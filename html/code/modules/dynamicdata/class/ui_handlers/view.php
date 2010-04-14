@@ -73,10 +73,7 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
         $title = xarML('View #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
-        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData'))
-            return xarController::$response->Forbidden(xarML('View Table #(1) is forbidden', $this->object->table));
-
-        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
+        if (!$this->object->checkAccess('view'))
             return xarController::$response->Forbidden(xarML('View #(1) is forbidden', $this->object->label));
 
         $this->object->countItems();
@@ -87,7 +84,8 @@ $this->object->callHooks('view');
 
         $output = xarTplObject(
             $this->tplmodule, $this->object->template, 'ui_view',
-            array('object' => $this->object)
+            array('object'   => $this->object,
+                  'tpltitle' => $this->tpltitle)
         );
 
         // Set the output of the object method in cache

@@ -31,8 +31,6 @@ function dynamicdata_admin_new($args)
     if(!xarVarFetch('notfresh', 'isset', $notfresh,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule','str',   $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
 
-    if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$module_id:$itemtype:All")) return;
-
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
     $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
@@ -45,6 +43,8 @@ function dynamicdata_admin_new($args)
                                          'tplmodule' => $tplmodule,
                                          'template'  => $template,
                                          ));
+    if (!$myobject->checkAccess('create'))
+        return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
 
     $args = $myobject->toArray();
     $data['object'] =& $myobject;

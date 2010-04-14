@@ -31,7 +31,7 @@
       <xsl:text>unset($_bl_blockgroup_template);</xsl:text>
     </xsl:when>
     <xsl:when test="not(child::node())">
-      <xsl:text>xarBlock_renderGroup('</xsl:text><xsl:value-of select="@name"/>
+      <xsl:text>xarBlock::renderGroup('</xsl:text><xsl:value-of select="@name"/>
       <xsl:text>');&nl;</xsl:text>
 
       <xsl:apply-templates />

@@ -32,7 +32,7 @@
                 <xar:set name="settings">
                     explode(',',xarModVars::get('roles','duvsettings'))
                 </xar:set>
-                <xar:if condition="ROLES_USERTYPE eq $basetype">
+                <xar:if condition="ROLES_USERTYPE eq $itemtype">
                     <xar:if condition="in_array('useremailformat',$settings)">
                         <div class="xar-form-input-wrapper">
                             <label for="duvs_useremailformat" title="#xarML('Email Format')#" class="xar-form-label">Email Format:</label>

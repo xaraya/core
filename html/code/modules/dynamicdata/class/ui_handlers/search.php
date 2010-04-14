@@ -120,10 +120,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         $title = xarML('Search #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
-        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData'))
-            return xarResponse::Forbidden(xarML('Search Table #(1) is forbidden', $this->object->table));
-
-        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
+        if (!$this->object->checkAccess('view'))
             return xarResponse::Forbidden(xarML('Search #(1) is forbidden', $this->object->label));
 
         if (empty($search['field']) || count($search['field']) < 1) {
@@ -158,7 +155,12 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             if(empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) 
                 return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
             // add the where clauses directly here to avoid quoting issues
-            $join = '';
+            if (!empty($result->where)) {
+                $join = 'and';
+                // TODO: wrap OR statements in (...) below
+            } else {
+                $join = '';
+            }
             foreach ($wherelist as $name => $clause) {
                 $result->addWhere($name, $clause, $join);
                 // CHECKME: use OR by default here !
@@ -189,7 +191,8 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             $this->tplmodule, $this->object->template, 'ui_search',
             array('object' => $this->object,
                   'search' => $search,
-                  'result' => $result)
+                  'result' => $result,
+                  'tpltitle' => $this->tpltitle)
         );
     }
 
@@ -230,10 +233,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         $title = xarML('Query #(1)', $this->object->label);
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
-        if(!empty($this->object->table) && !xarSecurityCheck('AdminDynamicData'))
-            return xarResponse::Forbidden(xarML('Query Table #(1) is forbidden', $this->object->table));
-
-        if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
+        if (!$this->object->checkAccess('view'))
             return xarResponse::Forbidden(xarML('Query #(1) is forbidden', $this->object->label));
 
         // get where clauses
@@ -279,7 +279,11 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             if(empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) 
                 return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
             // add the where clauses directly here to avoid quoting issues
-            $join = '';
+            if (!empty($result->where)) {
+                $join = 'and';
+            } else {
+                $join = '';
+            }
             foreach ($wherelist as $name => $clause) {
                 $result->addWhere($name, $clause, $join);
                 // CHECKME: use AND by default here !
@@ -321,7 +325,8 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             $this->tplmodule, $this->object->template, 'ui_query',
             array('object' => $this->object,
                   'query'  => $query,
-                  'result' => $result)
+                  'result' => $result,
+                  'tpltitle' => $this->tpltitle)
         );
     }
 

@@ -2,15 +2,14 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
-        <span class="xar-mod-title">Dynamic Data Object Interface</span>
+        <span class="xar-mod-title">#$tpltitle#</span>
     </div>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object)">
             <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
-            <xar:set name="instance">$object->moduleid .':'. $object->itemtype .':'. $object->itemid</xar:set>
-            <xar:sec mask="EditDynamicDataItem" catch="false" component="Item" instance="$instance">
+            <xar:if condition="$object:checkAccess('update')">
                 <xar:set name="modifylink">xarObject::getActionURL($object, 'modify', $object->itemid)</xar:set>
-            </xar:sec>
+            </xar:if>
             <h2>
                 #$object:label#&#160;
                 <a href="#$viewlink#" title="View #$object:label#">

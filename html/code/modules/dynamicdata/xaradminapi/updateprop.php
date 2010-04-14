@@ -45,13 +45,7 @@ function dynamicdata_adminapi_updateprop($args)
         throw new BadParameterException($vars, $msg);
     }
 
-    // Security check - important to do this as early on as possible to
-    // avoid potential security holes or just too much wasted processing
-    if (isset($name) && is_string($name)) {
-    if(!xarSecurityCheck('EditDynamicDataField',1,'Field',"$name:$type:$id")) return;
-    } else {
-    if(!xarSecurityCheck('EditDynamicDataField',1,'Field',"All:$type:$id")) return;
-    }
+    // TODO: security check on object level
 
     // Get database setup - note that xarDB::getConn()
     // returns an array but we handle it differently.

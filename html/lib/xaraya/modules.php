@@ -1045,6 +1045,51 @@ class xarMod extends Object implements IxarMod
         }
         return $tplmodule_cache[$key];
     }
+
+    /**
+     * Check access for a specific action on module level (see also xarObject and xarBlock)
+     *
+     * @access public
+     * @param moduleName string the module we want to check access for
+     * @param action string the action we want to take on this module (view/admin) // CHECKME: any others we really use on module level ?
+     * @param roleid mixed override the current user or null
+     * @return bool true if access
+     */
+    static function checkAccess($moduleName, $action, $roleid = null)
+    {
+        // TODO: get module variable with access config: groups, masks, levels or whatever
+
+        // TODO: check for access e.g. by group
+
+        // Fall back on mask-less security check with access levels corresponding to action
+        sys::import('modules.privileges.class.securitylevel');
+
+        // default actions supported on modules
+        switch($action)
+        {
+            case 'admin':
+                $seclevel = SecurityLevel::ADMIN;
+                break;
+
+        // CHECKME: any others we really use on module level (instead of object/item/block/... level) ?
+
+            case 'view':
+                $seclevel = SecurityLevel::OVERVIEW;
+                break;
+
+            default:
+                throw new BadParameterException('action', "Supported actions on module level are 'view' and 'admin'");
+                break;
+        }
+
+        if (!empty($roleid)) {
+            $role = xarRoles::get($roleid);
+            $rolename = $role->getName();
+            return xarSecurity::check('',0,'All','All',$moduleName,$rolename,0,$seclevel);
+        } else {
+            return xarSecurity::check('',0,'All','All',$moduleName,'',0,$seclevel);
+        }
+    }
 }
 
 

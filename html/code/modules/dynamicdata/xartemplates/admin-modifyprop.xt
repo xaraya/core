@@ -10,22 +10,8 @@
         <xar:if condition="!empty($objectid)">
             <h2>
                 Modify DataProperties #$label#
-                <xar:set name="editlink">xarModURL('dynamicdata','admin','modify',array('itemid' => $objectid))</xar:set>
-                &#160;<a href="#$editlink#" title="Modify DataObject #$label#">
-                    <img src="#xarTplGetImage('icons/modify.png', 'base')#" width="16" height="16" alt="modify"/>
-                </a>
-                <xar:set name="accesslink">xarModURL('dynamicdata','admin','modify',array('itemid' => $objectid, 'tab' => 'access'))</xar:set>
-                &#160;<a href="#$accesslink#" title="Modify Access Rules for #$label#">
-                    <img src="#xarTplGetImage('icons/privileges.png', 'base')#" width="16" height="16" alt="access"/>
-                </a>
-                <xar:set name="itemslink">xarModURL('dynamicdata','admin','view',array('itemid' => $objectid))</xar:set>
-                &#160;<a href="#$itemslink#" title="View Items #$label#">
-                    <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="viewitems"/>
-                </a>
-                <xar:set name="exportlink">xarModURL('dynamicdata','util','export',array('objectid' => $objectid))</xar:set>
-                &#160;<a href="#$exportlink#" title="Export Object Definition #$label#">
-                    <img src="#xarTplGetImage('icons/export-xml.png', 'base')#" width="16" height="16" alt="export"/>
-                </a>
+                <xar:set name="tab">'modifyprop'</xar:set>
+                <xar:template type="module" file="object_menu"/>
                 <xar:if condition="!empty($fields)">
                     <script type="text/javascript">
                     function xar_dynamicdata_formpreview()

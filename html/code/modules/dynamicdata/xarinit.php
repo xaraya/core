@@ -501,14 +501,6 @@ function dynamicdata_init()
     xarRegisterMask('DeleteDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_DELETE');
     xarRegisterMask('AdminDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_ADMIN');
 
-    xarRegisterMask('ReadDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_READ');
-    xarRegisterMask('EditDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_EDIT');
-    xarRegisterMask('AddDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_ADD');
-    xarRegisterMask('DeleteDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_DELETE');
-    xarRegisterMask('AdminDynamicDataField','All','dynamicdata','Field','All:All:All','ACCESS_ADMIN');
-
-    xarRegisterMask('ViewDynamicDataBlocks','All','dynamicdata','Block','All:All:All','ACCESS_OVERVIEW');
-    xarRegisterMask('ReadDynamicDataBlock','All','dynamicdata','Block','All:All:All','ACCESS_READ');
     /*********************************************************************
      * Define instances for this module
      * Format is
@@ -523,15 +515,6 @@ function dynamicdata_init()
         )
     );
     xarDefineInstance('dynamicdata','Item',$instances);
-
-    $instances = array(
-        array(
-            'header' => 'external', // this keyword indicates an external "wizard"
-            'query'  => xarModURL('dynamicdata', 'admin', 'privileges'),
-            'limit'  => 0
-        )
-    );
-    xarDefineInstance('dynamicdata','Field',$instances);
 
     // Installation complete; check for upgrades
     return dynamicdata_upgrade('2.0.0');

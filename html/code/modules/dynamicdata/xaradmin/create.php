@@ -91,7 +91,8 @@ function dynamicdata_admin_create($args)
     } else {
         xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array(
-                                      'itemid' => $myobject->objectid,
+                                      'name'   => 'objects',
+                                      'itemid' => $itemid,
                                       'tplmodule' => $tplmodule
                                       )));
     }

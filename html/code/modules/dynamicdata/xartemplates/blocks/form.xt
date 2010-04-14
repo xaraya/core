@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <form method="post" action="#xarModURL('dynamicdata'.'admin','create')#">
         <table>
-            <xar:data-form module="$moduleid" itemtype="$itemtype" itemid="0"/>
+            <xar:data-form object="$object"/>
             <tr>
                 <td class="xar-align-center" colspan="2">
                     <input type="submit" value="#xarML('Create Item')#"/>

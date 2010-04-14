@@ -6,7 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
-        <xar:if condition="$basetype eq 2">
+        <xar:if condition="$itemtype eq 2">
             <xar:set name="thisname">$object->properties['uname']->getValue()</xar:set>
         <xar:else />
             <xar:set name="thisname">$object->properties['name']->getValue()</xar:set>
@@ -38,7 +38,7 @@
             <legend>Role properties</legend>
             <xar:set name="fields">array('id','name','uname','email','state','regdate')</xar:set>
             <xar:data-display object="$object" fieldlist="$fields"/>
-            <xar:if condition="$basetype eq ROLES_USERTYPE">
+            <xar:if condition="$itemtype eq ROLES_USERTYPE">
                 <xar:set name="settings">
                     explode(',',xarModVars::get('roles','duvsettings'))
                 </xar:set>

@@ -31,10 +31,6 @@ function dynamicdata_user_display($args)
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule','isset', $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
 
-    if (!empty($table)) {
-        if(!xarSecurityCheck('AdminDynamicData')) return;
-    }
-
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,
                                          'moduleid' => $moduleid,
@@ -44,6 +40,9 @@ function dynamicdata_user_display($args)
                                          'itemid'   => $itemid,
                                          'tplmodule' => $tplmodule));
     if (!isset($myobject)) return;
+    if (!$myobject->checkAccess('display'))
+        return xarResponse::Forbidden(xarML('Display #(1) is forbidden', $myobject->label));
+
     $args = $myobject->toArray();
     $myobject->getItem();
 

@@ -102,6 +102,24 @@ function blocks_adminapi_load($args)
                     $loaded["$module:$type"] = 1;
                     break;
                 }
+
+            } elseif (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
+                try {
+                    sys::import('xaraya.legacy.blocks.load');
+                    blocks_adminapi_load_legacy($module,$type,$func,$className,$blockDir);
+                    if (!empty($func)) {
+                        if (method_exists($className, $func)) {
+                            $loaded["$module:$type:$func"] = 1;
+                            break;
+                        } else {
+                            throw new FunctionNotFoundException($func);
+                        }
+                    } else {
+                        $loaded["$module:$type"] = 1;
+                        break;
+                    }
+                } catch (Exception $e) {
+                }
             } else {
                 throw new ClassNotFoundException($className);
             }

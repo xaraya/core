@@ -340,7 +340,7 @@ function xarUserGetVar($name, $userId = NULL)
     if (empty($name)) throw new EmptyParameterException('name');
 
     if (empty($userId)) $userId = xarSessionGetVar('role_id');
-    if ($name == 'id') return $userId;
+    if ($name == 'id' || $name == 'uid') return $userId;
 
     if ($userId == _XAR_ID_UNREGISTERED) {
         // Anonymous user => only id, name and uname allowed, for other variable names

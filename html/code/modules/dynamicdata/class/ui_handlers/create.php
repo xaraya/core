@@ -40,6 +40,8 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
             return;
         if(!xarVarFetch('values', 'isset', $args['values'], NULL, XARVAR_DONT_SET)) 
             return;
+        if(!xarVarFetch('return_url', 'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
+            return;
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
@@ -56,7 +58,7 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
                 $this->tplmodule = $modname;
             }
         }
-        if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
+        if (!$this->object->checkAccess('create'))
             return xarController::$response->Forbidden(xarML('Create #(1) is forbidden', $this->object->label));
 
         // there's no item to get here yet
@@ -84,9 +86,6 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
                 if(empty($itemid)) 
                     return; // throw back
 
-                if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
-                    return;
-
                 if(empty($args['return_url'])) 
                     $args['return_url'] = $this->getReturnURL();
 
@@ -108,7 +107,9 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
             array('object'  => $this->object,
                   'preview' => $args['preview'],
                   'authid'  => xarSecGenAuthKey(),
-                  'hooks'   => $this->object->hookoutput)
+                  'hooks'   => $this->object->hookoutput,
+                  'tpltitle' => $this->tpltitle,
+                  'return_url' => $args['return_url'])
         );
     }
 }

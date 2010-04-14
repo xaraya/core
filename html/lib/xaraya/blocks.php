@@ -261,6 +261,20 @@ Class xarBlock extends Object implements IxarBlock
         return self::renderBlock(array('instance' => $groupname, 'box_template' => $template));
     }
 
+    /**
+     * Check access for a specific action on block level (see also xarMod and xarObject)
+     *
+     * @access public
+     * @param block object the block we want to check access for
+     * @param action string the action we want to take on this block (display/modify/delete)
+     * @param roleid mixed override the current user or null
+     * @return bool true if access
+     */
+    static function checkAccess($block, $action, $roleid = null)
+    {
+        // TODO: support $roleid there someday ?
+        return $block->checkAccess($action);
+    }
 }
 
 Interface IxarBlock
@@ -269,11 +283,5 @@ Interface IxarBlock
     public static function renderBlock(Array $args=array());
     public static function renderGroup($groupname, $template=null);
 }
-
-// Legacy functions
-function xarBlock_init(&$args) { return xarBlock::init($args); }
-function xarBlock_render($blockinfo) { return xarBlock::render($blockinfo); }
-function xarBlock_renderBlock($args) { return xarBlock::renderBlock($args); }
-function xarBlock_renderGroup($groupname, $template=NULL) { return xarBlock::renderGroup($groupname, $template); }
 
 ?>

@@ -104,7 +104,7 @@ class xarVersion extends Object
  * @param $levels number of levels to use in the comparison
  * @return int number indicating which version number is the latest
  */
-    public static function compare($versionstring1='', $versionstring1='', $levels=5)
+    public static function compare($versionstring1='', $versionstring2='', $levels=5)
     {
         $version1 = self::parse($versionstring1);
         $version2 = self::parse($versionstring2);

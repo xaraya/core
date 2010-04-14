@@ -26,6 +26,9 @@ function roles_userapi_get($args)
 {
     // Get arguments from argument array
     extract($args);
+    if ((empty($id) && !empty($uid))) {
+        $id = $uid;
+    }
     if (empty($id) && empty($name) && empty($uname) && empty($email)) {
         throw new EmptyParameterException('id or name or uname or email');
     } elseif (!empty($id) && !is_numeric($id)) {

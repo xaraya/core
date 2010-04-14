@@ -105,6 +105,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $this->where .= ' and ' . $this->secondary . ' eq ' . $this->itemtype;
             }
         }
+
         // Note: they can be empty here, which means overriding any previous criteria
         foreach(array_keys($this->datastores) as $name) {
             // make sure we don't have some left-over sort criteria
@@ -118,6 +119,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $this->datastores[$name]->cache = $args['cache'];
         }
         $this->setSort($this->sort);
+        // add content filters before setWhere()
+        $this->addFilters();
         $this->setWhere($this->where);
         $this->setGroupBy($this->groupby);
 //        $this->setCategories($this->catid);
@@ -167,6 +170,71 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 if (!isset($this->startstore))
                    $this->startstore = $datastore;
             }
+        }
+    }
+
+    /**
+     * Add content filters to where clauses - do not call directly for now...
+     */
+    private function addFilters()
+    {
+        if (!empty($this->filters) && is_string($this->filters)) {
+            try {
+                $this->filters = unserialize($this->filters);
+            } catch (Exception $e) {
+                $this->filters = null;
+            }
+        }
+        if (empty($this->filters)) {
+            return;
+        }
+
+        if (xarUserIsLoggedIn()) {
+            // get the direct parents of the current user (no ancestors)
+            $grouplist = xarCache::getParents();
+        } else {
+            // check anonymous visitors by themselves
+            $grouplist = array(_XAR_ID_UNREGISTERED);
+        }
+
+        foreach ($grouplist as $groupid) {
+            if (empty($this->filters[$groupid])) {
+                continue;
+            }
+            foreach ($this->filters[$groupid] as $filter) {
+                if (!isset($this->properties[$filter[0]])) {
+                    // skip filters on unknown properties
+                    continue;
+                }
+                $whereclause = '';
+                // TODO: cfr. getwhereclause in search ui
+                if ($filter != 'in' && !is_numeric($filter[2])) {
+                    // escape single quotes
+                    $filter[2] = str_replace("'", "\\'", $filter[2]);
+                    $filter[2] = "'"  . $filter[2] . "'";
+                }
+                switch ($filter[1])
+                {
+                    case 'in':
+                        $whereclause = ' IN (' . $filter[2] . ')';
+                        break;
+                    case 'eq':
+                    case 'gt':
+                    case 'lt':
+                    case 'ne':
+                    default:
+                        $whereclause = ' ' . $filter[1] . ' ' . $filter[2];
+                        break;
+                }
+                if (!empty($this->where)) {
+                    // CHECKME: how about when $this->where is an array ?
+                    $this->where .= ' and ' . $filter[0] . $whereclause;
+                } else {
+                    $this->where = $filter[0] . $whereclause;
+                }
+            }
+            // one group having filters is enough here !?
+            return;
         }
     }
 
@@ -697,23 +765,39 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 */
 
+        // Work with specific access rules for this object (= valid for all itemids)
+        if (!empty($this->access)) {
+            // initialize the access options
+            if (empty($this->cached_allow)) {
+                $this->cached_allow = array();
+                $this->cached_allow['display'] = $this->checkAccess('display');
+                $this->cached_allow['update'] = $this->checkAccess('update');
+                $this->cached_allow['create'] = $this->checkAccess('create');
+                $this->cached_allow['delete'] = $this->checkAccess('delete');
+            }
+            // get the access options
+            $allow_delete = $this->cached_allow['delete'];
+            $allow_add = $this->cached_allow['create'];
+            $allow_edit = $this->cached_allow['update'];
+            $allow_read = $this->cached_allow['display'];
+
         // Assume normal rules for access control, i.e. Delete > Edit > Read
-        if ($is_user && xarSecurityCheck('DeleteDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid))  {
+        } elseif ($is_user && $this->checkAccess('delete',$itemid))  {
             $allow_delete = 1;
             $allow_add = 1;
             $allow_edit = 1;
             $allow_read = 1;
-        } elseif ($is_user && xarSecurityCheck('AddDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+        } elseif ($is_user && $this->checkAccess('create',$itemid)) {
             $allow_delete = 0;
             $allow_add = 1;
             $allow_edit = 1;
             $allow_read = 1;
-        } elseif ($is_user && xarSecurityCheck('EditDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+        } elseif ($is_user && $this->checkAccess('update',$itemid)) {
             $allow_delete = 0;
             $allow_add = 0;
             $allow_edit = 1;
             $allow_read = 1;
-        } elseif (xarSecurityCheck('ReadDynamicDataItem',0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid)) {
+        } elseif ($this->checkAccess('display',$itemid)) {
             $allow_delete = 0;
             $allow_add = 0;
             $allow_edit = 0;
@@ -736,14 +820,14 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         // extra options when showing the dynamic objects themselves
         if ($allow_edit && $this->objectid == 1) {
-            // TODO: define 'access' as a standard action for objects if we want it, instead of overloading 'modify' action
-            $options['access'] = array('otitle' => xarML('Access'),
-                                            'oicon'  => 'privileges.png',
-                                            'olink'  => $this->getActionURL('modify', $itemid, array('tab' => 'access')),
-                                            'ojoin'  => '|');
+            // CHECKME: access should be based on the objects themselves here (but probably too heavy) ?
             $options['modifyprops'] = array('otitle' => xarML('Properties'),
                                             'oicon'  => 'modify-config.png',
                                             'olink'  => $this->getActionURL('modifyprop', $itemid),
+                                            'ojoin'  => '|');
+            $options['access'] = array('otitle' => xarML('Access'),
+                                            'oicon'  => 'privileges.png',
+                                            'olink'  => $this->getActionURL('access', $itemid),
                                             'ojoin'  => '|');
             $options['viewitems'] = array('otitle' => xarML('Items'),
                                           'oicon'  => 'item-list.png',
@@ -752,10 +836,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                                          );
         }
         //if ($allow_add)  {
-        // CHECKME: allow cloning only for the dynamic objects themselves ?
-        //if ($allow_add && $this->objectid == 1)  {
         // CHECKME: and/or skip cloning in object interface ?
-        if ($allow_add && $this->linktype != 'object')  {
+        //if ($allow_add && $this->linktype != 'object')  {
+        // CHECKME: allow cloning only for the dynamic objects themselves ?
+        if ($allow_add && $this->objectid == 1)  {
             // TODO: define 'clone' as a standard action for objects if we want it, instead of overloading 'modify' action
             $options['clone'] = array('otitle' => xarML('Clone'),
                                        'oicon'  => 'add.png',

@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
-        <span class="xar-mod-title">Dynamic Data Object Interface</span>
+        <span class="xar-mod-title">#$tpltitle#</span>
     </div>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object)">
@@ -14,11 +14,8 @@
                 <xar:template type="module" file="main_objects"/>
             <xar:else/>
                 <xar:set name="searchlink">xarObject::getActionURL($object, 'search')</xar:set>
-                <xar:if condition="!empty($object->primary)">
-                   <xar:set name="instance">$object->moduleid .':'. $object->itemtype .':All'</xar:set>
-                   <xar:sec mask="AddDynamicDataItem" catch="false" component="Item" instance="$instance">
-                       <xar:set name="newlink">xarObject::getActionURL($object, 'new')</xar:set>
-                   </xar:sec>
+                <xar:if condition="!empty($object:primary) and $object:checkAccess('create')">
+                    <xar:set name="newlink">xarObject::getActionURL($object, 'new')</xar:set>
                 </xar:if>
                 <h2>
                     View #$object:label#&#160;

@@ -45,10 +45,6 @@ function dynamicdata_adminapi_createproperty($args)
         throw new BadParameterException($vars,$msg);
     }
 
-    // Security check - important to do this as early on as possible to
-    // avoid potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('AdminDynamicDataField',1,'Field',"$name:$type:All")) return;
-
     if (empty($moduleid)) {
         // defaults to the current module
         $moduleid = xarMod::getRegID(xarModGetName());
@@ -58,9 +54,7 @@ function dynamicdata_adminapi_createproperty($args)
     }
     $itemid = 0;
 
-    // Security check - important to do this as early on as possible to
-    // avoid potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('AdminDynamicDataItem',1,'Item',"$moduleid:$itemtype:All")) return;
+    // TODO: security check on object level
 
     // get the properties of the 'properties' object
     $fields = xarMod::apiFunc('dynamicdata','user','getprop',

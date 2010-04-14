@@ -108,6 +108,14 @@ class BlockLayoutXSLTProcessor extends Object
         // Preprocess it.
         $this->preProcess();
 
+        // Legacy transforms for old 1x templates
+        try {
+            if (xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
+                sys::import('xaraya.legacy.templates');
+                $this->prepXml = fixLegacy($this->prepXml);
+            }
+        } catch (Exception $e) {}
+
         // Set the source document to what we prepped
         $this->setSourceDocument($this->prepXml);
 

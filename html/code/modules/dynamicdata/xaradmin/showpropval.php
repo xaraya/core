@@ -37,16 +37,22 @@ function dynamicdata_admin_showpropval($args)
                                                     'itemid' => $itemid));
     if (empty($myobject)) return;
 
-    // check security
-    $module_id = $myobject->moduleid;
-    $itemtype = $myobject->itemtype;
-    if (!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$module_id:$itemtype:$itemid")) return;
-
     $newid = $myobject->getItem();
 
     if (empty($newid) || empty($myobject->properties['id']->value)) {
         throw new BadParameterException(null,'Invalid item id');
     }
+    if (empty($myobject->properties['objectid']->value)) {
+        throw new BadParameterException(null,'Invalid object id');
+    }
+
+    // check security of the parent object
+    $parentobjectid = $myobject->properties['objectid']->value;
+    $parentobject = DataObjectMaster::getObject(array('objectid' => $parentobjectid));
+    if (empty($parentobject)) return;
+    if (!$parentobject->checkAccess('config'))
+        return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $parentobject->label));
+    unset($parentobject);
 
     // check if the module+itemtype this property belongs to is hooked to the uploads module
     /* FIXME: can we do without this hardwiring? Comment out for now
@@ -96,7 +102,7 @@ function dynamicdata_admin_showpropval($args)
                 if (empty($return_url)) {
                     // return to modifyprop
                     $return_url = xarModURL('dynamicdata', 'admin', 'modifyprop',
-                                            array('itemid' => $myobject->properties['objectid']->value));
+                                            array('itemid' => $parentobjectid));
                 }
                 xarController::redirect($return_url);
                 return true;

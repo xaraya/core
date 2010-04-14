@@ -5,6 +5,7 @@
   <xsl:param name="defaults"/> 
   <xsl:param name="bltags"/> 
   <xsl:param name="clienttags"/> 
+  <xsl:param name="legacytags"/> 
 
   <xsl:template match="xsl:includedefaults">
     <xsl:call-template name="includefile">
@@ -19,9 +20,16 @@
   </xsl:template>
 
   <xsl:template match="xsl:includeclienttags">
-  <xsl:text select="$clienttags"/>
+    <xsl:text select="$clienttags"/>
     <xsl:call-template name="includefile">
        <xsl:with-param name="string" select="$clienttags"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="xsl:includelegacytags">
+    <xsl:text select="$legacytags"/>
+    <xsl:call-template name="includefile">
+       <xsl:with-param name="string" select="$legacytags"/>
     </xsl:call-template>
   </xsl:template>
 

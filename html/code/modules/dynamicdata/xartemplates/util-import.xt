@@ -39,7 +39,7 @@
                 <div class="xar-form-input-wrapper-after">
                     <input type="checkbox" name="keepitemid" id="keepitemid" value="1"/>&#160;
                     <label for="keepitemid" title="#xarML('Check to attempt to maintain item ids found in definition file')#">
-                        Preserve Item ids If Possible
+                        Preserve item ids if possible
                     </label>
                 </div>
                 <div class="xar-form-input-wrapper">

@@ -23,6 +23,9 @@
 function roles_userapi_getall($args)
 {
     extract($args);
+    if ((empty($idlist) && !empty($uidlist))) {
+        $idlist = $uidlist;
+    }
 
     // Optional arguments.
     if (!isset($startnum)) $startnum = 1;

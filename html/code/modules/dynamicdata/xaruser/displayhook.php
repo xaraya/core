@@ -62,6 +62,8 @@ function dynamicdata_user_displayhook($args)
                                        'itemtype' => $itemtype,
                                        'itemid'   => $itemid));
     if (!isset($object)) return;
+    if (!$object->checkAccess('display'))
+        return xarML('Display #(1) is forbidden', $object->label);
 
     $object->getItem();
 

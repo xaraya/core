@@ -39,6 +39,11 @@ class ApiDeprecationException extends DeprecationExceptions
 */
 
 /**
+ * Add code directory to include_path for modules including other module files
+ */
+set_include_path(realpath(sys::code()) . PATH_SEPARATOR . get_include_path());
+
+/**
  * Returns the relative path name for the var directory
  *
  * @access public
@@ -147,16 +152,65 @@ function &xarDBNewDataDict(Connection &$dbconn, $mode = 'READONLY')
 }
 
 /**
+ * Wrapper function to support Xaraya 1 Error functions
+ *
+**/
+function xarCurrentErrorType()
+{
+    // Xaraya 2.x throws exceptions, use try { ... } catch (Exception $e) { ... }
+    if (!defined('XAR_NO_EXCEPTION')) {
+        define('XAR_NO_EXCEPTION', 0);
+    }
+    // pretend everything is OK for now
+    return XAR_NO_EXCEPTION;
+}
+function xarErrorHandled()
+{
+    return true;
+}
+
+/**
+ * Wrapper function to support Xaraya 1 Block functions
+ *
+**/
+function xarBlock_init(&$args) { return xarBlock::init($args); }
+function xarBlock_render($blockinfo) { return xarBlock::render($blockinfo); }
+function xarBlock_renderBlock($args) { return xarBlock::renderBlock($args); }
+function xarBlock_renderGroup($groupname, $template=NULL) { return xarBlock::renderGroup($groupname, $template); }
+
+/**
+ * Wrapper function to support Xaraya 1 Cache functions
+ *
+**/
+function xarCache_init($args = false) { return xarCache::init($args); }
+function xarCache_getStorage(array $args = array()) { return xarCache::getStorage($args); }
+
+/**
  * Support Xaraya 1 pager functions
  *
 **/
 function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions = 10)
 {
+    sys::import('modules.base.class.pager');
     return xarTplPager::getInfo($currentItem, $total, $itemsPerPage, $blockOptions);
 }
 function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $blockOptions = array(), $template = 'default', $tplmodule = 'base')
 {
+    sys::import('modules.base.class.pager');
     return xarTplPager::getPager($startNum, $total, $urltemplate, $itemsPerPage, $blockOptions, $template, $tplmodule);
+}
+
+/**
+ * Map legacy Dynamic_Property base class to DataProperty
+ * Note: this does not mean the property will actually work
+ */
+sys::import('modules.dynamicdata.class.properties.base');
+class Dynamic_Property extends DataProperty 
+{
+    function Dynamic_Property($args)
+    {
+        parent::__construct($args);
+    }
 }
 
 ?>

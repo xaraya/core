@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:if condition="$refobject eq 'roles_groups'">
-        <xar:data-output type="objectref" refobject="$refobject" store_prop="id" value="$value"/>
+        <xar:data-output type="objectref" refobject="$refobject" store_prop="id" value="$value['last']"/>
     <xar:else/>
         <xar:if condition="($show_salutation eq 'true') AND ($layout ne 'single')">
             #$value['salutation']#&#160;
@@ -16,9 +16,11 @@
 
         <xar:elseif condition="$layout eq 'lastfirst' OR $layout eq 'default'"/>
 
-            #$value['last']#,&#160;
-            #$value['first']#
-            <xar:if condition="$show_middlename eq 'true'">
+            #$value['last']#
+            <xar:if condition="!empty($value['first'])">
+                ,&#160;#$value['first']#
+            </xar:if>
+            <xar:if condition="$show_middlename eq 'true' AND !empty($value['middle'])">
                 &#160;#$value['middle']#
             </xar:if>
 

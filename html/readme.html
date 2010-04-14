@@ -1,4 +1,4 @@
-    <?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <link rel="stylesheet" type="text/css" href="themes/installer/style/style.css"/>
@@ -53,6 +53,7 @@
                                         <li class="active"><a href="#rename" style="text-decoration: none;">Renaming the Document Root</a></li>
                                         <li class="active"><a href="#multi" style="text-decoration: none;">Installing Multiple Sites</a></li>
                                         <li class="active"><a href="#trouble" style="text-decoration: none;">Troubleshooting</a></li>
+                                        <li class="active"><a href="#legacy" style="text-decoration: none;">Legacy Support</a></li>
                                     </ul>
                                   </div>
                                   <div id="status_foot">
@@ -217,7 +218,7 @@ $systemConfiguration['codeDir'] = "public_html/code/";
                                     -->
                                     To be added
                                 </p>
-                              <a name="trouble" style="text-decoration: none;"><h2>Troubleshooting and Caveats</h2></a> <a href="#top">top</a>
+                                <a name="trouble" style="text-decoration: none;"><h2>Troubleshooting and Caveats</h2></a> <a href="#top">top</a>
                                     <ul>
                                         <li>
                                             Unless you know what you're doing, never separate the contents of the lib, core or html folders
@@ -232,6 +233,25 @@ $systemConfiguration['codeDir'] = "public_html/code/";
                                             Linux installations: if you are using symbolic links, make sure they are used <b>both</b> for the code and lib directories. Otherwise you may get loading exceptions in some situations.
                                         </li>
                                     </ul>
+                                <a name="legacy" style="text-decoration: none;"><h2>Legacy Support</h2></a> <a href="#top">top</a>
+                                <p class="center">
+                                    Xaraya 2.1.0 provides limited legacy support for Xaraya 1.x modules. You can enable legacy support by checking the appropriate checkbox in the Base module Modify Config page (Other tab). Legacy support covers:
+                                    <ul>
+                                        <li>
+                                            Xaraya 1.x function calls that have been deprecated.
+                                        </li>
+                                        <li>
+                                            Non-numeric entities (e.g. &amp;nbsp;)
+                                        </li>
+                                        <li>
+                                            Missing xartemplate tags in the beginning and end of templates.
+                                        </li>
+                                        <li>
+                                            Xaraya 1.x blocks code
+                                        </li>
+                                    </ul>
+                                    Please note that enabling legacy support will result in a small performance hit. Legacy support cannot be guaranteed in future versions of Xaraya 2
+                                </p>
                             </div>
                         </div>
                         <div id="contentmain_blcorner"><div id="contentmain_brcorner">&#160;</div></div>

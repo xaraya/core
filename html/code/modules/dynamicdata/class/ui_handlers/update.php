@@ -41,6 +41,8 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
             return;
         if(!xarVarFetch('values', 'isset', $args['values'], NULL, XARVAR_DONT_SET)) 
             return;
+        if(!xarVarFetch('return_url', 'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
+            return;
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
@@ -57,7 +59,7 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
                 $this->tplmodule = $modname;
             }
         }
-        if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':'.$this->args['itemid']))
+        if (!$this->object->checkAccess('update'))
             return xarController::$response->Forbidden(xarML('Update Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
 
         $itemid = $this->object->getItem();
@@ -86,9 +88,6 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
                 if(empty($itemid)) 
                     return; // throw back
 
-                if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
-                    return;
-
                 if(empty($args['return_url'])) 
                     $args['return_url'] = $this->getReturnURL();
 
@@ -110,7 +109,9 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
             array('object'  => $this->object,
                   'preview' => $args['preview'],
                   'authid'  => xarSecGenAuthKey(),
-                  'hooks'   => $this->object->hookoutput)
+                  'hooks'   => $this->object->hookoutput,
+                  'tpltitle' => $this->tpltitle,
+                  'return_url' => $args['return_url'])
         );
     }
 }

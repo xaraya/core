@@ -9,7 +9,7 @@
             <label>Overview</label>
         </menuitem>
         <menuitem>
-            <mask>AdminDynamicData</mask>
+            <mask>EditDynamicData</mask>
             <type>admin</type>
             <includes>
                 <includeitem>view</includeitem>

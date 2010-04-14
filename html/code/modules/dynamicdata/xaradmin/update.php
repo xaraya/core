@@ -83,6 +83,13 @@ function dynamicdata_admin_update($args)
                 $myobject->callHooks('modify');
                 $data['hooks'] = $myobject->hookoutput;
 
+                if ($myobject->objectid == 1) {
+                    $data['label'] = $myobject->properties['label']->value;
+                    xarTplSetPageTitle(xarML('Modify DataObject #(1)', $data['label']));
+                } else {
+                    $data['label'] = $myobject->label;
+                    xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
+                }
                 return xarTplModule($tplmodule,'admin','modify', $data);
             }
 
@@ -116,26 +123,6 @@ function dynamicdata_admin_update($args)
 
             }
 
-        case 'access':
-            // only admins can change access rules
-            $adminaccess = xarSecurityCheck('',0,'All',$myobject->objectid . ":" . $myobject->name . ":" . "All",0,'',0,800);
-
-            if (!$adminaccess)
-                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
-
-            // Get the object's configuration
-            $config = unserialize($myobject->config);
-            
-            // Get the access information from the template
-            $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
-            $isvalid = $accessproperty->checkInput($myobject->name . '_display');
-            $config['display_access'] = $accessproperty->value;
-            $isvalid = $accessproperty->checkInput($myobject->name . '_modify');
-            $config['modify_access'] = $accessproperty->value;
-            $isvalid = $accessproperty->checkInput($myobject->name . '_delete');
-            $config['delete_access'] = $accessproperty->value;
-            $configstring = serialize($config);
-            $itemid = $myobject->updateItem(array('config' => $configstring));
         break;
 
         case 'clone':

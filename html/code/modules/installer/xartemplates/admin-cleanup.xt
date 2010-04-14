@@ -4,9 +4,10 @@
     <div id="install">
         <h1>Installation Complete</h1>
         <h3>Congratulations, you have successfully installed Xaraya
-        <xar:var scope="config" name="System.Core.VersionId"/> Revision 
-        <xar:var scope="config" name="System.Core.VersionNum"/> (
-        <xar:var scope="config" name="System.Core.VersionSub"/>)!</h3>
+        <xar:var scope="config" name="System.Core.VersionId"/>
+        #XARCORE_VERSION# (<xar:var scope="config" name="System.Core.VersionSub"/>) Build 
+        <xar:var scope="config" name="System.Core.VersionNum"/>
+        !</h3>
 
         <h2>Next Steps:</h2>
         <p>

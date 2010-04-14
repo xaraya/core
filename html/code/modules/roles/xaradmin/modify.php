@@ -23,7 +23,7 @@ function roles_admin_modify()
     if (!xarVarFetch('duvs', 'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
     $object = xarRoles::get($id);
-    $data['basetype'] = $object->getType();
+    $data['itemtype'] = $object->getType();
 
     $parents = array();
     $names = array();
@@ -53,7 +53,7 @@ function roles_admin_modify()
                                             'return_url' => xarServer::getCurrentURL(),
                                             'parents' => $parents,
                                             'groups' => $groups,
-                                            'basetype' => $data['basetype'],
+                                            'basetype' => $data['itemtype'],
                                                 ));
 
     if (!xarSecurityCheck('EditRole',0,'Roles',$object->getName())) {

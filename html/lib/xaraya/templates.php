@@ -385,7 +385,6 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
             }
         }
     }
-
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -462,7 +461,6 @@ function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elem
 
         xarCoreCache::setCached('Templates.DDElement', $cachename, $sourceFileName);
     }
-
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
@@ -706,13 +704,15 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
     foreach ($modules as $module) {
         $thismodule = trim($module);
         $sourceFileName = xarTplGetThemeDir() . "/modules/$thismodule/includes/$templateName.xt";
-        if (!file_exists($sourceFileName)) {
-                $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xt";
+        if (file_exists($sourceFileName)) break;
+        $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xt";
+        if (file_exists($sourceFileName)) break;
+        if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
+            $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xd";
+            if (file_exists($sourceFileName)) break;
         }
         if (!file_exists($sourceFileName)) {
                 $sourceFileName = sys::code() . "modules/dynamicdata/xartemplates/includes/$templateName.xt";
-        }
-        if (file_exists($sourceFileName)) break;
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
@@ -847,6 +847,11 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
         file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt")) {
     } elseif($canonical &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$canTemplateName.xt")) {
+    } elseif (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
+        try {
+            sys::import('xaraya.legacy.templates');
+            $sourceFileName = loadsourcefilename($tplBaseDir,$tplSubPart,$tplBase,$templateName,$canTemplateName,$canonical);
+        } catch (Exception $e) {$sourceFileName = '';}
     } else {
         // let functions higher up worry about what to do, e.g. DD object of property fallback template
         $sourceFileName = '';
