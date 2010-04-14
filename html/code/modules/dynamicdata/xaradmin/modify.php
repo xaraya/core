@@ -66,6 +66,7 @@ function dynamicdata_admin_modify($args)
         $object->getItem();
     }
     $data['object'] = & $object;
+    $data['itemid'] = $args['itemid'];
 
     switch ($data['tab']) {
 
@@ -99,7 +100,6 @@ function dynamicdata_admin_modify($args)
                 xarVarSetCached('dynamicdata','currentproptype', $object->properties['type']);
             }
 
-            $data['itemid'] = $args['itemid'];
             $data['preview'] = $preview;
 
             // Makes this hooks call explictly from DD - why ???
@@ -122,6 +122,13 @@ function dynamicdata_admin_modify($args)
             // user needs admin access to changethe access rules
             $data['adminaccess'] = xarSecurityCheck('',0,'All',$object->objectid . ":" . $name . ":" . "$itemid",0,'',0,800);
             $data['name'] = $object->properties['name']->value;
+            if ($object->objectid == 1) {
+                $data['label'] = $object->properties['label']->value;
+                xarTplSetPageTitle(xarML('Clone DataObject #(1)', $data['label']));
+            } else {
+                $data['label'] = $object->label;
+                xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
+            }
         break;
     }
     
