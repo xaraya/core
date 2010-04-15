@@ -629,4 +629,13 @@
     <ignore_empty>0</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
+  <configurations itemid="71">
+    <id>77</id>
+    <name>validation_email_confirm</name>
+    <description>Show a second email field to be filled in</description>
+    <property_id>14</property_id>
+    <label>Confirm Email</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
 </items>
