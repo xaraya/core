@@ -5,7 +5,7 @@
     <description>The layout for this field</description>
     <property_id>2</property_id>
     <label>Template Layout</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="2">
@@ -14,7 +14,7 @@
     <description>Minimun length for this field</description>
     <property_id>15</property_id>
     <label>Minimum Length</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="3">
@@ -23,7 +23,7 @@
     <description>Maximum length for this field</description>
     <property_id>15</property_id>
     <label>Maximum Length</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="4">
@@ -32,7 +32,7 @@
     <description>Any other rule for this field</description>
     <property_id>2</property_id>
     <label>Other Rule</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:0:{}</configuration>
   </configurations>
   <configurations itemid="5">
@@ -41,7 +41,7 @@
     <description>A regex the contents of this field must validate against</description>
     <property_id>2</property_id>
     <label>Regex Filter</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:0:{}</configuration>
   </configurations>
   <configurations itemid="6">
@@ -50,7 +50,7 @@
     <description>Show a second password field to be filled in</description>
     <property_id>14</property_id>
     <label>Confirm Password</label>
-    <ignore_empty>false</ignore_empty>
+    <ignore_empty>0</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
   <configurations itemid="7">
@@ -59,7 +59,7 @@
     <description>Length of this input box</description>
     <property_id>15</property_id>
     <label>Size</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="8">
@@ -68,7 +68,7 @@
     <description>The maximum length of input to this input box</description>
     <property_id>15</property_id>
     <label>Max Lemgth</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="9">
@@ -77,7 +77,7 @@
     <description>The template used to display this field</description>
     <property_id>2</property_id>
     <label>Property Template</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="10">
@@ -86,7 +86,7 @@
     <description>This field must have a value greater than this</description>
     <property_id>15</property_id>
     <label>Minimum Value</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:4:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:20:"validation_min_value";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="11">
@@ -95,7 +95,7 @@
     <description>This field must have a value smaller than this</description>
     <property_id>15</property_id>
     <label>Maximum Value</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="12">
@@ -104,7 +104,7 @@
     <description>The object this field refers to</description>
     <property_id>507</property_id>
     <label>Reference Object</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="13">
@@ -113,7 +113,7 @@
     <description>The object property used in the dropdown display </description>
     <property_id>6</property_id>
     <label>Display Property</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:75:"xarMod::apiFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";}</configuration>
   </configurations>
   <configurations itemid="14">
@@ -122,7 +122,7 @@
     <description>The object property used for storing the value of this field</description>
     <property_id>6</property_id>
     <label>Storage Prioperty</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:75:"xarMod::apiFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";}</configuration>
   </configurations>
   <configurations itemid="15">
@@ -131,7 +131,7 @@
     <description>A function used to generate the options for this field</description>
     <property_id>2</property_id>
     <label>Function</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="16">
@@ -140,7 +140,7 @@
     <description>A file containing the options for this field</description>
     <property_id>2</property_id>
     <label>File</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="17">
@@ -149,7 +149,7 @@
     <description>A list of options options for this field</description>
     <property_id>3</property_id>
     <label>Options</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="18">
@@ -158,7 +158,7 @@
     <description>Accept values not in the list of options for this field?</description>
     <property_id>14</property_id>
     <label>Override</label>
-    <ignore_empty>false</ignore_empty>
+    <ignore_empty>0</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
   <configurations itemid="19">
@@ -167,7 +167,7 @@
     <description>A collection object representing the options for this field</description>
     <property_id>2</property_id>
     <label>Collection</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:3:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
   <configurations itemid="20">
@@ -176,7 +176,7 @@
     <description>The default display status for this field</description>
     <property_id>15</property_id>
     <label>Display Status</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="21">
@@ -185,7 +185,7 @@
     <description>The default input status for this field</description>
     <property_id>15</property_id>
     <label>Input Status</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="22">
@@ -194,7 +194,7 @@
     <description>A rule to decide whether to show a link to this field</description>
     <property_id>6</property_id>
     <label>Display Link</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:66:"0,No rule;1,User must not already exist;2,User must already exist;";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="23">
@@ -203,7 +203,7 @@
     <description>A rule to use for checking the existence of this field</description>
     <property_id>6</property_id>
     <label>Existence Rule</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:66:"0,No rule;1,User must not already exist;2,User must already exist;";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="24">
@@ -212,7 +212,7 @@
     <description>The directory this field gets input from</description>
     <property_id>2</property_id>
     <label>Base Directory</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="25">
@@ -221,7 +221,7 @@
     <description>The source type where this field gets its input</description>
     <property_id>34</property_id>
     <label>Image Source</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:48:"local,local location;url,url;upload,file upload;";}</configuration>
   </configurations>
   <configurations itemid="26">
@@ -230,7 +230,7 @@
     <description>The file extensions allowed for this field</description>
     <property_id>2</property_id>
     <label>File Extensions</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:7:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="27">
@@ -239,7 +239,7 @@
     <description>A list of groups to chow in this field</description>
     <property_id>2</property_id>
     <label>Group List</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:0:{}</configuration>
   </configurations>
   <configurations itemid="28">
@@ -248,7 +248,7 @@
     <description>A list of parent groups whose children are shown in this field</description>
     <property_id>2</property_id>
     <label>Parent Groups</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:0:{}</configuration>
   </configurations>
   <configurations itemid="29">
@@ -257,7 +257,7 @@
     <description>A list of ancestor groups whose children are shown in this field</description>
     <property_id>2</property_id>
     <label>Ancestor Groups</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:0:{}</configuration>
   </configurations>
   <configurations itemid="30">
@@ -266,7 +266,7 @@
     <description>Icon URL</description>
     <property_id>2</property_id>
     <label>Icon URL</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:7:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="31">
@@ -275,7 +275,7 @@
     <description>The number of rows this field displays with</description>
     <property_id>15</property_id>
     <label>Rows</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:9:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:20:"validation_min_value";s:0:"";s:20:"validation_max_value";s:0:"";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="32">
@@ -284,7 +284,7 @@
     <description>The number of columns this field displays with</description>
     <property_id>15</property_id>
     <label>Columns</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:9:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:20:"validation_min_value";s:0:"";s:20:"validation_max_value";s:0:"";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="33">
@@ -293,7 +293,7 @@
     <description>This field can have only a single value</description>
     <property_id>14</property_id>
     <label>Single Only</label>
-    <ignore_empty>false</ignore_empty>
+    <ignore_empty>0</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
   <configurations itemid="34">
@@ -302,7 +302,7 @@
     <description>The module tthis field gets its value from</description>
     <property_id>19</property_id>
     <label>Module</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:0:{}</configuration>
   </configurations>
   <configurations itemid="35">
@@ -311,7 +311,7 @@
     <description>The itemtype tthis field gets its value from</description>
     <property_id>15</property_id>
     <label>Itemtype</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:0:{}</configuration>
   </configurations>
   <configurations itemid="36">
@@ -320,7 +320,7 @@
     <description>This field displays as a dropdown or a textbox or both</description>
     <property_id>34</property_id>
     <label>Combo Mode</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:29:"1,Dropdown;2,Text Box;3,Both;";}</configuration>
   </configurations>
   <configurations itemid="37">
@@ -329,7 +329,7 @@
     <description>How items and subitems are linked</description>
     <property_id>6</property_id>
     <label>Link Type</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:8:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:24:"initialization_firstline";s:0:"";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:125:"serialized,Local value;itemid,Link to subitem;childlist,List of children (child ids);parentid,Parentid reference in subitems;";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="38">
@@ -338,7 +338,7 @@
     <description>Make the parent id configurable or not</description>
     <property_id>34</property_id>
     <label>Parent ID</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:8:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:24:"initialization_firstline";s:0:"";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:36:"1,select;0,fixed (use itemid field);";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="39">
@@ -347,7 +347,7 @@
     <description>Select the fields to display in the interface</description>
     <property_id>39</property_id>
     <label>Field List</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:75:"xarMod::apiFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";}</configuration>
   </configurations>
   <configurations itemid="40">
@@ -356,7 +356,7 @@
     <description>The minimum number of subitems per parent item</description>
     <property_id>15</property_id>
     <label>Subitems displayed</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:0:{}</configuration>
   </configurations>
   <configurations itemid="41">
@@ -365,7 +365,7 @@
     <description>Allow editing of subitems from within the parent</description>
     <property_id>6</property_id>
     <label>Subitem editing</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:78:"0,No editing, display only;1,Only edit existing items;2,Add/Edit/Remove items;";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="42">
@@ -374,7 +374,7 @@
     <description>Enter a function that defines an array of default items</description>
     <property_id>2</property_id>
     <label>Default Items</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:0:{}</configuration>
   </configurations>
   <configurations itemid="43">
@@ -383,7 +383,7 @@
     <description>Whether this field accepts no input as valid</description>
     <property_id>14</property_id>
     <label>Allow empty</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:4:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:2:"  ";s:21:"validation_allowempty";s:1:"1";s:29:"validation_allowempty_invalid";s:2:"  ";}</configuration>
   </configurations>
   <configurations itemid="44">
@@ -392,7 +392,7 @@
     <description>Whether this field is tagged as &quot;required&quot; or not</description>
     <property_id>14</property_id>
     <label>Required</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:0:{}</configuration>
   </configurations>
   <configurations itemid="45">
@@ -401,7 +401,7 @@
     <description>A link to another table</description>
     <property_id>6</property_id>
     <label>Link Field</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:75:"xarMod::apiFunc('dynamicdata','user','getitemfields',array('name' => #(1)))";}</configuration>
   </configurations>
   <configurations itemid="46">
@@ -410,7 +410,7 @@
     <description>Is this field stored as text or ID</description>
     <property_id>6</property_id>
     <label>Storage Type</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:16:"id,ID;name,Name;";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="47">
@@ -419,7 +419,7 @@
     <description>The maximum acceptable file size in bytes</description>
     <property_id>15</property_id>
     <label>Maximum file size</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="48">
@@ -428,7 +428,7 @@
     <description>What methods this input uses to accept files</description>
     <property_id>1115</property_id>
     <label>File Input Methods</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:5:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:2:"  ";s:27:"validation_override_invalid";s:2:"  ";s:29:"validation_allowempty_invalid";s:2:"  ";s:22:"initialization_options";s:39:"5,Trusted;2,External;1,Upload;7,Stored;";}</configuration>
   </configurations>
   <configurations itemid="49">
@@ -437,7 +437,7 @@
     <description>The directory used for uploading files</description>
     <property_id>2</property_id>
     <label>Trusted Directory</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="50">
@@ -446,7 +446,7 @@
     <description>Whether the field accepts multiple file inputs</description>
     <property_id>14</property_id>
     <label>Multiple Files</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="51">
@@ -455,7 +455,7 @@
     <description>A name to be assigned to a directory</description>
     <property_id>2</property_id>
     <label>Directory Name</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:7:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="52">
@@ -464,7 +464,7 @@
     <description>The tooltip text for this field</description>
     <property_id>3</property_id>
     <label>Tooltip</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
   </configurations>
   <configurations itemid="53">
@@ -473,7 +473,7 @@
     <description>Whether this field contains a certain text string</description>
     <property_id>2</property_id>
     <label>Text Filter</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:8:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="54">
@@ -482,7 +482,7 @@
     <description>Whether this field has a line inserted at the beginning</description>
     <property_id>2</property_id>
     <label>First Line</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:3:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="55">
@@ -491,7 +491,7 @@
     <description>Whether this field equals some value</description>
     <property_id>2</property_id>
     <label>Equals</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:3:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="56">
@@ -500,7 +500,7 @@
     <description>Whether this field does not equal some value</description>
     <property_id>2</property_id>
     <label>Does Not Equal</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:3:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
   <configurations itemid="57">
@@ -509,7 +509,7 @@
     <description>Whether this property transfomrs its value</description>
     <property_id>14</property_id>
     <label>Run Transform</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
   <configurations itemid="58">
@@ -518,7 +518,7 @@
     <description>How this property deals with duplicates</description>
     <property_id>6</property_id>
     <label>Allow Duplicates</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:63:"0, Not allowed;1,Create a new instance;2, Use the old instance;";}</configuration>
   </configurations>
   <configurations itemid="59">
@@ -527,7 +527,7 @@
     <description>The allowed categories for this property</description>
     <property_id>30050</property_id>
     <label>Allowed Categories</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
   <configurations itemid="60">
@@ -536,7 +536,7 @@
     <description>Show the Route or not?</description>
     <property_id>14</property_id>
     <label>Show Route?</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
   <configurations itemid="61">
@@ -545,7 +545,7 @@
     <description>Allow adding of items</description>
     <property_id>6</property_id>
     <label>Add/Delete Items</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:70:"0,No Addition/Deletion,display only;1,Only Add Rows;2,Add/Delete Rows;";}</configuration>
   </configurations>
   <configurations itemid="62">
@@ -554,7 +554,7 @@
     <description>Changing key label of row</description>
     <property_id>2</property_id>
     <label>Key Label</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
   <configurations itemid="63">
@@ -563,7 +563,7 @@
     <description>Changing value label of row</description>
     <property_id>2</property_id>
     <label>Value Label</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
   <configurations itemid="64">
@@ -572,7 +572,7 @@
     <description>Allow saving as associative array</description>
     <property_id>14</property_id>
     <label>Associative Array Storage</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
   <configurations itemid="65">
@@ -581,7 +581,7 @@
     <description>Minimum year to start with</description>
     <property_id>15</property_id>
     <label>Start Year</label>
-    <ignore_empty>false</ignore_empty>
+    <ignore_empty>0</ignore_empty>
     <configuration>a:5:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:27:"Minimum value for the year.";s:21:"validation_min_length";s:1:"4";}</configuration>
   </configurations>
   <configurations itemid="66">
@@ -590,7 +590,7 @@
     <description>Maximum year to end with</description>
     <property_id>15</property_id>
     <label>End Year</label>
-    <ignore_empty>false</ignore_empty>
+    <ignore_empty>0</ignore_empty>
     <configuration>a:5:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:25:"Maximum value of the year";s:21:"validation_min_length";s:1:"4";}</configuration>
   </configurations>
   <configurations itemid="67">
@@ -599,7 +599,7 @@
     <description>Whether this field displays files or directories</description>
     <property_id>6</property_id>
     <label>Show type file or directory</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:30:"file,file;directory,directory;";}</configuration>
   </configurations>
   <configurations itemid="68">
@@ -630,21 +630,12 @@
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
   <configurations itemid="71">
-    <id>77</id>
-    <name>validation_email_confirm</name>
-    <description>Show a second email field to be filled in</description>
-    <property_id>14</property_id>
-    <label>Confirm Email</label>
-    <ignore_empty>1</ignore_empty>
-    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
-  </configurations>
-  <configurations itemid="71">
     <id>71</id>
     <name>initialization_update_behavior</name>
     <description>When updating do we add or replace an existing item?</description>
     <property_id>6</property_id>
     <label>Update Behavior</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:83:"none,Do not affect parents;replace,Replace an existing parent;add,Add a new parent;";}</configuration>
   </configurations>
   <configurations itemid="72">
@@ -653,7 +644,7 @@
     <description>A reference to a parent group</description>
     <property_id>45</property_id>
     <label>Base Group</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:4:{s:14:"display_layout";s:7:"default";s:19:"validation_override";s:1:"1";s:30:"initialization_update_behavior";s:4:"none";s:24:"initialization_basegroup";s:1:"1";}</configuration>
   </configurations>
   <configurations itemid="73">
@@ -662,7 +653,7 @@
     <description>Whether this field displays the name or username</description>
     <property_id>6</property_id>
     <label>Display Name</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:34:"uname,User Name;name,Display Name;";}</configuration>
   </configurations>
   <configurations itemid="74">
@@ -671,7 +662,7 @@
     <description>How is this field displayed</description>
     <property_id>2</property_id>
     <label>Number Format</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
   <configurations itemid="75">
@@ -680,7 +671,7 @@
     <description>How is this date displayed</description>
     <property_id>507</property_id>
     <label>Date Format</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration>a:5:{s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:9:"math_date";s:25:"initialization_store_prop";s:2:"id";s:27:"initialization_display_prop";s:4:"name";s:24:"initialization_firstline";s:16:"0,Current Locale";}</configuration>
   </configurations>
   <configurations itemid="76">
@@ -689,7 +680,16 @@
     <description>The number of columns for 2-Dimensional array property</description>
     <property_id>15</property_id>
     <label>Columns Count</label>
-    <ignore_empty>true</ignore_empty>
+    <ignore_empty>1</ignore_empty>
     <configuration></configuration>
+  </configurations>
+  <configurations itemid="77">
+    <id>77</id>
+    <name>validation_email_confirm</name>
+    <description>Show a second email field to be filled in</description>
+    <property_id>14</property_id>
+    <label>Confirm Email</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
 </items>
