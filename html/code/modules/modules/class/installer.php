@@ -531,6 +531,7 @@ class Installer extends Object
 
     public function checkCore($regid=null)
     {
+        xarMod::apiFunc('modules','admin','regenerate');
         $info = xarMod::getInfo($regid);
         if (!empty($info['dependencyinfo']) && !empty($info['dependencyinfo'][0])) {
             $valid = false;
