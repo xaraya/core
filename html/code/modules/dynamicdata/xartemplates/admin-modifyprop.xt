@@ -76,8 +76,7 @@
                             <td>#$field['name']#</td>
                             <td>#$field['label']#</td>
                             <td>
-                                <xar:data-output property="$fieldtypeprop"
-                                name="static_type['.$field['id'].']" value="$field['type']"/>
+                                <xar:data-output property="$fieldtypeprop" name="static_type['.$field['id'].']" value="$field['type']"/>
                             </td>
                             <td>#$field['defaultvalue']#</td>
                             <td>#$field['source']#</td>
