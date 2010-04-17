@@ -45,7 +45,7 @@ class xarLogger_mozilla extends xarLogger
      * @access public
      * @return boolean
      */
-    function setConfig(array &$conf)
+    function setConfig(Array &$conf)
     {
         parent::setConfig($conf);
         $this->_buffer = $this->getCommonCode();

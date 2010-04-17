@@ -32,7 +32,7 @@ class xarLogger_html extends xarLogger_simple
       *               'timeFormat'   => string      Time format to be used in the file (optional)
       * @access public
      **/
-     function setConfig (array &$conf) 
+     function setConfig (Array &$conf) 
      {
          parent::setConfig($conf);
          $this->_fileheader = '<?xml version="1.0" encoding="utf-8"?>
