@@ -75,3 +75,4 @@ function blocks_adminapi_create_cacheinstance($args)
 
     return true;
 }
+?>
