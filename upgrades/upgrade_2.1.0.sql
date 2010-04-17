@@ -14,6 +14,10 @@ INSERT INTO `xar_block_types` (name, module_id, info)
 INSERT INTO `xar_block_instances` (type_id, name, title, content, template, state)
     SELECT t.id, g.name, '', 'a:0:{}', g.template, 2 FROM xar_block_groups g, xar_block_types t WHERE t.name = 'blockgroup';
     
+/* Reset the group pointers in the  xar_block_group_instances table */
+UPDATE `xar_block_group_instances` gi SET group_id = 
+    (SELECT i.id FROM xar_block_groups g, xar_block_instances i WHERE i.name = g.name AND g.id = gi.group_id);
+
 /* Remove the xar_block_groups table */
 DROP TABLE xar_block_groups;
 
