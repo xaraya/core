@@ -99,7 +99,7 @@ function blocks_admin_view_types()
             }
             // make sure we instantiated a block,
             if (empty($block)) {
-                // return classname not found (this is always class {$type}Block)
+                // return classname not found (this is always class [$type]Block)
                 throw new ClassNotFoundException($className);
             }
             if (method_exists($block, 'help')) {
