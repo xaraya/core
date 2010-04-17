@@ -103,8 +103,8 @@ function blocks_userapi_getinfo($args)
     if (empty($blockinfo)) {return;}
 
     // Do standard overrides.
-    if (isset($title) && !is_null($title)) {$blockinfo['title'] = $title;}
-    if (isset($state) && !is_null($state)) {$blockinfo['state'] = $state;}
+    if (!empty($title)) {$blockinfo['title'] = $title;}
+    if (!empty($state)) {$blockinfo['state'] = $state;}
 
     // Now do the custom overrides.
     // We have a hack here to unserialize the content string, update the

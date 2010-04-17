@@ -84,7 +84,7 @@ class SelectProperty extends DataProperty
         // If we have options passed, take them. Otherwise generate them
         if (!isset($data['options'])) {
 
-            // Parse a configuration if one was passed
+        // Parse a configuration if one was passed
             if(isset($data['configuration'])) {
                 $this->parseConfiguration($data['configuration']);
                 unset($data['configuration']);
