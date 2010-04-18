@@ -51,7 +51,7 @@ Class xarBlock extends Object implements IxarBlock
  */
     public static function render(Array $data=array())
     {
-        // Skip rendering inactive blocks
+        // Skip executing inactive blocks
         if ($data['state'] === xarBlock::BLOCK_STATE_INACTIVE) {
             // @TODO: global flag to raise exceptions
             // if ((bool)xarModVars::get('blocks', 'noexceptions')) return '';
@@ -144,7 +144,7 @@ Class xarBlock extends Object implements IxarBlock
         }
 
         // Render block if it has content and isn't hidden
-        if (is_array($blockinfo['content']) && $data['state'] !== xarBlock::BLOCK_STATE_HIDDEN) {
+        if (is_array($blockinfo['content']) && $data['state'] != xarBlock::BLOCK_STATE_HIDDEN) {
             // Here $blockinfo['content'] is the array of template data
             // which will be passed to the inner block template
             // $blockinfo itself is passed to the outer template
