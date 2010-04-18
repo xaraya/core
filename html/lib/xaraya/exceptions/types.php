@@ -145,7 +145,7 @@ class IDNotFoundException extends NotFoundExceptions
 // Files
 class FileNotFoundException extends NotFoundExceptions
 { 
-    protected $message = 'The file "#(1) could not be found.';
+    protected $message = 'The file "#(1)" could not be found.';
 }
 // Directories
 class DirectoryNotFoundException extends NotFoundExceptions
