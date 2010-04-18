@@ -283,7 +283,7 @@ class xarObject extends Object implements IxarObject
                 $link = xarServer::getObjectURL($object->name, $action, $urlargs);
                 break;
         }
-        
+
         return $link;
     }
 

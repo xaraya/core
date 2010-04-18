@@ -1,5 +1,5 @@
 <adminmenu>
-    <menuitems>
+    <menuitems> 
         <menuitem>
             <includes>
                 <includeitem>main</includeitem>
@@ -28,7 +28,7 @@
             <title>Add a new block instance</title>
             <label>New Block</label>
         </menuitem>
-		<menuitem>
+        <menuitem>
             <mask>AdminBlock</mask>
             <includes>
                 <includeitem>view_types</includeitem>

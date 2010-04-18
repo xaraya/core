@@ -50,8 +50,8 @@ function blocks_admin_new_instance()
     $data['create_label'] = xarML('Create Instance');
     // populate block state options
     $data['state_options'] = array(
+        array('id' => xarBlock::BLOCK_STATE_INACTIVE, 'name' => xarML('Inactive')),
         array('id' => xarBlock::BLOCK_STATE_HIDDEN, 'name' => xarML('Hidden')),
-        // array('id' => xarBlock::BLOCK_STATE_INACTIVE, 'name' => xarML('Inactive')),
         array('id' => xarBlock::BLOCK_STATE_VISIBLE, 'name' => xarML('Visible')),
     );
 

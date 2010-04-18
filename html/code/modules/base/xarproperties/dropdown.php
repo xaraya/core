@@ -32,6 +32,7 @@ class SelectProperty extends DataProperty
     public $initialization_options          = null;
     public $validation_override             = false;
     public $validation_override_invalid;
+    public $display_rows                    = 100;   // If there are more than these rows,display as a textbox
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -45,6 +46,19 @@ class SelectProperty extends DataProperty
     {
         if (!parent::validateValue($value)) return false;
 
+        $options = $this->getOptions();
+        if (!empty($options) && ($this->display_rows <= $options)) {
+            $found = false;
+            foreach ($options as $option) {
+                if ($option['name'] == $value) {
+                    $value = $option['id'];
+                    $this->value = $value;
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) $value = null;
+        }
         // check if this option really exists
         $isvalid = $this->getOption(true);
         if ($isvalid) {
@@ -70,7 +84,7 @@ class SelectProperty extends DataProperty
         // If we have options passed, take them. Otherwise generate them
         if (!isset($data['options'])) {
 
-            // Parse a configuration if one was passed
+        // Parse a configuration if one was passed
             if(isset($data['configuration'])) {
                 $this->parseConfiguration($data['configuration']);
                 unset($data['configuration']);
@@ -119,6 +133,7 @@ class SelectProperty extends DataProperty
         }
         if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
         $data['extraparams'] =!empty($extraparams) ? $extraparams : "";
+        if(isset($data['rows'])) $this->display_rows = $data['rows']; 
         return parent::showInput($data);
     }
 

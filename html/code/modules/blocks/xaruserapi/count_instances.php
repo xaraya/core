@@ -98,3 +98,4 @@ function blocks_userapi_count_instances($args)
 
     return $numitems;
 }
+?>

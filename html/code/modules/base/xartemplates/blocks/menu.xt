@@ -114,12 +114,12 @@
                 <ul class="xar-menu-item">
                 <xar:if condition="$showback">
                     <!-- Optionally show admins a link to the back end -->
-                    <xar:sec mask="AdminBase" catch="false">
-                    <li class="xar-menu-item">
-                        <a title="#xarML('View the site back end interface')#" href="#xarModURL($module,'admin','main')#">
-                            View Back End
-                        </a>
-                    </li>
+                    <xar:sec mask="ManageBase" catch="false">
+                        <li class="xar-menu-item">
+                            <a title="#xarML('View the site back end interface')#" href="#xarModURL($module,'admin','main')#">
+                                View Back End
+                            </a>
+                        </li>
                     </xar:sec>
                 </xar:if>
                 <xar:if condition="$showlogout">
