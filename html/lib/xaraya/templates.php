@@ -385,6 +385,10 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
             }
         }
     }
+
+    if (empty($sourceFileName)) {
+        throw new FileNotFoundException("Module: [$modName],[$tplBase],[$templateName]");
+    }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -410,7 +414,9 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, 
 
     // Get the right source filename
     $sourceFileName = xarTpl__getSourceFileName($modName, $templateBase, $tplName, 'blocks');
-
+    if (empty($sourceFileName)) {
+        throw new FileNotFoundException("Block: [$modName],[$templateBase],[$tplName]");
+    }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 
@@ -461,6 +467,10 @@ function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elem
 
         xarCoreCache::setCached('Templates.DDElement', $cachename, $sourceFileName);
     }
+    if (empty($sourceFileName)) {
+        throw new FileNotFoundException("DD Element: [$modName],[$templateBase],[$ddName]");
+    }
+
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
 function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)

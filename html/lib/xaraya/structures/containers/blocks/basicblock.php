@@ -40,6 +40,7 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     public $type            = 'Block';  // block type name
     public $name            = '';       // Name of block
     public $title           = '';       // Block title
+    public $show_preview    = false;    // Show a preview of the display
 
     // Cache settings: will be over-ridden by blockinfo[content] (means block cache settings table data)
     // or from input, eg via block tag parameters, falling back to these defaults, or those of the child class
