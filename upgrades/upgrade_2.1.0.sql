@@ -71,3 +71,11 @@ UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'privileges';
 UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'roles';
 UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'themes';
 UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'authsystem';
+
+/* --------------------------------------------------------- */
+
+/* Adding the releasenumber modvar */
+
+INSERT INTO `xar_module_vars` (module_id, name, value)
+    SELECT mods.id, 'releasenumber', 10 FROM xar_modules mods
+    WHERE mods.name = 'base';

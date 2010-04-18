@@ -43,11 +43,14 @@ function base_admin_modifyconfig()
     $tzobject = new DateTimeZone(xarConfigVars::get(null, 'Site.Core.TimeZone'));
     $data['sitedatetime']->setTimezone($tzobject);
 
+    /*
     $data['editor'] = xarModVars::get('base','editor');
     $data['editors'] = array(array('displayname' => xarML('none')));
     if(xarModIsAvailable('htmlarea')) $data['editors'][] = array('displayname' => 'htmlarea');
     if(xarModIsAvailable('fckeditor')) $data['editors'][] = array('displayname' => 'fckeditor');
     if(xarModIsAvailable('tinymce')) $data['editors'][] = array('displayname' => 'tinymce');
+    */
+    
     $allowedlocales = xarConfigVars::get(null, 'Site.MLS.AllowedLocales');
     foreach($locales as $locale) {
         if (in_array($locale, $allowedlocales)) $active = true;
@@ -164,14 +167,14 @@ function base_admin_modifyconfig()
                     if (!xarVarFetch('loadlegacy',   'checkbox', $loadLegacy,    xarConfigVars::get(null, 'Site.Core.LoadLegacy'), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('proxyhost',    'str:1:',   $proxyhost,     xarModVars::get('base', 'proxyhost'), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('proxyport',    'int:1:',   $proxyport,     xarModVars::get('base', 'proxyport'), XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('editor',       'str:1:',   $editor,        xarModVars::get('base', 'editor'), XARVAR_NOT_REQUIRED)) return;
+//                    if (!xarVarFetch('editor',       'str:1:',   $editor,        xarModVars::get('base', 'editor'), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('releasenumber','int:1:',   $releasenumber, xarModVars::get('base','releasenumber'),XARVAR_NOT_REQUIRED)) return;
                     // Save these in normal module variables for now
                     xarModVars::set('base','proxyhost',$proxyhost);
                     xarModVars::set('base','proxyport',$proxyport);
                     xarModVars::set('base','releasenumber', $releasenumber);
                     xarConfigVars::set(null, 'Site.Core.LoadLegacy', $loadLegacy);
-                    xarModVars::set('base','editor',$editor);
+//                    xarModVars::set('base','editor',$editor);
 
                     // Timezone, offset and DST
                     if (!xarVarFetch('hosttimezone','str:1:',$hosttimezone,'UTC',XARVAR_NOT_REQUIRED)) return;
