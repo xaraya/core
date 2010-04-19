@@ -55,7 +55,7 @@ class AdminmenuBlock extends BasicBlock implements iBlock
 
         // which module is loaded atm?
         // we need it's name, type and function - dealing only with admin type mods, aren't we?
-        list($thismodname, $thismodtype, $thisfuncname) = xarRequest::getInfo();
+        list($thismodname, $thismodtype, $thisfuncname) = xarController::$request->getInfo();
 
         // SETTING 1: Show a logout link in the block?
         $showlogout = false;

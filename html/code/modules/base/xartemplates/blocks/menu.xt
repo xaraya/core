@@ -19,7 +19,7 @@
                             <li class="xar-menu-item">
                                 #$item['title']#
                             </li>
-                            <xar:elseif condition="!empty($item['child']) and ($item['here'])"/>
+                        <xar:elseif condition="!empty($item['child']) and ($item['here'])"/>
                             <li class="xar-menu-item-current">
                                 <ul class="xar-menu-subitem">
                                     <li class="xar-menu-subitem-current">
@@ -29,13 +29,13 @@
                                     </li>
                                 </ul>
                             </li>
-                            <xar:elseif condition="($item['here']) and empty($item['child'])"/>
+                        <xar:elseif condition="($item['here']) and empty($item['child'])"/>
                             <li class="xar-menu-item-current">
                                 <a name="activeitem" href="#$item['url']#" title="#$item['comment']#">
                                     #$item['title']#
                                 </a>
                             </li>
-                            <xar:elseif condition="!empty($item['child'])"/>
+                        <xar:elseif condition="!empty($item['child'])"/>
                             <li class="xar-menu-item">
                                 <ul class="xar-menu-subitem">
                                     <li class="xar-menu-subitem">
@@ -45,7 +45,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <xar:else />
+                        <xar:else />
                             <li class="xar-menu-item">
                                 <a href="#$item['url']#" title="#$item['comment']#">
                                     #$item['title']#
@@ -80,7 +80,7 @@
                                                         #$sublinks['userlabel']# #$marker#
                                                     </a>
                                                 </li>
-                                                <xar:else />
+                                            <xar:else />
                                                 <li class="xar-menu-subitem">
                                                     <a href="#$sublinks['userlink']#" title="#$sublinks['usertitle']#">
                                                         #$sublinks['userlabel']#
@@ -91,16 +91,16 @@
                                     </ul>
                                 </xar:if>
                             </li>
-                            <xar:elseif condition="$mod['modactive'] and !$mod['link']"/>
-                                <li class="xar-menu-section">
-                                    #$mod['label']#
-                                </li>
-                            <xar:else />
-                                <li class="xar-menu-item">
-                                    <a href="#$mod['link']#" title="#$mod['desc']#">
-                                        #$mod['label']#
-                                    </a>
-                                </li>
+                        <xar:elseif condition="$mod['modactive'] and !$mod['link']"/>
+                            <li class="xar-menu-section">
+                                #$mod['label']# 
+                            </li>
+                        <xar:else />
+                            <li class="xar-menu-item">
+                                <a href="#$mod['link']#" title="#$mod['desc']#">
+                                    #$mod['label']# 
+                                </a>
+                            </li>
                         </xar:if>
                     </xar:foreach>
                 </ul>
