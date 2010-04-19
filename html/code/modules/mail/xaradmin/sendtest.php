@@ -37,7 +37,7 @@ function mail_admin_sendtest()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
     // Security check
-    if (!xarSecurityCheck('AdminMail')) return;
+    if (!xarSecurityCheck('ManageMail')) return;
 
     if (empty($email)) {
         $email = xarModVars::get('mail', 'adminmail');

@@ -24,7 +24,7 @@
 function mail_admin_compose()
 {
     // Security Check
-    if (!xarSecurityCheck('AdminMail')) return;
+    if (!xarSecurityCheck('ManageMail')) return;
     // Generate a one-time authorisation code for this operation
     $data['authid']         = xarSecGenAuthKey();
 

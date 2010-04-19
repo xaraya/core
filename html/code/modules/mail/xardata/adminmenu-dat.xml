@@ -9,7 +9,7 @@
             <label>Overview</label>
         </menuitem>
         <menuitem>
-            <mask>AdminMail</mask>
+            <mask>ManageMail</mask>
             <includes>
                 <includeitem>compose</includeitem>
             </includes>

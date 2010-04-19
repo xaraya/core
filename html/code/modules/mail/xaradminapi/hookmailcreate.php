@@ -52,7 +52,6 @@ function mail_adminapi_hookmailcreate($args)
     // Security Check
     //TODO: if we add to the hook to allow sending of mail to OTHER recipients than the admin
     // we will have to include the following security check and make sure the appropriate privileges are assigned
-//    if (!xarSecurityCheck('CreateMail', 0, 'All', "$modname::$objectid", 'mail')) return;
 
     // Set up variables
     $wordwrap = xarModVars::get('mail', 'wordwrap');
