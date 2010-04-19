@@ -30,7 +30,7 @@ function themes_admin_modify()
 
     $themeName = $themeInfo['name'];
     // Security Check
-    if (!xarSecurityCheck('AdminTheme', 0, 'All', '$themeName::$regId')) return;
+    if (!xarSecurityCheck('AdminThemes', 0, 'All', '$themeName::$regId')) return;
 
     $themevars = array();
     //xarTheme_getVarsByTheme($themeName);

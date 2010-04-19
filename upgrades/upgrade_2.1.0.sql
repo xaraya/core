@@ -95,6 +95,8 @@ INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, desc
     SELECT 'ManagePrivileges',  m.id, 'All', 'All', 700, 'Site Manager mask for privileges module',3 FROM `xar_modules` m WHERE name = 'privileges';
 INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
     SELECT 'ManageRoles',  m.id, 'All', 'All', 700, 'Site Manager mask for roles module',3 FROM `xar_modules` m WHERE name = 'roles';
+INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
+    SELECT 'ManageThemes',  m.id, 'All', 'All', 700, 'Site Manager mask for themes module',3 FROM `xar_modules` m WHERE name = 'themes';
 
 /* --------------------------------------------------------- */
 
@@ -146,6 +148,11 @@ UPDATE `xar_privileges` SET name = 'AddRoles' WHERE name = 'AddRole';
 UPDATE `xar_privileges` SET name = 'AdminRoles' WHERE name = 'AdminRole';
 
 DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'DeleteRole';
+
+/* --------------------------------------------------------- */
+
+/* Redefining privileges module masks */
+UPDATE `xar_privileges` SET name = 'AdminThemes' WHERE name = 'AdminTheme';
 
 /* --------------------------------------------------------- */
 

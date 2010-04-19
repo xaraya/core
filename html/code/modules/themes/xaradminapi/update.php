@@ -27,7 +27,7 @@ function themes_adminapi_update($args)
     if (!isset($updatevars)) throw new EmptyParameterException('updatevars');
 
     // Security Check
-    if (!xarSecurityCheck('AdminTheme',0,'All',"All:All:$regId")) return;
+    if (!xarSecurityCheck('AdminThemes',0,'All',"All:All:$regId")) return;
 
     // Get theme name
     $themeInfo = xarThemeGetInfo($regid);
