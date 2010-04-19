@@ -70,16 +70,16 @@ function blocks_adminapi_load($args)
     $to_check = array();
     if (!empty($func)) {
         // check for method specific file, eg menu_modify.php
-        $className = ucfirst($type) . 'Block' . ucfirst($func);
+        $className = ucfirst($module) . '_' . ucfirst($type) . 'Block' . ucfirst($func);
         $to_check[$className] = "{$blockDir}/{$type}_{$func}.php";
         // check for generic admin file, eg menu_admin.php
         if ($func != 'display') {
-            $className = ucfirst($type) . 'BlockAdmin';
+            $className = ucfirst($module) . '_' . ucfirst($type) . 'BlockAdmin';
             $to_check[$className] = "{$blockDir}/{$type}_admin.php";
         }
     }
     // default block class to load
-    $className = ucfirst($type) . 'Block';
+    $className = ucfirst($module) . '_' . ucfirst($type) . 'Block';
     $to_check[$className] = "{$blockDir}/{$type}.php";
     foreach ($to_check as $className => $filePath) {
         if (file_exists($filePath)) {

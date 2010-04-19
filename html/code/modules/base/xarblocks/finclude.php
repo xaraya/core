@@ -15,7 +15,7 @@
  */
     sys::import('xaraya.structures.containers.blocks.basicblock');
 
-    class FincludeBlock extends BasicBlock implements iBlock
+    class Base_FincludeBlock extends BasicBlock implements iBlock
     {
 
         public $name                = 'HTMLBlock';

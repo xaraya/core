@@ -19,7 +19,7 @@
  */
 sys::import('modules.authsystem.xarblocks.login');
 
-class LoginBlockAdmin extends LoginBlock implements iBlock
+class Authsystem_LoginBlockAdmin extends Authsystem_LoginBlock implements iBlock
 {
 /**
  * Modify Function to the Blocks Admin

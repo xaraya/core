@@ -16,7 +16,7 @@
  */
     sys::import('xaraya.structures.containers.blocks.basicblock');
 
-    class ContentBlock extends BasicBlock implements iBlock
+    class Base_ContentBlock extends BasicBlock implements iBlock
     {
         public $name                = 'ContentBlock';
         public $module              = 'base';

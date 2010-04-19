@@ -17,7 +17,7 @@
  */
     sys::import('modules.roles.xarblocks.online');
 
-    class OnlineBlockAdmin extends OnlineBlock
+    class Roles_OnlineBlockAdmin extends Roles_OnlineBlock
     {
         function modify(Array $data=array())
         {

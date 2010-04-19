@@ -22,7 +22,7 @@
 
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class MetaBlock extends BasicBlock
+class Themes_MetaBlock extends BasicBlock
 {
     public $name                = 'MetaBlock';
     public $module              = 'themes';

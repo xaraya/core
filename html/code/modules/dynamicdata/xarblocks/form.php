@@ -15,7 +15,7 @@
  */
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class FormBlock extends BasicBlock implements iBlock
+class Dynamicdata_FormBlock extends BasicBlock implements iBlock
 {
     public $nocache             = 1;
 

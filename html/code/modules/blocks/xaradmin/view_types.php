@@ -87,8 +87,8 @@ function blocks_admin_view_types()
             );
             // cascading block files - order is method specific, admin specific, block specific
             $to_check = array();
-            $to_check[] = ucfirst($detail['type']) . 'BlockAdmin';    // from eg menu_admin.php
-            $to_check[] = ucfirst($detail['type']) . 'Block';         // from eg menu.php
+            $to_check[] = ucfirst($detail['module']) . '_' . ucfirst($detail['type']) . 'BlockAdmin';    // from eg menu_admin.php
+            $to_check[] = ucfirst($detail['module']) . '_' . ucfirst($detail['type']) . 'Block';         // from eg menu.php
             foreach ($to_check as $className) {
                 // @FIXME: class name should be unique
                 if (class_exists($className)) {

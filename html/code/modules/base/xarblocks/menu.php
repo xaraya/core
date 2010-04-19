@@ -23,7 +23,7 @@
 */
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class MenuBlock extends BasicBlock implements iBlock
+class Base_MenuBlock extends BasicBlock implements iBlock
 {
     public $name                = 'MenuBlock';
     public $module              = 'base';
