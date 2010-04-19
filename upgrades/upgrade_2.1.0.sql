@@ -79,3 +79,9 @@ UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'authsystem';
 INSERT INTO `xar_module_vars` (module_id, name, value)
     SELECT mods.id, 'releasenumber', 10 FROM xar_modules mods
     WHERE mods.name = 'base';
+
+/* --------------------------------------------------------- */
+
+/* Adding sitemanager masks */
+INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype) VALUES 
+    SELECT 'ManageBase',  m.id, 'All', 'All', 700, '',3 FROM `xar_modules` m WHERE name = 'base';
