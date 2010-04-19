@@ -92,6 +92,7 @@ function themes_init()
 
     xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditThemes','All','themes','All','All','ACCESS_EDIT');
+    xarRegisterMask('ManageThemes','All','themes','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminThemes','All','themes','All','All','ACCESS_ADMIN');
 
     if (!xarMod::apiFunc('blocks', 'admin', 'register_block_type',
