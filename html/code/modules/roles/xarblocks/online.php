@@ -17,7 +17,7 @@
  */
     sys::import('xaraya.structures.containers.blocks.basicblock');
 
-    class OnlineBlock extends BasicBlock
+    class Roles_OnlineBlock extends BasicBlock
     {
         public $name                = 'OnlineBlock';
         public $module              = 'roles';

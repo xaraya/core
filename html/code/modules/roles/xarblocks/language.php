@@ -18,7 +18,7 @@
  */
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class LanguageBlock extends BasicBlock
+class Roles_LanguageBlock extends BasicBlock
 {
     public $name                = 'LanguageBlock';
     public $module              = 'roles';

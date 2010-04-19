@@ -19,7 +19,7 @@
  */
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class AdminmenuBlock extends BasicBlock implements iBlock
+class Base_AdminmenuBlock extends BasicBlock implements iBlock
 {
     public $nocache             = 1;
 

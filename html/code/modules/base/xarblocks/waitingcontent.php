@@ -13,7 +13,7 @@
 
     sys::import('xaraya.structures.containers.blocks.basicblock');
 
-    class WaitingContentBlock extends BasicBlock implements iBlock
+    class Base_WaitingContentBlock extends BasicBlock implements iBlock
     {
         public $nocache             = 1;
 

@@ -19,7 +19,7 @@
  */
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class LoginBlock extends BasicBlock implements iBlock
+class Authsystem_LoginBlock extends BasicBlock implements iBlock
 {
     public $nocache             = 1;
 

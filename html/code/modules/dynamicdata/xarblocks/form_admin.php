@@ -15,7 +15,7 @@
  */
     sys::import('modules.dynamicdata.xarblocks.form');
 
-class FormBlockAdmin extends FormBlock implements iBlock
+class Dynamicdata_FormBlockAdmin extends Dynamicdata_FormBlock implements iBlock
 {
 /**
  * Modify Function to the Blocks Admin

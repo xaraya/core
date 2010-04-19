@@ -16,7 +16,7 @@
  */
     sys::import('modules.base.xarblocks.content');
 
-    class ContentBlockAdmin extends ContentBlock implements iBlock
+    class Base_ContentBlockAdmin extends Base_ContentBlock implements iBlock
     {
 /**
  * Modify Function to the Blocks Admin

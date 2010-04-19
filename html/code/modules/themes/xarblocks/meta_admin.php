@@ -22,7 +22,7 @@
 
     sys::import('modules.themes.xarblocks.meta');
 
-class MetaBlockAdmin extends MetaBlock
+class Themes_MetaBlockAdmin extends Themes_MetaBlock
 {
 /**
  * Modify Function to the Blocks Admin

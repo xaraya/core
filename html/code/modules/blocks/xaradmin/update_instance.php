@@ -46,9 +46,9 @@ function blocks_admin_update_instance()
 
     // cascading block files - order is method specific, admin specific, block specific
     $to_check = array();
-    $to_check[] = ucfirst($instance['type']) . 'BlockUpdate';   // from eg menu_update.php
-    $to_check[] = ucfirst($instance['type']) . 'BlockAdmin';    // from eg menu_admin.php
-    $to_check[] = ucfirst($instance['type']) . 'Block';         // from eg menu.php
+    $to_check[] = ucfirst($instance['module']) . '_' . ucfirst($instance['type']) . 'BlockUpdate';   // from eg menu_update.php
+    $to_check[] = ucfirst($instance['module']) . '_' . ucfirst($instance['type']) . 'BlockAdmin';    // from eg menu_admin.php
+    $to_check[] = ucfirst($instance['module']) . '_' . ucfirst($instance['type']) . 'Block';         // from eg menu.php
 
     // Block type properties config
     foreach ($to_check as $className) {

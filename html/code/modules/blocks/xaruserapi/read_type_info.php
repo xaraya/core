@@ -40,8 +40,8 @@ function blocks_userapi_read_type_info($args)
 
     // cascading block files - order is admin specific, block specific
     $to_check = array();
-    $to_check[] = ucfirst($type) . 'BlockAdmin';    // from eg menu_admin.php
-    $to_check[] = ucfirst($type) . 'Block';         // from eg menu.php
+    $to_check[] = ucfirst($module) . '_' . ucfirst($type) . 'BlockAdmin';    // from eg menu_admin.php
+    $to_check[] = ucfirst($module) . '_' . ucfirst($type) . 'Block';         // from eg menu.php
     foreach ($to_check as $className) {
         // @FIXME: class name should be unique
         if (class_exists($className)) {

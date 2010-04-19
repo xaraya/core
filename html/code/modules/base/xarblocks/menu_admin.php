@@ -23,7 +23,7 @@
 */
 sys::import('modules.base.xarblocks.menu');
 
-class MenuBlockAdmin extends MenuBlock implements iBlock
+class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
 {
 /**
  * Modify Function to the Blocks Admin

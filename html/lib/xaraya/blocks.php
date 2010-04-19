@@ -90,7 +90,7 @@ Class xarBlock extends Object implements IxarBlock
         }
 
         // @FIXME: class name should be unique
-        $className = ucfirst($data['type']) . 'Block';
+        $className = ucfirst($data['module']) . '_' . ucfirst($data['type']) . 'Block';
         // if we're here, we can safely instantiate the block instance
         $block = new $className($data);
 

@@ -18,7 +18,7 @@
 
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class UserBlock extends BasicBlock
+class Roles_UserBlock extends BasicBlock
 {
     public $name                = 'UserBlock';
     public $module              = 'roles';

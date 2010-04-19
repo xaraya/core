@@ -1,7 +1,7 @@
 <?php
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class BlockgroupBlock extends BasicBlock implements iBlock
+class Blocks_BlockgroupBlock extends BasicBlock implements iBlock
 {
     public $name                = 'BlockgroupBlock';
     public $module              = 'blocks';

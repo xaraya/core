@@ -32,9 +32,9 @@ function blocks_admin_delete_instance()
 
     // cascading block files - order is method specific, admin specific, block specific
     $to_check = array();
-    $to_check[] = ucfirst($blockinfo['type']) . 'BlockDelete';   // from eg menu_delete.php
-    $to_check[] = ucfirst($blockinfo['type']) . 'BlockAdmin';    // from eg menu_admin.php
-    $to_check[] = ucfirst($blockinfo['type']) . 'Block';         // from eg menu.php
+    $to_check[] = ucfirst($blockinfo['module']) . '_' . ucfirst($blockinfo['type']) . 'BlockDelete';   // from eg menu_delete.php
+    $to_check[] = ucfirst($blockinfo['module']) . '_' . ucfirst($blockinfo['type']) . 'BlockAdmin';    // from eg menu_admin.php
+    $to_check[] = ucfirst($blockinfo['module']) . '_' . ucfirst($blockinfo['type']) . 'Block';         // from eg menu.php
     foreach ($to_check as $className) {
         // @FIXME: class name should be unique
         if (class_exists($className)) {
