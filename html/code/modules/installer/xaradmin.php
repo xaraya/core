@@ -1032,6 +1032,7 @@ function installer_admin_confirm_configuration()
         }
         $func = "installer_" . basename(strval($configuration),'.conf.php') . "_configuration_load";
         $func($chosen);
+        
         $content['marker'] = '[x]';                                           // create the user menu
         $content['displaymodules'] = 'All';
         $content['modulelist'] = '';
@@ -1106,6 +1107,38 @@ function installer_admin_cleanup()
 
     // Install script is still there. Create a reminder block
     if (file_exists('install.php')) {
+
+        // get the left blockgroup block id
+        $leftBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'left'));
+        if ($leftBlockgroup == false) {
+            $msg = xarML("Blockgroup 'left' not found.");
+            throw new Exception($msg);
+        }
+        $leftBlockgroupID = $leftBlockgroup['bid'];
+        assert('is_numeric($leftBlockgroupID);');
+
+        $menuBlockType = xarMod::apiFunc('blocks', 'user', 'getblocktype',
+                                     array('module'  => 'base',
+                                           'type'=> 'menu'));
+
+        $menuBlockTypeId = $menuBlockType['tid'];
+
+        $content['marker'] = '[x]';                                           // create the user menu
+        $content['displaymodules'] = 'All';
+        $content['modulelist'] = '';
+        $content['content'] = '';
+
+        if (!xarMod::apiFunc('blocks', 'user', 'get', array('name'  => 'mainmenu'))) {
+            if (!xarMod::apiFunc('blocks', 'admin', 'create_instance',
+                          array('title' => 'Main Menu',
+                                'name'  => 'mainmenu',
+                                'type'  => $menuBlockTypeId,
+                                'groups' => array(array('id' => $leftBlockgroupID,)),
+                                'content' => $content,
+                                'state' => 2))) {
+                return;
+            }
+        }
 
         // get the admin blockgroup block id
         $adminBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'admin'));
