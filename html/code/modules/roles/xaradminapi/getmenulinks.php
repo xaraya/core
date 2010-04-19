@@ -26,7 +26,7 @@ function roles_adminapi_getmenulinks()
 
     $menulinks = array();
     .....
-    if (xarSecurityCheck('EditRole',0)) {
+    if (xarSecurityCheck('EditRoles',0)) {
         $menulinks[] = array('url'   => xarModURL('roles',
                                                   'admin',
                                                   'viewroles'),

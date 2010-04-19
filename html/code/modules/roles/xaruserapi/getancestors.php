@@ -22,7 +22,7 @@ function roles_userapi_getancestors($args)
 
     if(!isset($id)) throw new EmptyParameterException('id');
 
-    if(!xarSecurityCheck('ReadRole')) return;
+    if(!xarSecurityCheck('ReadRoles')) return;
 
     $role = xarRoles::get($id);
 

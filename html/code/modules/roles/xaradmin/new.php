@@ -16,7 +16,7 @@
  */
 function roles_admin_new()
 {
-    if (!xarSecurityCheck('AddRole')) return;
+    if (!xarSecurityCheck('AddRoles')) return;
 
     if (!xarVarFetch('return_url',  'isset', $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('parentid',    'id',    $data['parentid'], (int)xarModVars::get('roles','defaultgroup'), XARVAR_NOT_REQUIRED)) return;

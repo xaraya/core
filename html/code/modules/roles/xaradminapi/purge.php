@@ -41,7 +41,7 @@ function roles_adminapi_purge($args)
                 array('id' => $item['id']));
 
         // Security check
-        if (!xarSecurityCheck('DeleteRole',0,'Item',"$item[name]::$item[id]")) return;
+        if (!xarSecurityCheck('ManageRoles',0,'Item',"$item[name]::$item[id]")) return;
 
         // Call the Roles class
         $role = xarRoles::get($item['id']);

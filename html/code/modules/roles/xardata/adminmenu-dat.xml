@@ -9,7 +9,7 @@
             <label>Overview</label>
         </menuitem>
         <menuitem>
-            <mask>EditRole</mask>
+            <mask>EditRoles</mask>
             <includes>
                 <includeitem>showusers</includeitem>
                 <includeitem>display</includeitem>
@@ -23,7 +23,7 @@
             <label>Groups &amp; Users</label>
         </menuitem>
         <menuitem>
-            <mask>AdminRole</mask>
+            <mask>ManageRoles</mask>
             <includes>
                 <includeitem>createmail</includeitem>
                 <includeitem>modifyemail</includeitem>
@@ -34,7 +34,7 @@
             <label>Messaging</label>
         </menuitem>
         <menuitem>
-            <mask>AdminRole</mask>
+            <mask>ManageRoles</mask>
             <includes>
                 <includeitem>purge</includeitem>
             </includes>
@@ -43,7 +43,7 @@
             <label>Recall/Purge</label>
         </menuitem>
         <menuitem>
-            <mask>AdminRole</mask>
+            <mask>ManageRoles</mask>
             <includes>
                 <includeitem>sitelock</includeitem>
             </includes>
@@ -52,7 +52,7 @@
             <label>SiteLock</label>
         </menuitem>
         <menuitem>
-            <mask>AdminRole</mask>
+            <mask>AdminRoles</mask>
             <includes>
                 <includeitem>modifyconfig</includeitem>
             </includes>

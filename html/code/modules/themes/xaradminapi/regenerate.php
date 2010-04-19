@@ -20,7 +20,7 @@
 function themes_adminapi_regenerate()
 {
 // Security Check
-    if(!xarSecurityCheck('AdminTheme')) return;
+    if(!xarSecurityCheck('AdminThemes')) return;
 
     //Finds and updates missing modules
     sys::import('modules.modules.class.installer');

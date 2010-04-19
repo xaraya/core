@@ -43,7 +43,7 @@
         <fieldset>
             <legend>#$object:label# Properties:</legend>
             <form action="#xarModURL('dynamicdata','admin','update')#" method="post" enctype="application/x-www-form-urlencoded">
-                <xar:if condition="!xarSecurityCheck('EditRole',0,'Roles',$object:getName())">
+                <xar:if condition="!xarSecurityCheck('EditRoles',0,'Roles',$object:getName())">
                     <xar:data-display object="$object" tplmodule="roles"/>
                     <p>This #$object:label# cannot be edited or deleted.</p>
                 <xar:else />
@@ -201,7 +201,7 @@
                     </tr>
                 </xar:loop>
             </table>
-            <xar:if condition="!xarSecurityCheck('EditRole',0,'Roles',$object:getName())">
+            <xar:if condition="!xarSecurityCheck('EditRoles',0,'Roles',$object:getName())">
                 <p>This #$object:label# cannot be edited or deleted.</p>
                 <xar:else />
               <form action="#xarModURL('roles','admin','addmember')#" method="post" enctype="application/x-www-form-urlencoded">

@@ -25,7 +25,7 @@ function roles_user_main()
     // Security Check
     //This is limiting all admin users the chance to get to the menu for the roles.
     /*
-    if(xarSecurityCheck('EditRole',0)) {
+    if(xarSecurityCheck('EditRoles',0)) {
 
         if ((bool)xarModVars::get('modules', 'disableoverview') == false){
             return xarTplModule('roles','admin', 'main',array());

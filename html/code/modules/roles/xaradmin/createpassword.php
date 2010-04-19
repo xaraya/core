@@ -16,7 +16,7 @@
 function roles_admin_createpassword()
 {
     // Security Check
-    if (!xarSecurityCheck('EditRole')) return;
+    if (!xarSecurityCheck('EditRoles')) return;
     // Get parameters
     if(!xarVarFetch('state', 'isset', $state, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('groupid', 'int:0:', $groupid, 0, XARVAR_NOT_REQUIRED)) return;

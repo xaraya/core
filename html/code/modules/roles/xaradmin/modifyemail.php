@@ -14,7 +14,7 @@
 function roles_admin_modifyemail($args)
 {
     // Security Check
-    if (!xarSecurityCheck('EditRole')) return;
+    if (!xarSecurityCheck('EditRoles')) return;
 
     extract($args);
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;

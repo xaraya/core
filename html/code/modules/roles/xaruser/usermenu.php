@@ -155,7 +155,7 @@ function roles_user_usermenu($args)
                     if (xarUserIsLoggedIn() && xarUserGetVar('id')==$id) { //they should be but ..
                         $userlastlogin = xarSession::getVar('roles_thislastlogin');
                         $usercurrentlogin = xarModUserVars::get('roles','userlastlogin',$id);
-                    }elseif (xarSecurityCheck('AdminRole',0,'Roles',$name) && xarModUserVars::get('roles','userlastlogin',$id)){
+                    }elseif (xarSecurityCheck('AdminRoles',0,'Roles',$name) && xarModUserVars::get('roles','userlastlogin',$id)){
                         $usercurrentlogin = '';
                         $userlastlogin = xarModUserVars::get('roles','userlastlogin',$id);
                     }else{

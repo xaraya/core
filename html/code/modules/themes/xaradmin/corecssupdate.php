@@ -24,7 +24,7 @@ function themes_admin_corecssupdate()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
     // Security Check
-    if (!xarSecurityCheck('AdminTheme')) return;
+    if (!xarSecurityCheck('AdminThemes')) return;
 
     // params
     if (!xarVarFetch('linkoptions', 'str::', $linkoptions, '', XARVAR_NOT_REQUIRED)) return;

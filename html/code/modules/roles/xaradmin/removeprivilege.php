@@ -44,7 +44,7 @@ function roles_admin_removeprivilege()
         }
 
     // Security Check
-    if (!xarSecurityCheck('EditRole')) return;
+    if (!xarSecurityCheck('EditRoles')) return;
     // some info for the template display
     $rolename = $role->getName();
     $privname = $priv->getName();

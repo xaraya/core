@@ -21,7 +21,7 @@ function roles_adminapi_getgroupmenulinks()
 {
 
 // Security Check
-    if (xarSecurityCheck('AddRole',0)) {
+    if (xarSecurityCheck('AddRoles',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                    'admin',
@@ -31,7 +31,7 @@ function roles_adminapi_getgroupmenulinks()
     }
 
 // Security Check
-    if (xarSecurityCheck('EditRole',0)) {
+    if (xarSecurityCheck('EditRoles',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                    'admin',

@@ -118,7 +118,7 @@ function roles_admin_createmail()
                           'email'    => $role['email'],
                           'status'   => $role['state'],
                           'date_reg' => $role['date_reg'],
-                          'frozen'   => !xarSecurityCheck('EditRole',0,'Roles',$role['name'])
+                          'frozen'   => !xarSecurityCheck('EditRoles',0,'Roles',$role['name'])
                          );
         }
 
@@ -129,7 +129,7 @@ function roles_admin_createmail()
             $descendants = $parentgroup->getDescendants($state);
 
             while (list($key, $user) = each($descendants)) {
-                if (xarSecurityCheck('EditRole',0,'Roles',$user->getName())) {
+                if (xarSecurityCheck('EditRoles',0,'Roles',$user->getName())) {
                     if (in_array($state, array($user->getState(),xarRoles::ROLES_STATE_ALL))) {
                         $data['users'][$user->getID()] =
                             array('id'      => $user->getID(),

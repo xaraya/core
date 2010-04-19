@@ -35,7 +35,7 @@ function roles_admin_addprivilege()
     $priv = xarPrivileges::getPrivilege($privid);
 
     //Security Check
-    if (!xarSecurityCheck('AssignPrivilege',0,'Privileges',$priv->getName())) return;
+    if (!xarSecurityCheck('ManagePrivileges',0,'Privileges',$priv->getName())) return;
 
     // If this privilege is already assigned do nothing
     // Try to assign the privilege and bail if an error was thrown

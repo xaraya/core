@@ -121,7 +121,7 @@ function roles_userapi_getall($args)
     }
 
     // Hide pending users from non-admins
-    if (!xarSecurityCheck('AdminRole', 0)) {
+    if (!xarSecurityCheck('AdminRoles', 0)) {
         $where_clause[] = 'roletab.state <> ?';
         $bindvars[] = (int) ROLES_STATE_PENDING;
     }
@@ -172,7 +172,7 @@ function roles_userapi_getall($args)
     $roles = array();
     while($result->next()) {
         list($id, $uname, $name, $email, $pass, $state, $date_reg) = $result->fields;
-        if (xarSecurityCheck('ReadRole', 0, 'Roles', "$uname")) {
+        if (xarSecurityCheck('ReadRoles', 0, 'Roles', "$uname")) {
             if (!empty($idlist)) {
                 $roles[$id] = array(
                     'id'       => (int) $id,
