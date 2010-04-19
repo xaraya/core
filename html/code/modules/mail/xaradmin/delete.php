@@ -7,7 +7,7 @@ function mail_admin_delete($args = array())
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
     // Security check
-    if (!xarSecurityCheck('AdminMail')) return; 
+    if (!xarSecurityCheck('ManageMail')) return; 
     // Required parameters
     if(!xarVarFetch('itemid','int:1:',$itemid, 0, XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('objectid','int:1:',$objectid, 0, XARVAR_NOT_REQUIRED)) return;

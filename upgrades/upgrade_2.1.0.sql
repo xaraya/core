@@ -87,6 +87,8 @@ INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, desc
     SELECT 'ManageBase',  m.id, 'All', 'All', 700, 'Site Manager mask for base module',3 FROM `xar_modules` m WHERE name = 'base';
 INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
     SELECT 'ManageBlocks',  m.id, 'All', 'All', 700, 'Site Manager mask for blocks module',3 FROM `xar_modules` m WHERE name = 'blocks';
+INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
+    SELECT 'ManageMail',  m.id, 'All', 'All', 700, 'Site Manager mask for mail module',3 FROM `xar_modules` m WHERE name = 'mail';
 
 /* --------------------------------------------------------- */
 
@@ -111,6 +113,12 @@ DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'AdminBlock';
 DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'EditBlockGroup';
 DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'ReadBlocksBlock';
 DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'ViewAuthsystemBlocks';
+
+/* --------------------------------------------------------- */
+
+/* Redefining mail module masks */
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'DeleteMail';
+
 /* --------------------------------------------------------- */
 
 /* Adding the email confirm configuration */
