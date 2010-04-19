@@ -14,7 +14,7 @@
 function roles_admin_showusers()
 {
 
-    if (!xarSecurityCheck('EditRole')) return;
+    if (!xarSecurityCheck('EditRoles')) return;
 
     if (xarVarIsCached('roles', 'defaultgroupid')) {
         $defaultgroupid = xarVarGetCached('roles', 'defaultgroupid');
@@ -136,7 +136,7 @@ function roles_admin_showusers()
     $ids = array();
 
     foreach($q->output() as $row) {
-        $users[$row['id']]['frozen'] = !xarSecurityCheck('EditRole',0,'Roles',$row['name']);
+        $users[$row['id']]['frozen'] = !xarSecurityCheck('EditRoles',0,'Roles',$row['name']);
 
     }
     if ($id != 0) $data['title'] .= " ".xarML('of group')." ";

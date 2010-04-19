@@ -138,10 +138,10 @@ function initializeSetup()
     xarMasks::register('AdminInstaller','All','installer','All','All',xarSecurityLevel('ACCESS_ADMIN'));
 
     xarMasks::register('ViewRoles','All','roles','All','All',xarSecurityLevel('ACCESS_OVERVIEW'));
-    xarMasks::register('ReadRole','All','roles','All','All',xarSecurityLevel('ACCESS_READ'));
-    xarMasks::register('EditRole','All','roles','All','All',xarSecurityLevel('ACCESS_EDIT'));
-    xarMasks::register('AddRole','All','roles','All','All',xarSecurityLevel('ACCESS_ADD'));
-    xarMasks::register('DeleteRole','All','roles','All','All',xarSecurityLevel('ACCESS_DELETE'));
+    xarMasks::register('ReadRoles','All','roles','All','All',xarSecurityLevel('ACCESS_READ'));
+    xarMasks::register('EditRoles','All','roles','All','All',xarSecurityLevel('ACCESS_EDIT'));
+    xarMasks::register('AddRoles','All','roles','All','All',xarSecurityLevel('ACCESS_ADD'));
+    xarMasks::register('ManageRoles','All','roles','All','All',xarSecurityLevel('ACCESS_DELETE'));
     xarMasks::register('AdminRole','All','roles','All','All',xarSecurityLevel('ACCESS_ADMIN'));
     xarMasks::register('MailRoles','All','roles','Mail','All',xarSecurityLevel('ACCESS_ADMIN'));
 

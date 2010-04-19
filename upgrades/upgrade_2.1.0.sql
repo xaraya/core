@@ -93,6 +93,8 @@ INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, desc
     SELECT 'ManageModules',  m.id, 'All', 'All', 700, 'Site Manager mask for modules module',3 FROM `xar_modules` m WHERE name = 'modules';
 INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
     SELECT 'ManagePrivileges',  m.id, 'All', 'All', 700, 'Site Manager mask for privileges module',3 FROM `xar_modules` m WHERE name = 'privileges';
+INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
+    SELECT 'ManageRoles',  m.id, 'All', 'All', 700, 'Site Manager mask for roles module',3 FROM `xar_modules` m WHERE name = 'roles';
 
 /* --------------------------------------------------------- */
 
@@ -134,6 +136,16 @@ DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'DeletePrivilege';
 DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'ViewPrivileges';
 DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'AssignPrivilege';
 DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'DeassignPrivilege';
+
+/* --------------------------------------------------------- */
+
+/* Redefining privileges module masks */
+UPDATE `xar_privileges` SET name = 'ReadRoles' WHERE name = 'ReadRole';
+UPDATE `xar_privileges` SET name = 'EditRoles' WHERE name = 'EditRole';
+UPDATE `xar_privileges` SET name = 'AddRoles' WHERE name = 'AddRole';
+UPDATE `xar_privileges` SET name = 'AdminRoles' WHERE name = 'AdminRole';
+
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'DeleteRole';
 
 /* --------------------------------------------------------- */
 

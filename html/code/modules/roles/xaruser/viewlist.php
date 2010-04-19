@@ -36,7 +36,7 @@ function roles_user_viewlist($args)
     $data['pager'] = '';
 
     // Security Check
-    if (!xarSecurityCheck('ReadRole')) return;
+    if (!xarSecurityCheck('ReadRoles')) return;
 
     // Need the database connection for quoting strings.
     $dbconn = xarDB::getConn();

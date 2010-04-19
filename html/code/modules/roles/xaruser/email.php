@@ -51,7 +51,7 @@ function roles_user_email($args)
     }
 
     // Security Check
-    if (!xarSecurityCheck('ReadRole')) return;
+    if (!xarSecurityCheck('ReadRoles')) return;
 
     switch(strtolower($phase)) {
         case 'modify':
@@ -85,7 +85,7 @@ function roles_user_email($args)
             }        
 
             // Security Check
-            if (!xarSecurityCheck('ReadRole')) return;
+            if (!xarSecurityCheck('ReadRoles')) return;
 
             // If the sender details have not been passed in to $args, then
             // fetch them from the current user now.

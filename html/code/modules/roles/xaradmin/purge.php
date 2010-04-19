@@ -19,7 +19,7 @@
 function roles_admin_purge($args)
 {
     // Security Check
-    if(!xarSecurityCheck('DeleteRole')) return;
+    if(!xarSecurityCheck('ManageRoles')) return;
 
     // Get parameters from whatever input we need
     if (!xarVarFetch('operation',    'str', $data['operation'], 'recall', XARVAR_NOT_REQUIRED)) return;
@@ -49,7 +49,7 @@ function roles_admin_purge($args)
         if ($confirmation == xarML("Recall"))
         {
  // --- recall users and groups
-            if(!xarSecurityCheck('DeleteRole')) return;
+            if(!xarSecurityCheck('ManageRoles')) return;
             if ($data['groupid'] != 0) $parentgroup = xarRoles::get($data['groupid']);
             foreach ($recallids as $id => $val) {
                 $role = xarRoles::get($id);
@@ -102,7 +102,7 @@ function roles_admin_purge($args)
                 $msg = xarML('Execution halted: the role with id #(1) has an empty name. This needs to be corrected manually in the database.', $role['id']);
                 throw new Exception($msg);
             }
-            if (xarSecurityCheck('ReadRole', 0, 'All', $role['uname'] . ":All:" . $role['id'])) {
+            if (xarSecurityCheck('ReadRoles', 0, 'All', $role['uname'] . ":All:" . $role['id'])) {
                 $skip = 0;
                 $unique = 1;
                 $thisrole = xarRoles::get($role['id']);
@@ -159,7 +159,7 @@ function roles_admin_purge($args)
         if ($confirmation == xarML("Purge"))
         {
 // --- purge users
-            if(!xarSecurityCheck('AdminRole')) return;
+            if(!xarSecurityCheck('AdminRoles')) return;
             foreach ($purgeids as $id => $val) {
 // --- skip if we are trying to remove the designated site admin.
 // TODO: insert error feedabck here somehow

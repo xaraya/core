@@ -32,7 +32,7 @@ function roles_userapi_getactive($args)
     $roles = array();
 
     // Security Check
-    if(!xarSecurityCheck('ReadRole')) return;
+    if(!xarSecurityCheck('ReadRoles')) return;
 
     // Get database setup
     $dbconn = xarDB::getConn();
@@ -51,7 +51,7 @@ function roles_userapi_getactive($args)
     while($result->next()) {
         $id = $result->fields;
         // FIXME: add some instances here
-        if (xarSecurityCheck('ReadRole',0)) {
+        if (xarSecurityCheck('ReadRoles',0)) {
             $sessions[] = array('id'       => $id);
         }
     }
