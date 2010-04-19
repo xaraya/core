@@ -22,7 +22,7 @@ function blocks_admin_delete_instance()
     if (empty($bid)) return xarResponse::notFound();
 
     // Security Check
-    if (!xarSecurityCheck('DeleteBlock', 0, 'Instance')) {return;}
+    if (!xarSecurityCheck('ManageBlocks', 0, 'Instance')) {return;}
 
     // Get details on current block
     $blockinfo = xarModAPIFunc('blocks', 'user', 'get', array('bid' => $bid));

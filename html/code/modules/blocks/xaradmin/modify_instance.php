@@ -23,7 +23,7 @@ function blocks_admin_modify_instance()
     if (empty($bid)) return xarResponse::notFound();
 
     // Security Check
-    if (!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
+    if (!xarSecurityCheck('EditBlocks', 0, 'Instance')) {return;}
 
     // Get the instance details.
     // @CHECKME: exception if the block is not found, does get do that?

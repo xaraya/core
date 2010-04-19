@@ -17,7 +17,7 @@ function blocks_admin_update_type_info()
 {
     // Security Check
     // FIXME: not sure what the security check should be?
-    if (!xarSecurityCheck('AdminBlock', 0, 'Instance')) {return;}
+    if (!xarSecurityCheck('AdminBlocks', 0, 'Instance')) {return;}
 
     // Get parameters
     if (!xarVarFetch('modulename', 'str:1:', $modulename, 'base', XARVAR_NOT_REQUIRED)) {return;}

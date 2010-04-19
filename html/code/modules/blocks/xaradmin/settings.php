@@ -17,7 +17,7 @@
 function blocks_admin_settings()
 {
     // Security Check
-    if(!xarSecurityCheck('EditBlock')) return;
+    if(!xarSecurityCheck('EditBlocks')) return;
 
     if (!xarVarFetch('selstyle', 'str:1:', $selstyle, 'plain', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('filter', 'str:1:', $filter, null, XARVAR_NOT_REQUIRED)) {return;}

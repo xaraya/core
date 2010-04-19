@@ -20,7 +20,7 @@ function blocks_userapi_getitemtypes($args)
 {
     $itemtypes = array();
 
-    if (xarSecurityCheck('EditBlock',0)) {
+    if (xarSecurityCheck('EditBlocks',0)) {
         $showurl = true;
     } else {
         $showurl = false;

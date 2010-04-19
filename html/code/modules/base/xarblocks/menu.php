@@ -248,7 +248,6 @@ class MenuBlock extends BasicBlock implements iBlock
                     if (!$accessproperty->check($args)) continue;
                 }
 
-                if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$data['name']. ":" . $mod['name'])) continue;
                 if ((bool)xarModVars::get($mod['name'], 'user_menu_link')) continue;
 
                 /* Check for active module alias */

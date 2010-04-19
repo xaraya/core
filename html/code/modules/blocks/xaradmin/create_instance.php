@@ -32,7 +32,7 @@ function blocks_admin_create_instance()
     }
 
     // Security Check
-    if(!xarSecurityCheck('AddBlock', 0, 'Instance')) {return;}
+    if(!xarSecurityCheck('AddBlocks', 0, 'Instance')) {return;}
 
     // Check if block name has already been used.
     $checkname = xarMod::apiFunc('blocks', 'user', 'get', array('name' => $name));

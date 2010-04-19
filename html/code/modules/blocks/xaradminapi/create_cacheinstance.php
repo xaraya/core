@@ -27,7 +27,7 @@ function blocks_adminapi_create_cacheinstance($args)
     if(!is_numeric($bid)) throw new BadParameterException($bid);
 
     // Security
-    if (!xarSecurityCheck('AddBlock', 1, 'Block', "::$bid")) {return;}
+    if (!xarSecurityCheck('AddBlocks', 1, 'Block', "::$bid")) {return;}
 
     if (!empty($nocache)) {
         $nocache = true;

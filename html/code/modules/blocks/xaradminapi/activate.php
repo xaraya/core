@@ -24,7 +24,7 @@ function blocks_adminapi_activate($args)
     if (!isset($bid) || !is_numeric($bid)) throw new BadParameterException('bid');
 
     // Security
-    if(!xarSecurityCheck('CommentBlock',1,'Block',"::$bid")) {return;}
+    if(!xarSecurityCheck('ActivateBlocks',1,'Block',"::$bid")) {return;}
 
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();

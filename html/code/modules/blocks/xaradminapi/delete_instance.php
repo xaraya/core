@@ -25,7 +25,7 @@ function blocks_adminapi_delete_instance($args)
     if (!isset($bid) || !is_numeric($bid)) throw new BadParameterException('bid');
 
     // Security
-    if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$bid")) {return;}
+    if (!xarSecurityCheck('ManageBlocks', 1, 'Block', "::$bid")) {return;}
 
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();

@@ -27,7 +27,7 @@ function blocks_userapi_getitemlinks($args)
     }
     $itemlinks = array();
 
-    if (xarSecurityCheck('EditBlock',0)) {
+    if (xarSecurityCheck('EditBlocks',0)) {
         $showurl = true;
     } else {
         $showurl = false;

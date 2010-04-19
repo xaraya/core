@@ -20,7 +20,7 @@
 function blocks_admin_modifyconfig()
 {
     // Security Check
-    if(!xarSecurityCheck('AdminBlock')) return;
+    if(!xarSecurityCheck('AdminBlocks')) return;
     if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
 

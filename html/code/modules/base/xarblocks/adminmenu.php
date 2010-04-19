@@ -89,10 +89,6 @@ class AdminmenuBlock extends BasicBlock implements iBlock
                     $labelDisplay = $mod['displayname'];
                     // get URL to module's main function
                     $link = xarModURL($modname, 'admin', 'main', array());
-                    if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$data['name']. ":" . $mod['name'])) {
-                        $adminmods[$modname]['features'] = array();
-                        continue;
-                    }
                     // if this module is loaded we probably want to display it with -current css rule in the menu
                     $adminmods[$modname]['features'] = array(
                         'label'     => $labelDisplay,
@@ -156,10 +152,6 @@ class AdminmenuBlock extends BasicBlock implements iBlock
                     $cat = xarVarPrepForDisplay($mod['category']);
 
                     // if this module is loaded we probably want to display it with -current css rule in the menu
-                    if (!xarSecurityCheck('ViewBlock',0,'BlockItem',$data['name']. ":" . $mod['name'])) {
-                        $catmods[$cat][$modname]['features'] = array();
-                        continue;
-                    }
                     $catmods[$cat][$modname]['features'] = array(
                         'label'     => $labelDisplay,
                         'link'      => $link,

@@ -30,7 +30,7 @@ function blocks_admin_update_instance()
     if (!xarVarFetch('tab', 'pre:trim:lower:str:1:', $tab, 'config', XARVAR_NOT_REQUIRED)) return;
 
     // Security Check
-    if (!xarSecurityCheck('EditBlock', 0, 'Instance')) {return;}
+    if (!xarSecurityCheck('EditBlocks', 0, 'Instance')) {return;}
 
     if (!xarSecConfirmAuthKey())
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));

@@ -83,5 +83,37 @@ INSERT INTO `xar_module_vars` (module_id, name, value)
 /* --------------------------------------------------------- */
 
 /* Adding sitemanager masks */
-INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype) VALUES 
-    SELECT 'ManageBase',  m.id, 'All', 'All', 700, '',3 FROM `xar_modules` m WHERE name = 'base';
+INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
+    SELECT 'ManageBase',  m.id, 'All', 'All', 700, 'Site Manager mask for base module',3 FROM `xar_modules` m WHERE name = 'base';
+INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
+    SELECT 'ManageBlocks',  m.id, 'All', 'All', 700, 'Site Manager mask for blocks module',3 FROM `xar_modules` m WHERE name = 'blocks';
+
+/* --------------------------------------------------------- */
+
+/* Redefining blocks module masks */
+INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
+    SELECT 'ActivateBlocks',  m.id, 'All', 'All', 400, 'Activate mask for blocks module',3 FROM `xar_modules` m WHERE name = 'blocks';
+INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
+    SELECT 'EditBlocks',  m.id, 'All', 'All', 500, 'Edit mask for blocks module',3 FROM `xar_modules` m WHERE name = 'blocks';
+INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
+    SELECT 'AddBlocks',  m.id, 'All', 'All', 600, 'Add mask for blocks module',3 FROM `xar_modules` m WHERE name = 'blocks';
+INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
+    SELECT 'AdminBlocks',  m.id, 'All', 'All', 800, 'Admin mask for blocks module',3 FROM `xar_modules` m WHERE name = 'blocks';
+
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'ViewBlock';
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'ReadBlock';
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'CommentBlock';
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'ModerateBlock';
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'EditBlock';
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'AddBlock';
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'DeleteBlock';
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'AdminBlock';
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'EditBlockGroup';
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'ReadBlocksBlock';
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'ViewAuthsystemBlocks';
+/* --------------------------------------------------------- */
+
+/* Adding the email confirm configuration */
+INSERT INTO `xar_dynamic_configurations` (`name`, `description`, `property_id`, `label`, `ignore_empty`, `configuration`) VALUES
+('validation_email_confirm', 'Show a second email field to be filled in', 14, 'Confirm Email', 1, 'a:1:{s:14:"display_layout";s:7:"default";}');
+

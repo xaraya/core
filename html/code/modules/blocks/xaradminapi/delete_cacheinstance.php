@@ -27,7 +27,7 @@ function blocks_adminapi_delete_cacheinstance($args)
     if(!is_numeric($bid)) throw new BadParameterException($bid);
 
     // Security
-    if (!xarSecurityCheck('DeleteBlock', 1, 'Block', "::$bid")) {return;}
+    if (!xarSecurityCheck('ManageBlocks', 1, 'Block', "::$bid")) {return;}
 
     // Delete the cached block instance, if any
     $dbconn = xarDB::getConn();
