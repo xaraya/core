@@ -8,7 +8,7 @@
         <xar:template type="module" file="admin-menu"/>
         <h2>Utilities : Query #$label#</h2>
         <xar:template type="module" file="utility-menu"/>
-        <form method="post" action="&xar-modurl-dynamicdata-admin-query;">
+        <form method="post" action="#xarModURL('dynamicdata'.'admin','query')#">
             <table border="0" cellpadding="5" class="xar-align-left xar-fullwidth">
                 <tr>
                     <td>

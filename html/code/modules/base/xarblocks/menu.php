@@ -89,8 +89,10 @@ class Base_MenuBlock extends BasicBlock implements iBlock
         // which module is loaded atm?
         // we need it's name, type and function - dealing only with user type mods, aren't we?
         // This needs to be deprecated for multi-modules setups later on
-        list($thismodname, $thismodtype, $thisfuncname) = xarRequest::getInfo();
-
+//        list($thismodname, $thismodtype, $thisfuncname) = xarController::$request->getInfo();
+        $thismodname = xarController::$request->getModule();
+        $thismodtype = xarController::$request->getType();
+        $thisfuncname = xarController::$request->getFunction();
         // Sort Order, Status, Common Labels and Links Display preparation
 
         $authmoduledata = xarMod::apiFunc('roles','user','getdefaultauthdata');
