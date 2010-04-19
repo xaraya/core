@@ -97,6 +97,8 @@ INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, desc
     SELECT 'ManageRoles',  m.id, 'All', 'All', 700, 'Site Manager mask for roles module',3 FROM `xar_modules` m WHERE name = 'roles';
 INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
     SELECT 'ManageThemes',  m.id, 'All', 'All', 700, 'Site Manager mask for themes module',3 FROM `xar_modules` m WHERE name = 'themes';
+INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
+    SELECT 'ManageAuthsystem',  m.id, 'All', 'All', 700, 'Site Manager mask for authsystem module',3 FROM `xar_modules` m WHERE name = 'authsystem';
 
 /* --------------------------------------------------------- */
 
