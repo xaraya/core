@@ -19,7 +19,7 @@
 function modules_admin_hooks($args)
 {
 // Security Check
-    if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurityCheck('ManageModules')) return;
 
     if (!xarVarFetch('hook', 'isset', $curhook, '', XARVAR_NOT_REQUIRED)) {return;}
     extract($args);

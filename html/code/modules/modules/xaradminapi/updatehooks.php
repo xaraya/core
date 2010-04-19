@@ -25,7 +25,7 @@ function modules_adminapi_updatehooks($args)
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Security Check
-    if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regid")) return;
+    if(!xarSecurityCheck('ManageModules',0,'All',"All:All:$regid")) return;
 
     // Get database connection and table names
     $dbconn = xarDB::getConn();

@@ -18,7 +18,7 @@
 function modules_admin_updatehooks()
 {
 // Security Check
-    if(!xarSecurityCheck('AdminModules')) {return;}
+    if(!xarSecurityCheck('ManageModules')) {return;}
 
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
