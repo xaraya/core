@@ -94,7 +94,7 @@ function dynamicdata_userapi_showview($args)
                                            'fieldlist' => $myfieldlist,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
-                                           'status' => $status));
+                                           'status' => $status,));
     if (!isset($object)) return;
     if (!$object->checkAccess('view'))
         return xarML('View #(1) is forbidden', $object->label);

@@ -31,6 +31,8 @@ class ItemIDProperty extends NumberBoxProperty
         $this->tplmodule = 'dynamicdata';
         $this->template = 'itemid';
         $this->filepath   = 'modules/dynamicdata/xarproperties';
+        
+        $this->defaultvalue = null;
     }
 }
 

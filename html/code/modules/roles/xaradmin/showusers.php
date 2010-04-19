@@ -45,6 +45,7 @@ function roles_admin_showusers()
         $role      = xarRoles::get($id);
         $ancestors = $role->getRoleAncestors();
         $data['groupname'] = $role->getName();
+        $data['itemtype'] = $role->getType();
         $data['title'] = '';
         $data['ancestors'] = array();
         foreach ($ancestors as $ancestor) {
@@ -54,6 +55,7 @@ function roles_admin_showusers()
     } else {
         $data['title'] = xarML('All ')." ";
         $data['groupname'] = '';
+        $data['itemtype'] = 0;
     }
 
     // Check if we already have a selection
@@ -76,7 +78,6 @@ function roles_admin_showusers()
             $c[] = $q->plike('email','%' . $data['search'] . '%');
             $q->qor($c);
         }
-
         $q->eq('r.itemtype', ROLES_USERTYPE);
 
         // Add state
@@ -147,9 +148,7 @@ function roles_admin_showusers()
                            '2' => xarML('Tabbed')
                            );
 
-    sys::import('modules.roles.class.role');
-    $object = xarMod::apiFunc('dynamicdata','user','getobjectlist',array('name' => 'roles_users'));
-    $object->getItems(array('itemids' => array_keys($users)));
+    $object = DataObjectMaster::getObjectList(array('name' => 'roles_users'));
 
     // Load Template
     $data['id']        = $id;
