@@ -61,7 +61,7 @@
                                     <img src="#$icon_modify#" alt="#xarML('Modify')#" class="xar-icon"/>
                                 </a>
                                 &#160;
-                                <a href="#$loop:item.deleteurl#" onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item.deleteconfirm)#')" title="#xarML('Delete')#" class="xar-icon">
+                                <a href="#$loop:item.deleteurl#" title="#xarML('Delete')#" class="xar-icon">
                                     <img src="#$icon_delete#" alt="#xarML('Delete')#" class="xar-icon"/>
                                 </a>
                             </td>
@@ -71,7 +71,7 @@
                                     Edit
                                 </a>|
                                 &#160;
-                                <a href="#$loop:item['deleteurl']#" vonclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
+                                <a href="#$loop:item['deleteurl']#">
                                     Delete
                                 </a>
                             </td>

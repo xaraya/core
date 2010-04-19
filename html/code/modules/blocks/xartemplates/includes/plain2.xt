@@ -59,7 +59,7 @@
                     <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                         Edit
                     </a>|
-                    <a href="#$loop:item['deleteurl']#" onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
+                    <a href="#$loop:item['deleteurl']#">
                         Delete
                     </a>
                 </td>
