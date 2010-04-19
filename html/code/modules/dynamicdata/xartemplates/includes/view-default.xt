@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout" file="view-table"/>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:set name="subitems">false</xar:set>
+    <xar:foreach in="$properties" value="$property">
+        <xar:if condition="$property->type == 30069">
+            <xar:set name="subitems">true</xar:set>
+            <xar:break />
+        </xar:if>
+    </xar:foreach>
+    <xar:if condition="$subitems">
+        <xar:template file="view-subitems"/>
+    <xar:else />
+        <xar:template file="view-table"/>
+    </xar:if>
+</xar:template>
