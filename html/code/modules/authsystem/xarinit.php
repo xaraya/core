@@ -60,6 +60,7 @@ function authsystem_activate()
     xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
     xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
+    xarRegisterMask('ManageAuthsystem','All','authsystem','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
 
     /* Define Module vars */
