@@ -35,7 +35,7 @@ function mail_init()
 
     xarRegisterMask('EditMail','All','mail','All','All','ACCESS_EDIT');
     xarRegisterMask('AddMail','All','mail','All','All','ACCESS_ADD');
-    xarRegisterMask('DeleteMail', 'All','mail','All','All','ACCESS_DELETE');
+    xarRegisterMask('ManageMail', 'All','mail','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminMail','All','mail','All','All','ACCESS_ADMIN');
 
     // Installation complete; check for upgrades

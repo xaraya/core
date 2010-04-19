@@ -21,7 +21,7 @@
  */
 function roles_userapi_getallroles($args)
 {
-    if(!xarSecurityCheck('ReadRole')) {return;}
+    if(!xarSecurityCheck('ReadRoles')) {return;}
     extract($args);
 
     // Optional arguments.

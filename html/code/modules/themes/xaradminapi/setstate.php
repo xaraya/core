@@ -25,7 +25,7 @@ function themes_adminapi_setstate($args)
     if (!isset($state)) throw new EmptyParameterException('state');
 
     // Security Check
-    if(!xarSecurityCheck('AdminTheme')) return;
+    if(!xarSecurityCheck('AdminThemes')) return;
 
     // Clear cache to make sure we get newest values
     if (xarVarIsCached('Theme.Infos', $regid)) {

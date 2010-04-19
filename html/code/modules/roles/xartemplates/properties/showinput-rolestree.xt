@@ -16,7 +16,7 @@
                 <xar:set name="users">$node-&gt;users</xar:set>
                 <xar:set name="id">$node-&gt;id</xar:set>
                 <xar:set name="drawchildren">true</xar:set>
-                <xar:set name="seccheck">xarSecurityCheck('DeleteRole',0,'Roles',$node-&gt;name)</xar:set>
+                <xar:set name="seccheck">xarSecurityCheck('ManageRoles',0,'Roles',$node-&gt;name)</xar:set>
 
                 <li class="leaf">
                     <div class="leaf-actions">

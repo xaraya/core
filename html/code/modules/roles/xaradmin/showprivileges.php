@@ -21,7 +21,7 @@ function roles_admin_showprivileges()
     if (empty($id)) return xarResponse::notFound();
 
     // Security Check
-    if (!xarSecurityCheck('EditRole')) return;
+    if (!xarSecurityCheck('EditRoles')) return;
     // Call the Roles class and get the role
     $role = xarRoles::get($id);
 
@@ -100,7 +100,7 @@ function roles_admin_showprivileges()
     // extract the info for display by the template
     $currentprivileges = array();
     foreach ($curprivileges as $priv) {
-        $frozen = !xarSecurityCheck('DeassignPrivilege',0,'Privileges',$priv->getName());
+        $frozen = !xarSecurityCheck('ManagePrivileges',0,'Privileges',$priv->getName());
         if ($priv->getModule() == null) {
             $currentprivileges[] = array('privid' => $priv->getID(),
                 'name' => $priv->getName(),

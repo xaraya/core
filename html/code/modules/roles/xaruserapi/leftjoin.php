@@ -45,7 +45,7 @@ function roles_userapi_leftjoin($args)
 
 // TODO: check this !
     foreach ($ids as $id) {
-        if (!xarSecurityCheck('ReadRole',0,'All',"All:All:$id")) return;
+        if (!xarSecurityCheck('ReadRoles',0,'All',"All:All:$id")) return;
     }
 
     // Table definition

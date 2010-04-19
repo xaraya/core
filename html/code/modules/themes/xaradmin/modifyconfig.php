@@ -19,7 +19,7 @@
 function themes_admin_modifyconfig()
 {
     // Security Check
-    if (!xarSecurityCheck('AdminTheme')) return;
+    if (!xarSecurityCheck('AdminThemes')) return;
 
     // FIXME: remove at next upgrade
     try {

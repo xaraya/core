@@ -57,7 +57,7 @@ function roles_admin_modify()
                                                 ));
 
     if (!xarSecurityCheck('EditRole',0,'Roles',$object->getName())) {
-        if (!xarSecurityCheck('ReadRole',1,'Roles',$object->getName())) return;
+        if (!xarSecurityCheck('ReadRoles',1,'Roles',$object->getName())) return;
     }
 
     $data['object'] = &$object;

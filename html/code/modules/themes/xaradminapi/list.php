@@ -19,7 +19,7 @@
 function themes_adminapi_list()
 {
 // Security Check
-    if(!xarSecurityCheck('AdminTheme')) return;
+    if(!xarSecurityCheck('AdminThemes')) return;
 
     // Obtain information
     $themeList = xarMod::apiFunc('themes', 
