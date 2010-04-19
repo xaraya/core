@@ -330,7 +330,7 @@ class MenuBlock extends BasicBlock implements iBlock
             $showlogout = true;
         }
         // optionally show a link to the back end for admins
-        if (xarSecurityCheck('AdminBase', 0) && !empty($data['showback'])) {
+        if (!empty($data['showback'])) {
             $showback = true;
         } else {
             $showback = false;
