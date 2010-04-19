@@ -7,7 +7,9 @@
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
+  <datastore>relational</datastore>
   <config></config>
+  <sources>a:1:{s:10:"privileges";s:14:"xar_privileges";}</sources>
   <isalias>true</isalias>
   <properties>
     <property name="id">
@@ -15,7 +17,7 @@
       <label>ID</label>
       <type>itemid</type>
       <defaultvalue></defaultvalue>
-      <source>xar_privileges.id</source>
+      <source>privileges.id</source>
       <status>65</status>
       <seq>1</seq>
       <configuration></configuration>
