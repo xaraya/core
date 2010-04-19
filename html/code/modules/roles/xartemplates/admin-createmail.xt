@@ -22,24 +22,24 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
         <h2>
-            <a href="&xar-modurl-roles-admin-createmail;">Messaging System:</a>Send Mail To Users/Groups
+            <a href="#xarModURL('roles','admin','createmail')#">Messaging System:</a>Send Mail To Users/Groups
         </h2>
         <div>
             <ul class="xar-tabs xar-alt xar-norm-outline">
                 <xar:var name="label">Option</xar:var>
                 <li class="xar-tabs-label" title="#$label#">#$label#</li>
                 <li class="xar-tab-active">
-                    <a href="&xar-modurl-roles-admin-createmail;" class="xar-accent xar-accent-outline">Send mail</a>
+                    <a href="#xarModURL('roles','admin','createmail')#" class="xar-accent xar-accent-outline">Send mail</a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-admin-modifyemail;" class="xar-norm xar-norm-outline">Templates</a>
+                    <a href="#xarModURL('roles','admin','modfiymail')#" class="xar-norm xar-norm-outline">Templates</a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-admin-modifynotice;" class="xar-norm xar-norm-outline">Configure</a>
+                    <a href="#xarModURL('roles','admin','modifynotice')#" class="xar-norm xar-norm-outline">Configure</a>
                 </li>
             </ul>
         </div>
-        <form method="post" action="&xar-modurl-roles-admin-createmail;">
+        <form method="post" action="#xarModURL('roles','admin','createmail')#">
             <!--
                 Module List Sort and Filter Controls table
             -->
@@ -169,23 +169,23 @@
                         <table class="xar-fullwidth">
                             <tr>
                                 <th>
-                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=name">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'name'))#">
                                     Real name</a>
                                 </th>
                                 <th>
-                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=uname">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'uname'))#">
                                     Login</a>
                                 </th>
                                 <th>
-                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=email">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'email'))#">
                                     Email</a>
                                 </th>
                                 <th>
-                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=date_reg">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'date_reg'))#">
                                     Date Registered</a>
                                 </th>
                                 <th>
-                                    <a href="&xar-modurl-roles-admin-createmail;&amp;state=#$state#&amp;order=state">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'state'))#">
                                     State</a>
                                 </th>
                             </tr>
@@ -194,7 +194,7 @@
                                     <td>#$loop:item['name']#</td>
                                     <td>#$loop:item['uname']#</td>
                                     <td>
-                                        <a href="&xar-modurl-roles-admin-createmail;&amp;id=#$loop:item.id#"
+                                        <a href="#xarModURL('roles','admin','createmail',array('id'=>$loop->item['id']))#"
                                         title="#xarML('Email this user')#">
                                         #$loop:item['email']#</a>
                                     </td>
@@ -218,7 +218,7 @@
                 </xar:if>
             </xar:if>
         </fieldset>
-          <form action="&xar-modurl-roles-admin-sendmail;" method="post" enctype="application/x-www-form-urlencoded">
+          <form action="#xarModURL('roles','admin','sendmail')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Message</legend>
                 <p>Choose a message template from the Templates dropdown above, or type in your

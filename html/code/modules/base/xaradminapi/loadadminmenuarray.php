@@ -20,7 +20,7 @@
 function base_adminapi_loadadminmenuarray($args)
 {
     if (!isset($args['module'])) {
-        $urlinfo = xarRequest::getInfo();
+        $urlinfo = xarController::$request->getInfo();
         $args['module'] = $urlinfo[0];
     }
     $menuarray = array();
