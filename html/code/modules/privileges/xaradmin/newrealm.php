@@ -23,7 +23,7 @@ function privileges_admin_newrealm()
     if (!xarVarFetch('confirmed', 'bool', $confirmed, false, XARVAR_NOT_REQUIRED)) return;
 
     // Security Check
-    if(!xarSecurityCheck('AddPrivilege',0,'Realm')) return;
+    if(!xarSecurityCheck('AddPrivileges',0,'Realm')) return;
 
     if ($confirmed) {
         if (!xarSecConfirmAuthKey()) {

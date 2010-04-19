@@ -40,7 +40,7 @@ function privileges_admin_removerole()
     xarSessionDelVar('privileges_statusmsg');
 
 // Security Check
-    if(!xarSecurityCheck('EditPrivilege')) return;
+    if(!xarSecurityCheck('EditPrivileges')) return;
 
 // get the names of the role and privilege for display purposes
     $rolename = $role->getName();

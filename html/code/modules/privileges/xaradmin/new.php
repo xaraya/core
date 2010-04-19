@@ -34,7 +34,7 @@ function privileges_admin_new()
     xarSessionDelVar('privileges_statusmsg');
 
 // Security Check
-    if(!xarSecurityCheck('AddPrivilege')) return;
+    if(!xarSecurityCheck('AddPrivileges')) return;
 
 // remove duplicate entries from the list of privileges
     $privileges = array();

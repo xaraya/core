@@ -31,7 +31,7 @@ function privileges_admin_modifyprivilege()
     xarSessionDelVar('privileges_statusmsg');
 
 // Security Check
-    if(!xarSecurityCheck('EditPrivilege')) return;
+    if(!xarSecurityCheck('EditPrivileges')) return;
 
 //Call the Privileges class and get the privilege to be modified
     sys::import('modules.privileges.class.privileges');
@@ -64,7 +64,7 @@ function privileges_admin_modifyprivilege()
     $data['pname'] = $name;
 
     // Security Check
-    $data['frozen'] = !xarSecurityCheck('EditPrivilege',0,'Privileges',$name);
+    $data['frozen'] = !xarSecurityCheck('EditPrivileges',0,'Privileges',$name);
 
     if(isset($realm)) {$data['prealm'] = $realm;}
     else {$data['prealm'] = $priv->getRealm();}

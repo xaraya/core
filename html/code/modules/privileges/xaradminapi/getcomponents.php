@@ -18,7 +18,6 @@
     {
         extract($args);
         
-//        if (is_null($modid)) return array();
         if (empty($modid)){
             $components[] = array('id' => -2,
                                'name' => 'All');

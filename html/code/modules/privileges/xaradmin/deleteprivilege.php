@@ -28,7 +28,7 @@ function privileges_admin_deleteprivilege()
     $name = $priv->getName();
 
 // Security Check
-    if(!xarSecurityCheck('DeletePrivilege',0,'Privileges',$name)) return;
+    if(!xarSecurityCheck('ManagePrivileges',0,'Privileges',$name)) return;
 
     if (empty($confirmation)) {
 

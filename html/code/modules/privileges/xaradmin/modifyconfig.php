@@ -16,7 +16,7 @@
 function privileges_admin_modifyconfig()
 {
     // Security Check
-    if (!xarSecurityCheck('AdminPrivilege')) return;
+    if (!xarSecurityCheck('AdminPrivileges')) return;
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('testergroup', 'int', $testergroup, xarModVars::get('privileges', 'testergroup'), XARVAR_NOT_REQUIRED)) return;

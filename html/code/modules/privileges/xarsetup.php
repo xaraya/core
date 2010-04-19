@@ -125,6 +125,7 @@ function initializeSetup()
     xarMasks::register('ViewBase','All','base','All','All',xarSecurityLevel('ACCESS_OVERVIEW'));
     xarMasks::register('ReadBase','All','base','All','All',xarSecurityLevel('ACCESS_READ'));
     xarMasks::register('EditBase','All','base','All','All',xarSecurityLevel('ACCESS_EDIT'));
+    xarMasks::register('ManageBase','All','base','All','All',xarSecurityLevel('ACCESS_DELETE'));
     xarMasks::register('AdminBase','All','base','All','All',xarSecurityLevel('ACCESS_ADMIN'));
     /* This AdminPanel mask is added to replace the adminpanel module equivalent
      *   - since adminpanel module is removed as of 1.1.0
@@ -147,21 +148,13 @@ function initializeSetup()
     xarMasks::register('AttachRole','All','roles','Relation','All',xarSecurityLevel('ACCESS_ADD'));
     xarMasks::register('RemoveRole','All','roles','Relation','All',xarSecurityLevel('ACCESS_DELETE'));
 
-    xarMasks::register('AssignPrivilege','All','privileges','All','All',xarSecurityLevel('ACCESS_ADD'));
-    xarMasks::register('DeassignPrivilege','All','privileges','All','All',xarSecurityLevel('ACCESS_DELETE'));
-    xarMasks::register('ViewPrivileges','All','privileges','All','All',xarSecurityLevel('ACCESS_READ'));
-    xarMasks::register('EditPrivilege','All','privileges','All','All',xarSecurityLevel('ACCESS_EDIT'));
-    xarMasks::register('AddPrivilege','All','privileges','All','All',xarSecurityLevel('ACCESS_ADD'));
-    xarMasks::register('DeletePrivilege','All','privileges','All','All',xarSecurityLevel('ACCESS_DELETE'));
-    xarMasks::register('AdminPrivilege','All','privileges','All','All',xarSecurityLevel('ACCESS_ADMIN'));
-/*
-    xarMasks::register('ViewPrivileges','All','privileges','Realm','All',xarSecurityLevel('ACCESS_OVERVIEW'));
-    xarMasks::register('ReadPrivilege','All','privileges','Realm','All',xarSecurityLevel('ACCESS_READ'));
-    xarMasks::register('EditPrivilege','All','privileges','Realm','All',xarSecurityLevel('ACCESS_EDIT'));
-    xarMasks::register('AddPrivilege','All','privileges','Realm','All',xarSecurityLevel('ACCESS_ADD'));
-    xarMasks::register('DeletePrivilege','All','privileges','Realm','All',xarSecurityLevel('ACCESS_DELETE'));
-*/
+    xarMasks::register('EditPrivileges','All','privileges','All','All',xarSecurityLevel('ACCESS_EDIT'));
+    xarMasks::register('AddPrivileges','All','privileges','All','All',xarSecurityLevel('ACCESS_ADD'));
+    xarMasks::register('ManagePrivileges','All','privileges','All','All',xarSecurityLevel('ACCESS_DELETE'));
+    xarMasks::register('AdminPrivileges','All','privileges','All','All',xarSecurityLevel('ACCESS_ADMIN'));
+
     xarMasks::register('EditModules','All','modules','All','All',xarSecurityLevel('ACCESS_EDIT'));
+    xarMasks::register('ManageModules','All','modules','All','All',xarSecurityLevel('ACCESS_DELETE'));
     xarMasks::register('AdminModules','All','modules','All','All',xarSecurityLevel('ACCESS_ADMIN'));
 
     return true;

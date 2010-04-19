@@ -22,7 +22,7 @@ function privileges_admin_viewrealms()
     if (!xarVarFetch('show', 'isset', $data['show'], 'assigned', XARVAR_NOT_REQUIRED)) return;
 
     // Security Check
-    if(!xarSecurityCheck('ViewPrivileges',0,'Realm')) return;
+    if(!xarSecurityCheck('AdminPrivileges',0,'Realm')) return;
 
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();

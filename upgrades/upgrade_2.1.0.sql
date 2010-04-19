@@ -91,6 +91,8 @@ INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, desc
     SELECT 'ManageMail',  m.id, 'All', 'All', 700, 'Site Manager mask for mail module',3 FROM `xar_modules` m WHERE name = 'mail';
 INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
     SELECT 'ManageModules',  m.id, 'All', 'All', 700, 'Site Manager mask for modules module',3 FROM `xar_modules` m WHERE name = 'modules';
+INSERT INTO `xar_privileges` (name,  module_id, component, instance, level, description, itemtype)  
+    SELECT 'ManagePrivileges',  m.id, 'All', 'All', 700, 'Site Manager mask for privileges module',3 FROM `xar_modules` m WHERE name = 'privileges';
 
 /* --------------------------------------------------------- */
 
@@ -120,6 +122,18 @@ DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'ViewAuthsystemBloc
 
 /* Redefining mail module masks */
 DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'DeleteMail';
+
+/* --------------------------------------------------------- */
+
+/* Redefining privileges module masks */
+UPDATE `xar_privileges` SET name = 'EditPrivileges' WHERE name = 'EditPrivilege';
+UPDATE `xar_privileges` SET name = 'AddPrivileges' WHERE name = 'AddPrivilege';
+UPDATE `xar_privileges` SET name = 'AdminPrivileges' WHERE name = 'AdminPrivilege';
+
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'DeletePrivilege';
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'ViewPrivileges';
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'AssignPrivilege';
+DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'DeassignPrivilege';
 
 /* --------------------------------------------------------- */
 

@@ -45,7 +45,7 @@ function privileges_admin_updateprivilege()
     }
 
 // Security Check
-    if(!xarSecurityCheck('EditPrivilege',0,'Privileges',$name)) return;
+    if(!xarSecurityCheck('EditPrivileges',0,'Privileges',$name)) return;
 
 // call the Privileges class and update the values
 

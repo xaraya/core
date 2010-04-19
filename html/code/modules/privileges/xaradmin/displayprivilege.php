@@ -16,7 +16,7 @@
 function privileges_admin_displayprivilege()
 {
 // Security Check
-    if(!xarSecurityCheck('EditPrivilege')) return;
+    if(!xarSecurityCheck('EditPrivileges')) return;
 
     if(!xarVarFetch('id',           'isset', $id,        NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pinstance',     'array', $instance,   array(), XARVAR_NOT_REQUIRED)) {return;}

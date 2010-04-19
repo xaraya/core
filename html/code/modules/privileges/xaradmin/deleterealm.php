@@ -36,7 +36,7 @@ function privileges_admin_deleterealm()
     }
 
 // Security Check
-    if(!xarSecurityCheck('DeletePrivilege',0,'Realm',$name)) return;
+    if(!xarSecurityCheck('ManagePrivileges',0,'Realm',$name)) return;
 
     if (empty($confirmed)) {
         $data['authid'] = xarSecGenAuthKey();
