@@ -413,6 +413,20 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
 
+        // Add the configuration options if they have not been overridden
+        if(isset($data['configuration'])) {
+            $this->parseConfiguration($data['configuration']);
+            unset($data['configuration']);
+        }
+        foreach ($this->configurationtypes as $configtype) {
+            $properties = $this->getPublicProperties();
+            foreach ($properties as $name => $value) {
+                if (strpos($name,$configtype) === 0) {
+                    $shortname = substr($name,strlen($configtype)+1);
+                    $data[$shortname] = $value;
+                }
+            }
+        }
         return xarTplProperty($data['tplmodule'], $data['template'], 'showoutput', $data);
     }
 
