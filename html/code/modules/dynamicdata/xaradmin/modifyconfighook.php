@@ -52,9 +52,10 @@ function dynamicdata_admin_modifyconfighook($args)
 
     if (!xarModAPILoad('dynamicdata', 'user')) return;
 
-    $fields = xarMod::apiFunc('dynamicdata','user','getprop',
-                           array('moduleid' => $module_id,
-                                 'itemtype' => $itemtype));
+    $args = DataObjectDescriptor::getObjectID(array('module_id'  => $module_id,
+                                       'itemtype'  => $itemtype));
+    $fields = xarModAPIFunc('dynamicdata','user','getprop',
+                           array('objectid' => $args['objectid']));
     if (!isset($fields) || $fields == false) {
         $fields = array();
     }
