@@ -15,9 +15,10 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
+        <h2>Compose Message</h2>
         <form action="&xar-modurl-mail-admin-sendtest;" method="post" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded">
             <fieldset>
-                <legend>Test Configuration</legend>
+                <legend>Message Details</legend>
                 <div class="xar-form-input-wrapper">
                     <label for="name" title="#xarML('Recipient Name.')#" class="xar-form-label">
                         Name:
@@ -64,9 +65,8 @@
                     <label for="message" title="#xarML('Message Subject.')#" class="xar-form-label">
                         Message:
                     </label>
-                    <div class="xar-form-container-after">
-                        <textarea name="message" id="message" class="xar-form-textarealarge">
-                        &#160;</textarea>
+                <div class="xar-form-input-wrapper">
+<textarea name="message" id="message" class="xar-form-textarealarge">&#160;</textarea>
                     </div>
                 </div>
                 <xar:if condition="xarModIsAvailable('scheduler')">
@@ -81,7 +81,8 @@
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="submit" value="#xarML('Send Test Message')#" class="xar-margin-thickright"/>
+                    <xar:var name="label">Send Message</xar:var>
+                    <xar:button type="submit" label="$label"/>
                 </div>
             </fieldset>
         </form>
