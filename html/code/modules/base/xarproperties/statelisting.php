@@ -22,6 +22,8 @@ class StateListProperty extends SelectProperty
     public $name       = 'statelisting';
     public $desc       = 'State Dropdown';
 
+    public $display_rows = 0;   // Always display a dropdown. never a textbox
+
    function getOptions()
    {
         $options = $this->getFirstline();
