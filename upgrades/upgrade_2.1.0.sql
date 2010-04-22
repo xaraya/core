@@ -164,3 +164,7 @@ UPDATE `xar_privileges` SET name = 'AdminThemes' WHERE name = 'AdminTheme';
 INSERT INTO `xar_dynamic_configurations` (`name`, `description`, `property_id`, `label`, `ignore_empty`, `configuration`) VALUES
 ('validation_email_confirm', 'Show a second email field to be filled in', 14, 'Confirm Email', 1, 'a:1:{s:14:"display_layout";s:7:"default";}');
 
+/* --------------------------------------------------------- */
+
+/* Hide the roles_role object */
+DELETE FROM `xar_dynamic_objects` WHERE `xar_dynamic_objects`.`name` = 'roles_roles';
