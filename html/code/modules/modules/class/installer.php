@@ -317,6 +317,7 @@ class Installer extends Object
     public function installmodule($regid=null)
     {
         if ($this->extType == 'modules') $this->assembledependencies($regid);
+        if ($this->extType == 'themes') $this->modulestack->push($regid);
         $this->installdependencies($regid);
     }
     
@@ -405,7 +406,6 @@ class Installer extends Object
         } else {
             $regid = $topid;
         }
-
         //Checks if the extension is already initialised
         if (!$initialised) {
             // Finally, now that dependencies are dealt with, initialize the module
