@@ -50,8 +50,8 @@ class NameProperty extends TextBoxProperty
     public function showInput(Array $data = array())
     {
         if (empty($data['refobject'])) $data['refobject'] = $this->initialization_refobject;
-        if (empty($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
-        if (empty($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
+        if (!isset($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
+        if (!isset($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
         if (empty($data['value'])) $data['value'] = $this->value;
         $data['value'] = $this->getvaluearray($data['value']);
         return DataProperty::showInput($data);
@@ -60,8 +60,8 @@ class NameProperty extends TextBoxProperty
     public function showOutput(Array $data = array())
     {
         if (empty($data['refobject'])) $data['refobject'] = $this->initialization_refobject;
-        if (empty($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
-        if (empty($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
+        if (!isset($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
+        if (!isset($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
         if (empty($data['value'])) $data['value'] = $this->value;
         $data['value'] = $this->getvaluearray($data['value']);
         return DataProperty::showOutput($data);

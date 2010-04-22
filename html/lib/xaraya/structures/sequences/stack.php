@@ -30,6 +30,8 @@ class Stack extends SequenceAdapter implements iStack
 
     public function peek()
     {
+        $item = null;
+        if($this->empty) return $item;
         $item = $this->pop();
         $this->push($item);
         return $item;
