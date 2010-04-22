@@ -569,7 +569,7 @@ function installer_admin_bootstrap()
     if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'modules', 'objects' => $objects))) return;
 
     $objects = array(
-                   'roles_roles',
+//                   'roles_roles',
                    'roles_users',
                    'roles_groups',
                    'roles_user_settings',

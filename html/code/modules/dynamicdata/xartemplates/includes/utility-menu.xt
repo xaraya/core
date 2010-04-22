@@ -21,27 +21,27 @@
             </xar:sec>
             -->
             <xar:sec mask="EditDynamicData" catch="false">
-                <xar:set name="dummy">$activetab=='import'?xarTplSetPageTitle('Import'):''</xar:set>
+                <xar:set name="dummy">$activetab=='import'?xarTplSetPageTitle('Import Object'):''</xar:set>
                 <xar:set name="tabclass">$activetab=='import'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='import'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','util','import')#" class="#$linkclass#">Import</a>
+                    <a href="#xarModURL('dynamicdata','util','import')#" class="#$linkclass#">Import Object</a>
                 </li>
             </xar:sec>
             <xar:sec mask="EditDynamicData" catch="false">
-                <xar:set name="dummy">$activetab=='export'?xarTplSetPageTitle('Export'):''</xar:set>
+                <xar:set name="dummy">$activetab=='export'?xarTplSetPageTitle('Export Object'):''</xar:set>
                 <xar:set name="tabclass">$activetab=='export'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='export'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','util','export')#" class="#$linkclass#">Export</a>
+                    <a href="#xarModURL('dynamicdata','util','export')#" class="#$linkclass#">Export Object</a>
                 </li>
             </xar:sec>
             <xar:sec mask="EditDynamicData" catch="false">
-                <xar:set name="dummy">$activetab=='view_static'?xarTplSetPageTitle('Table Definitions'):''</xar:set>
+                <xar:set name="dummy">$activetab=='view_static'?xarTplSetPageTitle('Manage Tables'):''</xar:set>
                 <xar:set name="tabclass">$activetab=='view_static'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='view_static'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','util','view_static')#" class="#$linkclass#">Table Definitions</a>
+                    <a href="#xarModURL('dynamicdata','util','view_static')#" class="#$linkclass#">Manage Tables</a>
                 </li>
             </xar:sec>
             <xar:sec mask="AdminDynamicData" catch="false">
