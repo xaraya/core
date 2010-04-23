@@ -20,6 +20,7 @@ class NameProperty extends TextBoxProperty
     public $reqmodules = array('roles');
 
     public $display_show_salutation     = true;
+    public $display_show_firstname      = true;
     public $display_show_middlename     = true;
     public $initialization_refobject    = 'roles_users';    // Name of the object we want to reference
 
@@ -37,14 +38,59 @@ class NameProperty extends TextBoxProperty
         // store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            list($isvalid, $lastname) = $this->fetchValue($name . '_last');
-            list($isvalid, $firstname) = $this->fetchValue($name . '_first');
-            list($isvalid, $middlename) = $this->fetchValue($name . '_middle');
-            list($isvalid, $salutation) = $this->fetchValue($name . '_salutation');
+            $invalid = array();
+            $validity = true;
+            $value = array();
+            $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
+            $textbox->validation_min_length = 3;
+
+            $value['salutation'] = '';
+            if ($this->display_show_salutation) {
+                $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
+                $isvalid = $salutation->checkInput($name . '_salutation');
+                if ($isvalid) {
+                    $value['salutation'] = $salutation->value;
+                } else {
+                    $invalid[] = 'salutation';
+                }
+                $validity = $validity && $isvalid;
+            }
+            
+            $value['first_name'] = '';
+            if ($this->display_show_firstname) {
+                $isvalid = $textbox->checkInput($name . '_first');
+                if ($isvalid) {
+                    $value['first_name'] = $textbox->value;
+                } else {
+                    $invalid[] = 'first_name';
+                }
+                $validity = $validity && $isvalid;
+            }
+
+            $value['middle_name'] = '';
+            if ($this->display_show_middlename) {
+                $isvalid = $textbox->checkInput($name . '_middle');
+                if ($isvalid) {
+                    $value['middle_name'] = $textbox->value;
+                } else {
+                    $invalid[] = 'middle_name';
+                }
+                $validity = $validity && $isvalid;
+            }
+
+            $value['last_name'] = '';
+            $isvalid = $textbox->checkInput($name . '_last');
+            if ($isvalid) {
+                $value['last_name'] = $textbox->value;
+            } else {
+                $invalid[] = 'last_name';
+            }
+            $validity = $validity && $isvalid;
         }
 
-        $value = '%' . $lastname .'%' . $firstname .'%' . $middlename .'%' . $salutation .'%';
-        return $this->validateValue($value);
+        if (!empty($invalid)) $this->invalid = implode(',',$invalid);
+        $this->value = '%' . $value['last_name'] .'%' . $value['first_name'] .'%' . $value['middle_name'] .'%' . $value['salutation'] .'%';
+        return $validity;
     }
 
     public function showInput(Array $data = array())

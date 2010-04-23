@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="empty($labels['salutation'])"><xar:var name="label">Title</xar:var><xar:set name="labels['salutation']">$label</xar:set></xar:if>
+    <xar:if condition="empty($labels['first_name'])"><xar:var name="label">First Name</xar:var><xar:set name="labels['first_name']">$label</xar:set></xar:if>
+    <xar:if condition="empty($labels['middle_name'])"><xar:var name="label">Middle Name</xar:var><xar:set name="labels['middle_name']">$label</xar:set></xar:if>
+    <xar:if condition="empty($labels['last_name'])"><xar:var name="label">Last Name</xar:var><xar:set name="labels['last_name']">$label</xar:set></xar:if>
+
     <xar:if condition="isset($onchange)">
       <xar:set name="evt_change">$onchange</xar:set>
     <xar:else/>
@@ -53,5 +58,17 @@
         </xar:if>
     </xar:if>
 
-    <xar:template file="dataproperty_additions" module="base"/>
+    <xar:if condition="!empty($invalid)">
+        <xar:set name="keys">explode(',',$invalid)</xar:set>
+        <xar:set name="badlabels">array()</xar:set>
+        <xar:foreach in="$keys" value="$key">
+            <xar:set name="dummy">1;$badlabels[] = $labels[$key]</xar:set>
+        </xar:foreach>
+        <xar:set name="invalid">implode(', ',$badlabels)</xar:set>  
+        <div>
+            <span class="xar-error">
+                The following fields are not filled out correctly::#$invalid#
+            </span>
+        </div>
+    </xar:if>
 </xar:template>
