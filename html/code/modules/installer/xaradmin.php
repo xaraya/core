@@ -1205,8 +1205,7 @@ function installer_admin_cleanup()
     }
 
 
-//    xarModVars::delete('roles','adminpass');
-//    xarModVars::delete('installer','modules');
+    xarModVars::delete('roles','adminpass');
 
     // get the right blockgroup block id
     $rightBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'right'));
