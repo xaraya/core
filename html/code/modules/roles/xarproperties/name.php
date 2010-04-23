@@ -37,6 +37,11 @@ class NameProperty extends TextBoxProperty
         $name = empty($name) ? 'dd_'.$this->id : $name;
         // store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
+        if ($this->display_layout == 'single') {
+            $this->display_show_salutation     = false;
+            $this->display_show_firstname      = false;
+            $this->display_show_middlename     = false;
+        }
         if (!isset($value)) {
             $invalid = array();
             $validity = true;
@@ -97,6 +102,7 @@ class NameProperty extends TextBoxProperty
     {
         if (empty($data['refobject'])) $data['refobject'] = $this->initialization_refobject;
         if (!isset($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
+        if (!isset($data['show_firstname'])) $data['show_firstname'] = $this->display_show_firstname;
         if (!isset($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
         if (empty($data['value'])) $data['value'] = $this->value;
         $data['value'] = $this->getvaluearray($data['value']);
@@ -107,6 +113,7 @@ class NameProperty extends TextBoxProperty
     {
         if (empty($data['refobject'])) $data['refobject'] = $this->initialization_refobject;
         if (!isset($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
+        if (!isset($data['show_firstename'])) $data['show_firstename'] = $this->display_show_firstname;
         if (!isset($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
         if (empty($data['value'])) $data['value'] = $this->value;
         $data['value'] = $this->getvaluearray($data['value']);

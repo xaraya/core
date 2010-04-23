@@ -662,14 +662,9 @@ function installer_admin_create_administrator()
 
     sys::import('modules.roles.class.roles');
     $data['admin'] = xarRoles::getRole((int)xarModVars::get('roles','admin'));
-    $data['properties'] = $data['admin']->getProperties();
-
-    if (!xarVarFetch('create', 'isset', $create, FALSE, XARVAR_NOT_REQUIRED)) return;
-    if (!$create) {
-        return $data;
-    }
 
     // Set up some custom validation checks and messages
+    $data['admin']->properties['name']->display_layout = 'single';
     $data['admin']->properties['name']->validation_min_length = 4;
     $data['admin']->properties['name']->validation_min_length_invalid = xarML('The display name must be at least 4 characters long');
     $data['admin']->properties['uname']->validation_min_length = 4;
@@ -679,6 +674,13 @@ function installer_admin_create_administrator()
     $data['admin']->properties['password']->validation_password_confirm = 1;
     $data['admin']->properties['email']->validation_min_length = 1;
     $data['admin']->properties['email']->validation_min_length_invalid = xarML('An email address must be entered');
+
+    $data['properties'] = $data['admin']->getProperties();
+
+    if (!xarVarFetch('create', 'isset', $create, FALSE, XARVAR_NOT_REQUIRED)) return;
+    if (!$create) {
+        return $data;
+    }
 
     $isvalid = $data['admin']->checkInput();
     if (!$isvalid) {

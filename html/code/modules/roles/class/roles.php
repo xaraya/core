@@ -257,17 +257,12 @@ class xarRoles extends Object
         if($result->next()) $row = $result->fields;
         if (empty($row)) return;
 
-    /* CHECKME: they're not used afterwards, so why look them up here ?
-        $duvarray = array('userhome','primaryparent','passwordupdate','userlastlogin','usertimezone');
-        $duvs = array();
-        foreach ($duvarray as $key) {
-            $duv = xarModUserVars::Get('roles',$key,$row['id']);
-            if (!empty($duv)) $duvs[$key] = $duv;
-        }
-    */
         // create and return the role object
         sys::import('modules.roles.class.role');
-        $role = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $row['itemtype']));
+        if ($itemtype == ROLES_USERTYPE) $name = 'roles_users';
+        elseif ($itemtype == ROLES_GROUPTYPE) $name = 'roles_groups';
+        else throw new Exception(xarML('Unknown role type'));
+        $role = DataObjectMaster::getObject(array('name' => $name));
         $role->getItem(array('itemid' => $row['id']));
         return $role;
     }
