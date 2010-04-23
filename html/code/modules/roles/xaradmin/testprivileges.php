@@ -40,7 +40,9 @@ function roles_admin_testprivileges()
     $role = xarRoles::get($id);
 
     $types = xarMod::apiFunc('roles','user','getitemtypes');
-    $data['itemtypename'] = $types[$role->getType()]['label'];
+    // This is happening because we suppressed the roles_roles object, but we leave it this way for now
+    $thistype = $role->getType() - 1;
+    $data['itemtypename'] = $types[$thistype]['label'];
     // get the array of parents of this role
     // need to display this in the template
     $parents = array();
@@ -98,7 +100,7 @@ function roles_admin_testprivileges()
     $data['pname'] = $role->getName();
     $data['itemtype'] = $role->getType();
     $types = xarMod::apiFunc('roles','user','getitemtypes');
-    $data['itemtypename'] = $types[$data['itemtype']]['label'];
+    $data['itemtypename'] = $types[$thistype]['label'];
     $data['pmodule'] = $modRegId;
     $data['id'] = $id;
     $data['testlabel'] = xarML('Test');
