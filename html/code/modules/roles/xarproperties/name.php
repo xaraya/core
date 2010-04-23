@@ -141,7 +141,6 @@ class NameProperty extends TextBoxProperty
 
         // Backward compatibility
         if (!empty($value[0])) $valuearray['last'] = $value[0];
-        
         return $valuearray;
     }
 }

@@ -24,9 +24,11 @@ function roles_admin_display()
     $role = xarRoles::get($id);
 
     $data['itemtype'] = $role->getType();
-
-    $object = xarMod::apiFunc('dynamicdata','user','getobject',array('module'   => 'roles',
-                                                'itemtype' => $data['itemtype']));
+    sys::import('modules.dynamicdata.class.objects.master');
+    if ($data['itemtype'] == ROLES_USERTYPE) $name = 'roles_users';
+    elseif ($itemtype == ROLES_GROUPTYPE) $name = 'roles_groups';
+    else throw new Exception(xarML('Unknown role type'));
+    $object = DataObjectMaster::getObject(array('name' => $name));
 
     $itemid = $object->getItem(array('itemid' => $id));
 
