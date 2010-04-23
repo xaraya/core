@@ -42,7 +42,8 @@ function dynamicdata_admin_modify($args)
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
     if (!xarVarFetch('tab', 'pre:trim:lower:str:1', $data['tab'], 'edit', XARVAR_NOT_REQUIRED)) return;
 
-    $object = DataObjectMaster::getObject(array('objectid' => $objectid,
+    if (empty($objectid) && empty($name)) $objectid = 1;
+    $object = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,
                                          'moduleid' => $module_id,
                                          'itemtype' => $itemtype,
@@ -56,12 +57,15 @@ function dynamicdata_admin_modify($args)
 
     $args = $object->toArray();
 
+    // Security check
+    if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$args['itemid'])) return;
+
     if ($notfresh) {
         $isvalid = $object->checkInput();
     } else {
         $object->getItem();
     }
-    $data['object'] = $object;
+    $data['object'] = & $object;
     $data['itemid'] = $args['itemid'];
 
     switch ($data['tab']) {
