@@ -125,7 +125,7 @@ class NameProperty extends TextBoxProperty
         $valuearray = $this->getvaluearray($this->value);
         $value = $valuearray['salutation'] . ' ' . $valuearray['first'] . ' ' . $valuearray['middle'] . ' ' . $valuearray['last'];
         $value = str_replace('  ',' ',$value);
-        return $value;
+        return trim($value);
     }
 
     function getvaluearray($value)
