@@ -24,13 +24,6 @@ function roles_admin_display()
     $role = xarRoles::get($id);
 
     $data['itemtype'] = $role->getType();
-    sys::import('modules.dynamicdata.class.objects.master');
-    if ($data['itemtype'] == ROLES_USERTYPE) $name = 'roles_users';
-    elseif ($itemtype == ROLES_GROUPTYPE) $name = 'roles_groups';
-    else throw new Exception(xarML('Unknown role type'));
-    $object = DataObjectMaster::getObject(array('name' => $name));
-
-    $itemid = $object->getItem(array('itemid' => $id));
 
     // get the array of parents of this role
     // need to display this in the template
@@ -61,7 +54,7 @@ function roles_admin_display()
     $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $id, $item);
     $data['hooks'] = $hooks;
-    $data['object'] = & $object;
+    $data['object'] = $role;
     xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
     return $data;
 }

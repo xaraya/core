@@ -23,7 +23,8 @@ function roles_admin_new()
     if (!xarVarFetch('itemtype',    'int',   $data['itemtype'], xarRoles::ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('duvs',        'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
-    $data['object'] = DataObjectMaster::getObject(array('module'   => 'roles', 'itemtype' => $data['itemtype']));
+    $data['object'] = DataObjectMaster::getObject(array('module'   => 'roles', 'itemtype' => $data['itemtype']-1));
+    $data['object']->properties['name']->dispkay_layout = 'single';
 
     xarSession::setVar('ddcontext.roles', array(
                                             'return_url' => xarServer::getCurrentURL(),
