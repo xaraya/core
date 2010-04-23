@@ -268,7 +268,7 @@ class xarRoles extends Object
         if (empty($row)) return;
 
         // create and return the role object
-        sys::import('modules.roles.class.role');
+        sys::import('modules.dynamicdata.class.objects.master');
         if ($itemtype == ROLES_USERTYPE) $name = 'roles_users';
         elseif ($itemtype == ROLES_GROUPTYPE) $name = 'roles_groups';
         else throw new Exception(xarML('Unknown role type'));
