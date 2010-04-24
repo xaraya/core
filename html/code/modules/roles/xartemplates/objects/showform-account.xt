@@ -11,7 +11,7 @@
             Any data not provided by the object is provided by the $formdata array
         -->
         <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
-        <h2>Edit User : #$object->properties['uname']->getValue()#</h2>
+        <h2>Edit #$object->properties['name']->getValue()#</h2>
         <fieldset>
             <legend>User Details</legend>
             <xar:if condition="(bool)xarModVars::get('roles', 'requirevalidation')">
