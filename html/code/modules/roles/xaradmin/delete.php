@@ -63,7 +63,6 @@ function roles_admin_delete()
         // Load Template
         $data['itemtype'] = $itemtype;
         $types = xarMod::apiFunc('roles','user','getitemtypes');
-        $data['itemtypename'] = $types[$itemtype]['label'];
         $data['authid'] = xarSecGenAuthKey();
         $data['id'] = $id;
         $data['ptype'] = $role->getType();

@@ -258,7 +258,7 @@
             </form>
         </xar:if>
         <p>
-            <a href="&xar-modurl-roles-admin-new;&amp;ptype=0&amp;pparentid=#$groupid#" title="#xarML('Add a new user')#">
+            <a href="&xar-modurl-roles-admin-new;&amp;pparentid=#$groupid#" title="#xarML('Add a new user')#">
                 Add a new user to this group
             </a>|
             <a href="&xar-modurl-roles-admin-createmail;">Email users in this group</a>

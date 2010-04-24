@@ -569,7 +569,7 @@ function installer_admin_bootstrap()
     if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'modules', 'objects' => $objects))) return;
 
     $objects = array(
-//                   'roles_roles',
+                   'roles_roles',
                    'roles_users',
                    'roles_groups',
                    'roles_user_settings',
@@ -687,10 +687,10 @@ function installer_admin_create_administrator()
         return xarTplModule('installer','admin','create_administrator',$data);
     }
 
-    xarModVars::set('mail', 'adminname', $data['admin']->properties['name']->value);
-    xarModVars::set('mail', 'adminmail', $data['admin']->properties['email']->value);
-    xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright ' . date("Y") . ' ' . $data['admin']->properties['name']->value);
-    xarModVars::set('roles', 'lastuser', $data['admin']->properties['uname']->value);
+    xarModVars::set('mail', 'adminname', $data['admin']->properties['name']->getValue());
+    xarModVars::set('mail', 'adminmail', $data['admin']->properties['email']->getValue());
+    xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright ' . date("Y") . ' ' . $data['admin']->properties['name']->getValue());
+    xarModVars::set('roles', 'lastuser', $data['admin']->properties['uname']->getValue());
     xarModVars::set('roles', 'adminpass', $data['admin']->properties['password']->password);
 
 // CHECKME: misc. undefined module variables

@@ -187,7 +187,6 @@ function roles_admin_showprivileges()
     }
     $currentprivileges = $inherited[0];
     $inherited = array_reverse($xs);
-//    echo var_dump($inherited);exit;
 
 // -------------------------------------------------------------------
 // Load Template

@@ -140,7 +140,7 @@ function roles_admin_showusers()
         $users[$row['id']]['frozen'] = !xarSecurityCheck('EditRoles',0,'Roles',$row['name']);
 
     }
-    if ($id != 0) $data['title'] .= " ".xarML('of group')." ";
+    if ($id != 0) $data['title'] .= " ".xarML('of Group')." ";
 
     //selstyle
     $data['style'] = array('0' => xarML('Simple'),

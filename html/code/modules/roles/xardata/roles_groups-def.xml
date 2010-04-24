@@ -64,7 +64,7 @@
     </property>
     <property name="regdate">
       <id>50</id>
-      <label>Reg. Date</label>
+      <label>Registered</label>
       <type>calendar</type>
       <defaultvalue>xarMLS_userTime()</defaultvalue>
       <source>roles.date_reg</source>
@@ -74,7 +74,7 @@
     </property>
     <property name="valcode">
       <id>51</id>
-      <label>Val. Code</label>
+      <label>Validation Code</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source>roles.valcode</source>
