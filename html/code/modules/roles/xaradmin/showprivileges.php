@@ -194,7 +194,7 @@ function roles_admin_showprivileges()
     $data['pname'] = $role->getName();
     $data['itemtype'] = $role->getType();
     $types = xarMod::apiFunc('roles','user','getitemtypes');
-    $data['itemtypename'] = $types[$data['itemtype']-1]['label'];
+    $data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['roleid'] = $id;
     $data['inherited'] = $inherited;
     $data['privileges'] = $currentprivileges;

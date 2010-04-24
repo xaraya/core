@@ -50,7 +50,7 @@ class NameProperty extends TextBoxProperty
             $textbox->validation_min_length = 3;
 
             $value['salutation'] = '';
-            if ($this->display_show_salutation) {
+            if ($this->display_show_salutation && ($this->display_layout != 'single')) {
                 $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
                 $isvalid = $salutation->checkInput($name . '_salutation');
                 if ($isvalid) {
@@ -62,7 +62,7 @@ class NameProperty extends TextBoxProperty
             }
             
             $value['first_name'] = '';
-            if ($this->display_show_firstname) {
+            if ($this->display_show_firstname && ($this->display_layout != 'single')) {
                 $isvalid = $textbox->checkInput($name . '_first');
                 if ($isvalid) {
                     $value['first_name'] = $textbox->value;
@@ -73,7 +73,7 @@ class NameProperty extends TextBoxProperty
             }
 
             $value['middle_name'] = '';
-            if ($this->display_show_middlename) {
+            if ($this->display_show_middlename && ($this->display_layout != 'single')) {
                 $isvalid = $textbox->checkInput($name . '_middle');
                 if ($isvalid) {
                     $value['middle_name'] = $textbox->value;

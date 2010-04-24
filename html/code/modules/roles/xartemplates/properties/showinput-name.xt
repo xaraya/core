@@ -58,8 +58,6 @@
             <xar:set name="fieldname">$name . '_last'</xar:set>
             <xar:set name="fieldid">$id . '_last'</xar:set>
             <xar:data-input type="textbox" name="$fieldname" id="$fieldid" value="$value['last']"/>
-            <input type="hidden" name="#$name#_first" id="#$id#_first" value=""/>
-            <input type="hidden" name="#$name#_middle" id="#$id#_middle" value=""/>
             <xar:var name="label">Name</xar:var>
             <xar:set name="labels['last_name']">$label</xar:set>
 
