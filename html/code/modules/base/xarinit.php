@@ -147,6 +147,7 @@ function base_init()
      *****************************************************************/
     xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
     xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);
+    xarConfigVars::set(null, 'System.Core.Version', XARCORE_VERSION);
     xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
     $allowedAPITypes = array();
     /*****************************************************************

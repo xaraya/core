@@ -22,7 +22,7 @@
 function base_admin_release()
 {
     // Security Check
-    if(!xarSecurityCheck('EditModules')) return;
+    if(!xarSecurityCheck('ManageBase')) return;
 
     //number of releases to show
     $releasenumber = (int)xarModVars::get('base','releasenumber');

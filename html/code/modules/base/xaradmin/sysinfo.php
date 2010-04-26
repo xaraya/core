@@ -17,6 +17,9 @@
  */
 function base_admin_sysinfo()
 {
+    // Security Check
+    if(!xarSecurityCheck('ManageBase')) return;
+
     xarVarFetch('what','int:-1:127',$what,INFO_GENERAL, XARVAR_NOT_REQUIRED);
     $data['what'] = $what;
     // Security Check
