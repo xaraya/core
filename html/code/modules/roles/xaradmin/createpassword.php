@@ -30,18 +30,16 @@ function roles_admin_createpassword()
     if (empty($pass)) throw new DataNotFoundException(array(),'Problem generating new password');
     $role = xarRoles::get($id);
     $modifiedstatus = $role->setPass($pass);
-    $modifiedrole = $role->updateItem();
-    if (!$modifiedrole) return;
+    if (!$role->updateItem()) return;
 
     if (!xarModVars::get('roles', 'askpasswordemail')) {
         xarResponse::redirect(xarModURL('roles', 'admin', 'showusers',
                       array('id' => $groupid, 'state' => $state)));
-        return true;
-    }
-    else {
+    } else {
         xarSession::setVar('tmppass',$pass);
         xarResponse::redirect(xarModURL('roles', 'admin', 'asknotification',
         array('id' => array($id => '1'), 'mailtype' => 'password', 'groupid' => $groupid, 'state' => $state)));
     }
+    return true;
 }
 ?>
