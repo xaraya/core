@@ -31,8 +31,6 @@ function mail_admin_compose()
     // Get the admin email address
     $data['email']  = xarModVars::get('mail', 'adminmail');
     $data['name']   = xarModVars::get('mail', 'adminname');
-    $data['email']  = xarModVars::get('mail', 'adminmail');
-    $data['name']   = xarModVars::get('mail', 'adminname');
 
     // everything else happens in Template for now
     return $data;

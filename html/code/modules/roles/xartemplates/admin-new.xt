@@ -12,7 +12,7 @@
         <p>
             All fields are required to create a new role on the system.
         </p>
-        <form id="newrole" action="#xarModURL('dynamicdata','admin','create')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form id="newrole" action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>
                   #$object:label# Details
@@ -74,8 +74,8 @@
                 <div class="xar-form-input-wrapper-after">
                 <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
                     <input type="hidden" name="tplmodule" id="tplmodule" value="roles"/>
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#"/>
-                    <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="hidden" name="confirm" id="confirm" value="1"/>
                     <input type="submit" value="#xarML('Add')#"/>
                 </div>
             </fieldset>

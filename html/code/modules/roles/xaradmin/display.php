@@ -25,11 +25,6 @@ function roles_admin_display()
 
     $data['itemtype'] = $role->getType();
 
-    $object = xarMod::apiFunc('dynamicdata','user','getobject',array('module'   => 'roles',
-                                                'itemtype' => $data['itemtype']));
-
-    $itemid = $object->getItem(array('itemid' => $id));
-
     // get the array of parents of this role
     // need to display this in the template
     $parents = array();
@@ -59,7 +54,7 @@ function roles_admin_display()
     $hooks = array();
     $hooks = xarModCallHooks('item', 'display', $id, $item);
     $data['hooks'] = $hooks;
-    $data['object'] = & $object;
+    $data['object'] = $role;
     xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
     return $data;
 }

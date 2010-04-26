@@ -7,7 +7,7 @@
     <xar:set name="currentid">xarUserGetVar('id')</xar:set>
     <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
     <xar:if condition="$layout eq 'default'">
-        <h2>Profile for #xarVarPrepForDisplay(xarUserGetVar('name', $userid))#</h2>
+        <h2>Profile for <xar:data-output property="$properties['name']"/></h2>
         <fieldset>
         <xar:foreach in="$properties" key="$name" value="$property">
             <div class="xar-form-input-wrapper">

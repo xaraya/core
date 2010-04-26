@@ -7,7 +7,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
-        <h2>Utilities - Data Browser</h2>
+        <h2>Utilities - Table Browser</h2>
         <xar:template type="module" file="utility-menu"/>
         <xar:if condition="empty($export)">
             <xar:if condition="!empty($databases)">

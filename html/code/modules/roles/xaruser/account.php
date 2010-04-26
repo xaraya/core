@@ -192,7 +192,8 @@ function roles_user_account()
             $data['authid'] = xarSecGenAuthKey('roles');
         }
         $data['menutabs'] = $menutabs;
-
+        
+        $data['object']->properties['name']->display_layout = 'single';
     }
     $data['id']          = xarUserGetVar('id');
     $data['name']         = xarUserGetVar('name');

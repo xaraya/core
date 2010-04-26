@@ -58,7 +58,7 @@ function modules_admin_install()
         //Let's make a nice GUI to show the user the options
         $data['id'] = $id;
         //They come in 3 arrays: satisfied, satisfiable and unsatisfiable
-        //First 2 have $modInfo under them foreach module,
+        //First 2 have $modInfo under them for each module,
         //3rd has only 'regid' key with the ID of the module
 
         // get any dependency info on this module for a better message if something is missing

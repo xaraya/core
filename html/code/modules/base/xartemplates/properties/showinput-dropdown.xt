@@ -13,7 +13,7 @@
     </xar:if>
     <input type="hidden" name="#$name#_previous_value" value="#$value#"/>
 
-    <xar:if condition="!empty($rows) AND (count($options) le $rows)">
+    <xar:if condition="empty($rows) OR (!empty($rows) AND (count($options) le $rows))">
         <select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
             <xar:foreach in="$options" value="$option">
                 <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">

@@ -664,14 +664,9 @@ function installer_admin_create_administrator()
 
     sys::import('modules.roles.class.roles');
     $data['admin'] = xarRoles::getRole((int)xarModVars::get('roles','admin'));
-    $data['properties'] = $data['admin']->getProperties();
-
-    if (!xarVarFetch('create', 'isset', $create, FALSE, XARVAR_NOT_REQUIRED)) return;
-    if (!$create) {
-        return $data;
-    }
 
     // Set up some custom validation checks and messages
+    $data['admin']->properties['name']->display_layout = 'single';
     $data['admin']->properties['name']->validation_min_length = 4;
     $data['admin']->properties['name']->validation_min_length_invalid = xarML('The display name must be at least 4 characters long');
     $data['admin']->properties['uname']->validation_min_length = 4;
@@ -682,15 +677,22 @@ function installer_admin_create_administrator()
     $data['admin']->properties['email']->validation_min_length = 1;
     $data['admin']->properties['email']->validation_min_length_invalid = xarML('An email address must be entered');
 
+    $data['properties'] = $data['admin']->getProperties();
+
+    if (!xarVarFetch('create', 'isset', $create, FALSE, XARVAR_NOT_REQUIRED)) return;
+    if (!$create) {
+        return $data;
+    }
+
     $isvalid = $data['admin']->checkInput();
     if (!$isvalid) {
         return xarTplModule('installer','admin','create_administrator',$data);
     }
 
-    xarModVars::set('mail', 'adminname', $data['admin']->properties['name']->value);
-    xarModVars::set('mail', 'adminmail', $data['admin']->properties['email']->value);
-    xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright ' . date("Y") . ' ' . $data['admin']->properties['name']->value);
-    xarModVars::set('roles', 'lastuser', $data['admin']->properties['uname']->value);
+    xarModVars::set('mail', 'adminname', $data['admin']->properties['name']->getValue());
+    xarModVars::set('mail', 'adminmail', $data['admin']->properties['email']->getValue());
+    xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright ' . date("Y") . ' ' . $data['admin']->properties['name']->getValue());
+    xarModVars::set('roles', 'lastuser', $data['admin']->properties['uname']->getValue());
     xarModVars::set('roles', 'adminpass', $data['admin']->properties['password']->password);
 
 // CHECKME: misc. undefined module variables
@@ -1207,8 +1209,7 @@ function installer_admin_cleanup()
     }
 
 
-//    xarModVars::delete('roles','adminpass');
-//    xarModVars::delete('installer','modules');
+    xarModVars::delete('roles','adminpass');
 
     // get the right blockgroup block id
     $rightBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'right'));

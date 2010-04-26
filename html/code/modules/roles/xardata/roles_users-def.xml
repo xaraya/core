@@ -23,7 +23,7 @@
     <property name="name">
       <id>36</id>
       <label>Name</label>
-      <type>textbox</type>
+      <type>name</type>
       <defaultvalue></defaultvalue>
       <source>xar_roles.name</source>
       <status>33</status>
@@ -72,7 +72,7 @@
     </property>
     <property name="regdate">
       <id>41</id>
-      <label>Reg. Date</label>
+      <label>Registered</label>
       <type>calendar</type>
       <defaultvalue>xarMLS_userTime()</defaultvalue>
       <source>xar_roles.date_reg</source>
@@ -82,7 +82,7 @@
     </property>
     <property name="valcode">
       <id>42</id>
-      <label>Val. Code</label>
+      <label>Validation Code</label>
       <type>textbox</type>
       <defaultvalue>createdbyadmin</defaultvalue>
       <source>xar_roles.valcode</source>

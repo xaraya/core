@@ -317,6 +317,7 @@ class Installer extends Object
     public function installmodule($regid=null)
     {
         if ($this->extType == 'modules') $this->assembledependencies($regid);
+        if ($this->extType == 'themes') $this->modulestack->push($regid);
         $this->installdependencies($regid);
     }
     
@@ -375,8 +376,7 @@ class Installer extends Object
 
     public function installdependencies($regid)
     {
-        $topid = $this->modulestack->peek();
-        
+        $topid = $this->modulestack->pop();
         if ($this->extType == 'themes'){
             $extInfo = xarThemeGetInfo($regid);
             if (!isset($extInfo)) {
@@ -398,14 +398,14 @@ class Installer extends Object
 
         if ($regid == $topid) {
             // First time we've come to this module
-            $regid = $this->modulestack->pop();
             // Is there an install page?
             if (!$initialised && file_exists(sys::code() . 'modules/' . $extInfo['osdirectory'] . '/xartemplates/includes/installoptions.xt')) {
                 xarController::redirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $regid)));
                 return true;
             }
+        } else {
+            $regid = $topid;
         }
-
         //Checks if the extension is already initialised
         if (!$initialised) {
             // Finally, now that dependencies are dealt with, initialize the module

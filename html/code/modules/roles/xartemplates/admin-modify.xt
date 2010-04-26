@@ -42,7 +42,7 @@
         <xar:template file="tablist"/>
         <fieldset>
             <legend>#$object:label# Properties:</legend>
-            <form action="#xarModURL('dynamicdata','admin','update')#" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
                 <xar:if condition="!xarSecurityCheck('EditRoles',0,'Roles',$object:getName())">
                     <xar:data-display object="$object" tplmodule="roles"/>
                     <p>This #$object:label# cannot be edited or deleted.</p>
@@ -67,7 +67,13 @@
                             <xar:set name="onchange">
                                 "this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"
                             </xar:set>
-                            <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1"/>
+                                <xar:set name="options">
+                                    array( 
+                                        array('id' => '2', 'name' => 'User'),
+                                        array('id' => '3', 'name' => 'Group'),
+                                    )
+                                </xar:set>
+                                <xar:data-input type="dropdown" name="itemtype" value="$itemtype" options="$options"/>
                         </div>
                     </xar:if>
                     <xar:data-form object="$object" tplmodule="roles"/>
@@ -167,9 +173,9 @@
                         <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
                         <input type="hidden" name="itemid" id="itemid" value="#$id#"/>
                         <input type="hidden" name="tplmodule" id="tplmodule" value="roles"/>
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#"/>
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="confirm" id="confirm" value="1"/>
                         <input type="submit" value="#xarML('Update')#"/>
-                        <input type="hidden" name="return_url" value="#xarModURL('roles','admin','modify',array('name' =&gt; $object-&gt;name))#"/>
                     </div>
                 </xar:if>
             </form>

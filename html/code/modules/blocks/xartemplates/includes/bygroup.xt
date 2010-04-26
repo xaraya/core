@@ -72,7 +72,7 @@
                         <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                             Edit
                         </a>|
-                        <a href="#$loop:item['deleteurl']#"">
+                        <a href="#$loop:item['deleteurl']#">
                             Delete
                         </a>
                     </td>

@@ -423,7 +423,7 @@ class DataProperty extends Object implements iDataProperty
             foreach ($properties as $name => $value) {
                 if (strpos($name,$configtype) === 0) {
                     $shortname = substr($name,strlen($configtype)+1);
-                    $data[$shortname] = $value;
+                    if(!isset($shortname)) $data[$shortname] = $value;
                 }
             }
         }

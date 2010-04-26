@@ -22,6 +22,8 @@ class CountryListProperty extends SelectProperty
     public $name       = 'countrylisting';
     public $desc       = 'Country Dropdown';
 
+    public $display_rows = 0;   // Always display a dropdown. never a textbox
+
    /**
     * Country list according to ISO 3166
     *

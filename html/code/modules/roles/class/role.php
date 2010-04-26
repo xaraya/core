@@ -872,7 +872,7 @@ class Role extends DataObject
      * @todo since there are so many a generalized getter (magic __get() ) might be more pleasurable
      */
     function getID() { return $this->properties['id']->value; }
-    function getName() { return $this->properties['name']->value; }
+    function getName() { return $this->properties['name']->getValue(); }
     function getUname() { return $this->properties['uname']->value; }
     function getType() { return $this->properties['role_type']->value; }
     function getUser() { return $this->properties['uname']->value; }
