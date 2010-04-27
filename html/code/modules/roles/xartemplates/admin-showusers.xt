@@ -208,7 +208,7 @@
                             </xar:foreach>
                             <td class="xar-align-center xar-nowrap">
                                 <xar:if condition="!$users[$itemid]['frozen']">
-                                    <a href="&xar-modurl-roles-admin-createpassword;&amp;id=#$fields.id#&amp;state=#$state#&amp;groupid #$groupid#" title="#xarML('Generate a new password for this User')#">
+                                    <a href="&xar-modurl-roles-admin-createpassword;&amp;id=#$fields.id#&amp;state=#$state#&amp;groupid=#$groupid#" title="#xarML('Generate a new password for this User')#">
                                         <img src="#$icon_password#" class="xar-valign-middle"/>
                                     </a>
                                     &#160;
