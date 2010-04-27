@@ -22,7 +22,7 @@
     </property>
     <property name="name">
       <id>36</id>
-      <label>Name</label>
+      <label>Display Name</label>
       <type>name</type>
       <defaultvalue></defaultvalue>
       <source>xar_roles.name</source>
