@@ -25,7 +25,7 @@
     </property>
     <property name="name">
       <id>36</id>
-      <label>Name</label>
+      <label>Display Name</label>
       <type>name</type>
       <defaultvalue></defaultvalue>
       <source>roles.name</source>

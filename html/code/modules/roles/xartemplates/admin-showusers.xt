@@ -211,10 +211,12 @@
                             </xar:foreach>
                             <td class="xar-align-center xar-nowrap">
                                 <xar:if condition="!$users[$itemid]['frozen']">
-                                    <a href="&xar-modurl-roles-admin-createpassword;&amp;id=#$fields.id#&amp;state=#$state#&amp;groupid #$groupid#" title="#xarML('Generate a new password for this User')#">
-                                        <img src="#$icon_password#" class="xar-valign-middle"/>
-                                    </a>
-                                    &#160;
+                                    <xar:if condition="xarModVars::get('roles', 'askpasswordemail')">
+                                        <a href="&xar-modurl-roles-admin-createpassword;&amp;id=#$fields.id#&amp;state=#$state#&amp;groupid=#$groupid#" title="#xarML('Generate a new password for this User')#">
+                                            <img src="#$icon_password#" class="xar-valign-middle"/>
+                                        </a>
+                                        &#160;
+                                    </xar:if>
                                     <a href="&xar-modurl-roles-admin-modify;&amp;id=#$fields.id#" title="#xarML('Modify this user')#">
                                         <img src="#$icon_modify#" class="xar-valign-middle"/>
                                     </a>

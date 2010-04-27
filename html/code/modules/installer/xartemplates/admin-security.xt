@@ -11,7 +11,7 @@
         <h2>Secure the Installer:</h2>
         <form action="#xarModURL('installer','admin','cleanup')#" method="post">
             <p>
-                The install script that runs the installer is a security risk to your site. We suggest you let the installer rename or remove the install script so that the installer cannot be used by unauthorized persons.  If you choose neither of the options below you will be reminded to remove the install script via the site's reminder block for a period of 3 days. After that, you're on your own.
+                The install script that runs the installer is a security risk to your site. We suggest you let the installer rename or remove the install script so that the installer cannot be used by unauthorized persons.  If you choose neither of the options below you (the site administrator) will be reminded to remove the install script via the site's reminder block for a period of 3 days. After that, you're on your own.
             </p>
             <div class="xar-form-input-wrapper">
                 <p>
@@ -24,7 +24,7 @@
             </div>
             <div class="xar-form-input-wrapper">
                 <p>
-                    Renaming the install script will let you run it under its new name. This is les secure,
+                    Renaming the install script will let you run it under its new name. This is less secure,
                 </p>
                 <label class="xar-form-label" for="rename">
                     Rename the install script

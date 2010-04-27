@@ -5,6 +5,27 @@
   This script works with MySQL. It should be appropriately modified for other databases
 */
 
+/* Adding the releasenumber modvar */
+INSERT INTO `xar_module_vars` (module_id, name, value)
+    SELECT mods.id, 'releasenumber', 10 FROM xar_modules mods
+    WHERE mods.name = 'base';
+
+/* --------------------------------------------------------- */
+/* Upgrading the core module version numbers */
+UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'authsystem';
+UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'base';
+UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'blocks';
+UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'dynamicdata';
+UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'installer';
+UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'mail';
+UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'modules';
+UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'privileges';
+UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'roles';
+UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'themes';
+UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'authsystem';
+
+/* --------------------------------------------------------- */
+
 /* Merging the blockgroups and blocks tables */
 /* Add blockgroups as a type of block */
 INSERT INTO `xar_block_types` (name, module_id, info) 
@@ -56,29 +77,6 @@ INSERT INTO `xar_roles` (name, itemtype,  users, uname, date_reg, valcode, state
 
 /* Adding the SiteManager user */
 INSERT INTO `xar_roles` (name, itemtype,  users, uname, email, date_reg, valcode, state, auth_module_id) VALUES ('SiteManager', 2, 0, 'manager', 'none@none.com', UNIX_TIMESTAMP(), 'createdbysystem', 3, 4)
-
-/* --------------------------------------------------------- */
-
-/* Upgrading the core module version numbers */
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'authsystem';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'base';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'blocks';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'dynamicdata';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'installer';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'mail';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'modules';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'privileges';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'roles';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'themes';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'authsystem';
-
-/* --------------------------------------------------------- */
-
-/* Adding the releasenumber modvar */
-
-INSERT INTO `xar_module_vars` (module_id, name, value)
-    SELECT mods.id, 'releasenumber', 10 FROM xar_modules mods
-    WHERE mods.name = 'base';
 
 /* --------------------------------------------------------- */
 
@@ -167,4 +165,4 @@ INSERT INTO `xar_dynamic_configurations` (`name`, `description`, `property_id`, 
 /* --------------------------------------------------------- */
 
 /* Hide the roles_role object */
-DELETE FROM `xar_dynamic_objects` WHERE `xar_dynamic_objects`.`name` = 'roles_roles';
+// DELETE FROM `xar_dynamic_objects` WHERE `xar_dynamic_objects`.`name` = 'roles_roles';
