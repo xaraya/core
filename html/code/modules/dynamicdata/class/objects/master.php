@@ -826,7 +826,7 @@ class DataObjectMaster extends Object
         xarMod::load('dynamicdata');
         $tables = xarDB::getTables();
 
-        sys::import('modules.dynamicdata.class.properties.master');
+        sys::import('xaraya.structures.query');
         // TODO: delete all the (dynamic ?) data for this object
 
         // Delete all the properties of this object
