@@ -11,10 +11,6 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-/**
- * Initialise the modules module
- */
- 
 class Installer extends Object
 {
     private $extType                  = 'modules';

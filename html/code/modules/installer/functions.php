@@ -37,7 +37,7 @@ function xarInstallFunc($funcName = 'main', $args = array())
     $modFunc = "{$modName}_{$modType}_{$funcName}";
     if (!function_exists($modFunc)) {
         // try to load it
-        xarInstallLoad();
+        xarInstallLoad($funcName);
         if(!function_exists($modFunc)) throw new FunctionNotFoundException($modFunc);
     }
 
@@ -124,7 +124,7 @@ function xarInstallAPILoad()
  * @return true
  * @throws BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
-function xarInstallLoad()
+function xarInstallLoad($func)
 {
     static $loadedModuleCache = array();
 
@@ -142,7 +142,7 @@ function xarInstallLoad()
     $modOsType = xarVarPrepForOS($modType);
     $modOsDir = 'installer';
 
-    $osfile = sys::code() . "modules/$modOsDir/xar$modOsType.php";
+    $osfile = sys::code() . "modules/$modOsDir/xar$modOsType/$func.php";
     if (!file_exists($osfile)) throw new FileNotFoundException($osfile);
 
     // Load file

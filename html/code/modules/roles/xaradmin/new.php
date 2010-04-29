@@ -23,7 +23,7 @@ function roles_admin_new()
     if (!xarVarFetch('duvs',        'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('confirm',     'int',   $confirm, 0, XARVAR_NOT_REQUIRED)) return;
 
-    $data['object'] = DataObjectMaster::getObject(array('module'   => 'roles', 'itemtype' => $data['itemtype']-1));
+    $data['object'] = DataObjectMaster::getObject(array('module'   => 'roles', 'itemtype' => $data['itemtype']));
     $data['object']->properties['name']->display_layout = 'single';
 
     // call item new hooks
