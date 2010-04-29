@@ -30,7 +30,7 @@
                 <a href="#xarModURL('roles','admin','showprivileges',array('id' =&gt; $id))#" class="#$linkclass#">Privileges</a>
             </li>
 
-            <xar:if condition="$itemtype eq ROLES_GROUPTYPE">
+            <xar:if condition="$itemtype eq xarRoles::ROLES_GROUPTYPE">
                 <xar:set name="tabclass">$activetab=='showusers'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='showusers'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">

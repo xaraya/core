@@ -29,9 +29,8 @@ class xarRoles extends Object
     const ROLES_STATE_CURRENT = 98;
     const ROLES_STATE_ALL = 99;
 
-    const ROLES_ROLETYPE = 1;
-    const ROLES_USERTYPE = 2;
-    const ROLES_GROUPTYPE = 3;
+    const ROLES_USERTYPE = 1;
+    const ROLES_GROUPTYPE = 2;
 
     protected static $dbconn;
     protected static $rolestable;
@@ -68,8 +67,8 @@ class xarRoles extends Object
             $query = "SELECT r.id AS id, r.name AS name, r.users AS users, rm.parent_id AS parentid 
                       FROM " . self::$rolestable . " r LEFT JOIN " . self::$rolememberstable . " rm ON r.id = rm.role_id 
                       WHERE r.itemtype = ? AND r.state = ? ORDER BY r.name";
-            $bindvars[] = ROLES_GROUPTYPE;
-            $bindvars[] = ROLES_STATE_ACTIVE;
+            $bindvars[] = self::ROLES_GROUPTYPE;
+            $bindvars[] = self::ROLES_STATE_ACTIVE;
             $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
@@ -96,8 +95,8 @@ class xarRoles extends Object
                   FROM " . self::$rolestable . " r LEFT JOIN " . self::$rolememberstable . " rm ON r.id = rm.role_id 
                   WHERE role_id = ? AND r.itemtype = ? AND r.state = ? ORDER BY r.name";
         $bindvars[] = $id;
-        $bindvars[] = ROLES_GROUPTYPE;
-        $bindvars[] = ROLES_STATE_ACTIVE;
+        $bindvars[] = self::ROLES_GROUPTYPE;
+        $bindvars[] = self::ROLES_STATE_ACTIVE;
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
@@ -169,7 +168,7 @@ class xarRoles extends Object
      */
     public static function findRole($name)
     {
-        return self::_lookuprole('name',$name,$state=ROLES_STATE_ACTIVE);
+        return self::_lookuprole('name',$name,$state=self::ROLES_STATE_ACTIVE);
     }
 
     /**
@@ -181,7 +180,7 @@ class xarRoles extends Object
      */
     public static function ufindRole($uname)
     {
-        return self::_lookuprole('uname',$uname,$state=ROLES_STATE_ACTIVE);
+        return self::_lookuprole('uname',$uname,$state=self::ROLES_STATE_ACTIVE);
     }
 
     /**
@@ -240,15 +239,15 @@ class xarRoles extends Object
      * @param int    $state
      * @return object a role
      */
-    private static function _lookuprole($field,$value,$itemtype=ROLES_USERTYPE,$state=ROLES_STATE_ALL)
+    private static function _lookuprole($field,$value,$itemtype=self::ROLES_USERTYPE,$state=self::ROLES_STATE_ALL)
     {
         // retrieve the object's data from the repository
         // set up and execute the query
         self::initialize();
         $query = "SELECT * FROM " . self::$rolestable . " WHERE $field = " . self::$dbconn->qstr($value) ;
-        if ($state == ROLES_STATE_CURRENT) {
-            $query .= " state != " . ROLES_STATE_DELETED;
-        } elseif ($state != ROLES_STATE_ALL) {
+        if ($state == self::ROLES_STATE_CURRENT) {
+            $query .= " state != " . self::ROLES_STATE_DELETED;
+        } elseif ($state != self::ROLES_STATE_ALL) {
             $query .= " state = " . $state;
         }
         $stmt = self::$dbconn->prepareStatement($query);
@@ -259,8 +258,8 @@ class xarRoles extends Object
 
         // create and return the role object
         sys::import('modules.dynamicdata.class.objects.master');
-        if ($row['itemtype'] == ROLES_USERTYPE) $name = 'roles_users';
-        elseif ($row['itemtype'] == ROLES_GROUPTYPE) $name = 'roles_groups';
+        if ($row['itemtype'] == self::ROLES_USERTYPE) $name = 'roles_users';
+        elseif ($row['itemtype'] == self::ROLES_GROUPTYPE) $name = 'roles_groups';
         else throw new Exception(xarML('Unknown role type'));
         $role = DataObjectMaster::getObject(array('name' => $name));
         $role->getItem(array('itemid' => $row['id']));

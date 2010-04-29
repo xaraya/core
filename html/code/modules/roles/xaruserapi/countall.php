@@ -30,18 +30,18 @@ function roles_userapi_countall($args)
     $rolestable = $xartable['roles'];
 
     $bindvars = array();
-    if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
+    if (!empty($state) && is_numeric($state) && $state != xarRoles::ROLES_STATE_CURRENT) {
         $query = "SELECT COUNT(id) FROM $rolestable WHERE state = ?";
         $bindvars[] = (int) $state;
     } else {
         $query = "SELECT COUNT(id) FROM $rolestable WHERE state != ?";
-        $bindvars[] = ROLES_STATE_DELETED;
+        $bindvars[] = xarRoles::ROLES_STATE_DELETED;
     }
 
     //suppress display of pending users to non-admins
     if (!xarSecurityCheck("AdminRole",0)) {
         $query .= " AND state != ?";
-        $bindvars[] = ROLES_STATE_PENDING;
+        $bindvars[] = xarRoles::ROLES_STATE_PENDING;
     }
 
     if (isset($selection)) $query .= $selection;
@@ -56,7 +56,7 @@ function roles_userapi_countall($args)
     }
 
     $query .= " AND itemtype = ?";
-    $bindvars[] = ROLES_USERTYPE;
+    $bindvars[] = xarRoles::ROLES_USERTYPE;
     $bindvars[] = 0;
 // cfr. xarcachemanager - this approach might change later
     $expire = xarModVars::get('roles','cache.userapi.countall');

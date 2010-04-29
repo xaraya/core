@@ -35,7 +35,7 @@ function roles_userapi_getdeleteduser($args)
 
     // Set itemtype to user
     if (empty($itemtype)){
-        $itemtype = ROLES_USERTYPE;
+        $itemtype = xarRoles::ROLES_USERTYPE;
     }
 
     if(!xarSecurityCheck('ReadRoles')) return;

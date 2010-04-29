@@ -24,7 +24,7 @@ function roles_user_view($args)
 //    extract($args);
 
     if(!xarVarFetch('startnum', 'int:1', $args['startnum'], NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('itemtype', 'int', $args['itemtype'], ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemtype', 'int', $args['itemtype'], xarRoles::ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('search', 'str:1:100', $args['search'], NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('order', 'str', $args['order'], NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('include', 'str', $args['include'], NULL, XARVAR_NOT_REQUIRED)) {return;}

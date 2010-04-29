@@ -25,7 +25,7 @@ function roles_admin_showusers()
 
     if (!xarVarFetch('id',       'int:0:', $id,              $defaultgroupid, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('startnum', 'int:1:', $startnum,         1,   XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state',    'int:0:', $data['state'],    ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state',    'int:0:', $data['state'],    xarRoles::ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('selstyle', 'isset',  $data['selstyle'], xarSession::getVar('rolesdisplay'), XARVAR_DONT_SET)) return;
     if (!xarVarFetch('invalid',  'str:0:', $data['invalid'],  NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('order',    'str:0:', $data['order'],    'name', XARVAR_NOT_REQUIRED)) return;
@@ -77,11 +77,11 @@ function roles_admin_showusers()
             $q->qor($c);
         }
 
-        $q->eq('r.itemtype', ROLES_USERTYPE);
+        $q->eq('r.itemtype', xarRoles::ROLES_USERTYPE);
 
         // Add state
-        if ($data['state'] == ROLES_STATE_CURRENT) $q->ne('state',ROLES_STATE_DELETED);
-        elseif ($data['state'] == ROLES_STATE_ALL) {}
+        if ($data['state'] == xarRoles::ROLES_STATE_CURRENT) $q->ne('state',xarRoles::ROLES_STATE_DELETED);
+        elseif ($data['state'] == xarRoles::ROLES_STATE_ALL) {}
         else $q->eq('state',$data['state']);
 
         // If a group was chosen, get only the users of that group
@@ -108,24 +108,24 @@ function roles_admin_showusers()
     $data['totalselect'] = $q->getrows();
 
     switch ($data['state']) {
-        case ROLES_STATE_CURRENT :
+        case xarRoles::ROLES_STATE_CURRENT :
         default:
             if ($data['totalselect'] == 0) $data['message'] = xarML('There are no users');
             $data['title'] .= xarML('Users');
             break;
-        case ROLES_STATE_INACTIVE:
+        case xarRoles::ROLES_STATE_INACTIVE:
             if ($data['totalselect'] == 0) $data['message'] = xarML('There are no inactive users');
             $data['title'] .= xarML('Inactive Users');
             break;
-        case ROLES_STATE_NOTVALIDATED:
+        case xarRoles::ROLES_STATE_NOTVALIDATED:
             if ($data['totalselect'] == 0) $data['message'] = xarML('There are no users waiting for validation');
             $data['title'] .= xarML('Users Waiting for Validation');
             break;
-        case ROLES_STATE_ACTIVE:
+        case xarRoles::ROLES_STATE_ACTIVE:
             if ($data['totalselect'] == 0) $data['message'] = xarML('There are no active users');
             $data['title'] .= xarML('Active Users');
             break;
-        case ROLES_STATE_PENDING:
+        case xarRoles::ROLES_STATE_PENDING:
             if ($data['totalselect'] == 0) $data['message'] = xarML('There are no pending users');
             $data['title'] .= xarML('Pending Users');
             break;

@@ -32,7 +32,7 @@
         </h2>
         <!-- TODO set the active tab here -->
         <!-- Show the general tab list for roles -->
-        <xar:set name="itemtype">ROLES_GROUPTYPE</xar:set>
+        <xar:set name="itemtype">xarRoles::ROLES_GROUPTYPE</xar:set>
         <xar:template file="tablist"/>
         <xar:if condition="$selstyle eq '0'">
         <xar:elseif condition="$selstyle eq '1'"/>
@@ -145,7 +145,7 @@
                     </td>
                     <td class="xar-align-center">
                         <xar:set name="firstline">
-                            array('id' => ROLES_STATE_CURRENT, 'name' => 'All')
+                            array('id' => xarRoles::ROLES_STATE_CURRENT, 'name' => 'All')
                         </xar:set>
                         <xar:data-input type="dropdown" name="state" value="$state" options="$statelist" firstline="$firstline" onchange="this.form.submit()"/>
                     </td>

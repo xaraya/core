@@ -3,11 +3,11 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="stateoptions">
         array(
-            array('id' => ROLES_STATE_ALL, 'name' => xarML('All')),
-            array('id' => ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')),
-            array('id' => ROLES_STATE_NOTVALIDATED, 'name' => xarML('Not Validated')),
-            array('id' => ROLES_STATE_ACTIVE, 'name' => xarML('Active')),
-            array('id' => ROLES_STATE_PENDING, 'name' => xarML('Pending')),
+            array('id' => xarRoles::ROLES_STATE_ALL, 'name' => xarML('All')),
+            array('id' => xarRoles::ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')),
+            array('id' => xarRoles::ROLES_STATE_NOTVALIDATED, 'name' => xarML('Not Validated')),
+            array('id' => xarRoles::ROLES_STATE_ACTIVE, 'name' => xarML('Active')),
+            array('id' => xarRoles::ROLES_STATE_PENDING, 'name' => xarML('Pending')),
         )
     </xar:set>
     <xar:set name="modstatus">

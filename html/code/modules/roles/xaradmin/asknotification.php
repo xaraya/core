@@ -23,7 +23,7 @@ function roles_admin_asknotification($args)
     if (!xarVarFetch('mailtype', 'str:0:', $data['mailtype'], 'blank', XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('id',       'isset',  $id,              NULL,    XARVAR_NOT_REQUIRED)) return;
     //Maybe some kind of return url will make this function available for other modules
-    if (!xarVarFetch('state',    'int:0:', $data['state'],  ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state',    'int:0:', $data['state'],  xarRoles::ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('groupid',  'int:0:', $data['groupid'], 0,    XARVAR_NOT_REQUIRED)) return;
     //optional value
     if (!xarVarFetch('pass',     'str:0:', $data['pass'],     NULL, XARVAR_NOT_REQUIRED)) return;

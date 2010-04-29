@@ -54,10 +54,10 @@ function roles_userapi_getallroles($args)
     }
 
     // State
-    if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
+    if (!empty($state) && is_numeric($state) && $state != xarRoles::ROLES_STATE_CURRENT) {
         $q->eq('r.state',$state);
     } else {
-        $q->ne('r.state',ROLES_STATE_DELETED);
+        $q->ne('r.state',xarRoles::ROLES_STATE_DELETED);
     }
 
     $q->addfield('r.id AS id');
@@ -76,9 +76,9 @@ function roles_userapi_getallroles($args)
     $includedgroups = array();
     if (isset($include)) {
         foreach (explode(',', $include) as $include_field) {
-            if ($itemtype == ROLES_USERTYPE) {
+            if ($itemtype == xarRoles::ROLES_USERTYPE) {
                 $q->ne('uname',xarMod::apiFunc('roles', 'user', 'get', array('uname' => $include_field)));
-            } elseif ($itemtype == ROLES_GROUPTYPE) {
+            } elseif ($itemtype == xarRoles::ROLES_GROUPTYPE) {
                 $q->ne('name',xarMod::apiFunc('roles', 'user', 'get', array('name' => $include_field)));
                 $includedgroups[] = $include_field;
             }
@@ -89,9 +89,9 @@ function roles_userapi_getallroles($args)
     $excludedgroups = array();
     if (isset($exclude)) {
         foreach (explode(',', $exclude) as $exclude_field) {
-            if ($itemtype == ROLES_USERTYPE) {
+            if ($itemtype == xarRoles::ROLES_USERTYPE) {
                 $q->ne('uname',xarMod::apiFunc('roles', 'user', 'get', array('uname' => $exclude_field)));
-            } elseif ($itemtype == ROLES_GROUPTYPE) {
+            } elseif ($itemtype == xarRoles::ROLES_GROUPTYPE) {
                 $q->ne('name',xarMod::apiFunc('roles', 'user', 'get', array('name' => $exclude_field)));
                 $excludedgroups[] = $exclude_field;
             }
