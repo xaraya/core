@@ -32,7 +32,7 @@ class SelectProperty extends DataProperty
     public $initialization_options          = null;
     public $validation_override             = false;
     public $validation_override_invalid;
-    public $display_rows                    = 100;   // If there are more than these rows,display as a textbox
+    public $display_rows                    = 0;   // If there are more than these rows,display as a textbox
 
     function __construct(ObjectDescriptor $descriptor)
     {
