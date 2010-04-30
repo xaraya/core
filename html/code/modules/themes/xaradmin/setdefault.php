@@ -29,6 +29,7 @@ function themes_admin_setdefault()
     if (!xarVarFetch('id', 'int:1:', $defaulttheme, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($defaulttheme)) return xarResponse::notFound();
 
+
     $whatwasbefore = xarModVars::get('themes', 'default');
 
     if (!isset($defaulttheme)) {
