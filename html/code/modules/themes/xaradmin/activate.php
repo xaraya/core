@@ -31,6 +31,7 @@ function themes_admin_activate()
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
 
+
     // Activate
     $activated = xarMod::apiFunc('themes',
                                'admin',
@@ -39,9 +40,9 @@ function themes_admin_activate()
 
     //throw back
     if (!isset($activated)) return;
-    $minfo=xarThemeGetInfo($id);
+    $minfo = xarThemeGetInfo($id);
     // set the target location (anchor) to go to within the page
-    $target=$minfo['name'];
+    $target = $minfo['name'];
     xarResponse::redirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
     return true;
 } 
