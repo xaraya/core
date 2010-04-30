@@ -7,7 +7,9 @@
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
+  <datastore>relational</datastore>
   <config></config>
+  <sources>a:1:{s:7:"modules";s:11:"xar_modules";}</sources>
   <isalias>true</isalias>
   <properties>
     <property name="id">
@@ -15,7 +17,7 @@
       <label>ID</label>
       <type>itemid</type>
       <defaultvalue></defaultvalue>
-      <source>xar_modules.id</source>
+      <source>modules.id</source>
       <status>65</status>
       <seq>2</seq>
       <configuration></configuration>
@@ -25,7 +27,7 @@
       <label>Name</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_modules.name</source>
+      <source>modules.name</source>
       <status>33</status>
       <seq>3</seq>
       <configuration></configuration>
@@ -35,7 +37,7 @@
       <label>Regid</label>
       <type>integerbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_modules.regid</source>
+      <source>modules.regid</source>
       <status>33</status>
       <seq>4</seq>
       <configuration></configuration>
@@ -45,7 +47,7 @@
       <label>Directory</label>
       <type>textarea</type>
       <defaultvalue></defaultvalue>
-      <source>xar_modules.directory</source>
+      <source>modules.directory</source>
       <status>34</status>
       <seq>5</seq>
       <configuration></configuration>
@@ -55,7 +57,7 @@
       <label>Version</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_modules.version</source>
+      <source>modules.version</source>
       <status>33</status>
       <seq>6</seq>
       <configuration></configuration>
@@ -65,7 +67,7 @@
       <label>Class</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_modules.class</source>
+      <source>modules.class</source>
       <status>33</status>
       <seq>7</seq>
       <configuration></configuration>
@@ -75,7 +77,7 @@
       <label>Category</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_modules.category</source>
+      <source>modules.category</source>
       <status>33</status>
       <seq>8</seq>
       <configuration></configuration>
@@ -85,7 +87,7 @@
       <label>Admin Capable</label>
       <type>checkbox</type>
       <defaultvalue>1</defaultvalue>
-      <source>xar_modules.admin_capable</source>
+      <source>modules.admin_capable</source>
       <status>34</status>
       <seq>9</seq>
       <configuration></configuration>
@@ -95,7 +97,7 @@
       <label>User Capable</label>
       <type>checkbox</type>
       <defaultvalue>1</defaultvalue>
-      <source>xar_modules.user_capable</source>
+      <source>modules.user_capable</source>
       <status>34</status>
       <seq>10</seq>
       <configuration></configuration>
@@ -105,7 +107,7 @@
       <label>State</label>
       <type>dropdown</type>
       <defaultvalue></defaultvalue>
-      <source>xar_modules.state</source>
+      <source>modules.state</source>
       <status>33</status>
       <seq>11</seq>
       <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:213:"1,Unititialized;2,Inactive;3,Active;4,Missing Uninitialized;5,Upgraded;6,Installed;7,Missing Inactive;8,Missing Active;9,Missing Upgraded;10,Error Uninitialized;11,Error Inactive;12,Error Active;13,Error Upgraded;";s:25:"initialization_other_rule";s:0:"";}</configuration>
