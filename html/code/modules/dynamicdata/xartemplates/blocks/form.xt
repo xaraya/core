@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <form method="post" action="&xar-modurl-dynamicdata-admin-create;">
+    <form method="post" action="#xarModURL('dynamicdata'.'admin','create')#">
         <table>
             <xar:data-form object="$object"/>
             <tr>
