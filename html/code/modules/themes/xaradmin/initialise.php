@@ -27,7 +27,9 @@ function themes_admin_initialise()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    if (!xarVarFetch('id', 'int:1:', $id)) return; 
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return; 
+    if (empty($id)) return xarResponse::notFound();
+
     // Initialise theme
     $initialised = xarMod::apiFunc('themes',
         'admin',
