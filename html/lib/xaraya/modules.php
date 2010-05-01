@@ -1168,7 +1168,7 @@ class xarMod extends Object implements IxarMod
     {
         $modInfo = self::getInfo(self::getRegId($modName));
         if ((strpos($modInfo['class'], 'Core') !== false)) {
-            return $modInfo['version'] == XARCORE_VERSION;
+            return $modInfo['version'] == XARCORE_VERSION_NUM;
         } else {
             // Add check for non core modules here
             return true;

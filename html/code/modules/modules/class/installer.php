@@ -533,7 +533,7 @@ class Installer extends Object
             $valid = false;
             if (!empty($info['dependencyinfo'][0]['version_ge'])) {
                 sys::import('xaraya.version');
-                $result = xarVersion::compare(XARCORE_VERSION,$info['dependencyinfo'][0]['version_ge']);
+                $result = xarVersion::compare(XARCORE_VERSION_NUM,$info['dependencyinfo'][0]['version_ge']);
                 $valid = $result >= 0;
             }
             return $valid;

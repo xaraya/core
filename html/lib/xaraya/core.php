@@ -27,8 +27,10 @@ if(file_exists('../_MTN/revision'))
     if (isset($t[4]))
         $rev = str_replace(array('old_revision [',']'),'',$t[4]);
 }
+define('XARCORE_VERSION_ID',  'Jamaica');
+define('XARCORE_VERSION_NUM', '2.1.0');
+define('XARCORE_VERSION_SUB', 'post rabiem risus');
 define('XARCORE_VERSION_REV', $rev);
-define('XARCORE_VERSION', '2.1.0');
 
 /*
  * System dependencies for (optional) systems
@@ -550,8 +552,9 @@ class xarCore extends xarCoreCache
 {
     const GENERATION = 2;
     // The actual version information
-    const VERSION_NUM = XARCORE_VERSION_REV;
-    const VERSION_ID  = 'Jamaica';
-    const VERSION_SUB = 'post rabiem risus';
+    const VERSION_ID  = XARCORE_VERSION_ID;
+    const VERSION_NUM = XARCORE_VERSION_NUM;
+    const VERSION_SUB = XARCORE_VERSION_SUB;
+    const VERSION_REV = XARCORE_VERSION_REV;
 }
 ?>
