@@ -64,7 +64,7 @@ function roles_userapi_countallactive($args)
         $bindvars[] = (int) $anon['id'];
     }
     $query .= " AND itemtype = ?";
-    $bindvars[] = ROLES_USERTYPE;
+    $bindvars[] = xarRoles::ROLES_USERTYPE;
 
 // cfr. xarcachemanager - this approach might change later
     $expire = xarModVars::get('roles','cache.userapi.countallactive');

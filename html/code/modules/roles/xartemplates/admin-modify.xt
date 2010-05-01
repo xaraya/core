@@ -47,7 +47,7 @@
                     <xar:data-display object="$object" tplmodule="roles"/>
                     <p>This #$object:label# cannot be edited or deleted.</p>
                 <xar:else />
-                    <xar:if condition="$itemtype eq ROLES_GROUPTYPE AND $object:countChildren()">
+                    <xar:if condition="$itemtype eq xarRoles::ROLES_GROUPTYPE AND $object:countChildren()">
                         <div class="xar-form-input-wrapper">
                             <label title="#xarML('Type of Role')#" class="xar-form-label">
                                 Type:
@@ -69,11 +69,11 @@
                             </xar:set>
                                 <xar:set name="options">
                                     array( 
-                                        array('id' => '2', 'name' => 'User'),
-                                        array('id' => '3', 'name' => 'Group'),
+                                        array('id' => xarRoles::ROLES_USERTYPE, 'name' => 'User'),
+                                        array('id' => xarRoles::ROLES_GROUPTYPE, 'name' => 'Group'),
                                     )
                                 </xar:set>
-                                <xar:data-input type="dropdown" name="itemtype" value="$itemtype" options="$options"/>
+                                <xar:data-output type="dropdown" name="itemtype" value="$itemtype" options="$options"/>
                         </div>
                     </xar:if>
                     <xar:data-form object="$object" tplmodule="roles"/>
@@ -103,7 +103,7 @@
                             </p>
                         </div>
                     </xar:if>
-                    <xar:if condition="$itemtype eq ROLES_USERTYPE">
+                    <xar:if condition="$itemtype eq xarRoles::ROLES_USERTYPE">
                         <xar:if condition="in_array('useremailformat',$settings)">
                             <div class="xar-form-input-wrapper">
                                 <label for="duvs_useremailformat" title="#xarML('Email Format')#" class="xar-form-label">

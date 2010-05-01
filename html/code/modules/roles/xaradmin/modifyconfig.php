@@ -82,13 +82,13 @@ function roles_admin_modifyconfig()
             // Item type 0 is the default itemtype for 'user' roles.
             $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
                                      array('module' => 'roles',
-                                           'itemtype' => ROLES_USERTYPE));
+                                           'itemtype' => xarRoles::ROLES_USERTYPE));
             break;
         case 'grouphooks':
             // Item type 1 is the (current) itemtype for 'group' roles.
             $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
                                      array('module' => 'roles',
-                                           'itemtype' => ROLES_GROUPTYPE));
+                                           'itemtype' => xarRoles::ROLES_GROUPTYPE));
             break;
         case 'duvs':
             $data['user_settings'] = xarMod::apiFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => 0));
@@ -164,13 +164,13 @@ function roles_admin_modifyconfig()
                     // Role type 'user' (itemtype 1).
                     xarModCallHooks('module', 'updateconfig', 'roles',
                                     array('module' => 'roles',
-                                          'itemtype' => ROLES_USERTYPE));
+                                          'itemtype' => xarRoles::ROLES_USERTYPE));
                     break;
                 case 'grouphooks':
                     // Role type 'group' (itemtype 2).
                     xarModCallHooks('module', 'updateconfig', 'roles',
                                     array('module' => 'roles',
-                                          'itemtype' => ROLES_GROUPTYPE));
+                                          'itemtype' => xarRoles::ROLES_GROUPTYPE));
                     break;
                 case 'memberlist':
                 case 'duvs':

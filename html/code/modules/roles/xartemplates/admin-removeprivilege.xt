@@ -44,7 +44,7 @@
                     <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$roleid#" class="xar-accent xar-accent-outline">
                     Privileges</a>
                 </li>
-                <xar:if condition="$ptype eq ROLES_GROUPTYPE">
+                <xar:if condition="$ptype eq xarRoles::ROLES_GROUPTYPE">
                     <li class="xar-tab">
                         <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$roleid#" class="xar-norm xar-norm-outline">Users</a>
                     </li>

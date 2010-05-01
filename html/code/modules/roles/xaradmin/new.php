@@ -51,7 +51,6 @@ function roles_admin_new()
             return true;
         }
     }
-    
     return $data;
 }
 ?>

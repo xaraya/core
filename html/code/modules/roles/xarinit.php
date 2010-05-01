@@ -166,12 +166,12 @@ function roles_activate()
                     'itemid' => 0,  // make this explicit, because we are going to reuse the roles we define
                     'users' => 0,
                     'regdate' => time(),
-                    'state' => ROLES_STATE_ACTIVE,
+                    'state' => xarRoles::ROLES_STATE_ACTIVE,
                     'valcode' => 'createdbysystem',
                     'authmodule' => (int)xarMod::getID('roles'),
     );
     $group = DataObjectMaster::getObject(array('name' => 'roles_groups'));
-    $rolefields['role_type'] = ROLES_GROUPTYPE;
+    $rolefields['role_type'] = xarRoles::ROLES_GROUPTYPE;
     xarModVars::set('roles', 'defaultgroup', 0);
 
     // The top level group Everybody
@@ -210,7 +210,7 @@ function roles_activate()
     xarModVars::set('roles', 'defaultgroup', $usergroup);
 
     $user = DataObjectMaster::getObject(array('name' => 'roles_users'));
-    $rolefields['role_type'] = ROLES_USERTYPE;
+    $rolefields['role_type'] = xarRoles::ROLES_USERTYPE;
 
         // The Anonymous user
     $rolefields['name'] = 'Anonymous';

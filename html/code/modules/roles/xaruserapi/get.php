@@ -84,7 +84,7 @@ function roles_userapi_get($args)
         $cnt++;
         $bindvars[] = $email;
     }
-    if (!empty($state) && $state == ROLES_STATE_CURRENT) {
+    if (!empty($state) && $state == xarRoles::ROLES_STATE_CURRENT) {
         if($cnt >= 1){
             $queryWhere .= " AND state != ? ";
         }
@@ -92,9 +92,9 @@ function roles_userapi_get($args)
             $queryWhere .= " state != ?";
         }
         $cnt++;
-        $bindvars[] = ROLES_STATE_DELETED;
+        $bindvars[] = xarRoles::ROLES_STATE_DELETED;
     }
-    elseif (!empty($state) && $state != ROLES_STATE_ALL) {
+    elseif (!empty($state) && $state != xarRoles::ROLES_STATE_ALL) {
         if($cnt >= 1){
             $queryWhere .= " AND state = ? ";
         }

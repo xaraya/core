@@ -44,7 +44,7 @@ function roles_adminapi_senduseremail($args)
     //if (is_array($id)) {
         foreach ($id as $userid => $val) {
             ///get the user info
-            $user = xarMod::apiFunc('roles','user','get', array('id' => $userid, 'itemtype' => ROLES_USERTYPE));
+            $user = xarMod::apiFunc('roles','user','get', array('id' => $userid, 'itemtype' => xarRoles::ROLES_USERTYPE));
             if (!isset($pass)) $pass = '';
             if (!isset($ip)) $ip = '';
             if (isset($user['valcode'])) $validationlink = xarServer::getBaseURL() . "val.php?v=".$user['valcode']."&u=".$userid;
@@ -76,7 +76,7 @@ function roles_adminapi_senduseremail($args)
                                          array('module' => 'roles',
                                                // we know the item id now...
                                                'itemid' => $userid,
-                                               'itemtype' => ROLES_USERTYPE));
+                                               'itemtype' => xarRoles::ROLES_USERTYPE));
             if (isset($object) && !empty($object->objectid)) {
                 // retrieve the item itself
                 $itemid = $object->getItem();

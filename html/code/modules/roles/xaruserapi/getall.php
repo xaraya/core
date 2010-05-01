@@ -66,7 +66,7 @@ function roles_userapi_getall($args)
                 'roles', 'user', 'get',
                 array(
                     (is_numeric($group) ? 'id' : 'name') => $group,
-                    'itemtype' => ROLES_GROUPTYPE
+                    'itemtype' => xarRoles::ROLES_GROUPTYPE
                 )
             );
             if (isset($group['id']) && is_numeric($group['id'])) {
@@ -78,12 +78,12 @@ function roles_userapi_getall($args)
 
     $where_clause = array();
     $bindvars = array();
-    if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
+    if (!empty($state) && is_numeric($state) && $state != xarRoles::ROLES_STATE_CURRENT) {
         $where_clause[] = 'roletab.state = ?';
         $bindvars[] = (int) $state;
     } else {
         $where_clause[] = 'roletab.state <> ?';
-        $bindvars[] = (int) ROLES_STATE_DELETED;
+        $bindvars[] = (int) xarRoles::ROLES_STATE_DELETED;
     }
 
     if (empty($group_list)) {
@@ -123,7 +123,7 @@ function roles_userapi_getall($args)
     // Hide pending users from non-admins
     if (!xarSecurityCheck('AdminRoles', 0)) {
         $where_clause[] = 'roletab.state <> ?';
-        $bindvars[] = (int) ROLES_STATE_PENDING;
+        $bindvars[] = (int) xarRoles::ROLES_STATE_PENDING;
     }
 
     // If we aren't including anonymous in the query,
@@ -136,7 +136,7 @@ function roles_userapi_getall($args)
     }
 
     // Return only users (not groups).
-    $where_clause[] = 'roletab.itemtype = ' . ROLES_USERTYPE;
+    $where_clause[] = 'roletab.itemtype = ' . xarRoles::ROLES_USERTYPE;
 
     // Add the where-clause to the query.
     $query .= ' WHERE ' . implode(' AND ', $where_clause);

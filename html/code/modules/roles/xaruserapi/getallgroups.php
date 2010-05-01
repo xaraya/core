@@ -49,7 +49,7 @@ function roles_userapi_getallgroups($args)
                 'roles', 'user', 'get',
                 array(
                     (is_numeric($group) ? 'id' : 'name') => trim($group),
-                    'itemtype' => ROLES_GROUPTYPE
+                    'itemtype' => xarRoles::ROLES_GROUPTYPE
                 )
             );
             if (isset($group['id']) && is_numeric($group['id'])) {
@@ -62,7 +62,7 @@ function roles_userapi_getallgroups($args)
     if (isset($ancestor) && 0 == 1) {
         $q1 = new Query('SELECT',$xartable['roles']);
         $q1->addfields(array('id','name'));
-        $q1->eq('itemtype',ROLES_GROUPTYPE);
+        $q1->eq('itemtype',xarRoles::ROLES_GROUPTYPE);
         $q1->run();
         $allgroups = $q1->output();
         $descendants = array();
@@ -80,8 +80,8 @@ function roles_userapi_getallgroups($args)
     }
 
     if (count($conditions) != 0) $q->qor($conditions);
-    $q->eq('r.itemtype',ROLES_GROUPTYPE);
-    $q->ne('r.state',ROLES_STATE_DELETED);
+    $q->eq('r.itemtype',xarRoles::ROLES_GROUPTYPE);
+    $q->ne('r.state',xarRoles::ROLES_STATE_DELETED);
     $q->run();
     return $q->output();
 }

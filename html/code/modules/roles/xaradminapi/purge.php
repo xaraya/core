@@ -24,7 +24,7 @@ function roles_adminapi_purge($args)
     extract($args);
 
 
-    if ($state == ROLES_STATE_ACTIVE)
+    if ($state == xarRoles::ROLES_STATE_ACTIVE)
         return xarTplModule('roles','user','errors',array('layout' => 'purge_active_user'));
 
     $items = xarMod::apiFunc('roles',

@@ -28,7 +28,7 @@
         <div id="main_left">
             <h1>Database Found</h1>
             <div>
-                <p>You already have an installed database named #$dbName#.</p>
+                <p>You already have an installed database named <b>#$dbName#</b>.</p>
                 <!--
                 <p>
                     If you plan on <strong>upgrading</strong> an existing Xaraya then please run the <strong>upgrade.php</strong> script, not this install script.

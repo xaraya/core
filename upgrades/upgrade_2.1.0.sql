@@ -165,4 +165,12 @@ INSERT INTO `xar_dynamic_configurations` (`name`, `description`, `property_id`, 
 /* --------------------------------------------------------- */
 
 /* Hide the roles_role object */
-// DELETE FROM `xar_dynamic_objects` WHERE `xar_dynamic_objects`.`name` = 'roles_roles';
+ DELETE FROM `xar_dynamic_objects` WHERE `xar_dynamic_objects`.`name` = 'roles_roles';
+/* Changetheuser and group itemtypes */
+UPDATE `xar_roles` SET itemtype = 1 WHERE itemtype = 2;
+UPDATE `xar_roles` SET itemtype = 2 WHERE itemtype = 3;
+
+/* --------------------------------------------------------- */
+
+/* Add the version configvar  */
+INSERT INTO `xar_module_vars` (name, value) VALUES ('System.Core.Version', 's:5:"2.1.0"');
