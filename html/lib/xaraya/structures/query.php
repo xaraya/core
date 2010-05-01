@@ -548,6 +548,14 @@ class Query
     {
         return $this->notlike($field1,$field2,0);
     }
+    public function pin($field1,$field2)
+    {
+        return $this->in($field1,$field2,0);
+    }
+    public function pnotin($field1,$field2)
+    {
+        return $this->notin($field1,$field2,0);
+    }
     public function pregex($field1,$field2)
     {
         return $this->regex($field1,$field2,0);
@@ -801,43 +809,32 @@ class Query
 
     private function _getconditions()
     {
-        $this->cstring = "";
+       $this->cstring = "";
        foreach ($this->conjunctions as $conjunction) {
-            if ($conjunction['active']) $this->_resolve($conjunction);
+            if ($conjunction['active']) $this->_resolve($conjunction,1);
         }
         return $this->cstring;
     }
 
-    private function _resolve($conjunction)
+    private function _resolve($conjunction,$level)
     {
         if (is_array($conjunction['conditions'])) {
-            if ($this->cstring == "") {
-                $this->cstring .= "(";
-            }
-            else {
-                $tokens = explode(" ",trim($this->cstring));
-                $last = array_pop($tokens);
-                if (($last == $this->andoperator) || ($last == $this->oroperator) || ($last == '('))
-                    $this->cstring .= "(";
-                else $this->cstring .= $this->implicitconjunction . " (";
-            }
+            if ($level != 1) $this->cstring .= " (";
             $count = count($conjunction['conditions']);
             $i=0;
             foreach ($conjunction['conditions'] as $condition) {
                 $i++;
                 if (isset($this->conjunctions[$condition])) {
-                    $this->_resolve($this->conjunctions[$condition]);
-                }
-                else {
+                    $this->_resolve($this->conjunctions[$condition],$level+1);
+                } else {
                     $this->cstring .= $this->_getcondition($condition) . " ";
                 }
                 if ($i<$count) $this->cstring .= $conjunction['conj'] . " ";
-                else $this->cstring = trim($this->cstring) . ") ";
+                elseif ($level != 1) $this->cstring = trim($this->cstring) . ") ";
             }
-        }
-        elseif (!is_array($conjunction['conditions'])) {
+        } elseif (!is_array($conjunction['conditions'])) {
             if (($this->cstring == "") || (substr($this->cstring,strlen($this->cstring)-1) == '(')) $conj = "";
-            else {
+            else { 
                 if ($conjunction['conj'] == "IMPLICIT") $conj = $this->implicitconjunction;
                 else $conj = $conjunction['conj'];
             }
