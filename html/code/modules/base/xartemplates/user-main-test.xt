@@ -54,6 +54,55 @@
             Add SELECT with WHERE clauses here
         -->
         </xar:data-view>
-        <xar:set name="foo">var_dump($roles->dataquery->qecho())</xar:set>
+        <xar:set name="foo">$roles->dataquery->qecho()</xar:set>
+
+        <hr/><h4>3. The xar:select tag</h4>
+<pre>
+&lt;xar:select objectname="modules" items="$items" name="myquery">
+    &lt;xar:orconditions>
+        &lt;xar:andconditions>
+        &lt;xar:condition operator="eq" property="regid">8&lt;/xar:condition>
+            &lt;xar:orconditions>
+                &lt;xar:andconditions>
+                    &lt;xar:orconditions>
+                        &lt;xar:condition operator="eq" property="name">'base'&lt;/xar:condition>
+                        &lt;xar:condition operator="eq" property="name">'roles'&lt;/xar:condition>
+                    &lt;/xar:orconditions>
+                    &lt;xar:condition operator="gt" property="id">1&lt;/xar:condition>
+                    &lt;xar:condition operator="lt" property="id">5&lt;/xar:condition>
+                &lt;/xar:andconditions>
+                &lt;xar:condition operator="ne" property="regid">27&lt;/xar:condition>
+            &lt;/xar:orconditions>
+        &lt;/xar:andconditions>
+        &lt;xar:condition operator="in" property="regid">array(2,3,4,5,6,7,8,9,10)&lt;/xar:condition>
+        &lt;xar:condition operator="like" property="name">'themes'&lt;/xar:condition>
+    &lt;/xar:orconditions>
+&lt;/xar:select>
+</pre>
+        <xar:select objectname="modules" items="$items" name="myquery">
+            <xar:orconditions>
+                <xar:andconditions>
+                <xar:condition operator="eq" property="regid">8</xar:condition>
+                    <xar:orconditions>
+                        <xar:andconditions>
+                            <xar:orconditions>
+                                <xar:condition operator="eq" property="name">'base'</xar:condition>
+                                <xar:condition operator="eq" property="name">'roles'</xar:condition>
+                            </xar:orconditions>
+                            <xar:condition operator="gt" property="id">1</xar:condition>
+                            <xar:condition operator="lt" property="id">5</xar:condition>
+                        </xar:andconditions>
+                        <xar:condition operator="ne" property="regid">27</xar:condition>
+                    </xar:orconditions>
+                </xar:andconditions>
+                <xar:condition operator="in" property="regid">array(2,3,4,5,6,7,8,9,10)</xar:condition>
+                <xar:condition operator="like" property="name">'themes'</xar:condition>
+            </xar:orconditions>
+        </xar:select>
+        <xar:set name="foo">$myquery->qecho()</xar:set>
+        <br /><br />
+        <xar:set name="foo">var_dump($items)</xar:set>
+    
     </div>
+
 </xar:template>
