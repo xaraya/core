@@ -141,6 +141,7 @@
                 </p>
             </form>
         <xar:elseif condition="$phase eq 4"/>
+            <h2>Version Notes</h2>
         </xar:if>
         <xar:if condition="!empty($upgrade['errormessage'])">
             <p class="warning">#$upgrade['errormessage']#</p>
