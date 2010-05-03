@@ -39,7 +39,9 @@ function installer_admin_upgrade()
         $data = array_merge($data,main_210());
         
     } elseif ($data['phase'] == 3) {
+        $data['active_step'] = 3;
     } elseif ($data['phase'] == 4) {
+        $data['active_step'] = 4;
     }
 
     return $data;

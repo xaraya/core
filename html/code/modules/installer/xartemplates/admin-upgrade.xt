@@ -5,7 +5,16 @@
         <xar:template file="upstatus"/>
     </div>
     <div id="main_left">
-        <h1>Welcome to the Xaraya Upgrader</h1>
+        <xar:if condition="$phase eq 1">
+            <h1>Welcome to the Xaraya Upgrader</h1>
+        <xar:elseif condition="$phase eq 2"/>
+            <h1>Running the Upgrade</h1>
+        <xar:elseif condition="$phase eq 3"/>
+            <h1>Cleaning Up</h1>
+        <xar:elseif condition="$phase eq 4"/>
+            <h1>Notes on this Version</h1>
+        </xar:if>
+
         <h2>Version Status</h2>
         <h3>Version Information</h3>
         <table style="width: 90%">
@@ -122,7 +131,7 @@
         <xar:elseif condition="$phase eq 3"/>
             <form action="upgrade.php" method="post">
                 <p class="center">
-                    <input type="hidden" name="phase" id="phase" value="3"/>
+                    <input type="hidden" name="phase" id="phase" value="4"/>
                     <xar:var name="label">Back</xar:var>
                     <xar:button type="cancel" label="$label"/>&#160;
                     <xar:if condition="empty($upgrade['errormessage'])">
