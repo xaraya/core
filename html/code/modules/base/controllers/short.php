@@ -3,7 +3,7 @@
  * Base Action Controller class
  *
  * @package modules
- * @copyright (C) 2002-2009 The Digital Development Foundation
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
@@ -56,10 +56,11 @@ class BaseShortController extends ShortActionController
                 break;
         }
         
-        // Send the processed args back
-        $request->setFunctionArgs($path);
-        // Remove the processed args (in this case all of them)
-        $request->setFunctionArgs();
+        // Encode the processed params
+        $request->setFunction($this->getFunction($path));
+        
+        // Send the unprocessed params back
+        $request->setFunctionArgs($params);
         return parent::encode($request);
     }    
 }
