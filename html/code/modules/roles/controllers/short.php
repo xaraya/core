@@ -96,8 +96,8 @@ class RolesShortController extends ShortActionController
                     $path[] = 'viewall';
                 }
                 if (!empty($params['letter'])) {
+                    $path[] = $params['letter'];
                     unset($params['letter']);
-                    $path[] = $letter;
                 }
                 break;
 
@@ -135,8 +135,8 @@ class RolesShortController extends ShortActionController
               case 'display':
                 // check for required parameters
                 if (isset($params['id']) && is_numeric($params['id'])) {
+                    $path[] = $params['id'];
                     unset($params['id']);
-                    $path[] = $id;
                 }
                 break;
 

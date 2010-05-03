@@ -722,7 +722,8 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
             if (file_exists($sourceFileName)) break;
         }
         if (!file_exists($sourceFileName)) {
-                $sourceFileName = sys::code() . "modules/dynamicdata/xartemplates/includes/$templateName.xt";
+            $sourceFileName = sys::code() . "modules/dynamicdata/xartemplates/includes/$templateName.xt";
+        }
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
