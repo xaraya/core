@@ -11,7 +11,6 @@ class ShortRoute extends xarRoute
 
     public function __construct(Array $defaults=array(), xarDispatcher $dispatcher=null)
     {
-//        if (isset($request)) $this->_request = $request;
         if (isset($dispatcher)) $this->dispatcher = $dispatcher;
         parent::__construct($defaults, $dispatcher);
     }
