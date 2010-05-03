@@ -3,7 +3,7 @@ class xarController extends Object
 {
     public static $allowShortURLs = true;
     public static $shortURLVariables;
-    public static $delimiter = '?';    // This character divides the URL into entry point and parameters
+    public static $delimiter = '?';    // This character divides the URL into action part and parameters
     public static $separator = '&';    // This is the default separator between URL parameters in the default Xaraya route
     public static $dispatcher;
     public static $request;

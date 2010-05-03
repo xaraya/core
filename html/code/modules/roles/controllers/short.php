@@ -91,12 +91,12 @@ class RolesShortController extends ShortActionController
                 break;
             case 'view':
                 $path[] = 'list';
-                if (!empty($phase) && $phase == 'viewall') {
-                    unset($args['phase']);
+                if (!empty($params['phase']) && $params['phase'] == 'viewall') {
+                    unset($params['phase']);
                     $path[] = 'viewall';
                 }
-                if (!empty($letter)) {
-                    unset($args['letter']);
+                if (!empty($params['letter'])) {
+                    unset($params['letter']);
                     $path[] = $letter;
                 }
                 break;
@@ -109,24 +109,33 @@ class RolesShortController extends ShortActionController
                 $path[] = 'account';
                 if (!empty($params['tab'])){
                     switch ($params['tab']) {
-                        case 'basic': {$path[] = 'edit';break; }
+                        case 'basic': {
+                            $path[] = 'edit';
+                            unset($params['tab']);
+                            break; 
+                        }
+                        case 'profile': {
+                            $path[] = 'profile';
+                            unset($params['tab']);
+                            break; 
+                        }
                     }
                 }
                 break;
 
               case 'usermenu':
                 $path[] = 'settings';
-                if (!empty($phase) && ($phase == 'formbasic' || $phase == 'form')) {
+                if (!empty($params['phase']) && ($params['phase'] == 'formbasic' || $params['phase'] == 'form')) {
                     // Note : this URL format is no longer in use
-                    unset($args['phase']);
+                    unset($params['phase']);
                     $path[] = 'form';
                 }
                 break;
 
               case 'display':
                 // check for required parameters
-                if (isset($id) && is_numeric($id)) {
-                    unset($args['id']);
+                if (isset($params['id']) && is_numeric($params['id'])) {
+                    unset($params['id']);
                     $path[] = $id;
                 }
                 break;
@@ -135,10 +144,11 @@ class RolesShortController extends ShortActionController
                 break;
         }
         
-        // Send the processed args back
-        $request->setFunctionArgs($path);
-        // Remove the processed args (in this case all of them)
-        $request->setFunctionArgs();
+        // Encode the processed params
+        $request->setFunction($this->getFunction($path));
+        
+        // Send the unprocessed params back
+        $request->setFunctionArgs($params);
         return parent::encode($request);
     }    
 }

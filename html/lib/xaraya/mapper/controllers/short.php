@@ -71,5 +71,10 @@ class ShortActionController extends BaseActionController implements iController
         $path .= $this->separator . $request->getFunction();
         return $path;
     }       
+
+    public function getFunction(Array $params)
+    {  
+        return implode($this->separator, $params);
+    }       
 }
 ?>

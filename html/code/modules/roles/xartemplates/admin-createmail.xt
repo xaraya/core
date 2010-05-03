@@ -169,23 +169,23 @@
                         <table class="xar-fullwidth">
                             <tr>
                                 <th>
-                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'name'))#">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state'=>$state,'order'=>'name'))#">
                                     Real name</a>
                                 </th>
                                 <th>
-                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'uname'))#">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state'=>$state,'order'=>'uname'))#">
                                     Login</a>
                                 </th>
                                 <th>
-                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'email'))#">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state'=>$state,'order'=>'email'))#">
                                     Email</a>
                                 </th>
                                 <th>
-                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'date_reg'))#">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state'=>$state,'order'=>'date_reg'))#">
                                     Date Registered</a>
                                 </th>
                                 <th>
-                                    <a href="#xarModURL('roles','admin','createmail',array('state=>$state,'order'=>'state'))#">
+                                    <a href="#xarModURL('roles','admin','createmail',array('state'=>$state,'order'=>'state'))#">
                                     State</a>
                                 </th>
                             </tr>

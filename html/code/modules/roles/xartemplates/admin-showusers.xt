@@ -162,7 +162,7 @@
             <p>#$message#
             <xar:if condition="$search ne ''">&#160;matching '#$search#'</xar:if></p>
         <xar:else />
-            <form method="post" action="#xarModURL('roles','admin','updatestate',)#" name="state">
+            <form method="post" action="#xarModURL('roles','admin','updatestate')#" name="state">
                 <div class="xar-form-input-wrapper">
                     <label for="status" title="#xarML('Change the state of the users who have been selected below')#" class="xar-form-label" style="width: 200px">
                         Change state of selected users:
