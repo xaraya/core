@@ -34,6 +34,9 @@
                 </td>
                 <td>
                     <xar:var scope="config" name="System.Core.VersionId"/> version
+                    <xar:if condition="isset($oldversionnum)">
+                        2.0.0
+                    </xar:if>
                     <xar:var scope="config" name="System.Core.VersionNum"/>
                     (<xar:var scope="config" name="System.Core.VersionSub"/>)
                 </td>
@@ -48,7 +51,11 @@
                     #xarCore::VERSION_REV#
                 </td>
                 <td>
-                    <xar:var scope="config" name="System.Core.VersionRev"/>
+                    <xar:if condition="isset($oldversionnum)">
+                        #$oldversionnum#
+                    <xar:else />
+                        <xar:var scope="config" name="System.Core.VersionRev"/>                    
+                    </xar:if>
                 </td>
             </tr>
         </table>
