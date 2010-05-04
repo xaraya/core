@@ -37,7 +37,6 @@
                     <xar:if condition="isset($oldversionnum)">
                         2.0.0
                     </xar:if>
-                    <xar:var scope="config" name="System.Core.VersionNum"/>
                     (<xar:var scope="config" name="System.Core.VersionSub"/>)
                 </td>
             </tr>
