@@ -1124,8 +1124,8 @@ class xarMod extends Object implements IxarMod
             throw new ModuleNotActiveException($modName);
         }
         
-        // Not the correct version - throw exception
-        if (!self::checkVersion($modName)) {
+        // Not the correct version - throw exception unless we are upgrading
+        if (!self::checkVersion($modName) && !xarVarGetCached('Upgrade', 'upgrading')) {
             throw new ModuleBadVersionException($modName);
         }
         
