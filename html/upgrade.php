@@ -46,6 +46,7 @@ class Upgrader extends Object
 
     private static $instance          = null;
 
+    public static $errormessage       = '';
 
     protected function __construct()
     {
@@ -104,6 +105,21 @@ class Upgrader extends Object
         }
         return self::$instance;
     }
+
+    public static function loadFile($path)
+    {
+        $checkpath = sys::code() . 'modules/installer/' . $path;
+        if (!file_exists($checkpath)) {
+            self::$errormessage = xarML("The required file '#(1)' was not found.", $checkpath);
+            return false;
+        }
+        $importpath = str_replace('/','.','modules/installer/' . $path);
+        $importpath = substr($importpath,0,strlen($importpath)-4);
+        sys::import($importpath);
+        return true;
+    }
+
+
 }
 
 // Preparations complete. Call the upgrader now

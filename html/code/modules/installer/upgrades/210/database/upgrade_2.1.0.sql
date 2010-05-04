@@ -142,7 +142,7 @@ DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'DeassignPrivilege'
 
 /* --------------------------------------------------------- */
 
-/* Redefining roles module masks */
+/* Redefining privileges module masks */
 UPDATE `xar_privileges` SET name = 'ReadRoles' WHERE name = 'ReadRole';
 UPDATE `xar_privileges` SET name = 'EditRoles' WHERE name = 'EditRole';
 UPDATE `xar_privileges` SET name = 'AddRoles' WHERE name = 'AddRole';
@@ -152,7 +152,7 @@ DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'DeleteRole';
 
 /* --------------------------------------------------------- */
 
-/* Redefining themes module masks */
+/* Redefining privileges module masks */
 UPDATE `xar_privileges` SET name = 'AdminThemes' WHERE name = 'AdminTheme';
 
 /* --------------------------------------------------------- */
@@ -172,5 +172,4 @@ UPDATE `xar_roles` SET itemtype = 2 WHERE itemtype = 3;
 /* --------------------------------------------------------- */
 
 /* Add the version configvar  */
-// Use a var set call for this
-// INSERT INTO `xar_module_vars` (name, value) VALUES ('System.Core.VersionRev', 's:5:"FOOBAR');
+INSERT INTO `xar_module_vars` (name, value) VALUES ('System.Core.Version', 's:5:"2.1.0"');

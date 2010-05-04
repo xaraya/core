@@ -15,10 +15,10 @@
             color: ##999999;
         }
     </style>
-    <xar:set name="steptext[1]">'Prepare for Upgrade'</xar:set>
-    <xar:set name="steptext[2]">'Upgrade Database'</xar:set>
-    <xar:set name="steptext[3]">'Upgrade Miscellaneous'</xar:set>
-    <xar:set name="steptext[4]">'Finalize Upgrade'</xar:set>
+    <xar:var name="steptext[1]">Prepare for the Upgrade</xar:var>
+    <xar:var name="steptext[2]">Running the Upgrade</xar:var>
+    <xar:var name="steptext[3]">Finalizing the Upgrade</xar:var>
+    <xar:var name="steptext[4]">Notes on this Version</xar:var>
     <div id="status">
         <div id="status_body">
             <div class="xar-align-center">
