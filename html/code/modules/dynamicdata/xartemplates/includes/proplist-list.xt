@@ -61,7 +61,7 @@
                 </td>
                 <td class="#$displayclass#">
                     <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
-                        <xar:set name="title">xarML('Edit configuration for property #(1)',$field['name'])</xar:set>
+                        <xar:set name="title">xarML('Edit configuration for property \"#(1)\"',$field['name'])</xar:set>
                         <xar:set name="link">
                             xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $field['id']))
                         </xar:set>
@@ -77,7 +77,7 @@
                         </xar:set>
                         <xar:if condition="$index gt 1 and $numprops gt 1">
                             <xar:set name="link">
-                                xarModURL('dynamicdata', 'admin', 'orderprops', array('module_id' => $module_id, 'itemtype' => $itemtype, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid))
+                                xarModURL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid))
                             </xar:set>
                             <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
                         <xar:else />
@@ -91,12 +91,13 @@
                         </xar:set>
                         <xar:if condition="$index lt $numprops and $numprops ne 1">
                             <xar:set name="link">
-                                xarModURL('dynamicdata', 'admin', 'orderprops', array('module_id' => $module_id, 'itemtype' => $itemtype, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
+                                xarModURL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
                             </xar:set>
                             <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
                         <xar:else />
                             <img class="xar-icon-disabled" src="#$icon#" alt="down" title="#$title#"/>
                         </xar:if>
+                        &#160;
                     <xar:else />
                         <xar:set name="link">
                             xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $field['id']))
@@ -106,7 +107,7 @@
                         </a>
                         &#160;
                         <xar:set name="link">
-                            xarModURL('dynamicdata', 'admin', 'orderprops', array('module_id' => $module_id, 'itemtype' => $itemtype, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid))
+                            xarModURL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid))
                         </xar:set>
                         <xar:if condition="$index gt 1 and $numprops gt 1">
                             <a href="#$link#">
@@ -115,7 +116,7 @@
                             &#160;
                         </xar:if>
                         <xar:set name="link">
-                            xarModURL('dynamicdata', 'admin', 'orderprops', array('module_id' => $module_id, 'itemtype' => $itemtype, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
+                            xarModURL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
                         </xar:set>
                         <xar:if condition="$index lt $numprops and $numprops ne 1">
                             <a href="#$link#">
@@ -131,20 +132,9 @@
                 </td>
                 <td colspan="5" class="#$displayclass#">
                     Source:&#160;
-                    <select class="dd-norm" name="dd_source[#$field['id']#]" id="dd_source_#$field['id']#">
-                        <xar:set name="found_source">0</xar:set>
-                        <xar:foreach in="$sources" value="$mysource">
-                            <xar:if condition="$mysource eq $field['source']">
-                                <option selected="selected">#$mysource#</option>
-                                <xar:set name="found_source">1</xar:set>
-                            <xar:else/>
-                                <option>#$mysource#</option>
-                            </xar:if>
-                        </xar:foreach>
-                        <xar:if condition="empty($found_source) and !empty($field['source'])">
-                            <option selected="selected">#$field['source']#</option>
-                        </xar:if>
-                    </select>
+                    <xar:set name="name">'dd_source[' . $field['id'] . ']'</xar:set>
+                    <xar:set name="id">'dd_source_' . $field['id']</xar:set>
+                    <xar:data-input type="dropdown" class="dd-norm" name="$name" id="$id" value="$field['source']" options="$sources" />
                     &#160;&#160;Status:&#160;
                     <xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" id="dd_status_'.$field['id'].'" size="15" value="$field['status']"/>
                 </td>
