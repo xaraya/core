@@ -20,7 +20,15 @@ function sql_210_19()
     try {
         $dbconn->begin();
         $data['sql'] = "
-        DELETE FROM $dynamic_objects WHERE `xar_dynamic_objects`.`name` = 'roles_roles';
+        DELETE FROM $dynamic_objects WHERE name = 'roles_roles';
+        ";
+        $dbconn->Execute($data['sql']);
+        $data['sql'] = "
+        UPDATE $dynamic_objects SET itemtype = 1 WHERE module_id = 27 AND itemtype = 2;
+        ";
+        $dbconn->Execute($data['sql']);
+        $data['sql'] = "
+        UPDATE $dynamic_objects SET itemtype = 2 WHERE module_id = 27 AND itemtype = 3;
         ";
         $dbconn->Execute($data['sql']);
         $data['sql'] = "

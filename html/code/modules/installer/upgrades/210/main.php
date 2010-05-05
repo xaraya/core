@@ -25,6 +25,8 @@ function main_210()
                         'sql_210_18',
                         'sql_210_19',
                         'sql_210_20',
+                        'sql_210_21',
+                        'sql_210_22',
                     );
     foreach ($upgrades as $upgrade) {
         if (!Upgrader::loadFile('upgrades/210/database/' . $upgrade . '.php')) {
