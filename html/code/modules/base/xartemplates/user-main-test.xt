@@ -57,6 +57,7 @@
         <xar:set name="foo">$roles->dataquery->qecho()</xar:set>
 
         <hr/><h4>3. The xar:select tag</h4>
+        <h4>3.1. Markup</h4>
 <pre>
 &lt;xar:select objectname="modules" items="$items" name="myquery">
     &lt;xar:orconditions>
@@ -99,8 +100,11 @@
                 <xar:condition operator="like" property="name">'themes'</xar:condition>
             </xar:orconditions>
         </xar:select>
+        <br /><br />
+        <h4>3.2. Resulting query string</h4>
         <xar:set name="foo">$myquery->qecho()</xar:set>
         <br /><br />
+        <h4>3.3. Result of running the query</h4>
         <xar:set name="foo">var_dump($items)</xar:set>
     
     </div>
