@@ -50,15 +50,7 @@ function dynamicdata_admin_orderprops()
     $objectinfo = DataObjectMaster::getObjectInfo(
                                     array(
                                     'objectid' => $objectid,
-                                    'moduleid' => $module_id,
-                                    'itemtype' => $itemtype,
                                     ));
-
-    if (!isset($objectinfo)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('objectinfo', 'admin', 'orderprops', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
-    }
 
     $objectid = $objectinfo['objectid'];
     $module_id = $objectinfo['moduleid'];

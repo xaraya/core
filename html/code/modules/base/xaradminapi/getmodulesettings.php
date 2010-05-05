@@ -10,7 +10,7 @@ function base_adminapi_getmodulesettings($args)
         $object->properties[$name]->source = 'module variables: ' . $args['module'];
     }
     $object->datastores = array();
-    $object->getDatastores();
+    $object->getDatastore();
     return $object;
 }
 ?>

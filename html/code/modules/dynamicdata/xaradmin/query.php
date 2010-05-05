@@ -146,7 +146,7 @@ function dynamicdata_admin_query($args)
 
     $data['itemid'] = $itemid;
     $data['olditemid'] = $itemid;
-    $data['objects'] = xarMod::apiFunc('dynamicdata','user','getobjects');
+    $data['objects'] = DataObjectMaster::getObjects();
 
     $dbconn = xarDB::getConn();
     $data['table'] = $table;
