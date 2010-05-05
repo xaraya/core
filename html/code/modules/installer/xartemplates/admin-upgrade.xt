@@ -36,6 +36,8 @@
                     <xar:var scope="config" name="System.Core.VersionId"/> version
                     <xar:if condition="isset($oldversionnum)">
                         2.0.0
+                    <xar:else/>
+                        <xar:var scope="config" name="System.Core.VersionNum"/>
                     </xar:if>
                     (<xar:var scope="config" name="System.Core.VersionSub"/>)
                 </td>
@@ -128,10 +130,14 @@
                     <input type="hidden" name="phase" id="phase" value="3"/>
                     <xar:var name="label">Back</xar:var>
                     <xar:button type="cancel" label="$label"/>&#160;
+                    <!--
                     <xar:if condition="empty($upgrade['errormessage'])">
                         <xar:var name="label">Continue</xar:var>
                         <xar:button type="submit" label="$label"/>
                     </xar:if>
+                    -->
+                    <xar:var name="label">Continue</xar:var>
+                    <xar:button type="submit" label="$label"/>
                 </p>
             </form>
         <xar:elseif condition="$phase eq 3"/>
@@ -147,6 +153,7 @@
                 </p>
             </form>
         <xar:elseif condition="$phase eq 4"/>
+            <h3>Your upgrade is complete</h3>
             <h2>Version Notes</h2>
         </xar:if>
         <xar:if condition="!empty($upgrade['errormessage'])">

@@ -41,8 +41,8 @@ function main_210()
                             'success' => $result['success'],
                             );        
         if (!$result['success']) {
-            $data['upgrade']['errormessage'] = xarML('The upgrade failed. Check the reference(s) above to determine the cause.');
-            break;
+            $data['upgrade']['errormessage'] = xarML('Some parts of the upgrade failed. Check the reference(s) above to determine the cause.');
+//            break;
         }
     }
     return $data;
