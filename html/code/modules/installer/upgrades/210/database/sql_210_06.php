@@ -20,7 +20,7 @@ function sql_210_06()
     try {
         $dbconn->begin();
         $data['sql'] = "
-        DELETE p, pm FROM $privileges p INNER JOIN $privmembers pm WHERE p.id = pm.privilege_id AND p.name = 'DenyBlocks' AND p.itemtype= 3;
+        DELETE p, pm FROM $privileges p INNER JOIN $privmembers pm WHERE p.id = pm.privilege_id AND p.name = 'DenyBlocks' AND p.itemtype= 2;
         ";
         $dbconn->Execute($data['sql']);
         $dbconn->commit();

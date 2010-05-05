@@ -52,7 +52,7 @@ UPDATE `xar_dynamic_properties` SET `configuration` = REPLACE(configuration, 's:
 /* --------------------------------------------------------- */
 
 /* Removing the DenyBlocks privilege */
-DELETE p, pm FROM xar_privileges p INNER JOIN xar_privmembers pm WHERE p.id = pm.privilege_id AND p.name = 'DenyBlocks' AND p.itemtype= 3;
+DELETE p, pm FROM xar_privileges p INNER JOIN xar_privmembers pm WHERE p.id = pm.privilege_id AND p.name = 'DenyBlocks' AND p.itemtype= 2;
 
 /* Removing all masks with component Block */
 DELETE FROM `xar_privileges` WHERE `itemtype` = 3 AND  `component` =  'Block';

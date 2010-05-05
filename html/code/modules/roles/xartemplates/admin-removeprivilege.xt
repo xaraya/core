@@ -59,8 +59,8 @@
                 <input type="hidden" name="confirmation" id="confirmation" value="1"/>
                 <p>
                     <span class="xar-title">Confirm the removal of '#$privname#' from&#160; 
-                    <xar:if condition="$ptype eq 1">Group 
-                    <xar:else />User</xar:if>'#$rolename#'</span>
+                    <xar:if condition="$ptype eq xarRoles::ROLES_GROUPTYPE">Group 
+                    <xar:else />User</xar:if>&#160;'#$rolename#'</span>
                 </p>
                 <p>
                     <input type="submit" value="#$removelabel#" tabindex="1"/>

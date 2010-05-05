@@ -9,7 +9,7 @@ function sql_210_10()
     // Define the task and result
     $data['success'] = true;
     $data['task'] = xarML("
-        Adding newnames for the masks of the Blocks module
+        Adding new names for the masks of the Blocks module
     ");
     $data['reply'] = xarML("
         Done!
