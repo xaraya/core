@@ -11,7 +11,7 @@ function installer_admin_upgrade()
     // Versions prior to 2.1.0 had the revision number as version number
     if (strlen($dbversion) == 41) {
         $data['versioncompare'] = 1;
-        $data['upgradable'] = 0;
+        $data['upgradable'] = 1;
         $data['oldversionnum'] = $dbversion;
     } else {
         $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);

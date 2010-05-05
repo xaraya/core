@@ -142,7 +142,7 @@ function initializeSetup()
     xarMasks::register('EditRoles','All','roles','All','All',xarSecurityLevel('ACCESS_EDIT'));
     xarMasks::register('AddRoles','All','roles','All','All',xarSecurityLevel('ACCESS_ADD'));
     xarMasks::register('ManageRoles','All','roles','All','All',xarSecurityLevel('ACCESS_DELETE'));
-    xarMasks::register('AdminRole','All','roles','All','All',xarSecurityLevel('ACCESS_ADMIN'));
+    xarMasks::register('AdminRoles','All','roles','All','All',xarSecurityLevel('ACCESS_ADMIN'));
     xarMasks::register('MailRoles','All','roles','Mail','All',xarSecurityLevel('ACCESS_ADMIN'));
 
     xarMasks::register('AttachRole','All','roles','Relation','All',xarSecurityLevel('ACCESS_ADD'));
