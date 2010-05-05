@@ -179,10 +179,10 @@ function base_admin_modifyconfig()
 
                     $tzobject = new DateTimezone($hosttimezone);
                     if (!empty($tzobject)) {
-                        xarMod::apiFUnc('installer','admin','modifysystemvar', array('name'=> 'SystemTimeZone',
+                        xarMod::apiFunc('installer','admin','modifysystemvar', array('name'=> 'SystemTimeZone',
                                                                                      'value' => $hosttimezone));
                     } else {
-                        xarMod::apiFUnc('installer','admin','modifysystemvar', array('name'=> 'SystemTimeZone',
+                        xarMod::apiFunc('installer','admin','modifysystemvar', array('name'=> 'SystemTimeZone',
                                                                                      'value' => 'UTC'));
                     }
                     $tzobject = new DateTimezone($sitetimezone);
@@ -194,7 +194,7 @@ function base_admin_modifyconfig()
                         xarConfigVars::set(null, 'Site.Core.TimeZone', "UTC");
                         xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', 0);
                     }
-
+                    xarResponse::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other')));
                     break;
             }
 

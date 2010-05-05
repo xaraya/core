@@ -167,6 +167,7 @@
                         <input type="text" id="defaultfunction" name="defaultfunction" value="#$value#" maxlength="100" class="xar-form-textlong"/>
                     </div>
                 </fieldset>
+                <!-- General place to put extra module data and code. Hide it for now as it's not used
                 <fieldset>
                     <legend>
                         Module Data Path
@@ -181,6 +182,7 @@
                         <input type="text" id="defaultdatapath" name="defaultdatapath" value="#$value#" maxlength="100" class="xar-form-textlong"/>
                     </div>
                </fieldset>
+               -->
                <fieldset>
                     <legend>General Display Options</legend>
                     <div class="xar-form-input-wrapper">
