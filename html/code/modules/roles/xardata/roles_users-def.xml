@@ -7,15 +7,18 @@
   <filepath>modules/roles/class/role.php</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
-  <config></config>
+  <datastore>relational</datastore>
+  <config>a:1:{s:5:&quot;where&quot;;s:13:&quot;role_type = 2&quot;;}</config>
+  <sources>a:1:{s:5:"roles";s:9:"xar_roles";}</sources>
   <isalias>true</isalias>
+  <objects>a:0:{}</objects>
   <properties>
     <property name="id">
       <id>35</id>
       <label>ID</label>
       <type>itemid</type>
       <defaultvalue></defaultvalue>
-      <source>xar_roles.id</source>
+      <source>roles.id</source>
       <status>65</status>
       <seq>1</seq>
       <configuration></configuration>
@@ -25,7 +28,7 @@
       <label>Display Name</label>
       <type>name</type>
       <defaultvalue></defaultvalue>
-      <source>xar_roles.name</source>
+      <source>roles.name</source>
       <status>33</status>
       <seq>2</seq>
       <configuration></configuration>
@@ -35,7 +38,7 @@
       <label>Type</label>
       <type>itemtype</type>
       <defaultvalue>2</defaultvalue>
-      <source>xar_roles.itemtype</source>
+      <source>roles.itemtype</source>
       <status>67</status>
       <seq>3</seq>
       <configuration>a:5:{s:18:"display_combo_mode";s:1:"1";s:14:"display_layout";s:7:"default";s:19:"validation_override";s:1:"1";s:21:"initialization_module";s:2:"27";s:23:"initialization_itemtype";s:1:"0";}</configuration>
@@ -45,7 +48,7 @@
       <label>User Name</label>
       <type>username</type>
       <defaultvalue></defaultvalue>
-      <source>xar_roles.uname</source>
+      <source>roles.uname</source>
       <status>33</status>
       <seq>3</seq>
       <configuration></configuration>
@@ -55,7 +58,7 @@
       <label>Email</label>
       <type>email</type>
       <defaultvalue></defaultvalue>
-      <source>xar_roles.email</source>
+      <source>roles.email</source>
       <status>33</status>
       <seq>5</seq>
       <configuration></configuration>
@@ -65,7 +68,7 @@
       <label>Password</label>
       <type>passwordbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_roles.pass</source>
+      <source>roles.pass</source>
       <status>33</status>
       <seq>6</seq>
       <configuration>a:8:{s:12:"display_size";s:2:"25";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:1:"4";s:21:"validation_max_length";s:2:"30";s:27:"validation_password_confirm";s:1:"1";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
@@ -75,7 +78,7 @@
       <label>Registered</label>
       <type>calendar</type>
       <defaultvalue>xarMLS_userTime()</defaultvalue>
-      <source>xar_roles.date_reg</source>
+      <source>roles.date_reg</source>
       <status>66</status>
       <seq>7</seq>
       <configuration></configuration>
@@ -85,7 +88,7 @@
       <label>Validation Code</label>
       <type>textbox</type>
       <defaultvalue>createdbyadmin</defaultvalue>
-      <source>xar_roles.valcode</source>
+      <source>roles.valcode</source>
       <status>67</status>
       <seq>8</seq>
       <configuration></configuration>
@@ -95,7 +98,7 @@
       <label>State</label>
       <type>dropdown</type>
       <defaultvalue>1</defaultvalue>
-      <source>xar_roles.state</source>
+      <source>roles.state</source>
       <status>33</status>
       <seq>9</seq>
       <configuration>a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";s:43:"xarMod::apiFunc('roles','user','getstates')";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
@@ -105,7 +108,7 @@
       <label>Auth. Module</label>
       <type>integerbox</type>
       <defaultvalue>xarMod::getID(xarModVars::get('roles', 'defaultauthmodule'))</defaultvalue>
-      <source>xar_roles.auth_module_id</source>
+      <source>roles.auth_module_id</source>
       <status>67</status>
       <seq>10</seq>
       <configuration></configuration>
