@@ -17,7 +17,7 @@
     </style>
     <xar:var name="steptext[1]">Prepare for the Upgrade</xar:var>
     <xar:var name="steptext[2]">Running the Upgrade</xar:var>
-    <xar:var name="steptext[3]">Finalizing the Upgrade</xar:var>
+    <xar:var name="steptext[3]">Database Checks</xar:var>
     <xar:var name="steptext[4]">Notes on this Version</xar:var>
     <div id="status">
         <div id="status_body">
