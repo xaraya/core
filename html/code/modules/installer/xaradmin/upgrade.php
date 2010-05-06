@@ -48,14 +48,20 @@ function installer_admin_upgrade()
         
     } elseif ($data['phase'] == 3) {
         $data['active_step'] = 3;
-    } elseif ($data['phase'] == 4) {
         // Align the db and filesystem version info
         xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);
         xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
         xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
         xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
+        if (!Upgrader::loadFile('checks/210/main.php')) {
+            $data['check']['errormessage'] = Upgrader::$errormessage;
+            return $data;
+        }
+        $data = array_merge($data,main_210());
+
+    } elseif ($data['phase'] == 4) {
         $data['active_step'] = 4;
-        xarResponse::redirect(xarServer::getCurrentURL());
+//        xarResponse::redirect(xarServer::getCurrentURL(array('phase' => 4)));
     }
 
     return $data;

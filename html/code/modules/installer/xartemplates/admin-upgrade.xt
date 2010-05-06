@@ -10,7 +10,7 @@
         <xar:elseif condition="$phase eq 2"/>
             <h1>Running the Upgrade</h1>
         <xar:elseif condition="$phase eq 3"/>
-            <h1>Cleaning Up</h1>
+            <h1>Database Checks</h1>
         <xar:elseif condition="$phase eq 4"/>
             <h1>Notes on this Version</h1>
         </xar:if>
@@ -80,6 +80,15 @@
 
             <xar:if condition="$versioncompare eq 0">
                 You have already upgraded to version #xarCore::VERSION_NUM#. The upgrade script only needs to run once and therefore stops here.
+                <h2>Checking your system</h2>
+                You can run checks to verify that your installed database is correct: 
+                <form action="upgrade.php" method="post">
+                    <p class="center">
+                        <input type="hidden" name="phase" id="phase" value="3"/>
+                        <xar:var name="label">Run checks</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </p>
+                </form>
             <xar:elseif condition="$versioncompare eq 1"/>
                 <xar:if condition="!$upgradable">
                     You must have at least version 2.0.0 in order to run the upgrader.
@@ -142,14 +151,48 @@
             </form>
         <xar:elseif condition="$phase eq 3"/>
             <form action="upgrade.php" method="post">
+                <table style="margin-top:10px; width:100%">
+                    <tr>
+                        <th style="border-bottom: dotted 1px; text-align: left">Task</th>
+                        <th style="border-bottom: dotted 1px; width:10%; text-align: left">Result</th>
+                        <th style="border-bottom: dotted 1px; width:10%; text-align: left">Reference</th>
+                    </tr>
+                    <xar:if condition="empty($check['tasks'])">
+                        <tr>
+                            <td colspan="3" style="text-align: center">
+                                No tasks completed
+                            </td>
+                        </tr>
+                    <xar:else/>
+                        <xar:foreach in="$check['tasks']" value="$task">
+                            <tr>
+                                <td>#$task['description']#</td>
+                                <xar:if condition="$task['success']">
+                                    <xar:set name="reply_color">'green'</xar:set>
+                                <xar:else/>
+                                    <xar:set name="reply_color">'red'</xar:set>
+                                </xar:if>
+                                <td style="color: #$reply_color#">#$task['reply']#</td>
+                                <td>#$task['reference']#</td>
+                            </tr>
+                        </xar:foreach>
+                    </xar:if>
+                </table>
+                <xar:if condition="!empty($check['message']) AND empty($upgrade['errormessage'])">
+                    <h3>#$check['message']#</h3>
+                </xar:if>
                 <p class="center">
                     <input type="hidden" name="phase" id="phase" value="4"/>
                     <xar:var name="label">Back</xar:var>
                     <xar:button type="cancel" label="$label"/>&#160;
-                    <xar:if condition="empty($upgrade['errormessage'])">
+                    <!--
+                    <xar:if condition="empty($check['errormessage'])">
                         <xar:var name="label">Continue</xar:var>
                         <xar:button type="submit" label="$label"/>
                     </xar:if>
+                    -->
+                    <xar:var name="label">Continue</xar:var>
+                    <xar:button type="submit" label="$label"/>
                 </p>
             </form>
         <xar:elseif condition="$phase eq 4"/>
