@@ -52,7 +52,7 @@ Class xarBlock extends Object implements IxarBlock
     public static function render(Array $data=array())
     {
         // Skip executing inactive blocks
-        if ($data['state'] === xarBlock::BLOCK_STATE_INACTIVE) {
+        if ($data['state'] == xarBlock::BLOCK_STATE_INACTIVE) {
             // @TODO: global flag to raise exceptions
             // if ((bool)xarModVars::get('blocks', 'noexceptions')) return '';
             return '';
