@@ -9,7 +9,7 @@ function mail_adminapi_createq($args)
     extract($args);
 
     // Create a new queue storage object from the xml definition
-    $xmlDef = file_get_contents('modules/mail/xardata/qdatadef.xml');
+    $xmlDef = file_get_contents(sys::code() . 'modules/mail/xardata/qdatadef.xml');
     $qdataObjectId = xarMod::apiFunc('dynamicdata','util','import',array('objectname' => 'q_'.$name, 'xml' => $xmlDef));
     if(!isset($qdataObjectId)) return;
 
