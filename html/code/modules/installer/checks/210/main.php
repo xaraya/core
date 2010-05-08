@@ -27,6 +27,9 @@ function main_210()
                         'sql_210_security_realms',
                         'sql_210_session_info',
                         'sql_210_themes',
+                        'sql_210_dynamicdata_objects',
+                        'sql_210_roles_roles',
+                        'sql_210_roles_tree',
                     );
     foreach ($checks as $check) {
         if (!Upgrader::loadFile('checks/210/database/' . $check . '.php')) {

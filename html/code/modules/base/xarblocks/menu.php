@@ -202,15 +202,11 @@ class Base_MenuBlock extends BasicBlock implements iBlock
                 $comment = $line['description'];
                 $child = isset($line['child']) ? $line['child'] : false;
 
-                // Security Check
-                //FIX: Should contain a check for the particular menu item
-                //     Like "menu:$data[title]:$data[bid]:$title"?
-                if (xarSecurityCheck('ViewBaseBlocks',0,'Block',"menu:$data[title]:$data[bid]")) {
-                    $title = xarVarPrepForDisplay($title);
-                    $comment = xarVarPrepForDisplay($comment);
-                    $child = xarVarPrepForDisplay($child);
-                    $usercontent[] = array('title' => $title, 'url' => $line['url'], 'comment' => $comment, 'child'=> $child, 'here'=> $here);
-                }
+                // TODO: line specific access check for later
+                $title = xarVarPrepForDisplay($title);
+                $comment = xarVarPrepForDisplay($comment);
+                $child = xarVarPrepForDisplay($child);
+                $usercontent[] = array('title' => $title, 'url' => $line['url'], 'comment' => $comment, 'child'=> $child, 'here'=> $here);
             }
         } else {
             $usercontent = '';

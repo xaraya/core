@@ -198,6 +198,26 @@
         <xar:elseif condition="$phase eq 4"/>
             <h3>Your upgrade is complete</h3>
             <h2>Version Notes</h2>
+            <xar:template file="notes-210"/>
+            <h2>Next Steps:</h2>
+            <p>
+                You can now customize your installation to match your needs. Manage sitewide settings with the configuration options of the <strong>Base module</strong>. Use the <strong>Modules administration</strong> to install any additional features, or use the <strong>Blocks administration</strong> to adjust the look of your sidebars or add blocks to your site. You can do either of these at any time via the Admin menu.
+            </p>
+            <div style="clear: both; float: left; width: 25%">
+                <h3><a href="index.php?module=base&amp;type=admin&amp;func=modifyconfig">I want to configure the site</a></h3>
+            </div>
+            <div style="float: left; width: 25%">
+                <h3><a href="index.php?module=modules&amp;type=admin&amp;func=list">I want to add modules</a></h3>
+            </div>
+            <div style="float: left; width: 25%">
+                <h3><a href="index.php?module=blocks&amp;type=admin&amp;func=view_instances">I want to manage blocks</a></h3>
+            </div>
+            <div style="float: left; width: 25%">
+                <h3><a href="index.php">Just launch the site!</a></h3>
+            </div>
+            <br />
+            <br />
+            <h2>Thank you for using Xaraya.</h2>
         </xar:if>
         <xar:if condition="!empty($upgrade['errormessage'])">
             <p class="warning">#$upgrade['errormessage']#</p>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div>
+        <ul>
+            <li>
+                The blocks system has undergone an important rewrite in this version. Blocks now have their access rules (security checks) integrated in the block itself, giving the site administrator finer control over access rules and an easier user interface to configure them. Similarly, caching can now be¨controlled through a user interface specific to each block.
+            </li>
+            <li>
+                Block groups are now "proper" blocks. Although they have no content (at present), they can have their own access rules, making it possible to display (or not) entire groups of blocks to specific users.
+            </li>
+            <li>
+                A number of block types have been merged. The content block type now replaces the old text, html, php and finclude block types.
+            </li>
+        </ul>
+    </div>
+</xar:template>
