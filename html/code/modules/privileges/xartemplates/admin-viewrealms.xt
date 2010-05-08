@@ -34,9 +34,8 @@
             <xar:else />
             <h2>Manage Realms</h2>
             <p>
-                You can use Realms to 'slice' or divide your site into different areas. You can slice' in various ways, such as by theme or domain name. You must <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=realms" title="#xarML('Enable the Realms options')#">enable Realms on your site</a>in the Privileges config options. The realms create and modify options will then display here.
+                You can use Realms to 'slice' or divide your site into different areas. You can slice' in various ways, such as by theme or domain name. You must <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=realms" title="#xarML('Enable the Realms options')#">enable Realms on your site</a> in the Privileges config options. The realms create and modify options will then display here.
             </p>
         </xar:if>
     </div>
-    <!-- mod body -->
 </xar:template>
