@@ -1,6 +1,6 @@
 <?php
 
-function sql_210_22()
+function sql_210_23()
 {
     // Define parameters
     $table['block_types'] = xarDB::getPrefix() . '_block_types';
@@ -9,7 +9,7 @@ function sql_210_22()
     // Define the task and result
     $data['success'] = true;
     $data['task'] = xarML("
-        Changing the blocks of type 'html', 'php' and 'text', 'finclude' to 'content'
+        Removing the now unused block types 'html', 'php', 'text'
     ");
     $data['reply'] = xarML("
         Done!
@@ -20,22 +20,18 @@ function sql_210_22()
     try {
         $dbconn->begin();
         $data['sql'] = "
-        UPDATE $table[block_instances] SET type_id = 
-            (SELECT id FROM $table[block_types] WHERE name = 'content') WHERE type_id = 
-            (SELECT id FROM $table[block_types] WHERE name = 'html');
+        DELETE FROM $table[block_types] WHERE name = 'html';
         ";
         $dbconn->Execute($data['sql']);
         $data['sql'] = "
         UPDATE $table[block_instances] SET type_id = 
             (SELECT id FROM $table[block_types] WHERE name = 'content') WHERE type_id = 
-            (SELECT id FROM $table[block_types] WHERE name = 'php');
-        ";
+            (SELECT id FROM $table[block_types] WHERE name = 'php')        ";
         $dbconn->Execute($data['sql']);
         $data['sql'] = "
         UPDATE $table[block_instances] SET type_id = 
             (SELECT id FROM $table[block_types] WHERE name = 'content') WHERE type_id = 
-            (SELECT id FROM $table[block_types] WHERE name = 'text');
-        ";
+            (SELECT id FROM $table[block_types] WHERE name = 'text')        ";
         $dbconn->Execute($data['sql']);
         $dbconn->commit();
     } catch (Exception $e) {
