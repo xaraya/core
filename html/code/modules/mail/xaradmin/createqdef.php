@@ -28,7 +28,7 @@ function mail_admin_createqdef($args)
     }
 
     if($qdefNew) {
-        $xmlDef = @file_get_contents('modules/mail/xardata/qdef.xml'); // if it fails, sane check will catch it.
+        $xmlDef = @file_get_contents(sys::code() . 'modules/mail/xardata/qdef.xml'); // if it fails, sane check will catch it.
         // Take the xml and the objectname and try to create the object
         $qdefObjectId = xarMod::apiFunc('dynamicdata','util','import',array('objectname' => $qdefName, 'xml' => $xmlDef));
         if(!isset($qdefObjectId)) return;

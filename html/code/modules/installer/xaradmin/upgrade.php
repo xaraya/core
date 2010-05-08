@@ -8,8 +8,8 @@ function installer_admin_upgrade()
     $dbversion = xarConfigVars::get(null, 'System.Core.VersionNum');
     sys::import('xaraya.version');
     
-    // Versions prior to 2.1.0 had the revision number as version number
-    if (strlen($dbversion) == 41) {
+    // Versions prior to 2.1.0 had the revision number as version number, or something else
+    if (strlen($dbversion) == 41 || empty($dbversion) || $dbversion == 'unknown') {
         $data['versioncompare'] = 1;
         $data['upgradable'] = 1;
         $data['oldversionnum'] = $dbversion;
