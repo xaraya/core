@@ -7,6 +7,7 @@
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
+  <datastore>relational</datastore>
   <config>a:0:{}</config>
   <isalias>true</isalias>
   <properties>
