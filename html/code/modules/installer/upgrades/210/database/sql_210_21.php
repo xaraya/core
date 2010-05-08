@@ -3,16 +3,13 @@
 function sql_210_21()
 {
     // Define parameters
-    $table['modules'] = xarDB::getPrefix() . '_modules';
     $table['block_types'] = xarDB::getPrefix() . '_block_types';
     $table['block_instances'] = xarDB::getPrefix() . '_block_instances';
-    $table['block_groups'] = xarDB::getPrefix() . '_block_groups';
-    $table['block_group_instances'] = xarDB::getPrefix() . '_block_group_instances';
 
     // Define the task and result
     $data['success'] = true;
     $data['task'] = xarML("
-        Changing the blocks of type 'html', 'php' and 'text' to 'content'
+        Adding the content type to the content field of blocks of type 'html', 'php', 'finclude' and 'text'
     ");
     $data['reply'] = xarML("
         Done!
@@ -22,24 +19,26 @@ function sql_210_21()
     $dbconn = xarDB::getConn();
     try {
         $dbconn->begin();
-        $data['sql'] = "
-        UPDATE $table[block_instances] SET type_id = 
-            (SELECT id FROM $table[block_types] WHERE name = 'content') WHERE type_id = 
-            (SELECT id FROM $table[block_types] WHERE name = 'html');
-        ";
-        $dbconn->Execute($data['sql']);
-        $data['sql'] = "
-        UPDATE $table[block_instances] SET type_id = 
-            (SELECT id FROM $table[block_types] WHERE name = 'content') WHERE type_id = 
-            (SELECT id FROM $table[block_types] WHERE name = 'php');
-        ";
-        $dbconn->Execute($data['sql']);
-        $data['sql'] = "
-        UPDATE $table[block_instances] SET type_id = 
-            (SELECT id FROM $table[block_types] WHERE name = 'content') WHERE type_id = 
-            (SELECT id FROM $table[block_types] WHERE name = 'text');
-        ";
-        $dbconn->Execute($data['sql']);
+        
+        $types = array('text','html','php','finclude');
+        foreach ($types as $type) {
+            $data['sql'] = "
+            SELECT i.id, i.content FROM $table[block_instances] i, $table[block_types] t WHERE i.type_id = t.id AND t.name = '" . $type . "';
+            ";
+            $result = $dbconn->Execute($data['sql']);
+            while(!$result->EOF){
+                list($id, $content) = $result->fields;
+                $temp = unserialize($content);
+                $temp['content_type'] = $type;
+                $content = serialize($temp);
+                $data['sql'] = "
+                UPDATE $table[block_instances] SET content = '$content' WHERE id = $id;
+                ";
+                $dbconn->Execute($data['sql']);
+                $result->MoveNext();
+            }
+
+        }
         $dbconn->commit();
     } catch (Exception $e) {
         // Damn
