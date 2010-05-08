@@ -70,7 +70,7 @@ function blocks_admin_view_instances()
     $data['authid'] = $authid;
     // State descriptions.
     $data['state_desc'][0] = xarML('Hidden');
-    $data['state_desc'][1] = xarML('Minimized');
+    $data['state_desc'][1] = xarML('Inactive');
     $data['state_desc'][2] = xarML('Visible');
     $data['blocks'] = $instances;
     $data['filter'] = $filter;
