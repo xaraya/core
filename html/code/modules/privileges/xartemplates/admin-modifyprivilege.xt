@@ -256,7 +256,7 @@
                             </a>
                         </span>
                         <a href="#xarModURL('privileges','admin','removemember',array('childid'=>$ppid,'parentid'=>$loop->item['parentid'],'authid'=>$authid))#">
-                            <img src="modules/privileges/xarimages/remove.gif" alt="#xarML('Remove')#" title="Remove #$pname# from #$loop:item['parentname']#"/>
+                            <img src="#sys::code()#modules/privileges/xarimages/remove.gif" alt="#xarML('Remove')#" title="Remove #$pname# from #$loop:item['parentname']#"/>
                         </a>
                     </div>
                 </xar:loop>

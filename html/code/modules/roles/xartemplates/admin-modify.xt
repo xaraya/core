@@ -9,7 +9,7 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
         <xar:set name="properties">$object->properties</xar:set>
-        <xar:if condition="$itemtype eq 2">
+        <xar:if condition="$itemtype eq xarRoles::ROLES_USERTYPE">
             <xar:set name="thisname">$object->properties['uname']->getValue()</xar:set>
         <xar:else />
             <xar:set name="thisname">$object->properties['name']->getValue()</xar:set>

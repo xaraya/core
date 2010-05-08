@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <script type="text/javascript" src="modules/privileges/xartemplates/xarTree.js"></script>
+    <script type="text/javascript" src="#sys::code()#modules/privileges/xartemplates/xarTree.js"></script>
     <script type="text/javascript">
         var oldOnLoadFunction = (window.onload) ? window.onload : new
         Function("","return true;"); function doOnLoad() { oldOnLoadFunction();

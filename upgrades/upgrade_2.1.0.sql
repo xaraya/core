@@ -5,12 +5,6 @@
   This script works with MySQL. It should be appropriately modified for other databases
 */
 
-/* Adding the releasenumber modvar */
-INSERT INTO `xar_module_vars` (module_id, name, value)
-    SELECT mods.id, 'releasenumber', 10 FROM xar_modules mods
-    WHERE mods.name = 'base';
-
-/* --------------------------------------------------------- */
 /* Upgrading the core module version numbers */
 UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'authsystem';
 UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'base';
@@ -22,10 +16,15 @@ UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'modules';
 UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'privileges';
 UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'roles';
 UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'themes';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'authsystem';
 
 /* --------------------------------------------------------- */
 
+/* Adding the releasenumber modvar */
+INSERT INTO `xar_module_vars` (module_id, name, value)
+    SELECT mods.id, 'releasenumber', 10 FROM xar_modules mods
+    WHERE mods.name = 'base';
+
+/* --------------------------------------------------------- */
 /* Merging the blockgroups and blocks tables */
 /* Add blockgroups as a type of block */
 INSERT INTO `xar_block_types` (name, module_id, info) 
@@ -53,7 +52,7 @@ UPDATE `xar_dynamic_properties` SET `configuration` = REPLACE(configuration, 's:
 /* --------------------------------------------------------- */
 
 /* Removing the DenyBlocks privilege */
-DELETE p, pm FROM xar_privileges p INNER JOIN xar_privmembers pm WHERE p.id = pm.privilege_id AND p.name = 'DenyBlocks' AND p.itemtype= 3;
+DELETE p, pm FROM xar_privileges p INNER JOIN xar_privmembers pm WHERE p.id = pm.privilege_id AND p.name = 'DenyBlocks' AND p.itemtype= 2;
 
 /* Removing all masks with component Block */
 DELETE FROM `xar_privileges` WHERE `itemtype` = 3 AND  `component` =  'Block';
@@ -143,7 +142,7 @@ DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'DeassignPrivilege'
 
 /* --------------------------------------------------------- */
 
-/* Redefining privileges module masks */
+/* Redefining roles module masks */
 UPDATE `xar_privileges` SET name = 'ReadRoles' WHERE name = 'ReadRole';
 UPDATE `xar_privileges` SET name = 'EditRoles' WHERE name = 'EditRole';
 UPDATE `xar_privileges` SET name = 'AddRoles' WHERE name = 'AddRole';
@@ -153,7 +152,7 @@ DELETE FROM `xar_privileges` WHERE `xar_privileges`.`name` = 'DeleteRole';
 
 /* --------------------------------------------------------- */
 
-/* Redefining privileges module masks */
+/* Redefining themes module masks */
 UPDATE `xar_privileges` SET name = 'AdminThemes' WHERE name = 'AdminTheme';
 
 /* --------------------------------------------------------- */
@@ -173,4 +172,5 @@ UPDATE `xar_roles` SET itemtype = 2 WHERE itemtype = 3;
 /* --------------------------------------------------------- */
 
 /* Add the version configvar  */
-INSERT INTO `xar_module_vars` (name, value) VALUES ('System.Core.Version', 's:5:"2.1.0"');
+// Use a var set call for this
+// INSERT INTO `xar_module_vars` (name, value) VALUES ('System.Core.VersionRev', 's:5:"FOOBAR');
