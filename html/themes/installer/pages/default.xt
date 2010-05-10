@@ -69,9 +69,11 @@
                     <a href="docs/credits.html" target="_blank">Xaraya Credits</a>
                 </li>
                 <xar:if condition="$isupgrade eq '1'">
+                <!--
                     <li class="navbar-item">
                         <a href="http://www.xaraya.com/index.php/documentation/586">Upgrade Guide</a>
                     </li>
+                -->
                 <xar:else />
                 <!--
                     <li class="navbar-item">
