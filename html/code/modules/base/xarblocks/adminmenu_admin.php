@@ -29,12 +29,6 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
     {
         $data = parent::modify($data);
 
-        // Defaults
-        if(empty($data['showlogout'])) $data['showlogout'] = 0;
-        if(empty($data['menustyle']))  $data['menustyle'] = 'bycat'; //xarModVars::get('base','menustyle');
-        if(empty($data['showhelp'])) $data['showhelp'] = 0;
-        if(empty($data['showfront'])) $data['showfront'] = 0;
-
         // Set the template data we need
         $sortorder = array('byname' => xarML('By Name'),
                            'bycat'  => xarML('By Category'));

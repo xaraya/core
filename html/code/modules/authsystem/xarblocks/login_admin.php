@@ -21,16 +21,6 @@ sys::import('modules.authsystem.xarblocks.login');
 
 class Authsystem_LoginBlockAdmin extends Authsystem_LoginBlock implements iBlock
 {
-/**
- * Modify Function to the Blocks Admin
- * @param $data array containing title,content
- */
-    public function modify(Array $data=array())
-    {
-        $data = parent::modify($data);
-        return $data;
-
-    }
 
 /**
  * Updates the Block config from the Blocks Admin
