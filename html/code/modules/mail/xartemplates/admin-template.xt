@@ -33,7 +33,7 @@
             <xar:else />
             <p>The mail module is currently not hooked to any module</p>
         </xar:if>
-        <form method="post" action="&xar-modurl-mail-admin-template;">
+        <form method="post" action="#xarModURL('mail','admin','template')#">
             <fieldset>
                 <div class="xar-form-input-wrapper">
                     <label for="mailtype" title="#xarML('Select the template to edit')#" class="xar-form-label">Name:</label>
@@ -71,7 +71,7 @@
                 </p>
             </fieldset>
         </form>
-        <form action="&xar-modurl-mail-admin-template;" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarModURL('mail','admin','template')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Template Details</legend>
                 <div class="xar-form-input-wrapper">

@@ -29,13 +29,13 @@ function roles_userapi_usermenu($args)
     if (!xarUserIsLoggedIn()){
         // redirect user to their account page after login
         $redirecturl = xarModURL('roles', 'user', 'account');
-        xarResponse::redirect(xarModURL($defaultloginmodname,'user','showloginform', array('redirecturl' => $redirecturl)));
+        xarController::redirect(xarModURL($defaultloginmodname,'user','showloginform', array('redirecturl' => $redirecturl)));
     }
 
     // edit account is disabled?
     if ((bool)xarModVars::get('roles', 'usereditaccount') == false) {
         // show the user their profile display
-        xarResponse::redirect(xarModURL('roles', 'user', 'account'));
+        xarController::redirect(xarModURL('roles', 'user', 'account'));
     }
 
     // Get arguments from argument array
@@ -158,7 +158,7 @@ function roles_userapi_usermenu($args)
             // the default returnurl should be roles user account with a moduleload of current module
             if (empty($returnurl))
                 $returnurl = xarModURL('roles', 'user', 'account', array('moduleload' => 'roles'));
-            return xarResponse::redirect($returnurl);
+            return xarController::redirect($returnurl);
             */
             // let the calling function know the update was a success
             return true;

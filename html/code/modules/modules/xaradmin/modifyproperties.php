@@ -65,7 +65,7 @@ function modules_admin_modifyproperties($args)
                 if (empty($return_url)) {
                     $return_url = xarModURL('modules', 'admin', 'modifyproperties', array('id' => $id));
                 }
-                xarResponse::redirect($return_url);
+                xarController::redirect($return_url);
             }
         }
     }
