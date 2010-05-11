@@ -26,6 +26,7 @@ function roles_userapi_get($args)
 {
     // Get arguments from argument array
     extract($args);
+    // LEGACY
     if ((empty($id) && !empty($uid))) {
         $id = $uid;
     }
