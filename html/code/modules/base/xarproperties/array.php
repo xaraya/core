@@ -124,6 +124,7 @@ class ArrayProperty extends DataProperty
         if (!empty($value) && !is_array($value)) {
             $this->value = $value;
         } else {
+        //LEGACY
             if (empty($value)) $value = array();
             //this code is added to store the values as value1,value2 in the DB for non-associative storage
             if(!$this->initialization_associative_array) {
@@ -149,8 +150,15 @@ class ArrayProperty extends DataProperty
     public function getValue()
     {
         try {
+        // LEGACY
             if(!$this->initialization_associative_array) {
-                $value = $this->value;
+                $outer = explode(';',$this->value);
+                $value =array();
+                foreach ($outer as $element) {
+                    $inner = explode('%@$#',$element);
+                    if (count($inner)>1) $value[] = $inner;
+                    else $value[] = $element;
+                }
             } else {
                 $value = unserialize($this->value);
             }
