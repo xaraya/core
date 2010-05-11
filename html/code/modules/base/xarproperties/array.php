@@ -23,25 +23,17 @@ class ArrayProperty extends DataProperty
     public $fields = array();
 
     public $display_columns = 30;
-    //default value of column dimension
-    public $display_columns_count = 1;
+    public $display_columns_count = 1;              // default value of column dimension
     public $display_rows = 4;
-    public $initialization_addremove = 0;
-    //default value of Key label
-    public $display_key_label = "Key";
-    //default value of value label
-    public $display_value_label = "Value";
-    //to store the value as associative array
-    public $initialization_associative_array = 0;
-    //suffix for the Add/Remove Button
-    public $default_suffixlabel = "Row";
-    //property type and config for the array values
-    public $initialization_prop_type = 'textbox';
-// TODO: the config is displayed/stored as serialized text for now, to
-//       avoid nested configs (e.g. see the objects 'config' property)
-    public $initialization_prop_config = '';
-    //allow editing keys on input
-    public $initialization_fixed_keys = 0;
+    public $initialization_addremove = 0;           
+    public $display_key_label = "Key";              // default value of Key label
+    public $display_value_label = "Value";          // default value of value label
+    public $initialization_associative_array = 0;   // to store the value as associative array
+    public $default_suffixlabel = "Row";            // suffix for the Add/Remove Button
+    public $initialization_prop_type = 'textbox';   // property type and config for the array values
+    public $initialization_prop_config = '';        // TODO: the config is displayed/stored as serialized text for now, to                                                    
+                                                    //       avoid nested configs (e.g. see the objects 'config' property)
+    public $initialization_fixed_keys = 0;          // allow editing keys on input
 
     function __construct(ObjectDescriptor $descriptor)
     {
