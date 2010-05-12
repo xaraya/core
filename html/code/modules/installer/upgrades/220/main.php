@@ -8,7 +8,7 @@ function main_220()
                         'sql_220_01',
                     );
     foreach ($upgrades as $upgrade) {
-        if (!Upgrader::loadFile('upgrades/210/database/' . $upgrade . '.php')) {
+        if (!Upgrader::loadFile('upgrades/220/database/' . $upgrade . '.php')) {
             $data['upgrade']['errormessage'] = Upgrader::$errormessage;
             return $data;
         }

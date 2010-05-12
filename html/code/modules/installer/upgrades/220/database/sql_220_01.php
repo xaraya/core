@@ -1,6 +1,6 @@
 <?php
 
-function sql_210_01()
+function sql_220_01()
 {
     // Define parameters
     $table = xarDB::getPrefix() . '_modules';

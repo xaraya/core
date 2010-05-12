@@ -128,7 +128,7 @@ class NameProperty extends TextBoxProperty
         return trim($value);
     }
 
-    function getvaluearray($value)
+    public function getvaluearray($value)
     {
         if (!isset($value)) $value = '%%%%%';
         if (is_array($value)) return $value;
