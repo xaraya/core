@@ -233,11 +233,7 @@
                     <label for="message" title="#xarML('Body of the email')#" class="xar-form-label">
                         Message:
                     </label>
-                    <div class="xar-form-container-after">
-                        <textarea name="message" id="message" class="xar-form-textareaxlarge">
-                            #xarVarPrepForDisplay($message)#
-                        </textarea>
-                    </div>
+                    <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
                 </div>
             </fieldset>
             <fieldset>
