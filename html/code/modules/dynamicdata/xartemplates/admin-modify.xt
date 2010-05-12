@@ -80,8 +80,6 @@
                     </xar:if>
               </fieldset>
             </form>
-            <form method="post" action="#xarModURL('dynamicdata'.'admin','update')#">
-                                <a href="#xarModURL('dynamicdata'.'admin','showpropval',array('itemid'=>$itemid))#">
         <xar:elseif condition="$tab eq 'clone'"/>
             <h2>
                 <xar:if condition="!empty($objectid) and $objectid eq 1">

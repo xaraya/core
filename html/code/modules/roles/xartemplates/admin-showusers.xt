@@ -209,8 +209,7 @@
                             <td class="xar-align-center xar-nowrap">
                                 <xar:if condition="!$users[$itemid]['frozen']">
                                     <xar:if condition="xarModVars::get('roles', 'askpasswordemail')">
-                                    <a href="#xarModURL('roles','admin','createpassword',array('id'=>$fields['id'],'state'=>$state,'groupid'=>$groupid))#" title="#xarML('Generate a new password for this User')#">
-                                        <a href="&xar-modurl-roles-admin-createpassword;&amp;id=#$fields.id#&amp;state=#$state#&amp;groupid=#$groupid#" title="#xarML('Generate a new password for this User')#">
+                                        <a href="#xarModURL('roles','admin','createpassword',array('id'=>$fields['id'],'state'=>$state,'groupid'=>$groupid))#" title="#xarML('Generate a new password for this User')#">
                                             <img src="#$icon_password#" class="xar-valign-middle"/>
                                         </a>
                                         &#160;
