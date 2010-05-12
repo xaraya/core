@@ -21,7 +21,6 @@ class xarRoute extends Object implements iRoute
         $this->defaults += $defaults;
         if (isset($request)) $this->request = $request;
         if (isset($dispatcher)) $this->dispatcher = $dispatcher;
-//        $this->route = trim($this->route, '/');
     }
 
     /**
@@ -62,18 +61,5 @@ class xarRoute extends Object implements iRoute
         
         return false;
     }
-
-    /**
-     * Assembles a URL path defined by this route
-     *
-     * @param array $data An array of variable and value pairs used as parameters
-     * @return string Route path with user submitted parameters
-     */
-     /*
-    public function encode($data=array(), $reset=false, $encode=true, $partial=false)
-    {
-        return $this->route;
-    }
-*/
 }
 ?>

@@ -44,50 +44,5 @@ class DefaultRoute extends xarRoute
         $request->setRoute('default');
         return true;
     }
-/*    
-    public function encode($data=array(), $reset=false, $encode=true, $partial=false)
-    {
-        if (!$this->keysSet) $this->setRequestKeys();
-        $params = (!$reset) ? $this->parts : array();
-
-        foreach ($data as $key => $value) {
-            if ($value !== null) {
-                $params[$key] = $value;
-            } elseif (isset($params[$key])) {
-                unset($params[$key]);
-            }
-        }
-        $params += $this->defaults;
-
-        $url = '';
-        
-        // Do module, type, func in that order
-        if ($encode) $params['module'] = urlencode($params['module']);        
-        $url .= 'module=' . $params['module'];
-        unset($params['module']);
-        if ($encode) $params['type'] = urlencode($params['type']);        
-        $url .= '&type=' . $params['type'];
-        unset($params['type']);
-        if ($encode) $params['func'] = urlencode($params['func']);        
-        $url .= '&func=' . $params['func'];
-        unset($params['func']);
-        
-        // Do the rest of the URL parameters
-        foreach ($params as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $k => $v) {
-                    if ($encode) $v = urlencode($v);
-                    $url .= '&' . $k;
-                    $url .= '=' . $v;
-                }
-            } else {
-                if ($encode) $value = urlencode($value);
-                $url .= '&' . $key;
-                $url .= '=' . $value;
-            }
-        }
-        return $url;
-    }
-    */
 }
 ?>

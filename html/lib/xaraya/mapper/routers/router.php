@@ -37,14 +37,7 @@ class xarRouter extends Object
             $route = new ShortRoute(array(), $dispatcher);
             $this->routes['short'] = $route;
 
-            /*
-            sys::import('xaraya.mapper.routers.routes.hostname');
-            $route = new HostnameRoute(array(), $dispatcher);
-            $this->routes['hostname'] = $route;
-
-            sys::import('xaraya.mapper.routers.routes.static');
-            $route = new StaticRoute(array(), $dispatcher);
-            $this->routes['static'] = $route;
+            /* Add more routes here
             */
         }
         
