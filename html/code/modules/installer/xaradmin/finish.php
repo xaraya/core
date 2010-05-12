@@ -36,14 +36,14 @@ function installer_admin_finish()
 
     switch ($returnurl) {
         case ('base'):
-            xarResponse::redirect(xarModURL('base','admin','modifyconfig'));
+            xarController::redirect(xarModURL('base','admin','modifyconfig'));
         case ('modules'):
-            xarResponse::redirect(xarModURL('modules','admin','list'));
+            xarController::redirect(xarModURL('modules','admin','list'));
         case ('blocks'):
-            xarResponse::redirect(xarModURL('blocks','admin','view_instances'));
+            xarController::redirect(xarModURL('blocks','admin','view_instances'));
         case ('site'):
         default:
-            xarResponse::redirect('index.php');
+            xarController::redirect('index.php');
     }
     return true;
 }

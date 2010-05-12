@@ -22,7 +22,7 @@
                     <p>This module offers no hooks.</p>
                 </xar:if>
             </div>
-            <form action="&xar-modurl-modules-admin-updatehooks;" method="post">
+            <form action="#xarModURL('modules','admin','updatehooks')#" method="post">
                 <div>
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="curhook" id="curhook" value="#$curhook#"/>

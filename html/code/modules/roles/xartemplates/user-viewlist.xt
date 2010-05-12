@@ -12,13 +12,13 @@
             <li class="xar-tabs-label" title="#$title#">#$label#</li>
             <xar:if condition="$letter eq ''">
                 <li class="xar-tab-active">
-                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#" class="xar-accent xar-accent-outline">
+                    <a href="#xarModURL('roles','user','viewlist',array('phase'=>$phase,'letter'=>'','order'=>$order))#" class="xar-accent xar-accent-outline">
                         All
                     </a>
                 </li>
             <xar:else />
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;order=#$order#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('roles','user','viewlist',array('phase'=>$phase,'letter'=>'','order'=>$order))#" class="xar-norm xar-norm-outline">
                         All
                     </a>
                 </li>
@@ -26,13 +26,13 @@
                 <xar:foreach in="$alphabet" value="$ltr">
                     <xar:if condition="$letter eq $ltr">
                         <li class="xar-tab-active">
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#" class="xar-accent xar-accent-outline">
+                            <a href="#xarModURL('roles','user','viewlist',array('phase'=>$phase,'letter'=>$ltr,'order'=>$order))#" class="xar-accent xar-accent-outline">
                                 #$ltr#
                             </a>
                         </li>
                     <xar:else />
                         <li class="xar-tab">
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=#$ltr#&amp;order=#$order#" class="xar-norm xar-norm-outline">
+                            <a href="#xarModURL('roles','user','viewlist',array('phase'=>$phase,'letter'=>$ltr,'order'=>$order))#" class="xar-norm xar-norm-outline">
                                 #$ltr#
                             </a>
                         </li>
@@ -40,13 +40,13 @@
                 </xar:foreach>
             <xar:if condition="$letter eq 'Other'">
                 <li class="xar-tab-active">
-                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#" class="xar-accent xar-accent-outline">
+                    <a href="#xarModURL('roles','user','viewlist',array('phase'=>$phase,'letter'=>'Other','order'=>$order))#" class="xar-accent xar-accent-outline">
                         Other
                     </a>
                 </li>
             <xar:else />
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=Other&amp;order=#$order#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('roles','user','viewlist',array('phase'=>$phase,'letter'=>'Other','order'=>$order))#" class="xar-norm xar-norm-outline">
                         Other
                     </a>
                 </li>
@@ -59,26 +59,26 @@
                     <li class="xar-tabs-label" title="#$title#">#$label#</li>
                     <xar:if condition="$phase ne 'active'">
                         <li class="xar-tab-active">
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#" class="xar-accent xar-accent-outline">
+                            <a href="#xarModURL('roles','user','viewlist',array('phase'=>'viewall','letter'=>$letter,'search'=>$search,'order'=>$order))#" class="xar-accent xar-accent-outline">
                                 All
                             </a>
                         </li>
                     <xar:else />
                         <li class="xar-tab">
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=viewall&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#" class="xar-norm xar-norm-outline">
+                            <a href="#xarModURL('roles','user','viewlist',array('phase'=>'viewall','letter'=>$letter,'search'=>$search,'order'=>$order))#" class="xar-norm xar-norm-outline">
                                 All
                             </a>
                         </li>
                     </xar:if>
                     <xar:if condition="$phase eq 'active'">
                         <li class="xar-tab-active">
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#" class="xar-accent xar-accent-outline">
+                            <a href="#xarModURL('roles','user','viewlist',array('phase'=>'active','letter'=>$letter,'search'=>$search,'order'=>$order))#" class="xar-accent xar-accent-outline">
                                 Online
                             </a>
                         </li>
                     <xar:else />
                         <li class="xar-tab">
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=active&amp;letter=#$letter#&amp;search=#$search#&amp;order=#$order#" class="xar-norm xar-norm-outline">
+                            <a href="#xarModURL('roles','user','viewlist',array('phase'=>'active','letter'=>$letter,'search'=>$search,'order'=>$order))#" class="xar-norm xar-norm-outline">
                                 Online
                             </a>
                         </li>
@@ -96,18 +96,18 @@
                 <tr>
                     <xar:if condition="$phase eq 'active' and xarSecurityCheck('AdminPanel',0)">
                         <th class="xar-thirdwidth">
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
+                            <a href="#xarModURL('roles','user','viewlist',array('phase'=>$phase,'letter'=>'','search'=>$search,'order'=>'name'))#">
                                 Display Name
                             </a>
                         </th>
                         <th class="xar-thirdwidth">
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=uname">
+                            <a href="#xarModURL('roles','user','viewlist',array('phase'=>$phase,'letter'=>'','search'=>$search,'order'=>'uname'))#">
                                 IP Address
                             </a>
                         </th>
                     <xar:else />
                         <th class="xar-twothirdwidth">
-                            <a href="&xar-modurl-roles-user-viewlist;&amp;phase=#$phase#&amp;letter=&amp;search=#$search#&amp;order=name">
+                            <a href="#xarModURL('roles','user','viewlist',array('phase'=>$phase,'letter'=>'','search'=>$search,'order'=>'name'))#">
                                 Display Name
                             </a>
                         </th>
@@ -133,7 +133,7 @@
                     <tr class="#$item_class#">
                         <xar:if condition="!empty($loop:item['ipaddr']) and xarSecurityCheck('AdminPanel',0)">
                             <td>
-                                <a href="&xar-modurl-roles-user-display;&amp;id=#$loop:item.id#">
+                                <a href="#xarModURL('roles','user','display',array('id'=>$loop->item['id']))#">
                                 #xarVarPrepForDisplay($loop:item['name'])#</a>
                             </td>
                             <td class="xar-align-center">
@@ -142,7 +142,7 @@
                         <xar:else />
                             <td>
                                 <xar:if condition="xarUserIsLoggedIn()">
-                                    <a href="&xar-modurl-roles-user-display;&amp;id=#$loop:item.id#">
+                                    <a href="#xarModURL('roles','user','display',array('id'=>$loop->item['id']))#">
                                         #xarVarPrepForDisplay($loop:item['name'])#
                                     </a>
                                 <xar:else />
@@ -183,7 +183,7 @@
             <div class="xar-align-center">
                 <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
             </div>
-            <form method="post" action="&xar-modurl-roles-user-viewlist;">
+            <form method="post" action="#xarModURL('roles','user','viewlist')#">
                 <label for="search">Search:</label>
                 <input type="hidden" name="phase" id="phase" value="#xarVarPrepForDisplay($phase)#"/>
                 <input type="hidden" name="order" id="order" value="#xarVarPrepForDisplay($order)#"/>
