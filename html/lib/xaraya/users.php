@@ -222,7 +222,7 @@ function xarUserLogOut()
  */
 function xarUserIsLoggedIn()
 {
-    // FIXME: restore "clean" code once uid+session issues are resolved
+    // FIXME: restore "clean" code once id+session issues are resolved
     //return xarSessionGetVar('role_id') != _XAR_ID_UNREGISTERED;
     return (xarSessionGetVar('role_id') != _XAR_ID_UNREGISTERED
             && xarSessionGetVar('role_id') != 0);
@@ -340,6 +340,7 @@ function xarUserGetVar($name, $userId = NULL)
     if (empty($name)) throw new EmptyParameterException('name');
 
     if (empty($userId)) $userId = xarSessionGetVar('role_id');
+    //LEGACY
     if ($name == 'id' || $name == 'uid') return $userId;
 
     if ($userId == _XAR_ID_UNREGISTERED) {
