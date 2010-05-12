@@ -194,7 +194,7 @@ function base_admin_modifyconfig()
                         xarConfigVars::set(null, 'Site.Core.TimeZone', "UTC");
                         xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', 0);
                     }
-                    xarResponse::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other')));
+                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other')));
                     break;
             }
 
