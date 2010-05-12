@@ -1,6 +1,6 @@
 <?php
 /**
- * HTTP Protocol URL/Server/Request/Response utilities
+ * HTTP Protocol URL/Server utilities
  *
  * @package core
  * @copyright see the html/credits.html file in this release

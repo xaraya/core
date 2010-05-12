@@ -16,7 +16,7 @@ sys::import('xaraya.mapper.controllers.interfaces');
 
 class ShortActionController extends BaseActionController implements iController
 {    
-    public static $delimiter = '?';    // This character divides the URL into entry point and parameters
+    public static $delimiter = '?';    // This character divides the URL into initial path and parameters
     public $separator = '/';
     
     function decode(Array $data=array())

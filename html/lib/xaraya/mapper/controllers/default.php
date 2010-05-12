@@ -1,6 +1,6 @@
 <?php
 /**
- * Base Action Controller class
+ * Default Action Controller class
  *
  * @package core
  * @copyright see the html/credits.html file in this release
