@@ -78,6 +78,7 @@ function mail_adminapi_hookmailchange($args)
     $message  = xarTplCompileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$message.'</xar:template>');
 
     // Define the variables automatically available to all templates
+    // LEGACY
     $data = array(
         'sitename'   => xarModVars::get('themes', 'SiteName'),
         'siteslogan' => xarModVars::get('themes', 'SiteSlogan'),

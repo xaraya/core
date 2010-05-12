@@ -23,6 +23,7 @@ xarCoreInit();
 if (!xarVarFetch('v', 'str:1', $v)) return;
 if (!xarVarFetch('u', 'str:1', $u)) return;
 
+//LEGACY
 $user = xarModAPIFunc('roles','user','get', array('uid' => $u));
 
 xarController::redirect(xarModURL('roles', 'user','getvalidation',

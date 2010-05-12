@@ -251,7 +251,7 @@ class xarMasks extends xarSecurity
         if (xarVarIsCached('Security.getprivset', $role)) {
             return xarVarGetCached('Security.getprivset', $role);
         }
-        $query = "SELECT set FROM " . self::$privsetstable . " WHERE uid =?";
+        $query = "SELECT set FROM " . self::$privsetstable . " WHERE id =?";
         if(!isset($selStmt)) $selStmt = self::$dbconn->prepareStatement($query);
 
         $result = $selStmt->executeQuery(array($role->getID()));
