@@ -15,7 +15,7 @@
                 <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             </xar:if>
             <li class="#$tabclass#">
-                <a href="#xarModURL('privileges','admin','viewprivileges',array('show'=>'assigned))#" class="#$linkclass#">
+                <a href="#xarModURL('privileges','admin','viewprivileges',array('show'=>'assigned'))#" class="#$linkclass#">
                 Assigned</a>
             </li>
             <xar:if condition="$show eq 'unassigned'">
@@ -26,7 +26,7 @@
                 <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             </xar:if>
             <li class="#$tabclass#">
-                <a href="#xarModURL('privileges','admin','viewprivileges',array('show'=>'assigned))#" class="#$linkclass#">Unassigned</a>
+                <a href="#xarModURL('privileges','admin','viewprivileges',array('show'=>'assigned'))#" class="#$linkclass#">Unassigned</a>
             </li>
         </ul>
     </div>
