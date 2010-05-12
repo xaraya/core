@@ -84,9 +84,7 @@
                         Message:
                     </label>
                         <div class="xar-form-container-after">
-                            <textarea name="message" id="message" class="xar-form-textareaxlarge">
-                                #xarVarPrepForDisplay($message)#
-                            </textarea>
+                            <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
                         </div>
                     </div>
             </fieldset>

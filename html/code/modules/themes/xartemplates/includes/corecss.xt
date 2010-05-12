@@ -46,9 +46,7 @@
                         <p class="param">
                             <label for="viewsource">Source (view only)</label>
                             <span class="fullright">
-                                <textarea id="viewsource" name="viewsource" rows="10" cols="60" readonly="readonly">
-                                #$csssource#
-                                </textarea>
+                                <textarea id="viewsource" name="viewsource" rows="10" cols="60" readonly="readonly">#$csssource#</textarea>
                             </span>
                         </p>
                     <xar:elseif condition="$csslinkoption eq 'dynamic'"/>
@@ -61,9 +59,7 @@
                         <p class="param">
                             <label for="editsource">Source (editable)</label>
                             <span class="fullright">
-                                <textarea id="editsource" name="editsource" rows="20" cols="60">
-                                    #$csssource#
-                                </textarea>
+                                <textarea id="editsource" name="editsource" rows="20" cols="60">#$csssource#</textarea>
                             </span>
                         </p>
                     <xar:else />

@@ -65,8 +65,8 @@
                     <label for="message" title="#xarML('Message Subject.')#" class="xar-form-label">
                         Message:
                     </label>
-                <div class="xar-form-input-wrapper">
-<textarea name="message" id="message" class="xar-form-textarealarge">&#160;</textarea>
+                    <div class="xar-form-input-wrapper">
+                        <textarea name="message" id="message" class="xar-form-textarealarge">&#160;</textarea>
                     </div>
                 </div>
                 <xar:if condition="xarModIsAvailable('scheduler')">

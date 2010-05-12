@@ -47,7 +47,8 @@
                         Select a file in the list above, or paste the object definition in here:
                     </label>
                     <div class="xar-form-container-after">
-<textarea name="xml" id="xml" class="xar-form-textarealarge">&#160;</textarea>
+                        <xar:set name="empty">''</xar:set>
+                        <textarea name="xml" id="xml" class="xar-form-textarealarge">#$empty#</textarea>
                     </div>
                 </div>
                 <div class="xar-form-input-wrapper">

@@ -28,9 +28,7 @@
                     <div>
                         <label for="message">Message:</label>
                     </div>
-                    <textarea name="message" id="message" rows="20" cols="60">
-                        #xarVarPrepForDisplay($message)#
-                    </textarea>
+                    <textarea name="message" id="message" rows="20" cols="60">#xarVarPrepForDisplay($message)#</textarea>
                 </div>
                 <input name="submit" type="submit" value="#xarML('Send')#"/>
             </div>
