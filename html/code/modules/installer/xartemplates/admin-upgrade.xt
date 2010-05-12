@@ -197,8 +197,12 @@
             </form>
         <xar:elseif condition="$phase eq 4"/>
             <h3>Your upgrade is complete</h3>
-            <h2>Version Notes</h2>
-            <xar:template file="notes-210"/>
+            <h2>Notes for Version #XARCORE_VERSION_NUM#</h2>
+            <xar:if condition="XARCORE_VERSION_NUM eq '2.1.0'">
+                <xar:template file="notes-210"/>
+            <xar:elseif condition="XARCORE_VERSION_NUM eq '2.2.0'"/>
+                <xar:template file="notes-220"/>
+            </xar:if>
             <h2>Next Steps:</h2>
             <p>
                 You can now customize your installation to match your needs. Manage sitewide settings with the configuration options of the <strong>Base module</strong>. Use the <strong>Modules administration</strong> to install any additional features, or use the <strong>Blocks administration</strong> to adjust the look of your sidebars or add blocks to your site. You can do either of these at any time via the Admin menu.
