@@ -94,7 +94,7 @@ function roles_admin_createmail()
             $state = xarRoles::ROLES_STATE_ALL;
         }
 
-        if ($id != -1) {
+        if ($id != -1 && $id != 0) {
             if ($role->getType() == xarRoles::ROLES_GROUPTYPE) {
                 // If a group was chosen, get only the users of that group
                 $q->addtable($xartable['rolemembers'],'rm');
