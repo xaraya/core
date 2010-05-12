@@ -119,6 +119,9 @@
                     <strong>ObjectRef</strong>:&#160;a Select property used to display the items of a dataobject.
                 </li>
                 <li>
+                    <strong>PropertyRef</strong>:&#160;a Select property used to display the properties of a dataobject.
+                </li>
+                <li>
                     <strong>Subform</strong>:&#160;a property used to model subitems of a dataobject.
                 </li>
             </ul>
