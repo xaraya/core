@@ -61,7 +61,7 @@ function installer_admin_upgrade()
 
     } elseif ($data['phase'] == 4) {
         $data['active_step'] = 4;
-//        xarResponse::redirect(xarServer::getCurrentURL(array('phase' => 4)));
+//        xarController::redirect(xarServer::getCurrentURL(array('phase' => 4)));
     }
 
     return $data;

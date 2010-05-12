@@ -20,7 +20,7 @@ function mail_adminapi_getmessagetemplates($args)
     extract($args);
 
     if (empty($module)) {
-        list($module) = xarRequest::getInfo();
+        list($module) = xarController::$request->getInfo();
     }
 
     $messaginghome = sys::varpath() . "/messaging/" . $module;

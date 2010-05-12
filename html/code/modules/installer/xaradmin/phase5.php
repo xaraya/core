@@ -211,7 +211,14 @@ function installer_admin_phase5()
         if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;
     }
 
-    // 2. Load the definitions of all the modules in the modules table
+    // 2. Create some variables we'llneed in installing modules 
+    sys::import('xaraya.variables');
+    $a = array();
+    xarVar_init($a);
+    xarConfigVars::set(null, 'System.ModuleAliases',array());
+    xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
+    
+    // 3. Load the definitions of all the modules in the modules table
     $prefix = xarDB::getPrefix();
     $modulesTable = $prefix .'_modules';
     $tables =& xarDB::getTables();
@@ -249,7 +256,7 @@ function installer_admin_phase5()
         throw $e;
     }
 
-    // 3. Initialize all the modules we haven't yet
+    // 4. Initialize all the modules we haven't yet
     $modules = array('privileges','roles','blocks','authsystem','themes','dynamicdata','mail');
     foreach ($modules as $module) {
         try {
@@ -273,12 +280,6 @@ function installer_admin_phase5()
 
     // If we are here, the base system has completed
     // We can now pass control to xaraya.
-    sys::import('xaraya.variables');
-
-    $a = array();
-    xarVar_init($a);
-    xarConfigVars::set(null, 'System.ModuleAliases',array());
-    xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
 
     // Set the allowed locales to our "C" locale and the one used during installation
     // TODO: make this a bit more friendly.

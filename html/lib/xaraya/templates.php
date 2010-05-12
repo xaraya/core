@@ -524,7 +524,7 @@ function xarTplGetImage($modImage, $modName = NULL)
     // obtain current module name if not specified
     // FIXME: make a fallback for weird requests
     if(!isset($modName)){
-        list($modName) = xarRequest::getInfo();
+        list($modName) = xarController::$request->getInfo();
     }
 
     // get module directory (could be different from module name)
@@ -720,6 +720,9 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
         if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
             $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xd";
             if (file_exists($sourceFileName)) break;
+        }
+        if (!file_exists($sourceFileName)) {
+            $sourceFileName = sys::code() . "modules/dynamicdata/xartemplates/includes/$templateName.xt";
         }
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);

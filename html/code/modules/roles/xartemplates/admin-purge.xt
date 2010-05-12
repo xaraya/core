@@ -16,23 +16,23 @@
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <xar:if condition="$operation eq 'recall'">
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-roles-admin-purge;&amp;operation=recall" class="xar-accent xar-accent-outline">
+                        <a href="#xarModURL('roles','admin','purge',array('operation'=>'recall'))#" class="xar-accent xar-accent-outline">
                             Recall Groups and Users
                         </a>
                     </li>
                     <li class="xar-tab">
-                        <a href="&xar-modurl-roles-admin-purge;&amp;operation=purge" class="xar-norm xar-norm-outline">
+                        <a href="#xarModURL('roles','admin','purge',array('operation'=>'purge'))#" class="xar-norm xar-norm-outline">
                             Purge Users
                         </a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="&xar-modurl-roles-admin-purge;&amp;operation=recall" class="xar-norm xar-norm-outline">
+                        <a href="#xarModURL('roles','admin','purge',array('operation'=>'recall'))#" class="xar-norm xar-norm-outline">
                             Recall Groups and Users
                         </a>
                     </li>
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-roles-admin-purge;&amp;operation=purge" class="xar-accent xar-accent-outline">
+                        <a href="#xarModURL('roles','admin','purge',array('operation'=>'purge'))#" class="xar-accent xar-accent-outline">
                         Purge Users
                         </a>
                     </li>
@@ -41,7 +41,7 @@
         </div>
         <xar:if condition="$operation eq 'recall'">
             <h3>Recall Deleted Groups and Users</h3>
-            <form method="post" action="&xar-modurl-roles-admin-purge;" enctype="application/x-www-form-urlencoded">
+            <form method="post" action="#xarModURL('roles','admin','purge')#" enctype="application/x-www-form-urlencoded">
                 <!-- Module List Sort and Filter Controls table -->
                 <table class="xar-fullwidth">
                     <tr>
@@ -142,7 +142,7 @@
         <xar:else />
             <h3>Purge Users</h3>
             <p>Note: Purged users cannot be recalled. Groups and some special users cannot be purged.</p>
-            <form method="post" action="&xar-modurl-roles-admin-purge;" enctype="application/x-www-form-urlencoded" name="purge">
+            <form method="post" action="#xarModURL('roles','admin','purge')#" enctype="application/x-www-form-urlencoded" name="purge">
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="operation" id="operation" value="purge"/>
                 <!-- Roles List Sort and Filter Controls table -->

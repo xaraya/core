@@ -14,24 +14,24 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
         <h2>
-            <a href="&xar-modurl-roles-admin-createmail;">Messaging System:</a>Modify Notification Template: #$mailtype#
+            <a href="#xarModURL('roles','admin','createmail')#">Messaging System:</a>Modify Notification Template: #$mailtype#
         </h2>
         <div>
             <ul class="xar-tabs xar-alt xar-norm-outline">
                 <xar:var name="label">Option</xar:var>
                 <li class="xar-tabs-label" title="#$label#">#$label#</li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-admin-createmail;" class="xar-norm xar-accent-outline">Send mail</a>
+                    <a href="#xarModURL('roles','admin','createmail')#" class="xar-norm xar-accent-outline">Send mail</a>
                 </li>
                 <li class="xar-tab-active">
-                    <a href="&xar-modurl-roles-admin-modifyemail;" class="xar-accent xar-accent-outline">Templates</a>
+                    <a href="#xarModURL('roles','admin','modifyemail')#" class="xar-accent xar-accent-outline">Templates</a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-admin-modifynotice;" class="xar-norm xar-norm-outline">Configure</a>
+                    <a href="#xarModURL('roles','admin','modifynotice')#" class="xar-norm xar-norm-outline">Configure</a>
                 </li>
             </ul>
         </div>
-        <form method="post" action="&xar-modurl-roles-admin-modifyemail;">
+        <form method="post" action="#xarModURL('roles','admin','modifyemail')#">
             <fieldset>
                 <legend>Select Template</legend>
                 <div class="xar-form-input-wrapper">
@@ -70,7 +70,7 @@
                 </p>
             </fieldset>
         </form>
-        <form action="&xar-modurl-roles-admin-modifyemail;" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarModURL('roles','admin','modifyemail')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Email</legend>
                 <div class="xar-form-input-wrapper">
