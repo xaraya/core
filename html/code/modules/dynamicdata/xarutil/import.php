@@ -79,7 +79,7 @@ function dynamicdata_util_import($args)
         }
         if (empty($objectid)) return;
 
-        xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
+        xarController::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
                                       array('itemid' => $objectid)));
         return true;
     }

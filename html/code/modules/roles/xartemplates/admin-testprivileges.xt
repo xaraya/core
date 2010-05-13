@@ -22,7 +22,7 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
+                                <a href="#xarModURL('roles','admin','showusers',array('phase'=>$state,'id'=>$parents[$i]['parentid']))#" title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
                                     #$parents[$i]['parentname']#
                                 </a>
                             </li>
@@ -34,7 +34,7 @@
         </xar:if>
         <!-- Show the general tab list for roles -->
         <xar:template file="tablist"/>
-        <form action="&xar-modurl-roles-admin-testprivileges;" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarModURL('roles','admin','testprivileges')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Scope</legend>
                 <div class="xar-form-input-wrapper">
@@ -69,7 +69,7 @@
                     <xar:foreach in="$masks" value="$mask">
                         <tr>
                             <td>
-                                <a href="&xar-modurl-roles-admin-testprivileges;&amp;id=&xar-var-id;&amp;name=#$mask:getName()#&amp;test=true">
+                                <a href="#xarModURL('roles','admin','testprivileges',array¨'id'=>xarVar('id'),'name'=>$mask->getName(),'test'=>true))#">
                                 #$mask:getName()#</a>
                             </td>
                             <xar:if condition="xarModVars::get('privileges','showrealms')">
@@ -143,7 +143,7 @@
             <fieldset>
                 <legend>Test Result</legend>
                 <h4>
-                    #$itemtypename# <a href="&xar-modurl-roles-admin-modify;&amp;id=#$id#">'#$pname#'</a>
+                    #$itemtypename# <a href="#xarModURL('roles','admin','modify',array¨'id'=>$id))#">'#$pname#'</a>
                     <xar:if condition="$testresult eq false">
                         Is Not Permitted 
                     <xar:else />

@@ -36,7 +36,7 @@ function installer_admin_phase3()
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
-        xarResponse::redirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
+        xarController::redirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
     }
 
     //Defaults

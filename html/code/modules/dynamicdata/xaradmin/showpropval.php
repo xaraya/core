@@ -104,7 +104,7 @@ function dynamicdata_admin_showpropval($args)
                     $return_url = xarModURL('dynamicdata', 'admin', 'modifyprop',
                                             array('itemid' => $parentobjectid));
                 }
-                xarResponse::redirect($return_url);
+                xarController::redirect($return_url);
                 return true;
             }
             // show preview/updated values
