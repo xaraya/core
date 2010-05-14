@@ -23,7 +23,7 @@
                         </td>
                         <xar:if condition="$link['link_type'] eq 'parents'">
                             <td>
-                                <a href="#xarModURL('dynamicdata'.'util','relations',array('table'=>$where))#">
+                                <a href="#xarModURL('dynamicdata','util','relations',array('table'=>$where))#">
                             #$wherename#</a>
                             <br />#$link['to_prop']#</td>
                             <td>&#160;</td>
