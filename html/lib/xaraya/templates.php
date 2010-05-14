@@ -849,7 +849,11 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     if(!empty($templateName) &&
         file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt")) {
     } elseif(!empty($templateName) &&
+        file_exists($sourceFileName = "$tplThemesDir/properties/$templateName/templates/$tplBase.xt")) {
+    } elseif(!empty($templateName) &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt")) {
+    } elseif(!empty($templateName) &&
+        file_exists($sourceFileName = sys::code() . "properties/$templateName/templates/$tplBase.xt")) {
     } elseif(
         file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt")) {
     } elseif(
