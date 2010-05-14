@@ -9,7 +9,7 @@
         <xar:template type="module" file="admin-menu"/>
         <h2>Utilities - Export DataObject Definition</h2>
         <xar:template type="module" file="utility-menu"/>
-        <form method="post" action="#xarModURL('dynamicdata'.'util','export')#">
+        <form method="post" action="#xarModURL('dynamicdata','util','export')#">
             <fieldset>
                 <legend>Select Object</legend>
                 <div class="xar-form-input-wrapper">

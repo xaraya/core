@@ -28,7 +28,7 @@
                 <h3>#$table#</h3>
                 <p>
                 <!--
-                    <a href="#xarModURL('dynamicdata'.'util','relations',array('module_id'=>$fmodule_id))#">Add
+                    <a href="#xarModURL('dynamicdata','util','relations',array('module_id'=>$fmodule_id))#">Add
                     Relation</a>
                 -->
                     <a href="#xarModURL('dynamicdata','util','new_static',array('table'=>$table))#" style="float:left">                    

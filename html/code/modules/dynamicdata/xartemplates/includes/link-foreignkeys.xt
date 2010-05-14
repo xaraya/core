@@ -14,9 +14,9 @@
             </tr>
             <xar:foreach in="$foreignkeys" value="$fromto">
                 <tr>
-                    <td><a href="#xarModURL('dynamicdata'.'util','relations',array('table'=>$fromto['source']))#">#$fromto.source#</a></td>
+                    <td><a href="#xarModURL('dynamicdata','util','relations',array('table'=>$fromto['source']))#">#$fromto.source#</a></td>
                     <td>#$fromto.from#</td>
-                    <td><a href="#xarModURL('dynamicdata'.'util','relations',array('table'=>$fromto['target']))#">#$fromto.target#</a></td>
+                    <td><a href="#xarModURL('dynamicdata','util','relations',array('table'=>$fromto['target']))#">#$fromto.target#</a></td>
                     <td>#$fromto.to#</td>
                     <td>#$fromto.onupdate#</td>
                     <td>#$fromto.ondelete#</td>

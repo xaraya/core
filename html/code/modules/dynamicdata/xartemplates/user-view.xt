@@ -19,7 +19,7 @@
             <xar:data-view layout="$layout" module="$module_id" itemtype="$itemtype" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid"/>
         <xar:else />
             <div class="xar-align-center">
-                <a href="#xarModURL('dynamicdata'.'user','main')#">Please select one of the available objects</a>
+                <a href="#xarModURL('dynamicdata','user','main')#">Please select one of the available objects</a>
             </div>
         </xar:if>
     </div>

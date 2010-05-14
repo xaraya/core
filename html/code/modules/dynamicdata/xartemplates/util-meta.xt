@@ -11,7 +11,7 @@
         <xar:template type="module" file="utility-menu"/>
         <xar:if condition="empty($export)">
             <xar:if condition="!empty($databases)">
-                <form method="post" action="#xarModURL('dynamicdata'.'util','meta')#">
+                <form method="post" action="#xarModURL('dynamicdata','util','meta')#">
                     <fieldset>
                         <legend>Select Database</legend>
                         <div class="xar-form-input-wrapper">
