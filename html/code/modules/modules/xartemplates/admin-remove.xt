@@ -28,7 +28,7 @@
                 <input type="hidden" name="id" id="id" value="#$id#"/>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="submit" name="command" id="command" value="#xarML('Remove All')#" class="xar-margin-thickright"/>
-                <input type="button" name="return" id="return" onclick="document.location='&xar-modurl-modules-admin-list;';" value="#xarML('Go back to the modules list')#" class="xar-margin-thickleft"/>
+                <input type="button" name="return" id="return" onclick="document.location='#xarModURL(\'modules\',\'admin\',\'list\')#';" value="#xarML('Go back to the modules list')#" class="xar-margin-thickleft"/>
             </div>
         </form>
     </div>
