@@ -19,7 +19,7 @@
                     <xar:data-input type="password" name="pass" id="password" maxlength="64" size="20" tabindex="2"/>
                 </div>
                 <p class="xar-form-input-wrapper-after">
-                    <a href="#xarModURL('roles'.'user','lostpassword')#">Request a new password</a>
+                    <a href="#xarModURL('roles','user','lostpassword')#">Request a new password</a>
                 </p>
                 <div class="xar-form-input-wrapper-after">
                     <xar:data-input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3"/>&#160;
