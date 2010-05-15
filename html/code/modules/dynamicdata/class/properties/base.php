@@ -30,7 +30,7 @@ class DataProperty extends Object implements iDataProperty
     public $status         = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     public $seq            = 0;
     public $format         = '0'; //<-- eh?
-    public $filepath       = 'modules/dynamicdata/xarproperties';
+    public $filepath       = 'auto';
     public $class          = '';         // this property's class
 
     // Attributes for runtime
