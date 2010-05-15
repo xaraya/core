@@ -63,10 +63,9 @@ function installer_adminapi_modifysystemvars($args)
 {
     if (!isset($args['variables'])) throw new BadParameterException('variables');
     $configfile = sys::varpath() . '/config.system.php';
-    if (isset($filepath)) $filepath;
+    if (isset($args['filepath'])) $configfile = $args['filepath'];
     try {
         $config_php = join('', file($configfile));
-
         foreach ($args['variables'] as $name => $value) {
             $config_php = preg_replace('/\[\''.$name.'\'\]\s*=\s*(\'|\")(.*)\\1;/', "['".$name."'] = '$value';", $config_php);
         }
@@ -77,7 +76,7 @@ function installer_adminapi_modifysystemvars($args)
         return true;
 
     } catch (Exception $e) {
-        throw new FileNotFoundException();
+        throw new FileNotFoundException($configfile);
     }
 }
 
