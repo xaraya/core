@@ -341,12 +341,20 @@
                             <xar:data-input type="password" name="key" value="$encryption['key']"/>
                         </div>
                         <div class="xar-form-input-wrapper">
+                            <label for="bar" title="#xarML('A hint for remembering the key used in encryption and decryption')#" class="xar-form-label">                                
+                                Hint:                                
+                            </label>
+                            <xar:data-input type="textbox" name="hint" value="$encryption['hint']" size="80"/>
+                        </div>
+                        <!--
+                        <div class="xar-form-input-wrapper">
                             <label for="bar" title="#xarML('The initialization vector used in encryption and decryption')#" class="xar-form-label">
                                 Initialization Vector:
                             </label>
                             <xar:data-input type="textbox" name="initvector" value="$encryption['initvector']" size="10" maxlength="8"/>&#160;
                             must be exactly 8 characters long
                         </div>
+                        -->
                     <xar:else/>
                         You need to install the PHP mcrypt extension to access encryption functionality
                     </xar:if>
