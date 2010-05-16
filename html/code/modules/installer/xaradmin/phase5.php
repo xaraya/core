@@ -211,7 +211,7 @@ function installer_admin_phase5()
         if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;
     }
 
-    // 2. Create some variables we'llneed in installing modules 
+    // 2. Create some variables we'll need in installing modules 
     sys::import('xaraya.variables');
     $a = array();
     xarVar_init($a);

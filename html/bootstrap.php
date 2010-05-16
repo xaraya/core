@@ -310,7 +310,6 @@ final class sys extends Object
      *
      * @see    sys::once()
      * @todo   do we want to support sys::import('blocklayout.*') ?
-     * @todo   we should probably change our directory structure so we dont have to do specials for modules.
     **/
     public static function import($dp)
     {
