@@ -48,6 +48,21 @@
             </xsl:call-template>
             <xsl:text>);</xsl:text>
           </xsl:when>
+          <xsl:when test="@type='property'">
+            <xsl:text>xarTplFile(sys::code()."properties/</xsl:text>
+            <xsl:if test="@property != ''">
+              <xsl:call-template name="resolvePHP">
+                <xsl:with-param name="expr" select="@property"/>
+              </xsl:call-template>
+              <xsl:text>/templates/</xsl:text>
+            </xsl:if>
+            <xsl:value-of select="@file"/>
+            <xsl:text>",</xsl:text>
+            <xsl:call-template name="resolvePHP">
+              <xsl:with-param name="expr" select="$subdata"/>
+            </xsl:call-template>
+            <xsl:text>);</xsl:text>
+          </xsl:when>
           <xsl:otherwise>
             <xsl:text>xarTpl_includeModuleTemplate(</xsl:text>
             <xsl:choose>
