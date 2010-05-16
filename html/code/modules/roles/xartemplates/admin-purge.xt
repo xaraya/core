@@ -202,20 +202,20 @@
                             <th>Status</th>
                             <th>Purge?</th>
                         </tr>
-                        <xar:loop name="$purgeusers">
+                        <xar:foreach in="$purgeusers" value="$purgeuser">
                             <tr class="xar-norm-outline">
-                                <td>#$loop:item['name']#</td>
-                                <td>#$loop:item['uname']#</td>
-                                <td>#$loop:item['email']#</td>
+                                <td><xar:data-output type="name" value="$purgeuser['name']"/></td>
+                                <td><xar:data-output type="name" value="$purgeuser['uname']"/></td>
+                                <td><xar:data-output type="name" value="$purgeuser['email']"/></td>
                                 <td class="xar-align-center">
-                                    #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#
+                                    #xarLocaleFormatDate('%m/%d/%Y',$purgeuser['date_reg'])#
                                 </td>
-                                <td>#$loop:item['state']#</td>
+                                <td>#$purgeuser['state']#</td>
                                 <td class="xar-align-center">
-                                    <input type="checkbox" name="purgeids[#$loop:item['id']#]" id="purgeids_#$loop:item['id']#" value="1"/>
+                                    <input type="checkbox" name="purgeids[#$purgeuser['id']#]" id="purgeids_#$purgeuser['id']#" value="1"/>
                                 </td>
                             </tr>
-                        </xar:loop>
+                        </xar:foreach>
                         <!-- end loop over users -->
                     </table>
                     <div class="xar-align-right">
