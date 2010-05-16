@@ -109,7 +109,7 @@ function dynamicdata_util_export($args)
                         if ($name == 'configuration') {
                         // don't replace anything in the serialized value
                             $xml .= "    <$name>" . $item[$name];
-                        }else {
+                        } else {
                             $xml .= "    <$name>" . xarVarPrepForDisplay($item[$name]);
                         }
                     } else {

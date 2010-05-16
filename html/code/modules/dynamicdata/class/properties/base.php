@@ -281,7 +281,7 @@ class DataProperty extends Object implements iDataProperty
     function setItemValue($itemid, $value)
     {
         $this->value = $value;
-        $this->_items[$itemid][$this->name] = $this->getValue();
+        $this->_items[$itemid][$this->name] = $this->value;
     }
 
     /**
