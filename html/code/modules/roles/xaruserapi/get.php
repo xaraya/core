@@ -43,6 +43,9 @@ function roles_userapi_get($args)
     $xartable = xarDB::getTables();
     $rolestable = $xartable['roles'];
 
+    sys::import('modules.dynamicdata.class.objects.master');
+    $property = DataPropertyMaster::getProperty(array('name' => 'name'));
+    
     // Get user
     $query = "SELECT id, uname, name, itemtype, email, pass, date_reg, valcode, state FROM $rolestable";
     $bindvars = array();
@@ -63,7 +66,8 @@ function roles_userapi_get($args)
             $queryWhere .= " name = ?"; 
         }
         $cnt++;
-        $bindvars[] = $name;
+        $property->setValue($name);
+        $bindvars[] = $property->value;
     }
     if (!empty($uname)) {       
         if($cnt >= 1){
@@ -130,6 +134,8 @@ function roles_userapi_get($args)
     // id is a reserved/key words in Oracle et al.
     $user['id'] = $user['id'];
     $user['itemtype'] = $user['itemtype'];
+    $property->value = $user['name'];
+    $user['name'] = $property->getValue($user['name']);
     return $user;
 }
 
