@@ -74,7 +74,8 @@ function dynamicdata_admin_showpropval($args)
     $data['id']         = $id;
     // pass the original invalid value here
     $data['invalid']    = !empty($invalid) ? $invalid :'';
-    $property =& DataPropertyMaster::getProperty($data);
+    $property = DataPropertyMaster::getProperty($data);
+    $data['propertytype'] = DataPropertyMaster::getProperty(array('type' => $data['type']));
     if (empty($property)) return;
 
     if (!empty($preview) || !empty($confirm) || !empty($exit)) {
