@@ -131,7 +131,7 @@ class xarVersion extends Object
  */
     public static function assert($version, $application='core')
     {
-        if (empty($version)) return true;;
+        if (empty($version)) return true;
         if ($application == 'core') {
             $version2 = xarConfigVars::get(null, 'System.Core.VersionNum');
         } else {

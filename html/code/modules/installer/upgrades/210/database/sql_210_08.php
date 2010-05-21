@@ -4,6 +4,7 @@ function sql_210_08()
 {
     // Define parameters
     $roles = xarDB::getPrefix() . '_roles';
+    $rolemembers = xarDB::getPrefix() . '_rolemembers';
     $privileges = xarDB::getPrefix() . '_privileges';
 
     // Define the task and result
@@ -29,6 +30,24 @@ function sql_210_08()
         $dbconn->Execute($data['sql']);
         $data['sql'] = "
         INSERT INTO $roles (name, itemtype,  users, uname, email, date_reg, valcode, state, auth_module_id) VALUES ('SiteManager', 2, 0, 'manager', 'none@none.com', UNIX_TIMESTAMP(), 'createdbysystem', 3, 4)
+        ";
+        $dbconn->Execute($data['sql']);
+        $data['sql'] = "
+        SELECT id FROM $roles WHERE name = 'sitemanagers'
+        ";
+        $result = $dbconn->Execute($data['sql']);
+        list($idgroup) = $result->fields;
+        $data['sql'] = "
+        INSERT INTO $rolemembers (role_id, parent_id) VALUES ($idgroup,1)
+        ";
+        $dbconn->Execute($data['sql']);
+        $data['sql'] = "
+        SELECT id FROM $roles WHERE uname = 'manager'
+        ";
+        $result = $dbconn->Execute($data['sql']);
+        list($iduser) = $result->fields;
+        $data['sql'] = "
+        INSERT INTO $rolemembers (role_id, parent_id) VALUES ($iduser,$idgroup)
         ";
         $dbconn->Execute($data['sql']);
         $dbconn->commit();

@@ -27,6 +27,7 @@ function main_210()
                         'sql_210_20',
                         'sql_210_21',
                         'sql_210_22',
+                        'sql_210_23',
                     );
     foreach ($upgrades as $upgrade) {
         if (!Upgrader::loadFile('upgrades/210/database/' . $upgrade . '.php')) {
@@ -41,8 +42,8 @@ function main_210()
                             'success' => $result['success'],
                             );        
         if (!$result['success']) {
-            $data['upgrade']['errormessage'] = xarML('The upgrade failed. Check the reference(s) above to determine the cause.');
-            break;
+            $data['upgrade']['errormessage'] = xarML('Some parts of the upgrade failed. Check the reference(s) above to determine the cause.');
+//            break;
         }
     }
     return $data;

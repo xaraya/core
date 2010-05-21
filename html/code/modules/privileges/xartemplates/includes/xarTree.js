@@ -4,8 +4,8 @@
 
 var xarTree_config = {
     persistance   : true,                                    // Toogle cookie-based persistence
-    img_collapsed : "modules/privileges/xarimages/k3.gif", // URI for collapsed menu subhead
-    img_expanded  : "modules/privileges/xarimages/k2.gif", // URI for expanded menu subhead
+    img_collapsed : "code/modules/privileges/xarimages/k3.gif", // URI for collapsed menu subhead
+    img_expanded  : "code/modules/privileges/xarimages/k2.gif", // URI for expanded menu subhead
     branchname    : "xarbranch",                             // How we tag branches
     leafname      : "xarleaf",                               // How we tag leaves
     clickname     : "box",                                   // How we tag the tag that receives clicks
@@ -168,10 +168,10 @@ function toggleBranch(img, node){
     if (!xarTree_config.is.dom || xarTree_config.is.mac) return;
     if(node.style.display != 'none'){
         node.style.display = 'none';
-        img.src = 'modules/privileges/xarimages/k3.gif';
+        img.src = 'code/modules/privileges/xarimages/k3.gif';
     }
     else {
         node.style.display = 'block';
-        img.src = 'modules/privileges/xarimages/k2.gif';
+        img.src = 'code/modules/privileges/xarimages/k2.gif';
     }
 }

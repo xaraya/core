@@ -119,14 +119,14 @@ function blocks_admin_view_types()
                                 // Render the extra settings if necessary.
                                 // Again we check for an exception, this time in the template rendering
                                 try {
-                                    $block_help = xarTplBlock($blockinfo['module'], 'help-' . $blockinfo['type'], $blockhelp);
+                                    $block_help = xarTplBlock($detail['module'], 'help-' . $detail['type'], $blockhelp);
                                 } catch (Exception $e) {
                                     // @TODO: global flag to raise exceptions or not
                                     if ((bool)xarModVars::get('blocks', 'noexceptions')) {
                                         $block_help = '';
                                     } else {
-                                        //throw ($e);
-                                        $block_help = '';
+                                        throw ($e);
+                                        //$block_help = '';
                                     }
                                 }
                             // Legacy: old help functions return a string
@@ -139,8 +139,8 @@ function blocks_admin_view_types()
                         if ((bool)xarModVars::get('blocks', 'noexceptions')) {
                             $block_help = '';
                         } else {
-                            //throw ($e);
-                            $block_help = '';
+                            throw ($e);
+                            //$block_help = '';
                         }
                     }
                 }
