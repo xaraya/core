@@ -74,7 +74,21 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->setFieldList();
         }
         $itemid = $this->datastore->getItem($args);
+
         if(!empty($args['fieldlist'])) $this->setFieldList($fields);
+
+        /* General sequence:
+         * 2. Run the datastore's getItem method
+         * 3. Assignthe itemid to properties using the virtual datastore
+         *
+         * This may need to be adjusted in the future
+         */
+
+        foreach ($this->getFieldList() as $fieldname) {
+            if (empty($this->properties[$fieldname]->source)) {
+                $this->properties[$fieldname]->value = $this->itemid;
+            }
+        }
 
         // only worry about finding something in primary datastore (if any)
         if(empty($itemid) && !empty($primarystore) && $primarystore == $this->datastore) {
