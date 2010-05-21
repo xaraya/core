@@ -359,6 +359,10 @@ class PropertyRegistration extends DataContainer
                     $registered = $proptype->Register();
                 }
                 unset($currentproptypes);
+                
+                // Run the install function if it exists
+                self::installproperty($baseInfo->name);
+                
             } // next property class in the same file
             $dbconn->commit();
         } catch(Exception $e) {
@@ -373,6 +377,17 @@ class PropertyRegistration extends DataContainer
         // Sort the property types
         ksort($proptypes);
         return $proptypes;
+    }
+    
+    static public function installproperty($propertyname) 
+    {
+        if (file_exists(sys::code() . 'properties/' . $propertyname . '/install.php')) {
+            sys::import('properties.' . $propertyname . '.install');
+            $class = UCFirst($propertyname) . 'PropertyInstall';
+            $descriptor = new DataObjectDescriptor();
+            $installer = new $class($descriptor);
+            $installer->install();
+        }
     }
 }
 ?>
