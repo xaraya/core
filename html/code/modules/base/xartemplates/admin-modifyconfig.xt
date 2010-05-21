@@ -77,7 +77,7 @@
                         <label title="#xarML('Current Version.')#" class="xar-form-label">                            
                             Build:                            
                         </label>
-                        #xarCore::VERSION_NUM#
+                        #xarCore::VERSION_REV#
                     </div>
                 </fieldset>
                 <fieldset>
@@ -318,6 +318,38 @@
                             &#160;Default: #xarServer::getVar('HTTP_HOST')# for security level 'High'
                         </span>
                     </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Encryption</legend>
+                    <xar:if condition="extension_loaded('mcrypt')">
+                        <div class="xar-form-input-wrapper">
+                            <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                                Cipher Employed:                                
+                            </label>
+                            <xar:data-input type="dropdown" name="cipher" options="$ciphers" value="$encryption['cipher']"/>
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <label for="bar" title="#xarML('The cipher mode we are using')#" class="xar-form-label">                                
+                                Cipher Mode:                                
+                            </label>
+                            <xar:data-input type="dropdown" name="mode" options="$modes" value="$encryption['mode']"/>
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <label for="bar" title="#xarML('The key used in encryption and decryption')#" class="xar-form-label">                                
+                                Key:                                
+                            </label>
+                            <xar:data-input type="password" name="key" value="$encryption['key']"/>
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <label for="bar" title="#xarML('The initialization vector used in encryption and decryption')#" class="xar-form-label">
+                                Initialization Vector:
+                            </label>
+                            <xar:data-input type="textbox" name="initvector" value="$encryption['initvector']" size="10" maxlength="8"/>&#160;
+                            must be exactly 8 characters long
+                        </div>
+                    <xar:else/>
+                        You need to install the PHP mcrypt extension to access encryption functionality
+                    </xar:if>
                 </fieldset>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">

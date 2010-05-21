@@ -437,7 +437,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $this->setArguments($args);
 
 // CHECKME: this should filter the fieldlist based on the status as well - cfr. master.php
-        //echo var_dump($this->fieldlist);
 
         if(empty($args['numitems'])) {
             $args['numitems'] = $this->numitems;

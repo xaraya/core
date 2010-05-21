@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <textarea class="xar-form-textarealarge" name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#">
-        #$value#
-    </textarea>
+    <textarea class="xar-form-textarealarge" name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#">#$value#</textarea>
     <xar:if condition="!empty($uploads_hooked)">#$uploads_hooked# 
     <xar:else />
         <input type="hidden" name="MAX_FILE_SIZE" value="#$maxsize#"/>

@@ -28,16 +28,16 @@
                 <h3>#$table#</h3>
                 <p>
                 <!--
-                    <a href="&xar-modurl-dynamicdata-util-relations;&amp;module_id=#$module_id#">Add
+                    <a href="#xarModURL('dynamicdata','util','relations',array('module_id'=>$fmodule_id))#">Add
                     Relation</a>
                 -->
-                    <a href="#xarModURL('dynamicdata','util','new_static')#&amp;table=#$table#" style="float:left">                    
+                    <a href="#xarModURL('dynamicdata','util','new_static',array('table'=>$table))#" style="float:left">                    
                         Add a field to this table                   
                     </a>
-                    <a href="#xarModURL('dynamicdata','util','delete_static_table')#&amp;table=#$table#" style="float:right">                    
+                    <a href="#xarModURL('dynamicdata','util','delete_static_table',array('table'=>$table))#" style="float:right">                    
                         Delete this table:                    
                     </a>
-                    <a href="#xarModURL('dynamicdata','util','rename_static_table')#&amp;table=#$table#" style="float:right">                    
+                    <a href="#xarModURL('dynamicdata','util','rename_static_table',array('table'=>$table))#" style="float:right">                    
                         Rename this table:&#160;|&#160;             
                     </a>
                 </p>
@@ -97,7 +97,7 @@
             </xar:foreach>
             <!--
             <div class="xar-align-center">
-                <a href="&xar-modurl-dynamicdata-util-static;&amp;export=1&amp;module_id=#$module_id#">
+                <a href="#xarModURL('dynamicdata','util','static',array('export'=>1,'module_id'=>$module_id))#">
                 Export to XML</a>
             </div>
             -->
@@ -128,7 +128,7 @@
                 </fieldset>
             </form>
             <div class="xar-align-center">
-                <a href="&xar-modurl-dynamicdata-util-static;&amp;module_id=#$module_id#">Show Table
+                <a href="#xarModURL('dynamicdata','util','static',array('module_id'=>$module_id))#">Show Table
                 Definitions</a>
             </div>
         </xar:if>

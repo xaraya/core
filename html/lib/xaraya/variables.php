@@ -228,7 +228,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     // mrb: what doesn't work then? seems ok within the given workings
     // --------v  this is kinda confusing though, especially when dont_set is used as flag.
     if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
-        $value = xarRequest::getVar($name, $allowOnlyMethod);
+        $value = xarController::getVar($name, $allowOnlyMethod);
     }
 
     // Suppress validation warnings when dont_set, not_required or a default value is specified

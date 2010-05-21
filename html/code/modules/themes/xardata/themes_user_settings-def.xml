@@ -11,7 +11,7 @@
   <config>a:0:{}</config>
   <isalias>false</isalias>
   <properties>
-    <property name="default">
+    <property name="defaulttheme">
       <id>85</id>
       <label>Select Theme:</label>
       <type>dropdown</type>

@@ -55,6 +55,9 @@ class Upgrader extends Object
         sys::import('xaraya.core');
         xarCoreInit(XARCORE_SYSTEM_ALL);
         
+        // Load the current request
+        xarController::getRequest();
+        
         // Make sure we see any errors
         error_reporting(E_ALL);
 
@@ -65,7 +68,8 @@ class Upgrader extends Object
 
         // Make sure we can render a page
         xarTplSetPageTitle(xarML('Xaraya Upgrade'));
-        xarTplSetThemeName('installer') or  xarCore_die('You need the installer theme if you want to upgrade Xaraya.');
+        if(!xarTplSetThemeName('installer'))
+            throw new Exception('You need the installer theme if you want to upgrade Xaraya.');
         // Build function name from phase
         $funcName = 'upgrade'.$phase;
 
@@ -81,15 +85,15 @@ class Upgrader extends Object
         if (xarCoreIsDebuggerActive()) {
             if (ob_get_length() > 0) {
                 $rawOutput = ob_get_contents();
-                $$output = 'The following lines were printed in raw mode by module, however this
+                $output = 'The following lines were printed in raw mode by module, however this
                              should not happen. The module is probably directly calling functions
                              like echo, print, or printf. Please modify the module to exclude direct output.
                              The module is violating Xaraya architecture principles.<br /><br />'.
                              $rawOutput.
                              '<br /><br />This is the real module output:<br /><br />'.
                              $output;
+                ob_end_clean();
             }
-            ob_end_clean();
         }
 
         // Render page with the output

@@ -104,8 +104,8 @@ class NameProperty extends TextBoxProperty
         if (!isset($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
         if (!isset($data['show_firstname'])) $data['show_firstname'] = $this->display_show_firstname;
         if (!isset($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
-        if (empty($data['value'])) $data['value'] = $this->value;
-        $data['value'] = $this->getvaluearray($data['value']);
+        if (isset($data['value'])) $this->value = $data['value'];
+        $data['value'] = $this->getValueArray();
         return DataProperty::showInput($data);
     }
 
@@ -115,21 +115,22 @@ class NameProperty extends TextBoxProperty
         if (!isset($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
         if (!isset($data['show_firstename'])) $data['show_firstename'] = $this->display_show_firstname;
         if (!isset($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
-        if (empty($data['value'])) $data['value'] = $this->value;
-        $data['value'] = $this->getvaluearray($data['value']);
+        if (isset($data['value'])) $this->value = $data['value'];
+        $data['value'] = $this->getValueArray();
         return DataProperty::showOutput($data);
     }
 
     public function getValue()
     {
-        $valuearray = $this->getvaluearray($this->value);
+        $valuearray = $this->getValueArray();
         $value = $valuearray['salutation'] . ' ' . $valuearray['first'] . ' ' . $valuearray['middle'] . ' ' . $valuearray['last'];
         $value = str_replace('  ',' ',$value);
         return trim($value);
     }
 
-    function getvaluearray($value)
+    function getValueArray()
     {
+        $value = $this->value;
         if (!isset($value)) $value = '%%%%%';
         if (is_array($value)) return $value;
         $value = explode('%', $value);

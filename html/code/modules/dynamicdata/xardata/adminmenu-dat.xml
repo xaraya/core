@@ -22,9 +22,9 @@
             <mask>AdminDynamicData</mask>
             <type>admin</type>
             <includes>
-                <includeitem>modifyconfig</includeitem>
+                <includeitem>view_propertydefs</includeitem>
             </includes>
-            <target>modifyconfig</target>
+            <target>view_propertydefs</target>
             <title>Configure the default data proerty types</title>
             <label>Manage Property Types</label>
         </menuitem>
@@ -42,9 +42,9 @@
             <mask>AdminDynamicData</mask>
             <type>admin</type>
             <includes>
-                <includeitem>modifymoduleconfig</includeitem>
+                <includeitem>modifyconfig</includeitem>
             </includes>
-            <target>modifymoduleconfig</target>
+            <target>modifyconfig</target>
             <title>Modify the configuration of this module</title>
             <label>Modify Configuration</label>
         </menuitem>

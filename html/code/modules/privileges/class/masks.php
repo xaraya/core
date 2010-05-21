@@ -216,6 +216,9 @@ class xarMasks extends xarSecurity
     }
 
     /**
+            if ($module == '') list($module) = xarController::$request->getInfo();
+                xarController::redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
+                xarController::redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
      * forgetprivsets: remove all irreducible set of privileges from the db
      *
      * used to lighten the cache
@@ -248,7 +251,7 @@ class xarMasks extends xarSecurity
         if (xarVarIsCached('Security.getprivset', $role)) {
             return xarVarGetCached('Security.getprivset', $role);
         }
-        $query = "SELECT set FROM " . self::$privsetstable . " WHERE uid =?";
+        $query = "SELECT set FROM " . self::$privsetstable . " WHERE id =?";
         if(!isset($selStmt)) $selStmt = self::$dbconn->prepareStatement($query);
 
         $result = $selStmt->executeQuery(array($role->getID()));

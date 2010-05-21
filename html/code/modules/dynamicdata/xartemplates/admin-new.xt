@@ -40,7 +40,7 @@
             Trying to create this item here may break the module. Please proceed with caution.</h3>
         </xar:if>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
-        <form method="post" action="&xar-modurl-dynamicdata-admin-create;" enctype="#$enc_type#">
+        <form method="post" action="#xarModURL('dynamicdata','admin','create')#" enctype="#$enc_type#">
             <fieldset>
                 <legend>Item details</legend>
                 <xar:data-form object="$object"/>

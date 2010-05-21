@@ -283,6 +283,9 @@ class DataObject extends DataObjectMaster implements iDataObject
             if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
         }
 
+        // If a different itemid was passed, get that item before we display
+        if (isset($args['itemid']) && ($args['itemid'] != $this->properties[$this->primary]->value)) $this->getItem(array('itemid' => $args['itemid']));
+
 // CHECKME: do we always transform here if we're primary ?
 
         // Note: you can preset the list of properties to be transformed via $this->hooktransform

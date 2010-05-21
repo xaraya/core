@@ -30,7 +30,7 @@ class DataProperty extends Object implements iDataProperty
     public $status         = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     public $seq            = 0;
     public $format         = '0'; //<-- eh?
-    public $filepath       = 'modules/dynamicdata/xarproperties';
+    public $filepath       = 'auto';
     public $class          = '';         // this property's class
 
     // Attributes for runtime
@@ -289,7 +289,7 @@ class DataProperty extends Object implements iDataProperty
     function setItemValue($itemid, $value)
     {
         $this->value = $value;
-        $this->_items[$itemid][$this->name] = $this->getValue();
+        $this->_items[$itemid][$this->name] = $this->value;
     }
 
     /**
@@ -415,7 +415,7 @@ class DataProperty extends Object implements iDataProperty
         $data['name'] = $this->name;
         if (empty($data['_itemid'])) $data['_itemid'] = 0;
 
-        if(!isset($data['value'])) $data['value'] = $this->getValue();
+        if(!isset($data['value']))    $data['value']    = $this->value;
         // TODO: does this hurt when it is an array?
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
@@ -427,12 +427,10 @@ class DataProperty extends Object implements iDataProperty
             unset($data['configuration']);
         }
         foreach ($this->configurationtypes as $configtype) {
-            $properties = $this->getPublicProperties();
-            foreach ($properties as $name => $value) {
-                if (strpos($name,$configtype) === 0) {
-                    $shortname = substr($name,strlen($configtype)+1);
-                    if(!isset($shortname)) $data[$shortname] = $value;
-                }
+            $properties = $this->getConfigProperties($configtype,1);
+            foreach ($properties as $name => $configarg) {
+                if (!isset($data[$configarg['shortname']]))
+                    $data[$configarg['shortname']] = $this->{$configarg['fullname']};
             }
         }
         return xarTplProperty($data['tplmodule'], $data['template'], 'showoutput', $data);

@@ -7,45 +7,63 @@
  *
  * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
- * @author mikespub <mikespub@xaraya.com>
  */
-/**
- * This is a standard function to modify the configuration parameters of the
- * module
- * @return array
- */
+
 function dynamicdata_admin_modifyconfig()
 {
-    $data = xarMod::apiFunc('dynamicdata','admin','menu');
+    if (!xarSecurityCheck('AdminDynamicData')) return;
+    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('tab','str:1', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
 
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'dynamicdata'));
+    $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons');
+    $data['module_settings']->getItem();
+    switch (strtolower($phase)) {
+        case 'modify':
+        default:
 
-    $data['authid'] = xarSecGenAuthKey();
+            break;
 
-    if (!xarModAPILoad('dynamicdata', 'user')) return;
-    $data['fields'] = DataPropertyMaster::getPropertyTypes();
-    if (!isset($data['fields']) || $data['fields'] == false) {
-        $data['fields'] = array();
+        case 'update':
+            // Confirm authorisation code
+            if (!xarSecConfirmAuthKey()) {
+                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            }
+            if (!xarVarFetch('debugmode',    'checkbox', $debugmode, xarModVars::get('dynamicdata', 'debugmode'), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('administrators', 'str', $administrators, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('debugusers', 'str', $candidates, '', XARVAR_NOT_REQUIRED)) return;
+
+            $isvalid = $data['module_settings']->checkInput();
+            if (!$isvalid) {
+                return xarTplModule('dynamicdata','admin','view_propertydefs', $data);
+            } else {
+                $itemid = $data['module_settings']->updateItem();
+            }
+
+            $admins = explode(',',$administrators);
+            $validadmins = array();
+            foreach ($admins as $admin) {
+                if (empty($admin)) continue;
+                $user = xarMod::apiFunc('roles','user','get',array('uname' => trim($admin)));
+                if(!empty($user)) $validadmins[$user['uname']] = $user['uname'];
+            }
+            xarModVars::set('dynamicdata', 'administrators', serialize($validadmins));
+            xarModVars::set('dynamicdata', 'debugmode', $debugmode);
+
+            // Get the users to be shown the debug messages
+            if (empty($candidates)) {
+                $candidates = array();
+            } else {
+                $candidates = explode(',',$candidates);
+            }
+            $newusers = array();
+            foreach ($candidates as $candidate) {
+                $user = xarMod::apiFunc('roles','user','get',array('uname' => trim($candidate)));
+                if(!empty($user)) $newusers[$user['uname']] = array('id' => $user['id']);
+            }
+            xarModVars::set('dynamicdata', 'debugusers', serialize($newusers));
+            break;
     }
-
-    // FIXME: This may not work when moving property classes around manually !
-    //$data['fieldtypeprop'] =& DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
-    sys::import('modules.dynamicdata.xarproperties.fieldtype');
-
-    $descriptor = new DataObjectDescriptor(array('type' => 'fieldtype'));
-    $data['fieldtypeprop'] = new FieldTypeProperty($descriptor);
-
-    $data['labels'] = array(
-                            'id' => xarML('ID'),
-                            'name' => xarML('Name'),
-                            'label' => xarML('Description'),
-                            'informat' => xarML('Input Format'),
-                            'outformat' => xarML('Display Format'),
-                            'configuration' => xarML('Configuration'),
-                        // etc.
-                            'new' => xarML('New'),
-                      );
-
     return $data;
 }
 ?>

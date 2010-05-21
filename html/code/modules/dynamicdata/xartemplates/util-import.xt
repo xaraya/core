@@ -12,7 +12,7 @@
         <xar:if condition="!empty($warning)">
             <p>#$warning#</p>
         </xar:if>
-        <form method="post" action="&xar-modurl-dynamicdata-util-import;">
+        <form method="post" action="#xarModURL('dynamicdata','util','import')#">
             <fieldset>
                 <legend>Import Object Definition</legend>
                 <div class="xar-form-input-wrapper">
@@ -47,8 +47,8 @@
                         Select a file in the list above, or paste the object definition in here:
                     </label>
                     <div class="xar-form-container-after">
-                        <textarea name="xml" id="xml" class="xar-form-textarealarge">
-                        &#160;</textarea>
+                        <xar:set name="empty">''</xar:set>
+                        <textarea name="xml" id="xml" class="xar-form-textarealarge">#$empty#</textarea>
                     </div>
                 </div>
                 <div class="xar-form-input-wrapper">

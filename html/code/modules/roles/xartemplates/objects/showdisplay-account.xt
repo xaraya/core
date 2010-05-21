@@ -33,7 +33,7 @@
                 <label class="xar-form-label">
                     Email
                 </label>
-                <a href="&xar-modurl-roles-user-email;&amp;id=#$userid#">
+                <a href="#xarModURL('roles','user','email',array('id'=>$userid))#">
                     Send an Email to #xarVarPrepForDisplay(xarUserGetVar('name', $userid))#
                 </a>
             </div>

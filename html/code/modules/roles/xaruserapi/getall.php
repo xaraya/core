@@ -23,6 +23,7 @@
 function roles_userapi_getall($args)
 {
     extract($args);
+    // LEGACY
     if ((empty($idlist) && !empty($uidlist))) {
         $idlist = $uidlist;
     }

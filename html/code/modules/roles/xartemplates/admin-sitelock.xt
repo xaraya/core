@@ -7,7 +7,7 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
         <h2>Site Lock</h2>
-        <form action="&xar-modurl-roles-admin-sitelock;" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarModURL('roles','admin','sitelock')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Status</legend>
                 <div class="xar-form-input-wrapper">
@@ -61,9 +61,7 @@
                         Site Lock Email:
                     </label>
                     <div class="xar-form-container-after">
-                        <textarea name="notifymsg" id="notifymsg" class="xar-form-textarealarge">
-#$notifymsg#
-                        </textarea>
+                        <textarea name="notifymsg" id="notifymsg" class="xar-form-textarealarge">#$notifymsg#</textarea>
                     </div>
                 </div>
             </fieldset>
@@ -77,9 +75,7 @@
                         Site Lock Message:
                     </label>
                     <div class="xar-form-container-after">
-                        <textarea name="lockedoutmsg" id="lockedoutmsg" class="xar-form-textarealarge">
-#$lockedoutmsg#
-                        </textarea>
+                        <textarea name="lockedoutmsg" id="lockedoutmsg" class="xar-form-textarealarge">#$lockedoutmsg#</textarea>
                     </div>
                 </div>
             </fieldset>
