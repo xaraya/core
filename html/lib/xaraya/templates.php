@@ -524,7 +524,7 @@ function xarTplGetImage($modImage, $modName = NULL)
     // obtain current module name if not specified
     // FIXME: make a fallback for weird requests
     if(!isset($modName)){
-        list($modName) = xarRequest::getInfo();
+        list($modName) = xarController::$request->getInfo();
     }
 
     // get module directory (could be different from module name)
@@ -721,6 +721,9 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
             $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xd";
             if (file_exists($sourceFileName)) break;
         }
+        if (!file_exists($sourceFileName)) {
+            $sourceFileName = sys::code() . "modules/dynamicdata/xartemplates/includes/$templateName.xt";
+        }
     }
     return xarTpl__executeFromFile($sourceFileName, $tplData);
 }
@@ -846,7 +849,11 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     if(!empty($templateName) &&
         file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt")) {
     } elseif(!empty($templateName) &&
+        file_exists($sourceFileName = "$tplThemesDir/properties/$templateName/templates/$tplBase.xt")) {
+    } elseif(!empty($templateName) &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt")) {
+    } elseif(!empty($templateName) &&
+        file_exists($sourceFileName = sys::code() . "properties/$templateName/templates/$tplBase.xt")) {
     } elseif(
         file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt")) {
     } elseif(

@@ -16,23 +16,23 @@
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <xar:if condition="$operation eq 'recall'">
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-roles-admin-purge;&amp;operation=recall" class="xar-accent xar-accent-outline">
+                        <a href="#xarModURL('roles','admin','purge',array('operation'=>'recall'))#" class="xar-accent xar-accent-outline">
                             Recall Groups and Users
                         </a>
                     </li>
                     <li class="xar-tab">
-                        <a href="&xar-modurl-roles-admin-purge;&amp;operation=purge" class="xar-norm xar-norm-outline">
+                        <a href="#xarModURL('roles','admin','purge',array('operation'=>'purge'))#" class="xar-norm xar-norm-outline">
                             Purge Users
                         </a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="&xar-modurl-roles-admin-purge;&amp;operation=recall" class="xar-norm xar-norm-outline">
+                        <a href="#xarModURL('roles','admin','purge',array('operation'=>'recall'))#" class="xar-norm xar-norm-outline">
                             Recall Groups and Users
                         </a>
                     </li>
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-roles-admin-purge;&amp;operation=purge" class="xar-accent xar-accent-outline">
+                        <a href="#xarModURL('roles','admin','purge',array('operation'=>'purge'))#" class="xar-accent xar-accent-outline">
                         Purge Users
                         </a>
                     </li>
@@ -41,7 +41,7 @@
         </div>
         <xar:if condition="$operation eq 'recall'">
             <h3>Recall Deleted Groups and Users</h3>
-            <form method="post" action="&xar-modurl-roles-admin-purge;" enctype="application/x-www-form-urlencoded">
+            <form method="post" action="#xarModURL('roles','admin','purge')#" enctype="application/x-www-form-urlencoded">
                 <!-- Module List Sort and Filter Controls table -->
                 <table class="xar-fullwidth">
                     <tr>
@@ -142,7 +142,7 @@
         <xar:else />
             <h3>Purge Users</h3>
             <p>Note: Purged users cannot be recalled. Groups and some special users cannot be purged.</p>
-            <form method="post" action="&xar-modurl-roles-admin-purge;" enctype="application/x-www-form-urlencoded" name="purge">
+            <form method="post" action="#xarModURL('roles','admin','purge')#" enctype="application/x-www-form-urlencoded" name="purge">
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="operation" id="operation" value="purge"/>
                 <!-- Roles List Sort and Filter Controls table -->
@@ -202,20 +202,20 @@
                             <th>Status</th>
                             <th>Purge?</th>
                         </tr>
-                        <xar:loop name="$purgeusers">
+                        <xar:foreach in="$purgeusers" value="$purgeuser">
                             <tr class="xar-norm-outline">
-                                <td>#$loop:item['name']#</td>
-                                <td>#$loop:item['uname']#</td>
-                                <td>#$loop:item['email']#</td>
+                                <td><xar:data-output type="name" value="$purgeuser['name']"/></td>
+                                <td><xar:data-output type="name" value="$purgeuser['uname']"/></td>
+                                <td><xar:data-output type="name" value="$purgeuser['email']"/></td>
                                 <td class="xar-align-center">
-                                    #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#
+                                    #xarLocaleFormatDate('%m/%d/%Y',$purgeuser['date_reg'])#
                                 </td>
-                                <td>#$loop:item['state']#</td>
+                                <td>#$purgeuser['state']#</td>
                                 <td class="xar-align-center">
-                                    <input type="checkbox" name="purgeids[#$loop:item['id']#]" id="purgeids_#$loop:item['id']#" value="1"/>
+                                    <input type="checkbox" name="purgeids[#$purgeuser['id']#]" id="purgeids_#$purgeuser['id']#" value="1"/>
                                 </td>
                             </tr>
-                        </xar:loop>
+                        </xar:foreach>
                         <!-- end loop over users -->
                     </table>
                     <div class="xar-align-right">
