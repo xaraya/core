@@ -43,7 +43,7 @@ function roles_userapi_get($args)
     $xartable = xarDB::getTables();
     $rolestable = $xartable['roles'];
 
-    sys::import('modules.dynamicdata.class.objects.master');
+    sys::import('modules.dynamicdata.class.properties.master');
     $property = DataPropertyMaster::getProperty(array('name' => 'name'));
     
     // Get user

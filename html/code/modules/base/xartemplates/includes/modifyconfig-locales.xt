@@ -66,18 +66,9 @@
     <fieldset>
         <legend>Language/Locale Configuration</legend>
         <p>The following locales are available to this site:</p>
-        <xar:loop name="$locales">
             <div class="xar-form-input-wrapper-after">
-                <xar:if condition="$loop:item['active'] eq 'true'">
-                    <input type="checkbox" id="locale_#$loop:index#" name="active[]" value="#$loop:item['name']#" checked="checked"/>
-                <xar:else />
-                    <input type="checkbox" id="locale_#$loop:index#" name="active[]" value="#$loop:item['name']#"/>
-                </xar:if>
-                <label for="locale_#$loop:index#">
-                    #$loop:item['name']#
-                </label>
+                <xar:data-input type="checkboxlist" name="active" options="$locales" value="$allowedlocales" layout="vertical"/>
             </div>
-        </xar:loop>
         <div class="xar-form-input-wrapper">
             <label for="defaultlocale" title="#xarML('Default locale to load')#" class="xar-form-label">Default Locale:</label>
             <select name="defaultlocale" id="defaultlocale">
