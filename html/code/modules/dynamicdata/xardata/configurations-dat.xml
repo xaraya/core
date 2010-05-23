@@ -31,7 +31,7 @@
     <name>initialization_other_rule</name>
     <description>Any other rule for this field</description>
     <property_id>2</property_id>
-    <label>Other Rule</label>
+    <label>Generic Rule</label>
     <ignore_empty>1</ignore_empty>
     <configuration>a:0:{}</configuration>
   </configurations>
