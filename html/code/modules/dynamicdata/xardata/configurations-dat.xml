@@ -638,4 +638,13 @@
     <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
+  <configurations itemid="72">
+    <id>72</id>
+    <name>initialization_encrypt</name>
+    <description>Encrypt this value</description>
+    <property_id>14</property_id>
+    <label>Encryption</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
 </items>
