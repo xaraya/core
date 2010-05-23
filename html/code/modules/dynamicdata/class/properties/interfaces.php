@@ -34,6 +34,5 @@ interface iDataProperty
 interface iDataPropertyInstall
 {
     public function install(Array $data=array());
-    public function uninstall(Array $data=array());
 }
 ?>
