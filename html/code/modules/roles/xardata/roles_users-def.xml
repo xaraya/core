@@ -34,7 +34,7 @@
       <id>37</id>
       <label>Type</label>
       <type>itemtype</type>
-      <defaultvalue>2</defaultvalue>
+      <defaultvalue>1</defaultvalue>
       <source>xar_roles.itemtype</source>
       <status>67</status>
       <seq>3</seq>
