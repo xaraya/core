@@ -479,7 +479,7 @@ class xarModuleHooks
             if (!empty($extraInfo['module'])) {
                 $modName = $extraInfo['module'];
             } else {
-                list($modName) = xarRequest::getInfo();
+                list($modName) = xarController::$request->getInfo();
             }
         } else {
             $modName = $callerModName;
@@ -652,7 +652,7 @@ class xarModuleHooks
         if (empty($hookModName)) throw new EmptyParameterException('hookModName');
 
         if (empty($callerModName)) {
-            list($callerModName) = xarRequest::getInfo();
+            list($callerModName) = xarController::$request->getInfo();
         }
 
         // Get all hook modules for the caller module once

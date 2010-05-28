@@ -61,7 +61,7 @@
                 </td>
                 <td class="#$displayclass#">
                     <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
-                        <xar:set name="title">xarML('Edit configuration for property #(1)',$field['name'])</xar:set>
+                        <xar:set name="title">xarML('Edit configuration for property \"#(1)\"',$field['name'])</xar:set>
                         <xar:set name="link">
                             xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $field['id']))
                         </xar:set>
@@ -97,6 +97,7 @@
                         <xar:else />
                             <img class="xar-icon-disabled" src="#$icon#" alt="down" title="#$title#"/>
                         </xar:if>
+                        &#160;
                     <xar:else />
                         <xar:set name="link">
                             xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $field['id']))

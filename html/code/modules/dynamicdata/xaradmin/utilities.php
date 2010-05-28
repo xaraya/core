@@ -19,7 +19,7 @@ function dynamicdata_admin_utilities($args)
     extract($args);
     if(!xarVarFetch('q','str', $data['option'], 'query', XARVAR_NOT_REQUIRED)) {return;}
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML($data['option'])));
-    xarResponse::redirect(xarModURL('dynamicdata', 'util', 'import'));
+    xarController::redirect(xarModURL('dynamicdata', 'util', 'import'));
     return true;
 }
 ?>

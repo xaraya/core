@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:set name="request">xarRequest::getInfo()</xar:set>
+    <xar:set name="request">xarController::$request->getInfo()</xar:set>
     <xar:set name="activetab">#$request.2#</xar:set>
     <div>
         <ul class="xar-tabs xar-alt xar-norm-outline">
@@ -15,7 +15,7 @@
                 <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             </xar:if>
             <li class="#$tabclass#">
-                <a href="&xar-modurl-privileges-admin-viewprivileges;&amp;show=assigned" class="#$linkclass#">
+                <a href="#xarModURL('privileges','admin','viewprivileges',array('show'=>'assigned'))#" class="#$linkclass#">
                 Assigned</a>
             </li>
             <xar:if condition="$show eq 'unassigned'">
@@ -26,7 +26,7 @@
                 <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             </xar:if>
             <li class="#$tabclass#">
-                <a href="&xar-modurl-privileges-admin-viewprivileges;&amp;show=unassigned" class="#$linkclass#">Unassigned</a>
+                <a href="#xarModURL('privileges','admin','viewprivileges',array('show'=>'assigned'))#" class="#$linkclass#">Unassigned</a>
             </li>
         </ul>
     </div>
