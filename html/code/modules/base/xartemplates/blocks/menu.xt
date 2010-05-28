@@ -107,7 +107,7 @@
             </li>
         </ul>
     </xar:if>
-    <xar:if condition="!empty($showlogout) or !empty($displayprint) or !empty($displayrss) or !empty($showback)">
+    <xar:if condition="!empty($showlogout) AND !empty($displayprint) AND !empty($displayrss) AND !empty($showback)">
         <ul class="xar-menu-section">
             <li class="xar-menu-section">
                 <h4>Controls</h4>
