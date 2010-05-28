@@ -6,7 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:set name="typename">$propertytype->name</xar:set>
-        <xar:if condition="file_exists(sys::code().'properties/'.$typename.'/templates/overview.xt')">
+        <xar:if condition="file_exists(sys::code().'properties/'.$typename.'/templates/includes/overview.xt')">
             <![CDATA[
             <script type="text/javascript">
                 function showtab (selectedindex, items)
@@ -39,7 +39,7 @@
             </div>
 
             <div id="page-2" style="display: none">
-                <xar:template file="overview.xt" type="property" property="#$typename#"/> 
+                <xar:template file="overview" property="$typename"/>
             </div>
             <script type="text/javascript">
                 showtab (1,2)
