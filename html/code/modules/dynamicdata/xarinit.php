@@ -683,7 +683,8 @@ function dynamicdata_createPropDefTable()
         'modid'  => array(
             'type'        => 'integer',
             'unsigned'    => true,
-            'null'        => false
+            'null'        => false,
+            'default'     => '0'
         ),
         /* the default args for this property -- serialized array */
         'args'    => array(

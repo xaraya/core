@@ -51,11 +51,11 @@ function base_admin_modifyconfig()
     if(xarModIsAvailable('tinymce')) $data['editors'][] = array('displayname' => 'tinymce');
     */
     
-    $allowedlocales = xarConfigVars::get(null, 'Site.MLS.AllowedLocales');
+    $data['allowedlocales'] = xarConfigVars::get(null, 'Site.MLS.AllowedLocales');
     foreach($locales as $locale) {
-        if (in_array($locale, $allowedlocales)) $active = true;
+        if (in_array($locale, $data['allowedlocales'])) $active = true;
         else $active = false;
-        $data['locales'][] = array('name' => $locale, 'active' => $active);
+        $data['locales'][] = array('id' => $locale, 'name' => $locale, 'active' => $active);
     }
     $data['releasenumber'] = xarModVars::get('base','releasenumber');
 
@@ -180,8 +180,10 @@ function base_admin_modifyconfig()
                     if (!xarVarFetch('active','array',$active, array(), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('mlsmode','str:1:',$MLSMode,'SINGLE', XARVAR_NOT_REQUIRED)) return;
 
-                    $localesList = array();
-                    foreach($active as $activelocale) $localesList[] = $activelocale;
+                    sys::import('modules.dynamicdata.class.properties.master');
+                    $locales = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
+                    $locales->checkInput('active');
+                    $localesList = explode(',',$locales->getValue());
                     if (!in_array($defaultLocale,$localesList)) $localesList[] = $defaultLocale;
                     sort($localesList);
 
@@ -196,6 +198,7 @@ function base_admin_modifyconfig()
                     xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $defaultLocale);
                     xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $localesList);
 
+                    xarResponse::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
                     break;
                 case 'other':
                     if (!xarVarFetch('loadlegacy',   'checkbox', $loadLegacy,    xarConfigVars::get(null, 'Site.Core.LoadLegacy'), XARVAR_NOT_REQUIRED)) return;

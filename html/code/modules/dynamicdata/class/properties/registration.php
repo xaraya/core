@@ -229,6 +229,17 @@ class PropertyRegistration extends DataContainer
                 // Clear the cache
                 PropertyRegistration::ClearCache();
 
+                if (!xarVarGetCached('installer','installing')) {
+                    // Repopulate the configurations table
+                    $tables = xarDB::getTables();
+                    $sql = "DELETE FROM $tables[dynamic_configurations]";
+                    $res = $dbconn->ExecuteUpdate($sql);
+
+                    $dat_file = sys::code() . 'modules/dynamicdata/xardata/configurations-dat.xml';
+                    $data = array('file' => $dat_file);
+                    $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+                }
+
                 $activeMods = xarMod::apiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
                 assert('!empty($activeMods)'); // this should never happen
 
