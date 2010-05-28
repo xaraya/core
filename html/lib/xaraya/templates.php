@@ -707,7 +707,7 @@ function xarTpl_includeThemeTemplate($templateName, $tplData)
  * @param  array  $propertyName name of the property from which to include the template
  * @return string
  */
-function xarTpl_includeModuleTemplate($modName, $templateName, $tplData, $propertyName)
+function xarTpl_includeModuleTemplate($modName, $templateName, $tplData, $propertyName='')
 {
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
