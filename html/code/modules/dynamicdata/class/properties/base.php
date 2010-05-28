@@ -367,11 +367,12 @@ class DataProperty extends Object implements iDataProperty
             $data['invalid']  = '';
         }
 
-        // Add the configuration options if they have not been overridden
+        // Add the configuration options defined via UI
         if(isset($data['configuration'])) {
             $this->parseConfiguration($data['configuration']);
             unset($data['configuration']);
         }
+        // Now check for overrides from the template
         foreach ($this->configurationtypes as $configtype) {
             $properties = $this->getConfigProperties($configtype,1);
             foreach ($properties as $name => $configarg) {
@@ -413,11 +414,12 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
 
-        // Add the configuration options if they have not been overridden
+        // Add the configuration options defined via UI
         if(isset($data['configuration'])) {
             $this->parseConfiguration($data['configuration']);
             unset($data['configuration']);
         }
+        // Now check for overrides from the template
         foreach ($this->configurationtypes as $configtype) {
             $properties = $this->getConfigProperties($configtype,1);
             foreach ($properties as $name => $configarg) {
@@ -728,17 +730,11 @@ class DataProperty extends Object implements iDataProperty
             if (!isset($allconfigproperties[$name])) continue;
             $pos = strpos($name, "_");
             if (!$pos || (substr($name,0,$pos) != $type)) continue;
-            if ($fullname) {
-                $configproperties[$name] = $allconfigproperties[$name];
-                $configproperties[$name]['value'] = $arg;
-                $configproperties[$name]['shortname'] = substr($name,$pos+1);
-                $configproperties[$name]['fullname'] = $name;
-            } else {
-                $configproperties[substr($name,$pos+1)] = $allconfigproperties[$name];
-                $configproperties[substr($name,$pos+1)]['value'] = $arg;
-                $configproperties[substr($name,$pos+1)]['shortname'] = substr($name,$pos+1);
-                $configproperties[substr($name,$pos+1)]['fullname'] = $name;
-            }
+            $key = $fullname ? $name : substr($name,$pos+1);
+            $configproperties[$name] = $allconfigproperties[$name];
+            $configproperties[$key]['value'] = $arg;
+            $configproperties[$key]['shortname'] = substr($name,$pos+1);
+            $configproperties[$key]['fullname'] = $name;
         }
         return $configproperties;
     }
