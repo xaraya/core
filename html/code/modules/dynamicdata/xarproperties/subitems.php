@@ -134,7 +134,7 @@ class SubItemsProperty extends DataProperty
         if (isset($data['localmodule'])) {
             $this->localmodule = $data['localmodule'];
         } else {
-            $info = xarRequest::getInfo();
+            $info = xarController::$request->getInfo();
             $this->localmodule = $info[0];
             $data['localmodule'] = $this->localmodule;
         }

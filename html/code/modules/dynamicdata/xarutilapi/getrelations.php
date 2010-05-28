@@ -100,6 +100,8 @@ function dynamicdata_utilapi_getrelations($args)
                     $links[] = array('from' => $field['source'], 'to' => $modinfo['name'], 'type' => 'modulename');
                 } elseif (preg_match('/_moduleid$/',$field['source'])) {
                     $links[] = array('from' => $field['source'], 'to' => $module_id, 'type' => 'moduleid');
+                } elseif (preg_match('/_modid$/',$field['source'])) {
+                    $links[] = array('from' => $field['source'], 'to' => $module_id, 'type' => 'moduleid');
                 } elseif ('module_id' == $field['name']) {
                     $links[] = array('from' => $field['source'], 'to' => $module_id, 'type' => 'moduleid');
 

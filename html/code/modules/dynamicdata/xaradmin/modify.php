@@ -57,15 +57,12 @@ function dynamicdata_admin_modify($args)
 
     $args = $object->toArray();
 
-    // Security check
-    if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$args['itemid'])) return;
-
     if ($notfresh) {
         $isvalid = $object->checkInput();
     } else {
         $object->getItem();
     }
-    $data['object'] = & $object;
+    $data['object'] = $object;
     $data['itemid'] = $args['itemid'];
 
     switch ($data['tab']) {

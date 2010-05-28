@@ -67,7 +67,9 @@ function dynamicdata_admin_delete($args)
         }
         return true;
     }
+
     $myobject->getItem();
+
     if (empty($confirm)) {
         // handle special cases
         if ($myobject->objectid == 1) {
