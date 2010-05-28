@@ -704,12 +704,19 @@ function xarTpl_includeThemeTemplate($templateName, $tplData)
  * @param  string $modName      name of the module from which to include the template
  * @param  string $templateName Basically handler function for <xar:template type="module".../>
  * @param  array  $tplData      template variables
+ * @param  array  $propertyName name of the property from which to include the template
  * @return string
  */
-function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
+function xarTpl_includeModuleTemplate($modName, $templateName, $tplData, $propertyName)
 {
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
+
+    // Check for a property template first
+    $sourceFileName = xarTplGetThemeDir() . "properties/$propertyName/templates/includes/$templateName.xt";
+    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
+    $sourceFileName = sys::code() . "properties/$propertyName/templates/includes/$templateName.xt";
+    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
     $modules = explode(',',$modName);
     foreach ($modules as $module) {
         $thismodule = trim($module);
