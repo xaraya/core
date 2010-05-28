@@ -125,7 +125,7 @@ class ObjectRefProperty extends SelectProperty
         }
         
         // Make sure the display and store fields are valid properties of this object
-        $fields = array_keys($object->getProperties());
+        $fields = $object->getFieldList();
         if (!in_array($this->initialization_display_prop,$fields))
             throw new EmptyParameterException($object->name . '.' .$this->initialization_display_prop);
         if (!in_array($this->initialization_store_prop,$fields))
