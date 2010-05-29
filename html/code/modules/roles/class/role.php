@@ -169,26 +169,10 @@ class Role extends DataObject
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-
-         if ($member->isUser()) {
-            // get the current count
-            $query = "SELECT users FROM $this->rolestable
-                      WHERE id = ?";
-            $bindvars[] = $this->getID();
-
-            $stmt = $dbconn->prepareStatement($query);
-            if (!$stmt) return;
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-            while($result->next()) $row = $result->fields;
-            $users = $row['users'] + 1;
-            $query = "UPDATE $this->rolestable SET users =" . $users . " WHERE id = ?";
-            $bindvars[] = $this->getID();
-
-            // add 1 and update.
-            $stmt = $dbconn->prepareStatement($query);
-            if (!$stmt) return;
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-         }
+        
+        // If the relation already exists we are done
+        while($result->next()) $row = $result->fields;
+        if (!empty($row)) return true;
 
         $query = "INSERT INTO $this->rolememberstable (role_id, parent_id)
                     values (".$member->getID().", ". $this->getID().")";
@@ -206,7 +190,6 @@ class Role extends DataObject
                         FROM $this->rolestable";
             $query .= " WHERE id = ?";
             $bindvars[] =  $this->getID();
-            $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
             if (!$result) return;
@@ -222,6 +205,7 @@ class Role extends DataObject
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
 
         }
+
         $item['module']   = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid']   = $this->getID();
