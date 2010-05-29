@@ -11,7 +11,7 @@
             <xar:set name="tab">'access'</xar:set>
             <xar:template type="module" file="object_menu"/>
         </h2>
-        <form method="post" action="&xar-modurl-dynamicdata-admin-access;">
+        <form method="post" action="#xarModURL('dynamicdata','admin','access')#">
             <xar:template type="module" file="object_access"/>
         </form>
     </div>

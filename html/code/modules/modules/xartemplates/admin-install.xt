@@ -11,7 +11,7 @@
             <p>
                 The module #$displayname# you are trying to install depends on additional components. Please review the listing below:
             </p>
-            <form action="&xar-modurl-modules-admin-install;" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#xarModURL('modules','admin','install')#" method="post" enctype="application/x-www-form-urlencoded">
                 <div>
                     <input type="hidden" name="id" id="id" value="#$id#"/>
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
@@ -87,7 +87,7 @@
         <!-- This section deals with install errors. -->
         <xar:template file="install-errors" type="module"/>
         <p>
-            <a href="&xar-modurl-modules-admin-list;">Go back to the modules list</a>
+            <a href="#xarModURL('modules','admin','list')#">Go back to the modules list</a>
         </p>
     </div>
 </xar:template>

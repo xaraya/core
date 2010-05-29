@@ -153,9 +153,9 @@ function dynamicdata_admin_access($args)
 
         if(!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
         if (!empty($return_url)) {
-            xarResponse::redirect($return_url);
+            xarController::redirect($return_url);
         } else {
-            xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'access',
+            xarController::redirect(xarModURL('dynamicdata', 'admin', 'access',
                                             array('itemid' => $itemid,
                                                   'tplmodule' => $tplmodule)));
         }

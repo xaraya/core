@@ -31,4 +31,8 @@ interface iDataProperty
     public function validateValue($value = null);
 }
 
+interface iDataPropertyInstall
+{
+    public function install(Array $data=array());
+}
 ?>

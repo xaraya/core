@@ -31,17 +31,6 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
     public function modify(Array $data=array())
     {
         $data = parent::modify($data);
-
-        if (!isset($data['metakeywords'])) $data['metakeywords'] = $this->metakeywords;
-        if (!isset($data['metadescription'])) $data['metadescription'] = $this->metadescription;
-        if (!isset($data['usegeo'])) $data['usegeo'] = $this->usegeo;
-        if (!isset($data['usedk'])) $data['usedk'] = $this->usedk;
-        if (!isset($data['longitude'])) $data['longitude'] = $this->longitude;
-        if (!isset($data['latitude'])) $data['latitude'] = $this->latitude;
-        if (!isset($data['copyrightpage'])) $data['copyrightpage'] = $this->copyrightpage;
-        if (!isset($data['helppage'])) $data['helppage'] = $this->helppage;
-        if (!isset($data['glossary'])) $data['glossary'] = $this->glossary;
-
         $data['blockid'] = $data['bid'];
 
         return $data;
