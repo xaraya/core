@@ -19,9 +19,9 @@ class NameProperty extends TextBoxProperty
     public $desc       = 'Name';
     public $reqmodules = array('roles');
 
-    public $display_show_salutation     = true;
-    public $display_show_firstname      = true;
-    public $display_show_middlename     = true;
+    public $display_show_salutation;
+    public $display_show_firstname;
+    public $display_show_middlename;
     public $initialization_refobject    = 'roles_users';    // Name of the object we want to reference
 
     function __construct(ObjectDescriptor $descriptor)
