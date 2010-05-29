@@ -890,13 +890,13 @@ class Role extends DataObject
     function setID($var) { $this->properties['id']->setValue($var); }
     function setName($var) { $this->properties['name']->setValue($var); }
     function setUname($var) { $this->properties['uname']->setValue($var); }
-    function setType($var) { $this->properties['itemtype']->setValue($var); }
+    function setType($var) { $this->properties['role_type']->setValue($var); }
     function setParent($var) { $this->properties['parentid']->setValue($var); }
     function setUser($var) { $this->properties['uname']->setValue($var); }
     function setEmail($var) { $this->properties['email']->setValue($var); }
     function setPass($var) { $this->properties['password']->setValue($var); }
     function setState($var) { $this->properties['state']->setValue($var); }
-    function setDateReg($var) { $this->properties['datereg']->setValue($var); }
+    function setDateReg($var) { $this->properties['regdate']->setValue($var); }
     function setValCode($var) { $this->properties['valcode']->setValue($var); }
     function setAuthModule($var) { $this->properties['authmodule']->setValue($var); }
     function setLevel($var)
