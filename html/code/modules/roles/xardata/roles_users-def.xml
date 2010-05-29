@@ -8,7 +8,7 @@
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <datastore>relational</datastore>
-  <config>a:1:{s:5:&quot;where&quot;;s:13:&quot;role_type = 2&quot;;}</config>
+  <config>a:1:{s:5:&quot;where&quot;;s:13:&quot;role_type = 1&quot;;}</config>
   <sources>a:1:{s:5:"roles";s:9:"xar_roles";}</sources>
   <isalias>true</isalias>
   <objects>a:0:{}</objects>
