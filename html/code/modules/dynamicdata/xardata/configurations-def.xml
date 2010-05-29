@@ -39,7 +39,7 @@
       <label>Label</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_dynamic_configurations.label</source>
+      <source>dynamic_configurations.label</source>
       <status>33</status>
       <seq>3</seq>
       <configuration></configuration>
