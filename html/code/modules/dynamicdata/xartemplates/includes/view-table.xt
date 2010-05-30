@@ -13,7 +13,7 @@
                     </th>
                 </xar:foreach>
                 <xar:if condition="empty($linkfield)">
-                    <th class="xar-form-textlong">Action</th>
+                    <th class="xar-form-textlong">&#160;</th>
                 </xar:if>
             </tr>
             <xar:set name="item_no">0</xar:set>
