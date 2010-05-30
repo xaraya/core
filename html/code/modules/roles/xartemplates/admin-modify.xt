@@ -200,7 +200,7 @@
                         </td>
                         <td class="xar-align-center">
                             <xar:if condition="count($parents) ne 1">
-                                <a href="#xarModURL('roles','admin','removemember',array('childid=>$id,'parentid'=>$loop->item['parentid'].'authid'=>xarSecGenAuthKey()))#">
+                                <a href="#xarModURL('roles','admin','removemember',array('childid'=>$id,'parentid'=>$loop->item['parentid'],'authid'=>xarSecGenAuthKey()))#">
                             Remove</a>
                             <xar:else />Cannot Remove</xar:if>
                         </td>
