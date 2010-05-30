@@ -38,9 +38,9 @@ class NameProperty extends TextBoxProperty
         // store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if ($this->display_layout == 'single') {
-            $this->display_show_salutation     = false;
-            $this->display_show_firstname      = false;
-            $this->display_show_middlename     = false;
+            $this->display_show_salutation     = 0;
+            $this->display_show_firstname      = 0;
+            $this->display_show_middlename     = 0;
         }
         if (!isset($value)) {
             $invalid = array();
@@ -101,9 +101,6 @@ class NameProperty extends TextBoxProperty
     public function showInput(Array $data = array())
     {
         if (empty($data['refobject'])) $data['refobject'] = $this->initialization_refobject;
-        if (!isset($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
-        if (!isset($data['show_firstname'])) $data['show_firstname'] = $this->display_show_firstname;
-        if (!isset($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValueArray();
         return DataProperty::showInput($data);
@@ -112,9 +109,6 @@ class NameProperty extends TextBoxProperty
     public function showOutput(Array $data = array())
     {
         if (empty($data['refobject'])) $data['refobject'] = $this->initialization_refobject;
-        if (!isset($data['show_salutation'])) $data['show_salutation'] = $this->display_show_salutation;
-        if (!isset($data['show_firstename'])) $data['show_firstename'] = $this->display_show_firstname;
-        if (!isset($data['show_middlename'])) $data['show_middlename'] = $this->display_show_middlename;
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValueArray();
         return DataProperty::showOutput($data);
