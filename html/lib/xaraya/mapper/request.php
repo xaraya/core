@@ -28,6 +28,7 @@ class xarRequest extends Object
     protected $route     = 'default';
     
     public $defaultRequestInfo = array();
+    public $isObjectURL        = false;
 
     public $entryPoint;
     public $separator    = '&';
@@ -196,6 +197,9 @@ class xarRequest extends Object
                 xarVarFetch('method', 'regexp:/^[a-zA-Z0-9_-]+$/', $methodName, NULL, XARVAR_NOT_REQUIRED);
                 // Specify 'dynamicdata' as module for xarTpl_* functions etc.
                 $requestInfo = array('object', $objectName, $methodName);
+                if (empty($url)) {
+                    $this->isObjectURL = true;
+                }
             } else {
                 // If $modName is still empty we use the default module/type/func to be loaded in that such case
                 if (empty($this->defaultRequestInfo)) {
