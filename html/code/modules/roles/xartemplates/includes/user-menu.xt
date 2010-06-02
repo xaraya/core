@@ -9,7 +9,7 @@
     <div class="xar-mod-body">
         <xar:if condition="!empty($message)">
             #$message#
-            <xar:else />
+        <xar:else />
             <div>
                 <ul class="xar-tabs xar-alt xar-norm-outline">
                     <xar:foreach in="$menutabs" value="$menutab">
