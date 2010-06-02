@@ -30,16 +30,16 @@ function modules_adminapi_standarddeinstall($args)
 
     // Remove database tables
     xarMod::apiLoad($module);
-    try {
         $tablenameprefix = xarDB::getPrefix() . '_' . $module;
         foreach ($xartables as $table) {
             if (is_array($table)) continue;
             if (strpos($table,$tablenameprefix) === 0) {
                 $query = 'DROP TABLE ' . $table;
-                $dbconn->Execute($query);
+                try {
+                    $dbconn->Execute($query);
+                } catch (Exception $e) {}
             }
         }
-    } catch (Exception $e) {}
 
      // Delete the base group created by this module if it exists
      // Move the descendants to the Users group
