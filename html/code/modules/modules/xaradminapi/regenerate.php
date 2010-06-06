@@ -103,7 +103,7 @@ function modules_adminapi_regenerate()
                 // from 1.0.3 to 1.0.4
 
                 sys::import('xaraya.version');
-                $vercompare = xarVersion::compare($dbModules[$name]['version'], $modinfo['version'], 2);
+                $vercompare = xarVersion::compare($modinfo['version'], $dbModules[$name]['version'], 2);
 
                 // Check if database version is less than (or equal to) the file version
                 // i.e. that the module is not being downgraded.
