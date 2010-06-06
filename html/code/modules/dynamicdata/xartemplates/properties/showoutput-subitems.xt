@@ -1,0 +1,20 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    
+    <xar:set name="count">count($items)</xar:set>
+    <xar:if condition="$count eq 1" >
+        <xar:mlstring>
+            [1 subitem]
+        </xar:mlstring>
+    <xar:else />
+        <xar:ml>
+            <xar:mlstring>
+                [#(1) subitems]
+            </xar:mlstring>
+            <xar:mlvar>
+                #$count#
+            </xar:mlvar>
+        </xar:ml>
+    </xar:if>    
+    <xar:data-view object="$object" items="$items" tplmodule="math" />
+</xar:template>

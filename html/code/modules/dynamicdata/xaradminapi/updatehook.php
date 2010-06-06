@@ -83,8 +83,9 @@ function dynamicdata_adminapi_updatehook($args)
         throw new BadParameterException($vars,$msg);
     }
 
-    $myobject = & DataObjectMaster::getObject(array('moduleid' => $module_id,
-                                         'itemtype' => $itemtype,
+    $args = DataObjectDescriptor::getObjectID(array('module_id'  => $module_id,
+                                       'itemtype'  => $itemtype));
+    $myobject = DataObjectMaster::getObject(array('objectid' => $args['objectid'],
                                          'itemid'   => $itemid));
 
     // If no object returned, bail and pass the extrainfo to the next hook
