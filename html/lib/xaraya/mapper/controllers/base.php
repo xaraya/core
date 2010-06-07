@@ -18,11 +18,15 @@ class BaseActionController extends Object
     private $controller;
     private $request;
     
+    public $module;
+    public $modulealias;
+    
     public function __construct(xarRequest $request=null)
     {
         $this->request = $request;
         $this->actionstring = $request->getActionString();
         $this->module = $this->request->getModule();
+        $this->modulealias = $this->request->getModuleAlias();
     }
         
     function run(xarRequest $request=null, xarResponse $response=null)          

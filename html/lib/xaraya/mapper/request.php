@@ -20,6 +20,7 @@ class xarRequest extends Object
     protected $typekey   = 'type';
     protected $funckey   = 'func';
     protected $module    = 'base';
+    protected $modulealias = '';
     protected $type      = 'user';
     protected $func      = 'main';
     protected $funcargs  = array();
@@ -46,6 +47,7 @@ class xarRequest extends Object
             if (!empty($url['module'])) {
                 // Resolve if this is an alias for some other module
                 $this->setModule(xarModAlias::resolve($url['module']));
+                if ($this->getModule() != $url['module']) $this->setModuleAlias($url['module']);
                 unset($url['module']);
             }
             if (!empty($url['type'])) {
@@ -96,10 +98,12 @@ class xarRequest extends Object
                     } else {
                         // Resolve if this is an alias for some other module
                         if (!empty($modName)) $this->setModule(xarModAlias::resolve($modName));
+                        if ($this->getModule() != $modName) $this->setModuleAlias($modName);
                     }
                 } else {
                     // Resolve if this is an alias for some other module
                     if (!empty($modName)) $this->setModule(xarModAlias::resolve($modName));
+                    if ($this->getModule() != $modName) $this->setModuleAlias($modName);
                 }
 
             }
@@ -230,6 +234,7 @@ class xarRequest extends Object
     function getTypeKey()        { return $this->typekey; }
     function getFunctionKey()    { return $this->funckey; }
     function getModule()         { return $this->module; }
+    function getModuleAlias()    { return $this->modulealias; }
     function getType()           { return $this->type; }
     function getFunction()       { return $this->func; }
     function getObject()         { return $this->object; }
@@ -240,6 +245,7 @@ class xarRequest extends Object
     function getRoute()          { return $this->route; }
 
     function setModule($p)               { $this->module = $p; }
+    function setModuleAlias($p)          { $this->modulealias = $p; }
     function setType($p)                 { $this->type = $p; }
     function setFunction($p)             { $this->func = $p; }
     function setObject($p)               { $this->object = $p; }
