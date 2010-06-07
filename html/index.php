@@ -123,6 +123,11 @@ function xarMain()
             if (!xarTplSetPageTemplateName('admin-'.$request->getModule())) {
                 xarTplSetPageTemplateName('admin');
             }
+        } elseif (xarUserIsLoggedIn() && $request->getType() == 'user' && xarTplGetPageTemplateName() == 'default') {
+            // Same thing for user side where user is logged in
+            if (!xarTplSetPageTemplateName('user-'.$request->getModule())) {
+                xarTplSetPageTemplateName('user');
+            }
         }
 
         xarVarFetch('pageName','str:1:', $pageName, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
