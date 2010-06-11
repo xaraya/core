@@ -691,7 +691,7 @@ class Query
     public function addcondition($x,$active=1)
     {
         foreach($this->conditions as $key => $value)
-            if ($value == $x) return $key;
+            if ($value === $x) return $key;
 
         $key = $this->_getkey();        
         $this->conjunctions[$key]=array('conditions' => $key,
