@@ -312,6 +312,7 @@ class Query
                     }
                     else {
                         $newfield = explode('=',$field);
+                        if (!isset($newfield[1])) throw new Exception("The field $newfield[0] needs to have a value");
                         $argsarray = array('name' => trim($newfield[0]), 'value' => trim($newfield[1]));
                     }
                 }
@@ -703,7 +704,7 @@ class Query
     public function addcondition($x,$active=1)
     {
         foreach($this->conditions as $key => $value)
-            if ($value == $x) return $key;
+            if ($value === $x) return $key;
 
         $key = $this->_getkey();        
         $this->conjunctions[$key]=array('conditions' => $key,

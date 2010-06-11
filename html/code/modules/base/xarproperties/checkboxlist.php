@@ -40,34 +40,39 @@ class CheckboxListProperty extends SelectProperty
         return $this->validateValue($value);
     }
 
-
     public function validateValue($value = null)
     {
-        if (!isset($value)) $this->value = '';
-        elseif ( is_array($value) ) $this->value = implode ( ',', $value);
-        else $this->value = $value;
+        if (!isset($value)) $value = '';
+        $this->setValue($value);
         return true;
     }
 
     public function showInput(Array $data = array())
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
-        else $this->value = $data['value'];
-
+        if (isset($data['value'])) $this->value = $data['value'];
+        $data['value'] = $this->getValue();
         if (!isset($data['rows_cols'])) $data['rows_cols'] = $this->display_columns;
-        if (empty($data['value'])) {
-            $data['value'] = array();
-        } elseif (!is_array($data['value']) && is_string($data['value'])) {
-            $data['value'] = explode(',', $data['value']);
-        }
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
-        if (is_array($data['value']) ) $data['value'] = implode(',',$data['value']);
+        if (isset($data['value'])) $this->value = $data['value'];
+        $data['value'] = $this->getValue();
         return parent::showOutput($data);
+    }
+
+    public function getValue()
+    {
+        if (!is_array($this->value) && is_string($this->value) && !empty($this->value)) 
+            return explode(',', $this->value);
+        else return array();
+    }
+
+    public function setValue($value=null)
+    {
+        if ( is_array($value) ) $this->value = implode ( ',', $value);
+        else $this->value = $value;
     }
 }
 
