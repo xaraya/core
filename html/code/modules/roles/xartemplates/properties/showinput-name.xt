@@ -18,7 +18,7 @@
         <xar:data-input type="objectref" refobject="$refobject" store_prop="id" style="$style" onchange="$evt_change" value="$value"/>
     <xar:else/>
         <xar:set name="namestring">$name . '_salutation'</xar:set>
-        <xar:if condition="($show_salutation eq 'true') AND ($layout ne 'single')">
+        <xar:if condition="($show_salutation) AND ($layout ne 'single')">
             <xar:if condition="empty($salutationoptions)">
                 <xar:set name="salutationoptions">
                     array(
@@ -29,16 +29,14 @@
                 </xar:set>
             </xar:if>
             <xar:data-input type="dropdown" name="$namestring" value="$value['salutation']" options="$salutationoptions"/>&#160;
-        <xar:else/>
-            <input type="hidden" name="#$namestring#" id="#$namestring#" value="#$value['salutation']#"/>
         </xar:if>
 
         <xar:if condition="$layout eq 'firstlast' OR $layout eq 'default'">
 
-            <xar:if condition="$show_firstname eq 'true'">
+            <xar:if condition="$show_firstname">
                 <input type="text" name="#$name#_first" id="#$id#_first" value="#$value['first']#"/>&#160;
             </xar:if>
-            <xar:if condition="$show_middlename eq 'true'">
+            <xar:if condition="$show_middlename">
                 <input type="text" name="#$name#_middle" id="#$id#_middle" value="#$value['middle']#"/>&#160;
             </xar:if>
             <input type="text" name="#$name#_last" id="#$id#_last" value="#$value['last']#"/>
@@ -46,10 +44,10 @@
         <xar:elseif condition="$layout eq 'lastfirst'"/>
 
             <input type="text" name="#$name#_last" id="#$id#_last" value="#$value['last']#"/>&#160;
-            <xar:if condition="$show_firstname eq 'true'">
+            <xar:if condition="$show_firstname">
                 <input type="text" name="#$name#_first" id="#$id#_first" value="#$value['first']#"/>
             </xar:if>
-            <xar:if condition="$show_middlename eq 'true'">
+            <xar:if condition="$show_middlename">
                 &#160;<input type="text" name="#$name#_middle" id="#$id#_middle" value="#$value['middle']#"/>
             </xar:if>
 

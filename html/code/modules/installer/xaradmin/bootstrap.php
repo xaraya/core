@@ -120,7 +120,7 @@ function installer_admin_bootstrap()
         }
     }
 
-    xarResponse::redirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
+    xarController::redirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
 }
 
 ?>
