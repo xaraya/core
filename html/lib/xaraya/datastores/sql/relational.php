@@ -403,6 +403,7 @@ class RelationalDataStore extends SQLDataStore
 
         // Distribute the results to the appropriate properties
 
+        $fordisplay = (isset($args['fordisplay'])) ? $args['fordisplay'] : 0;
         foreach ($result as $row) {
             // Get the value of the primary key
             $itemid = $row[$this->object->primary];
@@ -415,7 +416,7 @@ class RelationalDataStore extends SQLDataStore
             // Set the values of the valid properties
 
             foreach ($this->object->fieldlist as $fieldname) {
-                $this->setItemValue($itemid, $row, $fieldname, $this->object);
+                $this->setItemValue($itemid, $row, $fieldname, $this->object, $fordisplay);
             }
         }    
    }
@@ -463,7 +464,7 @@ class RelationalDataStore extends SQLDataStore
         }
     }
 
-    private function setItemValue($itemid, $row, $field, $object)
+    private function setItemValue($itemid, $row, $field, $object, $fordisplay=0)
     {
     // Is this a subitems property?
         if ($object->properties[$field]->type == 30069) {
@@ -487,7 +488,7 @@ class RelationalDataStore extends SQLDataStore
                     $primary = $subitemsobject->primary;
                     $subitemsobject->properties[$primary]->setValue($row[$subitemsobject->name . "_" . $subitemsobject->properties[$primary]->name]);
                     $subitemid = $subitemsobject->properties[$primary]->value;
-                    $this->setItemValue($subitemid, $row, $subproperty, $subitemsobject);
+                    $this->setItemValue($subitemid, $row, $subproperty, $subitemsobject, $fordisplay);
     // Ignore any other property without a source (for now)
                 } elseif (empty($subitemsobject->properties[$subproperty]->source)){
                     continue;
@@ -504,7 +505,7 @@ class RelationalDataStore extends SQLDataStore
     // This is some other property with a virtual datasource, ignore it
         } else {
     // This is a  property with a normal datasource: assign the value in the usual way
-            $object->properties[$field]->setItemValue($itemid,$row[$object->properties[$field]->name]);
+            $object->properties[$field]->setItemValue($itemid,$row[$object->properties[$field]->name],$fordisplay);
         }
     }
     

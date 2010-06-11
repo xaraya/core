@@ -285,11 +285,13 @@ class DataProperty extends Object implements iDataProperty
      *
      * @param int $itemid
      * @param mixed value
+     * @param integer fordisplay
      */
-    function setItemValue($itemid, $value)
+    function setItemValue($itemid, $value, $fordisplay=0)
     {
         $this->value = $value;
-        $this->_items[$itemid][$this->name] = $this->value;
+        if ($fordisplay) $this->_items[$itemid][$this->name] = $this->getValue();
+        else $this->_items[$itemid][$this->name] = $this->value;
     }
 
     /**
