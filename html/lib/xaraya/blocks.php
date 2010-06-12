@@ -173,7 +173,7 @@ Class xarBlock extends Object implements IxarBlock
             try {
                 $blockinfo['content'] = xarTplBlock(
                     $data['module'], $data['type'], $blockinfo['content'],
-                    $data['_bl_block_template'],
+                    !empty($blockinfo['_bl_block_template']) ? $blockinfo['_bl_block_template'] : NULL,
                     !empty($blockinfo['_bl_template_base']) ? $blockinfo['_bl_template_base'] : NULL
                 );
             } catch (Exception $e) {
