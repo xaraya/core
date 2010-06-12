@@ -178,7 +178,8 @@
                 <!-- @todo: add this to the filter GUI? -->
                 <xar:set name="fieldlist">array('id','uname','email','regdate')</xar:set>
                 <xar:data-getitems object="$object" values="$values" properties="$properties" sort="$order" fieldlist="$fieldlist"/>
-                <table class="xar-fullwidth xar-clearboth">
+                <br class="xar-clearboth"/>
+                <table class="xar-fullwidth">
                     <tr>
                         <xar:foreach in="$properties" key="$name">
                             <th class="xar-align-center">
