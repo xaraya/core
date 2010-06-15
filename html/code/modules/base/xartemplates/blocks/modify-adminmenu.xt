@@ -35,4 +35,53 @@
             </xar:foreach>
         </select>
     </div>
+    <table class="xar-fullwidth">
+        <thead>
+            <tr>
+                <th class="xar-align-left">
+                    Module
+                </th>
+                <!--
+                <th class="xar-align-left">
+                    Required Access Group or Level
+                </th>
+                -->
+                <th class="xar-align-center">
+                    Visible
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        <xar:foreach in="$modules" value="$module">
+            <tr>
+                <td>
+                    #$module['displayname']#
+                </td>
+                <!--
+                <td>
+                    <xar:if condition="isset($view_access[$module['name']])">
+                        <xar:set name="value">$view_access[$module['name']]</xar:set>
+                    <xar:else />
+                        <xar:set name="value">
+                            array(
+                                'group' => 0,
+                                'level' => 100,
+                                'failure' => 0
+                            )
+                        </xar:set>
+                    </xar:if>
+                    <xar:set name="accessname">'view_access_' . $module['name']</xar:set>
+                    <xar:data-input type="access" name="$accessname" layout="horizontal" failure="1" value="$value" />
+                </td>
+                -->
+                <td class="xar-align-center">
+                    <xar:set name="inputname">"modulelist[".$module['name']."][visible]"</xar:set>
+                    <xar:set name="inputid">"modulelist_".$module['name']."_visible"</xar:set>
+                    <xar:set name="inputval">!empty($modulelist[$module['name']]['visible'])</xar:set>
+                    <xar:data-input type="checkbox" name="$inputname" id="$inputid" value="$inputval"/>
+                </td>
+            </tr>
+        </xar:foreach>
+        </tbody>
+    </table>
 </xar:template>

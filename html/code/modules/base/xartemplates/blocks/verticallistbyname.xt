@@ -8,97 +8,44 @@
     <ul class="xar-menu-section">
         <li class="xar-menu-section">
             <ul class="xar-menu-item">
+                <!--
                 <xar:if condition="$showhelp eq '1'">
                     <li class="xar-menu-item">
                         <a title="#xarML('System help')#" href="#$overviewlink#">Help</a>
                     </li>
                 </xar:if>
-                <xar:foreach in="$adminmods" value="$mod" key="$modname">
-                    <xar:if condition="empty($mod['features'])">
-                        <xar:continue />
-                    <xar:elseif condition="$mod['features']['modactive'] and !$mod['features']['overview']"/>
-                        <li class="xar-menu-item-current">
-                            <a name="activeitem" title="#$mod['features']['label']#">
-                                #$mod['features']['label']#
+                -->
+                <xar:foreach in="$adminmods" key="$modname" value="$links">
+                    <xar:set name="linkclass">!empty($links['isactive'])?'xar-menu-item-current':'xar-menu-item'</xar:set>
+                    <li class="#$linkclass#">
+                        <xar:if condition="!empty($links['isactive'])">
+                            <a id="activeitem" title="#$links['title']#">
+                                #$links['label']#
                             </a>
-                            <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
-
-                                <ul class="xar-menu-subitem">
-                                    <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
-                                        <!-- determine and indicate current states of module functions display -->
-                                        <xar:if condition="$sublinks['funcactive']">
-                                            <li class="xar-menu-subitem-current">
-                                                <a name="activesubitem" title="#$sublinks['adminlabel']#">
-                                                    #$sublinks['adminlabel']#
-                                                </a>
-                                            </li>
-                                        <xar:else />
-                                            <li class="xar-menu-subitem">
-                                                <a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">
-                                                    #$sublinks['adminlabel']#
-                                                </a>
-                                            </li>
-                                        </xar:if>
-                                    </xar:foreach>
-                                </ul>
-                            </xar:if>
-                        </li>
-                    <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']"/>
-                        <li class="xar-menu-item-current">
-                            <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">
-                                #$mod['features']['label']#
+                        <xar:else/>
+                            <a href="#$links['url']#" title="#$links['title']#">
+                                #$links['label']#
                             </a>
-                            <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
-
-                                <ul class="xar-menu-subitem">
-                                    <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
-                                        <!-- determine and indicate current states of module functions display -->
-                                        <xar:if condition="$sublinks['funcactive']">
-                                            <li class="xar-menu-subitem-current">
-                                                <a name="activesubitem" title="#$sublinks['adminlabel']#">
-                                                    #$sublinks['adminlabel']#
-                                                </a>
-                                            </li>
-                                        <xar:else />
-                                            <li class="xar-menu-subitem">
-                                                <a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">
-                                                    #$sublinks['adminlabel']#
-                                                </a>
-                                            </li>
+                        </xar:if>
+                        <xar:if condition="count($links['menulinks']) gt 0">
+                            <ul class="xar-menu-subitem">
+                                <xar:foreach in="$links['menulinks']" key="$modfunc" value="$sublink">
+                                    <xar:set name="sublinkclass">!empty($sublink['isactive'])?'xar-menu-subitem-current':'xar-menu-subitem'</xar:set>
+                                    <li class="#$sublinkclass#">
+                                        <xar:if condition="!empty($sublink['isactive'])">
+                                            <a id="activesubitem" title="#$sublink['title']#">
+                                                #$sublink['label']#
+                                            </a>
+                                        <xar:else/>
+                                            <a href="#$sublink['url']#" title="#$sublink['title']#">
+                                                #$sublink['label']#
+                                            </a>
                                         </xar:if>
-                                    </xar:foreach>
-                                </ul>
-                            </xar:if>
-                        </li>
-                    <xar:else />
-                        <li class="xar-menu-item">
-                            <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">
-                                #$mod['features']['label']#
-                            </a>
-                            <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
-
-                                <ul class="xar-menu-subitem">
-                                    <xar:foreach in="$mod['indlinks']" value="$sublinks"
-                                    key="$sublink">
-                                        <!-- determine and indicate current states of module functions display -->
-                                        <xar:if condition="$sublinks['funcactive']">
-                                            <li class="xar-menu-subitem-current">
-                                                <a name="activesubitem" title="#$sublinks['adminlabel']#">
-                                                    #$sublinks['adminlabel']#
-                                                </a>
-                                            </li>
-                                        <xar:else />
-                                            <li class="xar-menu-subitem">
-                                                <a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">
-                                                    #$sublinks['adminlabel']#
-                                                </a>
-                                            </li>
-                                        </xar:if>
-                                    </xar:foreach>
-                                </ul>
-                            </xar:if>
-                        </li>
-                    </xar:if>
+                                    </li>
+                                </xar:foreach>
+                            </ul>
+                        </xar:if>
+                    </li>
                 </xar:foreach>
             </ul>
         </li>

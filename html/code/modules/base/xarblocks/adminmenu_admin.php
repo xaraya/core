@@ -29,10 +29,15 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
     {
         $data = parent::modify($data);
 
+        // Admin Capable Modules
+        $data['modules'] = $this->adminmodules;
+
         // Set the template data we need
-        $sortorder = array('byname' => xarML('By Name'),
-                           'bycat'  => xarML('By Category'));
-        $data['sortorder'] = $sortorder;
+        $data['sortorder'] = array(
+            'byname' => xarML('By Name'),
+            'bycat'  => xarML('By Category'),
+        );
+
         return $data;
     }
 
@@ -43,10 +48,31 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
     public function update(Array $data=array())
     {
         $data = parent::update($data);
-        if (!xarVarFetch('showlogout', 'int:0:1', $vars['showlogout'], 0, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('menustyle' , 'str::'  , $vars['menustyle'] , 'bycat', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('showhelp', 'int:0:1', $vars['showhelp'], 0, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('showfront', 'int:0:1', $vars['showfront'], 0, XARVAR_NOT_REQUIRED)) return;
+
+        if (!xarVarFetch('showlogout', 'int:0:1', $showlogout, 0, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('menustyle' , 'pre:trim:lower:enum:byname:bycat' , $menustyle , 'bycat', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('showhelp', 'int:0:1', $showhelp, 0, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('showfront', 'int:0:1', $showfront, 0, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('modulelist', 'array', $modulelist, array(), XARVAR_NOT_REQUIRED)) return;
+
+        if (empty($modulelist)) $modulelist = array('modules' => array('visible' => 1));
+
+        // Admin Capable Modules
+        $mods = xarMod::apiFunc('modules', 'admin', 'getlist',
+            array('filter' => array('AdminCapable' => 1, 'State' => XARMOD_STATE_ACTIVE)));
+
+        foreach ($this->adminmodules as $mod) {
+            if (empty($modulelist[$mod['name']]['visible']))
+                $modulelist[$mod['name']]['visible'] = 0;
+        }
+
+        $vars = $data['content'];
+        $vars['showlogout'] = $showlogout;
+        $vars['menustyle']  = $menustyle;
+        $vars['showhelp']   = $showhelp;
+        $vars['showfront']  = $showfront;
+        $vars['modulelist'] = $modulelist;
+
         $data['content'] = $vars;
         return $data;
     }
