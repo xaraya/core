@@ -41,12 +41,15 @@
                 <th class="xar-align-left">
                     Module
                 </th>
+                <th title="#xarML('Use current module name or alias in menus')#">
+                    Alias
+                </th>
                 <!--
                 <th class="xar-align-left">
                     Required Access Group or Level
                 </th>
                 -->
-                <th class="xar-align-center">
+                <th class="xar-align-center" title="#xarML('Display link to this module in the menu')#">
                     Visible
                 </th>
             </tr>
@@ -56,6 +59,17 @@
             <tr>
                 <td>
                     #$module['displayname']#
+                </td>
+                <td>
+                    <xar:if condition="!empty($module['aliases'])">
+                        <xar:set name="inputname">"modulelist[".$module['name']."][alias_name]"</xar:set>
+                        <xar:set name="inputid">"modulelist_".$module['name']."_alias_name"</xar:set>
+                        <xar:set name="inputval">!empty($modulelist[$module['name']]['alias_name']) ? $modulelist[$module['name']]['alias_name'] : $module['name']</xar:set>
+                        <xar:set name="inputfirst">array('id' => $module['name'], 'name' => $module['displayname'])</xar:set>
+                        <xar:data-input type="dropdown" name="$inputname" id="$inputid" firstline="$inputfirst" options="$module['aliases']" value="$inputval"/>
+                    <xar:else/>
+                        [none]
+                    </xar:if>
                 </td>
                 <!--
                 <td>

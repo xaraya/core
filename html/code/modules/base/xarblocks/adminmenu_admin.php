@@ -57,13 +57,14 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
 
         if (empty($modulelist)) $modulelist = array('modules' => array('visible' => 1));
 
-        // Admin Capable Modules
-        $mods = xarMod::apiFunc('modules', 'admin', 'getlist',
-            array('filter' => array('AdminCapable' => 1, 'State' => XARMOD_STATE_ACTIVE)));
-
         foreach ($this->adminmodules as $mod) {
             if (empty($modulelist[$mod['name']]['visible']))
                 $modulelist[$mod['name']]['visible'] = 0;
+            if (empty($modulelist[$mod['name']]['alias_name']) ||
+                empty($mod['aliases']) ||
+                !isset($mod['aliases'][$modulelist[$mod['name']]['alias_name']])) {
+                $modulelist[$mod['name']]['alias_name'] = $mod['name'];
+            }
         }
 
         $vars = $data['content'];

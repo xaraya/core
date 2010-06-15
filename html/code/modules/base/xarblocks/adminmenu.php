@@ -44,11 +44,22 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
         // all methods require the list of active admin capable modules, set it early
         $this->adminmodules = xarMod::apiFunc('modules','admin','getlist',
             array('filter' => array('AdminCapable' => true, 'State' => XARMOD_STATE_ACTIVE)));
+        // get module aliases while we're here, we need those too
+        $aliasMap = xarConfigVars::get(null,'System.ModuleAliases');
+        $aliases = array();
+        if (!empty($aliasMap)) {
+            foreach ($aliasMap as $alias => $modname) {
+                $aliases[$modname][$alias] = array('id' => $alias, 'name' => $alias);
+            }
+        }
         // add any missing modules to the modulelist
         // eg, at first run of this block instance or when new modules are added to the system
-        foreach ($this->adminmodules as $mod) {
+        foreach ($this->adminmodules as $key => $mod) {
             if (!isset($this->modulelist[$mod['name']]))
                 $this->modulelist[$mod['name']]['visible'] = 1;
+            // add aliases to adminmodules only if aliases are in use
+            if ((bool)xarModVars::get($mod['name'], 'use_module_alias') && !empty($aliases[$mod['name']]))
+                $this->adminmodules[$key]['aliases'] = $aliases[$mod['name']];
         }
         if (empty($this->modulelist)) {
             // if the modulelist is empty, admin deselected all modules, put back the modules module
@@ -82,13 +93,11 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
             // Use this instead :)
             if (empty($vars['modulelist'][$modname]['visible'])) continue;
 
-            // Check for active module alias
-            $useAliasName = xarModVars::get($modname, 'use_module_alias');
-            $module_alias_name = xarModVars::get($modname,'module_alias_name');
-
-            // use the alias name if it exists
-            if (isset($useAliasName) && $useAliasName==1 && isset($module_alias_name) && !empty($module_alias_name)) {
-                $displayname = $module_alias_name;
+            if (!empty($vars['modulelist'][$modname]['alias_name'])) {
+                $displayname = $vars['modulelist'][$modname]['alias_name'];
+                if (empty($mod['aliases']) || !isset($mod['aliases'][$displayname])) {
+                    $displayname = $mod['displayname'];
+                }
             } else {
                 $displayname = $mod['displayname'];
             }
