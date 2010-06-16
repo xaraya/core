@@ -27,28 +27,30 @@
                     <h4>#$catname#</h4>
                     <ul class="xar-menu-item">
                         <xar:foreach in="$adminmods" key="$modname" value="$links">
-                            <xar:set name="linkclass">!empty($links['isactive'])?'xar-menu-item-current':'xar-menu-item'</xar:set>
+                            <xar:set name="linkclass">!empty($links['isactive'])  ? 'xar-menu-item-current' : 'xar-menu-item'</xar:set>
+                            <xar:set name="linkid">!empty($links['isactive'])? 'activeitem' : 'admin_'.$modname</xar:set>
                             <li class="#$linkclass#">
-                                <xar:if condition="!empty($links['isactive'])">
-                                    <a id="activeitem" title="#$links['title']#">
+                                <xar:if condition="!empty($links['url'])">
+                                    <a href="#$links['url']#" id="#$linkid#" title="#$links['title']#">
                                         #$links['label']#
                                     </a>
                                 <xar:else/>
-                                    <a href="#$links['url']#" title="#$links['title']#">
+                                    <a id="#$linkid#" title="#$links['title']#">
                                         #$links['label']#
                                     </a>
                                 </xar:if>
                                 <xar:if condition="count($links['menulinks']) gt 0">
                                     <ul class="xar-menu-subitem">
-                                        <xar:foreach in="$links['menulinks']" key="$modfunc" value="$sublink">
+                                        <xar:foreach in="$links['menulinks']" key="$subkey" value="$sublink">
                                             <xar:set name="sublinkclass">!empty($sublink['isactive'])?'xar-menu-subitem-current':'xar-menu-subitem'</xar:set>
+                                            <xar:set name="subid">!empty($sublink['isactive'])?'activesubitem':'admin_'.$modname.'_'.$subkey</xar:set>
                                             <li class="#$sublinkclass#">
-                                                <xar:if condition="!empty($sublink['isactive'])">
-                                                    <a id="activesubitem" title="#$sublink['title']#">
+                                                <xar:if condition="!empty($sublink['url'])">
+                                                    <a href="#$sublink['url']#" id="#$subid#" title="#$sublink['title']#">
                                                         #$sublink['label']#
                                                     </a>
                                                 <xar:else/>
-                                                    <a href="#$sublink['url']#" title="#$sublink['title']#">
+                                                    <a id="#$subid#" title="#$sublink['title']#">
                                                         #$sublink['label']#
                                                     </a>
                                                 </xar:if>

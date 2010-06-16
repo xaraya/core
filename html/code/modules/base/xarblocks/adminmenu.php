@@ -114,7 +114,7 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
                 $menulinks = array();
                 $isactive = false;
             }
-
+            $modurl = xarModURL($modname, 'admin', 'main', array());
             switch ($vars['menustyle']) {
                 case 'bycat':
                 default:
@@ -126,7 +126,7 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
                     // add module link to category
                     $categories[$cat][$modname] = array(
                         'label' => $displayname,
-                        'url' => xarModURL($modname, 'admin', 'main', array()),
+                        'url' => $modurl == self::$currenturl ? '' : $modurl,
                         'title' => xarML('Show administration options for module #(1)', $displayname),
                         'isactive' => $isactive,
                     );

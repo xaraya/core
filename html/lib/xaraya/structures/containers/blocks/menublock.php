@@ -42,7 +42,13 @@ class MenuBlock extends BasicBlock implements iBlock
                     continue;
                 }
                 // active link?
-                $menulinks[$k]['isactive'] = (!empty($v['active']) && is_array($v['active']) && in_array(self::$thisfuncname, $v['active'])) ? 1 : 0;
+                if (!empty($v['active']) && is_array($v['active']) && in_array(self::$thisfuncname, $v['active']) ||
+                    $v['url'] == self::$currenturl) {
+                    $menulinks[$k]['isactive'] = 1;
+                } else {
+                    $menulinks[$k]['isactive'] = 0;
+                }
+                $menulinks[$k]['url'] = $v['url'] == self::$currenturl ? '' : $v['url'];
             }
         }
 

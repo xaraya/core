@@ -84,6 +84,8 @@ class BasicBlock extends ObjectDescriptor implements iBlock
             parent::setArgs($data['content']);
         // update properties from content args
         parent::refresh($this);
+        // populate content on first run
+        if (empty($this->content)) $this->content = $this->getInfo();
     }
 
     public function getInfo()
