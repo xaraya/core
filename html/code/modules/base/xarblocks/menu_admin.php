@@ -34,6 +34,7 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
         $data = parent::modify($data);
 
         $data['modules'] = $this->usermodules;
+        $data['userlinks'] = self::getUserLinks();
 
         return $data;
     }
@@ -100,7 +101,7 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
                 // perform links_select action on selected items
                 if (!empty($link['select']) && $links_select == 'delete') {
                     continue;
-                } else {
+                } elseif (!empty($link['select'])) {
                     switch ($links_select) {
                         case 'show':
                             $link['visible'] = 1;
@@ -113,6 +114,8 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
                             $link['visible'] = !empty($this->userlinks[$order]['visible']);
                         break;
                     }
+                } else {
+                    $link['visible'] = !empty($this->userlinks[$order]['visible']);
                 }
                 $menu_links = array();
                 // insert link as first child of item
@@ -128,7 +131,7 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
                         // perform links_select action on selected items
                         if (!empty($sublink['select']) && $links_select == 'delete') {
                             continue;
-                        } else {
+                        } elseif (!empty($sublink['select'])) {
                             switch ($links_select) {
                                 case 'show':
                                     $sublink['visible'] = 1;
@@ -141,6 +144,8 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
                                     $sublink['visible'] = !empty($this->userlinks[$order]['menulinks'][$suborder]['visible']);
                                 break;
                             }
+                        } else {
+                            $sublink['visible'] = !empty($this->userlinks[$order]['menulinks'][$suborder]['visible']);
                         }
                         $sublink['id'] = $j;
                         //$sublink['name'] = $sublink['label'];
@@ -184,8 +189,8 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
                 !isset($mod['aliases'][$modulelist[$modname]['alias_name']])) {
                 $modulelist[$modname]['alias_name'] = $modname;
             }
-            $isvalid = $accessproperty->checkInput($modulelist[$modname]['view_access']);
-            $modulelist[$modname]['view_access'] = @unserialize($accessproperty->value);
+            $isvalid = $accessproperty->checkInput('modulelist_'.$modname.'_view_access');
+            $modulelist[$modname]['view_access'] = $accessproperty->value;
         }
 
         // put updated values in the content array
@@ -201,5 +206,103 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
 
         return $data;
     }
+
+/**
+ * Admin get userlinks method
+ * Adds links to order the menu links, used by updatelinkorder method
+**/
+    public function getUserLinks()
+    {
+        $userlinks = array();
+        $authid = xarSecGenAuthkey();
+        if (!empty($this->userlinks)) {
+            $numlinks = count($this->userlinks);
+            $i = 1;
+            foreach ($this->userlinks as $linkid => $link) {
+                if ($i < $numlinks) {
+                    $link['downurl'] = xarModURL('blocks', 'admin', 'update_instance',
+                        array('tab' => 'linkorder', 'bid' => $this->bid, 'linkid' => $linkid, 'direction' => 'down', 'authid' => $authid));
+                }
+                if ($i > 1) {
+                    $link['upurl'] = xarModURL('blocks', 'admin', 'update_instance',
+                        array('tab' => 'linkorder', 'bid' => $this->bid, 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid));
+                }
+                if (!empty($link['menulinks'])) {
+                    $sublinks = array();
+                    $numsublinks = count($link['menulinks']);
+                    $j = 1;
+                    foreach ($link['menulinks'] as $sublinkid => $sublink) {
+                        if ($j < $numsublinks) {
+                            $sublink['downurl'] = xarModURL('blocks', 'admin', 'update_instance',
+                                array('tab' => 'linkorder', 'bid' => $this->bid, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid));
+                        }
+                        if ($j > 1) {
+                            $sublink['upurl'] = xarModURL('blocks', 'admin', 'update_instance',
+                                array('tab' => 'linkorder', 'bid' => $this->bid, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid));
+                        }
+                        $sublinks[$sublinkid] = $sublink;
+                        $j++;
+                    }
+                    $link['menulinks'] = $sublinks;
+                }
+                $userlinks[$linkid] = $link;
+                $i++;
+            }
+        }
+        return $userlinks;
+    }
+
+/**
+ * Custom update method to handle link ordering
+**/
+    public function updatelinkorder(Array $data=array())
+    {
+        $data = $this->getInfo();
+        if (!xarVarFetch('linkid', 'int:0:', $linkid, null, XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('sublinkid', 'int:0:', $sublinkid, null, XARVAR_DONT_SET)) return;
+        if (!xarVarFetch('direction', 'pre:trim:lower:enum:up:down', $direction, null, XARVAR_DONT_SET)) return;
+
+        if (!isset($linkid)) throw new EmptyParameterException('linkid');
+        if (!isset($direction)) throw new EmptyParameterException('direction');
+
+        foreach ($this->userlinks as $order => $link) {
+            if ($order == $linkid) {
+                if (!isset($sublinkid)) {
+                    if ($direction == 'up' && isset($this->userlinks[$order-1])) {
+                        $temp = $this->userlinks[$order-1];
+                        $this->userlinks[$order-1] = $link;
+                        $this->userlinks[$order] = $temp;
+                    } elseif ($direction == 'down' && isset($this->userlinks[$order+1])) {
+                        $temp = $this->userlinks[$order+1];
+                        $this->userlinks[$order+1] = $link;
+                        $this->userlinks[$order] = $temp;
+                    }
+                } else {
+                    if (!empty($link['menulinks'])) {
+                        foreach ($link['menulinks'] as $suborder => $sublink) {
+                            if ($suborder == $sublinkid) {
+                                if ($direction == 'up' && isset($this->userlinks[$order]['menulinks'][$suborder-1])) {
+                                    $temp = $this->userlinks[$order]['menulinks'][$suborder-1];
+                                    $this->userlinks[$order]['menulinks'][$suborder-1] = $sublink;
+                                    $this->userlinks[$order]['menulinks'][$suborder] = $temp;
+                                } elseif ($direction == 'down' && isset($this->userlinks[$order]['menulinks'][$suborder+1])) {
+                                    $temp = $this->userlinks[$order]['menulinks'][$suborder+1];
+                                    $this->userlinks[$order]['menulinks'][$suborder+1] = $sublink;
+                                    $this->userlinks[$order]['menulinks'][$suborder] = $temp;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        $data['content']['userlinks'] = $this->userlinks;
+        $data['return_url'] = xarModURL('blocks', 'admin', 'modify_instance',
+            array('bid' => $this->bid), null, 'menulinks_'.$this->bid);
+        return $data;
+    }
+
 }
 ?>

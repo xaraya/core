@@ -42,7 +42,13 @@
         <xar:set name="invisibleicon">#xarTplGetImage('icons/disabled.png', 'base')#</xar:set>
         <xar:var name="visibletitle">Link is visible in the menu</xar:var>
         <xar:var name="invisibletitle">Link is not visible in the menu</xar:var>
-        <table class="xar-fullwidth xar-margin-nonebottom">
+        <xar:set name="imgup">#xarTplGetImage('icons/go-up.png', 'base')#</xar:set>
+        <xar:set name="imgdown">#xarTplGetImage('icons/go-down.png', 'base')#</xar:set>
+        <xar:var name="imgupalt">Up</xar:var>
+        <xar:var name="imgdownalt">Down</xar:var>
+        <xar:var name="imguptitle">Move this link up</xar:var>
+        <xar:var name="imgdowntitle">Move this link down</xar:var>
+        <table id="menulinks_#$blockid#" class="xar-fullwidth xar-margin-nonebottom">
             <caption class="xar-align-left xar-margin-thickbottom xar-margin-nonetop">
                 <strong>Menu Links</strong>
             </caption>
@@ -85,6 +91,20 @@
                             </xar:if>
                         </td>
                         <td class="xar-align-right">
+                            <xar:if condition="!empty($link['upurl'])">
+                                <a href="#$link['upurl']#" title="#$imguptitle#" class="xar-icon">
+                                <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon"/>
+                                </a>
+                            <xar:else/>
+                                <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon-disabled"/>
+                            </xar:if>
+                            <xar:if condition="!empty($link['downurl'])">
+                                <a href="#$link['downurl']#" title="#$imgdowntitle#" class="xar-icon">
+                                <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon"/>
+                                </a>
+                            <xar:else/>
+                                <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon-disabled"/>
+                            </xar:if>
                             <xar:set name="select_id">$link_id . '_select'</xar:set>
                             <xar:set name="select_name">$link_name . '[select]'</xar:set>
                             <xar:data-input type="checkbox" id="$select_id" name="$select_name"/>
@@ -115,12 +135,28 @@
                             </td>
                             <td class="xar-align-center">
                                 <xar:if condition="!empty($sublink['visible'])">
-                                    <img src="#$visibleicon#" alt="visible" title="#$visibletitle#"/>
+                                    <xar:set name="iconclass">!empty($link['visible']) ? 'xar-icon' : 'xar-icon-disabled'</xar:set>
+                                    <xar:set name="icontitle">!empty($link['visible']) ? $visibletitle : $invisibletitle</xar:set>
+                                    <img src="#$visibleicon#" alt="visible" title="#$icontitle#" class="#$iconclass#"/>
                                 <xar:else/>
-                                    <img src="#$invisibleicon#" alt="invisible" title="#$invisibletitle#"/>
+                                    <img src="#$invisibleicon#" alt="invisible" title="#$invisibletitle#" class="xar-icon-disabled"/>
                                 </xar:if>
                             </td>
                             <td class="xar-align-right xar-nowrap">
+                                <xar:if condition="!empty($sublink['upurl'])">
+                                    <a href="#$sublink['upurl']#" title="#$imguptitle#" class="xar-icon">
+                                    <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon"/>
+                                    </a>
+                                <xar:else/>
+                                    <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon-disabled"/>
+                                </xar:if>
+                                <xar:if condition="!empty($sublink['downurl'])">
+                                    <a href="#$sublink['downurl']#" title="#$imgdowntitle#" class="xar-icon">
+                                    <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon"/>
+                                    </a>
+                                <xar:else/>
+                                    <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon-disabled"/>
+                                </xar:if>
                                 <xar:set name="select_id">$sub_id . '_select'</xar:set>
                                 <xar:set name="select_name">$sub_name . '[select]'</xar:set>
                                 <xar:data-input type="checkbox" id="$select_id" name="$select_name"/>
@@ -241,7 +277,9 @@
                     </xar:if>
                 </td>
                 <td>
+                    <!-- fixme the access property should be able to handle this
                     <xar:set name="inputname">"modulelist[".$module['name']."][view_access]"</xar:set>
+                     -->
                     <xar:set name="inputid">"modulelist_".$module['name']."_view_access"</xar:set>
                     <xar:if condition="isset($modulelist[$module['name']]['view_access'])">
                         <xar:set name="inputval">$modulelist[$module['name']]['view_access']</xar:set>
@@ -254,22 +292,7 @@
                             )
                         </xar:set>
                     </xar:if>
-                    <xar:data-input type="access" name="$inputname" id="$inputid" layout="horizontal" failure="1" value="$inputval" />
-                    <!--
-                    <xar:if condition="isset($view_access[$module['name']])">
-                        <xar:set name="value">$view_access[$module['name']]</xar:set>
-                    <xar:else />
-                        <xar:set name="value">
-                            array(
-                                'group' => 0,
-                                'level' => 100,
-                                'failure' => 0
-                            )
-                        </xar:set>
-                    </xar:if>
-                    <xar:set name="accessname">'view_access_' . $module['name']</xar:set>
-                    <xar:data-input type="access" name="$accessname" layout="horizontal" failure="1" value="$value" />
-                    -->
+                    <xar:data-input type="access" name="$inputid" layout="horizontal" failure="1" value="$inputval" />
                 </td>
                 <td class="xar-align-center">
                     <xar:set name="inputname">"modulelist[".$module['name']."][visible]"</xar:set>

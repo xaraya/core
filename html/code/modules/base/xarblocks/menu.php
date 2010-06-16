@@ -257,7 +257,10 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                 }
                 if (!empty($link['menulinks'])) {
                     foreach ($link['menulinks'] as $subid => $sublink) {
-                        if (empty($sublink['visible'])) continue;
+                        if (empty($sublink['visible'])) {
+                            unset($link['menulinks'][$subid]);
+                            continue;
+                        }
                         if (!empty($sublink['url'])) {
                             $sublink['url'] = self::_decodeURL($sublink['url']);
                         }
