@@ -33,6 +33,7 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
     public $menustyle           = 'bycat';
     //public $showhelp            = 0; <chris> remove this unused property for now
     public $showfront           = 1;
+    public $marker              = '';
 
     public $menumodtype         = 'admin';
     public $menumodtypes        = array('admin', 'util');
@@ -48,6 +49,8 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
         }
         // make sure we keep the content array in sync
         $this->content['modulelist'] = $this->modulelist;
+        if (!isset($this->content['marker']))
+            $this->content['marker'] = $this->marker;
     }
 
 /**

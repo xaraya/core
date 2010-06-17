@@ -14,46 +14,19 @@
         <ul class="xar-menu-section">
             <li class="xar-menu-section">
                 <ul class="xar-menu-item">
-                    <xar:foreach in="$userlinks" key="$linkkey" value="$link">
-                        <xar:set name="linkclass">!empty($link['isactive']) ? 'xar-menu-item-current' : 'xar-menu-item'</xar:set>
-                        <xar:set name="linkid">!empty($link['isactive']) ? 'activeitem' : 'link_'.$linkkey</xar:set>
-                        <li class="#$linkclass#">
-                            <xar:if condition="!empty($link['url']) and !empty($link['label'])">
-                                <a href="#$link['url']#" id="#$linkid#" title="#$link['title']#">
-                                    #$link['label']#
-                                </a>
-                            <xar:elseif condition="!empty($link['label'])"/>
-                                <a id="#$linkid#" title="#$link['title']#">
-                                    #$link['label']#
-                                </a>
-                            <xar:else/>
-                                <!-- insert blank -->
-                                &#160;
-                            </xar:if>
-                            <xar:if condition="!empty($link['menulinks']) and !empty($link['isactive'])">
-                                <ul class="xar-menu-subitem">
-                                    <xar:foreach in="$link['menulinks']" key="$subkey" value="$sublink">
-                                        <xar:set name="subclass">!empty($sublink['isactive']) ? 'xar-menu-subitem-current' : 'xar-menu-subitem'</xar:set>
-                                        <xar:set name="subid">!empty($sublink['isactive']) ? 'activesubitem' : 'sublink_'.$subkey</xar:set>
-                                        <li class="#$subclass#">
-                                            <xar:if condition="!empty($sublink['url']) and !empty($sublink['label'])">
-                                                <a href="#$sublink['url']#" id="#$subid#" title="#$sublink['title']#">
-                                                    #$sublink['label']# #$marker#
-                                                </a>
-                                            <xar:elseif condition="!empty($sublink['label'])"/>
-                                                <a id="#$subid#" title="#$sublink['title']#">
-                                                    #$sublink['label']# #$marker#
-                                                </a>
-                                            <xar:else/>
-                                                <!-- insert blank -->
-                                                &#160;
-                                            </xar:if>
-                                        </li>
-                                    </xar:foreach>
-                                </ul>
-                            </xar:if>
-                        </li>
-                    </xar:foreach>
+                    <!-- hand the links off to the common blocks-menu-menulinks include template
+                         the template recursively includes itself to add sublinks to any number
+                         of nested levels, and also ensures menus are consistent  :)
+                         You can of course over-ride this block template, or the include itself
+                         to provide unique styling for individual menus
+                    -->
+                    <xar:set name="subdata">array(
+                        'menulinks' => $userlinks,      // pass the menulinks
+                        'menuid' => 'menu' . $blockid,  // pass a unique menuid
+                        'marker' => $marker,            // pass through the marker
+                        'maxlevels' => 2                // specify max levels
+                    )</xar:set>
+                    <xar:template type="module" module="base" file="blocks-menu-menulinks" subdata="$subdata"/>
                 </ul>
             </li>
         </ul>
@@ -64,41 +37,19 @@
             <li class="xar-menu-section">
                 <h4>Modules</h4>
                 <ul class="xar-menu-item">
-                    <xar:foreach in="$modlinks" key="$modname" value="$modinfo">
-                        <xar:set name="linkclass">!empty($modinfo['isactive']) ? 'xar-menu-item-current' : 'xar-menu-item'</xar:set>
-                        <xar:set name="linkid">!empty($modinfo['isactive']) ? 'activeitem' : 'user_'.$modname</xar:set>
-                        <li class="#$linkclass#">
-                            <xar:if condition="!empty($modinfo['url'])">
-                                <a href="#$modinfo['url']#" id="#$linkid#" title="#$modinfo['title']#">
-                                    #$modinfo['label']#
-                                </a>
-                            <xar:else/>
-                                <a id="#$linkid#" title="#$modinfo['title']#">
-                                    #$modinfo['label']#
-                                </a>
-                            </xar:if>
-                            <xar:if condition="!empty($modinfo['menulinks'])">
-                                <ul class="xar-menu-subitem">
-                                    <xar:foreach in="$modinfo['menulinks']" key="$subkey" value="$link">
-                                        <xar:set name="subclass">!empty($link['isactive']) ? 'xar-menu-subitem-current' : 'xar-menu-subitem'</xar:set>
-                                        <xar:set name="subid">!empty($link['isactive']) ? 'activesubitem' : 'user_'.$modname.'_'.$subkey</xar:set>
-                                        <xar:set name="submarker">!empty($link['isactive'])?$marker:''</xar:set>
-                                        <li class="#$subclass#">
-                                            <xar:if condition="!empty($link['url'])">
-                                                <a href="#$link['url']#" id="#$subid#" title="#$link['title']#">
-                                                    #$link['label']# #$submarker#
-                                                </a>
-                                            <xar:else/>
-                                                <a id="#$subid#" title="#$link['title']#">
-                                                    #$link['label']# #$submarker#
-                                                </a>
-                                            </xar:if>
-                                        </li>
-                                    </xar:foreach>
-                                </ul>
-                            </xar:if>
-                        </li>
-                    </xar:foreach>
+                    <!-- hand the links off to the common blocks-menu-menulinks include template
+                         the template recursively includes itself to add sublinks to any number
+                         of nested levels, and also ensures menus are consistent  :)
+                         You can of course over-ride this block template, or the include itself
+                         to provide unique styling for individual menus
+                    -->
+                    <xar:set name="subdata">array(
+                        'menulinks' => $modlinks,       // pass the menulinks
+                        'menuid' => 'menu' . $blockid,  // pass a unique menuid
+                        'marker' => $marker,            // pass through the marker
+                        'maxlevels' => 2                // specify max levels
+                    )</xar:set>
+                    <xar:template type="module" module="base" file="blocks-menu-menulinks" subdata="$subdata"/>
                 </ul>
             </li>
         </ul>

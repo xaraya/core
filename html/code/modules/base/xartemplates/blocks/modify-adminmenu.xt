@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-form-input-wrapper">
-        <label class="xar-form-label" for="showlogout#$bid#" title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
-            Show A Logout Link
-        </label>
-        <xar:data-input type="checkbox" name="showlogout" checked="$showlogout"/>
-    </div>
     <!--
     <div class="xar-form-input-wrapper">
         <label class="xar-form-label" for="showhelp#$bid#" title="#xarML('By checking this box a help link will be shown in the panel instance.')#">
@@ -15,6 +9,18 @@
         <xar:data-input type="checkbox" name="showhelp" checked="$showhelp"/>
     </div>
     -->
+    <div class="xar-form-input-wrapper">
+        <label for="marker" title="#xarML('When Xaraya is generating the menu, we can mark the current page. Use this to configure the marker for that display.')#" class="xar-form-label">
+        Marker:
+        </label>
+        <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort"/>
+    </div>
+    <div class="xar-form-input-wrapper">
+        <label class="xar-form-label" for="showlogout#$bid#" title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
+            Show A Logout Link
+        </label>
+        <xar:data-input type="checkbox" name="showlogout" checked="$showlogout"/>
+    </div>
     <div class="xar-form-input-wrapper">
         <label class="xar-form-label" for="showfront#$bid#" title="#xarML('By checking this box a link to the front end will be shown in the panel instance.')#">
             Show Link to Front End

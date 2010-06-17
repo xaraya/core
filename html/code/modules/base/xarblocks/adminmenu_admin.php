@@ -53,6 +53,7 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
         if (!xarVarFetch('menustyle' , 'pre:trim:lower:enum:byname:bycat' , $menustyle , 'bycat', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('showhelp', 'int:0:1', $showhelp, 0, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('showfront', 'int:0:1', $showfront, 0, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('marker',      'str:0',    $marker, '', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('modulelist', 'array', $modulelist, array(), XARVAR_NOT_REQUIRED)) return;
 
         if (empty($modulelist)) $modulelist = array('modules' => array('visible' => 1));
@@ -77,6 +78,7 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
         $vars['showhelp']   = $showhelp;
         $vars['showfront']  = $showfront;
         $vars['modulelist'] = $modulelist;
+        $vars['marker']     = $marker;
 
         $data['content'] = $vars;
         return $data;

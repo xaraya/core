@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<xar:if condition="!empty($menulinks)">
+    <!-- This template is called recursively, so we keep track of how many levels deep we are -->
+    <xar:if condition="empty($level)"><xar:set name="level">1</xar:set></xar:if>
+    <!-- Optional $maxlevels) param so we know when to stop, 0 = all levels, default -->
+    <xar:if condition="empty($maxlevels)"><xar:set name="maxlevels">0</xar:set></xar:if>
+    <!-- Calling function should have supplied a unique menuid (cfr. base menu/adminmenu block templates -->
+    <xar:if condition="empty($menuid)"><xar:set name="menuid">'menu'</xar:set></xar:if>
+    <!-- Keep track of the current marker, so we can pass it through to sublinks later -->
+    <xar:set name="linkmarker">!empty($marker) ? $marker : ''</xar:set>
+    <xar:if condition="$level eq 1">
+        <!-- set classes for first level (parent) menu-item(s) -->
+        <xar:set name="itemclass">'xar-menu-item'</xar:set>
+        <xar:set name="activeclass">'xar-menu-item-current'</xar:set>
+        <!-- string to append to active link id -->
+        <xar:set name="activeid">'activeitem'</xar:set>
+        <!-- don't show the marker in these links -->
+        <xar:set name="marker">''</xar:set>
+        <!-- Parent links are always active -->
+        <xar:set name="parentactive">1</xar:set>
+    <xar:else/>
+        <!-- set classes for subsequent level (child) menu-subitem(s) -->
+        <xar:set name="itemclass">'xar-menu-subitem'</xar:set>
+        <xar:set name="activeclass">'xar-menu-subitem-current'</xar:set>
+        <!-- string to append to active link id -->
+        <xar:set name="activeid">'activesubitem'</xar:set>
+    </xar:if>
+    <ul class="#$itemclass#">
+        <!-- loop through the menulinks for the current level -->
+        <xar:foreach in="$menulinks" key="$linkid" value="$link">
+            <!-- set a unique id for each link in this menu at this level -->
+            <xar:set name="linkkey">$menuid . '_' . $level . '_' . $linkid</xar:set>
+            <!-- set the list item container class -->
+            <xar:set name="linkclass">!empty($link['isactive'])  ? $activeclass : $itemclass</xar:set>
+            <!-- Set the link id, using linkkey and appending activeid if the link is active -->
+            <xar:set name="linkid">!empty($link['isactive'])? $linkkey . $activeid : $linkkey</xar:set>
+            <!-- Get the marker if the link is active -->
+            <xar:set name="marked">!empty($link['isactive']) ? $marker : ''</xar:set>
+            <li class="#$linkclass#">
+                <!-- Display the link -->
+                <xar:if condition="!empty($link['url']) and !empty($link['label'])">
+                    <a href="#$link['url']#" id="#$linkid#" title="#$link['title']#">
+                        #$link['label']# #$marked#
+                    </a>
+                <xar:elseif condition="!empty($link['label'])"/>
+                    <a id="#$linkid#" title="#$link['title']#">
+                        #$link['label']# #$marked#
+                    </a>
+                <xar:else/>
+                    <a id="#$linkid#"></a>
+                </xar:if>
+                <!-- If this link has menulinks, and the link is active, and its parent is active,
+                     and we haven't reached the maxlevel, display next level -->
+                <xar:if condition="!empty($link['menulinks']) and !empty($link['isactive']) and !empty($parentactive) and (empty($maxlevels) or $maxlevels ge $level+1)">
+                    <!-- Put all the data this template expects in the subdata array -->
+                    <xar:set name="subdata">array(
+                        'menulinks' => $link['menulinks'],  // next level of menu links
+                        'level' => $level+1,                // level up
+                        'menuid' => $menuid,                // pass through the menuid
+                        'marker' => $linkmarker,            // pass through the marker
+                        'maxlevels' => $maxlevels,          // pass through the maxlevels
+                        'parentactive' => $link['isactive'],// let sublinks know if parent is active
+                    )</xar:set>
+                    <!-- pass the subdata to this template, and do the dance again :) -->
+                    <xar:template type="module" module="base" file="blocks-menu-menulinks" subdata="$subdata"/>
+                </xar:if>
+            </li>
+        </xar:foreach>
+    </ul>
+</xar:if>
+</xar:template>

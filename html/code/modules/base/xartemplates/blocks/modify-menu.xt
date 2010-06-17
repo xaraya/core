@@ -4,14 +4,12 @@
     <!--
         We know that blocks.css file is already included by admin-modify_instance.xd, so no need to do it twice
     -->
-    <xar:if condition="!empty($displaymodules)">
-        <div class="xar-form-input-wrapper">
-            <label for="marker" title="#xarML('When Xaraya is generating the menu, we can mark the current page. Use this to configure the marker for that display.')#" class="xar-form-label">
-            Marker:
-            </label>
-            <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort"/>
-        </div>
-    </xar:if>
+    <div class="xar-form-input-wrapper">
+        <label for="marker" title="#xarML('When Xaraya is generating the menu, we can mark the current page. Use this to configure the marker for that display.')#" class="xar-form-label">
+        Marker:
+        </label>
+        <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort"/>
+    </div>
     <div class="xar-form-input-wrapper">
         <label for="showback" title="#xarML('Select if you would like Xaraya to generate a link to the back end for administrative users at the bottom of the menu.')#" class="xar-form-label">
             Display Admin Link to Back End
