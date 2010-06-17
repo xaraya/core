@@ -17,25 +17,32 @@
  * @param array $args optional array of arguments
  * @param string $args[modname] optional name of module to get links for (default current request module)
  * @param string $args[modtype] optional type of links to return [admin|user] (default current request type)
+ * @param string $args[layout] return links for menu or links for tabs with menu title info (default links)
  * @returns array
  * @return array of menulinks for a module
  * @throws none
  */
 function base_adminapi_loadmenuarray($args)
 {
-    //if (!isset($args['modname']) || !isset($args['modtype']) || !isset($args['funcname'])) {
-    if (!isset($args['modname']) || !isset($args['modtype'])) {
+    if (!isset($args['modname']) || !isset($args['modtype']) || !isset($args['funcname'])) {
         $urlinfo = xarController::$request->getInfo();
         if (empty($args['modname'])) $args['modname'] = $urlinfo[0];
         if (empty($args['modtype'])) $args['modtype'] = $urlinfo[1];
-        //if (empty($args['funcname'])) $args['funcname'] = $urlinfo[2];
+        if (empty($args['funcname'])) $args['funcname'] = $urlinfo[2];
     }
+    if (!isset($args['layout'])) $args['layout'] = 'links';
 
+    $menu = array();
     $menulinks = array();
     $xmlfile = sys::code() . "modules/{$args['modname']}/xardata/{$args['modtype']}menu-dat.xml";
     if (file_exists($xmlfile)) {
         try {
             $xml = simplexml_load_file($xmlfile);
+            if($args['layout'] == 'tabs' && isset($xml->menutitle)) {
+                $menutitle = $xml->menutitle;
+                $menu['label'] = isset($menutitle->label) ? trim((string)$menutitle->label) : xarML('Actions');
+                $menu['title'] = isset($menutitle->title) ? trim((string)$menutitle->title) : xarML('Choose an action to perform');
+            }
             $menulinks = array();
             foreach ($xml->menuitems->children() as $menuitem) {
                 $target = isset($menuitem->target) ? trim((string)$menuitem->target) : null;
@@ -72,7 +79,39 @@ function base_adminapi_loadmenuarray($args)
 
         }
     }
-    return $menulinks;
 
+    // set active link
+    if (!empty($menulinks)) {
+        $currenturl = xarServer::getCurrentURL();
+        foreach ($menulinks as $k => $v) {
+            // sec check
+            if (!empty($v['mask']) && !xarSecurityCheck($v['mask'], 0)) {
+                unset($menulinks[$k]);
+                continue;
+            }
+            // active link?
+            if (!empty($v['active']) && is_array($v['active']) && in_array($args['funcname'], $v['active']) ||
+                $v['url'] == $currenturl) {
+                $menulinks[$k]['isactive'] = 1;
+            } else {
+                $menulinks[$k]['isactive'] = 0;
+            }
+            $menulinks[$k]['url'] = $v['url'] == $currenturl ? '' : $v['url'];
+        }
+    }
+
+    // tabbed layout
+    if ($args['layout'] == 'tabs') {
+        // if we didn't get title info, set some defaults
+        if (empty($menu)) {
+            $menu['label'] = xarML('Actions');
+            $menu['title'] = xarML('Choose an action to perform');
+        }
+        $menu['menulinks'] = $menulinks;
+        return $menu;
+    }
+
+    // default, just return the links
+    return $menulinks;
 }
 ?>

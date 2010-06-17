@@ -65,36 +65,6 @@ class MenuBlock extends BasicBlock implements iBlock
         return $data;
     }
 
-    public function getMenuLinks(Array $args=array())
-    {
-        self::setRequestInfo();
-        if (empty($args['modname'])) $args['modname'] = self::$thismodname;
-        if (empty($args['modtype'])) $args['modtype'] = self::$thismodtype;
-        //if (empty($args['funcname'])) $args['funcname'] = self::$thisfuncname;
-
-        $menulinks = xarMod::apiFunc('base', 'admin', 'loadmenuarray', $args);
-
-        if (!empty($menulinks)) {
-            foreach ($menulinks as $k => $v) {
-                // sec check
-                if (!empty($v['mask']) && !xarSecurityCheck($v['mask'], 0)) {
-                    unset($menulinks[$k]);
-                    continue;
-                }
-                // active link?
-                if (!empty($v['active']) && is_array($v['active']) && in_array(self::$thisfuncname, $v['active']) ||
-                    $v['url'] == self::$currenturl) {
-                    $menulinks[$k]['isactive'] = 1;
-                } else {
-                    $menulinks[$k]['isactive'] = 0;
-                }
-                $menulinks[$k]['url'] = $v['url'] == self::$currenturl ? '' : $v['url'];
-            }
-        }
-
-        return $menulinks;
-    }
-
     public function setRequestInfo()
     {
         if (!isset(self::$thismodname) || !isset(self::$thismodtype) || !isset(self::$thisfuncname)) {

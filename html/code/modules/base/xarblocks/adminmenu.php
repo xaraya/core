@@ -79,7 +79,7 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
 
             // get menu links if module is active
             if ($modname == self::$thismodname && (self::$thismodtype == $this->menumodtype || !empty($this->menumodtypes) && in_array(self::$thismodtype, $this->menumodtypes)) ) {
-                $menulinks = $this->getMenuLinks(
+                $menulinks = xarMod::apiFunc('base', 'admin', 'loadmenuarray',
                     array(
                         'modname' => $modname,
                         'modtype' => $this->menumodtype, // make sure we get admin menu links
