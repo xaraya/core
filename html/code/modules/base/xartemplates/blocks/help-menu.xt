@@ -62,9 +62,9 @@
     <h3 id="modulelinks">Module Links</h3>
     <p>The Module Links listing shows a list of all user capable modules available.</p>
     <ul>
-        <li><strong>Alias</strong> If you have aliases specified for a module, you can choose one of the to be used as the label to be displayed in links to that module. The default is to use the modules display name.</li>
+        <li><strong>Alias</strong> If you have aliases specified for a module, you can choose one of them to be used as the label to be displayed in links to that module. The default is to use the modules display name.</li>
         <li><strong>Required Access Group or Level</strong> This allows you to choose which groups of users, or what privilege level they must have, in order to see the link.</li>
-        <li><strong>Visibile</strong> By unchecking the checkbox you can remove a link from the menu entirely</li>
+        <li><strong>Visible</strong> By unchecking the checkbox you can remove a link from the menu entirely</li>
     </ul>
     <p><strong>NOTE:</strong> When you add a new module to the system, it will automatically be available to all users with the necessary privileges to view until you edit the block it appears in.</p>
 

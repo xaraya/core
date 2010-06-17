@@ -30,7 +30,7 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
         $data = parent::modify($data);
 
         // Admin Capable Modules
-        $data['modules'] = $this->adminmodules;
+        $data['modules'] = $this->xarmodules;
 
         // Set the template data we need
         $data['sortorder'] = array(
@@ -57,7 +57,8 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
 
         if (empty($modulelist)) $modulelist = array('modules' => array('visible' => 1));
 
-        foreach ($this->adminmodules as $mod) {
+        $i = 0;
+        foreach ($this->xarmodules as $mod) {
             if (empty($modulelist[$mod['name']]['visible']))
                 $modulelist[$mod['name']]['visible'] = 0;
             if (empty($modulelist[$mod['name']]['alias_name']) ||
@@ -65,6 +66,9 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
                 !isset($mod['aliases'][$modulelist[$mod['name']]['alias_name']])) {
                 $modulelist[$mod['name']]['alias_name'] = $mod['name'];
             }
+            if (empty($modulelist[$mod['name']]['order']))
+                $modulelist[$mod['name']]['order'] = $i;
+            $i++;
         }
 
         $vars = $data['content'];

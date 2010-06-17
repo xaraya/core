@@ -57,28 +57,13 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                                     ),
                                   );
 
-    public $modulelist          = array();
-    protected $usermodules      = array();
-
-
+    public $menumodtype         = 'user';
 
     public function __construct(Array $data=array())
     {
         $data['rssurl'] = xarServer::getCurrentURL(array('theme' => 'rss'));
         $data['printurl'] = xarServer::getCurrentURL(array('theme' => 'print'));
         parent::__construct($data);
-
-        // all methods require the list of active user capable modules, set it early
-        $this->usermodules = xarMod::apiFunc('modules','admin','getlist',
-            array('filter' => array('UserCapable' => true, 'State' => XARMOD_STATE_ACTIVE)));
-        // get module aliases while we're here, we need those too
-        $aliasMap = xarConfigVars::get(null,'System.ModuleAliases');
-        $aliases = array();
-        if (!empty($aliasMap)) {
-            foreach ($aliasMap as $alias => $modname) {
-                $aliases[$modname][$alias] = array('id' => $alias, 'name' => $alias);
-            }
-        }
 
         // convert the old modulelist string to an array, one time deal coming from < 2.2.0
         if (!empty($this->modulelist) && !is_array($this->modulelist)) {
@@ -93,29 +78,18 @@ class Base_MenuBlock extends MenuBlock implements iBlock
             unset($oldlist);
             $this->modulelist = array();
         }
-
-        // add missing modules to the modulelist
-        foreach ($this->usermodules as $key => $mod) {
-            $modname = $mod['name'];
-            if (!empty($this->content['displaymodules'])) {
+        if (isset($this->content['displaymodules'])) {
+            foreach ($this->xarmodules as $key => $mod) {
+                $modname = $mod['name'];
                 // convert the old modulelist, one time deal coming from < 2.2.0
                 if ($this->content['displaymodules'] == 'All' || isset($modulelist[$modname])) {
                     $this->modulelist[$modname]['visible'] = 1;
                 } else {
                     $this->modulelist[$modname]['visible'] = 0;
                 }
-            } else {
-                // make any new modules visible
-                if (!isset($this->modulelist[$modname]))
-                    $this->modulelist[$modname]['visible'] = 1;
             }
-            // add aliases to usermodules only if aliases are in use
-            if ((bool)xarModVars::get($modname, 'use_module_alias') && !empty($aliases[$modname]))
-                $this->usermodules[$key]['aliases'] = $aliases[$modname];
-        }
-        // remove deprecated displaymodules setting if necessary
-        if (isset($this->content['displaymodules']))
             unset($this->content['displaymodules']);
+        }
         // make sure we keep the content array in sync
         $this->content['modulelist'] = $this->modulelist;
 
@@ -179,7 +153,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
         // Handle modulelist
         $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
         $modlinks = array();
-        foreach ($this->usermodules as $mod) {
+        foreach ($this->xarmodules as $mod) {
             $modname = $mod['name'];
             if (!empty($vars['modulelist'][$modname]['view_access'])) {
                 // Decide whether this menu item is displayable to the current user
@@ -193,7 +167,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                 if (!$accessproperty->check($args)) continue;
             }
             // @TODO: deprecate this
-            if ((bool)xarModVars::get($modname, 'user_menu_link')) continue;
+            if ((bool)xarModVars::get($modname, $this->menumodtype . '_menu_link')) continue;
             // Use this instead :)
             if (empty($vars['modulelist'][$modname]['visible'])) continue;
 
@@ -207,18 +181,18 @@ class Base_MenuBlock extends MenuBlock implements iBlock
             }
 
             // get menu links if module is active
-            if ($modname == self::$thismodname && self::$thismodtype == 'user') {
+            if ($modname == self::$thismodname && (self::$thismodtype == $this->menumodtype || !empty($this->menumodtypes) && in_array(self::$thismodtype, $this->menumodtypes)) ) {
                 $menulinks = $this->getMenuLinks(
                     array(
                         'modname' => $modname,
-                        'modtype' => 'user', // make sure we get user menu links
+                        'modtype' => $this->menumodtype, // make sure we get user menu links
                     ));
                 $isactive = true;
             } else {
                 $menulinks = array();
                 $isactive = false;
             }
-            $modurl = xarModURL($modname, 'user', 'main', array());
+            $modurl = xarModURL($modname, $this->menumodtype, 'main', array());
             $modlinks[$modname] = array(
                 'label' => $displayname,
                 'title' => $mod['description'],

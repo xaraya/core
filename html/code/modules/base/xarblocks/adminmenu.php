@@ -34,33 +34,13 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
     //public $showhelp            = 0; <chris> remove this unused property for now
     public $showfront           = 1;
 
-    public $modulelist;
-
-    protected $adminmodules     = array();
+    public $menumodtype         = 'admin';
+    public $menumodtypes        = array('admin', 'util');
 
     public function __construct(Array $data=array())
     {
         parent::__construct($data);
-        // all methods require the list of active admin capable modules, set it early
-        $this->adminmodules = xarMod::apiFunc('modules','admin','getlist',
-            array('filter' => array('AdminCapable' => true, 'State' => XARMOD_STATE_ACTIVE)));
-        // get module aliases while we're here, we need those too
-        $aliasMap = xarConfigVars::get(null,'System.ModuleAliases');
-        $aliases = array();
-        if (!empty($aliasMap)) {
-            foreach ($aliasMap as $alias => $modname) {
-                $aliases[$modname][$alias] = array('id' => $alias, 'name' => $alias);
-            }
-        }
-        // add any missing modules to the modulelist
-        // eg, at first run of this block instance or when new modules are added to the system
-        foreach ($this->adminmodules as $key => $mod) {
-            if (!isset($this->modulelist[$mod['name']]))
-                $this->modulelist[$mod['name']]['visible'] = 1;
-            // add aliases to adminmodules only if aliases are in use
-            if ((bool)xarModVars::get($mod['name'], 'use_module_alias') && !empty($aliases[$mod['name']]))
-                $this->adminmodules[$key]['aliases'] = $aliases[$mod['name']];
-        }
+
         if (empty($this->modulelist)) {
             // if the modulelist is empty, admin deselected all modules, put back the modules module
             // @CHECKME: put back the blocks module too so we can edit this?
@@ -81,15 +61,10 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
 
         $vars = isset($data['content']) ? $data['content'] : array();
 
-        // Admin types
-        // FIXME: this is quite ad-hoc here
-        // CHECKME: is this even relevent? links are still supplied by admin getmenulinks/adminmenu-dat.xml
-        $admintypes = array('admin', 'util');
-
-        foreach ($this->adminmodules as $mod) {
+        foreach ($this->xarmodules as $mod) {
             $modname = $mod['name'];
             // @TODO: deprecate this
-            if ((bool)xarModVars::get($modname, 'admin_menu_link')) continue;
+            if ((bool)xarModVars::get($modname, $this->menumodtype . '_menu_link')) continue;
             // Use this instead :)
             if (empty($vars['modulelist'][$modname]['visible'])) continue;
 
@@ -103,18 +78,18 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
             }
 
             // get menu links if module is active
-            if ($modname == self::$thismodname && in_array(self::$thismodtype, $admintypes)) {
+            if ($modname == self::$thismodname && (self::$thismodtype == $this->menumodtype || !empty($this->menumodtypes) && in_array(self::$thismodtype, $this->menumodtypes)) ) {
                 $menulinks = $this->getMenuLinks(
                     array(
                         'modname' => $modname,
-                        'modtype' => 'admin', // make sure we get admin menu links
+                        'modtype' => $this->menumodtype, // make sure we get admin menu links
                     ));
                 $isactive = true;
             } else {
                 $menulinks = array();
                 $isactive = false;
             }
-            $modurl = xarModURL($modname, 'admin', 'main', array());
+            $modurl = xarModURL($modname, $this->menumodtype, 'main', array());
             switch ($vars['menustyle']) {
                 case 'bycat':
                 default:
@@ -137,7 +112,7 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
                     // add module link to adminmods
                     $adminmods[$modname] = array(
                         'label' => $displayname,
-                        'url' => xarModURL($modname, 'admin', 'main', array()),
+                        'url' => $modurl == self::$currenturl ? '' : $modurl,
                         'title' => xarML('Show administration options for module #(1)', $displayname),
                         'isactive' => $isactive,
                     );

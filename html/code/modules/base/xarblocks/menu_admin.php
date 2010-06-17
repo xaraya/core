@@ -33,7 +33,7 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
     {
         $data = parent::modify($data);
 
-        $data['modules'] = $this->usermodules;
+        $data['modules'] = $this->xarmodules;
         $data['userlinks'] = self::getUserLinks();
 
         return $data;
@@ -180,7 +180,7 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
         // handle modulelist input
         sys::import('modules.dynamicdata.class.properties.master');
         $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
-        foreach ($this->usermodules as $mod) {
+        foreach ($this->xarmodules as $mod) {
             $modname = $mod['name'];
             if (empty($modulelist[$modname]['visible']))
                 $modulelist[$modname]['visible'] = 0;
