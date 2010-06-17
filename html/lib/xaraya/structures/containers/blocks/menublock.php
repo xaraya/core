@@ -41,6 +41,9 @@ class MenuBlock extends BasicBlock implements iBlock
                 $aliases[$modname][$alias] = array('id' => $alias, 'name' => $alias);
             }
         }
+        if (empty($this->modulelist) && !is_array($this->modulelist)) {
+            $this->modulelist = array();
+        }
         // sync the modulelist with xarmodules
         foreach ($this->xarmodules as $key => $mod) {
             $modname = $mod['name'];
