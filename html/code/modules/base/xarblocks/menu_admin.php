@@ -207,6 +207,11 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
         return $data;
     }
 
+    public function help()
+    {
+        return $this->getInfo();
+    }
+
 /**
  * Admin get userlinks method
  * Adds links to order the menu links, used by updatelinkorder method
