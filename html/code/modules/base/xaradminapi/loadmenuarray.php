@@ -28,6 +28,8 @@ function base_adminapi_loadmenuarray($args)
         $urlinfo = xarController::$request->getInfo();
         if (empty($args['modname'])) $args['modname'] = $urlinfo[0];
         if (empty($args['modtype'])) $args['modtype'] = $urlinfo[1];
+        // handle modules using util as an admin type
+        if ($args['modtype'] == 'util') $args['modtype'] = 'admin';
         if (empty($args['funcname'])) $args['funcname'] = $urlinfo[2];
     }
     if (!isset($args['layout'])) $args['layout'] = 'links';
