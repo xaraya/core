@@ -59,9 +59,9 @@
                 <p>
                 <a href="#xarModURL('dynamicdata','admin','view',array('table'=>$table))#">View</a>| 
                 <a href="#xarModURL('dynamicdata','admin','query',array('table'=>$table))#">Query</a>| 
-                    <a href="#xarModURL('dynamicdata','util','meta',array('table'=>$table,'export'=>'object))#">
+                    <a href="#xarModURL('dynamicdata','util','meta',array('table'=>$table,'export'=>'object'))#">
                 Export Object</a>| 
-                    <a href="#xarModURL('dynamicdata','util','meta',array('table'=>$table,'export'=>'ddl))#">
+                    <a href="#xarModURL('dynamicdata','util','meta',array('table'=>$table,'export'=>'ddl'))#">
                 Export DDL</a>
                 <!--
                 | <a href="#xarModURL('dynamicdata','util','relations',array('table'=>$table))#">Add
@@ -96,9 +96,9 @@
                 </table>
             </xar:if>
             <p class="xar-align-center">
-            <a href="#xarModURL('dynamicdata','util','meta',array('export'=>'object))#">Export all tables to
+            <a href="#xarModURL('dynamicdata','util','meta',array('export'=>'object'))#">Export all tables to
             Objects</a>| 
-            <a href="#xarModURL('dynamicdata','util','meta',array('export'=>'ddl))#">Export all tables to
+            <a href="#xarModURL('dynamicdata','util','meta',array('export'=>'ddl'))#">Export all tables to
             DDL</a>| 
             <a href="#xarModURL('dynamicdata','util','meta',array('showdb'=>1))#">Show other databases</a></p>
         <xar:else />
