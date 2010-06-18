@@ -127,7 +127,6 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 
         $vars = !empty($data['content']) ? $data['content'] : array();
 
-        //print_r($this->modulelist);
         if (xarUserIsLoggedIn()) {
             if (!empty($vars['showlogout'])) {
                 $authmoduledata = xarMod::apiFunc('roles','user','getdefaultauthdata');
@@ -204,9 +203,19 @@ class Base_MenuBlock extends MenuBlock implements iBlock
         $vars['modlinks'] = $modlinks;
 
         // no links, nothing to display
-        if (empty($vars['modlinks']) && empty($vars['userlinks'])) return;
+        if (
+            empty($vars['modlinks']) &&
+            empty($vars['userlinks']) &&
+            empty($vars['showlogout']) &&
+            empty($vars['showback']) &&
+            empty($vars['displayprint']) &&
+            empty($vars['displayrss'])
+        ) return;
 
+        // pass through the current request info
         $vars['thismodname'] = self::$thismodname;
+        $vars['thismodtype'] = self::$thismodtype;
+        $vars['thisfuncname'] = self::$thisfuncname;
 
         $data['content'] = $vars;
 
@@ -223,29 +232,89 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                 if (!empty($link['url'])) {
                     $link['url'] = self::_decodeURL($link['url']);
                 }
-                if (self::$currenturl == $link['url']) {
-                    $link['url'] = '';
-                    $link['isactive'] = 1;
-                } else {
-                    $link['isactive'] = 0;
-                }
-                if (!empty($link['menulinks'])) {
-                    foreach ($link['menulinks'] as $subid => $sublink) {
-                        if (empty($sublink['visible'])) {
-                            unset($link['menulinks'][$subid]);
-                            continue;
+                // url was, eg base_menulinks
+                if (strpos($link['url'], '_menulinks') !== false) {
+                    $modname = str_replace('_menulinks', '', $link['url']);
+                    // only allowed to display modules in the modulelist
+                    if (!empty($this->modulelist[$modname])) {
+                        $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+                        // check access defined in the module list
+                        if (!empty($this->modulelist[$modname]['view_access'])) {
+                            // Decide whether this menu item is displayable to the current user
+                            $args = array(
+                                'module' => 'base',
+                                'component' => 'Block',
+                                'instance' => $this->title . "All:All",
+                                'group' => $this->modulelist[$modname]['view_access']['group'],
+                                'level' => $this->modulelist[$modname]['view_access']['level'],
+                            );
+                            if (!$accessproperty->check($args)) continue;
                         }
-                        if (!empty($sublink['url'])) {
-                            $sublink['url'] = self::_decodeURL($sublink['url']);
+                        // link to main module function
+                        $link['url'] = xarModURL($modname, $this->menumodtype, 'main', array());
+                        // get link label from module/alias if none specified
+                        if (empty($link['label'])) {
+                            if (!empty($this->modulelist[$modname]['alias_name'])) {
+                                $displayname = $this->modulelist[$modname]['alias_name'];
+                                if ($displayname == $modname) {
+                                    $displayname = xarModGetDisplayableName($modname);
+                                } elseif (empty($this->modulelist[$modname]['aliases']) || !isset($this->modulelist[$modname]['aliases'][$displayname])) {
+                                    $displayname = xarModGetDisplayableName($modname);
+                                }
+                            } else {
+                                $displayname = xarModGetDisplayableName($modname);
+                            }
+                            $link['label'] = $displayname;
                         }
-                        if (self::$currenturl == $sublink['url']) {
-                            $sublink['url'] = '';
-                            $sublink['isactive'] = 1;
-                            $link['isactive'] = 1;
+                        // get link title from module display description if none specified
+                        if (empty($link['title'])) {
+                            $link['title'] = xarModGetDisplayableDescription($modname);
+                        }
+                        if (empty($link['name'])) {
+                            $link['name'] = $link['label'];
+                        }
+                        // get menu links if module is active
+                        if ($modname == self::$thismodname && (self::$thismodtype == $this->menumodtype || !empty($this->menumodtypes) && in_array(self::$thismodtype, $this->menumodtypes)) ) {
+                            $menulinks = xarMod::apiFunc('base', 'admin', 'loadmenuarray',
+                                array(
+                                    'modname' => $modname,
+                                    'modtype' => $this->menumodtype, // make sure we get user menu links
+                                ));
+                            $isactive = true;
                         } else {
-                            $sublink['isactive'] = 0;
+                            $menulinks = array();
+                            $isactive = false;
                         }
-                        $link['menulinks'][$subid] = $sublink;
+                        $link['menulinks'] = $menulinks;
+                        $link['isactive'] = $isactive;
+                    } else {
+                        //continue;
+                    }
+                } else{
+                    if (self::$currenturl == $link['url']) {
+                        $link['url'] = '';
+                        $link['isactive'] = 1;
+                    } else {
+                        $link['isactive'] = 0;
+                    }
+                    if (!empty($link['menulinks'])) {
+                        foreach ($link['menulinks'] as $subid => $sublink) {
+                            if (empty($sublink['visible'])) {
+                                unset($link['menulinks'][$subid]);
+                                continue;
+                            }
+                            if (!empty($sublink['url'])) {
+                                $sublink['url'] = self::_decodeURL($sublink['url']);
+                            }
+                            if (self::$currenturl == $sublink['url']) {
+                                $sublink['url'] = '';
+                                $sublink['isactive'] = 1;
+                                $link['isactive'] = 1;
+                            } else {
+                                $sublink['isactive'] = 0;
+                            }
+                            $link['menulinks'][$subid] = $sublink;
+                        }
                     }
                 }
                 $userlinks[] = $link;
@@ -273,16 +342,21 @@ class Base_MenuBlock extends MenuBlock implements iBlock
             $args = array();
 
             if (!empty($sections[1])) {
-                $pairs = $sections[1];
-                if (preg_match('/^(&|\?)/',$pairs)) {
-                    $pairs = substr($pairs, 1);
-                }
-                $pairs = explode('&', $pairs);
-                foreach ($pairs as $pair) {
-                    $params = explode('=', $pair);
-                    $key = $params[0];
-                    $val = !empty($params[1]) ? $params[1] : null;
-                    $args[$key] = $val;
+                // flag to instruct the menu to get menulinks for a specified module
+                if (trim($sections[1]) == '_menulinks') {
+                    return $modname . '_menulinks';
+                } else {
+                    $pairs = $sections[1];
+                    if (preg_match('/^(&|\?)/',$pairs)) {
+                        $pairs = substr($pairs, 1);
+                    }
+                    $pairs = explode('&', $pairs);
+                    foreach ($pairs as $pair) {
+                        $params = explode('=', $pair);
+                        $key = $params[0];
+                        $val = isset($params[1]) ? $params[1] : null;
+                        $args[$key] = $val;
+                    }
                 }
             }
 

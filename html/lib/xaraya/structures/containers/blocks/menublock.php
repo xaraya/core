@@ -48,12 +48,16 @@ class MenuBlock extends BasicBlock implements iBlock
         foreach ($this->xarmodules as $key => $mod) {
             $modname = $mod['name'];
             // add new modules to the modlist
-            if (is_array($this->modulelist) && !isset($this->modulelist[$modname]))
-                $this->modulelist[$modname] = array(
-                    'visible' => 1,
-                    'alias_name' => $modname,
-                    'view_access' => array('group' => 0, 'level' => 100, 'failure' => 0),
-                );
+            if (is_array($this->modulelist)) {
+                if (!isset($this->modulelist[$modname])) {
+                    $this->modulelist[$modname] = array(
+                        'visible' => 1,
+                        'alias_name' => $modname,
+                        'view_access' => array('group' => 0, 'level' => 100, 'failure' => 0),
+                    );
+                }
+                $this->modulelist[$modname]['aliases'] = !empty($aliases[$modname]) ? $aliases[$modname] : array();
+            }
             // add aliases for module if aliases are in use
             if ((bool)xarModVars::get($modname, 'use_module_alias') && !empty($aliases[$modname]))
                 $this->xarmodules[$key]['aliases'] = $aliases[$modname];

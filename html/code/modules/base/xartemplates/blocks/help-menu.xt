@@ -57,7 +57,19 @@
         <li><strong>[roles:user:account]</strong> Will link to the roles user account function</li>
         <li><strong>[articles:user:view]ptid=1</strong> Will link to articles user view pubtype 1</li>
     </ul>
-    <p><strong>NOTE:</strong> The menu block is pre-configure to link to [base]page=docs. If your menu has no other menu links it will always be present and cannot be removed. Instead, you should change it's visible state if you don't wish to see it in the menu</p>
+    <p>By adding the <strong>_menulinks</strong> keyword to a <strong>[module]</strong> you can include a module link in your menu and have it behave as if it was being displayed in the module menu.</p>
+    Example
+    <ul>
+        <li><strong>[roles]_menulinks</strong> Will display a link to Roles User Main, and when active will display the menu links supplied by the roles module.</li>
+    </ul>
+    <p>Including module menu links this way is very flexible, you can...</p>
+    <ul>
+        <li>Leave the label blank, and the label will fall back to either the modules' display name, or the alias you set in the Module List for the module.</li>
+        <li>Leave the title blank and the title will fall back to the modules' display description.</li>
+        <li>Set the access permissions and the link will obey them.</li>
+    </ul>
+
+    <p><strong>NOTE:</strong> The menu block is pre-configured to link to [base]page=docs. If your menu has no other menu links it will always be present and cannot be removed. Instead, you should change it's visible state if you don't wish to see it in the menu</p>
 
     <h3 id="modulelinks">Module Links</h3>
     <p>The Module Links listing shows a list of all user capable modules available.</p>
