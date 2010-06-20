@@ -24,6 +24,8 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     public $module          = 'BlockModule';  // Module your child class belongs to
     public $text_type       = 'Basic Block';  // Block name
     public $text_type_long  = 'Parent class for blocks'; // Block description
+    // version check so blocks can supply an upgrade method (called in constructor)
+    public $xarversion             = '0.0.1'; // expects a 3 point version number
 
     // block instance properties
     // these will be filled in by blockinfo when a new object is instantiated
@@ -66,11 +68,14 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     // blocks inheriting from this class must define their own properties
     // all properties not stored in the db are stored in $this->content
 
+    public $isupgraded = false;
     // use the constructor to populate properties ($data = blockinfo)
     // all blocks inheriting this class should call this constructor
     // eg parent::__construct($data);
     public function __construct(Array $data=array())
     {
+        // get the current block version before we over-write with content
+        $newver = $this->xarversion;
         // expand content here if necessary (shouldn't be now)
         if (isset($data['content']) && !is_array($data['content'])) {
             $content = @unserialize($data['content']);
@@ -84,6 +89,28 @@ class BasicBlock extends ObjectDescriptor implements iBlock
             parent::setArgs($data['content']);
         // update properties from content args
         parent::refresh($this);
+        // set a sensible default for blocks not yet using xarversion
+        $oldver = !empty($this->content['xarversion']) ? $this->content['xarversion'] : '0.0.0';
+        // compare versions if we have a new version that is different to the old version,
+        // and only if the content is populated (ie, not on first run of a new block)
+        if (!empty($newver) && $newver != $oldver && !empty($this->content)) {
+            sys::import('xaraya.version');
+            $vercompare = xarVersion::compare($newver, $oldver, 3);
+            // compare new block with old block,
+            if ($vercompare > 0) {
+                // only run upgrade if new version is greater than old version
+                // modules can over-ride the upgrade method with their own :)
+                // pass the old version to the upgrade method
+                if (!$this->upgrade($this->xarversion))
+                    // if upgrade method didn't return true, upgrade failed
+                    throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to upgrade #(1) module block #(2) from version #(3) to version #(4)');
+                // update to new version
+                $this->content['xarversion'] = $newver;
+            } elseif ($vercompare < 0) {
+                // can't downgrade blocks
+                throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to downgrade #(1) module block #(2) from version #(3) to version #(4)');
+            }
+        }
         // populate content on first run
         if (empty($this->content)) $this->content = $this->getInfo();
     }
@@ -109,6 +136,7 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     public function display(Array $args=array())
     {
         $data = $this->getInfo();
+        print_r('upgrade: ' . $this->isupgraded);
         return $data;
     }
 
@@ -131,6 +159,24 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     {
         $data = $this->getInfo();
         return $data;
+    }
+
+    // this method is called by the constructor to run upgrades from older block versions
+    public function upgrade($oldversion)
+    {
+        // use it much as you would the xarinit upgrade function in modules
+        switch ($oldversion) {
+            case '0.0.0':
+            default:
+                // upgrades from 0.0.0 (or empty) go here
+            // fall through to subsequent upgrades
+            case '0.0.1':
+                // upgrades from 0.0.1 go here
+
+            // etc...
+            break;
+        }
+        return true;
     }
 
     // @param access (display|modify|delete)
