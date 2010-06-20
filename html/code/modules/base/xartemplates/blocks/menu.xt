@@ -64,31 +64,34 @@
                     <!-- Optionally show admins a link to the back end -->
                     <xar:sec mask="ManageBase" catch="false">
                         <li class="xar-menu-item">
-                            <a title="#xarML('View the site back end interface')#" href="#xarModURL($thismodname,'admin','main')#">
-                                View Back End
+                            <a title="#$backtitle#" href="#xarModURL($thismodname,'admin','main')#">
+                                #$backlabel#
                             </a>
                         </li>
                     </xar:sec>
                 </xar:if>
                 <xar:if condition="$showlogout">
                    <li class="xar-menu-item">
-                        <a title="#xarML('Logout')#" href="#$logouturl#">
+                        <a title="#$logouttitle#" href="#$logouturl#">
                             #$logoutlabel#
                         </a>
                     </li>
                 </xar:if>
-                <xar:if condition="(xarThemeIsAvailable('print')) and !empty($displayprint)">
+                <!-- the block checks if the theme is available, no need to check here -->
+                <xar:if condition="!empty($displayprint)">
+                   <!-- pointless having the block get the url, just get it here if needed -->
                    <li class="xar-menu-item">
-                        <a title="#xarML('Print View')#" href="#$printurl#">
-                            Print View
+                        <a title="#$printtitle#" href="#xarServer::getCurrentURL(array('theme' => 'print'))#">
+                            #$printlabel#
                         </a>
                     </li>
                 </xar:if>
                 <!-- TODO check whether a modules supports syndication, do not hardcode in here -->
-                <xar:if condition="(xarThemeIsAvailable('rss')) and !empty($displayrss) and ($where eq 'articles')">
+                <!-- FIXME deprecate this and remove the articles dependency -->
+                <xar:if condition="!empty($displayrss) and ($thismodname eq 'articles')">
                    <li class="xar-menu-item">
-                        <a title="#xarML('Syndication')#" href="#$rssurl#">
-                            Syndication
+                        <a title="#$rsstitle#" href="#xarServer::getCurrentURL(array('theme' => 'rss'))#">
+                            #$rsslabel#
                         </a>
                     </li>
                 </xar:if>

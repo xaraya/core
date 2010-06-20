@@ -50,11 +50,18 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
 
         // display options
         if (!xarVarFetch('showlogout',  'checkbox', $showlogout, false, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('logoutlabel',  'str:1:255', $logoutlabel, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('logouttitle',  'str:1:255', $logouttitle, '', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('displayrss',  'checkbox', $displayrss, false, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('rsslabel',  'str:1:255', $rsslabel, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('rsstitle',  'str:1:255', $rsstitle, '', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('displayprint','checkbox', $displayprint, false, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('printlabel',  'str:1:255', $printlabel, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('printtitle',  'str:1:255', $printtitle, '', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('marker',      'str:0',    $marker, '', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('showback',    'checkbox', $showback, false, XARVAR_NOT_REQUIRED)) return;
-
+        if (!xarVarFetch('backlabel',  'str:1:255', $backlabel, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('backtitle',  'str:1:255', $backtitle, '', XARVAR_NOT_REQUIRED)) return;
         // userlinks
         if (!xarVarFetch('userlinks',   'array',    $userlinks, array(), XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('links_select', 'pre:trim:lower:enum:show:hide:delete', $links_select, 'none', XARVAR_NOT_REQUIRED)) return;
@@ -271,10 +278,18 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
         $vars['userlinks'] = $new_links;
         $vars['modulelist'] = $modulelist;
         $vars['showback'] = $showback;
+        $vars['backlabel'] = $backlabel;
+        $vars['backtitle'] = $backtitle;
         $vars['showlogout'] = $showlogout;
+        $vars['logoutlabel'] = $logoutlabel;
+        $vars['logouttitle'] = $logouttitle;
         $vars['marker'] = $marker;
         $vars['displayrss'] = $displayrss;
+        $vars['rsslabel'] = $rsslabel;
+        $vars['rsstitle'] = $rsstitle;
         $vars['displayprint'] = $displayprint;
+        $vars['printlabel'] = $printlabel;
+        $vars['printtitle'] = $printtitle;
 
         $data['content'] = $vars;
 

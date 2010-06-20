@@ -38,11 +38,17 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 
     public $marker              = '[x]';
     public $showlogout          = true;
+    public $logoutlabel         = 'Logout';
+    public $logouttitle         = 'Logout from the site';
     public $showback            = true;
+    public $backlabel           = 'View Back End';
+    public $backtitle           = 'View the site back end interface';
     public $displayrss          = false;
-    public $rssurl;
+    public $rsslabel            = 'Syndication';
+    public $rsstitle            = 'Syndicate this content';
     public $displayprint        = false;
-    public $printurl;
+    public $printlabel          = 'Print View';
+    public $printtitle           = 'Printer friendly view of this page';
 
     public $userlinks           = array();
     public $links_default       = array(
@@ -61,8 +67,6 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 
     public function __construct(Array $data=array())
     {
-        $data['rssurl'] = xarServer::getCurrentURL(array('theme' => 'rss'));
-        $data['printurl'] = xarServer::getCurrentURL(array('theme' => 'print'));
         parent::__construct($data);
 
         // convert the old modulelist string to an array, one time deal coming from < 2.2.0
@@ -76,9 +80,9 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                 }
             }
             unset($oldlist);
-            $this->modulelist = array();
         }
         if (isset($this->content['displaymodules'])) {
+            $this->modulelist = array();
             foreach ($this->xarmodules as $key => $mod) {
                 $modname = $mod['name'];
                 // convert the old modulelist, one time deal coming from < 2.2.0
@@ -114,6 +118,15 @@ class Base_MenuBlock extends MenuBlock implements iBlock
         // load the default link if userlinks are empty
         if (empty($this->userlinks))
             $this->userlinks = $this->content['userlinks'] = $this->links_default;
+        // add labels and titles for static links < 2.2.0
+        if (empty($this->content['backlabel'])) $this->content['backlabel'] = $this->backlabel;
+        if (empty($this->content['backtitle'])) $this->content['backtitle'] = $this->backtitle;
+        if (empty($this->content['logoutlabel'])) $this->content['logoutlabel'] = $this->logoutlabel;
+        if (empty($this->content['logouttitle'])) $this->content['logouttitle'] = $this->logouttitle;
+        if (empty($this->content['rsslabel'])) $this->content['rsslabel'] = $this->rsslabel;
+        if (empty($this->content['rsstitle'])) $this->content['rsstitle'] = $this->rsstitle;
+        if (empty($this->content['printlabel'])) $this->content['printlabel'] = $this->printlabel;
+        if (empty($this->content['printtitle'])) $this->content['printtitle'] = $this->printtitle;
     }
 
 /**
@@ -137,7 +150,6 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                     $vars['logouturl'] = xarModURL($authmodlogout,'user', 'logout', array());
                     $vars['showback'] = 0;
                 }
-                $vars['logoutlabel'] = xarVarPrepForDisplay(xarML('Logout'));
             }
             $vars['loggedin'] = 1;
         } else {
@@ -176,6 +188,9 @@ class Base_MenuBlock extends MenuBlock implements iBlock
         $vars['thismodname'] = self::$thismodname;
         $vars['thismodtype'] = self::$thismodtype;
         $vars['thisfuncname'] = self::$thisfuncname;
+
+        if (!empty($vars['displayrss']) && !xarThemeIsAvailable('rss')) $vars['displayrss'] = 0;
+        if (!empty($vars['displayprint']) && !xarThemeIsAvailable('print')) $vars['displayprint'] = 0;
 
         $data['content'] = $vars;
 

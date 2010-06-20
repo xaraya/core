@@ -34,8 +34,8 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
 
         // Set the template data we need
         $data['sortorder'] = array(
-            'byname' => xarML('By Name'),
-            'bycat'  => xarML('By Category'),
+            array('id' => 'byname', 'name' => xarML('By Name')),
+            array('id' => 'bycat', 'name' => xarML('By Category')),
         );
 
         return $data;

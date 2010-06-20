@@ -31,15 +31,7 @@
         <label for="menustyle" title="#xarML('How should the menu items be ordered?')#" class="xar-form-label">
             Sort Admin Menu Items:
         </label>
-        <select name="menustyle" id="menustyle">
-            <xar:foreach in="$sortorder" value="$v" key="$k">
-                <xar:if condition="$k eq $menustyle">
-                    <option value="#$k#" selected="selected">#$v#</option>
-                <xar:else />
-                    <option value="#$k#">#$v#</option>
-                </xar:if>
-            </xar:foreach>
-        </select>
+        <xar:data-input type="dropdown" name="menustyle" id="menustyle" options="$sortorder" value="$menustyle"/>
     </div>
     <table class="xar-fullwidth">
         <thead>
