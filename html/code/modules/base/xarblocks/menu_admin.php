@@ -72,17 +72,33 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
 
         // handle user links
         // Build new link if we have any values for it
-        if (!empty($new_url) || !empty($new_name) || !empty($new_title) || !empty($new_blank)) {
-            if (!empty($new_blank)) $new_url = $new_label = $new_title = '';
-            // we don't set the id here, since it could be anything
-            $new_link = array(
-                'url' => $new_url,
-                'name' => $new_label,
-                'label' => $new_label,
-                'title' => $new_title,
-                'visible' => 1,
-                'menulinks' => array(),
-            );
+        if (!empty($new_url) || !empty($new_label) || !empty($new_title) || !empty($new_blank)) {
+            $modlinks = array();
+            $new_link = self::_decodeURL($new_url, true);
+            $new_link['visible'] = 1;
+            if (!empty($new_blank)) {
+                $new_link['url'] = $new_label = $new_title = '';
+                $new_link['name'] = '_blank_';
+            } elseif ($new_link['ismodlink'] && $new_position > 1) {
+                $new_link['ismodlink'] = 0;
+                 if (empty($new_label)) {
+                    $new_label = xarModGetDisplayableName($new_link['modname']);
+                    $new_link['name'] = $new_link['modname'] . '_' . $new_link['modtype'] . '_main';
+                }
+                if (empty($new_title)) {
+                    $new_title = xarModGetDisplayableDescription($new_link['modname']);
+                }
+            } elseif ($new_link['ismodlink']) {
+                $new_link['name'] = $new_link['modname'] . '_' . $new_link['modtype'];
+                // @TODO: handle module menu links?
+            } elseif (!empty($new_label)) {
+                $new_link['name'] = $new_label;
+            } else {
+                $new_link['name'] = '_nolabel_';
+            }
+            $new_link['label'] = $new_label;
+            $new_link['title'] = $new_title;
+            $new_link['menulinks'] = $modlinks;
         }
 
         // Now re-index our array of links, performing any selected actions along the way
@@ -90,85 +106,143 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
         $i = $j = 0;
         if (!empty($userlinks)) {
             foreach ($userlinks as $order => $link) {
+                // add missing link settings from exisiting entry
+                if (isset($this->userlinks[$order]))
+                    $link += $this->userlinks[$order];
                 // Insert new link before an item
-                if ((!empty($new_link) && $new_position == 0) &&
-                    ($new_relation == $order)) {
+                if ((!empty($new_link) && $new_position == 0) && ($new_relation == $order)) {
                     // insert new link before selected link
                     $new_link['id'] = $i;
                     $new_links[$i] = $new_link;
                     $i++;
                 }
+                // Perform operations on current link
+                // decode the link url
+                $link['encodedurl'] = $link['url'];
+                $check = self::_decodeURL($link['url'], true);
+                foreach ($check as $k => $v) {
+                    $link[$k] = $v;
+                }
+                // set an appropriate name (so options in the "In Relation To" dropdown are never empty)
+                if (empty($link['label']) && empty($link['title']) && empty($link['url'])) {
+                    // blank link
+                    $link['name'] = '_blank_';
+                } elseif (!empty($link['label']) && !$link['ismodlink']) {
+                    // normal link, set name as label
+                   $link['name'] = $link['label'];
+                } elseif ($link['ismodlink']) {
+                    // module link, set name as module_type
+                    $link['name'] = $link['modname'] . '_' . $link['modtype'];
+                     // @TODO: handle module menu links
+                    $modlinks = xarMod::apiFunc('base', 'admin', 'loadmenuarray',
+                        array(
+                            'modname' => $link['modname'],
+                            'modtype' => $this->menumodtype,
+                        ));
+                    foreach ($modlinks as $key => $sublink) {
+                        $name = $link['modname'] . '_' . $link['modtype'] . '_' . $key;
+                        $sublink['isvisible'] = true;
+                        $sublink += self::_decodeURL($sublink['url'], true);
+                        $modlinks[$name] = $sublink;
+                    }
+                }
+
                 // perform links_select action on selected items
-                if (!empty($link['select']) && $links_select == 'delete') {
-                    continue;
-                } elseif (!empty($link['select'])) {
+                if (!empty($link['select']) && $links_select != 'none') {
+                    // remove link
+                    if ($links_select == 'delete') continue;
                     switch ($links_select) {
                         case 'show':
+                            // make link visible
                             $link['visible'] = 1;
                         break;
                         case 'hide':
+                            // make link invisible
                             $link['visible'] = 0;
                         break;
-                        case 'none':
                         default:
-                            $link['visible'] = !empty($this->userlinks[$order]['visible']);
+                            // do nothing
                         break;
                     }
-                } else {
-                    $link['visible'] = !empty($this->userlinks[$order]['visible']);
                 }
+                unset ($link['select']);
+                // re-index sublinks
                 $menu_links = array();
-                // insert link as first child of item
-                if ((!empty($new_link) && $new_position == 2) &&
-                    ($new_relation == $order)) {
-                    $new_link['id'] = $j;
-                    // insert new link as first child of this link
-                    $menu_links[$j] = $new_link;
-                    $j++;
-                }
-                if (!empty($link['menulinks'])) {
-                    foreach ($link['menulinks'] as $suborder => $sublink) {
-                        // perform links_select action on selected items
-                        if (!empty($sublink['select']) && $links_select == 'delete') {
-                            continue;
-                        } elseif (!empty($sublink['select'])) {
-                            switch ($links_select) {
-                                case 'show':
-                                    $sublink['visible'] = 1;
-                                break;
-                                case 'hide':
-                                    $sublink['visible'] = 0;
-                                break;
-                                case 'none':
-                                default:
-                                    $sublink['visible'] = !empty($this->userlinks[$order]['menulinks'][$suborder]['visible']);
-                                break;
+                // only if the parent isn't a module link
+                if (empty($link['ismodlink'])) {
+                    // insert link as first child of item
+                    if ((!empty($new_link) && $new_position == 2) && ($new_relation == $order)) {
+                        $new_link['id'] = $j;
+                        // insert new link as first child of this link
+                        $menu_links[$j] = $new_link;
+                        $j++;
+                    }
+                    if (!empty($link['menulinks'])) {
+                        foreach ($link['menulinks'] as $suborder => $sublink) {
+                            // add missing link settings from existing entry
+                            if (isset($this->userlinks[$order]['menulinks'][$suborder]))
+                                $sublink += $this->userlinks[$order]['menulinks'][$suborder];
+                            // decode the link url
+                            $subcheck = self::_decodeURL($sublink['url'], true);
+                            foreach ($subcheck as $k => $v) {
+                                $sublink[$k] = $v;
                             }
-                        } else {
-                            $sublink['visible'] = !empty($this->userlinks[$order]['menulinks'][$suborder]['visible']);
+                            // set an appropriate name (so options in the "In Relation To" dropdown are never empty)
+                            if (empty($sublink['label']) && empty($sublink['title']) && empty($sublink['url'])) {
+                                // blank link
+                                $sublink['name'] = '_blank_';
+                            } elseif (!empty($sublink['label']) && !$sublink['ismodlink']) {
+                                // normal link, set name as label
+                               $sublink['name'] = $sublink['label'];
+                            } elseif ($sublink['ismodlink']) {
+                                // module link, set name as module_type_main
+                                $sublink['name'] = $subcheck['modname'] . '_' . $subcheck['modtype'] . '_main';
+                                // @TODO: get name and title from module link?
+                            }
+                            // children can't be module links menu items
+                            $sublink['ismodlink'] = 0;
+                            // perform links_select action on selected items
+                            if (!empty($sublink['select']) && $links_select != 'none') {
+                                // remove sublink
+                                if ($links_select == 'delete') continue;
+                                switch ($links_select) {
+                                    case 'show':
+                                        // make sublink visible
+                                        $sublink['visible'] = 1;
+                                    break;
+                                    case 'hide':
+                                        // make sublink invisible
+                                        $sublink['visible'] = 0;
+                                    break;
+                                    default:
+                                        // do nothing
+                                    break;
+                                }
+                            }
+                            unset ($sublink['select']);
+                            $sublink['id'] = $j;
+                            $sublink['ismodlink'] = 0;
+                            //$sublink['name'] = $sublink['label'];
+                            $menu_links[$j] = $sublink;
+                            $j++;
                         }
-                        $sublink['id'] = $j;
-                        //$sublink['name'] = $sublink['label'];
-                        $menu_links[$j] = $sublink;
+                    }
+                    // append link as last child of item
+                    if ((!empty($new_link) && $new_position == 3) && ($new_relation == $order)) {
+                        $new_link['id'] = $j;
+                        // insert new link as last child of this link
+                        $menu_links[$j] = $new_link;
                         $j++;
                     }
                 }
-                // append link as last child of item
-                if ((!empty($new_link) && $new_position == 3) &&
-                    ($new_relation == $order)) {
-                    $new_link['id'] = $j;
-                    // insert new link as last child of this link
-                    $menu_links[$j] = $new_link;
-                    $j++;
-                }
+                // update current link values
                 $link['menulinks'] = $menu_links;
                 $link['id'] = $i;
-                $link['name'] = $link['label'];
+                //$link['name'] = $link['label'];
                 $new_links[$i] = $link;
                 $i++;
                 // insert link after item
-                if ((!empty($new_link) && $new_position == 1) &&
-                    ($new_relation == $order)) {
+                if ((!empty($new_link) && $new_position == 1) && ($new_relation == $order)) {
                     $new_link['id'] = $i;
                     // insert new link after this link
                     $new_links[$i] = $new_link;
@@ -224,6 +298,15 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
             $numlinks = count($this->userlinks);
             $i = 1;
             foreach ($this->userlinks as $linkid => $link) {
+                if (!isset($link['encodedurl'])) {
+                    $check = self::_decodeURL($link['url'], true);
+                    foreach ($check as $k => $v) {
+                        $link[$k] = $v;
+                    }
+                }
+                $link['checkurl'] = $link['url'];
+                $link['url'] = $link['encodedurl'];
+                // Add order links to parent menu items
                 if ($i < $numlinks) {
                     $link['downurl'] = xarModURL('blocks', 'admin', 'update_instance',
                         array('tab' => 'linkorder', 'bid' => $this->bid, 'linkid' => $linkid, 'direction' => 'down', 'authid' => $authid));
@@ -237,6 +320,16 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
                     $numsublinks = count($link['menulinks']);
                     $j = 1;
                     foreach ($link['menulinks'] as $sublinkid => $sublink) {
+                        if (!isset($sublink['encodedurl'])) {
+                            $check = self::_decodeURL($sublink['url'], true);
+                            foreach ($check as $k => $v) {
+                                $sublink[$k] = $v;
+                            }
+                        }
+                        $sublink['checkurl'] = $sublink['url'];
+                        $sublink['url'] = $sublink['encodedurl'];
+
+                        // Add order links to child menu items
                         if ($j < $numsublinks) {
                             $sublink['downurl'] = xarModURL('blocks', 'admin', 'update_instance',
                                 array('tab' => 'linkorder', 'bid' => $this->bid, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid));

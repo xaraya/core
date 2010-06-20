@@ -84,5 +84,67 @@ class MenuBlock extends BasicBlock implements iBlock
             self::$truecurrenturl = xarServer::getCurrentURL(array(), false);
     }
 
+/**
+ * Get a module link for display
+ *
+ * @param array $link array of link information, required
+ * @param bool $expand force loadmenuarray (default false)
+ * @return mixed bool false if no modname, or link isn't visible, array of link info on success
+**/
+    protected function getModuleLink($link, $expand=false)
+    {
+        if (empty($link['modname']) || empty($link['visible']) || (bool)xarModVars::get($link['modname'], $this->menumodtype . '_menu_link')) return;
+
+        $modname = $link['modname'];
+        $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+        // check access defined in the module list
+        if (!empty($this->modulelist[$modname]['view_access'])) {
+            // Decide whether this menu item is displayable to the current user
+            $args = array(
+                'module' => 'base',
+                'component' => 'Block',
+                'instance' => $this->title . "All:All",
+                'group' => $this->modulelist[$modname]['view_access']['group'],
+                'level' => $this->modulelist[$modname]['view_access']['level'],
+            );
+            if (!$accessproperty->check($args)) return;
+        }
+        if (!empty($this->modulelist[$modname]['alias_name']) && empty($link['label'])) {
+            $aliasname = $this->modulelist[$modname]['alias_name'];
+            if (isset($this->modulelist[$modname]['aliases'][$aliasname])) {
+                $link['label'] = $aliasname;
+            }
+        }
+        if (empty($link['label'])) {
+            $link['label'] = xarModGetDisplayableName($modname);
+        }
+        if (empty($link['title'])) {
+            $link['title'] = xarModGetDisplayableDescription($modname);
+        }
+        $link['url'] = xarModURL($modname, $this->menumodtype, 'main', array());
+        if ($link['url'] == self::$currenturl) $link['url'] = '';
+
+        if (empty($link['name'])) {
+            $link['name'] = $modname . '_' . $this->menumodtype;
+        }
+
+        // see if module is active
+        $isactive = ($modname == self::$thismodname &&
+                    (self::$thismodtype == $this->menumodtype || !empty($this->menumodtypes) && in_array(self::$thismodtype, $this->menumodtypes)));
+        $menulinks = array();
+        // get menulinks if module is active or calling function requested expand(ed) list
+        if ($isactive || $expand) {
+            $menulinks = xarMod::apiFunc('base', 'admin', 'loadmenuarray',
+                array(
+                    'modname' => $modname,
+                    'modtype' => $this->menumodtype, // make sure we get correct type of menu links
+                ));
+        }
+        $link['menulinks'] = $menulinks;
+        $link['isactive'] = $isactive;
+        $link['ismodlink'] = 1;
+
+        return $link;
+    }
 }
 ?>

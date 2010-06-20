@@ -46,6 +46,10 @@
         <xar:var name="imgdownalt">Down</xar:var>
         <xar:var name="imguptitle">Move this link up</xar:var>
         <xar:var name="imgdowntitle">Move this link down</xar:var>
+        <xar:set name="wwwicon">#xarTplGetImage('icons/www-url.png', 'base')#</xar:set>
+        <xar:var name="wwwcheck">Check the URL for this link</xar:var>
+        <xar:var name="wwwnone">URL is empty</xar:var>
+        <xar:var name="wwwalt">Check URL</xar:var>
         <table id="menulinks_#$blockid#" class="xar-fullwidth xar-margin-nonebottom">
             <caption class="xar-align-left xar-margin-thickbottom xar-margin-nonetop">
                 <strong>Menu Links</strong>
@@ -56,6 +60,7 @@
                     <th>Label</th>
                     <th>Title</th>
                     <th>URL</th>
+                    <th>&#160;</th>
                     <th class="xar-align-center">State</th>
                     <th class="xar-align-right">Select</th>
                 </tr>
@@ -81,6 +86,15 @@
                             <xar:set name="url_name">$link_name . '[url]'</xar:set>
                             <xar:data-input type="textbox" class="xar-form-textlong" name="$url_name" id="$url_id" maxlength="255" value="$link['url']"/>
                         </td>
+                        <td>
+                            <xar:if condition="!empty($link['url'])">
+                                <a href="#$link['checkurl']#" title="#$wwwcheck#">
+                                    <img src="#$wwwicon#" alt="#$wwwalt#" class="xar-icon"/>
+                                </a>
+                            <xar:else/>
+                                <img src="#$wwwicon#" alt="#$wwwalt#" title="#$wwwnone#" class="xar-icon-disabled"/>
+                            </xar:if>
+                        </td>
                         <td class="xar-align-center">
                             <xar:if condition="!empty($link['visible'])">
                                 <img src="#$visibleicon#" alt="visible" title="#$visibletitle#" class="xar-icon"/>
@@ -88,20 +102,20 @@
                                 <img src="#$invisibleicon#" alt="hidden" title="#$invisibletitle#" class="xar-icon-disabled"/>
                             </xar:if>
                         </td>
-                        <td class="xar-align-right">
+                        <td class="xar-align-right xar-nowrap">
                             <xar:if condition="!empty($link['upurl'])">
                                 <a href="#$link['upurl']#" title="#$imguptitle#" class="xar-icon">
-                                <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon"/>
+                                <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon xar-padding-thinright"/>
                                 </a>
                             <xar:else/>
-                                <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon-disabled"/>
+                                <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon-disabled xar-padding-thinright"/>
                             </xar:if>
                             <xar:if condition="!empty($link['downurl'])">
                                 <a href="#$link['downurl']#" title="#$imgdowntitle#" class="xar-icon">
-                                <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon"/>
+                                <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon xar-padding-thinright"/>
                                 </a>
                             <xar:else/>
-                                <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon-disabled"/>
+                                <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon-disabled xar-padding-thinright"/>
                             </xar:if>
                             <xar:set name="select_id">$link_id . '_select'</xar:set>
                             <xar:set name="select_name">$link_name . '[select]'</xar:set>
@@ -131,10 +145,25 @@
                                 <xar:set name="url_name">$sub_name . '[url]'</xar:set>
                                 <xar:data-input type="textbox" class="xar-form-textlong" name="$url_name" id="$url_id" maxlength="255" value="$sublink['url']"/>
                             </td>
+                            <td>
+                                <xar:if condition="!empty($sublink['url'])">
+                                    <a href="#$sublink['checkurl']#" title="#$wwwcheck#">
+                                        <img src="#$wwwicon#" alt="#$wwwalt#" class="xar-icon"/>
+                                    </a>
+                                <xar:else/>
+                                    <img src="#$wwwicon#" alt="#$wwwalt#" title="#$wwwnone#" class="xar-icon-disabled"/>
+                                </xar:if>
+                            </td>
                             <td class="xar-align-center">
                                 <xar:if condition="!empty($sublink['visible'])">
-                                    <xar:set name="iconclass">!empty($link['visible']) ? 'xar-icon' : 'xar-icon-disabled'</xar:set>
-                                    <xar:set name="icontitle">!empty($link['visible']) ? $visibletitle : $invisibletitle</xar:set>
+                                    <!-- visible only if parent is visible, has a label, and has a url -->
+                                    <xar:if condition="!empty($link['visible']) and !empty($link['url']) and !empty($link['label'])">
+                                        <xar:set name="icontitle">$visibletitle</xar:set>
+                                        <xar:set name="iconclass">'xar-icon'</xar:set>
+                                    <xar:else/>
+                                        <xar:set name="icontitle">$invisibletitle</xar:set>
+                                        <xar:set name="iconclass">'xar-icon-disabled'</xar:set>
+                                    </xar:if>
                                     <img src="#$visibleicon#" alt="visible" title="#$icontitle#" class="#$iconclass#"/>
                                 <xar:else/>
                                     <img src="#$invisibleicon#" alt="invisible" title="#$invisibletitle#" class="xar-icon-disabled"/>
@@ -143,17 +172,17 @@
                             <td class="xar-align-right xar-nowrap">
                                 <xar:if condition="!empty($sublink['upurl'])">
                                     <a href="#$sublink['upurl']#" title="#$imguptitle#" class="xar-icon">
-                                    <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon"/>
+                                    <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon xar-padding-thinright"/>
                                     </a>
                                 <xar:else/>
-                                    <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon-disabled"/>
+                                    <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon-disabled xar-padding-thinright"/>
                                 </xar:if>
                                 <xar:if condition="!empty($sublink['downurl'])">
                                     <a href="#$sublink['downurl']#" title="#$imgdowntitle#" class="xar-icon">
-                                    <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon"/>
+                                    <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon xar-padding-thinright"/>
                                     </a>
                                 <xar:else/>
-                                    <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon-disabled"/>
+                                    <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon-disabled xar-padding-thinright"/>
                                 </xar:if>
                                 <xar:set name="select_id">$sub_id . '_select'</xar:set>
                                 <xar:set name="select_name">$sub_name . '[select]'</xar:set>
@@ -166,7 +195,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="6" class="xar-align-right">
+                    <td colspan="7" class="xar-align-right">
                         <xar:set name="link_selects">array(
                             array('id' => 'none', 'name' => '--- do nothing ---'),
                             array('id' => 'show', 'name' => 'Make Visible'),

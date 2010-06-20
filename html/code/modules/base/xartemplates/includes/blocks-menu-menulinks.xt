@@ -48,7 +48,7 @@
                         #$link['label']# #$marked#
                     </a>
                 <xar:else/>
-                    <a id="#$linkid#"></a>
+                    &#160;<a id="#$linkid#"></a>
                 </xar:if>
                 <!-- If this link has menulinks, and the link is active, and its parent is active,
                      and we haven't reached the maxlevel, display next level -->

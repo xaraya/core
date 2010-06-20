@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <h3>Menu Block Help Information</h3>
+    <h3 id="menublockhelp">Menu Block Help Information</h3>
 
     <p>The menu block is responsible for providing links to site users. It is able to display static links which you provide. In addition, it can display links to modules with user capable functions.</p>
 
@@ -25,19 +25,40 @@
     |--- Parent Link
     etc...
     </pre>
-
+    <xar:set name="visibleicon">#xarTplGetImage('icons/enabled.png', 'base')#</xar:set>
+    <xar:set name="invisibleicon">#xarTplGetImage('icons/disabled.png', 'base')#</xar:set>
+    <xar:var name="visibletitle">Link is visible in the menu</xar:var>
+    <xar:var name="invisibletitle">Link is not visible in the menu</xar:var>
+    <xar:set name="wwwicon">#xarTplGetImage('icons/www-url.png', 'base')#</xar:set>
+    <xar:var name="wwwcheck">Check the URL for this link</xar:var>
     <h4 id="editlinks">Editing links</h4>
     <p>The Menu Links listing displays information about all links added to the block. You can edit their values at any time.</p>
     <ul>
-        <li><strong>Label</strong> The label is optional, and if specified will be displayed in the menu</li>
-        <li><strong>Title</strong> The title is optional and will be displayed when a link is hovered</li>
-        <li><strong>URL</strong> The URL is optional (see notes on <a href="#xarServer::getCurrentURL(array(), null, 'shortcutsyntax')#">shortcut syntax</a> below for an alternative way to specify links to modules)</li>
-        <li><strong>State</strong> Shows the current state of the link, either visible or hidden. You can change the state of links at any time by selecting them with the checkbox and then selecting an action from the dropdown below the links.</li>
-        <li>Links can be re-ordered by clicking on the appropriate order link. Note, child links can only be re-ordered within their parent link. To make a child link a parent you will need to Add it as a new menu link</li>
+        <li><strong>Label</strong> The label is optional, and if specified will be displayed in the menu.</li>
+        <li><strong>Title</strong> The title is optional and will be displayed as a tooltip when a link is hovered.</li>
+        <li><strong>URL</strong> The URL is optional (see notes on <a href="#xarServer::getCurrentURL(array(), null, 'shortcutsyntax')#">shortcut syntax</a> below for an alternative way to specify links to modules). <br/>You can check your urls are valid by clicking the <img src="#$wwwicon#" alt="#xarML('Check URL')#" title="#$wwwcheck#" class="xar-icon"/> check url link.</li>
+        <li><strong>State</strong> Shows the current state of the link, either visible or hidden. The states are as follows...
+            <ul>
+                <li>
+                    <img src="#$visibleicon#" alt="#xarML('Visible')#" title="#$visibletitle" class="xar-icon"/>
+                    Link is visible, the item will be displayed in the menu.
+                </li>
+                <li>
+                    <img src="#$visibleicon#" alt="#xarML('Visible')#" title="#$visibletitle" class="xar-icon-disabled"/>
+                    Link is visible, but other settings are preventing it displaying in the menu, eg the parent link isn't visible.
+                </li>
+                <li>
+                    <img src="#$invisibleicon#" alt="#xarML('Not visible')#" title="#$invisibletitle" class="xar-icon-disabled"/>
+                    Link is not visible, the item will not be displayed in the menu.
+                </li>
+            </ul>
+            You can change the state of links at any time by selecting them with the checkbox and then selecting an action from the dropdown below the links.
+        </li>
+        <li>Links can be re-ordered by clicking on the appropriate order link. Note, child links can only be re-ordered within their parent link. To make a child link a parent you will need to add it as a <a href="#xarServer::getCurrentURL(array(), null, 'newlinks')#">new menu link</a>.</li>
         <li>Links can be deleted by selecting them with the checkbox and selecting Delete from the dropdown below the links</li>
     </ul>
 
-    <h4 id="newlinks">Adding new links</h4>
+    <h4 id="newlinks">Adding new menu links</h4>
     <p>New links can be added to your menu by providing Label, Title and URL information in the Add New Menu Links fields.</p>
     <p>In addition, you may leave the fields blank, and select the Insert Blank checkbox. This will add an empty link to the menu, which can be used as a separator.</p>
     <p>When adding a new link you must also specify where you'd like the link to appear in relation to the other links.</p>
@@ -47,26 +68,26 @@
     </ul>
 
     <h4 id="shortcutsyntax">Shortcut Syntax</h4>
-    <p>Instead of specifiying your urls in the normal way, the URL field accepts urls in the following syntax to allow you to easily specify module, type, function and any addition parameters to pass to the url</p>
+    <p>Instead of specifiying your urls in the normal way, the URL field accepts urls in the following syntax to allow you to easily specify module, type, function and any addition parameters to pass to the url.</p>
     <pre>
     [module:type:func]param1=value1&amp;param2=value2 etc..
     </pre>
-    Some examples
+    <p>By passing just the module name without type, function or parameters, eg., <strong>[module]</strong>, you can include a <a href="#xarServer::getCurrentURL(array(), null, 'modulelinks')#">module link</a> in your menu and have it behave as if it was being displayed in the module menu.</p>
+    <p>Some Examples....</p>
     <ul>
-        <li><strong>[base]</strong> Will link to the base module user main function</li>
-        <li><strong>[roles:user:account]</strong> Will link to the roles user account function</li>
-        <li><strong>[articles:user:view]ptid=1</strong> Will link to articles user view pubtype 1</li>
-    </ul>
-    <p>By adding the <strong>_menulinks</strong> keyword to a <strong>[module]</strong> you can include a module link in your menu and have it behave as if it was being displayed in the module menu.</p>
-    Example
-    <ul>
-        <li><strong>[roles]_menulinks</strong> Will display a link to Roles User Main, and when active will display the menu links supplied by the roles module.</li>
-    </ul>
-    <p>Including module menu links this way is very flexible, you can...</p>
-    <ul>
-        <li>Leave the label blank, and the label will fall back to either the modules' display name, or the alias you set in the Module List for the module.</li>
-        <li>Leave the title blank and the title will fall back to the modules' display description.</li>
-        <li>Set the access permissions and the link will obey them.</li>
+        <li><strong>[roles]</strong> Will display a link to Roles User Main. Will display the menu links supplied by the roles module when active.
+            <p>Including module menu links this way is very flexible, you can...</p>
+            <ul>
+                <li>Leave the label blank, and the label will fall back to either the modules' display name, or the alias you set in the Module List for the module.</li>
+                <li>Leave the title blank and the title will fall back to the modules' display description.</li>
+                <li>Set the modules' access permissions in the module list and the link will honor them.</li>
+                <li>Module menu links must be parent menu items. Including them as children will result in a link to the modules' user main function but menu links will not be displayed when it's active.</li>
+                <li>In addition, you cannot add child items to module menu links.</li>
+            </ul>
+        </li>
+        <li><strong>[base]page=docs</strong> Will display a link to Base User Main, passing it the parameters specified. Will not display links supplied by the base module when active.</li>
+        <li><strong>[roles:user:main]</strong> Will display a link to the Roles User Main function. Will not display links supplied by the roles module when active.</li>
+        <li><strong>[articles:user:view]ptid=1</strong> Will display a link to Articles User View pubtype 1</li>
     </ul>
 
     <p><strong>NOTE:</strong> The menu block is pre-configured to link to [base]page=docs. If your menu has no other menu links it will always be present and cannot be removed. Instead, you should change it's visible state if you don't wish to see it in the menu</p>
@@ -76,8 +97,11 @@
     <ul>
         <li><strong>Alias</strong> If you have aliases specified for a module, you can choose one of them to be used as the label to be displayed in links to that module. The default is to use the modules display name.</li>
         <li><strong>Required Access Group or Level</strong> This allows you to choose which groups of users, or what privilege level they must have, in order to see the link.</li>
-        <li><strong>Visible</strong> By unchecking the checkbox you can remove a link from the menu entirely</li>
+        <li><strong>Visible</strong> By unchecking the checkbox you can remove a link from the menu entirely.</li>
     </ul>
     <p><strong>NOTE:</strong> When you add a new module to the system, it will automatically be available to all users with the necessary privileges to view until you edit the block it appears in.</p>
+    <div class="xar-align-center xar-margin-thickends xar-padding-thickends">
+        <a href="#xarServer::getCurrentURL(array(), null, 'menublockhelp')#">back to top</a>
+    </div>
 
 </xar:template>

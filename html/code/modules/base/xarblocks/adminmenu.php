@@ -66,33 +66,12 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
 
         foreach ($this->xarmodules as $mod) {
             $modname = $mod['name'];
-            // @TODO: deprecate this
-            if ((bool)xarModVars::get($modname, $this->menumodtype . '_menu_link')) continue;
-            // Use this instead :)
-            if (empty($vars['modulelist'][$modname]['visible'])) continue;
-
-            if (!empty($vars['modulelist'][$modname]['alias_name'])) {
-                $displayname = $vars['modulelist'][$modname]['alias_name'];
-                if (empty($mod['aliases']) || !isset($mod['aliases'][$displayname])) {
-                    $displayname = $mod['displayname'];
-                }
-            } else {
-                $displayname = $mod['displayname'];
-            }
-
-            // get menu links if module is active
-            if ($modname == self::$thismodname && (self::$thismodtype == $this->menumodtype || !empty($this->menumodtypes) && in_array(self::$thismodtype, $this->menumodtypes)) ) {
-                $menulinks = xarMod::apiFunc('base', 'admin', 'loadmenuarray',
-                    array(
-                        'modname' => $modname,
-                        'modtype' => $this->menumodtype, // make sure we get admin menu links
-                    ));
-                $isactive = true;
-            } else {
-                $menulinks = array();
-                $isactive = false;
-            }
-            $modurl = xarModURL($modname, $this->menumodtype, 'main', array());
+            if (!isset($this->modulelist[$modname])) continue;
+            $link = $this->modulelist[$modname];
+            $link['modname'] = $modname;
+            $link = self::getModuleLink($link);
+            if (!$link) continue;
+            $link['title'] = xarML('Show administration options for module #(1)', $link['label']);
             switch ($vars['menustyle']) {
                 case 'bycat':
                 default:
@@ -102,25 +81,11 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
                     }
                     $cat = xarVarPrepForDisplay($mod['category']);
                     // add module link to category
-                    $categories[$cat][$modname] = array(
-                        'label' => $displayname,
-                        'url' => $modurl == self::$currenturl ? '' : $modurl,
-                        'title' => xarML('Show administration options for module #(1)', $displayname),
-                        'isactive' => $isactive,
-                    );
-                    // add module menulinks to category (if any)
-                    $categories[$cat][$modname]['menulinks'] = $menulinks;
+                    $categories[$cat][$modname] = $link;
                 break;
                 case 'byname':
                     // add module link to adminmods
-                    $adminmods[$modname] = array(
-                        'label' => $displayname,
-                        'url' => $modurl == self::$currenturl ? '' : $modurl,
-                        'title' => xarML('Show administration options for module #(1)', $displayname),
-                        'isactive' => $isactive,
-                    );
-                    // add module menulinks to adminmods (if any)
-                    $adminmods[$modname]['menulinks'] = $menulinks;
+                    $adminmods[$modname] = $link;
                 break;
             }
         }
