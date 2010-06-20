@@ -84,5 +84,10 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
         return $data;
     }
 
+    public function help()
+    {
+        return $this->getInfo();
+    }
+
 }
 ?>
