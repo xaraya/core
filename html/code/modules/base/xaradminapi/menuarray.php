@@ -16,52 +16,22 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @returns array
  * @return array of menulinks for a module
+ *
+ & @TODO: remove this once all modules are calling loadmenuarray
  */
 function base_adminapi_menuarray($args)
 {
-    if (!isset($args['module'])) {
-        $urlinfo = xarController::$request->getInfo();
-        $args['module'] = $urlinfo[0];
+    // Handle calls from admin getmenulinks functions which haven't yet been updated to use loadmenuarray()
+    if (!isset($args['modname']) && isset($args['module'])) {
+        // They all use module instead of modname, and are always called by admin type getmenulinks functions
+        $args['modname'] = $args['module'];
+        $args['modtype'] = 'admin';
+        // since loadmenuarray can itself call the getmenulinks function,
+        // so that we don't end up in a loop, we request only links in xml files
+        $args['nolinks'] = 1;
     }
-    $menulinks = array();
-    $menuarray = xarMod::apiFunc('base','admin','loadadminmenuarray',array('module' => $args['module']));
-    if (!empty($menuarray['items'])) {
-        foreach ($menuarray['items'] as $menuitem) {
-            $url = isset($menuitem['target']) ? xarModURL($args['module'],'admin',$menuitem['target']) : xarServer::getBaseURL();
-            $link = array('url'   => $url,
-                          'title' => $menuitem['title'],
-                          'label' => $menuitem['label']
-                           );
-            if(isset($menuitem['mask'])) {
-                if (xarSecurityCheck($menuitem['mask'],0)) {
-                    $menulinks[] = $link;
-                }
-            } else {
-                $menulinks[] = $link;
-            }
-        }
-    } else {
-        try {
-            $tabs = xarMod::apiFunc($args['module'],'data','adminmenu');
-            foreach($tabs as $tab) {
-                $url = isset($tab['target']) ? xarModURL($args['module'],'admin',$tab['target']) : xarServer::getBaseURL();
-                $label = isset($tab['label']) ? $tab['label'] : xarML('Missing label');
-                $title = isset($tab['title']) ? $tab['title'] : $label;
-                $link = array('url'   => $url,
-                              'title' => $title,
-                              'label' => $label
-                               );
-                if(isset($tab['mask'])) {
-                    if (xarSecurityCheck($tab['mask'],0)) {
-                        $menulinks[] = $link;
-                    }
-                } else {
-                    $menulinks[] = $link;
-                }
-            }
-        } catch (Exception $e) {}
-    }
-    return $menulinks;
+    // let loadmenuarray do the work
+    return xarMod::apiFunc('base', 'admin', 'loadmenuarray', $args);
 }
 
 ?>

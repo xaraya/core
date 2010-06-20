@@ -11,13 +11,31 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
- * utility function to get an array of menulinks from {modtype} getmenulinks function or {modtype}menu-dat.xml file
+ * Utility function to get an array of menulinks from {modtype} getmenulinks function or {modtype}menu-dat.xml file
+ * This function pays no respect to the active state of the module, calling functions must determine that
+ * It looks for menu links for the specified module and type, falling back to the current request module and type
+ * It first looks for links in xml files in ./code/modules/{modname}/xardata/{modtype}menu-dat.xml
+ * If the xml file doesn't exist, it falls back to looking for links in the modules' getmenulinks function
+ * If no links are found the function returns an empty array
+ *
+ * Any module which supplies links in xml files is expected to use this function to retrieve those links.
+ * See examples of use in core module _adminapi_getmenulinks functions
+ *
+ * This function is called by the MenuBlocks class and its children
+ *
+ * This function is also used by the base/xartemplates/includes/admin-menu.xt file to supply links
+ * for admin tabs. Other modules can include that instead of creating their own admin-menu.xt file
+ * <xar:template type="module" module="base" file="admin-menu" subdata="array('modname' => 'module', 'modtype' => 'admin')"/>
+ * Easter egg, the file can also be used in the same way for user tabs by changing the type :)
+ * <xar:template type="module" module="base" file="admin-menu" subdata="array('modname' => 'module', 'modtype' => 'user')"/>
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array $args optional array of arguments
  * @param string $args[modname] optional name of module to get links for (default current request module)
  * @param string $args[modtype] optional type of links to return [admin|user] (default current request type)
  * @param string $args[layout] return links for menu or links for tabs with menu title info (default links)
+ * @param bool $args[noxml] optionally force looking for links only from a getmenulinks function
+ * @param bool $args[nolinks] optionally force looking for links only from xml files
  * @returns array
  * @return array of menulinks for a module
  * @throws none
@@ -37,7 +55,7 @@ function base_adminapi_loadmenuarray($args)
     $menu = array();
     $menulinks = array();
     $xmlfile = sys::code() . "modules/{$args['modname']}/xardata/{$args['modtype']}menu-dat.xml";
-    if (file_exists($xmlfile)) {
+    if (file_exists($xmlfile) && empty($args['noxml'])) {
         try {
             $xml = simplexml_load_file($xmlfile);
             if($args['layout'] == 'tabs' && isset($xml->menutitle)) {
@@ -74,7 +92,7 @@ function base_adminapi_loadmenuarray($args)
             // throw ($e);
         }
 
-    } else {
+    } elseif (empty($args['nolinks'])) {
         try {
             $menulinks = xarMod::apiFunc($args['modname'], $args['modtype'], 'getmenulinks');
         } catch (Exception $e) {
