@@ -38,6 +38,8 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
     public $menumodtype         = 'admin';
     public $menumodtypes        = array('admin', 'util');
 
+    public $xarversion          = '2.2.0';
+
     public function __construct(Array $data=array())
     {
         parent::__construct($data);
@@ -49,8 +51,23 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
         }
         // make sure we keep the content array in sync
         $this->content['modulelist'] = $this->modulelist;
-        if (!isset($this->content['marker']))
-            $this->content['marker'] = $this->marker;
+
+    }
+/**
+ * This method is called by the BasicBlock class constructor
+**/
+    public function upgrade($oldversion) {
+
+        switch ($oldversion) {
+            case '0.0.0': // upgrade menu blocks to version 2.2.0
+            if (!isset($this->content['marker']))
+                $this->content['marker'] = $this->marker;
+            // fall through to next version
+            case '2.2.0':
+
+            break;
+        }
+        return true;
     }
 
 /**

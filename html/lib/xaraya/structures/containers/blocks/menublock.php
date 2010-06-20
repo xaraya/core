@@ -41,6 +41,7 @@ class MenuBlock extends BasicBlock implements iBlock
                 $aliases[$modname][$alias] = array('id' => $alias, 'name' => $alias);
             }
         }
+        // replace old menu blocks modulelist property default with new default
         if (empty($this->modulelist) && !is_array($this->modulelist)) {
             $this->modulelist = array();
         }

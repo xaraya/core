@@ -30,6 +30,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
     public $module              = 'base';
     public $text_type           = 'Menu';
     public $text_type_long      = 'Generic menu';
+    public $xarversion          = '2.2.0';
     public $allow_multiple      = true;
     public $show_preview        = true;
     public $nocache             = 1;
@@ -67,66 +68,13 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 
     public function __construct(Array $data=array())
     {
+        // upgrades are now in the upgrade() method below (called in parent constructor :) )
         parent::__construct($data);
-
-        // convert the old modulelist string to an array, one time deal coming from < 2.2.0
-        if (!empty($this->modulelist) && !is_array($this->modulelist)) {
-            $oldlist = @explode(',', $this->modulelist);
-            $modulelist = array();
-            if (is_array($oldlist)) {
-                foreach ($oldlist as $modname) {
-                    $modname = trim($modname);
-                    $modulelist[$modname] = 1;
-                }
-            }
-            unset($oldlist);
-        }
-        if (isset($this->content['displaymodules'])) {
-            $this->modulelist = array();
-            foreach ($this->xarmodules as $key => $mod) {
-                $modname = $mod['name'];
-                // convert the old modulelist, one time deal coming from < 2.2.0
-                if ($this->content['displaymodules'] == 'All' || isset($modulelist[$modname])) {
-                    $this->modulelist[$modname]['visible'] = 1;
-                } else {
-                    $this->modulelist[$modname]['visible'] = 0;
-                }
-            }
-            unset($this->content['displaymodules']);
-        }
         // make sure we keep the content array in sync
         $this->content['modulelist'] = $this->modulelist;
-
-        // convert the old user_content/lines to userlinks array
-        if (!empty($this->content['lines'])) {
-            $userlinks = array();
-            foreach ($this->content['lines'] as $id => $line) {
-                $userlinks[] = array(
-                    'id' => $id,
-                    'name' => $line['label'],
-                    'label' => $line['label'],
-                    'title' => $line['description'],
-                    'url' => $line['url'],
-                    'visible' => $line['visible'],
-                    'menulinks' => array(),
-                    'isactive' => 0,
-                );
-            }
-            $this->userlinks = $this->content['userlinks'] = $userlinks;
-            unset($this->content['lines']);
-        }
         // load the default link if userlinks are empty
         if (empty($this->userlinks))
             $this->userlinks = $this->content['userlinks'] = $this->links_default;
-        // add labels and titles for static links < 2.2.0
-        if (empty($this->content['backlabel'])) $this->content['backlabel'] = $this->backlabel;
-        if (empty($this->content['backtitle'])) $this->content['backtitle'] = $this->backtitle;
-        if (empty($this->content['logoutlabel'])) $this->content['logoutlabel'] = $this->logoutlabel;
-        if (empty($this->content['logouttitle'])) $this->content['logouttitle'] = $this->logouttitle;
-        if (empty($this->content['rsslabel'])) $this->content['rsslabel'] = $this->rsslabel;
-        if (empty($this->content['rsstitle'])) $this->content['rsstitle'] = $this->rsstitle;
-        if (empty($this->content['printlabel'])) $this->content['printlabel'] = $this->printlabel;
-        if (empty($this->content['printtitle'])) $this->content['printtitle'] = $this->printtitle;
     }
 
 /**
@@ -195,6 +143,78 @@ class Base_MenuBlock extends MenuBlock implements iBlock
         $data['content'] = $vars;
 
         return $data;
+    }
+/**
+ * This method is called by the BasicBlock class constructor
+**/
+    public function upgrade($oldversion) {
+
+        switch ($oldversion) {
+            case '0.0.0': // upgrade menu blocks to version 2.2.0
+                // convert the old modulelist string to an array, one time deal coming from < 2.2.0
+                if (!empty($this->modulelist) && !is_array($this->modulelist)) {
+                    $oldlist = @explode(',', $this->modulelist);
+                    $modulelist = array();
+                    if (is_array($oldlist)) {
+                        foreach ($oldlist as $modname) {
+                            $modname = trim($modname);
+                            $modulelist[$modname] = 1;
+                        }
+                    }
+                    unset($oldlist);
+                }
+                if (isset($this->content['displaymodules'])) {
+                    $this->modulelist = array();
+                    foreach ($this->xarmodules as $key => $mod) {
+                        $modname = $mod['name'];
+                        if ($this->content['displaymodules'] == 'All' || isset($modulelist[$modname])) {
+                            $this->modulelist[$modname]['visible'] = 1;
+                        } else {
+                            $this->modulelist[$modname]['visible'] = 0;
+                        }
+                    }
+                    unset($this->content['displaymodules']);
+                }
+
+                // convert the old user_content/lines to userlinks array
+                if (!empty($this->content['lines'])) {
+                    $userlinks = array();
+                    foreach ($this->content['lines'] as $id => $line) {
+                        $userlinks[] = array(
+                            'id' => $id,
+                            'name' => $line['label'],
+                            'label' => $line['label'],
+                            'title' => $line['description'],
+                            'url' => $line['url'],
+                            'visible' => $line['visible'],
+                            'menulinks' => array(),
+                            'isactive' => 0,
+                        );
+                    }
+                    $this->userlinks = $this->content['userlinks'] = $userlinks;
+                    unset($this->content['lines']);
+                }
+                // remove any other deprecated properties
+                if (isset($this->content['user_content'])) unset($this->content['user_content']);
+                if (isset($this->content['rssurl'])) unset($this->content['rssurl']);
+                if (isset($this->content['printurl'])) unset($this->content['printurl']);
+
+                // Add new properties to the content array
+                if (empty($this->content['backlabel'])) $this->content['backlabel'] = xarML($this->backlabel);
+                if (empty($this->content['backtitle'])) $this->content['backtitle'] = xarML($this->backtitle);
+                if (empty($this->content['logoutlabel'])) $this->content['logoutlabel'] = xarML($this->logoutlabel);
+                if (empty($this->content['logouttitle'])) $this->content['logouttitle'] = xarML($this->logouttitle);
+                if (empty($this->content['rsslabel'])) $this->content['rsslabel'] = xarML($this->rsslabel);
+                if (empty($this->content['rsstitle'])) $this->content['rsstitle'] = xarML($this->rsstitle);
+                if (empty($this->content['printlabel'])) $this->content['printlabel'] = xarML($this->printlabel);
+                if (empty($this->content['printtitle'])) $this->content['printtitle'] = xarML($this->printtitle);
+
+            // fall through to next upgrade...
+            case '2.2.0': // upgrade from 2.2.0 comes here
+
+            break;
+        }
+        return true;
     }
 
     public function getUserLinks()

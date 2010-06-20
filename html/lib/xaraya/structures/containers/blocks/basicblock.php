@@ -25,7 +25,7 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     public $text_type       = 'Basic Block';  // Block name
     public $text_type_long  = 'Parent class for blocks'; // Block description
     // version check so blocks can supply an upgrade method (called in constructor)
-    public $xarversion             = '0.0.1'; // expects a 3 point version number
+    public $xarversion             = '0.0.0'; // expects a 3 point version number
 
     // block instance properties
     // these will be filled in by blockinfo when a new object is instantiated
@@ -89,11 +89,12 @@ class BasicBlock extends ObjectDescriptor implements iBlock
             parent::setArgs($data['content']);
         // update properties from content args
         parent::refresh($this);
+         // populate content on first run
+        if (empty($this->content)) $this->content = $this->getInfo();
         // set a sensible default for blocks not yet using xarversion
         $oldver = !empty($this->content['xarversion']) ? $this->content['xarversion'] : '0.0.0';
         // compare versions if we have a new version that is different to the old version,
-        // and only if the content is populated (ie, not on first run of a new block)
-        if (!empty($newver) && $newver != $oldver && !empty($this->content)) {
+        if (!empty($newver) && $newver != $oldver) {
             sys::import('xaraya.version');
             $vercompare = xarVersion::compare($newver, $oldver, 3);
             // compare new block with old block,
@@ -101,7 +102,7 @@ class BasicBlock extends ObjectDescriptor implements iBlock
                 // only run upgrade if new version is greater than old version
                 // modules can over-ride the upgrade method with their own :)
                 // pass the old version to the upgrade method
-                if (!$this->upgrade($this->xarversion))
+                if (!$this->upgrade($oldver))
                     // if upgrade method didn't return true, upgrade failed
                     throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to upgrade #(1) module block #(2) from version #(3) to version #(4)');
                 // update to new version
@@ -111,8 +112,7 @@ class BasicBlock extends ObjectDescriptor implements iBlock
                 throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to downgrade #(1) module block #(2) from version #(3) to version #(4)');
             }
         }
-        // populate content on first run
-        if (empty($this->content)) $this->content = $this->getInfo();
+
     }
 
     public function getInfo()
@@ -136,7 +136,6 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     public function display(Array $args=array())
     {
         $data = $this->getInfo();
-        print_r('upgrade: ' . $this->isupgraded);
         return $data;
     }
 
@@ -166,9 +165,9 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     {
         // use it much as you would the xarinit upgrade function in modules
         switch ($oldversion) {
-            case '0.0.0':
+            case '0.0.0': // if no version was previously set, the default is 0.0.0
             default:
-                // upgrades from 0.0.0 (or empty) go here
+                // upgrades from 0.0.0 go here
             // fall through to subsequent upgrades
             case '0.0.1':
                 // upgrades from 0.0.1 go here
