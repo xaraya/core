@@ -68,7 +68,6 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     // blocks inheriting from this class must define their own properties
     // all properties not stored in the db are stored in $this->content
 
-    public $isupgraded = false;
     // use the constructor to populate properties ($data = blockinfo)
     // all blocks inheriting this class should call this constructor
     // eg parent::__construct($data);
@@ -221,6 +220,7 @@ interface iBlock
 {
     public function getInfo();
     public function getInit();
+    public function upgrade($oldversion);
     public function display(Array $args=array());
     public function modify(Array $args=array());
     public function update(Array $args=array());

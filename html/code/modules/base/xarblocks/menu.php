@@ -151,7 +151,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 
         switch ($oldversion) {
             case '0.0.0': // upgrade menu blocks to version 2.2.0
-                // convert the old modulelist string to an array, one time deal coming from < 2.2.0
+                // convert the old modulelist string to an array
                 if (!empty($this->modulelist) && !is_array($this->modulelist)) {
                     $oldlist = @explode(',', $this->modulelist);
                     $modulelist = array();
@@ -200,14 +200,14 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                 if (isset($this->content['printurl'])) unset($this->content['printurl']);
 
                 // Add new properties to the content array
-                if (empty($this->content['backlabel'])) $this->content['backlabel'] = xarML($this->backlabel);
-                if (empty($this->content['backtitle'])) $this->content['backtitle'] = xarML($this->backtitle);
-                if (empty($this->content['logoutlabel'])) $this->content['logoutlabel'] = xarML($this->logoutlabel);
-                if (empty($this->content['logouttitle'])) $this->content['logouttitle'] = xarML($this->logouttitle);
-                if (empty($this->content['rsslabel'])) $this->content['rsslabel'] = xarML($this->rsslabel);
-                if (empty($this->content['rsstitle'])) $this->content['rsstitle'] = xarML($this->rsstitle);
-                if (empty($this->content['printlabel'])) $this->content['printlabel'] = xarML($this->printlabel);
-                if (empty($this->content['printtitle'])) $this->content['printtitle'] = xarML($this->printtitle);
+                if (!isset($this->content['backlabel'])) $this->content['backlabel'] = xarML($this->backlabel);
+                if (!isset($this->content['backtitle'])) $this->content['backtitle'] = xarML($this->backtitle);
+                if (!isset($this->content['logoutlabel'])) $this->content['logoutlabel'] = xarML($this->logoutlabel);
+                if (!isset($this->content['logouttitle'])) $this->content['logouttitle'] = xarML($this->logouttitle);
+                if (!isset($this->content['rsslabel'])) $this->content['rsslabel'] = xarML($this->rsslabel);
+                if (!isset($this->content['rsstitle'])) $this->content['rsstitle'] = xarML($this->rsstitle);
+                if (!isset($this->content['printlabel'])) $this->content['printlabel'] = xarML($this->printlabel);
+                if (!isset($this->content['printtitle'])) $this->content['printtitle'] = xarML($this->printtitle);
 
             // fall through to next upgrade...
             case '2.2.0': // upgrade from 2.2.0 comes here

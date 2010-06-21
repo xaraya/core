@@ -105,7 +105,7 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
             }
             $new_link['label'] = $new_label;
             $new_link['title'] = $new_title;
-            $new_link['menulinks'] = $modlinks;
+            $new_link['menulinks'] = array();
         }
 
         // Now re-index our array of links, performing any selected actions along the way
@@ -140,7 +140,7 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
                 } elseif ($link['ismodlink']) {
                     // module link, set name as module_type
                     $link['name'] = $link['modname'] . '_' . $link['modtype'];
-                     // @TODO: handle module menu links
+                    /* @TODO: handle module menu links one day?
                     $modlinks = xarMod::apiFunc('base', 'admin', 'loadmenuarray',
                         array(
                             'modname' => $link['modname'],
@@ -152,6 +152,7 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
                         $sublink += self::_decodeURL($sublink['url'], true);
                         $modlinks[$name] = $sublink;
                     }
+                    */
                 }
 
                 // perform links_select action on selected items
