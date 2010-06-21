@@ -62,7 +62,10 @@ function installer_admin_bootstrap()
 
     if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'roles', 'objects' => $objects))) return;
 
-    $objects = array('themes_user_settings');
+    $objects = array(
+                'themes',
+                'themes_user_settings',
+                );
 
     if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'themes', 'objects' => $objects))) return;
 

@@ -264,7 +264,7 @@ class VariableTableDataStore extends SQLDataStore
                         $items[$itemid][$propid] = $value;
                     } else {
                         // add the item to the value list for this property
-                        $this->fields[$propid]->setItemValue($itemid,$value);
+                        $this->fields[$propid]->setItemValue($itemid,$value,$fordisplay);
                     }
                 }
             }
