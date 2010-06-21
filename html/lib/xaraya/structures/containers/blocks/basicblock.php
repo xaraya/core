@@ -98,17 +98,44 @@ class BasicBlock extends ObjectDescriptor implements iBlock
             $vercompare = xarVersion::compare($newver, $oldver, 3);
             // compare new block with old block,
             if ($vercompare > 0) {
-                // only run upgrade if new version is greater than old version
-                // modules can over-ride the upgrade method with their own :)
-                // pass the old version to the upgrade method
-                if (!$this->upgrade($oldver))
-                    // if upgrade method didn't return true, upgrade failed
-                    throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to upgrade #(1) module block #(2) from version #(3) to version #(4)');
-                // update to new version
-                $this->content['xarversion'] = $newver;
-            } elseif ($vercompare < 0) {
-                // can't downgrade blocks
-                throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to downgrade #(1) module block #(2) from version #(3) to version #(4)');
+                // since blocks can have children we need to ensure we only call
+                // the upgrade method for this block if it has one (and not defer to its parent)
+                // To do this we use reflection...
+                // First we need the Class Name of the block,
+                $refName = ucfirst($this->module) . '_' . ucfirst($this->type) . 'Block';
+                // create a reflection object from the class
+                $refObject  = new ReflectionClass($refName);
+                // find all public and protected methods in ParentClass
+                $parentMethods = $refObject->getParentClass()->getMethods(
+                    ReflectionMethod::IS_PUBLIC ^ ReflectionMethod::IS_PROTECTED
+                );
+                // find all parentmethods that were redeclared in ChildClass
+                foreach($parentMethods as $parentMethod) {
+                    $declaringClass = $refObject->getMethod($parentMethod->getName())
+                                                ->getDeclaringClass()
+                                                ->getName();
+                    if($declaringClass === $child->getName() && $parentMethod->getName() == 'upgrade') {
+                        $hasUpgrade = 1;
+                        unset($declaringClass);
+                        break;
+                    }
+                }
+                // clean up unneeded variables
+                unset($parentMethods); unset($refName); unset($refObject);
+                if (!empty($hasUpgrade)) {
+                    // only run upgrade if new version is greater than old version
+                    // modules can over-ride the upgrade method with their own :)
+                    // pass the old version to the upgrade method
+                    if (!$this->upgrade($oldver)) {
+                        // if upgrade method didn't return true, upgrade failed
+                        throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to upgrade #(1) module block #(2) from version #(3) to version #(4)');
+                        // update to new version
+                        $this->content['xarversion'] = $newver;
+                    } elseif ($vercompare < 0) {
+                        // can't downgrade blocks
+                        throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to downgrade #(1) module block #(2) from version #(3) to version #(4)');
+                    }
+                }
             }
         }
 
@@ -160,6 +187,8 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     }
 
     // this method is called by the constructor to run upgrades from older block versions
+    // this method should be placed in the Module_BlockNameBlock class,
+    // eg in Base_MenuBlock not in Base_MenuBlockAdmin
     public function upgrade($oldversion)
     {
         // use it much as you would the xarinit upgrade function in modules

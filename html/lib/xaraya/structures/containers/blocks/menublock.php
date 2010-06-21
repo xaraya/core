@@ -57,11 +57,17 @@ class MenuBlock extends BasicBlock implements iBlock
                         'view_access' => array('group' => 0, 'level' => 100, 'failure' => 0),
                     );
                 }
-                $this->modulelist[$modname]['aliases'] = !empty($aliases[$modname]) ? $aliases[$modname] : array();
+                // add aliases for module if aliases are in use
+                if ((bool)xarModVars::get($modname, 'use_module_alias') && !empty($aliases[$modname])) {
+                    $this->modulelist[$modname]['aliases'] = $aliases[$modname];
+                } else {
+                    $this->modulelist[$modname]['aliases'] = array();
+                }
+                // add in some other useful info about the module
+                $this->modulelist[$modname]['modname'] = $modname;
+                $this->modulelist[$modname]['displayname'] = $mod['displayname'];
+                $this->modulelist[$modname]['displaydescription'] = $mod['displaydescription'];
             }
-            // add aliases for module if aliases are in use
-            if ((bool)xarModVars::get($modname, 'use_module_alias') && !empty($aliases[$modname]))
-                $this->xarmodules[$key]['aliases'] = $aliases[$modname];
         }
         $this->content['modulelist'] = $this->modulelist;
     }
@@ -117,10 +123,10 @@ class MenuBlock extends BasicBlock implements iBlock
             }
         }
         if (empty($link['label'])) {
-            $link['label'] = xarModGetDisplayableName($modname);
+            $link['label'] = $this->modulelist[$modname]['displayname'];
         }
         if (empty($link['title'])) {
-            $link['title'] = xarModGetDisplayableDescription($modname);
+            $link['title'] = $this->modulelist[$modname]['displaydescription'];
         }
         $link['url'] = xarModURL($modname, $this->menumodtype, 'main', array());
         if ($link['url'] == self::$currenturl) $link['url'] = '';
