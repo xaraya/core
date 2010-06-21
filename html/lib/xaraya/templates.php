@@ -712,11 +712,6 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData, $proper
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
 
-    // Check for a property template first
-    $sourceFileName = xarTplGetThemeDir() . "properties/$propertyName/templates/includes/$templateName.xt";
-    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
-    $sourceFileName = sys::code() . "properties/$propertyName/templates/includes/$templateName.xt";
-    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
     $modules = explode(',',$modName);
     foreach ($modules as $module) {
         $thismodule = trim($module);
@@ -732,7 +727,16 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData, $proper
             $sourceFileName = sys::code() . "modules/dynamicdata/xartemplates/includes/$templateName.xt";
         }
     }
-    return xarTpl__executeFromFile($sourceFileName, $tplData);
+    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
+
+    // Check for a property template as a fallback
+    $sourceFileName = xarTplGetThemeDir() . "properties/$propertyName/templates/includes/$templateName.xt";
+    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
+    $sourceFileName = sys::code() . "properties/$propertyName/templates/includes/$templateName.xt";
+    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
+    echo $sourceFileName;exit;
+    // Not found: raise an exception
+    throw new Exception("Could not find include template $templateName.xt");
 }
 
 // PRIVATE FUNCTIONS
