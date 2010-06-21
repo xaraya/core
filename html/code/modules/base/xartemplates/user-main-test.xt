@@ -18,6 +18,5 @@
         </p>
             <xar:data-input type="listing" objectname="objects"/>
 -->
-            #xarSystemVars::get(sys::CONFIG, 'BaseModURL')#
     </div>
 </xar:template>
