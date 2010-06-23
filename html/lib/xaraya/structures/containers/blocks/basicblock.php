@@ -114,7 +114,7 @@ class BasicBlock extends ObjectDescriptor implements iBlock
                     $declaringClass = $refObject->getMethod($parentMethod->getName())
                                                 ->getDeclaringClass()
                                                 ->getName();
-                    if($declaringClass === $child->getName() && $parentMethod->getName() == 'upgrade') {
+                    if($declaringClass === $refObject->getName() && $parentMethod->getName() == 'upgrade') {
                         $hasUpgrade = 1;
                         unset($declaringClass);
                         break;
