@@ -53,6 +53,8 @@ function blocks_admin_view_types()
             if (is_array($init)) {
                 // Parse the initialisation data to extract further details.
                 foreach($init as $key => $value) {
+                    // not allowed to change xarversion
+                    if ($key == 'xarversion') continue;
                     $valuetype = gettype($value);
                     $params[$key]['name'] = $key;
 
