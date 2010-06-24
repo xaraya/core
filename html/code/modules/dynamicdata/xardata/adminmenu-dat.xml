@@ -13,6 +13,9 @@
             <type>admin</type>
             <includes>
                 <includeitem>view</includeitem>
+                <includeitem>modify</includeitem>
+                <includeitem>modifyprop</includeitem>
+                <includeitem>access</includeitem>
             </includes>
             <target>view</target>
             <title>Manage dataobjects using dynamicdata</title>
@@ -33,6 +36,11 @@
             <type>admin</type>
             <includes>
                 <includeitem>utilities</includeitem>
+				<includeitem>import</includeitem>
+				<includeitem>export</includeitem>
+				<includeitem>view_static</includeitem>
+				<includeitem>meta</includeitem>
+				<includeitem>relations</includeitem>
             </includes>
             <target>utilities</target>
             <title>Import/export and other utilities</title>

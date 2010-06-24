@@ -17,7 +17,28 @@
  */
 function base_adminapi_getmenulinks()
 {
-    // No special menu. Just return a standard array
-    return xarMod::apiFunc('base','admin','menuarray',array('module' => 'base'));
+
+    // All modules which supply links in xml should get their links from the loadmenuarray function
+    $menulinks = xarMod::apiFunc('base','admin','loadmenuarray',array('modname' => 'base', 'modtype' => 'admin'));
+
+    /*
+    This menu gets its data from the adminmenu-dat.xml file in /code/modules/base/xardata/
+    You can add or change menu items by changing the data in that file.
+    Or you can create your own menu items here. They should have the form of this example:
+    $menulinks = array();
+
+    .....
+    if (xarSecurityCheck('EditRole',0)) {
+        $menulinks[] = array(
+            'url'   => xarModURL('roles','admin','viewroles'),          // link url
+            'title' => xarML('View and edit the groups on the system'), // link title
+            'label' => xarML('View All Groups'),                        // link label
+            'active' => array('viewroles'),                             // array of active function names
+        );
+    }
+    .....
+    */
+
+    return $menulinks;
 }
 ?>
