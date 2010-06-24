@@ -122,13 +122,14 @@ class ObjectRefProperty extends SelectProperty
 
             $items =  $object->getItems(array (
                                         'sort'     => $this->initialization_display_prop,
-                                        'fieldlist'=> array($this->initialization_display_prop,$this->initialization_store_prop))
+                                        'fieldlist'=> array($this->initialization_display_prop,$this->initialization_store_prop),
+                                        'fordisplay' => 1)
                                  );
             $object = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
         }
         
         // Make sure the display and store fields are valid properties of this object
-        $fields = array_keys($object->getProperties());
+        $fields = $object->getFieldList();
         if (!in_array($this->initialization_display_prop,$fields))
             throw new EmptyParameterException($object->name . '.' .$this->initialization_display_prop);
         if (!in_array($this->initialization_store_prop,$fields))
