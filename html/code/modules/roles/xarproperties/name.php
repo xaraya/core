@@ -34,68 +34,76 @@ class NameProperty extends TextBoxProperty
 
     public function checkInput($name = '', $value = null)
     {
-        $name = empty($name) ? 'dd_'.$this->id : $name;
-        // store the fieldname for validations who need them (e.g. file uploads)
-        $this->fieldname = $name;
-        if ($this->display_layout == 'single') {
-            $this->display_show_salutation     = 0;
-            $this->display_show_firstname      = 0;
-            $this->display_show_middlename     = 0;
+        $name = empty($name) ? 'dd_'.$this->id : $name;echo $name;
+        if ($this->initialization_refobject == 'roles_groups') {
+            $property = DataPropertyMaster::getProperty(array('name' => 'objectref'));
+            $property->validation_override = true;
+            $property->initialization_refobject = $this->initialization_refobject;
+            $property->initialization_store_prop = 'id';
+            return $property->checkInput($name, $value);
+        } else {
+            // store the fieldname for validations who need them (e.g. file uploads)
+            $this->fieldname = $name;
+            if ($this->display_layout == 'single') {
+                $this->display_show_salutation     = 0;
+                $this->display_show_firstname      = 0;
+                $this->display_show_middlename     = 0;
+            }
+            if (!isset($value)) {
+                $invalid = array();
+                $validity = true;
+                $value = array();
+                $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
+                $textbox->validation_min_length = 3;
+
+                $value['salutation'] = '';
+                if ($this->display_show_salutation && ($this->display_layout != 'single')) {
+                    $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
+                    $isvalid = $salutation->checkInput($name . '_salutation');
+                    if ($isvalid) {
+                        $value['salutation'] = $salutation->value;
+                    } else {
+                        $invalid[] = 'salutation';
+                    }
+                    $validity = $validity && $isvalid;
+                }
+
+                $value['first'] = '';
+                if ($this->display_show_firstname && ($this->display_layout != 'single')) {
+                    $isvalid = $textbox->checkInput($name . '_first');
+                    if ($isvalid) {
+                        $value['first'] = $textbox->value;
+                    } else {
+                        $invalid[] = 'first';
+                    }
+                    $validity = $validity && $isvalid;
+                }
+
+                $value['middle'] = '';
+                if ($this->display_show_middlename && ($this->display_layout != 'single')) {
+                    $isvalid = $textbox->checkInput($name . '_middle');
+                    if ($isvalid) {
+                        $value['middle'] = $textbox->value;
+                    } else {
+                        $invalid[] = 'middle';
+                    }
+                    $validity = $validity && $isvalid;
+                }
+
+                $value['last'] = '';
+                $isvalid = $textbox->checkInput($name . '_last');
+                if ($isvalid) {
+                    $value['last'] = $textbox->value;
+                } else {
+                    $invalid[] = 'last';
+                }
+                $validity = $validity && $isvalid;
+            }
+
+            if (!empty($invalid)) $this->invalid = implode(',',$invalid);
+            $this->value = '%' . $value['last'] .'%' . $value['first'] .'%' . $value['middle'] .'%' . $value['salutation'] .'%';
+            return $validity;
         }
-        if (!isset($value)) {
-            $invalid = array();
-            $validity = true;
-            $value = array();
-            $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
-            $textbox->validation_min_length = 3;
-
-            $value['salutation'] = '';
-            if ($this->display_show_salutation && ($this->display_layout != 'single')) {
-                $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
-                $isvalid = $salutation->checkInput($name . '_salutation');
-                if ($isvalid) {
-                    $value['salutation'] = $salutation->value;
-                } else {
-                    $invalid[] = 'salutation';
-                }
-                $validity = $validity && $isvalid;
-            }
-            
-            $value['first_name'] = '';
-            if ($this->display_show_firstname && ($this->display_layout != 'single')) {
-                $isvalid = $textbox->checkInput($name . '_first');
-                if ($isvalid) {
-                    $value['first_name'] = $textbox->value;
-                } else {
-                    $invalid[] = 'first_name';
-                }
-                $validity = $validity && $isvalid;
-            }
-
-            $value['middle_name'] = '';
-            if ($this->display_show_middlename && ($this->display_layout != 'single')) {
-                $isvalid = $textbox->checkInput($name . '_middle');
-                if ($isvalid) {
-                    $value['middle_name'] = $textbox->value;
-                } else {
-                    $invalid[] = 'middle_name';
-                }
-                $validity = $validity && $isvalid;
-            }
-
-            $value['last_name'] = '';
-            $isvalid = $textbox->checkInput($name . '_last');
-            if ($isvalid) {
-                $value['last_name'] = $textbox->value;
-            } else {
-                $invalid[] = 'last_name';
-            }
-            $validity = $validity && $isvalid;
-        }
-
-        if (!empty($invalid)) $this->invalid = implode(',',$invalid);
-        $this->value = '%' . $value['last_name'] .'%' . $value['first_name'] .'%' . $value['middle_name'] .'%' . $value['salutation'] .'%';
-        return $validity;
     }
 
     public function showInput(Array $data = array())
