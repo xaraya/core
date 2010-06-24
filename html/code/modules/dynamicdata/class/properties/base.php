@@ -497,13 +497,13 @@ class DataProperty extends Object implements iDataProperty
         // The value might be an array
         if (is_array($data['value'])){
             $temp = array();
-            foreach ($data['value'] as $tmp) $temp[] = xarVarPrepForDisplay($tmp);
+            foreach ($data['value'] as $key => $tmp) $temp[$key] = xarVarPrepForDisplay($tmp);
             $data['value'] = $temp;
         } else {
             $data['value'] = xarVarPrepForDisplay($data['value']);
         }
 
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : $this->invalid;
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
