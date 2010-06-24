@@ -52,6 +52,7 @@ class ObjectRefProperty extends SelectProperty
         if (isset($data['refobject']))    $this->initialization_refobject = $data['refobject'];
         if (isset($data['store_prop']))   $this->initialization_store_prop = $data['store_prop'];
         if (isset($data['display_prop'])) $this->initialization_display_prop = $data['display_prop'];
+        if (isset($data['firstline']))    $this->initialization_firstline = $data['firstline'];
         return parent::showInput($data);
     }
 
@@ -61,6 +62,7 @@ class ObjectRefProperty extends SelectProperty
         if (isset($data['refobject']))    $this->initialization_refobject = $data['refobject'];
         if (isset($data['store_prop']))   $this->initialization_store_prop = $data['store_prop'];
         if (isset($data['display_prop'])) $this->initialization_display_prop = $data['display_prop'];
+        if (isset($data['firstline']))    $this->initialization_firstline = $data['firstline'];
 
         if (isset($data['value'])) $this->value = $data['value'];
         if (!empty($this->value) && !isset($data['link'])) {
@@ -83,6 +85,7 @@ class ObjectRefProperty extends SelectProperty
             return $this->options;
         }
         $options = $this->getFirstline();
+
         // The object we need to query is in $this->initialization_refobject, we display the value of
         // the property in $this->display_prop and the id comes from $this->store_prop
 
