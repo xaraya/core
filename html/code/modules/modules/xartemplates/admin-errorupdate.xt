@@ -40,7 +40,7 @@
         <p>If modules files are up to date, you can update the database to the current version.
         Only do this if you are absolutely certain the module files are up to date.</p>
         <p>
-            <a href="&xar-modurl-modules-admin-updateversion;&amp;id=#$regId#">Click here to update
+            <a href="#xarModURL('privileges','admin','updateversion',array('id'=>$regId))#">Click here to update
             the module version in the database.</a>
         </p>
     </div>

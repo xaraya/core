@@ -12,7 +12,7 @@
             <xar:set name="dummy">xarModVars::set('privileges','maskbasedsecurity',true)</xar:set>
             <xar:set name="isenabled">1</xar:set>
         </xar:if>
-        #xarResponse::redirect(xarServer::getCurrentURL(array('enable'=> null)))#
+        #xarController::redirect(xarServer::getCurrentURL(array('enable'=> null)))#
     </xar:if>
 </xar:sec>
 
@@ -33,7 +33,7 @@
         <xar:else/>
             <xar:set name="dummy">xarModVars::set('privileges',$_REQUEST['flip'],1)</xar:set>
         </xar:if>
-        #xarResponse::redirect(xarServer::getCurrentURL(array('flip'=> null)))#
+        #xarController::redirect(xarServer::getCurrentURL(array('flip'=> null)))#
     </xar:if>
 </xar:sec>
 
@@ -60,7 +60,7 @@ uasort($groups,'by_name')</xar:set>
                 </xar:if>
             </xar:foreach>
         </xar:foreach>
-        #xarResponse::redirect(xarServer::getCurrentURL(array('refresh'=> null)))#
+        #xarController::redirect(xarServer::getCurrentURL(array('refresh'=> null)))#
     </xar:if>
 </xar:sec>
 

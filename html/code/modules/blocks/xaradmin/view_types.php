@@ -53,6 +53,8 @@ function blocks_admin_view_types()
             if (is_array($init)) {
                 // Parse the initialisation data to extract further details.
                 foreach($init as $key => $value) {
+                    // not allowed to change xarversion
+                    if ($key == 'xarversion') continue;
                     $valuetype = gettype($value);
                     $params[$key]['name'] = $key;
 
@@ -119,14 +121,14 @@ function blocks_admin_view_types()
                                 // Render the extra settings if necessary.
                                 // Again we check for an exception, this time in the template rendering
                                 try {
-                                    $block_help = xarTplBlock($blockinfo['module'], 'help-' . $blockinfo['type'], $blockhelp);
+                                    $block_help = xarTplBlock($detail['module'], 'help-' . $detail['type'], $blockhelp);
                                 } catch (Exception $e) {
                                     // @TODO: global flag to raise exceptions or not
                                     if ((bool)xarModVars::get('blocks', 'noexceptions')) {
                                         $block_help = '';
                                     } else {
-                                        //throw ($e);
-                                        $block_help = '';
+                                        throw ($e);
+                                        //$block_help = '';
                                     }
                                 }
                             // Legacy: old help functions return a string
@@ -139,8 +141,8 @@ function blocks_admin_view_types()
                         if ((bool)xarModVars::get('blocks', 'noexceptions')) {
                             $block_help = '';
                         } else {
-                            //throw ($e);
-                            $block_help = '';
+                            throw ($e);
+                            //$block_help = '';
                         }
                     }
                 }

@@ -27,12 +27,6 @@
         {
             $data = parent::modify($data);
 
-            // Defaults
-            if (!isset($data['content_text'])) $data['content_text'] = $this->content_text;
-
-            if (empty($data['expire'])) $data['expire'] = $this->expire;
-            if (empty($data['html_content'])) $data['html_content'] = $this->html_content;
-
             // Drop-down list defining content type.
             $content_types = array();
             $content_types[] = array('value' => 'text', 'label' => xarML('Text'));

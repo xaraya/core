@@ -77,7 +77,7 @@ function dynamicdata_user_search($args)
         }
     } else {
         // get items from the objects table
-        $objects = xarMod::apiFunc('dynamicdata','user','getobjects');
+        $objects = DataObjectMaster::getObjects();
     }
 
     if (empty($data['ishooked'])) {
