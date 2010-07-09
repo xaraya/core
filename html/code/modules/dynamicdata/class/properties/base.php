@@ -191,6 +191,11 @@ class DataProperty extends Object implements iDataProperty
         $this->value = $value;
     }
 
+    public function clearValue()
+    {
+        $this->value = null;
+    }
+
     /**
      * Fetch the input value of this property
      *
