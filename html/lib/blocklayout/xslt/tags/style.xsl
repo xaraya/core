@@ -38,6 +38,9 @@
     <xsl:if test="@module != ''">
       <xsl:text>'module' =&gt;'</xsl:text><xsl:value-of select="@module"/><xsl:text>',</xsl:text>
     </xsl:if>
+    <xsl:if test="@property != ''">
+      <xsl:text>'property' =&gt;'</xsl:text><xsl:value-of select="@property"/><xsl:text>',</xsl:text>
+    </xsl:if>
     <xsl:text>));</xsl:text>
   </xsl:processing-instruction>
 </xsl:template>

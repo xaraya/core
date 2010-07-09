@@ -46,7 +46,7 @@ class xarCSS extends Object
 
     public $method       = 'link';      // supported are 'link', 'import', 'embed'
 
-    // SUPPORTED SCOPES ARE MODULE, THEME, COMMON
+    // SUPPORTED SCOPES ARE MODULE, THEME, PROPERTY, COMMON
     public $scope      = 'theme';      // component type - 'module, 'theme' or 'common'
     public $compcssdir = 'xarstyles';  // component css directory name (e.g. 'xarstyles')
 
@@ -96,6 +96,8 @@ class xarCSS extends Object
             $this->filename = $this->commonsource;
         } elseif ($this->scope == 'module') {
             $this->base = xarMod::getName();
+        } elseif ($this->scope == 'property') {//echo "X";exit;
+            $this->base = isset($property) ? $property : '';
         } elseif ($this->scope == 'block') {
             // we basically need to find out which module this block belongs to 
             // and then procede as with module scope
@@ -205,6 +207,10 @@ class xarCSS extends Object
                 return $original;
             }
 
+        } elseif ($this->scope == 'property') {            
+            $propertystylesheet = sys::code() . "properties/" . strtolower($this->base) . "/style/" . $this->filename . "." . $this->fileext;
+            if(!file_exists($propertystylesheet)) throw new FileNotFoundException($propertystylesheet);
+            return $propertystylesheet;
         } else {
             // no scope, somebody overrode defaults and hasn't assign anything sensible? naughty - lets complain
             $msg = xarML("#(1) (no valid scope attribute could be deduced from this xar:style tag)",$this->scope);
