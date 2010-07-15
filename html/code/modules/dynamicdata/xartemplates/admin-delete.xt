@@ -36,7 +36,7 @@
         <h3 class="xar-align-center">Confirm Deleting This Item?</h3>
         <xar:data-display object="$object"/>
         <div style="clear:both">&#160;</div>
-        <form method="post" action="&xar-modurl-dynamicdata-admin-delete;">
+        <form method="post" action="#xarModURL('dynamicdata','admin','delete')#">
             <div class="xar-align-center">
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>

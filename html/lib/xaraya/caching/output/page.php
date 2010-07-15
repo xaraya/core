@@ -155,14 +155,9 @@ class xarPageCache extends Object
     {
         if (empty($url)) {
             // get module parameters
-            list($modName, $modType, $funcName) = xarRequest::getInfo();
+            list($modName, $modType, $funcName) = xarController::$request->getInfo();
             // define the cacheKey
-            if (xarRequest::isObjectURL()) {
-                // CHECKME: differentiate between view and display (= both with empty $funcName) based on itemid ??
-                $cacheKey = "objecturl-$modType-$funcName";
-            } else {
-                $cacheKey = "$modName-$modType-$funcName";
-            }
+            $cacheKey = "$modName-$modType-$funcName";
             // get the current themeDir
             $themeDir = xarTplGetThemeDir();
 

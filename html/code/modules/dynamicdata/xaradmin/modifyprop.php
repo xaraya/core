@@ -205,7 +205,6 @@ function dynamicdata_admin_modifyprop()
                                                'itemtype' => empty($itemtype) ? null : $itemtype));
     }
 
-    // Return the template variables defined in this function
     return $data;
 }
 
