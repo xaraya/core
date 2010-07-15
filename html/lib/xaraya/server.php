@@ -811,7 +811,7 @@ class xarResponse extends Object
             header('HTTP/1.0 404 Not Found');
         }
 
-        xarTplSetPageTitle('404 Not Found');
+        xarTplSetPageTitle(xarML('404 Not Found'));
 
         return xarTplModule($modName, $modType, $funcName, array('msg' => $msg), $templateName);
     }
