@@ -81,8 +81,11 @@ function dynamicdata_admin_modifyconfighook($args)
     $data['fields'] = $fields;
     $data['fieldtypeprop'] = & DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
 
-    $object = & DataObjectMaster::getObject(array('moduleid' => $module_id,
-                                                  'itemtype' => $itemtype));
+    $descriptorargs = DataObjectDescriptor::getObjectID(array('module'  => $module_id,
+                                       'itemtype'  => $itemtype));
+    sys::import('modules.dynamicdata.class.objects.master');
+    $object = DataObjectMaster::getObject(array('name' => $descriptorargs['name']));
+
     if (!empty($object)) {
         if (!empty($object->template)) {
             $template = $object->template;
