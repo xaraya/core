@@ -180,10 +180,11 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                 if (!empty($this->content['lines'])) {
                     $userlinks = array();
                     foreach ($this->content['lines'] as $id => $line) {
+                        if (!isset($line['label'])) $line['label'] = $line['url'];
                         $userlinks[] = array(
                             'id' => $id,
                             'name' => $line['name'],
-//                            'label' => $line['label'],
+                            'label' => $line['label'],
                             'title' => $line['description'],
                             'url' => $line['url'],
                             'visible' => $line['visible'],
