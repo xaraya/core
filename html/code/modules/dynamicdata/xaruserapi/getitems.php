@@ -116,7 +116,7 @@ function dynamicdata_userapi_getitems($args)
         $catid = '';
     }
 
-    $args = DataObjectDescriptor::getObjectID(array('module_id'  => $module_id,
+    $args = DataObjectDescriptor::getObjectID(array('moduleid'  => $module_id,
                                        'itemtype'  => $itemtype));
     if (empty($args['objectid'])) return array();
     $object = & DataObjectMaster::getObjectList(array('objectid'  => $args['objectid'],
