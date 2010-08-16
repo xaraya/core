@@ -256,7 +256,7 @@ class VariableTableDataStore extends SQLDataStore
             } elseif (empty($this->fields[$propid]->operation)) {
                 continue; // all fields should be either GROUP BY or have some operation
             }
-            array_push($process, $propid);
+            $process = $propid;
         }
 
         $dynamicdata = $this->getTable('dynamic_data');
