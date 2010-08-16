@@ -249,6 +249,16 @@ class VariableTableDataStore extends SQLDataStore
         }
         if (count($propids) < 1) return;
 
+        $process = array();
+        foreach ($propids as $propid) {
+            if (!empty($this->groupby) && in_array($propid,$this->groupby)) {
+                continue;
+            } elseif (empty($this->fields[$propid]->operation)) {
+                continue; // all fields should be either GROUP BY or have some operation
+            }
+            array_push($process, $propid);
+        }
+
         $dynamicdata = $this->getTable('dynamic_data');
 
         // ------------------------------------------------------
@@ -668,7 +678,7 @@ class VariableTableDataStore extends SQLDataStore
 
         // ------------------------------------------------------
         // here we grab everyting and process it - TODO: better way to do this ?
-        } elseif (count($propids) > 0) {
+        } elseif (count($process) > 0) {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             $query = "SELECT DISTINCT property_id,
                              item_id,
@@ -681,7 +691,7 @@ class VariableTableDataStore extends SQLDataStore
 
             // we only have one "itemid" with the result of the operations
             $curid = 1;
-            foreach ($propids as $propid) {
+            foreach ($process as $propid) {
                 // add the item to the value list for this property
                 $this->fields[$propid]->setItemValue($curid,null);
             }
@@ -748,7 +758,7 @@ class VariableTableDataStore extends SQLDataStore
             // count distinct keys afterwards
             $divide = array();
             $distinct = array();
-            foreach ($propids as $propid) {
+            foreach ($process as $propid) {
                 if ($this->fields[$propid]->operation == 'AVG') {
                     $divide[] = $propid;
                 } elseif ($this->fields[$propid]->operation == 'COUNT_DISTINCT') {
