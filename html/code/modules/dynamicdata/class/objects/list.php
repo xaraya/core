@@ -448,12 +448,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $fields = $this->getFieldList();
             $this->setFieldList($args['fieldlist']);
         } else {
-
-        // count the items first if we haven't done so yet, but only on demand (args['count'] = 1)
-        if (!empty($this->count) && !isset($this->itemcount)) {
-            $this->countItems();
-        }
-
+            // count the items first if we haven't done so yet, but only on demand (args['count'] = 1)
+            if (!empty($this->count) && !isset($this->itemcount)) {
+                $this->countItems();
+            }
         }
         $this->items = array();
         $this->datastore->getItems($args);

@@ -1517,14 +1517,14 @@ class Query
     }
     public function setstatement($statement='')
     {
-        if ($statement != '') {
-            $this->israwstatement = 1;
+        if (!empty($statement)) {
+            $this->israwstatement = true;
             $this->statement = $statement;
             $st = explode(" ",$statement);
             $this->type = strtoupper($st[0]);
         }
         else {
-            $this->israwstatement = 0;
+            $this->israwstatement = false;
             $this->statement = $this->_statement();
         }
     }
