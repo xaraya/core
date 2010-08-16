@@ -696,17 +696,17 @@ class DataObjectMaster extends Object
         sys::import('modules.dynamicdata.class.objects.list');
         $class = 'DataObjectList';
         if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) include_once(sys::code() . $data['filepath']);
-        if(!empty($data['class']))
+        if(!empty($args['class']))
         {
-            if(class_exists($data['class'] . 'List'))
+            if(class_exists($args['class'] . 'List'))
             {
                 // this is a generic classname for the object, list and interface
-                $class = $data['class'] . 'List';
+                $class = $args['class'] . 'List';
             }
-            elseif(class_exists($data['class']))
+            elseif(class_exists($args['class']))
             {
                 // this is a specific classname for the list
-                $class = $data['class'];
+                $class = $args['class'];
             }
         }
         $descriptor = new DataObjectDescriptor($data);
