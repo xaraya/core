@@ -253,7 +253,7 @@ class VariableTableDataStore extends SQLDataStore
         foreach ($propids as $propid) {
             if (!empty($this->groupby) && in_array($propid,$this->groupby)) {
                 continue;
-            } elseif (empty($this->fields[$propid]->operation)) {
+            } elseif (empty($properties[$propid]->operation)) {
                 continue; // all fields should be either GROUP BY or have some operation
             }
             $process = $propid;
@@ -543,8 +543,8 @@ class VariableTableDataStore extends SQLDataStore
                     $groupid = '';
                     foreach ($this->groupby as $propid) {
                         // handle *TIME_BY_* operations here
-                        if (!empty($propval[$propid]) && !empty($this->fields[$propid]->operation)) {
-                            switch ($this->fields[$propid]->operation) {
+                        if (!empty($propval[$propid]) && !empty($properties[$propid]->operation)) {
+                            switch ($properties[$propid]->operation) {
                                 case 'UNIXTIME_BY_YEAR':
                                     $propval[$propid] = gmdate('Y',$propval[$propid]);
                                     break;
@@ -658,7 +658,7 @@ class VariableTableDataStore extends SQLDataStore
                             $curval = $properties[$propid]->getItemValue($curid);
                             if (!empty($curval) && is_array($curval) && !empty($curval['count'])) {
                                 $newval = $curval['total'] / $curval['count'];
-                                $this->fields[$propid]->setItemValue($curid,$newval);
+                                $properties[$propid]->setItemValue($curid,$newval);
                             }
                         }
                     }
@@ -666,10 +666,10 @@ class VariableTableDataStore extends SQLDataStore
                 if (count($distinct) > 0) {
                     foreach ($this->_itemids as $curid) {
                         foreach ($distinct as $propid) {
-                            $curval = $this->fields[$propid]->getItemValue($curid);
+                            $curval = $properties[$propid]->getItemValue($curid);
                             if (!empty($curval) && is_array($curval)) {
                                 $newval = count(array_keys($curval));
-                                $this->fields[$propid]->setItemValue($curid,$newval);
+                                $properties[$propid]->setItemValue($curid,$newval);
                             }
                         }
                     }
@@ -693,14 +693,14 @@ class VariableTableDataStore extends SQLDataStore
             $curid = 1;
             foreach ($process as $propid) {
                 // add the item to the value list for this property
-                $this->fields[$propid]->setItemValue($curid,null);
+                $properties[$propid]->setItemValue($curid,null);
             }
 
             while ($result->next()) {
                 list($propid,$itemid,$value) = $result->getRow();
                 if (isset($value)) {
-                    $curval = $this->fields[$propid]->getItemValue($curid);
-                    switch ($this->fields[$propid]->operation) {
+                    $curval = $properties[$propid]->getItemValue($curid);
+                    switch ($properties[$propid]->operation) {
                         case 'COUNT':
                             if (!isset($curval)) {
                                 $curval = 0;
@@ -747,7 +747,7 @@ class VariableTableDataStore extends SQLDataStore
                         default:
                             break;
                     }
-                    $this->fields[$propid]->setItemValue($curid,$curval);
+                    $properties[$propid]->setItemValue($curid,$curval);
                 }
             }
             // add this "itemid" to the list
@@ -759,19 +759,19 @@ class VariableTableDataStore extends SQLDataStore
             $divide = array();
             $distinct = array();
             foreach ($process as $propid) {
-                if ($this->fields[$propid]->operation == 'AVG') {
+                if ($properties[$propid]->operation == 'AVG') {
                     $divide[] = $propid;
-                } elseif ($this->fields[$propid]->operation == 'COUNT_DISTINCT') {
+                } elseif ($properties[$propid]->operation == 'COUNT_DISTINCT') {
                     $distinct[] = $propid;
                 }
             }
             if (count($divide) > 0) {
                 foreach ($this->_itemids as $curid) {
                     foreach ($divide as $propid) {
-                        $curval = $this->fields[$propid]->getItemValue($curid);
+                        $curval = $properties[$propid]->getItemValue($curid);
                         if (!empty($curval) && is_array($curval) && !empty($curval['count'])) {
                             $newval = $curval['total'] / $curval['count'];
-                            $this->fields[$propid]->setItemValue($curid,$newval);
+                            $properties[$propid]->setItemValue($curid,$newval);
                         }
                     }
                 }
@@ -779,10 +779,10 @@ class VariableTableDataStore extends SQLDataStore
             if (count($distinct) > 0) {
                 foreach ($this->_itemids as $curid) {
                     foreach ($distinct as $propid) {
-                        $curval = $this->fields[$propid]->getItemValue($curid);
+                        $curval = $properties[$propid]->getItemValue($curid);
                         if (!empty($curval) && is_array($curval)) {
                             $newval = count(array_keys($curval));
-                            $this->fields[$propid]->setItemValue($curid,$newval);
+                            $properties[$propid]->setItemValue($curid,$newval);
                         }
                     }
                 }
@@ -806,7 +806,7 @@ class VariableTableDataStore extends SQLDataStore
                 $itemidlist[$itemid] = 1;
                 if (isset($value)) {
                     // add the item to the value list for this property
-                    $this->fields[$propid]->setItemValue($itemid,$value);
+                    $properties[$propid]->setItemValue($itemid,$value);
                 }
             }
             // add the itemids to the list
