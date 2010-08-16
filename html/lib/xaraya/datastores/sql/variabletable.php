@@ -251,6 +251,7 @@ class VariableTableDataStore extends SQLDataStore
 
         $dynamicdata = $this->getTable('dynamic_data');
 
+        // ------------------------------------------------------
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
@@ -321,6 +322,7 @@ class VariableTableDataStore extends SQLDataStore
                 unset($items);
             }
 
+        // ------------------------------------------------------
         // join between dynamic_data and another table
         // (all items, single key, no sort, DD where clauses limited to ORing)
         } elseif (count($this->join) > 0) {
@@ -418,6 +420,7 @@ class VariableTableDataStore extends SQLDataStore
             $this->_itemids = array_keys($itemidlist);
             $result->close();
 
+        // ------------------------------------------------------
         // TODO: make sure this is portable !
         // more difficult case where we need to create a pivot table, basically
         } elseif ($numitems > 0 || count($this->sort) > 0 || count($this->where) > 0 || count($this->groupby) > 0) {
@@ -663,8 +666,9 @@ class VariableTableDataStore extends SQLDataStore
                 }
             }
 
+        // ------------------------------------------------------
         // here we grab everyting and process it - TODO: better way to do this ?
-        } elseif (count($process) > 0) {
+        } elseif (count($propids) > 0) {
             $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
             $query = "SELECT DISTINCT property_id,
                              item_id,
@@ -677,7 +681,7 @@ class VariableTableDataStore extends SQLDataStore
 
             // we only have one "itemid" with the result of the operations
             $curid = 1;
-            foreach ($process as $propid) {
+            foreach ($propids as $propid) {
                 // add the item to the value list for this property
                 $this->fields[$propid]->setItemValue($curid,null);
             }
@@ -744,7 +748,7 @@ class VariableTableDataStore extends SQLDataStore
             // count distinct keys afterwards
             $divide = array();
             $distinct = array();
-            foreach ($process as $propid) {
+            foreach ($propids as $propid) {
                 if ($this->fields[$propid]->operation == 'AVG') {
                     $divide[] = $propid;
                 } elseif ($this->fields[$propid]->operation == 'COUNT_DISTINCT') {

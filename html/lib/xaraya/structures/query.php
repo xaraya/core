@@ -110,32 +110,36 @@ class Query
 
         $this->setstatement($statement);
 
-        if ($this->type != 'SELECT') {
-            if ($this->usebinding  && !$this->israwstatement) {
-                $result = $this->dbconn->Execute($this->statement,$this->bindvars);
-                $this->bindvars = array();
+        if ($this->israwstatement) {
+            $result = $this->dbconn->Execute($this->statement);
+        } else {
+            if ($this->type != 'SELECT') {
+                if ($this->usebinding) {
+                    $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+                    $this->bindvars = array();
+                } else {
+                    $result = $this->dbconn->Execute($this->statement);
+                }
+                if(!$result) return;
+                return true;
+            }
+            if($this->rowstodo != 0 && $this->limits == 1) {
+                $begin = $this->startat-1;
+                if ($this->usebinding) {
+                    $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin,$this->bindvars);
+                }
+                else {
+                    $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
+                }
             } else {
-                $result = $this->dbconn->Execute($this->statement);
-            }
-            if(!$result) return;
-            return true;
-        }
-        if($this->rowstodo != 0 && $this->limits == 1) {
-            $begin = $this->startat-1;
-            if ($this->usebinding && !$this->israwstatement) {
-                $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin,$this->bindvars);
-            }
-            else {
-                $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
+                if ($this->usebinding) {
+                    $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+                } else {
+                    $result = $this->dbconn->Execute($this->statement);
+                }
             }
         }
-        else {
-            if ($this->usebinding && !$this->israwstatement) {
-                $result = $this->dbconn->Execute($this->statement,$this->bindvars);
-            } else {
-                $result = $this->dbconn->Execute($this->statement);
-            }
-        }
+
         if ($this->debugflag) $loopstart = microtime(true);
         if (!$result) return;
         $this->result =& $result;
@@ -146,7 +150,7 @@ class Query
             $numfields = count($result->fields); // Better than the private var, fields should still be protected
         $this->output = array();
         if ($display == 1) {
-            if ($statement == '') {
+            if (!$this->israwstatement) {
                 if ($this->fields == array() && $numfields > 0) {
                     $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
                     $result->next(); $result->previous();
@@ -177,11 +181,13 @@ class Query
                 }
             } else {
                 while (!$result->EOF) {
+                /*
                     $line = array();
                     for ($i=0;$i<$this->rowfields;$i++) {
                         $line[] = $result->fields[$i];
                     }
-                    $this->output[] = $line;
+                    */
+                    $this->output[] = $result->fields;
                     $result->MoveNext();
                 }
             }
@@ -835,7 +841,7 @@ class Query
             }
         } elseif (!is_array($conjunction['conditions'])) {
             if (($this->cstring == "") || (substr($this->cstring,strlen($this->cstring)-1) == '(')) $conj = "";
-            else { 
+            else {
                 if ($conjunction['conj'] == "IMPLICIT") $conj = $this->implicitconjunction;
                 else $conj = $conjunction['conj'];
             }
