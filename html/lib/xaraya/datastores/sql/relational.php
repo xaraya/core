@@ -305,6 +305,7 @@ class RelationalDataStore extends SQLDataStore
 
     private function removeForeignTables($q=null)
     {
+        // Foreign tables are any tables not among the object's datasources, like subitems
         if (empty($q)) return $q;
         
         $updatabletables = array();
@@ -312,7 +313,7 @@ class RelationalDataStore extends SQLDataStore
             // We cater to simple and composite aliases (object name _ simple alias)
             $fullalias = $this->object->name . "_" . $table['alias'];
             
-            // If this table is not among thedata sources igonore it
+            // If this table is not among the data sources igonore it
             if (!isset($this->object->datasources[$table['alias']]) && !isset($this->object->datasources[$fullalias])) continue;
             
             // Make sure this table is not tagged "foreign" before adding it
@@ -327,11 +328,13 @@ class RelationalDataStore extends SQLDataStore
         foreach ($q->tablelinks as $link) {
             $link1 = $q->deconstructfield($link['field1']);
             $link2 = $q->deconstructfield($link['field2']);
-            if (
-                (!isset($this->object->datasources[$link1['table']]) || (!is_array($this->object->datasources[$link1['table']]) || $this->object->datasources[$link1['table']][1] != 'foreign')) &&
-                (!isset($this->object->datasources[$link2['table']]) || (!is_array($this->object->datasources[$link2['table']]) || $this->object->datasources[$link2['table']][1] != 'foreign')) 
-                )
-                $updatablelinks[] = $link;
+            if (isset($this->object->datasources[$link1['table']]) && isset($this->object->datasources[$link2['table']])) {
+                if (
+                    (is_array($this->object->datasources[$link1['table']]) && $this->object->datasources[$link1['table']][1] == 'foreign') &&
+                    (is_array($this->object->datasources[$link2['table']]) && $this->object->datasources[$link2['table']][1] == 'foreign')
+                    ) { continue; }
+                    $updatablelinks[] = $link;
+            }
         }
         $q->tablelinks = $updatablelinks;
         return $q;
