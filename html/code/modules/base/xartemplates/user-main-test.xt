@@ -10,8 +10,6 @@
             You can experiment with various blocklayout features and template tags here if you want...
         </p>
 
-    <xar:set name="XX">1;sys::import('modules.xen.class.xencollection');$system = new xenCollection();var_dump($system->getAssignments('member'))</xar:set>
-
         <h3>XML to SQL Proof of Concept</h3>
         
         <h4>First create the roles object</h4>
