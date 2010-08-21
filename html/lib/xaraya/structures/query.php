@@ -112,6 +112,8 @@ class Query
 
         if ($this->israwstatement) {
             $result = $this->dbconn->Execute($this->statement);
+            // If this is not a SELECT exit here
+            if (!is_object($result)) return $result;
         } else {
             if ($this->type != 'SELECT') {
                 if ($this->usebinding) {
@@ -120,8 +122,7 @@ class Query
                 } else {
                     $result = $this->dbconn->Execute($this->statement);
                 }
-                if(!$result) return;
-                return true;
+                return $result;
             }
             if($this->rowstodo != 0 && $this->limits == 1) {
                 $begin = $this->startat-1;
@@ -144,7 +145,7 @@ class Query
         if (!$result) return;
         $this->result =& $result;
 
-        if (($result->fields) === false)
+        if ($result->fields === false)
             $numfields = 0;
         else
             $numfields = count($result->fields); // Better than the private var, fields should still be protected
