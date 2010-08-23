@@ -205,9 +205,9 @@ class ArrayProperty extends DataProperty
         }
 
         // check if we have a specific property for the values
-        if (!isset($data['valuetype'])) $data['valuetype'] = $this->initialization_prop_type;
+        if (!isset($data['columntype'])) $data['columntype'] = $this->initialization_prop_type;
         if (!isset($data['valueconfig'])) $data['valueconfig'] = $this->initialization_prop_config;
-        $data['property'] = $this->getValueProperty($data['valuetype'], $data['valueconfig']);
+        $data['property'] = $this->getValueProperty($data['columntype'], $data['valueconfig']);
 
         // use a different default template when dealing with properties
         if (empty($data['template']) && !empty($data['property'])) {
@@ -231,6 +231,7 @@ class ArrayProperty extends DataProperty
                 }
             }
         }
+var_dump($value);
 
         if (!isset($data['rows'])) $data['rows'] = $this->display_rows;
         if (!isset($data['size'])) $data['size'] = $this->display_columns;

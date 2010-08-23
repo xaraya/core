@@ -40,7 +40,7 @@
             <xar:else/>
                 <xar:set name="displayclass">'xar-norm'</xar:set>
             </xar:if>
-            <tr>
+            <tr style="height: 35px">
                 <td class="#$displayclass#">
                     #$field.id#
                 </td>
@@ -126,7 +126,7 @@
                     </xar:if>
                 </td>
             </tr>
-            <tr>
+            <tr style="height: 35px">
                 <td class="#$displayclass#">
                     &#160;
                 </td>
