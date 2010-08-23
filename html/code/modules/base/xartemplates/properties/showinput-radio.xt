@@ -37,7 +37,7 @@
                     <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked"/>
                 <xar:else />
                     <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#"/>
-                </xar:if>
+                </xar:if>&#160;
                 <label for="#$theID#">#$option['name']# </label>
             </div>
         </xar:foreach>
