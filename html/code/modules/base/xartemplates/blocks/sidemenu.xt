@@ -4,46 +4,47 @@
     <xar:if condition="isset($menustyle)">#$menustyle#</xar:if>
         <xar:if condition="empty($catmods) or !is_array($catmods)">
             <ul class="xar-menu-section">
-                <xar:foreach in="$adminmods" value="$mod">
-                    <li class="xar-menu-item">
-                    <a href="#$mod['link']#">#$mod['label']#</a>
-                        <xar:if condition="isset($indlinks) and count($indlinks) gt 0 and $mod['modactive'] eq 1">
-                            <ul class="xar-menu-subitem">
-                                <xar:foreach in="$indlinks" value="$sublinks" key="$sublink">
-                                    <li class="xar-menu-subitem">
-                                        <a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">
-                                            #$sublinks['adminlabel']#
-                                        </a>
-                                    </li>
-                                </xar:foreach>
-                            </ul>
-                        </xar:if>
-                    </li>
-                </xar:foreach>
+                <li class="xar-menu-section">
+                    <h4>Modules</h4>
+                    <ul class="xar-menu-item">
+                        <!-- hand the links off to the common blocks-menu-menulinks include template
+                             the template recursively includes itself to add sublinks to any number
+                             of nested levels, and also ensures menus are consistent  :)
+                             You can of course over-ride this block template, or the include itself
+                             to provide unique styling for individual menus
+                        -->
+                        <xar:set name="subdata">array(
+                            'menulinks' => $adminmods,       // pass the menulinks
+                            'menuid' => 'menu' . $blockid,  // pass a unique menuid
+                            'marker' => $marker,            // pass through the marker
+                            'maxlevels' => 2                // specify max levels
+                        )</xar:set>
+                        <xar:template type="module" module="base" file="blocks-menu-menulinks" subdata="$subdata"/>
+                    </ul>
+                </li>
             </ul>
         <xar:else />
-            <xar:foreach in="$catmods" key="$catname" value="$cats">
-                <ul class="xar-menu-section">
-                <li class="xar-menu-section">#$catname#
-                <ul class="xar-menu-item">
-                    <xar:foreach in="$cats" value="$mod" key="$modname">
-                        <li class="xar-menu-item">
-                            <a href="#$mod[0]['link']#">#$mod['features']['label']#</a>
-                            <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
-                                <ul class="xar-menu-subitem">
-                                    <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
-                                        <li class="xar-menu-subitem">
-                                            <a href="#$sublinks['adminlink']#"
-                                            title="#$sublinks['admintitle']#">
-                                            #$sublinks['adminlabel']#</a>
-                                        </li>
-                                    </xar:foreach>
-                                </ul>
-                            </xar:if>
+            <xar:foreach in="$catmods" key="$catname" value="$menulinks">
+                <xar:if condition="count($menulinks) ne 0">
+                    <ul class="xar-menu-section">
+                        <li class="xar-menu-section">
+                            <h4>#$catname#</h4>
+                            <!-- hand the links off to the common blocks-menu-menulinks include template
+                                 the template recursively includes itself to add sublinks to any number
+                                 of nested levels, and also ensures menus are consistent  :)
+                                 You can of course over-ride this block template, or the include itself
+                                 to provide unique styling for individual menus
+                            -->
+                            <xar:set name="subdata">array(
+                                'menulinks' => $menulinks,          // pass the menulinks
+                                'menuid' => 'adminmenu' . $blockid, // pass a unique menuid
+                                'marker' => $marker,            // pass through the marker
+                                'maxlevels' => 2,                   // specify max levels
+                            )</xar:set>
+                            <xar:template type="module" module="base" file="blocks-menu-menulinks" subdata="$subdata"/>
                         </li>
-                    </xar:foreach>
-                </ul></li>
-                </ul>
+                    </ul>
+                </xar:if>
             </xar:foreach>
         </xar:if>
         <!-- Logout -->
@@ -61,7 +62,7 @@
                     </xar:if>
                     <xar:if condition="$showlogout">
                        <li class="xar-menu-item">
-                            <a title="#xarML('Logout as administrator')#" href="&xar-modurl-base-admin-confirmlogout;">
+                            <a title="#xarML('Logout as administrator')#" href="#xarModURL('base','admin','confirmlogout')#">
                                 Logout
                             </a>
                         </li>

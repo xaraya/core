@@ -23,8 +23,10 @@ function roles_admin_new()
     if (!xarVarFetch('duvs',        'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('confirm',     'str',   $confirm, '', XARVAR_NOT_REQUIRED)) return;
 
-    $data['object'] = DataObjectMaster::getObject(array('module'   => 'roles', 'itemtype' => $data['itemtype']));
-    $data['object']->properties['name']->display_layout = 'single';
+    if ($data['itemtype'] == ROLES_USERTYPE) $name = 'roles_users';
+    elseif ($data['itemtype'] == ROLES_GROUPTYPE) $name = 'roles_groups';
+
+    $data['object'] = DataObjectMaster::getObject(array('name'   => $name));
 
     // call item new hooks
     $item = $data;
@@ -47,7 +49,7 @@ function roles_admin_new()
             $itemid = $data['object']->createItem();
 
             // Jump to the next page
-            xarResponse::redirect(xarModURL('roles','admin','new'));
+            xarController::redirect(xarModURL('roles','admin','new'));
             return true;
         }
     }

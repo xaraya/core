@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:if condition="$refobject eq 'roles_groups'">
-        <xar:data-output type="objectref" refobject="$refobject" store_prop="id" value="$value['last']"/>
+        <xar:var name="firstline">autoallocated</xar:var>
+        <xar:set name="firstline">"0,$firstline"</xar:set>
+        <xar:set name="value">empty($value['last'])?0:$value['last']</xar:set>
+        <xar:data-output type="objectref" refobject="$refobject" store_prop="id" value="$value" firstline="$firstline"/>
     <xar:else/>
-        <xar:if condition="($show_salutation eq 'true') AND ($layout ne 'single')">
+        <xar:if condition="$show_salutation AND ($layout ne 'single')">
             #$value['salutation']#&#160;
         </xar:if>
         <xar:if condition="$layout eq 'firstlast'">
 
             #$value['last']#&#160;
-            <xar:if condition="$show_middlename eq 'true'">
+            <xar:if condition="$show_middlename">
                 #$value['middle']#&#160;
             </xar:if>
             #$value['first']#
@@ -20,7 +23,7 @@
             <xar:if condition="!empty($value['first'])">
                 ,&#160;#$value['first']#
             </xar:if>
-            <xar:if condition="$show_middlename eq 'true' AND !empty($value['middle'])">
+            <xar:if condition="$show_middlename AND !empty($value['middle'])">
                 &#160;#$value['middle']#
             </xar:if>
 

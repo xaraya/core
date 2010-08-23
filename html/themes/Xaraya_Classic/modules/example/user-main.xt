@@ -20,7 +20,7 @@
                         </td>
                         <!-- more menu items come here... -->
                         <!-- Note : you can also specify simple links directly with blocklayout
-          template tags : e.g. &xar-modurl-example-user-view; -->
+          template tags : e.g. #xarModURL('example','user','view')# -->
                     </tr>
                 </table>
             </td>

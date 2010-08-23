@@ -103,23 +103,23 @@
                         <select onchange="window.open(this.options[this.selectedIndex].value,'_blank')">
                             <option value="#">Choose a page to preview..</option>
                             <option value="#xarModURL()#?theme=#$themedir#">Default Front Page</option>
-                            <option value="&xar-modurl-base-admin-main;&amp;theme=#$themedir#">Base
+                            <option value="#xarModURL('base','admin','main',array('theme'=>$themedir))#">Base
                             (admin)</option>
-                            <option value="&xar-modurl-base-user-main;&amp;theme=#$themedir#">Base
+                            <option value="#xarModURL('base','user','main',array('theme'=>$themedir))#">Base
                             (user)</option>
-                            <option value="&xar-modurl-blocks-admin-main;&amp;theme=#$themedir#">Blocks
+                            <option value="#xarModURL('blocks','admin','main',array('theme'=>$themedir))#">Blocks
                             (admin)</option>
-                            <option value="&xar-modurl-module-admin-main;&amp;theme=#$themedir#">
+                            <option value="#xarModURL('modules','admin','main',array('theme'=>$themedir))#">
                             Modules (admin)</option>
-                            <option value="&xar-modurl-themes-admin-main;&amp;theme=#$themedir#">Themes
+                            <option value="#xarModURL('themes','admin','main',array('theme'=>$themedir))#">Themes
                             (admin)</option>
-                            <option value="&xar-modurl-dynamicdata-admin-main;&amp;theme=#$themedir#">
+                            <option value="#xarModURL('dynamicdata','admin','main',array('theme'=>$themedir))#">
                             Dynamicdata (admin)</option>
-                            <option value="&xar-modurl-privileges-admin-main;&amp;theme=#$themedir#">
+                            <option value="#xarModURL('privileges','admin','main',array('theme'=>$themedir))#">
                             Privileges (admin)</option>
-                            <option value="&xar-modurl-roles-admin-main;&amp;theme=#$themedir#">Roles
+                            <option value="#xarModURL('roles','admin','main',array('theme'=>$themedir))#">Roles
                             (admin)</option>
-                            <option value="&xar-modurl-themes-admin-themesinfo;&amp;theme=#$themedir#&amp;id=#$themeid#">
+                            <option value="#xarModURL('themes','admin','themesinfo',array('theme'=>$themedir,'id'=>$themeid))#">
                             This Page</option>
                         </select>
                         <noscript>

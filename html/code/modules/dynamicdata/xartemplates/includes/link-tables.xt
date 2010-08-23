@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="!empty($relations)">
-        <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
+        <form method="post" action="#xarModURL('dynamicdata','util','relations')#">
             <fieldset>
             <legend>Links for #$table#</legend>
             <table>
@@ -23,7 +23,7 @@
                         </td>
                         <xar:if condition="$link['link_type'] eq 'parents'">
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$where#">
+                                <a href="#xarModURL('dynamicdata','util','relations',array('table'=>$where))#">
                             #$wherename#</a>
                             <br />#$link['to_prop']#</td>
                             <td>&#160;</td>
@@ -36,7 +36,7 @@
                             <td>#$link['from_prop']#</td>
                             <td class="xar-nowrap">&#160;</td>
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$where#">
+                                <a href="#xarModURL('dynamicdata','util','relations',array('table'=>$where))#">
                             #$wherename#</a>
                             <br />#$link['to_prop']#</td>
                         <xar:elseif condition="$link['link_type'] eq 'linkedto' or $link['link_type'] eq 'extensions'"/>
@@ -44,14 +44,14 @@
                             <td>&#160;</td>
                             <td>#$link['from_prop']#</td>
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$where#">
+                                <a href="#xarModURL('dynamicdata','util','relations',array('table'=>$where))#">
                             #$wherename#</a>
                             <br />#$link['to_prop']#</td>
                             <td class="xar-nowrap">&#160;</td>
                         <xar:elseif condition="$link['link_type'] eq 'linkedfrom' or $link['link_type'] eq 'extended'"/>
                             <td>&#160;</td>
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$where#">
+                                <a href="#xarModURL('dynamicdata','util','relations',array('table'=>$where))#">
                             #$wherename#</a>
                             <br />#$link['to_prop']#</td>
                             <td>#$link['from_prop']#</td>
@@ -71,7 +71,7 @@
             </fieldset>
         </form>
     </xar:if>
-    <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
+    <form method="post" action="#xarModURL('dynamicdata','util','relations')#">
         <fieldset>
         <legend>Add Link for #$table#</legend>
         <div class="xar-form-input-wrapper">

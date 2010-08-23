@@ -27,9 +27,9 @@ if(file_exists('../_MTN/revision'))
     if (isset($t[4]))
         $rev = str_replace(array('old_revision [',']'),'',$t[4]);
 }
-define('XARCORE_VERSION_ID',  'Jamaica');
-define('XARCORE_VERSION_NUM', '2.1.0');
-define('XARCORE_VERSION_SUB', 'post rabiem risus');
+define('XARCORE_VERSION_ID',  'Bermuda');
+define('XARCORE_VERSION_NUM', '2.2.0');
+define('XARCORE_VERSION_SUB', 'altius fortius');
 define('XARCORE_VERSION_REV', $rev);
 
 /*
@@ -313,8 +313,9 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
                         'generateXMLURLs' => true);
     xarServer::init($systemArgs);
-    xarRequest::init($systemArgs);
-    xarResponse::init($systemArgs);
+    sys::import('xaraya.mapper.main');
+    xarController::init($systemArgs);
+//    xarController::$response->init($systemArgs);
 
     /*
      * Bring Multi Language System online

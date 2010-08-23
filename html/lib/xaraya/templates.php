@@ -524,7 +524,7 @@ function xarTplGetImage($modImage, $modName = NULL)
     // obtain current module name if not specified
     // FIXME: make a fallback for weird requests
     if(!isset($modName)){
-        list($modName) = xarRequest::getInfo();
+        list($modName) = xarController::$request->getInfo();
     }
 
     // get module directory (could be different from module name)
@@ -704,12 +704,14 @@ function xarTpl_includeThemeTemplate($templateName, $tplData)
  * @param  string $modName      name of the module from which to include the template
  * @param  string $templateName Basically handler function for <xar:template type="module".../>
  * @param  array  $tplData      template variables
+ * @param  array  $propertyName name of the property from which to include the template
  * @return string
  */
-function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
+function xarTpl_includeModuleTemplate($modName, $templateName, $tplData, $propertyName='')
 {
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
+
     $modules = explode(',',$modName);
     foreach ($modules as $module) {
         $thismodule = trim($module);
@@ -721,8 +723,20 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
             $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xd";
             if (file_exists($sourceFileName)) break;
         }
+        if (!file_exists($sourceFileName)) {
+            $sourceFileName = sys::code() . "modules/dynamicdata/xartemplates/includes/$templateName.xt";
+        }
     }
-    return xarTpl__executeFromFile($sourceFileName, $tplData);
+    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
+
+    // Check for a property template as a fallback
+    $sourceFileName = xarTplGetThemeDir() . "properties/$propertyName/templates/includes/$templateName.xt";
+    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
+    $sourceFileName = sys::code() . "properties/$propertyName/templates/includes/$templateName.xt";
+    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
+    
+    // Not found: raise an exception
+    throw new Exception("Could not find include template $templateName.xt");
 }
 
 // PRIVATE FUNCTIONS
@@ -846,7 +860,11 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     if(!empty($templateName) &&
         file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt")) {
     } elseif(!empty($templateName) &&
+        file_exists($sourceFileName = "$tplThemesDir/properties/$templateName/templates/$tplBase.xt")) {
+    } elseif(!empty($templateName) &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt")) {
+    } elseif(!empty($templateName) &&
+        file_exists($sourceFileName = sys::code() . "properties/$templateName/templates/$tplBase.xt")) {
     } elseif(
         file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt")) {
     } elseif(

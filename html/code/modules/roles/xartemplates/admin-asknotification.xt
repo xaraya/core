@@ -9,7 +9,7 @@
     </div>
     <div class="xar-mod-body">
         <h2>
-            <a href="&xar-modurl-roles-admin-showusers;">Member List</a>: Send #$mailtype# notification
+            <a href="#xarModURL('roles','admin','showusers')#">Member List</a>: Send #$mailtype# notification
         </h2>
         <!-- Contextual text 
         <xar:if condition="$mailtype eq 'validation'">
@@ -43,9 +43,9 @@
         </xar:if>
         -->
         <p>
-            The changes have been made to the selected user(s), you can now send a notification by submitting the form or go back to the <a href="&xar-modurl-roles-admin-showusers;&amp;state=#$state#&amp;id=#$groupid#">members list</a>.
+            The changes have been made to the selected user(s), you can now send a notification by submitting the form or go back to the <a href="#xarModURL('roles','admin','showusers',array('state'=>$state,'id'=>$groupid))#">members list</a>.
         </p>
-        <form action="&xar-modurl-roles-admin-asknotification;" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarModURL('roles','admin','asknotification')#" method="post" enctype="application/x-www-form-urlencoded">
             <div class="xar-form-input-wrapper">
                 <label for="subject" title="#xarML('Title of the notification')#" class="xar-form-label">
                     Subject:

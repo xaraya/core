@@ -30,6 +30,7 @@ function themes_admin_upgrade()
 
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
+
     
     // Upgrade theme
     $upgraded = xarMod::apiFunc('themes', 'admin', 'upgrade', array('regid' => $id));
@@ -37,7 +38,7 @@ function themes_admin_upgrade()
     //throw back
     if(!isset($upgraded)) return;
 
-    xarResponse::redirect(xarModURL('themes', 'admin', 'list'));
+    xarController::redirect(xarModURL('themes', 'admin', 'list'));
 
     return true;
 }

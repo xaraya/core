@@ -97,9 +97,9 @@ function themes_admin_update()
     if (!xarVarFetch('return', 'checkbox', $return,  false, XARVAR_NOT_REQUIRED)) {return;}
 
     if ($return) {
-        xarResponse::redirect(xarModURL('themes', 'admin', 'modify', array('id' => $regId)));
+        xarController::redirect(xarModURL('themes', 'admin', 'modify', array('id' => $regId)));
     } else {
-        xarResponse::redirect(xarModURL('themes', 'admin', 'list'));
+        xarController::redirect(xarModURL('themes', 'admin', 'list'));
     } 
     return true;
 } 

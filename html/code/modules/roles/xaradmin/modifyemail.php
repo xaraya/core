@@ -50,8 +50,7 @@ function roles_admin_modifyemail($args)
             $data['message'] = $strings['message'];
             $data['authid'] = xarSecGenAuthKey();
 
-            $object = xarMod::apiFunc('dynamicdata', 'user', 'getobject',
-                              array('name' => 'roles_users'));
+            $object = DataObjectMaster::getObject(array('name' => 'roles_users'));
                 if (isset($object) && !empty($object->objectid)) {
                     // get the Dynamic Properties of this object
                     $data['properties'] = &$object->getProperties();
@@ -98,7 +97,7 @@ function roles_admin_modifyemail($args)
                 $msg = 'The messaging template "#(1)" is not writable or it is not allowed to delete files from #(2)';
                 throw new ConfigurationException(array($filename,$messaginghome),$msg);
             }
-            xarResponse::redirect(xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => $data['mailtype'])));
+            xarController::redirect(xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => $data['mailtype'])));
             return true;
             break;
     }

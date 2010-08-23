@@ -72,11 +72,8 @@ function roles_adminapi_senduseremail($args)
             // retrieve the dynamic properties (if any) for use in the e-mail too
 
             // get the DataObject defined for this module and item id
-            $object = xarMod::apiFunc('dynamicdata','user','getobject',
-                                         array('module' => 'roles',
-                                               // we know the item id now...
-                                               'itemid' => $userid,
-                                               'itemtype' => xarRoles::ROLES_USERTYPE));
+            $object = DataObjectMaster::getObject(array('name' => 'roles_users', 'itemid' => $userid));
+
             if (isset($object) && !empty($object->objectid)) {
                 // retrieve the item itself
                 $itemid = $object->getItem();

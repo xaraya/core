@@ -8,7 +8,7 @@
         <h2>Welcome Email</h2>
         <p>This email will be sent to users to welcome them.</p>
         <p>The welcome email is plain text</p>
-        <form action="&xar-modurl-roles-admin-welcomeemail;" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarModURL('roles','admin','welcomeemail')#" method="post" enctype="application/x-www-form-urlencoded">
             <div>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="phase" id="phase" value="update"/>
