@@ -67,7 +67,9 @@ function base_javascriptapi__findfile($args)
 
     // The search path for the JavaScript file.
     $searchPath[] = $themedir . '/scripts/' . $filename;
-    if (isset($property)) {
+    
+    // A property attribute in the tag overrides a module attribute
+    if (!empty($property)) {
         $searchPath[] = $themedir . '/properties/' . $property . '/scripts/' . $filename;
         $searchPath[] = $themedir . '/properties/' . $property . '/templates/includes/' . $filename;
         $searchPath[] = sys::code() . 'properties/' . $property . '/scripts/' . $filename;
