@@ -23,8 +23,8 @@ function roles_admin_new()
     if (!xarVarFetch('duvs',        'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('confirm',     'str',   $confirm, '', XARVAR_NOT_REQUIRED)) return;
 
-    if ($data['itemtype'] == ROLES_USERTYPE) $name = 'roles_users';
-    elseif ($data['itemtype'] == ROLES_GROUPTYPE) $name = 'roles_groups';
+    if ($data['itemtype'] == xarRoles::ROLES_USERTYPE) $name = 'roles_users';
+    elseif ($data['itemtype'] == xarRoles::ROLES_GROUPTYPE) $name = 'roles_groups';
 
     $data['object'] = DataObjectMaster::getObject(array('name'   => $name));
 
