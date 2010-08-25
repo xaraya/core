@@ -73,25 +73,14 @@ function roles_admin_asknotification($args)
             $data['message'] = preg_replace( "/%%(.+)%%/","#$\\1#", $data['message'] );
             $data['subject'] = preg_replace( "/%%(.+)%%/","#$\\1#", $data['subject'] );
 
-            // Preserve whitespace by encoding to html (block layout compiler seems to eat whitespace for lunch)
-            $data['message'] = nl2br($data['message']);
-            $data['message'] = str_replace(" ","&#160;", $data['message']);
-
-            // Get System/Site vars
-            $vars  = xarMod::apiFunc('roles','admin','getmessageincludestring', array('template' => 'message-vars'));
-
             // Compile Template before sending it to senduseremail()
-            $data['message'] = xarTplCompileString($vars . $data['message']);
-            $data['subject'] = xarTplCompileString($vars . $data['subject']);
-
-            // Restore whitespace
-            $data['message'] = str_replace('&#160;',' ', $data['message']);
-            $data['message'] = str_replace('<br />',' ', $data['message']);
+            $data['message'] = xarTplCompileString($data['message']);
+            $data['subject'] = xarTplCompileString($data['subject']);
 
             //Send notification
             $id = unserialize(base64_decode($id));
             if (!xarMod::apiFunc('roles','admin','senduseremail', array( 'id' => $id, 'mailtype' => $data['mailtype'], 'subject' => $data['subject'], 'message' => $data['message'], 'pass' => $data['pass'], 'ip' => $data['ip']))) {
-                return;
+                return xarTplModule('roles','user','errors',array('layout'=> 'mail_failed')); 
             }
             xarResponse::redirect(xarModURL('roles', 'admin', 'showusers',
                               array('id' => $data['groupid'], 'state' => $data['state'])));
