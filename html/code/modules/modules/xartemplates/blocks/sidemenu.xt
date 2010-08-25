@@ -47,5 +47,5 @@
         </xar:foreach>
     </xar:if>
     <!-- Logout -->
-    [<a href="&xar-modurl-modules-admin-confirmlogout;">Admin logout</a>]
+    [<a href="#xarModURL('modules','admin','confirmlogout')#">Admin logout</a>]
 </xar:template>

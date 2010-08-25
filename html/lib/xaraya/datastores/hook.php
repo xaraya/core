@@ -11,6 +11,8 @@
  *
  * @package dynamicdata
 **/
+sys::import('modules.dynamicdata.class.datastores.base');
+
 class HookDataStore extends BasicDataStore
 {
     /**
