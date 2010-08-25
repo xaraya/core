@@ -191,7 +191,10 @@
                             </tr>
                             <xar:loop name="$users">
                                 <tr>
-                                    <td>#$loop:item['name']#</td>
+                                    <td>
+                                        <xar:set name="value">$loop->item['name']</xar:set>
+                                        <xar:data-output type="name" value="$value"/>
+                                    </td>
                                     <td>#$loop:item['uname']#</td>
                                     <td>
                                         <a href="&xar-modurl-roles-admin-createmail;&amp;id=#$loop:item.id#"
