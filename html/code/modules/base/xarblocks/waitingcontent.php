@@ -27,15 +27,17 @@
         {
             $data = parent::display($data);
             if (empty($data)) return;
-
+            /*
             // Hooks (we specify that we want the ones for adminpanels here)
             $output = array();
             $output = xarModCallHooks('item', 'waitingcontent', '');
-
+            
             $data['content'] = array(
                 'output'   => $output,
             );
+            */
 
+            $data['content'] = xarMod::apiFunc('base', 'admin', 'waitingcontent');
             return $data;
         }
     }
