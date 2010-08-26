@@ -231,7 +231,6 @@ class ArrayProperty extends DataProperty
                 }
             }
         }
-var_dump($value);
 
         if (!isset($data['rows'])) $data['rows'] = $this->display_rows;
         if (!isset($data['size'])) $data['size'] = $this->display_columns;

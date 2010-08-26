@@ -132,33 +132,7 @@
             </xar:if>
             <div class="xar-form-input-wrapper">
                 <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                    ##$sitename##
-                </span>
-                <span class="xar-padding-thickleft">Name of the site</span>
-            </div>
-            <div class="xar-form-input-wrapper">
-                <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                    ##$siteadmin##
-                </span>
-                <span class="xar-padding-thickleft">Name of the administrator</span>
-            </div>
-            <div class="xar-form-input-wrapper">
-                <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                    ##$adminmail##
-                </span>
-                <span class="xar-padding-thickleft">Email address of the administrator</span>
-            </div>
-            <div class="xar-form-input-wrapper">
-                <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                    ##$siteurl##
-                </span>
-                <span class="xar-padding-thickleft">
-                    URL of the site&#160;(#xarServer::getBaseURL()#)
-                </span>
-            </div>
-            <div class="xar-form-input-wrapper">
-                <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                    ##$myname##
+                    ##$name##
                 </span>
                 <span class="xar-padding-thickleft">Name of the user</span>
             </div>
@@ -170,21 +144,10 @@
             </div>
             <div class="xar-form-input-wrapper">
                 <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                    ##$useremail##
+                    ##$email##
                 </span>
                 <span class="xar-padding-thickleft">Email address of the user</span>
             </div>
-            <xar:foreach in="$properties" key="$name">
-                <div class="xar-form-input-wrapper">
-                    <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                        ##$<xar:var name="name"/>##
-                    </span>
-                    <span class="xar-padding-thickleft">
-                        <xar:data-label property="$properties[$name]"/>
-                    </span>
-                </div>
-            </xar:foreach>
-            <br class="xar-clearboth"/>
         </form>
     </div>
 </xar:template>
