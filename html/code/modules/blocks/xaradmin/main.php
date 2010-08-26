@@ -27,7 +27,7 @@ function blocks_admin_main()
         if (!xarVarFetch('tab', 'pre:trim:lower:str:1:', $data['tab'], '', XARVAR_NOT_REQUIRED)) return;
         return xarTplModule('blocks','admin','overview', $data);
     } else {
-        xarResponse::redirect(xarModURL('blocks', 'admin', 'view'));
+        xarResponse::redirect(xarModURL('blocks', 'admin', 'view_instances'));
         return true;
     }
 }
