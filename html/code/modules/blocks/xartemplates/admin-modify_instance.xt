@@ -52,6 +52,16 @@
                         #xarVarPrepForDisplay($instance['type'])#
                     </div>
                     <div class="xar-form-input-wrapper">
+                        <label title="#xarML('This is the current version of block that is being modified.')#" class="xar-form-label">
+                            Block Version:
+                        </label>
+                        <xar:if condition="empty($instance['xarversion']) or $instance['xarversion'] eq '0.0.0'">
+                            Unknown
+                        <xar:else/>
+                            #xarVarPrepForDisplay($instance['xarversion'])#
+                        </xar:if>
+                    </div>
+                    <div class="xar-form-input-wrapper">
                         <label for="block_name" title="#xarML('Each instance requires a unique name.')#" class="xar-form-label">
                             Name:
                         </label>
@@ -85,6 +95,16 @@
                                 Block Type:
                             </label>
                             #xarVarPrepForDisplay($instance['type'])#
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <label title="#xarML('This is the current version of block that is being modified.')#" class="xar-form-label">
+                                Block Version:
+                            </label>
+                            <xar:if condition="empty($instance['xarversion']) or $instance['xarversion'] eq '0.0.0'">
+                                Unknown
+                            <xar:else/>
+                                #xarVarPrepForDisplay($instance['xarversion'])#
+                            </xar:if>
                         </div>
                         <div class="xar-form-input-wrapper">
                             <label for="block_name" title="#xarML('Each instance requires a unique name.')#" class="xar-form-label">

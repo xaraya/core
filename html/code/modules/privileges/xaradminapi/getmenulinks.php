@@ -19,6 +19,6 @@
 function privileges_adminapi_getmenulinks()
 {
     // No special menu. Just return a standard array
-    return xarMod::apiFunc('base','admin','menuarray',array('module' => 'privileges'));
+    return xarMod::apiFunc('base','admin','loadmenuarray',array('modname' => 'privileges', 'modtype' => 'admin'));
 }
 ?>

@@ -100,8 +100,5 @@ class ConfigurationProperty extends TextBoxProperty
 
         return $value;
     }
-
-
-
 }
 ?>
