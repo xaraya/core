@@ -79,7 +79,7 @@ function roles_admin_modifyconfig()
     switch ($data['tab']) {
 
         case 'hooks':
-            // Item type 0 is the default itemtype for 'user' roles.
+            // Item type 1 is the default itemtype for 'user' roles.
             $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
                                      array('module' => 'roles',
                                            'itemtype' => xarRoles::ROLES_USERTYPE));
