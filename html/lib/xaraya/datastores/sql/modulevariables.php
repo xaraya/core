@@ -51,7 +51,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
     {
         $this->setModvarName($this->name);
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
-        $fieldlist = $this->object->fieldlist;
+        $fieldlist = $this->object->getFieldList();
         if (count($fieldlist) < 1) return;
         foreach ($fieldlist as $field) {
             $value = xarModItemVars::get($this->modulename,$field,$itemid);
@@ -69,7 +69,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
     function updateItem(Array $args = array())
     {
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
-        $fieldlist = $this->object->fieldlist;
+        $fieldlist = $this->object->getFieldList();
         if (count($fieldlist) < 1) {
             return 0;
         }
@@ -90,7 +90,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
     function deleteItem(Array $args = array())
     {
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
-        $fieldlist = $this->object->fieldlist;
+        $fieldlist = $this->object->getFieldList();
         if (count($fieldlist) < 1) return;
 
         foreach ($fieldlist as $field) {
@@ -126,7 +126,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
             $this->cache = $args['cache'];
         }
 
-        $fieldlist = $this->object->fieldlist;
+        $fieldlist = $this->object->getFieldList();
         if (count($fields) < 1) {
             return;
         }
@@ -585,7 +585,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
         $modvars = $this->getTable('module_vars');
         $moditemvars = $this->getTable('module_itemvars');
 
-        $fieldlist = $this->object->fieldlist;
+        $fieldlist = $this->object->getFieldList();
 
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
