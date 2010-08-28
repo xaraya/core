@@ -392,9 +392,8 @@ final class sys extends Object
     public static function varpath()
     {
         if (isset(self::$var)) return self::$var;
-        if (file_exists('./var/.key.php')) { // I/O (prolly cheap, but we could eliminate this one with a try/catch)
-            include './var/.key.php';        // I/O (doesnt use include_path, only looks in ./var/ so not that expensive either)
-            self::$var = $protectedVarPath;
+        if (isset($GLOBALS['systemConfiguration']['varDir'])) {
+            self::$var = $GLOBALS['systemConfiguration']['varDir'];
         } else {
             self::$var = './var';
         }
