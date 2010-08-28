@@ -7,7 +7,7 @@
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
-  <config>a:0:{}</config>
+  <config>a:1:{s:6:"access";s:142:"a:5:{s:7:"display";a:1:{i:0;i:2;}s:6:"update";a:1:{i:0;i:2;}s:6:"create";a:1:{i:0;i:2;}s:6:"delete";a:1:{i:0;i:2;}s:6:"config";a:1:{i:0;i:2;}}";}</config>
   <isalias>true</isalias>
   <properties>
     <property name="id">
