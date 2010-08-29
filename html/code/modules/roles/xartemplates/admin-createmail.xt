@@ -192,8 +192,8 @@
                             <xar:loop name="$users">
                                 <tr>
                                     <td>
-                                        <xar:set name="name">$loop->item['name']</xar:set>
-                                        <xar:data-output type="name" value="$name"/>
+                                        <xar:set name="value">$loop->item['name']</xar:set>
+                                        <xar:data-output type="name" value="$value"/>
                                     </td>
                                     <td>#$loop:item['uname']#</td>
                                     <td>
