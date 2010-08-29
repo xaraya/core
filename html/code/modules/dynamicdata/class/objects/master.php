@@ -269,7 +269,8 @@ class DataObjectMaster extends Object
             case 'relational': $this->addDataStore('relational', 'relational'); break;
             case 'module_variables': 
                 $firstproperty = reset($this->properties);
-                $name = substr($firstproperty->source,17);
+                // FIXME: this needs a better design
+                $name = trim(substr($firstproperty->source,17));
                 $this->addDataStore($name, 'modulevars'); 
                 break;
             case 'dynamicdata': $this->addDataStore('_dynamic_data_', 'data'); break;
@@ -576,6 +577,7 @@ class DataObjectMaster extends Object
     static function &getObject(Array $args=array())
     {
         $info = self::_getObjectInfo($args);
+        
         if (empty($info)) {
             if (isset($args['name'])) $identifier = xarML('the name is #(1)',$args['name']);
             if (isset($args['objectid'])) $identifier = xarML('the objectid is #(1)',$args['objectid']);

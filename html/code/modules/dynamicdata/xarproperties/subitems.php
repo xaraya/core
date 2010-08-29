@@ -33,7 +33,11 @@ class SubItemsProperty extends DataProperty
 
         $this->fieldprefix    = $this->_fieldprefix . 'dd_'.$this->id;
         sys::import('modules.dynamicdata.class.objects.master');
+        // FIXME: properties should not be instantiation when being registered
+        try {
         $this->subitemsobject = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
+        } catch (Exception $e) {
+        }
     }
 
     public function checkInput($name = '', $value = null)
