@@ -11,6 +11,8 @@ function base_adminapi_getmodulesettings($args)
     }
     $object->datastores = array();
     $object->getDatastore();
+    
+    // Store the module id in the object's field for now
     return $object;
 }
 ?>

@@ -267,7 +267,11 @@ class DataObjectMaster extends Object
     {
         switch ($this->datastore) {
             case 'relational': $this->addDataStore('relational', 'relational'); break;
-            case 'module_variables': $this->addDataStore('modulevars', 'modulevars'); break;
+            case 'module_variables': 
+                $firstproperty = reset($this->properties);
+                $name = substr($firstproperty->source,17);
+                $this->addDataStore($name, 'modulevars'); 
+                break;
             case 'dynamicdata': $this->addDataStore('_dynamic_data_', 'data'); break;
         }
     }

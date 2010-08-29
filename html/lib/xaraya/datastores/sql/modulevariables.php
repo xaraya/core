@@ -32,14 +32,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
     private function setModvarName($name="")
     {
         if (empty($name)) throw new Exception('Bad modvar name');
-        $namepart = explode('__',$name);
-        if (empty($namepart[1])) {
-            $this->modulename = 'dynamicdata';
-            $this->variablename = $namepart[0];
-        } else {
-            $this->modulename = $namepart[0];
-            $this->variablename = $namepart[1];
-        }
+        $this->modulename = $name;
     }
 
     function getFieldName(DataProperty &$property)
