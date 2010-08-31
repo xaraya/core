@@ -8,7 +8,6 @@
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <datastore>relational</datastore>
-  <config></config>
   <sources>a:1:{s:10:"privileges";s:14:"xar_privileges";}</sources>
   <isalias>true</isalias>
   <properties>

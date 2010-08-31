@@ -35,4 +35,12 @@ $systemConfiguration['codeDir'] = "code/";
 // 3. When you want to use URLs like http://mysite.com/news/123
 //$systemConfiguration['BaseURI'] = '';
 //$systemConfiguration['BaseModURL'] = '';
+
+/*
+ * This value is used to change the default path of the
+ * var directory.
+ *
+ * Comment them out to use Xaraya's built-in/auto values
+ */
+//$systemConfiguration['varDir'] = './var';
 ?>

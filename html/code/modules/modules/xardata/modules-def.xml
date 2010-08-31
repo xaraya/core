@@ -8,7 +8,6 @@
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <datastore>relational</datastore>
-  <config></config>
   <sources>a:1:{s:7:"modules";s:11:"xar_modules";}</sources>
   <isalias>true</isalias>
   <properties>

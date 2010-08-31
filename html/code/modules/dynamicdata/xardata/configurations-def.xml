@@ -6,7 +6,7 @@
   <class>DataObject</class>
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
-  <maxid>26</maxid>
+  <maxid>0</maxid>
   <isalias>true</isalias>
   <datastore>relational</datastore>
   <config>a:0:{}</config>

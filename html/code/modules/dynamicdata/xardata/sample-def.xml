@@ -6,7 +6,7 @@
   <class>DataObject</class>
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
-  <maxid>10</maxid>
+  <maxid>0</maxid>
   <datastore>dynamicdata</datastore>
   <config>a:0:{}</config>
   <isalias>false</isalias>
