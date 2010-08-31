@@ -19,7 +19,7 @@
             <xar:else />
                 <xar:foreach in="$items" value="$item">
                     <h2>Search #$item['label']#</h2>
-                    <form method="get" action="index.php">
+                    <form method="post" action="#xarServer::getCurrentURL()#">
                         <div>
                             <table border="0" cellpadding="2" cellspacing="0">
                                 <tr>
