@@ -100,14 +100,6 @@ class Query
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
         if (empty($statement)) $this->optimize();
 
-        // Special case for multitable inserts
-        if ($this->type == 'INSERT' && count($this->tables) > 1) {
-            if (empty($this->primary))
-                throw new Exception(xarML('Cannot execute a multitable insert without a primary field defined'));
-            $this->multiinsert(); 
-            return true;
-        }
-
         $this->setstatement($statement);
 
         if ($this->israwstatement) {
@@ -115,6 +107,14 @@ class Query
             // If this is not a SELECT exit here
             if (!is_object($result)) return $result;
         } else {
+            // Special case for multitable inserts
+            if ($this->type == 'INSERT' && count($this->tables) > 1) {
+                if (empty($this->primary))
+                    throw new Exception(xarML('Cannot execute a multitable insert without a primary field defined'));
+                $this->multiinsert(); 
+                return true;
+            }
+
             if ($this->type != 'SELECT') {
                 if ($this->usebinding) {
                     $result = $this->dbconn->Execute($this->statement,$this->bindvars);
