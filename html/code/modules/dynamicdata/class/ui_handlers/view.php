@@ -62,7 +62,7 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
         {
             $this->object =& DataObjectMaster::getObjectList($this->args);
             if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
 
             if(empty($this->tplmodule)) 
             {
@@ -74,7 +74,7 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
         if (!$this->object->checkAccess('view'))
-            return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));
+            return xarController::$response->Forbidden(xarML('View #(1) is forbidden', $this->object->label));
 
         $this->object->countItems();
 

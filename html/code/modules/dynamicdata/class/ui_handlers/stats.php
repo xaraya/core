@@ -265,7 +265,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         // save the report and redirect
         } elseif (!empty($save) && !empty($stats['report']) && $this->object->checkAccess('config')) {
             $this->saveReport($stats['report'], $stats, $info);
-            xarResponse::Redirect(xarServer::getObjectURL($this->object->name, 'report', array('report' => $stats['report'])));
+            xarController::Rredirect(xarServer::getObjectURL($this->object->name, 'report', array('report' => $stats['report'])));
             return true;
 
         // get the result

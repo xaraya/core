@@ -15,7 +15,7 @@
         <p>
             Your preferences can be reset to defaults from this page, so that you can, for instance, see the same startup page as a new admin..
         </p>
-        <form method="post" action="&xar-modurl-modules-admin-pref;">
+        <form method="post" action="#xarModURL('modules','admin','pref')#">
             <div>
                 <input type="submit" name="restore" value="Restore"/>
             </div>

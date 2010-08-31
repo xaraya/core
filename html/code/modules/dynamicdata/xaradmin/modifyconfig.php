@@ -35,7 +35,7 @@ function dynamicdata_admin_modifyconfig()
 
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
-                return xarTplModule('dynamicdata','admin','view_propertydefs', $data);
+                return xarTplModule('dynamicdata','admin','modifyconfig', $data);
             } else {
                 $itemid = $data['module_settings']->updateItem();
             }

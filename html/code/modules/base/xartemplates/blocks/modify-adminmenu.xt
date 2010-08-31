@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-form-input-wrapper">
-        <label class="xar-form-label" for="showlogout#$bid#" title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
-            Show A Logout Link
-        </label>
-        <xar:data-input type="checkbox" name="showlogout" checked="$showlogout"/>
-    </div>
     <!--
     <div class="xar-form-input-wrapper">
         <label class="xar-form-label" for="showhelp#$bid#" title="#xarML('By checking this box a help link will be shown in the panel instance.')#">
@@ -15,6 +9,18 @@
         <xar:data-input type="checkbox" name="showhelp" checked="$showhelp"/>
     </div>
     -->
+    <div class="xar-form-input-wrapper">
+        <label for="marker" title="#xarML('When Xaraya is generating the menu, we can mark the current page. Use this to configure the marker for that display.')#" class="xar-form-label">
+        Marker:
+        </label>
+        <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort"/>
+    </div>
+    <div class="xar-form-input-wrapper">
+        <label class="xar-form-label" for="showlogout#$bid#" title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
+            Show A Logout Link
+        </label>
+        <xar:data-input type="checkbox" name="showlogout" checked="$showlogout"/>
+    </div>
     <div class="xar-form-input-wrapper">
         <label class="xar-form-label" for="showfront#$bid#" title="#xarML('By checking this box a link to the front end will be shown in the panel instance.')#">
             Show Link to Front End
@@ -25,14 +31,52 @@
         <label for="menustyle" title="#xarML('How should the menu items be ordered?')#" class="xar-form-label">
             Sort Admin Menu Items:
         </label>
-        <select name="menustyle" id="menustyle">
-            <xar:foreach in="$sortorder" value="$v" key="$k">
-                <xar:if condition="$k eq $menustyle">
-                    <option value="#$k#" selected="selected">#$v#</option>
-                <xar:else />
-                    <option value="#$k#">#$v#</option>
-                </xar:if>
-            </xar:foreach>
-        </select>
+        <xar:data-input type="dropdown" name="menustyle" id="menustyle" options="$sortorder" value="$menustyle"/>
     </div>
+    <table class="xar-fullwidth">
+        <thead>
+            <tr>
+                <th class="xar-align-left">
+                    Module
+                </th>
+                <th title="#xarML('Use current module name or alias in menus')#">
+                    Alias
+                </th>
+                <!--
+                <th class="xar-align-left">
+                    Required Access Group or Level
+                </th>
+                -->
+                <th class="xar-align-center" title="#xarML('Display link to this module in the menu')#">
+                    Visible
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        <xar:foreach in="$modules" value="$module">
+            <tr>
+                <td>
+                    #$module['displayname']#
+                </td>
+                <td>
+                    <xar:if condition="!empty($module['aliases'])">
+                        <xar:set name="inputname">"modulelist[".$module['name']."][alias_name]"</xar:set>
+                        <xar:set name="inputid">"modulelist_".$module['name']."_alias_name"</xar:set>
+                        <xar:set name="inputval">!empty($modulelist[$module['name']]['alias_name']) ? $modulelist[$module['name']]['alias_name'] : $module['name']</xar:set>
+                        <xar:set name="inputfirst">array('id' => $module['name'], 'name' => $module['displayname'])</xar:set>
+                        <xar:data-input type="dropdown" name="$inputname" id="$inputid" firstline="$inputfirst" options="$module['aliases']" value="$inputval"/>
+                    <xar:else/>
+                        [none]
+                    </xar:if>
+                </td>
+                <td class="xar-align-center">
+                    <xar:set name="inputname">"modulelist[".$module['name']."][visible]"</xar:set>
+                    <xar:set name="inputid">"modulelist_".$module['name']."_visible"</xar:set>
+                    <xar:set name="inputval">!empty($modulelist[$module['name']]['visible'])</xar:set>
+                    <xar:data-input type="checkbox" name="$inputname" id="$inputid" value="$inputval"/>
+                </td>
+            </tr>
+        </xar:foreach>
+        </tbody>
+    </table>
 </xar:template>

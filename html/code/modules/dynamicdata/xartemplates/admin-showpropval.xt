@@ -5,88 +5,47 @@
         <span class="xar-mod-title">Dynamic Data Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:if condition="!empty($itemid)">
-            <h2>Configuration for DataProperty #$itemid#</h2>
-            <xar:if condition="!empty($isupload)">
-                <xar:set name="enc_type">'multipart/form-data'</xar:set>
-            <xar:else />
-                <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
-            </xar:if>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;" enctype="#$enc_type#">
-                <fieldset>
-                    <legend>Property summary</legend>
-                    <xar:set name="fieldlist">
-                        array('name','label','objectid','type')
-                    </xar:set>
-                    <xar:data-display object="$object" fieldlist="$fieldlist"/>
-                </fieldset>
-                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>#$showval# 
-                <fieldset>
-                    <div class="xar-align-center">
-                        <input type="submit" name="confirm" value="#xarML('Update')#"/>&#160;
-                        <input type="submit" name="exit" value="#xarML('Update and Exit')#"/> 
-                    </div>
-                </fieldset>
-            </form>
+        <xar:set name="typename">$propertytype->name</xar:set>
+        <xar:if condition="file_exists(sys::code().'properties/'.$typename.'/templates/includes/overview.xt')">
+            <![CDATA[
+            <script type="text/javascript">
+                function showtab (selectedindex, items)
+                {
+                    for (i=1;i<=items;i++) {
+                        document.getElementById('page-' + i).style.display = "none";
+                        document.getElementById('tab-' + i).className = "xar-tab";
+                        document.getElementById('href-' + i).className = "xar-norm xar-norm-outline";
+                    }
+                    document.getElementById('page-' + selectedindex).style.display = "block";
+                    document.getElementById('tab-' + selectedindex).className = "xar-tab-active";
+                    document.getElementById('href-' + selectedindex).className = "xar-accent xar-accent-outline";
+                }
+            </script>
+            ]]>
+            <ul class="xar-tabs xar-alt xar-norm-outline" style="clear:both">
+                <li id="tab-1">
+                    <a id="href-1" href="javascript:showtab(1,2)">
+                        Configuration
+                    </a>
+                </li>
+                <li id="tab-2">
+                    <a id="href-2" href="javascript:showtab(2,2)">
+                        Property Information
+                    </a>
+                </li>
+            </ul>
+            <div id="page-1">
+                <xar:template file="property-configuration"/>
+            </div>
 
-        <xar:elseif condition="!empty($proptype)"/>
-            <h2>Sample Configuration for DataProperty Type #$proptype#</h2>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
-                <fieldset>
-                    <legend>Select Property Type</legend>
-                    <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="$proptype"/>
-                    <input type="submit" value="#xarML('Select')#"/>
-                </fieldset>
-            </form>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
-                <fieldset>
-                    <legend>Property Type Summary</legend>
-                    <table class="xar-fullwidth">
-                        <tr>
-                            <td>
-                                <div class="xar-form-input-wrapper">
-                                    <label class="xar-form-label" for="#$proptype#_desc" title="" style="">
-                                        Property Type
-                                    </label>
-                                    [#$propinfo:type#] #$propinfo:desc#
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="xar-form-input-wrapper">
-                                    <label class="xar-form-label" for="#$proptype#_config" title="" style="">
-                                        Configuration
-                                    </label>
-                                    <textarea name="#$proptype#_config" id="#$proptype#_config" rows="4" cols="50" readonly="readonly">#$propinfo:configuration#</textarea>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </fieldset>
-                <input type="hidden" name="proptype" value="#$proptype#"/>
-                #$showval#
-                <fieldset>
-                    <div class="xar-align-center">
-                        <input type="submit" name="preview" value="#xarML('Preview')#"/>
-    <!-- See CHECKME in showpropval
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                        <input type="submit" name="confirm" value="#xarML('Update')#" disabled="disabled"/>
-    -->
-                    </div>
-                </fieldset>
-            </form>
-
-        <xar:else/>
-            <h2>Sample Configuration for DataProperty Types</h2>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
-                <fieldset>
-                    <legend>Select Property Type</legend>
-                    <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="textbox"/>
-                    <input type="submit" value="#xarML('Select')#"/>
-                </fieldset>
-            </form>
+            <div id="page-2" style="display: none">
+                <xar:template file="overview" property="$typename"/>
+            </div>
+            <script type="text/javascript">
+                showtab (1,2)
+            </script>
+        <xar:else />
+            <xar:template file="property-configuration"/>
         </xar:if>
     </div>
 </xar:template>
