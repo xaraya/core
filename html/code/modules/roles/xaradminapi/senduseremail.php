@@ -39,7 +39,6 @@ function roles_adminapi_senduseremail($args)
 
     if (!isset($subject)) $subject = xarTplCompileString($strings['subject']);
     if (!isset($message)) $message = xarTplCompileString($strings['message']);
-
     //Get the common search and replace values
     //if (is_array($id)) {
         foreach ($id as $userid => $val) {
@@ -72,14 +71,11 @@ function roles_adminapi_senduseremail($args)
             // retrieve the dynamic properties (if any) for use in the e-mail too
 
             // get the DataObject defined for this module and item id
-            $object = xarMod::apiFunc('dynamicdata','user','getobject',
-                                         array('module' => 'roles',
-                                               // we know the item id now...
-                                               'itemid' => $userid,
-                                               'itemtype' => xarRoles::ROLES_USERTYPE));
+            sys::import('modules.dynamicdata.class.objects.master');
+            $object = DataObjectMaster::getObject(array('name' => 'roles_users'));
             if (isset($object) && !empty($object->objectid)) {
                 // retrieve the item itself
-                $itemid = $object->getItem();
+                $itemid = $object->getItem(array('itemid' => $userid));
                 if (!empty($itemid) && $itemid == $userid) {
                     // get the Dynamic Properties of this object
                     $properties =& $object->getProperties();

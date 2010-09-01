@@ -674,4 +674,13 @@
     <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
+  <configurations itemid="76">
+    <id>234</id>
+    <name>initialization_hash_type</name>
+    <label>Hash Type</label>
+    <description>The hash algorithm used for encrypting passwords</description>
+    <property_id>2</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
 </items>

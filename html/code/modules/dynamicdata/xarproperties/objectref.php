@@ -85,7 +85,6 @@ class ObjectRefProperty extends SelectProperty
             return $this->options;
         }
         $options = $this->getFirstline();
-
         // The object we need to query is in $this->initialization_refobject, we display the value of
         // the property in $this->display_prop and the id comes from $this->store_prop
 

@@ -36,6 +36,11 @@ class xarRequest extends Object
     
     function __construct($url=null)
     {
+        // Make this load lazily
+        $this->setModule(xarModVars::get('modules', 'defaultmodule'));
+        $this->setType(xarModVars::get('modules', 'defaultmoduletype'));
+        $this->setFunction(xarModVars::get('modules', 'defaultmodulefunction'));
+
         $this->entryPoint = xarController::$entryPoint;
         $this->setURL($url);
     }
