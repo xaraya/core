@@ -734,4 +734,5 @@
     <label>Hash Type</label>
     <description>The hash algorithm used for encrypting passwords</description>
     <property_id>2</property_id>
+  </configurations>
 </items>
