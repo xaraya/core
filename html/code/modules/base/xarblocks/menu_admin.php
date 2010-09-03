@@ -267,8 +267,8 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
             if (empty($modulelist[$modname]['visible']))
                 $modulelist[$modname]['visible'] = 0;
             if (empty($modulelist[$modname]['alias_name']) ||
-                empty($mod['aliases']) ||
-                !isset($mod['aliases'][$modulelist[$modname]['alias_name']])) {
+                empty($this->modulelist[$modname]['aliases']) ||
+                !isset($this->modulelist[$modname]['aliases'][$modulelist[$modname]['alias_name']])) {
                 $modulelist[$modname]['alias_name'] = $modname;
             }
             $isvalid = $accessproperty->checkInput('modulelist_'.$modname.'_view_access');

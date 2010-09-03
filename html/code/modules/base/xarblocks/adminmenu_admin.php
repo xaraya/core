@@ -63,8 +63,8 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
             if (empty($modulelist[$mod['name']]['visible']))
                 $modulelist[$mod['name']]['visible'] = 0;
             if (empty($modulelist[$mod['name']]['alias_name']) ||
-                empty($mod['aliases']) ||
-                !isset($mod['aliases'][$modulelist[$mod['name']]['alias_name']])) {
+                empty($this->modulelist[$mod['name']]['aliases']) ||
+                !isset($this->modulelist[$mod['name']]['aliases'][$modulelist[$mod['name']]['alias_name']])) {
                 $modulelist[$mod['name']]['alias_name'] = $mod['name'];
             }
             if (empty($modulelist[$mod['name']]['order']))
