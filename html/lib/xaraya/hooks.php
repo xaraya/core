@@ -244,7 +244,7 @@ class xarHooks
             return false;
         }
 
-        $checkScope = xarHooks::getActionScope($hookAction);
+        $checkScope = xarHooks::getActionScope($hookScope);
         if (!empty($checkScope) && $checkScope != $hookScope) {
             // reject registrations for the wrong scope ('item' or 'module' for now, perhaps 'config' later)
             throw new BadParameterException('hookScope');
