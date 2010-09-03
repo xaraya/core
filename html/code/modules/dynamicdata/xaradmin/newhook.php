@@ -57,10 +57,10 @@ function dynamicdata_admin_newhook($args)
     } else {
         $itemid = 0;
     }
-    $object = & DataObjectMaster::getObject(array(
-                                       'moduleid' => $module_id,
-                                       'itemtype' => $itemtype,
-                                       'itemid'   => $itemid));
+    $descriptorargs = DataObjectDescriptor::getObjectID(array('moduleid'  => $module_id,
+                                       'itemtype'  => $itemtype));
+    sys::import('modules.dynamicdata.class.objects.master');
+    $object = DataObjectMaster::getObject(array('name' => $descriptorargs['name']));
     if (!isset($object)) return;
 
     // if we are in preview mode, we need to check for any preview values

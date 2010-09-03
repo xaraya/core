@@ -30,8 +30,6 @@ function dynamicdata_user_view($args)
     if(!xarVarFetch('startnum', 'int',   $startnum,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('numitems', 'int',   $numitems,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('sort',     'isset', $sort,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('catid',    'isset', $catid,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('layout',   'str:1' ,$layout,    'default', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('tplmodule','isset', $tplmodule, 'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
@@ -62,14 +60,10 @@ function dynamicdata_user_view($args)
     // Note: we need to pass all relevant arguments ourselves here
     $object = DataObjectMaster::getObjectList(
                             array('objectid'  => $itemid,
-                                  'moduleid'  => $module_id,
-                                  'itemtype'  => $itemtype,
                                   'name'      => $name,
                                   'startnum'  => $startnum,
                                   'numitems'  => $numitems,
                                   'sort'      => $sort,
-                                  'join'      => $join,
-                                  'table'     => $table,
                                   'catid'     => $catid,
                                   'layout'    => $layout,
                                   'tplmodule' => $tplmodule,

@@ -67,7 +67,7 @@ function base_admin_modifyconfig()
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'base'));
     $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, user_menu_link');
     $data['module_settings']->getItem();
-                    if (extension_loaded('mcrypt')) {
+                    if (extension_loaded('mcrypt') && 0) {
                         include_once(sys::lib()."xaraya/encryption.php");
                         $data['encryption'] = $encryption;
 

@@ -23,6 +23,19 @@
     </xsl:choose>
   </xsl:variable>
   
+  <xsl:variable name="property">
+    <xsl:choose>
+      <xsl:when test="not(@property)">
+        <xsl:text>''</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>'</xsl:text>
+        <xsl:value-of select="@property"/>
+        <xsl:text>'</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:variable name="position">
     <xsl:choose>
       <xsl:when test="not(@position)">
@@ -49,6 +62,8 @@
       <xsl:when test="string-length(@filename) &gt; 0">
         <xsl:text>xarMod::apiFunc('base','javascript','modulefile',array('module'=&gt;</xsl:text>
         <xsl:value-of select="$module"/>
+        <xsl:text>,'property'=&gt;</xsl:text>
+        <xsl:value-of select="$property"/>
         <xsl:text>,'filename'=&gt;'</xsl:text>
         <xsl:value-of select="@filename"/>
         <xsl:text>','position'=&gt;'</xsl:text>

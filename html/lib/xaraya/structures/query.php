@@ -99,53 +99,62 @@ class Query
 
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
         if (empty($statement)) $this->optimize();
+
         $this->setstatement($statement);
 
-        if ($this->type == 'INSERT' && count($this->tables) > 1) return true;
-        if ($this->type != 'SELECT') {
-            if ($this->usebinding  && !$this->israwstatement) {
-                $result = $this->dbconn->Execute($this->statement,$this->bindvars);
-                $this->bindvars = array();
+        if ($this->israwstatement) {
+            $result = $this->dbconn->Execute($this->statement);
+            // If this is not a SELECT exit here
+            if (!is_object($result)) return $result;
+        } else {
+            // Special case for multitable inserts
+            if ($this->type == 'INSERT' && count($this->tables) > 1) {
+                if (empty($this->primary))
+                    throw new Exception(xarML('Cannot execute a multitable insert without a primary field defined'));
+                $this->multiinsert(); 
+                return true;
+            }
+
+            if ($this->type != 'SELECT') {
+                if ($this->usebinding) {
+                    $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+                    $this->bindvars = array();
+                } else {
+                    $result = $this->dbconn->Execute($this->statement);
+                }
+                return $result;
+            }
+            if($this->rowstodo != 0 && $this->limits == 1) {
+                $begin = $this->startat-1;
+                if ($this->usebinding) {
+                    $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin,$this->bindvars);
+                }
+                else {
+                    $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
+                }
             } else {
-                $result = $this->dbconn->Execute($this->statement);
-            }
-            if(!$result) return;
-            return true;
-        }
-        if($this->rowstodo != 0 && $this->limits == 1) {
-            $begin = $this->startat-1;
-            if ($this->usebinding && !$this->israwstatement) {
-                $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin,$this->bindvars);
-                $this->statement .= " LIMIT " . $begin . "," . $this->rowstodo;
-            }
-            else {
-                $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
+                if ($this->usebinding) {
+                    $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+                } else {
+                    $result = $this->dbconn->Execute($this->statement);
+                }
             }
         }
-        else {
-            if ($this->usebinding && !$this->israwstatement) {
-                $result = $this->dbconn->Execute($this->statement,$this->bindvars);
-            } else {
-                $result = $this->dbconn->Execute($this->statement);
-            }
-        }
+
         if ($this->debugflag) $loopstart = microtime(true);
         if (!$result) return;
         $this->result =& $result;
 
-        if (($result->fields) === false)
+        if ($result->fields === false)
             $numfields = 0;
         else
             $numfields = count($result->fields); // Better than the private var, fields should still be protected
         $this->output = array();
         if ($display == 1) {
-            if ($statement == '') {
+            if (!$this->israwstatement) {
                 if ($this->fields == array() && $numfields > 0) {
                     $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
                     $result->next(); $result->previous();
-                    foreach ($result->fields as $key => $value) {
-                        $this->fields[$key]['name'] = strtolower($key); 
-                    }
                     for ($i=0;$i< $numfields;$i++) {
                         // Fetchfield was the only one used throughout the whole codebase, simulate it here instead of in creole
                         //$o = $result->FetchField($i);
@@ -173,11 +182,13 @@ class Query
                 }
             } else {
                 while (!$result->EOF) {
+                /*
                     $line = array();
                     for ($i=0;$i<$this->rowfields;$i++) {
                         $line[] = $result->fields[$i];
                     }
-                    $this->output[] = $line;
+                    */
+                    $this->output[] = $result->fields;
                     $result->MoveNext();
                 }
             }
@@ -545,6 +556,14 @@ class Query
     {
         return $this->notlike($field1,$field2,0);
     }
+    public function pin($field1,$field2)
+    {
+        return $this->in($field1,$field2,0);
+    }
+    public function pnotin($field1,$field2)
+    {
+        return $this->notin($field1,$field2,0);
+    }
     public function pregex($field1,$field2)
     {
         return $this->regex($field1,$field2,0);
@@ -798,42 +817,30 @@ class Query
 
     private function _getconditions()
     {
-        $this->cstring = "";
+       $this->cstring = "";
        foreach ($this->conjunctions as $conjunction) {
-            if ($conjunction['active']) $this->_resolve($conjunction);
+            if ($conjunction['active']) $this->_resolve($conjunction,1);
         }
         return $this->cstring;
     }
 
-    private function _resolve($conjunction)
+    private function _resolve($conjunction,$level)
     {
         if (is_array($conjunction['conditions'])) {
-//                echo $this->cstring . "<br />";
-            if ($this->cstring == "") {
-                $this->cstring .= "(";
-            }
-            else {
-                $tokens = explode(" ",trim($this->cstring));
-                $last = array_pop($tokens);
-                if (($last == $this->andoperator) || ($last == $this->oroperator) || ($last == '('))
-                    $this->cstring .= "(";
-                else $this->cstring .= $this->implicitconjunction . " (";
-            }
+            if ($level != 1) $this->cstring .= " (";
             $count = count($conjunction['conditions']);
             $i=0;
             foreach ($conjunction['conditions'] as $condition) {
                 $i++;
                 if (isset($this->conjunctions[$condition])) {
-                    $this->_resolve($this->conjunctions[$condition]);
-                }
-                else {
+                    $this->_resolve($this->conjunctions[$condition],$level+1);
+                } else {
                     $this->cstring .= $this->_getcondition($condition) . " ";
                 }
                 if ($i<$count) $this->cstring .= $conjunction['conj'] . " ";
-                else $this->cstring = trim($this->cstring) . ") ";
+                elseif ($level != 1) $this->cstring = trim($this->cstring) . ") ";
             }
-        }
-        elseif (!is_array($conjunction['conditions'])) {
+        } elseif (!is_array($conjunction['conditions'])) {
             if (($this->cstring == "") || (substr($this->cstring,strlen($this->cstring)-1) == '(')) $conj = "";
             else {
                 if ($conjunction['conj'] == "IMPLICIT") $conj = $this->implicitconjunction;
@@ -898,12 +905,6 @@ class Query
             $st .= $this->assembledsorts();
             break;
         case "INSERT" :
-            if (count($this->tables) > 1) {
-                if (empty($this->primary))
-                    throw new Exception(xarML('Cannot execute a multitable insert without a primary field defined'));
-                $this->multiinsert(); 
-                return true;
-            }
             $st .= "INTO ";
             $st .= $this->assembledtables();
             $st .= $this->assembledfields("INSERT");
@@ -1330,7 +1331,6 @@ class Query
     public function clearfields()
     {
         $this->fields = array();
-        $this->distinctarray = array();
     }
     public function clearsorts()
     {
@@ -1524,14 +1524,14 @@ class Query
     }
     public function setstatement($statement='')
     {
-        if ($statement != '') {
-            $this->israwstatement = 1;
+        if (!empty($statement)) {
+            $this->israwstatement = true;
             $this->statement = $statement;
             $st = explode(" ",$statement);
             $this->type = strtoupper($st[0]);
         }
         else {
-            $this->israwstatement = 0;
+            $this->israwstatement = false;
             $this->statement = $this->_statement();
         }
     }
@@ -1550,8 +1550,15 @@ class Query
     }
     public function tostring()
     {
+        // Set the current statement aside
+        $temp = $this->statement;
+        // Regenerate and get the statement
         $this->setstatement();
-        return $this->getstatement();
+        $statementstring = $this->getstatement();
+        // Restore the original statement
+        $this->statement = $temp;
+        // Return the generated statement
+        return $statementstring;
     }
     public function addconditions($q)
     {
@@ -1711,7 +1718,7 @@ class Query
         // What is left are the table with no fields; remove them
         $newtables = array();
         foreach ($this->tables as $table) {
-            if (!isset($tables[$table['alias']])) $newtables[] = $table;
+            if (!isset($tables[$table['alias']])) $newtables[$table['alias']] = $table;
         }
         $this->tables = $newtables;
         
@@ -1747,20 +1754,37 @@ class Query
         $primaryvalue = $this->lastid($tablesource, $parts[1]) + 1;
         
         // Get convenient arrays to track the tables, links and fields
-        foreach ($this->tables as $table) $tablestodo[$table['alias']] = $table;
-        $linkstodo = $this->tablelinks;
+        
+        // Get the links we will work with; we only consider inner joins
+        $tablelinks = array();
+        foreach ($this->tablelinks as $link) {
+            // Only support INNER JOINs
+            if ($link['op'] == 'INNER JOIN') $tablelinks[] = $link;
+        }
+        
+        // Get the tables joined by the links and re-present them
+        $tablestodo = $this->findInternalTables($primarytable, $tablelinks);
+
+        // Now weed out any of the links above that don't deal with these tables
+        $linkstodo = array();
+        $tablekeys = array_keys($tablestodo);
+        foreach ($tablelinks as $link) {
+            if (in_array($link['field1']['table'],$tablekeys) || in_array($link['field1']['table'],$tablekeys))
+                $linkstodo[] = $link;
+        }
+
+        // Finally get all the fields we'll be working with
         foreach ($this->fields as $field) $fieldstodo[$field['table'] . '.' . $field['name']] = $field;
 
         // Assign values to all the link fields where we can
         // At the end of this process we will have linkfields with either values at both ends of the link
         // or no values. In the latter case the code will just insert the next possible value, as such cases
         // must involve at least one primary key.
-        $linkstoprocess = $this->tablelinks;
+        $linkstoprocess = $linkstodo;
         $temp = array();
         
         $fieldstodonames = array_keys($fieldstodo);
         while (count($linkstoprocess)) {
-            $linkdone = false;
             $linkpair = current($linkstoprocess);
             if (in_array($linkpair['field1'],$fieldstodonames)) {
                 $temp[$linkpair['field1']] = $fieldstodo[$linkpair['field1']]['value'];
@@ -1818,7 +1842,6 @@ class Query
             // Run an insert
             $theselinks = isset($linkfields[$thistable['alias']]) ? $linkfields[$thistable['alias']] : array();
             $fieldsdone = $this->partialinsert($thistable,$fieldstodo,$theselinks);            
-        
             // We've run the insert for this table, remove it from the list of todos
             unset($tablestodo[$thistable['alias']]);
             $tablequeue = array();
@@ -1899,6 +1922,23 @@ class Query
         
         // Return the array of the fields we used for this insert and their values
         return $q->row();
+    }
+    
+    private function findInternalTables($primarytable, $linkstodo) 
+    {
+        foreach ($this->tables as $table) $temp[$table['alias']] = $table;
+        $tables[$primarytable] = $temp[$primarytable];
+        $links = $linkstodo;
+        while (count($links)) {
+            $linkpair = current($links);
+            if (in_array($linkpair['field1']['table'],$tables)) {
+                $tables[$linkpair['field1']['table']] = $temp[$linkpair['field1']['table']];
+            } if (in_array($linkpair['field2']['table'],$tables)) {
+                $tables[$linkpair['field2']['table']] = $temp[$linkpair['field2']['table']];
+            }
+            array_shift($links);            
+        }
+        return $tables;
     }
 }
 ?>
