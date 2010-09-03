@@ -392,9 +392,15 @@ class PropertyRegistration extends DataContainer
     
     static public function installproperty($propertyname) 
     {
-        if (file_exists(sys::code() . 'properties/' . $propertyname . '/install.php')) {
+        $class = UCFirst($propertyname) . 'PropertyInstall';
+        if (class_exists($class)) {
+            // Assume this is a property in a module
+            $descriptor = new DataObjectDescriptor();
+            $installer = new $class($descriptor);
+            $installer->install();
+        } elseif (file_exists(sys::code() . 'properties/' . $propertyname . '/install.php')) {
+            // Assume this is a standalone property
             sys::import('properties.' . $propertyname . '.install');
-            $class = UCFirst($propertyname) . 'PropertyInstall';
             $descriptor = new DataObjectDescriptor();
             $installer = new $class($descriptor);
             $installer->install();
