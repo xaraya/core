@@ -20,11 +20,22 @@ class SubItemsProperty extends DataProperty
     public $objectref         = null;
     public $subitemsobject    = null;
     public $prefixarray       = array();
-    public $itemsdata         = array();                   // holds the subitem objects
+    public $value             = array();                   // holds the subitem objects' values
     public $toupdate          = array();                   // holds the ids of items to update
     public $tocreate          = array();                   // holds the ids of items to create
     public $todelete          = array();                   // holds the ids of items to delete
 
+    /*
+    *   In this property the value corresonds to an array of the form
+    *       array(
+    *           $key => array($propertyname_1 => $propertyvalue_1, ...)
+    *           ....
+    *       )
+    *   $key is the id of a subobject item with the form dd_$id
+    *   $propertyname_x is the name of a subobject item property
+    *   $propertyvalue_x is the value of a subobject item property
+    */
+    
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
@@ -33,7 +44,8 @@ class SubItemsProperty extends DataProperty
 
         $this->fieldprefix    = $this->_fieldprefix . 'dd_'.$this->id;
         sys::import('modules.dynamicdata.class.objects.master');
-        // FIXME: properties should not be instantiation when being registered
+        // FIXME: properties should not be instantiated when being registered
+        // In this case refreshing the property cache causes a failure which we have to catch
         try {
         $this->subitemsobject = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
         } catch (Exception $e) {
@@ -67,7 +79,6 @@ class SubItemsProperty extends DataProperty
         
         // First we need to check all the data on the template
         // If checkInput fails, don't bail
-        $itemsdata = array();
         $isvalid = true;
         // We won't check all the items, just those that are to be created or updated
         $itemids = array_merge($this->toupdate,$this->tocreate);
@@ -76,7 +87,7 @@ class SubItemsProperty extends DataProperty
             $thisvalid = $data['object']->checkInput();
             $isvalid = $isvalid && $thisvalid;
         // Store each item for later processing
-            $this->itemsdata[$newprefix][$prefix] = $data['object']->getFieldValues();
+            $this->value[$newprefix][$prefix] = $data['object']->getFieldValues();
         }
         return $isvalid;
     }
@@ -89,8 +100,8 @@ class SubItemsProperty extends DataProperty
         try {
             $newprefix = array_shift($this->prefixarray);
             // Only do this if we actually have any items to be created/updated (might just be a delete call)
-            if (isset($this->itemsdata[$newprefix])) {
-                foreach ($this->itemsdata[$newprefix] as $itemdata) {
+            if (isset($this->value[$newprefix])) {
+                foreach ($this->value[$newprefix] as $itemdata) {
                     $this->subitemsobject->setFieldValues($itemdata);
                     $primary =& $this->subitemsobject->properties[$this->subitemsobject->primary];
                     if (empty($primary->value)) {
@@ -161,20 +172,20 @@ class SubItemsProperty extends DataProperty
 
         // Check for the items data:
         // 1. Override from the tag
-        // 2. The property's itemsdata array (means checkInput ran)
+        // 2. The property's value array (means checkInput ran)
         // 3. The parent object's items array (means we are getting the data from db)
         // 4. Default values passed from the property defaultvalue field
         // 5. Add object default values forany rows not yet covered
         if (empty($data['items'])) {
             // 2. Nothing passed in the tag, lookfor the items data if checkInput ran
-            if (!empty($this->itemsdata)) {
+            if (!empty($this->value)) {
                 try {
                     // Display the itmes from previous rounds
-                    $data['items'] = $this->itemsdata[$newprefix];   
-                    unset($this->itemsdata[$newprefix]);
+                    $data['items'] = $this->value[$newprefix];   
+                    unset($this->value[$newprefix]);
                 } catch (Exception $e) {
                     // Display the newly added items 
-                    $data['items'] = array_shift($this->itemsdata);   
+                    $data['items'] = array_shift($this->value);   
                 }
             } else {
                     // 3. Otherwise get the values from the parent object
