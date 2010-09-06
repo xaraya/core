@@ -161,69 +161,6 @@ class RelationalDataStore extends SQLDataStore
         return $itemid;
     }
     
-    function runinsert($alias='',$primary='')
-    {
-        if (empty($alias)) return true;
-        
-        // Get the table we are inserting to and remove it from the array of tables
-        $tables = array();
-        $thistable = '';
-        foreach ($this->tables as $table) {
-            if ($table['alias'] == $alias) {
-                $thistable = $table;
-            } else {
-                $tables[] = $table;
-            }
-        }
-        $this->tables = $tables;
-
-        // Get the fields we are inserting to and remove them from the array of fields
-        $fields = array();
-        $thesefields = array();
-        foreach ($this->fields as $field) {
-            if ($field['table'] == $alias) {
-                $thesefields[] = $field;
-            } else {
-                $fields[] = $field;
-            }
-        }
-        $this->fields = $fields;
-        
-        // Run the insert for this table
-        $q = new Query('INSERT', $thistable['name']);
-        $q->fields = $thesefields;
-        if (!$q->run()) throw new Exception(xarML('Query failed'));
-        
-        // Get the row we just inserted
-        $q->setType('SELECT');
-        $q->clearfields();
-        if (!empty($primary)) $q->eq($primary, $q->lastid($thistable['name'],$primary));
-        if (!$q->run()) throw new Exception(xarML('Query failed'));
-        
-        // 
-        $tablelinks = array();
-        $theselinks = array();
-        foreach ($this->tablelinks as $link) {
-            $parts = explode('.',$link['field1']);
-            if (count($parts) != 2) throw new Exception(xarML('Incorrect datasource'));
-            $tablealias = $parts[0];
-            if ($tablealias == $alias) {
-                $theselinks[] = $link['field2'];
-            } else {
-                $parts = explode('.',$link['field2']);
-                if (count($parts) != 2) throw new Exception(xarML('Incorrect datasource'));
-                $tablealias = $parts[0];
-                if ($tablealias == $alias) {
-                    $theselinks[] = $link['field1'];
-                } else {
-                    $tablelinks[] = $link;
-                }
-            }
-        }
-        $this->tablelinks = $tablelinks;
-        
-    }
-    
     function updateItem(Array $args = array())
     {
         // Get the itemid from the params or from the object definition

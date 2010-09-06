@@ -1759,7 +1759,10 @@ class Query
         $tablelinks = array();
         foreach ($this->tablelinks as $link) {
             // Only support INNER JOINs
-            if ($link['op'] == 'INNER JOIN') $tablelinks[] = $link;
+            if (
+                ($this->on_syntax && $link['op'] == 'INNER JOIN') ||
+                (!$this->on_syntax && $link['op'] == 'JOIN')
+            ) $tablelinks[] = $link;
         }
         
         // Get the tables joined by the links and re-present them
@@ -1769,10 +1772,11 @@ class Query
         $linkstodo = array();
         $tablekeys = array_keys($tablestodo);
         foreach ($tablelinks as $link) {
-            if (in_array($link['field1']['table'],$tablekeys) || in_array($link['field1']['table'],$tablekeys))
+            $field1 = $this->_deconstructfield($link['field1']);
+            $field2 = $this->_deconstructfield($link['field2']);
+            if (in_array($field1['table'],$tablekeys) || in_array($field2['table'],$tablekeys))
                 $linkstodo[] = $link;
         }
-
         // Finally get all the fields we'll be working with
         foreach ($this->fields as $field) $fieldstodo[$field['table'] . '.' . $field['name']] = $field;
 
@@ -1785,7 +1789,7 @@ class Query
         
         $fieldstodonames = array_keys($fieldstodo);
         while (count($linkstoprocess)) {
-            $linkpair = current($linkstoprocess);
+            $linkpair = reset($linkstoprocess);
             if (in_array($linkpair['field1'],$fieldstodonames)) {
                 $temp[$linkpair['field1']] = $fieldstodo[$linkpair['field1']]['value'];
                 $temp[$linkpair['field2']] = $temp[$linkpair['field1']];
@@ -1929,12 +1933,16 @@ class Query
         foreach ($this->tables as $table) $temp[$table['alias']] = $table;
         $tables[$primarytable] = $temp[$primarytable];
         $links = $linkstodo;
+
         while (count($links)) {
-            $linkpair = current($links);
-            if (in_array($linkpair['field1']['table'],$tables)) {
-                $tables[$linkpair['field1']['table']] = $temp[$linkpair['field1']['table']];
-            } if (in_array($linkpair['field2']['table'],$tables)) {
-                $tables[$linkpair['field2']['table']] = $temp[$linkpair['field2']['table']];
+            $linkpair = reset($links);
+            $field1 = $this->_deconstructfield($linkpair['field1']);
+            $field2 = $this->_deconstructfield($linkpair['field2']);
+
+            if (in_array($field1['table'],array_keys($tables))) {
+                $tables[$field2['table']] = $temp[$field2['table']];
+            } elseif (in_array($field2['table'],array_keys($tables))) {
+                $tables[$field1['table']] = $temp[$field1['table']];
             }
             array_shift($links);            
         }
