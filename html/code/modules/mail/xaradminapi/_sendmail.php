@@ -78,13 +78,13 @@ function mail_adminapi__sendmail($args)
     sys::import('modules.mail.class.phpmailer');
 
     $mail = new phpmailer();
-    $mail->PluginDir = 'modules/mail/class/';
+    $mail->PluginDir = sys::code() . 'modules/mail/class/';
     $mail->ClearAllRecipients();
 
     // Set default language path to English.  This is necessary as
     // phpmailer will set an invalid path to the language directory
     // and throw an error.
-    $mail->SetLanguage("en", "modules/mail/class/language/");
+    $mail->SetLanguage("en", sys::code() . "modules/mail/class/language/");
 
     // Get type of mail server
     $serverType = xarModVars::get('mail', 'server');
