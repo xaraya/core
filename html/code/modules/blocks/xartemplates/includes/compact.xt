@@ -28,7 +28,7 @@
                         <xar:else />
                             M
                         </xar:if>|
-                        <a href="#xarMOdURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
+                        <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                             E
                         </a>|
                         <a href="#$loop:item['deleteurl']#">
@@ -69,7 +69,7 @@
                         <xar:else />
                             M
                         </xar:if>|
-                        <a href="#xarMOdURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
+                        <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                             E
                         </a>|
                         <a href="#$loop:item['deleteurl']#">

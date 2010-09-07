@@ -29,16 +29,15 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
     {
         $data = parent::modify($data);
 
-        // Defaults
-        if(empty($data['showlogout'])) $data['showlogout'] = 0;
-        if(empty($data['menustyle']))  $data['menustyle'] = 'bycat'; //xarModVars::get('base','menustyle');
-        if(empty($data['showhelp'])) $data['showhelp'] = 0;
-        if(empty($data['showfront'])) $data['showfront'] = 0;
+        // Admin Capable Modules
+        $data['modules'] = $this->xarmodules;
 
         // Set the template data we need
-        $sortorder = array('byname' => xarML('By Name'),
-                           'bycat'  => xarML('By Category'));
-        $data['sortorder'] = $sortorder;
+        $data['sortorder'] = array(
+            array('id' => 'byname', 'name' => xarML('By Name')),
+            array('id' => 'bycat', 'name' => xarML('By Category')),
+        );
+
         return $data;
     }
 
@@ -49,12 +48,45 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
     public function update(Array $data=array())
     {
         $data = parent::update($data);
-        if (!xarVarFetch('showlogout', 'int:0:1', $vars['showlogout'], 0, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('menustyle' , 'str::'  , $vars['menustyle'] , 'bycat', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('showhelp', 'int:0:1', $vars['showhelp'], 0, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('showfront', 'int:0:1', $vars['showfront'], 0, XARVAR_NOT_REQUIRED)) return;
+
+        if (!xarVarFetch('showlogout', 'int:0:1', $showlogout, 0, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('menustyle' , 'pre:trim:lower:enum:byname:bycat' , $menustyle , 'bycat', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('showhelp', 'int:0:1', $showhelp, 0, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('showfront', 'int:0:1', $showfront, 0, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('marker',      'str:0',    $marker, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('modulelist', 'array', $modulelist, array(), XARVAR_NOT_REQUIRED)) return;
+
+        if (empty($modulelist)) $modulelist = array('modules' => array('visible' => 1));
+
+        $i = 0;
+        foreach ($this->xarmodules as $mod) {
+            if (empty($modulelist[$mod['name']]['visible']))
+                $modulelist[$mod['name']]['visible'] = 0;
+            if (empty($modulelist[$mod['name']]['alias_name']) ||
+                empty($this->modulelist[$mod['name']]['aliases']) ||
+                !isset($this->modulelist[$mod['name']]['aliases'][$modulelist[$mod['name']]['alias_name']])) {
+                $modulelist[$mod['name']]['alias_name'] = $mod['name'];
+            }
+            if (empty($modulelist[$mod['name']]['order']))
+                $modulelist[$mod['name']]['order'] = $i;
+            $i++;
+        }
+
+        $vars = $data['content'];
+        $vars['showlogout'] = $showlogout;
+        $vars['menustyle']  = $menustyle;
+        $vars['showhelp']   = $showhelp;
+        $vars['showfront']  = $showfront;
+        $vars['modulelist'] = $modulelist;
+        $vars['marker']     = $marker;
+
         $data['content'] = $vars;
         return $data;
+    }
+
+    public function help()
+    {
+        return $this->getInfo();
     }
 
 }

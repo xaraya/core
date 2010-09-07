@@ -28,12 +28,24 @@ function installer_admin_cleanup()
     xarVarFetch('newname', 'str', $newname, '', XARVAR_NOT_REQUIRED);
 
     if ($remove) {
-        unlink('install.php');
+        try {
+            unlink('install.php');
+        } catch (Exception $e) {
+            return xarTplModule('installer','user','errors',array('layout' => 'no_permission_delete', 'filename' => 'install.php'));
+        }
     } elseif ($rename) {
         if (empty($newname)) {
-            unlink('install.php');
+            try {
+                unlink('install.php');
+            } catch (Exception $e) {
+                return xarTplModule('installer','user','errors',array('layout' => 'no_permission_delete', 'filename' => 'install.php'));
+            }
         } else {
-            rename('install.php',$newname . '.php');
+            try {
+                rename('install.php',$newname . '.php');
+            } catch (Exception $e) {
+                return xarTplModule('installer','user','errors',array('layout' => 'no_permission_rename', 'filename' => 'install.php'));
+            }
         }
     }
 

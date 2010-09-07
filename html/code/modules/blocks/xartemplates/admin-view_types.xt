@@ -37,11 +37,19 @@
             <fieldset>
                 <legend>Selected Block Type Properties</legend>
                 <div class="xar-form-input-wrapper">
+                    <label class="xar-form-label">
+                Module:</label>#xarVarPrepForDisplay($detail['module'])#</div>
+                <div class="xar-form-input-wrapper">
                 <label class="xar-form-label">Block
                 Type:</label>#xarVarPrepForDisplay($detail['type'])#</div>
                 <div class="xar-form-input-wrapper">
-                    <label class="xar-form-label">
-                Module:</label>#xarVarPrepForDisplay($detail['module'])#</div>
+                    <label class="xar-form-label">Block Version:</label>
+                    <xar:if condition="empty($info['xarversion']) or $info['xarversion'] eq '0.0.0'">
+                        Unknown
+                    <xar:else/>
+                        #xarVarPrepForDisplay($info['xarversion'])#
+                    </xar:if>
+                </div>
                 <xar:if condition="!empty($info['text_type'])">
                     <div class="xar-form-input-wrapper">
                     <label class="xar-form-label">Short

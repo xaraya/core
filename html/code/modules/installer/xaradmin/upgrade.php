@@ -17,34 +17,29 @@ function installer_admin_upgrade()
         $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);
         $data['upgradable'] = xarVersion::compare($fileversion, '2.0.0') > 0;
     }
-    
-    // Core modules
-    $data['coremodules'] = array(
-                                42    => 'authsystem',
-                                68    => 'base',
-                                13    => 'blocks',
-                                182   => 'dynamicdata',
-                                200   => 'installer',
-                                771   => 'mail',
-                                1     => 'modules',
-                                1098  => 'privileges',
-                                27    => 'roles',
-                                17    => 'themes',
-    );
-    $data['versions'] = array(
-                                '2.1.0',
-    );
-    
+        
     if ($data['phase'] == 1) {
         $data['active_step'] = 1;
 
     } elseif ($data['phase'] == 2) {
         $data['active_step'] = 2;
-        if (!Upgrader::loadFile('upgrades/210/main.php')) {
-            $data['upgrade']['errormessage'] = Upgrader::$errormessage;
-            return $data;
+
+        switch ($fileversion) {
+            case '2.1.0':
+            if (!Upgrader::loadFile('upgrades/210/main.php')) {
+                $data['upgrade']['errormessage'] = Upgrader::$errormessage;
+                return $data;
+            }
+            $data = array_merge($data,main_210());
+
+            case '2.2.0':
+            if (!Upgrader::loadFile('upgrades/220/main.php')) {
+                $data['upgrade']['errormessage'] = Upgrader::$errormessage;
+                return $data;
+            }
+            $data = array_merge($data,main_220());
         }
-        $data = array_merge($data,main_210());
+        
         
     } elseif ($data['phase'] == 3) {
         $data['active_step'] = 3;
@@ -53,15 +48,27 @@ function installer_admin_upgrade()
         xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
         xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
         xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
-        if (!Upgrader::loadFile('checks/210/main.php')) {
-            $data['check']['errormessage'] = Upgrader::$errormessage;
-            return $data;
+
+        switch ($fileversion) {
+            case '2.1.0':
+            if (!Upgrader::loadFile('checks/210/main.php')) {
+                $data['check']['errormessage'] = Upgrader::$errormessage;
+                return $data;
+            }
+            $data = array_merge($data,main_210());
+
+            case '2.2.0':
+            if (!Upgrader::loadFile('checks/220/main.php')) {
+                $data['check']['errormessage'] = Upgrader::$errormessage;
+                return $data;
+            }
+            $data = array_merge($data,main_220());
         }
-        $data = array_merge($data,main_210());
+
 
     } elseif ($data['phase'] == 4) {
         $data['active_step'] = 4;
-//        xarResponse::redirect(xarServer::getCurrentURL(array('phase' => 4)));
+//        xarController::redirect(xarServer::getCurrentURL(array('phase' => 4)));
     }
 
     return $data;

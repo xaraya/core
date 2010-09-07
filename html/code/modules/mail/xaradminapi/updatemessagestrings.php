@@ -25,7 +25,7 @@ function mail_adminapi_updatemessagestrings($args)
     if (empty($template)) throw new EmptyParameterException('template');
 
     if (empty($module)) {
-        list($module) = xarRequest::getInfo();
+        list($module) = xarController::$request->getInfo();
     }
     if (empty($subject)) {
         $subject = '';
