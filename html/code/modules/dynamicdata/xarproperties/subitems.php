@@ -100,10 +100,16 @@ class SubItemsProperty extends DataProperty
     public function createValue($itemid=0)
     {
         list($sublink, $link) = $this->getLinks();
-
         // Create or update each item
         try {
-            $newprefix = array_shift($this->prefixarray);
+            if (empty($newprefix)) {
+                // Creation happens programmatically
+                $newprefix = 'dd_' . $this->id;
+            } else {
+                // Creation happens via UI submit, checkInput has run
+                $newprefix = array_shift($this->prefixarray);
+            }
+
             // Only do this if we actually have any items to be created/updated (might just be a delete call)
             if (isset($this->itemsdata[$newprefix])) {
                 foreach ($this->itemsdata[$newprefix] as $itemdata) {
@@ -116,12 +122,14 @@ class SubItemsProperty extends DataProperty
                     } elseif ($primary->value) {
                         $itemid = $this->subitemsobject->updateItem();
                     }
-                // Clear the itemid property in preparation for the next round
+                // Clear the value of the primary index in preparation for the next round
+                    $primary->value = 0;
                     $this->subitemsobject->itemid = 0;
                 }
             }
         } catch (Exception $e) {
-            throw new Exception(xarML('Subitem create/update failed: #(1)',$this->name));
+            $msg = xarML('Subitem create/update failed: #(1)',$this->name);
+            throw new Exception($msg);
         }
         // Delete any items that are no longer present
         $this->deleteValue($itemid);
@@ -247,6 +255,12 @@ class SubItemsProperty extends DataProperty
     {
         $name = 'dd_'.$this->id;
         return $this->itemsdata[$name];
+    }
+
+    public function setItemsData($args=array())
+    {
+        $name = 'dd_'.$this->id;
+        $this->itemsdata[$name] = $args;
     }
 
     private function transposeItems()
