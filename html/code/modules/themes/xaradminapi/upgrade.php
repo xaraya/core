@@ -46,10 +46,9 @@ function themes_adminapi_upgrade($args)
     $xartable = xarDB::getTables();
 
      $sql = "UPDATE $xartable[themes]
-            SET version = ?, class = ?
+            SET version = ?
             WHERE regid = ?";
     $bindvars = array($themeFileInfo['version'],
-                      $themeFileInfo['class'],
                       $regid);
 
     $dbconn->Execute($sql,$bindvars);
