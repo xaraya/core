@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <div class="xar-block-body-topnav">
         #$content#
-        <xar:if condition="$group_name ne 'admin'">
+        <xar:if condition="$group ne 'admin'">
             <xar:sec mask="AdminBase" catch="false">
                 <a href="#xarModURL('blocks','admin','modify_instance',array('bid' => $bid))#" title="Edit this block" style="float: right">
                     <img src="#xarTplGetImage('icons/modify.png','base')#"/>
