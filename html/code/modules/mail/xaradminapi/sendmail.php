@@ -37,6 +37,8 @@
  * @param  string $ 'usetemplates' set to true to use templates in xartemplates (default = true)
  * @param  int $ 'when' timestamp specifying that this mail should be sent 'no earlier than' (default is now)
  *                  This requires installation and configuration of the scheduler module
+ * @param  $ 'redirectsending' set this to redirect email.(optional)
+ * @param  $ 'redirectaddress' is the email address we are redirecting mails.(optional)
  */
 function mail_adminapi_sendmail($args)
 {
@@ -135,30 +137,48 @@ function mail_adminapi_sendmail($args)
         if (!isset($attachPath)) {
             $attachPath = '';
         }
+        //Check redirect sending
+        if (!isset($redirectsending)){
+            $redirectsending = '';
+        }
+        //Check redirect address
+        if(!isset($redirectaddress)) {
+            $redirectaddress = '';
+        }
+        if(!isset($custom_header)){
+            $custom_header = array();
+        }
+        if(!isset($message_envelope)){
+            $message_envelope = "";
+        }
         // Call private sendmail
         return xarMod::apiFunc('mail', 'admin', '_sendmail',
-            array('info'          => $info,
-                  'name'          => $name,
-                  'recipients'    => $recipients,
-                  'ccinfo'        => $ccinfo,
-                  'ccname'        => $ccname,
-                  'ccrecipients'  => $ccrecipients,
-                  'bccinfo'       => $bccinfo,
-                  'bccname'       => $bccname,
-                  'bccrecipients' => $bccrecipients,
-                  'subject'       => $subject,
-                  'message'       => $message,
-                  'htmlmessage'   => $message, // set to $message
-                  'priority'      => $priority,
-                  'encoding'      => $encoding,
-                  'wordwrap'      => $wordwrap,
-                  'from'          => $from,
-                  'fromname'      => $fromname,
-                  'usetemplates'  => $usetemplates,
-                  'when'          => $when,
-                  'attachName'    => $attachName,
-                  'attachPath'    => $attachPath,
-                  'htmlmail'      => false));
+            array('info'             => $info,
+                  'name'             => $name,
+                  'recipients'       => $recipients,
+                  'ccinfo'           => $ccinfo,
+                  'ccname'           => $ccname,
+                  'ccrecipients'     => $ccrecipients,
+                  'bccinfo'          => $bccinfo,
+                  'bccname'          => $bccname,
+                  'bccrecipients'    => $bccrecipients,
+                  'subject'          => $subject,
+                  'message'          => $message,
+                  'htmlmessage'      => $message, // set to $message
+                  'priority'         => $priority,
+                  'encoding'         => $encoding,
+                  'wordwrap'         => $wordwrap,
+                  'from'             => $from,
+                  'fromname'         => $fromname,
+                  'usetemplates'     => $usetemplates,
+                  'when'             => $when,
+                  'attachName'       => $attachName,
+                  'attachPath'       => $attachPath,
+                  'redirectsending'  => $redirectsending,
+                  'redirectaddress'  => $redirectaddress,
+                  'htmlmail'         => false,
+                  'custom_header'    => $custom_header,
+                  'message_envelope' => $message_envelope));
     }
 }
 

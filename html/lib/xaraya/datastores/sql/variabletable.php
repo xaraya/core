@@ -211,9 +211,7 @@ class VariableTableDataStore extends SQLDataStore
         }
 
         $propids = array_keys($this->fields);
-        if (count($propids) < 1) {
-            return;
-        }
+        if (count($propids) < 1) return;
 
         $process = array();
         foreach ($propids as $propid) {

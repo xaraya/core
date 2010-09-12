@@ -33,10 +33,10 @@
                 </ul>
             </xar:foreach>
             <div class="qstatus">
-                <a href="&xar-modurl-mail-admin-qstatus;">
+                <a href="#xarModURL('mail','admin','qstatus')#">
                     <img src="#xarTplGetImage('refresh.gif')#"/>Refresh current status
                 </a>
-                <a href="&xar-modurl-mail-admin-qstatus;">
+                <a href="#xarModURL('mail','admin','qstatus')#">
                     <img src="#xarTplGetImage('reprocess.gif')#"/>Reprocess queues
                 </a>
             </div>

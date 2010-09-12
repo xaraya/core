@@ -18,8 +18,8 @@
  */
 function authsystem_adminapi_getmenulinks()
 {
-    // No special menu. Just return a standard array
-    return xarMod::apiFunc('base','admin','menuarray',array('module' => 'authsystem'));
+    // No special menu. Just return links from xml
+    return xarMod::apiFunc('base','admin','loadmenuarray',array('modname' => 'authsystem', 'modtype' => 'admin'));
 }
 
 ?>

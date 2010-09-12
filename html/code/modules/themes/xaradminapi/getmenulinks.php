@@ -19,7 +19,7 @@
 function themes_adminapi_getmenulinks()
 {
     // No special menu. Just return a standard array
-    return xarMod::apiFunc('base','admin','menuarray',array('module' => 'themes'));
+    return xarMod::apiFunc('base','admin','loadmenuarray',array('modname' => 'themes', 'modtype' => 'admin'));
 }
 
 ?>

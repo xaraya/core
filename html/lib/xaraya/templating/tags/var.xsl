@@ -169,7 +169,7 @@
       </xsl:when>
       <!-- Request vars -->
       <xsl:when test="@scope = 'request'">
-        <xsl:text>xarRequestGetVar('</xsl:text>
+        <xsl:text>xarController::getVar('</xsl:text>
         <xsl:value-of select="@name"/>
         <xsl:text>')</xsl:text>
       </xsl:when>
