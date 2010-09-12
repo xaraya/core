@@ -33,6 +33,7 @@
                 </div>
                 <div id="sideInfo2" class="sideInfo">
                     <xar:blockgroup name="right" id="right"/>
+                    <xar:block instance="adminpanel"/>
                     <!--
                     <xar:blockgroup name="admin" id="admin"/>
                     -->

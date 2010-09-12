@@ -309,12 +309,12 @@
                     #$module['name']#
                 </td>
                 <td>
-                    <xar:if condition="!empty($module['aliases'])">
+                    <xar:if condition="!empty($modulelist[$module['name']]['aliases'])">
                         <xar:set name="inputname">"modulelist[".$module['name']."][alias_name]"</xar:set>
                         <xar:set name="inputid">"modulelist_".$module['name']."_alias_name"</xar:set>
                         <xar:set name="inputval">!empty($modulelist[$module['name']]['alias_name']) ? $modulelist[$module['name']]['alias_name'] : $module['name']</xar:set>
                         <xar:set name="inputfirst">array('id' => $module['name'], 'name' => $module['displayname'])</xar:set>
-                        <xar:data-input type="dropdown" name="$inputname" id="$inputid" firstline="$inputfirst" options="$module['aliases']" value="$inputval"/>
+                        <xar:data-input type="dropdown" name="$inputname" id="$inputid" firstline="$inputfirst" options="$modulelist[$module['name']]['aliases']" value="$inputval"/>
                     <xar:else/>
                         [none]
                     </xar:if>
