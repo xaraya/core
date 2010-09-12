@@ -152,7 +152,7 @@
         </script>
     </xar:if>
 
-    <xar:template file="subitemstemplate-input" module="$localmodule,math"/>
+    <xar:template file="subitemstemplate-input" module="$localmodule,dynamicdata"/>
     
     <div style="display:none;" id="empty_template_#$fieldprefix#">
         <xar:if condition="$addremove eq 2">
