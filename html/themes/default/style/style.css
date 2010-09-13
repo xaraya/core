@@ -20,6 +20,12 @@ input, textarea {
     max-width: 84em;
     position: relative;
 }
+#user-wrapper {
+    /* to prevent the content area to become too wide (with respect to line-length) */
+    margin: 1.5em auto;
+    width: 100%;
+    position: relative;
+}
 #admin-wrapper {
     /* to prevent the content area to become too wide (with respect to line-length) */
     margin: 1.5em auto;
@@ -29,6 +35,15 @@ input, textarea {
 #main {
     padding: 1.5em;
     margin: 0 16.5em;
+    border: 1px dotted #D77043;
+    border-width: 0 1px;
+    background: #F6F0E7;
+    color: #020;
+    min-height: 537px;
+}
+#user-main {
+    padding: 1.5em;
+    margin: 0 1.5em 0 16.5em;
     border: 1px dotted #D77043;
     border-width: 0 1px;
     background: #F6F0E7;

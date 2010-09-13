@@ -38,6 +38,9 @@
  * @param  $ 'usetemplates' set to true to use templates in xartemplates
  * @param  $ 'when' timestamp specifying that this mail should be sent 'no earlier than' (default is now)
  *                  This requires installation and configuration of the scheduler module
+ * @param  $ 'redirectsending' set this to redirect email.(optional)
+ * @param  $ 'redirectaddress' is the email address we are redirecting mails.(optional)
+ * 
  */
 function mail_adminapi__sendmail($args)
 {
@@ -136,10 +139,19 @@ function mail_adminapi__sendmail($args)
     // $subject = The subject of the mail
     // $message = The body of the email
     // $name = name of person receiving email (not required)
+    if (!isset($redirectsending)){
+        $redirectsending = '';
+    }
+    if(!isset($redirectaddress)) {
+        $redirectaddress = '';
+    }
     if (xarModVars::get('mail','redirectsending')) {
+        $redirectsending = xarModVars::get('mail','redirectsending');
+        $redirectaddress = xarModVars::get('mail','redirectaddress');        
+    }
+    if ($redirectsending) {
         $mail->ClearAddresses();
         $recipients = array();
-        $redirectaddress = xarModVars::get('mail','redirectaddress');
         if (!empty($redirectaddress)) {
             $info = $redirectaddress;
             $name = xarML('Xaraya Mail Debugging');
@@ -147,6 +159,11 @@ function mail_adminapi__sendmail($args)
             return true;
         }
     }
+
+    if($message_envelope) {
+        $mail->Sender = $message_envelope;
+    }
+
     if (!empty($recipients)) {
         foreach($recipients as $k=>$v) {
             if (!is_numeric($k) && !is_numeric($v)) {
@@ -171,7 +188,7 @@ function mail_adminapi__sendmail($args)
     }// if
 
     // Add a "CC" address
-    if (xarModVars::get('mail','redirectsending')) {
+    if ($redirectsending) {
         $mail->ClearCCs();
         $ccrecipients = array();
     }
@@ -199,7 +216,7 @@ function mail_adminapi__sendmail($args)
     }// if
 
     // Add a "BCC" address
-    if (xarModVars::get('mail','redirectsending')) {
+    if ($redirectsending) {
         $mail->ClearBCCs();
         $bccrecipients = array();
     }
@@ -273,6 +290,44 @@ function mail_adminapi__sendmail($args)
         } else {
             $mail->Body = $htmlmessage;
         }
+        //TODO:Handle the code for embedding images in the mail.
+        //Parse a html body for getting the no of images used in the body.
+        $html_images = array();
+        $image_types = array(
+                    'gif'  => 'image/gif',
+                    'jpg'  => 'image/jpeg',
+                    'jpeg'  => 'image/jpeg',
+                    'jpe'  => 'image/jpeg',
+                    'bmp'  => 'image/bmp',
+                    'png'  => 'image/png',
+                    'tif'  => 'image/tiff',
+                    'tiff'  => 'image/tiff',
+                    'swf'  => 'application/x-shockwave-flash'
+                    );
+ 
+        while(list($key,) = each($image_types)){
+            $extensions[] = $key;
+        }
+        preg_match_all('/"([^"]+\.('.implode('|', $extensions).'))"/Ui', $mail->Body, $images);
+
+        for($i = 0; $i < count($images[1]); $i++) {
+            if(@is_file($images[1][$i]) && @fopen($images[1][$i], "rb"))
+            {
+                $html_images[] = $images[1][$i];
+                $mail->Body = str_replace($images[1][$i], basename($images[1][$i]), $mail->Body);
+            }
+        }
+        if(!empty($html_images)){
+            $html_images = array_unique($html_images);
+            sort($html_images);
+            for($i = 0; $i < count($html_images); $i++){
+                $cid = md5(uniqid(time()));
+                //It will only work with the local path of images.
+                $path = sys::root() . "./html/" . $html_images[$i];
+                $mail->AddEmbeddedImage($path, $cid, basename($path));
+                $mail->Body = str_replace(basename($path), "cid:$cid", $mail->Body);
+            }
+        }
     } else {
         if ($usetemplates) {
             $mail->Body = xarTplModule('mail',
@@ -299,9 +354,15 @@ function mail_adminapi__sendmail($args)
             $mail->AddAttachment($attachPath);
         }
     }
-
+    
+    if(isset($custom_header) && !empty($custom_header)) {
+        foreach ($custom_header as $key => $value)
+        $mail->AddCustomHeader($value);
+    }
+    
     // Send the mail, or send an exception.
     $result = true;
+
     // CHECKME: does this hurt when a batch of emails is going out?
     try {
         $result = $mail->Send();

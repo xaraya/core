@@ -19,7 +19,7 @@
 function blocks_adminapi_getmenulinks()
 {
     // No special menu. Just return a standard array
-    return xarMod::apiFunc('base','admin','menuarray',array('module' => 'blocks'));
+    return xarMod::apiFunc('base','admin','loadmenuarray',array('modname' => 'blocks', 'modtype' => 'admin'));
 }
 
 ?>
