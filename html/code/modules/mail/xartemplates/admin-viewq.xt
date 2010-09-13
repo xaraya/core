@@ -64,7 +64,7 @@
                         </tr>
                     </table>
                 </xar:if>
-                <form method="POST" action="#xarModURL('mail','admin','viewq')#">
+                <form method="post" action="#xarModURL('mail','admin','viewq')#">
                     <input type="hidden" name="authid" value="#$authid#"/>
                     <input type="hidden" name="action" value="process"/>
                     <input type="submit" value="#xarML('Process Queue')#"/>
