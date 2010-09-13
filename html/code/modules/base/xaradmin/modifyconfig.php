@@ -95,6 +95,7 @@ function base_admin_modifyconfig()
             }
             $data['inheritdeny'] = xarModVars::get('privileges', 'inheritdeny');
 
+            switch ($data['tab']) {
                 case 'security':
                 break;
             }
