@@ -1,7 +1,7 @@
 <?php
-    $encryption['cipher'] = 'cast-128';
+    $encryption['cipher'] = 'blowfish';
     $encryption['mode'] = 'ecb';
-    $encryption['key'] = '770105b98be2fdd6a6f096d29ca5632c';
-    $encryption['hint'] = 'dorkington';
+    $encryption['key'] = '33ee7e1eb504b6619c1b445ca1442c21';
+    $encryption['hint'] = 'war and ...';
     $encryption['initvector'] = 'xaraya2x';
 ?>
