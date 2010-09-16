@@ -129,6 +129,11 @@ function xarMain()
             if (!xarTplSetPageTemplateName('admin-'.$modName)) {
                 xarTplSetPageTemplateName('admin');
             }
+        } elseif (xarUserIsLoggedIn() && $modType == 'user' && xarTplGetPageTemplateName() == 'default') {
+            // Same thing for user side where user is logged in
+            if (!xarTplSetPageTemplateName('user-'.$modName)) {
+                xarTplSetPageTemplateName('user');
+            }
         }
 
         xarVarFetch('pageName','str:1:', $pageName, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
