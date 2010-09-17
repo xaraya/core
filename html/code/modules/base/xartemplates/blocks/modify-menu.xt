@@ -4,139 +4,330 @@
     <!--
         We know that blocks.css file is already included by admin-modify_instance.xd, so no need to do it twice
     -->
-    <xar:if condition="!empty($user_content)">
-        <p>
-            <strong>Edit Menu Items</strong>
-        </p>
-        <table class="xar-fullwidth">
-            <tr>
-                <th>Title</th>
-                <th>URL</th>
-                <th>Description</th>
-                <th>Visible</th>
-                <th>Delete</th>
-                <th>Child</th>
-                <th>Insert Blank</th>
-            </tr>
-            <xar:set name="index">0</xar:set>
-            <xar:foreach in="$lines" value="$line">
-                <xar:set name="index">$index+1</xar:set>
-                <tr>
-                    <td>
-                        <input type="text" class="xar-form-textmedium" name="name[#$index#]" id="url_#$index#" maxlength="255" value="#xarVarPrepForDisplay($line['name'])#"/>
-                    </td>
-                    <td>
-                        <input type="text" class="xar-form-textlong" name="url[#$index#]" id="url_#$index#" maxlength="255" value="#xarVarPrepForDisplay($line['url'])#"/>
-                    </td>
-                    <td>
-                        <input type="text" class="xar-form-textlong" name="description[#$index#]" id="description_#$index#" maxlength="255" value="#xarVarPrepForDisplay($line['description'])#"/>
-                    </td>
-                    <td class="xar-align-center">
-                        <xar:if condition="empty($line['visible'])">
-                            <input type="checkbox" name="visible[#$index#]" id="visible_#$index#" value="1"/>
-                        <xar:else />
-                            <input type="checkbox" name="visible[#$index#]" id="visible_#$index#" value="1" checked="checked"/>
-                        </xar:if>
-                    </td>
-                    <td class="xar-align-center">
-                        <input type="checkbox" name="delete[#$index#]" id="delete_#$index#" value="1"/>
-                    </td>
-                    <td class="xar-align-center">
-                        <xar:if condition="empty($line['child'])">
-                            <input type="checkbox" name="child[#$index#]" id="child_#$index#" value="1"/>
-                        <xar:else />
-                            <input type="checkbox" name="child[#$index#]" id="child_#$index#" value="1" checked="checked"/>
-                        </xar:if>
-                    </td>
-                    <td class="xar-align-center">
-                        <input type="checkbox" name="insert[#$index#]" id="insert_#$index#" value="1"/>
-                    </td>
-                </tr>
-            </xar:foreach>
-        </table>
-        <!--
-            <table class="fullwidth">
-                <caption>
-                Modify Structure (TODO obviously)
-                </caption>
-                <tr>
-                    <th>
-                    Edit
-                    </th>
-                    <th>
-                    Preview
-                    </th>
-                </tr>
-                <tr>
-                    <td>
-                    </td>
-                    <td>
-                    </td>
-                </tr>
-            </table>
-        -->
-    </xar:if>
-    <p>
-        <strong>Add New Menu Item</strong>
-    </p>
     <div class="xar-form-input-wrapper">
-        <label for="new_linkname" title="#xarML('Item title')#" class="xar-form-label">
-            Title:
+        <label for="marker" title="#xarML('When Xaraya is generating the menu, we can mark the current page. Use this to configure the marker for that display.')#" class="xar-form-label">
+        Marker:
         </label>
-        <input type="text" name="new_linkname" id="new_linkname" maxlength="255" class="xar-form-textmedium"/>
+        <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort"/>
     </div>
     <div class="xar-form-input-wrapper">
-        <label for="new_linkurl" title="#xarML('Item URL')#" class="xar-form-label">URL:</label>
-        <input type="text" name="new_linkurl" id="new_linkurl" maxlength="255" class="xar-form-textlong"/>
+        <label for="showback" title="#xarML('Select if you would like Xaraya to generate a link to the back end for administrative users at the bottom of the menu.')#" class="xar-form-label">
+            Display Admin Link to Back End
+        </label>
+        <xar:data-input type="checkbox" name="showback" id="showback" checked="$showback"/>&#160;
+        <label for="backlabel" title="#xarML('Set the label for the link to the back end')#">Label</label>:
+        <xar:data-input type="textbox" class="xar-form-textmedium" name="backlabel" id="backlabel" maxlength="255" value="$backlabel"/>&#160;
+        <label for="backtitle" title="#xarML('Set the title for the link to the back end')#">Title</label>:
+        <xar:data-input type="textbox" class="xar-form-textlong" name="backtitle" id="backtitle" maxlength="255" value="$backtitle"/>
     </div>
     <div class="xar-form-input-wrapper">
-        <label for="new_linkdesc" title="#xarML('Item description')#" class="xar-form-label">
-            Description (optional):
+        <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link for non-administrative users at the bottom of the menu.')#" class="xar-form-label">
+            Display Logout
         </label>
-        <input type="text" name="new_linkdesc" id="new_linkdesc" maxlength="255" class="xar-form-textlong"/>
+        <xar:data-input type="checkbox" name="showlogout" checked="$showlogout" />&#160;
+        <label for="logoutlabel" title="#xarML('Set the label for the logout link')#">Label</label>:
+        <xar:data-input type="textbox" class="xar-form-textmedium" name="logoutlabel" id="logoutlabel" maxlength="255" value="$logoutlabel"/>&#160;
+        <label for="logouttitle" title="#xarML('Set the title for the logout link')#">Title</label>:
+        <xar:data-input type="textbox" class="xar-form-textlong" name="logouttitle" id="logouttitle" maxlength="255" value="$logouttitle"/>
     </div>
-    <p class="xar-form-textmedium xar-padding-medium" style="display:block;">
-        <strong>Menu Extras</strong>
-    </p>
     <div class="xar-form-input-wrapper">
-        <label for="displaymodules"
-        title="#xarML('To display a restricted list of modules, enter their names separated by commas in the text box at right, and choose Manual List from the dropdown.')#" class="xar-form-label">
-            Display Modules
+        <label for="displayprint" title="#xarML('Select if you would like Xaraya to generate a link to your print page at the bottom of the menu.')#" class="xar-form-label">
+            Display Print Link
         </label>
-        <xar:set name="options">
-            array(
-                array('id' => 'None', 'name' => xarML('None')),
-                array('id' => 'All', 'name' => xarML('All Modules')),
-                array('id' => 'List', 'name' => xarML('Manual List')),
-            )
-        </xar:set>
-        <xar:data-input type="dropdown" name="displaymodules" options="$options" value="$displaymodules"/>
-        <div class="xar-form-container-after">
-            <p>To display a restricted list of modules in the menu, enter their names separated by
-            commas in the field below, and choose Manual List from the dropdown.</p>
-                <input type="text" name="modulelist" id="modulelist" size="50" maxlength="255" value="#$modulelist#"/>
-        </div>
+        <xar:data-input type="checkbox" name="displayprint" checked="$displayprint" />&#160;
+        <label for="printlabel" title="#xarML('Set the label for the print link')#">Label</label>:
+        <xar:data-input type="textbox" class="xar-form-textmedium" name="printlabel" id="printlabel" maxlength="255" value="$printlabel"/>&#160;
+        <label for="printtitle" title="#xarML('Set the title for the print link')#">Title</label>:
+        <xar:data-input type="textbox" class="xar-form-textlong" name="printtitle" id="printtitle" maxlength="255" value="$printtitle"/>
+    </div>
+    <div class="xar-form-input-wrapper">
+        <label for="displayrss" title="#xarML('Select if you would like Xaraya to generate a link to your RSS at the bottom of the menu.')#" class="xar-form-label">
+            Display RSS Link
+        </label>
+        <xar:data-input type="checkbox" name="displayrss" checked="$displayrss" />&#160;
+        <label for="rsslabel" title="#xarML('Set the label for the rss link')#">Label</label>:
+        <xar:data-input type="textbox" class="xar-form-textmedium" name="rsslabel" id="rsslabel" maxlength="255" value="$rsslabel"/>&#160;
+        <label for="rsstitle" title="#xarML('Set the title for the rss link')#">Title</label>:
+        <xar:data-input type="textbox" class="xar-form-textlong" name="rsstitle" id="rsstitle" maxlength="255" value="$rsstitle"/>
     </div>
 
-    <table class="xar-fullwidth">
-        <tr>
-            <th style="text-align: left">
-                Module
-            </th>
-            <th style="text-align: left">
-                Required Access Group or Level
-            </th>
-        </tr>
+    <xar:if condition="!empty($userlinks)">
+        <xar:set name="visibleicon">#xarTplGetImage('icons/enabled.png', 'base')#</xar:set>
+        <xar:set name="invisibleicon">#xarTplGetImage('icons/disabled.png', 'base')#</xar:set>
+        <xar:var name="visibletitle">Link is visible in the menu</xar:var>
+        <xar:var name="invisibletitle">Link is not visible in the menu</xar:var>
+        <xar:set name="imgup">#xarTplGetImage('icons/go-up.png', 'base')#</xar:set>
+        <xar:set name="imgdown">#xarTplGetImage('icons/go-down.png', 'base')#</xar:set>
+        <xar:var name="imgupalt">Up</xar:var>
+        <xar:var name="imgdownalt">Down</xar:var>
+        <xar:var name="imguptitle">Move this link up</xar:var>
+        <xar:var name="imgdowntitle">Move this link down</xar:var>
+        <xar:set name="wwwicon">#xarTplGetImage('icons/www-url.png', 'base')#</xar:set>
+        <xar:var name="wwwcheck">Check the URL for this link</xar:var>
+        <xar:var name="wwwnone">URL is empty</xar:var>
+        <xar:var name="wwwalt">Check URL</xar:var>
+        <table id="menulinks_#$blockid#" class="xar-fullwidth xar-margin-nonebottom">
+            <caption class="xar-align-left xar-margin-thickbottom xar-margin-nonetop">
+                <strong>Menu Links</strong>
+            </caption>
+            <thead>
+                <tr>
+                    <th>&#160;</th>
+                    <th>Label</th>
+                    <th>Title</th>
+                    <th>URL</th>
+                    <th>&#160;</th>
+                    <th class="xar-align-center">State</th>
+                    <th class="xar-align-right">Select</th>
+                </tr>
+            </thead>
+            <tbody>
+                <xar:foreach in="$userlinks" key="$linkid" value="$link">
+                    <xar:set name="link_id">'userlinks_' . $linkid</xar:set>
+                    <xar:set name="link_name">'userlinks[' . $linkid . ']'</xar:set>
+                    <tr>
+                        <td>|---</td>
+                        <td>
+                            <xar:set name="label_id">$link_id . '_label'</xar:set>
+                            <xar:set name="label_name">$link_name . '[label]'</xar:set>
+                            <xar:data-input type="textbox" class="xar-form-textmedium" name="$label_name" id="$label_id" maxlength="255" value="$link['label']"/>
+                        </td>
+                        <td>
+                            <xar:set name="title_id">$link_id . '_title'</xar:set>
+                            <xar:set name="title_name">$link_name . '[title]'</xar:set>
+                            <xar:data-input type="textbox" class="xar-form-textlong" name="$title_name" id="$title_id" maxlength="255" value="$link['title']"/>
+                        </td>
+                        <td>
+                            <xar:set name="url_id">$link_id . '_url'</xar:set>
+                            <xar:set name="url_name">$link_name . '[url]'</xar:set>
+                            <xar:data-input type="textbox" class="xar-form-textlong" name="$url_name" id="$url_id" maxlength="255" value="$link['url']"/>
+                        </td>
+                        <td>
+                            <xar:if condition="!empty($link['url'])">
+                                <a href="#$link['checkurl']#" title="#$wwwcheck#">
+                                    <img src="#$wwwicon#" alt="#$wwwalt#" class="xar-icon"/>
+                                </a>
+                            <xar:else/>
+                                <img src="#$wwwicon#" alt="#$wwwalt#" title="#$wwwnone#" class="xar-icon-disabled"/>
+                            </xar:if>
+                        </td>
+                        <td class="xar-align-center">
+                            <xar:if condition="!empty($link['visible'])">
+                                <img src="#$visibleicon#" alt="visible" title="#$visibletitle#" class="xar-icon"/>
+                            <xar:else/>
+                                <img src="#$invisibleicon#" alt="hidden" title="#$invisibletitle#" class="xar-icon-disabled"/>
+                            </xar:if>
+                        </td>
+                        <td class="xar-align-right xar-nowrap">
+                            <xar:if condition="!empty($link['upurl'])">
+                                <a href="#$link['upurl']#" title="#$imguptitle#" class="xar-icon">
+                                <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon xar-padding-thinright"/>
+                                </a>
+                            <xar:else/>
+                                <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon-disabled xar-padding-thinright"/>
+                            </xar:if>
+                            <xar:if condition="!empty($link['downurl'])">
+                                <a href="#$link['downurl']#" title="#$imgdowntitle#" class="xar-icon">
+                                <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon xar-padding-thinright"/>
+                                </a>
+                            <xar:else/>
+                                <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon-disabled xar-padding-thinright"/>
+                            </xar:if>
+                            <xar:set name="select_id">$link_id . '_select'</xar:set>
+                            <xar:set name="select_name">$link_name . '[select]'</xar:set>
+                            <xar:data-input type="checkbox" id="$select_id" name="$select_name"/>
+                        </td>
+                    </tr>
+                    <xar:if condition="!empty($link['menulinks'])">
+                        <xar:foreach in="$link['menulinks']" key="$sublinkid" value="$sublink">
+                        <tr>
+                            <xar:set name="sub_id">$link_id .'_menulinks_' . $sublinkid</xar:set>
+                            <xar:set name="sub_name">$link_name . '[menulinks][' . $sublinkid . ']'</xar:set>
+                            <td>
+                                &#160;&#160;|-
+                            </td>
+                            <td>
+                                <xar:set name="label_id">$sub_id . '_label'</xar:set>
+                                <xar:set name="label_name">$sub_name . '[label]'</xar:set>
+                                <xar:data-input type="textbox" class="xar-form-textmedium" name="$label_name" id="$label_id" maxlength="255" value="$sublink['label']"/>
+                            </td>
+                            <td>
+                                <xar:set name="title_id">$sub_id . '_title'</xar:set>
+                                <xar:set name="title_name">$sub_name . '[title]'</xar:set>
+                                <xar:data-input type="textbox" class="xar-form-textlong" name="$title_name" id="$title_id" maxlength="255" value="$sublink['title']"/>
+                            </td>
+                            <td>
+                                <xar:set name="url_id">$sub_id . '_url'</xar:set>
+                                <xar:set name="url_name">$sub_name . '[url]'</xar:set>
+                                <xar:data-input type="textbox" class="xar-form-textlong" name="$url_name" id="$url_id" maxlength="255" value="$sublink['url']"/>
+                            </td>
+                            <td>
+                                <xar:if condition="!empty($sublink['url'])">
+                                    <a href="#$sublink['checkurl']#" title="#$wwwcheck#">
+                                        <img src="#$wwwicon#" alt="#$wwwalt#" class="xar-icon"/>
+                                    </a>
+                                <xar:else/>
+                                    <img src="#$wwwicon#" alt="#$wwwalt#" title="#$wwwnone#" class="xar-icon-disabled"/>
+                                </xar:if>
+                            </td>
+                            <td class="xar-align-center">
+                                <xar:if condition="!empty($sublink['visible'])">
+                                    <!-- visible only if parent is visible, has a label, and has a url -->
+                                    <xar:if condition="!empty($link['visible']) and !empty($link['url']) and !empty($link['label'])">
+                                        <xar:set name="icontitle">$visibletitle</xar:set>
+                                        <xar:set name="iconclass">'xar-icon'</xar:set>
+                                    <xar:else/>
+                                        <xar:set name="icontitle">$invisibletitle</xar:set>
+                                        <xar:set name="iconclass">'xar-icon-disabled'</xar:set>
+                                    </xar:if>
+                                    <img src="#$visibleicon#" alt="visible" title="#$icontitle#" class="#$iconclass#"/>
+                                <xar:else/>
+                                    <img src="#$invisibleicon#" alt="invisible" title="#$invisibletitle#" class="xar-icon-disabled"/>
+                                </xar:if>
+                            </td>
+                            <td class="xar-align-right xar-nowrap">
+                                <xar:if condition="!empty($sublink['upurl'])">
+                                    <a href="#$sublink['upurl']#" title="#$imguptitle#" class="xar-icon">
+                                    <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon xar-padding-thinright"/>
+                                    </a>
+                                <xar:else/>
+                                    <img src="#$imgup#" alt="#$imgupalt#" class="xar-icon-disabled xar-padding-thinright"/>
+                                </xar:if>
+                                <xar:if condition="!empty($sublink['downurl'])">
+                                    <a href="#$sublink['downurl']#" title="#$imgdowntitle#" class="xar-icon">
+                                    <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon xar-padding-thinright"/>
+                                    </a>
+                                <xar:else/>
+                                    <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon-disabled xar-padding-thinright"/>
+                                </xar:if>
+                                <xar:set name="select_id">$sub_id . '_select'</xar:set>
+                                <xar:set name="select_name">$sub_name . '[select]'</xar:set>
+                                <xar:data-input type="checkbox" id="$select_id" name="$select_name"/>
+                            </td>
+                        </tr>
+                        </xar:foreach>
+                    </xar:if>
+                </xar:foreach>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="7" class="xar-align-right">
+                        <xar:set name="link_selects">array(
+                            array('id' => 'none', 'name' => '--- do nothing ---'),
+                            array('id' => 'show', 'name' => 'Make Visible'),
+                            array('id' => 'hide', 'name' => 'Make Invisible'),
+                            array('id' => 'delete', 'name' => 'Delete'),
+                        )</xar:set>
+                        <label for="links_select">With selected links</label>:&#160;
+                        <xar:data-input type="dropdown" name="links_select" id="links_select" options="$link_selects"/>
+                    </td>
+                </tr>
+            </tfoot>
+         </table>
+        <table class="xar-fullwidth xar-margin-nonetop">
+            <caption class="xar-align-left xar-margin-thickbottom xar-margin-thicktop">
+                <strong>Insert New Menu Link</strong>
+            </caption>
+            <thead>
+                <tr>
+                    <th>&#160;</th>
+                    <th>Label</th>
+                    <th>Title</th>
+                    <th>Url</th>
+                    <th class="xar-align-right">options</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        |---
+                    </td>
+                    <td>
+                        <xar:set name="new_label_id">'links_new_label'</xar:set>
+                        <xar:data-input type="textbox" class="xar-form-textmedium" name="$new_label_id" id="$new_label_id" maxlength="255" value=""/>
+                    </td>
+                    <td>
+                        <xar:set name="new_title_id">'links_new_title'</xar:set>
+                        <xar:data-input type="textbox" class="xar-form-textlong" name="$new_title_id" id="$new_title_id" maxlength="255" value=""/>
+                    </td>
+                    <td>
+                        <xar:set name="new_url_id">'links_new_url'</xar:set>
+                        <xar:data-input type="textbox" class="xar-form-textlong" name="$new_url_id" id="$new_url_id" maxlength="255" value=""/>
+                    </td>
+                    <td class="xar-align-right xar-nowrap">
+                        <xar:set name="new_blank_id">'links_new_blank'</xar:set>
+                        <label for="#$new_blank_id#">Insert Blank</label>&#160;
+                        <xar:data-input type="checkbox" name="$new_blank_id" id="$new_blank_id"/>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5" class="xar-align-center">
+                        <xar:set name="new_relation_id">'links_new_relation'</xar:set>
+                        <label for="#$new_relation_id#">In Relation To</label>&#160;
+                        <xar:data-input type="dropdown" name="$new_relation_id" id="$new_relation_id" options="$userlinks"/>&#160;&#160;
+                        <xar:set name="new_position_id">'links_new_position'</xar:set>
+                        <xar:set name="positions">array(
+                            array('id' => 0, 'name' => 'Right before, in the same level'),
+                            array('id' => 1, 'name' => 'Right after, in the same level'),
+                            array('id' => 2, 'name' => 'The first child link'),
+                            array('id' => 3, 'name' => 'The last child link'),
+                        )</xar:set>
+                        <label for="#$new_position_id#">Position</label>&#160;
+                        <xar:data-input type="dropdown" name="$new_position_id" id="$new_position_id" options="$positions"/>
+                    </td>
+                </tr>
+            </tfoot>
+         </table>
+    </xar:if>
+
+    <table class="xar-fullwidth xar-margin-nonetop">
+        <caption class="xar-align-left xar-margin-thickbottom xar-margin-nonetop">
+            <strong>Module Links</strong>
+        </caption>
+        <thead>
+            <tr>
+                <th class="xar-align-left">
+                    Module
+                </th>
+                <th class="xar-align-left">
+                    Alias
+                </th>
+                <th class="xar-align-left">
+                    Required Access Group or Level
+                </th>
+                <th class="xar-align-center">
+                    Visible
+                </th>
+            </tr>
+        </thead>
+        <tbody>
         <xar:foreach in="$modules" value="$module">
             <tr>
                 <td>
                     #$module['name']#
                 </td>
                 <td>
-                    <xar:if condition="isset($view_access[$module['name']])">
-                        <xar:set name="value">$view_access[$module['name']]</xar:set>
+                    <xar:if condition="!empty($modulelist[$module['name']]['aliases'])">
+                        <xar:set name="inputname">"modulelist[".$module['name']."][alias_name]"</xar:set>
+                        <xar:set name="inputid">"modulelist_".$module['name']."_alias_name"</xar:set>
+                        <xar:set name="inputval">!empty($modulelist[$module['name']]['alias_name']) ? $modulelist[$module['name']]['alias_name'] : $module['name']</xar:set>
+                        <xar:set name="inputfirst">array('id' => $module['name'], 'name' => $module['displayname'])</xar:set>
+                        <xar:data-input type="dropdown" name="$inputname" id="$inputid" firstline="$inputfirst" options="$modulelist[$module['name']]['aliases']" value="$inputval"/>
+                    <xar:else/>
+                        [none]
+                    </xar:if>
+                </td>
+                <td>
+                    <!-- fixme the access property should be able to handle this
+                    <xar:set name="inputname">"modulelist[".$module['name']."][view_access]"</xar:set>
+                     -->
+                    <xar:set name="inputid">"modulelist_".$module['name']."_view_access"</xar:set>
+                    <xar:if condition="isset($modulelist[$module['name']]['view_access'])">
+                        <xar:set name="inputval">$modulelist[$module['name']]['view_access']</xar:set>
                     <xar:else />
-                        <xar:set name="value">
+                        <xar:set name="inputval">
                             array(
                                 'group' => 0,
                                 'level' => 100,
@@ -144,47 +335,17 @@
                             )
                         </xar:set>
                     </xar:if>
-                    <xar:set name="accessname">'view_access_' . $module['name']</xar:set>
-                    <xar:data-input type="access" name="$accessname" layout="horizontal" failure="1" value="$value" />
+                    <xar:data-input type="access" name="$inputid" layout="horizontal" failure="1" value="$inputval" />
+                </td>
+                <td class="xar-align-center">
+                    <xar:set name="inputname">"modulelist[".$module['name']."][visible]"</xar:set>
+                    <xar:set name="inputid">"modulelist_".$module['name']."_visible"</xar:set>
+                    <xar:set name="inputval">!empty($modulelist[$module['name']]['visible'])</xar:set>
+                    <xar:data-input type="checkbox" name="$inputname" id="$inputid" value="$inputval"/>
                 </td>
             </tr>
         </xar:foreach>
+        </tbody>
     </table>
 
-    <p>
-        <strong>Display Options</strong>
-    </p>
-
-    <div class="xar-form-input-wrapper">
-        <label for="showback" title="#xarML('Select if you would like Xaraya to generate a link to the back end for administrative users at the bottom of the menu.')#" class="xar-form-label">
-            Display Admin Link to Back End
-        </label>
-        <xar:data-input type="checkbox" name="showback" id="showback" checked="$showback"/>
-    </div>
-    <div class="xar-form-input-wrapper">
-        <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link for non-administrative users at the bottom of the menu.')#" class="xar-form-label">
-            Display Logout
-        </label>
-        <xar:data-input type="checkbox" name="showlogout" checked="$showlogout" />
-    </div>
-    <div class="xar-form-input-wrapper">
-        <label for="displayprint" title="#xarML('Select if you would like Xaraya to generate a link to your print page at the bottom of the menu.')#" class="xar-form-label">
-            Display Print Link
-        </label>
-        <xar:data-input type="checkbox" name="displayprint" checked="$displayprint" />
-    </div>
-    <div class="xar-form-input-wrapper">
-        <label for="displayrss" title="#xarML('Select if you would like Xaraya to generate a link to your RSS at the bottom of the menu.')#" class="xar-form-label">
-            Display RSS Link
-        </label>
-        <xar:data-input type="checkbox" name="displayrss" checked="$displayrss" />
-    </div>
-    <xar:if condition="!empty($displaymodules)">
-        <div class="xar-form-input-wrapper">
-            <label for="marker" title="#xarML('When Xaraya is generating the menu, we can mark the current page. Use this to configure the marker for that display.')#" class="xar-form-label">
-            Marker:
-            </label>
-            <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort"/>
-        </div>
-    </xar:if>
 </xar:template>

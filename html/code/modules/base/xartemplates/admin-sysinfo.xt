@@ -14,42 +14,42 @@
             <xar:set name="tabclass">$what==1?'xar-tab-active':'xar-tab'</xar:set>
             <xar:set name="linkclass">$what==1?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
             <li class="#$tabclass#">
-                <a href="&xar-modurl-base-admin-sysinfo;&amp;what=1" class="#$linkclass#">General info</a>
+                <a href="#xarModURL('base','admin','sysinfo',array('what'=>1))#" class="#$linkclass#">General info</a>
             </li>
             <xar:set name="tabclass">$what==2?'xar-tab-active':'xar-tab'</xar:set>
             <xar:set name="linkclass">$what==2?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
             <li class="#$tabclass#">
-                <a href="&xar-modurl-base-admin-sysinfo;&amp;what=2" class="#$linkclass#">Credits</a>
+                <a href="#xarModURL('base','admin','sysinfo',array('what'=>2))#" class="#$linkclass#">Credits</a>
             </li>
             <xar:set name="tabclass">$what==4?'xar-tab-active':'xar-tab'</xar:set>
             <xar:set name="linkclass">$what==4?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
             <li class="#$tabclass#">
-                <a href="&xar-modurl-base-admin-sysinfo;&amp;what=4" class="#$linkclass#">Configuration</a>
+                <a href="#xarModURL('base','admin','sysinfo',array('what'=>4))#" class="#$linkclass#">Configuration</a>
             </li>
             <xar:set name="tabclass">$what==8?'xar-tab-active':'xar-tab'</xar:set>
             <xar:set name="linkclass">$what==8?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
             <li class="#$tabclass#">
-                <a href="&xar-modurl-base-admin-sysinfo;&amp;what=8" class="#$linkclass#">Modules</a>
+                <a href="#xarModURL('base','admin','sysinfo',array('what'=>8))#" class="#$linkclass#">Modules</a>
             </li>
             <xar:set name="tabclass">$what==16?'xar-tab-active':'xar-tab'</xar:set>
             <xar:set name="linkclass">$what==16?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
             <li class="#$tabclass#">
-                <a href="&xar-modurl-base-admin-sysinfo;&amp;what=16" class="#$linkclass#">Environment</a>
+                <a href="#xarModURL('base','admin','sysinfo',array('what'=>16))#" class="#$linkclass#">Environment</a>
             </li>
             <xar:set name="tabclass">$what==32?'xar-tab-active':'xar-tab'</xar:set>
             <xar:set name="linkclass">$what==32?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
             <li class="#$tabclass#">
-                <a href="&xar-modurl-base-admin-sysinfo;&amp;what=32" class="#$linkclass#">Variables</a>
+                <a href="#xarModURL('base','admin','sysinfo',array('what'=>32))#" class="#$linkclass#">Variables</a>
             </li>
             <xar:set name="tabclass">$what==64?'xar-tab-active':'xar-tab'</xar:set>
             <xar:set name="linkclass">$what==64?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
             <li class="#$tabclass#">
-                <a href="&xar-modurl-base-admin-sysinfo;&amp;what=64" class="#$linkclass#">License</a>
+                <a href="#xarModURL('base','admin','sysinfo',array('what'=>64))#" class="#$linkclass#">License</a>
             </li>
             <xar:set name="tabclass">$what==-1?'xar-tab-active':'xar-tab'</xar:set>
             <xar:set name="linkclass">$what==-1?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
             <li class="#$tabclass#">
-                <a href="&xar-modurl-base-admin-sysinfo;&amp;what=-1" class="#$linkclass#">All</a>
+                <a href="#xarModURL('base','admin','sysinfo',array('what'=>-1))#" class="#$linkclass#">All</a>
             </li>
         </ul>
         <!--

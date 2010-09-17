@@ -221,7 +221,7 @@ function blocks_admin_update_instance()
                     // need to raise an exception here if it doesn't
                 }
             }
-
+            $tab = null;
         break;
     }
 
@@ -231,11 +231,10 @@ function blocks_admin_update_instance()
     // Resequence blocks within groups.
     if (!xarMod::apiFunc('blocks', 'admin', 'resequence')) {return;}
 
-    // block update methods can specify a different return url if necessary
     $return_url =  !empty($blockinfo['return_url']) ? $blockinfo['return_url'] :
         xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $bid, 'tab' => $tab));
 
-    return xarResponse::redirect($return_url);
+    return xarController::redirect($return_url);
 
 }
 ?>
