@@ -215,8 +215,9 @@ class xarMod extends Object implements IxarMod
         self::$genXmlUrls   = $args['generateXMLURLs'];
 
         // Register the events for this subsystem
-        xarEvents::register('ModLoad');
-        xarEvents::register('ModAPILoad');
+        // events are now registered during modules module init        
+        //xarEvents::register('ModLoad');
+        //xarEvents::register('ModAPILoad');
 
         // Modules Support Tables
         $prefix = xarDB::getPrefix();
@@ -1005,7 +1006,12 @@ class xarMod extends Object implements IxarMod
         self::loadDbInfo($modName, $modDir);
 
         // Module loaded successfully, trigger the proper event
-        xarEvents::trigger('ModLoad', $modName);
+        //xarEvents::trigger('ModLoad', $modName);
+        if (preg_match('/(.*)?api$/', $modType)) {
+            xarEvent::notify('ModApiLoad', $modName);
+        } else {
+            xarEvent::notify('ModLoad', $modName);
+        }        
         return true;
     }
 

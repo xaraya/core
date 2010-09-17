@@ -30,6 +30,7 @@ function modules_init()
     $tables['module_vars'] = $prefix . '_module_vars';
     $tables['module_itemvars'] = $prefix . '_module_itemvars';
     $tables['hooks'] = $prefix . '_hooks';
+    $tables['eventsystem'] = $prefix . '_eventsystem';
     // Create tables
     // This should either go, or fail competely
     try {
@@ -258,6 +259,71 @@ function modules_upgrade($oldversion)
             if (!$result) return;
 
         case '2.0.1':
+            /**
+             * Create Event System table
+             * NOTE: we do this here, not in base, because the event system depends on the module system
+            **/
+            $dbconn = xarDB::getConn();
+            $tables =& xarDB::getTables();
+
+            $prefix = xarDB::getPrefix();
+
+            // Creating the first part inside a transaction
+            try {
+                $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+                $dbconn->begin();
+                /**
+                 * CREATE TABLE xar_eventsystem (
+                 *   id         integer NOT NULL auto_increment,
+                 *   event      varchar(254) NOT NULL,
+                 *   module_id  integer default 0,
+                 *   itemtype   integer default 0
+                 *   PRIMARY KEY (id)
+                 * )
+                 */
+
+                $fields = array(
+                    'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
+                    'event' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset),
+                    'module_id' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),            
+                    'itemtype' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0')
+                );
+
+                // Create the eventsystem table
+                $query = xarDBCreateTable($tables['eventsystem'], $fields);
+                $dbconn->Execute($query);
+
+                // each entry should be unique
+                $index = array('name'   => 'i_'.$prefix.'_eventsystem',
+                       'fields' => array('event', 'module_id', 'itemtype'),
+                       'unique' => true);
+
+                $query = xarDBCreateIndex($tables['eventsystem'],$index);
+                $dbconn->Execute($query);
+                // Let's commit this, since we're gonna do some other stuff
+                $dbconn->commit();
+
+            } catch (Exception $e) {
+                $dbconn->rollback();
+                throw $e;
+            }
+            
+            // Register base module event subjects
+            // Base module inits before modules, so we have to register events for it here
+            xarEvent::registerSubject('Event', 'base');
+            xarEvent::registerSubject('ServerRequest', 'base');
+            xarEvent::registerSubject('SessionCreate', 'base');
+    
+            // Register base module event observers
+            xarEvent::registerObserver('Event', 'base');
+
+            // Register modules module event subjects
+            xarEvent::registerSubject('ModLoad', 'modules');
+            xarEvent::registerSubject('ModApiLoad', 'modules');
+            
+            // NOTE UserLogin and UserLogout are registered by authsystem module 
+            
+        case '2.2.0':
             break;
     }
     return true;

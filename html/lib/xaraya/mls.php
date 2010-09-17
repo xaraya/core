@@ -84,9 +84,13 @@ function xarMLS_init(&$args)
 
     // Register MLS events
     // These should be done before the xarMLS_setCurrentLocale function
-    xarEvents::register('MLSMissingTranslationString');
-    xarEvents::register('MLSMissingTranslationKey');
-    xarEvents::register('MLSMissingTranslationDomain');
+    // These are now registered during base module init
+    // @CHECKME: <chris> grep -R xarEvents::trigger . finds no results
+    // It appears these events are never raised ?
+    // In addition, these seem more like exceptions than 'events' ?
+    //xarEvents::register('MLSMissingTranslationString');
+    //xarEvents::register('MLSMissingTranslationKey');
+    //xarEvents::register('MLSMissingTranslationDomain');
 
     // FIXME: this was previously conditional on User subsystem initialisation,
     // but in the 2.x flow we need it earlier apparently, so made this unconditional
