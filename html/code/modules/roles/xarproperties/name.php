@@ -34,7 +34,7 @@ class NameProperty extends TextBoxProperty
 
     public function checkInput($name = '', $value = null)
     {
-        $name = empty($name) ? 'dd_'.$this->id : $name;echo $name;
+        $name = empty($name) ? 'dd_'.$this->id : $name;//echo $name;
         if ($this->initialization_refobject == 'roles_groups') {
             $property = DataPropertyMaster::getProperty(array('name' => 'objectref'));
             $property->validation_override = true;
@@ -55,7 +55,7 @@ class NameProperty extends TextBoxProperty
                 $value = array();
                 $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
                 $textbox->validation_min_length = 3;
-
+            }
             $value['salutation'] = '';
             if ($this->display_show_salutation && ($this->display_layout != 'single')) {
                 $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
