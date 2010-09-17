@@ -240,14 +240,14 @@ function dynamicdata_utilapi_import($args)
             elseif ($index == $count) $args['position'] = 'last';
             else $args['position'] = '';
 
-            $args['name'] = $child->getName();
+            $thisname = $child->getName();
             $args['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
 
             // set up the object the first time around in this loop
-            if ($args['name'] != $currentobject) {
+            if ($thisname != $currentobject) {
                 if (!empty($currentobject))
                     throw new Exception("The items imported must all belong to the same object");
-                $currentobject = $args['name'];
+                $currentobject = $thisname;
 
                 /*
                 // Check that this is a real object
@@ -257,7 +257,7 @@ function dynamicdata_utilapi_import($args)
                         $objectname2objectid[$currentobject] = $$currentobject;
                     } else {
                         $msg = 'Unknown #(1) "#(2)"';
-                        $vars = array('object',xarVarPrepForDisplay($item['name']));
+                        $vars = array('object',xarVarPrepForDisplay($thisname));
                         throw new BadParameterException($vars,$msg);
                     }
                 }
