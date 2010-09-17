@@ -52,6 +52,7 @@ class NameProperty extends TextBoxProperty
             $value['salutation'] = '';
             if ($this->display_show_salutation && ($this->display_layout != 'single')) {
                 $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
+                $salutation->validation_override = true;
                 $isvalid = $salutation->checkInput($name . '_salutation');
                 if ($isvalid) {
                     $value['salutation'] = $salutation->value;
