@@ -131,9 +131,9 @@ function dynamicdata_utilapi_import($args)
             $args['itemtype'] = $info['itemtype'];
             $objectid = $object->updateItem($args);
             // remove the properties, as they will be replaced
-            $dupobject = DataObjectMaster::getObject(array('name' => $info['name']));
-            $existingproperties = $dupobject->getProperties();
-            foreach ($existingproperties as $propertyitem)
+            $duplicateobject = DataObjectMaster::getObject(array('name' => $info['name']));
+            $oldproperties = $duplicateobject->properties;
+            foreach ($oldproperties as $propertyitem)
                 $dataproperty->deleteItem(array('itemid' => $propertyitem->id));
         } else {
             $objectid = $object->createItem($args);
@@ -240,15 +240,14 @@ function dynamicdata_utilapi_import($args)
             elseif ($index == $count) $args['position'] = 'last';
             else $args['position'] = '';
 
-            $item = array();
-            $item['name'] = $child->getName();
-            $item['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
+            $args['name'] = $child->getName();
+            $args['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
 
             // set up the object the first time around in this loop
-            if ($item['name'] != $currentobject) {
+            if ($args['name'] != $currentobject) {
                 if (!empty($currentobject))
                     throw new Exception("The items imported must all belong to the same object");
-                $currentobject = $item['name'];
+                $currentobject = $args['name'];
 
                 /*
                 // Check that this is a real object
@@ -269,12 +268,6 @@ function dynamicdata_utilapi_import($args)
                 }
                 $object =& $objectcache[$currentobject];
                 $objectid = $objectcache[$currentobject]->objectid;
-                /*
-                if (!isset($objectcache[$object->baseancestor])) {
-                    $objectcache[$object->baseancestor] = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));
-                }
-                $primaryobject =& $objectcache[$object->baseancestor];
-                */
                 // Get the properties for this object
                 $objectproperties = $object->properties;
             }
@@ -292,36 +285,22 @@ function dynamicdata_utilapi_import($args)
                             $integer->validate($value, array());
                         } catch (Exception $e) {}
                     }
-                    $item[$propertyname] = $value;
+                    $object->properties[$propertyname]->value = $value;
                 }
             }
             if (empty($keepitemid)) {
                 // for dynamic objects, set the primary field to 0 too
                 if (isset($object->primary)) {
                     $primary = $object->primary;
-                    if (!empty($item[$primary])) {
-                        $item[$primary] = 0;
+                    if (!empty($object->properties[$primary]->value)) {
+                        $object->properties[$primary]->value = 0;
                     }
                 }
             }
-            $args = array_merge($args,$item);
 
-            /* for the moment we only allow creates
-            if (!empty($item['itemid'])) {
-                // check if the item already exists
-                $olditemid = $object->getItem(array('itemid' => $item['itemid']));
-                if (!empty($olditemid) && $olditemid == $item['itemid']) {
-                    // update the item
-                    $itemid = $object->updateItem($args);
-                } else {
-                    // create the item
-                    $itemid = $object->createItem($args);
-                }
-            } else {
-            */
-                // create the item
-                $itemid = $object->createItem($args);
-//            }
+            // for the moment we only allow creates
+            // create the item
+            $itemid = $object->createItem($args);
             if (empty($itemid)) return;
 
             // keep track of the highest item id
