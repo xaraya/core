@@ -463,7 +463,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         if(count($args) > 0) {
             foreach($args as $name => $value) {
                 if(isset($this->properties[$name])) {
-                    $this->properties[$name]->setValue($value);
+                    $this->properties[$name]->value = $value;
                 }
             }
             if(isset($args['itemid'])) {

@@ -19,9 +19,9 @@ class NameProperty extends TextBoxProperty
     public $desc       = 'Name';
     public $reqmodules = array('roles');
 
-    public $display_show_salutation;
-    public $display_show_firstname;
-    public $display_show_middlename;
+    public $display_show_salutation     = true;
+    public $display_show_firstname      = true;
+    public $display_show_middlename     = true;
     public $initialization_refobject    = 'roles_users';    // Name of the object we want to reference
 
     function __construct(ObjectDescriptor $descriptor)
@@ -34,7 +34,7 @@ class NameProperty extends TextBoxProperty
 
     public function checkInput($name = '', $value = null)
     {
-        $name = empty($name) ? 'dd_'.$this->id : $name;//echo $name;
+        $name = empty($name) ? 'dd_'.$this->id : $name;
         if ($this->initialization_refobject == 'roles_groups') {
             $property = DataPropertyMaster::getProperty(array('name' => 'objectref'));
             $property->validation_override = true;
@@ -45,9 +45,9 @@ class NameProperty extends TextBoxProperty
             // store the fieldname for validations who need them (e.g. file uploads)
             $this->fieldname = $name;
             if ($this->display_layout == 'single') {
-                $this->display_show_salutation     = 0;
-                $this->display_show_firstname      = 0;
-                $this->display_show_middlename     = 0;
+                $this->display_show_salutation     = false;
+                $this->display_show_firstname      = false;
+                $this->display_show_middlename     = false;
             }
             if (!isset($value)) {
                 $invalid = array();
@@ -55,16 +55,18 @@ class NameProperty extends TextBoxProperty
                 $value = array();
                 $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
                 $textbox->validation_min_length = 3;
-            }
-            $value['salutation'] = '';
-            if ($this->display_show_salutation && ($this->display_layout != 'single')) {
-                $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
-                $salutation->validation_override = true;
-                $isvalid = $salutation->checkInput($name . '_salutation');
-                if ($isvalid) {
-                    $value['salutation'] = $salutation->value;
-                } else {
-                    $invalid[] = 'salutation';
+
+                $value['salutation'] = '';
+                if ($this->display_show_salutation && ($this->display_layout != 'single')) {
+                    $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
+                    $salutation->validation_override = true;
+                    $isvalid = $salutation->checkInput($name . '_salutation');
+                    if ($isvalid) {
+                        $value['salutation'] = $salutation->value;
+                    } else {
+                        $invalid[] = 'salutation';
+                    }
+                    $validity = $validity && $isvalid;
                 }
 
                 $value['first'] = '';
