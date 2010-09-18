@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:if condition="empty($labels['salutation'])"><xar:var name="label">Title</xar:var><xar:set name="labels['salutation']">$label</xar:set></xar:if>
-    <xar:if condition="empty($labels['first_name'])"><xar:var name="label">First Name</xar:var><xar:set name="labels['first_name']">$label</xar:set></xar:if>
-    <xar:if condition="empty($labels['middle_name'])"><xar:var name="label">Middle Name</xar:var><xar:set name="labels['middle_name']">$label</xar:set></xar:if>
-    <xar:if condition="empty($labels['last_name'])"><xar:var name="label">Last Name</xar:var><xar:set name="labels['last_name']">$label</xar:set></xar:if>
+    <xar:if condition="empty($labels['first'])"><xar:var name="label">First Name</xar:var><xar:set name="labels['first']">$label</xar:set></xar:if>
+    <xar:if condition="empty($labels['middle'])"><xar:var name="label">Middle Name</xar:var><xar:set name="labels['middle']">$label</xar:set></xar:if>
+    <xar:if condition="empty($labels['last'])"><xar:var name="label">Last Name</xar:var><xar:set name="labels['last']">$label</xar:set></xar:if>
 
     <xar:if condition="isset($onchange)">
       <xar:set name="evt_change">$onchange</xar:set>
@@ -15,10 +15,10 @@
     </xar:if>
 
     <xar:if condition="$refobject eq 'roles_groups'">
-        <xar:data-input type="objectref" refobject="$refobject" store_prop="id" style="$style" onchange="$evt_change" value="$value"/>
+        <xar:data-input type="objectref" name="$name" id="$name" refobject="$refobject" store_prop="id" style="$style" onchange="$evt_change" value="$value"/>
     <xar:else/>
         <xar:set name="namestring">$name . '_salutation'</xar:set>
-        <xar:if condition="($show_salutation eq 'true') AND ($layout ne 'single')">
+        <xar:if condition="($show_salutation) AND ($layout ne 'single')">
             <xar:if condition="empty($salutationoptions)">
                 <xar:set name="salutationoptions">
                     array(
@@ -29,16 +29,14 @@
                 </xar:set>
             </xar:if>
             <xar:data-input type="dropdown" name="$namestring" value="$value['salutation']" options="$salutationoptions"/>&#160;
-        <xar:else/>
-            <input type="hidden" name="#$namestring#" id="#$namestring#" value="#$value['salutation']#"/>
         </xar:if>
 
         <xar:if condition="$layout eq 'firstlast' OR $layout eq 'default'">
 
-            <xar:if condition="$show_firstname eq 'true'">
+            <xar:if condition="$show_firstname">
                 <input type="text" name="#$name#_first" id="#$id#_first" value="#$value['first']#"/>&#160;
             </xar:if>
-            <xar:if condition="$show_middlename eq 'true'">
+            <xar:if condition="$show_middlename">
                 <input type="text" name="#$name#_middle" id="#$id#_middle" value="#$value['middle']#"/>&#160;
             </xar:if>
             <input type="text" name="#$name#_last" id="#$id#_last" value="#$value['last']#"/>
@@ -46,10 +44,10 @@
         <xar:elseif condition="$layout eq 'lastfirst'"/>
 
             <input type="text" name="#$name#_last" id="#$id#_last" value="#$value['last']#"/>&#160;
-            <xar:if condition="$show_firstname eq 'true'">
+            <xar:if condition="$show_firstname">
                 <input type="text" name="#$name#_first" id="#$id#_first" value="#$value['first']#"/>
             </xar:if>
-            <xar:if condition="$show_middlename eq 'true'">
+            <xar:if condition="$show_middlename">
                 &#160;<input type="text" name="#$name#_middle" id="#$id#_middle" value="#$value['middle']#"/>
             </xar:if>
 
@@ -59,7 +57,7 @@
             <xar:set name="fieldid">$id . '_last'</xar:set>
             <xar:data-input type="textbox" name="$fieldname" id="$fieldid" value="$value['last']"/>
             <xar:var name="label">Name</xar:var>
-            <xar:set name="labels['last_name']">$label</xar:set>
+            <xar:set name="labels['last']">$label</xar:set>
 
         </xar:if>
     </xar:if>
@@ -73,7 +71,7 @@
         <xar:set name="invalid">implode(', ',$badlabels)</xar:set>  
         <div>
             <span class="xar-error">
-                The following fields are not filled out correctly::#$invalid#
+                The following fields are not filled out correctly: #$invalid#
             </span>
         </div>
     </xar:if>

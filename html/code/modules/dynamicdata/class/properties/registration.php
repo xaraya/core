@@ -92,8 +92,8 @@ class PropertyRegistration extends DataContainer
         $propdefTable = $tables['dynamic_properties_def'];
 
         // Make sure the db is the same as in the old days
-        assert('count($this->reqmodules)==1; /* The reqmodules registration should only contain the name of the owning module */');
-        $module_id = xarMod::getID($this->reqmodules[0]);
+        assert('count($this->reqmodules)<=1; /* The reqmodules registration should only contain the name of the owning module */');
+        $module_id = empty($this->reqmodules) ? 0 : xarMod::getID($this->reqmodules[0]);
 
         if($this->format == 0) $this->format = $this->id;
 
@@ -160,7 +160,7 @@ class PropertyRegistration extends DataContainer
                           p.format, p.configuration, p.source,
                           p.reqfiles, m.name, p.args,
                           p.aliases
-                  FROM    $tables[dynamic_properties_def] p INNER JOIN $tables[modules] m
+                  FROM    $tables[dynamic_properties_def] p LEFT JOIN $tables[modules] m
                   ON      p.modid = m.id
                   ORDER BY m.name, p.name";
         $result = $dbconn->executeQuery($query);
@@ -229,6 +229,17 @@ class PropertyRegistration extends DataContainer
                 // Clear the cache
                 PropertyRegistration::ClearCache();
 
+                if (!xarVarGetCached('installer','installing')) {
+                    // Repopulate the configurations table
+                    $tables = xarDB::getTables();
+                    $sql = "DELETE FROM $tables[dynamic_configurations]";
+                    $res = $dbconn->ExecuteUpdate($sql);
+
+                    $dat_file = sys::code() . 'modules/dynamicdata/xardata/configurations-dat.xml';
+                    $data = array('file' => $dat_file);
+                    $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+                }
+
                 $activeMods = xarMod::apiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
                 assert('!empty($activeMods)'); // this should never happen
 
@@ -270,6 +281,30 @@ class PropertyRegistration extends DataContainer
                 } // loop over the files in a directory
             } // loop over the directories
 
+            // Now get the properties in the properties directory
+            $propertiesdir = sys::code() . 'properties/';
+            if (!file_exists($propertiesdir)) throw new DirectoryNotFoundException($propertiesdir);
+
+            $dir = new RelativeDirectoryIterator($propertiesdir);
+            // Loop through properties directory
+            for ($dir->rewind();$dir->valid();$dir->next()) {
+                if ($dir->isDot()) continue; // temp for emacs insanity and skip hidden files while we're at it
+                if (!$dir->isDir()) continue; // only dirs
+
+                // Include the file into the environment
+                $file = $dir->getPathName();
+                if (!isset($loaded[$file])) {
+                    // FIXME: later -> include
+                    $dp = str_replace('/','.','properties/' . basename($file) . "/main");
+                    try {
+                        sys::import($dp);
+                    } catch (Exception $e) {echo file_exists($propertiesdir . basename($file) . "/main.php");
+                        throw new Exception(xarML('The file #(1) could not be loaded', $dp . '.php'));
+                    }
+                    $loaded[$file] = true;
+                }
+            } // loop over the directories in the property directory
+
             // FIXME: this wont work reliable enough, since we have the static now
             // might as well put this directly after the include above.
             $newClasses = get_declared_classes();
@@ -302,7 +337,11 @@ class PropertyRegistration extends DataContainer
                 // Fill in the info we dont have in the registration class yet
                 // TODO: see if we can have it in the registration class
                 $baseInfo->class = $propertyClass;
-                $baseInfo->filepath = $property->filepath . '/' . $baseInfo->name . '.php';
+                if ($property->filepath == 'auto') {
+                    $baseInfo->filepath = 'properties/' . $baseInfo->name . '/main.php';
+                } else {
+                    $baseInfo->filepath = $property->filepath . '/' . $baseInfo->name . '.php';
+                }
                 $currentproptypes[$baseInfo->id] = $baseInfo;
                 $proptypes[$baseInfo->id] = $baseInfo->getPublicProperties();
 
@@ -314,7 +353,11 @@ class PropertyRegistration extends DataContainer
                         $descriptor = new ObjectDescriptor($alias);
                         $aliasInfo = new PropertyRegistration($descriptor);
                         $aliasInfo->class = $propertyClass;
-                        $aliasInfo->filepath = $property->filepath .'/'. $property->name . '.php';
+                        if ($property->filepath == 'auto') {
+                            $aliasInfo->filepath = 'properties/' . $property->name . '/main.php';
+                        } else {
+                            $aliasInfo->filepath = $property->filepath . '/' . $property->name . '.php';
+                        }
                         $currentproptypes[$aliasInfo->id] = $aliasInfo;
                         $proptypes[$aliasInfo->id] = $aliasInfo->getPublicProperties();
                     }
@@ -327,6 +370,10 @@ class PropertyRegistration extends DataContainer
                     $registered = $proptype->Register();
                 }
                 unset($currentproptypes);
+                
+                // Run the install function if it exists
+                self::installproperty($baseInfo->name);
+                
             } // next property class in the same file
             $dbconn->commit();
         } catch(Exception $e) {
@@ -341,6 +388,23 @@ class PropertyRegistration extends DataContainer
         // Sort the property types
         ksort($proptypes);
         return $proptypes;
+    }
+    
+    static public function installproperty($propertyname) 
+    {
+        $class = UCFirst($propertyname) . 'PropertyInstall';
+        if (class_exists($class)) {
+            // Assume this is a property in a module
+            $descriptor = new DataObjectDescriptor();
+            $installer = new $class($descriptor);
+            $installer->install();
+        } elseif (file_exists(sys::code() . 'properties/' . $propertyname . '/install.php')) {
+            // Assume this is a standalone property
+            sys::import('properties.' . $propertyname . '.install');
+            $descriptor = new DataObjectDescriptor();
+            $installer = new $class($descriptor);
+            $installer->install();
+        }
     }
 }
 ?>
