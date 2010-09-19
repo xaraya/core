@@ -734,7 +734,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData, $proper
     if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
     $sourceFileName = sys::code() . "properties/$propertyName/templates/includes/$templateName.xt";
     if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
-    echo $sourceFileName;exit;
+    
     // Not found: raise an exception
     throw new Exception("Could not find include template $templateName.xt");
 }

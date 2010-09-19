@@ -147,8 +147,8 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 /**
  * This method is called by the BasicBlock class constructor
 **/
-    public function upgrade($oldversion) {
-
+    public function upgrade($oldversion) 
+    {
         switch ($oldversion) {
             case '0.0.0': // upgrade menu blocks to version 2.2.0
                 // convert the old modulelist string to an array
@@ -180,9 +180,10 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                 if (!empty($this->content['lines'])) {
                     $userlinks = array();
                     foreach ($this->content['lines'] as $id => $line) {
+                        if (!isset($line['label'])) $line['label'] = $line['url'];
                         $userlinks[] = array(
                             'id' => $id,
-                            'name' => $line['label'],
+                            'name' => $line['name'],
                             'label' => $line['label'],
                             'title' => $line['description'],
                             'url' => $line['url'],
