@@ -18,18 +18,18 @@
             <xar:if condition="$itemid gt 0">
                 <legend>Change queue definition</legend>
                 <!--Normal edit form -->
-                <form style="display: inline;" method="post" action="&xar-modurl-mail-admin-update;">
+                <form style="display: inline;" method="post" action="#xarModURL('mail','admin','update')#">
                     <xar:data-form module="$qdef['moduleid']" itemid="$itemid" itemtype="$qdef['itemtype']" linkfield="name"/>
                     <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
                     <input type="hidden" name="itemid" value="#$itemid#"/>
                     <input type="hidden" name="objectid" value="#$qdef.objectid#"/>
                     <input type="hidden" name="modid" value="#$qdef.moduleid#"/>
-                    <input type="hidden" name="return_url" value="&xar-modurl-mail-admin-view;"/>
+                    <input type="hidden" name="return_url" value="#xarModURL('mail','admin','view')#"/>
                     <input type="hidden" name="itemtype" value="#$qdef.itemtype#"/>
                     <input type="submit" value="#xarML('Save')#"/>
                 </form>
                 <!-- When editting, offer delete option -->
-                <form style="display: inline;" method="post" action="&xar-modurl-mail-admin-delete;">
+                <form style="display: inline;" method="post" action="#xarModURL('mail','admin','delete')#">
                     <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
                     <input type="hidden" name="itemid" value="#$itemid#"/>
                     <input type="hidden" name="objectid" value="#$qdef.objectid#"/>
@@ -38,19 +38,19 @@
                 <xar:else />
                 <legend>Create new queue definition</legend>
           <!-- Create form -->
-                <form style="display: inline;" method="post" action="&xar-modurl-dynamicdata-admin-create;">
+                <form style="display: inline;" method="post" action="#xarModURL('dynamicdata','admin','create')#">
                     <xar:data-form module="$qdef['moduleid']" itemid="$itemid" itemtype="$qdef['itemtype']" linkfield="name"/>
                     <input type="hidden" name="authid" value="#xarSecGenAuthKey('dynamicdata')#"/>
                     <input type="hidden" name="objectid" value="#$qdef.objectid#"/>
                     <input type="hidden" name="modid" value="#$qdef.moduleid#"/>
-                    <input type="hidden" name="return_url" value="&xar-modurl-mail-admin-view;"/>
+                    <input type="hidden" name="return_url" value="#xarModURL('mail','admin','view')#"/>
                     <input type="hidden" name="itemtype" value="#$qdef.itemtype#"/>
                     <input type="submit" value="#xarML('Save')#"/>
                 </form>
             </xar:if>
         </fieldset>
         <xar:if condition="$itemid ne 0">
-            <a href="&xar-modurl-mail-admin-view;">Create new queue definition</a>
+            <a href="#xarModURL('mail','admin','view')#">Create new queue definition</a>
         </xar:if>
     </div>
 </xar:template>

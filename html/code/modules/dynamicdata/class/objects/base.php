@@ -361,6 +361,15 @@ class DataObject extends DataObjectMaster implements iDataObject
         return true;
     }
 
+    public function clearFieldValues(Array $args = array())
+    {
+        $properties = $this->getProperties($args);
+        foreach ($properties as $property) {
+            $fields[$property->name] = $property->clearValue();
+        }
+        return true;
+    }
+
     /**
      * Get the labels and values to include in some output display for this item
      */

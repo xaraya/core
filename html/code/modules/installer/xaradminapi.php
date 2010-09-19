@@ -52,27 +52,32 @@ function installer_adminapi_modifyconfig($args)
 }
 
 /**
- * Modify a single variable in the system configuration file
+ * Modify one or more variables in a configuration file
  *
  * @author Marc Lutolf
- * @param string args['name']
- * @param string args['value']
+ * @param string args['variables'] = array($name => $value,...)
  * @return bool
  */
 
-function installer_adminapi_modifysystemvar($args)
+function installer_adminapi_modifysystemvars($args)
 {
-    extract($args);
-    $systemConfigFile = sys::varpath() . '/config.system.php';
-    $config_php = join('', file($systemConfigFile));
+    if (!isset($args['variables'])) throw new BadParameterException('variables');
+    $configfile = sys::varpath() . '/config.system.php';
+    if (isset($args['filepath'])) $configfile = $args['filepath'];
+    try {
+        $config_php = join('', file($configfile));
+        foreach ($args['variables'] as $name => $value) {
+            $config_php = preg_replace('/\[\''.$name.'\'\]\s*=\s*(\'|\")(.*)\\1;/', "['".$name."'] = '$value';", $config_php);
+        }
 
-    $config_php = preg_replace('/\[\''.$name.'\'\]\s*=\s*(\'|\")(.*)\\1;/', "['".$name."'] = '$value';", $config_php);
+        $fp = fopen ($configfile, 'wb');
+        fwrite ($fp, $config_php);
+        fclose ($fp);
+        return true;
 
-    $fp = fopen ($systemConfigFile, 'wb');
-    fwrite ($fp, $config_php);
-    fclose ($fp);
-
-    return true;
+    } catch (Exception $e) {
+        throw new FileNotFoundException($configfile);
+    }
 }
 
 /**

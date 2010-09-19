@@ -3,7 +3,7 @@
    * Return the itemtypes for the mail module
    *
    */
-
+sys::import('modules.dynamicdata.class.objects.master');
 function mail_userapi_getitemtypes($args)
 {
     $itemtypes = array();
