@@ -735,4 +735,12 @@
     <description>The hash algorithm used for encrypting passwords</description>
     <property_id>2</property_id>
   </configurations>
-</items>
+  <configurations itemid="77">
+    <id>2319</id>
+    <name>validation_ignore_validations</name>
+    <label>Ignore validations</label>
+    <description>Override the validations set for this property</description>
+    <property_id>14</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations></items>

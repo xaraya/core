@@ -3,6 +3,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @package modules
  * @subpackage roles
+ * @copyright see the html/credits.html file in this release
  */
 
 sys::import('modules.base.xarproperties.textbox');
@@ -19,10 +20,11 @@ class NameProperty extends TextBoxProperty
     public $desc       = 'Name';
     public $reqmodules = array('roles');
 
-    public $display_show_salutation     = true;
-    public $display_show_firstname      = true;
-    public $display_show_middlename     = true;
+    public $display_show_salutation;
+    public $display_show_firstname;
+    public $display_show_middlename;
     public $initialization_refobject    = 'roles_users';    // Name of the object we want to reference
+    public $validation_ignore_validations;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -54,7 +56,9 @@ class NameProperty extends TextBoxProperty
                 $validity = true;
                 $value = array();
                 $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
-                $textbox->validation_min_length = 3;
+                if (!$this->validation_ignore_validations) {
+                    $textbox->validation_min_length = 3;
+                }
 
                 $value['salutation'] = '';
                 if ($this->display_show_salutation && ($this->display_layout != 'single')) {
