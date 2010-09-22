@@ -51,7 +51,7 @@ class SubItemsProperty extends DataProperty
         // FIXME: properties should not be instantiated when being registered
         // In this case refreshing the property cache causes a failure which we have to catch
         try {
-        $this->subitemsobject = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
+            $this->subitemsobject = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
         } catch (Exception $e) {
         }
     }
@@ -104,12 +104,11 @@ class SubItemsProperty extends DataProperty
         try {
             if (empty($newprefix)) {
                 // Creation happens programmatically
-                $newprefix = 'dd_' . $this->id;
+                $newprefix = 'dd_'.$this->id;
             } else {
                 // Creation happens via UI submit, checkInput has run
                 $newprefix = array_shift($this->prefixarray);
             }
-
             // Only do this if we actually have any items to be created/updated (might just be a delete call)
             if (isset($this->itemsdata[$newprefix])) {
                 foreach ($this->itemsdata[$newprefix] as $itemdata) {
@@ -188,12 +187,12 @@ class SubItemsProperty extends DataProperty
         // 2. The property's itemsdata array (means checkInput ran)
         // 3. The parent object's items array (means we are getting the data from db)
         // 4. Default values passed from the property defaultvalue field
-        // 5. Add object default values forany rows not yet covered
+        // 5. Add object default values for any rows not yet covered
         if (empty($data['items'])) {
             // 2. Nothing passed in the tag, look for the items data if checkInput ran
             if (!empty($this->itemsdata)) {
                 try {
-                    // Display the itmes from previous rounds
+                    // Display the items from previous rounds
                     $data['items'] = $this->itemsdata[$newprefix];   
                     unset($this->itemsdata[$newprefix]);
                 } catch (Exception $e) {
@@ -202,7 +201,7 @@ class SubItemsProperty extends DataProperty
                 }
             } else {
                     // 3. Otherwise get the values from the parent object
-                    $data['items'] = $this->transposeItems();
+                    $data['items'] = $this->getItemsData();
             }
 
             // 4. If still no items and we are passing default values from the property, use them
@@ -254,7 +253,9 @@ class SubItemsProperty extends DataProperty
     public function getItemsData()
     {
         $name = 'dd_'.$this->id;
-        return $this->itemsdata[$name];
+        $items = $this->transposeItems();
+        if (!isset($items[$name])) return array();
+        return $items[$name];
     }
 
     public function setItemsData($args=array())
@@ -265,13 +266,14 @@ class SubItemsProperty extends DataProperty
 
     private function transposeItems()
     {
+        $name = 'dd_'.$this->id;
         if (empty($this->objectref->items)) return array();
-        $itemsarray = array_shift($this->objectref->items);
+        $itemsarray = reset($this->objectref->items);
         $namelength = strlen($this->initialization_refobject) + 1;
         foreach ($itemsarray as $key => $value) {
             $cleankey = substr($key, $namelength);
             foreach ($value as $key1 => $value1) {
-                $items[$key1][$cleankey] = $value1;
+                $items[$name][$key1][$cleankey] = $value1;
             }
         }
         return $items;

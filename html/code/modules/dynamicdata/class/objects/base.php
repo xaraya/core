@@ -61,8 +61,8 @@ class DataObject extends DataObjectMaster implements iDataObject
             }
             $this->itemid = $args['itemid'];
         }
-
         if (!empty($this->primary) && !empty($this->properties[$this->primary])) {
+        	$this->properties[$this->primary]->value = $this->itemid;
             $primarystore = $this->properties[$this->primary]->datastore;
         }
 
@@ -73,28 +73,32 @@ class DataObject extends DataObjectMaster implements iDataObject
         } else {
             $this->setFieldList();
         }*/
-        
-        $itemid = $this->datastore->getItem($args);
-
-        if(!empty($args['fieldlist'])) $this->setFieldList($fields);
-
+                
         /* General sequence:
          * 2. Run the datastore's getItem method
-         * 3. Assignthe itemid to properties using the virtual datastore
+         * 3. Assign the itemid to properties using the virtual datastore
          *
          * This may need to be adjusted in the future
          */
 
+        $itemid = $this->datastore->getItem($args);
+
+        if(!empty($args['fieldlist'])) $this->setFieldList($fields);
+
         foreach ($this->getFieldList() as $fieldname) {
             if (empty($this->properties[$fieldname]->source)) {
                 $this->properties[$fieldname]->value = $this->itemid;
+				if (method_exists($this->properties[$fieldname],'getitem')) {
+//					$this->properties[$fieldname]->getItem($this->itemid);
+				}
             }
         }
 
-        // only worry about finding something in primary datastore (if any)
+/*        // only worry about finding something in primary datastore (if any)
         if(empty($itemid) && !empty($primarystore) && $primarystore == $this->datastore) {
             return;
         }
+        */
 
         // Turn the values retrieved into proper PHP values
         foreach($this->properties as $property) {
