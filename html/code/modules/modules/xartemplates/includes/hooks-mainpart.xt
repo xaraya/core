@@ -172,12 +172,14 @@
                 </xar:foreach>                    
                 </xar:foreach>
             </xar:if>
-        </div>
-        <div class="xar-align-center">
+        <fieldset>
+        <div class="xar-form-input-wrapper-after">
             <input type="hidden" name="authid" id="authid" value="#$authid#"/>
             <input type="hidden" name="curhook" id="curhook" value="#$curhook#"/>
             <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
             <input type="submit" value="#xarML('Save Changes')#"/>
+        </div>
+        </fieldset>
         </div>
     </form>
     </xar:if>
