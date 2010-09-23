@@ -200,7 +200,8 @@ class xarEvent extends Object
      * xarMod::apiFunc('roles', 'user', 'otherevent');
     **/
     
-    protected static function register($event,$module,$area='class',$type='eventobservers',$func='notify', $itemtype) {
+    protected static function register($event,$module,$area='class',$type='eventobservers',$func='notify', $itemtype) 
+    {
         // check module subsystem is up before running
         if (!class_exists('xarMod')) return;
 
