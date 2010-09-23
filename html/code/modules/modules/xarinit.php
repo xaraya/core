@@ -132,7 +132,7 @@ function modules_init()
          *   priority    integer default 0
          *   PRIMARY KEY (id)
          * )
-         */
+         *
         $fields = array(
                         'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                         'object'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
@@ -146,9 +146,28 @@ function modules_init()
                         't_func'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
                         't_file'      => array('type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset),
                         'priority'       => array('type' => 'integer', 'size' => 'tiny', 'unsigned' => true, 'null' => false, 'default' => '0')
-                    );
+                   );
+        */
         // TODO: no indexes?
 
+
+        /**
+         * CREATE TABLE xar_hooks (
+         *   observer   integer unsigned NOT NULL,
+         *   subject    integer unsigned NOT NULL,
+         *   itemtype   integer unsigned NOT NULL
+        **/
+        $fields = array(
+            'observer' => array('type' => 'integer', 'unsigned'=>true, 'null' => false),
+            'subject'  => array('type' => 'integer', 'unsigned'=>true, 'null' => false),
+            'itemtype' => array('type' => 'integer', 'unsigned'=>true, 'null' => false)
+        );
+        // each entry should be unique
+        $index = array(
+            'name'   => 'i_'.$prefix.'_hooks',
+            'fields' => array('observer', 'subject', 'itemtype'),
+            'unique' => true
+        );
         // Create the hooks table
         $query = xarDBCreateTable($tables['hooks'], $fields);
         $dbconn->Execute($query);
@@ -286,7 +305,10 @@ function modules_upgrade($oldversion)
                     'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                     'event' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset),
                     'module_id' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),            
-                    'itemtype' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0')
+                    'itemtype' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),
+                    'area' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+                    'type' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+                    'func' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset)
                 );
 
                 // Create the eventsystem table
@@ -300,6 +322,35 @@ function modules_upgrade($oldversion)
 
                 $query = xarDBCreateIndex($tables['eventsystem'],$index);
                 $dbconn->Execute($query);
+                /**
+                 * CREATE TABLE xar_index (
+                 *   id         integer NOT NULL auto_increment,
+                 *   module_id  integer default 0,
+                 *   itemtype   integer default 0,
+                 *   item_id    integer default 0,
+                 *   PRIMARY KEY (id)
+                 * )
+                 */
+                /* @TODO: index subsystem 
+                $fields = array(
+                    'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
+                    'module_id' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),            
+                    'itemtype' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),
+                    'item_id' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0')
+                );
+
+                // Create the eventsystem table
+                $query = xarDBCreateTable($tables['index'], $fields);
+                $dbconn->Execute($query);
+
+                // each entry should be unique
+                $index = array('name'   => 'i_'.$prefix.'_index',
+                       'fields' => array('module_id', 'itemtype', 'item_id'),
+                       'unique' => true);
+
+                $query = xarDBCreateIndex($tables['index'],$index);
+                $dbconn->Execute($query);
+                */
                 // Let's commit this, since we're gonna do some other stuff
                 $dbconn->commit();
 
@@ -307,7 +358,7 @@ function modules_upgrade($oldversion)
                 $dbconn->rollback();
                 throw $e;
             }
-            
+            /* System Events */
             // Register base module event subjects
             // Base module inits before modules, so we have to register events for it here
             xarEvent::registerSubject('Event', 'base');
@@ -320,9 +371,34 @@ function modules_upgrade($oldversion)
             // Register modules module event subjects
             xarEvent::registerSubject('ModLoad', 'modules');
             xarEvent::registerSubject('ModApiLoad', 'modules');
+
+            /* Hook Events */
+            // Register modules module hook event subjects 
+            xarHook::registerSubject('ModuleModifyconfig', 'modules');
+            xarHook::registerSubject('ModuleUpdateconfig', 'modules');
+            xarHook::registerSubject('ModuleRemove', 'modules');
+
+            xarHook::registerSubject('ModuleInit', 'modules');
+            xarHook::registerSubject('ModuleActivate', 'modules');
+            xarHook::registerSubject('ModuleUpgrade', 'modules');
+
+            // Module itemtype hook  subjects
+            xarHook::registerSubject('ItemtypeCreate', 'modules');
+            xarHook::registerSubject('ItemtypeDelete', 'modules');
+            xarHook::registerSubject('ItemtypeView', 'modules');
+
+            // Module item hook  subjects (@TODO: these should no longer apply to roles) 
+            xarHook::registerSubject('ItemNew', 'modules');
+            xarHook::registerSubject('ItemCreate', 'modules');
+            xarHook::registerSubject('ItemModify', 'modules'); 
+            xarHook::registerSubject('ItemUpdate', 'modules');
+            xarHook::registerSubject('ItemDisplay', 'modules');
+            xarHook::registerSubject('ItemDelete', 'modules');
+            
+            // @TODO: other hook subjects 
             
             // NOTE UserLogin and UserLogout are registered by authsystem module 
-            
+            // @TODO: Roles module to registers User* and Group* events            
         case '2.2.0':
             break;
     }

@@ -24,6 +24,7 @@
  */
 function modules_admin_modify($args)
 {
+    
     extract($args);
 
     // xarVarFetch does validation if not explicitly set to be not required
@@ -34,66 +35,52 @@ function modules_admin_modify($args)
     $modInfo = xarMod::getInfo($id);
     if (!isset($modInfo)) return;
 
-    $modName     = $modInfo['name'];
+    $modname     = $modInfo['name'];
     $displayName = $modInfo['displayname'];
 
     // Security Check
-    if(!xarSecurityCheck('AdminModules',0,'All',"$modName::$id")) return;
-
-    $data['savechangeslabel'] = xarML('Save Changes');
-
-    // Get the list of all hook modules, and the current hooks enabled for this module
-    $hooklist = xarMod::apiFunc('modules','admin','gethooklist',
-                              array('modName' => $modName));
+    if(!xarSecurityCheck('AdminModules',0,'All',"$modname::$id")) return;
 
     // Get the list of all item types for this module (if any)
     try {
-        $itemtypes = xarMod::apiFunc($modName,'user','getitemtypes',array());
+        $itemtypes = xarMod::apiFunc($modname,'user','getitemtypes',array());
     } catch ( FunctionNotFoundException $e) {
+        $itemtypes = array();
         // No worries
     }
 
-    if (isset($itemtypes)) {
-        $data['itemtypes'] = $itemtypes;
-    } else {
-        $data['itemtypes'] = array();
-    }
-
-    // $data[hooklist] is the master array which holds all info
-    // about the registered hooks.
-    $data['hooklist'] = array();
-
-    // Loop over available $key => $value pairs in hooklist
-    // $modname is assigned key (name of module)
-    // $hooks is assigned object:action:area
-    // MrB: removed the details check, it's simpler to have the same datastructure
-    // allways, and I think there's not much of a performance hit.
-    // TODO: make the different hooks selectable per type of hook
-    foreach ($hooklist as $hookmodname => $hooks) {
-        // CHECKME: don't allow hooking to yourself !?
-        if ($hookmodname == $modName) {
-            continue;
-        }
-        $data['hooklist'][$hookmodname]['modname'] = $hookmodname;
-        $data['hooklist'][$hookmodname]['checked'] = array();
-        $data['hooklist'][$hookmodname]['hooks'] = array();
-        // Fill in the details for the different hooks
-        foreach ($hooks as $hook => $modules) {
-            if (!empty($modules[$modInfo['systemid']])) {
-                foreach ($modules[$modInfo['systemid']] as $itemType => $val) {
-                    $data['hooklist'][$hookmodname]['checked'][$itemType] = 1;
+    // Get list of hook module(s) (observers) and the available hooks supplied 
+    $observers = xarHook::getObserverModules(); 
+    foreach ($observers as $observer => $modinfo) {
+        // get subject itemtypes this observer is hooked to (if any)
+        $subjects = xarHook::getObserverSubjects($observer, $modname);
+        $hookstate = !empty($subjects[$modname][0]);
+        if (!empty($itemtypes)) {
+            foreach ($itemtypes as $key => $itemtype) {
+                if ($hookstate == 1) {
+                    // hooked to all itemtypes
+                    $ishooked = false;
+                } else {
+                    // otherwise see if hooked to some
+                    $ishooked = !empty($subjects[$modname][$key]);
                 }
+                // set hook state to some if not hooked to all                    
+                if ($hookstate != 1 && $ishooked) 
+                    $hookstate = 2;
+                // add ishooked value to itemtype                     
+                $itemtypes[$key]['ishooked'] = $ishooked;
             }
-            $data['hooklist'][$hookmodname]['hooks'][$hook] = 1;
         }
+        $observers[$observer]['hookstate'] = $hookstate;
+        $observers[$observer]['itemtypes'] = $itemtypes;
     }
-  //print_r($data['hooklist']);
-    // End form
-
-    $data['available'] = xarModIsAvailable($modName);
-    $data['authid'] = xarSecGenAuthKey('modules');
+    
     $data['id'] = $id;
-    $data['displayname'] = $modInfo['displayname'];
+    $data['observers'] = $observers;
+    $data['module'] = $modname;
+    $data['displayname'] = $displayName;
+    $data['authid'] = xarSecGenAuthKey('modules');
+
     if (!empty($return_url)) {
         $data['return_url'] = $return_url;
     }

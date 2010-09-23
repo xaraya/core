@@ -32,35 +32,10 @@ function modules_adminapi_disablehooks($args)
     if (empty($hookModName))  throw new EmptyParameterException('hookModName');
 
     if (empty($callerItemType)) {
-        $callerItemType = '';
+        $callerItemType = 0;
     }
 
-    // Rename operation
-    $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
-
-    // Delete hooks regardless
-    // New query: select on the mod id's instead of their names
-    // optionally: get the ids first and then use the select
-    // better: construct a join with the modules table but not possible for postgres for example
-    $smodInfo = xarMod_GetBaseInfo($callerModName);
-    $smodId = $smodInfo['systemid'];
-    $tmodInfo = xarMod_GetBaseInfo($hookModName);
-    $tmodId = $tmodInfo['systemid'];
-    $sql = "DELETE FROM $xartable[hooks] WHERE s_module_id = ? AND s_type = ? AND t_module_id = ?";
-    $stmt = $dbconn->prepareStatement($sql);
-
-    try {
-        $dbconn->begin();
-        $bindvars = array($smodId,$callerItemType,$tmodId);
-        $stmt->executeUpdate($bindvars);
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
-
-    return true;
+    return xarHook::detach($hookModName, $callerModName, $callerItemType);
 }
 
 ?>

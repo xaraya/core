@@ -7,7 +7,8 @@
  *
  * This observer is responsible for logging the event to the system log
 **/
-class BaseEventObserver extends Object implements ixarEventObserver
+sys::import('xaraya.structures.descriptor');
+class BaseEventObserver extends ObjectDescriptor implements ixarEventObserver
 {
     public function notify(ixarEventSubject $subject)
     {

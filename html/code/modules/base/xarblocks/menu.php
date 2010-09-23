@@ -62,6 +62,15 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                                         'visible' => 1,
                                         'menulinks' => array(),
                                     ),
+                                    array(
+                                        'id' => 1,
+                                        'name' => 'eventsystem',
+                                        'url' => '[base]page=events',
+                                        'label'=> 'Event System',
+                                        'title' => 'Event Messaging System Overview',
+                                        'visible' => 1,
+                                        'menulinks' => array(),
+                                    ),
                                   );
 
     public $menumodtype         = 'user';

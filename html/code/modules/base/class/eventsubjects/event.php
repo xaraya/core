@@ -49,20 +49,20 @@ class BaseEventSubject extends ObjectDescriptor implements ixarEventSubject
     
     public function attach(ixarEventObserver $observer)
     {
-        $id = spl_object_hash($observer);
+        $id = $observer->module;
         $this->observers[$id] = $observer;
     }
     
     public function detach(ixarEventObserver $observer)
     {
-        $id = spl_object_hash($observer);
+        $id = $observer->module;
         if (isset($this->observers[$id]))
             unset($this->observers[$id]);    
     }
-    public function getObservers()
+    
+    public function getSubject()
     {
-        // we just return all observers of this subject from the db here
-        return xarEvent::getObservers($this->subject);
+        return $this->subject;
     }
 }
 

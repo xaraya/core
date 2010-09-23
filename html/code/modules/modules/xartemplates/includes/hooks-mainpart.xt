@@ -1,162 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:foreach in="$hookmodules" value="$hookmod">
-        <xar:if condition="empty($return_url)">
-            <p class="xar-alt xar-block-title xar-norm-outline xar-padding-thick xar-margin-thickbottom">
-                <a href="#$hookmod['modlink']#">#$hookmod['modname']#</a>: #$hookmod['modtitle']#
-            </p>
-        </xar:if>
-        <xar:if condition="$hookmod['modname'] eq $curhook">
-            <p>Use this functionality in the following modules: [ 
-            <a href="javascript:void(0);" title="#xarML('Click to toggle details display.')#" onclick="return toggleDisplay('hookdetails');">Details</a>]</p>
-            <!-- inline style is needed here because IE's DOM support is flaky -->
-            <div id="hookdetails" class="xar-displaynone">
-                <xar:if condition="count($hooktypes) gt 0">
-                    <p>This module offers the following hooks:</p>
+    <xar:javascript module="base" filename="toggle.js"/>
+    <h3>Hook Modules</h3>
+    <xar:var name="toggletitle">Click to toggle display of available hooks for this module.</xar:var>
+    <ul>
+        <xar:foreach in="$observers" key="$module" value="$modinfo">             
+            <li>
+                <a href="#xarServer::getCurrentURL(array('hook' => $module))#">
+                    #$modinfo['displayname']#
+                </a>
+                 : #$modinfo['displaydescription']# 
+                [ <a href="javascript:void(0);" title="#$toggletitle#" onclick="return toggleDisplay('hookdetails#$module#');">Details</a> ]
+                <div id="hookdetails#$module#">
+                    <p>This module supplies the following hooks...</p>                    
                     <ul>
-                        <xar:foreach in="$hooktypes" value="$hooktype">
-                            <li>#$hooktype#</li>
+                        <xar:foreach in="$modinfo['hooks']" key="$event" value="$hook">
+                            <li>#$event#</li>
                         </xar:foreach>
                     </ul>
-                <xar:else />
-                    <p>This module offers no hooks.</p>
-                </xar:if>
-            </div>
-            <form action="#xarModURL('modules','admin','updatehooks')#" method="post">
-                <div>
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="curhook" id="curhook" value="#$curhook#"/>
-                    <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
-                    <xar:foreach in="$hookedmodules" value="$hookedmod">
-                        <xar:if condition="!empty($hookedmod['header'])">
-                            <h4>#$hookedmod['header']#</h4>
-                        </xar:if>
-                        <!-- Store the checked attribute for reuse -->
-                        <xar:set name="NOTischecked">false</xar:set>
-                        <xar:set name="ALLischecked">false</xar:set>
-                        <xar:set name="SOMEischecked">false</xar:set>
-                        <xar:if condition="empty($hookedmod['checked']) or count($hookedmod['checked']) eq 0">
-                            <xar:set name="NOTischecked">true</xar:set>
-                        <xar:elseif condition="!empty($hookedmod['checked'][0])"/>
-                            <xar:set name="ALLischecked">true</xar:set>
-                        <xar:else/>
-                            <xar:set name="SOMEischecked">true</xar:set>
-                        </xar:if>
-                        <!-- Store the disabled attribute for reuse -->
-                        <xar:set name="hookedmoddisabled">true</xar:set>
-                        <xar:if condition="$hookmod['modstatus'] eq 1">
-                            <xar:set name="hookedmoddisabled">false</xar:set>
-                        </xar:if>
-                        <fieldset>
-                            <legend>#$hookedmod['name']#</legend>
-                            <!-- inline style is needed here because IE's DOM support is flaky -->
-                            <!-- The NOT radio -->
-                            <xar:if condition="$NOTischecked">
-                                <xar:if condition="$hookedmoddisabled">
-                                    <input onclick="setDisplayOff('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="NOT_hooked_#$hookedmod['name']#_0" value="0" checked="checked" disabled="disabled"/>
-                                <xar:else/>
-                                    <input onclick="setDisplayOff('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="NOT_hooked_#$hookedmod['name']#_0" value="0" checked="checked"/>
-                                </xar:if>
-                            <xar:else/>
-                                <xar:if condition="$hookedmoddisabled">
-                                    <input onclick="setDisplayOff('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="NOT_hooked_#$hookedmod['name']#_0" value="0" disabled="disabled"/>
-                                <xar:else/>
-                                    <input onclick="setDisplayOff('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="NOT_hooked_#$hookedmod['name']#_0" value="0"/>
-                                </xar:if>
-                            </xar:if>&#160;
-                            <label for="NOT_hooked_#$hookedmod['name']#_0">Do NOT enable
-                            #$hookmod['modname']# functionality in #$hookedmod['name']#</label>
-                            <br />
-                            <!-- The ALL radio -->
-                            <xar:if condition="$ALLischecked">
-                                <xar:if condition="$hookedmoddisabled">
-                                    <input onclick="setDisplayOff('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]"
-                                    id="ALL_hooked_#$hookedmod['name']#_0" value="1" checked="checked" disabled="disabled"/>
-                                <xar:else/>
-                                    <input onclick="setDisplayOff('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="ALL_hooked_#$hookedmod['name']#_0" value="1" checked="checked"/>
-                                </xar:if>
-                            <xar:else/>
-                                <xar:if condition="$hookedmoddisabled">
-                                    <input onclick="setDisplayOff('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="ALL_hooked_#$hookedmod['name']#_0" value="1" disabled="disabled"/>
-                                <xar:else/>
-                                    <input onclick="setDisplayOff('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="ALL_hooked_#$hookedmod['name']#_0" value="1"/>
-                                </xar:if>
-                            </xar:if>&#160;
-                            <label for="ALL_hooked_#$hookedmod['name']#_0">Enable the
-                            #$hookmod['modname']# hooks for ALL items in
-                            #$hookedmod['name']#</label>
-                            <br />
-                            <xar:if condition="isset($hookedmod['itemtypes']) AND count($hookedmod['itemtypes']) gt 0">
-                                <!-- The SOME radio -->
-                                <xar:if condition="$SOMEischecked">
-                                    <xar:if condition="$hookedmoddisabled">
-                                        <input onclick="setDisplayOn('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="SOME_hooked_#$hookedmod['name']#_0" value="2" checked="checked" disabled="disabled"/>
-                                    <xar:else/>
-                                        <input onclick="setDisplayOn('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="SOME_hooked_#$hookedmod['name']#_0" value="2" checked="checked"/>
-                                    </xar:if>
-                                <xar:else/>
-                                    <xar:if condition="$hookedmoddisabled">
-                                        <input onclick="setDisplayOn('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="SOME_hooked_#$hookedmod['name']#_0" value="2" disabled="disabled"/>
-                                    <xar:else/>
-                                        <input onclick="setDisplayOn('itemtypes_#$hookedmod['name']#');" type="radio" name="hooked_#$hookedmod['name']#[0]" id="SOME_hooked_#$hookedmod['name']#_0" value="2"/>
-                                    </xar:if>
-                                </xar:if>&#160;
-                                <label for="SOME_hooked_#$hookedmod['name']#_0">Enable
-                                #$hookmod['modname']# functionality for SOME itemtypes in
-                                #$hookedmod['name']#</label>
-                                <br />
-                                <xar:set name="hasItemTypes">false</xar:set>
-                                <div id="itemtypes_#$hookedmod['name']#" class="xar-padding-thickleft">
-                                    <xar:foreach in="$hookedmod['itemtypes']" key="$typeid" value="$itemtype">
-                                        <!-- Store the checked attribute -->
-                                        <xar:set name="itemtypechecked">false</xar:set>
-                                        <xar:if condition="!empty($hookedmod['checked'][$typeid])">
-                                            <xar:set name="hasItemTypes">true</xar:set>
-                                            <xar:set name="itemtypechecked">true</xar:set>
-                                        </xar:if>
-                                        <!-- Store the disabled attribute -->
-                                        <xar:set name="hookmoddisabled">true</xar:set>
-                                        <xar:if condition="$hookmod['modstatus'] eq 1">
-                                            <xar:set name="hookmoddisabled">false</xar:set>
-                                        </xar:if>
-                                        <!-- Show the proper check box -->
-                                        <xar:if condition="$itemtypechecked">
-                                            <xar:if condition="$hookmoddisabled">
-                                                <input type="checkbox" name="hooked_#$hookedmod['name']#[#$typeid#]" id="hooked_#$hookedmod['name']#_#$typeid#" value="1" checked="checked" disabled="disabled"/>
-                                            <xar:else/>
-                                                <input type="checkbox" name="hooked_#$hookedmod['name']#[#$typeid#]" id="hooked_#$hookedmod['name']#_#$typeid#" value="1" checked="checked"/>
-                                            </xar:if>
-                                        <xar:else/>
-                                            <xar:if condition="$hookmoddisabled">
-                                                <input type="checkbox" name="hooked_#$hookedmod['name']#[#$typeid#]" id="hooked_#$hookedmod['name']#_#$typeid#" value="1" disabled="disabled"/>
-                                            <xar:else/>
-                                                <input type="checkbox" name="hooked_#$hookedmod['name']#[#$typeid#]" id="hooked_#$hookedmod['name']#_#$typeid#" value="1"/>
-                                            </xar:if>
-                                        </xar:if>
-                                        <label for="hooked_#$hookedmod['name']#_#$typeid#">
-                                            #$itemtype['label']#
-                                        </label>
-                                        <br />
-                                    </xar:foreach>
-                                </div>
-                                <!-- NOTE: the position of this script thingie is important, it has to come AFTER the div above -->
-                                <xar:if condition="$hasItemTypes">
-                                    <script type="text/javascript">
-                                        setDisplayOn('itemtypes_#$hookedmod['name']#'); document.getElementById('SOME_hooked_#$hookedmod['name']#_0').checked="checked";
-                                    </script>
-                                <xar:else/>
-                                    <script type="text/javascript">
-                                        setDisplayOff('itemtypes_#$hookedmod['name']#');
-                                    </script>
-                                </xar:if>
-                            </xar:if>
-                        </fieldset>
-                    </xar:foreach>
-                    <div class="xar-align-center">
-                        <input type="submit" value="#xarML('Save Changes')#"/>
-                    </div>
                 </div>
-            </form>
-        </xar:if>
-    </xar:foreach>
+                <!-- hide hook details on page load (only if js enabled :) ) -->
+                <![CDATA[
+                <script type="text/javascript">
+                    setDisplayOff('hookdetails#$module#');
+                </script>
+                ]]>                 
+            </li>
+        </xar:foreach>
+    </ul>
+    <xar:if condition="!empty($subjects) or !empty($cats)">
+    <h3>Configure #$observers[$curhook]['displayname']# Hooks</h3>
+    <form action="#xarModURL('modules','admin','updatehooks')#" method="post">
+        <div>
+            <xar:if condition="!empty($subjects)">
+                <xar:foreach in="$subjects" key="$module" value="$modinfo">
+                    <xar:set name="subject_id">"subjects_{$module}"</xar:set>
+                    <xar:set name="subject_name">"subjects[{$module}]"</xar:set>
+                    <fieldset>
+                        <legend>#$modinfo['displayname']#</legend>
+                        <!-- hooked to none -->
+                        <div class="xar-form-input-wrapper">
+                            <xar:if condition="$modinfo['hookstate'] eq 0">
+                                <input type="radio" id="#$subject_id#_hookstate_0" name="#$subject_name#[hookstate]" value="0" checked="checked" onclick="setDisplayOff('#$subject_id#_itemtypes');"/>
+                            <xar:else/>
+                                <input type="radio" id="#$subject_id#_hookstate_0" name="#$subject_name#[hookstate]" value="0" onclick="setDisplayOff('#$subject_id#_itemtypes');"/>
+                            </xar:if>
+                            <label for="#$subject_id#_hookstate_0">Do NOT enable
+                            #$observers[$curhook]['displayname']# functionality in #$modinfo['displayname']#</label>
+                        </div>
+                        <!-- hooked to all -->
+                        <div class="xar-form-input-wrapper">
+                            <xar:if condition="$modinfo['hookstate'] eq 1">
+                                <input type="radio" id="#$subject_id#_hookstate_1" name="#$subject_name#[hookstate]" value="1" checked="checked" onclick="setDisplayOff('#$subject_id#_itemtypes');"/>
+                            <xar:else/>
+                                <input type="radio" id="#$subject_id#_hookstate_1" name="#$subject_name#[hookstate]" value="1" onclick="setDisplayOff('#$subject_id#_itemtypes');"/>
+                            </xar:if>
+                            <label for="#$subject_id#_hookstate_1">Enable
+                            #$observers[$curhook]['displayname']# functionality for ALL items in #$modinfo['displayname']#</label>
+                        </div>
+                        <!-- has itemtypes -->
+                        <xar:if condition="!empty($modinfo['itemtypes'])">  
+                            <!-- hooked to some -->                          
+                            <div class="xar-form-input-wrapper">
+                            <xar:if condition="$modinfo['hookstate'] gt 1">
+                                <input type="radio" id="#$subject_id#_hookstate_2" name="#$subject_name#[hookstate]" value="2" checked="checked" onclick="setDisplayOn('#$subject_id#_itemtypes');"/>
+                            <xar:else/>
+                                <input type="radio" id="#$subject_id#_hookstate_2" name="#$subject_name#[hookstate]" value="2" onclick="setDisplayOn('#$subject_id#_itemtypes');"/>
+                            </xar:if>
+                            <label for="#$subject_id#_hookstate_2">Enable
+                            #$observers[$curhook]['displayname']# functionality for SOME items in #$modinfo['displayname']#</label>
+                            </div>
+                             
+                            <ul class="xar-form-input-wrapper" id="#$subject_id#_itemtypes">
+                                <xar:foreach in="$modinfo['itemtypes']" key="$itemtype" value="$typeinfo">
+                                    <xar:set name="type_id">"{$subject_id}_itemtypes_{$itemtype}"</xar:set>
+                                    <xar:set name="type_name">"{$subject_name}[itemtypes][{$itemtype}]"</xar:set>
+                                    <li>
+                                        <label for="#$type_id#">
+                                            <xar:data-input id="$type_id" name="$type_name" type="checkbox" checked="$typeinfo['ishooked']"/>
+                                            #$typeinfo['label']#
+                                        </label>
+                                    </li>
+                                </xar:foreach>
+                            </ul>
+                            <!-- show/hide itemtype details on page load (only if js enabled :) ) -->
+                            <xar:if condition="$modinfo['hookstate'] gt 1">
+                                 <![CDATA[
+                                 <script type="text/javascript">
+                                     setDisplayOn('#$subject_id#_itemtypes'); document.getElementById('#$subject_id#_hookstate_2').checked="checked";
+                                 </script>
+                                ]]>
+                            <xar:else/>
+                                <![CDATA[
+                                 <script type="text/javascript">
+                                     setDisplayOff('#$subject_id#_itemtypes');
+                                 </script>
+                                ]]>
+                            </xar:if>
+                        </xar:if>               
+                    </fieldset>
+                </xar:foreach>
+            <xar:elseif condition="!empty($cats)"/>
+                <xar:foreach in="$cats" key="$cat" value="$subjects">
+                    <h4>#$cat#</h4>
+                <xar:foreach in="$subjects" key="$module" value="$modinfo">
+                    <xar:set name="subject_id">"subjects_{$module}"</xar:set>
+                    <xar:set name="subject_name">"subjects[{$module}]"</xar:set>
+                    <fieldset>
+                        <legend>#$modinfo['displayname']#</legend>
+                        <!-- hooked to none -->
+                        <div class="xar-form-input-wrapper">
+                            <xar:if condition="$modinfo['hookstate'] eq 0">
+                                <input type="radio" id="#$subject_id#_hookstate_0" name="#$subject_name#[hookstate]" value="0" checked="checked" onclick="setDisplayOff('#$subject_id#_itemtypes');"/>
+                            <xar:else/>
+                                <input type="radio" id="#$subject_id#_hookstate_0" name="#$subject_name#[hookstate]" value="0" onclick="setDisplayOff('#$subject_id#_itemtypes');"/>
+                            </xar:if>
+                            <label for="#$subject_id#_hookstate_0">Do NOT enable
+                            #$observers[$curhook]['displayname']# functionality in #$modinfo['displayname']#</label>
+                        </div>
+                        <!-- hooked to all -->
+                        <div class="xar-form-input-wrapper">
+                            <xar:if condition="$modinfo['hookstate'] eq 1">
+                                <input type="radio" id="#$subject_id#_hookstate_1" name="#$subject_name#[hookstate]" value="1" checked="checked" onclick="setDisplayOff('#$subject_id#_itemtypes');"/>
+                            <xar:else/>
+                                <input type="radio" id="#$subject_id#_hookstate_1" name="#$subject_name#[hookstate]" value="1" onclick="setDisplayOff('#$subject_id#_itemtypes');"/>
+                            </xar:if>
+                            <label for="#$subject_id#_hookstate_1">Enable
+                            #$observers[$curhook]['displayname']# functionality for ALL items in #$modinfo['displayname']#</label>
+                        </div>
+                        <!-- has itemtypes -->
+                        <xar:if condition="!empty($modinfo['itemtypes'])">  
+                            <!-- hooked to some -->                          
+                            <div class="xar-form-input-wrapper">
+                            <xar:if condition="$modinfo['hookstate'] gt 1">
+                                <input type="radio" id="#$subject_id#_hookstate_2" name="#$subject_name#[hookstate]" value="2" checked="checked" onclick="setDisplayOn('#$subject_id#_itemtypes');"/>
+                            <xar:else/>
+                                <input type="radio" id="#$subject_id#_hookstate_2" name="#$subject_name#[hookstate]" value="2" onclick="setDisplayOn('#$subject_id#_itemtypes');"/>
+                            </xar:if>
+                            <label for="#$subject_id#_hookstate_2">Enable
+                            #$observers[$curhook]['displayname']# functionality for SOME items in #$modinfo['displayname']#</label>
+                            </div>
+                             
+                            <ul class="xar-form-input-wrapper" id="#$subject_id#_itemtypes">
+                                <xar:foreach in="$modinfo['itemtypes']" key="$itemtype" value="$typeinfo">
+                                    <xar:set name="type_id">"{$subject_id}_itemtypes_{$itemtype}"</xar:set>
+                                    <xar:set name="type_name">"{$subject_name}[itemtypes][{$itemtype}]"</xar:set>
+                                    <li>
+                                        <label for="#$type_id#">
+                                            <xar:data-input id="$type_id" name="$type_name" type="checkbox" checked="$typeinfo['ishooked']"/>
+                                            #$typeinfo['label']#
+                                        </label>
+                                    </li>
+                                </xar:foreach>
+                            </ul>
+                            <!-- show/hide itemtype details on page load (only if js enabled :) ) -->
+                            <xar:if condition="$modinfo['hookstate'] gt 1">
+                                <![CDATA[
+                                 <script type="text/javascript">
+                                     setDisplayOn('#$subject_id#_itemtypes'); document.getElementById('#$subject_id#_hookstate_2').checked="checked";
+                                 </script>
+                                ]]>
+                            <xar:else/>
+                                <![CDATA[
+                                 <script type="text/javascript">
+                                     setDisplayOff('#$subject_id#_itemtypes');
+                                 </script>
+                                ]]>
+                            </xar:if>
+                        </xar:if>               
+                    </fieldset>
+                </xar:foreach>                    
+                </xar:foreach>
+            </xar:if>
+        </div>
+        <div class="xar-align-center">
+            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+            <input type="hidden" name="curhook" id="curhook" value="#$curhook#"/>
+            <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+            <input type="submit" value="#xarML('Save Changes')#"/>
+        </div>
+    </form>
+    </xar:if>
 </xar:template>

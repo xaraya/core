@@ -13,6 +13,8 @@
  *
  * @author Xaraya Development Team
  * @param $args['hookModName'] hook module we're looking for
+ * These args are deprecated since they're irrelevent to this function,
+ * it's all or nothing with hooks, you hook one object/action/area, you hook them all
  * @param $args['hookObject'] the object of the hook (item, module, ...) (optional)
  * @param $args['hookAction'] the action on that object (transform, display, ...) (optional)
  * @param $args['hookArea'] the area we're dealing with (GUI, API) (optional)
@@ -30,44 +32,8 @@ function modules_adminapi_gethookedmodules($args)
 
     // Argument check
     if (empty($hookModName)) throw new EmptyParameterException('hookModName');
+    
+    return xarHook::getObserverSubjects($hookModName);
 
-    $dbconn = xarDB::getConn();
-    $xartable      = xarDB::getTables();
-
-    $bindvars = array();
-    // TODO: This looks awfally similar to gethooklist in xarMod.php, investigate later
-    $query = "SELECT DISTINCT smods.name, hooks.s_type
-              FROM $xartable[hooks] hooks, $xartable[modules] mods, $xartable[modules] smods
-              WHERE hooks.t_module_id = mods.id AND hooks.s_module_id = smods.id AND mods.name = ?";
-    $bindvars[] = $hookModName;
-    if (!empty($hookObject)) {
-        $query .= " AND hooks.object = ?";
-        $bindvars[] = $hookObject;
-    }
-    if (!empty($hookAction)) {
-        $query .= " AND hooks.action = ?";
-        $bindvars[] = $hookAction;
-    }
-    if (!empty($hookArea)) {
-        $query .= " AND hooks.t_area = ?";
-        $bindvars[] = $hookArea;
-    }
-    $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuery($bindvars);
-
-    // modlist will hold the hooked modules
-    $modlist = array();
-    while($result->next()) {
-        list($callerModName,$callerItemType) = $result->fields;
-        if (empty($callerModName)) continue;
-        if (empty($callerItemType)) {
-            $callerItemType = 0;
-        }
-        $modlist[$callerModName][$callerItemType] = 1;
-    }
-    $result->close();
-
-    return $modlist;
 }
-
 ?>
