@@ -7,7 +7,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
-        <h2>#$displayname# Module and Hook Settings</h2>
+        <h2>#$displayname# Module Hook Settings</h2>
         <xar:if condition="!empty($observers)">
             <form action="#xarModURL('modules','admin','update')#" method="post" enctype="application/x-www-form-urlencoded">
                 <xar:var name="toggletitle">Click to toggle display of available hooks for this module.</xar:var>
