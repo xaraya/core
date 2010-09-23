@@ -156,7 +156,8 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 /**
  * This method is called by the BasicBlock class constructor
 **/
-    public function upgrade($oldversion) {
+    public function upgrade($oldversion) 
+    {
 
         switch ($oldversion) {
             case '0.0.0': // upgrade menu blocks to version 2.2.0
