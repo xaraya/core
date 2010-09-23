@@ -155,7 +155,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         foreach($fields as $name) {
             // Ignore disabled or ignored properties
             if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
-            || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED))
+            || ($this->properties[$name]->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_IGNORED))
                 continue;
 
             // Give the property this object's reference so it can send back info on missing fields
