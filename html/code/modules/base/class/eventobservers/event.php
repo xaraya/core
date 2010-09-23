@@ -10,6 +10,7 @@
 sys::import('xaraya.structures.descriptor');
 class BaseEventObserver extends ObjectDescriptor implements ixarEventObserver
 {
+    public $module = 'base';
     public function notify(ixarEventSubject $subject)
     {
         $args = $subject->getArgs();

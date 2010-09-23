@@ -680,7 +680,6 @@ interface ixarEventSubject
     public function notify();
     public function attach(ixarEventObserver $observer);
     public function detach(ixarEventObserver $observer);
-    public function getObservers();
 }
 /**
  * Event Observer Interface
