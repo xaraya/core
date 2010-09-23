@@ -586,7 +586,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     if(($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE)
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
-                    || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
                     ) {
                         $args['properties'][$name] =& $this->properties[$name];
                     } elseif (!empty($this->groupby) && in_array($name, $this->groupby)) {
@@ -601,7 +600,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 if(($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
-                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED)
                 ) {
                     $args['properties'][$name] =& $this->properties[$name];
                 } elseif (!empty($this->groupby) && in_array($name, $this->groupby)) {
