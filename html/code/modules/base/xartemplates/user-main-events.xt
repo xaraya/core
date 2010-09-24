@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="module" module="base" file="navtabs"/>
+    <xar:set name="dummy">xarVarFetch('tab', 'pre:trim:lower:str:1:', $tab, '', XARVAR_NOT_REQUIRED)</xar:set>
+    <xar:set name="activetab">'xar-tab-active'</xar:set>
+    <xar:set name="activelink">'xar-accent xar-accent-outline'</xar:set>
+    <xar:set name="inactivetab">'xar-tab'</xar:set>
+    <xar:set name="inactivelink">'xar-norm xar-norm-outline'</xar:set>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Base Module</span>
+    </div>
+    <div class="xar-mod-body">
+        <h2>EventSystem Scenario</h2>
+        <p>The event system is used by packages of Xaraya to trigger certain events in the system. These events are dispatched to the active modules which may define special functions that can act on those events.</p>
+        <p>NOTE: The event system is distinct from hooks in that events belonging to the event system are guaranteed to happen, unlike hooks which may, or may not have been configured by the site administrator.</p>
+        <div>
+            <ul class="xar-tabs xar-alt xar-norm-outline">
+                <xar:set name="tabclass">empty($tab)?$activetab:$inactivetab</xar:set>
+                <xar:set name="linkclass">empty($tab)?$activelink:$inactivelink</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarServer::getCurrentUrl(array('tab' => null))#" title="#xarML('Overview')#" class="#$linkclass#">
+                    Overview</a>
+                </li>
+                <!--
+                <xar:set name="tabclass">$tab=='functions'?$activetab:$inactivetab</xar:set>
+                <xar:set name="linkclass">$tab=='functions'?$activelink:$inactivelink</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarServer::getCurrentUrl(array('tab' => 'functions'))#" title="#xarML('Functions')#" class="#$linkclass#">
+                    Functions</a>
+                </li>
+                <xar:set name="tabclass">$tab=='subjects'?$activetab:$inactivetab</xar:set>
+                <xar:set name="linkclass">$tab=='subjects'?$activelink:$inactivelink</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarServer::getCurrentUrl(array('tab' => 'subjects'))#" title="#xarML('Subjects')#" class="#$linkclass#">
+                    Subjects</a>
+                </li>
+                <xar:set name="tabclass">$tab=='observers'?$activetab:$inactivetab</xar:set>
+                <xar:set name="linkclass">$tab=='observers'?$activelink:$inactivelink</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarServer::getCurrentUrl(array('tab' => 'observers'))#" title="#xarML('Observers')#" class="#$linkclass#">
+                    Observers</a>
+                </li>
+                <xar:set name="tabclass">$tab=='examples'?$activetab:$inactivetab</xar:set>
+                <xar:set name="linkclass">$tab=='examples'?$activelink:$inactivelink</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarServer::getCurrentUrl(array('tab' => 'examples'))#" title="#xarML('Examples')#" class="#$linkclass#">
+                    Examples</a>
+                </li>
+                -->
+            </ul>
+        </div>
+        <xar:if condition="empty($tab)">
+
+            <h2>Event Messaging System (EMS)</h2>
+            <p>The EMS is responsible for managing events and notifying event subjects</p>
+
+            <h3>Event Subjects</h3>
+            <p>Event subjects are responsible for handling notification from the EMS and notifying event observers. </p>
+
+            <h3>Event Observers</h3>
+            <p>Event observers are responsible for handling notifications from an event subject.</p>
+
+            <h3>Workflow</h3>
+            <ol>
+                <li>Event notified to EMS by caller</li>
+                <li>Event subject notified by EMS</li>
+                <li>Event observers notified by event subject</li>
+                <li>Response from event subject returned to caller</li>
+            </ol>
+
+            <h3>EMS Functions</h3>
+            <ul>
+                <li>xarEvent::registerSubject()
+                    <p>Registration of event subjects into the EMS, typically called at module init().</p>
+                </li>
+                <li>xarEvent::unregisterSubject()
+                    <p>Remove a subject from the EMS, typically called at module delete().</p>
+                </li>    
+                <li>xarEvent::registerObserver()
+                    <p>Registration of a subject observer into the EMS, typically called at module init().</p>
+                </li>   
+                <li>xarEvent::unregisterObserver()
+                    <p>Remove a subject observer from the EMS, typically called at module delete().</p>
+                </li>
+                <li>xarEvent::notify()
+                    <p>Notify an event subject.</p>
+                </li>
+            </ul>
+        <xar:elseif condition="$tab eq 'functions'"/>
+            <h2>Functions</h2>
+            
+            <h3>Registering Event Subjects</h3>
+<code><pre>
+    @param $event, name of event, required, must be unique
+    @param $module, name of module subject file can be found in, required
+    @param $area, where to look for subject file, api or class
+    @param $type, folder to look for subject file in
+                  for api $area, typically this would be user or admin
+                  for class $area, this would be a folder in modules/$module/class/
+    @param $func, the name of the function to be called when this event is raised by the EMS
+                  for api $area, this would typically by the lowercase version of the event name
+                  for class $area, this is the class method to call
+
+    xarEvent::registerSubject($event, $module, $area="class", $type="eventsubjects", $func="notify")
+</pre></code>
+
+            <h3>Registering Event Observers</h3>
+            <p></p>
+<code>
+    xarEvent::registerObserver($event, $module, $area="class", $type="eventobservers", $func="notify")
+</code>
+<!--
+        <xar:elseif condition="$tab eq 'subjects'"/>
+            <h2>Event Subjects</h2>
+            <p>Event subjects can be thought of as the definitions of events.</p>
+            <h3>Requirements</h3>
+            <ul>
+                <li>Event subjects must be unique.</li>
+                <li>All event subjects must be registered into the EMS.</li>
+                <li>All event subjects must have a corresponding subject file.</li>            
+            </ul>
+            <h3>Class Type Event Subjects</h3>
+            <p>As the name suggests, the event subject is contained in a class.</p>
+<code><pre>
+sys::import('xaraya.structures.descriptor');
+class EventSubject extends ObjectDescriptor implements ixarEventSubject
+{
+    // protected $args = array();      // from descriptor    
+    protected $observers = array(); // xarEvent::notify is responsible for populating this array 
+    protected $subject = 'Event';   // name of this event subject
+     
+    public function __construct($args=array())
+    {
+        parent::__construct($args); // $this->setArgs($args);                              
+    }
+
+    public function notify()
+    {
+        foreach ($this->observers as $obs) {
+            $response = $obs->notify($this);
+        }
+    }
+    
+    public function attach(ixarEventObserver $obs)
+    {
+        $id = $obs->module;
+        $this->observers[$id] = $obs;
+    }
+    
+    public function detach(ixarEventObserver $obs)
+    {
+        $id = $obs->module;
+        if (isset($this->observers[$id]))
+            unset($this->observers[$id]);    
+    }
+    
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+}
+</pre></code>
+                           
+        <xar:elseif condition="$tab eq 'examples'"/>
+            <h3>Examples</h3>
+            
+        <xar:else/>
+-->        
+        </xar:if>                
+    </div>
+    <div class="xar-mod-foot">
+        <p class="xar-align-center">Document Version 1.0: 23 Sep 2010</p>
+    </div>
+</xar:template>
