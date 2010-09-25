@@ -31,7 +31,7 @@ class DuplicateEventRegistrationException extends EventRegistrationException
     protected $message = 'Unable to register event subject "#(1)", already registered by another module';
 }
 
-class xarEvent extends Object 
+class xarEvents extends Object 
 {
     // Event system itemtypes 
     const SUBJECT_TYPE       = 1;   // System event subjects, handles OBSERVER_TYPE events
@@ -53,12 +53,12 @@ class xarEvent extends Object
     }
     public static function getSubjectType()
     {
-        return xarEvent::SUBJECT_TYPE;
+        return xarEvents::SUBJECT_TYPE;
     }
     
     public static function getObserverType()
     {
-        return xarEvent::OBSERVER_TYPE;
+        return xarEvents::OBSERVER_TYPE;
     }
     
     /**
@@ -77,81 +77,81 @@ class xarEvent extends Object
         $info = static::getSubject($event);
         if (empty($info)) return;
        
-        // Attempt to load subject file 
+        // Attempt to load subject 
         try {
             // file load takes care of validation for us 
             if (!self::fileLoad($info)) return; 
-        } catch (Exception $e) {
-            // @TODO: debug switch (cfr. blocks) to raise exceptions on demand
-            return;
-        }
-        // @TODO: wrap this in a try / catch 
-        $module = xarMod::getName($info['module_id']);
-        switch (strtolower($info['area'])) {
-            case 'class':
-                // define class (loadFile already checked it exists) 
-                $classname = ucfirst($module) . $info['event'] . "Subject";
-                // create subject instance, passing $args from caller
-                $subject = new $classname($args); 
-                // get observer info from subject
-                $obsinfo = static::getObservers($subject);
-                if (!empty($obsinfo)) {
-                    foreach ($obsinfo as $obs) {
-                        try {
-                            if (!self::fileLoad($obs)) continue;
-                        } catch (Exception $e) {
-                            continue;
+            $module = xarMod::getName($info['module_id']);
+            switch (strtolower($info['area'])) {
+                case 'class':
+                    // define class (loadFile already checked it exists) 
+                    $classname = ucfirst($module) . $info['event'] . "Subject";
+                    // create subject instance, passing $args from caller
+                    $subject = new $classname($args); 
+                    // get observer info from subject
+                    $obsinfo = static::getObservers($subject);
+                    if (!empty($obsinfo)) {
+                        foreach ($obsinfo as $obs) {
+                            // Attempt to load observer
+                            try {
+                                if (!self::fileLoad($obs)) continue;
+                                $obsmod = xarMod::getName($obs['module_id']);
+                                $obs['module'] = $obsmod;
+                                switch (strtolower($obs['area'])) {
+                                    case 'class':
+                                    default:
+                                        // use the defined class for the observer
+                                        $obsclass = ucfirst($obsmod) . $obs['event'] . "Observer";
+                                        // attach observer to subject                
+                                        $subject->attach(new $obsclass());
+                                    break;
+                                    case 'api':
+                                        // wrap api function in apiclass observer
+                                        sys::import("xaraya.structures.events.apiobserver");
+                                        $obsclass = "ApiEventObserver";
+                                        $subject->attach(new $obsclass($obs));
+                                    break;
+                                    case 'gui':
+                                        // wrap gui function in guiclass observer
+                                        sys::import("xaraya.structures.events.guiobserver");
+                                        $obsclass = "GuiEventObserver";
+                                        $subject->attach(new $obsclass($obs));
+                                    break;                            
+                                } 
+                            } catch (Exception $e) {
+                                // Event system never fails, ever!
+                                continue;
+                            }
                         }
-                        // @TODO: wrap this in a try / catch
-                        $obsmod = xarMod::getName($obs['module_id']);
-                        $obs['module'] = $obsmod;
-                        switch (strtolower($obs['area'])) {
-                            case 'class':
-                            default:
-                                // use the defined class for the observer
-                                $obsclass = ucfirst($obsmod) . $obs['event'] . "Observer";
-                                // attach observer to subject                
-                                $subject->attach(new $obsclass());
-                            break;
-                            case 'api':
-                                // wrap api function in apiclass observer
-                                sys::import("modules.modules.class.eventobservers.apiclass");
-                                $obsclass = "ModulesApiClassObserver";
-                                $subject->attach(new $obsclass($obs));
-                            break;
-                            case 'gui':
-                                // wrap gui function in guiclass observer
-                                sys::import("modules.modules.class.eventobservers.guiclass");
-                                $obsclass = "ModulesGuiClassObserver";
-                                $subject->attach(new $obsclass($obs));
-                            break;                            
-                        }       
                     }
-                }
-                $method = !empty($info['func']) ? $info['func'] : 'notify';
-                // always notify the subject, even if there are no observers
-                $response = $subject->$method();
-            break;
-            case 'api':
-                // fileLoad should have made sure file/func exists, but just in case...
-                try {
-                    $response = xarMod::apiFunc($module, $info['type'], $info['func'], $args);
-                } catch (Exception $e) {
+                    $method = !empty($info['func']) ? $info['func'] : 'notify';
+                    // always notify the subject, even if there are no observers
+                    $response = $subject->$method();
+                break;
+                case 'api':
+                    // fileLoad should have made sure file/func exists, but just in case...
+                    try {
+                        $response = xarMod::apiFunc($module, $info['type'], $info['func'], $args);
+                    } catch (Exception $e) {
+                        $response = false;
+                    }
+                break;
+                case 'gui':
+                    // not allowed in event subjects
+                    default:                
                     $response = false;
-                }
-            break;
-            case 'gui':
-                // not allowed in event subjects
-                default:                
-                $response = false;
-            break;          
+                break;          
+            }
+        } catch (Exception $e) {
+            // Events never fail, ever!
+            $response = false;
         }
         
         // now notify Event subject observers that an event was just raised
         // (these are generic listeners that observe every event raised)
         // We only do this if this isn't the generic Event itself...
         if ($event != 'Event') 
-            xarEvent::notify('Event', $info);
+            xarEvents::notify('Event', $info);
 
         // return the response
         return $response;
@@ -192,11 +192,11 @@ class xarEvent extends Object
      * Subjects must be api functions or class methods
      * Observers can be api or gui functions, or class methods
      * some examples
-     * xarEvent::registerSubject('MyEvent', 'base', 'class', 'eventsubject', 'notify');
+     * xarEvents::registerSubject('MyEvent', 'base', 'class', 'eventsubject', 'notify');
      * Note: by using defaults for area, type and func as above we could have just written 
-     * xarEvent::registerSubject('MyEvent', 'base);
+     * xarEvents::registerSubject('MyEvent', 'base);
      * BaseMyEventObserver::notify() in file /base/class/baseobserver/myevent.php
-     * xarEvent::registerSubject('OtherEvent', 'roles', 'api', 'user', 'otherevent');
+     * xarEvents::registerSubject('OtherEvent', 'roles', 'api', 'user', 'otherevent');
      * xarMod::apiFunc('roles', 'user', 'otherevent');
     **/
     
@@ -611,7 +611,7 @@ class xarEvent extends Object
      * @param int id id of the event item, optional
      * @param string event name of the event, optional
      * @param int module_id id of the module item belongs to, optional
-     * @param int itemtype eventsystem itemtype (xarEvent::SUBJECT_TYPE|xarEvent::OBSERVER_TYPE), optional
+     * @param int itemtype eventsystem itemtype (xarEvents::SUBJECT_TYPE|xarEvents::OBSERVER_TYPE), optional
      * @param int startnum offset to begin at, optional, default 0
      * @param int numitems number of records to return, optional, default -1 (all) 
      * @return array of event items
@@ -674,21 +674,6 @@ class xarEvent extends Object
    
     }
      
-}
-interface ixarEventSubject
-{
-    public function notify();
-    public function attach(ixarEventObserver $observer);
-    public function detach(ixarEventObserver $observer);
-}
-/**
- * Event Observer Interface
- *
- * All Event Observers must implement this
-**/
-interface ixarEventObserver
-{
-    public function notify(ixarEventSubject $subject);
 }
 
 ?>

@@ -35,7 +35,7 @@ function modules_adminapi_disablehooks($args)
         $callerItemType = 0;
     }
 
-    return xarHook::detach($hookModName, $callerModName, $callerItemType);
+    return xarHooks::detach($hookModName, $callerModName, $callerItemType);
 }
 
 ?>

@@ -50,10 +50,10 @@ function modules_admin_modify($args)
     }
 
     // Get list of hook module(s) (observers) and the available hooks supplied 
-    $observers = xarHook::getObserverModules(); 
+    $observers = xarHooks::getObserverModules(); 
     foreach ($observers as $observer => $modinfo) {
         // get subject itemtypes this observer is hooked to (if any)
-        $subjects = xarHook::getObserverSubjects($observer, $modname);
+        $subjects = xarHooks::getObserverSubjects($observer, $modname);
         $hookstate = !empty($subjects[$modname][0]);
         if (!empty($itemtypes)) {
             foreach ($itemtypes as $key => $itemtype) {

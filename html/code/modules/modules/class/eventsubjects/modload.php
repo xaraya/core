@@ -3,8 +3,8 @@
  * ModApiLoad System Event Subject
  * Notifies observers when a module is loaded (via xarMod::load)
 **/
-sys::import('modules.base.class.eventsubjects.event');
-class ModulesModLoadSubject extends BaseEventSubject implements ixarEventSubject
+sys::import('xaraya.structures.events.subject');
+class ModulesModLoadSubject extends EventSubject implements ixarEventSubject
 {
     public $subject = 'ModLoad';
     /*
@@ -14,9 +14,7 @@ class ModulesModLoadSubject extends BaseEventSubject implements ixarEventSubject
     **/
     public function __construct($modName)
     {
-        $args = array();
-        if (!empty($modName)) $args['modname'] = $modName;
-        parent::__construct($args); // $this->setArgs($args);                              
+        parent::__construct($modname);                             
     }
 }
 ?>

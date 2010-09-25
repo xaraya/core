@@ -1,6 +1,6 @@
 <?php
-sys::import('modules.base.class.eventsubjects.event');
-class BaseSessionCreateSubject extends BaseEventSubject implements ixarEventSubject
+sys::import('xaraya.structures.events.subject');
+class BaseSessionCreateSubject extends EventSubject implements ixarEventSubject
 {
     protected $subject = 'SessionCreate';
 }

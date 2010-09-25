@@ -41,7 +41,7 @@ function modules_adminapi_enablehooks($args)
         $callerItemType = 0;
     }
 
-    return xarHook::attach($hookModName, $callerModName, $callerItemType);
+    return xarHooks::attach($hookModName, $callerModName, $callerItemType);
     
 }
 

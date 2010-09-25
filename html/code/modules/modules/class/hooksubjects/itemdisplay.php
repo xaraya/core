@@ -7,8 +7,8 @@
 /**
  * GUI type hook, observers should return string template data
 **/
-sys::import('modules.modules.class.eventsubjects.guihook');
-class ModulesItemDisplaySubject extends ModulesGuiHookSubject
+sys::import('xaraya.structures.hooks.guisubject');
+class ModulesItemDisplaySubject extends GuiHookSubject
 {
     public $subject = 'ItemDisplay';
     // methods inherited from parent...

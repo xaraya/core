@@ -1,52 +1,103 @@
 <?php
-
-sys::import('xaraya.structures.hooks.request');
-
-class BasicSubject extends RequestObject implements SplSubject
+/**
+ * HookSubject
+ *
+ * NOTE: this class is never called directly, but should be extended
+ * by other hook subjects. Hook subjects should only need to extend this
+ * class and overload the $subject property with their event subject name,
+ * the inherited methods will take care of the rest
+**/
+sys::import('xaraya.structures.events.subject');
+// declared abstract to prevent direct instances of this class
+abstract class HookSubject extends EventSubject implements ixarEventSubject
 {
-    function attach(SplObserver $observer)  { }
-    function detach(SplObserver $observer)  { }
-    function notify() { }
-}
-class HookSubject extends BasicSubject
-{
-    private $messenger;
+    // protected $args; // from EventSubject
+    protected $subject = 'Hook'; // change this to the name of your hook subject    
+    protected $extrainfo = array();
 
-    function attach(SplObserver $observer, $callerItemType = '')
-    {
-        if (!xarModIsHooked($observer->getmodule(), $this->getmodule(), $callerItemType))
-        xarMod::apiFunc('modules','admin','enablehooks',array('callerModName' => $this->getmodule(), 'hookModName' => $observer->getmodule(), 'callerItemType' => $callerItemType));
-    }
+    /**
+     * constructor
+     * This is common to all hook subjects
+     * declared final, should not be overloaded
+     * 
+     * @param array $args, array containing hook caller item params and values
+     * @return void
+     * @throws BadParameterException
+    **/    
+    final public function __construct($args=array())
+    {   
+        // The basic premise here is to support legacy hooks using (array('objectid', 'extrainfo'))
+        // whilst allowing a more sane approach for hook observers written as classes
+        // in $this->args we will store the array for legacy hook functions
+        // when notified, the EMS passes $this->getArgs() to legacy hook functions for us
+        // in $this->args[extrainfo] we will store the array for class based observers
+        // when notified, the observer can obtain extrainfo in one hit from $subject->getExtrainfo();    
+    
+        // all validation happens here, so hook observers never need to check
+        extract($args);
+             
+        if (empty($extrainfo))
+            $extrainfo = array();
+        if (!is_array($extrainfo)) 
+            throw new BadParameterException('extrainfo');
+        
+        if (empty($module)) {
+            if (!empty($extrainfo['module'])) {
+                $module = $extrainfo['module'];
+            } else {
+                // @CHECKME: is module name ever omitted for this to happen? 
+                list($module) = xarController::$request->getInfo();
+            }
+        }
+        $module_id = xarMod::getRegID($module);
+        if (empty($module_id)) 
+            throw new BadParameterException('module');
+        
+        if (empty($itemtype) && !empty($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype']))
+            $itemtype = $extrainfo['itemtype'];
+        if (!empty($itemtype) && !is_numeric($itemtype)) 
+            throw new BadParameterException('itemtype');
+        if (empty($itemtype)) $itemtype = null;
+        
+        if (empty($objectid)) {
+            // check for item id passed in $args (new way)            
+            if (!empty($id)) {
+                $objectid = $id;
+            } elseif (!empty($itemid)) {
+                $objectid = $itemid;
+            }          
+        }
+        // check for item id passed in extrainfo (old way)
+        if (empty($objectid) && !empty($extrainfo['itemid']))
+            $objectid = $extrainfo['itemid'];
+        // NOTE: we can't check var type numeric, since objectid can be a module name, eg for ModuleRemove
+        if (empty($objectid))
+            throw new BadParameterException('objectid');
+            
+        // this is the minimum data the hook observer can always expect in extrainfo 
+        $extrainfo['itemid'] = $objectid;
+        $extrainfo['module'] = $module;
+        $extrainfo['module_id'] = $module_id;
+        $extrainfo['itemtype'] = $itemtype;
+        // merge any args not already in extrainfo
+        foreach ($args as $k => $v) {
+            if ($k == 'extrainfo' || isset($extrainfo[$k])) continue;
+            $extrainfo[$k] = $v;
+        } 
+        $args = array(
+            'objectid' => $objectid,
+            'extrainfo' => $extrainfo,
+        );
+        // set $args
 
-    function detach(SplObserver $observer, $callerItemType = '')
-    {
-        xarMod::apiFunc('modules','admin','disablehooks',array('callerModName' => $this->getmodule(), 'hookModName' => $observer->getmodule(), 'callerItemType' => $callerItemType));
+        parent::__construct($args);
     }
-
-    function getMessenger($itemid=0, $extrainfo=array())
+    
+    public function getExtrainfo()
     {
-        sys::import('xaraya.structures.hooks.messenger');
-        $this->messenger = new HookMessenger($this->module, $this->itemtype, $itemid, $extrainfo);
-        return $this->messenger;
+        $args = $this->getArgs();
+        if (isset($args['extrainfo'])) 
+            return $args['extrainfo'];
     }
-
-    function notify()
-    {
-        if (empty($this->module)) $this->module = null;
-        if ($this->itemtype == 'All') $this->itemtype = '';
-
-        return xarModCallHooks($this->messenger->gethookObject(), $this->messenger->gethookAction(), $this->messenger->getitemid(), $this->messenger->getextraInfo(), $this->module, $this->itemtype);
-    }
-    function getHooklist()
-    {
-        if ($this->itemtype == "All") $this->itemtype = '';
-        return xarModGetHookList($this->module, $this->messenger->gethookObject(), $this->messenger->gethookAction(), $this->itemtype);
-    }
-    function isHooked($hookModName)
-    {
-        if ($this->itemtype == "All") $this->itemtype = '';
-        return xarModIsHooked($hookModName, $this->module, $this->itemtype);
-    }
-
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
-sys::import('modules.base.class.eventsubjects.event');
-class BaseServerRequestSubject extends BaseEventSubject implements ixarEventSubject
+sys::import('xaraya.structures.events.subject');
+class BaseServerRequestSubject extends EventSubject implements ixarEventSubject
 {
     protected $subject = 'ServerRequest';
 }

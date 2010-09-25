@@ -37,20 +37,20 @@ function modules_adminapi_updatehooks($args)
     if (!empty($subjects) && is_array($subjects)) {
         foreach ($subjects as $module => $values) {
             // remove current assignments
-            xarHook::detach($curhook, $module, -1);
+            xarHooks::detach($curhook, $module, -1);
             if ($values['hookstate'] == 0) {
                 // not hooked to any itemtypes
                 continue;
             } elseif ($values['hookstate'] == 1) {
                 // hooked to all itemtypes
-                xarHook::attach($curhook, $module, 0);
+                xarHooks::attach($curhook, $module, 0);
                 continue;
             } else {
                 // hooked to some itemtypes
                 if (!empty($values['itemtypes'])) {
                     foreach ($values['itemtypes'] as $id => $ishooked) {
                         if (!empty($ishooked)) {
-                            xarHook::attach($curhook, $module, $id);
+                            xarHooks::attach($curhook, $module, $id);
                             continue;
                         } 
                     }
@@ -72,18 +72,18 @@ function modules_adminapi_updatehooks($args)
             // hooked_$mod['name'][0] contains the global setting ( 0 -> not, 1 -> all, 2 -> some)
             xarVarFetch("hooked_" . $mod['name'],'isset',$ishooked,'',XARVAR_DONT_REUSE);
             // remove current assignments       
-            xarHook::detach($curhook, $mod['name'], -1);        
+            xarHooks::detach($curhook, $mod['name'], -1);        
             // No setting or explicit NOT, skip it (note: empty shouldn't occur anymore
             if (!empty($ishooked) && $ishooked[0] != 0) {                        
                 if ($ishooked[0] == 1) {
                     // hooked to all itemtypes
-                    xarHook::attach($curhook, $mod['name'], 0);
+                    xarHooks::attach($curhook, $mod['name'], 0);
                 } elseif ($ishooked[0] == 2) {
                     // hooked to some itemtypes
                     foreach (array_keys($ishooked) as $itemtype) {
                         // skip itemtype 0                    
                         if ($itemtype == 0) continue;
-                        xarHook::attach($curhook, $mod['name'], $itemtype);
+                        xarHooks::attach($curhook, $mod['name'], $itemtype);
                     }
                 }                
             }

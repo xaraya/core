@@ -184,7 +184,7 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
 
     // User logged in successfully, trigger the proper event with the new userid
     //xarEvents::trigger('UserLogin',$userId);
-    xarEvent::notify('UserLogin', $userId);
+    xarEvents::notify('UserLogin', $userId);
     xarSession::delVar('privilegeset');
     return true;
 }
@@ -213,7 +213,7 @@ function xarUserLogOut()
 
     // User logged out successfully, trigger the proper event with the old userid
     //xarEvents::trigger('UserLogout',$userId);
-    xarEvent::notify('UserLogout',$userId);
+    xarEvents::notify('UserLogout',$userId);
     
     xarSession::delVar('privilegeset');
     return true;

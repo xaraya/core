@@ -71,19 +71,19 @@
 
             <h3>EMS Functions</h3>
             <ul>
-                <li>xarEvent::registerSubject()
+                <li>xarEvents::registerSubject()
                     <p>Registration of event subjects into the EMS, typically called at module init().</p>
                 </li>
-                <li>xarEvent::unregisterSubject()
+                <li>xarEvents::unregisterSubject()
                     <p>Remove a subject from the EMS, typically called at module delete().</p>
                 </li>    
-                <li>xarEvent::registerObserver()
+                <li>xarEvents::registerObserver()
                     <p>Registration of a subject observer into the EMS, typically called at module init().</p>
                 </li>   
-                <li>xarEvent::unregisterObserver()
+                <li>xarEvents::unregisterObserver()
                     <p>Remove a subject observer from the EMS, typically called at module delete().</p>
                 </li>
-                <li>xarEvent::notify()
+                <li>xarEvents::notify()
                     <p>Notify an event subject.</p>
                 </li>
             </ul>
@@ -102,13 +102,13 @@
                   for api $area, this would typically by the lowercase version of the event name
                   for class $area, this is the class method to call
 
-    xarEvent::registerSubject($event, $module, $area="class", $type="eventsubjects", $func="notify")
+    xarEvents::registerSubject($event, $module, $area="class", $type="eventsubjects", $func="notify")
 </pre></code>
 
             <h3>Registering Event Observers</h3>
             <p></p>
 <code>
-    xarEvent::registerObserver($event, $module, $area="class", $type="eventobservers", $func="notify")
+    xarEvents::registerObserver($event, $module, $area="class", $type="eventobservers", $func="notify")
 </code>
 <!--
         <xar:elseif condition="$tab eq 'subjects'"/>
@@ -127,7 +127,7 @@ sys::import('xaraya.structures.descriptor');
 class EventSubject extends ObjectDescriptor implements ixarEventSubject
 {
     // protected $args = array();      // from descriptor    
-    protected $observers = array(); // xarEvent::notify is responsible for populating this array 
+    protected $observers = array(); // xarEvents::notify is responsible for populating this array 
     protected $subject = 'Event';   // name of this event subject
      
     public function __construct($args=array())

@@ -7,8 +7,8 @@
 /**
  * API type hook, observers should return array of $extrainfo
 **/
-sys::import('modules.modules.class.eventsubjects.apihook');
-class ModulesModuleUpdateconfigSubject extends ModulesApiHookSubject
+sys::import('xaraya.structures.hooks.apisubject');
+class ModulesModuleUpdateconfigSubject extends ApiHookSubject
 {
     public $subject = 'ModuleUpdateconfig';
     // methods inherited from parent

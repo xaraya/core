@@ -116,7 +116,7 @@ function xarMain()
 
         // We're all done, one ServerRequest made
         //xarEvents::trigger('ServerRequest');
-        xarEvent::notify('ServerRequest');
+        xarEvents::notify('ServerRequest');
         
         // Set page template
         if ($request->getType() == 'admin' && xarTplGetPageTemplateName() == 'default') {

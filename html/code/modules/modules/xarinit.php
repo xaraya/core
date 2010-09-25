@@ -361,39 +361,39 @@ function modules_upgrade($oldversion)
             /* System Events */
             // Register base module event subjects
             // Base module inits before modules, so we have to register events for it here
-            xarEvent::registerSubject('Event', 'base');
-            xarEvent::registerSubject('ServerRequest', 'base');
-            xarEvent::registerSubject('SessionCreate', 'base');
+            xarEvents::registerSubject('Event', 'base');
+            xarEvents::registerSubject('ServerRequest', 'base');
+            xarEvents::registerSubject('SessionCreate', 'base');
     
             // Register base module event observers
-            xarEvent::registerObserver('Event', 'base');
+            xarEvents::registerObserver('Event', 'base');
 
             // Register modules module event subjects
-            xarEvent::registerSubject('ModLoad', 'modules');
-            xarEvent::registerSubject('ModApiLoad', 'modules');
+            xarEvents::registerSubject('ModLoad', 'modules');
+            xarEvents::registerSubject('ModApiLoad', 'modules');
 
             /* Hook Events */
             // Register modules module hook event subjects 
-            xarHook::registerSubject('ModuleModifyconfig', 'modules');
-            xarHook::registerSubject('ModuleUpdateconfig', 'modules');
-            xarHook::registerSubject('ModuleRemove', 'modules');
+            xarHooks::registerSubject('ModuleModifyconfig', 'modules');
+            xarHooks::registerSubject('ModuleUpdateconfig', 'modules');
+            xarHooks::registerSubject('ModuleRemove', 'modules');
 
-            xarHook::registerSubject('ModuleInit', 'modules');
-            xarHook::registerSubject('ModuleActivate', 'modules');
-            xarHook::registerSubject('ModuleUpgrade', 'modules');
+            xarHooks::registerSubject('ModuleInit', 'modules');
+            xarHooks::registerSubject('ModuleActivate', 'modules');
+            xarHooks::registerSubject('ModuleUpgrade', 'modules');
 
             // Module itemtype hook  subjects
-            xarHook::registerSubject('ItemtypeCreate', 'modules');
-            xarHook::registerSubject('ItemtypeDelete', 'modules');
-            xarHook::registerSubject('ItemtypeView', 'modules');
+            xarHooks::registerSubject('ItemtypeCreate', 'modules');
+            xarHooks::registerSubject('ItemtypeDelete', 'modules');
+            xarHooks::registerSubject('ItemtypeView', 'modules');
 
             // Module item hook  subjects (@TODO: these should no longer apply to roles) 
-            xarHook::registerSubject('ItemNew', 'modules');
-            xarHook::registerSubject('ItemCreate', 'modules');
-            xarHook::registerSubject('ItemModify', 'modules'); 
-            xarHook::registerSubject('ItemUpdate', 'modules');
-            xarHook::registerSubject('ItemDisplay', 'modules');
-            xarHook::registerSubject('ItemDelete', 'modules');
+            xarHooks::registerSubject('ItemNew', 'modules');
+            xarHooks::registerSubject('ItemCreate', 'modules');
+            xarHooks::registerSubject('ItemModify', 'modules'); 
+            xarHooks::registerSubject('ItemUpdate', 'modules');
+            xarHooks::registerSubject('ItemDisplay', 'modules');
+            xarHooks::registerSubject('ItemDelete', 'modules');
             
             // @TODO: other hook subjects 
             

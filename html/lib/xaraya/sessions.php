@@ -60,7 +60,7 @@ function xarSession_init(&$args)
         if($session->register($ipAddress)) {
             // Congratulations. We have created a new session
             //xarEvents::trigger('SessionCreate');
-            xarEvent::notify('SessionCreate');
+            xarEvents::notify('SessionCreate');
         } else {
             // Registering failed, now what?
         }

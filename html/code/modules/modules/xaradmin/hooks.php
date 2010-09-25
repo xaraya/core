@@ -30,7 +30,7 @@ function modules_admin_hooks($args)
         $get['observer_id'] = xarMod::getRegID($curhook);
 
     // Get list of hook module(s) (observers) and the available hooks supplied 
-    $hookmods = xarHook::getObserverModules($get);
+    $hookmods = xarHooks::getObserverModules($get);
 
     if (!empty($curhook) && isset($hookmods[$curhook])) {
         $get = array();
@@ -40,7 +40,7 @@ function modules_admin_hooks($args)
         $modules = xarMod::apiFunc('modules', 'admin', 'getlist', $get);
         if (!isset($modules)) return;
         // get list of modules / itemtypes this module is hooked to
-        $obssubjects = xarHook::getObserverSubjects($curhook);        
+        $obssubjects = xarHooks::getObserverSubjects($curhook);        
         $cats = array();
         $subjects = array();
         foreach ($modules as $k => $modinfo) {

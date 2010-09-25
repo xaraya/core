@@ -33,7 +33,7 @@ function modules_adminapi_gethookedmodules($args)
     // Argument check
     if (empty($hookModName)) throw new EmptyParameterException('hookModName');
     
-    return xarHook::getObserverSubjects($hookModName);
+    return xarHooks::getObserverSubjects($hookModName);
 
 }
 ?>

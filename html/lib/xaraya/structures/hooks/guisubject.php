@@ -12,13 +12,11 @@
 /**
  * GUI type hook, observers should return string template data
 **/
-sys::import('modules.modules.class.eventsubjects.hook');
-abstract class ModulesGuiHookSubject extends ModulesHookSubject
+sys::import('xaraya.structures.hooks.subject');
+abstract class GuiHookSubject extends HookSubject
 {
-    public $subject = 'GuiHook';  // change this to the name of your event subject
-
+    protected $subject = 'GuiHook';  // change this to the name of your event subject
     protected $hookoutput = array(); // property to store array of hooked module responses 
-
     /**
      * Notify hooked observers
      * @todo: it shouldn't be necessary to overload this method, make it final?
@@ -30,11 +28,15 @@ abstract class ModulesGuiHookSubject extends ModulesHookSubject
     public function notify()
     {
         foreach ($this->observers as $obs) {
-            // @TODO: wrap this in a try / catch clause, hooks shouldn't fail, ever! 
-            // notify observer and store response in hookoutput property keyed by hook module name
-            $this->hookoutput[$obs->module] = $obs->notify($this);
+            try { 
+                // notify observer and store response in hookoutput property keyed by hook module name
+                $this->hookoutput[$obs->module] = $obs->notify($this);
+            } catch (Exception $e) {
+                // hooks shouldn't fail, ever!
+                continue;
+            }
         }
-        // return array of hooked responses 
+        // return array of hookoutput 
         return $this->hookoutput;
     }
 }

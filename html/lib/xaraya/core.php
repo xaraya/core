@@ -254,7 +254,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      *
      */
     sys::import('xaraya.events');
-    xarEvent::init($systemArgs);
+    xarEvents::init($systemArgs);
 
 /* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ?
     sys::import('xaraya.autoload');

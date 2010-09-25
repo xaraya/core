@@ -1008,9 +1008,9 @@ class xarMod extends Object implements IxarMod
         // Module loaded successfully, trigger the proper event
         //xarEvents::trigger('ModLoad', $modName);
         if (preg_match('/(.*)?api$/', $modType)) {
-            xarEvent::notify('ModApiLoad', $modName);
+            xarEvents::notify('ModApiLoad', $modName);
         } else {
-            xarEvent::notify('ModLoad', $modName);
+            xarEvents::notify('ModLoad', $modName);
         }        
         return true;
     }
