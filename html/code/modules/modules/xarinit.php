@@ -297,6 +297,10 @@ function modules_upgrade($oldversion)
                  *   event      varchar(254) NOT NULL,
                  *   module_id  integer default 0,
                  *   itemtype   integer default 0
+                 *   area       varchar(64) NOT NULL,
+                 *   type       varchar(64) NOT NULL,
+                 *   func       varchar(64) NOT NULL,
+                 *   scope      varchar(64) NOT NULL,
                  *   PRIMARY KEY (id)
                  * )
                  */
@@ -308,7 +312,8 @@ function modules_upgrade($oldversion)
                     'itemtype' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),
                     'area' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
                     'type' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-                    'func' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset)
+                    'func' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+                    'scope' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset)
                 );
 
                 // Create the eventsystem table
@@ -361,44 +366,57 @@ function modules_upgrade($oldversion)
             /* System Events */
             // Register base module event subjects
             // Base module inits before modules, so we have to register events for it here
-            xarEvents::registerSubject('Event', 'base');
-            xarEvents::registerSubject('ServerRequest', 'base');
-            xarEvents::registerSubject('SessionCreate', 'base');
+            xarEvents::registerSubject('Event', 'event', 'base');
+            xarEvents::registerSubject('ServerRequest', 'server', 'base');
+            xarEvents::registerSubject('SessionCreate', 'session', 'base');
     
             // Register base module event observers
             xarEvents::registerObserver('Event', 'base');
 
             // Register modules module event subjects
-            xarEvents::registerSubject('ModLoad', 'modules');
-            xarEvents::registerSubject('ModApiLoad', 'modules');
+            xarEvents::registerSubject('ModLoad', 'module', 'modules');
+            xarEvents::registerSubject('ModApiLoad', 'module', 'modules');
 
             /* Hook Events */
-            // Register modules module hook event subjects 
-            xarHooks::registerSubject('ModuleModifyconfig', 'modules');
-            xarHooks::registerSubject('ModuleUpdateconfig', 'modules');
-            xarHooks::registerSubject('ModuleRemove', 'modules');
+            // Register modules module hook subjects 
+            xarHooks::registerSubject('ModuleModifyconfig', 'module', 'modules');
+            xarHooks::registerSubject('ModuleUpdateconfig', 'module', 'modules');
+            xarHooks::registerSubject('ModuleRemove', 'module', 'modules');
 
-            xarHooks::registerSubject('ModuleInit', 'modules');
-            xarHooks::registerSubject('ModuleActivate', 'modules');
-            xarHooks::registerSubject('ModuleUpgrade', 'modules');
+            xarHooks::registerSubject('ModuleInit', 'module', 'modules');
+            xarHooks::registerSubject('ModuleActivate', 'module', 'modules');
+            xarHooks::registerSubject('ModuleUpgrade', 'module', 'modules');
 
-            // Module itemtype hook  subjects
-            xarHooks::registerSubject('ItemtypeCreate', 'modules');
-            xarHooks::registerSubject('ItemtypeDelete', 'modules');
-            xarHooks::registerSubject('ItemtypeView', 'modules');
+            // Module itemtype hook subjects
+            xarHooks::registerSubject('ItemtypeCreate', 'itemtype', 'modules');
+            xarHooks::registerSubject('ItemtypeDelete', 'itemtype', 'modules');
+            xarHooks::registerSubject('ItemtypeView', 'itemtype', 'modules');
 
-            // Module item hook  subjects (@TODO: these should no longer apply to roles) 
-            xarHooks::registerSubject('ItemNew', 'modules');
-            xarHooks::registerSubject('ItemCreate', 'modules');
-            xarHooks::registerSubject('ItemModify', 'modules'); 
-            xarHooks::registerSubject('ItemUpdate', 'modules');
-            xarHooks::registerSubject('ItemDisplay', 'modules');
-            xarHooks::registerSubject('ItemDelete', 'modules');
+            // Module item hook subjects (@TODO: these should no longer apply to roles) 
+            xarHooks::registerSubject('ItemNew', 'item', 'modules');
+            xarHooks::registerSubject('ItemCreate', 'item', 'modules');
+            xarHooks::registerSubject('ItemModify', 'item', 'modules'); 
+            xarHooks::registerSubject('ItemUpdate', 'item', 'modules');
+            xarHooks::registerSubject('ItemDisplay', 'item', 'modules');
+            xarHooks::registerSubject('ItemDelete', 'item', 'modules');
+            xarHooks::registerSubject('ItemSubmit', 'item', 'modules');            
+            // Transform hooks
+            // @TODO: these really need to go away...
+            xarHooks::registerSubject('ItemTransform', 'item', 'modules');
+            xarHooks::registerSubject('ItemTransforminput', 'item', 'modules');           
+
+            // @TODO: these need evaluating
+            xarHooks::registerSubject('ItemFormheader', 'item', 'modules');
+            xarHooks::registerSubject('ItemFormaction', 'item', 'modules');
+            xarHooks::registerSubject('ItemFormdisplay', 'item', 'modules');
+            xarHooks::registerSubject('ItemFormarea', 'item', 'modules');
+
+            // Register base module hook subjects 
+            xarHooks::registerSubject('ItemWaitingcontent', 'item', 'base'); 
             
-            // @TODO: other hook subjects 
-            
-            // NOTE UserLogin and UserLogout are registered by authsystem module 
-            // @TODO: Roles module to registers User* and Group* events            
+            // NOTE: UserLogin and UserLogout are registered by authsystem module
+            // NOTE: ItemSearch is registered by search module 
+            // @TODO: Roles module to register User* and Group* event subjects            
         case '2.2.0':
             break;
     }

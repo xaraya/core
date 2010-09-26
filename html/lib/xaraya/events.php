@@ -31,7 +31,7 @@ class DuplicateEventRegistrationException extends EventRegistrationException
     protected $message = 'Unable to register event subject "#(1)", already registered by another module';
 }
 
-class xarEvents extends Object 
+class xarEvents extends Object implements ixarEvents
 {
     // Event system itemtypes 
     const SUBJECT_TYPE       = 1;   // System event subjects, handles OBSERVER_TYPE events
@@ -41,8 +41,6 @@ class xarEvents extends Object
     // @TODO: evaluate caching
     protected static $subjects;
     protected static $observers;
-    
-    protected static $_itemtypes;
 
     public static function init(&$args)
     {
@@ -72,7 +70,7 @@ class xarEvents extends Object
     {
         // check module subsystem is up before running (SessionCreate is raised during install)
         if (!class_exists('xarMod')) return;
-
+        
         // get info for specified event
         $info = static::getSubject($event);
         if (empty($info)) return;
@@ -119,6 +117,7 @@ class xarEvents extends Object
                                     break;                            
                                 } 
                             } catch (Exception $e) {
+                                //throw $e;
                                 // Event system never fails, ever!
                                 continue;
                             }
@@ -129,12 +128,7 @@ class xarEvents extends Object
                     $response = $subject->$method();
                 break;
                 case 'api':
-                    // fileLoad should have made sure file/func exists, but just in case...
-                    try {
-                        $response = xarMod::apiFunc($module, $info['type'], $info['func'], $args);
-                    } catch (Exception $e) {
-                        $response = false;
-                    }
+                    $response = xarMod::apiFunc($module, $info['type'], $info['func'], $args);
                 break;
                 case 'gui':
                     // not allowed in event subjects
@@ -143,6 +137,7 @@ class xarEvents extends Object
                 break;          
             }
         } catch (Exception $e) {
+            //throw $e;
             // Events never fail, ever!
             $response = false;
         }
@@ -162,21 +157,29 @@ class xarEvents extends Object
      * public event registration functions
      *
     **/    
-    public static function registerSubject($event,$module,$area='class',$type='eventsubjects',$func='notify')
+    public static function registerSubject($event,$scope,$module,$area='class',$type='eventsubjects',$func='notify')
     {
-        return self::register($event, $module, $area, $type, $func, static::getSubjectType());
+        $subjecttype = static::getSubjectType();
+        $info = self::register($event, $module, $area, $type, $func, $subjecttype, $scope);
+        if (empty($info)) return;
+        self::$subjects[$subjecttype][$event] = $info;
+        return $info['id'];
     }    
     
     public static function registerObserver($event,$module,$area='class',$type='eventobservers',$func='notify')
-    {       
-        return self::register($event, $module, $area, $type, $func, static::getObserverType());
+    {     
+        $observertype = static::getObserverType();  
+        $info = self::register($event, $module, $area, $type, $func, $observertype);
+        if (empty($info)) return;
+        self::$observers[$observertype][$event][$module] = $info;
+        return $info['id'];
     }    
     
     /**
      * event registration function
      * used internally by registerSubject and registerObserver methods 
      *
-     * @access protected
+     * @access public
      * @param string $event name of the event to observer or listener, required
      * @param mixed $module either string name of module, or int regid of module
      * @param string $area, name of area where file can be found (class|gui|api)
@@ -200,7 +203,7 @@ class xarEvents extends Object
      * xarMod::apiFunc('roles', 'user', 'otherevent');
     **/
     
-    protected static function register($event,$module,$area='class',$type='eventobservers',$func='notify', $itemtype) 
+    final public static function register($event,$module,$area='class',$type='eventobservers',$func='notify', $itemtype, $scope="") 
     {
         // check module subsystem is up before running
         if (!class_exists('xarMod')) return;
@@ -212,17 +215,34 @@ class xarEvents extends Object
             'type' => $type,
             'func' => $func,
             'itemtype' => $itemtype,
+            'scope' => $scope,
         );        
                       
         // file load takes care of validation, any invalid input throws an exception 
         if (!self::fileLoad($info)) return;
-        
-        $module_id = !is_numeric($module) ? xarMod::getRegID($module) : $module; 
-        $info['module_id'] = $module_id;
 
-        // check if item already exists
-        $exists = static::getItem($info);
-        if (!empty($exists)) return $exists['id'];
+        if ($itemtype == static::getSubjectType()) {
+            // see if subject is already registered            
+            $subject = static::getSubject($event);
+            // event subjects must be unique! (event, module, itemtype)
+            if (!empty($subject)) {
+                if ($subject['module'] == $module) {
+                    // same module, registering same event subject
+                    // unregister the event so it can be re-registered ( = updated :) )
+                    if (!static::unregisterSubject($event, $module)) return;
+                } else {
+                    // oops, that event is already registered by another module, pick a different one!
+                    throw new DuplicateEventRegistrationException($event);
+                }
+            }
+        } elseif ($itemtype == static::getObserverType()) {
+             // event observers don't need to be unique, but each module can 
+             // only register one observer per event subject
+             // unregister the event so it can be re-registered ( = updated :) )
+             if (!static::unregisterObserver($event, $module)) return;
+        }
+        
+        $module_id = xarMod::getRegID($module);        
         
          // create entry in db
         $dbconn = xarDB::getConn();
@@ -238,9 +258,10 @@ class xarEvents extends Object
                   area,
                   type,
                   func,
-                  itemtype
+                  itemtype,
+                  scope
                   )
-                  VALUES (?,?,?,?,?,?,?)";
+                  VALUES (?,?,?,?,?,?,?,?)";
 
         $bindvars = array();
         $bindvars[] = $nextId;
@@ -250,6 +271,7 @@ class xarEvents extends Object
         $bindvars[] = $type;
         $bindvars[] = $func;
         $bindvars[] = $itemtype;
+        $bindvars[] = $scope;
 
         $result = $dbconn->Execute($query,$bindvars);
         if (!$result) return;
@@ -257,15 +279,14 @@ class xarEvents extends Object
         $id = $dbconn->PO_Insert_ID($emstable, 'id');
         if (empty($id)) return;
         $info['id'] = $id;
- 
-        self::$_itemtypes[$itemtype][$event] = $info;
+        $info['module_id'] = $module_id;
         
-        return $id;
+        return $info;
     }
     
-    public static function fileLoad($args)
+    public static function fileLoad($info)
     {
-        extract($args);
+        extract($info);
         
         // validate input, some methods (register/notify) use this to validate input     
         $invalid = array();
@@ -308,8 +329,8 @@ class xarEvents extends Object
         $area = strtolower($area);
         $module = $modinfo['name'];
         static $_files = array();
-        if (isset($_files[$event][$itemtype][$module]))
-            return $_files[$event][$itemtype][$module];
+        if (isset($_files[$itemtype][$event][$module]))
+            return $_files[$itemtype][$event][$module];
         $loaded = false;
         
         switch ($area) {
@@ -335,9 +356,6 @@ class xarEvents extends Object
             
             case 'gui':
             case 'api':
-                // type is required for api and gui funcs 
-                if (empty($type) || !is_string($type))
-                    throw new BadParameterException('type');
                 // use name of event as function name if none specified
                 if (empty($func)) $func = strtolower($event);
                 // use name of func as filename
@@ -363,18 +381,26 @@ class xarEvents extends Object
                 $loaded = true;
             break;
         } 
-        return $_files[$event][$itemtype][$module] = $loaded;
+        return $_files[$itemtype][$event][$module] = $loaded;
     }
         
 
     public static function unregisterSubject($event, $module)
     {
-        return self::unregister($event, $module, static::getSubjectType());
+        $subjecttype = static::getSubjectType();
+        if (!self::unregister($event, $module, $subjecttype)) return;
+        if (isset(self::$subjects[$subjecttype][$event]))
+            unset(self::$subjects[$subjecttype][$event]);
+        return true;
     }
     
     public static function unregisterObserver($event, $module)
     {
-        return self::unregister($event, $module, static::getObserverType());
+        $observertype = static::getObserverType();
+        if (!self::unregister($event, $module, $observertype)) return;
+        if (isset(self::$observers[$observertype][$event][$module]))
+            unset(self::$observers[$observertype][$event][$module]);
+        return true;
     }
 
     
@@ -405,25 +431,18 @@ class xarEvents extends Object
             $msg = "Invalid #(1) for method #(2)() in class #(3)";
             throw new BadParameterException($vars, $msg);
         }
-        
-        $exists = static::getItem($info);
-        // already gone, we're done...
-        if (empty($exists)) return true;        
-        
+                
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
         $bindvars = array();
         $emstable = $tables['eventsystem'];
                 
         // remove event item
-        $query = "DELETE FROM $emstable WHERE id = ?";
-        $bindvars[] = $info['id'];
+        $query = "DELETE FROM $emstable WHERE event = ? AND module_id = ? AND itemtype = ?";
+        $bindvars = array($event, $module_id, $itemtype);
         $result = &$dbconn->Execute($query,$bindvars);
         if (!$result) return;
-        if ($itemtype == static::getSubjectType()) {                
-            if (isset(self::$_itemtypes[$itemtype][$event]))
-                unset(self::$_itemtypes[$itemtype][$event]);
-        }
+
         return true;
     } 
 
@@ -434,98 +453,95 @@ class xarEvents extends Object
      * Get db info for an event subject
      * 
      * @param string $event name of event subject, required
-     * @return mixed array of subject info or bool false    
+     * @return mixed array of subject info or bool false
+     * used internally by the event system, must not be overloaded  
     **/
-    public static function getSubject($event)
+    final public static function getSubject($event)
     {
+        // init the cache, if it isn't already init'ed
         static::getSubjects();
-        $itemtype = static::getSubjectType();
-        if (isset(self::$_itemtypes[$itemtype][$event]))
-            return self::$_itemtypes[$itemtype][$event];
-        return false;
+        $subjecttype = static::getSubjectType();
+        if (!isset(self::$subjects[$subjecttype][$event]))
+            self::$subjects[$subjecttype][$event] = array();
+        return self::$subjects[$subjecttype][$event];
     }
 
     /**
-     * Get all subjects from db
+     * Load all subjects from db for current subject type
+     * We only ever do this once per page request, results are cached
      * @param none
      * @return array containing subjects, indexed by event name
+     * used internally by the event system, must not be overloaded 
     **/
-    public static function getSubjects()
+    final public static function getSubjects()
     {
-        $itemtype = static::getSubjectType();
-        if (isset(self::$_itemtypes[$itemtype]))
-            return self::$_itemtypes[$itemtype];
-        // first (only) run, get event subjects from db
-        $args = array('itemtype' => $itemtype);
-        $subjects = static::getItems($args);
-        if (!isset(self::$_itemtypes[$itemtype]))
-            self::$_itemtypes[$itemtype] = array();
-        foreach ($subjects as $subject) {
-            $event = $subject['event'];
-            // add each event subject to the static cache
-            self::$_itemtypes[$itemtype][$event] = $subject;
-        }
-        // return cached event subjects
-        return self::$_itemtypes[$itemtype];
+        $subjecttype = static::getSubjectType();
+        if (isset(self::$subjects[$subjecttype]))
+            return self::$subjects[$subjecttype];
+        
+        // initialize the cache (we only ever run this query once per subject type)
+        self::$subjects[$subjecttype] = array();
+
+        // Get database info
+        $dbconn   = xarDB::getConn();
+        $xartable = xarDB::getTables();
+        $etable = $xartable['eventsystem'];
+        $mtable = $xartable['modules'];
+        $bindvars = array();
+        $where = array();
+        $query = "SELECT es.id, es.event, es.module_id, es.area, es.type, es.func, es.itemtype, es.scope,
+                         ms.name
+                  FROM $etable es, $mtable ms";
+        // get subjects for valid, active modules only 
+        $where[] = "es.module_id = ms.regid";
+        $where[] = "ms.state = ?";
+        $bindvars[] = XARMOD_STATE_ACTIVE;
+        // get subjects for current subjecttype
+        $where[] = "es.itemtype = ?";
+        $bindvars[] = $subjecttype;        
+        $query .= " WHERE " . join(" AND ", $where);
+        // order by module, event (doesn't really matter for subjects)
+        $query .= " ORDER BY ms.name ASC, es.event ASC";                  
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
+        if (!$result) return;
+        while($result->next()) {
+            list($id, $event, $module_id, $area, $type, $func, $itemtype, $scope, $module) = $result->fields;
+            // cache results            
+            self::$subjects[$subjecttype][$event] = array(
+                'id' => $id,
+                'event' => $event,
+                'module_id' => $module_id,
+                'module' => $module,
+                'area' => $area,
+                'type' => $type,
+                'func' => $func,
+                'itemtype' => $itemtype,
+                'scope' => $scope,
+            );
+        };
+        $result->close();
+        // return cached results   
+        return self::$subjects[$subjecttype];
     }
 
-    /**
-     * Get db info for an event observer
-     * 
-     * @param string $event name of event subject, required
-     * @param int $module_id, id of module observer belongs to
-     * @return mixed array of observer info or bool false    
-    **/   
-    public static function getObserver($event, $module)
-    {
-        $itemtype = static::getObserverType();
-        $module_id = is_numeric($module) ? $module : xarMod::getRegID($module);
-        $args = array('event' => $event, 'module_id' => $module_id, 'itemtype' => $itemtype);
-        return static::getItem($args);
-    }
     /**
      * Get all observers of an event subject from db
      *
-     * @param mixed $event string, name of event subject 
-     *                     object ixarEventSubject object with event name as subject property
-     *                     array subject info containing event name
-     *                     optional, default empty (all observers)
-     * @return array containing specified event observers
+     * @param object $subject ixarEventSubject
+     * @return array containing subject observers
     **/
-    public static function getObservers($event=null)
+    public static function getObservers(ixarEventSubject $subject)
     {
-        if (is_object($event)) {
-            // notify method passes whole object
-            $subject = $event->getSubject();
-        } elseif (is_string($event)) {
-            // for convenience, specifying the name of the event is supported
-            $subject = $event;
-        } elseif (is_array($event)) {
-            // passing an array containing the event is also supported
-            if (isset($event['event'])) {
-                $subject = $event['event'];
-            }
-            // @TODO: optionally filter by subject and observer type ?
-            // NOTE: default uses current static bindings from calling class
-            if (isset($event['subjecttype']) && isset($event['observertype'])) {
-                // types come in pairs
-                $subjecttype = $event['subjecttype'];
-                $observertype = $event['observertype'];
-            }
-            // optionally filter by specific subject module
-            if (isset($event['subject_id'])) {
-                $subject_id = $event['subject_id'];
-            }
-            // optionally filter by specific observer module
-            if (isset($event['observer_id'])) {
-                $observer_id = $event['observer_id'];
-            }
-        } 
-        if (empty($subjecttype) || empty($observertype)) {
-            // types come in pairs
-            $subjecttype = static::getSubjectType();     
-            $observertype = static::getObserverType();
-        }
+        $event = $subject->getSubject();
+        $info = static::getSubject($event);
+        $subjecttype = static::getSubjectType();
+        if (empty($info) || $info['itemtype'] != $subjecttype) 
+            return array();
+        $observertype = static::getObserverType();
+        
+        if (isset(self::$observers[$observertype][$event]))
+            return self::$observers[$observertype][$event];
         
         // Get database info
         $dbconn   = xarDB::getConn();
@@ -558,22 +574,10 @@ class xarEvents extends Object
         // only get observers for the current observer itemtype
         $where[] = "o.itemtype = ?";
         $bindvars[] = $observertype;
-      
-        // optionally filter by event subject        
-        if (!empty($subject)) {
-            $where[] = "s.event = ?";
-            $bindvars[] = $subject;
-        }
-        // optionally filter by subject module
-        if (!empty($subject_id)) {
-            $where[] = "s.module_id = ?";
-            $bindvars[] = $subject_id;
-        }
-        // optionally filter by observer module
-        if (!empty($observer_id)) {
-            $where[] = "o.module_id = ?";
-            $bindvars[] = $observer_id;
-        }
+        // only observers of this event subject
+        $where[] = "s.event = ?";
+        $bindvars[] = $event;
+
         $query .= " WHERE " . join(" AND ", $where);
         // order by module, event
         $query .= " ORDER BY mo.name ASC, o.event ASC";                  
@@ -582,11 +586,11 @@ class xarEvents extends Object
         if (!$result) return;
         $obs = array();
         while($result->next()) {
-            list($id, $event, $module_id, $module, $area, $type, $func, $itemtype) = $result->fields;
-            // @todo: cache these effectively 
-            $obs[] = array(
+            list($id, $evt, $module_id, $module, $area, $type, $func, $itemtype) = $result->fields;
+            // @todo: cache these effectively
+            self::$observers[$itemtype][$evt][$module] = array(
                 'id' => $id,
-                'event' => $event,
+                'event' => $evt,
                 'module_id' => $module_id,
                 'module' => $module,
                 'area' => $area,
@@ -595,85 +599,89 @@ class xarEvents extends Object
                 'itemtype' => $itemtype,
             );
         };
-        $result->close();
-        return $obs;     
-    }
-    public static function getItem($args)
-    {
-        $items = static::getItems($args);
-        if (count($items) <> 1) return;
-        return reset($items);
+        if (!isset(self::$observers[$observertype][$event])) 
+            self::$observers[$observertype][$event] = array();
+
+        return self::$observers[$observertype][$event];  
     }
 
-    /**
-     * Get event items from the db
-     * 
-     * @param int id id of the event item, optional
-     * @param string event name of the event, optional
-     * @param int module_id id of the module item belongs to, optional
-     * @param int itemtype eventsystem itemtype (xarEvents::SUBJECT_TYPE|xarEvents::OBSERVER_TYPE), optional
-     * @param int startnum offset to begin at, optional, default 0
-     * @param int numitems number of records to return, optional, default -1 (all) 
-     * @return array of event items
-    **/
-    public static function getItems(Array $args=array())
+    public static function getObserverModules()
     {
-        if (!isset($args['module_id']) && isset($args['module'])) {
-            $args['module_id'] = is_numeric($args['module']) ? $args['module'] : xarMod::getRegID($args['module']);
+        $observertype = static::getObserverType();
+        static $_modules;
+        if (isset($_modules[$observertype])) {
+            return $_modules[$observertype];
         }
-
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $_modules[$observertype] = array();
+        // Get database info
+        $dbconn   = xarDB::getConn();
+        $xartable = xarDB::getTables();
+        //$htable = $xartable['hooks'];
+        $etable = $xartable['eventsystem'];
+        $mtable = $xartable['modules'];
         $bindvars = array();
         $where = array();
-        $emstable = $tables['eventsystem'];
-        $query = "SELECT id, event, module_id, area, type, func, itemtype FROM $emstable";
-        
-        if (!empty($args['id']) && is_numeric($args['id'])) {
-            $where[] = 'id = ?';
-            $bindvars[] = $args['id'];
-        }
-        if (!empty($args['event']) && is_string($args['event'])) {
-            $where[] = 'event = ?';
-            $bindvars[] = $args['event'];
-        }
-        if (!empty($args['module_id']) && is_numeric($args['module_id'])) {
-            $where[] = 'module_id = ?';
-            $bindvars[] = $args['module_id'];
-        } 
-        if (!empty($args['itemtype']) && is_numeric($args['itemtype'])) {
-            $where[] = 'itemtype = ?';
-            $bindvars[] = $args['itemtype'];
-        }
-        
-        if (!empty($where)) {
-            $query .= " WHERE " . join(" AND ", $where);
-        }
-        
-        $numitems = empty($args['numitems']) || !is_numeric($args['numitems']) ? -1 : $args['numitems'];
-        $startnum = empty($args['startnum']) || !is_numeric($args['startnum']) ? 0 : $args['startnum']-1;
+        $query = "SELECT eo.id, eo.event, eo.module_id, eo.area, eo.type, eo.func, eo.itemtype,
+                         mo.name,
+                         es.scope
+                  FROM $etable eo, $etable es, $mtable mo, $mtable ms";
+        // get only observers with a corresponding subject registered
+        $where[] = "eo.event = es.event";
+        // make sure they belong to a valid module
+        $where[] = "eo.module_id = mo.regid";
+        // make sure they belong to an active module
+        $where[] = "mo.state = ?";
+        $bindvars[] = XARMOD_STATE_ACTIVE;
+        $where[] = "ms.state = ?";
+        $bindvars[] = XARMOD_STATE_ACTIVE;
+        // only observers of current observer itemtype
+        $where[] = "eo.itemtype = ?";
+        $bindvars[] = $observertype;
+        // only subjects of current subject itemtype
+        $where[] = "es.itemtype = ?";
+        $bindvars[] = static::getSubjectType();        
 
-        $result = $dbconn->SelectLimit($query, $numitems, $startnum, $bindvars);
+        $query .= " WHERE " . join(" AND ", $where);
+        // order by module, event
+        $query .= " ORDER BY mo.name ASC, eo.event ASC";                  
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
         if (!$result) return;
-
-        $items = array();
-        for (; !$result->EOF; $result->MoveNext()) {
-            list ($id, $event, $module_id, $area, $type, $func, $itemtype) = $result->fields;
-            $items[] = array(
+        while($result->next()) {
+            list($id, $evt, $module_id, $area, $type, $func, $itemtype, $modname, $scope) = $result->fields;
+            if (!isset($_modules[$observertype][$modname]))
+                $_modules[$observertype][$modname] = array();
+            $_modules[$observertype][$modname][$evt] = array(
                 'id' => $id,
-                'event' => $event,
+                'event' => $evt,
                 'module_id' => $module_id,
+                'module' => $modname,
                 'area' => $area,
                 'type' => $type,
                 'func' => $func,
                 'itemtype' => $itemtype,
+                'scope' => $scope,
             );
-        }
-        $result->Close();
-        return $items;
-   
+        } 
+        return $_modules[$observertype];
     }
      
+}
+
+interface ixarEvents
+{
+    public static function getSubjectType();
+    public static function getObserverType();
+    public static function getObservers(ixarEventSubject $subject);
+    public static function registerSubject($event,$scope,$module,$area,$type,$func);
+    public static function register($event,$module,$area,$type,$func,$itemtype,$scope);    
+    public static function registerObserver($event,$module,$area,$type,$func);
+    public static function unregisterSubject($event,$module);    
+    public static function unregisterObserver($event,$module);
+    public static function notify($event, $args);
+    public static function getSubject($event);
+    public static function getSubjects();
+    public static function fileLoad($info);
 }
 
 ?>

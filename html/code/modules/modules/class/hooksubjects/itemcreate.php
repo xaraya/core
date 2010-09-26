@@ -10,6 +10,6 @@
 sys::import('xaraya.structures.hooks.apisubject');
 class ModulesItemCreateSubject extends ApiHookSubject
 {
-    public $subject = 'ItemCreate';
+    protected $subject = 'ItemCreate';
 }
 ?>

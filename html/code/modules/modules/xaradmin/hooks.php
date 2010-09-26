@@ -21,16 +21,12 @@ function modules_admin_hooks($args)
 // Security Check
     if(!xarSecurityCheck('ManageModules')) return;
 
-    if (!xarVarFetch('hook', 'isset', $curhook, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('hook', 'isset', $curhook, null, XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('layout', 'pre:trim:lower:enum:bycat', $layout, 'bycat', XARVAR_NOT_REQUIRED)) return;
     extract($args);
     
-    $get = array();
-    if (!empty($curhook))
-        $get['observer_id'] = xarMod::getRegID($curhook);
-
     // Get list of hook module(s) (observers) and the available hooks supplied 
-    $hookmods = xarHooks::getObserverModules($get);
+    $hookmods = xarHooks::getObserverModules($curhook);
 
     if (!empty($curhook) && isset($hookmods[$curhook])) {
         $get = array();

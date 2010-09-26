@@ -1,13 +1,9 @@
 <?php
 
-sys::import('xaraya.structures.hooks.subject');
+sys::import('xaraya.structures.events.observer');
 
-class BasicObserver extends RequestObject implements SplObserver
+abstract class HookObserver extends EventObserver implements ixarEventObserver
 {
-
-    function update(SplSubject $subject)
-    {
-
-    }
+    public $module = "modules";
 }
 ?>

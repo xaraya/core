@@ -18,13 +18,13 @@ abstract class HookSubject extends EventSubject implements ixarEventSubject
     /**
      * constructor
      * This is common to all hook subjects
-     * declared final, should not be overloaded
+     * @TODO: declare final, shouldn't need to be overloaded ?
      * 
      * @param array $args, array containing hook caller item params and values
      * @return void
      * @throws BadParameterException
     **/    
-    final public function __construct($args=array())
+    public function __construct($args=array())
     {   
         // The basic premise here is to support legacy hooks using (array('objectid', 'extrainfo'))
         // whilst allowing a more sane approach for hook observers written as classes

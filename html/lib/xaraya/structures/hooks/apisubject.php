@@ -15,7 +15,7 @@
 sys::import('xaraya.structures.hooks.subject');
 abstract class ApiHookSubject extends HookSubject implements ixarEventSubject
 {
-    public $subject = 'ApiHook';  // change this to the name of your hook subject
+    protected $subject = 'ApiHook';  // change this to the name of your hook subject
     /**
      * Notify hooked observers
      * @todo: it shouldn't be necessary to overload this method, make it final?

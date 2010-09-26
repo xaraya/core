@@ -19,6 +19,8 @@ class xarHooks extends xarEvents
     // unique event system itemtype ids for storage/retrieval/actioning in the event system 
     const HOOK_SUBJECT_TYPE  = 3;    
     const HOOK_OBSERVER_TYPE = 4;
+    
+    protected static $hookobservers = array();
 /**    
  * required functions, provide event system with late static bindings for these values
 **/
@@ -34,9 +36,9 @@ class xarHooks extends xarEvents
      * public event registration functions
      *
     **/    
-    public static function registerSubject($event,$module,$area='class',$type='hooksubjects',$func='notify')
+    public static function registerSubject($event,$scope,$module,$area='class',$type='hooksubjects',$func='notify')
     {
-        return xarHooks::register($event, $module, $area, $type, $func, xarHooks::HOOK_SUBJECT_TYPE);
+        return xarHooks::register($event, $module, $area, $type, $func, xarHooks::HOOK_SUBJECT_TYPE, $scope);
     }    
     
     public static function registerObserver($event,$module,$area='class',$type='hookobservers',$func='notify')
@@ -47,36 +49,23 @@ class xarHooks extends xarEvents
     // this function is called when an event is raised (hook called)
     // it returns all modules hooked to the caller module (+ itemtype) that raised the event
     // NOTE: This function is called by the event module, modify with caution
-    public static function getObservers($event=null)
+    public static function getObservers(ixarEventSubject $subject)
     {
-        if (is_object($event)) {
-            // notify method passes whole object
-            $subject = $event->getSubject();
-            // name and itemtype of caller is always in extrainfo
-            $extrainfo = $event->getExtrainfo();
-            $subject_id = xarMod::getRegID($extrainfo['module']);
-            $subject_itemtype = $extrainfo['itemtype'];
-        } elseif (is_string($event)) {
-            // for convenience, specifying the name of the event is supported
-            $subject = $event;
-        } elseif (is_array($event)) {
-            // passing an array containing the event is also supported
-            if (isset($event['event'])) {
-                $subject = $event['event'];
-            }
-            // optionally filter by specific subject module
-            if (isset($event['module'])) {
-                $subject_id = xarMod::getRegID($event['module']);
-            }
-            if (isset($event['itemtype'])) {
-                $subject_itemtype = $event['itemtype'];
-            }
-        } 
+        $event = $subject->getSubject();
+        $args = $subject->getExtrainfo();
+        $subject_id = $args['module_id'];
+        $subject_module = $args['module'];
+        $subject_itemtype = empty($args['itemtype']) ? 0 : $args['itemtype'];
         
-        // types come in pairs
-        $subjecttype = static::getSubjectType();     
-        $observertype = static::getObserverType();
-        
+        if (!empty($subject_itemtype)) {
+            if (isset(self::$hookobservers[$subject_module][$subject_itemtype][$event]))
+                return self::$hookobservers[$subject_module][$subject_itemtype][$event];
+        }
+        if (isset(self::$hookobservers[$subject_module][0][$event]))
+            return self::$hookobservers[$subject_module][0][$event];        
+        // init cache        
+        self::$hookobservers[$subject_module][$subject_itemtype][$event] = array();
+             
         // Get database info
         $dbconn   = xarDB::getConn();
         $xartable = xarDB::getTables();
@@ -88,13 +77,13 @@ class xarHooks extends xarEvents
         $query = "SELECT eo.id, eo.event, eo.module_id, eo.area, eo.type, eo.func, eo.itemtype,
                          mo.name
                   FROM $htable h, $etable eo, $mtable mo";
-        // only get observers for the current observer itemtype
+        // only get observers for the hooks observer itemtype
         $where[] =  "eo.itemtype = ?";
-        $bindvars[] = $observertype;        
+        $bindvars[] = xarHooks::HOOK_OBSERVER_TYPE;        
         // only get observers of this event        
         $where[] = "eo.event = ?";
-        $bindvars[] = $subject;
-        // only modules hooked to this subject
+        $bindvars[] = $event;
+        // only from modules hooked to this subject
         $where[] = "h.subject = ?";
         $bindvars[] = $subject_id;
         $where[] = "eo.module_id = h.observer";
@@ -120,11 +109,10 @@ class xarHooks extends xarEvents
         if (!$result) return;
         $obs = array();
         while($result->next()) {
-            list($id, $event, $module_id, $area, $type, $func, $itemtype, $module) = $result->fields;
-            // @todo: cache these effectively 
-            $obs[] = array(
+            list($id, $evt, $module_id, $area, $type, $func, $itemtype, $module) = $result->fields;
+            self::$hookobservers[$subject_module][$subject_itemtype][$event][$module] = array(
                 'id' => $id,
-                'event' => $event,
+                'event' => $evt,
                 'module_id' => $module_id,
                 'module' => $module,
                 'area' => $area,
@@ -134,13 +122,12 @@ class xarHooks extends xarEvents
             );
         };
         $result->close();
-        return $obs;           
+        return self::$hookobservers[$subject_module][$subject_itemtype][$event];           
     }
     
     
 /**
  * Hook system functions
- * @TODO: move these to xarHookss when that class is refactored
 **/
     /**
      * Attach (hook) a hook module (observer) to a module (subject) (+ itemtype)
@@ -279,29 +266,19 @@ class xarHooks extends xarEvents
         return true;        
     }
     
-    // get the list of registered hook modules and their available hook subject observers
-    public static function getObserverModules($args=array())
+    // get the list of hook modules (observers) and their available subject observers (hooks)
+    // @param string $observer, name of module supplying hooks 
+    public static function getObserverModules($observer=null)
     {
-        $args += array(
-            'observertype' => xarHooks::HOOK_OBSERVER_TYPE,
-            'subjecttype' => xarHooks::HOOK_SUBJECT_TYPE,
-        );
-
         // Get list of hook modules from event system
-        // can't use xarHooks::getObservers here since that returns hooked modules for specific events
-        $hookmods = xarEvents::getObservers($args);
+        $hookmods = parent::getObserverModules();
 
         // format the list for output
         $hooklist = array();    
-        foreach ($hookmods as $mod) {
-            $modname = $mod['module'];
-            if (!isset($hooklist[$modname])) {
-                $modinfo = $mod + xarMod::getInfo($mod['module_id']);
-                $hooklist[$modname] = $modinfo;
-                $hooklist[$modname]['hooks'] = array();
-            }
-            $event = $mod['event'];
-            $hooklist[$modname]['hooks'][$event] = $mod;
+        foreach ($hookmods as $modname => $hooks) {
+            if (!empty($observer) && $modname != $observer) continue;
+            $hooklist[$modname] = xarMod::getInfo(xarMod::getRegID($modname));
+            $hooklist[$modname]['hooks'] = $hooks;
         }
         return $hooklist;
     }
@@ -351,8 +328,6 @@ class xarHooks extends xarEvents
     }
 
 }
-
-
 
 /**
  * Carry out hook operations for module
