@@ -782,15 +782,17 @@ class Query
                 $sqlfield = '(' . $condition['field2'] . ')';
             }
         } else {
-            if (gettype($condition['field2']) == 'string' && !mb_eregi('JOIN', $condition['op'])) {
+            if (strtolower(substr($condition['field2'],0,5)) == 'expr:') {
+                $condition['field2'] = trim(substr($condition['field2'],5));
+                $sqlfield = $condition['field2'];
+            } elseif (gettype($condition['field2']) == 'string' && !mb_eregi('JOIN', $condition['op'])) {
                 if ($this->usebinding) {
                     $this->bindvars[] = $condition['field2'];
                     $sqlfield = '?';
                 } else {
                     $sqlfield = $this->dbconn->qstr($condition['field2']);
                 }
-            }
-            else {
+            } else {
                 if ($this->usebinding && !mb_eregi('JOIN', $condition['op'])) {
                     $this->bindvars[] = $condition['field2'];
                     $sqlfield = '?';
