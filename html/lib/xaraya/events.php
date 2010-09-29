@@ -63,7 +63,7 @@ class xarEvents extends Object implements ixarEvents
      * public event notifier function
      *
      * @param string event name of event subject, required
-     * @param array $args arguments to pass to subject, optional
+     * @param mixed $args argument(s) to pass to subject, optional, default empty array
      * @return mixed response from subject notify method
     **/
     public static function notify($event, $args=array())
@@ -85,7 +85,7 @@ class xarEvents extends Object implements ixarEvents
                     // define class (loadFile already checked it exists) 
                     $classname = ucfirst($module) . $info['event'] . "Subject";
                     // create subject instance, passing $args from caller
-                    $subject = new $classname($args); 
+                    $subject = new $classname($args);
                     // get observer info from subject
                     $obsinfo = static::getObservers($subject);
                     if (!empty($obsinfo)) {
@@ -409,7 +409,7 @@ class xarEvents extends Object implements ixarEvents
         // validate input        
         $invalid = array();
         if (empty($event) || !is_string($event) || strlen($event) > 255)
-            $invalid[] = 'event subject';
+            $invalid[] = 'event';
         if (empty($module) || (!is_string($module) && !is_numeric($module)) ) {
             $invalid[] = 'module';
         } else {

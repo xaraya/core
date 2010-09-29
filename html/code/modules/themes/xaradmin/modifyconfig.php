@@ -98,6 +98,7 @@ function themes_admin_modifyconfig()
             xarModVars::set('themes', 'selsort', $data['selsort']);
 
             // Adjust the usermenu hook according to the setting
+            /* The usermenu isn't a hook...
             sys::import('xaraya.structures.hooks.observer');
             $observer = new BasicObserver('themes','user','usermenu');
             $subject = new HookSubject('roles');
@@ -106,6 +107,7 @@ function themes_admin_modifyconfig()
             } else {
                 $subject->detach($observer);
             }
+            */
             break;
     }
     return $data;

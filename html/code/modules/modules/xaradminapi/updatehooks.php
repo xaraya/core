@@ -35,6 +35,70 @@ function modules_adminapi_updatehooks($args)
     $curhook = $modinfo['name'];
     // new way of handling this (sane way)
     if (!empty($subjects) && is_array($subjects)) {
+            foreach ($subjects as $module => $values) {
+
+            // remove current assignments
+            xarHooks::detach($curhook, $module, -1, -1);
+            switch ($values['hookstate']) {
+                case 0:
+                    // hooked to none
+                    continue;
+                break;
+                case 1:
+                    // hooked to all scopes, all items
+                    xarHooks::attach($curhook, $module, 0, 0);
+                    continue;
+                break;
+                case 2:
+                    // hooked to some scopes, all items
+                    // see which scopes
+                    if (!empty($values['itemtypes'][0])) {
+                        foreach ($values['itemtypes'][0] as $scope => $setting) {
+                            if (empty($scope)) continue;
+                            if (!empty($setting)) {
+                                xarHooks::attach($curhook, $module, 0, $scope);
+                            }
+                        }
+                    }
+                    
+                    continue;
+                break;
+                case 3:
+                    // hooked to some scopes, some items
+                    // see which items
+                    if (!empty($values['itemtypes'])) {
+                        foreach ($values['itemtypes'] as $itemtype => $typeinfo) {
+                            if (empty($itemtype)) continue;
+                            switch ($typeinfo['scopes'][0]) {
+                                case 0:
+                                    // none
+                                    continue;
+                                break;
+                                case 1:
+                                    // all scopes, this itemtype
+                                    xarHooks::attach($curhook, $module, $itemtype, 0);
+                                    continue;
+                                break;
+                                case 2:
+                                    // some scopes, this itemtype                                    
+                                    // see which scopes
+                                    foreach ($typeinfo['scopes'] as $scope => $setting) {
+                                        if (empty($scope)) continue;
+                                        if (!empty($setting)) {
+                                            xarHooks::attach($curhook, $module, $itemtype, $scope);
+                                        }
+                                    }
+                                break;
+                            }
+                        }
+                    }                    
+                                    
+                    continue;
+                break;
+            }
+                    
+            }  
+        /*
         foreach ($subjects as $module => $values) {
             // remove current assignments
             xarHooks::detach($curhook, $module, -1);
@@ -43,20 +107,21 @@ function modules_adminapi_updatehooks($args)
                 continue;
             } elseif ($values['hookstate'] == 1) {
                 // hooked to all itemtypes
-                xarHooks::attach($curhook, $module, 0);
+                xarHooks::attach($curhook, $module, 0, 0);
                 continue;
             } else {
                 // hooked to some itemtypes
                 if (!empty($values['itemtypes'])) {
                     foreach ($values['itemtypes'] as $id => $ishooked) {
                         if (!empty($ishooked)) {
-                            xarHooks::attach($curhook, $module, $id);
+                            xarHooks::attach($curhook, $module, $id, 0);
                             continue;
                         } 
                     }
                 }
             }
         }
+        */
     } else {
         // Legacy support, deprecated
         // get the list of all (active) modules
@@ -77,13 +142,13 @@ function modules_adminapi_updatehooks($args)
             if (!empty($ishooked) && $ishooked[0] != 0) {                        
                 if ($ishooked[0] == 1) {
                     // hooked to all itemtypes
-                    xarHooks::attach($curhook, $mod['name'], 0);
+                    xarHooks::attach($curhook, $mod['name'], 0, 0);
                 } elseif ($ishooked[0] == 2) {
                     // hooked to some itemtypes
                     foreach (array_keys($ishooked) as $itemtype) {
                         // skip itemtype 0                    
                         if ($itemtype == 0) continue;
-                        xarHooks::attach($curhook, $mod['name'], $itemtype);
+                        xarHooks::attach($curhook, $mod['name'], $itemtype, 0);
                     }
                 }                
             }

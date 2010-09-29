@@ -160,12 +160,13 @@ function modules_init()
         $fields = array(
             'observer' => array('type' => 'integer', 'unsigned'=>true, 'null' => false),
             'subject'  => array('type' => 'integer', 'unsigned'=>true, 'null' => false),
-            'itemtype' => array('type' => 'integer', 'unsigned'=>true, 'null' => false)
+            'itemtype' => array('type' => 'integer', 'unsigned'=>true, 'null' => false),
+            'scope'    => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
         );
         // each entry should be unique
         $index = array(
             'name'   => 'i_'.$prefix.'_hooks',
-            'fields' => array('observer', 'subject', 'itemtype'),
+            'fields' => array('observer', 'subject', 'itemtype', 'scope'),
             'unique' => true
         );
         // Create the hooks table

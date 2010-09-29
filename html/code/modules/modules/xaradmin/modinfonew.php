@@ -59,6 +59,16 @@ function modules_admin_modinfonew()
         $data['moddependencies']             = xarML('None');
     }
     
+    $modname = $modinfo['name'];
+    $subjects = array();
+    $observers = xarEvents::getObserverModules();
+    $hookobservers = xarHooks::getObserverModules($modname);
+    //$hooksubjects = xarHooks::getSubjectModules();
+    
+    if (!empty($hookobservers[$modname]['hooks'])) {
+        $data['hookobservers'] = $hookobservers[$modname]['hooks'];
+    }
+        
     return $data;
 }
 

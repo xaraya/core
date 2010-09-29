@@ -11,8 +11,9 @@
 abstract class EventSubject extends Object implements ixarEventSubject
 {
     protected $args;                // args passed from caller when event is raised
-    protected $observers = array(); // xarEvents::notify is responsible for populating this array 
+    protected $observers = array(); // xarEvents::notify is responsible for populating this array
     protected $subject = 'Event';   // name of this event subject
+
     /**
      * Constructor
      * overloading is optional
@@ -123,6 +124,8 @@ interface ixarEventSubject
     public function attach(ixarEventObserver $obs);
     public function detach(ixarEventObserver $obs);
     public function getSubject();
+    public function getArgs();
+    public function setArgs($args);
 }
 
 ?>
