@@ -6,35 +6,38 @@
 
 class Query
 {
-    public $version = "3.4";
-    public $type;
-    public $tables;
-    public $fields;
+    public $version = "3.5";
+    public $type                = 'SELECT';     // Normalized array of tables used in the statement
+    public $tables              = array();      // Normalized array of tables used in the statement
+    public $tablelinks          = array();      // Normalized array of table links used in the statement
+    public $fields              = array();      // Normalized array of fields used in the statement
     public $primary;
-    public $conditions;
-    public $conjunctions;
-    public $bindings;
-    public $tablelinks;
-    public $sorts;
-    public $result;
-    public $rows = 0;
-    public $rowfields = 0;
-    public $rowstodo = 0;
-    public $startat = 1;
+    public $conditions          = array();      // Normalized array of conditions used in the statement
+    public $conjunctions        = array();      // Normalized array of conjunctions used with conditions used in the statement
+//    public $bindings            = array();
+    public $sorts               = array();      // Aarray of fields used in the sort clause of the statement
+    public $groups              = array();      // Normalized array of fields used in the group clause of the statement
+    public $having              = array();      // Normalized array of fields used in the having clause of the statement
+    public $result              = array();
+    public $bindvars            = array();      // An array of bindvars in this statement
+    public $rows                = 0;
+    public $rowfields           = 0;
+    public $rowstodo            = 0;
+    public $startat             = 1;
     public $createtablename;
-    public $output;
-    public $row;
+    public $output              = array();
+    public $row                 = array();
     public $dbconn;
     public $statement;
     public $israwstatement = 0;
-    public $bindpublics;
+//    public $bindpublics;
     public $bindstring;
-    public $limits = 1;
+    public $limits              = true;         // Flag that indicates whether the (SELECT) query uses limits
     public $distinctselect = false;
     public $distinctarray = array();
 
     private $starttime;
-    private $key;
+    private $key;                               // Unique key for this statement
     
 // Flags
 // Set to true to use binding variables supported by some dbs
@@ -76,21 +79,6 @@ class Query
         }
 
         $this->key = time();
-        $this->tables = array();
-        $this->addtables($tables);
-        $this->fields = array();
-        $this->addfields($fields);
-        $this->conditions = array();
-        $this->conjunctions = array();
-        $this->bindings = array();
-        $this->tablelinks = array();
-        $this->sorts = array();
-        $this->groups = array();
-        $this->having = array();
-        $this->result = array();
-        $this->output = null;
-        $this->row = array();
-        $this->bindvars = array();
     }
 
     public function run($statement='',$display=1)
@@ -524,50 +512,17 @@ class Query
                                   'op' => 'REGEXP'),$active);
     }
 
-    public function peq($field1,$field2)
-    {
-        return $this->eq($field1,$field2,0);
-    }
-    public function pne($field1,$field2)
-    {
-        return $this->ne($field1,$field2,0);
-    }
-    public function pgt($field1,$field2)
-    {
-        return $this->gt($field1,$field2,0);
-    }
-    public function pge($field1,$field2)
-    {
-        return $this->ge($field1,$field2,0);
-    }
-    public function ple($field1,$field2)
-    {
-        return $this->le($field1,$field2,0);
-    }
-    public function plt($field1,$field2)
-    {
-        return $this->lt($field1,$field2,0);
-    }
-    public function plike($field1,$field2)
-    {
-        return $this->like($field1,$field2,0);
-    }
-    public function pnotlike($field1,$field2)
-    {
-        return $this->notlike($field1,$field2,0);
-    }
-    public function pin($field1,$field2)
-    {
-        return $this->in($field1,$field2,0);
-    }
-    public function pnotin($field1,$field2)
-    {
-        return $this->notin($field1,$field2,0);
-    }
-    public function pregex($field1,$field2)
-    {
-        return $this->regex($field1,$field2,0);
-    }
+    public function peq($field1,$field2)      {return $this->eq($field1,$field2,0);}
+    public function pne($field1,$field2)      {return $this->ne($field1,$field2,0);}
+    public function pgt($field1,$field2)      {return $this->gt($field1,$field2,0);}
+    public function pge($field1,$field2)      {return $this->ge($field1,$field2,0);}
+    public function plt($field1,$field2)      {return $this->lt($field1,$field2,0);}
+    public function ple($field1,$field2)      {return $this->le($field1,$field2,0);}
+    public function plike($field1,$field2)    {return $this->like($field1,$field2,0);}
+    public function pnotlike($field1,$field2) {return $this->notlike($field1,$field2,0);}
+    public function pin($field1,$field2)      {return $this->in($field1,$field2,0);}
+    public function pnotin($field1,$field2)   {return $this->notin($field1,$field2,0);}
+    public function pregex($field1,$field2)   {return $this->regex($field1,$field2,0);}
 
    public function qand()
     {
@@ -743,7 +698,7 @@ class Query
         return $binding['field1'] . " " . $binding['op'] . " " . $sqlfield;
     }
 
-    private function _getbindings()
+/*    private function _getbindings()
     {
         $this->bstring = "";
         foreach ($this->bindings as $binding) {
@@ -753,7 +708,7 @@ class Query
         if ($this->bstring != "") $this->bstring = substr($this->bstring,0,strlen($this->bstring)-5);
         return $this->bstring;
     }
-
+*/
     private function _getcondition($key)
     {
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
@@ -829,7 +784,9 @@ class Query
     private function _resolve($conjunction,$level)
     {
         if (is_array($conjunction['conditions'])) {
-            if ($level != 1) $this->cstring .= " (";
+//            if ($level != 1) $this->cstring .= " (";
+            if (!empty($this->cstring)) $this->cstring .= $this->implicitconjunction . " ";
+            $this->cstring .= "(";
             $count = count($conjunction['conditions']);
             $i=0;
             foreach ($conjunction['conditions'] as $condition) {
@@ -837,11 +794,12 @@ class Query
                 if (isset($this->conjunctions[$condition])) {
                     $this->_resolve($this->conjunctions[$condition],$level+1);
                 } else {
-                    $this->cstring .= $this->_getcondition($condition) . " ";
+                    $this->cstring .= $this->_getcondition($condition);
                 }
                 if ($i<$count) $this->cstring .= $conjunction['conj'] . " ";
-                elseif ($level != 1) $this->cstring = trim($this->cstring) . ") ";
+//                elseif ($level != 1) $this->cstring = trim($this->cstring) . ")";
             }
+            $this->cstring = trim($this->cstring) . ")";
         } elseif (!is_array($conjunction['conditions'])) {
             if (($this->cstring == "") || (substr($this->cstring,strlen($this->cstring)-1) == '(')) $conj = "";
             else {
@@ -850,10 +808,12 @@ class Query
             }
             $tokens = explode(" ",trim($this->cstring));
             $last = array_pop($tokens);
-            if (($last == $this->andoperator) || ($last == $this->oroperator) || ($last == '('))
-                $this->cstring .= $this->_getcondition($conjunction['conditions']) . " ";
-            else $this->cstring .= $conj . " " . $this->_getcondition($conjunction['conditions']) . " ";
+            if (($last == $this->andoperator) || ($last == $this->oroperator) || ($last == '(')) {
+                $this->cstring .= $this->_getcondition($conjunction['conditions']);
+            }
+            else $this->cstring .= $conj . " " . $this->_getcondition($conjunction['conditions']);
         }
+        $this->cstring .= " ";
     }
 
     private function _addcondition($active=1)
@@ -1176,15 +1136,17 @@ class Query
                                   'field2' => $link['field2'],
                                   'op' => $link['op']),1);
         }
-        if (count($this->bindings)>0) {
+/*        if (count($this->bindings)>0) {
             $c = " WHERE ";
             $c .= $this->_getbindings();
         }
+*/
         if (count($this->conditions)>0) {
             $conditions = $this->_getconditions();
-            if ($conditions == '') return $c;
-            if ($c == '') $c = " WHERE " . $conditions;
-            else $c .= " " . $this->implicitconjunction . " "  . $conditions;
+            if (!empty($conditions)) $c = " WHERE " . $conditions;
+//            if ($conditions == '') return $c;
+//            if ($c == '') $c = " WHERE " . $conditions;
+//            else $c .= " " . $this->implicitconjunction . " "  . $conditions;
         }
         $this->conditions = $temp1;
         $this->conjunctions = $temp2;
@@ -1665,10 +1627,10 @@ class Query
         foreach ($this->tablelinks as $link) {
             $string .= "field1 = " . $link['field1'] . ", field2 = " . $link['field2'] . "<br/>";
         }
-        $string .= "Bindings: <br />";
-        foreach ($this->bindings as $binding) {
-            $string .= "field1 = " . $binding['field1'] . ", field2 = " . $binding['field2'] . "<br/>";
-        }
+//        $string .= "Bindings: <br />";
+//        foreach ($this->bindings as $binding) {
+//            $string .= "field1 = " . $binding['field1'] . ", field2 = " . $binding['field2'] . "<br/>";
+//        }
         $string .= "Fields: <br />";
         foreach ($this->fields as $field) {
             $string .= "name = " . $field['name'] . ", alias = " . $field['alias'] . ", table = " . $field['table'] . ", value = " . $field['value'] . "<br/>";
