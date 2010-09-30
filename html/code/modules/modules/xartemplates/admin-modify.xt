@@ -177,10 +177,10 @@
                           
                             </xar:if>
                             <!-- show/hide itemtype details on page load (only if js enabled :) ) -->
-                            <xar:if condition="$modinfo['hookstate'] gt 1">
+                            <xar:if condition="$modinfo['hookstate'] gt 2">
                                  <![CDATA[                                 
                                  <script type="text/javascript">
-                                     setDisplayOn('#$subject_id#_itemtypes'); document.getElementById('#$subject_id#_hookstate_2').checked="checked";
+                                     setDisplayOn('#$subject_id#_itemtypes'); document.getElementById('#$subject_id#_hookstate_3').checked="checked";
                                  </script>
                                  ]]>
                             <xar:else/>
