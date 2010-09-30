@@ -52,8 +52,59 @@ function modules_admin_modify($args)
     // Get list of hook module(s) (observers) and the available hooks supplied 
     $observers = xarHooks::getObserverModules(); 
     foreach ($observers as $observer => $modinfo) {
+        $curhook = $observer;
         // get subject itemtypes this observer is hooked to (if any)
         $subjects = xarHooks::getObserverSubjects($observer, $modname);
+            $hookstate = 0;
+            if (!empty($subjects[$modname][0][0])) {
+                // Hooked by ALL scopes to ALL itemtypes
+                $hookstate = 1;
+            } elseif (!empty($subjects[$modname][0])) {
+                // Hooked by SOME scopes to ALL itemtypes 
+                if (!empty($modinfo['scopes'])) {
+                    foreach ($modinfo['scopes'] as $scope => $val) {
+                        $ishooked = !empty($subjects[$modname][0][$scope]);
+                        if ($ishooked) $hookstate = 2;
+                        $itemtypes[0]['scopes'][$scope] = $ishooked;
+                    }
+                }
+            } 
+
+            if (!empty($itemtypes)) {
+                // Hooked by SOME scopes to SOME itemtypes
+                foreach ($itemtypes as $typeid => $itemtype) {
+                    if (empty($typeid)) continue;
+                    $itemtypes[$typeid]['scopes'] = array();                    
+                    if ($hookstate != 0) {
+                        $itemtypes[$typeid]['scopes'][0] = 0;
+                        // already matched the state
+                        $ishooked = false;
+                    } else {
+                        if (!empty($subjects[$modname][$typeid][0])) {
+                            // ALL scopes this itemtype
+                            $itemtypes[$typeid]['scopes'][0] = 1;
+                            $newstate = 3;
+                        } else {
+                            if (!empty($modinfo['scopes'])) {
+                                // SOME scopes this itemtype
+                                foreach ($modinfo['scopes'] as $scope => $val) {
+                                    $ishooked = !empty($subjects[$modname][$typeid][$scope]);
+                                    if ($ishooked) {
+                                        $newstate = 3;
+                                        $itemtypes[$typeid]['scopes'][0] = 2;
+                                    }
+                                    $itemtypes[$typeid]['scopes'][$scope] = $ishooked;                 
+                                }
+                            }
+                            if (!isset($itemtypes[$typeid]['scopes'][0]))
+                                $itemtypes[$typeid]['scopes'][0] = 0;
+                        }
+                        
+                    }
+                }
+                if (!empty($newstate)) { $hookstate = $newstate; unset($newstate); }        
+            }
+        /*
         $hookstate = !empty($subjects[$modname][0]);
         if (!empty($itemtypes)) {
             foreach ($itemtypes as $key => $itemtype) {
@@ -71,6 +122,7 @@ function modules_admin_modify($args)
                 $itemtypes[$key]['ishooked'] = $ishooked;
             }
         }
+        */
         $observers[$observer]['hookstate'] = $hookstate;
         $observers[$observer]['itemtypes'] = $itemtypes;
     }
