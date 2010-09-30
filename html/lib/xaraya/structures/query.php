@@ -79,6 +79,8 @@ class Query
         }
 
         $this->key = time();
+        $this->addtables($tables);
+        $this->addfields($fields);
     }
 
     public function run($statement='',$display=1)
