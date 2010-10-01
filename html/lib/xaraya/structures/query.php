@@ -911,7 +911,7 @@ class Query
     private function assembledtables()
     {
         foreach ($this->tablelinks as $link) {
-            if ($link['op'] != 'JOIN') {
+            if ($link['op'] == 'LEFT JOIN' || $link['op'] == 'RIGHT JOIN') {
                 $this->on_syntax = true;
                 break;
             }
