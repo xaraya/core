@@ -13,11 +13,13 @@
             </xar:if>
         </div>
     </xar:foreach>
-    <div class="xar-form-input-wrapper">
-        Object Query
-    </div>
-    <div class="xar-form-input-wrapper">
-        <xar:set name="thisobject">DataObjectMaster::getObject(array('name' => $properties['name']->value))</xar:set>
-        #$thisobject->dataquery->qecho()#
-    </div>
+    <xar:if condition="!empty($properties['name']->value)">
+        <div class="xar-form-input-wrapper">
+            Object Query
+        </div>
+        <div class="xar-form-input-wrapper">
+            <xar:set name="thisobject">DataObjectMaster::getObject(array('name' => $properties['name']->value))</xar:set>
+            #$thisobject->dataquery->qecho()#
+        </div>
+    </xar:if>
 </xar:template>
