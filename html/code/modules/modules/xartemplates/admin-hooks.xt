@@ -18,6 +18,7 @@
             <p>Select the hook module providing the extra functionality and then check the boxes of
             the modules you would like to enable that functionality in (e.g. select "comments" and
             then check "articles" to enable comments in the articles module).</p>
+            <h3>Hook Modules</h3>
             <xar:template file="hooks-mainpart" module="modules"/>
         </div>
     <xar:else />

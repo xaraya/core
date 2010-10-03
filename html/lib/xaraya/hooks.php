@@ -377,7 +377,7 @@ class xarHooks extends xarEvents
  * @access public
  * @param hookScope string the scope the hook is called for - 'item', 'module', ...
  * @param hookAction string the action the hook is called for - 'transform', 'display', 'new', 'create', 'delete', ...
- * @param hookId integer the id of the object the hook is called for (module-specific)
+ * @param hookId mixed the id of the object the hook is called for (module-specific)
  * @param extraInfo mixed extra information for the hook, dependent on hookAction
  * @param callerModName string for what module are we calling this (default = current main module)
  *        Note : better pass the caller module via $extraInfo['module'] if necessary, so that hook functions receive it too
@@ -388,12 +388,18 @@ class xarHooks extends xarEvents
  */
 function xarModCallHooks($hookScope, $hookAction, $hookId, $extraInfo = NULL, $callerModName = NULL, $callerItemType = '')
 {
-    // scope and action are combined to form the name of the hook event
+    // scope and action are concatenated to form the name of the hook event
     $event = ucfirst($hookScope) . ucfirst($hookAction);
+    if (empty($extraInfo))
+        $extraInfo = array();
+    if (!isset($extraInfo['itemid']))
+        $extrainfo['itemid'] = $hookId;
+    if (isset($callerModName) && !isset($extraInfo['module']))
+        $extraInfo['module'] = $callerModName;
+    if (isset($callerItemType) && !isset($extraInfo['itemtype']))
+        $extraInfo['itemtype'] = $callerItemType;
     $args = array(
-        'id' => $hookId,
-        'module' => $callerModName,
-        'itemtype' => $callerItemType,
+        'objectid' => $hookId,
         'extrainfo' => $extraInfo,
     );
     // Notify the hook subject (event) observers

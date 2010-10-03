@@ -117,7 +117,6 @@ class xarEvents extends Object implements ixarEvents
                                     break;                            
                                 } 
                             } catch (Exception $e) {
-                                //throw $e;
                                 // Event system never fails, ever!
                                 continue;
                             }
@@ -137,7 +136,6 @@ class xarEvents extends Object implements ixarEvents
                 break;          
             }
         } catch (Exception $e) {
-            //throw $e;
             // Events never fail, ever!
             $response = false;
         }
