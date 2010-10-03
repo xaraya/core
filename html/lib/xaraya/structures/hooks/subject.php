@@ -9,16 +9,17 @@
 **/
 sys::import('xaraya.structures.events.subject');
 // declared abstract to prevent direct instances of this class
-abstract class HookSubject extends EventSubject implements ixarEventSubject
+abstract class HookSubject extends EventSubject implements ixarEventSubject, ixarHookSubject
 {
     // protected $args; // from EventSubject
-    protected $subject = 'Hook'; // change this to the name of your hook subject    
-    protected $extrainfo = array();
+    protected $subject = 'Hook'; // change this to the name of your hook subject  
+    // Hook subjects can optionally supply other properties for their observers to use  
 
     /**
      * constructor
      * This is common to all hook subjects
-     * @TODO: declare final, shouldn't need to be overloaded ?
+     * @CHECKME: declare final, shouldn't need to be overloaded ?
+     * @FIXME: this could be improved upon
      * 
      * @param array $args, array containing hook caller item params and values
      * @return void
@@ -33,7 +34,7 @@ abstract class HookSubject extends EventSubject implements ixarEventSubject
         // in $this->args[extrainfo] we will store the array for class based observers
         // when notified, the observer can obtain extrainfo in one hit from $subject->getExtrainfo();    
     
-        // all validation happens here, so hook observers never need to check
+        // all validation happens here
         extract($args);
              
         if (empty($extrainfo))
@@ -92,12 +93,30 @@ abstract class HookSubject extends EventSubject implements ixarEventSubject
 
         parent::__construct($args);
     }
-    
+    /**
+     * getExtrainfo
+     * This is common to all hook subjects
+     * @CHECKME: declare final, shouldn't need to be overloaded ?
+     * 
+     * @params none
+     * @return array extrainfo for the current hook item 
+     * @throws none
+    **/        
     public function getExtrainfo()
     {
         $args = $this->getArgs();
         if (isset($args['extrainfo'])) 
             return $args['extrainfo'];
     }
+    // The default hook subject inherits all other methods from the EventSubject
+    // Hook subjects may optionally overload those methods,
+    // and/or supply other methods for their observers to use   
+    
 }
+// All hook subjects must implement this interface...
+interface ixarHookSubject
+{
+    public function getExtraInfo();
+}
+
 ?>
