@@ -6,6 +6,18 @@
 **/
 /**
  * GUI type hook, observers should return string template data
+ *
+ * The notify method returns an array of hookoutputs keyed by hooked module name
+ * Called in display function as...
+ * $item = array('module' => $module, $itemid => $itemid [, 'itemtype' => $itemtype, ...]);
+ * New way of calling hooks
+ * $data['hooks'] = xarHooks::notify('ItemDisplay', $item);
+ * Legacy way, supported for now, deprecated in future 
+ * $data['hooks'] = xarModCallHooks('item', 'display', $itemid, $item); 
+ * Output in display template as
+ * <xar:foreach in="$hooks" key="$hookmod" value="$hookoutput">
+ *     #$hookoutput#
+ * </xar:foreach>
 **/
 sys::import('xaraya.structures.hooks.guisubject');
 class ModulesItemDisplaySubject extends GuiHookSubject

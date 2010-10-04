@@ -6,6 +6,14 @@
 **/
 /**
  * API type hook, observers should return array of $extrainfo
+ *
+ * The notify method returns an array of cumulative extrainfo from the observers
+ * Called in (api|gui) function after item is deleted as...
+ * $item = array('module' => $module, 'itemid' => $itemid [, 'itemtype' => $itemtype, ...]);
+ * New way of calling hooks
+ * xarHooks::notify('ItemDelete', $item);
+ * Legacy way, supported for now, deprecated in future 
+ * xarModCallHooks('item', 'delete', $itemid, $item); 
 **/
 sys::import('xaraya.structures.hooks.apisubject');
 class ModulesItemDeleteSubject extends ApiHookSubject
