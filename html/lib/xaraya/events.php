@@ -298,7 +298,9 @@ class xarEvents extends Object implements ixarEvents
         }                    
         if (!empty($module_id))
             $modinfo = xarMod::getInfo($module_id);
-        if (empty($modinfo) || !xarMod::isAvailable($modinfo['name']))
+        // can't check mod available here, since it may not be if the module is init'ing
+        //if (empty($modinfo) || !xarMod::isAvailable($modinfo['name']))
+        if (empty($modinfo)) 
             $invalid[] = 'module';       
 
         // Check we have a valid area (class, api, gui)
