@@ -60,7 +60,7 @@ class NameProperty extends TextBoxProperty
             $value['last'] = '';
             $value['middle'] = '';
             $value['first'] = '';
-            if ($this->display_show_salutation && ($this->display_layout != 'single')) {
+            if ($this->display_show_salutation) {
                 $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
                 $salutation->validation_override = true;
                 $isvalid = $salutation->checkInput($name . '_salutation');
@@ -69,35 +69,34 @@ class NameProperty extends TextBoxProperty
                 } else {
                     $invalid[] = 'salutation';
                 }
-
-                if ($this->display_show_firstname && ($this->display_layout != 'single')) {
-                    $isvalid = $textbox->checkInput($name . '_first');
-                    if ($isvalid) {
-                        $value['first'] = $textbox->value;
-                    } else {
-                        $invalid[] = 'first';
-                    }
-                    $validity = $validity && $isvalid;
-                }
-
-                if ($this->display_show_middlename && ($this->display_layout != 'single')) {
-                    $isvalid = $textbox->checkInput($name . '_middle');
-                    if ($isvalid) {
-                        $value['middle'] = $textbox->value;
-                    } else {
-                        $invalid[] = 'middle';
-                    }
-                    $validity = $validity && $isvalid;
-                }
-
-                $isvalid = $textbox->checkInput($name . '_last');
+            }
+            if ($this->display_show_firstname) {
+                $isvalid = $textbox->checkInput($name . '_first');
                 if ($isvalid) {
-                    $value['last'] = $textbox->value;
+                    $value['first'] = $textbox->value;
                 } else {
-                    $invalid[] = 'last';
+                    $invalid[] = 'first';
                 }
                 $validity = $validity && $isvalid;
             }
+
+            if ($this->display_show_middlename) {
+                $isvalid = $textbox->checkInput($name . '_middle');
+                if ($isvalid) {
+                    $value['middle'] = $textbox->value;
+                } else {
+                    $invalid[] = 'middle';
+                }
+                $validity = $validity && $isvalid;
+            }
+
+            $isvalid = $textbox->checkInput($name . '_last');
+            if ($isvalid) {
+                $value['last'] = $textbox->value;
+            } else {
+                $invalid[] = 'last';
+            }
+            $validity = $validity && $isvalid;
 
             if (!empty($invalid)) $this->invalid = implode(',',$invalid);
             $this->value = '%' . $value['last'] .'%' . $value['first'] .'%' . $value['middle'] .'%' . $value['salutation'] .'%';
