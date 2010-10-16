@@ -255,10 +255,18 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      */
     sys::import('xaraya.events');
 
-/* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ?
-    sys::import('xaraya.autoload');
-    xarAutoload::initialize();
-
+    /*
+     * Start autoload
+     *
+     * Note: we only need this for variable caching for now, but if we generalize autoloading
+     *       of Xaraya classes someday, we could initialize this earlier, e.g. in bootstrap ?
+     */
+/* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ? */
+    if (xarCache::$variableCacheIsEnabled) {
+        sys::import('xaraya.autoload');
+        xarAutoload::initialize();
+    }
+/*
 // Testing of autoload + second-level cache storage - please do not use on live sites
     sys::import('xaraya.caching.storage');
     $cache = xarCache_Storage::getCacheStorage(array('storage' => 'xcache', 'type' => 'core'));
