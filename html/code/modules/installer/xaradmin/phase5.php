@@ -51,14 +51,12 @@ function installer_admin_phase5()
         $dbHost = '127.0.0.1';
     }
     if ($dbName == '') {
-        $msg = xarML('No database was specified');
-        throw new Exception($msg);
+        return xarTplModule('installer','admin','errors',array('layout' => 'no_database'));
     }
 
     // allow only a-z 0-9 and _ in table prefix
     if (!preg_match('/^\w*$/',$dbPrefix)) {
-        $msg = xarML('Invalid character in table prefix. Only use a-z, a _ and/or 0-9 in the prefix.');
-        throw new Exception($msg);
+        return xarTplModule('installer','admin','errors',array('layout' => 'bad_character'));
     }
     // Save config data
     $config_args = array('dbHost'    => $dbHost,
@@ -95,11 +93,9 @@ function installer_admin_phase5()
       try {
         $init_args['databaseName'] ='';
         $dbconn = xarDBNewConn($init_args);
-      } catch(Exception $ex) {
+      } catch(Exception $e) {
         // It failed without dbname too
-        $msg = xarML('Database connection failed. The information supplied was erroneous, such as a bad or missing password or wrong username.
-                          The message was: ' . $ex->getMessage());
-        throw new Exception($msg);
+        return xarTplModule('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
       }
     }
 
