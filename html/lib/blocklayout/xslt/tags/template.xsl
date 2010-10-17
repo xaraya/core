@@ -69,7 +69,7 @@
                 </xsl:choose>
               </xsl:otherwise>
             </xsl:choose>
-            <xsl:text>, "</xsl:text>
+            <xsl:text>,"</xsl:text>
             <xsl:call-template name="resolvePHP">
               <xsl:with-param name="expr" select="@file"/>
             </xsl:call-template>
@@ -77,6 +77,21 @@
             <xsl:call-template name="resolvePHP">
               <xsl:with-param name="expr" select="$subdata"/>
             </xsl:call-template>
+            <xsl:text>,</xsl:text>
+            <xsl:choose>
+              <xsl:when test="@property != ''">
+                <xsl:text>"</xsl:text>
+                <xsl:value-of select="@property"/>
+                <xsl:text>"</xsl:text>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text>"</xsl:text>
+                <xsl:if test="string-length(substring-before(substring-after($bl_dirname,'properties/'),'/')) &gt; 0">
+                  <xsl:value-of select="substring-before(substring-after($bl_dirname,'properties/'),'/')"/>
+                </xsl:if>
+                <xsl:text>"</xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
             <xsl:text>);</xsl:text>
           </xsl:otherwise>
         </xsl:choose>

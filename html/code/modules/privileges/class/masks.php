@@ -216,6 +216,9 @@ class xarMasks extends xarSecurity
     }
 
     /**
+            if ($module == '') list($module) = xarController::$request->getInfo();
+                xarController::redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
+                xarController::redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
      * forgetprivsets: remove all irreducible set of privileges from the db
      *
      * used to lighten the cache

@@ -31,14 +31,16 @@ function roles_adminapi_getmenulinks()
                                                   'admin',
                                                   'viewroles'),
                               'title' => xarML('View and edit the groups on the system'),
-                              'label' => xarML('View All Groups'));
+                              'label' => xarML('View All Groups'),
+                              'active' => array('viewroles'),
+                       );
     }
     .....
     return $menulinks;
     */
 
     // No special menu. Just return a standard array
-    return xarMod::apiFunc('base','admin','menuarray',array('module' => 'roles'));
+    return xarMod::apiFunc('base','admin','loadmenuarray',array('modname' => 'roles', 'modtype' => 'admin'));
 }
 
 ?>
