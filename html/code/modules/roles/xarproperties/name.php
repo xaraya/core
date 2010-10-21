@@ -59,8 +59,8 @@ class NameProperty extends TextBoxProperty
                 if (!$this->validation_ignore_validations) {
                     $textbox->validation_min_length = 3;
                 }
-
-                $value['salutation'] = '';
+			}
+            $value['salutation'] = '';
             $value['last'] = '';
             $value['middle'] = '';
             $value['first'] = '';
