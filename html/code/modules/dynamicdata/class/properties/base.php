@@ -255,15 +255,27 @@ class DataProperty extends Object implements iDataProperty
         else $this->setValue($value);
 
         if (isset($this->validation_notequals)  && $value == $this->validation_notequals) {
-            $this->invalid = xarML('#(1) cannot have the value #(2)', $this->name,$this->validation_notequals );
+            if (!empty($this->validation_notequals_invalid)) {
+                $this->invalid = xarML($this->validation_notequals_invalid);
+            } else {
+                $this->invalid = xarML('#(1) cannot have the value #(2)', $this->name,$this->validation_notequals );
+            }
             $this->value = null;
             return false;
         } elseif (isset($this->validation_equals)  && $value != $this->validation_equals) {
-            $this->invalid = xarML('#(1) must have the value #(2)', $this->name,$this->validation_notequals );
+            if (!empty($this->validation_equals_invalid)) {
+                $this->invalid = xarML($this->validation_equals_invalid);
+            } else {
+                $this->invalid = xarML('#(1) must have the value #(2)', $this->name,$this->validation_notequals );
+            }
             $this->value = null;
             return false;
         } elseif (isset($this->validation_allowempty) && !$this->validation_allowempty && empty($value)) {
-            $this->invalid = xarML('#(1) cannot be empty', $this->name);
+            if (!empty($this->validation_allowempty_invalid)) {
+                $this->invalid = xarML($this->validation_allowempty_invalid);
+            } else {
+                $this->invalid = xarML('#(1) cannot be empty', $this->name);
+            }
             $this->value = null;
             return false;
         }

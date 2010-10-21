@@ -83,27 +83,26 @@ class NameProperty extends TextBoxProperty
                     }
                     $validity = $validity && $isvalid;
                 }
+                $validity = $validity && $isvalid;
+            }
 
-                $value['middle'] = '';
-                if ($this->display_show_middlename && ($this->display_layout != 'single')) {
-                    $isvalid = $textbox->checkInput($name . '_middle');
-                    if ($isvalid) {
-                        $value['middle'] = $textbox->value;
-                    } else {
-                        $invalid[] = 'middle';
-                    }
-                    $validity = $validity && $isvalid;
-                }
-
-                $value['last'] = '';
-                $isvalid = $textbox->checkInput($name . '_last');
+            if ($this->display_show_middlename) {
+                $isvalid = $textbox->checkInput($name . '_middle');
                 if ($isvalid) {
-                    $value['last'] = $textbox->value;
+                    $value['middle'] = $textbox->value;
                 } else {
-                    $invalid[] = 'last';
+                    $invalid[] = 'middle';
                 }
                 $validity = $validity && $isvalid;
             }
+
+            $isvalid = $textbox->checkInput($name . '_last');
+            if ($isvalid) {
+                $value['last'] = $textbox->value;
+            } else {
+                $invalid[] = 'last';
+            }
+            $validity = $validity && $isvalid;
 
             if (!empty($invalid)) $this->invalid = implode(',',$invalid);
             $this->value = '%' . $value['last'] .'%' . $value['first'] .'%' . $value['middle'] .'%' . $value['salutation'] .'%';
