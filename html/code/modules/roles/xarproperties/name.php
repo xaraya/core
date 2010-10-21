@@ -47,9 +47,9 @@ class NameProperty extends TextBoxProperty
             // store the fieldname for validations who need them (e.g. file uploads)
             $this->fieldname = $name;
             if ($this->display_layout == 'single') {
-                $this->display_show_salutation     = false;
-                $this->display_show_firstname      = false;
-                $this->display_show_middlename     = false;
+                $this->display_show_salutation     = 0;
+                $this->display_show_firstname      = 0;
+                $this->display_show_middlename     = 0;
             }
             if (!isset($value)) {
                 $invalid = array();
@@ -61,27 +61,25 @@ class NameProperty extends TextBoxProperty
                 }
 
                 $value['salutation'] = '';
-                if ($this->display_show_salutation && ($this->display_layout != 'single')) {
-                    $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
-                    $salutation->validation_override = true;
-                    $isvalid = $salutation->checkInput($name . '_salutation');
-                    if ($isvalid) {
-                        $value['salutation'] = $salutation->value;
-                    } else {
-                        $invalid[] = 'salutation';
-                    }
-                    $validity = $validity && $isvalid;
+            $value['last'] = '';
+            $value['middle'] = '';
+            $value['first'] = '';
+            if ($this->display_show_salutation) {
+                $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
+                $salutation->validation_override = true;
+                $isvalid = $salutation->checkInput($name . '_salutation');
+                if ($isvalid) {
+                    $value['salutation'] = $salutation->value;
+                } else {
+                    $invalid[] = 'salutation';
                 }
-
-                $value['first'] = '';
-                if ($this->display_show_firstname && ($this->display_layout != 'single')) {
-                    $isvalid = $textbox->checkInput($name . '_first');
-                    if ($isvalid) {
-                        $value['first'] = $textbox->value;
-                    } else {
-                        $invalid[] = 'first';
-                    }
-                    $validity = $validity && $isvalid;
+            }
+            if ($this->display_show_firstname) {
+                $isvalid = $textbox->checkInput($name . '_first');
+                if ($isvalid) {
+                    $value['first'] = $textbox->value;
+                } else {
+                    $invalid[] = 'first';
                 }
                 $validity = $validity && $isvalid;
             }
