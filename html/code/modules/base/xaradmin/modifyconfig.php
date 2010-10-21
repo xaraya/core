@@ -57,6 +57,7 @@ function base_admin_modifyconfig()
         else $active = false;
         $data['locales'][] = array('id' => $locale, 'name' => $locale, 'active' => $active);
     }
+   
     $data['releasenumber'] = xarModVars::get('base','releasenumber');
 
     // TODO: delete after new backend testing
@@ -140,16 +141,14 @@ function base_admin_modifyconfig()
                     break;
                 case 'locales':
                     if (!xarVarFetch('defaultlocale','str:1:',$defaultLocale)) return;
-                    if (!xarVarFetch('active','array',$active, array(), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('mlsmode','str:1:',$MLSMode,'SINGLE', XARVAR_NOT_REQUIRED)) return;
 
                     sys::import('modules.dynamicdata.class.properties.master');
                     $locales = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
                     $locales->checkInput('active');
-                    $localesList = explode(',',$locales->getValue());
+                    $localesList = $locales->getValue();
                     if (!in_array($defaultLocale,$localesList)) $localesList[] = $defaultLocale;
                     sort($localesList);
-
                     if ($MLSMode == 'UNBOXED') {
                         if (xarMLSGetCharsetFromLocale($defaultLocale) != 'utf-8') {
                             throw new ConfigurationException(null,'You should select utf-8 locale as default before selecting UNBOXED mode');

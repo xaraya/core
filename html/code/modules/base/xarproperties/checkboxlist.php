@@ -50,7 +50,6 @@ class CheckboxListProperty extends SelectProperty
     public function showInput(Array $data = array())
     {
         if (isset($data['value'])) $this->value = $data['value'];
-        $data['value'] = $this->getValue();
         if (!isset($data['rows_cols'])) $data['rows_cols'] = $this->display_columns;
         return parent::showInput($data);
     }
@@ -58,7 +57,6 @@ class CheckboxListProperty extends SelectProperty
     public function showOutput(Array $data = array())
     {
         if (isset($data['value'])) $this->value = $data['value'];
-        $data['value'] = $this->getValue();
         return parent::showOutput($data);
     }
 
