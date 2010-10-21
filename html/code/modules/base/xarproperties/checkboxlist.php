@@ -49,7 +49,14 @@ class CheckboxListProperty extends SelectProperty
 
     public function showInput(Array $data = array())
     {
-        if (isset($data['value'])) $this->value = $data['value'];
+        if (isset($data['value'])) {
+            if (is_array($data['value'])) {
+                $this->value = implode(',',$data['value']);
+            } else {
+                $this->value = $data['value'];
+            }
+        }
+        $data['value'] = $this->getValue();
         if (!isset($data['rows_cols'])) $data['rows_cols'] = $this->display_columns;
         return parent::showInput($data);
     }
