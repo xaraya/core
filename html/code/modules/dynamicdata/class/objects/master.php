@@ -168,6 +168,7 @@ class DataObjectMaster extends Object
     {
         $parts = explode('.',$sourcestring);
         if (!isset($parts[1])) throw new Exception(xarML('Bad property definition'));
+        $parts[0] = trim($parts[0]);
         if ($parts[0] == 'this' || $parts[0] == $object->name) {
             if ($prefix) return $object->name . "_" . $object->properties[$parts[1]]->source;
             else return $object->properties[$parts[1]]->source;
@@ -1009,6 +1010,10 @@ class DataObjectMaster extends Object
                     foreach ($object->datasources as $key => $value) {
                         // Support simple array form
                         if (is_array($value)) $value = current($value);
+                        // Remove any spaces and similar chars
+                        $value = trim($value);
+                        $key = trim($key);
+
                         // Default to variable datasource if we find that anywhere
                         if ($key == 'variable') {
                             $object->datasources = array('variable' => 'variable');
@@ -1031,6 +1036,9 @@ class DataObjectMaster extends Object
                 foreach ($relationargs as $key => $value) {
                     // Support simple array form
                     if (is_array($value)) $value = current($value);
+                    // Remove any spaces and similar chars
+                    $value = trim($value);
+                    $key = trim($key);
                     
                     // Check if this relation includes a foreign table
                     // If it does do a left or right join, rather than an inner join
@@ -1066,6 +1074,10 @@ class DataObjectMaster extends Object
                 foreach ($objectargs as $key => $value) {
                     // Support simple array form
                     if (is_array($value)) $value = current($value);
+                    // Remove any spaces and similar chars
+                    $value = trim($value);
+                    $key = trim($key);
+
                     if ((strpos($key, 'this') === false) && (strpos($value, 'this') === false)
                     && (strpos($key, $object->name) === false) && (strpos($value, $object->name) === false)
                     ) 
