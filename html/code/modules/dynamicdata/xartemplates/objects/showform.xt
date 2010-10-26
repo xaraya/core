@@ -20,7 +20,7 @@
                 <xar:data-input property="$properties[$name]" />
             </div>
         </xar:foreach>
-        <xar:else />
+    <xar:else />
         <!-- You can also specify your own layout here or in a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->
         <xar:template module="$tplmodule" file="form-$layout"/>
     </xar:if>
