@@ -48,6 +48,7 @@ class DataProperty extends Object implements iDataProperty
     public $previous_value = null;       // previous value of this property (if supported)
     public $filter         = 'nofilter'; // value of the filter of this property (if it is part of a filter layout)
     public $invalid        = '';         // result of the checkInput/validateValue methods
+    public $basetype       = 'string';   // the primitive data type of this property
 
     public $include_reference = 0; // tells the object this property belongs to whether to add a reference of itself to me
     public $objectref = null;  // object this property belongs to

@@ -20,6 +20,8 @@ class NumberBoxProperty extends TextBoxProperty
     public $name       = 'integerbox';
     public $desc       = 'Number Box';
 
+    public $basetype   = 'number';
+
     public $validation_min_value           = null;
     public $validation_min_value_invalid;
     public $validation_max_value           = null;
