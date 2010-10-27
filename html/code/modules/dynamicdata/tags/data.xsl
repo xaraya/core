@@ -447,4 +447,55 @@
   </xsl:processing-instruction>
 </xsl:template>
 
+<xsl:template match="xar:data-filter">
+  <xsl:processing-instruction name="php">
+    <xsl:choose>
+        <xsl:when test="not(@property)">
+          <!-- No prop, get one (the right one, preferably) -->
+          <xsl:text>sys::import('modules.dynamicdata.class.properties');</xsl:text>
+          <xsl:text>$property =&amp; DataPropertyMaster::getProperty(</xsl:text>
+          <xsl:call-template name="atts2args">
+            <xsl:with-param name="nodeset" select="@*"/>
+          </xsl:call-template>
+          <xsl:text>);</xsl:text>
+          <xsl:text>echo $property-&gt;showFilter(</xsl:text>
+          <!-- if we have a field attribute, use just that, otherwise use all attributes -->
+          <xsl:choose>
+            <xsl:when test="not(@field)">
+              <xsl:call-template name="atts2args">
+                <xsl:with-param name="nodeset" select="@*[name() != 'property']"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="@field"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:text>);</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- We already had a property object, run its output method -->
+          <xsl:text>if (isset(</xsl:text>
+          <xsl:value-of select="@property"/>
+          <xsl:text>)){</xsl:text>
+          <xsl:text>echo </xsl:text>
+          <xsl:value-of select="@property"/>
+          <xsl:text>-&gt;showFilter(</xsl:text>
+          <!-- if we have a field attribute, use just that, otherwise use all attributes -->
+          <xsl:choose>
+            <xsl:when test="not(@field)">
+              <xsl:call-template name="atts2args">
+                <xsl:with-param name="nodeset" select="@*[name() != 'property']"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="@field"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:text>);</xsl:text>
+          <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+  </xsl:processing-instruction>
+</xsl:template>
+
 </xsl:stylesheet>

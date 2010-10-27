@@ -3,6 +3,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @package modules
  * @subpackage roles
+ * @copyright see the html/credits.html file in this release
  */
 
 sys::import('modules.base.xarproperties.textbox');
@@ -23,6 +24,7 @@ class NameProperty extends TextBoxProperty
     public $display_show_firstname;
     public $display_show_middlename;
     public $initialization_refobject    = 'roles_users';    // Name of the object we want to reference
+    public $validation_ignore_validations;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -34,7 +36,7 @@ class NameProperty extends TextBoxProperty
 
     public function checkInput($name = '', $value = null)
     {
-        $name = empty($name) ? 'dd_'.$this->id : $name;//echo $name;
+        $name = empty($name) ? 'dd_'.$this->id : $name;
         if ($this->initialization_refobject == 'roles_groups') {
             $property = DataPropertyMaster::getProperty(array('name' => 'objectref'));
             $property->validation_override = true;
@@ -54,8 +56,10 @@ class NameProperty extends TextBoxProperty
                 $validity = true;
                 $value = array();
                 $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
-                $textbox->validation_min_length = 3;
-            }
+                if (!$this->validation_ignore_validations) {
+                    $textbox->validation_min_length = 3;
+                }
+			}
             $value['salutation'] = '';
             $value['last'] = '';
             $value['middle'] = '';

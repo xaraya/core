@@ -20,12 +20,15 @@ class NumberBoxProperty extends TextBoxProperty
     public $name       = 'integerbox';
     public $desc       = 'Number Box';
 
+    public $basetype   = 'number';
+
     public $validation_min_value           = null;
     public $validation_min_value_invalid;
     public $validation_max_value           = null;
     public $validation_max_value_invalid;
     public $display_size                   = 10;
     public $display_maxlength              = 30;
+    public $display_numberformat           = 0;
 
     function __construct(ObjectDescriptor $descriptor)
     {
