@@ -17,7 +17,7 @@
         <xar:if condition="!empty($starter) and is_array($starter) and xarSecConfirmAuthKey()">
             <xar:set name="startlist">array_keys($starter)</xar:set>
             <xar:set name="dummy">xarModVars::set('dynamicdata','starter_object_list',serialize($startlist))</xar:set>
-            #xarResponse::Redirect(xarServer::getCurrentURL(array('update'=> null)))#
+            #xarController::redirect(xarServer::getCurrentURL(array('update'=> null)))#
         </xar:if>
         <form method="post">
         <p>Please specify which objects should be shown to your users here</p>

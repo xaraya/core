@@ -19,7 +19,7 @@
         <div class="xar-mod-body">
             <xar:template type="module" file="admin-menu"/>
             <h2>Modify Configuration</h2>
-            <form action="&xar-modurl-themes-admin-updateconfig;" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#xarModURL('themes','admin','updateconfig')#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Configuration Options</legend>
                     <div class="textInputContainer">

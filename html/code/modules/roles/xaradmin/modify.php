@@ -88,7 +88,7 @@ function roles_admin_modify()
             $itemid = $data['object']->updateItem(array('itemid' => $data['itemid']));
 
             // Jump to the next page
-            xarResponse::redirect(xarModURL('roles','admin','modify',array('itemid' => $data['itemid'])));
+            xarController::redirect(xarModURL('roles','admin','modify',array('itemid' => $data['itemid'])));
             return true;
         }
     }

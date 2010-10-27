@@ -19,17 +19,20 @@ function roles_userapi_getmenulinks()
     //If we have turned on role list (memberlist) display and users have requisite level to see them
     $menulinks = array();
     if ((bool)xarModVars::get('roles', 'displayrolelist')){
-            $menulinks[] = array('url'   => xarModURL('roles',
-                                                      'user',
-                                                      'view'),
-                                 'title' => xarML('View All Users'),
-                                 'label' => xarML('Memberslist'));
-
+            $menulinks[] = array(
+                'url'   => xarModURL('roles','user','view'),
+                'title' => xarML('View All Users'),
+                'label' => xarML('Memberslist'),
+                'active' => array('view'),
+                );
     }
     if (xarUserIsLoggedIn()){
-        $menulinks[] = array('url'   => xarModURL('roles','user','account'),
-                             'title' => xarML('Your Custom Configuration'),
-                             'label' => xarML('Your Account'));
+        $menulinks[] = array(
+            'url'   => xarModURL('roles','user','account'),
+            'title' => xarML('Your Custom Configuration'),
+            'label' => xarML('Your Account'),
+            'active' => array('account'),
+            );
     }
     return $menulinks;
 }

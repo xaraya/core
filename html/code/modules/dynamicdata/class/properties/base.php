@@ -30,7 +30,7 @@ class DataProperty extends Object implements iDataProperty
     public $status         = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     public $seq            = 0;
     public $format         = '0'; //<-- eh?
-    public $filepath       = 'modules/dynamicdata/xarproperties';
+    public $filepath       = 'auto';
     public $class          = '';         // this property's class
 
     // Attributes for runtime
@@ -189,6 +189,11 @@ class DataProperty extends Object implements iDataProperty
     public function setValue($value=null)
     {
         $this->value = $value;
+    }
+
+    public function clearValue()
+    {
+        $this->value = null;
     }
 
     /**
@@ -379,11 +384,12 @@ class DataProperty extends Object implements iDataProperty
             $data['invalid']  = '';
         }
 
-        // Add the configuration options if they have not been overridden
+        // Add the configuration options defined via UI
         if(isset($data['configuration'])) {
             $this->parseConfiguration($data['configuration']);
             unset($data['configuration']);
         }
+        // Now check for overrides from the template
         foreach ($this->configurationtypes as $configtype) {
             $properties = $this->getConfigProperties($configtype,1);
             foreach ($properties as $name => $configarg) {
@@ -419,24 +425,23 @@ class DataProperty extends Object implements iDataProperty
         $data['name'] = $this->name;
         if (empty($data['_itemid'])) $data['_itemid'] = 0;
 
-        if(!isset($data['value'])) $data['value'] = $this->getValue();
+        if(!isset($data['value']))    $data['value']    = $this->value;
         // TODO: does this hurt when it is an array?
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
 
-        // Add the configuration options if they have not been overridden
+        // Add the configuration options defined via UI
         if(isset($data['configuration'])) {
             $this->parseConfiguration($data['configuration']);
             unset($data['configuration']);
         }
+        // Now check for overrides from the template
         foreach ($this->configurationtypes as $configtype) {
-            $properties = $this->getPublicProperties();
-            foreach ($properties as $name => $value) {
-                if (strpos($name,$configtype) === 0) {
-                    $shortname = substr($name,strlen($configtype)+1);
-                    if(!isset($shortname)) $data[$shortname] = $value;
-                }
+            $properties = $this->getConfigProperties($configtype,1);
+            foreach ($properties as $name => $configarg) {
+                if (!isset($data[$configarg['shortname']]))
+                    $data[$configarg['shortname']] = $this->{$configarg['fullname']};
             }
         }
         return xarTplProperty($data['tplmodule'], $data['template'], 'showoutput', $data);
@@ -509,13 +514,13 @@ class DataProperty extends Object implements iDataProperty
         // The value might be an array
         if (is_array($data['value'])){
             $temp = array();
-            foreach ($data['value'] as $tmp) $temp[] = xarVarPrepForDisplay($tmp);
+            foreach ($data['value'] as $key => $tmp) $temp[$key] = xarVarPrepForDisplay($tmp);
             $data['value'] = $temp;
         } else {
             $data['value'] = xarVarPrepForDisplay($data['value']);
         }
 
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : $this->invalid;
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
@@ -742,17 +747,11 @@ class DataProperty extends Object implements iDataProperty
             if (!isset($allconfigproperties[$name])) continue;
             $pos = strpos($name, "_");
             if (!$pos || (substr($name,0,$pos) != $type)) continue;
-            if ($fullname) {
-                $configproperties[$name] = $allconfigproperties[$name];
-                $configproperties[$name]['value'] = $arg;
-                $configproperties[$name]['shortname'] = substr($name,$pos+1);
-                $configproperties[$name]['fullname'] = $name;
-            } else {
-                $configproperties[substr($name,$pos+1)] = $allconfigproperties[$name];
-                $configproperties[substr($name,$pos+1)]['value'] = $arg;
-                $configproperties[substr($name,$pos+1)]['shortname'] = substr($name,$pos+1);
-                $configproperties[substr($name,$pos+1)]['fullname'] = $name;
-            }
+            $key = $fullname ? $name : substr($name,$pos+1);
+            $configproperties[$name] = $allconfigproperties[$name];
+            $configproperties[$key]['value'] = $arg;
+            $configproperties[$key]['shortname'] = substr($name,$pos+1);
+            $configproperties[$key]['fullname'] = $name;
         }
         return $configproperties;
     }

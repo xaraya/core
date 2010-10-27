@@ -20,7 +20,8 @@
  */
 function mail_adminapi_getmenulinks()
 {
-    $menulinks = xarMod::apiFunc('base','admin','menuarray',array('module' => 'mail'));
+    // Get menu links from xml
+    $menulinks = xarMod::apiFunc('base','admin','loadmenuarray',array('modname' => 'mail', 'modtype' => 'admin'));
     if (xarModIsAvailable('scheduler')) {
         $menulinks[] = array('url' => xarModURL('mail','admin','viewq'),
                              'title' => xarML('View all mails scheduled to be sent later'),
