@@ -533,7 +533,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
         }
 
-        $args['items'] =& $this->items;
+        // If we have an items parameter, take it as valid 
+        if (isset($args['items'])) {
+            $this->items = $args['items'];
+        } else {
+            $args['items'] =& $this->items;
+        }
 
         // add link to display the item
         if(empty($args['linktype']))  $args['linktype'] = $this->linktype;
