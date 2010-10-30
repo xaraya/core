@@ -23,18 +23,24 @@ class ArrayProperty extends DataProperty
     public $fields = array();
 
     public $display_columns = 30;
-    public $display_columns_count = 1;              // default value of column dimension
+//    public $display_columns_count = 2;                             // default value of column dimension
     public $display_rows = 4;
     public $initialization_addremove = 0;           
-    public $display_key_label = "Key";              // default value of Key label
-    public $display_value_label = "Value";          // default value of value label
-    public $initialization_associative_array = 0;   // to store the value as associative array
-    public $default_suffixlabel = "Row";            // suffix for the Add/Remove Button
-    public $initialization_prop_type = 'textbox';   // property type and config for the array values
-    public $initialization_prop_config = '';        // TODO: the config is displayed/stored as serialized text for now, to                                                    
+//    public $display_key_label = "Key";              // default value of Key label
+//    public $display_value_label = "Value";          // default value of value label
+    public $display_column_titles = array("Key","Value");          // default labels for columns
+    public $display_column_types = array("textbox","textbox");     // default types for columns
+    public $initialization_associative_array = 1;                  // to store the value as associative array
+    public $default_suffixlabel = "Row";                           // suffix for the Add/Remove Button
+//    public $initialization_prop_type = 'textbox';   // property type and config for the array values
+//    public $initialization_prop_config = '';        // TODO: the config is displayed/stored as serialized text for now, to                                                    
                                                     //       avoid nested configs (e.g. see the objects 'config' property)
     public $initialization_fixed_keys = 0;          // allow editing keys on input
 
+
+    public $display_column_definition = array(array("Key","Value"),array("textbox","textbox"));  
+
+    
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
@@ -50,51 +56,20 @@ class ArrayProperty extends DataProperty
         $this->fieldname = $name;
 
         if (!isset($value)) {
-            if (!xarVarFetch($name . '_key', 'array', $keys, array(), XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch($name . '_value',   'array', $values, array(), XARVAR_NOT_REQUIRED)) return;
+            $columncount = count($this->display_column_definition['value'][0]);
+            for ($i=0;$i<$this->display_rows;$i++) {
+                for ($j=0;$j<$columncount;$j++) {
+                    // Get the property for this field and get the value from the template
+                    $property = DataPropertyMaster::getProperty(array('type' => $this->display_column_definition['value'][1][$j]));
+                    $fieldname = $name . '["value"][' . $j . '][' . $i . ']';
+                    $property->checkInput($fieldname);
+                    $value[$j][$i] = $property->value;
+                }
+            }
 
-            //Check for an associative_array.
-            if (!xarVarFetch($name . '_associative_array',   'int', $associative_array, null, XARVAR_NOT_REQUIRED)) return;
             //Set value to the initialization_associative_array  
+            if (!xarVarFetch($name . '["associative_array"]', 'int', $associative_array, 0, XARVAR_NOT_REQUIRED)) return;
             $this->initialization_associative_array = $associative_array;
-
-            // check if we have a specific property for the values
-            if (!xarVarFetch($name . '_has_property', 'isset', $has_property, null, XARVAR_NOT_REQUIRED)) return;
-            if (!empty($has_property)) {
-                // Note: this relies on the initialized configuration
-                $property = $this->getValueProperty();
-            }
-
-            if (!empty($property)) {
-                $value = array();
-                foreach ($keys as $idx => $key) {
-                    if (empty($key)) continue;
-                    $fieldname = $name . '_value_' . $idx;
-                    $isvalid = $property->checkInput($fieldname);
-                    if ($isvalid) {
-                        $value[$key] = $property->getValue();
-                    } else {
-                        $this->invalid .= $key . ': ' . $property->invalid;
-                    }
-                }
-            } else {
-                $hasvalues = false;
-                while (count($keys)) {
-                    try {
-                        $thiskey = array_shift($keys);
-                        $thisvalue = array_shift($values);
-                        if (empty($thiskey) && empty($thisvalue)) continue;
-                        if ($this->initialization_associative_array && empty($thiskey)) continue;
-                        if (is_array($thisvalue) && count($thisvalue) == 1) {
-                            $value[$thiskey] = current($thisvalue);
-                        } else {
-                            $value[$thiskey] = $thisvalue;
-                        }
-                        $hasvalues = true;
-                    } catch (Exception $e) {}
-                }
-                if (!$hasvalues) $value = array();
-            }
         }
         return $this->validateValue($value);
     }
@@ -116,7 +91,6 @@ class ArrayProperty extends DataProperty
         if (!empty($value) && !is_array($value)) {
             $this->value = $value;
         } else {
-        //LEGACY
             if (empty($value)) $value = array();
             //this code is added to store the values as value1,value2 in the DB for non-associative storage
             if(!$this->initialization_associative_array) {
@@ -142,7 +116,6 @@ class ArrayProperty extends DataProperty
     public function getValue()
     {
         try {
-        // LEGACY
             if(!$this->initialization_associative_array) {
                 $outer = explode(';',$this->value);
                 $value =array();
@@ -162,10 +135,81 @@ class ArrayProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
-        if (!isset($data['value'])) $value = $this->value;
+        // If this is a column definition, load its configuration up front
+        // A bound array property contains itself an arry property as part of its configuration
+        // The recursed parameter signals we are displaying the configuration property
+        if (isset($data["configuration"])) {
+            $configuration = unserialize($data["configuration"]);
+            if (isset($configuration['display_column_definition']['configuration']) && 
+                !empty($configuration['display_column_definition']['recursed'])) {
+                
+                // Unset the recursed parameter so as not to repeat this
+                unset($configuration['display_column_definition']['recursed']);
+                
+                // Load the configuration data
+                $this->parseConfiguration($configuration['display_column_definition']['configuration']);
+                
+                // Get the values for titles and column types
+                if (!isset($data['column_definition'])) $data['column_definition'] = $this->display_column_definition;
+                $titles = $data['column_definition'][0];
+                $types = $data['column_definition'][1];
+                
+                // CHECKME: Get the value array. This is a bit odd, but not sure we can do better
+                if (isset($data['value']['value'])) $data['value'] = $data['value']['value'];
+                // Remove any empty rows, i.e. those where there is no title
+                $temp = array();
+                foreach ($data['value'][0] as $k => $v) {
+                    if (!empty($v)) {
+                        $temp[0][] = $v;
+                        $temp[1][] = $data['value'][1][$k];
+                    }
+                }
+                $data['value'] = $temp;
+                $data['rows'] = count($data['value'][0]);
+                $data['layout'] = 'configuration';
+            }
+        } else {
+            $titles = $this->display_column_definition['value'][0];
+            $types = $this->display_column_definition['value'][1];
+            $data['layout'] = 'table';
+        }
+        
+        // Bring the array config values to a common set of variables
+//        if (isset($data['column_titles'])) $this->display_column_titles = $data['column_titles'];
+//        if (isset($data['column_types']))  $this->display_column_types = $data['column_types'];
+//        if (isset($data['rows']))          $this->display_rows = $data['rows'];
+
+        if (!isset($data['rows']))          $data['rows'] = count($titles);        
+        if (!isset($data['column_titles'])) $data['column_titles'] = $titles;
+        if (!isset($data['column_types']))  $data['column_types'] = $types;
+
+        // If titles or types were passed directly through the tag, they may be lists we need to turn into arrays
+        if (!is_array($data['column_titles'])) $data['column_titles'] = explode(',', $data['column_titles']);
+        if (!is_array($data['column_types'])) $data['column_types'] = explode(',', $data['column_types']);
+        
+        // Now arrange the values contained in this array to the size we need
+        // Number of columns is defined by count($data['column_titles'])
+        // Number of rows is defined by $data['rows']
+        if (!isset($data['value'])) $value = $this->getValue();
         else $value = $data['value'];
         
-        if (!isset($data['suffixlabel'])) $data['suffixlabel'] = $this->default_suffixlabel;
+        // First align the the number of titles and column types
+        $titlescount = count($data['column_titles']);
+        $typescount = count($data['column_types']);
+        if ($titlescount > $typescount) {
+            $lastprop = $data['column_types'][$typescount-1];
+            for ($i=$typescount;$i<$titlescount;$i++) $types[] = $lastprop;
+        }
+        // Now add any missing value rows or columns        
+        for ($i=0;$i<$data['rows'];$i++) {
+            for ($j=0;$j<$titlescount;$j++) {
+                $property = DataPropertyMaster::getProperty(array('type' => $data['column_types'][$j]));
+                if (!isset($value[$j][$i])) $value[$j][$i] = $property->defaultvalue;
+            }
+        }
+        $data['value'] = $value;
+        
+/*
         if (!is_array($value)) {
             try {
                 $value = unserialize($value);
@@ -205,16 +249,14 @@ class ArrayProperty extends DataProperty
         }
 
         // check if we have a specific property for the values
-        if (!isset($data['columntype'])) $data['columntype'] = $this->initialization_prop_type;
-        if (!isset($data['valueconfig'])) $data['valueconfig'] = $this->initialization_prop_config;
-        $data['property'] = $this->getValueProperty($data['columntype'], $data['valueconfig']);
+//        if (!isset($data['valuetype'])) $data['valuetype'] = $this->initialization_prop_type;
+//        if (!isset($data['valueconfig'])) $data['valueconfig'] = $this->initialization_prop_config;
+//        $data['property'] = $this->getValueProperty($data['valuetype'], $data['valueconfig']);
 
-        // use a different default template when dealing with properties
-        if (empty($data['template']) && !empty($data['property'])) {
-            $data['template'] = 'array_of_props';
-        }
+//        $data['value'] = array();
 
-        $data['value'] = array();
+*/        
+/*
         foreach ($fieldlist as $field) {
             if (!isset($value[$field])) {
                 $data['value'][$field] = '';
@@ -231,89 +273,55 @@ class ArrayProperty extends DataProperty
                 }
             }
         }
+        */
+        //exit;
 
-        if (!isset($data['rows'])) $data['rows'] = $this->display_rows;
-        if (!isset($data['size'])) $data['size'] = $this->display_columns;
-        if (!isset($data['columns'])) $data['columns'] = $this->display_columns_count;
+/*
         
-        if (!isset($data['keylabel'])) $data['keylabel'] = $this->display_key_label;
-        if (!isset($data['valuelabel'])) $data['valuelabel'] = $this->display_value_label;
+//        if (!isset($data['keylabel'])) $data['keylabel'] = $this->display_key_label;
+//        if (!isset($data['valuelabel'])) $data['valuelabel'] = $this->display_value_label;
+
+        if (!isset($data['column_definition'])) $data['column_definition'] = $this->display_column_definition;
+//var_dump($this->display_column_titles);
+//var_dump($this->display_column_types);
+//var_dump($this->display_columns_count);
+//var_dump($this->display_rows);
+         
+*/
         if (!isset($data['allowinput'])) $data['allowinput'] = $this->initialization_addremove;
         if (!isset($data['associative_array'])) $data['associative_array'] = $this->initialization_associative_array;
         if (!isset($data['fixedkeys'])) $data['fixedkeys'] = $this->initialization_fixed_keys;
-        $data['numberofrows'] = count($data['value']);
+
+        if (!isset($data['suffixlabel'])) $data['suffixlabel'] = $this->default_suffixlabel;
+        if (!isset($data['size'])) $data['size'] = $this->display_columns;
+        if (!isset($data['layout'])) $data['layout'] = 'table';
+
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
-        if (!isset($data['columns'])) $data['columns'] = $this->display_columns_count;
-        $value = isset($data['value']) ? $data['value'] : $this->getValue();
-        $data['associative_array'] = !empty($associative_array) ? $associative_array : $this->initialization_associative_array;
-        if (!is_array($value)) {
-            //this is added to show the value with new line when storage is non-associative
-            if(!$this->initialization_associative_array) {
-                $data['value'] = explode(';',$value);
-                // remove the last (empty) element
-                 array_pop($data['value']);
-            } else {
-                 $data['value'] = $value;
-            }
-        } else {
-            if (empty($value)) $value = array();
-
-            if (count($this->fields) > 0) {
-                $fieldlist = $this->fields;
-            } else {
-                $fieldlist = array_keys($value);
-            }
-
-            $data['value'] = array();
-            foreach ($fieldlist as $field) {
-                if (!isset($value[$field])) {
-                    $data['value'][$field] = '';
-                } else {
-                    $data['value'][$field] = $value[$field];
-                }
-            }
-        }
-
-        // check if we have a specific property for the values
-        if (!isset($data['valuetype'])) $data['valuetype'] = $this->initialization_prop_type;
-        if (!isset($data['valueconfig'])) $data['valueconfig'] = $this->initialization_prop_config;
-        $data['property'] = $this->getValueProperty($data['valuetype'], $data['valueconfig']);
-
-        // use a different default template when dealing with properties
-        if (empty($data['template']) && !empty($data['property'])) {
-            $data['template'] = 'array_of_props';
-        }
+        $data['value'] = isset($data['value']) ? $data['value'] : $this->getValue();
+        $data['column_titles'] = $this->display_column_definition['value'][0];
+        $data['column_types'] = $this->display_column_definition['value'][1];
 
         return parent::showOutput($data);
     }
-
-    function &getValueProperty($valuetype = '', $valueconfig = '')
+    
+    public function updateConfiguration(Array $data = array())
     {
-        if (empty($valuetype)) {
-            $valuetype = $this->initialization_prop_type;
-        } else {
-            $this->initialization_prop_type = $valuetype;
-        }
-        if (empty($valueconfig)) {
-            $valueconfig = $this->initialization_prop_config;
-        } else {
-            $this->initialization_prop_config = $valueconfig;
-        }
-        if (empty($this->initialization_prop_type)) {
-            $property = null;
-        } elseif ($this->initialization_prop_type == 'textbox' && empty($this->initialization_prop_config)) {
-            $property = null;
-        } else {
-            $property = DataPropertyMaster::getProperty(array('type' => $this->initialization_prop_type));
-            if (!empty($this->initialization_prop_config)) {
-                $property->parseConfiguration($this->initialization_prop_config);
+        // Remove any empty rows, i.e. those where there is no title
+        $temp = array();
+        foreach ($data['configuration']['display_column_definition']['value'][0] as $k => $v) {
+            if (!empty($v)) {
+                $temp[0][] = $v;
+                $temp[1][] = $data['configuration']['display_column_definition']['value'][1][$k];
+                $temp[2][] = $data['configuration']['display_column_definition']['value'][2][$k];
             }
         }
-        return $property;
+        $data['configuration']['display_column_definition']['value'] = $temp;
+
+        return parent::updateConfiguration($data);
     }
 }
 ?>

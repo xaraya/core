@@ -62,6 +62,14 @@ class xarController extends Object
      */
     static function getVar($name, $allowOnlyMethod = NULL)
     {
+        if (strpos($name, '[') === false) {
+            $poststring = '$_POST["' . $name . '"]';            
+        } else {
+            $position = strpos($name, '[');
+            $poststring = '$_POST["' . substr($name,0,$position) . '"]' . substr($name,$position);            
+        }
+        eval("\$isset = isset($poststring);");
+
         if ($allowOnlyMethod == 'GET') {
             // Short URLs variables override GET variables
             if (self::$allowShortURLs && isset(self::$shortURLVariables[$name])) {
@@ -75,9 +83,9 @@ class xarController extends Object
             }
             $method = $allowOnlyMethod;
         } elseif ($allowOnlyMethod == 'POST') {
-            if (isset($_POST[$name])) {
+            if ($isset) {
                 // First check in $_POST
-                $value = $_POST[$name];
+                eval("\$value = $poststring;");
             } else {
                 // Nothing found, return void
                 return;
@@ -88,9 +96,9 @@ class xarController extends Object
                 // Short URLs variables override GET and POST variables
                 $value = self::$shortURLVariables[$name];
                 $method = 'GET';
-            } elseif (isset($_POST[$name])) {
+            } elseif ($isset) {
                 // Then check in $_POST
-                $value = $_POST[$name];
+                eval("\$value = $poststring;");
                 $method = 'POST';
             } elseif (isset($_GET[$name])) {
                 // Then check in $_GET
