@@ -301,10 +301,10 @@ class ArrayProperty extends DataProperty
 
     public function showOutput(Array $data = array())
     {
-        $data['value'] = isset($data['value']) ? $data['value'] : $this->getValue();
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        $data['value'] = $this->getValue();
         $data['column_titles'] = $this->display_column_definition['value'][0];
         $data['column_types'] = $this->display_column_definition['value'][1];
-
         return parent::showOutput($data);
     }
     
