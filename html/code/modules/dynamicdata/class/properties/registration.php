@@ -298,7 +298,7 @@ class PropertyRegistration extends DataContainer
                     $dp = str_replace('/','.','properties/' . basename($file) . "/main");
                     try {
                         sys::import($dp);
-                    } catch (Exception $e) {echo file_exists($propertiesdir . basename($file) . "/main.php");
+                    } catch (Exception $e) {
                         throw new Exception(xarML('The file #(1) could not be loaded', $dp . '.php'));
                     }
                     $loaded[$file] = true;
