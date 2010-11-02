@@ -2,7 +2,8 @@
 /**
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @package modules
- * @subpackage roles
+ * @subpackage roles module
+ * 
  */
 
 sys::import('modules.base.xarproperties.textbox');

@@ -1,5 +1,7 @@
 <?php
 /**
+ * @package modules
+ * @subpackage themes module
  * Gets a list of themes that matches required criteria.
  *
  * Supported criteria are UserCapable, AdminCapable, Class, Category, State.

@@ -3,11 +3,12 @@
  * Sends a new password to the user if they have forgotten theirs.
  *
  * @package modules
+ * @subpackage roles module
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage roles module
+ * 
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**

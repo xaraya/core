@@ -2,11 +2,11 @@
 /**
  * Handle css tag
  * @package modules
+ * @subpackage themes module
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage themes module
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**

@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage themes module
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage themes
+ * 
  */
 /**
  * Gets a list of themes that matches required criteria

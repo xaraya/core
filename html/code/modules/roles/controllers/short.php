@@ -3,11 +3,12 @@
  * Roles Action Controller class
  *
  * @package modules
+ * @subpackage roles module
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage roles
+ * 
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
