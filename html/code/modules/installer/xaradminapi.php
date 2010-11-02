@@ -1,12 +1,12 @@
 <?php
 /**
  * Modify the system configuration File
- * @package Installer
+ * @package installer
+ * @subpackage installer module
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Installer
  * @link http://xaraya.com/index.php/release/200.html
  */
 
