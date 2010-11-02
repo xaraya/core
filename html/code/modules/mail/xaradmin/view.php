@@ -3,7 +3,7 @@
  * Queue management for mail module
  *
  * @package modules
- * @subpackage mail
+ * @subpackage mail module
  * @author Marcel van der Boom <marcel@xaraya.com>
  */
 function mail_admin_view($args)
