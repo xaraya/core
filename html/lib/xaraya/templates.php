@@ -506,7 +506,7 @@ function xarTplObject($modName, $objectName, $tplType = 'showdisplay', $tplData 
  *        don't contain nasty stuff. Filter as appropriate when using
  *        this function to generate image URLs...
  *
- * @access  public
+ * 
  * @param   string $modImage the module image url relative to xarimages/
  * @param   string $modName  the module to check for the image <optional>
  * @return  string $theme    image url if it exists or module image url if not, or NULL if neither found

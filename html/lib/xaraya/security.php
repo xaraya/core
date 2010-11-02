@@ -39,7 +39,7 @@ sys::import('modules.roles.class.roles');
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   string name
  * @return  bool
  */
@@ -188,7 +188,7 @@ function xarAssignPrivilege($privilege,$role)
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   string module
  * @return  bool
  */
@@ -227,7 +227,7 @@ function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   string module
  * @return  bool
  */
@@ -251,7 +251,7 @@ function xarGetGroups() { return xarRoles::getgroups(); }
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   string name
  * @return  object role
  */
@@ -288,7 +288,7 @@ function xarIsAncestor($name1, $name2)
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   string name
  * @return  object role
  * @todo    what is this doing here?
@@ -306,7 +306,7 @@ function xarTree()
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   integer pid,level
  * @param   strings pid,name,realm,module,component
  * @param   array instance
@@ -329,7 +329,7 @@ function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$leve
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   integer levelname
  * @return  security level
  */
@@ -342,7 +342,7 @@ function xarSecurityLevel($levelname)
  * xarPrivExists: checks whether a privilege exists.
  *
  *
- * @access  public
+ * 
  * @param   string name of privilege
  * @return  boolean
  */
@@ -357,7 +357,7 @@ function xarPrivExists($name)
  * xarMaskExists: checks whether a mask exists.
  *
  *
- * @access  public
+ * 
  * @param   string name of mask
  * @param   string module of mask
  * @return  bool
@@ -432,7 +432,7 @@ function xarUnregisterMask($name)
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   string module
  * @return  bool
  */

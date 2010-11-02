@@ -100,7 +100,7 @@ class xarEvents extends Object implements IxarEvents
     /**
      * Check whether an event is registered
      *
-     * @access  private
+     * 
      * @param   $eventName Name of the event to check
      * @return  bool
      * @throws  EventRegistrationException
@@ -118,7 +118,6 @@ class xarEvents extends Object implements IxarEvents
      * has defined a specific handler for that event, that function is
      * executed.
      *
-     * @access  protected (huh? it is publicly coded)
      * @param   string $eventName The name of the event
      * @param   mixed  $value Passed as parameter to the even handler function in the module
      * @return  void
