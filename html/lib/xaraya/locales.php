@@ -27,7 +27,7 @@ class LocaleNotFoundException extends NotFoundExceptions
  * Locale data is an associative array, its keys are described at the top
  * of this file
  *
- * @access public
+ * 
  * @return array locale data
  * @throws LocaleNotFoundException
  * @todo   figure out why we go through this function for xarMod::isAvailable
@@ -121,7 +121,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
 /**
  * Parses a string as a currency amount according to specified locale data
  *
- * @access public
+ * 
  * @return string representing a currency amount
  */
 function xarLocaleParseCurrency($currency, $localeData = NULL)
@@ -139,7 +139,7 @@ function xarLocaleParseCurrency($currency, $localeData = NULL)
 /**
  * Parses a string as a number according to specified locale data
  *
- * @access public
+ * 
  * @return string representing a number
  */
 function xarLocaleParseNumber($number, $localeData = NULL, $isCurrency = false)
@@ -158,7 +158,7 @@ function xarLocaleParseNumber($number, $localeData = NULL, $isCurrency = false)
 /**
  * Formats a currency according to specified locale data
  *
- * @access public
+ * 
  * @return string formatted currency
  */
 function xarLocaleFormatCurrency($currency, $localeData = NULL)
@@ -173,7 +173,7 @@ function xarLocaleFormatCurrency($currency, $localeData = NULL)
 /**
  * Formats a number according to specified locale data
  *
- * @access public
+ * 
  * @return string formatted number
  * @throws BAD_PARAM
  */
@@ -279,7 +279,7 @@ function xarLocaleGetFormattedUTCDate($length = 'short', $timestamp = null, $add
 /**
  *  Grab the formated date by the user's current locale settings
  *
- * @access public
+ * 
  * @param string $length what date locale we want (short|medium|long)
  * @param int $timestamp optional unix timestamp in UTC to format
  * @param bool $addoffset add user timezone offset (default true)
@@ -330,7 +330,7 @@ function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null, $addo
 /**
  * Grab the formated time by the user's current locale settings
  *
- * @access public
+ * 
  * @param string $length what time locale we want (short|medium|long)
  * @param int $timestamp optional unix timestamp in UTC to format
  * @param bool $addoffset add user timezone offset (default true)
@@ -411,7 +411,7 @@ function xarLocaleFormatUTCDate($format = null, $time = null, $addoffset = false
 /**
  * Format a date/time according to the current locale (and/or user's preferences)
  *
- * @access public
+ * 
  * @param time mixed timestamp or date string (default now)
  * @param format strftime() format to use (TODO: default locale-dependent or configurable ?)
  * @param addoffset bool add user timezone offset (default true)
@@ -450,7 +450,7 @@ function xarLocaleFormatDate($format = null, $timestamp = null, $addoffset = tru
  *  a timestamp that has been modified for the user's current
  *  timezone setting.
  *
- *  @access protected
+ *  
  *  @param string $format valid format params from strftime() function\
  *  @param int $timestamp optional unix timestamp to translate
  *  @return string datetime string with locale translations

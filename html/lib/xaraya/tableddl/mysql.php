@@ -24,7 +24,7 @@
 /**
  * Generate the MySQL specific SQL to create a table
  *
- * @access private
+ * 
  * @param tableName the physical table name
  * @param fields an array containing the fields to create
  * @return string|false the generated SQL statement, or false on failure
@@ -84,7 +84,7 @@ function xarDB__mysqlCreateTable($tableName, $fields)
 /**
  * Mysql specific function to alter a table
  *
- * @access private
+ * 
  * @param tableName the table to alter
  * @param args['command'] command to perform on the table
  * @param args['field'] name of column to modify
@@ -202,7 +202,7 @@ function xarDB__mysqlAlterTable($tableName, $args)
 /**
  * Mysql specific column type generation
  *
- * @access private
+ * 
  * @param field_name
  * @param parameters
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?

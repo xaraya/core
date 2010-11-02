@@ -83,7 +83,7 @@ class xarLogger_mail extends xarLogger
      *   $conf['from']      : the mail's "From" header line,
      *   $conf['subject']   : the mail's "Subject" line.
      * 
-     * @access public
+     * 
      */
     function setConfig(Array &$conf)
     {
@@ -109,7 +109,7 @@ class xarLogger_mail extends xarLogger
     * Destructor. This will write out any lines to the logfile, UNLESS the dontLog()
     * method has been called, in which case it won't.
     *
-    * @access private
+    * 
     */
     function _destructor()
     {
@@ -120,7 +120,7 @@ class xarLogger_mail extends xarLogger
      * Starts a new mail message.
      * This is implicitly called by log(), if necessary.
      * 
-     * @access public
+     * 
      */
     function open()
     {
@@ -134,7 +134,7 @@ class xarLogger_mail extends xarLogger
      * Closes the message, if it is open, and sends the mail.
      * This is implicitly called by the destructor, if necessary.
      * 
-     * @access public
+     * 
      */
     function close()
     {
@@ -162,7 +162,7 @@ class xarLogger_mail extends xarLogger
      * Calls open(), if necessary.
      * 
      * @return boolean  True on success or false on failure.
-     * @access public
+     * 
      */
     function notify($message, $level)
     {

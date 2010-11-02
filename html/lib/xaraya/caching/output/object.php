@@ -65,7 +65,6 @@ class xarObjectCache extends Object
     /**
      * Get a cache key if this object method is suitable for output caching
      *
-     * @access public
      * @param string $objectName string registered name of object
      * @param string $methodName string specific method to run
      * @param array  $args arguments to pass to the method
@@ -196,7 +195,6 @@ class xarObjectCache extends Object
     /**
      * Check whether a object is cached
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular object you want to access
      * @return bool   true if the object is available in cache, false if not
      */
@@ -227,7 +225,6 @@ class xarObjectCache extends Object
     /**
      * Get the contents of a object from the cache
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular object you want to access
      * @return string the cached output of the object method
      */
@@ -268,7 +265,6 @@ class xarObjectCache extends Object
     /**
      * Set the contents of a object in the cache
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular object you want to access
      * @param  string $value    the new content for that object
      * @return void

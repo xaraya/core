@@ -52,7 +52,7 @@ class GeneralException extends xarExceptions
 /**
  * Debug function, artificially throws an exception
  *
- * @access public
+ * 
  * @return void
  * @throws DebugException
 **/

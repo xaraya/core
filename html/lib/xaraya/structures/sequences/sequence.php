@@ -1,3 +1,4 @@
+<?php
 /**
  * @package core
  * @subpackage structures
@@ -7,7 +8,6 @@
  * 
  * 
  */
-<?php
 /**
  * Sequence datastructure implementation
  *

@@ -34,7 +34,7 @@
 /**
  * Generate the SQL to create a database
  *
- * @access public
+ * 
  * @param databaseName
  * @param databaseType
  * @return string sql statement for database creation
@@ -79,7 +79,7 @@ function xarDBCreateDatabase($databaseName, $databaseType=NULL, $databaseCharset
 /**
  * Generate the SQL to create a table
  *
- * @access public
+ * 
  * @param tableName the table to alter
  * @param args['command'] command to perform on table(add,modify,drop,rename)
  * @param args['field'] name of column to alter
@@ -140,7 +140,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
 /**
  * Alter database table
  *
- * @access public
+ * 
  * @param tableName the table to alter
  * @param args['command'] command to perform on table(add,modify,drop,rename)
  * @param args['field'] name of column to alter
@@ -203,7 +203,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
 /**
  * Generate the SQL to delete a table
  *
- * @access public
+ * 
  * @param tableName the physical table name
  * @param index an array containing the index name, type and fields array
  * @return data|false the generated SQL statement, or false on failure
@@ -304,7 +304,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
 /**
  * Generate the SQL to drop an index
  *
- * @access public
+ * 
  * @param tableName
  * @param name a db index name
  * @param databaseType

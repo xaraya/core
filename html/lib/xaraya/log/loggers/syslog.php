@@ -60,7 +60,7 @@ class xarLogger_syslog extends xarLogger
      *
      * @param array     $conf               Configuration options for the specific driver.
      *
-     * @access public
+     * 
      * @return boolean
      */
     function setConfig(array &$conf) 
@@ -85,7 +85,7 @@ class xarLogger_syslog extends xarLogger
     * Destructor. This will write out any lines to the logfile, UNLESS the dontLog()
     * method has been called, in which case it won't.
     *
-    * @access private
+    * 
     */
     function _destructor()
     {
@@ -95,7 +95,7 @@ class xarLogger_syslog extends xarLogger
     /**
      * Opens a connection to the system logger, if it has not already
      * been opened.  This is implicitly called by log(), if necessary.
-     * @access public
+     * 
      */
     function open()
     {
@@ -107,7 +107,7 @@ class xarLogger_syslog extends xarLogger
 
     /**
      * Closes the connection to the system logger, if it is open.
-     * @access public     
+     *      
      */
     function close()
     {
@@ -129,7 +129,7 @@ class xarLogger_syslog extends xarLogger
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
      *                  The default is PEAR_LOG_INFO.
      * @return boolean  True on success or false on failure.
-     * @access public     
+     *      
      */
     function notify($message, $level)
     {
@@ -158,7 +158,7 @@ class xarLogger_syslog extends xarLogger
      *
      * @return  The LOG_* representation of $priority.
      *
-     * @access private
+     * 
      */
     function _toSyslog($level)
     {

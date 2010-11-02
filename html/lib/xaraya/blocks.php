@@ -23,7 +23,7 @@ Class xarBlock extends Object implements IxarBlock
  * Initialize blocks subsystem
  *
  * @author Paul Rosania
- * @access protected
+ * 
  * @param  array args
  * @return bool
  */
@@ -44,7 +44,7 @@ Class xarBlock extends Object implements IxarBlock
  * Renders a block instance
  *
  * @author Paul Rosania, Marco Canini <marco@xaraya.com>
- * @access protected
+ * 
  * @param  array data block information parameters
  * @return string output the block to show
  * @throws  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
@@ -228,7 +228,7 @@ Class xarBlock extends Object implements IxarBlock
  * Renders a single block
  *
  * @author John Cox
- * @access protected
+ * 
  * @param  string args[instance] id or name of block instance to render
  * @param  string args[module] module that owns the block
  * @param  string args[type] module that owns the block
@@ -250,7 +250,7 @@ Class xarBlock extends Object implements IxarBlock
  * Renders a block group
  *
  * @author Paul Rosania, Marco Canini <marco@xaraya.com>
- * @access protected
+ * 
  * @param string groupname the name of the block group
  * @param string template optional template to apply to all blocks in the group
  * @return string
@@ -265,7 +265,6 @@ Class xarBlock extends Object implements IxarBlock
     /**
      * Check access for a specific action on block level (see also xarMod and xarObject)
      *
-     * @access public
      * @param block object the block we want to check access for
      * @param action string the action we want to take on this block (display/modify/delete)
      * @param roleid mixed override the current user or null

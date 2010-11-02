@@ -147,7 +147,7 @@ class xarPageCache extends Object
     /**
      * Check if this page is suitable for page caching
      *
-     * @access public
+     * 
      * @param  string $url optional url to be checked if not the current url
      * @return bool   true if the page is suitable for caching, false if not
      */
@@ -196,7 +196,7 @@ class xarPageCache extends Object
     /**
      * Send HTTP headers for page caching (or return 304 Not Modified)
      *
-     * @access private
+     * 
      * @return void
      */
     public static function sendHeaders($modtime = 0)
@@ -264,7 +264,7 @@ class xarPageCache extends Object
     /**
      * check if the content of a page is available in cache or not
      *
-     * @access public
+     * 
      * @param  string $cacheKey the key identifying the particular page you want to access
      * @return bool   true if the page is available in cache, false if not
      */
@@ -304,7 +304,7 @@ class xarPageCache extends Object
     /**
      * get the content of a cached page
      *
-     * @access public
+     * 
      * @param  string $cacheKey the key identifying the particular page you want to access
      * @return bool   true if succeeded, false otherwise
      */
@@ -327,7 +327,7 @@ class xarPageCache extends Object
     /**
      * set the content of a cached page
      *
-     * @access public
+     * 
      * @param  string $cacheKey the key identifying the particular page you want to access
      * @param  string $value    the new content for that page
      * @return void
@@ -405,7 +405,7 @@ class xarPageCache extends Object
 /**
  * check if the user can benefit from page caching
  *
- * @access private
+ * 
  * @return bool
  * @todo Note : don't do this if admins get cached too :)
  */

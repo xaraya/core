@@ -21,7 +21,7 @@ sys::import('xaraya.creole');
  * connection using the required parameters then it sets
  * the table prefixes and xartables up and returns true
  *
- * @access protected
+ * 
  * @param string args[databaseType] database type to use
  * @param string args[databaseHost] database hostname
  * @param string args[databaseName] database name
@@ -53,7 +53,7 @@ function xarDB_init(array &$args)
  *
  * Create a new connection based on the supplied parameters
  *
- * @access public
+ * 
  * @todo   make an object/class method out of this
  */
 function &xarDBNewConn(array $args = null)

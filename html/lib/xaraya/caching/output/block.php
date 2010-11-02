@@ -59,7 +59,6 @@ class xarBlockCache extends Object
     /**
      * Get a cache key if this block is suitable for output caching
      *
-     * @access public
      * @param  array  $blockInfo block information with module, type, id etc.
      * @return mixed  cacheKey to be used with (is|get|set)Cached, or null if not applicable
      */
@@ -228,7 +227,6 @@ class xarBlockCache extends Object
     /**
      * Check whether a block is cached
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular block you want to access
      * @return bool   true if the block is available in cache, false if not
      */
@@ -252,7 +250,6 @@ class xarBlockCache extends Object
     /**
      * Get the contents of a block from the cache
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular block you want to access
      * @return string the cached output of the block
      */
@@ -285,7 +282,6 @@ class xarBlockCache extends Object
     /**
      * Set the contents of a block in the cache
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular block you want to access
      * @param  string $value    the new content for that block
      * @return void

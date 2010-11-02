@@ -107,7 +107,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
      * @param  integer $line linenumber on which the error occurred
      * @param  array   $errorContext information on the context of the error
      * @author Marco Canini <marco@xaraya.com>
-     * @access private
+     * 
      * @throws PHPException
      * @return void
      */

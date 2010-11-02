@@ -62,7 +62,7 @@ class xarLogger_sql extends xarLogger
     *
     * @param  array $conf  with
     *               'table  '     => string      The name of the logger table.
-    * @access public
+    * 
     */
     function setConfig(array &$conf)
     {
@@ -84,7 +84,7 @@ class xarLogger_sql extends xarLogger
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
      *                  The default is PEAR_LOG_INFO.
      * @return boolean  True on success or false on failure.
-     * @access public
+     * 
      */
     function notify($message, $priority)
     {

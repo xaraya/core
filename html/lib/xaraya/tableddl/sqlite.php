@@ -24,7 +24,7 @@
 /**
  * Generate the SQLite specific SQL to create a table
  *
- * @access private
+ * 
  * @param tableName the physical table name
  * @param fields an array containing the fields to create
  * @return string|false the generated SQL statement, or false on failure
@@ -70,7 +70,7 @@ function xarDB__sqliteCreateTable($tableName, $fields)
 /**
  * SQLite specific function to alter a table
  *
- * @access private
+ * 
  * @param tableName the table to alter
  * @param args['command'] command to perform on the table
  * @param args['field'] name of column to modify
@@ -121,7 +121,7 @@ function xarDB__sqliteAlterTable($tableName, $args)
  * all other specs are not needed. We left them in here, so the SQL generated
  * is at least more clear. 
  *
- * @access private
+ * 
  * @param field_name
  * @param parameters
  *

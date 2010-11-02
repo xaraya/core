@@ -46,7 +46,7 @@ set_include_path(realpath(sys::code()) . PATH_SEPARATOR . get_include_path());
 /**
  * Returns the relative path name for the var directory
  *
- * @access public
+ * 
  * @return string the var directory path name
  * @deprec replaced by sys::varpath()
  * @see    sys

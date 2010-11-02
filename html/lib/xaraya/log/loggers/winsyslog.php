@@ -38,7 +38,7 @@ class xarLogger_winsyslog extends xarLogger_syslog
      *
      * @return  The LOG_* representation of $priority.
      *
-     * @access private
+     * 
      */
     function _toSyslog($level)
     {

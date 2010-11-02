@@ -228,7 +228,7 @@ class xarCache extends Object
     /**
      * Get a storage class instance for some type of cached data
      *
-     * @access protected
+     * 
      * @param string  $storage the storage you want (filesystem, database or memcached)
      * @param string  $type the type of cached data (page, block, template, ...)
      * @param string  $cachedir the path to the cache directory (for filesystem)
@@ -248,7 +248,7 @@ class xarCache extends Object
     /**
      * Get the parent group ids of the current user (with minimal overhead)
      *
-     * @access private
+     * 
      * @return array of parent gids
      * @todo avoid DB lookup by passing groups via cookies ?
      * @todo Note : don't do this if admins get cached too :)

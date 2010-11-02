@@ -52,7 +52,7 @@ class xarLogger_error_log extends xarLogger
      *
      * @param array     $conf               Configuration options for the specific driver.
      *
-     * @access public
+     * 
      * @return boolean
      */
     function setConfig(array &$conf)
@@ -89,7 +89,7 @@ class xarLogger_error_log extends xarLogger
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
      *                  The default is PEAR_LOG_INFO.
      * @return boolean  True on success or false on failure.
-     * @access public
+     * 
      */
     function notify($message, $level)
     {

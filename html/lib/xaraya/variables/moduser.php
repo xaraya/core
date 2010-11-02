@@ -31,7 +31,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * a specific item for a certain module. Typical usage
      * is storing user preferences.
      *
-     * @access public
+     * 
      * @param  string  $scope   The name of the module
      * @param  string  $name    The name of the variable to get
      * @param  integer $itemid  User id for which value is to be retrieved
@@ -58,7 +58,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * is storing user preferences.
      * Only deviations from the module vars are stored.
      *
-     * @access public
+     * 
      * @param  string  $scope   The name of the module to set a user variable for
      * @param  string  $name    The name of the variable to set
      * @param  mixed   $value   Value to set the variable to.
@@ -87,7 +87,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * for deleting a specific user variable, effectively
      * setting the value for that user to the default setting
      *
-     * @access public
+     * 
      * @param  string  $scope The name of the module to set a variable for
      * @param  string  $name  The name of the variable to set
      * @param  integer $itemid User id of the user to delete the variable for.

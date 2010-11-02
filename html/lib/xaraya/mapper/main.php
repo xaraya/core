@@ -53,7 +53,7 @@ class xarController extends Object
     /**
      * Get request variable
      *
-     * @access public
+     * 
      * @param name string
      * @param allowOnlyMethod string
      * @return mixed
@@ -158,7 +158,7 @@ class xarController extends Object
     /**
      * Check to see if this is a local referral
      *
-     * @access public
+     * 
      * @return bool true if locally referred, false if not
      */
     static function isLocalReferer()
@@ -176,7 +176,7 @@ class xarController extends Object
     /**
      * Carry out a redirect
      *
-     * @access public
+     * 
      * @param redirectURL string the URL to redirect to
      */
     static function redirect($url)
@@ -237,7 +237,7 @@ class xarController extends Object
     /**
      * Generates an URL that references a module function.
      *
-     * @access public
+     * 
      * @param modName string registered name of module
      * @param modType string type of function
      * @param funcName string module function

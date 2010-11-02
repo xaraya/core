@@ -16,7 +16,7 @@ class xarSessionLessCache extends Object
     /**
      * Check if this page is suitable for session-less page caching
      *
-     * @access public
+     * 
      * @returns bool
      * @return true if the page is suitable for session-less caching, false if not
      */

@@ -30,7 +30,7 @@ class xarModVars extends xarVars implements IxarModVars
     /**
      * Get a module variable
      *
-     * @access public
+     * 
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
      * @param  mixed  $value If a default value should be returned, it can be passed in.
@@ -84,7 +84,7 @@ class xarModVars extends xarVars implements IxarModVars
      * PreLoad all module variables for a particular module
      *
      * @author Michel Dalle
-     * @access private
+     * 
      * @param  string $scope Module name
      * @return boolean true on success
      * @throws EmptyParameterException
@@ -118,7 +118,7 @@ class xarModVars extends xarVars implements IxarModVars
     /**
      * Set a module variable
      *
-     * @access public
+     * 
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
      * @param  mixed  $value The value of the variable
@@ -164,7 +164,7 @@ class xarModVars extends xarVars implements IxarModVars
     /**
      * Delete a module variable
      *
-     * @access public
+     * 
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
      * @return bool true on success
@@ -205,7 +205,7 @@ class xarModVars extends xarVars implements IxarModVars
     /**
      * Delete all module variables
      *
-     * @access public
+     * 
      * @param  string $scope The name of the module
      * @return bool true on success
      * @throws EmptyParameterException, SQLException
@@ -269,7 +269,7 @@ class xarModVars extends xarVars implements IxarModVars
      * private function which delivers a module user variable
      * id based on the module name and the variable name
      *
-     * @access private
+     * 
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
      * @return integer identifier for the variable

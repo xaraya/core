@@ -37,7 +37,7 @@ class xarLogger_mozilla extends xarLogger
 
     /**
     * Write out the buffer if it is possible (the template system is already loaded)
-    * @access public
+    * 
     */
     function writeOut()
     {
@@ -49,7 +49,7 @@ class xarLogger_mozilla extends xarLogger
     /**
      * Sets up the configuration specific parameters for each driver
      * @param array     $conf               Configuration options for the specific driver.
-     * @access public
+     * 
      * @return boolean
      */
     function setConfig(Array &$conf)
@@ -91,7 +91,7 @@ function mozConsole(msg, level)
     * @param string $message Log message
     * @param int $level Level of priority of the message
     * @return boolean  True on success or false on failure.
-    * @access public
+    * 
     */
     function notify($message, $level)
     {

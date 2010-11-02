@@ -18,7 +18,7 @@
 /**
  * Carry out hook operations for module
  *
- * @access public
+ * 
  * @param hookScope string the scope the hook is called for - 'item', 'module', ...
  * @param hookAction string the action the hook is called for - 'transform', 'display', 'new', 'create', 'delete', ...
  * @param hookId integer the id of the object the hook is called for (module-specific)
@@ -39,7 +39,7 @@ function xarModCallHooks($hookScope, $hookAction, $hookId, $extraInfo = NULL, $c
 /**
  * Get list of available hooks for a particular module[, scope] and action
  *
- * @access private
+ * 
  * @param callerModName string name of the calling module
  * @param hookScope string the hook scope
  * @param hookAction string the hook action
@@ -56,7 +56,7 @@ function xarModGetHookList($callerModName, $hookScope, $hookAction, $callerItemT
 /**
  * Check if a particular hook module is hooked to the current module (+ itemtype)
  *
- * @access public
+ * 
  * @static modHookedCache array
  * @param hookModName string name of the hook module we're looking for
  * @param callerModName string name of the calling module (default = current)
@@ -73,7 +73,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
 /**
  * register a hook function
  *
- * @access public
+ * 
  * @param hookScope the hook scope
  * @param hookAction the hook action
  * @param hookArea the area of the hook (either 'GUI' or 'API')
@@ -91,7 +91,7 @@ function xarModRegisterHook($hookScope, $hookAction, $hookArea, $hookModName, $h
 /**
  * unregister a hook function (deprecated - use unregisterHookModule or the standard deinstall for modules instead)
  *
- * @access public
+ * 
  * @param hookScope the hook scope
  * @param hookAction the hook action
  * @param hookArea the area of the hook (either 'GUI' or 'API')

@@ -37,7 +37,7 @@ class xarLogger_html extends xarLogger_simple
       *               'maxLevel'     => int         Maximum level at which to log.
       *               'mode'         => string      File mode of te log file (optional)
       *               'timeFormat'   => string      Time format to be used in the file (optional)
-      * @access public
+      * 
      **/
      function setConfig (Array &$conf) 
      {
@@ -62,7 +62,7 @@ class xarLogger_html extends xarLogger_simple
      *
      * @param  string  $message   The line to write
      * @param  integer $level     The level of priority of this line/msg
-     * @access private
+     * 
     **/
     function _formatMessage($message, $level)
     {

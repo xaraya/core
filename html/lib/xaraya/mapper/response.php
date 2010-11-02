@@ -35,7 +35,7 @@ class xarResponse extends Object
      *    }
      *    ...
      *
-     * @access public
+     * 
      * @param msg string the message
      * @param ... string template overrides, cfr. xarTplModule (optional)
      * @return string the template message-notfound.xt from the base module filled in
@@ -63,7 +63,7 @@ class xarResponse extends Object
      *    }
      *    ...
      *
-     * @access public
+     * 
      * @param msg string the message
      * @param ... string template overrides, cfr. xarTplModule (optional)
      * @return string the template message-forbidden.xt from the base module filled in

@@ -151,7 +151,7 @@ class xarCharset extends Object
     /**
      * Converts unicode number to UTF-8 multibyte character
      *
-     * @access private
+     * 
      * @param  integer     Hexadecimal value of a unicode char.
      * @return string      Encoded hexadecimal value as a regular char.
      **/

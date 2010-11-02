@@ -46,7 +46,7 @@ define('XARUSER_LAST_RESORT', -3);
 /**
  * Initialise the User System
  *
- * @access protected
+ * 
  * @global xarUser_authentication modules array
  * @param args[authenticationModules] array
  * @return bool true on success
@@ -81,7 +81,7 @@ function xarUser_init(Array &$args)
 /**
  * Log the user in
  *
- * @access public
+ * 
  * @param  string  $userName the name of the user logging in
  * @param  string  $password the password of the user logging in
  * @param  integer $rememberMe whether or not to remember this login
@@ -188,7 +188,7 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
 /**
  * Log the user out
  *
- * @access public
+ * 
  * @return bool true if the user successfully logged out
  */
 function xarUserLogOut()
@@ -217,7 +217,7 @@ function xarUserLogOut()
 /**
  * Check if the user logged in
  *
- * @access public
+ * 
  * @return bool true if the user is logged in, false if they are not
  */
 function xarUserIsLoggedIn()
@@ -231,7 +231,7 @@ function xarUserIsLoggedIn()
 /**
  * Gets the user navigation theme name
  *
- * @access public
+ * 
  * @return string name of the users navigation theme
  */
 function xarUserGetNavigationThemeName()
@@ -250,7 +250,7 @@ function xarUserGetNavigationThemeName()
 /**
  * Set the user navigation theme name
  *
- * @access public
+ * 
  * @param  string $themeName name of the theme to set as navigation theme
  * @return void
  */
@@ -264,7 +264,7 @@ function xarUserSetNavigationThemeName($themeName)
 /**
  * Get the user navigation locale
  *
- * @access public
+ * 
  * @return string $locale users navigation locale name
  */
 function xarUserGetNavigationLocale()
@@ -293,7 +293,7 @@ function xarUserGetNavigationLocale()
 /**
  * Set the user navigation locale
  *
- * @access public
+ * 
  * @param  string $locale
  * @return bool true if the navigation locale is set, false if not
  */
@@ -324,7 +324,7 @@ $GLOBALS['xarUser_objectRef'] = null;
 /**
  * Get a user variable
  *
- * @access public
+ * 
  * @param  string  $name the name of the variable
  * @param  integer $userId integer the user to get the variable for
  * @return mixed the value of the user variable if the variable exists, void if the variable doesn't exist
@@ -429,7 +429,7 @@ function xarUserGetVar($name, $userId = NULL)
  * Set a user variable
  *
  * @since 1.23 - 2002/02/01
- * @access public
+ * 
  * @param  string  $name  the name of the variable
  * @param  mixed   $value the value of the variable
  * @param  integer $userId integer user's ID
@@ -495,7 +495,7 @@ function xarUserSetVar($name, $value, $userId = null)
 /**
  * Compare Passwords
  *
- * @access public
+ * 
  * @param  string $givenPassword  the password given for comparison
  * @param  string $realPassword   the reference password to compare to
  * @param  string $userName       name of the corresponding user?
@@ -522,7 +522,7 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
 /**
  * Get user's authentication module
  *
- * @access private
+ * 
  * @param  userId string
  * @todo   what happens for anonymous users ???
  * @todo   check coherence 1 vs. 0 for Anonymous users !!!
@@ -574,7 +574,7 @@ function xarUser__getAuthModule($userId)
 /**
  * See if a Variable has been defined
  *
- * @access private
+ * 
  * @param  string $name name of the variable to check
  * @return bool true if the variable is defined
  * @todo   rething this.
@@ -599,7 +599,7 @@ function xarUser__isVarDefined($name)
 }
 
 /**
- * @access private
+ * 
  * @return bool
  * @throws SQLException
  * @todo replace with some roles API ?

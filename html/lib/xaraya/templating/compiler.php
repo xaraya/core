@@ -12,7 +12,7 @@
 /**
  * XarayaCompiler - the abstraction of the BL compiler
  *
- * @access public
+ * 
  */
 sys::import('blocklayout.compiler');
 
