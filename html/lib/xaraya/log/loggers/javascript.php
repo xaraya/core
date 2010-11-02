@@ -1,7 +1,7 @@
 <?php
 /**
  * @package core
- * @package logging
+ * @subpackage logging
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -26,7 +26,6 @@ sys::import('xaraya.log.loggers.xarLogger');
 /**
  * Javascript logger
  *
- * @package logging
  */
 class xarLogger_javascript extends xarLogger
 {

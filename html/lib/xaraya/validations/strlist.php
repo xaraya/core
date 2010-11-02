@@ -21,7 +21,6 @@
  * any required validation type.
  *
  *
- * @package validation
  * @copyright see the html/credits.html file in this release
 **/
 

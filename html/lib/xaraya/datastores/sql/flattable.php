@@ -15,7 +15,6 @@ sys::import('xaraya.datastores.sql');
 /**
  * Class for flat table
  *
- * @package dynamicdata
  */
 class FlatTableDataStore extends SQLDataStore
 {

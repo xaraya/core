@@ -46,7 +46,6 @@ interface ITranslationsBackend {
  * but also the a list of references where it appears in the source by
  * reporting the file name and the line number.
  *
- * @package multilanguage
  * @throws Exception, BadParameterException
  */
 abstract class xarMLS__ReferencesBackend  extends Object implements ITranslationsBackend

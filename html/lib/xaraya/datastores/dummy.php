@@ -20,7 +20,6 @@
 /**
  * Dummy data store class
  *
- * @package dynamicdata
  */
 sys::import('modules.dynamicdata.class.datastores.base');
 

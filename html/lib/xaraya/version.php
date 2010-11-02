@@ -3,7 +3,7 @@
  * Exceptions defined by this subsystem
  *
  * @package core
- * @package version
+ * @subpackage version
  */
 class BadVersionException extends xarExceptions
 {
@@ -13,7 +13,6 @@ class BadVersionException extends xarExceptions
 /**
  * Version utility class
  *
- * @package core
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com

@@ -538,7 +538,6 @@ function xarFuncIsDisabled($funcName)
 /**
  * Convenience class for keeping track of debugger operation
  *
- * @package debug
  * @todo this is close to exceptions or logging than core, see also notes earlier
 **/
 class xarDebug extends Object
@@ -551,7 +550,6 @@ class xarDebug extends Object
 /**
  * Convenience class for keeping track of core stuff
  *
- * @package core
  * @todo change xarCore:: calls to xarCoreCache:: and put other core stuff here ?
 **/
 class xarCore extends xarCoreCache

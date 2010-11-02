@@ -21,7 +21,6 @@ class VariableValidationException extends ValidationExceptions
 }
 /**
  *
- * @package config
  * @todo this exception is too weak
 **/
 class ConfigurationException extends ConfigurationExceptions
@@ -44,7 +43,6 @@ interface IxarVars
 /**
  * Base class for variable handling in core
  *
- * @package variables
  * @author Marcel van der Boom <mrb@hsdev.com>
  **/
 class xarVars extends Object

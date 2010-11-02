@@ -1,7 +1,7 @@
 <?php
 /**
  * @package core
- * @package logging
+ * @subpackage logging
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -26,7 +26,6 @@
  * @author  Ronnie Garcia <ronnie@mk2.net>
  * @author  Jon Parise <jon@php.net>
  * @version $Revision: 1.8 $
- * @package logging
  */
  
 /**
@@ -38,7 +37,6 @@ sys::import('xaraya.log.loggers.xarLogger');
 /**
  * Mail logger
  *
- * @package logging
  */
 class xarLogger_mail extends xarLogger 
 {

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package core
- * @package logging
+ * @subpackage logging
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -42,7 +42,6 @@ sys::import('xaraya.log.loggers.xarLogger');
  * @author  Jon Parise <jon@php.net>
  * @version $Revision: 1.21 $
  * @since   Horde 1.3
- * @package logging
  */
 class xarLogger_sql extends xarLogger
 {

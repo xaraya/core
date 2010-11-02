@@ -29,21 +29,18 @@ class ModuleBaseInfoNotFoundException extends NotFoundExceptions
     protected $message = 'The base info for module "#(1)" could not be found';
 }
 /**
- * @package modules
 **/
 class ModuleNotFoundException extends NotFoundExceptions
 {
     protected $message = 'A module is missing, the module name could not be determined in the current context';
 }
 /**
- * @package modules
 **/
 class ModuleNotActiveException extends xarExceptions
 {
     protected $message = 'The module "#(1)" was called, but it is not active.';
 }
 /**
- * @package modules
 **/
 class ModuleBadVersionException extends NotFoundExceptions
 {

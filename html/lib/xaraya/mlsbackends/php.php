@@ -3,7 +3,7 @@
  * Multi Language System
  *
  * @package core
- * @package multilanguage
+ * @subpackage multilanguage
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -16,7 +16,6 @@
  * Note that it does not support the xarMLS__ReferencesBackend interface.
  * <marc> why? have changed this to be able to collapse common methods
  *
- * @package multilanguage
  */
 
 sys::import('xaraya.mlsbackends.reference');

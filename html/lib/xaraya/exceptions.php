@@ -5,7 +5,7 @@
  * For all documentation about exceptions see RFC-0054
  *
  * @package core
- * @package exceptions
+ * @subpackage exceptions
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com

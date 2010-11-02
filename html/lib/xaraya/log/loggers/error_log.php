@@ -4,7 +4,7 @@
 
 /**
  * @package core
- * @package logging
+ * @subpackage logging
 * The Log_file class is a concrete implementation of the Log::
 * abstract class which writes message to a text file. This is based
 * on the previous Log_file class by Jon Parise.
@@ -24,7 +24,6 @@ sys::import('xaraya.log.loggers.xarLogger');
  * abstract class which sends messages to to the web server's error log, a TCP port or to a file.
  *
  * @author  Flavio Botelho <nuncanada@xaraya.com>
- * @package logging
  */
 class xarLogger_error_log extends xarLogger
 {

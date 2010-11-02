@@ -9,7 +9,6 @@
 /**
  * Class to handle module variables datastores
  *
- * @package dynamicdata
  */
 sys::import('xaraya.datastores.sql.flattable');
 

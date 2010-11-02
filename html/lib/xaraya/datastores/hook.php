@@ -9,7 +9,6 @@
 /**
  * Class to handle hook datastore
  *
- * @package dynamicdata
 **/
 sys::import('modules.dynamicdata.class.datastores.base');
 

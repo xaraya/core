@@ -1,7 +1,7 @@
 <?php
 /**
  * @package core
- * @package logging
+ * @subpackage logging
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -35,13 +35,11 @@
  * This class implements the Logger
  *
  * @author  Flavio Botelho <nuncanada@ig.com.br>
- * @package logging
  */
 
 /**
  * Base class for all loggers
  *
- * @package logging
  */
 class xarLogger extends Object
 {

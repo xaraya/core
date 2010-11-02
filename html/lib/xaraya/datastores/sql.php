@@ -9,7 +9,6 @@
 /**
  * Base class for SQL Data Stores
  *
- * @package dynamicdata
 **/
 sys::import('modules.dynamicdata.class.datastores.base');
 

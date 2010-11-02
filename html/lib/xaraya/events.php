@@ -15,7 +15,6 @@
  * itself is initialized directly after the DB subsystem. Any systems loaded before
  * that need to check whether the proper things are loaded themselves.
  *
- * @package events
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -58,7 +57,6 @@
 /**
  * Exceptions raised by this subsystem
  *
- * @package events
  */
 class EventRegistrationException extends RegistrationExceptions
 {
@@ -68,7 +66,6 @@ class EventRegistrationException extends RegistrationExceptions
 /**
  * Interface declaration for core events
  *
- * @package events
  */
 interface IxarEvents
 {
@@ -78,7 +75,6 @@ interface IxarEvents
 /**
  * Class to model the interface to core events management
  *
- * @package events
  */
 class xarEvents extends Object implements IxarEvents
 {

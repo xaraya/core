@@ -15,7 +15,6 @@ sys::import('xaraya.datastores.sql');
 /**
  * Data store is a variable SQL table
  *
- * @package dynamicdata
 **/
 class VariableTableDataStore extends SQLDataStore
 {

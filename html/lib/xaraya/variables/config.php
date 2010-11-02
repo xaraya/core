@@ -13,7 +13,6 @@ sys::import('xaraya.creole');
 /**
  * ConfigVars class
  *
- * @package variables
  * @todo if core was module 0 this could be a whole lot simpler by derivation (or if all config variables were moved to a module)
  */
 class xarConfigVars extends xarVars implements IxarVars

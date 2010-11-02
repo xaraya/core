@@ -15,7 +15,6 @@
 /**
  * Convenience class for managing autoload functions and methods
  *
- * @package core
  * @todo let modules register functions and class methods during activation ?
  * @todo save the list of registered functions and class methods somewhere ?
  * @todo re-use the list of saved functions and class methods in initialize() ?

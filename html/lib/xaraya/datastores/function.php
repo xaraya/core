@@ -9,7 +9,6 @@
 /**
  * Handly function data store
  *
- * @package dynamicdata
  *
 **/
 sys::import('modules.dynamicdata.class.datastores.base');

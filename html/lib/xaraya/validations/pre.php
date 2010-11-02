@@ -47,7 +47,6 @@
  *    field 'Item Name':
  *    'pre:lower:ftoken:field:Item Name:val:notempty'
  *
- * @package validation
  * @copyright see the html/credits.html file in this release
  * @throws VariableValidationException
 **/
