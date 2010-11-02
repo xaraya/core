@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * @package modules
+ * @subpackage privileges module
  * xarMask: class for the mask object
  *
  * Represents a single security mask

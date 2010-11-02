@@ -1,5 +1,7 @@
 <?php
 /**
+ * @package modules
+ * @subpackage privileges module
  * xarPrivileges: class for the privileges repository
  *
  * Represents the repository containing all privileges

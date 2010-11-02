@@ -2,7 +2,8 @@
 /**
  * Make security levels available
  *
- * @package default
+ * @package modules
+ * @subpackage privileges module
  * @author Marcel van der Boom <mrb@hsdev.com>
  * @todo  this is here as replacement for what we used to have in a table, but wrapping levels are a bit high for getting to this info
  **/

@@ -1,5 +1,7 @@
 <?php
 /**
+ * @package modules
+ * @subpackage privileges module
  * xarPrivilege: class for the privileges object
  *
  * Represents a single privileges object
