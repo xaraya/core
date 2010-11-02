@@ -198,7 +198,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     xarLog_init($systemArgs);
 
     sys::import('xaraya.variables.system');
-    date_default_timezone_set(xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
+    try {
+        date_default_timezone_set(xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
+    } catch (Exception $e) {
+        die('Your configuration file appears to be missing. This usually indicates Xaraya has not been installed. <br/>Please refer to point 4 of the installation instructions <a href="readme.html" target="_blank">here</a>');
+    }
 
     /*
      * Start Database Connection Handling System

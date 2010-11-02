@@ -40,4 +40,17 @@
       </xsl:if>
     </xsl:copy>
   </xsl:template>
+  
+  <!--
+      In the case of textareas the fix above shows the comment in the textarea
+      But a comment with just a blank gives the result we want
+  -->
+  <xsl:template match="textarea">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()"/>
+      <xsl:if test="not(node()[not(self::comment())])">
+        <xsl:comment> </xsl:comment>
+      </xsl:if>
+    </xsl:copy>
+  </xsl:template>
 </xsl:stylesheet>
