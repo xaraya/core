@@ -8,7 +8,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage xml_backend
  * @author Marco Canini <marco@xaraya.com>
  */
 
@@ -18,7 +17,6 @@
  * Implements a concrete translations backend based on the XML language.
  * All xml files are encoded in UTF-8. This backend is useful only when
  * running Xaraya in the multi-language mode (UTF-8).
- * @package multilanguage
  * @throws Exception, XMLParseException
  */
 class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend

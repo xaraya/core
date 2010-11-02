@@ -1,6 +1,7 @@
 <?php
 /**
  * @package core
+ * @subpackage events
  * Event Messagging System
  *
  * This subsystem issues events into the module space when something happens

@@ -8,7 +8,7 @@ sys::import('xaraya.variables');
  * on anything else but that file and xarCore.php.
  *
  * @package core
- * @package variables
+ * @subpackage variables
  * @author Marcel van der Boom <mrb@hsdev.com>
  **/
 class xarSystemVars extends xarVars implements IxarVars

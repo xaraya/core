@@ -3,11 +3,11 @@
  * User System
  *
  * @package core
+ * @subpackage user
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage user
  * @author Jim McDonald
  * @author Marco Canini <marco@xaraya.com>
  * @todo <marco> user status field

@@ -17,6 +17,7 @@
  * of what you want to do here.
  *
  * @package core
+ * @subpackage core
  * @copyright (C) copyright-placeholder
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com

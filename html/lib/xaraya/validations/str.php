@@ -3,7 +3,7 @@
  * Short description of purpose of file
  *
  * @package core
- * @package validation
+ * @subpackage validation
  * @copyright see the html/credits.html file in this release
  **/
 

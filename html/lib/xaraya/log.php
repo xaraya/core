@@ -3,11 +3,11 @@
  * Logging Facilities
  *
  * @package core
+ * @package logging
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage logging
  * @author Marco Canini <marco@xaraya.com>
  * @author Flavio Botelho <nuncanada@ig.com.br>
  * @author Marcel van der Boom

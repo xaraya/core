@@ -3,7 +3,7 @@
  * Validate a date value.
  *
  * @package core
- * @package validation
+ * @subpackage validation
  * @copyright see the html/credits.html file in this release
 */
 

@@ -2,11 +2,11 @@
 /**
  * XSLT version of the BL compiler
  *
- * @package core
+ * @package blocklayout
+ * @subpackage xsl
  * @copyright see the html/credits.html file in this release
  * @link http://www.xaraya.com
  *
- * @subpackage xsl
  * @author Marcel van der Boom <marcel@xaraya.com>
 **/
 

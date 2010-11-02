@@ -1,6 +1,7 @@
 <?php
 /**
  * @package core
+ * @subpackage variables
  * Class to handle variables linked to an item of a module.
  *
  * Bit different than the others, so lets just start and see

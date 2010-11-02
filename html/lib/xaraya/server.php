@@ -3,11 +3,11 @@
  * HTTP Protocol URL/Server utilities
  *
  * @package core
+ * @subpackage server
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage server
  * @author Marco Canini <marco@xaraya.com>
  * @author Michel Dalle <mikespub@xaraya.com>
 **/

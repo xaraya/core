@@ -3,11 +3,11 @@
  * Locales (Multi Language System)
  *
  * @package core
+ * @subpackage multilanguage
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage multilanguage
  * @author Marco Canini <marco@xaraya.com>
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @author Roger Raymond <roger@asphyxia.com>
