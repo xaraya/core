@@ -2,6 +2,7 @@
 /**
  * Exception types
  *
+ * @package core
  * @package exceptions
  * @copyright see the html/credits.html file in this release
  * @license GPL <http://www.gnu.org/licenses/gpl.html>

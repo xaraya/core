@@ -1,5 +1,6 @@
 <?php
 /**
+ * @package core
  *
  * Wrapper class for PHP date functions
  *

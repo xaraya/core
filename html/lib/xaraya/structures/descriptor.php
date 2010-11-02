@@ -1,5 +1,6 @@
 <?php
 /**
+ * @package core
  * Generic descriptor for a Data Object in the Dynamic Data sense
  *
  * @todo this does not belong here

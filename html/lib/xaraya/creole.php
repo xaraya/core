@@ -5,7 +5,7 @@
  * The idea here is to put all deviations/additions/correction from creole
  * into this class. All generic improvement should be  pushed upstream obviously
  *
- * @package lib
+ * @package core
  * @subpackage database
  * @copyright see the html/credits.html file in this release
  * @link http://www.xaraya.com

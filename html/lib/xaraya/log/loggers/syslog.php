@@ -1,6 +1,13 @@
 <?php
-// $Id: syslog.php,v 1.12 2003/04/08 05:55:05 jon Exp $
-// $Horde: horde/lib/Log/syslog.php,v 1.6 2000/06/28 21:36:13 jon Exp $
+/**
+ * @package core
+ * @subpackage 
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * 
+ * 
+ */
 
 /**
 * The Log_file class is a concrete implementation of the Log::

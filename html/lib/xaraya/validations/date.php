@@ -2,6 +2,7 @@
 /**
  * Validate a date value.
  *
+ * @package core
  * @package validation
  * @copyright see the html/credits.html file in this release
 */

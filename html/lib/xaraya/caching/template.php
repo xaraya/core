@@ -2,7 +2,7 @@
 /**
  * Template caching abstraction
  *
- * @package blocklayout
+ * @package core
  * @copyright see the html/credits.html file in this release
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @author Marcel van der Boom <mrb@hsdev.com>

@@ -2,6 +2,7 @@
 /**
  * Multi Language System - XML Translations Backend
  *
+ * @package core
  * @package multilanguage
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}

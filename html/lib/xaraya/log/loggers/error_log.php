@@ -3,6 +3,7 @@
 // $Horde: horde/lib/Log/syslog.php,v 1.6 2000/06/28 21:36:13 jon Exp $
 
 /**
+ * @package core
 * The Log_file class is a concrete implementation of the Log::
 * abstract class which writes message to a text file. This is based
 * on the previous Log_file class by Jon Parise.

@@ -2,7 +2,7 @@
 /**
  * Data Store is managed by a hook/utility module
  *
- * @package dynamicdata
+ * @package core
  * @subpackage datastores
 **/
 

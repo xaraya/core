@@ -1,5 +1,14 @@
 <?php
 /**
+ * @package core
+ * @subpackage 
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * 
+ * 
+ */
+/**
  * Title: Pre-process values.
  * Desc: Allows a value to be pre-processed before (optionally)
  * passing on to another validation method. Each option is processed

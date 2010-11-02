@@ -5,6 +5,7 @@
  * @checkme Control actions further and e.g. automatically detect & call hook actions in various places ?
  * @checkme Replace 'module' with 'config' scope to indicate that we actually configure hooks for module itemtypes, objects, etc. there ?
  *
+ * @package core
  * @package hooks
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}

@@ -2,6 +2,7 @@
 /**
  * Exceptions defined by this subsystem
  *
+ * @package core
  * @package version
  */
 class BadVersionException extends xarExceptions

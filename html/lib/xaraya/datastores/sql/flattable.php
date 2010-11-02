@@ -2,7 +2,7 @@
 /**
  * Data Store is a flat SQL table (= typical module tables)
  *
- * @package dynamicdata
+ * @package core
  * @subpackage datastores
  */
 

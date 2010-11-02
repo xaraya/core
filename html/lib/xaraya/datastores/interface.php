@@ -1,5 +1,6 @@
 <?php
 /**
+ * @package core
  * Interface declarations for the datastores hierarchy
  *
  * @copyright see the html/credits.html file in this release

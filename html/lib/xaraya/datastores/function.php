@@ -2,7 +2,7 @@
 /**
  * Data Store is offered by a user function
  *
- * @package dynamicdata
+ * @package core
  * @subpackage datastores
 **/
 

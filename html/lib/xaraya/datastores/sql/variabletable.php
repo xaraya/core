@@ -2,7 +2,7 @@
 /**
  * Data Store is a variable SQL table (= only xar_dynamic_data for now)
  *
- * @package dynamicdata
+ * @package core
  * @subpackage datastores
 **/
 

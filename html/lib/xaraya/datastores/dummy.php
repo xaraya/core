@@ -2,7 +2,7 @@
 /**
  * Data Store is a dummy (for in-memory data storage, perhaps)
  *
- * @package dynamicdata
+ * @package core
  * @subpackage datastores
 **/
 
