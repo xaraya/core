@@ -3,18 +3,17 @@
  * OrderSelect Property
  *
  * @package modules
+ * @subpackage base module
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 sys::import("modules.base.xarproperties.multiselect");
 /**
  * handle the orderselect property
  * @author Dracos <dracos@xaraya.com>
- * @package dynamicdata
  */
 class OrderSelectProperty extends MultiSelectProperty
 {

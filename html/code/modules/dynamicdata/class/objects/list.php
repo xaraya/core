@@ -5,7 +5,7 @@
  *        but a single object with an array of item values
  *
  * @package modules
- * @subpackage dynamicdata
+ * @subpackage dynamicdata module
  *
  **/
 

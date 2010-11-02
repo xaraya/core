@@ -3,11 +3,11 @@
  * Time Since
  *
  * @package modules
+ * @subpackage base module
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage base module
  * @link http://xaraya.com/index.php/release/151.html
 */
 /* Returns a fomatted string of two of years/months/weeks/days/hours/minutes since a given time (unix timestamp).

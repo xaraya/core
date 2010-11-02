@@ -3,7 +3,7 @@
  * Base class for Dynamic Data Stores
  *
  * @package modules
- * @subpackage dynamicdata
+ * @subpackage dynamicdata module
 **/
 sys::import('modules.dynamicdata.class.datastores.master');
 sys::import('xaraya.datastores.interface');

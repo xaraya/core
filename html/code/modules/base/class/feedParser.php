@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package modules
+ * @subpackage base module
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @link http://xaraya.com/index.php/release/68.html
+ */
 /*
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

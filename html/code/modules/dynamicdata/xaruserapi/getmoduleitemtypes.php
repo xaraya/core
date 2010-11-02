@@ -3,11 +3,11 @@
  * Retrieve list of itemtypes of any module
  *
  * @package modules
+ * @subpackage dynamicdata module
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage dynamicdata
  * @author mikespub <mikespub@xaraya.com>
  */
 /**

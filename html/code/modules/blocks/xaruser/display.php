@@ -3,7 +3,7 @@
  * Display a single block in the module space
  *
  * @package modules
- * @subpackage blocks
+ * @subpackage blocks module
  * @return array
  * @author Marcel van der Boom <mrb@hsdev.com>
  * @param  string $name name of the block to render

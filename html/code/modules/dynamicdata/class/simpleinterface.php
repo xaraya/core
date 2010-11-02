@@ -1,8 +1,8 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
  * @copyright see the html/credits.html file in this release
- * @subpackage dynamicdata
  * @author Marc Lutolf
  * @author Johnny Robeson <johnny@localmomentum.net>
  */

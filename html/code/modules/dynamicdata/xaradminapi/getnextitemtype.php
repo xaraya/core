@@ -3,11 +3,11 @@
  * Get the next itemtype of extended objects pertaining to a given module
  *
  * @package modules
+ * @subpackage dynamicdata module
  * @copyright see the html/credits.html file in this release
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
  * @link http://www.xaraya.com
  *
- * @subpackage dynamicdata
  * @author random <mfl@netspan.ch>
 */
 /**
