@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Modules module
+ * @subpackage modules module
  */
 /**
  * Checks for change in module versions, and updates the status of them if any is found

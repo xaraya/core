@@ -7,7 +7,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage roles
+ * @subpackage authsystem
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 

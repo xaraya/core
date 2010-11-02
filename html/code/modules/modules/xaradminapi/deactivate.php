@@ -7,7 +7,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Modules module
+ * @subpackage modules module
  */
 /**
  * Deactivate a module if it has a deactive function, otherwise just set the state to deactive

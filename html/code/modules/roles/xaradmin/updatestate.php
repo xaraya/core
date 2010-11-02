@@ -7,7 +7,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Roles module
+ * @subpackage roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /* Update users from roles_admin_showusers

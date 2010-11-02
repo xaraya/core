@@ -6,7 +6,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Modules module
+ * @subpackage modules module
  */
 /**
  * Update hooks for a particular hook module

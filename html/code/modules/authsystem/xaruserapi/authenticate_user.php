@@ -6,7 +6,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Authsystem module
+ * @subpackage authsystem module
  * @link http://xaraya.com/index.php/release/42.html
  */
 /**

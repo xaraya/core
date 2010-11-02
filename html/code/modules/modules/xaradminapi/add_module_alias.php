@@ -5,7 +5,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Modules module
+ * @subpackage modules module
  */
 /**
  * define a module name as an alias for some other module
