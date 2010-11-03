@@ -72,7 +72,7 @@
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                         <input type="hidden" name="phase" id="phase" value="update"/>
                         <xar:var name="label">Update</xar:var>
-                        <input type="submit" value="#$label#"/>
+                        <xar:button type="submit" label="$label"/>
                     </div>
                 </fieldset>
             </form>

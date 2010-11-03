@@ -33,7 +33,7 @@
  * @return array of (itemid => array of (name => value)), or false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function &dynamicdata_userapi_getitems($args)
+function dynamicdata_userapi_getitems($args)
 {
     extract($args);
     $nullreturn = null;
@@ -116,8 +116,10 @@ function &dynamicdata_userapi_getitems($args)
         $catid = '';
     }
 
-    $object = & DataObjectMaster::getObjectList(array('moduleid'  => $module_id,
-                                           'itemtype'  => $itemtype,
+    $args = DataObjectDescriptor::getObjectID(array('moduleid'  => $module_id,
+                                       'itemtype'  => $itemtype));
+    if (empty($args['objectid'])) return array();
+    $object = & DataObjectMaster::getObjectList(array('objectid'  => $args['objectid'],
                                            'itemids' => $itemids,
                                            'sort' => $sort,
                                            'numitems' => $numitems,

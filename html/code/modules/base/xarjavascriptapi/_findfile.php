@@ -67,10 +67,19 @@ function base_javascriptapi__findfile($args)
 
     // The search path for the JavaScript file.
     $searchPath[] = $themedir . '/scripts/' . $filename;
-    if (isset($modOsDir)) {
-        $searchPath[] = $themedir . '/modules/' . $modOsDir . '/includes/' . $filename;
-        $searchPath[] = $themedir . '/modules/' . $modOsDir . '/xarincludes/' . $filename;
-        $searchPath[] = sys::code() . 'modules/' . $modOsDir . '/xartemplates/includes/' . $filename;
+    
+    // A property attribute in the tag overrides a module attribute
+    if (!empty($property)) {
+        $searchPath[] = $themedir . '/properties/' . $property . '/scripts/' . $filename;
+        $searchPath[] = $themedir . '/properties/' . $property . '/templates/includes/' . $filename;
+        $searchPath[] = sys::code() . 'properties/' . $property . '/scripts/' . $filename;
+        $searchPath[] = sys::code() . 'properties/' . $property . '/templates/includes/' . $filename;
+    } else {
+        if (isset($modOsDir)) {
+            $searchPath[] = $themedir . '/modules/' . $modOsDir . '/includes/' . $filename;
+            $searchPath[] = $themedir . '/modules/' . $modOsDir . '/xarincludes/' . $filename;
+            $searchPath[] = sys::code() . 'modules/' . $modOsDir . '/xartemplates/includes/' . $filename;
+        }
     }
 
     foreach($searchPath as $filePath) {

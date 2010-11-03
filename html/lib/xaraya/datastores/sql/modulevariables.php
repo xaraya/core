@@ -10,9 +10,9 @@
  * Class to handle module variables datastores
  *
  */
-sys::import('xaraya.datastores.sql.flattable');
+sys::import('xaraya.datastores.sql.relational');
 
-class ModuleVariablesDataStore extends FlatTableDataStore
+class ModuleVariablesDataStore extends RelationalDataStore
 {
     public $modulename;
     public $variablename;
@@ -23,17 +23,15 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         $this->setModvarName($name);
     }
 
+    function __toString()
+    {
+        return "module_variables";
+    }
+
     private function setModvarName($name="")
     {
         if (empty($name)) throw new Exception('Bad modvar name');
-        $namepart = explode('__',$name);
-        if (empty($namepart[1])) {
-            $this->modulename = 'dynamicdata';
-            $this->variablename = $namepart[0];
-        } else {
-            $this->modulename = $namepart[0];
-            $this->variablename = $namepart[1];
-        }
+        $this->modulename = $name;
     }
 
     function getFieldName(DataProperty &$property)
@@ -45,12 +43,12 @@ class ModuleVariablesDataStore extends FlatTableDataStore
     {
         $this->setModvarName($this->name);
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
-        $fieldlist = array_keys($this->fields);
+        $fieldlist = $this->object->getFieldList();
         if (count($fieldlist) < 1) return;
         foreach ($fieldlist as $field) {
             $value = xarModItemVars::get($this->modulename,$field,$itemid);
             // set the value for this property
-            $this->fields[$field]->value = $value;
+            $this->object->properties[$field]->value = $value;
         }
         return $itemid;
     }
@@ -63,12 +61,12 @@ class ModuleVariablesDataStore extends FlatTableDataStore
     function updateItem(Array $args = array())
     {
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
-        $fieldlist = array_keys($this->fields);
+        $fieldlist = $this->object->getFieldList();
         if (count($fieldlist) < 1) return 0;
 
         foreach ($fieldlist as $field) {
             // get the value from the corresponding property
-            $value = $this->fields[$field]->value;
+            $value = $this->object->properties[$field]->value;
             // skip fields where values aren't set
             if (!isset($value)) continue;
             if (empty($itemid)) {
@@ -83,7 +81,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
     function deleteItem(Array $args = array())
     {
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
-        $fieldlist = array_keys($this->fields);
+        $fieldlist = $this->object->getFieldList();
         if (count($fieldlist) < 1) return 0;
 
         foreach ($fieldlist as $field) {
@@ -119,7 +117,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             $this->cache = $args['cache'];
         }
 
-        $fields = array_keys($this->fields);
+        $fieldlist = $this->object->getFieldList();
         if (count($fields) < 1) {
             return;
         }
@@ -578,7 +576,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         $modvars = $this->getTable('module_vars');
         $moditemvars = $this->getTable('module_itemvars');
 
-        $fields = array_keys($this->fields);
+        $fieldlist = $this->object->getFieldList();
 
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
