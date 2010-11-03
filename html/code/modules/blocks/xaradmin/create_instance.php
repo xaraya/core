@@ -11,7 +11,8 @@
  */
  /**
  * create a new block instance
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  */
 function blocks_admin_create_instance()
 {

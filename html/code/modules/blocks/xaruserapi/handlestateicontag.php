@@ -10,7 +10,8 @@
  */
 /* Handle the icon tag state
  *
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
 */
 
 function blocks_userapi_handleStateIconTag($args)

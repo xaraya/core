@@ -11,7 +11,8 @@
 /**
  * update attributes of a block instance
  *
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @param $args['tab'] the current update phase
  * @param $args['bid'] the ID of the block to update
  * @param $args['title'] the new title of the block

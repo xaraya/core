@@ -11,7 +11,8 @@
 /**
  * update attributes of a block instance
  *
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @param $args['bid'] the ID of the block to update
  * @param $args['title'] the new title of the block
  * @param $args['group_id'] the new position of the block (deprecated)

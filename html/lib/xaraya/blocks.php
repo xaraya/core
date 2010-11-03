@@ -43,7 +43,8 @@ Class xarBlock extends Object implements IxarBlock
 /**
  * Renders a block instance
  *
- * @author Paul Rosania, Marco Canini <marco@xaraya.com>
+ * @author Paul Rosania
+ * @author Marco Canini <marco@xaraya.com>
  * 
  * @param  array data block information parameters
  * @return string output the block to show
@@ -249,7 +250,8 @@ Class xarBlock extends Object implements IxarBlock
 /**
  * Renders a block group
  *
- * @author Paul Rosania, Marco Canini <marco@xaraya.com>
+ * @author Paul Rosania
+ * @author Marco Canini <marco@xaraya.com>
  * 
  * @param string groupname the name of the block group
  * @param string template optional template to apply to all blocks in the group

@@ -10,7 +10,8 @@
  */
 /**
  * resequence a blocks table
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @return bool
  */
 function blocks_adminapi_resequence($args)

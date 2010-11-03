@@ -12,7 +12,8 @@
 /**
  * List modules and current settings
  * @param several params from the associated form in template
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  */
 function blocks_admin_settings()
 {

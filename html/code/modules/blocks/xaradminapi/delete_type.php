@@ -12,7 +12,8 @@
 /**
  * Delete block type
  *
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @access public
  * @param modName the module name (deprec)
  * @param module the module name

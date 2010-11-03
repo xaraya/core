@@ -22,7 +22,8 @@
  * @throws EmptyParameterException, ClassNotFoundException, FunctionNotFoundException,
  *         FileNotFoundException (via adminapi load function)
  *
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  */
 
 function blocks_userapi_read_type_info($args)

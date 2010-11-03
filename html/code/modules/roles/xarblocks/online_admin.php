@@ -14,7 +14,11 @@
 
 /**
  * Online Block
- * @author Jim McDonald, Greg Allan, John Cox, Michael Makushev, Marc Lutolf
+ * @author Jim McDonald
+ * @author Greg Allan
+ * @author John Cox
+ * @author Michael Makushev
+ * @author Marc Lutolf
  */
     sys::import('modules.roles.xarblocks.online');
 

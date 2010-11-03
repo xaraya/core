@@ -15,7 +15,8 @@
  * @TODO: This function is used solely by the blockgroup block
  * consider moving it to that blocks updateorder() method
  *
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @param $args['id'] the ID of the group to update
  * @param $args['instance_order'] the new instance sequence (array of bid)
  * @returns bool

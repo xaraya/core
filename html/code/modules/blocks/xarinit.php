@@ -13,7 +13,8 @@
 
 /**
  * initialise the blocks module
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  */
 function blocks_init()
 {

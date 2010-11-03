@@ -14,7 +14,8 @@
  * this is primarily used to prevent users still having
  * collapsed menus if the administrator turns off
  * collapseable menu support
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @return true on success, false on failure
  */
 function blocks_userapi_reactivate_menus()

@@ -12,7 +12,8 @@
 /**
  * update the group details for a block instance
  *
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @param $args['bid'] the ID of the block to update
  * @param $args['groups'] array of group memberships
  * @returns bool

@@ -9,7 +9,9 @@
  * @link http://www.xaraya.com
  *
  * @link http://xaraya.com/index.php/release/42.html
- * @author Jan Schrage, John Cox, Gregor Rothfuss
+ * @author Jan Schrage
+ * @author John Cox
+ * @author Gregor Rothfuss
  */
 
 /**
