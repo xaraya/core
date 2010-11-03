@@ -246,7 +246,7 @@ class SubItemsProperty extends DataProperty
         }
         // Add the default values from the property's defaultvalue field
         if (is_array($this->defaultvalue)) $data['items'] = $data['items'] + $this->defaultvalue;
-        $data['object'] = DataObjectMaster::getObjectList(array('name' => $this->subitemsobject; 
+        $data['object'] = DataObjectMaster::getObjectList(array('name' => $this->subitemsobject));
         $data['object']->items =& $data['items'];
         return parent::showOutput($data);
     }
