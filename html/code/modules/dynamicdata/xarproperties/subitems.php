@@ -92,7 +92,8 @@ class SubItemsProperty extends DataProperty
             $thisvalid = $data['object']->checkInput();
             $isvalid = $isvalid && $thisvalid;
         // Store each item for later processing
-            $this->itemsdata[$newprefix][$prefix] = $data['object']->getFieldValues();
+        // Note these are storage, not display, values
+            $this->itemsdata[$newprefix][$prefix] = $data['object']->getFieldValues(array(),1);
         }
         return $isvalid;
     }
@@ -245,7 +246,7 @@ class SubItemsProperty extends DataProperty
         }
         // Add the default values from the property's defaultvalue field
         if (is_array($this->defaultvalue)) $data['items'] = $data['items'] + $this->defaultvalue;
-        $data['object'] = $this->subitemsobject;
+        $data['object'] = DataObjectMaster::getObjectList(array('name' => $this->subitemsobject;
         $data['object']->items =& $data['items'];
         return parent::showOutput($data);
     }
