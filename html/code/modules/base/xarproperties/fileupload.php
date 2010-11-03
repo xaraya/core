@@ -292,9 +292,9 @@ class FileUploadProperty extends DataProperty
             }
             $this->value = $value;
         } else {
-            // No file name entered, ignore
-            $this->value = '';
-            return true;
+            // No file name entered, get previous value
+            xarVarFetch($name. '_previous', 'isset', $value,  NULL, XARVAR_DONT_SET);
+            $this->value = $value;
         }
         return true;
     }
