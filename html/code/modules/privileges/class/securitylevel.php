@@ -4,6 +4,13 @@
  *
  * @package modules
  * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/1098.html
+ *
  * @author Marcel van der Boom <mrb@hsdev.com>
  * @todo  this is here as replacement for what we used to have in a table, but wrapping levels are a bit high for getting to this info
  **/
