@@ -163,7 +163,8 @@ function installer_adminapi_createdb($args)
  * @param args['field_name']
  * @param args['table_name']
  * @returns true if field exists false otherwise
- * @author Sean Finkle, John Cox
+ * @author Sean Finkle
+ * @author John Cox
  */
 function installer_adminapi_CheckForField($args)
 {
@@ -199,7 +200,8 @@ function installer_adminapi_CheckForField($args)
  * @param args['field_name']
  * @param args['table_name']
  * @returns field type
- * @author Sean Finkle, John Cox
+ * @author Sean Finkle
+ * @author John Cox
  */
 function installer_adminapi_GetFieldType($args)
 {
@@ -231,7 +233,8 @@ function installer_adminapi_GetFieldType($args)
  * @access public
  * @param args['table_name']
  * @returns true if field exists false otherwise
- * @author Sean Finkle, John Cox
+ * @author Sean Finkle
+ * @author John Cox
  */
 function installer_adminapi_CheckTableExists($args)
 {

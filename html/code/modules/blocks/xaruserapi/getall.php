@@ -22,7 +22,8 @@
  * @param args[$startnum] optional query offset
  * @param args[$rowstodo] optional limit items to return (deprec)
  * @param args[$numitems] optional limit items to return
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @author Chris Powis
  * @throws DB_EXCEPTION
  * @return array of block instances

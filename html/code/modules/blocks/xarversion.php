@@ -8,7 +8,8 @@
  * @link http://www.xaraya.com
  *
  * @link http://xaraya.com/index.php/release/13.html
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
 */
 
 /* WARNING

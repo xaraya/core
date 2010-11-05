@@ -10,7 +10,8 @@
  */
 /**
  * deactivate a block
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @param $args['bid'] the ID of the block to deactivate
  * @returns bool
  * @return true on success, false on failure

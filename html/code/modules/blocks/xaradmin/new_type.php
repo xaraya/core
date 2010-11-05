@@ -11,7 +11,8 @@
  */
 /**
  * Register New Block Type
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  */
 function blocks_admin_new_type()
 {

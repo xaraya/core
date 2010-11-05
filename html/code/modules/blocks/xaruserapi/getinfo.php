@@ -20,7 +20,8 @@
  * - arbitrary parameters can be passed in to override the block content array elements
  * - some sort of validation check could be made available for the overridable params?
  * - system-level flag to switch between reporting attribute/args errors or just ignoring
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  *
  * TODO: move this function to a method of the xarBlock class,
  * per note below, there's no reason for this to be here, it doesn't,

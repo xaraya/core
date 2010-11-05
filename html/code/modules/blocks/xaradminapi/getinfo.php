@@ -12,7 +12,8 @@
 /**
  * Get block information
  *
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @access public
  * @param see blocks/userapi/getinfo
  * @return see blocks/userapi/getinfo

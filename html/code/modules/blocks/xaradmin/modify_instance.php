@@ -11,7 +11,8 @@
 /**
  * modify a block instance
  * @TODO Need to sperate this out to API calls.
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  */
 
 function blocks_admin_modify_instance()

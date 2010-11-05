@@ -15,7 +15,8 @@
  * The function also checks the block class exists, and if a func is
  * specified, will check if the method named func exists in the block class
  *
- * @author Paul Rosania, Marco Canini <marco@xaraya.com>
+ * @author Marco Canini <marco@xaraya.com>
+ * @author Paul Rosania
  * @access protected
  * @param string modName the module name (deprec)
  * @param string module the module name
