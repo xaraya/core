@@ -12,7 +12,8 @@
 /**
  * Register block type
  *
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @access public
  * @param modName the module name (deprecated)
  * @param blockType the block type (deprecated)
