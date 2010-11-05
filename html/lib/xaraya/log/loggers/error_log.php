@@ -5,6 +5,12 @@
 /**
  * @package core
  * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
 * The Log_file class is a concrete implementation of the Log::
 * abstract class which writes message to a text file. This is based
 * on the previous Log_file class by Jon Parise.
