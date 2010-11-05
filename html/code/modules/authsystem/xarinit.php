@@ -1,25 +1,28 @@
 <?php
 /**
- * Initialise the Authsystem module
+ * Functions that manage installation, upgrade and deinstallation of the module
  *
  * @package modules
  * @subpackage authsystem module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
  * @link http://xaraya.com/index.php/release/42.html
- * @author Jan Schrage, John Cox, Gregor Rothfuss
+ *
+ * @author Jan Schrage
+ * @author John Cox
+ * @author Gregor Rothfuss
+ * @author Jo Dalle Nogare <jojodee@xaraya.com>
  */
 
 /**
- * Initialise the Authsystem module
+ * Initialise the module. This function is called once when the module is intalled.
  *
- * @author Jo Dalle Nogare <jojodee@xaraya.com>
- * @access public
- * @return bool
+ * @return bool true on success, false on failure
  */
-function authsystem_init()
+public function authsystem_init()
 {
     //Set the default authmodule if not already set
     $isdefaultauth = xarModVars::get('roles','defaultauthmodule');
@@ -48,10 +51,13 @@ function authsystem_init()
     // Installation complete; check for upgrades
     return authsystem_upgrade('2.0.0');
 }
-/*
- * We don't have all modules activated at install time
+
+/**
+ * Activate the module. This function is called when the module is changed from installed to active state.
+ *
+ * @return bool true on success, false on failure
  */
-function authsystem_activate()
+public function authsystem_activate()
 {
     xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
     xarRegisterPrivilege('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
@@ -73,12 +79,12 @@ function authsystem_activate()
 }
 
 /**
- * Upgrade this module from an old version
+ * Upgrade the module from an old version. This function is called when the module is being upgraded.
  *
- * @param oldVersion
- * @returns bool
+ * @param string $oldversion The three digit version number of the currently installed (old) version
+ * @return bool true on success, false on failure
  */
-function authsystem_upgrade($oldversion)
+public function authsystem_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
@@ -89,11 +95,12 @@ function authsystem_upgrade($oldversion)
 }
 
 /**
- * Delete this module
+ * Delete the module.
+ * This function is called when the module is being uninstalled.
  *
- * @return bool
+ * @return bool true on success, false on failure
  */
-function authsystem_delete()
+public function authsystem_delete()
 {
   //this module cannot be removed
   return false;
