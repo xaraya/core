@@ -15,8 +15,7 @@
  * check if a user is active or not on the site
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param bool $include_anonymous whether or not to include anonymous user
- * @returns array
- * @return array of users, or false on failure
+ * @return mixed array of users, or false on failure
  */
 function roles_userapi_getactive($args)
 {

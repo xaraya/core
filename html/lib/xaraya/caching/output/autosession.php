@@ -19,7 +19,7 @@ class xarAutoSessionCache extends Object
     /**
      * Log the HIT / MISS status of URLs requested by first-time visitors
      *
-     * @returns none
+     * @return none
      */
     public static function logStatus($status = 'MISS', $autoCachePeriod)
     {

@@ -14,8 +14,7 @@
  *
  * @author Xaraya Development Team
  * @param none
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  * @throws NO_PERMISSION
  */
 function modules_adminapi_regenerate()

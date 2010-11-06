@@ -17,7 +17,7 @@
  * @author Marty Vance
  * @access public
  * @param regid theme's registered id
- * @returns bool
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
 function themes_adminapi_activate($args)

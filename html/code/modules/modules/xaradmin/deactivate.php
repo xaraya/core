@@ -20,8 +20,7 @@
  *
  * @access public
  * @param id the mdoule id to deactivate
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 function modules_admin_deactivate ()
 {

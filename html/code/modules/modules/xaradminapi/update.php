@@ -14,8 +14,7 @@
  * @param $args['regid'] the id number of the module to update
  * @param $args['displayname'] the new display name of the module
  * @param $args['description'] the new description of the module
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 function modules_adminapi_update($args)
 {

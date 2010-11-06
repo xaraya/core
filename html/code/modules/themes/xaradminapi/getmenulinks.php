@@ -15,8 +15,7 @@
 * utility function pass individual menu items to the main menu
 *
 * @author Marty Vance
-* @returns array
-* @return array containing the menulinks for the main menu items.
+* @return array the menulinks for the main menu items.
 */
 function themes_adminapi_getmenulinks()
 {

@@ -19,8 +19,7 @@
  *
  * @author Marty Vance
  * @param id the theme id to upgrade
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 function themes_admin_upgrade()
 {

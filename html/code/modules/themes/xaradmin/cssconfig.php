@@ -15,7 +15,7 @@
 * Module admin function to review and configure Xaraya CSS
 *
 * @author AndyV_at_Xaraya_dot_Com
-* @returns array
+* @return array
 */
 function themes_admin_cssconfig()
 {

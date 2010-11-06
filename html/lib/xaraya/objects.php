@@ -349,7 +349,7 @@ class xarObject extends Object implements IxarObject
      * @param action string the action we want to take on this object (display/update/create/delete/config)
      * @param itemid mixed the specific item id or null
      * @param roleid mixed override the current user or null
-     * @return bool true if access
+     * @return boolean true if access
      */
     static function checkAccess($object, $action, $itemid = null, $roleid = null)
     {

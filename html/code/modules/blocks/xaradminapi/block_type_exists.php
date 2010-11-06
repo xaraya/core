@@ -17,8 +17,7 @@
  * @access public
  * @param modName the module name
  * @param blockType the block type
- * @returns bool
- * @return true if exists, false if not found
+ * @return boolean true on success, false on failure
  * @throws DATABASE_ERROR, BAD_PARAM
  * @deprec Deprecated 11 Jan 2004 - use countblocktypes directly
  */

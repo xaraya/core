@@ -23,7 +23,7 @@
  *
  * @access public
  * @param create
- * @return bool
+ * @return boolean
  * @todo make confirm password work
  * @todo remove URL field from users table
  * @todo normalize user's table

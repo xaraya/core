@@ -17,8 +17,7 @@
  * @param $args['callerModName'] caller module
  * @param $args['callerItemType'] optional item type for the caller module
  * @param $args['hookModName'] hook module
- * @returns bool
- * @return true if successfull
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
 function modules_adminapi_enablehooks($args)

@@ -14,8 +14,7 @@
  *
  * @author Xaraya Development Team
  * @param $args['regId'] the id number of the module to update
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 function modules_adminapi_updateversion($args)
 {

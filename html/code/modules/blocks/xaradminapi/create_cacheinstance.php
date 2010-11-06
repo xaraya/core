@@ -16,7 +16,7 @@
  * create a cache block
  *
  * @param $args['bid'] the ID of the block to create
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 function blocks_adminapi_create_cacheinstance($args)
 {

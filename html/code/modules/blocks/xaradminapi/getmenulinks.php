@@ -15,8 +15,7 @@
  *
  * @author Jim McDonald
  * @author Paul Rosania
- * @returns array
- * @return array containing the menulinks for the main menu items.
+ * @return array the menulinks for the main menu items.
  */
 function blocks_adminapi_getmenulinks()
 {

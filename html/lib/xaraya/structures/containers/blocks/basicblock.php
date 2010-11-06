@@ -218,7 +218,7 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     // @param access (display|modify|delete)
     // this method is called by blocks_admin_modify|update|delete functions
     // and by xarBlock::render() method to determine access for current user
-    // @return bool true if access allowed
+    // @return boolean true if access allowed
     public function checkAccess($access)
     {
         if (empty($access)) throw new EmptyParameterException('Access method');

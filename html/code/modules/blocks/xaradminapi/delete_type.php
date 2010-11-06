@@ -20,7 +20,7 @@
  * @param module the module name
  * @param blockType the block type (deprec)
  * @param type the block type
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 function blocks_adminapi_delete_type($args)
 {

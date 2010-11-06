@@ -30,7 +30,7 @@ class xarConfigVars extends xarVars implements IxarVars
      * 
      * @param  string $name the name of the variable
      * @param  mixed  $value (array,integer or string) the value of the variable
-     * @return bool true on success, or false if you're trying to set unallowed variables
+     * @return boolean true on success, or false if you're trying to set unallowed variables
      * @todo return states that it should return false if we're setting
      *       unallowed variables.. there is no such code to do that in the function
      */
@@ -159,7 +159,7 @@ class xarConfigVars extends xarVars implements IxarVars
      * Pre-load site configuration variables
      *
      * 
-     * @return bool true on success, or void on database error
+     * @return boolean true on success, or void on database error
      * @todo We need some way to delete configuration (useless without a certain module) variables from the table!!!
      * @todo look into removing the serialisation, creole does this when needed, automatically (well, almost)
      */

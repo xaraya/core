@@ -19,8 +19,7 @@
  * @author Xaraya Development Team
  * @access public
  * @param  id the module id
- * @returns mixed
- * @return true on success
+ * @return mixed true on success
  */
 
 // Remove/Deactivate/Install GUI functions are basically copied and pasted versions...

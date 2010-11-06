@@ -14,7 +14,7 @@
  * Map a mail item to a queue based on defined rules
  *
  * @param object msg_structure parsed out result from the mailparser class
- * @returns array of queue idents
+ * @return array the queue idents
  */
 function mail_adminapi_maptoqueue($args)
 {

@@ -43,7 +43,7 @@ sys::import('xaraya.mlsbackends.reference');
  *
  * 
  * @throws Exception
- * @return bool true
+ * @return boolean true
  */
 function xarMLS_init(&$args)
 {
@@ -434,7 +434,7 @@ function xarMLS_setCurrentLocale($locale)
  * Loads translations for the specified context
  *
  * 
- * @return bool
+ * @return boolean
  */
 function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
 {
@@ -488,7 +488,7 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
 /**
  * Load relevant translations for a specified relatvive path (be it file or directory)
  *
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  * @todo slowly add more intelligence for more scopes. (core, version, init?)
  * @todo static hash on path to prevent double loading?
  * @todo is directory support needed? i.e. modules/base/ load all for base module? or how does this work?
@@ -674,7 +674,7 @@ function xarMLS__getSingleByteCharset($langISO2Code)
  * Create directories tree
  *
  * 
- * @return bool true
+ * @return boolean true
  */
 function xarMLS__mkdirr($path)
 {
@@ -703,7 +703,7 @@ function xarMLS__mkdirr($path)
  * Check directory writability and create directory if it doesn't exist
  *
  * 
- * @return bool true
+ * @return boolean true
  */
 function xarMLS__iswritable($directory=NULL)
 {

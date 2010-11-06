@@ -17,8 +17,7 @@
  * @access public
  * @param aliasModName name of the 'fake' module you want to remove
  * @param modName name of the 'real' module it was assigned to
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
 function modules_adminapi_delete_module_alias($args)

@@ -14,8 +14,7 @@
  *
  * @author Marty Vance
  * @param none
- * @returns array
- * @return an array of themes from the file system
+ * @return array the themes from the file system
  */
 function themes_adminapi_getfilethemes()
 {

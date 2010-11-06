@@ -87,7 +87,7 @@ class xarTemplateCache extends Object implements ixarTemplateCache
      * Save the cache key for a sourcefile
      *
      * @param  string $sourceFileName  For which file are we entering the key?
-     * @return bool true on success, false on failure
+     * @return boolean true on success, false on failure
      * @todo   exceptions?
      * @todo   typically writing of these keys occurs in bursts, can we leave file open until we're done?
      * @todo   hmm, write the key when inactive too? feels like not, to keep it minimal
@@ -118,7 +118,7 @@ class xarTemplateCache extends Object implements ixarTemplateCache
      *
      * @param  string $fileName  for which source file?
      * @param  string $data      what to save
-     * @return bool   true on success, false on failure
+     * @return boolean   true on success, false on failure
      * @todo   doesnt belong here
     **/
     public static function saveEntry($fileName, $data)
@@ -136,7 +136,7 @@ class xarTemplateCache extends Object implements ixarTemplateCache
      * Determine if a cache entry is dirty, i.e. needs recompilation.
      *
      * @param  string $fileName source file
-     * @return bool  true when cache entry is dirty, false otherwise
+     * @return boolean  true when cache entry is dirty, false otherwise
     **/
     public static function isDirty($fileName)
     {

@@ -16,7 +16,7 @@
  * delete a cache block
  *
  * @param $args['bid'] the ID of the block to delete
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 function blocks_adminapi_delete_cacheinstance($args)
 {

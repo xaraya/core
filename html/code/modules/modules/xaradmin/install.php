@@ -22,8 +22,7 @@
  * <andyv implementation of JC's request> attempt to activate module immediately after it's inited
  *
  * @param id the module id to initialise
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 sys::import('modules.modules.class.installer');
 

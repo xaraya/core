@@ -127,7 +127,7 @@ function installer_admin_phase3()
  *
  * @access private
  * @param string dirname directory name
- * @return bool true if directory is writable, readable and executable
+ * @return boolean true if directory is writable, readable and executable
  */
 function check_dir($dirname)
 {

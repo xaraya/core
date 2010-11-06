@@ -16,8 +16,7 @@
  * @param id $ the theme's registered id
  * @param newdisplayname $ the new display name
  * @param newdescription $ the new description
- * @returns bool
- * @return true on success, error message on failure
+ * @return boolean true on success, false on failure
  */
 function themes_admin_update()
 { 

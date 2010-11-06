@@ -20,8 +20,7 @@
  *
  * @author Xaraya Development Team
  * @param id the module id to initialise
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 function modules_admin_installall()
 {

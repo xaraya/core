@@ -14,8 +14,7 @@
  *
  * @author Marty Vance
  * @param none
- * @returns array
- * @return array of known themes
+ * @return array the known themes
  * @throws NO_PERMISSION
  */
 function themes_adminapi_list()

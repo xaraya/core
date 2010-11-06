@@ -16,7 +16,7 @@
 * Module admin function to update configuration Xaraya core CSS
 *
 * @author AndyV_at_Xaraya_dot_Com
-* @returns true
+ * @return boolean true on success, false on failure
 */
 function themes_admin_corecssupdate()
 {

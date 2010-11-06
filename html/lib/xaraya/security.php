@@ -55,7 +55,7 @@ function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname
  *
  * 
  * @param  string name
- * @return bool
+ * @return boolean
  */
 function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state=3,$authModule= 0)
 {
@@ -70,7 +70,7 @@ function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state
  * 
  * @param  string child name
  * @param  string parent name
- * @return bool
+ * @return boolean
  */
 function xarMakeRoleMemberByName($childName, $parentName)
 {
@@ -85,7 +85,7 @@ function xarMakeRoleMemberByName($childName, $parentName)
  * 
  * @param  string child uname
  * @param  string parent uname
- * @return bool
+ * @return boolean
  */
 function xarMakeRoleMemberByUname($childName, $parentName)
 {
@@ -103,7 +103,7 @@ function xarMakeRoleMemberByUname($childName, $parentName)
  * 
  * @param  string child ID
  * @param  string parent ID
- * @return bool
+ * @return boolean
  */
 function xarMakeRoleMemberByID($childId, $parentId)
 {
@@ -121,7 +121,7 @@ function xarMakeRoleMemberByID($childId, $parentId)
  * 
  * @param  string child ID
  * @param  string parent ID
- * @return bool
+ * @return boolean
  */
 function xarRemoveRoleMemberByID($childId, $parentId)
 {
@@ -144,7 +144,7 @@ function xarRemoveRoleMemberByID($childId, $parentId)
  * @param  string instance
  * @param  integer level
  * @param  string description
- * @return bool
+ * @return boolean
  */
 function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='')
 {
@@ -164,7 +164,7 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
  * 
  * @param  string childName
  * @param  string  parentName
- * @return bool
+ * @return boolean
  */
 function xarMakePrivilegeMember($childName, $parentName)
 {
@@ -179,7 +179,7 @@ function xarMakePrivilegeMember($childName, $parentName)
  * 
  * @param  string  privilege name
  * @param  string role name
- * @return bool
+ * @return boolean
  */
 function xarAssignPrivilege($privilege,$role)
 {
@@ -218,7 +218,7 @@ function xarRemovePrivileges($module)
  * @param  integer childId
  * @param  integer parentId
  * @param  string description
- * @return bool
+ * @return boolean
  */
 function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId='',$parentId='',$description='')
 {
@@ -386,7 +386,7 @@ function xarMaskExists($name,$module="All",$component="All")
  * @param  string  $instance
  * @param  string  $module
  * @param  string  $role
- * @return bool
+ * @return boolean
  */
 function xarSecurityCheck($mask, $showException=1, $component='', $instance='', $module='', $role='',$pnrealm=0,$pnlevel=0)
 {
@@ -411,7 +411,7 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
  * @param  string  $instance
  * @param  integer $level
  * @param  string  $description
- * @return bool
+ * @return boolean
  */
 function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
 {
@@ -423,7 +423,7 @@ function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$descr
  *
  * 
  * @param  string name
- * @return bool
+ * @return boolean
  */
 function xarUnregisterMask($name)
 {
@@ -495,7 +495,7 @@ function xarSecGenAuthKey($modName = NULL)
  *
  * 
  * @param string authIdVarName
- * @return bool true if the key is valid, false if it is not
+ * @return boolean true if the key is valid, false if it is not
  * @throws ForbiddenOperationException
  * @todo bring back possibility of time authorized keys
  */

@@ -25,7 +25,7 @@
  * @param $args['defaultvalue'] default of the field to delete
  * @param $args['source'] data source of the field to delete
  * @param $args['configuration'] configuration of the field to delete
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_deleteprop($args)

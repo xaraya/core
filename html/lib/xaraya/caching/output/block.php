@@ -32,7 +32,7 @@ class xarBlockCache extends Object
     /**
      * Initialise the block caching options
      *
-     * @return bool true on success, false on failure
+     * @return boolean true on success, false on failure
      */
     public static function init(array $args = array())
     {
@@ -163,7 +163,7 @@ class xarBlockCache extends Object
      * Check if this block is suitable for block caching
      *
      * @param  array $blockInfo block information with module, type, id etc.
-     * @return bool  true if the block is suitable for caching, false if not
+     * @return boolean  true if the block is suitable for caching, false if not
      */
     public static function checkCachingRules($blockInfo = array())
     {
@@ -231,7 +231,7 @@ class xarBlockCache extends Object
      * Check whether a block is cached
      *
      * @param  string $cacheKey the key identifying the particular block you want to access
-     * @return bool   true if the block is available in cache, false if not
+     * @return boolean   true if the block is available in cache, false if not
      */
     public static function isCached($cacheKey)
     {

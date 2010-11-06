@@ -19,10 +19,7 @@
  * @param $args['phase'] phase to process (valid phases are showform, checkinput, and updateitem)
  * NOTE: If you provide this function in your module, you must include return values for all phases
  * @param $args['object'] user_settings object (default roles_user_settings)
- * @returns mixed
- * @return array on showform
- * @return bool on checkinput, invalid = false, valid = true
- * @return bool on updateitem, error = false, success = true
+ * @return mixed array on showform, bool on checkinput, invalid = false, valid = true, bool on updateitem, error = false, success = true
  */
 function roles_userapi_usermenu($args)
 {

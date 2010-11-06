@@ -21,8 +21,7 @@
  * @author Marty Vance
  * @access public
  * @param none
- * @returns bool
- * @
+ * @return boolean true on success, false on failure
  */
 function themes_admin_regenerate()
 {

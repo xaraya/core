@@ -14,7 +14,7 @@
 /**
  * log user out of system
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @return bool true on success of redirect
+ * @return boolean true on success of redirect
  */
 function authsystem_user_logout()
 {

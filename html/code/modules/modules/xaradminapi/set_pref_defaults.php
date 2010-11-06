@@ -15,8 +15,7 @@
  * @author Xaraya Development Team
  * @access public
  * @param none
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
 function modules_adminapi_set_pref_defaults()

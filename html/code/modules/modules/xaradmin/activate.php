@@ -21,8 +21,7 @@
  * status message and returns true.
  *
  * @param id the module id to activate
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 function modules_admin_activate()
 {

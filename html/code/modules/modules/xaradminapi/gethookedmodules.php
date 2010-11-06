@@ -18,8 +18,7 @@
  * @param $args['hookObject'] the object of the hook (item, module, ...) (optional)
  * @param $args['hookAction'] the action on that object (transform, display, ...) (optional)
  * @param $args['hookArea'] the area we're dealing with (GUI, API) (optional)
- * @returns array
- * @return array of modules calling this hook module
+ * @return array modules calling this hook module
  * @throws BAD_PARAM
  */
 function modules_adminapi_gethookedmodules($args)

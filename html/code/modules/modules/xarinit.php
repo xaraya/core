@@ -16,7 +16,7 @@ sys::import('xaraya.tableddl');
 /**
  * Initialise the modules module
  *
- * @return bool
+ * @return boolean
  * @throws DATABASE_ERROR
  */
 function modules_init()
@@ -210,7 +210,7 @@ function modules_init()
  * Activates the modules module
  *
  * @param none $
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function modules_activate()
 {
@@ -236,7 +236,7 @@ function modules_activate()
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function modules_upgrade($oldversion)
 {
@@ -267,7 +267,7 @@ function modules_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return bool
+ * @return boolean
  */
 function modules_delete()
 {

@@ -20,7 +20,7 @@
 /**
  * Initialise the module. This function is called once when the module is intalled.
  *
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 public function authsystem_init()
 {
@@ -55,7 +55,7 @@ public function authsystem_init()
 /**
  * Activate the module. This function is called when the module is changed from installed to active state.
  *
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 public function authsystem_activate()
 {
@@ -82,7 +82,7 @@ public function authsystem_activate()
  * Upgrade the module from an old version. This function is called when the module is being upgraded.
  *
  * @param string $oldversion The three digit version number of the currently installed (old) version
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 public function authsystem_upgrade($oldversion)
 {
@@ -98,7 +98,7 @@ public function authsystem_upgrade($oldversion)
  * Delete the module.
  * This function is called when the module is being uninstalled.
  *
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 public function authsystem_delete()
 {

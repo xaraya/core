@@ -122,7 +122,7 @@ class FlatTableDataStore extends SQLDataStore
     /**
      * Create an item in the flat table
      *
-     * @return bool true on success, false on failure
+     * @return boolean true on success, false on failure
      * @throws BadParameterException
      **/
     function createItem(Array $args = array())

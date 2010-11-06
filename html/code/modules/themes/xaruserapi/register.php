@@ -15,8 +15,7 @@
  *
  * @author andyv <andyv@xaraya.com>
  * @param $args array containing the parameters
- * @returns string
- * @return the PHP code needed to show the css tag in the BL template
+ * @return string the PHP code needed to show the css tag in the BL template
  */
 /**
  * Handler for the xar:style tag

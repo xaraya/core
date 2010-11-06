@@ -16,8 +16,7 @@
  * @param id the module's registered id
  * @param newdisplayname the new display name
  * @param newdescription the new description
- * @returns bool
- * @return true on success, error message on failure
+ * @return mixed true on success, error message on failure
  */
 function modules_admin_update()
 {

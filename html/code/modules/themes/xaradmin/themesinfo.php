@@ -17,7 +17,7 @@
  * @author Marty Vance
  * @access public
  * @param none
- * @returns array
+ * @return array
  * @todo some facelift
  */
 function themes_admin_themesinfo()

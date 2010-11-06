@@ -22,8 +22,7 @@
  * @param $args['template'] the template of the block instance
  * @param $args['content'] the new content of the block
  * @param $args['refresh'] the new refresh rate of the block
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 function blocks_admin_update_instance()
 {

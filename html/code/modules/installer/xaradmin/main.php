@@ -22,8 +22,7 @@
  * Dead
  *
  * @access public
- * @returns array
- * @return an array of template values
+ * @return array template values
  */
 function installer_admin_main()
 {

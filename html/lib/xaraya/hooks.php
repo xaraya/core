@@ -83,7 +83,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
  * @param hookModName name of the hook module
  * @param hookModType name of the hook type ('user' / 'admin' / ... for regular functions, or 'class' for hook call handlers)
  * @param hookModFunc name of the hook function or handler class
- * @return bool true on success
+ * @return boolean true on success
  * @throws BadParameterException
  */
 function xarModRegisterHook($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)
@@ -101,7 +101,7 @@ function xarModRegisterHook($hookScope, $hookAction, $hookArea, $hookModName, $h
  * @param hookModName name of the hook module
  * @param hookModType name of the hook type ('user' / 'admin' / ... for regular functions, or 'class' for hook call handlers)
  * @param hookModFunc name of the hook function or handler class
- * @return bool true if the unregister call suceeded, false if it failed
+ * @return boolean true if the unregister call suceeded, false if it failed
  * @throws BadParameterException
  */
 function xarModUnregisterHook($hookScope, $hookAction, $hookArea,$hookModName, $hookModType, $hookModFunc)

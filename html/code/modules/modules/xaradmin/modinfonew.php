@@ -16,7 +16,7 @@
  * @author Xaraya Development Team
  * @access public
  * @param none
- * @returns array
+ * @return array
  * @todo some facelift
  */
 function modules_admin_modinfonew()

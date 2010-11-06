@@ -18,8 +18,7 @@
  * @param $args['selection'] extra coonditions passed into the where-clause
  * @param $args['group'] comma-separated list of group names or IDs, or
  * @param $args['idlist'] array of user ids
- * @returns array
- * @return array of users, or false on failure
+ * @return mixed array of users, or false on failure
  */
 function roles_userapi_getall($args)
 {

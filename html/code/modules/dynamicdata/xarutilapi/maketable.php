@@ -30,7 +30,7 @@
  * 6. (for extension objects) skip the extra itemid property in display / input templates
  * 7. in case of problems, report to http://bugs.xaraya.com/
  *
- * @return bool true on succes
+ * @return boolean true on succes
  */
 function dynamicdata_utilapi_maketable($args)
 {

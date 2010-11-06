@@ -20,8 +20,7 @@
  * status message and returns true.
  * 
  * @param id $ the theme id to activate
- * @returns 
- * @return 
+ * @return boolean true on success, false on failure
  */
 function themes_admin_activate()
 { 

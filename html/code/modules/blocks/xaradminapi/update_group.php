@@ -20,8 +20,7 @@
  * @author Paul Rosania
  * @param $args['id'] the ID of the group to update
  * @param $args['instance_order'] the new instance sequence (array of bid)
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 function blocks_adminapi_update_group($args)
 {

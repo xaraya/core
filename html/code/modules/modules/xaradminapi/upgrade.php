@@ -14,8 +14,7 @@
  *
  * @author Xaraya Development Team
  * @param regid registered module id
- * @returns bool
- * @return
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
 function modules_adminapi_upgrade($args)

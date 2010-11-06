@@ -139,7 +139,7 @@ function xarLogFallbackFile ()
 
 /**
  * Will check if the fallback mechanism can be used
- * @return bool
+ * @return boolean
  */
 function xarLogFallbackPossible ()
 {

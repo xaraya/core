@@ -14,8 +14,7 @@
 /**
  * count all users
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @returns integer
- * @return number of users matching the selection criteria (cfr. getall)
+ * @return integer the number of users matching the selection criteria (cfr. getall)
  */
 function roles_userapi_countall($args)
 {

@@ -27,7 +27,7 @@ class SessionException extends Exception
 /**
  * Initialise the Session Support
  *
- * @return bool true
+ * @return boolean true
  */
 function xarSession_init(&$args)
 {
@@ -189,7 +189,7 @@ class xarSession extends Object implements IsessionHandler
      * @param $args['securityLevel'] the current security level
      * @param $args['duration'] duration of the session
      * @param $args['inactivityTimeout']
-     * @return bool
+     * @return boolean
      */
     private function setup(&$args)
     {

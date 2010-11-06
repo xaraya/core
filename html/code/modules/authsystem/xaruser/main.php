@@ -18,7 +18,7 @@
  * and returns user to correct location.
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @author  Jo Dalle Nogare<jojodee@xaraya.com>
- * @return bool true
+ * @return boolean true
  */
 function authsystem_user_main()
 {

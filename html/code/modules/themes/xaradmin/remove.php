@@ -19,8 +19,7 @@
  * @author Marty Vance 
  * @access public 
  * @param id $ the theme id
- * @returns mixed
- * @return true on success
+ * @return boolean true on success, false on failure
  */
 function themes_admin_remove()
 { 
