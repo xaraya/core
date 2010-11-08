@@ -1,6 +1,7 @@
 <?php
 /**
- * Retrieve list of itemtypes of this module
+ * Retrieve a list of itemtypes of this module
+ *
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
@@ -13,9 +14,8 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * utility function to retrieve the list of item types of this module (if any)
- *
- * @return array containing the item types and their description
+ * Utility function to retrieve the list of itemtypes of this module (if any).
+ * @return array the itemtypes of this module and their description *
  */
 function dynamicdata_userapi_getitemtypes($args)
 {

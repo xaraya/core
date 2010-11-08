@@ -1,5 +1,7 @@
 <?php
 /**
+ * Retrieve a list of itemtypes of this module
+ *
  * @package modules
  * @subpackage roles module
  * @category Xaraya Web Applications Framework
@@ -10,10 +12,10 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
- * utility function to retrieve the list of item types of this module (if any)
+ * Utility function to retrieve the list of itemtypes of this module (if any).
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @return array the item types and their description
+ * @return array the itemtypes of this module and their description *
  */
 function roles_userapi_getitemtypes($args)
 {

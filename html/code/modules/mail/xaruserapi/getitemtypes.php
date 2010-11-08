@@ -1,5 +1,7 @@
 <?php
 /**
+ * Retrieve a list of itemtypes of this module
+ *
  * @package modules
  * @subpackage mail module
  * @category Xaraya Web Applications Framework
@@ -10,10 +12,10 @@
  * @link http://xaraya.com/index.php/release/771.html
  */
 
-  /**
-   * Return the itemtypes for the mail module
-   *
-   */
+/**
+ * Utility function to retrieve the list of itemtypes of this module (if any).
+ * @return array the itemtypes of this module and their description *
+ */
 sys::import('modules.dynamicdata.class.objects.master');
 function mail_userapi_getitemtypes($args)
 {
