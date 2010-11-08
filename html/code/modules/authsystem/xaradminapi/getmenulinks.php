@@ -1,6 +1,6 @@
 <?php
 /**
- * Utility function pass individual menu items to the main menu
+ * Pass individual menu items to the admin menu
  *
  * @package modules
  * @subpackage authsystem module
@@ -12,10 +12,10 @@
  * @link http://xaraya.com/index.php/release/42.html
  */
 /**
- * utility function pass individual menu items to the main menu
+ * Utility function pass individual menu items to the admin menu.
  *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
- * @return array containing the menulinks for the main menu items.
+ * @return array the menulinks for the admin menu items of this module.
  */
 function authsystem_adminapi_getmenulinks()
 {

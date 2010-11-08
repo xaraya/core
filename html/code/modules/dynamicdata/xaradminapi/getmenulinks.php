@@ -1,6 +1,7 @@
 <?php
 /**
- * Utility to get menu links
+ * Pass individual menu items to the admin menu
+ *
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
@@ -13,10 +14,10 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * utility function pass individual menu items to the main menu
+ * Utility function pass individual menu items to the admin menu.
  *
  * @author the Example module development team
- * @return array containing the menulinks for the main menu items.
+ * @return array the menulinks for the admin menu items of this module.
  */
 function dynamicdata_adminapi_getmenulinks()
 {

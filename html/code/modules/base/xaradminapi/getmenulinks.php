@@ -1,6 +1,7 @@
 <?php
 /**
- * Get admin menu links
+ * Pass individual menu items to the admin menu
+ *
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
@@ -11,10 +12,10 @@
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
- * Pass individual menu items to the admin menu
+ * Utility function pass individual menu items to the admin menu.
  *
  * @author the Base module development team
- * @return array containing the menulinks for the admin menu items.
+ * @return array the menulinks for the admin menu items of this module.
  */
 function base_adminapi_getmenulinks()
 {

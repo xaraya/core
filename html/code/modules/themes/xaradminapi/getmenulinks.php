@@ -1,6 +1,6 @@
 <?php
 /**
- * Pass individual menu items to the main menu
+ * Pass individual menu items to the admin menu
  *
  * @package modules
  * @subpackage themes module
@@ -12,11 +12,11 @@
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
-* utility function pass individual menu items to the main menu
-*
-* @author Marty Vance
-* @return array the menulinks for the main menu items.
-*/
+ * Utility function pass individual menu items to the admin menu.
+ *
+ * @author Marty Vance
+ * @return array the menulinks for the admin menu items of this module.
+ */
 function themes_adminapi_getmenulinks()
 {
     // No special menu. Just return a standard array
