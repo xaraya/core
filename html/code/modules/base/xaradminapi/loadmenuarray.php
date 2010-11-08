@@ -38,7 +38,6 @@
  * @param bool $args[noxml] optionally force looking for links only from a getmenulinks function
  * @param bool $args[nolinks] optionally force looking for links only from xml files
  * @return array menulinks for the module
- * @throws none
  */
 function base_adminapi_loadmenuarray($args)
 {

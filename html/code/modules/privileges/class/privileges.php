@@ -16,7 +16,6 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @throws  none
 */
 
 sys::import('modules.privileges.class.masks');
@@ -104,7 +103,6 @@ class xarPrivileges extends xarMasks
      * @access  public
      * @param   module name
      * @return  boolean
-     * @throws  none
     */
     public static function removeInstances($module)
     {
@@ -134,7 +132,6 @@ class xarPrivileges extends xarMasks
      * @access  public
      * @param   array of privilege values
      * @return  boolean
-     * @throws  none
      * @todo    duplicates parts of $privilege->add() method
     */
     public static function register($name,$realm,$module,$component,$instance,$level,$description='')
@@ -177,7 +174,6 @@ class xarPrivileges extends xarMasks
      * @param   string
      * @param   string
      * @return  boolean
-     * @throws  none
     */
     public static function assign($privilegename,$rolename)
     {
@@ -259,7 +255,6 @@ class xarPrivileges extends xarMasks
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @return  array of privileges
-     * @throws  none
      * @todo    use associative fetching and one getrow statement.
     */
     public static function getprivileges(Array $args=array())
@@ -313,7 +308,6 @@ class xarPrivileges extends xarMasks
      * @access  public
      * @param   string $arg indicates what types of elements to get
      * @return  array of privileges
-     * @throws  none
      * @todo    use associative fetching and one getrow
      * @todo    cache with statics?
     */
@@ -378,7 +372,6 @@ class xarPrivileges extends xarMasks
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @return  array of realm ids and names
-     * @throws  none
      * @todo    this isn't really the right place for this function
     */
     public static function getrealms()
@@ -416,7 +409,6 @@ class xarPrivileges extends xarMasks
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @return  array of module ids and names
-     * @throws  none
      * @todo    this isn't really the right place for this function
      * @todo    ucfirst is a presentation issue.
      */
@@ -468,7 +460,6 @@ class xarPrivileges extends xarMasks
      * @access  public
      * @param   integer
      * @return  privilege object
-     * @throws  none
     */
     public static function getPrivilege($id)
     {
@@ -523,7 +514,6 @@ class xarPrivileges extends xarMasks
      * @access  public
      * @param   string
      * @return  privilege object
-     * @throws  none
     */
     public static function findPrivilege($name)
     {
@@ -565,7 +555,6 @@ class xarPrivileges extends xarMasks
      * @access  public
      * @param   string
      * @return  privilege object
-     * @throws  none
     */
     public static function findPrivilegesForModule($module)
     {
@@ -610,7 +599,6 @@ class xarPrivileges extends xarMasks
      * @param   string
      * @param   string
      * @return  boolean
-     * @throws  none
      * @todo    create exceptions for bad input
     */
     public static function makeMember($childname,$parentname)

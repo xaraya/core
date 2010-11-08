@@ -20,7 +20,6 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @return  none
- * @throws  none
  */
 function privileges_admin_removemember()
 {

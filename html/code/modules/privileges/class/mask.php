@@ -16,7 +16,6 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @throws  none
 */
 class xarMask extends Object
 {
@@ -50,7 +49,6 @@ class xarMask extends Object
      * @access  public
      * @param   array of values
      * @return  mask
-     * @throws  none
     */
     function __construct($pargs=array())
     {
@@ -102,7 +100,6 @@ class xarMask extends Object
      * @access  public
      * @param   integer   adds  Number of additional instance parts to add to the array
      * @return  array of strings
-     * @throws  none
     */
     function normalize($adds=0)
     {
@@ -163,7 +160,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  array 2 normalized masks
-     * @throws  none
     */
     function canonical($mask)
     {
@@ -183,7 +179,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  boolean
-     * @throws  none
     */
     function matches($mask)
     {
@@ -208,7 +203,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  boolean
-     * @throws  none
     */
     function matchesexactly($mask)
     {
@@ -226,7 +220,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  boolean
-     * @throws  none
     */
     function includes($mask)
     {
@@ -293,7 +286,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  boolean
-     * @throws  none
     */
     function implies($mask)
     {

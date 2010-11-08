@@ -21,7 +21,6 @@
  * @access  public
  * @param   childid, parentid
  * @return  boolean
- * @throws  none
  */
 function privileges_adminapi_removemember($args)
 {

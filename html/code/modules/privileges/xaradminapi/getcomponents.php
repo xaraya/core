@@ -22,7 +22,6 @@
      * @access  public
      * @param   string with module name
      * @return  array of component ids and names
-     * @throws  none
     */
 
     function privileges_adminapi_getcomponents($args)
