@@ -23,7 +23,6 @@
  * @param none $
  * @return none
  * @throws none
- * @todo none
  */
 function roles_admin_testprivileges()
 {

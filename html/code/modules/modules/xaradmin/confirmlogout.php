@@ -20,8 +20,6 @@
  * @access  public
  * @param   no parameters
  * @return  data for template
- * @throws  no exceptions
- * @todo    nothing
 */
 function modules_admin_confirmlogout()
 {

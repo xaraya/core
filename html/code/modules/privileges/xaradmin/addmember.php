@@ -24,7 +24,6 @@
  * @param   none
  * @return  none
  * @throws  none
- * @todo    none
  */
 function privileges_admin_addmember()
 {

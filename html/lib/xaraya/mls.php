@@ -115,7 +115,6 @@ function xarMLSGetMode()
  *
  * 
  * @return string the site locale
- * @todo   check
  */
 function xarMLSGetSiteLocale() { return $GLOBALS['xarMLS_defaultLocale']; }
 
@@ -124,7 +123,6 @@ function xarMLSGetSiteLocale() { return $GLOBALS['xarMLS_defaultLocale']; }
  *
  * 
  * @return array of locales
- * @todo   check
  */
 function xarMLSListSiteLocales()
 {

@@ -66,7 +66,6 @@ class xarSecurity extends Object
      * @param   none
      * @return  the masks object
      * @throws  none
-     * @todo    none
     */
     public static function initialize()
     {

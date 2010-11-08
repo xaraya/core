@@ -17,8 +17,6 @@
  * @access  public
  * @param   none
  * @return  nothing
- * @throws  no exceptions
- * @todo    nothing
 */
 
 sys::import('xaraya.structures.containers.blocks.basicblock');

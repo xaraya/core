@@ -22,7 +22,6 @@
  * @param   childid, parentid
  * @return  boolean
  * @throws  none
- * @todo    none
  */
 function privileges_adminapi_removemember($args)
 {

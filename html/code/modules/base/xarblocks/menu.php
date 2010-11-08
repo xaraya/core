@@ -19,8 +19,6 @@
  * @access  public
  * @param   none
  * @return  nothing
- * @throws  no exceptions
- * @todo    nothing
 */
 // Inherit properties and methods from MenuBlock class
 sys::import('xaraya.structures.containers.blocks.menublock');

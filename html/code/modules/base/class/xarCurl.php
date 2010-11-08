@@ -35,7 +35,6 @@
  * @access  public
  * @param   $args['url'] The main URL for the curl session (optional)
  * @return  nothing
- * @throws  no exceptions
  * @todo    nice handling of protocols other than http.
  */
 class xarCurl extends Object

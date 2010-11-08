@@ -29,7 +29,6 @@ var debug = 0;
 * @param   string method (Optional) 'GET' or 'POST' (default=GET)
 * @param   object formobj (Optional) Form object reference (Only needed if method=POST)
 * @return  boolean local_debug (Optional) Whether to include debug output (default=false)
-* @throws  no exceptions
 */
 function loadContent(url, tagid, method, form_obj, local_debug)
 {

@@ -17,9 +17,7 @@
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  true on success or void on failure
- * @throws  no exceptions
- * @todo    nothing
+ * @return  true on success or void on failure * @throws  no exceptions
 */
 function mail_admin_sendtest()
 {

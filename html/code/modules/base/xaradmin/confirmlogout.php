@@ -20,8 +20,6 @@
  * @access  public
  * @param   no parameters
  * @return  array data for template
- * @throws  no exceptions
- * @todo    nothing
 */
 function base_admin_confirmlogout()
 {

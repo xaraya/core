@@ -18,8 +18,6 @@
  * @access  public
  * @param   no parameters
  * @return  true on success or void on failure
- * @throws  no exceptions
- * @todo    nothing
 */
 function mail_admin_viewq($args)
 {

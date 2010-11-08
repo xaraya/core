@@ -18,7 +18,6 @@
  * @access  public
  * @param   none
  * @return  true on success or void on failure
- * @todo    nothing
 */
 function base_adminapi_waitingcontent()
 {

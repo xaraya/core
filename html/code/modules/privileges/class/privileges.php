@@ -17,7 +17,6 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @throws  none
- * @todo    none
 */
 
 sys::import('modules.privileges.class.masks');
@@ -106,7 +105,6 @@ class xarPrivileges extends xarMasks
      * @param   module name
      * @return  boolean
      * @throws  none
-     * @todo    none
     */
     public static function removeInstances($module)
     {
@@ -180,7 +178,6 @@ class xarPrivileges extends xarMasks
      * @param   string
      * @return  boolean
      * @throws  none
-     * @todo    none
     */
     public static function assign($privilegename,$rolename)
     {
@@ -475,7 +472,6 @@ class xarPrivileges extends xarMasks
      * @param   integer
      * @return  privilege object
      * @throws  none
-     * @todo    none
     */
     public static function getPrivilege($id)
     {
@@ -531,7 +527,6 @@ class xarPrivileges extends xarMasks
      * @param   string
      * @return  privilege object
      * @throws  none
-     * @todo    none
     */
     public static function findPrivilege($name)
     {
@@ -574,7 +569,6 @@ class xarPrivileges extends xarMasks
      * @param   string
      * @return  privilege object
      * @throws  none
-     * @todo    none
     */
     public static function findPrivilegesForModule($module)
     {

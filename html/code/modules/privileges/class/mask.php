@@ -51,7 +51,6 @@ class xarMask extends Object
      * @param   array of values
      * @return  mask
      * @throws  none
-     * @todo    none
     */
     function __construct($pargs=array())
     {
@@ -104,7 +103,6 @@ class xarMask extends Object
      * @param   integer   adds  Number of additional instance parts to add to the array
      * @return  array of strings
      * @throws  none
-     * @todo    none
     */
     function normalize($adds=0)
     {
@@ -166,7 +164,6 @@ class xarMask extends Object
      * @param   mask object
      * @return  array 2 normalized masks
      * @throws  none
-     * @todo    none
     */
     function canonical($mask)
     {
