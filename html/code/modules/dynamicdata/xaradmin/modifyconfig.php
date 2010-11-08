@@ -1,5 +1,7 @@
 <?php
 /**
+ * Modify the configuration settings of this module
+ *
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
@@ -10,6 +12,11 @@
  * @link http://xaraya.com/index.php/release/182.html
  */
 
+/**
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ *
+ * @return array of template values
+ */
 function dynamicdata_admin_modifyconfig()
 {
     if (!xarSecurityCheck('AdminDynamicData')) return;

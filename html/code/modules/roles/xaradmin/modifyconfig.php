@@ -1,5 +1,7 @@
 <?php
 /**
+ * Modify the configuration settings of this module
+ *
  * @package modules
  * @subpackage roles module
  * @category Xaraya Web Applications Framework
@@ -10,7 +12,8 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
- * modify configuration
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ * @return array of template values
  */
 function roles_admin_modifyconfig()
 {

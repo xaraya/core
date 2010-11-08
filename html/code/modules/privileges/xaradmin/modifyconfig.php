@@ -1,6 +1,7 @@
 <?php
 /**
- * Modify configuration of this module
+ * Modify the configuration settings of this module
+ *
  * @package modules
  * @subpackage privileges module
  * @category Xaraya Web Applications Framework
@@ -13,7 +14,8 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
- * modify configuration
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ * @return array of template values
  */
 function privileges_admin_modifyconfig()
 {

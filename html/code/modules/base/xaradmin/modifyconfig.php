@@ -1,6 +1,7 @@
 <?php
 /**
- * Modify site configuration
+ * Modify the configuration settings of this module
+ *
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
@@ -11,7 +12,7 @@
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
- * Modify site configuration
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
  * @author John Robeson
  * @author Greg Allan
  * @return array of template values
