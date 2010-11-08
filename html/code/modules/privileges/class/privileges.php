@@ -258,7 +258,6 @@ class xarPrivileges extends xarMasks
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  array of privileges
      * @throws  none
      * @todo    use associative fetching and one getrow statement.
@@ -378,7 +377,6 @@ class xarPrivileges extends xarMasks
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  array of realm ids and names
      * @throws  none
      * @todo    this isn't really the right place for this function
@@ -417,7 +415,6 @@ class xarPrivileges extends xarMasks
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  array of module ids and names
      * @throws  none
      * @todo    this isn't really the right place for this function

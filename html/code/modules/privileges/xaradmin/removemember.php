@@ -19,7 +19,6 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   none
  * @return  none
  * @throws  none
  */

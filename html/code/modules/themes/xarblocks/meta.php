@@ -15,7 +15,6 @@
  * @author  John Cox
  * @author  Carl Corliss
  * @access  public
- * @param   none
  * @return  void
 */
 
