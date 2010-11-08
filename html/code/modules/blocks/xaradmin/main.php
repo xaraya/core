@@ -1,6 +1,6 @@
 <?php
 /**
- * Block Functions
+ * Main entry point for the admin interface of this module
  *
  * @package modules
  * @subpackage blocks module
@@ -12,9 +12,13 @@
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
- * Blocks Functions
+ * The main admin interface function of this module.
+ * This function is the default function for the admin interface, and is called whenever the module is
+ * initiated with only an admin type but no func parameter passed.  
+ * The function displays the module's overview page, or redirects to the view_instances page if overviews are disabled.
  * @author Jim McDonald
  * @author Paul Rosania
+ * @return mixed array of template data or boolean true if redirected
  */
 function blocks_admin_main()
 {
