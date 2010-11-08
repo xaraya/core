@@ -41,5 +41,6 @@ function privileges_admin_removemember()
                              'admin',
                              'modifyprivilege',
                              array('id'=>$childid)));
+    return true;
 }
 ?>

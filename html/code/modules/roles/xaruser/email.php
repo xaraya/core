@@ -17,7 +17,7 @@
  * @author  John Cox
  * @access  public
  * @param   id is the id of the user being sent
- * @return  true on success or void on falure
+ * @return  array data for the template display
  * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
  * @todo    handle empty subject and/or message?
  */

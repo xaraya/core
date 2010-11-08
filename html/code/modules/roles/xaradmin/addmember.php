@@ -55,6 +55,7 @@ function roles_admin_addmember()
     // redirect to the next page
     xarController::redirect(xarModURL('roles', 'admin', 'modify',
             array('id' => $id)));
+    return true;
 }
 
 ?>

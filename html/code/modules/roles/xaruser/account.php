@@ -16,6 +16,7 @@
  * Currently does not work, due to design
  * of menu not in place, and DD not in place.
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return array data for the template display
  * @todo   Finish this function.
  */
 function roles_user_account()

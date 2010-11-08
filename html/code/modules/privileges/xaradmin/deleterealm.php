@@ -63,6 +63,7 @@ function privileges_admin_deleterealm()
 
 // redirect to the next page
     xarController::redirect(xarModURL('privileges', 'admin', 'viewrealms'));
+    return true;
 }
 
 ?>

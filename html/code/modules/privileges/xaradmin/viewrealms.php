@@ -15,7 +15,7 @@
  */
 /**
  * viewRealms - view the defined realms
- * Takes no parameters
+ * @return array data for the template display
  */
 function privileges_admin_viewrealms()
 {

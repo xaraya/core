@@ -15,7 +15,7 @@
  */
 /**
  * addRealm - create a new realm
- * Takes no parameters
+ * @return array data for the template display
  */
 function privileges_admin_newrealm()
 {

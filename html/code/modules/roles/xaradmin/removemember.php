@@ -48,5 +48,6 @@ function roles_admin_removemember()
 
     // redirect to the next page
     xarController::redirect(xarModURL('roles', 'admin', 'modify',  array('id' => $childid)));
+    return true;
 }
 ?>

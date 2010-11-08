@@ -29,7 +29,7 @@
  * @param dbPrefix
  * @param dbType
  * @param createDb
- * @todo better error checking on arguments
+ * @return array data for the template display
  */
 function installer_admin_phase5()
 {

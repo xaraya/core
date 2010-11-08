@@ -16,6 +16,7 @@
  * This assumes the install.php and index.php are in the same directory.
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
+ * @return array data for the template display
  */
 
 function installer_admin_security()

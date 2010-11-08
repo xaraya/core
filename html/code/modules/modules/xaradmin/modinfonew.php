@@ -15,7 +15,7 @@
  * opens in new window when browser is javascript enabled
  * @author Xaraya Development Team
  * @access public
- * @return array
+ * @return array data for the template display
  * @todo some facelift
  */
 function modules_admin_modinfonew()

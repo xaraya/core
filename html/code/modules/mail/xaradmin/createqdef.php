@@ -61,5 +61,6 @@ function mail_admin_createqdef($args)
         xarModVars::set('mail','queue-definition',$qdefName);
     }
     xarController::redirect(xarModUrl('mail','admin','view'));
+    return ttue;
 }
 ?>

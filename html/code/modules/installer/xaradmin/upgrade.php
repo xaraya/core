@@ -10,6 +10,9 @@
  * @link http://xaraya.com/index.php/release/200.html
  */
 
+/**
+ * @return array data for the template display
+ */
 function installer_admin_upgrade()
 {
     if(!xarVarFetch('phase','int', $data['phase'], 1, XARVAR_DONT_SET)) {return;}

@@ -85,6 +85,7 @@ function roles_admin_asknotification($args)
             }
             xarController::redirect(xarModURL('roles', 'admin', 'showusers',
                               array('id' => $data['groupid'], 'state' => $data['state'])));
+            return true;
            break;
     }
 }

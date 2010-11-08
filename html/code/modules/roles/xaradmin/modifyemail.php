@@ -11,6 +11,7 @@
  */
 /**
  * Modify the  email for users
+ * @return array data for the template display
  */
 function roles_admin_modifyemail($args)
 {

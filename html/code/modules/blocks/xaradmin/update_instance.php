@@ -235,7 +235,8 @@ function blocks_admin_update_instance()
     $return_url =  !empty($blockinfo['return_url']) ? $blockinfo['return_url'] :
         xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $bid, 'tab' => $tab));
 
-    return xarController::redirect($return_url);
+    xarController::redirect($return_url);
+    return true;
 
 }
 ?>

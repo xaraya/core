@@ -16,7 +16,7 @@
  *
  * @author Marty Vance
  * @access public
- * @return array
+ * @return array data for the template display
  * @todo some facelift
  */
 function themes_admin_themesinfo()

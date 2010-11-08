@@ -23,9 +23,7 @@
  *
  * @access private
  * @param agree string
- * @return array
- * @todo <johnny> make sure php version checking works with
- *       php versions that contain strings
+ * @return array data for the template display
  */
 function installer_admin_phase3()
 {

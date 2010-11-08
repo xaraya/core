@@ -15,6 +15,7 @@
 /* Site lock
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return array data for the template display
  */
 
 function roles_admin_sitelock($args)

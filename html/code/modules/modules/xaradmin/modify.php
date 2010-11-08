@@ -20,7 +20,7 @@
  * @author Xaraya Development Team
  * @param id registered module id
  * @param return_url optional return URL after updating the hooks
- * @return array variables to pass to the template
+ * @return array data for the template display
  */
 function modules_admin_modify($args)
 {

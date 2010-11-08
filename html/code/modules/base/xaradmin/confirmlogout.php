@@ -19,7 +19,7 @@
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  array data for template
+ * @return  array data for the template display
 */
 function base_admin_confirmlogout()
 {

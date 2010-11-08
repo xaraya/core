@@ -14,6 +14,7 @@
  * view block types
  * @author Jim McDonald
  * @author Paul Rosania
+ * @return array data for the template display
  */
 function blocks_admin_view_types()
 {

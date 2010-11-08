@@ -15,6 +15,7 @@
  * showprivileges - display the privileges of this role
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return array data for the template display
  */
 function roles_admin_showprivileges()
 {
@@ -211,8 +212,6 @@ function roles_admin_showprivileges()
         'showprivileges');
     $data['addlabel'] = xarML('Add');
     return $data;
-    // redirect to the next page
-    xarController::redirect(xarModURL('roles', 'admin', 'new'));
 }
 
 ?>

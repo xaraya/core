@@ -13,6 +13,7 @@
  */
 /**
  * Sends a new password to the user if they have forgotten theirs.
+ * @return array data for the template display
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  */

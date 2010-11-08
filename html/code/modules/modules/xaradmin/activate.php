@@ -46,7 +46,6 @@ function modules_admin_activate()
     $target=$minfo['name'];
 
     xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
-
     return true;
 }
 

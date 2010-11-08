@@ -14,8 +14,7 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @return array
- * @todo 
+ * @return array data for the template display
  */
 function modules_admin_prefs()
 {

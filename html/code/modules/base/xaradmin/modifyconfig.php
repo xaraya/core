@@ -15,7 +15,7 @@
  * Standard GUI function to display and update the configuration settings of the module based on input data.
  * @author John Robeson
  * @author Greg Allan
- * @return array of template values
+ * @return array data for the template display
  */
 function base_admin_modifyconfig()
 {

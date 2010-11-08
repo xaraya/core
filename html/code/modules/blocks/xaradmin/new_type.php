@@ -14,6 +14,7 @@
  * Register New Block Type
  * @author Jim McDonald
  * @author Paul Rosania
+ * @return array data for the template display
  */
 function blocks_admin_new_type()
 {

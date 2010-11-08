@@ -54,7 +54,6 @@ function modules_admin_installall()
     }
 
     xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL));
-
     return true;
 }
 

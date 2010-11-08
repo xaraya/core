@@ -195,6 +195,7 @@ function installer_admin_create_administrator()
     xarAssignPrivilege('GeneralLock','Users');
 
     xarController::redirect(xarModURL('installer', 'admin', 'security',array('install_language' => $install_language)));
+    return true;
 }
 
 

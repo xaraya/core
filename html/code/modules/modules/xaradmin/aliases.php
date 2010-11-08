@@ -9,6 +9,9 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/1.html
  */
+/**
+ * @return array data for the template display
+ */
 
     function modules_admin_aliases($args)
     {

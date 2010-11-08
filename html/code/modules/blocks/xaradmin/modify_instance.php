@@ -14,6 +14,7 @@
  * @TODO Need to sperate this out to API calls.
  * @author Jim McDonald
  * @author Paul Rosania
+ * @return array data for the template display
  */
 
 function blocks_admin_modify_instance()

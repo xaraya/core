@@ -19,7 +19,7 @@
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return array of template values
+ * @return  array data for the template display
 */
 function modules_admin_modifyconfig()
 {

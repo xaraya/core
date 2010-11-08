@@ -72,7 +72,6 @@ function mail_admin_sendtest()
 
     // lets update status and display updated configuration
     xarController::redirect(xarModURL('mail', 'admin', 'compose'));
-    // Return
     return true;
 }
 ?>

@@ -22,7 +22,7 @@
  * Phase 4: Database Settings Page
  *
  * @access private
- * @return array of default values for the database creation
+ * @return array data for the template display
  */
 function installer_admin_phase4()
 {

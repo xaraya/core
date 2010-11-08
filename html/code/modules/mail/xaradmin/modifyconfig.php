@@ -18,7 +18,7 @@
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return array of template values
+ * @return array data for the template display
 */
 function mail_admin_modifyconfig()
 {

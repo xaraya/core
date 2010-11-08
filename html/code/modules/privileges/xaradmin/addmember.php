@@ -71,6 +71,7 @@ function privileges_admin_addmember()
                              'admin',
                              'modifyprivilege',
                              array('id'=>$id)));
+    return true;
 }
 
 

@@ -15,6 +15,7 @@
  */
 /**
  * Manage definition of instances for privileges (unfinished)
+ * @return array data for the template display
  */
 function dynamicdata_admin_privileges($args)
 { 

@@ -15,6 +15,7 @@
  * Sends a new password to the user if they have forgotten theirs.
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * @return  array data for the template display
  */
 function roles_user_lostpassword()
 {

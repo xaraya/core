@@ -35,5 +35,6 @@ function privileges_admin_removebranch()
     xarController::redirect(xarModURL('privileges',
                              'admin',
                              'viewprivileges'));
+    return true;
 }
 ?>

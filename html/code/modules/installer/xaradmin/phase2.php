@@ -22,7 +22,7 @@
  * Phase 2: Accept License Page
  *
  * @access private
- * @return array
+ * @return array data for the template display
  */
 function installer_admin_phase2()
 {

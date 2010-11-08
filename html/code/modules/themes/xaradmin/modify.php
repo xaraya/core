@@ -17,7 +17,7 @@
  *
  * @author Marty Vance 
  * @param id $ theme id
- * @return array the variables to pass to the template
+ * @return array data for the template display
  */
 function themes_admin_modify()
 {

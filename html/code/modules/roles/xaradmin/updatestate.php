@@ -90,11 +90,11 @@ function roles_admin_updatestate()
      if ((!xarModVars::get('roles', 'ask'.$mailtype.'email')) || (count($idnotify) == 0)) {
             xarController::redirect(xarModURL('roles', 'admin', 'showusers',
                           array('id' => $data['groupid'], 'state' => $data['state'])));
-            return true;
      }
      else {
         xarController::redirect(xarModURL('roles', 'admin', 'asknotification',
                           array('id' => $ids, 'mailtype' => $mailtype, 'groupid' => $data['groupid'], 'state' => $data['state'])));
      }
+     return true;
 }
 ?>
