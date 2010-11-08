@@ -1,6 +1,7 @@
 <?php
 /**
- * Dynamic Data Initialization
+ * Configuration information for the Dynamicdata module
+ *
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
@@ -19,6 +20,7 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
+ 
 $modversion['name']               = 'Dynamic Data';
 $modversion['id']                 = '182';
 $modversion['displayname']        = xarML('Dynamic Data');
