@@ -11,7 +11,10 @@
  */
 
 /**
- * Return table names back to Xaraya
+ * Return table name definitions to Xaraya.
+ * This function is called internally by the core whenever the module is
+ * loaded. It adds the table names to a globally accessible array
+ * @return array the registered tables of this module
  */
 function blocks_xartables()
 {
