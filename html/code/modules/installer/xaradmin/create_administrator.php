@@ -24,6 +24,7 @@
  * @access public
  * @param create
  * @return boolean
+ * @return mixed boolean after redirect or output display string if invalid data submitted
  * @todo make confirm password work
  * @todo remove URL field from users table
  * @todo normalize user's table

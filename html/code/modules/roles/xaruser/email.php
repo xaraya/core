@@ -17,7 +17,7 @@
  * @author  John Cox
  * @access  public
  * @param   id is the id of the user being sent
- * @return  array data for the template display
+ * @return mixed data array for the template display or output display string if invalid data submitted
  * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
  * @todo    handle empty subject and/or message?
  */

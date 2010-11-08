@@ -16,7 +16,7 @@
  * This function is the default function for the admin interface, and is called whenever the module is
  * initiated with only an admin type but no func parameter passed.  
  * The function displays the module's overview page, or redirects to the showusers page if overviews are disabled.
- * @return mixed array of template data or boolean true if redirected
+ * @return mixed output display string or boolean true if redirected
  */
 function roles_admin_main()
 {

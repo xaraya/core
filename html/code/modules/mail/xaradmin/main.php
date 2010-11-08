@@ -21,7 +21,7 @@
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return mixed array of template data or boolean true if redirected
+ * @return mixed output display string or boolean true if redirected
 */
 function mail_admin_main()
 {

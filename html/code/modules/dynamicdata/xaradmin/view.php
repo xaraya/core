@@ -14,6 +14,7 @@
 
 /**
  * View items
+ * @return string output display string
  */
 function dynamicdata_admin_view($args)
 {

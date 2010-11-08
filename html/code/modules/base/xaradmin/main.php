@@ -21,7 +21,7 @@
  * The function displays the module's overview page, or redirects to the modifyconfig page if overviews are disabled.
  * @author John Robeson
  * @author Greg Allan
- * @return mixed array of template data or boolean true if redirected
+ * @return mixed output display string or boolean true if redirected
  */
 function base_admin_main()
 {

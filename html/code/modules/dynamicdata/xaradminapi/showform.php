@@ -15,7 +15,7 @@
  * Show an input form in a template
  *
  * @param array containing the item or fields to show
- * @return string containing the HTML (or other) text to output in the BL template
+ * @return string output display string
  */
 function dynamicdata_adminapi_showform($args)
 {

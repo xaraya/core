@@ -18,7 +18,7 @@
  * The function displays the module's overview page, or redirects to the view_instances page if overviews are disabled.
  * @author Jim McDonald
  * @author Paul Rosania
- * @return mixed array of template data or boolean true if redirected
+ * @return mixed output display string or boolean true if redirected
  */
 function blocks_admin_main()
 {

@@ -18,7 +18,7 @@
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return array data for the template display
+ * @return mixed data array for the template display or output display string if invalid data submitted
 */
 function mail_admin_modifyconfig()
 {

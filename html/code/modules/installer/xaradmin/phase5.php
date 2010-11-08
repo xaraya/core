@@ -16,6 +16,7 @@
  * This assumes the install.php and index.php are in the same directory.
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
 
 /**

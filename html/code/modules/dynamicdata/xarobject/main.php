@@ -15,7 +15,7 @@
 
 /**
  * Use the DataObjectUserInterface() to handle every GUI function for objects (deprecated - see xaraya.objects in core)
- * @return mixed array of template data or boolean true if redirected
+ * @return mixed output display string or boolean true if redirected
  *
  * @author mikespub <mikespub@xaraya.com>
  */

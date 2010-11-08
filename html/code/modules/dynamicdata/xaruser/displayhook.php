@@ -15,7 +15,7 @@
  *
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
- * @return boolean true on success, false on failure
+ * @return string output display string
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
 function dynamicdata_user_displayhook($args)

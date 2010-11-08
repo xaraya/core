@@ -19,7 +19,7 @@
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  array data for the template display
+ * @return  mixed data array for the template display or output display string if invalid data submitted
 */
 function modules_admin_modifyconfig()
 {

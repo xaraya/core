@@ -18,7 +18,7 @@
  * The function displays the module's main entry page, or redirects to different page if the admin has defined one.
  * @author Paul Rosania
  * @param string page The page to use if the admin has enabled different page templates
- * @return mixed array of template data or boolean true if redirected
+ * @return mixed output display string
  */
 function base_user_main($args)
 {

@@ -17,7 +17,7 @@
 /**
  * Standard GUI function to display and update the configuration settings of the module based on input data.
  *
- * @return array data for the template display
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
 function blocks_admin_modifyconfig()
 {

@@ -25,7 +25,7 @@
  * @access public
  * @param funcName specific function to run
  * @param args argument array
- * @return mixed he output of the function, or false on failure
+ * @return string output display string
  * @throws BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
  */
 function xarInstallFunc($funcName = 'main', $args = array())
