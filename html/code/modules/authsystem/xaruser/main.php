@@ -1,6 +1,6 @@
 <?php
 /**
- * Default user function
+ * Main entry point for the user interface of this module
  *
  * @package modules
  * @subpackage authsystem module

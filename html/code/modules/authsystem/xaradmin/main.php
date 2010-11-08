@@ -1,6 +1,6 @@
 <?php
 /**
- * Main admin function
+ * Main entry point for the admin interface of this module
  *
  * @package modules
  * @subpackage authsystem module

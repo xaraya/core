@@ -1,6 +1,6 @@
 <?php
 /**
- * Log user out of system
+ * Log a user out from the system
  *
  * @package modules
  * @subpackage authsystem module

@@ -1,6 +1,6 @@
 <?php
 /**
- * Login via a block.
+ * Login Block user interface
  *
  * @package modules
  * @subpackage authsystem module

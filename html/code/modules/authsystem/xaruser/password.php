@@ -1,6 +1,6 @@
 <?php
 /**
- * Sends a new password to the user if they have forgotten theirs.
+ * Display a password request page
  *
  * @package modules
  * @subpackage authsystem module
