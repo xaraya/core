@@ -13,7 +13,6 @@
  * Get themes from filesystem
  *
  * @author Marty Vance
- * @param none
  * @return array the themes from the file system
  */
 function themes_adminapi_getfilethemes()

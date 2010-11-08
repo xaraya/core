@@ -18,7 +18,7 @@
  * @author  John Cox <admin@dinerminor.com>
  * @access  public
  * @param   none
- * @return  nothing
+ * @return  void
 */
 // Inherit properties and methods from MenuBlock class
 sys::import('xaraya.structures.containers.blocks.menublock');

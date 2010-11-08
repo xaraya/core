@@ -12,7 +12,6 @@
 /**
  * List themes and current settings
  * @author Marty Vance
- * @param none
  */
 function themes_admin_list()
 {

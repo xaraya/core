@@ -14,7 +14,6 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @param none
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */

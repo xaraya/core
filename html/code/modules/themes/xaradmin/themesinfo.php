@@ -16,7 +16,6 @@
  *
  * @author Marty Vance
  * @access public
- * @param none
  * @return array
  * @todo some facelift
  */

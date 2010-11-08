@@ -16,7 +16,6 @@
  *
  * @author John Cox
  * @access public
- * @param none
  * @return array Information of recent releases from http://www.xaraya.com/
  * @todo change feed url once release module is moved
  */

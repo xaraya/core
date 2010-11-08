@@ -15,8 +15,7 @@
  * @author  John Cox
  * @author  Carl Corliss
  * @access  public
- * @param   none
- * @return  nothing
+ * @return  void
 */
 
     sys::import('modules.themes.xarblocks.meta');

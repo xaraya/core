@@ -34,7 +34,7 @@
  * @author  Jason Judge <judgej@xaraya.com>
  * @access  public
  * @param   $args['url'] The main URL for the curl session (optional)
- * @return  nothing
+ * @return  void
  * @todo    nice handling of protocols other than http.
  */
 class xarCurl extends Object

@@ -16,7 +16,6 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @param none
  * @return array
  * @todo some facelift
  */

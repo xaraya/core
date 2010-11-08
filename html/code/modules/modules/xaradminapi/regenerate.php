@@ -13,7 +13,6 @@
  * Regenerate module list
  *
  * @author Xaraya Development Team
- * @param none
  * @return boolean true on success, false on failure
  * @throws NO_PERMISSION
  */

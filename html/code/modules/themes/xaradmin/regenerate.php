@@ -20,7 +20,6 @@
  *
  * @author Marty Vance
  * @access public
- * @param none
  * @return boolean true on success, false on failure
  */
 function themes_admin_regenerate()

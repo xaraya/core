@@ -13,7 +13,6 @@
  * Obtain list of themes
  *
  * @author Marty Vance
- * @param none
  * @return array the known themes
  * @throws NO_PERMISSION
  */

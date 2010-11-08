@@ -13,7 +13,6 @@
  * Checks for change in module versions, and updates the status of them if any is found
  *
  * @author Xaraya Development Team
- * @param none
  * @return boolean null on exceptions, true on sucess to update
  * @throws NO_PERMISSION
  */

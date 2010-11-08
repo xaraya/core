@@ -16,7 +16,7 @@
  * @author  Carl Corliss
  * @access  public
  * @param   none
- * @return  nothing
+ * @return  void
 */
 
 sys::import('xaraya.structures.containers.blocks.basicblock');

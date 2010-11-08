@@ -209,7 +209,6 @@ function modules_init()
 /**
  * Activates the modules module
  *
- * @param none $
  * @return boolean true on success, false on failure
  */
 function modules_activate()

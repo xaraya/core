@@ -14,7 +14,6 @@
  * Regenerate theme list
  *
  * @author Marty Vance
- * @param none
  * @return boolean true on success, false on failure
  * @throws NO_PERMISSION
  */

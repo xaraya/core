@@ -14,7 +14,6 @@
  *
  * @author Marty Vance
  * @access public
- * @param none
  * @return array
  * @todo change feed url once release module is moved
  */
