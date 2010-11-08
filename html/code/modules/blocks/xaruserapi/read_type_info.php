@@ -20,8 +20,7 @@
  * @param args['module'] the module name
  * @param args['type'] the block type name
  * @return the block init details (an array)
- * @throws EmptyParameterException, ClassNotFoundException, FunctionNotFoundException,
- *         FileNotFoundException (via adminapi load function)
+ * @throws EmptyParameterException, ClassNotFoundException,
  *
  * @author Jim McDonald
  * @author Paul Rosania

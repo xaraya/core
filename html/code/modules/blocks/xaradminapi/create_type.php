@@ -21,7 +21,6 @@
  * @param args['type'] the block type
  * @param args['info'] the info array for the block type
  * @return mixed ID of block type registered (even if already registered), false on failure
- * @throws DATABASE_ERROR, BAD_PARAM
  */
 function blocks_adminapi_create_type($args)
 {
