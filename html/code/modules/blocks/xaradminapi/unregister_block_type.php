@@ -19,7 +19,6 @@
  * @param modName the module name
  * @param blockType the block type
  * @return boolean true on success, false on failure
- * @throws DATABASE_ERROR, BAD_PARAM
  */
 function blocks_adminapi_unregister_block_type($args)
 {

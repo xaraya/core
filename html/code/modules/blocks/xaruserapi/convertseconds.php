@@ -20,7 +20,6 @@
  * @param string $args['starttime'] (seconds or hh:mm:ss)
  * @param string $args['direction'] (from or to)
  * @return string $convertedtime (hh:mm:ss or seconds)
- * @throws nothing
  * @todo maybe add support for days?
  */
 function blocks_userapi_convertseconds($args)

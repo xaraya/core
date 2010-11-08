@@ -22,7 +22,6 @@ sys::import('xaraya.tableddl');
  * Initialise the base module
  *
  * @return boolean
- * @throws DATABASE_ERROR
  */
 function base_init()
 {
