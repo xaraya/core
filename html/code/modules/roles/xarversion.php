@@ -1,6 +1,6 @@
 <?php
 /**
- * Roles module initialization
+ * Configuration information for the Roles module
  *
  * @package modules
  * @subpackage roles module
@@ -22,6 +22,7 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
+ 
 $modversion['name']               = 'Roles';
 $modversion['id']                 = '27';
 $modversion['version']            = '2.2.0';

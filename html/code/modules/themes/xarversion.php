@@ -1,6 +1,6 @@
 <?php
 /**
- * Themes administration and initialization
+ * Configuration information for the Themes module
  *
  * @package modules
  * @subpackage themes module
@@ -21,6 +21,7 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
+ 
 $modversion['name']               = 'Themes Administration';
 $modversion['id']                 = '70';
 $modversion['version']            = '2.2.0';

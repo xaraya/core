@@ -1,6 +1,7 @@
 <?php
 /**
- * Initialization function
+ * Configuration information for the Privileges module
+ *
  * @package modules
  * @subpackage privileges module
  * @category Xaraya Web Applications Framework
@@ -19,6 +20,7 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
+ 
 $modversion['name']               = 'Privileges Adminstration';
 $modversion['id']                 = '1098';
 $modversion['version']            = '2.2.0';
