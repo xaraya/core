@@ -14,7 +14,7 @@
 /**
  * Import an object definition or an object item from XML
  */
-function dynamicdata_util_import($args)
+function dynamicdata_util_import(Array $args=array())
 {
     if(!xarSecurityCheck('AdminDynamicData')) return;
 

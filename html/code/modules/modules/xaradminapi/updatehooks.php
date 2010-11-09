@@ -17,7 +17,7 @@
  * @param $args['regid'] the id number of the hook module
  * @return boolean true on success, false on failure
  */
-function modules_adminapi_updatehooks($args)
+function modules_adminapi_updatehooks(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

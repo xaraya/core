@@ -46,7 +46,7 @@
  * @return array of theme information arrays
  * @throws DATABASE_ERROR, BAD_PARAM
  */
-function themes_adminapi_dropdownlist($args)
+function themes_adminapi_dropdownlist(Array $args=array())
 {
 
     $themelist = xarMod::apiFunc('themes', 'admin', 'getlist', $args);

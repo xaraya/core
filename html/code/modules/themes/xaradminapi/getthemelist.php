@@ -21,7 +21,7 @@
  * @return array array of theme information arrays
  * @throws DATABASE_ERROR, BAD_PARAM
  */
-function themes_adminapi_getthemelist($args)
+function themes_adminapi_getthemelist(Array $args=array())
 {
     extract($args);
 

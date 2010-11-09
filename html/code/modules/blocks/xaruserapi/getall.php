@@ -30,7 +30,7 @@
  * @return array of block instances
 */
 
-function blocks_userapi_getall($args)
+function blocks_userapi_getall(Array $args=array())
 {
     extract($args);
 

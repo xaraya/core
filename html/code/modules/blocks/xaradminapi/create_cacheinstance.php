@@ -18,7 +18,7 @@
  * @param $args['bid'] the ID of the block to create
  * @return boolean true on success, false on failure
  */
-function blocks_adminapi_create_cacheinstance($args)
+function blocks_adminapi_create_cacheinstance(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

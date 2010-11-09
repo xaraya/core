@@ -20,7 +20,7 @@
      * @return  mixed id if OK, void if not
     */
 
-    function privileges_adminapi_returnprivilege($args)
+    function privileges_adminapi_returnprivilege(Array $args=array())
     {
         extract($args);
 

@@ -141,7 +141,7 @@ class xarServer extends Object
      * Initialize
      *
      */
-    static function init($args)
+    static function init(Array $args=array())
     {
         self::$allowShortURLs = $args['enableShortURLsSupport'];
         self::$generateXMLURLs = $args['generateXMLURLs'];

@@ -21,7 +21,7 @@ class xarResponse extends Object
      * initialize
      *
      */
-    static function init($args) { }
+    static function init(Array $args=array()) { }
 
 // CHECKME: Should we support this kind of high-level user response in module GUI functions ?
 //          And should some of the existing exceptions (to be defined) call those methods too ?

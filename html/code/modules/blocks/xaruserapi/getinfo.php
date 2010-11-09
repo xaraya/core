@@ -33,7 +33,7 @@
  * to change without notice.
  */
 
-function blocks_userapi_getinfo($args)
+function blocks_userapi_getinfo(Array $args=array())
 {
     extract($args);
 

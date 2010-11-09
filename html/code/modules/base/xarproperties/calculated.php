@@ -65,7 +65,7 @@ class CalculatedProperty extends TextBoxProperty
         return parent::showOutput($args);
     }
 
-    private function calculateValue($args)
+    private function calculateValue(Array $args=array())
     {
         if (empty($this->calculation)) {
             // nothing to calculate

@@ -20,7 +20,7 @@
  * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  * @todo split off the common parts which are also in getstatic.php
  */
-function dynamicdata_utilapi_getmeta($args)
+function dynamicdata_utilapi_getmeta(Array $args=array())
 {
     static $propertybag = array();
 

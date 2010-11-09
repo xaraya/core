@@ -13,7 +13,7 @@
  /*
  * @author John Cox <niceguyeddie@xaraya.com>
  */
-function dynamicdata_admin_utilities($args)
+function dynamicdata_admin_utilities(Array $args=array())
 {
     // Security check
     if (!xarSecurityCheck('EditDynamicData')) return;

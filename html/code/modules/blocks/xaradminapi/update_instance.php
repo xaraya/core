@@ -23,7 +23,7 @@
  * @param $args['refresh'] the new refresh rate of the block
  * @return boolean true on success, false on failure
  */
-function blocks_adminapi_update_instance($args)
+function blocks_adminapi_update_instance(Array $args=array())
 {
     // Get arguments from argument array
     $template = null;

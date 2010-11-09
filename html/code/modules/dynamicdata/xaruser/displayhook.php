@@ -18,7 +18,7 @@
  * @return string output display string
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
-function dynamicdata_user_displayhook($args)
+function dynamicdata_user_displayhook(Array $args=array())
 {
     extract($args);
 

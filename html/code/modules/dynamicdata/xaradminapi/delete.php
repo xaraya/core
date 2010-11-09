@@ -22,7 +22,7 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_delete($args)
+function dynamicdata_adminapi_delete(Array $args=array())
 {
     extract($args);
 

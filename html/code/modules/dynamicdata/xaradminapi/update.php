@@ -23,7 +23,7 @@
  * @return mixed item id on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_update($args)
+function dynamicdata_adminapi_update(Array $args=array())
 {
     extract($args);
 

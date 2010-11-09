@@ -50,7 +50,7 @@
  * @todo support 'maxfiles' to limit the number of files that can be returned
  */
 
-function base_userapi_browse_files($args)
+function base_userapi_browse_files(Array $args=array())
 {
     extract($args);
 

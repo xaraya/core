@@ -14,7 +14,7 @@
 /**
  * Return meta data (test only)
  */
-function dynamicdata_util_meta($args)
+function dynamicdata_util_meta(Array $args=array())
 {
 // Security Check
     if(!xarSecurityCheck('AdminDynamicData')) return;

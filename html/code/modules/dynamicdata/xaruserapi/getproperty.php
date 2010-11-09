@@ -23,7 +23,7 @@
  * @param $args['configuration'] configuration for the property (optional)
  * @return object a particular DataProperty
  */
-function &dynamicdata_userapi_getproperty($args)
+function &dynamicdata_userapi_getproperty(Array $args=array())
 {
     if (empty($args['type'])) {
         $result = null;

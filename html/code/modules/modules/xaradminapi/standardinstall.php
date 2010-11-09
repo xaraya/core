@@ -10,7 +10,7 @@
  * @link http://xaraya.com/index.php/release/1.html
  */
 
-function modules_adminapi_standardinstall($args)
+function modules_adminapi_standardinstall(Array $args=array())
 {
     extract($args);
     if (!isset($module)) return false;

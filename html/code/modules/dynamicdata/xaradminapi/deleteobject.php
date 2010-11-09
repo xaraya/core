@@ -19,7 +19,7 @@
  * @return int object ID on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_deleteobject($args)
+function dynamicdata_adminapi_deleteobject(Array $args=array())
 {
     $objectid = DataObjectMaster::deleteObject($args);
     return $objectid;

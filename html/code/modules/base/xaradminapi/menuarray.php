@@ -19,7 +19,7 @@
  *
  & @TODO: remove this once all modules are calling loadmenuarray
  */
-function base_adminapi_menuarray($args)
+function base_adminapi_menuarray(Array $args=array())
 {
     // Handle calls from admin getmenulinks functions which haven't yet been updated to use loadmenuarray()
     if (!isset($args['modname']) && isset($args['module'])) {

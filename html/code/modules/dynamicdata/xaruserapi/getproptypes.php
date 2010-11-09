@@ -18,7 +18,7 @@
  * @return array of property types
  * @throws DATABASE_ERROR, NO_PERMISSION
  */
-function dynamicdata_userapi_getproptypes($args)
+function dynamicdata_userapi_getproptypes(Array $args=array())
 {
     return DataPropertyMaster::getPropertyTypes();
 }

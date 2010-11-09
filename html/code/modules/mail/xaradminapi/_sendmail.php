@@ -43,7 +43,7 @@
  * @param  $ 'redirectaddress' is the email address we are redirecting mails.(optional)
  * 
  */
-function mail_adminapi__sendmail($args)
+function mail_adminapi__sendmail(Array $args=array())
 {
     if (xarModVars::get('mail', 'suppresssending')) return true;
 // Get arguments from argument array

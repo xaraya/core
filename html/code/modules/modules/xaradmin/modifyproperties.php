@@ -21,7 +21,7 @@
  * @param return_url optional return URL after setting the hooks
  * @return array data for the template display
  */
-function modules_admin_modifyproperties($args)
+function modules_admin_modifyproperties(Array $args=array())
 {
     extract($args);
 

@@ -22,7 +22,7 @@
  * @param return_url optional return URL after updating the hooks
  * @return array data for the template display
  */
-function modules_admin_modify($args)
+function modules_admin_modify(Array $args=array())
 {
     extract($args);
 

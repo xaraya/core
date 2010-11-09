@@ -20,7 +20,7 @@
  * @param $args['exclude'] comma-separated list of role names
  * @return mixed array of roles, or false on failure
  */
-function roles_userapi_getallroles($args)
+function roles_userapi_getallroles(Array $args=array())
 {
     if(!xarSecurityCheck('ReadRoles')) {return;}
     extract($args);

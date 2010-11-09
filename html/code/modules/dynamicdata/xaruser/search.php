@@ -21,7 +21,7 @@
  * @param int numitems The number of items to get
  * @return array output of the items found
  */
-function dynamicdata_user_search($args)
+function dynamicdata_user_search(Array $args=array())
 {
 // Security Check
     if(!xarSecurityCheck('ViewDynamicData')) return;

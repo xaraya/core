@@ -15,7 +15,7 @@
  * @author Paul Rosania
 */
 
-function blocks_userapi_get($args)
+function blocks_userapi_get(Array $args=array())
 {
     extract($args);
 

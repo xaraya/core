@@ -19,7 +19,7 @@
  * @param $args['itemids'] array of item ids to get
  * @return array containing the itemlink(s) for the item(s).
  */
-function dynamicdata_userapi_getitemlinks($args)
+function dynamicdata_userapi_getitemlinks(Array $args=array())
 {
     extract($args);
 

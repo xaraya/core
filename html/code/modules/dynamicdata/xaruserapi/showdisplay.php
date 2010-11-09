@@ -18,7 +18,7 @@
  * @param $args array containing the item or fields to show
  * @return string output display string
  */
-function dynamicdata_userapi_showdisplay($args)
+function dynamicdata_userapi_showdisplay(Array $args=array())
 {
     extract($args);
 

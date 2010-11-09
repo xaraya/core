@@ -17,7 +17,7 @@
  * @param $args array containing the parameters/**
  * @return string output display string
  */
-function themes_userapi_deliver($args)
+function themes_userapi_deliver(Array $args=array())
 {
     sys::import('modules.themes.class.xarcss');
     $obj = new xarCSS($args);

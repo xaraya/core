@@ -17,7 +17,7 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_NOT_EXIST
  */
-function modules_adminapi_initialise($args)
+function modules_adminapi_initialise(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

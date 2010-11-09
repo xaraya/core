@@ -23,7 +23,7 @@
  * @param string args['dbType']
  * @return boolean
  */
-function installer_adminapi_modifyconfig($args)
+function installer_adminapi_modifyconfig(Array $args=array())
 {
     extract($args);
 
@@ -60,7 +60,7 @@ function installer_adminapi_modifyconfig($args)
  * @return boolean
  */
 
-function installer_adminapi_modifysystemvars($args)
+function installer_adminapi_modifysystemvars(Array $args=array())
 {
     if (!isset($args['variables'])) throw new BadParameterException('variables');
     $configfile = sys::varpath() . '/config.system.php';
@@ -90,7 +90,7 @@ function installer_adminapi_modifysystemvars($args)
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  */
-function installer_adminapi_initialise($args)
+function installer_adminapi_initialise(Array $args=array())
 {
     extract($args);
 
@@ -133,7 +133,7 @@ function installer_adminapi_initialise($args)
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, DATABASE_ERROR
  */
-function installer_adminapi_createdb($args)
+function installer_adminapi_createdb(Array $args=array())
 {
     extract($args);
     // Load in Table Maintainance API
@@ -167,7 +167,7 @@ function installer_adminapi_createdb($args)
  * @author Sean Finkle
  * @author John Cox
  */
-function installer_adminapi_CheckForField($args)
+function installer_adminapi_CheckForField(Array $args=array())
 {
     extract($args);
 
@@ -204,7 +204,7 @@ function installer_adminapi_CheckForField($args)
  * @author Sean Finkle
  * @author John Cox
  */
-function installer_adminapi_GetFieldType($args)
+function installer_adminapi_GetFieldType(Array $args=array())
 {
     extract($args);
 
@@ -237,7 +237,7 @@ function installer_adminapi_GetFieldType($args)
  * @author Sean Finkle
  * @author John Cox
  */
-function installer_adminapi_CheckTableExists($args)
+function installer_adminapi_CheckTableExists(Array $args=array())
 {
     extract($args);
 

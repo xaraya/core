@@ -17,7 +17,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @return array the itemtypes of this module and their description *
  */
-function roles_userapi_getitemtypes($args)
+function roles_userapi_getitemtypes(Array $args=array())
 {
     return xarMod::apiFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27, 'native' =>false));
 }

@@ -18,7 +18,7 @@
  * @param $args['bid'] the ID of the block to delete
  * @return boolean true on success, false on failure
  */
-function blocks_adminapi_delete_cacheinstance($args)
+function blocks_adminapi_delete_cacheinstance(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

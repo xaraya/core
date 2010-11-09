@@ -24,7 +24,7 @@
  * @return mixed ID of block type registered (even if already registered), false on failure
  * @throws DATABASE_ERROR, BAD_PARAM
  */
-function blocks_adminapi_update_type_info($args)
+function blocks_adminapi_update_type_info(Array $args=array())
 {
     extract($args);
 

@@ -21,7 +21,7 @@
  * @return array modules calling this hook module
  * @throws BAD_PARAM
  */
-function modules_adminapi_gethookedmodules($args)
+function modules_adminapi_gethookedmodules(Array $args=array())
 {
 // Security Check (called by other modules, so we can't use one this here)
 //    if(!xarSecurityCheck('ManageModules')) return;

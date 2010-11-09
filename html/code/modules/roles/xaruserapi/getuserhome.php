@@ -16,7 +16,7 @@
  * @param int $itemid whether
  * @return string representing the user home
  */
-function roles_userapi_getuserhome($args)
+function roles_userapi_getuserhome(Array $args=array())
 {
     extract($args);
 

@@ -19,7 +19,7 @@
  * @author Jason Judge
 */
 
-function blocks_userapi_getallblocktypes($args)
+function blocks_userapi_getallblocktypes(Array $args=array())
 {
     extract($args);
 

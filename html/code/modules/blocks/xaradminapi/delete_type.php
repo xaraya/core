@@ -22,7 +22,7 @@
  * @param type the block type
  * @return boolean true on success, false on failure
  */
-function blocks_adminapi_delete_type($args)
+function blocks_adminapi_delete_type(Array $args=array())
 {
     extract($args);
 

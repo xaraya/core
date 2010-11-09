@@ -30,7 +30,7 @@
  * @throws EmptyParameterException, ClassNotFoundException, FunctionNotFoundException,
  *         FileNotFoundException
  */
-function blocks_adminapi_load($args)
+function blocks_adminapi_load(Array $args=array())
 {
     // Array of block loaded flags.
     static $loaded = array();

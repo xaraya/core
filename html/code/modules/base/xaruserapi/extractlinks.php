@@ -22,7 +22,7 @@
  * @param $args['baseurl'] string optional base URL for the content (default is this site)
  * @return array list of links found
  */
-function base_userapi_extractlinks($args)
+function base_userapi_extractlinks(Array $args=array())
 {
     if (empty($args['content'])) {
         return array();

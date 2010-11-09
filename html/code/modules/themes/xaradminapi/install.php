@@ -18,7 +18,7 @@
  * @return boolean true on dependencies activated, false for not
  * @throws NO_PERMISSION
  */
-function themes_adminapi_install($args)
+function themes_adminapi_install(Array $args=array())
 {
     //    static $installed_ids = array();
     $regid = $args['regid'];

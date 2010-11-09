@@ -20,7 +20,7 @@
  * @todo use roles api, not direct db
  * @return int id on successful authentication, XARUSER_AUTH_FAILED otherwise
  */
-function authsystem_userapi_authenticate_user($args)
+function authsystem_userapi_authenticate_user(Array $args=array())
 {
     extract($args);
 

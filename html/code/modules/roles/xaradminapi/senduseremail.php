@@ -27,7 +27,7 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function roles_adminapi_senduseremail($args)
+function roles_adminapi_senduseremail(Array $args=array())
 {
     // Send Email
     extract($args);

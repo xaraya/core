@@ -23,7 +23,7 @@
  * @param $args['rememberme'] remember this user (optional)
  * @return true on success, false on failure
  */
-function authsystem_userapi_login($args)
+function authsystem_userapi_login(Array $args=array())
 {
     extract($args);
 

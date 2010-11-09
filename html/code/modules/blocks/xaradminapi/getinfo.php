@@ -21,7 +21,7 @@
  * @deprec Jan 2004
  * @throws DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
-function blocks_adminapi_getinfo($args)
+function blocks_adminapi_getinfo(Array $args=array())
 {
     return xarMod::apiFunc('blocks', 'user', 'getinfo', $args);
 }

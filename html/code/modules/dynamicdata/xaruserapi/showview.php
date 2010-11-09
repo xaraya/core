@@ -17,7 +17,7 @@
  * @return string output display string
  */
 
-function dynamicdata_userapi_showview($args)
+function dynamicdata_userapi_showview(Array $args=array())
 {
     extract($args);
 

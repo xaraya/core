@@ -1187,7 +1187,7 @@ class DummyHookedObject extends Object
         }
     }
 
-    function addProperty($args)
+    function addProperty(Array $args=array())
     {
         $this->properties[$args['name']] = new DummyHookedProperty($args);
     }

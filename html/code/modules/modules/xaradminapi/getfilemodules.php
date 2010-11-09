@@ -25,7 +25,7 @@
  * @param $args['regid'] - optional regid to retrieve
  * @return array modules from the file system
  */
-function modules_adminapi_getfilemodules($args)
+function modules_adminapi_getfilemodules(Array $args=array())
 {
     // Get arguments
     extract($args);

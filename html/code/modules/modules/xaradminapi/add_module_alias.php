@@ -20,7 +20,7 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function modules_adminapi_add_module_alias($args)
+function modules_adminapi_add_module_alias(Array $args=array())
 {
     extract($args);
 

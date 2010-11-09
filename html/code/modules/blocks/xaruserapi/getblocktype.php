@@ -18,7 +18,7 @@
  * @author Jason Judge
 */
 
-function blocks_userapi_getblocktype($args)
+function blocks_userapi_getblocktype(Array $args=array())
 {
     // Minimum parameters allowed, to fetch a single block type: id or type.
     if (empty($args['tid']) && (empty($args['module']) || empty($args['type']))) {

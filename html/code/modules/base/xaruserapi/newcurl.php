@@ -15,7 +15,7 @@
  * Return a new xarCurl object.
  * $args are passed directly to the class.
  */
-function base_userapi_newcurl($args)
+function base_userapi_newcurl(Array $args=array())
 {
     sys::import('modules.base.class.xarCurl');
     return new xarCurl($args);

@@ -22,7 +22,7 @@
  * @param $args['email'] email of user to get
  * @return array
  */
-function roles_userapi_getdeleteduser($args)
+function roles_userapi_getdeleteduser(Array $args=array())
 {
     // Extract arguments
     extract($args);

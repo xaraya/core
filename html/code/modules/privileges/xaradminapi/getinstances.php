@@ -24,7 +24,7 @@
      * @return  array of instance ids and names for the module
     */
 
-    function privileges_adminapi_getinstances($args)
+    function privileges_adminapi_getinstances(Array $args=array())
     {
         extract($args);
         

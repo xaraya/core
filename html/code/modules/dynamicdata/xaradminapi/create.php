@@ -23,7 +23,7 @@
  * @return item id on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_create($args)
+function dynamicdata_adminapi_create(Array $args=array())
 {
     extract($args);
 

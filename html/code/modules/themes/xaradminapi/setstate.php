@@ -17,7 +17,7 @@
  * @param $args['state'] the state
  * @throws BAD_PARAM,NO_PERMISSION
  */
-function themes_adminapi_setstate($args)
+function themes_adminapi_setstate(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

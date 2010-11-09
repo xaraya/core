@@ -30,7 +30,7 @@
  *               ...
  *               'email'  => 'xar_roles.email')
  */
-function roles_userapi_leftjoin($args)
+function roles_userapi_leftjoin(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

@@ -17,7 +17,7 @@
  * wishes to create a new module item
  * @return string output display string
  */
-function dynamicdata_admin_form($args)
+function dynamicdata_admin_form(Array $args=array())
 {
     extract($args);
 

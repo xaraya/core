@@ -18,7 +18,7 @@
  * @param $args['id'] role id
  * @return true on success, false on failure
  */
-function roles_userapi_addmember($args)
+function roles_userapi_addmember(Array $args=array())
 {
     extract($args);
 

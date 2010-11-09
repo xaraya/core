@@ -13,7 +13,7 @@
  *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
 */
-function blocks_userapi_getcacheblock($args)
+function blocks_userapi_getcacheblock(Array $args=array())
 {
     extract($args);
 

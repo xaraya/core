@@ -17,7 +17,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access private
  */
-function roles_schedulerapi_expire($args)
+function roles_schedulerapi_expire(Array $args=array())
 {
 
 // TODO: get some configuration info here if necessary

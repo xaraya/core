@@ -20,7 +20,7 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function themes_adminapi_activate($args)
+function themes_adminapi_activate(Array $args=array())
 {
     extract($args);
 

@@ -26,7 +26,7 @@
  * @return mixed value of the field, or false on failure
  * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  */
-function dynamicdata_userapi_getprop($args)
+function dynamicdata_userapi_getprop(Array $args=array())
 {
     static $propertybag = array();
 

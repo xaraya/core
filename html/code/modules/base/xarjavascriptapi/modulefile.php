@@ -20,7 +20,7 @@
  * @param $args['position'] position on the page; generally 'head' or 'body'
  * @return boolean true=success; null=fail
  */
-function base_javascriptapi_modulefile($args)
+function base_javascriptapi_modulefile(Array $args=array())
 {
     extract($args);
 

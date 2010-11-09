@@ -25,7 +25,7 @@
  * @param string tplmodule
  * @return boolean
  */
-function dynamicdata_admin_create($args)
+function dynamicdata_admin_create(Array $args=array())
 {
     extract($args);
 

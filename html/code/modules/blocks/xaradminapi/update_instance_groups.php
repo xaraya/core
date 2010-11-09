@@ -19,7 +19,7 @@
  * @param $args['groups'] array of group memberships
  * @return boolean true on success, false on failure
  */
-function blocks_adminapi_update_instance_groups($args)
+function blocks_adminapi_update_instance_groups(Array $args=array())
 {
     $template = null;
     extract($args);

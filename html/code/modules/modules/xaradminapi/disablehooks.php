@@ -20,7 +20,7 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function modules_adminapi_disablehooks($args)
+function modules_adminapi_disablehooks(Array $args=array())
 {
     // Security Check (called by other modules, so we can't use one this here)
     //    if(!xarSecurityCheck('ManageModules')) return;

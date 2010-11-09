@@ -16,7 +16,7 @@
  * View items
  * @return string output display string
  */
-function dynamicdata_admin_view($args)
+function dynamicdata_admin_view(Array $args=array())
 {
     if(!xarVarFetch('itemid',   'int',   $itemid,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}

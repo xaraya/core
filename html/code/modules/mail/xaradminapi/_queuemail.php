@@ -18,7 +18,7 @@
  * basis :-)
  * @author  John Cox <niceguyeddie@xaraya.com>
  */
-function mail_adminapi__queuemail($args)
+function mail_adminapi__queuemail(Array $args=array())
 {
     // see if we have a scheduler job running to send queued mail
     $job = xarMod::apiFunc('scheduler','user','get',
