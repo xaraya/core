@@ -25,7 +25,8 @@ class ArrayProperty extends DataProperty
 
 //    public $display_columns = 30;
 //    public $display_columns_count = 2;                             // default value of column dimension
-    public $display_rows = 4;
+    public $display_minimum_rows = 2;
+    public $display_maximum_rows = 10;
     public $initialization_addremove = 0;           
 //    public $display_key_label = "Key";              // default value of Key label
 //    public $display_value_label = "Value";          // default value of value label
@@ -38,8 +39,14 @@ class ArrayProperty extends DataProperty
                                                     //       avoid nested configs (e.g. see the objects 'config' property)
     public $initialization_fixed_keys = 0;          // allow editing keys on input
 
-
     public $display_column_definition = array(array("Key","Value"),array("textbox","textbox"));  
+
+    // Configuration setting to ignore
+    public $initialization_other_rule_ignore    = true;
+    public $initialization_transform_ignore     = true;
+    public $validation_allowempty_ignore        = true;
+    public $validation_equals_ignore            = true;
+    public $validation_notequals_ignore         = true;
 
     
     function __construct(ObjectDescriptor $descriptor)
@@ -58,6 +65,7 @@ class ArrayProperty extends DataProperty
 
         if (!isset($value)) {
             $columncount = count($this->display_column_definition['value'][0]);
+            echo "<pre>";var_dump($_POST);
             for ($i=0;$i<$this->display_rows;$i++) {
                 for ($j=0;$j<$columncount;$j++) {
                     // Get the property for this field and get the value from the template
