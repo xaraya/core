@@ -3,12 +3,13 @@
  * Update the configuration parameters
  *
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage xarCacheManager module
- * @link http://xaraya.com/index.php/release/1652.html
+ * @link http://xaraya.com/index.php/release/13.html
  */
 /**
  * Update the configuration parameters of the module based on data from the modification form

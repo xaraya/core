@@ -2,7 +2,10 @@
 /**
  * Class for conversion between charsets
  *
- * @package multilanguage
+ * @package core
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -150,7 +153,7 @@ class xarCharset extends Object
     /**
      * Converts unicode number to UTF-8 multibyte character
      *
-     * @access private
+     * 
      * @param  integer     Hexadecimal value of a unicode char.
      * @return string      Encoded hexadecimal value as a regular char.
      **/

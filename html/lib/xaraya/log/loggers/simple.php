@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package core
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
 
 // Modified by the xaraya Team
 
@@ -45,7 +54,6 @@
 *
 * @author  Richard Heyes <richard@php.net>
 * @author  Nuncanada <nuncanada@ig.com.br>
-* @package logging
 */
 
 /**
@@ -56,7 +64,6 @@ sys::import('xaraya.log.loggers.xarLogger');
 /**
  * Simple logging class
  *
- * @package logging
  */
 class xarLogger_simple extends xarLogger
 {
@@ -94,7 +101,7 @@ class xarLogger_simple extends xarLogger
     // @param $conf['fileName'] string The filename of the logfile
     // @param $conf['mode'] string File mode of the log file, in Octal (optional)
     // @param $conf['maxFileSize'] integer The maximum size the logfile can be before it is moved or deleted (optional, bytes)
-    // @access public
+    // 
     function setConfig(array &$conf)
     {
         parent::setConfig($conf);
@@ -133,7 +140,7 @@ class xarLogger_simple extends xarLogger
     }
 
     // Destructor. This will write outstanding records to the logfile.
-    // @access private
+    // 
     function _xarLogger_simple_destructor()
     {
         // Push a final message to the log.
@@ -145,7 +152,7 @@ class xarLogger_simple extends xarLogger
 
     // Add a message, applying appropriate formatting, to the output buffer.
     // @return boolean true on success or false on failure.
-    // @access public
+    // 
     function notify($message, $level)
     {
         // Abort early if the level of priority is above the maximum logging level.
@@ -160,7 +167,7 @@ class xarLogger_simple extends xarLogger
     }
 
     // Clear the output buffer (and optionally stop logging).
-    // @access public
+    // 
     function clearBuffer($stop_logging = false)
     {
         $this->_buffer = '';
@@ -172,7 +179,7 @@ class xarLogger_simple extends xarLogger
 
     // Flush the current buffer to the log file (and optionally stop logging).
     // Handy for long running processes.
-    // @access public
+    // 
     function flushBuffer($stop_logging = false)
     {
         if (!empty($this->_buffer) && $this->_openLogfile()) {
@@ -193,7 +200,7 @@ class xarLogger_simple extends xarLogger
      * Prepare the logfile for writing
      *
      * @param file $file Path to the logger file
-     * @access private
+     * 
      * @throws LoggerException
      * @return bool true on success
      **/
@@ -226,7 +233,7 @@ class xarLogger_simple extends xarLogger
      * The file should always exist, as setConfig() will have created it
      * if it did not
      *
-     * @access private
+     * 
      * @throws LoggerException
      * @return bool true on succes, false on failure
      **/
@@ -262,7 +269,7 @@ class xarLogger_simple extends xarLogger
 
     // Closes the logfile, if open.
     // @return boolean True if the log file is (or was) closed, false if not
-    // @access private
+    // 
     function _closeLogfile()
     {
         if (empty($this->_fp)) {
@@ -303,7 +310,7 @@ class xarLogger_simple extends xarLogger
     // @param string $message The message detail text
     // @param integer $level The priority level of this record
     // @return string The formatted log record
-    // @access private
+    // 
     function _formatMessage($message, $level)
     {
         return $this->getTime() . ' [' . $this->levelToString($level) . '] ' . $message . $this->EOL;

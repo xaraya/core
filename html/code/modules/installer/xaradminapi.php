@@ -1,12 +1,13 @@
 <?php
 /**
  * Modify the system configuration File
- * @package Installer
+ * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Installer
  * @link http://xaraya.com/index.php/release/200.html
  */
 
@@ -163,7 +164,8 @@ function installer_adminapi_createdb($args)
  * @param args['field_name']
  * @param args['table_name']
  * @returns true if field exists false otherwise
- * @author Sean Finkle, John Cox
+ * @author Sean Finkle
+ * @author John Cox
  */
 function installer_adminapi_CheckForField($args)
 {
@@ -199,7 +201,8 @@ function installer_adminapi_CheckForField($args)
  * @param args['field_name']
  * @param args['table_name']
  * @returns field type
- * @author Sean Finkle, John Cox
+ * @author Sean Finkle
+ * @author John Cox
  */
 function installer_adminapi_GetFieldType($args)
 {
@@ -231,7 +234,8 @@ function installer_adminapi_GetFieldType($args)
  * @access public
  * @param args['table_name']
  * @returns true if field exists false otherwise
- * @author Sean Finkle, John Cox
+ * @author Sean Finkle
+ * @author John Cox
  */
 function installer_adminapi_CheckTableExists($args)
 {

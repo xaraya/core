@@ -2,11 +2,12 @@
 /**
  * Modify site configuration
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
@@ -207,7 +208,7 @@ function base_admin_modifyconfig()
                     xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $defaultLocale);
                     xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $localesList);
 
-                    xarResponse::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
+                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
                     break;
                 case 'other':
                     if (!xarVarFetch('loadlegacy',   'checkbox', $loadLegacy,    xarConfigVars::get(null, 'Site.Core.LoadLegacy'), XARVAR_NOT_REQUIRED)) return;

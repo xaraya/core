@@ -3,11 +3,12 @@
  * Get details suitable for *rendering* a block instance.
  *
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /*
@@ -20,7 +21,8 @@
  * - arbitrary parameters can be passed in to override the block content array elements
  * - some sort of validation check could be made available for the overridable params?
  * - system-level flag to switch between reporting attribute/args errors or just ignoring
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  *
  * TODO: move this function to a method of the xarBlock class,
  * per note below, there's no reason for this to be here, it doesn't,

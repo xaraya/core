@@ -6,7 +6,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Base module
+ * @subpackage base module
  * @link http://xaraya.com/index.php/release/68.html
  * @author Marcel van der Boom <marcel@hsdev.com>
  */

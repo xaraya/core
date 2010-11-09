@@ -2,11 +2,14 @@
 /**
  * Database Abstraction Layer API Helpers
  *
- * @package database
+ * @package core
+ * @subpackage database
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage database
+ *
  * @author Marco Canini
 **/
 
@@ -21,7 +24,7 @@ sys::import('xaraya.creole');
  * connection using the required parameters then it sets
  * the table prefixes and xartables up and returns true
  *
- * @access protected
+ * 
  * @param string args[databaseType] database type to use
  * @param string args[databaseHost] database hostname
  * @param string args[databaseName] database name
@@ -53,7 +56,7 @@ function xarDB_init(array &$args)
  *
  * Create a new connection based on the supplied parameters
  *
- * @access public
+ * 
  * @todo   make an object/class method out of this
  */
 function &xarDBNewConn(array $args = null)

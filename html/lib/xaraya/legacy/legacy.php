@@ -2,11 +2,14 @@
 /**
  * Legacy Functions
  *
- * @package lib
+ * @package core
  * @subpackage legacy
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Marco Canini
  */
 
@@ -46,7 +49,7 @@ set_include_path(realpath(sys::code()) . PATH_SEPARATOR . get_include_path());
 /**
  * Returns the relative path name for the var directory
  *
- * @access public
+ * 
  * @return string the var directory path name
  * @deprec replaced by sys::varpath()
  * @see    sys

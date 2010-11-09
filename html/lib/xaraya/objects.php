@@ -2,10 +2,14 @@
 /**
  * Object handling subsystem (experimental counterpart for modules on object-centric sites)
  *
- * @package objects
+ * @package core
+ * @subpackage objects
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Michel Dalle <mikespub@xaraya.com>
  * @todo Investigate possible use ;-)
  */
@@ -39,7 +43,7 @@ class xarObject extends Object implements IxarObject
     /**
      * Call a dataobject user interface method (maybe from index.php someday)
      *
-     * @access public
+     * 
      * @param objectName string registered name of object
      * @param methodName string specific method to run
      * @param args array arguments to pass to the method
@@ -63,7 +67,7 @@ class xarObject extends Object implements IxarObject
     /**
      * Call a dataobject class method directly - CHECKME: do we even want this here ???
      *
-     * @access public
+     * 
      * @param objectName string registered name of object
      * @param methodName string specific method to run
      * @param args array arguments to pass to the method
@@ -128,7 +132,7 @@ class xarObject extends Object implements IxarObject
     /**
      * Run a dataobject class method via simpleinterface - CHECKME: do we even want this here ???
      *
-     * @access public
+     * 
      * @param objectName string registered name of object
      * @param methodName string specific method to run
      * @param args array arguments to pass to the method
@@ -153,7 +157,7 @@ class xarObject extends Object implements IxarObject
     /**
      * Generate URL for a specific action on an object - the format will depend on the linktype
      *
-     * @access public
+     * 
      * @param object object the object or object list we want to create an URL for
      * @param action string the action we want to take on this object (= method or func)
      * @param itemid mixed the specific item id or null
@@ -340,7 +344,7 @@ class xarObject extends Object implements IxarObject
     /**
      * Check access for a specific action on object level (see also xarMod and xarBlock)
      *
-     * @access public
+     * 
      * @param object object the object or object list we want to check access for
      * @param action string the action we want to take on this object (display/update/create/delete/config)
      * @param itemid mixed the specific item id or null

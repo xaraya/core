@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package core
+ * @subpackage variables
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
 
 /**
  * Interface declaration for theme vars
@@ -12,7 +21,7 @@ class xarThemeVars extends xarModItemVars implements IxarModItemVars
     /**
      * get a theme variable
      *
-     * @access public
+     * 
      * @param  string $scope The name of the theme
      * @param  string $name  The name of the variable
      * @return mixed The value of the variable or void if variable doesn't exist
@@ -33,7 +42,7 @@ class xarThemeVars extends xarModItemVars implements IxarModItemVars
      * Note that this method is incompatible with 1.x even if wrapped.
      * the prime/description parameters were dropped from the signature.
      *
-     * @access public
+     * 
      * @param themeName The name of the theme
      * @param name The name of the variable
      * @param value The value of the variable
@@ -58,7 +67,7 @@ class xarThemeVars extends xarModItemVars implements IxarModItemVars
     /**
      * delete a theme variable
      *
-     * @access public
+     * 
      * @param themeName The name of the theme
      * @param name The name of the variable
      * @return bool true on success

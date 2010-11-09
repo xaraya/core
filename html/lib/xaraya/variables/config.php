@@ -2,9 +2,14 @@
 /**
  * Configuration variable handling
  *
- * @package variables
+ * @package core
+ * @subpackage variables
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
  * @author Marcel van der Boom <mrb@hsdev.com>
  */
 sys::import('xaraya.variables');
@@ -12,7 +17,6 @@ sys::import('xaraya.creole');
 /**
  * ConfigVars class
  *
- * @package variables
  * @todo if core was module 0 this could be a whole lot simpler by derivation (or if all config variables were moved to a module)
  */
 class xarConfigVars extends xarVars implements IxarVars
@@ -23,7 +27,7 @@ class xarConfigVars extends xarVars implements IxarVars
     /**
      * Sets a configuration variable.
      *
-     * @access public
+     * 
      * @param  string $name the name of the variable
      * @param  mixed  $value (array,integer or string) the value of the variable
      * @return bool true on success, or false if you're trying to set unallowed variables
@@ -154,7 +158,7 @@ class xarConfigVars extends xarVars implements IxarVars
     /**
      * Pre-load site configuration variables
      *
-     * @access private
+     * 
      * @return bool true on success, or void on database error
      * @todo We need some way to delete configuration (useless without a certain module) variables from the table!!!
      * @todo look into removing the serialisation, creole does this when needed, automatically (well, almost)

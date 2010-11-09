@@ -3,11 +3,13 @@
  * HTTP Protocol URL/Server utilities
  *
  * @package core
+ * @subpackage server
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage server
  * @author Marco Canini <marco@xaraya.com>
  * @author Michel Dalle <mikespub@xaraya.com>
 **/
@@ -23,7 +25,7 @@ class xarURL extends Object
      * This will encode the path parts, the and GET parameter names
      * and data. It cannot encode a complete URL yet.
      *
-     * @access private
+     * 
      * @param data string the data to be encoded (see todo)
      * @param type string the type of string to be encoded ('getname', 'getvalue', 'path', 'url', 'domain')
      * @return string the encoded URL parts
@@ -74,7 +76,7 @@ class xarURL extends Object
      * Format GET parameters formed by nested arrays, to support xarModURL().
      * This function will recurse for each level to the arrays.
      *
-     * @access private
+     * 
      * @param args array the array to be expanded as a GET parameter
      * @param prefix string the prefix for the GET parameter
      * @return string the expanded GET parameter(s)
@@ -95,7 +97,7 @@ class xarURL extends Object
     /**
      * Add further parameters to the path, ensuring each value is encoded correctly.
      *
-     * @access private
+     * 
      * @param args array the array to be encoded
      * @param path string the current path to append parameters to
      * @param psep string the path seperator to use
@@ -153,7 +155,7 @@ class xarServer extends Object
      * {@link http://www.php.net/manual/en/reserved.variables.html PHP manual}.
      * If the server variable doesn't exist void is returned.
      *
-     * @access public
+     * 
      * @param name string the name of the variable
      * @return mixed value of the variable
      */
@@ -170,7 +172,7 @@ class xarServer extends Object
     /**
      * Get base URI for Xaraya
      *
-     * @access public
+     * 
      * @return string base URI for Xaraya
      * @todo remove whatever may come after the PHP script - TO BE CHECKED !
      * @todo See code comments.
@@ -226,7 +228,7 @@ class xarServer extends Object
      * Returns the server host name fetched from HTTP headers when possible.
      * The host name is in the canonical form (host + : + port) when the port is different than 80.
      *
-     * @access public
+     * 
      * @return string HTTP host name
      */
     static function getHost()
@@ -249,7 +251,7 @@ class xarServer extends Object
      *
      * Returns the HTTP protocol used by current connection, it could be 'http' or 'https'.
      *
-     * @access public
+     * 
      * @return string current HTTP protocol
      */
     static function getProtocol()
@@ -270,7 +272,7 @@ class xarServer extends Object
     /**
      * get base URL for Xaraya
      *
-     * @access public
+     * 
      * @return string base URL for Xaraya
      */
     static function getBaseURL()
@@ -289,7 +291,7 @@ class xarServer extends Object
     /**
      * get the elapsed time since this page started
      *
-     * @access public
+     * 
      * @return seconds and microseconds elapsed since the page started
      */
     static function getPageTime()
@@ -300,7 +302,7 @@ class xarServer extends Object
     /**
      * Get current URL (and optionally add/replace some parameters)
      *
-     * @access public
+     * 
      * @param args array additional parameters to be added to/replaced in the URL (e.g. theme, ...)
      * @param generateXMLURL boolean over-ride Server default setting for generating XML URLs (true/false/NULL)
      * @param target string add a 'target' component to the URL

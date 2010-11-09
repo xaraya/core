@@ -3,12 +3,13 @@
  * Utility function pass individual menu items to the main menu
  *
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
- * @link http://xaraya.com/index.php/release/27.html
+ * @link http://xaraya.com/index.php/release/68.html
  */
 /**
  * Utility function to get an array of menulinks from {modtype} getmenulinks function or {modtype}menu-dat.xml file

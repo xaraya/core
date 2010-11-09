@@ -2,9 +2,14 @@
 /**
  * Template caching abstraction
  *
- * @package blocklayout
+ * @package core
+ * @subpackage caching
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
 sys::import('xaraya.exceptions');
@@ -29,7 +34,6 @@ interface IxarTemplateCache
 /**
  * Class to model the xar compiled template cache
  *
- * @package blocklayout
  * @todo bring this into the cache hierarchy in general so it can inherit from xarCache or something like that.
  * @todo this is still poorly abstracted, i would like to make a difference between the cache and its entries
  * @todo yes, i know this is similar to caching/storage/filesystem, but that one isnt ready yet :-) getting to that later.

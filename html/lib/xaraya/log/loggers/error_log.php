@@ -3,13 +3,20 @@
 // $Horde: horde/lib/Log/syslog.php,v 1.6 2000/06/28 21:36:13 jon Exp $
 
 /**
+ * @package core
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
 * The Log_file class is a concrete implementation of the Log::
 * abstract class which writes message to a text file. This is based
 * on the previous Log_file class by Jon Parise.
 *
 * @author  Richard Heyes <richard@php.net>
 * @author  Nuncanada <nuncanada@ig.com.br>
-* @package logging
 */
 
 /**
@@ -23,7 +30,6 @@ sys::import('xaraya.log.loggers.xarLogger');
  * abstract class which sends messages to to the web server's error log, a TCP port or to a file.
  *
  * @author  Flavio Botelho <nuncanada@xaraya.com>
- * @package logging
  */
 class xarLogger_error_log extends xarLogger
 {
@@ -52,7 +58,7 @@ class xarLogger_error_log extends xarLogger
      *
      * @param array     $conf               Configuration options for the specific driver.
      *
-     * @access public
+     * 
      * @return boolean
      */
     function setConfig(array &$conf)
@@ -89,7 +95,7 @@ class xarLogger_error_log extends xarLogger
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
      *                  The default is PEAR_LOG_INFO.
      * @return boolean  True on success or false on failure.
-     * @access public
+     * 
      */
     function notify($message, $level)
     {

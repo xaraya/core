@@ -3,10 +3,13 @@
  * Module gui function caching
  *
  * @package core
- * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.com
  * @subpackage caching
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
  * @author mikespub
  * @author jsb
 **/
@@ -66,7 +69,6 @@ class xarModuleCache extends Object
     /**
      * Get a cache key if this module function is suitable for output caching
      *
-     * @access public
      * @param string $modName registered name of module
      * @param string $modType type of function to run
      * @param string $funcName specific function to run
@@ -219,7 +221,6 @@ class xarModuleCache extends Object
     /**
      * Check whether a module is cached
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular module you want to access
      * @return bool   true if the module is available in cache, false if not
      */
@@ -250,7 +251,6 @@ class xarModuleCache extends Object
     /**
      * Get the contents of a module from the cache
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular module you want to access
      * @return string the cached output of the module function
      */
@@ -291,7 +291,6 @@ class xarModuleCache extends Object
     /**
      * Set the contents of a module in the cache
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular module you want to access
      * @param  string $value    the new content for that module
      * @return void

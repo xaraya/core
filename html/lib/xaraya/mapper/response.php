@@ -3,11 +3,13 @@
  * Response class
  *
  * @package core
+ * @subpackage controllers
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage controllers
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
@@ -35,7 +37,7 @@ class xarResponse extends Object
      *    }
      *    ...
      *
-     * @access public
+     * 
      * @param msg string the message
      * @param ... string template overrides, cfr. xarTplModule (optional)
      * @return string the template message-notfound.xt from the base module filled in
@@ -63,7 +65,7 @@ class xarResponse extends Object
      *    }
      *    ...
      *
-     * @access public
+     * 
      * @param msg string the message
      * @param ... string template overrides, cfr. xarTplModule (optional)
      * @return string the template message-forbidden.xt from the base module filled in

@@ -3,9 +3,13 @@
  * The Core
  *
  * @package core
+ * @subpackage core
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @todo dependencies and runlevels!
@@ -78,7 +82,7 @@ define('XARCORE_VERSION_REV', $rev);
  * need it you just pass XARCORE_SYSTEM_SESSION to xarCoreInit and its
  * dependancies will be automatically resolved
  *
- * @access public
+ * 
  * @todo   bring these under a class as constant
 **/
 define('XARCORE_SYSTEM_NONE'         , 0);
@@ -95,7 +99,7 @@ define('XARCORE_SYSTEM_ALL'          , 127); // bit OR of all optional systems (
  * Bit defines to keep track of the loading based on the defines which
  * are passed in as arguments
  *
- * @access private
+ * 
  * @todo we should probably get rid of these
 **/
 define('XARCORE_BIT_DATABASE'     ,  1);
@@ -110,7 +114,7 @@ define('XARCORE_BIT_TEMPLATE'     , 64);
 /**#@+
  * Debug flags
  *
- * @access private
+ * 
  * @todo   encapsulate in class
 **/
 define('XARDBG_ACTIVE'           , 1);
@@ -123,7 +127,7 @@ define('XARDBG_INACTIVE'         ,16);
 /**#@+
  * Miscelaneous defines
  *
- * @access public
+ * 
  * @todo encapsulate in class
 **/
 define('XARCORE_CACHEDIR'     , '/cache');
@@ -149,7 +153,7 @@ sys::import('xaraya.caching.core');
 /**
  * Initializes the core engine
  *
- * @access public
+ * 
  * @param integer whatToLoad What optional systems to load.
  * @return bool true
  * @todo <johnny> fix up sitetable prefix when we have a place to store it
@@ -198,7 +202,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     xarLog_init($systemArgs);
 
     sys::import('xaraya.variables.system');
-    date_default_timezone_set(xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
+    try {
+        date_default_timezone_set(xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
+    } catch (Exception $e) {
+        die('Your configuration file appears to be missing. This usually indicates Xaraya has not been installed. <br/>Please refer to point 4 of the installation instructions <a href="readme.html" target="_blank">here</a>');
+    }
 
     /*
      * Start Database Connection Handling System
@@ -442,7 +450,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 /**
  * Activates the debugger.
  *
- * @access public
+ * 
  * @param integer $flags bit mask for the debugger flags
  * @todo  a big part of this should be in the exception (error handling) subsystem.
  * @return void
@@ -479,7 +487,7 @@ function xarCoreActivateDebugger($flags)
 /**
  * Check if the debugger is active
  *
- * @access public
+ * 
  * @return bool true if the debugger is active, false otherwise
 **/
 function xarCoreIsDebuggerActive()
@@ -490,7 +498,7 @@ function xarCoreIsDebuggerActive()
 /**
  * Check for specified debugger flag.
  *
- * @access public
+ * 
  * @param integer flag the debugger flag to check for activity
  * @return bool true if the flag is active, false otherwise
 **/
@@ -503,7 +511,7 @@ function xarCoreIsDebugFlagSet($flag)
  * Checks if a certain function was disabled in php.ini
  *
  *
- * @access public
+ * 
  * @param string $funcName The function name; case-sensitive
  * @todo this seems out of place here.
 **/
@@ -533,7 +541,6 @@ function xarFuncIsDisabled($funcName)
 /**
  * Convenience class for keeping track of debugger operation
  *
- * @package debug
  * @todo this is close to exceptions or logging than core, see also notes earlier
 **/
 class xarDebug extends Object
@@ -546,7 +553,6 @@ class xarDebug extends Object
 /**
  * Convenience class for keeping track of core stuff
  *
- * @package core
  * @todo change xarCore:: calls to xarCoreCache:: and put other core stuff here ?
 **/
 class xarCore extends xarCoreCache

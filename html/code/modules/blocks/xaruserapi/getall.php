@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /*
@@ -22,7 +23,8 @@
  * @param args[$startnum] optional query offset
  * @param args[$rowstodo] optional limit items to return (deprec)
  * @param args[$numitems] optional limit items to return
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @author Chris Powis
  * @throws DB_EXCEPTION
  * @return array of block instances

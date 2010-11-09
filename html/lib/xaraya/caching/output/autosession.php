@@ -3,10 +3,13 @@
  * Automatic discovery & update of candidates for session-less page caching
  * 
  * @package core
- * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.com
  * @subpackage caching
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
  * @author mikespub
  * @author jsb
 **/

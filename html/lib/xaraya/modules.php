@@ -8,10 +8,14 @@
  *      xarModUserVars
  *      xarMod
  *
- * @package modules
+ * @package core
+ * @subpackage modules
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Jim McDonald
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
@@ -22,28 +26,24 @@
 /**
  * Exceptions defined by this subsystem
  *
- * @package modules
  */
 class ModuleBaseInfoNotFoundException extends NotFoundExceptions
 {
     protected $message = 'The base info for module "#(1)" could not be found';
 }
 /**
- * @package modules
 **/
 class ModuleNotFoundException extends NotFoundExceptions
 {
     protected $message = 'A module is missing, the module name could not be determined in the current context';
 }
 /**
- * @package modules
 **/
 class ModuleNotActiveException extends xarExceptions
 {
     protected $message = 'The module "#(1)" was called, but it is not active.';
 }
 /**
- * @package modules
 **/
 class ModuleBadVersionException extends NotFoundExceptions
 {
@@ -238,7 +238,7 @@ class xarMod extends Object implements IxarMod
      * If regID is passed in, return the name of that module, otherwise use
      * current toplevel module.
      *
-     * @access public
+     * 
      * @param  $regID integer optional regID for module
      * @return string the name of the current top-level module
      */
@@ -259,7 +259,7 @@ class xarMod extends Object implements IxarMod
      *
      * The displayable name is sensible to user language.
      *
-     * @access public
+     * 
      * @param modName string registered name of module
      * @return string the displayable name
      * @todo   re-evaluate this, i think it causes more harm than joy
@@ -276,7 +276,7 @@ class xarMod extends Object implements IxarMod
      *
      * The displayable description is sensible to user language.
      *
-     * @access public
+     * 
      * @param modName string registered name of module
      * @return string the displayable description
      */
@@ -307,7 +307,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Get module registry ID by name
      *
-     * @access public
+     * 
      * @param modName string The name of the module
      * @param type determines theme or module
      * @return string The module registry ID.
@@ -321,7 +321,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Get module system ID by name
      *
-     * @access public
+     * 
      * @param modName string The name of the module
      * @param type determines theme or module
      * @return string The module registry ID.
@@ -335,7 +335,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Get the module's current state
      *
-     * @access public
+     * 
      * @param  integer the module's registered id
      * @param type determines theme or module
      * @return mixed the module's current state
@@ -352,7 +352,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Check if a module is installed and its state is XARMOD_STATE_ACTIVE
      *
-     * @access public
+     * 
      * @static modAvailableCache array
      * @param modName string registered name of module
      * @param type determines theme or module
@@ -392,7 +392,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Get information on module
      *
-     * @access public
+     * 
      * @param modRegId string module id
      * @param type determines theme or module
      * @return array of module information
@@ -543,7 +543,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Load a module's base information
      *
-     * @access public
+     * 
      * @param modName string the module's name
      * @param type determines theme or module
      * @return mixed an array of base module info on success
@@ -621,7 +621,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Get info from xarversion.php for module specified by modOsDir
      *
-     * @access protected
+     * 
      * @param modOSdir the module's directory
      * @param type determines theme or module
      * @return array an array of module file information
@@ -714,7 +714,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Load database definition for a module
      *
-     * @access private
+     * 
      * @param modName string name of module to load database definition for
      * @param modOsDir string directory that module is in
      * @return mixed true on success
@@ -768,7 +768,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Call a module GUI function.
      *
-     * @access public
+     * 
      * @param modName string registered name of module
      * @param modType string type of function to run
      * @param funcName string specific function to run
@@ -822,7 +822,7 @@ class xarMod extends Object implements IxarMod
      * like so:
      * Ex: modName_modTypeapi_modFunc($args);
      *
-     * @access public
+     * 
      * @param modName string registered name of module
      * @param modType string type of function to run
      * @param funcName string specific function to run
@@ -839,7 +839,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Work horse method for the lazy calling of module functions
      *
-     * @access private
+     * 
      */
     private static function callFunc($modName,$modType,$funcName,$args,$funcType = '')
     {
@@ -918,7 +918,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Load the modType of module identified by modName.
      *
-     * @access public
+     * 
      * @param modName string - name of module to load
      * @param modType string - type of functions to load
      * @return mixed
@@ -932,7 +932,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Load the modType API for module identified by modName.
      *
-     * @access public
+     * 
      * @param modName string registered name of the module
      * @param modType string type of functions to load
      * @return mixed true on success
@@ -946,7 +946,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Load the modType of module identified by modName.
      *
-     * @access private
+     * 
      * @param modName string - name of module to load
      * @param modType string - type of functions to load
      * @param flags number - flags to modify function behaviour
@@ -1049,7 +1049,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Check access for a specific action on module level (see also xarObject and xarBlock)
      *
-     * @access public
+     * 
      * @param moduleName string the module we want to check access for
      * @param action string the action we want to take on this module (view/admin) // CHECKME: any others we really use on module level ?
      * @param roleid mixed override the current user or null
