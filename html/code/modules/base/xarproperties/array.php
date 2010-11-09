@@ -23,7 +23,7 @@ class ArrayProperty extends DataProperty
 
     public $fields = array();
 
-    public $display_columns = 30;
+//    public $display_columns = 30;
 //    public $display_columns_count = 2;                             // default value of column dimension
     public $display_rows = 4;
     public $initialization_addremove = 0;           
@@ -170,8 +170,15 @@ class ArrayProperty extends DataProperty
                 $data['layout'] = 'configuration';
             }
         } else {
-            $titles = $this->display_column_definition['value'][0];
-            $types = $this->display_column_definition['value'][1];
+            try {
+                // New way for configs
+                $titles = $this->display_column_definition['value'][0];
+                $types = $this->display_column_definition['value'][1];
+            } catch (Exception $e) {
+                // Legacy way for configs
+                $titles = $this->display_column_definition[0];
+                $types = $this->display_column_definition[1];
+            }
             $data['layout'] = 'table';
         }
         
@@ -294,7 +301,7 @@ class ArrayProperty extends DataProperty
         if (!isset($data['fixedkeys'])) $data['fixedkeys'] = $this->initialization_fixed_keys;
 
         if (!isset($data['suffixlabel'])) $data['suffixlabel'] = $this->default_suffixlabel;
-        if (!isset($data['size'])) $data['size'] = $this->display_columns;
+//        if (!isset($data['size'])) $data['size'] = $this->display_columns;
         if (!isset($data['layout'])) $data['layout'] = 'table';
 
         return parent::showInput($data);
