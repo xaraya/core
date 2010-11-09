@@ -18,7 +18,7 @@
  * @param int module_id
  * @param int itemtype
  * @throws BAD_PARAM
- * @return bool true on success and redirect to modifyprop
+ * @return boolean true on success and redirect to modifyprop
  */
 function dynamicdata_admin_updateprop()
 {

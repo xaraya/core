@@ -13,9 +13,7 @@
  * Obtain list of modules (deprecated)
  *
  * @author Xaraya Development Team
- * @param none
- * @returns array
- * @return array of known modules
+ * @return array the known modules
  * @throws NO_PERMISSION
  */
 function modules_adminapi_list($args)

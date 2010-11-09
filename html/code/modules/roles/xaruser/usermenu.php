@@ -14,6 +14,7 @@
  * Show the user menu
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return string output display string
  */
 function roles_user_usermenu($args)
 {

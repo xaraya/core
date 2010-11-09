@@ -18,8 +18,6 @@
  * @access  public
  * @param   no parameters
  * @return  true on success or void on failure
- * @throws  no exceptions
- * @todo    nothing
 */
 function mail_admin_sendtest()
 {
@@ -74,7 +72,6 @@ function mail_admin_sendtest()
 
     // lets update status and display updated configuration
     xarController::redirect(xarModURL('mail', 'admin', 'compose'));
-    // Return
     return true;
 }
 ?>

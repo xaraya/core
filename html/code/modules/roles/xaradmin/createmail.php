@@ -11,6 +11,9 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/27.html
  */
+/**
+ * @return array data for the template display
+  */
 function roles_admin_createmail()
 {
     // TODO allow selection by group or user or all users.

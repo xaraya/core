@@ -46,7 +46,7 @@ class xarThemeVars extends xarModItemVars implements IxarModItemVars
      * @param themeName The name of the theme
      * @param name The name of the variable
      * @param value The value of the variable
-     * @return bool true on success
+     * @return boolean true on success
      * @throws EmptyParameterException
      *
      */
@@ -70,7 +70,7 @@ class xarThemeVars extends xarModItemVars implements IxarModItemVars
      * 
      * @param themeName The name of the theme
      * @param name The name of the variable
-     * @return bool true on success
+     * @return boolean true on success
      * @throws EmptyParameterException
      */
     public static function delete($scope, $name, $itemid = null)

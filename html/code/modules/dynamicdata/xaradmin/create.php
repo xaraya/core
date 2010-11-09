@@ -23,7 +23,7 @@
  * @param string table
  * @param string template
  * @param string tplmodule
- * @return bool
+ * @return boolean
  */
 function dynamicdata_admin_create($args)
 {

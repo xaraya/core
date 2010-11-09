@@ -63,10 +63,7 @@ class xarSecurity extends Object
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   none
      * @return  the masks object
-     * @throws  none
-     * @todo    none
     */
     public static function initialize()
     {

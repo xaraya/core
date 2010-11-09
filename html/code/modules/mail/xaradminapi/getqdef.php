@@ -13,8 +13,7 @@
 /*
  * Checker if our queue definition is there
  *
- * @returns false if not there
- * @returns objectinfo if it's found
+ * @return mixed objectinfo if it's found, false if not there
  */
 
 function mail_adminapi_getqdef($args)

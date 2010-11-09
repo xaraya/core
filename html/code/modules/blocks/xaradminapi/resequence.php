@@ -13,7 +13,7 @@
  * resequence a blocks table
  * @author Jim McDonald
  * @author Paul Rosania
- * @return bool
+ * @return boolean
  */
 function blocks_adminapi_resequence($args)
 {

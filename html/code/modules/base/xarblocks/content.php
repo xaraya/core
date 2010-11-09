@@ -43,7 +43,7 @@
 /**
  * Display func.
  * @param $blockinfo array
- * @returns $blockinfo array
+ * @return array $blockinfo
  */
 
         function display(Array $data=array())

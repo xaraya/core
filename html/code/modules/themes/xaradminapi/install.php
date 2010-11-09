@@ -15,8 +15,7 @@
  *
  * @author Marty Vance
  * @param $maindId int ID of the module to look dependents for
- * @returns bool
- * @return true on dependencies activated, false for not
+ * @return boolean true on dependencies activated, false for not
  * @throws NO_PERMISSION
  */
 function themes_adminapi_install($args)

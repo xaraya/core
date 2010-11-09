@@ -1,6 +1,6 @@
 <?php
 /**
- * Modify configuration
+ * Modify the configuration settings of this module
  *
  * @package modules
  * @subpackage authsystem module
@@ -12,7 +12,8 @@
  * @link http://xaraya.com/index.php/release/42.html
  */
 /**
- * modify configuration
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
 function authsystem_admin_modifyconfig()
 {

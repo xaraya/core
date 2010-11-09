@@ -16,6 +16,7 @@
  * @param 'status' the status we are purging
  * @param 'confirmation' confirmation that this item can be purge
  * @todo kinda long, no?
+ * @return array data for the template display
  */
 function roles_admin_purge($args)
 {

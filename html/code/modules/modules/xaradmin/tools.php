@@ -14,8 +14,7 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @param none
- * @returns array
+ * @return array data for the template display
  * @todo some facelift
  */
 function modules_admin_tools()

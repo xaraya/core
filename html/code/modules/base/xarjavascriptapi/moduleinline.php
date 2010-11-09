@@ -20,8 +20,7 @@
  * @param $args['position'] position on the page; generally 'head' or 'body'
  * @param $args['code'] the JavaScript code fragment
  * @param $args['index'] optional index in the JS array; unique identifier
- * @returns true=success; null=fail
- * @return boolean
+ * @return boolean true=success; null=fail
  */
 function base_javascriptapi_moduleinline($args)
 {

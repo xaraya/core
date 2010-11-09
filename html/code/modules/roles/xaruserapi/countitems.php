@@ -14,8 +14,7 @@
 /**
  * utility function to count the number of users
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @returns integer
- * @return number of items held by this module
+ * @return integer the number of items held by this module
  */
 function roles_userapi_countitems()
 {

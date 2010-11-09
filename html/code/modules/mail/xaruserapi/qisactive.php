@@ -14,7 +14,7 @@
  * Determine wether a mail queue is active
  *
  * @param $qInfo in args as returned by getobjectinfo of dd
- * @returns bool 
+ * @return boolean true on success, false on failure
  */
 function mail_userapi_qisactive($args)
 {

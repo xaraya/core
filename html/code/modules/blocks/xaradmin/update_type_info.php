@@ -31,6 +31,7 @@ function blocks_admin_update_type_info()
     );
 
     xarController::redirect(xarModURL('blocks', 'admin', 'view_types'));
+    return true;
 }
 
 ?>

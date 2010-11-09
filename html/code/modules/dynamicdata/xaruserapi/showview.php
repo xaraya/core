@@ -14,7 +14,7 @@
  * list some items in a template
  *
  * @param $args array containing the items or fields to show
- * @return string containing the HTML (or other) text to output in the BL template
+ * @return string output display string
  */
 
 function dynamicdata_userapi_showview($args)

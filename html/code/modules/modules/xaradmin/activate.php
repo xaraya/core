@@ -21,8 +21,7 @@
  * status message and returns true.
  *
  * @param id the module id to activate
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 function modules_admin_activate()
 {
@@ -47,7 +46,6 @@ function modules_admin_activate()
     $target=$minfo['name'];
 
     xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
-
     return true;
 }
 

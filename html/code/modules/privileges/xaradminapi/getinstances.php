@@ -22,7 +22,6 @@
      * @param   string with module name
      * @param   string with component name
      * @return  array of instance ids and names for the module
-     * @throws  none
     */
 
     function privileges_adminapi_getinstances($args)

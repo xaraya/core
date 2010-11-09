@@ -22,7 +22,7 @@
  * Phase 1: Welcome (Set Language and Locale) Page
  *
  * @access private
- * @return data array of language values
+ * @return array data for the template display
  */
 function installer_admin_phase1()
 {

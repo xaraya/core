@@ -206,6 +206,7 @@ class xarTplPager Extends Object
  * @param integer $blockOptions number of pages to display at once (default=10) or array of advanced options
  * @param integer $template     alternative template name within $tplmodule/user (default 'pager')
  * @param string  $tplmodule    alternative module to look for templates in (default 'base')
+ * @return string output display string
  *
  */
     public static function getPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $blockOptions = array(), $template = 'default', $tplmodule = 'base')

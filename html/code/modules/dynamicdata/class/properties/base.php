@@ -657,7 +657,7 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
      * @param $args['configuration'] configuration rule (default is the current configuration)
      * @param $args['id'] id of the field
-     * @return bool true if the configuration rule could be processed, false otherwise
+     * @return boolean true if the configuration rule could be processed, false otherwise
      */
     public function updateConfiguration(Array $data = array())
     {
@@ -745,9 +745,14 @@ class DataProperty extends Object implements iDataProperty
         $configproperties = array();
         $properties = $this->getPublicProperties();
         foreach ($properties as $name => $arg) {
-            if (!isset($allconfigproperties[$name])) continue;
+            // Ignore properties that are not defined as configs in the configurations table
+            // and also those that are flagged as not to be active for this property object
+            $flagname = $name . "_ignore";
+            if (!isset($allconfigproperties[$name]) || !empty($this->$flagname)) continue;
+            // Ignore properties that are not of the config $type passed
             $pos = strpos($name, "_");
             if (!$pos || (substr($name,0,$pos) != $type)) continue;
+            // This one is good. Make an entry for it
             $key = $fullname ? $name : substr($name,$pos+1);
             $configproperties[$name] = $allconfigproperties[$name];
             $configproperties[$key]['value'] = $arg;

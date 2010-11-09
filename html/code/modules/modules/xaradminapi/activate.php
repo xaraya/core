@@ -14,7 +14,7 @@
  *
  * @access public
  * @param regid module's registered id
- * @return bool
+ * @return boolean
  * @throws BAD_PARAM
  */
 function modules_adminapi_activate ($args)

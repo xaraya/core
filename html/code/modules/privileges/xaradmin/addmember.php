@@ -21,10 +21,7 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   none
  * @return  none
- * @throws  none
- * @todo    none
  */
 function privileges_admin_addmember()
 {
@@ -74,6 +71,7 @@ function privileges_admin_addmember()
                              'admin',
                              'modifyprivilege',
                              array('id'=>$id)));
+    return true;
 }
 
 

@@ -15,6 +15,7 @@
  * add new item
  * This is a standard function that is called whenever an administrator
  * wishes to create a new module item
+ * @return string output display string
  */
 function dynamicdata_admin_form($args)
 {

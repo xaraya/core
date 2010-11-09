@@ -20,8 +20,7 @@ class xarSessionLessCache extends Object
      * Check if this page is suitable for session-less page caching
      *
      * 
-     * @returns bool
-     * @return true if the page is suitable for session-less caching, false if not
+     * @return boolean true if the page is suitable for session-less caching, false if not
      */
     public static function checkCachingRules()
     {
@@ -45,8 +44,7 @@ class xarSessionLessCache extends Object
     /**
      * Check session-less page caching
      *
-     * @returns none
-     * @return exit if session-less page caching finds a hit
+     * @return none exit if session-less page caching finds a hit
      */
     public static function isCached($sessionLessList = null, $autoCachePeriod = 0)
     {

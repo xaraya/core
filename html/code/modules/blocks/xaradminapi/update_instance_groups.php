@@ -17,8 +17,7 @@
  * @author Paul Rosania
  * @param $args['bid'] the ID of the block to update
  * @param $args['groups'] array of group memberships
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 function blocks_adminapi_update_instance_groups($args)
 {

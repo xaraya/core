@@ -202,7 +202,7 @@ class xarLogger_simple extends xarLogger
      * @param file $file Path to the logger file
      * 
      * @throws LoggerException
-     * @return bool true on success
+     * @return boolean true on success
      **/
     function _prepareLogfile()
     {
@@ -235,7 +235,7 @@ class xarLogger_simple extends xarLogger
      *
      * 
      * @throws LoggerException
-     * @return bool true on succes, false on failure
+     * @return boolean true on succes, false on failure
      **/
     function _openLogfile()
     {

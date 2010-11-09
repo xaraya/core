@@ -1,6 +1,6 @@
 <?php
 /**
- * Shows the user login form when login block is not active
+ * Display the user login form
  *
  * @package modules
  * @subpackage authsystem module

@@ -18,8 +18,7 @@
  * @param $args['moduleid'] module ID
  * @param $args['filename'] file name list (comma-separated or array)
  * @param $args['position'] position on the page; generally 'head' or 'body'
- * @returns true=success; null=fail
- * @return boolean
+ * @return boolean true=success; null=fail
  */
 function base_javascriptapi_modulecode($args)
 {

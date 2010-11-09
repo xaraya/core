@@ -17,7 +17,7 @@
  * @author Xaraya Development Team
  * @access public
  * @param regid module's registered id
- * @returns bool
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
 function modules_adminapi_deactivate ($args)

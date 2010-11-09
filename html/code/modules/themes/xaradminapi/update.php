@@ -16,8 +16,7 @@
  * @param $args['regid'] the id number of the theme to update
  * @param $args['displayname'] the new display name of the theme
  * @param $args['description'] the new description of the theme
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 function themes_adminapi_update($args)
 {

@@ -231,7 +231,7 @@ class xarRequest extends Object
      * Check to see if this request is an object URL
      *
      * 
-     * @return bool true if object URL, false if not
+     * @return boolean true if object URL, false if not
      */
     function isObjectURL() { return $this->isObjectURL; }
 

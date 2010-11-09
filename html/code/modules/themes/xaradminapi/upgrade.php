@@ -14,8 +14,7 @@
  *
  * @author Marty Vance
  * @param regid registered theme id
- * @returns bool
- * @return
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
 function themes_adminapi_upgrade($args)

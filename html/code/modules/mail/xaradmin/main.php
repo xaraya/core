@@ -1,6 +1,6 @@
 <?php
 /**
- * Main administration function
+ * Main entry point for the admin interface of this module
  *
  * @package modules
  * @subpackage mail module
@@ -13,13 +13,15 @@
  */
 
 /**
- * the main administration function
+ * The main admin interface function of this module.
+ * This function is the default function for the admin interface, and is called whenever the module is
+ * initiated with only an admin type but no func parameter passed.  
+ * The function displays the module's overview page, or redirects to the modifyconfig page if overviews are disabled.
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  true on success or void on falure
- * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
+ * @return mixed output display string or boolean true if redirected
 */
 function mail_admin_main()
 {

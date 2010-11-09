@@ -14,7 +14,7 @@
  * Install Xaraya
  *
  * @author Johnny Robeson
- * @return bool
+ * @return boolean
  */
 function installer_init()
 {
@@ -26,7 +26,7 @@ function installer_init()
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function installer_upgrade($oldversion)
 {
@@ -41,7 +41,7 @@ function installer_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return bool
+ * @return boolean
  */
 function installer_delete()
 {

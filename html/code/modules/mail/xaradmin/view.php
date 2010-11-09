@@ -28,6 +28,9 @@ function mail_admin_view($args)
     }
 }
 
+/**
+ * @return array data for the template display
+ */
 function OfferCreate($qDef = null)
 {
     $data['authid'] = xarSecGenAuthKey();

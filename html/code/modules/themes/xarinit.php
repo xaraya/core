@@ -16,7 +16,7 @@ sys::import('xaraya.tableddl');
 /**
  * Initialise the themes module
  * @author Marty Vance
- * @return bool
+ * @return boolean
  * @throws DATABASE_ERROR
  */
 function themes_init()
@@ -117,7 +117,7 @@ function themes_init()
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function themes_upgrade($oldversion)
 {
@@ -132,7 +132,7 @@ function themes_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return bool
+ * @return boolean
  */
 function themes_delete()
 {

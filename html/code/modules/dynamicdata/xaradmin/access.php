@@ -20,7 +20,7 @@
  * @param int itemid the id of the object to be modified
  * @param join
  * @param table
- * @return string
+ * @return string output display string
  */
 function dynamicdata_admin_access($args)
 {

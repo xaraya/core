@@ -17,8 +17,7 @@
  * @access public
  * @param modName name of the 'real' module you want to assign it to
  * @param aliasModName name of the 'fake' module you want to define
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
 function modules_adminapi_add_module_alias($args)

@@ -1105,7 +1105,7 @@ class DataObjectMaster extends Object
      * @param action string the action we want to take on this object (= method or func)
      * @param itemid mixed the specific item id or null
      * @param roleid mixed override the current user or null // CHECKME: do we want this ?
-     * @return bool true if access
+     * @return boolean true if access
      */
     public function checkAccess($action, $itemid = null, $roleid = null)
     {

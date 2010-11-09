@@ -32,6 +32,7 @@ function modules_admin_settings()
     xarModUserVars::set('modules', 'selsort', $selsort);
     
     xarController::redirect(xarModURL('modules', 'admin', 'list', array('regen' => $regen)));
+    return true;
 }
 
 ?>

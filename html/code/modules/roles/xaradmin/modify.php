@@ -14,6 +14,7 @@
  * Modify role details
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
 function roles_admin_modify()
 {

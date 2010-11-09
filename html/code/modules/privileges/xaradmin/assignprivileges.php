@@ -9,6 +9,9 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/1098.html
  */
+/**
+ * @return array data for the template display
+ */
 
     function privileges_admin_assignprivileges()
     {

@@ -64,6 +64,7 @@ function privileges_admin_deleteprivilege()
 
 // redirect to the next page
     xarController::redirect(xarModURL('privileges', 'admin', 'viewprivileges'));
+    return true;
 }
 
 ?>

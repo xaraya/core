@@ -1,6 +1,6 @@
 <?php
 /**
- * Utility function pass individual menu items to the main menu
+ * Pass individual menu items to the admin menu
  *
  * @package modules
  * @subpackage privileges module
@@ -14,9 +14,9 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
- * utility function pass individual menu items to the main menu
+ * Utility function pass individual menu items to the admin menu.
  *
- * @return array containing the menulinks for the main menu items.
+ * @return array the menulinks for the admin menu items of this module.
  */
 function privileges_adminapi_getmenulinks()
 {

@@ -19,10 +19,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @param none $
  * @return none
- * @throws none
- * @todo none
  */
 function roles_admin_removemember()
 {
@@ -51,5 +48,6 @@ function roles_admin_removemember()
 
     // redirect to the next page
     xarController::redirect(xarModURL('roles', 'admin', 'modify',  array('id' => $childid)));
+    return true;
 }
 ?>

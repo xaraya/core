@@ -12,7 +12,6 @@
 /**
  * Update hooks by hook module
  *
- * @param none
  *
  * @author Xaraya Development Team
  */

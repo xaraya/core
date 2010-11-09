@@ -20,9 +20,9 @@
 /**
  * Initialise the module. This function is called once when the module is intalled.
  *
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  */
-public function authsystem_init()
+function authsystem_init()
 {
     //Set the default authmodule if not already set
     $isdefaultauth = xarModVars::get('roles','defaultauthmodule');
@@ -55,9 +55,9 @@ public function authsystem_init()
 /**
  * Activate the module. This function is called when the module is changed from installed to active state.
  *
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  */
-public function authsystem_activate()
+function authsystem_activate()
 {
     xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
     xarRegisterPrivilege('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
@@ -82,9 +82,9 @@ public function authsystem_activate()
  * Upgrade the module from an old version. This function is called when the module is being upgraded.
  *
  * @param string $oldversion The three digit version number of the currently installed (old) version
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  */
-public function authsystem_upgrade($oldversion)
+function authsystem_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
@@ -98,9 +98,9 @@ public function authsystem_upgrade($oldversion)
  * Delete the module.
  * This function is called when the module is being uninstalled.
  *
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  */
-public function authsystem_delete()
+function authsystem_delete()
 {
   //this module cannot be removed
   return false;

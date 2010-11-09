@@ -19,10 +19,7 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   none
  * @return  none
- * @throws  none
- * @todo    none
  */
 function privileges_admin_removemember()
 {
@@ -44,5 +41,6 @@ function privileges_admin_removemember()
                              'admin',
                              'modifyprivilege',
                              array('id'=>$childid)));
+    return true;
 }
 ?>

@@ -17,8 +17,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param  $args ['itemtype'] item type (optional)
  * @param  $args ['itemids'] array of item ids to get
- * @returns array
- * @return array containing the itemlink(s) for the item(s).
+ * @return array the itemlink(s) for the item(s).
  */
 function roles_userapi_getitemlinks($args)
 {

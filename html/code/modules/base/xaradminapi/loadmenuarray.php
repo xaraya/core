@@ -37,9 +37,7 @@
  * @param string $args[layout] return links for menu or links for tabs with menu title info (default links)
  * @param bool $args[noxml] optionally force looking for links only from a getmenulinks function
  * @param bool $args[nolinks] optionally force looking for links only from xml files
- * @returns array
- * @return array of menulinks for a module
- * @throws none
+ * @return array menulinks for the module
  */
 function base_adminapi_loadmenuarray($args)
 {

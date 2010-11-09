@@ -19,7 +19,7 @@
  * @param int $args['itemtype'] item type of the table to import
  * @param string $args['table'] name of the table you want to import
  * @param id $args['objectid'] object id to assign these properties to
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_utilapi_importproperties($args)

@@ -30,5 +30,6 @@ function mail_admin_delete($args = array())
     if(!$result) return;
 
     return xarController::redirect(xarModUrl('mail','admin','view'));
+    return true;
 }
 ?>

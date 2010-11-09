@@ -14,7 +14,7 @@
  */
 /**
  * Show configuration of some property
- * @return array
+ * @return array data for the template display
  */
 function dynamicdata_admin_showpropval($args)
 {

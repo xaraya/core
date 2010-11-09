@@ -21,7 +21,7 @@
  * @param string args['dbPass']
  * @param string args['prefix']
  * @param string args['dbType']
- * @return bool
+ * @return boolean
  */
 function installer_adminapi_modifyconfig($args)
 {
@@ -57,7 +57,7 @@ function installer_adminapi_modifyconfig($args)
  *
  * @author Marc Lutolf
  * @param string args['variables'] = array($name => $value,...)
- * @return bool
+ * @return boolean
  */
 
 function installer_adminapi_modifysystemvars($args)
@@ -87,7 +87,7 @@ function installer_adminapi_modifysystemvars($args)
  * @access public
  * @param args['directory'] the directory to include
  * @param args['initfunc'] init|upgrade|remove
- * @returns bool
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  */
 function installer_adminapi_initialise($args)
@@ -130,7 +130,7 @@ function installer_adminapi_initialise($args)
  * @access public
  * @param args['dbName']
  * @param args['dbType']
- * @returns bool
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, DATABASE_ERROR
  */
 function installer_adminapi_createdb($args)
@@ -163,7 +163,7 @@ function installer_adminapi_createdb($args)
  * @access public
  * @param args['field_name']
  * @param args['table_name']
- * @returns true if field exists false otherwise
+ * @return boolean true if field exists false otherwise
  * @author Sean Finkle
  * @author John Cox
  */
@@ -200,7 +200,7 @@ function installer_adminapi_CheckForField($args)
  * @access public
  * @param args['field_name']
  * @param args['table_name']
- * @returns field type
+ * @return integer field type
  * @author Sean Finkle
  * @author John Cox
  */
@@ -233,7 +233,7 @@ function installer_adminapi_GetFieldType($args)
  *
  * @access public
  * @param args['table_name']
- * @returns true if field exists false otherwise
+ * @return boolean true if field exists false otherwise
  * @author Sean Finkle
  * @author John Cox
  */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Update the configuration parameters
+ * Modify the configuration settings of this module
  *
  * @package modules
  * @subpackage mail module
@@ -13,14 +13,12 @@
  */
 
 /**
- * Update the configuration parameters of the module based on data from the modification form
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  true on success or void on failure
- * @throws  no exceptions
- * @todo    nothing
+ * @return mixed data array for the template display or output display string if invalid data submitted
 */
 function mail_admin_modifyconfig()
 {

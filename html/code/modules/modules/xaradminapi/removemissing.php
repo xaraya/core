@@ -15,8 +15,7 @@
  *
  * @author Xaraya Development Team
  * @param $args['regid'] the id of the module
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
 function modules_adminapi_removemissing($args)

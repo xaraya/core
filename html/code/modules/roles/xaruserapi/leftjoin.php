@@ -23,8 +23,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['ids'] optional array of ids that we are selecting on
- * @returns array
- * @return array('table' => 'xar_roles',
+ * @return array array('table' => 'xar_roles',
  *               'field' => 'xar_roles.id',
  *               'where' => 'xar_roles.id IN (...)',
  *               'name'  => 'xar_roles.name',

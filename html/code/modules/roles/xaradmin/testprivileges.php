@@ -20,10 +20,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @param none $
- * @return none
- * @throws none
- * @todo none
+ * @return array data for the template display
  */
 function roles_admin_testprivileges()
 {
@@ -113,8 +110,6 @@ function roles_admin_testprivileges()
     }
     $data['authid'] = xarSecGenAuthKey();
     return $data;
-    // redirect to the next page
-    xarController::redirect(xarModURL('roles', 'admin', 'new'));
 }
 
 ?>

@@ -18,8 +18,7 @@
  * @param $args['selection'] extra coonditions passed into the where-clause
  * @param $args['include'] comma-separated list of role names
  * @param $args['exclude'] comma-separated list of role names
- * @returns array
- * @return array of roles, or false on failure
+ * @return mixed array of roles, or false on failure
  */
 function roles_userapi_getallroles($args)
 {

@@ -155,7 +155,7 @@ sys::import('xaraya.caching.core');
  *
  * 
  * @param integer whatToLoad What optional systems to load.
- * @return bool true
+ * @return boolean true
  * @todo <johnny> fix up sitetable prefix when we have a place to store it
 **/
 function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
@@ -488,7 +488,7 @@ function xarCoreActivateDebugger($flags)
  * Check if the debugger is active
  *
  * 
- * @return bool true if the debugger is active, false otherwise
+ * @return boolean true if the debugger is active, false otherwise
 **/
 function xarCoreIsDebuggerActive()
 {
@@ -500,7 +500,7 @@ function xarCoreIsDebuggerActive()
  *
  * 
  * @param integer flag the debugger flag to check for activity
- * @return bool true if the flag is active, false otherwise
+ * @return boolean true if the flag is active, false otherwise
 **/
 function xarCoreIsDebugFlagSet($flag)
 {

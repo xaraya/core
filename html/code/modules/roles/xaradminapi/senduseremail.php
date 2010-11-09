@@ -24,8 +24,7 @@
  * @param $args['subject'] the subject of the mail (optionnal)
  * @param $args['pass'] new password of the user (optionnal)
  * @param $args['ip'] ip adress of the user (optionnal)
- * @returns bool
- * @return true on success, false on failures
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
 function roles_adminapi_senduseremail($args)

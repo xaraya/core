@@ -81,6 +81,7 @@ function roles_admin_removeprivilege()
 
         // redirect to the next page
         xarController::redirect(xarModURL('roles', 'admin', 'showprivileges', array('id' => $roleid)));
+        return true;
     }
 }
 

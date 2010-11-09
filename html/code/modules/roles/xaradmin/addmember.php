@@ -19,10 +19,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @param none $
  * @return none
- * @throws none
- * @todo none
  */
 function roles_admin_addmember()
 {
@@ -58,6 +55,7 @@ function roles_admin_addmember()
     // redirect to the next page
     xarController::redirect(xarModURL('roles', 'admin', 'modify',
             array('id' => $id)));
+    return true;
 }
 
 ?>

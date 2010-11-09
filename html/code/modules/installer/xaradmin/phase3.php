@@ -23,9 +23,7 @@
  *
  * @access private
  * @param agree string
- * @return array
- * @todo <johnny> make sure php version checking works with
- *       php versions that contain strings
+ * @return array data for the template display
  */
 function installer_admin_phase3()
 {
@@ -127,7 +125,7 @@ function installer_admin_phase3()
  *
  * @access private
  * @param string dirname directory name
- * @return bool true if directory is writable, readable and executable
+ * @return boolean true if directory is writable, readable and executable
  */
 function check_dir($dirname)
 {

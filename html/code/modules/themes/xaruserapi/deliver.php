@@ -14,9 +14,8 @@
  * Handle css tag
  *
  * @author andyv <andyv@xaraya.com>
- * @param $args array containing the parameters
- * @returns string
- * @return the PHP code needed to show the css tag in the BL template
+ * @param $args array containing the parameters/**
+ * @return string output display string
  */
 function themes_userapi_deliver($args)
 {

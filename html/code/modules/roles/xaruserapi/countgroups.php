@@ -15,8 +15,7 @@
  * utility function to count the number of items held by this module
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @returns integer
- * @return number of items held by this module
+ * @return integer the number of items held by this module
  * @throws DATABASE_ERROR
  */
 function roles_userapi_countgroups()

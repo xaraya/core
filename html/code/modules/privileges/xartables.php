@@ -10,13 +10,12 @@
  * @link http://xaraya.com/index.php/release/1098.html
  */
 /**
- * Return table name definitions to Xaraya
+ * Return table name definitions to Xaraya.
+ * This function is called internally by the core whenever the module is
+ * loaded. It adds the table names to a globally accessible array
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * This function is called internally by the core whenever the module is
- * loaded. It is called by xarMod__dbInfoLoad()
- *
- * @return array
+ * @return array the registered tables of this module
  */
 function privileges_xartables()
 {

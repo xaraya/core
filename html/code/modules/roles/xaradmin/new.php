@@ -14,6 +14,7 @@
  *
  * @author Marc Lutolf
  * @author Johnny Robeson
+ * @return array data for the template display
  */
 function roles_admin_new()
 {

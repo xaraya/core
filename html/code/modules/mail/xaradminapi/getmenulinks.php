@@ -1,6 +1,6 @@
 <?php
 /**
- * Pass individual menu items to the admin panels
+ * Pass individual menu items to the admin menu
  *
  * @package modules
  * @subpackage mail module
@@ -13,11 +13,10 @@
  */
 
 /**
- * utility function pass individual menu items to the admin panels
+ * Utility function pass individual menu items to the admin menu.
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @returns array
- * @return array containing the menulinks for the main menu items.
+ * @return array the menulinks for the admin menu items of this module.
  */
 function mail_adminapi_getmenulinks()
 {

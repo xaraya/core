@@ -43,7 +43,7 @@ sys::import('xaraya.variables.config');
  * @global string xarTpl_JavaScript
  * @param  array  $args                  Elements: defaultThemeName, enableTemplateCaching
  * @throws FileNotFoundException
- * @return bool true
+ * @return boolean true
 **/
 function xarTpl_init(&$args)
 {
@@ -99,7 +99,7 @@ function xarTplGetThemeName()
  * @global string xarTpl_themesBaseDir
  * @global string xarTpl_themeName
  * @param  string $themeName Themename to set
- * @return bool
+ * @return boolean
  */
 function xarTplSetThemeName($themeName)
 {
@@ -121,7 +121,7 @@ function xarTplSetThemeName($themeName)
  * @global string xarTpl_themesBaseDir
  * @global string xarTpl_themeDir
  * @param  string themeDir
- * @return bool
+ * @return boolean
  * @todo   on removal of the global, we need to bring in standard caching here!!
  */
 function xarTplSetThemeDir($themeDir)
@@ -183,7 +183,7 @@ function xarTplGetPageTemplateName()
  * 
  * @global xarTpl_pageTemplateName string
  * @param  string $templateName Name of the page template
- * @return bool
+ * @return boolean
  */
 function xarTplSetPageTemplateName($templateName)
 {
@@ -213,7 +213,7 @@ function xarTplGetDoctype()
  * 
  * @global string xarTpl_doctype
  * @param  string $doctypeName Identifier string of the doctype
- * @return bool
+ * @return boolean
  */
 function xarTplSetDoctype($doctypeName)
 {
@@ -230,7 +230,7 @@ function xarTplSetDoctype($doctypeName)
  * @param  string $title
  * @param  string $module
  * @todo   this needs to be moved into the templating domain somehow
- * @return bool
+ * @return boolean
  */
 function xarTplSetPageTitle($title = NULL, $module = NULL)
 {
@@ -294,7 +294,7 @@ function xarTplGetPageTitle()
  * @param  string $type             Either 'src' or 'code'
  * @param  string $data             pathname or raw JavaScript
  * @param  string $index            optional (unique key and/or ordering)
- * @return bool
+ * @return boolean
  */
 function xarTplAddJavaScript($position, $type, $data, $index = '')
 {
@@ -663,7 +663,7 @@ function xarTpl_renderPage($mainModuleOutput, $pageTemplate = NULL)
  * 
  * @param  array  $blockInfo  Information on the block
  * @param  string $templateName string
- * @return bool xarTpl__executeFromFile($sourceFileName, $blockInfo)
+ * @return boolean xarTpl__executeFromFile($sourceFileName, $blockInfo)
  *
  * @todo the search logic for the templates can perhaps use the private function?
  * @todo fallback to some internal block box template?
@@ -991,7 +991,7 @@ function xarTpl_outputTemplateFilenames()
  * 
  * @param  string $sourceFileName
  * @param  string $tplOutput
- * @return bool found header content
+ * @return boolean found header content
  *
  * @todo it is possible that the first regex <!DOCTYPE[^>].*]> is too
  *       greedy in more complex xml documents and others.

@@ -19,10 +19,7 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   none
  * @return  none
- * @throws  none
- * @todo    none
  */
 function privileges_admin_removebranch()
 {
@@ -38,5 +35,6 @@ function privileges_admin_removebranch()
     xarController::redirect(xarModURL('privileges',
                              'admin',
                              'viewprivileges'));
+    return true;
 }
 ?>

@@ -14,8 +14,7 @@
  *
  * @author Xaraya Development Team
  * @param regid registered module id
- * @returns bool
- * @return
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_NOT_EXIST
  */
 function modules_adminapi_initialise($args)

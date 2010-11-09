@@ -15,8 +15,7 @@
  * @author Xaraya Development Team
  * @param $args['regid'] the id of the module
  * @param $args['function'] name of the function to be called
- * @returns bool
- * @return true on success, false on failure in the called function
+ * @return boolean true on success, false on failure in the called function
  * @throws BAD_PARAM, NO_PERMISSION
  */
 function modules_adminapi_executeinitfunction ($args)

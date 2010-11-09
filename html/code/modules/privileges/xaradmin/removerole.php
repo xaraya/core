@@ -78,6 +78,7 @@ function privileges_admin_removerole()
                                  'admin',
                                  'viewroles',
                                  array('id'=>$id)));
+        return true;
     }
 
 }

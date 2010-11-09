@@ -12,7 +12,7 @@
 /**
  * List themes and current settings
  * @author Marty Vance
- * @param none
+ * @return array data for the template display
  */
 function themes_admin_list()
 {

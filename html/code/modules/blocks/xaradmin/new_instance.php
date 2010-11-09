@@ -13,7 +13,8 @@
  * display form for a new block instance
  * @author Jim McDonald
  * @author Paul Rosania
- */
+ * @return array data for the template display
+*/
 function blocks_admin_new_instance()
 {
     // Security Check

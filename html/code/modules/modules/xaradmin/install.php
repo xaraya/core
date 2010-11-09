@@ -22,8 +22,7 @@
  * <andyv implementation of JC's request> attempt to activate module immediately after it's inited
  *
  * @param id the module id to initialise
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 sys::import('modules.modules.class.installer');
 
@@ -102,7 +101,6 @@ function modules_admin_install()
     }
 
     xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
-
     return true;
 }
 

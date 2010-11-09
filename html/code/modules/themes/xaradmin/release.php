@@ -14,8 +14,7 @@
  *
  * @author Marty Vance
  * @access public
- * @param none
- * @returns array
+ * @return array data for the template display
  * @todo change feed url once release module is moved
  */
 function themes_admin_release()

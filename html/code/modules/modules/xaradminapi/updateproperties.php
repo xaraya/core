@@ -17,8 +17,7 @@
  * @param $args['displayname'] the new display name of the module
  * @param admincapable the whether the module shows an admin menu
  * @param usercapable the whether the module shows a user menu
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 function modules_adminapi_updateproperties($args)
 {

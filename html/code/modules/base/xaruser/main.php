@@ -1,6 +1,7 @@
 <?php
 /**
- * Main function
+ * Main entry point for the user interface of this module
+ *
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
@@ -11,9 +12,13 @@
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
+ * The main user interface function of this module.
+ * This function is the default function, and is called whenever the module is
+ * initiated without defining arguments.  
+ * The function displays the module's main entry page, or redirects to different page if the admin has defined one.
  * @author Paul Rosania
  * @param string page The page to use if the admin has enabled different page templates
- * @return mixed
+ * @return mixed output display string
  */
 function base_user_main($args)
 {

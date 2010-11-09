@@ -1,5 +1,7 @@
 <?php
 /**
+ * Pass individual menu items to the user menu
+ *
  * @package modules
  * @subpackage roles module
  * @category Xaraya Web Applications Framework
@@ -11,9 +13,10 @@
  */
 
 /**
- * Standard function to get main menu links
+ * Utility function pass individual menu items to the user menu.
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return array the menulinks for the user menu items of this module.
  */
 function roles_userapi_getmenulinks()
 {

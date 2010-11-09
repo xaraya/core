@@ -1,6 +1,7 @@
 <?php
 /**
  * Authenticate a user
+ *
  * @package modules
  * @subpackage authsystem module
  * @category Xaraya Web Applications Framework

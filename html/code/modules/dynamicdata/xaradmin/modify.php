@@ -22,7 +22,7 @@
  * @param int itemtype the id of the itemtype of the item
  * @param join
  * @param table
- * @return string
+ * @return string output display string
  */
 function dynamicdata_admin_modify($args)
 {

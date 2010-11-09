@@ -1,5 +1,7 @@
 <?php
 /**
+ * Main entry point for the user interface of this module
+ *
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
@@ -12,9 +14,12 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * dynamicdata user main function
+ * The main user interface function of this module.
+ * This function is the default function, and is called whenever the module is
+ * initiated without defining arguments.  
+ * The function displays a list of DD's available modules.
  *
- * @return array
+ * @return array empty array of data for the template display
  */
 function dynamicdata_user_main($args)
 {

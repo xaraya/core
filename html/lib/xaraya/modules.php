@@ -1053,7 +1053,7 @@ class xarMod extends Object implements IxarMod
      * @param moduleName string the module we want to check access for
      * @param action string the action we want to take on this module (view/admin) // CHECKME: any others we really use on module level ?
      * @param roleid mixed override the current user or null
-     * @return bool true if access
+     * @return boolean true if access
      */
     static function checkAccess($moduleName, $action, $roleid = null)
     {

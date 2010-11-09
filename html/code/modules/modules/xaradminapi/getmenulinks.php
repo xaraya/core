@@ -1,6 +1,6 @@
 <?php
 /**
- * utility function pass individual menu items to the main menu
+ * Pass individual menu items to the admin menu
  *
  * @package modules
  * @subpackage modules module
@@ -12,11 +12,10 @@
  * @link http://xaraya.com/index.php/release/1.html
  */
 /**
- * utility function pass individual menu items to the main menu
+ * Utility function pass individual menu items to the admin menu.
  *
  * @author the Modules module development team
- * @returns array
- * @return array containing the menulinks for the main menu items.
+ * @return array the menulinks for the admin menu items of this module.
  */
 function modules_adminapi_getmenulinks()
 {

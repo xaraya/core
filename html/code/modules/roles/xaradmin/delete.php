@@ -100,6 +100,7 @@ function roles_admin_delete()
         } else {
             xarController::redirect($returnurl);
         }
+        return true;
     }
 }
 ?>

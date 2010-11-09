@@ -82,7 +82,7 @@ define('XARVAR_PREP_TRIM',        8);
  * @global xarVar_allowableHTML array
  * @global xarVar_fixHTMLEntities bool
  * @param args array
- * @return bool
+ * @return boolean
  * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
  * @todo revisit naming of config_vars table
 **/
@@ -312,7 +312,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  * @param validation mixed the validation to be performed
  * @param subject string the subject on which the validation must be performed, will be where the validated value will be returned
  * @throws EmptyParameterException
- * @return bool true if the $subject validates correctly, false otherwise
+ * @return boolean true if the $subject validates correctly, false otherwise
  */
 function xarVarValidate($validation, &$subject, $supress = false, $name = '')
 {

@@ -575,7 +575,7 @@ function dynamicdata_upgrade($oldversion)
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function dynamicdata_delete()
 {

@@ -14,7 +14,7 @@
 /**
  * This is a standard function to modify the configuration parameters of the
  * module
- * @return array
+ * @return array data for the template display
  */
 function dynamicdata_admin_view_propertydefs()
 {

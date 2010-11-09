@@ -17,8 +17,7 @@
  *
  * @author Marty Vance
  * @param id the theme id to set
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 function themes_admin_setdefault()
 {

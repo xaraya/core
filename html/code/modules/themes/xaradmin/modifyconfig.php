@@ -1,6 +1,6 @@
 <?php
 /**
- * Modify the configuration parameters
+ * Modify the configuration settings of this module
  *
  * @package modules
  * @subpackage themes module
@@ -12,8 +12,8 @@
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
- * This is a standard function to modify the configuration parameters of the
- * module
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ * @return mixed data array for the template display or output display string if invalid data submitted
  *
  * @author Marty Vance
  */

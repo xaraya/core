@@ -16,8 +16,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['state'] state that we are deleting.
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 function roles_adminapi_purge($args)
 {

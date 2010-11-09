@@ -18,8 +18,7 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @param none
- * @returns bool
+ * @return boolean true on success, false on failure
  * @
  */
 function modules_admin_regenerate()

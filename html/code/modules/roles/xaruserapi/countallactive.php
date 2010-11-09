@@ -17,8 +17,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param bool $include_anonymous whether or not to include anonymous user
  * @param string $filter
- * @returns integer
- * @return number of users
+ * @return integer the number of users
  */
 function roles_userapi_countallactive($args)
 {

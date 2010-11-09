@@ -81,7 +81,6 @@ function blocks_admin_delete_instance()
     );
 
     xarController::redirect(xarModURL('blocks', 'admin', 'view_instances'));
-
     return true;
 }
 

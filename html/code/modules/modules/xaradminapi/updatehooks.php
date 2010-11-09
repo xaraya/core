@@ -15,8 +15,7 @@
  *
  * @author Xaraya Development Team
  * @param $args['regid'] the id number of the hook module
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 function modules_adminapi_updatehooks($args)
 {
