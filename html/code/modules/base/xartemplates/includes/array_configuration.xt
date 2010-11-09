@@ -1,42 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <table border="0">
-        <tr>
-            <td>&#160;</td>
-            <xar:for start="$i=0" test="$i lt count($column_titles)" iter="$i++">
-                <td style="text-align: center">
-                    <label>#$column_titles[$i]#</label>
-                </td>
+    <table class="xar-border-none xar-margin-thicktop">
+        <thead>
+            <tr>
+                <th class="xar-align-left">Column</th>
+                <xar:for start="$i=0" test="$i lt count($column_titles)" iter="$i++">
+                    <th class="xar-align-left">
+                        <label>#$column_titles[$i]#</label>
+                    </th>
+                </xar:for>
+                <!--
+                <th class="xar-align-right">Actions</th>
+                -->        
+            </tr>        
+        </thead>
+        <tbody>
+            <xar:for start="$i=0" test="$i lt $rows" iter="$i++">
+                <tr>
+                    <td>
+                        <xar:set name="j">$i+1</xar:set>
+                        #$j#
+                    </td>
+                    <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
+                        <td>
+                            <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
+                            <xar:set name="propid">$id.'_value_'.$k</xar:set>
+                            <xar:set name="propvalue">$value[$k][$i]</xar:set>
+                            <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue"/>
+                        </td>
+                    </xar:for>
+                    <!--
+                        <td class="xar-align-right">&#160;</td>
+                    -->
+                </tr>
             </xar:for>
-        </tr>
-        <xar:for start="$i=0" test="$i lt $rows" iter="$i++">
             <tr>
                 <td>
-                    <xar:set name="j">$i+1</xar:set>
-                    Column #$j#
+                    <xar:set name="extendedrows">$rows+1</xar:set>
+                    New
                 </td>
                 <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
                     <td>
-                        <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
+                        <xar:set name="propname">$name.'[value][' . $k . '][' . $extendedrows . ']'</xar:set>
                         <xar:set name="propid">$id.'_value_'.$k</xar:set>
-                        <xar:set name="propvalue">$value[$k][$i]</xar:set>
-                        <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue"/>
+                        <xar:data-input type="$column_types[$k]" name="$propname" id="$propid"/>
                     </td>
                 </xar:for>
-            </tr>
-        </xar:for>
-        <tr>
-            <td>
-                <xar:set name="extendedrows">$rows+1</xar:set>
-                New Column
-            </td>
-            <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
-                <td>
-                    <xar:set name="propname">$name.'[value][' . $k . '][' . $extendedrows . ']'</xar:set>
-                    <xar:set name="propid">$id.'_value_'.$k</xar:set>
-                    <xar:data-input type="$column_types[$k]" name="$propname" id="$propid"/>
-                </td>
-            </xar:for>
-        </tr>
+            </tr>                    
+        </tbody>
     </table>
 </xar:template>
