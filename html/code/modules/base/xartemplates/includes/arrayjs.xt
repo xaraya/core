@@ -46,11 +46,11 @@
         function #$id#_removeRow(Id, row)
         {           
             var d = document.getElementById('#$id#_rows');
-            var olddiv = document.getElementById(Id + "_" + row + "");            
+            var olddiv = document.getElementById(Id + "_" + row);     
             d.removeChild(olddiv);
             
             //Update the "rowsdisplayed" value after removing the row
-            var rowsdisplayedfield = document.getElementById('#$id#_rowsdisplayed');
+            var rowsdisplayedfield = document.getElementById('#$id#_rowsdisplayed');alert('#$id#_rowsdisplayed');
             var rowsdisplayed = rowsdisplayedfield.value;                        
             rowsdisplayed = rowsdisplayed.replace(',' + row, '');            
             rowsdisplayedfield.value = rowsdisplayed;    

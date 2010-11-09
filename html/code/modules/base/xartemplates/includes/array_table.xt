@@ -1,29 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:template module="base" file="arrayjs"/>
     <table border="0">
         <tr>
-            <td>&#160;</td>
+            <td>
+                <img src="#xarTplGetImage('icons/add.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','dummy')"/> 
+            </td>
             <xar:for start="$i=0" test="$i lt count($column_titles)" iter="$i++">
                 <td style="text-align: center">
                     <label>#$column_titles[$i]#</label>
                 </td>
             </xar:for>
         </tr>
-        <xar:for start="$i=0" test="$i lt $rows" iter="$i++">
-            <tr>
-                <td>
-                    <xar:set name="j">$i+1</xar:set>
-                    Row #$j#
-                </td>
-                <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
-                    <td>
-                        <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
-                        <xar:set name="propid">$id.'_value_'.$k</xar:set>
-                        <xar:set name="propvalue">$value[$k][$i]</xar:set>
-                        <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue"/>
-                    </td>
-                </xar:for>
-            </tr>
-        </xar:for>
+        <xar:set name="rowsdisplayed">""</xar:set>
+        <div id="#$id#_rows">           
+            <xar:for start="$i=0" test="$i lt $rows" iter="$i++">
+                    <tr id="#$id#_#$i#">
+                        <td>
+                            <img src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')" style="cursor: pointer"/> 
+                            &#160;
+                            <xar:set name="j">$i+1</xar:set>
+                            Row #$j#
+                        </td>
+                        <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
+                            <td>
+                                <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
+                                <xar:set name="propid">$id.'_value_'.$k</xar:set>
+                                <xar:set name="propvalue">$value[$k][$i]</xar:set>
+                                <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue"/>
+                            </td>
+                        </xar:for>
+                    </tr>
+                    <xar:set name="rowsdisplayed">$rowsdisplayed . "," . $i</xar:set>
+            </xar:for>
+        </div>
     </table>
+    
+    <xar:set name="rowsdisplayed">trim($rowsdisplayed,",")</xar:set>
+    <input type="hidden" name="#$id#_rowsdisplayed" id="#$id#_rowsdisplayed" value="#$rowsdisplayed#"/>
+<!--  Begin dummy line for adding rows -->    
+    <div class ="xxar-displaynone">
+        <tr>
+            <td>
+                <img src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','dummy')"/> 
+                &#160;
+                <xar:set name="j">$i+1</xar:set>
+                Row #$j#
+            </td>
+            <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
+                <td>
+                    <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
+                    <xar:set name="propid">$id.'_value_'.$k</xar:set>
+                    <xar:data-input type="$column_types[$k]" name="$propname" id="$propid"/>
+                </td>
+            </xar:for>
+        </tr>
+    </div>
+<!--  End dummy line for adding rows -->    
 </xar:template>
