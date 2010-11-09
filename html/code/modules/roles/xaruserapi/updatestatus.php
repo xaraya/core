@@ -18,7 +18,7 @@
  * @param $args['state'] is the new state for the user
  * returns bool
  */
-function roles_userapi_updatestatus($args)
+function roles_userapi_updatestatus(Array $args=array())
 {
     extract($args);
 

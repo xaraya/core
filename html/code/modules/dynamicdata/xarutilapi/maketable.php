@@ -32,7 +32,7 @@
  *
  * @return boolean true on succes
  */
-function dynamicdata_utilapi_maketable($args)
+function dynamicdata_utilapi_maketable(Array $args=array())
 {
     // restricted to DD Admins
     if(!xarSecurityCheck('AdminDynamicData')) return;

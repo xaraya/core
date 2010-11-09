@@ -124,7 +124,7 @@ class xarCurl extends Object
      * A session will be opened immediately the object is created.
      * @return array
      */
-    function __construct($args)
+    function __construct(Array $args=array())
     {
         extract($args);
 

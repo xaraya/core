@@ -19,7 +19,7 @@
  * @throws BAD_PARAM,NO_PERMISSION
  * @todo Do the db changes in a transaction to completely fail or succeed?
  */
-function modules_adminapi_setstate($args)
+function modules_adminapi_setstate(Array $args=array())
 {
     // Get arguments from argument array
 

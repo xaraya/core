@@ -22,7 +22,7 @@
  * @param $args['follow'] bool indicates if we want to follow redirects or not (default is true)
  * @return integer status of the link
  */
-function base_userapi_checklink($args)
+function base_userapi_checklink(Array $args=array())
 {
     extract($args);
 

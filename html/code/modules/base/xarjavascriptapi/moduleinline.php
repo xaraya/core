@@ -22,7 +22,7 @@
  * @param $args['index'] optional index in the JS array; unique identifier
  * @return boolean true=success; null=fail
  */
-function base_javascriptapi_moduleinline($args)
+function base_javascriptapi_moduleinline(Array $args=array())
 {
     extract($args);
 

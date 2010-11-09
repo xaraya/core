@@ -32,7 +32,7 @@
  *
  * <xar:style file="basename" scope="theme" type="text/css" media="all" alternate="no" title="Great style" method="import"/>
  */
-function themes_userapi_register($args)
+function themes_userapi_register(Array $args=array())
 {
     // keep track of style when we're caching
     xarCache::addStyle($args);

@@ -341,7 +341,7 @@ class xarObjectCache extends Object
      * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
      * @return void
      */
-    public static function addStyle($args)
+    public static function addStyle(Array $args=array())
     {
         if (empty(self::$cacheKey)) return;
         self::$styleList[] = $args;

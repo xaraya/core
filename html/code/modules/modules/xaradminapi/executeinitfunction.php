@@ -18,7 +18,7 @@
  * @return boolean true on success, false on failure in the called function
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function modules_adminapi_executeinitfunction ($args)
+function modules_adminapi_executeinitfunction(Array $args=array())
 {
     // Security Check
     if(!xarSecurityCheck('AdminModules')) return;

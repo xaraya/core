@@ -16,7 +16,7 @@
  * @author Marc Lutolf (mfl@netspan.ch)
  * @return boolean result of action
 **/
-function modules_adminapi_standarddeinstall($args)
+function modules_adminapi_standarddeinstall(Array $args=array())
 {
     extract($args);
     if (!isset($module)) return false;

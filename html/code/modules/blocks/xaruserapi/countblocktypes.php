@@ -21,7 +21,7 @@
  * @return integer count of block types that meet the required criteria
  * @throws DATABASE_ERROR
  */
-function blocks_userapi_countblocktypes($args)
+function blocks_userapi_countblocktypes(Array $args=array())
 {
     extract($args);
 

@@ -21,7 +21,7 @@
  * @param  string $mailtype     The type of mail html|text
  * @return string xarTpl__executeFromFile($sourceFileName, $tplData) 
  */
-function mail_adminapi_mailmessagemodule($args)
+function mail_adminapi_mailmessagemodule(Array $args=array())
 {
     extract($args);
     // Get the right source filename

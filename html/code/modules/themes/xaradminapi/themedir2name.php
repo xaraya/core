@@ -19,7 +19,7 @@
  * @return  the theme name in this directory, or false if theme is not
  *          found
  */
-function themes_adminapi_themedir2name($args)
+function themes_adminapi_themedir2name(Array $args=array())
 {
     $allthemes = xarMod::apiFunc('themes', 'admin', 'getfilethemes');
     foreach ($allthemes as $theme) {

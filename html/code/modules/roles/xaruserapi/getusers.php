@@ -17,7 +17,7 @@
  * @param $args['id'] group id
  * @return $users array containing uname, id
  */
-function roles_userapi_getUsers($args)
+function roles_userapi_getUsers(Array $args=array())
 {
     extract($args);
 

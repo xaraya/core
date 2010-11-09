@@ -40,7 +40,7 @@
  * @param int $args['firstitem']
  * @param int $args['firstpage']
  */
-function base_userapi_pager($args)
+function base_userapi_pager(Array $args=array())
 {
     extract($args);
     if (empty($startnum) || !is_numeric($startnum))

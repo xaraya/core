@@ -24,7 +24,7 @@
  * @param table
  * @return string output display string
  */
-function dynamicdata_admin_modify($args)
+function dynamicdata_admin_modify(Array $args=array())
 {
     extract($args);
 

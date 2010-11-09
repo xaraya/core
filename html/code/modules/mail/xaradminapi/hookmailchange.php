@@ -18,7 +18,7 @@
  * @param  $ 'modid' is the module that is sending mail.
  * @param  $ 'objectid' is the item changed.
  */
-function mail_adminapi_hookmailchange($args)
+function mail_adminapi_hookmailchange(Array $args=array())
 {
     extract($args);
 

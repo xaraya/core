@@ -19,7 +19,7 @@
  * @param usercapable the whether the module shows a user menu
  * @return boolean true on success, false on failure
  */
-function modules_adminapi_updateproperties($args)
+function modules_adminapi_updateproperties(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

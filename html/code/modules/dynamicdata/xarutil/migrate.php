@@ -15,7 +15,7 @@
 /**
  * migrate module items
  */
-function dynamicdata_util_migrate($args)
+function dynamicdata_util_migrate(Array $args=array())
 {
     extract($args);
 

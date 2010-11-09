@@ -15,7 +15,7 @@
  * @param int $args['stamp'] as a unix timestamp
  * @author - based on original by Natalie Downe http://blog.natbat.co.uk/archive/2003/Jun/14/time_since
  */
-function base_userapi_timesince($args)
+function base_userapi_timesince(Array $args=array())
 {
     extract($args);
     //expecting a var named $originaltime

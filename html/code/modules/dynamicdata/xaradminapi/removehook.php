@@ -20,7 +20,7 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
-function dynamicdata_adminapi_removehook($args)
+function dynamicdata_adminapi_removehook(Array $args=array())
 {
     extract($args);
 

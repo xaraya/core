@@ -19,7 +19,7 @@
  * @param $args array containing the definition of the field (type, name, value, ...)
  * @return string containing the HTML (or other) text to output in the BL template
  */
-function dynamicdata_adminapi_showinput($args)
+function dynamicdata_adminapi_showinput(Array $args=array())
 {
     $property = & DataPropertyMaster::getProperty($args);
 

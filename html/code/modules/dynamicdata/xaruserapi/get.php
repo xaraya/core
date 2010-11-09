@@ -14,7 +14,7 @@
  *
  * @author mikespub <mikespub@xaraya.com>
 */
-function dynamicdata_userapi_get($args)
+function dynamicdata_userapi_get(Array $args=array())
 {
     return xarMod::apiFunc('dynamicdata','user','getfield',$args);
 }

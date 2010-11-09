@@ -18,7 +18,7 @@
  * @param $args['itemids'] array of item ids to get
  * @return array the itemlink(s) for the item(s).
  */
-function blocks_userapi_getitemlinks($args)
+function blocks_userapi_getitemlinks(Array $args=array())
 {
     extract($args);
 

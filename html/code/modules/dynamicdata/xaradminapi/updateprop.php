@@ -26,7 +26,7 @@
  * @return boolean
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_updateprop($args)
+function dynamicdata_adminapi_updateprop(Array $args=array())
 {
     extract($args);
 

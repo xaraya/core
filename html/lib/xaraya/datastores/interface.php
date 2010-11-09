@@ -104,6 +104,6 @@ interface ISQLDataStore
         function getNext($args = array())
 
     Introduced by VariableTable datastore:
-        function getNextId($args)
+        function getNextId(Array $args=array())
 */
 ?>

@@ -895,7 +895,7 @@ class VariableTableDataStore extends SQLDataStore
      * @return integer value of the next id
      * @throws BadParameterException
      */
-    function getNextId(array $args)
+    function getNextId(Array $args=array())
     {
         extract($args);
 

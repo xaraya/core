@@ -16,7 +16,7 @@
  * @param $qInfo in args as returned by getobjectinfo of dd
  * @return boolean true on success, false on failure
  */
-function mail_userapi_qisactive($args)
+function mail_userapi_qisactive(Array $args=array())
 {
     extract($args);
     if(!isset($objectid)) return false; // we're lazy

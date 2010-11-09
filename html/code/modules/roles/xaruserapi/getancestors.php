@@ -17,7 +17,7 @@
  * @param $args['id'] role id
  * @return $ancestors array containing name, id
  */
-function roles_userapi_getancestors($args)
+function roles_userapi_getancestors(Array $args=array())
 {
     extract($args);
 

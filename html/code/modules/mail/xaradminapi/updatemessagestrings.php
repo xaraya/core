@@ -20,7 +20,7 @@
  * @param $args['message'] new message
  * @return array of strings of file contents read
  */
-function mail_adminapi_updatemessagestrings($args)
+function mail_adminapi_updatemessagestrings(Array $args=array())
 {
     extract($args);
     if (empty($template)) throw new EmptyParameterException('template');

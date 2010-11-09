@@ -24,7 +24,7 @@
  * @return mixed value of the field, or false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_userapi_getfield($args)
+function dynamicdata_userapi_getfield(Array $args=array())
 {
     extract($args);
 

@@ -16,7 +16,7 @@
  * @return array the known modules
  * @throws NO_PERMISSION
  */
-function modules_adminapi_list($args)
+function modules_adminapi_list(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

@@ -60,7 +60,7 @@ function installer_community_privilegeoptions()
  * @access public
  * @return boolean
  */
-function installer_community_configuration_load($args)
+function installer_community_configuration_load(Array $args=array())
 {
 // load the privileges chosen
 

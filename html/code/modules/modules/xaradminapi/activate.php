@@ -17,7 +17,7 @@
  * @return boolean
  * @throws BAD_PARAM
  */
-function modules_adminapi_activate ($args)
+function modules_adminapi_activate(Array $args=array())
 {
     extract($args);
 

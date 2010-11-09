@@ -17,7 +17,7 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function modules_adminapi_upgrade($args)
+function modules_adminapi_upgrade(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

@@ -20,7 +20,7 @@
  * @param int module ID of the module
  * @return array containing the item field definitions
  */
-function dynamicdata_userapi_getitemfields($args)
+function dynamicdata_userapi_getitemfields(Array $args=array())
 {
     $object = DataObjectMaster::getObject($args);
     if (!is_object($object)) return array();

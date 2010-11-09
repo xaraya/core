@@ -24,7 +24,7 @@
  * @return true on success, false on failure
  * @throws DATABASE_ERROR, BAD_PARAM
  */
-function blocks_adminapi_register_block_type($args)
+function blocks_adminapi_register_block_type(Array $args=array())
 {
     return xarMod::apiFunc('blocks', 'admin', 'create_type', $args);
 }

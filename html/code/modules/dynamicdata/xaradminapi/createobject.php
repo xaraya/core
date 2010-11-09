@@ -26,7 +26,7 @@
  * @return int object ID on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_createobject($args)
+function dynamicdata_adminapi_createobject(Array $args=array())
 {
     $objectid = DataObjectMaster::createObject($args);
     return $objectid;

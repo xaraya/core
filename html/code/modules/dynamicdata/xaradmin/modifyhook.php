@@ -20,7 +20,7 @@
  * @return string output display string
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
-function dynamicdata_admin_modifyhook($args)
+function dynamicdata_admin_modifyhook(Array $args=array())
 {
     extract($args);
 

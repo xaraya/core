@@ -17,7 +17,7 @@
  * @param $args['module'] module directory in var/messaging
  * @return array of strings of file contents read
  */
-function mail_adminapi_getmessagestrings($args)
+function mail_adminapi_getmessagestrings(Array $args=array())
 {
     extract($args);
     if (!isset($template)) throw new EmptyParameterException('template');

@@ -18,7 +18,7 @@
  * @return array containing a reference to the properties and a reference to the items
  * @TODO: move this to some common place in Xaraya (base module ?)
  */
-function dynamicdata_userapi_getitemsforview($args)
+function dynamicdata_userapi_getitemsforview(Array $args=array())
 {
     if (empty($args['fieldlist']) && empty($args['status'])) {
         // get the Active properties only (not those for Display Only)

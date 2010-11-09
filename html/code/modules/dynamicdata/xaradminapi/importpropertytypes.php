@@ -20,7 +20,7 @@
  * @return array an array of the property types currently available
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_importpropertytypes($args)
+function dynamicdata_adminapi_importpropertytypes(Array $args=array())
 {
     sys::import('modules.dynamicdata.class.properties.registration');
     extract($args);

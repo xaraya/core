@@ -26,7 +26,7 @@
  * @param string join
  * @param string table
  */
-function dynamicdata_admin_update($args)
+function dynamicdata_admin_update(Array $args=array())
 {
     extract($args);
 

@@ -16,7 +16,7 @@
  * @return mixed objectinfo if it's found, false if not there
  */
 
-function mail_adminapi_getqdef($args)
+function mail_adminapi_getqdef(Array $args=array())
 {
     extract($args);
 

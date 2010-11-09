@@ -21,7 +21,7 @@
  * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
  * @todo    handle empty subject and/or message?
  */
-function roles_user_email($args)
+function roles_user_email(Array $args=array())
 {
     // we can only send emails to other members if we are logged in
     if(!xarUserIsLoggedIn())

@@ -13,7 +13,7 @@
  * @return array data for the template display
  */
 
-function modules_admin_modifyinstalloptions($args)
+function modules_admin_modifyinstalloptions(Array $args=array())
 {
     sys::import('modules.modules.class.installer');
     $installer = Installer::getInstance();    

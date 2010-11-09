@@ -24,7 +24,7 @@
  * @return mixed value of the field, or false on failure
  * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  */
-function dynamicdata_utilapi_getrelations($args)
+function dynamicdata_utilapi_getrelations(Array $args=array())
 {
     static $propertybag = array();
 

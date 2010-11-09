@@ -18,9 +18,9 @@
  * @param   redirecturl page to return user
  * @return  externalurl boolean true if external URL
  */
-function roles_userapi_parseuserhome($args)
+function roles_userapi_parseuserhome(Array $args=array())
 {
-    extract ($args);
+    extract($args);
     if(!isset($url) || !isset($truecurrenturl)) {
         throw new BadParameterException(null,'Wrong arguments to roles_userapi_userhome.');
     }

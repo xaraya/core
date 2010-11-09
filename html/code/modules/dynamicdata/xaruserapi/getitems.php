@@ -35,7 +35,7 @@
  * @return array of (itemid => array of (name => value)), or false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function &dynamicdata_userapi_getitems($args)
+function &dynamicdata_userapi_getitems(Array $args=array())
 {
     extract($args);
     $nullreturn = null;

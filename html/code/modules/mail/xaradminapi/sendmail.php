@@ -41,7 +41,7 @@
  * @param  $ 'redirectsending' set this to redirect email.(optional)
  * @param  $ 'redirectaddress' is the email address we are redirecting mails.(optional)
  */
-function mail_adminapi_sendmail($args)
+function mail_adminapi_sendmail(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

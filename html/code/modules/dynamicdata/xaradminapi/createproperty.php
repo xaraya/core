@@ -29,7 +29,7 @@
  * @return int property ID on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_createproperty($args)
+function dynamicdata_adminapi_createproperty(Array $args=array())
 {
     extract($args);
 

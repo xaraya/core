@@ -18,7 +18,7 @@
  * @param int id
  * @return string output display string
  */
-function roles_user_display($args)
+function roles_user_display(Array $args=array())
 {
     extract($args);
 

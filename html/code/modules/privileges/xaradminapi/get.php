@@ -14,7 +14,7 @@
  * Get a specific privilege
  * Transient hack, will be removed
  */
-function privileges_adminapi_get($args)
+function privileges_adminapi_get(Array $args=array())
 {
     extract($args);
     if (empty($itemid) && empty($name)) {

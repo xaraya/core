@@ -18,7 +18,7 @@
  * @param $args['description'] the new description of the theme
  * @return boolean true on success, false on failure
  */
-function themes_adminapi_update($args)
+function themes_adminapi_update(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

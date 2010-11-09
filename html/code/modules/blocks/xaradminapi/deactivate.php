@@ -16,7 +16,7 @@
  * @param $args['bid'] the ID of the block to deactivate
  * @return boolean true on success, false on failure
  */
-function blocks_adminapi_deactivate($args)
+function blocks_adminapi_deactivate(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

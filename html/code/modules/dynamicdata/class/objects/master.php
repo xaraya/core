@@ -429,7 +429,7 @@ class DataObjectMaster extends Object
      * @todo why not keep the scope here and do this:
      *       $this->properties[$args['id']] = new Property($args); (with a reference probably)
     **/
-    function addProperty($args)
+    function addProperty(Array $args=array())
     {
         // TODO: find some way to have unique IDs across all objects if necessary
         if(!isset($args['id']))
@@ -730,7 +730,7 @@ class DataObjectMaster extends Object
      * @todo  get rid of the classname munging
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
-    static function &getObjectInterface($args)
+    static function &getObjectInterface(Array $args=array())
     {
         sys::import('modules.dynamicdata.class.userinterface');
 
@@ -773,7 +773,7 @@ class DataObjectMaster extends Object
      * @param $args['class'] optional classname (e.g. <module>_DataObject)
      * @return integer object id of the created item
     **/
-    static function createObject(Array $args)
+    static function createObject(Array $args=array())
     {
         // TODO: if we extend dobject classes then probably we need to put the class name here
         $object = self::getObject(array('name' => 'objects'));
@@ -787,7 +787,7 @@ class DataObjectMaster extends Object
         return $objectid;
     }
 
-    static function updateObject(Array $args)
+    static function updateObject(Array $args=array())
     {
         $object = self::getObject(array('name' => 'objects'));
 
@@ -799,7 +799,7 @@ class DataObjectMaster extends Object
         return $itemid;
     }
 
-    static function deleteObject($args)
+    static function deleteObject(Array $args=array())
     {
         $descriptor = new DataObjectDescriptor($args);
         $args = $descriptor->getArgs();
@@ -856,7 +856,7 @@ class DataObjectMaster extends Object
      * @param $args['sort'] optional sort order in that table (TODO)
      *
     **/
-    function joinTable($args)
+    function joinTable(Array $args=array())
     {
         if(empty($args['table']))
             return;
@@ -959,7 +959,7 @@ class DataObjectMaster extends Object
      * @todo pick moduleid or module
      * @todo move this into a utils class?
      */
-    static function getModuleItemTypes(Array $args)
+    static function getModuleItemTypes(Array $args=array())
     {
         extract($args);
         // Argument checks

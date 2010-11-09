@@ -26,7 +26,7 @@
  * @author Paul Rosania
  */
 
-function blocks_userapi_read_type_info($args)
+function blocks_userapi_read_type_info(Array $args=array())
 {
     extract($args);
 

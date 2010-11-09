@@ -31,7 +31,7 @@
  * @return array of (itemid => fieldvalue), or false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_userapi_dropdownlist($args)
+function dynamicdata_userapi_dropdownlist(Array $args=array())
 {
     if (empty($args['field'])) throw new EmptyParameterException('field');
 

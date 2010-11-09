@@ -56,7 +56,7 @@ function installer_intranet_privilegeoptions()
  * @access public
  * @return boolean
  */
-function installer_intranet_configuration_load($args)
+function installer_intranet_configuration_load(Array $args=array())
 {
 // load the privileges chosen
 

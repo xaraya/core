@@ -47,7 +47,7 @@ class VariableStream extends Object
         return $ret;
     }
     
-    function stream_write($data) 
+    function stream_write(Array $data=array()) 
     {
         $left = substr($GLOBALS[$this->varname], 0, $this->position);
         $right = substr($GLOBALS[$this->varname], $this->position + strlen($data));

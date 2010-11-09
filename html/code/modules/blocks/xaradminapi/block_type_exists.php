@@ -21,7 +21,7 @@
  * @throws BAD_PARAM
  * @deprec Deprecated 11 Jan 2004 - use countblocktypes directly
  */
-function blocks_adminapi_block_type_exists($args)
+function blocks_adminapi_block_type_exists(Array $args=array())
 {
     extract($args);
 

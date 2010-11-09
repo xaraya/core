@@ -18,7 +18,7 @@
  * @param $args['id'] role id
  * @return true on succes, false on failure
  */
-function roles_userapi_removemember($args)
+function roles_userapi_removemember(Array $args=array())
 {
     extract($args);
 

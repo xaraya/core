@@ -15,7 +15,7 @@
  * @author Paul Rosania
 */
 
-function blocks_userapi_handleStateIconTag($args)
+function blocks_userapi_handleStateIconTag(Array $args=array())
 {
     return "echo xarMod::apiFunc('blocks', 'user', 'drawStateIcon', array('bid' => \$bid)); ";
 }

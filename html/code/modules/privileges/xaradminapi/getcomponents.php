@@ -24,7 +24,7 @@
      * @return  array of component ids and names
     */
 
-    function privileges_adminapi_getcomponents($args)
+    function privileges_adminapi_getcomponents(Array $args=array())
     {
         extract($args);
         

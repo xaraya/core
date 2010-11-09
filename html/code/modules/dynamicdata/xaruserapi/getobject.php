@@ -20,7 +20,7 @@
  * @param $args['itemtype'] item type of the item field to get
  * @return object a particular DataObject
  */
-function &dynamicdata_userapi_getobject($args)
+function &dynamicdata_userapi_getobject(Array $args=array())
 {
     return DataObjectMaster::getObject($args);
 }

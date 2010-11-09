@@ -21,7 +21,7 @@
  * @param $args['template'] the block's template
  * @return integer block instance id on success, false on failure
  */
-function blocks_adminapi_create_instance($args)
+function blocks_adminapi_create_instance(Array $args=array())
 {
     // Get arguments from argument array
     $template = null;

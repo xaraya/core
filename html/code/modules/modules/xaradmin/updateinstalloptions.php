@@ -10,7 +10,7 @@
  * @link http://xaraya.com/index.php/release/1.html
  */
 
- modules_admin_updateinstalloptions()
+ function modules_admin_updateinstalloptions()
 {
     // TODO: check under what conditions this is needed
 //    if (!xarSecConfirmAuthKey()) return;

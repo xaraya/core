@@ -30,7 +30,7 @@
  * @return array of (name => value), or false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function &dynamicdata_userapi_getitem($args)
+function &dynamicdata_userapi_getitem(Array $args=array())
 {
     extract($args);
 

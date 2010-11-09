@@ -13,7 +13,7 @@
  * Modify the  email for users
  * @return array data for the template display
  */
-function roles_admin_modifyemail($args)
+function roles_admin_modifyemail(Array $args=array())
 {
     // Security Check
     if (!xarSecurityCheck('EditRoles')) return;

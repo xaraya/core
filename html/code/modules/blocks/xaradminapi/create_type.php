@@ -22,7 +22,7 @@
  * @param args['info'] the info array for the block type
  * @return mixed ID of block type registered (even if already registered), false on failure
  */
-function blocks_adminapi_create_type($args)
+function blocks_adminapi_create_type(Array $args=array())
 {
     extract($args);
 

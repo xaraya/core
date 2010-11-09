@@ -22,7 +22,7 @@
  * @param $args['instance_order'] the new instance sequence (array of bid)
  * @return boolean true on success, false on failure
  */
-function blocks_adminapi_update_group($args)
+function blocks_adminapi_update_group(Array $args=array())
 {
     // Get arguments from argument array
     $template = null;

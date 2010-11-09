@@ -21,7 +21,7 @@
  * @return int number of instances
 */
 
-function blocks_userapi_count_instances($args)
+function blocks_userapi_count_instances(Array $args=array())
 {
     extract($args);
 

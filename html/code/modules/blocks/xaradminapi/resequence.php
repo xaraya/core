@@ -15,7 +15,7 @@
  * @author Paul Rosania
  * @return boolean
  */
-function blocks_adminapi_resequence($args)
+function blocks_adminapi_resequence(Array $args=array())
 {
     extract($args);
 

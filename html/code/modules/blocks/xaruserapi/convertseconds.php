@@ -22,7 +22,7 @@
  * @return string $convertedtime (hh:mm:ss or seconds)
  * @todo maybe add support for days?
  */
-function blocks_userapi_convertseconds($args)
+function blocks_userapi_convertseconds(Array $args=array())
 {
     extract($args);
 

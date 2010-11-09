@@ -28,7 +28,7 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_deleteprop($args)
+function dynamicdata_adminapi_deleteprop(Array $args=array())
 {
     extract($args);
 

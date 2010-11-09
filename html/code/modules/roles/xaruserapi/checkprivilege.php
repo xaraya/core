@@ -17,7 +17,7 @@
  * @param   string role ID id
  * @return  bool
  */
-function roles_userapi_checkprivilege($args)
+function roles_userapi_checkprivilege(Array $args=array())
 {
     extract($args);
 

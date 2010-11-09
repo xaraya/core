@@ -20,7 +20,7 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function modules_adminapi_deactivate ($args)
+function modules_adminapi_deactivate(Array $args=array())
 {
     extract($args);
 
