@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-form-container-after">
+    <xar:set name="container_class">$layout=='table'?'xar-clearboth':'xar-form-container-after'</xar:set>
+    <div class="#$container_class#">
         <xar:if condition="$allowinput eq 0">       
             <xar:if condition="$layout eq 'table'">
                 <xar:template file="array_table"/>
