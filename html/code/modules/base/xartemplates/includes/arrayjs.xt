@@ -1,6 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <script type="text/javascript">
+        function #$id#_addTableRow(removeflag)
+        {
+            //get the div in which the rows are displayed            
+            var itemdiv = document.getElementById('#$id#_rows');
+            // Get value for the next row and increment the last row ID
+            var lastrowfield = document.getElementById('#$id#_lastrow');
+            var lastrow = lastrowfield.value;
+            lastrow++;
+            lastrowfield.value = lastrow;
+            
+            // Add the next row number to the list of rows
+            var rowsdisplayedfield = document.getElementById('#$id#_rowsdisplayed');            
+            var rowsdisplayed = rowsdisplayedfield.value;            
+            rowsdisplayed = rowsdisplayed + ',' + lastrow;
+            rowsdisplayedfield.value = rowsdisplayed;
+            
+            // get the rownum element
+            var numelement = document.getElementById('#$id#_rownum');
+            rownum = lastrow+1;
+            // replace rownum in the cell before cloning
+            numelement.innerHTML = rownum;
+            
+            // get the deleteitem element
+            var delelement = document.getElementById('#$id#_delbutton');
+            // replace rownum in the cell before cloning
+            delelement.setAttribute("onclick", "javascript:#$id#_removeRow('#$id#'," + lastrow + ")");
+                    
+            // Clone the new row template
+            var rowelement = document.getElementById('#$id#_rowtemplate');
+            var rowtemplate = rowelement.cloneNode(true);
+
+            // set the row template id attribute to the next id            
+            var trIdName = "#$id#_" + lastrow +  "";   
+            rowtemplate.setAttribute("id",trIdName);
+            // make sure the new element display is not hidden
+            rowtemplate.style.display = '';
+            
+            if (removeflag) {
+                // remove an element before appending the new row
+                var removetemplate = document.getElementById(removeflag);
+                itemdiv.removeChild(removetemplate);
+                // append the row
+                itemdiv.appendChild(rowtemplate);
+                // then append what we removed
+                itemdiv.appendChild(removetemplate);
+            } else {
+                // just append the row
+                itemdiv.appendChild(rowtemplate);
+            }      
+        }    
+    
         function #$id#_addRow(removeflag)
         {           
             //get the div in which the rows are displayed            
@@ -50,7 +101,9 @@
             d.removeChild(olddiv);
             
             //Update the "rowsdisplayed" value after removing the row
-            var rowsdisplayedfield = document.getElementById('#$id#_rowsdisplayed');alert('#$id#_rowsdisplayed');
+            var rowsdisplayedfield = document.getElementById('#$id#_rowsdisplayed');
+            // debug            
+            // alert('Removed ' + Id + '_' + row);
             var rowsdisplayed = rowsdisplayedfield.value;                        
             rowsdisplayed = rowsdisplayed.replace(',' + row, '');            
             rowsdisplayedfield.value = rowsdisplayed;    

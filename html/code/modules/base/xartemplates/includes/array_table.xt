@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:template module="base" file="arrayjs"/>
+    <xar:javascript module="base" filename="toggle.js"/>
     <table class="xar-border-none xar-margin-thicktop">
         <thead>
             <tr>
@@ -10,12 +11,13 @@
                         <label>#$column_titles[$i]#</label>
                     </th>
                 </xar:for>
-                <th class="xar-align-right">Actions</th>        
+                <th class="xar-align-right">Delete</th>        
             </tr>        
         </thead>    
         <tbody id="#$id#_rows">
             <xar:set name="rowsdisplayed">""</xar:set>            
             <xar:for start="$i=0" test="$i lt $rows" iter="$i++">
+                <xar:set name="lastrow">$i==$rows-1</xar:set>
                     <tr id="#$id#_#$i#">
                         <td>
                             <xar:set name="j">$i+1</xar:set> #$j#
@@ -29,16 +31,23 @@
                             </td>
                         </xar:for>
                         <td class="xar-align-right">
-                            <img class="xar-icon" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')" style="cursor: pointer"/> 
-                            &#160;
+                            <xar:set name="delname">$name.'[delete][' . $k . '][' . $i . ']'</xar:set>
+                            <xar:set name="delid">$id.'_delete_'.$k.'_'.$i</xar:set>
+                            <xar:data-input type="checkbox" name="$delname" id="$delid" value="1" checked=""/>
+                            <img class="xar-icon" id="#$id#_#$i#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')" style="cursor: pointer;display:none;"/> 
+                        <!-- Hide checkboxes, show delete icons if js enabled -->                        
+                        <script type="text/javascript">
+                            setDisplayOff('#$delid#');
+                            setDisplayOn('#$id#_#$i#_delbutton');
+                        </script>    
                         </td>
                     </tr>
                     <xar:set name="rowsdisplayed">$rowsdisplayed . "," . $i</xar:set>            
             </xar:for>
-<!--  Begin dummy line for adding rows -->    
-            <tr class="xar-displaynone">
-                <td>
-                    <xar:set name="j">$i+1</xar:set> #$j#
+<!--  Begin dummy line for adding rows --> 
+            <tr id="#$id#_rowtemplate">
+                <td id="#$id#_rownum">
+                    <xar:set name="j">$i+1</xar:set> New
                 </td>                            
                 <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
                     <td>
@@ -48,12 +57,25 @@
                     </td>
                 </xar:for>
                 <td class="xar-align-right">
-                    <img src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','dummy')"/>
+                    <img id="#$id#_delbutton" class="xar-icon" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')"  style="display:none;cursor: pointer;"/>
                 </td>
             </tr>
+            <tr id="#$id#_addrow" style="display:none;">
+                <xar:set name="colspan">count($column_titles)+2</xar:set>                
+                <td colspan="#$colspan#" class="xar-align-right">
+                    <img src="#xarTplGetImage('icons/add.png', 'base')#" onclick="javascript:#$id#_addTableRow('#$id#_addrow')"/>                
+                </td>            
+            </tr>
+            <!-- turn off the new row template, turn on the new row button if js enabled -->
+            <script type="text/javascript">
+                setDisplayOff('#$id#_rowtemplate');
+                setDisplayOn('#$id#_addrow');
+                setDisplayOn('#$id#_delbutton');
+            </script>           
 <!--  End dummy line for adding rows -->
         </tbody>
     </table>
     <xar:set name="rowsdisplayed">trim($rowsdisplayed,",")</xar:set>
+    <input type="hidden" name="#$id#_lastrow" id="#$id#_lastrow" value="#$lastrow#"/>
     <input type="hidden" name="#$id#_rowsdisplayed" id="#$id#_rowsdisplayed" value="#$rowsdisplayed#"/>  
 </xar:template>
