@@ -65,7 +65,6 @@ class ArrayProperty extends DataProperty
 
         if (!isset($value)) {
             $columncount = count($this->display_column_definition['value'][0]);
-            echo "<pre>";var_dump($_POST);
             for ($i=0;$i<$this->display_rows;$i++) {
                 for ($j=0;$j<$columncount;$j++) {
                     // Get the property for this field and get the value from the template

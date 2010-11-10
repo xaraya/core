@@ -31,35 +31,39 @@
                             </td>
                         </xar:for>
                         <td class="xar-align-right">
-                            <xar:set name="delname">$name.'[delete][' . $k . '][' . $i . ']'</xar:set>
-                            <xar:set name="delid">$id.'_delete_'.$k.'_'.$i</xar:set>
-                            <xar:data-input type="checkbox" name="$delname" id="$delid" value="1" checked=""/>
-                            <img class="xar-icon" id="#$id#_#$i#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')" style="cursor: pointer;display:none;"/> 
-                        <!-- Hide checkboxes, show delete icons if js enabled -->                        
-                        <script type="text/javascript">
-                            setDisplayOff('#$delid#');
-                            setDisplayOn('#$id#_#$i#_delbutton');
-                        </script>    
+                            <xar:if condition="$rows gt $minimum_rows">
+                                <xar:set name="delname">$name.'[delete][' . $k . '][' . $i . ']'</xar:set>
+                                <xar:set name="delid">$id.'_delete_'.$k.'_'.$i</xar:set>
+                                <xar:data-input type="checkbox" name="$delname" id="$delid" value="1" checked=""/>
+                                <img class="xar-icon" id="#$id#_#$i#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')" style="cursor: pointer;display:none;"/> 
+                                <!-- Hide checkboxes, show delete icons if js enabled -->                        
+                                <script type="text/javascript">
+                                    setDisplayOff('#$delid#');
+                                    setDisplayOn('#$id#_#$i#_delbutton');
+                                </script>    
+                            </xar:if>
                         </td>
                     </tr>
                     <xar:set name="rowsdisplayed">$rowsdisplayed . "," . $i</xar:set>            
             </xar:for>
 <!--  Begin dummy line for adding rows --> 
-            <tr id="#$id#_rowtemplate">
-                <td id="#$id#_rownum">
-                    <xar:set name="j">$i+1</xar:set> New
-                </td>                            
-                <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
-                    <td>
-                        <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
-                        <xar:set name="propid">$id.'_value_'.$k</xar:set>
-                        <xar:data-input type="$column_types[$k]" name="$propname" id="$propid"/>
+            <xar:if condition="$rows lt $maximum_rows">
+                <tr id="#$id#_rowtemplate">
+                    <td id="#$id#_rownum">
+                        <xar:set name="j">$i+1</xar:set> New
+                    </td>                            
+                    <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
+                        <td>
+                            <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
+                            <xar:set name="propid">$id.'_value_'.$k</xar:set>
+                            <xar:data-input type="$column_types[$k]" name="$propname" id="$propid"/>
+                        </td>
+                    </xar:for>
+                    <td class="xar-align-right">
+                        <img id="#$id#_delbutton" class="xar-icon" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')"  style="display:none;cursor: pointer;"/>
                     </td>
-                </xar:for>
-                <td class="xar-align-right">
-                    <img id="#$id#_delbutton" class="xar-icon" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')"  style="display:none;cursor: pointer;"/>
-                </td>
-            </tr>
+                </tr>
+            </xar:if>
             <tr id="#$id#_addrow" style="display:none;">
                 <xar:set name="colspan">count($column_titles)+2</xar:set>                
                 <td colspan="#$colspan#" class="xar-align-right">
