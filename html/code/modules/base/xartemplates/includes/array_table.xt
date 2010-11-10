@@ -80,6 +80,6 @@
         </tbody>
     </table>
     <xar:set name="rowsdisplayed">trim($rowsdisplayed,",")</xar:set>
-    <input type="hidden" name="#$id#_lastrow" id="#$id#_lastrow" value="#$lastrow#"/>
-    <input type="hidden" name="#$id#_rowsdisplayed" id="#$id#_rowsdisplayed" value="#$rowsdisplayed#"/>  
+    <input type="hidden" name="#$id#[lastrow]" id="#$id#_lastrow" value="#$lastrow#"/>
+    <input type="hidden" name="#$id#[rowsdisplayed]" id="#$id#_rowsdisplayed" value="#$rowsdisplayed#"/>  
 </xar:template>

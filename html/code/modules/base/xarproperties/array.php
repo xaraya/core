@@ -64,14 +64,18 @@ class ArrayProperty extends DataProperty
         $this->fieldname = $name;
 
         if (!isset($value)) {
+            // Get the number of columns and rows
             $columncount = count($this->display_column_definition['value'][0]);
-            for ($i=0;$i<$this->display_rows;$i++) {
-                for ($j=0;$j<$columncount;$j++) {
+            if (!xarVarFetch($name . '["rowsdisplayed"]',    'str', $rowsdisplayed, '', XARVAR_NOT_REQUIRED)) return;
+            $rowsdisplayed = explode(',', $rowsdisplayed);//var_dump($rowsdisplayed);exit;
+            foreach ($rowsdisplayed as $rownumber) {
+                $rowid = $rownumber - 1;
+                for ($k=0;$k<$columncount;$k++) {
                     // Get the property for this field and get the value from the template
-                    $property = DataPropertyMaster::getProperty(array('type' => $this->display_column_definition['value'][1][$j]));
-                    $fieldname = $name . '["value"][' . $j . '][' . $i . ']';
+                    $property = DataPropertyMaster::getProperty(array('type' => $this->display_column_definition['value'][1][$k]));
+                    $fieldname = $name . '["value"][' . $k . '][' . $rownumber . ']';
                     $property->checkInput($fieldname);
-                    $value[$j][$i] = $property->value;
+                    $value[$k][$rownumber] = $property->value;
                 }
             }
 
