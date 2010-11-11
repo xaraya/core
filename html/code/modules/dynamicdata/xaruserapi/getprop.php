@@ -15,6 +15,7 @@
  * Get field properties for a specific module + item type
  *
  * @author the DynamicData module development team
+ * @param array   $args array of parameters
  * @param $args['objectid'] object id of the properties to get
  * @param $args['module'] module name of the item fields, or
  * @param $args['module_id'] module id of the item field to get

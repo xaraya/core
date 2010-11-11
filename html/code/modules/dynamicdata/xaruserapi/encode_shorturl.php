@@ -14,6 +14,7 @@
  */
 /**
  * return the path for a short URL to xarModURL for this module
+ * @param array   $args array of parameters
  * @param $args the function and arguments passed to xarModURL
  * @return string path to be added to index.php for a short URL, or empty if failed
  */

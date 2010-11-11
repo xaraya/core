@@ -17,6 +17,7 @@
  *
  * @author Panayotis Vryonis (lilina package)
  * @access public
+ * @param array   $args array of parameters
  * @param $args['url'] string the absolute URL for the file
  * @return string content of the file
  */

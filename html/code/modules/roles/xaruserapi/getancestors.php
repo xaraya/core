@@ -14,6 +14,7 @@
 /**
  * getancestors - get ancestors of a role
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array   $args array of parameters
  * @param $args['id'] role id
  * @return $ancestors array containing name, id
  */

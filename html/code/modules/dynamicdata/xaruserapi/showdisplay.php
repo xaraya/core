@@ -15,6 +15,7 @@
 /**
  * Display an item in a template
  *
+ * @param array   $args array of parameters
  * @param $args array containing the item or fields to show
  * @return string output display string
  */

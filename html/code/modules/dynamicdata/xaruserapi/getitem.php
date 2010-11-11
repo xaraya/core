@@ -17,6 +17,7 @@
  * (identified by module + item type + item id or table + item id)
  *
  * @author the DynamicData module development team
+ * @param array   $args array of parameters
  * @param string $args['module'] module name of the item fields to get or
  * @param int $args['module_id'] module id of the item fields to get +
  * @param int $args['itemtype'] item type of the item fields to get, or

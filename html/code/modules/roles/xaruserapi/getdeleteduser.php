@@ -16,6 +16,7 @@
  * uname, id and email are guaranteed to be unique,
  * otherwise the first hit will be returned
  * @author Richard Cave <rcave@xaraya.com>
+ * @param array   $args array of parameters
  * @param $args['id'] id of user to get
  * @param $args['uname'] user name of user to get
  * @param $args['name'] name of user to get

@@ -13,6 +13,7 @@
  */
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array   $args array of parameters
  * @param   string privilege name privname
  * @param   string role ID id
  * @return  bool

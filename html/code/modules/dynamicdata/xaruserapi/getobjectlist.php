@@ -15,6 +15,7 @@
  * get a dynamic object list
  *
  * @author the DynamicData module development team
+ * @param array   $args array of parameters
  * @param $args['objectid'] id of the object you're looking for, or
  * @param $args['moduleid'] module id of the item field to get
  * @param $args['itemtype'] item type of the item field to get

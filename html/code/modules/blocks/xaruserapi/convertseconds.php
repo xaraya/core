@@ -17,6 +17,7 @@
  * @author Jon Haworth
  * @author jsb <jsb@xaraya.com>
  * @access public
+ * @param array   $args array of parameters
  * @param string $args['starttime'] (seconds or hh:mm:ss)
  * @param string $args['direction'] (from or to)
  * @return string $convertedtime (hh:mm:ss or seconds)

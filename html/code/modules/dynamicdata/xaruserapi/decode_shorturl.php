@@ -15,6 +15,7 @@
 /**
  * extract function and arguments from short URLs for this module, and pass
  * them back to xarGetRequestInfo()
+ * @param array   $args array of parameters
  * @param array $params containing the elements of PATH_INFO
  * @return array containing func the function to be called and args the query
  *         string arguments, or empty if it failed

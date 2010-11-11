@@ -16,6 +16,7 @@
  *
  * @author mikespub
  * @access public
+ * @param array   $args array of parameters
  * @param $args['content'] string the HTML content that you want to extract links from
  * @param $args['getlocal'] bool indicates if we want to get local URLs (default is true)
  * @param $args['getremote'] bool indicates if we want to get remote URLs (default is false)

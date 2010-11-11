@@ -13,7 +13,7 @@
 // TODO: move this to some common place in Xaraya (base module ?)
  * list some items in a template
  *
- * @param $args array containing the items or fields to show
+ * @param array   $args array of parameters
  * @return string output display string
  */
 

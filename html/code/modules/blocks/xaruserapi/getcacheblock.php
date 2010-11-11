@@ -13,6 +13,9 @@
  *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
 */
+/**
+ * @param array   $args array of parameters
+*/
 function blocks_userapi_getcacheblock(Array $args=array())
 {
     extract($args);

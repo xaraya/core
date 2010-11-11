@@ -18,6 +18,7 @@
 /**
  * log a user in
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array   $args array of parameters
  * @param $args['uname'] user name of user
  * @param $args['pass'] password of user
  * @param $args['rememberme'] remember this user (optional)

@@ -15,6 +15,7 @@
  * Count all active users
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array   $args array of parameters
  * @param bool $include_anonymous whether or not to include anonymous user
  * @param string $filter
  * @return integer the number of users

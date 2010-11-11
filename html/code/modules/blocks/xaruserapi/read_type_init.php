@@ -16,6 +16,7 @@
  * from which it attempts to call the getInit method to retrieve
  * default block type information
  *
+ * @param array   $args array of parameters
  * @param args['module'] the module name
  * @param args['type'] the block type name
  * @return the block init details (an array)

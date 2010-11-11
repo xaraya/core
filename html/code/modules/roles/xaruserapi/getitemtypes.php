@@ -15,6 +15,7 @@
  * Utility function to retrieve the list of itemtypes of this module (if any).
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array   $args array of parameters
  * @return array the itemtypes of this module and their description *
  */
 function roles_userapi_getitemtypes(Array $args=array())

@@ -16,6 +16,7 @@
  * Returns the content of the file (possibly cached). Don't use this to download huge files :)
  * @author mikespub
  * @access public
+ * @param array   $args array of parameters
  * @param $args['url'] string the absolute URL for the file
  * @param $args['cached'] bool indicates whether this file can be cached or not
  * @param $args['cachedir'] string directory (under var/) where the file should be cached

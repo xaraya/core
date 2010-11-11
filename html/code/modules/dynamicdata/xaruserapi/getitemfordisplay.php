@@ -16,6 +16,7 @@
 /**
  * return the properties for an item
  *
+ * @param array   $args array of parameters
  * @param array $args array containing the items or fields to show
  * @return array containing a reference to the properties of the item
  * @TODO: move this to some common place in Xaraya (base module ?)

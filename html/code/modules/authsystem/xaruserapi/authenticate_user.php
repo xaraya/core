@@ -15,6 +15,7 @@
  * authenticate a user
  * @public
  * @author Marco Canini
+ * @param array   $args array of parameters
  * @param args['uname'] user name of user
  * @param args['pass'] password of user
  * @todo use roles api, not direct db

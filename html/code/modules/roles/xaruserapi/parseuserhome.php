@@ -13,6 +13,7 @@
  */
 /**
  * @desct
+ * @param array   $args array of parameters
  * @param   userurl to check
  * @param   truecurenturl calling url
  * @param   redirecturl page to return user

@@ -10,6 +10,9 @@
  * @link http://xaraya.com/index.php/release/771.html
  */
 
+/**
+ * @param array   $args array of parameters
+ */
 function mail_userapi_getqueues(Array $args=array())
 {
     // Queues are different from the itemtypes here, in the sense

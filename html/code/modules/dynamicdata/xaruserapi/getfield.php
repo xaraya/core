@@ -16,6 +16,7 @@
  * @TODO: update this with all the new stuff
  *
  * @author the DynamicData module development team
+ * @param array   $args array of parameters
  * @param string $args['module'] module name of the item field to get, or
  * @param int $args['module_id'] module id of the item field to get
  * @param int $args['itemtype'] item type of the item field to get

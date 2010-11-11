@@ -16,6 +16,7 @@
  *
  * @author Carl P. Corliss
  * @author the Base module development team
+ * @param array   $args array of parameters
  * @return array containing the contents of the different output buffers
  */
 function base_userapi_get_output_buffer()

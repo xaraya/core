@@ -14,6 +14,7 @@
 /**
  * removemember - remove a role from a group
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array   $args array of parameters
  * @param $args['gid'] group id
  * @param $args['id'] role id
  * @return true on succes, false on failure

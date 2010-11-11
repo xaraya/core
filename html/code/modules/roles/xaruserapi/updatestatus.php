@@ -14,6 +14,7 @@
 /**
  * Update a users status
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array   $args array of parameters
  * @param $args['uname'] is the users system name
  * @param $args['state'] is the new state for the user
  * returns bool

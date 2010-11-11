@@ -15,6 +15,7 @@
 /**
  * utility function to pass individual item links to whoever
  *
+ * @param array   $args array of parameters
  * @param $args['itemtype'] item type (optional)
  * @param $args['itemids'] array of item ids to get
  * @return array containing the itemlink(s) for the item(s).

@@ -17,6 +17,7 @@
  * from which it attempts to call the getInfo method to retrieve
  * default block information
  *
+ * @param array   $args array of parameters
  * @param args['module'] the module name
  * @param args['type'] the block type name
  * @return the block init details (an array)

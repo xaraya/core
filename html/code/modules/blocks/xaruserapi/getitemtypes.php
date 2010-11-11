@@ -13,6 +13,7 @@
  */
 /**
  * Utility function to retrieve the list of itemtypes of this module (if any).
+ * @param array   $args array of parameters
  * @return array the itemtypes of this module and their description *
  */
 function blocks_userapi_getitemtypes(Array $args=array())

@@ -22,6 +22,7 @@
  *               AND $where
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array   $args array of parameters
  * @param $args['ids'] optional array of ids that we are selecting on
  * @return array array('table' => 'xar_roles',
  *               'field' => 'xar_roles.id',

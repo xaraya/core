@@ -11,6 +11,7 @@
  */
 /*
  * Get one or more block types.
+ * @param array   $args array of parameters
  * @param args['tid'] block type ID (optional)
  * @param args['module'] module name (optional)
  * @param args['type'] block type name (optional)

@@ -10,8 +10,9 @@
  * @link http://xaraya.com/index.php/release/771.html
  */
 
-  /**
-   * Return a list of queue types in a structured format, also suitable for dd validation
+/**
+ * @param array   $args array of parameters
+ * Return a list of queue types in a structured format, also suitable for dd validation
    *
    */
 function mail_userapi_getqueuetypes(Array $args=array())

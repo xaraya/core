@@ -11,6 +11,7 @@
  */
 /*
  * Count block instances
+ * @param array   $args array of parameters
  * @param args[$order] optionally count from group instances table
  * @param args[$type] optionally count by block type
  * @param args[$module] optionally count by module

@@ -22,6 +22,7 @@
  * Note : for additional optional parameters, see the getitems() function
  *
  * @author the DynamicData module development team
+ * @param array   $args array of parameters
  * @param $args['field'] field to use in the dropdown list (required here)
  * @param $args['showoutput'] go through showOutput() for this field (default false)
  * @param $args['module'] module name of the item fields to get, or

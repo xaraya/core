@@ -12,6 +12,7 @@
 /**
  * Get all items
  * @author mikespub <mikespub@xaraya.com>
+ * @param array   $args array of parameters
 */
 
 function dynamicdata_userapi_getall(Array $args=array())

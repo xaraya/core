@@ -13,6 +13,7 @@
 /*
  * @author Jim McDonald
  * @author Paul Rosania
+ * @param array   $args array of parameters
 */
 function blocks_userapi_drawStateIcon(Array $args=array())
 {

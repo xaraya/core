@@ -14,6 +14,7 @@
 /**
  * Return a new xarCurl object.
  * $args are passed directly to the class.
+ * @param array   $args array of parameters
  */
 function base_userapi_newcurl(Array $args=array())
 {

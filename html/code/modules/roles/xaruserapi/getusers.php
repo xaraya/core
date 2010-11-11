@@ -14,6 +14,7 @@
 /**
  * getUsers - view users in group
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array   $args array of parameters
  * @param $args['id'] group id
  * @return $users array containing uname, id
  */

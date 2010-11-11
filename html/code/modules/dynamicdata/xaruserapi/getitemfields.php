@@ -16,6 +16,7 @@
 /**
  * utility function to pass item field definitions to whoever
  *
+ * @param array   $args array of parameters
  * @param int $args['itemtype'] item type
  * @param int module ID of the module
  * @return array containing the item field definitions

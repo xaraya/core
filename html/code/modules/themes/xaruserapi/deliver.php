@@ -14,6 +14,7 @@
  * Handle css tag
  *
  * @author andyv <andyv@xaraya.com>
+ * @param array   $args array of parameters
  * @param $args array containing the parameters/**
  * @return string output display string
  */
