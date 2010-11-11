@@ -314,7 +314,7 @@ class ArrayProperty extends DataProperty
         if (!isset($data['suffixlabel'])) $data['suffixlabel'] = $this->default_suffixlabel;
 //        if (!isset($data['size'])) $data['size'] = $this->display_columns;
         if (!isset($data['layout'])) $data['layout'] = 'table';
-
+//echo "<pre>";var_dump($this->getValue());
         return parent::showInput($data);
     }
 
@@ -324,6 +324,7 @@ class ArrayProperty extends DataProperty
         $data['value'] = $this->getValue();
         $data['column_titles'] = $this->display_column_definition['value'][0];
         $data['column_types'] = $this->display_column_definition['value'][1];
+        $data['rows'] = count($data['value'][0]);
         return parent::showOutput($data);
     }
     
