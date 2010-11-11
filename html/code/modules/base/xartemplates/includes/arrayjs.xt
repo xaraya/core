@@ -12,16 +12,16 @@
             lastrowfield.value = lastrow;
             
             // Add the next row number to the list of rows
-            var rowsdisplayedfield = document.getElementById('#$id#_rowsdisplayed');            
-            var rowsdisplayed = rowsdisplayedfield.value;            
-            rowsdisplayed = rowsdisplayed + ',' + lastrow;
-            rowsdisplayedfield.value = rowsdisplayed;
+            //var rowsdisplayedfield = document.getElementById('#$id#_rowsdisplayed');            
+            //var rowsdisplayed = rowsdisplayedfield.value;            
+            //rowsdisplayed = rowsdisplayed + ',' + lastrow;
+            //rowsdisplayedfield.value = rowsdisplayed;
             
             // get the rownum element
-            var numelement = document.getElementById('#$id#_rownum');
-            rownum = lastrow+1;
+            //var numelement = document.getElementById('#$id#_rownum');
+            //rownum = lastrow+1;
             // replace rownum in the cell before cloning
-            numelement.innerHTML = rownum;
+            //numelement.innerHTML = rownum;
             
             // get the deleteitem element
             var delelement = document.getElementById('#$id#_delbutton');
@@ -99,14 +99,20 @@
             var d = document.getElementById('#$id#_rows');
             var olddiv = document.getElementById(Id + "_" + row);     
             d.removeChild(olddiv);
+
+            // Get value for the last row and de-increment the last row ID
+            var lastrowfield = document.getElementById('#$id#_lastrow');
+            var lastrow = lastrowfield.value;
+            lastrow--;
+            lastrowfield.value = lastrow;
             
             //Update the "rowsdisplayed" value after removing the row
-            var rowsdisplayedfield = document.getElementById('#$id#_rowsdisplayed');
+            //var rowsdisplayedfield = document.getElementById('#$id#_rowsdisplayed');
             // debug            
             // alert('Removed ' + Id + '_' + row);
-            var rowsdisplayed = rowsdisplayedfield.value;                        
-            rowsdisplayed = rowsdisplayed.replace(',' + row, '');            
-            rowsdisplayedfield.value = rowsdisplayed;    
+            //var rowsdisplayed = rowsdisplayedfield.value;                        
+            //rowsdisplayed = rowsdisplayed.replace(',' + row, '');            
+            //rowsdisplayedfield.value = rowsdisplayed;    
         }
     </script>
 </xar:template>

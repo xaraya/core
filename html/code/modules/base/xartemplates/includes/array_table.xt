@@ -5,7 +5,6 @@
     <table class="xar-border-none xar-margin-thicktop">
         <thead>
             <tr>
-                <th class="xar-align-left">Row</th>
                 <xar:for start="$i=0" test="$i lt count($column_titles)" iter="$i++">
                     <th class="xar-align-left">
                         <label>#$column_titles[$i]#</label>
@@ -13,50 +12,64 @@
                 </xar:for>
                 <th class="xar-align-right">Delete</th>        
             </tr>        
-        </thead>    
+        </thead>
         <tbody id="#$id#_rows">
-            <xar:set name="rowsdisplayed">""</xar:set>            
             <xar:for start="$i=0" test="$i lt $rows" iter="$i++">
-                <xar:set name="lastrow">$i==$rows-1</xar:set>
-                    <tr id="#$id#_#$i#">
+                <!-- name[row] -->
+                <xar:set name="row_name">"{$name}[{$i}]"</xar:set>
+                <xar:set name="row_id">"{$name}_{$i}"</xar:set>
+                <tr id="#$row_id#">
+                    <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
+                        <!-- name[row][column] -->                        
+                        <xar:set name="col_name">"{$row_name}[{$k}]"</xar:set>
+                        <xar:set name="col_id">"{$row_id}_{$k}"</xar:set>
+                        <!-- This ensures the column always appears in the POST vars -->
+                        <input type="hidden" name="#$col_name#" id="#$col_id#"/>
+                        <!-- name[row][column][value] -->
+                        <xar:set name="prop_name">"{$col_name}[value]"</xar:set>
+                        <xar:set name="prop_id">"{$col_id}_value"</xar:set>
+                        <!-- CHECKME: would be better as $value[$i][$k] ? -->
+                        <xar:set name="prop_val">$value[$k][$i]</xar:set>
                         <td>
-                            <xar:set name="j">$i+1</xar:set> #$j#
+                            <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$prop_val"/>
                         </td>
-                        <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
-                            <td>
-                                <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
-                                <xar:set name="propid">$id.'_value_'.$k</xar:set>
-                                <xar:set name="propvalue">$value[$k][$i]</xar:set>
-                                <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue"/>
-                            </td>
-                        </xar:for>
-                        <td class="xar-align-right">
-                            <xar:if condition="$rows gt $minimum_rows">
-                                <xar:set name="delname">$name.'[delete][' . $k . '][' . $i . ']'</xar:set>
-                                <xar:set name="delid">$id.'_delete_'.$k.'_'.$i</xar:set>
-                                <xar:data-input type="checkbox" name="$delname" id="$delid" value="1" checked=""/>
-                                <img class="xar-icon" id="#$id#_#$i#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')" style="cursor: pointer;display:none;"/> 
-                                <!-- Hide checkboxes, show delete icons if js enabled -->                        
-                                <script type="text/javascript">
-                                    setDisplayOff('#$delid#');
-                                    setDisplayOn('#$id#_#$i#_delbutton');
-                                </script>    
-                            </xar:if>
-                        </td>
-                    </tr>
-                    <xar:set name="rowsdisplayed">$rowsdisplayed . "," . $i</xar:set>            
-            </xar:for>
+                    </xar:for>
+                    <td class="xar-align-right">
+                        <xar:if condition="$i ge $minimum_rows">
+                            <!-- name[row][delete] -->
+                            <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
+                            <xar:set name="del_id">"{$row_id}_delete"</xar:set>
+                            <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked=""/>
+                            <img class="xar-icon" id="#$row_id#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')" style="cursor: pointer;display:none;"/> 
+                            <!-- Hide checkboxes, show delete icons if js enabled -->
+                            <script type="text/javascript">
+                                setDisplayOff('#$del_id#');
+                                setDisplayOn('#$row_id#_delbutton');
+                            </script>
+                        <xar:else/>
+                            &#160;    
+                        </xar:if>
+                    </td>            
+                </tr>
+                <xar:set name="lastrow">$i</xar:set>
+            </xar:for>       
 <!--  Begin dummy line for adding rows --> 
             <xar:if condition="$rows lt $maximum_rows">
-                <tr id="#$id#_rowtemplate">
-                    <td id="#$id#_rownum">
-                        <xar:set name="j">$i+1</xar:set> New
-                    </td>                            
+                <xar:set name="thisrow">$lastrow+1</xar:set>
+                <xar:set name="row_name">"{$name}[{$thisrow}]"</xar:set>
+                <xar:set name="row_id">"{$name}_{$thisrow}"</xar:set>
+                <tr id="#$id#_rowtemplate">                         
                     <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
+                        <!-- name[row][column] -->                        
+                        <xar:set name="col_name">"{$row_name}[{$k}]"</xar:set>
+                        <xar:set name="col_id">"{$row_id}_{$k}"</xar:set>
+                        <!-- This ensures the column always appears in the POST vars -->
+                        <input type="hidden" name="#$col_name#" id="#$col_id#"/>
+                        <!-- name[row][column][value] -->
+                        <xar:set name="prop_name">"{$col_name}[value]"</xar:set>
+                        <xar:set name="prop_id">"{$col_id}_value"</xar:set>
                         <td>
-                            <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
-                            <xar:set name="propid">$id.'_value_'.$k</xar:set>
-                            <xar:data-input type="$column_types[$k]" name="$propname" id="$propid"/>
+                            <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id"/>
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
@@ -77,9 +90,11 @@
                 setDisplayOn('#$id#_delbutton');
             </script>           
 <!--  End dummy line for adding rows -->
+
         </tbody>
+
     </table>
-    <xar:set name="rowsdisplayed">trim($rowsdisplayed,",")</xar:set>
-    <input type="hidden" name="#$id#[lastrow]" id="#$id#_lastrow" value="#$lastrow#"/>
-    <input type="hidden" name="#$id#[rowsdisplayed]" id="#$id#_rowsdisplayed" value="#$rowsdisplayed#"/>  
+
+    <input type="hidden" name="#$id#_lastrow" id="#$id#_lastrow" value="#$lastrow#"/>
+ 
 </xar:template>
