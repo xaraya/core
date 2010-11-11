@@ -2,11 +2,12 @@
 /**
  * Hook function to send mail on creation of an item
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 
@@ -17,7 +18,7 @@
  * @param  $ 'modid' is the module that is sending mail.
  * @param  $ 'itemid' is the item created.
  */
-function mail_adminapi_hookmailcreate($args)
+function mail_adminapi_hookmailcreate(Array $args=array())
 {
     extract($args);
 

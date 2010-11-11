@@ -2,12 +2,13 @@
 /**
  * Installer
  *
- * @package Installer
+ * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Installer
  * @link http://xaraya.com/index.php/release/200.html
  */
 
@@ -22,9 +23,7 @@
  *
  * @access private
  * @param agree string
- * @return array
- * @todo <johnny> make sure php version checking works with
- *       php versions that contain strings
+ * @return array data for the template display
  */
 function installer_admin_phase3()
 {
@@ -36,7 +35,7 @@ function installer_admin_phase3()
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
-        xarResponse::redirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
+        xarController::redirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
     }
 
     //Defaults
@@ -126,7 +125,7 @@ function installer_admin_phase3()
  *
  * @access private
  * @param string dirname directory name
- * @return bool true if directory is writable, readable and executable
+ * @return boolean true if directory is writable, readable and executable
  */
 function check_dir($dirname)
 {

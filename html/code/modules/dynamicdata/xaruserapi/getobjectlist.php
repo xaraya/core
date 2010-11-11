@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -18,7 +20,7 @@
  * @param $args['itemtype'] item type of the item field to get
  * @return object a particular DataObjectList
  */
-function &dynamicdata_userapi_getobjectlist($args)
+function &dynamicdata_userapi_getobjectlist(Array $args=array())
 {
     return DataObjectMaster::getObjectList($args);
 }

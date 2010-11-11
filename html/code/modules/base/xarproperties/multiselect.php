@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 sys::import('modules.base.xarproperties.dropdown');
@@ -55,8 +57,8 @@ class MultiSelectProperty extends SelectProperty
 
     public function showInput(Array $data = array())
     {
-        if (!empty($data['single'])) $this->validation_single = $data['single'];
-        if (!empty($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
+        if (isset($data['single'])) $this->validation_single = $data['single'];
+        if (isset($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
         if (!isset($data['value'])) $data['value'] = $this->value;
         $data['value'] = $this->getSerializedValue($data['value']);
 

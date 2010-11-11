@@ -1,18 +1,19 @@
 <?php
 /**
- * Modify the configuration parameters
+ * Modify the configuration settings of this module
  *
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
- * This is a standard function to modify the configuration parameters of the
- * module
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ * @return mixed data array for the template display or output display string if invalid data submitted
  *
  * @author Marty Vance
  */

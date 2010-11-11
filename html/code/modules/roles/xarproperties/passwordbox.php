@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -29,6 +30,7 @@ class PassBoxProperty extends TextBoxProperty
     public $validation_max_length           = 30;
     public $validation_password_confirm     = 0;
     public $validation_password_confirm_invalid;
+    public $initialization_hash_type        = 'md5';
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -83,7 +85,17 @@ class PassBoxProperty extends TextBoxProperty
     public function encrypt($value = null)
     {
         if (empty($value)) return null;
-        return md5($value);
+        
+        // If we removed the default, revert to md5
+        if (empty($this->initialization_hash_type)) return md5($value);
+        // Do not encrypt only if explicitly stated
+        if ($this->initialization_hash_type == 'none') return $value;
+        try {
+            return hash($this->initialization_hash_type, $value);
+        } catch (Exception $e) {
+        // Bad hash type? Go back to md5
+            return md5($value);
+        }
     }
 
     public function showInput(Array $data = array())

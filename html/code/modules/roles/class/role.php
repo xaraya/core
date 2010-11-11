@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -71,7 +72,7 @@ class Role extends DataObject
      * Creates an entry in the repository for a role object that has been created
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return bool
+     * @return boolean
      */
     public function createItem(Array $data = array())
     {
@@ -153,7 +154,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $member
-     * @return bool
+     * @return boolean
      */
     public function addMember($member)
     {
@@ -223,7 +224,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $member
-     * @return bool
+     * @return boolean
      * @todo add transaction around the delete and the update
      */
     public function removeMember($member)
@@ -272,7 +273,7 @@ class Role extends DataObject
      * deleteItem: make a role deleted
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return bool
+     * @return boolean
      * @todo flag illegal deletes
      */
     public function deleteItem(Array $data = array())
@@ -338,7 +339,7 @@ class Role extends DataObject
      * purge: make a role purged
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return bool
+     * @return boolean
      */
     public function purge()
     {
@@ -452,7 +453,7 @@ class Role extends DataObject
      * Checks whether this role has a specific privilege assigned or inherited.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return bool
+     * @return boolean
      */
     public function hasPrivilege($privname)
     {
@@ -470,7 +471,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $privilege
-     * @return bool
+     * @return boolean
      */
     public function assignPrivilege($privilege)
     {
@@ -489,7 +490,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $privilege
-     * @return bool
+     * @return boolean
      */
     public function removePrivilege($privilege)
     {
@@ -750,7 +751,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $role
-     * @return bool
+     * @return boolean
      * @todo replace this with the hash object equality check?
      */
     public function isEqual($role)
@@ -765,7 +766,7 @@ class Role extends DataObject
      * Groups have itemtype = 2.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return bool
+     * @return boolean
      */
     public function isUser()
     {
@@ -777,7 +778,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $role
-     * @return bool
+     * @return boolean
      */
     public function isParent($role)
     {
@@ -793,7 +794,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $role
-     * @return bool
+     * @return boolean
      */
     public function isAncestor($role)
     {
@@ -809,7 +810,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param int $adjust
-     * @return bool
+     * @return boolean
      */
     public function adjustParentUsers($adjust)
     {

@@ -1,12 +1,14 @@
 <?php
 /**
  * Get list of modules calling a particular hook module
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Modules module
+ * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * Get list of modules calling a particular hook module
@@ -16,11 +18,10 @@
  * @param $args['hookObject'] the object of the hook (item, module, ...) (optional)
  * @param $args['hookAction'] the action on that object (transform, display, ...) (optional)
  * @param $args['hookArea'] the area we're dealing with (GUI, API) (optional)
- * @returns array
- * @return array of modules calling this hook module
+ * @return array modules calling this hook module
  * @throws BAD_PARAM
  */
-function modules_adminapi_gethookedmodules($args)
+function modules_adminapi_gethookedmodules(Array $args=array())
 {
 // Security Check (called by other modules, so we can't use one this here)
 //    if(!xarSecurityCheck('ManageModules')) return;

@@ -2,10 +2,14 @@
 /**
  * Exception handlers class
  *
- * @package exceptions
+ * @package core
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Marcel van der Boom <marcel@hsdev.com>
  * @todo This design promotes method growth instead of inheritance, change it 
  *         (there should be a chain of classes, not a chain of methods)
@@ -106,7 +110,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
      * @param  integer $line linenumber on which the error occurred
      * @param  array   $errorContext information on the context of the error
      * @author Marco Canini <marco@xaraya.com>
-     * @access private
+     * 
      * @throws PHPException
      * @return void
      */
@@ -168,8 +172,8 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
             $msg = $rawmsg;
         } else {
             $module = '';
-            if (xarRequest::$allowShortURLs && isset(xarRequest::$shortURLVariables['module'])) {
-                $module = xarRequest::$shortURLVariables['module'];
+            if (xarController::$allowShortURLs && isset(xarController::$shortURLVariables['module'])) {
+                $module = xarController::$shortURLVariables['module'];
             } elseif (isset($_GET['module'])) {
                 // Then check in $_GET
                 $module = $_GET['module'];

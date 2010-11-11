@@ -3,11 +3,12 @@
  * Browse for files and directories
  *
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
@@ -49,7 +50,7 @@
  * @todo support 'maxfiles' to limit the number of files that can be returned
  */
 
-function base_userapi_browse_files($args)
+function base_userapi_browse_files(Array $args=array())
 {
     extract($args);
 

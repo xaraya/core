@@ -3,11 +3,14 @@
  * Retrieve list of itemtypes of any module
  *
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/182.html
  *
- * @subpackage dynamicdata
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -16,7 +19,7 @@
  * @todo remove this before it can propagate
  * @return array containing the item types and their description
  */
-function dynamicdata_userapi_getmoduleitemtypes($args)
+function dynamicdata_userapi_getmoduleitemtypes(Array $args=array())
 {
     return DataObjectMaster::getModuleItemTypes($args);      
 }

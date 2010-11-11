@@ -3,11 +3,12 @@
  * Delete a cache block instance
  *
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 
@@ -15,9 +16,9 @@
  * delete a cache block
  *
  * @param $args['bid'] the ID of the block to delete
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  */
-function blocks_adminapi_delete_cacheinstance($args)
+function blocks_adminapi_delete_cacheinstance(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

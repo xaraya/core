@@ -3,11 +3,13 @@
  * User System
  *
  * @package core
+ * @subpackage user
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage user
  * @author Jim McDonald
  * @author Marco Canini <marco@xaraya.com>
  * @todo <marco> user status field
@@ -46,10 +48,10 @@ define('XARUSER_LAST_RESORT', -3);
 /**
  * Initialise the User System
  *
- * @access protected
+ * 
  * @global xarUser_authentication modules array
  * @param args[authenticationModules] array
- * @return bool true on success
+ * @return boolean true on success
  */
 function xarUser_init(Array &$args)
 {
@@ -81,11 +83,11 @@ function xarUser_init(Array &$args)
 /**
  * Log the user in
  *
- * @access public
+ * 
  * @param  string  $userName the name of the user logging in
  * @param  string  $password the password of the user logging in
  * @param  integer $rememberMe whether or not to remember this login
- * @return bool true if the user successfully logged in
+ * @return boolean true if the user successfully logged in
  * @throws EmptyParameterException, SQLException
  * @todo <marco> #1 here we could also set a last_logon timestamp
  */
@@ -188,8 +190,8 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
 /**
  * Log the user out
  *
- * @access public
- * @return bool true if the user successfully logged out
+ * 
+ * @return boolean true if the user successfully logged out
  */
 function xarUserLogOut()
 {
@@ -217,8 +219,8 @@ function xarUserLogOut()
 /**
  * Check if the user logged in
  *
- * @access public
- * @return bool true if the user is logged in, false if they are not
+ * 
+ * @return boolean true if the user is logged in, false if they are not
  */
 function xarUserIsLoggedIn()
 {
@@ -231,7 +233,7 @@ function xarUserIsLoggedIn()
 /**
  * Gets the user navigation theme name
  *
- * @access public
+ * 
  * @return string name of the users navigation theme
  */
 function xarUserGetNavigationThemeName()
@@ -250,7 +252,7 @@ function xarUserGetNavigationThemeName()
 /**
  * Set the user navigation theme name
  *
- * @access public
+ * 
  * @param  string $themeName name of the theme to set as navigation theme
  * @return void
  */
@@ -264,7 +266,7 @@ function xarUserSetNavigationThemeName($themeName)
 /**
  * Get the user navigation locale
  *
- * @access public
+ * 
  * @return string $locale users navigation locale name
  */
 function xarUserGetNavigationLocale()
@@ -293,9 +295,9 @@ function xarUserGetNavigationLocale()
 /**
  * Set the user navigation locale
  *
- * @access public
+ * 
  * @param  string $locale
- * @return bool true if the navigation locale is set, false if not
+ * @return boolean true if the navigation locale is set, false if not
  */
 function xarUserSetNavigationLocale($locale)
 {
@@ -324,7 +326,7 @@ $GLOBALS['xarUser_objectRef'] = null;
 /**
  * Get a user variable
  *
- * @access public
+ * 
  * @param  string  $name the name of the variable
  * @param  integer $userId integer the user to get the variable for
  * @return mixed the value of the user variable if the variable exists, void if the variable doesn't exist
@@ -429,11 +431,11 @@ function xarUserGetVar($name, $userId = NULL)
  * Set a user variable
  *
  * @since 1.23 - 2002/02/01
- * @access public
+ * 
  * @param  string  $name  the name of the variable
  * @param  mixed   $value the value of the variable
  * @param  integer $userId integer user's ID
- * @return bool true if the set was successful, false if validation fails
+ * @return boolean true if the set was successful, false if validation fails
  * @throws EmptyParameterException, BadParameterException, NotLoggedInException, xarException, IDNotFoundException
  * @todo redesign the delegation to auth* modules for handling user variables
  * @todo some securitycheck for retrieving at least other users variables ?
@@ -495,12 +497,12 @@ function xarUserSetVar($name, $value, $userId = null)
 /**
  * Compare Passwords
  *
- * @access public
+ * 
  * @param  string $givenPassword  the password given for comparison
  * @param  string $realPassword   the reference password to compare to
  * @param  string $userName       name of the corresponding user?
  * @param  string $cryptSalt      ?
- * @return bool true if the passwords match, false otherwise
+ * @return boolean true if the passwords match, false otherwise
  * @todo   weird duckling here
  * @todo   consider something strong than md5 here (not trivial wrt upgrading though)
  */
@@ -522,7 +524,7 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
 /**
  * Get user's authentication module
  *
- * @access private
+ * 
  * @param  userId string
  * @todo   what happens for anonymous users ???
  * @todo   check coherence 1 vs. 0 for Anonymous users !!!
@@ -574,9 +576,9 @@ function xarUser__getAuthModule($userId)
 /**
  * See if a Variable has been defined
  *
- * @access private
+ * 
  * @param  string $name name of the variable to check
- * @return bool true if the variable is defined
+ * @return boolean true if the variable is defined
  * @todo   rething this.
  */
 function xarUser__isVarDefined($name)
@@ -599,8 +601,8 @@ function xarUser__isVarDefined($name)
 }
 
 /**
- * @access private
- * @return bool
+ * 
+ * @return boolean
  * @throws SQLException
  * @todo replace with some roles API ?
 **/

@@ -8,11 +8,14 @@
  * BUT THIS ONE WILL BE ABANDONED, YOU MIGHT AS WELL WRITE YOUR CODE TO USE
  * THE MAINTAINED SUBSYSTEM.
 
- * @package database
+ * @package core
+ * @subpackage database
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage table_api
+ *
  * @author Gary Mitchell
  * @todo Check functions!
  *       Check FIXMEs
@@ -24,7 +27,7 @@
 /**
  * Generate the DataDict specific SQL to create a table
  *
- * @access private
+ * 
  * @param tableName the physical table name
  * @param fields an array containing the fields to create
  * @return string|false the generated SQL statement, or false on failure
@@ -61,7 +64,7 @@ function xarDB__datadictCreateTable($tableName, $fields)
 /**
  * DataDict specific function to alter a table
  *
- * @access private
+ * 
  * @param tableName the table to alter
  * @param args['command'] command to perform on the table
  * @param args['field'] name of column to modify
@@ -144,7 +147,7 @@ function xarDB__datadictAlterTable($tableName, $args)
 /**
  * DataDict specific column type generation - adapted from a d o d b-mysql.inc.php mapping
  *
- * @access private
+ * 
  * @param field_name
  * @param parameters
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
@@ -376,7 +379,7 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
 /**
  * Generate the SQL to create a database
  *
- * @access private
+ * 
  * @param databaseName
  * @return string sql statement for database creation
  * @throws BAD_PARAM
@@ -398,7 +401,7 @@ function xarDB__datadictCreateDatabase($databaseName)
 /**
  * Generate the DataDict specific SQL to drop a table
  *
- * @access private
+ * 
  * @param tableName the physical table name
  * @return string|false the generated SQL statement, or false on failure
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
@@ -440,7 +443,7 @@ function xarDB__datadictCreateIndex($tableName, $index)
 /**
  * Generate the SQL to drop an index
  *
- * @access private
+ * 
  * @param tableName
  * @param name a db index name
  * @return string|false generated sql to drop an index

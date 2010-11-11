@@ -3,17 +3,19 @@
  * Display the privileges of this role
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * showprivileges - display the privileges of this role
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return array data for the template display
  */
 function roles_admin_showprivileges()
 {
@@ -210,8 +212,6 @@ function roles_admin_showprivileges()
         'showprivileges');
     $data['addlabel'] = xarML('Add');
     return $data;
-    // redirect to the next page
-    xarResponse::redirect(xarModURL('roles', 'admin', 'new'));
 }
 
 ?>

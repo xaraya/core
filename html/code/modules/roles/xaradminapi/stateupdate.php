@@ -3,11 +3,12 @@
  * Update a role state
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -23,7 +24,7 @@
  *       replace with status
  * @param $args['url'] user url
  */
-function roles_adminapi_stateupdate($args)
+function roles_adminapi_stateupdate(Array $args=array())
 {
     extract($args);
     // Argument check - make sure that all required arguments are present,

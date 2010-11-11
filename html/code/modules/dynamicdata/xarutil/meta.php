@@ -1,18 +1,20 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * Return meta data (test only)
  */
-function dynamicdata_util_meta($args)
+function dynamicdata_util_meta(Array $args=array())
 {
 // Security Check
     if(!xarSecurityCheck('AdminDynamicData')) return;

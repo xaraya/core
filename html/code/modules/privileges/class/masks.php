@@ -3,12 +3,14 @@
  * Privileges administration API
  *
  * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Privileges module
  * @link http://xaraya.com/index.php/release/1098.html
+ *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 
@@ -216,6 +218,9 @@ class xarMasks extends xarSecurity
     }
 
     /**
+            if ($module == '') list($module) = xarController::$request->getInfo();
+                xarController::redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
+                xarController::redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
      * forgetprivsets: remove all irreducible set of privileges from the db
      *
      * used to lighten the cache

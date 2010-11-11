@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
@@ -13,8 +14,7 @@
  *
  * @author Marty Vance
  * @access public
- * @param none
- * @returns array
+ * @return array data for the template display
  * @todo change feed url once release module is moved
  */
 function themes_admin_release()

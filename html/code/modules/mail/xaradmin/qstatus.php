@@ -1,9 +1,21 @@
 <?php
+/**
+ * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/771.html
+ */
+
 /*
  * Queue status management
  *
+ * @return array data for the template display
  */
-function mail_admin_qstatus($args)
+function mail_admin_qstatus(Array $args=array())
 {
     // Security Check
     if (!xarSecurityCheck('AdminMail')) return;
@@ -13,7 +25,7 @@ function mail_admin_qstatus($args)
     // Do we have the master ?
     if(!$qdefInfo = xarMod::apiFunc('mail','admin','getqdef')) {
         // Redirect to the view page, which offers to create one
-        xarResponse::redirect(xarModUrl('mail','admin','view'));
+        xarController::redirect(xarModUrl('mail','admin','view'));
         return true;
     }
     // Retrieve the queues

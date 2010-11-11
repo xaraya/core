@@ -2,11 +2,12 @@
 /**
  * Extract links
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
@@ -21,7 +22,7 @@
  * @param $args['baseurl'] string optional base URL for the content (default is this site)
  * @return array list of links found
  */
-function base_userapi_extractlinks($args)
+function base_userapi_extractlinks(Array $args=array())
 {
     if (empty($args['content'])) {
         return array();

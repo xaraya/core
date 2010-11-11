@@ -3,11 +3,12 @@
  * Xaraya CSS class library
  *
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
  * @link http://xaraya.com/index.php/release/70.html
 **/
 
@@ -37,7 +38,6 @@ define("CSSCOMMONBASE", "base");
  * Base CSS class
  *
  *
- * @package themes
 **/
 class xarCSS extends Object
 {
@@ -46,7 +46,7 @@ class xarCSS extends Object
 
     public $method       = 'link';      // supported are 'link', 'import', 'embed'
 
-    // SUPPORTED SCOPES ARE MODULE, THEME, COMMON
+    // SUPPORTED SCOPES ARE MODULE, THEME, PROPERTY, COMMON
     public $scope      = 'theme';      // component type - 'module, 'theme' or 'common'
     public $compcssdir = 'xarstyles';  // component css directory name (e.g. 'xarstyles')
 
@@ -86,7 +86,7 @@ class xarCSS extends Object
     public $suppress   = false;        // true == this css is suppressed
 
     // constructor
-    function __construct($args)
+    function __construct(Array $args=array())
     {
         extract($args);
         if (isset($method)) $this->method               = $method;
@@ -96,6 +96,8 @@ class xarCSS extends Object
             $this->filename = $this->commonsource;
         } elseif ($this->scope == 'module') {
             $this->base = xarMod::getName();
+        } elseif ($this->scope == 'property') {
+            $this->base = isset($property) ? $property : '';
         } elseif ($this->scope == 'block') {
             // we basically need to find out which module this block belongs to 
             // and then procede as with module scope
@@ -205,6 +207,10 @@ class xarCSS extends Object
                 return $original;
             }
 
+        } elseif ($this->scope == 'property') {            
+            $propertystylesheet = sys::code() . "properties/" . strtolower($this->base) . "/style/" . $this->filename . "." . $this->fileext;
+            if(!file_exists($propertystylesheet)) throw new FileNotFoundException($propertystylesheet);
+            return $propertystylesheet;
         } else {
             // no scope, somebody overrode defaults and hasn't assign anything sensible? naughty - lets complain
             $msg = xarML("#(1) (no valid scope attribute could be deduced from this xar:style tag)",$this->scope);
@@ -217,7 +223,6 @@ class xarCSS extends Object
  * Queue class. Holds the tag data until it is sent to the template
  *
  *
- * @package themes
  */
 
 class tagqueue extends Object
@@ -252,7 +257,7 @@ class tagqueue extends Object
         }
     }
 
-    function register($args)
+    function register(Array $args=array())
     {
         return $this->queue('register',$args);
     }

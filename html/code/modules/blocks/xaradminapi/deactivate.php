@@ -1,21 +1,22 @@
 <?php
 /**
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
  * deactivate a block
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @param $args['bid'] the ID of the block to deactivate
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  */
-function blocks_adminapi_deactivate($args)
+function blocks_adminapi_deactivate(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

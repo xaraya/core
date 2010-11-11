@@ -1,4 +1,14 @@
 <?php
+/**
+ * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/68.html
+ */
 /*
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -156,9 +166,9 @@ class feedParser extends Object
     }
 
     function getXmlTree() { return $this->data;}
-    function setXmlData($data) { $this->xmldata = $data; }
+    function setXmlData(Array $data=array()) { $this->xmldata = $data; }
     
-    function parseEntities(&$data) 
+    function parseEntities(Array &$data=array()) 
     {
 
         foreach($this->entities as $entity => $replace) {
@@ -170,7 +180,7 @@ class feedParser extends Object
     }
 
 
-    function parseFeed($xmldata) 
+    function parseFeed(Array $xmldata=array()) 
     {
         $data = $this->buildStruct($xmldata);
         if(is_array($data) && count($data) > 0) {
@@ -267,7 +277,7 @@ class feedParser extends Object
             
     }
 
-    function getRDFChannel($data) 
+    function getRDFChannel(Array $data=array()) 
     {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {
@@ -335,7 +345,7 @@ class feedParser extends Object
         return $channel;
     }
 
-    function getRSSChannel($data) 
+    function getRSSChannel(Array $data=array()) 
     {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {
@@ -396,7 +406,7 @@ class feedParser extends Object
         return array('channel' => $channel, 'item' => $item);
     }
 
-    function getRDFItem($data) 
+    function getRDFItem(Array $data=array()) 
     {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {
@@ -461,7 +471,7 @@ class feedParser extends Object
         return $item;
     }
     
-    function getRSSItem($data) 
+    function getRSSItem(Array $data=array()) 
     {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {

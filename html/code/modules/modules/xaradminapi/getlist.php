@@ -1,11 +1,13 @@
 <?php
 /**
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage modules
+ * @link http://xaraya.com/index.php/release/1.html
  */
 
 /**
@@ -47,7 +49,7 @@
  * @return array array of module information arrays
  * @throws DATABASE_ERROR, BAD_PARAM
  */
-function modules_adminapi_getlist($args)
+function modules_adminapi_getlist(Array $args=array())
 {
     extract($args);
     static $validOrderFields = array('name' => 'mods', 'regid' => 'mods','id' => 'mods',

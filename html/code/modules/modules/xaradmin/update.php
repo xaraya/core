@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Module System
  * @link http://xaraya.com/index.php/release/1.html
  */
 /**
@@ -15,8 +16,7 @@
  * @param id the module's registered id
  * @param newdisplayname the new display name
  * @param newdescription the new description
- * @returns bool
- * @return true on success, error message on failure
+ * @return mixed true on success, error message on failure
  */
 function modules_admin_update()
 {
@@ -39,9 +39,9 @@ function modules_admin_update()
     
     xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET);
     if (!empty($return_url)) {
-        xarResponse::redirect($return_url);
+        xarController::redirect($return_url);
     } else {
-        xarResponse::redirect(xarModURL('modules', 'admin', 'list'));
+        xarController::redirect(xarModURL('modules', 'admin', 'list'));
     }
     
     return true;

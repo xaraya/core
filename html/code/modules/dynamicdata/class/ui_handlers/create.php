@@ -2,12 +2,14 @@
 /**
  * Dynamic Object User Interface Handler
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 
@@ -50,7 +52,7 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
         {
             $this->object =& DataObjectMaster::getObject($this->args);
             if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
 
             if(empty($this->tplmodule)) 
             {
@@ -59,7 +61,7 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
             }
         }
         if (!$this->object->checkAccess('create'))
-            return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $this->object->label));
+            return xarController::$response->Forbidden(xarML('Create #(1) is forbidden', $this->object->label));
 
         // there's no item to get here yet
         //$this->object->getItem();
@@ -89,7 +91,7 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
                 if(empty($args['return_url'])) 
                     $args['return_url'] = $this->getReturnURL();
 
-                xarResponse::redirect($args['return_url']);
+                xarController::redirect($args['return_url']);
                 // Return
                 return true;
             }

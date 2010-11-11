@@ -3,11 +3,12 @@
  * Count all active users
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -16,10 +17,9 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param bool $include_anonymous whether or not to include anonymous user
  * @param string $filter
- * @returns integer
- * @return number of users
+ * @return integer the number of users
  */
-function roles_userapi_countallactive($args)
+function roles_userapi_countallactive(Array $args=array())
 {
     extract($args);
 

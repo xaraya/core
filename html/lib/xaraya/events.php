@@ -1,5 +1,13 @@
 <?php
 /**
+ * @package core
+ * @subpackage events
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
  * Event Messagging System
  *
  * This subsystem issues events into the module space when something happens
@@ -13,7 +21,6 @@
  * itself is initialized directly after the DB subsystem. Any systems loaded before
  * that need to check whether the proper things are loaded themselves.
  *
- * @package events
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -56,7 +63,6 @@
 /**
  * Exceptions raised by this subsystem
  *
- * @package events
  */
 class EventRegistrationException extends RegistrationExceptions
 {
@@ -66,7 +72,6 @@ class EventRegistrationException extends RegistrationExceptions
 /**
  * Interface declaration for core events
  *
- * @package events
  */
 interface IxarEvents
 {
@@ -76,7 +81,6 @@ interface IxarEvents
 /**
  * Class to model the interface to core events management
  *
- * @package events
  */
 class xarEvents extends Object implements IxarEvents
 {
@@ -102,7 +106,7 @@ class xarEvents extends Object implements IxarEvents
     /**
      * Check whether an event is registered
      *
-     * @access  private
+     * 
      * @param   $eventName Name of the event to check
      * @return  bool
      * @throws  EventRegistrationException
@@ -120,7 +124,6 @@ class xarEvents extends Object implements IxarEvents
      * has defined a specific handler for that event, that function is
      * executed.
      *
-     * @access  protected (huh? it is publicly coded)
      * @param   string $eventName The name of the event
      * @param   mixed  $value Passed as parameter to the even handler function in the module
      * @return  void

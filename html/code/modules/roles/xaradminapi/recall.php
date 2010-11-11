@@ -3,20 +3,20 @@
  * Recall deleted roles
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['id'] id of the role that is being called
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  */
-function roles_adminapi_recall($args)
+function roles_adminapi_recall(Array $args=array())
 {
     // Get arguments
     extract($args);

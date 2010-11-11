@@ -1,26 +1,28 @@
 <?php
 /**
- * Retrieve list of itemtypes of this module
+ * Retrieve a list of itemtypes of this module
+ *
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * utility function to retrieve the list of item types of this module (if any)
- *
- * @return array containing the item types and their description
+ * Utility function to retrieve the list of itemtypes of this module (if any).
+ * @return array the itemtypes of this module and their description *
  */
-function dynamicdata_userapi_getitemtypes($args)
+function dynamicdata_userapi_getitemtypes(Array $args=array())
 {
     $itemtypes = array();
 
     // Get objects
-    $objects = xarMod::apiFunc('dynamicdata','user','getobjects');
+    $objects = DataObjectMaster::getObjects();
 
     $module_id = xarMod::getRegID('dynamicdata');
     foreach ($objects as $id => $object) {

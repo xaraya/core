@@ -3,10 +3,13 @@
  * Block caching
  * 
  * @package core
- * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.com
  * @subpackage caching
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
  * @author mikespub
  * @author jsb
 **/
@@ -29,7 +32,7 @@ class xarBlockCache extends Object
     /**
      * Initialise the block caching options
      *
-     * @return bool true on success, false on failure
+     * @return boolean true on success, false on failure
      */
     public static function init(array $args = array())
     {
@@ -59,7 +62,6 @@ class xarBlockCache extends Object
     /**
      * Get a cache key if this block is suitable for output caching
      *
-     * @access public
      * @param  array  $blockInfo block information with module, type, id etc.
      * @return mixed  cacheKey to be used with (is|get|set)Cached, or null if not applicable
      */
@@ -161,7 +163,7 @@ class xarBlockCache extends Object
      * Check if this block is suitable for block caching
      *
      * @param  array $blockInfo block information with module, type, id etc.
-     * @return bool  true if the block is suitable for caching, false if not
+     * @return boolean  true if the block is suitable for caching, false if not
      */
     public static function checkCachingRules($blockInfo = array())
     {
@@ -228,9 +230,8 @@ class xarBlockCache extends Object
     /**
      * Check whether a block is cached
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular block you want to access
-     * @return bool   true if the block is available in cache, false if not
+     * @return boolean   true if the block is available in cache, false if not
      */
     public static function isCached($cacheKey)
     {
@@ -252,7 +253,6 @@ class xarBlockCache extends Object
     /**
      * Get the contents of a block from the cache
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular block you want to access
      * @return string the cached output of the block
      */
@@ -285,7 +285,6 @@ class xarBlockCache extends Object
     /**
      * Set the contents of a block in the cache
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular block you want to access
      * @param  string $value    the new content for that block
      * @return void

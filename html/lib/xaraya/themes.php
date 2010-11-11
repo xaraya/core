@@ -2,12 +2,14 @@
 /**
  * Theme handling functions
  *
- * @package lib
+ * @package core
+ * @subpackage themes
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage themes
  * @author mrb <marcel@xaraya.com>
  * @todo Most of this doesnt belong here, but in the themes module, move it away
 */
@@ -25,7 +27,7 @@ function xarThemeDelVar($themeName, $name)                                      
 /**
  * Gets theme registry ID given its name
  *
- * @access public
+ * 
  * @param themeName The name of the theme
  * @return theme RegID for processing
  * @throws EmptyParameterException
@@ -43,7 +45,7 @@ function xarThemeGetIDFromName($themeName,$id='regid')
 /**
  * get information on theme
  *
- * @access public
+ * 
  * @param themeRegId theme id
  * @return array array of theme information
  */
@@ -52,9 +54,9 @@ function xarThemeGetInfo($regId) { return xarMod::getInfo($regId, $type = 'theme
 /**
  * checks if a theme is installed and its state is XARTHEME_STATE_ACTIVE
  *
- * @access public
+ * 
  * @param themeName registered name of theme
- * @return bool true if the theme is available, false if not
+ * @return boolean true if the theme is available, false if not
  */
 function xarThemeIsAvailable($themeName) { return xarMod::isAvailable($themeName, $type = 'theme'); }
 
@@ -64,7 +66,7 @@ function xarThemeIsAvailable($themeName) { return xarMod::isAvailable($themeName
 /**
  * Get info from xartheme.php
  *
- * @access protected
+ * 
  * @param themeOSdir the theme's directory
  * @return xarMod::getFileInfo for processing
  * @todo move to own class so we can protect it
@@ -74,7 +76,7 @@ function xarTheme_getFileInfo($themeOsDir) { return xarMod::getFileInfo($themeOs
 /**
  * Load a theme's base information
  *
- * @access protected
+ * 
  * @param themeName the theme's name
  * @return to xarMod__getBaseInfo for processing
  */
@@ -83,7 +85,7 @@ function xarTheme_getBaseInfo($themeName) { return xarMod::getBaseInfo($themeNam
 /**
  * Get all theme variables for a particular theme
  *
- * @access protected
+ * 
  * @return array an array of theme variables
  */
 function xarTheme_getVarsByTheme($themeName)

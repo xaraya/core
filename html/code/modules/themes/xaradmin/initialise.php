@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
@@ -17,8 +18,7 @@
  * status message and returns true.
  * @author Marty Vance
  * @param id $ the theme id to initialise
- * @returns 
- * @return 
+ * @return boolean true on success, false on failure
  */
 function themes_admin_initialise()
 { 
@@ -38,8 +38,7 @@ function themes_admin_initialise()
 
     if (!isset($initialised)) return;
 
-    xarResponse::redirect(xarModURL('themes', 'admin', 'list'));
-
+    xarController::redirect(xarModURL('themes', 'admin', 'list'));
     return true;
 } 
 

@@ -92,7 +92,6 @@
 *
 * @author  Richard Heyes <richard@phpguru.org>
 * @version $Revision: 1.46 $
-* @package Mail
 */
 class Mail_mimeDecode extends PEAR
 {

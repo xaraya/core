@@ -3,11 +3,12 @@
  * Create a new password for the user
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -33,11 +34,11 @@ function roles_admin_createpassword()
     if (!$role->updateItem()) return;
 
     if (!xarModVars::get('roles', 'askpasswordemail')) {
-        xarResponse::redirect(xarModURL('roles', 'admin', 'showusers',
+        xarController::redirect(xarModURL('roles', 'admin', 'showusers',
                       array('id' => $groupid, 'state' => $state)));
     } else {
         xarSession::setVar('tmppass',$pass);
-        xarResponse::redirect(xarModURL('roles', 'admin', 'asknotification',
+        xarController::redirect(xarModURL('roles', 'admin', 'asknotification',
         array('id' => array($id => '1'), 'mailtype' => 'password', 'groupid' => $groupid, 'state' => $state)));
     }
     return true;

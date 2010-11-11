@@ -3,11 +3,12 @@
  * Send queued/scheduled mails via Scheduler
  *
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 /**
@@ -16,7 +17,7 @@
  * @author mikespub
  * @access public
  */
-function mail_schedulerapi_sendmail($args)
+function mail_schedulerapi_sendmail(Array $args=array())
 {
     $log = xarML('Starting to send queued mail') . "\n";
 

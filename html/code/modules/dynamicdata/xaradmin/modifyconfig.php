@@ -1,14 +1,22 @@
 <?php
 /**
+ * Modify the configuration settings of this module
+ *
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  */
 
+/**
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ *
+ * @return mixed data array for the template display or output display string if invalid data submitted
+ */
 function dynamicdata_admin_modifyconfig()
 {
     if (!xarSecurityCheck('AdminDynamicData')) return;
@@ -35,7 +43,7 @@ function dynamicdata_admin_modifyconfig()
 
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
-                return xarTplModule('dynamicdata','admin','view_propertydefs', $data);
+                return xarTplModule('dynamicdata','admin','modifyconfig', $data);
             } else {
                 $itemid = $data['module_settings']->updateItem();
             }

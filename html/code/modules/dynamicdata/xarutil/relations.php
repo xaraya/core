@@ -2,18 +2,20 @@
 /**
  * Return relationship information
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * Return relationship information (test only)
  */
-function dynamicdata_util_relations($args)
+function dynamicdata_util_relations(Array $args=array())
 {
     if(!xarVarFetch('module',    'isset', $module,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('module_id', 'isset', $module_id, NULL, XARVAR_DONT_SET)) {return;}
@@ -184,6 +186,7 @@ function dynamicdata_util_relations($args)
             // CHECKME: what if var/processes is not under the web root anymore ?
             if (is_writable(sys::varpath() . '/processes/')) {
                 $yuml_hash = md5($yuml_spec);
+        // CHECKME: what if var/processes is not under the web root anymore ?
                 $filepath = sys::varpath() . '/processes/yuml-' . $yuml_hash . '.png';
                 if (!file_exists($filepath)) {
                     $image = file_get_contents('http://yuml.me/diagram/class/' . rawurlencode($yuml_spec));
@@ -228,7 +231,7 @@ function dynamicdata_util_relations($args)
 
             // add link
             DataObjectLinks::addLink($objectid, $field, $withobjectid, $withfield, $relation, $direction, $extra);
-            xarResponse::redirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarController::redirect(xarModURL('dynamicdata', 'util', 'relations',
                                             array('objectid' => $objectid)));
             return true;
 
@@ -241,7 +244,7 @@ function dynamicdata_util_relations($args)
                 if (empty($link_id) || empty($val)) continue;
                 DataObjectLinks::removeLink($link_id);
             }
-            xarResponse::redirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarController::redirect(xarModURL('dynamicdata', 'util', 'relations',
                                             array('objectid' => $objectid)));
             return true;
 
@@ -308,7 +311,7 @@ function dynamicdata_util_relations($args)
             // CHECKME: always bi-directional for tables ?
             $direction = 'bi';
             DataStoreLinks::addLink($table, $field, $withtable, $withfield, $relation, $direction, $extra);
-            xarResponse::redirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarController::redirect(xarModURL('dynamicdata', 'util', 'relations',
                                           array('table' => $table)));
             return true;
 
@@ -321,7 +324,7 @@ function dynamicdata_util_relations($args)
                 if (empty($link_id) || empty($val)) continue;
                 DataStoreLinks::removeLink($link_id);
             }
-            xarResponse::redirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarController::redirect(xarModURL('dynamicdata', 'util', 'relations',
                                           array('table' => $table)));
             return true;
         }

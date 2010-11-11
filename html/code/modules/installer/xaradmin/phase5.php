@@ -2,12 +2,13 @@
 /**
  * Installer
  *
- * @package Installer
+ * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Installer
  * @link http://xaraya.com/index.php/release/200.html
  */
 
@@ -15,6 +16,7 @@
  * This assumes the install.php and index.php are in the same directory.
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
 
 /**
@@ -28,7 +30,7 @@
  * @param dbPrefix
  * @param dbType
  * @param createDb
- * @todo better error checking on arguments
+ * @return array data for the template display
  */
 function installer_admin_phase5()
 {
@@ -207,7 +209,14 @@ function installer_admin_phase5()
         if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;
     }
 
-    // 2. Load the definitions of all the modules in the modules table
+    // 2. Create some variables we'll need in installing modules 
+    sys::import('xaraya.variables');
+    $a = array();
+    xarVar_init($a);
+    xarConfigVars::set(null, 'System.ModuleAliases',array());
+    xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
+    
+    // 3. Load the definitions of all the modules in the modules table
     $prefix = xarDB::getPrefix();
     $modulesTable = $prefix .'_modules';
     $tables =& xarDB::getTables();
@@ -245,7 +254,7 @@ function installer_admin_phase5()
         throw $e;
     }
 
-    // 3. Initialize all the modules we haven't yet
+    // 4. Initialize all the modules we haven't yet
     $modules = array('privileges','roles','blocks','authsystem','themes','dynamicdata','mail');
     foreach ($modules as $module) {
         try {
@@ -269,12 +278,6 @@ function installer_admin_phase5()
 
     // If we are here, the base system has completed
     // We can now pass control to xaraya.
-    sys::import('xaraya.variables');
-
-    $a = array();
-    xarVar_init($a);
-    xarConfigVars::set(null, 'System.ModuleAliases',array());
-    xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
 
     // Set the allowed locales to our "C" locale and the one used during installation
     // TODO: make this a bit more friendly.

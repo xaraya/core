@@ -3,11 +3,12 @@
  * Send mail
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -106,7 +107,7 @@ function roles_admin_sendmail()
     // If it was on, turn it back on
     xarModVars::set('themes','ShowTemplates',$themecomments);
 
-    xarResponse::redirect(xarModURL('roles', 'admin', 'createmail'));
+    xarController::redirect(xarModURL('roles', 'admin', 'createmail'));
     return true;
 }
 ?>

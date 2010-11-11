@@ -1,22 +1,23 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
+ * @link http://xaraya.com/index.php/release/70.html
  */
 /**
  * Upgrade a theme
  *
  * @author Marty Vance
  * @param regid registered theme id
- * @returns bool
- * @return
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function themes_adminapi_upgrade($args)
+function themes_adminapi_upgrade(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

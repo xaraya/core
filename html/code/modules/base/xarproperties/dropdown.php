@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -335,7 +337,7 @@ class SelectProperty extends DataProperty
      * configurations don't (or shouldn't) impact the result of the getOptions() function...
      *
      * @param $type string the type of configuration you want to check (typically only initialization)
-     * @return bool true if the configuration is the same as last time we checked, false otherwise
+     * @return boolean true if the configuration is the same as last time we checked, false otherwise
      */
     function isSameConfiguration($type = 'initialization')
     {

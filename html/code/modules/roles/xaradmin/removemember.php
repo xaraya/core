@@ -3,11 +3,12 @@
  * Remove a user or group from a group
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -18,10 +19,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @param none $
  * @return none
- * @throws none
- * @todo none
  */
 function roles_admin_removemember()
 {
@@ -49,6 +47,7 @@ function roles_admin_removemember()
     xarModCallHooks('item', 'unlink', $parentid, $pargs);
 
     // redirect to the next page
-    xarResponse::redirect(xarModURL('roles', 'admin', 'modify',  array('id' => $childid)));
+    xarController::redirect(xarModURL('roles', 'admin', 'modify',  array('id' => $childid)));
+    return true;
 }
 ?>

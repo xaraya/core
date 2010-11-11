@@ -3,11 +3,13 @@
  * Logging Facilities
  *
  * @package core
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage logging
  * @author Marco Canini <marco@xaraya.com>
  * @author Flavio Botelho <nuncanada@ig.com.br>
  * @author Marcel van der Boom
@@ -35,7 +37,6 @@ define('XARLOG_LEVEL_ALL',       255);
 /**
  * Exceptions raised within the loggers
  *
- * @package logging
  */
 class LoggerException extends Exception
 {
@@ -138,7 +139,7 @@ function xarLogFallbackFile ()
 
 /**
  * Will check if the fallback mechanism can be used
- * @return bool
+ * @return boolean
  */
 function xarLogFallbackPossible ()
 {

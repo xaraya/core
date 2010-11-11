@@ -1,18 +1,20 @@
 <?php
 /**
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
- * @subpackage Mail System
  */
 /**
  * Modify the email templates for hooked notifications
+ *
+ * @return array data for the template display
  */
-function mail_admin_template($args)
+function mail_admin_template(Array $args=array())
 {
     // Security Check
     if (!xarSecurityCheck('AdminMail')) return;
@@ -53,7 +55,7 @@ function mail_admin_template($args)
                 return;
             }
 
-            xarResponse::redirect(xarModURL('mail', 'admin', 'template',
+            xarController::redirect(xarModURL('mail', 'admin', 'template',
                                           array('mailtype' => $data['mailtype'])));
             return true;
             break;

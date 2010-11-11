@@ -3,11 +3,14 @@
  * Module installer
  *
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/1.html
  *
- * @subpackage modules
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
@@ -396,7 +399,7 @@ class Installer extends Object
             // First time we've come to this module
             // Is there an install page?
             if (!$initialised && file_exists(sys::code() . 'modules/' . $extInfo['osdirectory'] . '/xartemplates/includes/installoptions.xt')) {
-                xarResponse::redirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $regid)));
+                xarController::redirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $regid)));
                 return true;
             }
         } else {
@@ -419,7 +422,7 @@ class Installer extends Object
 
         // if this is a theme we're done
         if ($this->extType == 'themes') {
-            xarResponse::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0)));
+            xarController::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0)));
             return true;
         }
         
@@ -438,7 +441,7 @@ class Installer extends Object
                 xarOutputFlushCached('base-block');
             }
 
-            xarResponse::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0), NULL, $target));
+            xarController::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0), NULL, $target));
         } else {
             // Do the next module
             if (!$this->installdependencies($nextmodule)) return;

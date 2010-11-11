@@ -3,11 +3,12 @@
  * Handle roles_user_settings object
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -18,24 +19,21 @@
  * @param $args['phase'] phase to process (valid phases are showform, checkinput, and updateitem)
  * NOTE: If you provide this function in your module, you must include return values for all phases
  * @param $args['object'] user_settings object (default roles_user_settings)
- * @returns mixed
- * @return array on showform
- * @return bool on checkinput, invalid = false, valid = true
- * @return bool on updateitem, error = false, success = true
+ * @return mixed array on showform, bool on checkinput, invalid = false, valid = true, bool on updateitem, error = false, success = true
  */
-function roles_userapi_usermenu($args)
+function roles_userapi_usermenu(Array $args=array())
 {
     // not logged in?
     if (!xarUserIsLoggedIn()){
         // redirect user to their account page after login
         $redirecturl = xarModURL('roles', 'user', 'account');
-        xarResponse::redirect(xarModURL($defaultloginmodname,'user','showloginform', array('redirecturl' => $redirecturl)));
+        xarController::redirect(xarModURL($defaultloginmodname,'user','showloginform', array('redirecturl' => $redirecturl)));
     }
 
     // edit account is disabled?
     if ((bool)xarModVars::get('roles', 'usereditaccount') == false) {
         // show the user their profile display
-        xarResponse::redirect(xarModURL('roles', 'user', 'account'));
+        xarController::redirect(xarModURL('roles', 'user', 'account'));
     }
 
     // Get arguments from argument array
@@ -158,7 +156,7 @@ function roles_userapi_usermenu($args)
             // the default returnurl should be roles user account with a moduleload of current module
             if (empty($returnurl))
                 $returnurl = xarModURL('roles', 'user', 'account', array('moduleload' => 'roles'));
-            return xarResponse::redirect($returnurl);
+            return xarController::redirect($returnurl);
             */
             // let the calling function know the update was a success
             return true;

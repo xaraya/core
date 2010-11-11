@@ -14,7 +14,7 @@
         </p>
         <xar:else />
             <!-- The form for editting the module settings and hooks -->
-            <form action="&xar-modurl-modules-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#xarModURL('modules','admin','update')#" method="post" enctype="application/x-www-form-urlencoded">
               <p>
                   Available hooks for #$displayname#:
               </p>

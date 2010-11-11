@@ -3,11 +3,12 @@
  * Update a users status
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -17,7 +18,7 @@
  * @param $args['state'] is the new state for the user
  * returns bool
  */
-function roles_userapi_updatestatus($args)
+function roles_userapi_updatestatus(Array $args=array())
 {
     extract($args);
 

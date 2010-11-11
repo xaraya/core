@@ -3,11 +3,12 @@
  * Activate a theme
  *
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
@@ -19,8 +20,7 @@
  * status message and returns true.
  * 
  * @param id $ the theme id to activate
- * @returns 
- * @return 
+ * @return boolean true on success, false on failure
  */
 function themes_admin_activate()
 { 
@@ -31,6 +31,7 @@ function themes_admin_activate()
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
 
+
     // Activate
     $activated = xarMod::apiFunc('themes',
                                'admin',
@@ -39,10 +40,10 @@ function themes_admin_activate()
 
     //throw back
     if (!isset($activated)) return;
-    $minfo=xarThemeGetInfo($id);
+    $minfo = xarThemeGetInfo($id);
     // set the target location (anchor) to go to within the page
-    $target=$minfo['name'];
-    xarResponse::redirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
+    $target = $minfo['name'];
+    xarController::redirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
     return true;
 } 
 ?>

@@ -1,21 +1,23 @@
 <?php
 /**
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage modules
+ * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * Activate a module if it has an active function, otherwise just set the state to active
  *
  * @access public
  * @param regid module's registered id
- * @return bool
+ * @return boolean
  * @throws BAD_PARAM
  */
-function modules_adminapi_activate ($args)
+function modules_adminapi_activate(Array $args=array())
 {
     extract($args);
 

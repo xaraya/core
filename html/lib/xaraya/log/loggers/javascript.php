@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package core
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
 
 /**
  * JavaScriptLogger
@@ -6,7 +15,6 @@
  * Implements a javascript logger in a separate HTML window
  *
  *
- * @package logging
  */
 
 /**
@@ -18,7 +26,6 @@ sys::import('xaraya.log.loggers.xarLogger');
 /**
  * Javascript logger
  *
- * @package logging
  */
 class xarLogger_javascript extends xarLogger
 {
@@ -30,7 +37,7 @@ class xarLogger_javascript extends xarLogger
     /**
     * Write out the buffer if it is possible (the template system is already loaded)
     *
-    * @access public
+    * 
     */
     function writeOut()
     {
@@ -44,7 +51,7 @@ class xarLogger_javascript extends xarLogger
      *
      * @param array     $conf               Configuration options for the specific driver.
      *
-     * @access public
+     * 
      * @return boolean
      */
     function setConfig(array &$conf)
@@ -56,7 +63,7 @@ class xarLogger_javascript extends xarLogger
     /**
     * Common Code. This will create the javascript debug window.
     *
-    * @access private
+    * 
     */
     function getCommonCode()
     {
@@ -78,7 +85,7 @@ class xarLogger_javascript extends xarLogger
     * @param string $message Log message
     * @param int $level level of priority of the message
     * @return boolean  True on success or false on failure.
-    * @access public
+    * 
     */
     function notify($message, $level)
     {

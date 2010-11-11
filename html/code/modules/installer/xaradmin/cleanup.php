@@ -2,12 +2,13 @@
 /**
  * Installer
  *
- * @package Installer
+ * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Installer
  * @link http://xaraya.com/index.php/release/200.html
  */
 
@@ -15,6 +16,7 @@
  * This assumes the install.php and index.php are in the same directory.
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
+ * @return array data for the template display
  */
 
 function installer_admin_cleanup()
@@ -28,12 +30,24 @@ function installer_admin_cleanup()
     xarVarFetch('newname', 'str', $newname, '', XARVAR_NOT_REQUIRED);
 
     if ($remove) {
-        unlink('install.php');
+        try {
+            unlink('install.php');
+        } catch (Exception $e) {
+            return xarTplModule('installer','user','errors',array('layout' => 'no_permission_delete', 'filename' => 'install.php'));
+        }
     } elseif ($rename) {
         if (empty($newname)) {
-            unlink('install.php');
+            try {
+                unlink('install.php');
+            } catch (Exception $e) {
+                return xarTplModule('installer','user','errors',array('layout' => 'no_permission_delete', 'filename' => 'install.php'));
+            }
         } else {
-            rename('install.php',$newname . '.php');
+            try {
+                rename('install.php',$newname . '.php');
+            } catch (Exception $e) {
+                return xarTplModule('installer','user','errors',array('layout' => 'no_permission_rename', 'filename' => 'install.php'));
+            }
         }
     }
 

@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 
@@ -14,9 +16,9 @@
  * Display an item in a template
  *
  * @param $args array containing the item or fields to show
- * @return string containing the HTML (or other) text to output in the BL template
+ * @return string output display string
  */
-function dynamicdata_userapi_showdisplay($args)
+function dynamicdata_userapi_showdisplay(Array $args=array())
 {
     extract($args);
 

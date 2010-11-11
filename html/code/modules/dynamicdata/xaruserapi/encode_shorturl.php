@@ -2,12 +2,14 @@
 /**
  * Encode short urls
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -15,7 +17,7 @@
  * @param $args the function and arguments passed to xarModURL
  * @return string path to be added to index.php for a short URL, or empty if failed
  */
-function dynamicdata_userapi_encode_shorturl($args)
+function dynamicdata_userapi_encode_shorturl(Array $args=array())
 {
     static $objectcache = array();
 
@@ -50,7 +52,7 @@ function dynamicdata_userapi_encode_shorturl($args)
     }
 
     if (count($objectcache) == 0) {
-        $objects = xarMod::apiFunc('dynamicdata','user','getobjects');
+        $objects = DataObjectMaster::getObjects();
         foreach ($objects as $object) {
             $objectcache[$object['moduleid'].':'.$object['itemtype']] = $object['name'];
         }

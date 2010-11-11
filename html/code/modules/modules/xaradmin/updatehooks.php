@@ -1,17 +1,17 @@
 <?php
 /**
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Module System
  * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * Update hooks by hook module
  *
- * @param none
  *
  * @author Xaraya Development Team
  */
@@ -41,9 +41,9 @@ function modules_admin_updatehooks()
 
     if (!xarVarFetch('return_url', 'isset', $return_url, '', XARVAR_NOT_REQUIRED)) {return;}
     if (!empty($return_url)) {
-        xarResponse::redirect($return_url);
+        xarController::redirect($return_url);
     } else {
-        xarResponse::redirect(xarModURL('modules', 'admin', 'hooks',
+        xarController::redirect(xarModURL('modules', 'admin', 'hooks',
                                       array('hook' => $curhook)));
     }
     return true;

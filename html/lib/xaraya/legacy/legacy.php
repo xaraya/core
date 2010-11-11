@@ -2,11 +2,14 @@
 /**
  * Legacy Functions
  *
- * @package lib
+ * @package core
  * @subpackage legacy
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Marco Canini
  */
 
@@ -46,7 +49,7 @@ set_include_path(realpath(sys::code()) . PATH_SEPARATOR . get_include_path());
 /**
  * Returns the relative path name for the var directory
  *
- * @access public
+ * 
  * @return string the var directory path name
  * @deprec replaced by sys::varpath()
  * @see    sys
@@ -118,11 +121,22 @@ function xarServerGetHost()     { return xarServer::getHost();     }
 function xarServerGetProtocol() { return xarServer::getProtocol(); }
 function xarServerGetBaseURL()  { return xarServer::getBaseURL();  }
 function xarServerGetCurrentURL($args = array(), $generateXMLURL = NULL, $target = NULL) { return xarServer::getCurrentURL($args, $generateXMLURL, $target); }
-function xarRequestGetVar($name, $allowOnlyMethod = NULL) { return xarRequest::getVar($name, $allowOnlyMethod);}
-function xarRequestGetInfo()                              { return xarRequest::getInfo();        }
-function xarRequestIsLocalReferer()                       { return xarRequest::isLocalReferer(); }
-function xarResponseRedirect($redirectURL)                { return xarResponse::Redirect($redirectURL); }
+function xarRequestGetVar($name, $allowOnlyMethod = NULL) { return xarController::getVar($name, $allowOnlyMethod);}
+function xarRequestGetInfo()                              { return xarController::$request->getInfo(); }
+function xarRequestIsLocalReferer()                       { return xarController::isLocalReferer(); }
+function xarResponseRedirect($redirectURL)                { return xarController::redirect($redirectURL); }
+//function xarRequest::getVar($name, $allowOnlyMethod)      { return xarController::getVar($name, $allowOnlyMethod);}
+//function xarRequest::getInfo()                            { return xarController::$request->getInfo(); }
+//function xarRequest::isLocalReferer()                     { return xarController::isLocalReferer(); }
 
+/**
+ * Wrapper functions to support Xaraya 1 API Module functions
+ *
+**/
+function xarModURL($modName=NULL, $modType='user', $funcName='main', $args=array(), $generateXMLURL=NULL, $fragment=NULL, $entrypoint=array())
+{   
+    return xarController::URL($modName, $modType, $funcName, $args, $generateXMLURL, $fragment, $entrypoint); 
+}
 
 /**
  * Wrapper function to support Xaraya 1 API Database functions

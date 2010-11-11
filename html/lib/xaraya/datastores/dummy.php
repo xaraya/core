@@ -2,8 +2,13 @@
 /**
  * Data Store is a dummy (for in-memory data storage, perhaps)
  *
- * @package dynamicdata
+ * @package core
  * @subpackage datastores
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
 **/
 
 /**
@@ -20,7 +25,6 @@
 /**
  * Dummy data store class
  *
- * @package dynamicdata
  */
 sys::import('modules.dynamicdata.class.datastores.base');
 

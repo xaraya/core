@@ -3,11 +3,12 @@
  * Get a specific user by any of his attributes
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -19,10 +20,9 @@
  * @param $args['uname'] user name of user to get
  * @param $args['name'] name of user to get
  * @param $args['email'] email of user to get
- * @returns array
- * @return user array, or false on failure
+ * @return mixed user array, or false on failure
  */
-function roles_userapi_get($args)
+function roles_userapi_get(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

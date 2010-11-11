@@ -2,12 +2,13 @@
 /**
  * Installer
  *
- * @package Installer
+ * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Installer
  * @link http://xaraya.com/index.php/release/200.html
  */
 
@@ -22,7 +23,8 @@
  *
  * @access public
  * @param create
- * @return bool
+ * @return boolean
+ * @return mixed boolean after redirect or output display string if invalid data submitted
  * @todo make confirm password work
  * @todo remove URL field from users table
  * @todo normalize user's table
@@ -193,7 +195,8 @@ function installer_admin_create_administrator()
     xarAssignPrivilege('GeneralLock','Administrators');
     xarAssignPrivilege('GeneralLock','Users');
 
-    xarResponse::redirect(xarModURL('installer', 'admin', 'security',array('install_language' => $install_language)));
+    xarController::redirect(xarModURL('installer', 'admin', 'security',array('install_language' => $install_language)));
+    return true;
 }
 
 

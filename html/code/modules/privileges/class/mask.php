@@ -1,13 +1,21 @@
 <?php
 
 /**
+ * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/1098.html
+ *
  * xarMask: class for the mask object
  *
  * Represents a single security mask
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @throws  none
 */
 class xarMask extends Object
 {
@@ -41,8 +49,6 @@ class xarMask extends Object
      * @access  public
      * @param   array of values
      * @return  mask
-     * @throws  none
-     * @todo    none
     */
     function __construct($pargs=array())
     {
@@ -94,8 +100,6 @@ class xarMask extends Object
      * @access  public
      * @param   integer   adds  Number of additional instance parts to add to the array
      * @return  array of strings
-     * @throws  none
-     * @todo    none
     */
     function normalize($adds=0)
     {
@@ -156,8 +160,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  array 2 normalized masks
-     * @throws  none
-     * @todo    none
     */
     function canonical($mask)
     {
@@ -177,7 +179,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  boolean
-     * @throws  none
     */
     function matches($mask)
     {
@@ -202,7 +203,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  boolean
-     * @throws  none
     */
     function matchesexactly($mask)
     {
@@ -220,7 +220,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  boolean
-     * @throws  none
     */
     function includes($mask)
     {
@@ -287,7 +286,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  boolean
-     * @throws  none
     */
     function implies($mask)
     {

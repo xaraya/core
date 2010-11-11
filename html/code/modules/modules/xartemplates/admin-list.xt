@@ -27,7 +27,7 @@
         <p>
             Total listed:  <xar:set name="modscount">count($listrowsitems)</xar:set>#$modscount#
         </p>
-        <form method="post" action="&xar-modurl-modules-admin-settings;">
+        <form method="post" action="#xarModURL('modules','admin','settings')#">
             <!-- Module List Sort and Filter Controls table -->
             <table class="xar-fullwidth">
                 <tr>

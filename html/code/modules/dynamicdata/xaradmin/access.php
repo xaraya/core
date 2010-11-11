@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -18,9 +20,9 @@
  * @param int itemid the id of the object to be modified
  * @param join
  * @param table
- * @return string
+ * @return string output display string
  */
-function dynamicdata_admin_access($args)
+function dynamicdata_admin_access(Array $args=array())
 {
     extract($args);
 
@@ -153,9 +155,9 @@ function dynamicdata_admin_access($args)
 
         if(!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
         if (!empty($return_url)) {
-            xarResponse::redirect($return_url);
+            xarController::redirect($return_url);
         } else {
-            xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'access',
+            xarController::redirect(xarModURL('dynamicdata', 'admin', 'access',
                                             array('itemid' => $itemid,
                                                   'tplmodule' => $tplmodule)));
         }

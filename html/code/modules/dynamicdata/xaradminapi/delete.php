@@ -2,12 +2,14 @@
 /**
  * Delete an item
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -17,10 +19,10 @@
  * @param $args['itemid'] item id of the original item
  * @param $args['module_id'] module id for the original item
  * @param $args['itemtype'] item type of the original item
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_delete($args)
+function dynamicdata_adminapi_delete(Array $args=array())
 {
     extract($args);
 

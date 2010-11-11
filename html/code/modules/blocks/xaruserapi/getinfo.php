@@ -3,11 +3,12 @@
  * Get details suitable for *rendering* a block instance.
  *
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /*
@@ -20,7 +21,8 @@
  * - arbitrary parameters can be passed in to override the block content array elements
  * - some sort of validation check could be made available for the overridable params?
  * - system-level flag to switch between reporting attribute/args errors or just ignoring
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  *
  * TODO: move this function to a method of the xarBlock class,
  * per note below, there's no reason for this to be here, it doesn't,
@@ -31,7 +33,7 @@
  * to change without notice.
  */
 
-function blocks_userapi_getinfo($args)
+function blocks_userapi_getinfo(Array $args=array())
 {
     extract($args);
 
@@ -129,38 +131,38 @@ function blocks_userapi_getinfo($args)
 
     // The content at this point will be, completely empty, a string or
     // an array - only try and set array elements for an array.
+    // FIXME: the over-rides here come from $args, not from $blockinfo[content]
     if (is_array($blockinfo['content'])) {
         foreach($blockinfo['content'] as $pname => $pvalue) {
+            // not allowed to over-ride block version in block tags
+            if ($pname == 'xarversion') continue;
             // If the array element exists, then override it.
-            // There is no validation here (yet) - so arrays can
-            // override strings and strings can override arrays.
+            // There is some validation here - so arrays can't
+            // override strings and strings can't override arrays.
             // TODO: allow a block to provide validation rules to
             // pass $pvalue through for each $pname.
             // Such validation would also be able to convert numbers
             // into booleans, string lists into arrays etc.
             // Only override non-array and unset elements for now.
-
-            if (!isset($blockinfo['content'][$pname])) {
-                $blockinfo['content'][$pname] = $pvalue;
-            } elseif (!is_array($blockinfo['content'][$pname])) {
-                // Now let's be clever. Validate the override so it is the same
-                // data type as the element it is over-riding. We still can't do
-                // range-checking, or more complicated transformationsm, but we
-                // get better validation and type casting.
-
+            if (isset($args[$pname]) && !is_array($pvalue) && $args[$pname] !== $pvalue) {
+                // Only override non-array elements
                 switch (gettype($blockinfo['content'][$pname])) {
-                    case 'integer' : $valid = xarVarValidate('int', $pvalue, true); break;
-                    case 'string' : $valid = xarVarValidate('str', $pvalue, true); break;
+                    case 'integer' : $valid = xarVarValidate('int', $args[$pname], true); break;
+                    case 'string' : $valid = xarVarValidate('str', $args[$pname], true); break;
                     // Note: bool type validates 'true'/'false', or set/non-set
                     // but NOT non-zero and zero.
-                    case 'boolean' : $valid = xarVarValidate('bool', $pvalue, true); break;
-                    case 'float' : $valid = xarVarValidate('float', $pvalue, true); break;
+                    case 'boolean' : $valid = xarVarValidate('bool', $args[$pname], true); break;
+                    case 'float' : $valid = xarVarValidate('float', $args[$pname], true); break;
                     default : $valid = false;
                 }
-
                 // If the override validated, then set the parameter.
-                if ($valid) {$blockinfo['content'][$pname] = $pvalue;}
+                if ($valid) {$blockinfo['content'][$pname] = $args[$pname];}
             }
+        }
+        foreach ($args as $aname => $avalue) {
+            if (isset($blockinfo['content'][$aname]) || is_array($avalue)) continue;
+            // Only override unset and non-array elements
+            $blockinfo['content'][$aname] = $avalue;
         }
 
         if ($serialize_flag) {

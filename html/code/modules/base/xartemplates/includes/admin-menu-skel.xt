@@ -3,69 +3,39 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- Common Administration menu -->
     <xar:if condition="xarModVars::get('themes','adminpagemenu')">
-        <xar:set name="urlinfo">xarRequest::getInfo()</xar:set>
-        <!-- TODO: replace this with a call to a function that gets the array from XML data -->
-        <xar:set name="tabs">xarMod::apiFunc('base','admin','loadadminmenuarray',array('module' => $urlinfo[0]))</xar:set>
-        <xar:set name="activetab">$urlinfo[2]</xar:set>
-        <div>
-            <ul class="xar-tabs xar-alt xar-norm-outline">
-                <xar:if condition="isset($tabs['title']) and isset($tabs['title']['label'])">
-                    <xar:if condition="isset($tabs['title']['title'])">
-                        <li class="xar-tabs-label" title="#$tabs.title.title#">#$tabs.title.label#:</li>
-                    <xar:else />
-                        <li class="xar-tabs-label">#$tabs.title.label#:</li>
+        <!-- loadmenuarray function does all the hard work for us :) -->
+        <xar:set name="tabs">xarMod::apiFunc('base', 'admin', 'loadmenuarray', array('layout' => 'tabs'))</xar:set>
+        <!-- only display if we found some links -->
+        <xar:if condition="!empty($tabs['menulinks'])">
+            <div>
+                <ul class="xar-tabs xar-alt xar-norm-outline">
+                    <xar:if condition="!empty($tabs['title'])">
+                        <li class="xar-tabs-label" title="#$tabs.title#">#$tabs.label#:</li>
+                    <xar:else/>
+                        <li class="xar-tabs-label">#$tabs.label#:</li>
                     </xar:if>
-                </xar:if>
-                <xar:if condition="isset($tabs['items'])">
-                    <xar:foreach in="$tabs['items']" value="$tab">
-                        <xar:set name="functions">
-                            isset($tab['includes']) ? $tab['includes'] : array()
-                        </xar:set>
-                        <xar:set name="type">
-                            isset($tab['type']) ? $tab['type'] : $urlinfo[1]
-                        </xar:set>
-                        <xar:if condition="is_array($functions)">
-                            <xar:set name="condition">false</xar:set>
-                            <xar:foreach in="$tab['includes']" value="$function">
-                                <xar:set name="condition">
-                                    $condition || ($activetab == $function)
-                                </xar:set>
-                            </xar:foreach>
+                    <xar:foreach in="$tabs['menulinks']" value="$tab">
+                        <xar:if condition="!empty($tab['isactive'])">
+                            <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                            <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
                         <xar:else />
-                            <xar:set name="condition">$activetab == $tab['includes']</xar:set>
+                            <xar:set name="tabclass">'xar-tab'</xar:set>
+                            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
                         </xar:if>
-                        <xar:if condition="isset($tab['mask'])">
-                            <xar:set name="mask">$tab['mask']</xar:set>
-                            <xar:sec mask="$mask" catch="false">
-                                <xar:if condition="$condition">
-                                    <xar:set name="tabclass">'xar-tab-active'</xar:set>
-                                    <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
-                                <xar:else />
-                                    <xar:set name="tabclass">'xar-tab'</xar:set>
-                                    <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
-                                </xar:if>
-                                <li class="#$tabclass#">
-                                    <a href="#xarModURL($urlinfo[0],$type,$tab['target'])#" class="#$linkclass#">
-                                    #$tab['label']#</a>
-                                </li>
-                            </xar:sec>
-                        <xar:else />
-                            <xar:if condition="$condition">
-                                <xar:set name="tabclass">'xar-tab-active'</xar:set>
-                                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
-                            <xar:else />
-                                <xar:set name="tabclass">'xar-tab'</xar:set>
-                                <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                        <li class="#$tabclass#">
+                            <xar:if condition="!empty($tab['url'])">
+                            <a href="#$tab['url']#" class="#$linkclass#" title="#$tab['title']#">
+                                #$tab['label']#
+                            </a>
+                            <xar:else/>
+                            <a class="#$linkclass#" title="#$tab['title']#">
+                                #$tab['label']#
+                            </a>
                             </xar:if>
-                            <li class="#$tabclass#">
-                                <a href="#xarModURL($urlinfo[0],$type,$tab['target'])#" class="#$linkclass#">
-                                    #$tab['label']#
-                                </a>
-                            </li>
-                        </xar:if>
+                        </li>
                     </xar:foreach>
-                </xar:if>
-            </ul>
-        </div>
+                </ul>
+            </div>
+        </xar:if>
     </xar:if>
 </xar:template>

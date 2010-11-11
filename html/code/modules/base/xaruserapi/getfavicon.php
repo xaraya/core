@@ -2,11 +2,12 @@
 /**
  * Return the favicon for a given url
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
@@ -19,7 +20,7 @@
  * @param $args['url'] string the absolute URL for the file
  * @return string content of the file
  */
-function base_userapi_getfavicon($args)
+function base_userapi_getfavicon(Array $args=array())
 {
     extract($args);
     if (!isset($url)) throw new BadParameterException($url);

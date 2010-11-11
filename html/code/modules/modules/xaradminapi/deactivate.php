@@ -2,12 +2,14 @@
 /**
  * Deactivate a module 
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Modules module
+ * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * Deactivate a module if it has a deactive function, otherwise just set the state to deactive
@@ -15,10 +17,10 @@
  * @author Xaraya Development Team
  * @access public
  * @param regid module's registered id
- * @returns bool
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function modules_adminapi_deactivate ($args)
+function modules_adminapi_deactivate(Array $args=array())
 {
     extract($args);
 

@@ -1,13 +1,14 @@
 <?php
 /**
- * Log user in to system
+ * Log a user in to the system
  *
  * @package modules
+ * @subpackage authsystem module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Authsystem module
  * @link http://xaraya.com/index.php/release/42.html
  */
 /**
@@ -167,7 +168,7 @@ function authsystem_user_login()
 
         case xarRoles::ROLES_STATE_NOTVALIDATED:
             //User still must validate
-            xarResponse::redirect(xarModURL('roles', 'user', 'getvalidation'));
+            xarController::redirect(xarModURL('roles', 'user', 'getvalidation'));
 
             break;
 
@@ -274,9 +275,9 @@ function authsystem_user_login()
                    $data['title'] = xarML('Home Page');
                    return xarTplModule('roles','user','homedisplay', $data);
                  */
-                 xarResponse::redirect($redirecturl);
+                 xarController::redirect($redirecturl);
             }else {
-                xarResponse::redirect($redirecturl);
+                xarController::redirect($redirecturl);
             }
 
             return true;

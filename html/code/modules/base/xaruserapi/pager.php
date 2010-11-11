@@ -3,12 +3,13 @@
  * base-pager template tag
  *
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base Module
- * @link http://xaraya.com/index.php/release/151.html
+ * @link http://xaraya.com/index.php/release/68.html
 */
 /* Wrapper for xarTplPager::getPager() (see modules/base/class/pager.php)
  * Used by the base-pager template tag
@@ -39,7 +40,7 @@
  * @param int $args['firstitem']
  * @param int $args['firstpage']
  */
-function base_userapi_pager($args)
+function base_userapi_pager(Array $args=array())
 {
     extract($args);
     if (empty($startnum) || !is_numeric($startnum))
@@ -47,7 +48,7 @@ function base_userapi_pager($args)
 
     if (!isset($itemsperpage) || !is_numeric($itemsperpage)) {
         if (empty($module))
-            list($module) = xarRequest::getInfo();
+            list($module) = xarController::$request->getInfo();
         if (!empty($module))
             // @TODO: setting per itemtype?
             // if (!empty($itemtype)) $itemsperpage = xarModUserVars::get($module, 'items_per_page'.$itemtype);

@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /* Include parent class */
@@ -29,6 +31,7 @@ class TextBoxProperty extends DataProperty
     public $validation_max_length_invalid;
     public $validation_regex                = null;
     public $validation_regex_invalid;
+    public $initialization_encrypt          = false;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -81,10 +84,10 @@ class TextBoxProperty extends DataProperty
     public function showInput(Array $data = array())
     {
         // Should we be doing this? (random)
-        if(!isset($data['maxlength'])) $data['maxlength'] = $this->display_maxlength;
-        if(!isset($data['size']))      $data['size']      = $this->display_size;
-        if ($data['size'] > $data['maxlength']) {
-            $data['size'] = $data['maxlength'];
+        if(isset($data['maxlength'])) $this->display_maxlength = $data['maxlength'];
+        if(isset($data['size']))      $this->display_size = $data['size'];
+        if ($this->display_size > $this->display_maxlength) {
+            $this->display_size = $this->display_maxlength;
         }
 
         // Prepare for templating
@@ -94,6 +97,25 @@ class TextBoxProperty extends DataProperty
         return parent::showInput($data);
     }
 
+    public function setValue($value=null)
+    {
+        parent::setValue($value);
+        if ($this->initialization_encrypt) {
+            sys::import('xaraya.encryptor');
+            $encryptor = xarEncryptor::instance();
+            $this->value = $encryptor->encrypt($this->value);
+        }
+    }
+    public function getValue()
+    {
+        $value = parent::getValue();
+        if ($this->initialization_encrypt) {
+            sys::import('xaraya.encryptor');
+            $encryptor = xarEncryptor::instance();
+            $value = $encryptor->decrypt($value);
+        }
+        return $value;
+    }
 }
 
 ?>

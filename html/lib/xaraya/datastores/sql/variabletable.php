@@ -2,8 +2,13 @@
 /**
  * Data Store is a variable SQL table (= only xar_dynamic_data for now)
  *
- * @package dynamicdata
+ * @package core
  * @subpackage datastores
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
 **/
 
 /*
@@ -15,7 +20,6 @@ sys::import('xaraya.datastores.sql');
 /**
  * Data store is a variable SQL table
  *
- * @package dynamicdata
 **/
 class VariableTableDataStore extends SQLDataStore
 {
@@ -211,9 +215,7 @@ class VariableTableDataStore extends SQLDataStore
         }
 
         $propids = array_keys($this->fields);
-        if (count($propids) < 1) {
-            return;
-        }
+        if (count($propids) < 1) return;
 
         $process = array();
         foreach ($propids as $propid) {
@@ -893,7 +895,7 @@ class VariableTableDataStore extends SQLDataStore
      * @return integer value of the next id
      * @throws BadParameterException
      */
-    function getNextId(array $args)
+    function getNextId(Array $args=array())
     {
         extract($args);
 

@@ -2,10 +2,14 @@
 /**
  * BlockLayout Template Engine
  *
- * @package blocklayout
+ * @package core
+ * @package templating
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Paul Rosania <paul@xaraya.com>
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <mrb@hsdev.com>
@@ -32,14 +36,14 @@ sys::import('xaraya.variables.config');
 /**
  * Initializes the BlockLayout Template Engine
  *
- * @access protected
+ * 
  * @global string xarTpl_themesBaseDir
  * @global string xarTpl_defaultThemeName
  * @global string xarTpl_doctype
  * @global string xarTpl_JavaScript
  * @param  array  $args                  Elements: defaultThemeName, enableTemplateCaching
  * @throws FileNotFoundException
- * @return bool true
+ * @return boolean true
 **/
 function xarTpl_init(&$args)
 {
@@ -70,7 +74,7 @@ function xarTpl_init(&$args)
 /**
  * Get theme name for the theme in use.
  *
- * @access public
+ * 
  * @global xarTpl_themeName string
  * @return string themename
  * @todo   the method_exists / function_exists should be in the xaraya scope, so we can deal with it's oddities
@@ -91,11 +95,11 @@ function xarTplGetThemeName()
 /**
  * Set theme name
  *
- * @access public
+ * 
  * @global string xarTpl_themesBaseDir
  * @global string xarTpl_themeName
  * @param  string $themeName Themename to set
- * @return bool
+ * @return boolean
  */
 function xarTplSetThemeName($themeName)
 {
@@ -113,11 +117,11 @@ function xarTplSetThemeName($themeName)
 /**
  * Set theme dir
  *
- * @access public
+ * 
  * @global string xarTpl_themesBaseDir
  * @global string xarTpl_themeDir
  * @param  string themeDir
- * @return bool
+ * @return boolean
  * @todo   on removal of the global, we need to bring in standard caching here!!
  */
 function xarTplSetThemeDir($themeDir)
@@ -134,7 +138,7 @@ function xarTplSetThemeDir($themeDir)
 /**
  * Private helper function for the xarTplSetThemeName and xarTplSetThemeDir
  *
- * @access private
+ * 
  * @param  string $name Name of the theme
  * @todo theme name and dir are not required to be identical
  * @return void
@@ -151,7 +155,7 @@ function xarTpl__SetThemeNameAndDir($name)
 /**
  * Get theme directory
  *
- * @access public
+ * 
  * @global string xarTpl_themeDir
  * @return sring  Theme directory
  */
@@ -164,7 +168,7 @@ function xarTplGetThemeDir($theme=null)
 /**
  * Get page template name
  *
- * @access public
+ * 
  * @global string xarTpl_pageTemplateName
  * @return string page template name
  */
@@ -176,10 +180,10 @@ function xarTplGetPageTemplateName()
 /**
  * Set page template name
  *
- * @access public
+ * 
  * @global xarTpl_pageTemplateName string
  * @param  string $templateName Name of the page template
- * @return bool
+ * @return boolean
  */
 function xarTplSetPageTemplateName($templateName)
 {
@@ -194,7 +198,7 @@ function xarTplSetPageTemplateName($templateName)
 /**
  * Get doctype declared by page template
  *
- * @access public
+ * 
  * @global string xarTpl_doctype
  * @return string doctype identifier
  */
@@ -206,10 +210,10 @@ function xarTplGetDoctype()
 /**
  * Set doctype declared by page template
  *
- * @access public
+ * 
  * @global string xarTpl_doctype
  * @param  string $doctypeName Identifier string of the doctype
- * @return bool
+ * @return boolean
  */
 function xarTplSetDoctype($doctypeName)
 {
@@ -221,12 +225,12 @@ function xarTplSetDoctype($doctypeName)
 /**
  * Set page title
  *
- * @access public
+ * 
  * @global string xarTpl_pageTitle
  * @param  string $title
  * @param  string $module
  * @todo   this needs to be moved into the templating domain somehow
- * @return bool
+ * @return boolean
  */
 function xarTplSetPageTitle($title = NULL, $module = NULL)
 {
@@ -269,7 +273,7 @@ function xarTplSetPageTitle($title = NULL, $module = NULL)
 /**
  * Get page title
  *
- * @access public
+ * 
  * @return string
  */
 function xarTplGetPageTitle()
@@ -284,13 +288,13 @@ function xarTplGetPageTitle()
 /**
  * Add JavaScript code or links to template output
  *
- * @access public
+ * 
  * @global array  xarTpl_JavaScript
  * @param  string $position         Either 'head' or 'body'
  * @param  string $type             Either 'src' or 'code'
  * @param  string $data             pathname or raw JavaScript
  * @param  string $index            optional (unique key and/or ordering)
- * @return bool
+ * @return boolean
  */
 function xarTplAddJavaScript($position, $type, $data, $index = '')
 {
@@ -321,7 +325,7 @@ function xarTplAddJavaScript($position, $type, $data, $index = '')
 /**
  * Get JavaScript code or links cached for template output
  *
- * @access public
+ * 
  * @global array  xarTpl_JavaScript
  * @param  string $position
  * @param  string $index
@@ -339,7 +343,7 @@ function xarTplGetJavaScript($position = '', $index = '')
 /**
  * Turns module output into a template.
  *
- * @access public
+ * 
  * @param  string $modName      the module name
  * @param  string $modType      user|admin
  * @param  string $funcName     module function to template
@@ -395,7 +399,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
 /**
  * Renders a block content through a block template.
  *
- * @access public
+ * 
  * @param  string $modName   the module name
  * @param  string $blockType the block type (xar_block_types.type)
  * @param  array  $tplData   arguments for the template
@@ -423,7 +427,7 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, 
 /**
  * Renders a DD element (object or property) through a template.
  *
- * @access private
+ * 
  * @param  string $modName      the module name owning the object/property, with fall-back to dynamicdata
  * @param  string $ddName       the name of the object/property type, or some other name specified in BL tag or API call
  * @param  string $tplType      the template type to render
@@ -505,7 +509,7 @@ function xarTplObject($modName, $objectName, $tplType = 'showdisplay', $tplData 
  *        don't contain nasty stuff. Filter as appropriate when using
  *        this function to generate image URLs...
  *
- * @access  public
+ * 
  * @param   string $modImage the module image url relative to xarimages/
  * @param   string $modName  the module to check for the image <optional>
  * @return  string $theme    image url if it exists or module image url if not, or NULL if neither found
@@ -524,7 +528,7 @@ function xarTplGetImage($modImage, $modName = NULL)
     // obtain current module name if not specified
     // FIXME: make a fallback for weird requests
     if(!isset($modName)){
-        list($modName) = xarRequest::getInfo();
+        list($modName) = xarController::$request->getInfo();
     }
 
     // get module directory (could be different from module name)
@@ -570,7 +574,7 @@ function xarTplGetImage($modImage, $modName = NULL)
 /**
  * Execute a pre-compiled template string with the supplied template variables
  *
- * @access public
+ * 
  * @param  string $templateCode pre-compiled template code (see xarTplCompileString)
  * @param  array  $tplData      template variables
  * @return string filled-in template
@@ -597,7 +601,7 @@ function xarTplString($templateCode, &$tplData)
 /**
  * Execute a specific template file with the supplied template variables
  *
- * @access public
+ * 
  * @param  string $fileName location of the template file
  * @param  array  $tplData  template variables
  * @return string filled-in template
@@ -613,7 +617,7 @@ function xarTplFile($fileName, &$tplData)
  *        template strings e.g. after an upgrade, so you should store both
  *        the original template and the compiled version if necessary
  *
- * @access public
+ * 
  * @param  string $templateSource template source
  * @return string compiled template
  */
@@ -627,7 +631,7 @@ function xarTplCompileString($templateSource)
 /**
  * Renders a page template.
  *
- * @access protected
+ * 
  * @param  string $mainModuleOutput       the module output
  * @param  string $pageTemplate           the page template to use (without extension .xt)
  * @return string
@@ -656,10 +660,10 @@ function xarTpl_renderPage($mainModuleOutput, $pageTemplate = NULL)
 /**
  * Render a block box
  *
- * @access protected
+ * 
  * @param  array  $blockInfo  Information on the block
  * @param  string $templateName string
- * @return bool xarTpl__executeFromFile($sourceFileName, $blockInfo)
+ * @return boolean xarTpl__executeFromFile($sourceFileName, $blockInfo)
  *
  * @todo the search logic for the templates can perhaps use the private function?
  * @todo fallback to some internal block box template?
@@ -684,7 +688,7 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
 /**
  * Include a subtemplate from the theme space
  *
- * @access protected
+ * 
  * @param  string $templateName Basically handler function for <xar:template type="theme".../>
  * @param  array  $tplData      template variables
  * @return string
@@ -700,16 +704,18 @@ function xarTpl_includeThemeTemplate($templateName, $tplData)
 /**
  * Include a subtemplate from the module space
  *
- * @access protected
+ * 
  * @param  string $modName      name of the module from which to include the template
  * @param  string $templateName Basically handler function for <xar:template type="module".../>
  * @param  array  $tplData      template variables
+ * @param  array  $propertyName name of the property from which to include the template
  * @return string
  */
-function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
+function xarTpl_includeModuleTemplate($modName, $templateName, $tplData, $propertyName='')
 {
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
+
     $modules = explode(',',$modName);
     foreach ($modules as $module) {
         $thismodule = trim($module);
@@ -721,8 +727,20 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
             $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xd";
             if (file_exists($sourceFileName)) break;
         }
+        if (!file_exists($sourceFileName)) {
+            $sourceFileName = sys::code() . "modules/dynamicdata/xartemplates/includes/$templateName.xt";
+        }
     }
-    return xarTpl__executeFromFile($sourceFileName, $tplData);
+    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
+
+    // Check for a property template as a fallback
+    $sourceFileName = xarTplGetThemeDir() . "properties/$propertyName/templates/includes/$templateName.xt";
+    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
+    $sourceFileName = sys::code() . "properties/$propertyName/templates/includes/$templateName.xt";
+    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
+    echo $sourceFileName;exit;
+    // Not found: raise an exception
+    throw new Exception("Could not find include template $templateName.xt");
 }
 
 // PRIVATE FUNCTIONS
@@ -730,7 +748,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData)
 /**
  * Execute template from file
  *
- * @access private
+ * 
  * @param  string $sourceFileName       From which file do we want to execute? Assume it exists by now ;-)
  * @param  array  $tplData              Template variables
  * @param  string $tplType              'module' or 'page'
@@ -846,7 +864,11 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     if(!empty($templateName) &&
         file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt")) {
     } elseif(!empty($templateName) &&
+        file_exists($sourceFileName = "$tplThemesDir/properties/$templateName/templates/$tplBase.xt")) {
+    } elseif(!empty($templateName) &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt")) {
+    } elseif(!empty($templateName) &&
+        file_exists($sourceFileName = sys::code() . "properties/$templateName/templates/$tplBase.xt")) {
     } elseif(
         file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt")) {
     } elseif(
@@ -875,7 +897,7 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
 /**
  * Output template
  *
- * @access private
+ * 
  * @param  string $sourceFileName
  * @param  string $tplOutput
  * @return void
@@ -911,7 +933,7 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
 /**
  * Output php comment block in templates
  *
- * @access private
+ * 
  * @global int xarTpl_showPHPCommentBlockInTemplates int
  * @return int value of xarTpl_showPHPCommentBlockInTemplates (0 or 1)
  */
@@ -935,7 +957,7 @@ function xarTpl_outputPHPCommentBlockInTemplates()
 /**
  * Output template filenames
  *
- * @access private
+ * 
  * @global int xarTpl_showTemplateFilenames
  * @return int value of xarTpl_showTemplateFilenames (0 or 1)
  *
@@ -966,10 +988,10 @@ function xarTpl_outputTemplateFilenames()
  * so append a start comment after the first matched header tag
  * found.
  *
- * @access private
+ * 
  * @param  string $sourceFileName
  * @param  string $tplOutput
- * @return bool found header content
+ * @return boolean found header content
  *
  * @todo it is possible that the first regex <!DOCTYPE[^>].*]> is too
  *       greedy in more complex xml documents and others.

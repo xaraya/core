@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -21,10 +23,10 @@
  * @param $args['source'] data source of the field to update (optional)
  * @param $args['status'] status of the field to update (optional)
  * @param $args['configuration'] configuration of the field to update (optional)
- * @return bool
+ * @return boolean
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_updateprop($args)
+function dynamicdata_adminapi_updateprop(Array $args=array())
 {
     extract($args);
 

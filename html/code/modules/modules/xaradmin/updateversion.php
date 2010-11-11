@@ -1,19 +1,19 @@
 <?php
 /**
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Module System
  * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * Update the module version in the database
  *
  * @param 'regId' the id number of the module to update
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  *
  * @author Xaraya Development Team
  */
@@ -38,7 +38,7 @@ function modules_admin_updateversion()
     if (!isset($updated)) return;
 
     // Redirect to module list
-    xarResponse::redirect(xarModURL('modules', 'admin', 'list'));
+    xarController::redirect(xarModURL('modules', 'admin', 'list'));
 
     return true;
 }

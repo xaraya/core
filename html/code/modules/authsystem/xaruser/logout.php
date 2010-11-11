@@ -1,19 +1,20 @@
 <?php
 /**
- * Log user out of system
+ * Log a user out from the system
  *
  * @package modules
+ * @subpackage authsystem module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Authsystem module
  * @link http://xaraya.com/index.php/release/42.html
  */
 /**
  * log user out of system
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @return bool true on success of redirect
+ * @return boolean true on success of redirect
  */
 function authsystem_user_logout()
 {
@@ -35,7 +36,7 @@ function authsystem_user_logout()
     if (!xarUserLogOut()) {
         throw new ForbiddenOperationException(array('authsystem', 'logout'),xarML('Problem Logging Out.  Module #(1) Function #(2)'));
     }
-    xarResponse::redirect($redirecturl);
+    xarController::redirect($redirecturl);
     return true;
 }
 ?>

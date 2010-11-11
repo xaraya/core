@@ -3,11 +3,12 @@
  * Initialise the mail module
  *
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 
@@ -46,7 +47,7 @@ function mail_init()
  * Activate the mail module
  *
  * @access public
- * @return bool
+ * @return boolean
  */
 function mail_activate()
 {
@@ -57,7 +58,7 @@ function mail_activate()
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  * @todo create separate xar_mail_queue someday
  * @todo allow mail gateway functionality
  */
@@ -75,7 +76,7 @@ function mail_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return bool
+ * @return boolean
  */
 function mail_delete()
 {

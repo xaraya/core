@@ -3,11 +3,12 @@
  * View the current mail queue
  *
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 /**
@@ -16,11 +17,9 @@
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  true on success or void on failure
- * @throws  no exceptions
- * @todo    nothing
+ * @return  array data for the template display
 */
-function mail_admin_viewq($args)
+function mail_admin_viewq(Array $args=array())
 {
     extract($args);
     if (!xarVarFetch('action','str', $action, '')) return;
@@ -73,7 +72,7 @@ function mail_admin_viewq($args)
                     $serialqueue = serialize($queue);
                     xarModVars::set('mail','queue',$serialqueue);
 
-                    xarResponse::redirect(xarModURL('mail', 'admin', 'viewq'));
+                    xarController::redirect(xarModURL('mail', 'admin', 'viewq'));
                     return true;
                 }
                 break;

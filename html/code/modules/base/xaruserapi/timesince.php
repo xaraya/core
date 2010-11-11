@@ -3,18 +3,19 @@
  * Time Since
  *
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base Module
- * @link http://xaraya.com/index.php/release/151.html
+ * @link http://xaraya.com/index.php/release/68.html
 */
 /* Returns a fomatted string of two of years/months/weeks/days/hours/minutes since a given time (unix timestamp).
  * @param int $args['stamp'] as a unix timestamp
  * @author - based on original by Natalie Downe http://blog.natbat.co.uk/archive/2003/Jun/14/time_since
  */
-function base_userapi_timesince($args)
+function base_userapi_timesince(Array $args=array())
 {
     extract($args);
     //expecting a var named $originaltime

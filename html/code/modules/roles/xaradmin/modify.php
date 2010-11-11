@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -13,6 +14,7 @@
  * Modify role details
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
 function roles_admin_modify()
 {
@@ -88,7 +90,7 @@ function roles_admin_modify()
             $itemid = $data['object']->updateItem(array('itemid' => $data['itemid']));
 
             // Jump to the next page
-            xarResponse::redirect(xarModURL('roles','admin','modify',array('itemid' => $data['itemid'])));
+            xarController::redirect(xarModURL('roles','admin','modify',array('itemid' => $data['itemid'])));
             return true;
         }
     }

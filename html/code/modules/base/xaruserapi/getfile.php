@@ -2,11 +2,12 @@
 /**
  * Get a file from the Internet
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
@@ -24,7 +25,7 @@
  * @param $args['superrors'] bool indicates whether we want to die without an error shown (for blocks)
  * @return string content of the file
  */
-function base_userapi_getfile($args)
+function base_userapi_getfile(Array $args=array())
 {
     extract($args);
 

@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
@@ -15,7 +16,8 @@
  * The function also checks the block class exists, and if a func is
  * specified, will check if the method named func exists in the block class
  *
- * @author Paul Rosania, Marco Canini <marco@xaraya.com>
+ * @author Marco Canini <marco@xaraya.com>
+ * @author Paul Rosania
  * @access protected
  * @param string modName the module name (deprec)
  * @param string module the module name
@@ -28,7 +30,7 @@
  * @throws EmptyParameterException, ClassNotFoundException, FunctionNotFoundException,
  *         FileNotFoundException
  */
-function blocks_adminapi_load($args)
+function blocks_adminapi_load(Array $args=array())
 {
     // Array of block loaded flags.
     static $loaded = array();
