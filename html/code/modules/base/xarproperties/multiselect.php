@@ -57,8 +57,8 @@ class MultiSelectProperty extends SelectProperty
 
     public function showInput(Array $data = array())
     {
-        if (!empty($data['single'])) $this->validation_single = $data['single'];
-        if (!empty($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
+        if (isset($data['single'])) $this->validation_single = $data['single'];
+        if (isset($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
         if (!isset($data['value'])) $data['value'] = $this->value;
         $data['value'] = $this->getSerializedValue($data['value']);
 
