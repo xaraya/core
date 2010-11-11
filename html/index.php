@@ -6,7 +6,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @subpackage entrypoint
- * @author Marco Canini 
+ * @author Marco Canini
  */
 
 $GLOBALS["Xaraya_PageTime"] = microtime(true);
