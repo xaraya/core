@@ -15,6 +15,7 @@
 /**
  * create a cache block
  *
+ * @param array   $args array of parameters
  * @param $args['bid'] the ID of the block to create
  * @return boolean true on success, false on failure
  */

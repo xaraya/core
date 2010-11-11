@@ -15,6 +15,7 @@
 /**
  * Check the properties directory for properties and import them into the Property Type table.
  *
+ * @param array   $args array of parameters
  * @param $args[flush] flush the property type table before import true/false (optional)
  * @param array $args[dirs]
  * @return array an array of the property types currently available

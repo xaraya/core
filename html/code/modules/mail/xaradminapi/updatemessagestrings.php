@@ -14,6 +14,7 @@
 /**
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
+ * @param array   $args array of parameters
  * @param $args['module'] module directory in var/messaging
  * @param $args['template'] name of the email type which has apair of -subject and -message files
  * @param $args['subject'] new subject

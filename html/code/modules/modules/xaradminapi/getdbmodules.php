@@ -13,6 +13,7 @@
 /**
  * Get all modules in the database
  *
+ * @param array   $args array of parameters
  * @param $args['regid'] - optional regid to retrieve
  * @return array modules in the database
  */

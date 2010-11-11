@@ -46,6 +46,9 @@
  * @return array of theme information arrays
  * @throws DATABASE_ERROR, BAD_PARAM
  */
+/**
+ * @param array   $args array of parameters
+ */
 function themes_adminapi_dropdownlist(Array $args=array())
 {
 

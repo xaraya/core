@@ -16,6 +16,7 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * @access public
+ * @param array   $args array of parameters
  * @param see blocks/userapi/getinfo
  * @return see blocks/userapi/getinfo
  * @deprec Jan 2004

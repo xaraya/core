@@ -15,6 +15,7 @@
  * utility function to create an array for a getmenulinks function
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array   $args array of parameters
  * @return array menulinks for the module
  *
  & @TODO: remove this once all modules are calling loadmenuarray

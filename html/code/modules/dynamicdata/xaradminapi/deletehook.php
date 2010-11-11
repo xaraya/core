@@ -14,6 +14,7 @@
 /**
  * delete fields for an item - hook for ('item','delete','API')
  *
+ * @param array   $args array of parameters
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
  * @return boolean true on success, false on failure

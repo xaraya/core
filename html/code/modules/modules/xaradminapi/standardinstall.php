@@ -9,6 +9,9 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/1.html
  */
+/**
+ * @param array   $args array of parameters
+ */
 
 function modules_adminapi_standardinstall(Array $args=array())
 {

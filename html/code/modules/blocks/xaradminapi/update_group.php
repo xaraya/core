@@ -18,6 +18,7 @@
  *
  * @author Jim McDonald
  * @author Paul Rosania
+ * @param array   $args array of parameters
  * @param $args['id'] the ID of the group to update
  * @param $args['instance_order'] the new instance sequence (array of bid)
  * @return boolean true on success, false on failure

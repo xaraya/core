@@ -16,6 +16,7 @@
  * from any module regardless if the admin has configured html mail
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
+ * @param array   $args array of parameters
  * @param  $ 'info' is the email address we are sending (required)
  * @param  $ 'name' is the name of the email recipient (optional)
  * @param  $ 'recipients' is an array of recipients (required) // NOTE: $info or $recipients is required, not both

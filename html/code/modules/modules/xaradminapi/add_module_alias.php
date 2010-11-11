@@ -15,6 +15,7 @@
  *
  * @author Xaraya Development Team
  * @access public
+ * @param array   $args array of parameters
  * @param modName name of the 'real' module you want to assign it to
  * @param aliasModName name of the 'fake' module you want to define
  * @return boolean true on success, false on failure

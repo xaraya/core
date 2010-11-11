@@ -19,6 +19,7 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
+ * @param array   $args array of parameters
  * @param   childid, parentid
  * @return  boolean
  */

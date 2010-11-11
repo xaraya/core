@@ -18,6 +18,7 @@
  * Ex: Lost Password, Confirmation
  * @todo FIXME: change name of id parameter to something that implies plurality, review why we need k => v array
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array   $args array of parameters
  * @param $args['id'] array of id of the user(s) array($id => '1')
  * @param $args['mailtype'] type of the message to send (confirmation, deactivation, ...)
  * @param $args['message'] the message of the mail (optionnal)

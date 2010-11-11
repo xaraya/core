@@ -9,6 +9,9 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
+/**
+ * @param array   $args array of parameters
+ */
 
 function base_adminapi_getmodulesettings(Array $args=array())
 {

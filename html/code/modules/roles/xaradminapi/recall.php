@@ -13,6 +13,7 @@
  */
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array   $args array of parameters
  * @param $args['id'] id of the role that is being called
  * @return boolean true on success, false on failure
  */

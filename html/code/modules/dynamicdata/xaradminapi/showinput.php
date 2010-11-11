@@ -16,6 +16,7 @@
 /**
  * show some predefined form input field in a template
  *
+ * @param array   $args array of parameters
  * @param $args array containing the definition of the field (type, name, value, ...)
  * @return string containing the HTML (or other) text to output in the BL template
  */

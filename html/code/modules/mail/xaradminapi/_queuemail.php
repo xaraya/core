@@ -17,6 +17,7 @@
  * called directly. Its arguments are classified on a need-to-know
  * basis :-)
  * @author  John Cox <niceguyeddie@xaraya.com>
+ * @param array   $args array of parameters
  */
 function mail_adminapi__queuemail(Array $args=array())
 {

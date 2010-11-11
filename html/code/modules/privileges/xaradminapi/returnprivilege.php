@@ -16,6 +16,7 @@
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
+ * @param array   $args array of parameters
      * @param   strings with pid, name, realm, module, component, instance and level
      * @return  mixed id if OK, void if not
     */

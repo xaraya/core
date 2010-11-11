@@ -15,6 +15,7 @@
  * Modify the system configuration file
  *
  * @author Johnny Robeson
+ * @param array   $args array of parameters
  * @param string args['dbHost']
  * @param string args['dbName']
  * @param string args['dbUname']
@@ -56,6 +57,7 @@ function installer_adminapi_modifyconfig(Array $args=array())
  * Modify one or more variables in a configuration file
  *
  * @author Marc Lutolf
+ * @param array   $args array of parameters
  * @param string args['variables'] = array($name => $value,...)
  * @return boolean
  */
@@ -85,6 +87,7 @@ function installer_adminapi_modifysystemvars(Array $args=array())
  * Include a module init file and run a function
  *
  * @access public
+ * @param array   $args array of parameters
  * @param args['directory'] the directory to include
  * @param args['initfunc'] init|upgrade|remove
  * @return boolean true on success, false on failure
@@ -128,6 +131,7 @@ function installer_adminapi_initialise(Array $args=array())
  * Create a database
  *
  * @access public
+ * @param array   $args array of parameters
  * @param args['dbName']
  * @param args['dbType']
  * @return boolean true on success, false on failure
@@ -161,6 +165,7 @@ function installer_adminapi_createdb(Array $args=array())
  * CheckForField
  *
  * @access public
+ * @param array   $args array of parameters
  * @param args['field_name']
  * @param args['table_name']
  * @return boolean true if field exists false otherwise
@@ -198,6 +203,7 @@ function installer_adminapi_CheckForField(Array $args=array())
  * GetFieldType
  *
  * @access public
+ * @param array   $args array of parameters
  * @param args['field_name']
  * @param args['table_name']
  * @return integer field type
@@ -232,6 +238,7 @@ function installer_adminapi_GetFieldType(Array $args=array())
  * CheckTableExists
  *
  * @access public
+ * @param array   $args array of parameters
  * @param args['table_name']
  * @return boolean true if field exists false otherwise
  * @author Sean Finkle

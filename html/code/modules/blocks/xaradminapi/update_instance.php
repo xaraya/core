@@ -14,6 +14,7 @@
  *
  * @author Jim McDonald
  * @author Paul Rosania
+ * @param array   $args array of parameters
  * @param $args['bid'] the ID of the block to update
  * @param $args['title'] the new title of the block
  * @param $args['group_id'] the new position of the block (deprecated)

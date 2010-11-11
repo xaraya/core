@@ -12,6 +12,9 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+/**
+ * @param array   $args array of parameters
+ */
 function dynamicdata_adminapi_browse(Array $args=array())
 {
     // Argument check - make sure that all required arguments are present

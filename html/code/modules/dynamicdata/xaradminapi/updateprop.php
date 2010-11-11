@@ -15,6 +15,7 @@
  * update a property field
  *
  * @author the DynamicData module development team
+ * @param array   $args array of parameters
  * @param $args['id'] property id of the item field to update
  * @param $args['name'] name of the field to update (optional)
  * @param $args['label'] label of the field to update

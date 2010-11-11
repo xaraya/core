@@ -13,6 +13,7 @@
 
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array   $args array of parameters
  * @param $args['module'] module directory in var/messaging
  * @return array of template names and labels
  */

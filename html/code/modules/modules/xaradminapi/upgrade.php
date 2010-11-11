@@ -13,6 +13,7 @@
  * Upgrade a module
  *
  * @author Xaraya Development Team
+ * @param array   $args array of parameters
  * @param regid registered module id
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
