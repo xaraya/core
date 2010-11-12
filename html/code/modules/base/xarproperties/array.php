@@ -23,20 +23,13 @@ class ArrayProperty extends DataProperty
 
     public $fields = array();
 
-//    public $display_columns = 30;
-//    public $display_columns_count = 2;                             // default value of column dimension
     public $display_minimum_rows = 2;
     public $display_maximum_rows = 10;
     public $initialization_addremove = 0;           
-//    public $display_key_label = "Key";              // default value of Key label
-//    public $display_value_label = "Value";          // default value of value label
     public $display_column_titles = array("Key","Value");          // default labels for columns
     public $display_column_types = array("textbox","textbox");     // default types for columns
     public $initialization_associative_array = 1;                  // to store the value as associative array
     public $default_suffixlabel = "Row";                           // suffix for the Add/Remove Button
-//    public $initialization_prop_type = 'textbox';   // property type and config for the array values
-//    public $initialization_prop_config = '';        // TODO: the config is displayed/stored as serialized text for now, to                                                    
-                                                    //       avoid nested configs (e.g. see the objects 'config' property)
     public $initialization_fixed_keys = 0;          // allow editing keys on input
 
     public $display_column_definition = array(array("Key","Value"),array("textbox","textbox"));  
@@ -204,11 +197,6 @@ class ArrayProperty extends DataProperty
             $data['layout'] = 'table';
         }
         
-        // Bring the array config values to a common set of variables
-//        if (isset($data['column_titles'])) $this->display_column_titles = $data['column_titles'];
-//        if (isset($data['column_types']))  $this->display_column_types = $data['column_types'];
-//        if (isset($data['rows']))          $this->display_rows = $data['rows'];
-
         if (!isset($data['column_titles'])) $data['column_titles'] = $titles;
         if (!isset($data['column_types']))  $data['column_types'] = $types;
 
@@ -222,9 +210,13 @@ class ArrayProperty extends DataProperty
         if (!isset($data['value'])) $value = $this->getValue();
         else $value = $data['value'];
         
-        if (!isset($data['rows']))          $data['rows'] = count($value[0]);
+        try {
+            if (!isset($data['rows']))          $data['rows'] = count($value[0]);
+        } catch(Exception $e) {
+            $data['rows'] = $this->display_minimum_rows;
+        }
 
-        // First align the the number of titles and column types
+        // First make sure the number of titles and column types is the same
         $titlescount = count($data['column_titles']);
         $typescount = count($data['column_types']);
         if ($titlescount > $typescount) {
@@ -239,93 +231,13 @@ class ArrayProperty extends DataProperty
             }
         }
         $data['value'] = $value;
-/*
-        if (!is_array($value)) {
-            try {
-                $value = unserialize($value);
-                if (!is_array($value)) throw new Exception("Did not find a correct array value");
-            } catch (Exception $e) {
-                $elements = array();
-                $lines = explode(';',$value);
-                // remove the last (empty) element
-                array_pop($lines);
-                foreach ($lines as $element)
-                {
-                    // allow escaping \, for values that need a comma
-                    if (preg_match('/(?<!\\\),/', $element)) {
-                        // if the element contains a , we'll assume it's an key,value combination
-                        list($key,$name) = preg_split('/(?<!\\\),/', $element);
-                        $key = trim(strtr($key,array('\,' => ',')));
-                        $val = trim(strtr($val,array('\,' => ',')));
-                        $elements[$key] = $val;
-                    } else {
-                        // otherwise we'll assume no associative array
-                        $element = trim(strtr($element,array('\,' => ',')));
-                        $element = explode('%@$#',$element); 
-                        array_pop($element);                            
-                        array_push($elements, $element);
-                    }
-                }
-                $value = $elements;
-            }
-        }
 
-        // Allow overriding of the field keys from the template
-        if (isset($data['fields'])) $this->fields = $data['fields'];
-        if (count($this->fields) > 0) {
-            $fieldlist = $this->fields;
-        } else {
-            $fieldlist = array_keys($value);
-        }
-
-        // check if we have a specific property for the values
-//        if (!isset($data['valuetype'])) $data['valuetype'] = $this->initialization_prop_type;
-//        if (!isset($data['valueconfig'])) $data['valueconfig'] = $this->initialization_prop_config;
-//        $data['property'] = $this->getValueProperty($data['valuetype'], $data['valueconfig']);
-
-//        $data['value'] = array();
-
-*/        
-/*
-        foreach ($fieldlist as $field) {
-            if (!isset($value[$field])) {
-                $data['value'][$field] = '';
-            } elseif (is_array($value[$field])) {
-                foreach($value[$field] as $k => $v){
-                    $data['value'][$field][$k] = xarVarPrepForDisplay($v);
-                }
-            } else {
-                // CHECKME: skip this for array of properties ?
-                if (!empty($data['template']) && $data['template'] == 'array_of_props') {
-                    $data['value'][$field] = $value[$field];
-                } else {
-                    $data['value'][$field] = xarVarPrepForDisplay($value[$field]);
-                }
-            }
-        }
-        */
-        //exit;
-
-/*
-        
-//        if (!isset($data['keylabel'])) $data['keylabel'] = $this->display_key_label;
-//        if (!isset($data['valuelabel'])) $data['valuelabel'] = $this->display_value_label;
-
-        if (!isset($data['column_definition'])) $data['column_definition'] = $this->display_column_definition;
-//var_dump($this->display_column_titles);
-//var_dump($this->display_column_types);
-//var_dump($this->display_columns_count);
-//var_dump($this->display_rows);
-         
-*/
         if (!isset($data['allowinput'])) $data['allowinput'] = $this->initialization_addremove;
         if (!isset($data['associative_array'])) $data['associative_array'] = $this->initialization_associative_array;
         if (!isset($data['fixedkeys'])) $data['fixedkeys'] = $this->initialization_fixed_keys;
 
         if (!isset($data['suffixlabel'])) $data['suffixlabel'] = $this->default_suffixlabel;
-//        if (!isset($data['size'])) $data['size'] = $this->display_columns;
         if (!isset($data['layout'])) $data['layout'] = 'table';
-//        var_dump($data['value']);
         return parent::showInput($data);
     }
 
