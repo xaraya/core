@@ -255,11 +255,5 @@
                 </div>
             </fieldset>
         </form>
-        <p>
-            Look in the file var/messaging/roles/includes/message-vars.xd to see how the different variables used in the templates are defined.
-        </p>
-        <p>
-            Note that some variables (e.g. $myusername in the confirmation template) are defined dynamically during Xaraya processes, such as registration. You cannot use those variables, nor can you send messages that contain them from here.
-        </p>
     </div>
 </xar:template>
