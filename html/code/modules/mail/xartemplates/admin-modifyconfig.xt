@@ -372,13 +372,15 @@
                             <label for="searchstrings" title="#xarML('Enter each string on a single line. Do not separate with comma, etc. Best use is %%string%% to ensure no conflict exists.')#" class="xar-form-label">
                                 Strings for search:
                             </label>
+                            <xar:set name="searchstrings">unserialize(xarModVars::get('mail', 'searchstrings'))</xar:set>
                             <xar:data-input type="textarea_medium" name="searchstrings" value="$searchstrings"/>
                         </div>
                         <div class="xar-form-input-wrapper">
-                            <label for="searchstrings" title="#xarML('Enter each string on a single line in the same order as the search.  Do not separate with comma, etc.')#" class="xar-form-label">
+                            <label for="replacestrings" title="#xarML('Enter each string on a single line in the same order as the search.  Do not separate with comma, etc.')#" class="xar-form-label">
                                 Strings for replacement:
                             </label>
-                            <xar:data-input type="textarea_medium" name="searchstrings" value="$replacestrings"/>
+                            <xar:set name="replacestrings">unserialize(xarModVars::get('mail', 'replacestrings'))</xar:set>
+                            <xar:data-input type="textarea_medium" name="replacestrings" value="$replacestrings"/>
                         </div>
                     </fieldset>
                     <fieldset>

@@ -29,20 +29,6 @@ function mail_admin_modifyconfig()
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab','str:1', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
     
-    // Quick Check for E_ALL
-    $searchstrings = xarModVars::get('mail', 'searchstrings');
-    $replacestrings = xarModVars::get('mail', 'replacestrings');
-    if (empty($searchstrings)){
-        $searchstrings = serialize('%%Search%%');
-        xarModVars::set('mail', 'searchstrings', $searchstrings);
-    }
-    if (empty($replacestrings)){
-        $replacestrings = serialize('Replace %%Search%% with this text');
-        xarModVars::set('mail', 'replacestrings', $replacestrings);
-    }
-    $data['searchstrings'] = unserialize(xarModVars::get('mail', 'searchstrings'));
-    $data['replacestrings'] = unserialize(xarModVars::get('mail', 'replacestrings'));
-
     // Get encoding
     $data['encoding'] = xarModVars::get('mail', 'encoding');
 
@@ -162,10 +148,8 @@ function mail_admin_modifyconfig()
                     if (!empty($smtpPassword)) xarModVars::set('mail', 'smtpPassword', $smtpPassword);
 
                     xarModVars::set('mail', 'sendmailpath', $sendmailpath);
-                    $searchstrings = serialize($searchstrings);
-                    xarModVars::set('mail', 'searchstrings', $searchstrings);
-                    $replacestrings = serialize($replacestrings);
-                    xarModVars::set('mail', 'replacestrings', $replacestrings);
+                    xarModVars::set('mail', 'searchstrings', serialize($searchstrings));
+                    xarModVars::set('mail', 'replacestrings', serialize($replacestrings));
                     xarModVars::set('mail', 'suppresssending', $suppresssending);
                     xarModVars::set('mail', 'redirectsending', $redirectsending);
                     xarModVars::set('mail', 'redirectaddress', $redirectaddress);

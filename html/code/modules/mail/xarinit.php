@@ -28,6 +28,8 @@ function mail_init()
     xarModVars::set('mail', 'smtpHost', 'Your SMTP Host');
     xarModVars::set('mail', 'encoding', '8bit');
     xarModVars::set('mail', 'html', false);
+    xarModVars::set('mail', 'searchstrings', serialize('%%Search%%'));
+    xarModVars::set('mail', 'replacestrings', serialize('Replace %%Search%% with this text'));
 
     xarModRegisterHook('item', 'create', 'API', 'mail', 'admin', 'hookmailcreate');
     xarModRegisterHook('item', 'delete', 'API', 'mail', 'admin', 'hookmaildelete');
