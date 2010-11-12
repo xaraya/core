@@ -13,7 +13,7 @@
                 <th class="xar-align-right">Delete/Ignore</th>        
             </tr>        
         </thead>
-        <tbody id="#$id#_rows">#$rows#
+        <tbody id="#$id#_rows">
             <xar:for start="$i=0" test="$i lt $rows" iter="$i++">
                 <!-- name[row] -->
                 <xar:set name="row_name">"{$name}[value][{$i}]"</xar:set>
