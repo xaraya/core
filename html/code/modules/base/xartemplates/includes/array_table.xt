@@ -13,21 +13,23 @@
                 <th class="xar-align-right">Delete</th>        
             </tr>        
         </thead>
-        <tbody id="#$id#_rows">
+        <tbody id="#$id#_rows">#$rows#
             <xar:for start="$i=0" test="$i lt $rows" iter="$i++">
                 <!-- name[row] -->
-                <xar:set name="row_name">"{$name}[{$i}]"</xar:set>
+                <xar:set name="row_name">"{$name}[value][{$i}]"</xar:set>
                 <xar:set name="row_id">"{$name}_{$i}"</xar:set>
+                <xar:set name="col_name">"{$row_name}[0]"</xar:set>
+                <xar:set name="col_id">"{$row_id}_0"</xar:set>
                 <tr id="#$row_id#">
+                    <xar:data-input type="1" name="$col_name" id="$col_id" value="$i+1" hidden="hidden"/>
                     <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
+                        <xar:set name="col_index">$k+1</xar:set>
                         <!-- name[row][column] -->                        
-                        <xar:set name="col_name">"{$row_name}[{$k}]"</xar:set>
-                        <xar:set name="col_id">"{$row_id}_{$k}"</xar:set>
-                        <!-- This ensures the column always appears in the POST vars -->
-                        <input type="hidden" name="#$col_name#" id="#$col_id#"/>
-                        <!-- name[row][column][value] -->
-                        <xar:set name="prop_name">"{$col_name}[value]"</xar:set>
-                        <xar:set name="prop_id">"{$col_id}_value"</xar:set>
+                        <xar:set name="col_name">"{$row_name}[{$col_index}]"</xar:set>
+                        <xar:set name="col_id">"{$row_id}_{$col_index}"</xar:set>
+                        <!-- name[row][column] -->
+                        <xar:set name="prop_name">"{$col_name}"</xar:set>
+                        <xar:set name="prop_id">"{$col_id}"</xar:set>
                         <!-- CHECKME: would be better as $value[$i][$k] ? -->
                         <xar:set name="prop_val">$value[$k][$i]</xar:set>
                         <td>
@@ -35,7 +37,7 @@
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
-                        <xar:if condition="$i ge $minimum_rows">
+                        <xar:if condition="$rows ge $minimum_rows">
                             <!-- name[row][delete] -->
                             <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
                             <xar:set name="del_id">"{$row_id}_delete"</xar:set>
@@ -56,18 +58,20 @@
 <!--  Begin dummy line for adding rows --> 
             <xar:if condition="$rows lt $maximum_rows">
                 <xar:set name="thisrow">$lastrow+1</xar:set>
-                <xar:set name="row_name">"{$name}[{$thisrow}]"</xar:set>
+                <xar:set name="row_name">"{$name}[value][{$thisrow}]"</xar:set>
                 <xar:set name="row_id">"{$name}_{$thisrow}"</xar:set>
+                <xar:set name="col_name">"{$row_name}[0]"</xar:set>
+                <xar:set name="col_id">"{$row_id}_0"</xar:set>
                 <tr id="#$id#_rowtemplate">                         
+                    <xar:data-input type="1" name="$col_name" id="$col_id" value="$i+1" hidden="hidden"/>
                     <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
+                        <xar:set name="col_index">$k+1</xar:set>
                         <!-- name[row][column] -->                        
-                        <xar:set name="col_name">"{$row_name}[{$k}]"</xar:set>
-                        <xar:set name="col_id">"{$row_id}_{$k}"</xar:set>
-                        <!-- This ensures the column always appears in the POST vars -->
-                        <input type="hidden" name="#$col_name#" id="#$col_id#"/>
-                        <!-- name[row][column][value] -->
-                        <xar:set name="prop_name">"{$col_name}[value]"</xar:set>
-                        <xar:set name="prop_id">"{$col_id}_value"</xar:set>
+                        <xar:set name="col_name">"{$row_name}[{$col_index}]"</xar:set>
+                        <xar:set name="col_id">"{$row_id}_{$col_index}"</xar:set>
+                        <!-- name[row][column] -->
+                        <xar:set name="prop_name">"{$col_name}"</xar:set>
+                        <xar:set name="prop_id">"{$col_id}"</xar:set>
                         <td>
                             <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id"/>
                         </td>

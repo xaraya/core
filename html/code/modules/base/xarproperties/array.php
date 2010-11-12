@@ -62,22 +62,33 @@ class ArrayProperty extends DataProperty
         $name = empty($name) ? 'dd_'.$this->id : $name;
         // store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
-
         if (!isset($value)) {
             // Get the number of columns and rows
             $columncount = count($this->display_column_definition['value'][0]);
-            if (!xarVarFetch($name . '["rowsdisplayed"]',    'str', $rowsdisplayed, '', XARVAR_NOT_REQUIRED)) return;
-            $rowsdisplayed = explode(',', $rowsdisplayed);//var_dump($rowsdisplayed);exit;
-            foreach ($rowsdisplayed as $rownumber) {
-                $rowid = $rownumber - 1;
-                for ($k=0;$k<$columncount;$k++) {
-                    // Get the property for this field and get the value from the template
-                    $property = DataPropertyMaster::getProperty(array('type' => $this->display_column_definition['value'][1][$k]));
-                    $fieldname = $name . '["value"][' . $k . '][' . $rownumber . ']';
-                    $property->checkInput($fieldname);
-                    $value[$k][$rownumber] = $property->value;
+            if (!xarVarFetch($name . '["value"]',    'array', $elements, 'array', XARVAR_NOT_REQUIRED)) return;
+// Ignore the last row for now. It's the one for adding rows
+//            array_pop($elements);
+            // Get the number of rows we are saving
+            $rows = count($elements);
+
+            for ($k=1;$k<=$columncount;$k++) {
+                // Get the property type for this column and get the value from the template
+                $property = DataPropertyMaster::getProperty(array('type' => $this->display_column_definition['value'][1][$k-1]));
+                $i=0;
+                foreach ($elements as $row) {
+                    // $i is the row index we will save with, ensuring saved data has no holes in the index
+                    $i++;
+                    // $index is the current index of the row. May have holes if rows have been deleted
+                    $index = $row[0]-1;
+                    // Get the field name of the element we are looking at
+                    $fieldname = $name . '["value"][' . $index . '][' . $k . ']';
+                    // Get its data
+                    $valid = $property->checkInput($fieldname);
+                    // Move the found data to the array we will save
+                    $value[$k-1][$i-1] = $property->value;
                 }
-            }
+            }echo "<pre>";var_dump($_POST);var_dump($value);
+            //exit;
 
             //Set value to the initialization_associative_array  
             if (!xarVarFetch($name . '["associative_array"]', 'int', $associative_array, 0, XARVAR_NOT_REQUIRED)) return;
@@ -198,7 +209,6 @@ class ArrayProperty extends DataProperty
 //        if (isset($data['column_types']))  $this->display_column_types = $data['column_types'];
 //        if (isset($data['rows']))          $this->display_rows = $data['rows'];
 
-        if (!isset($data['rows']))          $data['rows'] = count($titles);        
         if (!isset($data['column_titles'])) $data['column_titles'] = $titles;
         if (!isset($data['column_types']))  $data['column_types'] = $types;
 
@@ -212,6 +222,8 @@ class ArrayProperty extends DataProperty
         if (!isset($data['value'])) $value = $this->getValue();
         else $value = $data['value'];
         
+        if (!isset($data['rows']))          $data['rows'] = count($value[0]);
+
         // First align the the number of titles and column types
         $titlescount = count($data['column_titles']);
         $typescount = count($data['column_types']);
@@ -227,7 +239,6 @@ class ArrayProperty extends DataProperty
             }
         }
         $data['value'] = $value;
-        
 /*
         if (!is_array($value)) {
             try {
@@ -314,7 +325,7 @@ class ArrayProperty extends DataProperty
         if (!isset($data['suffixlabel'])) $data['suffixlabel'] = $this->default_suffixlabel;
 //        if (!isset($data['size'])) $data['size'] = $this->display_columns;
         if (!isset($data['layout'])) $data['layout'] = 'table';
-//echo "<pre>";var_dump($this->getValue());
+//        var_dump($data['value']);
         return parent::showInput($data);
     }
 
