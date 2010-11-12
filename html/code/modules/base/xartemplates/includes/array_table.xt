@@ -37,19 +37,25 @@
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
-                        <xar:if condition="$rows ge $minimum_rows">
-                            <!-- name[row][delete] -->
-                            <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
-                            <xar:set name="del_id">"{$row_id}_delete"</xar:set>
+                        <!-- name[row][delete] -->
+                        <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
+                        <xar:set name="del_id">"{$row_id}_delete"</xar:set>
+                        <xar:if condition="$rows gt $minimum_rows">
                             <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked=""/>
-                            <img class="xar-icon" id="#$row_id#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')" style="cursor: pointer;display:none;"/> 
+                            <img class="xar-icon" id="#$row_id#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_delTableRow('#$row_id#')" style="cursor: pointer;display:none;"/> 
                             <!-- Hide checkboxes, show delete icons if js enabled -->
                             <script type="text/javascript">
                                 setDisplayOff('#$del_id#');
                                 setDisplayOn('#$row_id#_delbutton');
                             </script>
                         <xar:else/>
-                            &#160;    
+                            <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked="" disabled="disabled"/>
+                            <img class="xar-icon-disabled" id="#$row_id#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" style="display:none;"/> 
+                            <!-- Hide checkboxes, show delete icons if js enabled -->
+                            <script type="text/javascript">
+                                setDisplayOff('#$del_id#');
+                                setDisplayOn('#$row_id#_delbutton');
+                            </script>   
                         </xar:if>
                     </td>            
                 </tr>
@@ -81,12 +87,12 @@
                         <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
                         <xar:set name="del_id">"{$row_id}_delete"</xar:set>
                         <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked="checked"/>
-                        <img id="#$id#_delbutton" class="xar-icon" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')"  style="display:none;cursor: pointer;"/>
+                        <img id="#$id#_delbutton" class="xar-icon" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_delTableRow('#$row_id#')"  style="display:none;cursor: pointer;"/>
                     </td>
                 </tr>
             </xar:if>
             <tr id="#$id#_addrow" style="display:none;">
-                <xar:set name="colspan">count($column_titles)+2</xar:set>                
+                <xar:set name="colspan">count($column_titles)+1</xar:set>                
                 <td colspan="#$colspan#" class="xar-align-right">
                     <img src="#xarTplGetImage('icons/add.png', 'base')#" onclick="javascript:#$id#_addTableRow('#$id#_addrow')"/>                
                 </td>            
@@ -94,6 +100,7 @@
             <!-- turn off the new row template, turn on the new row button if js enabled -->
             <script type="text/javascript">
                 setDisplayOff('#$id#_rowtemplate');
+                setDisplayOff('#$del_id#');
                 setDisplayOn('#$id#_addrow');
                 setDisplayOn('#$id#_delbutton');
             </script>           
