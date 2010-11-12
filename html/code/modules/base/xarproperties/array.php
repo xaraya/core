@@ -30,7 +30,7 @@ class ArrayProperty extends DataProperty
     public $display_column_types = array("textbox","textbox");     // default types for columns
     public $initialization_associative_array = 1;                  // to store the value as associative array
     public $default_suffixlabel = "Row";                           // suffix for the Add/Remove Button
-    public $initialization_fixed_keys = 0;          // allow editing keys on input
+    public $initialization_fixed_keys = 0;                         // allow editing keys on input
 
     public $display_column_definition = array(array("Key","Value"),array("textbox","textbox"));  
 
@@ -63,12 +63,14 @@ class ArrayProperty extends DataProperty
 //            array_pop($elements);
             // Get the number of rows we are saving
             $rows = count($elements);
-
+//echo "<pre>";var_dump($elements);exit;
             for ($k=1;$k<=$columncount;$k++) {
                 // Get the property type for this column and get the value from the template
                 $property = DataPropertyMaster::getProperty(array('type' => $this->display_column_definition['value'][1][$k-1]));
                 $i=0;
                 foreach ($elements as $row) {
+                    // Ignore rows where the delete checkbox was checked
+                    if (isset($row['delete'])) continue;
                     // $i is the row index we will save with, ensuring saved data has no holes in the index
                     $i++;
                     // $index is the current index of the row. May have holes if rows have been deleted

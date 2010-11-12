@@ -10,7 +10,7 @@
                         <label>#$column_titles[$i]#</label>
                     </th>
                 </xar:for>
-                <th class="xar-align-right">Delete</th>        
+                <th class="xar-align-right">Delete/Ignore</th>        
             </tr>        
         </thead>
         <tbody id="#$id#_rows">#$rows#
@@ -77,6 +77,10 @@
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
+                        <!-- name[row][delete] -->
+                        <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
+                        <xar:set name="del_id">"{$row_id}_delete"</xar:set>
+                        <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked="checked"/>
                         <img id="#$id#_delbutton" class="xar-icon" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')"  style="display:none;cursor: pointer;"/>
                     </td>
                 </tr>
