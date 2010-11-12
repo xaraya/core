@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <table border="0">
+    <table class="xar-border-none xar-margin-thicktop">
         <tr>
             <td>&#160;</td>
             <xar:for start="$i=0" test="$i lt count($column_titles)" iter="$i++">

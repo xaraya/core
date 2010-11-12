@@ -16,8 +16,6 @@
                 <xar:template file="array_configuration"/>
             </xar:if >
         </xar:if >
-        <!--PSspl:Added hidden field for associative array configuration value. -->
-        <input type="hidden" name="#$name#[associative_array]" id="#$name#_associative_array" value="#$associative_array#"/>        
         <br class="xar-clearall"/>
         <xar:template file="dataproperty_additions" module="base"/>        
     </div>
