@@ -80,8 +80,7 @@ class ArrayProperty extends DataProperty
                     // Move the found data to the array we will save
                     $value[$k-1][$i-1] = $property->value;
                 }
-            }echo "<pre>";var_dump($_POST);var_dump($value);
-            //exit;
+            }
 
             //Set value to the initialization_associative_array  
             if (!xarVarFetch($name . '["associative_array"]', 'int', $associative_array, 0, XARVAR_NOT_REQUIRED)) return;
