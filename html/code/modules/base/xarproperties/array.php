@@ -23,9 +23,9 @@ class ArrayProperty extends DataProperty
 
     public $fields = array();
 
-    public $display_minimum_rows = 2;
-    public $display_maximum_rows = 10;
-    public $initialization_addremove = 0;           
+    public $display_minimum_rows = 2;                              // The table displays at least this many rows
+    public $display_maximum_rows = 10;                             // The table cannot display more than this many rows
+    public $initialization_addremove = 0;                          // 0: no adding/deleting of rows, 1: adding only, 2: adding and deleting    
     public $display_column_titles = array("Key","Value");          // default labels for columns
     public $display_column_types = array("textbox","textbox");     // default types for columns
     public $initialization_associative_array = 1;                  // to store the value as associative array
@@ -237,7 +237,7 @@ class ArrayProperty extends DataProperty
         if (!isset($data['associative_array'])) $data['associative_array'] = $this->initialization_associative_array;
         if (!isset($data['fixedkeys'])) $data['fixedkeys'] = $this->initialization_fixed_keys;
 
-        if (!isset($data['suffixlabel'])) $data['suffixlabel'] = $this->default_suffixlabel;
+        if (isset($data['addremove']))$this->initialization_addremove =  $data['addremove'];
         if (!isset($data['layout'])) $data['layout'] = 'table';
         return parent::showInput($data);
     }

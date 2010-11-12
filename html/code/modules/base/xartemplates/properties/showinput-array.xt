@@ -3,18 +3,10 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="container_class">$layout=='table'||$layout=='configuration'?'xar-clearboth':'xar-form-container-after'</xar:set>
     <div class="#$container_class#">
-        <xar:if condition="$allowinput eq 0">       
-            <xar:if condition="$layout eq 'table'">
-                <xar:template file="array_table"/>
-            <xar:else/>
-                <xar:template file="array_configuration"/>
-           </xar:if>
+        <xar:if condition="$layout eq 'table'">
+            <xar:template file="array_table"/>
         <xar:else/>
-            <xar:if condition="$layout eq 'table'">
-                <xar:template file="array_table"/>
-            <xar:else/>
-                <xar:template file="array_configuration"/>
-            </xar:if >
+            <xar:template file="array_configuration"/>
         </xar:if >
         <br class="xar-clearall"/>
         <xar:template file="dataproperty_additions" module="base"/>        

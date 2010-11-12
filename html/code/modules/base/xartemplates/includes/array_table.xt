@@ -37,7 +37,7 @@
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
-                        <xar:if condition="$rows ge $minimum_rows">
+                        <xar:if condition="($rows ge $minimum_rows) AND ($addremove eq 2)">
                             <!-- name[row][delete] -->
                             <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
                             <xar:set name="del_id">"{$row_id}_delete"</xar:set>
@@ -56,7 +56,7 @@
                 <xar:set name="lastrow">$i</xar:set>
             </xar:for>       
 <!--  Begin dummy line for adding rows --> 
-            <xar:if condition="$rows lt $maximum_rows">
+            <xar:if condition="($rows lt $maximum_rows) AND ($addremove ne 0)">
                 <xar:set name="thisrow">$lastrow+1</xar:set>
                 <xar:set name="row_name">"{$name}[value][{$thisrow}]"</xar:set>
                 <xar:set name="row_id">"{$name}_{$thisrow}"</xar:set>
@@ -84,13 +84,13 @@
                         <img id="#$id#_delbutton" class="xar-icon" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_removeRow('#$id#','#$i#')"  style="display:none;cursor: pointer;"/>
                     </td>
                 </tr>
-            </xar:if>
             <tr id="#$id#_addrow" style="display:none;">
                 <xar:set name="colspan">count($column_titles)+2</xar:set>                
                 <td colspan="#$colspan#" class="xar-align-right">
                     <img src="#xarTplGetImage('icons/add.png', 'base')#" onclick="javascript:#$id#_addTableRow('#$id#_addrow')"/>                
                 </td>            
             </tr>
+            </xar:if>
             <!-- turn off the new row template, turn on the new row button if js enabled -->
             <script type="text/javascript">
                 setDisplayOff('#$id#_rowtemplate');
