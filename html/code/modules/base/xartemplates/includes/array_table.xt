@@ -37,10 +37,10 @@
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
+                        <!-- name[row][delete] -->
+                        <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
+                        <xar:set name="del_id">"{$row_id}_delete"</xar:set>
                         <xar:if condition="($rows ge $minimum_rows) AND ($addremove eq 2)">
-                            <!-- name[row][delete] -->
-                            <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
-                            <xar:set name="del_id">"{$row_id}_delete"</xar:set>
                             <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked=""/>
                             <img class="xar-icon" id="#$row_id#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_delTableRow('#$row_id#')" style="cursor: pointer;display:none;"/> 
                             <!-- Hide checkboxes, show delete icons if js enabled -->

@@ -133,7 +133,16 @@ class ArrayProperty extends DataProperty
     public function getValue()
     {
         try {
+            $value = unserialize($this->value);
+            $temp = array();                
+            foreach($value as $i => $row) {
+                foreach ($row as $k => $column) {
+                    $temp[$k][$i] = $value[$i][$k];
+                }
+            }
             if(!$this->initialization_associative_array) {
+            /*
+                //Legacy format. remove?
                 $outer = explode(';',$this->value);
                 $value =array();
                 foreach ($outer as $element) {
@@ -141,8 +150,16 @@ class ArrayProperty extends DataProperty
                     if (count($inner)>1) $value[] = $inner;
                     else $value[] = $element;
                 }
+                */
+                $temp1 = array();                
+                foreach ($temp as $row) {
+                    $newkey = $row[0];
+                    unset($row[0]);
+                    $temp1[$newkey] = $row;
+                }
+                $value = $temp1;
             } else {
-                $value = unserialize($this->value);
+                $value = $temp;
             }
         } catch(Exception $e) {
             $value = null;
@@ -208,7 +225,7 @@ class ArrayProperty extends DataProperty
         // Now arrange the values contained in this array to the size we need
         // Number of columns is defined by count($data['column_titles'])
         // Number of rows is defined by $data['rows']
-        if (!isset($data['value'])) $value = $this->getValue();
+        if (!isset($data['value'])) $value = unserialize($this->value);
         else $value = $data['value'];
         
         try {
@@ -245,7 +262,7 @@ class ArrayProperty extends DataProperty
     public function showOutput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
-        $data['value'] = $this->getValue();
+        $data['value'] = unserialize($this->value);
         $data['column_titles'] = $this->display_column_definition['value'][0];
         $data['column_types'] = $this->display_column_definition['value'][1];
         $data['rows'] = count($data['value'][0]);
