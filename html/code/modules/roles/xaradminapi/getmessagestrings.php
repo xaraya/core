@@ -13,7 +13,7 @@
  */
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param $args['template'] name of the email type which has apair of -subject and -message files
  * @param $args['module'] module directory in var/messaging
  * @return array of strings of file contents read

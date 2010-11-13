@@ -13,10 +13,10 @@
  */
 /**
  * @desct
- * @param array   $args array of parameters
- * @param   userurl to check
- * @param   truecurenturl calling url
- * @param   redirecturl page to return user
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['userurl'] to check<br/>
+ *        string   $args['truecurenturl'] calling url<br/>
+ *        string   $args['redirecturl'] page to return user
  * @return  externalurl boolean true if external URL
  */
 function roles_userapi_parseuserhome(Array $args=array())

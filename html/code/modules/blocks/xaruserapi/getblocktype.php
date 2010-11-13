@@ -11,10 +11,10 @@
  */
 /*
  * Get a single block type.
- * @param array   $args array of parameters
- * @param args['tid'] block type ID (optional)
- * @param args['module'] module name (optional, but requires 'type')
- * @param args['type'] block type name (optional, but requires 'module')
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['tid'] block type ID (optional)<br/>
+ *        string   $args['module'] module name (optional, but requires 'type')<br/>
+ *        string   $args['type'] block type name (optional, but requires 'module')
  * @return array of block types, keyed on block type ID
  * @author Jason Judge
 */

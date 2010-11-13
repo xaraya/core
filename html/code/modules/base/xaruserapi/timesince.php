@@ -12,8 +12,8 @@
  * @link http://xaraya.com/index.php/release/68.html
 */
 /* Returns a fomatted string of two of years/months/weeks/days/hours/minutes since a given time (unix timestamp).
- * @param array   $args array of parameters
- * @param int $args['stamp'] as a unix timestamp
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['stamp'] as a unix timestamp
  * @author - based on original by Natalie Downe http://blog.natbat.co.uk/archive/2003/Jun/14/time_since
  */
 function base_userapi_timesince(Array $args=array())

@@ -14,8 +14,7 @@
  * Handle css tag
  *
  * @author andyv <andyv@xaraya.com>
- * @param array   $args array of parameters
- * @param $args array containing the parameters/**
+ * @param array    $args array of optional parameters<br/>
  * @return string output display string
  */
 function themes_userapi_deliver(Array $args=array())

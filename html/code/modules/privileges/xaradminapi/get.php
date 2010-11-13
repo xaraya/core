@@ -13,7 +13,7 @@
 /**
  * Get a specific privilege
  * Transient hack, will be removed
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  */
 function privileges_adminapi_get(Array $args=array())
 {

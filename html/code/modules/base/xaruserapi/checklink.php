@@ -15,11 +15,12 @@
  * @subpackage base
  * @author mikespub
  * @access public
- * @param $args['url'] string the absolute URL for the link
- * @param $args['method'] string the request method to use (default is HEAD, alternative is GET)
- * @param $args['skiplocal'] bool indicates if we want to skip checking local URLs (default is true)
- * @param $args['referer'] string optional referer (default is base URL of your site)
- * @param $args['follow'] bool indicates if we want to follow redirects or not (default is true)
+ * @param array   $args array of optional parameters<br/>
+ *        string  $args['url'] the absolute URL for the link<br/>
+ *        string  $args['method'] the request method to use (default is HEAD, alternative is GET)<br/>
+ *        boolean $args['skiplocal'] indicates if we want to skip checking local URLs (default is true)<br/>
+ *        string  $args['referer'] optional referer (default is base URL of your site)<br/>
+ *        boolean $args['follow'] indicates if we want to follow redirects or not (default is true)<br/>
  * @return integer status of the link
  */
 function base_userapi_checklink(Array $args=array())

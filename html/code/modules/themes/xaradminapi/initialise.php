@@ -13,7 +13,7 @@
  * Initialise a theme
  *
  * @author Marty Vance
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param regid registered theme id
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, THEME_NOT_EXIST

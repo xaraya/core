@@ -26,7 +26,7 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * @author Chris Powis
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @throws DB_EXCEPTION
  * @return array of block instances
 */

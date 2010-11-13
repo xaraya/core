@@ -15,7 +15,7 @@
  * create a new property field for an object
  *
  * @author the DynamicData module development team
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param $args['name'] name of the property to create
  * @param $args['label'] label of the property to create
  * @param $args['objectid'] object id of the property to create

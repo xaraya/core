@@ -16,11 +16,11 @@
  * uname, id and email are guaranteed to be unique,
  * otherwise the first hit will be returned
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array   $args array of parameters
- * @param $args['id'] id of user to get
- * @param $args['uname'] user name of user to get
- * @param $args['name'] name of user to get
- * @param $args['email'] email of user to get
+ *        array    $args array of optional parameters<br/>
+ *        string   $args['id'] id of user to get<br/>
+ *        string   $args['uname'] user name of user to get<br/>
+ *        string   $args['name'] name of user to get<br/>
+ *        string   $args['email'] email of user to get
  * @return mixed user array, or false on failure
  */
 function roles_userapi_get(Array $args=array())

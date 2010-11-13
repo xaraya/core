@@ -41,7 +41,7 @@
  * 'class/category/name' as orderBy parameter
  *
  * @author Marco Canini <marco@xaraya.com>
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param filter array of criteria used to filter the entire list of installed
  *        modules.
  * @param startNum integer the start offset in the list

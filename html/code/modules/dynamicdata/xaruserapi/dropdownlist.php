@@ -22,13 +22,13 @@
  * Note : for additional optional parameters, see the getitems() function
  *
  * @author the DynamicData module development team
- * @param array   $args array of parameters
- * @param $args['field'] field to use in the dropdown list (required here)
- * @param $args['showoutput'] go through showOutput() for this field (default false)
- * @param $args['module'] module name of the item fields to get, or
- * @param $args['module_id'] module id of the item fields to get +
- * @param $args['itemtype'] item type of the item fields to get, or
- * @param $args['table'] database table to turn into an object
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['field'] field to use in the dropdown list (required here)<br/>
+ *        boolean  $args['showoutput'] go through showOutput() for this field (default false)<br/>
+ *        string   $args['module'] module name of the item fields to get, or<br/>
+ *        integer  $args['module_id'] module id of the item fields to get +<br/>
+ *        string   $args['itemtype'] item type of the item fields to get, or<br/>
+ *        string   $args['table'] database table to turn into an object
  * @return array of (itemid => fieldvalue), or false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */

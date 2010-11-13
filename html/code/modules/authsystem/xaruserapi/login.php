@@ -18,10 +18,10 @@
 /**
  * log a user in
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array   $args array of parameters
- * @param $args['uname'] user name of user
- * @param $args['pass'] password of user
- * @param $args['rememberme'] remember this user (optional)
+ * @param array    $args array of optional parameters<br/>
+ *        string  $args['uname'] user name of user<br/>
+ *        string  $args['pass'] password of user<br/>
+ *        string  $args['rememberme'] remember this user (optional)
  * @return true on success, false on failure
  */
 function authsystem_userapi_login(Array $args=array())

@@ -13,7 +13,7 @@
  * Initialise a module
  *
  * @author Xaraya Development Team
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param regid registered module id
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_NOT_EXIST

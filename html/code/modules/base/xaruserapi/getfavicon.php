@@ -17,8 +17,8 @@
  *
  * @author Panayotis Vryonis (lilina package)
  * @access public
- * @param array   $args array of parameters
- * @param $args['url'] string the absolute URL for the file
+ * @param array    $args array of optional parameters<br/>
+ *        string  $args['url'] the absolute URL for the file
  * @return string content of the file
  */
 function base_userapi_getfavicon(Array $args=array())

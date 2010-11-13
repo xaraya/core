@@ -11,7 +11,7 @@
  */
 /**
  * Update module information
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param $args['regid'] the id number of the module to update
  * @param $args['displayname'] the new display name of the module
  * @param $args['description'] the new description of the module

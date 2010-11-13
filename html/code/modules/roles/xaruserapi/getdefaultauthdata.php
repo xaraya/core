@@ -16,7 +16,7 @@
  * The login and logout may not be supplied by the authentication module and so could be different
  *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @return array defaultauthmodulename, defaultlogoutmodname, defaultloginmodname
  */
 function roles_userapi_getdefaultauthdata()

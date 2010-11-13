@@ -13,7 +13,7 @@
  *
  * @author Jim McDonald
  * @author Paul Rosania
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
 */
 
 function blocks_userapi_handleStateIconTag(Array $args=array())

@@ -15,9 +15,9 @@
  * Count all active users
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array   $args array of parameters
- * @param bool $include_anonymous whether or not to include anonymous user
- * @param string $filter
+ * @param array    $args array of optional parameters<br/>
+ *        boolean  $args['include_anonymous'] whether or not to include anonymous user<br/>
+ *        string   $args['filter']
  * @return integer the number of users
  */
 function roles_userapi_countallactive(Array $args=array())

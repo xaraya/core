@@ -13,9 +13,9 @@
  */
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array   $args array of parameters
- * @param   string privilege name privname
- * @param   string role ID id
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['privilege'] name of a privilege<br/>
+ *        string   $args['role_id'] id of a role
  * @return  bool
  */
 function roles_userapi_checkprivilege(Array $args=array())

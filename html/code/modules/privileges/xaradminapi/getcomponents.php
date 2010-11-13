@@ -20,7 +20,7 @@
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
      * @param   string with module name
      * @return  array of component ids and names
     */

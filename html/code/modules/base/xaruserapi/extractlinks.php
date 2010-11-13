@@ -16,11 +16,11 @@
  *
  * @author mikespub
  * @access public
- * @param array   $args array of parameters
- * @param $args['content'] string the HTML content that you want to extract links from
- * @param $args['getlocal'] bool indicates if we want to get local URLs (default is true)
- * @param $args['getremote'] bool indicates if we want to get remote URLs (default is false)
- * @param $args['baseurl'] string optional base URL for the content (default is this site)
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['content'] string the HTML content that you want to extract links from<br/>
+ *        string   $args['getlocal'] bool indicates if we want to get local URLs (default is true)<br/>
+ *        string   $args['getremote'] bool indicates if we want to get remote URLs (default is false)<br/>
+ *        string   $args['baseurl'] string optional base URL for the content (default is this site)<br/>
  * @return array list of links found
  */
 function base_userapi_extractlinks(Array $args=array())

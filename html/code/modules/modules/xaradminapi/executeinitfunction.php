@@ -13,7 +13,7 @@
  * Loads xarinit or pninit and executes the given function
  *
  * @author Xaraya Development Team
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param $args['regid'] the id of the module
  * @param $args['function'] name of the function to be called
  * @return boolean true on success, false on failure in the called function

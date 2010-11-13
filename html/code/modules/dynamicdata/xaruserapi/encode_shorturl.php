@@ -14,8 +14,8 @@
  */
 /**
  * return the path for a short URL to xarModURL for this module
- * @param array   $args array of parameters
- * @param $args the function and arguments passed to xarModURL
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args the function and arguments passed to xarModURL
  * @return string path to be added to index.php for a short URL, or empty if failed
  */
 function dynamicdata_userapi_encode_shorturl(Array $args=array())

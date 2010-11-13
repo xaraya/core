@@ -15,7 +15,7 @@
  * update fields for an item - hook for ('item','update','API')
  * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
  *
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
  * @return boolean true on success, false on failure

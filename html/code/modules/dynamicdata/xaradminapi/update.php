@@ -15,7 +15,7 @@
  * update an item (the whole item or the dynamic data fields of it)
  *
  * @author the DynamicData module development team
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param $args['itemid'] item id of the original item
  * @param $args['module_id'] module id for the original item
  * @param $args['itemtype'] item type of the original item

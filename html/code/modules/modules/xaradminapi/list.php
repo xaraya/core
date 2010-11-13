@@ -13,7 +13,7 @@
  * Obtain list of modules (deprecated)
  *
  * @author Xaraya Development Team
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @return array the known modules
  * @throws NO_PERMISSION
  */

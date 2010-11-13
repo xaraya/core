@@ -13,7 +13,7 @@
  * Update the module version in the database
  *
  * @author Xaraya Development Team
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param $args['regId'] the id number of the module to update
  * @return boolean true on success, false on failure
  */

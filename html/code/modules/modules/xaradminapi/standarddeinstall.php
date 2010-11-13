@@ -14,7 +14,7 @@
  * Perform standard module removal actions
  *
  * @author Marc Lutolf (mfl@netspan.ch)
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @return boolean result of action
 **/
 function modules_adminapi_standarddeinstall(Array $args=array())

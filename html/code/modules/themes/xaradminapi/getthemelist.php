@@ -14,7 +14,7 @@
  * Supported criteria are: UserCapable, AdminCapable, Class, Category, State.
  * @author original - Marco Canini <marco@xaraya.com>,
  * @author andyv - modified
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param filter array of criteria used to filter the entire list of installed themes.
  * @param startNum the start offset in the list
  * @param numItems the length of the list

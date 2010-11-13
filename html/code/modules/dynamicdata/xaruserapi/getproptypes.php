@@ -15,7 +15,7 @@
  * Get the list of defined property types
  *
  * @author the DynamicData module development team
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @return array of property types
  * @throws DATABASE_ERROR, NO_PERMISSION
  */

@@ -16,7 +16,7 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * @access public
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param modName the module name (deprecated)
  * @param blockType the block type (deprecated)
  * @param args['module'] the module name

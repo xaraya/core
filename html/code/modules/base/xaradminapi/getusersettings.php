@@ -10,7 +10,7 @@
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  */
 
 function base_adminapi_getusersettings(Array $args=array())

@@ -14,9 +14,9 @@
 /**
  * utility function to pass individual item links to whoever
  *
- * @param array   $args array of parameters
- * @param $args['itemtype'] item type (optional)
- * @param $args['itemids'] array of item ids to get
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['itemtype'] item type (optional)<br/>
+ *        array    $args['itemids'] array of item ids to get
  * @return array the itemlink(s) for the item(s).
  */
 function blocks_userapi_getitemlinks(Array $args=array())

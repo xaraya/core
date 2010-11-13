@@ -13,7 +13,7 @@
 /*
  * Checker if our queue definition is there
  *
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @return mixed objectinfo if it's found, false if not there
  */
 

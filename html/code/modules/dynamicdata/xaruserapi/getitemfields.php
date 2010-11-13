@@ -16,9 +16,9 @@
 /**
  * utility function to pass item field definitions to whoever
  *
- * @param array   $args array of parameters
- * @param int $args['itemtype'] item type
- * @param int module ID of the module
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['itemtype'] item type<br/>
+ *        integer  $args['module_id'] ID of the module
  * @return array containing the item field definitions
  */
 function dynamicdata_userapi_getitemfields(Array $args=array())

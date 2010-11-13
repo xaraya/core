@@ -13,7 +13,7 @@
 /**
  * Set the state of a module
  *
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param $args['regid'] the module id
  * @param $args['state'] the state
  * @return int state

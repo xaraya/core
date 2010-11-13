@@ -14,9 +14,9 @@
 /**
  * removemember - remove a role from a group
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array   $args array of parameters
- * @param $args['gid'] group id
- * @param $args['id'] role id
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['gid'] group id<br/>
+ *        integer  $args['id'] role id
  * @return true on succes, false on failure
  */
 function roles_userapi_removemember(Array $args=array())

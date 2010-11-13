@@ -15,7 +15,7 @@
  * create a new block instance
  * @author Jim McDonald
  * @author Paul Rosania
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param $args['name'] unique name for the block
  * @param $args['title'] the title of the block
  * @param $args['type'] the block's type

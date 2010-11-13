@@ -13,7 +13,7 @@
 /*
  * Map a mail item to a queue based on defined rules
  *
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param object msg_structure parsed out result from the mailparser class
  * @return array the queue idents
  */

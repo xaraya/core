@@ -13,8 +13,8 @@
  * get an array of context data for a module using dynamicdata
  *
  * @author the DynamicData module development team
- * @param array   $args array of parameters
- * @param string $module  name of the module dynamicdata is working for
+ * @param array    $args array of optional parameters<br/>
+ *        string   $module  name of the module dynamicdata is working for
  * @return array of data
  */
 function dynamicdata_userapi_getcontext($args=array('module' =>'dynamicdata'))

@@ -13,7 +13,7 @@
 /**
  * Obtain list of hooks (optionally for a particular module)
  *
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param $args['modName'] optional module we're looking for
  * @return array of known hooks
  */

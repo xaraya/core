@@ -31,7 +31,7 @@
  * <xar:template type="module" module="base" file="admin-menu" subdata="array('modname' => 'module', 'modtype' => 'user')"/>
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param string $args[modname] optional name of module to get links for (default current request module)
  * @param string $args[modtype] optional type of links to return [admin|user] (default current request type)
  * @param string $args[layout] return links for menu or links for tabs with menu title info (default links)

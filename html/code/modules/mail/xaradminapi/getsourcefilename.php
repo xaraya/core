@@ -13,7 +13,7 @@
 /**
  * Psspl : Added API function to determine the template sourcefile to use
  *
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param  string $modName      Module name doing the request *                                 
  * @param  string $modtype      The base name for the template user|admin
  * @param  string $templateName The name for the template to use if any

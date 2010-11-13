@@ -14,7 +14,7 @@
 /**
  * insertuser - add a user to a group
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param $args['id'] user id
  * @param $args['gid'] group id
  * @return true on succes, false on failure

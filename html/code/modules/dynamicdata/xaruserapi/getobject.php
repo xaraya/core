@@ -15,10 +15,10 @@
  * get a dynamic object
  *
  * @author the DynamicData module development team
- * @param array   $args array of parameters
- * @param $args['objectid'] id of the object you're looking for, or
- * @param $args['moduleid'] module id of the item field to get
- * @param $args['itemtype'] item type of the item field to get
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['objectid'] id of the object you're looking for, or<br/>
+ *        integer  $args['moduleid'] module id of the item field to get<br/>
+ *        string   $args['itemtype'] item type of the item field to get
  * @return object a particular DataObject
  */
 function &dynamicdata_userapi_getobject(Array $args=array())

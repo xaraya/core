@@ -16,7 +16,7 @@
  * from any module
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param  string $ 'info' is the email address we are sending (required)
  * @param  string $ 'name' is the name of the email recipient
  * @param  array  $ 'recipients' is an array of recipients (required) // NOTE: $info or $recipients is required, not both

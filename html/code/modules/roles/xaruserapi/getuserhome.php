@@ -13,8 +13,8 @@
  */
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array   $args array of parameters
- * @param int $itemid whether
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['itemid']
  * @return string representing the user home
  */
 function roles_userapi_getuserhome(Array $args=array())

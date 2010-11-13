@@ -10,7 +10,7 @@
  * @link http://xaraya.com/index.php/release/771.html
  */
 /**
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  */
 
 

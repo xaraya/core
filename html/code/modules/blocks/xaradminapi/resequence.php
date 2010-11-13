@@ -13,7 +13,7 @@
  * resequence a blocks table
  * @author Jim McDonald
  * @author Paul Rosania
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @return boolean
  */
 function blocks_adminapi_resequence(Array $args=array())

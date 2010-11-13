@@ -14,9 +14,9 @@
 /**
  * Update a users status
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array   $args array of parameters
- * @param $args['uname'] is the users system name
- * @param $args['state'] is the new state for the user
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['uname'] is the users system name<br/>
+ *        string   $args['state'] is the new state for the user
  * returns bool
  */
 function roles_userapi_updatestatus(Array $args=array())

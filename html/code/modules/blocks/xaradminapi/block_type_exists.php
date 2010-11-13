@@ -15,7 +15,7 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * @access public
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param modName the module name
  * @param blockType the block type
  * @return boolean true on success, false on failure

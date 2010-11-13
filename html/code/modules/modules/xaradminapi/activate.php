@@ -13,7 +13,7 @@
  * Activate a module if it has an active function, otherwise just set the state to active
  *
  * @access public
- * @param array   $args array of parameters
+ * @param array    $args array of optional parameters<br/>
  * @param regid module's registered id
  * @return boolean
  * @throws BAD_PARAM

@@ -14,11 +14,11 @@
 /**
  * get all users
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array   $args array of parameters
- * @param $args['order'] comma-separated list of order items; default 'name'
- * @param $args['selection'] extra coonditions passed into the where-clause
- * @param $args['group'] comma-separated list of group names or IDs, or
- * @param $args['idlist'] array of user ids
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['order'] comma-separated list of order items; default 'name'<br/>
+ *        string   $args['selection'] extra coonditions passed into the where-clause<br/>
+ *        string   $args['group'] comma-separated list of group names or IDs, or<br/>
+ *        array    $args['idlist'] array of user ids
  * @return mixed array of users, or false on failure
  */
 function roles_userapi_getall(Array $args=array())
