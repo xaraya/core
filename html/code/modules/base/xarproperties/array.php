@@ -105,12 +105,13 @@ class ArrayProperty extends DataProperty
 
     function setValue($value=null)
     {
-        if (!empty($value) && !is_array($value)) {
-            $this->value = $value;
-        } else {
-            if (empty($value)) $value = array();
+        // If passing an string we assume it is already a serialzed array of the correct type
+        if (empty($value)) $value = array();
+        if (!empty($value) && is_array($value)) {
             //this code is added to store the values as value1,value2 in the DB for non-associative storage
             if(!$this->initialization_associative_array) {
+            /*
+                //Legacy format. remove?
                 $elements = "";
                 foreach ($value as $element) {
                     if (is_array($element)) {
@@ -124,10 +125,23 @@ class ArrayProperty extends DataProperty
                     }
                 }
                 $this->value = $elements;
-            } else {
-                $this->value = serialize($value);
+            */
+                $temp = array();                
+                foreach ($value as $key => $row) {
+                    array_unshift($row,$key);
+                    $temp[] = $row;
+                }
+                $value = $temp;
             }
+            $temp = array();                
+            foreach($value as $i => $column) {
+                foreach ($column as $k => $row) {
+                    $temp[$k][$i] = $value[$i][$k];
+                }
+            }
+            $value = $temp;
         }
+        $this->value = serialize($value);
     }
 
     public function getValue()
@@ -150,7 +164,7 @@ class ArrayProperty extends DataProperty
                     if (count($inner)>1) $value[] = $inner;
                     else $value[] = $element;
                 }
-                */
+            */
                 $temp1 = array();                
                 foreach ($temp as $row) {
                     $newkey = $row[0];
