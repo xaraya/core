@@ -7,7 +7,11 @@
             <tr>
                 <xar:for start="$i=0" test="$i lt count($column_titles)" iter="$i++">
                     <th class="xar-align-left">
-                        <label>#$column_titles[$i]#</label>
+                        <xar:if condition="$associative_array AND ($i eq 0)">
+                            <label>Array Key</label>
+                        <xar:else/>
+                            <label>#$column_titles[$i]#</label>
+                        </xar:if>
                     </th>
                 </xar:for>
                 <th class="xar-align-right">Delete/Ignore</th>        
@@ -33,7 +37,11 @@
                         <!-- CHECKME: would be better as $value[$i][$k] ? -->
                         <xar:set name="prop_val">$value[$k][$i]</xar:set>
                         <td>
-                            <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$prop_val"/>
+                            <xar:if condition="$associative_array AND ($k eq 0)">
+                                <xar:data-input type="textbox" name="$prop_name" id="$prop_id" value="$prop_val"/>
+                            <xar:else/>
+                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$prop_val"/>
+                            </xar:if>
                         </td>
                     </xar:for>
                     <td class="xar-align-right">

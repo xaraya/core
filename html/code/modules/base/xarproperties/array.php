@@ -28,7 +28,7 @@ class ArrayProperty extends DataProperty
     public $initialization_addremove = 0;                          // 0: no adding/deleting of rows, 1: adding only, 2: adding and deleting    
     public $display_column_titles = array("Key","Value");          // default labels for columns
     public $display_column_types = array("textbox","textbox");     // default types for columns
-    public $initialization_associative_array = 1;                  // to store the value as associative array
+    public $initialization_associative_array = 0;                  // flag to store the value as associative array
     public $default_suffixlabel = "Row";                           // suffix for the Add/Remove Button
     public $initialization_fixed_keys = 0;                         // allow editing keys on input
 
@@ -63,7 +63,6 @@ class ArrayProperty extends DataProperty
 //            array_pop($elements);
             // Get the number of rows we are saving
             $rows = count($elements);
-//echo "<pre>";var_dump($elements);exit;
             for ($k=1;$k<=$columncount;$k++) {
                 // Get the property type for this column and get the value from the template
                 $property = DataPropertyMaster::getProperty(array('type' => $this->display_column_definition['value'][1][$k-1]));
@@ -264,12 +263,12 @@ class ArrayProperty extends DataProperty
         }
         $data['value'] = $value;
 
-        if (!isset($data['allowinput'])) $data['allowinput'] = $this->initialization_addremove;
-        if (!isset($data['associative_array'])) $data['associative_array'] = $this->initialization_associative_array;
         if (!isset($data['fixedkeys'])) $data['fixedkeys'] = $this->initialization_fixed_keys;
 
-        if (isset($data['addremove']))$this->initialization_addremove =  $data['addremove'];
-        if (!isset($data['layout'])) $data['layout'] = 'table';
+        if (isset($data['allowinput']))        $this->initialization_addremove = $data['allowinput'];
+        if (isset($data['associative_array'])) $this->initialization_associative_array = $data['associative_array'];
+        if (isset($data['addremove']))         $this->initialization_addremove =  $data['addremove'];
+        if (!isset($data['layout']))           $data['layout'] = 'table';
         return parent::showInput($data);
     }
 
