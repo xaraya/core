@@ -87,7 +87,11 @@
                         <xar:set name="prop_name">"{$col_name}"</xar:set>
                         <xar:set name="prop_id">"{$col_id}"</xar:set>
                         <td>
-                            <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id"/>
+                            <xar:if condition="$associative_array AND ($k eq 0)">
+                                <xar:data-input type="textbox" name="$prop_name" id="$prop_id"/>
+                            <xar:else/>
+                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id"/>
+                            </xar:if>
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
