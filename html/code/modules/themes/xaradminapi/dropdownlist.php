@@ -38,11 +38,12 @@
  * 'class/category/name' as orderBy parameter
  *
  * @author Marco Canini <marco.canini@postnuke.com>
- * @param filter array of criteria used to filter the entire list of installed
- *        themes.
- * @param startNum the start offset in the list
- * @param numItems the length of the list
- * @param orderBy the order type of the list
+ * @param array    $args array of optional parameters<br/>
+ *        array    $args['filter'] array of criteria used to filter the entire list of installed<br/>
+ *                 themes.<br/>
+ *        integer  $args['startNum'] the start offset in the list<br/>
+ *        integer  $args['numItems'] the length of the list<br/>
+ *        string   $args['orderBy'] the order type of the list
  * @return array of theme information arrays
  * @throws DATABASE_ERROR, BAD_PARAM
  */

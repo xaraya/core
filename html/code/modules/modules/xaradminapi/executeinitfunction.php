@@ -14,8 +14,8 @@
  *
  * @author Xaraya Development Team
  * @param array    $args array of optional parameters<br/>
- * @param $args['regid'] the id of the module
- * @param $args['function'] name of the function to be called
+ *        integer  $args['regid'] the id of the module<br/>
+ *        string   $args['function'] name of the function to be called
  * @return boolean true on success, false on failure in the called function
  * @throws BAD_PARAM, NO_PERMISSION
  */

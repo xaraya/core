@@ -15,7 +15,7 @@
  *
  * @author Marty Vance
  * @param array    $args array of optional parameters<br/>
- * @param $maindId int ID of the module to look dependents for
+ *        integer  $args['maindId'] ID of the module to look dependents for
  * @return boolean true on dependencies activated, false for not
  * @throws NO_PERMISSION
  */

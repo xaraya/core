@@ -12,9 +12,9 @@
 /**
  * Update module information
  * @param array    $args array of optional parameters<br/>
- * @param $args['regid'] the id number of the module to update
- * @param $args['displayname'] the new display name of the module
- * @param $args['description'] the new description of the module
+ *        integer  $args['regid'] the id number of the module to update<br/>
+ *        string   $args['displayname'] the new display name of the module<br/>
+ *        string   $args['description'] the new description of the module
  * @return boolean true on success, false on failure
  */
 function modules_adminapi_update(Array $args=array())

@@ -20,7 +20,8 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
  * @param array    $args array of optional parameters<br/>
- * @param   childid, parentid
+ *        integer  $args['childid']<br/>
+ *        integer  $args['parentid']
  * @return  boolean
  */
 function privileges_adminapi_removemember(Array $args=array())

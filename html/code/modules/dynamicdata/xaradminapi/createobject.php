@@ -15,14 +15,15 @@
  * create a new dynamic object
  *
  * @author the DynamicData module development team
- * @param $args['name'] name of the object to create
- * @param $args['label'] label of the object to create
- * @param $args['moduleid'] module id of the object to create
- * @param $args['itemtype'] item type of the object to create
- * @param $args['urlparam'] URL parameter to use for the item (itemid, exid, aid, ...)
- * @param $args['config'] some configuration for the object (free to define and use)
- * @param $args['objectid'] object id of the object to create (for import only)
- * @param $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['name'] name of the object to create<br/>
+ *        string   $args['label'] label of the object to create<br/>
+ *        integer  $args['moduleid'] module id of the object to create<br/>
+ *        string   $args['itemtype'] item type of the object to create<br/>
+ *        string   $args['urlparam'] URL parameter to use for the item (itemid, exid, aid, ...)<br/>
+ *        string   $args['config'] some configuration for the object (free to define and use)<br/>
+ *        integer  $args['objectid'] object id of the object to create (for import only)<br/>
+ *        integer  $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
  * @return int object ID on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */

@@ -14,8 +14,8 @@
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
- * @param $args['template'] name of the email type which has apair of -subject and -message files
- * @param $args['module'] module directory in var/messaging
+ *        string   $args['template'] name of the email type which has apair of -subject and -message files<br/>
+ *        string   $args['module'] module directory in var/messaging
  * @return array of strings of file contents read
  */
 function mail_adminapi_getmessagestrings(Array $args=array())

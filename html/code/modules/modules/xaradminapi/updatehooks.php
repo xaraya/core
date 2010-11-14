@@ -15,7 +15,7 @@
  *
  * @author Xaraya Development Team
  * @param array    $args array of optional parameters<br/>
- * @param $args['regid'] the id number of the hook module
+ *        integer  $args['regid'] the id number of the hook module
  * @return boolean true on success, false on failure
  */
 function modules_adminapi_updatehooks(Array $args=array())

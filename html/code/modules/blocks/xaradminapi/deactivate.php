@@ -14,7 +14,7 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * @param array    $args array of optional parameters<br/>
- * @param $args['bid'] the ID of the block to deactivate
+ *        integer  $args['bid'] the ID of the block to deactivate
  * @return boolean true on success, false on failure
  */
 function blocks_adminapi_deactivate(Array $args=array())

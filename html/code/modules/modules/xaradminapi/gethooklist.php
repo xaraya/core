@@ -14,7 +14,7 @@
  * Obtain list of hooks (optionally for a particular module)
  *
  * @param array    $args array of optional parameters<br/>
- * @param $args['modName'] optional module we're looking for
+ *        string   $args['modName'] optional module we're looking for
  * @return array of known hooks
  */
 function modules_adminapi_gethooklist(Array $args=array())

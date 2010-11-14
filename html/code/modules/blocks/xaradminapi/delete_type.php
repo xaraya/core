@@ -17,10 +17,10 @@
  * @author Paul Rosania
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param modName the module name (deprec)
- * @param module the module name
- * @param blockType the block type (deprec)
- * @param type the block type
+ *        string   $args['modName'] the module name (deprec)<br/>
+ *        string   $args['module'] the module name<br/>
+ *        string   $args['blockType'] the block type (deprec)<br/>
+ *        string   $args['type'] the block type
  * @return boolean true on success, false on failure
  */
 function blocks_adminapi_delete_type(Array $args=array())

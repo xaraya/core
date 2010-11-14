@@ -14,8 +14,8 @@
  *
  * @author Marty Vance
  * @param array    $args array of optional parameters<br/>
- * @param $args['regid'] the theme id
- * @param $args['state'] the state
+ *        integer  $args['regid'] the theme id<br/>
+ *        integer  $args['state'] the state
  * @throws BAD_PARAM,NO_PERMISSION
  */
 function themes_adminapi_setstate(Array $args=array())

@@ -14,7 +14,7 @@
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
- * @param $args['module'] module directory in var/messaging
+ *        string   $args['module'] module directory in var/messaging
  * @return array of template names and labels
  */
 function mail_adminapi_getmessagetemplates(Array $args=array())

@@ -14,12 +14,12 @@
  * Psspl : Added API function to get the template file output for the mail message.
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param  string $modName      the module name
- * @param  string $modType      user|admin
- * @param  string $funcName     module function to template  
- * @param  string $templateName string the specific template to call
- * @param  array  $tplData      arguments for the template
- * @param  string $mailtype     The type of mail html|text
+ *        string   $args['modName'] the module name<br/>
+ *        string   $args['modType']      user|admin<br/>
+ *        string   $args['funcName']     module function to template  <br/>
+ *        string   $args['templateName'] string the specific template to call<br/>
+ *        string   $args['tplData']      arguments for the template<br/>
+ *        string   $args['mailtype']     The type of mail html|text
  * @return string xarTpl__executeFromFile($sourceFileName, $tplData) 
  */
 function mail_adminapi_mailmessagemodule(Array $args=array())

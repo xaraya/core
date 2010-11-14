@@ -16,7 +16,7 @@
  *
  * @author Roger Keays <r.keays@ninthave.net>
  * @param array    $args array of optional parameters<br/>
- * @param   directory of the theme
+ *        string   $args['directory'] of the theme
  * @return  the theme name in this directory, or false if theme is not
  *          found
  */

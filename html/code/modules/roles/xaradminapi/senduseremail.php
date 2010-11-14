@@ -19,12 +19,12 @@
  * @todo FIXME: change name of id parameter to something that implies plurality, review why we need k => v array
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
- * @param $args['id'] array of id of the user(s) array($id => '1')
- * @param $args['mailtype'] type of the message to send (confirmation, deactivation, ...)
- * @param $args['message'] the message of the mail (optionnal)
- * @param $args['subject'] the subject of the mail (optionnal)
- * @param $args['pass'] new password of the user (optionnal)
- * @param $args['ip'] ip adress of the user (optionnal)
+ *        integer  $args['id'] array of id of the user(s) array($id => '1')<br/>
+ *        string   $args['mailtype'] type of the message to send (confirmation, deactivation, ...)<br/>
+ *        string   $args['message'] the message of the mail (optionnal)<br/>
+ *        string   $args['subject'] the subject of the mail (optionnal)<br/>
+ *        string   $args['pass'] new password of the user (optionnal)<br/>
+ *        string   $args['ip'] ip adress of the user (optionnal)
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */

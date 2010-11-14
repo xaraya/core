@@ -14,8 +14,8 @@
  * Set the state of a module
  *
  * @param array    $args array of optional parameters<br/>
- * @param $args['regid'] the module id
- * @param $args['state'] the state
+ *        integer  $args['regid'] the module id<br/>
+ *        integer  $args['state'] the state
  * @return int state
  * @throws BAD_PARAM,NO_PERMISSION
  * @todo Do the db changes in a transaction to completely fail or succeed?

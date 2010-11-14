@@ -16,17 +16,17 @@
  *
  * @author the DynamicData module development team
  * @param array    $args array of optional parameters<br/>
- * @param $args['name'] name of the property to create
- * @param $args['label'] label of the property to create
- * @param $args['objectid'] object id of the property to create
- * @param $args['moduleid'] module id of the property to create
- * @param $args['itemtype'] item type of the property to create
- * @param $args['type'] type of the property to create
- * @param $args['defaultvalue'] default of the property to create
- * @param $args['source'] data source for the property (dynamic_data table or other)
- * @param $args['status'] status of the property to create (disabled/active/...)
- * @param $args['seq'] order of the property to create
- * @param $args['configuration'] configuration of the property to create
+ *        string   $args['name'] name of the property to create<br/>
+ *        string   $args['label'] label of the property to create<br/>
+ *        integer  $args['objectid'] object id of the property to create<br/>
+ *        integer  $args['moduleid'] module id of the property to create<br/>
+ *        string   $args['itemtype'] item type of the property to create<br/>
+ *        string   $args['type'] type of the property to create<br/>
+ *        string   $args['defaultvalue'] default of the property to create<br/>
+ *        string   $args['source'] data source for the property (dynamic_data table or other)<br/>
+ *        string   $args['status'] status of the property to create (disabled/active/...)<br/>
+ *        integer  $args['seq'] order of the property to create<br/>
+ *        string   $args['configuration'] configuration of the property to create
  * @return int property ID on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */

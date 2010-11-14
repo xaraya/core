@@ -17,7 +17,7 @@
  * @author Paul Rosania
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param see blocks/userapi/getinfo
+ *                 see blocks/userapi/getinfo
  * @return see blocks/userapi/getinfo
  * @deprec Jan 2004
  * @throws DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST

@@ -15,13 +15,13 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * @param array    $args array of optional parameters<br/>
- * @param $args['bid'] the ID of the block to update
- * @param $args['title'] the new title of the block
- * @param $args['group_id'] the new position of the block (deprecated)
- * @param $args['groups'] optional array of group memberships
- * @param $args['template'] the template of the block instance
- * @param $args['content'] the new content of the block
- * @param $args['refresh'] the new refresh rate of the block
+ *        integer  $args['bid'] the ID of the block to update<br/>
+ *        string   $args['title'] the new title of the block<br/>
+ *        string   $args['group_id'] the new position of the block (deprecated)<br/>
+ *        string   $args['groups'] optional array of group memberships<br/>
+ *        string   $args['template'] the template of the block instance<br/>
+ *        string   $args['content'] the new content of the block<br/>
+ *        integer  $args['refresh'] the new refresh rate of the block<br/>
  * @return boolean true on success, false on failure
  */
 function blocks_adminapi_update_instance(Array $args=array())

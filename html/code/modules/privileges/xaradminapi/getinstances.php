@@ -20,8 +20,8 @@
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
  * @param array    $args array of optional parameters<br/>
-     * @param   string with module name
-     * @param   string with component name
+ *        string   $args['module']  module name<br/>
+ *        string   $args['component']  component name
      * @return  array of instance ids and names for the module
     */
 

@@ -16,8 +16,8 @@
  * @author Paul Rosania
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param modName the module name
- * @param blockType the block type
+ *        string   $args['modName'] the module name<br/>
+ *        string   $args['blockType'] the block type
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  * @deprec Deprecated 11 Jan 2004 - use countblocktypes directly

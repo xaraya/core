@@ -16,8 +16,8 @@
  * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
  *
  * @param array    $args array of optional parameters<br/>
- * @param $args['objectid'] ID of the object
- * @param $args['extrainfo'] extra information
+ *        integer  $args['objectid'] ID of the object<br/>
+ *        string   $args['extrainfo'] extra information
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */

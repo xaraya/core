@@ -14,7 +14,7 @@
  * Get all modules in the database
  *
  * @param array    $args array of optional parameters<br/>
- * @param $args['regid'] - optional regid to retrieve
+ *        integer  $args['regid'] - optional regid to retrieve
  * @return array modules in the database
  */
 function modules_adminapi_getdbmodules(Array $args=array())

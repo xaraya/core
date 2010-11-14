@@ -16,8 +16,8 @@
  * @author Xaraya Development Team
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param aliasModName name of the 'fake' module you want to remove
- * @param modName name of the 'real' module it was assigned to
+ *        string   $args['aliasModName'] name of the 'fake' module you want to remove<br/>
+ *        string   $args['modName'] name of the 'real' module it was assigned to
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */

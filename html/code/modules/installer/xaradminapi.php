@@ -16,12 +16,12 @@
  *
  * @author Johnny Robeson
  * @param array    $args array of optional parameters<br/>
- * @param string args['dbHost']
- * @param string args['dbName']
- * @param string args['dbUname']
- * @param string args['dbPass']
- * @param string args['prefix']
- * @param string args['dbType']
+ *        string   $args['dbHost']<br/>
+ *        string   $args['dbName']<br/>
+ *        string   $args['dbUname']<br/>
+ *        string   $args['dbPass']<br/>
+ *        string   $args['prefix']<br/>
+ *        string   $args['dbType']
  * @return boolean
  */
 function installer_adminapi_modifyconfig(Array $args=array())
@@ -88,8 +88,8 @@ function installer_adminapi_modifysystemvars(Array $args=array())
  *
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param args['directory'] the directory to include
- * @param args['initfunc'] init|upgrade|remove
+ *        string   $args['directory'] the directory to include<br/>
+ *        string   $args['initfunc'] init|upgrade|remove
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  */
@@ -132,8 +132,8 @@ function installer_adminapi_initialise(Array $args=array())
  *
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param args['dbName']
- * @param args['dbType']
+ *        string   $args['dbName']<br/>
+ *        string   $args['dbType']
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, DATABASE_ERROR
  */
@@ -166,8 +166,8 @@ function installer_adminapi_createdb(Array $args=array())
  *
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param args['field_name']
- * @param args['table_name']
+ *        string   $args['field_name']<br/>
+ *        string   $args['table_name']
  * @return boolean true if field exists false otherwise
  * @author Sean Finkle
  * @author John Cox
@@ -204,8 +204,8 @@ function installer_adminapi_CheckForField(Array $args=array())
  *
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param args['field_name']
- * @param args['table_name']
+ *        string   $args['field_name']<br/>
+ *        string   $args['table_name']
  * @return integer field type
  * @author Sean Finkle
  * @author John Cox
@@ -239,7 +239,7 @@ function installer_adminapi_GetFieldType(Array $args=array())
  *
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param args['table_name']
+ *        string   $args['table_name']
  * @return boolean true if field exists false otherwise
  * @author Sean Finkle
  * @author John Cox

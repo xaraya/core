@@ -14,7 +14,7 @@
  *
  * @author Xaraya Development Team
  * @param array    $args array of optional parameters<br/>
- * @param regid registered module id
+ *        integer  $args['regid'] registered module id
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */

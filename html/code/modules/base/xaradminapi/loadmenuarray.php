@@ -32,11 +32,11 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
- * @param string $args[modname] optional name of module to get links for (default current request module)
- * @param string $args[modtype] optional type of links to return [admin|user] (default current request type)
- * @param string $args[layout] return links for menu or links for tabs with menu title info (default links)
- * @param bool $args[noxml] optionally force looking for links only from a getmenulinks function
- * @param bool $args[nolinks] optionally force looking for links only from xml files
+ * @param string   $args[modname] optional name of module to get links for (default current request module)<br/>
+ * @param string   $args[modtype] optional type of links to return [admin|user] (default current request type)<br/>
+ * @param string   $args[layout] return links for menu or links for tabs with menu title info (default links)<br/>
+ * @param boolean  $args[noxml] optionally force looking for links only from a getmenulinks function<br/>
+ * @param boolean  $args[nolinks] optionally force looking for links only from xml files
  * @return array menulinks for the module
  */
 function base_adminapi_loadmenuarray(Array $args=array())

@@ -15,10 +15,10 @@
  *
  * @author Xaraya Development Team
  * @param array    $args array of optional parameters<br/>
- * @param $args['hookModName'] hook module we're looking for
- * @param $args['hookObject'] the object of the hook (item, module, ...) (optional)
- * @param $args['hookAction'] the action on that object (transform, display, ...) (optional)
- * @param $args['hookArea'] the area we're dealing with (GUI, API) (optional)
+ *        string   $args['hookModName'] hook module we're looking for<br/>
+ *        string   $args['hookObject'] the object of the hook (item, module, ...) (optional)<br/>
+ *        string   $args['hookAction'] the action on that object (transform, display, ...) (optional)<br/>
+ *        string   $args['hookArea'] the area we're dealing with (GUI, API) (optional)
  * @return array modules calling this hook module
  * @throws BAD_PARAM
  */

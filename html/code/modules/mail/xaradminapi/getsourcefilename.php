@@ -14,11 +14,11 @@
  * Psspl : Added API function to determine the template sourcefile to use
  *
  * @param array    $args array of optional parameters<br/>
- * @param  string $modName      Module name doing the request *                                 
- * @param  string $modtype      The base name for the template user|admin
- * @param  string $templateName The name for the template to use if any
- * @param  string $mailtype     The type of mail html|text 
- * @param  string $messagepart  The part of the message tobe sent subject|body 
+ *        string   $args['modName']      Module name doing the request *   <br/>                              
+ *        string   $args['modtype']      The base name for the template user|admin<br/>
+ *        string   $args['templateName'] The name for the template to use if any<br/>
+ *        string   $args['mailtype']     The type of mail html|text <br/>
+ *        string   $args['messagepart']  The part of the message tobe sent subject|body 
  * @return string
  *
  */

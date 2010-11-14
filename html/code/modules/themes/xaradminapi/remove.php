@@ -15,7 +15,7 @@
  *
  * @author Marty Vance
  * @param array    $args array of optional parameters<br/>
- * @param $args['regid'] the id of the theme
+ *        integer  $args['regid'] the id of the theme
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */

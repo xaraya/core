@@ -16,7 +16,7 @@
  *
  * @author the DynamicData module development team
  * @param array    $args array of optional parameters<br/>
- * @param $args['objectid'] object id of the object to delete
+ *        integer  $args['objectid'] object id of the object to delete
  * @return int object ID on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */

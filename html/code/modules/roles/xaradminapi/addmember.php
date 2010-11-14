@@ -15,8 +15,8 @@
  * insertuser - add a user to a group
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
- * @param $args['id'] user id
- * @param $args['gid'] group id
+ *        integer  $args['id'] user id<br/>
+ *        integer  $args['gid'] group id
  * @return true on succes, false on failure
  */
 function roles_adminapi_addmember(Array $args=array())

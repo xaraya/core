@@ -16,11 +16,11 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
- * @param $args['id'] user ID
- * @param $args['name'] user real name
- * @param $args['uname'] user nick name
- * @param $args['email'] user email address
- * @param $args['pass'] user password
+ *        integer  $args['id'] user ID<br/>
+ *        string   $args['name'] user real name<br/>
+ *        string   $args['uname'] user nick name<br/>
+ *        string   $args['email'] user email address<br/>
+ *        string   $args['pass'] user password
  * TODO: move url to dynamic user data
  *       replace with status
  * @param $args['url'] user url

@@ -16,14 +16,14 @@
  *
  * @author the DynamicData module development team
  * @param array    $args array of optional parameters<br/>
- * @param $args['id'] property id of the item field to update
- * @param $args['name'] name of the field to update (optional)
- * @param $args['label'] label of the field to update
- * @param $args['type'] type of the field to update
- * @param $args['defaultvalue'] default of the field to update (optional)
- * @param $args['source'] data source of the field to update (optional)
- * @param $args['status'] status of the field to update (optional)
- * @param $args['configuration'] configuration of the field to update (optional)
+ *        integer  $args['id'] property id of the item field to update<br/>
+ *        string   $args['name'] name of the field to update (optional)<br/>
+ *        string   $args['label'] label of the field to update<br/>
+ *        string   $args['type'] type of the field to update<br/>
+ *        string   $args['defaultvalue'] default of the field to update (optional)<br/>
+ *        string   $args['source'] data source of the field to update (optional)<br/>
+ *        integer  $args['status'] status of the field to update (optional)<br/>
+ *        string   $args['configuration'] configuration of the field to update (optional)
  * @return boolean
  * @throws BAD_PARAM, NO_PERMISSION
  */

@@ -19,13 +19,14 @@
  * @author Marco Canini <marco@xaraya.com>
  * @author Paul Rosania
  * @access protected
- * @param string modName the module name (deprec)
- * @param string module the module name
- * @param string blockType the name of the block (deprec)
- * @param string type the name of the block
- * @param string blockFunc the block function to load (deprec)
- * @param string func the block function to load ('modify', 'update', 'display', 'info', 'help') (deprec)
- * @param string func the block function to load ('modify', 'update', 'display', 'getInfo', 'getInit')
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['modName'] the module name (deprec)<br/>
+ *        string   $args['module'] the module name<br/>
+ *        string   $args['blockType'] the name of the block (deprec)<br/>
+ *        string   $args['type'] the name of the block<br/>
+ *        string   $args['blockFunc'] the block function to load (deprec)<br/>
+ *        string   $args['func'] the block function to load ('modify', 'update', 'display', 'info', 'help') (deprec)<br/>
+ *        string   $args['func'] the block function to load ('modify', 'update', 'display', 'getInfo', 'getInit')
  * @return boolean success or failure
  * @throws EmptyParameterException, ClassNotFoundException, FunctionNotFoundException,
  *         FileNotFoundException

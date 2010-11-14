@@ -15,9 +15,9 @@
  *
  * @author Xaraya Development Team
  * @param array    $args array of optional parameters<br/>
- * @param $args['callerModName'] caller module
- * @param $args['callerItemType'] optional item type for the caller module
- * @param $args['hookModName'] hook module
+ *        string   $args['callerModName'] caller module<br/>
+ *        string   $args['callerItemType'] optional item type for the caller module<br/>
+ *        string   $args['hookModName'] hook module
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */

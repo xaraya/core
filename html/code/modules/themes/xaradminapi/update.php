@@ -14,9 +14,9 @@
  *
  * @author Marty Vance
  * @param array    $args array of optional parameters<br/>
- * @param $args['regid'] the id number of the theme to update
- * @param $args['displayname'] the new display name of the theme
- * @param $args['description'] the new description of the theme
+ *        integer  $args['regid'] the id number of the theme to update<br/>
+ *        string   $args['displayname'] the new display name of the theme<br/>
+ *        string   $args['description'] the new description of the theme
  * @return boolean true on success, false on failure
  */
 function themes_adminapi_update(Array $args=array())

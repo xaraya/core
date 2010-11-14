@@ -14,7 +14,7 @@
  *
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param regid module's registered id
+ *        integer  $args['regid'] module's registered id
  * @return boolean
  * @throws BAD_PARAM
  */

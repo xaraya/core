@@ -17,7 +17,7 @@
  * @author Marty Vance
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param regid theme's registered id
+ *        string   $args['regid'] theme's registered id
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */

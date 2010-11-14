@@ -15,8 +15,8 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
- * @param $args['template'] name of the template without .xt extension
- * @param $args['module'] module directory in var/messaging
+ *        string   $args['template'] name of the template without .xt extension<br/>
+ *        string   $args['module'] module directory in var/messaging
  * @return string of file contents read
  */
 function roles_adminapi_getmessageincludestring(Array $args=array())

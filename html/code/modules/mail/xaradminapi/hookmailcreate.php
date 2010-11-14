@@ -16,8 +16,8 @@
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @param array    $args array of optional parameters<br/>
- * @param  $ 'modid' is the module that is sending mail.
- * @param  $ 'itemid' is the item created.
+ *        integer  $args['modid'] is the module that is sending mail.<br/>
+ *        integer  $args['itemid'] is the item created.
  */
 function mail_adminapi_hookmailcreate(Array $args=array())
 {

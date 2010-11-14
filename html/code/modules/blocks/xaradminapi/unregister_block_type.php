@@ -17,8 +17,8 @@
  * @author Paul Rosania
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param modName the module name
- * @param blockType the block type
+ *        string   $args['modName'] the module name<br/>
+ *        string   $args['blockType'] the block type
  * @return boolean true on success, false on failure
  */
 function blocks_adminapi_unregister_block_type(Array $args=array())

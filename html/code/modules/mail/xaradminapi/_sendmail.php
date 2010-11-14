@@ -17,31 +17,31 @@
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @param array    $args array of optional parameters<br/>
- * @param  $ 'info' is the email address we are sending (required)
- * @param  $ 'name' is the name of the email receipitent (optional)
- * @param  $ 'recipients' is an array of recipients (required) // NOTE: $info or $recipients is required, not both
- * @param  $ 'ccinfo' is the email address we are sending (optional)
- * @param  $ 'ccname' is the name of the email recipient (optional)
- * @param  $ 'ccrecipients' is an array of cc recipients (optional)
- * @param  $ 'bccinfo' is the email address we are sending (required)
- * @param  $ 'bccname' is the name of the email recipient (optional)
- * @param  $ 'bccrecipients' is an array of bcc recipients (optional)
- * @param  $ 'subject' is the subject of the email (required)
- * @param  $ 'message' is the body of the email (required)
- * @param  $ 'htmlmessage' is the html body of the email
- * @param  $ 'priority' is the priority of the message
- * @param  $ 'encoding' is the encoding of the message
- * @param  $ 'wordwrap' is the column width of the message
- * @param  $ 'from' is who the email is from
- * @param  $ 'fromname' is the name of the person the email is from
- * @param  $ 'attachName' is the name of an attachment to a message
- * @param  $ 'attachPath' is the path of the attachment
- * @param  $ 'htmlmail' is set to true for an html email
- * @param  $ 'usetemplates' set to true to use templates in xartemplates
- * @param  $ 'when' timestamp specifying that this mail should be sent 'no earlier than' (default is now)
+ *        string   $args['info'] is the email address we are sending (required)<br/>
+ *        string   $args['name'] is the name of the email receipitent (optional)<br/>
+ *        array    $args['recipients'] is an array of recipients (required) // NOTE: $info or $recipients is required, not both<br/>
+ *        string   $args['ccinfo'] is the email address we are sending (optional)<br/>
+ *        string   $args['ccname'] is the name of the email recipient (optional)<br/>
+ *        array    $args['ccrecipients'] is an array of cc recipients (optional)<br/>
+ *        string   $args['bccinfo'] is the email address we are sending (required)<br/>
+ *        string   $args['bccname'] is the name of the email recipient (optional)<br/>
+ *        array    $args['bccrecipients'] is an array of bcc recipients (optional)<br/>
+ *        string   $args['subject'] is the subject of the email (required)<br/>
+ *        string   $args['message'] is the body of the email (required)<br/>
+ *        string   $args['htmlmessage'] is the html body of the email<br/>
+ *        string   $args['priority'] is the priority of the message<br/>
+ *        string   $args['encoding'] is the encoding of the message<br/>
+ *        string   $args['wordwrap'] is the column width of the message<br/>
+ *        string   $args['from'] is who the email is from<br/>
+ *        string   $args['fromname'] is the name of the person the email is from<br/>
+ *        string   $args['attachName'] is the name of an attachment to a message<br/>
+ *        string   $args['attachPath'] is the path of the attachment<br/>
+ *        string   $args['htmlmail'] is set to true for an html email<br/>
+ *        string   $args['usetemplates'] set to true to use templates in xartemplates<br/>
+ *        string   $args['when' timestamp specifying that this mail should be sent 'no earlier than' (default is now)
  *                  This requires installation and configuration of the scheduler module
- * @param  $ 'redirectsending' set this to redirect email.(optional)
- * @param  $ 'redirectaddress' is the email address we are redirecting mails.(optional)
+ * @param  $args['redirectsending' set this to redirect email.(optional)
+ * @param  $args['redirectaddress' is the email address we are redirecting mails.(optional)
  * 
  */
 function mail_adminapi__sendmail(Array $args=array())

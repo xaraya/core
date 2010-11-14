@@ -16,11 +16,11 @@
  * @author Paul Rosania
  * @access public
  * @param array    $args array of optional parameters<br/>
- * @param modName the module name (deprecated)
- * @param blockType the block type (deprecated)
- * @param args['module'] the module name
- * @param args['type'] the block type
- * @param args['info'] the info array for the block type
+ *        string   $args['modName'] the module name (deprecated)<br/>
+ *        string   $args['blockType'] the block type (deprecated)<br/>
+ *        string   $args['module'] the module name<br/>
+ *        string   $args['type'] the block type<br/>
+ *        string   $args['info'] the info array for the block type
  * @return mixed ID of block type registered (even if already registered), false on failure
  */
 function blocks_adminapi_create_type(Array $args=array())
