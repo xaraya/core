@@ -173,7 +173,9 @@ function roles_user_account()
                 $data['formdata'] = $formdata;
             }
             $object->getItem(array('itemid' => $id));
-            $data['object'] = $object;
+            $data['object'] = $object;   
+            // Bug 6566: name property only applies to roles_users object  
+            $data['object']->properties['name']->display_layout = 'single';
         }
         // set some sensible defaults for common stuff
         if (empty($data['formaction'])) {
@@ -193,7 +195,6 @@ function roles_user_account()
         }
         $data['menutabs'] = $menutabs;
         
-        $data['object']->properties['name']->display_layout = 'single';
     }
     $data['id']          = xarUserGetVar('id');
     $data['name']         = xarUserGetVar('name');
