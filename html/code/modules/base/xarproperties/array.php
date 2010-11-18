@@ -26,7 +26,7 @@ class ArrayProperty extends DataProperty
     public $display_minimum_rows = 2;                              // The table displays at least this many rows
     public $display_maximum_rows = 10;                             // The table cannot display more than this many rows
     public $initialization_addremove = 0;                          // 0: no adding/deleting of rows, 1: adding only, 2: adding and deleting    
-    public $initialization_associative_array = 0;                  // flag to store the value as associative array
+    public $initialization_associative_array = 0;                  // flag to display the value as associative array
     public $default_suffixlabel = "Row";                           // suffix for the Add/Remove Button
     public $initialization_fixed_keys = 0;                         // allow editing keys on input
 

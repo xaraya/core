@@ -18,7 +18,7 @@
                 </td>
                 <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
                     <td>
-                        <xar:set name="propvalue">$value[$k][$i]</xar:set>
+                        <xar:set name="propvalue">$value[$i][$k]</xar:set>
                         <xar:data-output type="$column_types[$k]" value="$propvalue"/>
                     </td>
                 </xar:for>

@@ -7,7 +7,7 @@
             <tr>
                 <xar:for start="$i=0" test="$i lt count($column_titles)" iter="$i++">
                     <th class="xar-align-left">
-                        <xar:if condition="$associative_array AND ($i eq 0)">
+                        <xar:if condition="!$associative_array AND ($i eq 0)">
                             <label>Array Key</label>
                         <xar:else/>
                             <label>#$column_titles[$i]#</label>
@@ -35,9 +35,9 @@
                         <xar:set name="prop_name">"{$col_name}"</xar:set>
                         <xar:set name="prop_id">"{$col_id}"</xar:set>
                         <!-- CHECKME: would be better as $value[$i][$k] ? -->
-                        <xar:set name="prop_val">$value[$k][$i]</xar:set>
+                        <xar:set name="prop_val">$value[$i][$k]</xar:set>
                         <td>
-                            <xar:if condition="$associative_array AND ($k eq 0)">
+                            <xar:if condition="!$associative_array AND ($k eq 0)">
                                 <xar:data-input type="textbox" name="$prop_name" id="$prop_id" value="$prop_val"/>
                             <xar:else/>
                                 <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$prop_val"/>
@@ -87,7 +87,7 @@
                         <xar:set name="prop_name">"{$col_name}"</xar:set>
                         <xar:set name="prop_id">"{$col_id}"</xar:set>
                         <td>
-                            <xar:if condition="$associative_array AND ($k eq 0)">
+                            <xar:if condition="!$associative_array AND ($k eq 0)">
                                 <xar:data-input type="textbox" name="$prop_name" id="$prop_id"/>
                             <xar:else/>
                                 <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id"/>
@@ -102,12 +102,12 @@
                         <img id="#$id#_delbutton" class="xar-icon" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_delTableRow('#$row_id#')"  style="display:none;cursor: pointer;"/>
                     </td>
                 </tr>
-            <tr id="#$id#_addrow" style="display:none;">
-                <xar:set name="colspan">count($column_titles)+1</xar:set>                
-                <td colspan="#$colspan#" class="xar-align-right">
-                    <img src="#xarTplGetImage('icons/add.png', 'base')#" onclick="javascript:#$id#_addTableRow('#$id#_addrow')"/>                
-                </td>            
-            </tr>
+                <tr id="#$id#_addrow" style="display:none;">
+                    <xar:set name="colspan">count($column_titles)+1</xar:set>                
+                    <td colspan="#$colspan#" class="xar-align-right">
+                        <img src="#xarTplGetImage('icons/add.png', 'base')#" onclick="javascript:#$id#_addTableRow('#$id#_addrow')"/>                
+                    </td>            
+                </tr>
             </xar:if>
             <!-- turn off the new row template, turn on the new row button if js enabled -->
             <script type="text/javascript">
