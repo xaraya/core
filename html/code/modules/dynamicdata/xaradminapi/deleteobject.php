@@ -15,11 +15,12 @@
  * delete a dynamic object and its properties
  *
  * @author the DynamicData module development team
- * @param $args['objectid'] object id of the object to delete
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['objectid'] object id of the object to delete
  * @return int object ID on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_deleteobject($args)
+function dynamicdata_adminapi_deleteobject(Array $args=array())
 {
     $objectid = DataObjectMaster::deleteObject($args);
     return $objectid;

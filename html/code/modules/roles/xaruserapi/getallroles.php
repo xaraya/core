@@ -14,13 +14,14 @@
 /**
  * get all roles
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['order'] comma-separated list of order items; default 'name'
- * @param $args['selection'] extra coonditions passed into the where-clause
- * @param $args['include'] comma-separated list of role names
- * @param $args['exclude'] comma-separated list of role names
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['order'] comma-separated list of order items; default 'name'<br/>
+ *        string   $args['selection'] extra coonditions passed into the where-clause<br/>
+ *        string   $args['include'] comma-separated list of role names<br/>
+ *        string   $args['exclude'] comma-separated list of role names
  * @return mixed array of roles, or false on failure
  */
-function roles_userapi_getallroles($args)
+function roles_userapi_getallroles(Array $args=array())
 {
     if(!xarSecurityCheck('ReadRoles')) {return;}
     extract($args);

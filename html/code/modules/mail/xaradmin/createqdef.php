@@ -10,7 +10,7 @@
  * @link http://xaraya.com/index.php/release/771.html
  */
 
-function mail_admin_createqdef($args)
+function mail_admin_createqdef(Array $args=array())
 {
     // Are we legitimately here
     if (!xarSecConfirmAuthKey()) {

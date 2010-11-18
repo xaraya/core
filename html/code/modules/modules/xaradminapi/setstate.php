@@ -13,13 +13,14 @@
 /**
  * Set the state of a module
  *
- * @param $args['regid'] the module id
- * @param $args['state'] the state
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the module id<br/>
+ *        integer  $args['state'] the state
  * @return int state
  * @throws BAD_PARAM,NO_PERMISSION
  * @todo Do the db changes in a transaction to completely fail or succeed?
  */
-function modules_adminapi_setstate($args)
+function modules_adminapi_setstate(Array $args=array())
 {
     // Get arguments from argument array
 

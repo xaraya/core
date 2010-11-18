@@ -9,8 +9,11 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/1.html
  */
+/**
+ * @param array    $args array of optional parameters<br/>
+ */
 
-function modules_adminapi_standardinstall($args)
+function modules_adminapi_standardinstall(Array $args=array())
 {
     extract($args);
     if (!isset($module)) return false;

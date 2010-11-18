@@ -20,11 +20,12 @@
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   string with module name
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['module']  module name
      * @return  array of component ids and names
     */
 
-    function privileges_adminapi_getcomponents($args)
+    function privileges_adminapi_getcomponents(Array $args=array())
     {
         extract($args);
         

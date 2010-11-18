@@ -23,7 +23,7 @@
  * @return mixed true or debug string on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_utilapi_migrate($args)
+function dynamicdata_utilapi_migrate(Array $args=array())
 {
     extract($args);
 

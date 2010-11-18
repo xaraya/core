@@ -13,10 +13,11 @@
 /**
  * Obtain list of hooks (optionally for a particular module)
  *
- * @param $args['modName'] optional module we're looking for
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['modName'] optional module we're looking for
  * @return array of known hooks
  */
-function modules_adminapi_gethooklist($args)
+function modules_adminapi_gethooklist(Array $args=array())
 {
     // Security Check
     if(!xarSecurityCheck('ManageModules')) return;

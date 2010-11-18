@@ -15,9 +15,10 @@
  */
 /**
  * Utility function to retrieve the list of itemtypes of this module (if any).
+ * @param array    $args array of optional parameters<br/>
  * @return array the itemtypes of this module and their description *
  */
-function dynamicdata_userapi_getitemtypes($args)
+function dynamicdata_userapi_getitemtypes(Array $args=array())
 {
     $itemtypes = array();
 

@@ -13,9 +13,10 @@
  *
  * @author Jim McDonald
  * @author Paul Rosania
+ * @param array    $args array of optional parameters<br/>
 */
 
-function blocks_userapi_get($args)
+function blocks_userapi_get(Array $args=array())
 {
     extract($args);
 

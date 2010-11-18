@@ -16,7 +16,7 @@
  * view users
  * @return array data for the template display
  */
-function roles_user_viewlist($args)
+function roles_user_viewlist(Array $args=array())
 {
     extract($args);
 

@@ -13,10 +13,11 @@
  * Update the module version in the database
  *
  * @author Xaraya Development Team
- * @param $args['regId'] the id number of the module to update
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regId'] the id number of the module to update
  * @return boolean true on success, false on failure
  */
-function modules_adminapi_updateversion($args)
+function modules_adminapi_updateversion(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

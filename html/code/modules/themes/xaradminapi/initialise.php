@@ -13,11 +13,12 @@
  * Initialise a theme
  *
  * @author Marty Vance
- * @param regid registered theme id
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['regid'] registered theme id
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, THEME_NOT_EXIST
  */
-function themes_adminapi_initialise($args)
+function themes_adminapi_initialise(Array $args=array())
 {
 
     extract($args);

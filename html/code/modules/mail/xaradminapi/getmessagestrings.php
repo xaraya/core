@@ -13,11 +13,12 @@
 
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['template'] name of the email type which has apair of -subject and -message files
- * @param $args['module'] module directory in var/messaging
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['template'] name of the email type which has apair of -subject and -message files<br/>
+ *        string   $args['module'] module directory in var/messaging
  * @return array of strings of file contents read
  */
-function mail_adminapi_getmessagestrings($args)
+function mail_adminapi_getmessagestrings(Array $args=array())
 {
     extract($args);
     if (!isset($template)) throw new EmptyParameterException('template');

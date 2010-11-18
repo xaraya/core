@@ -17,7 +17,7 @@
  * @param 'itemid' the id of the item to be deleted
  * @param 'confirm' confirm that this item can be deleted
  */
-function dynamicdata_admin_delete($args)
+function dynamicdata_admin_delete(Array $args=array())
 {
    extract($args);
 

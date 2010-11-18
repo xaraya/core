@@ -16,15 +16,16 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * @access public
- * @param modName the module name (deprecated)
- * @param blockType the block type (deprecated)
- * @param args['tid'] the type id
- * @param args['module'] the module name
- * @param args['type'] the block type
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['modName'] the module name (deprecated)<br/>
+ *        string   $args['blockType'] the block type (deprecated)<br/>
+ *        integer  $args['tid'] the type id<br/>
+ *        string   $args['module'] the module name<br/>
+ *        string   $args['type'] the block type<br/>
  * @return mixed ID of block type registered (even if already registered), false on failure
  * @throws DATABASE_ERROR, BAD_PARAM
  */
-function blocks_adminapi_update_type_info($args)
+function blocks_adminapi_update_type_info(Array $args=array())
 {
     extract($args);
 

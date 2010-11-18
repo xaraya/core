@@ -16,6 +16,7 @@
  * Utility function pass individual menu items to the user menu.
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array    $args array of optional parameters<br/>
  * @return array the menulinks for the user menu items of this module.
  */
 function roles_userapi_getmenulinks()

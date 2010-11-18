@@ -22,7 +22,7 @@
  * @param table
  * @return string output display string
  */
-function dynamicdata_admin_access($args)
+function dynamicdata_admin_access(Array $args=array())
 {
     extract($args);
 

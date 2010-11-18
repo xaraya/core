@@ -15,9 +15,10 @@
  * Utility function to retrieve the list of itemtypes of this module (if any).
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array    $args array of optional parameters<br/>
  * @return array the itemtypes of this module and their description *
  */
-function roles_userapi_getitemtypes($args)
+function roles_userapi_getitemtypes(Array $args=array())
 {
     return xarMod::apiFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 27, 'native' =>false));
 }

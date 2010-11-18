@@ -13,10 +13,11 @@
 /**
  * Get all modules in the database
  *
- * @param $args['regid'] - optional regid to retrieve
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] - optional regid to retrieve
  * @return array modules in the database
  */
-function modules_adminapi_getdbmodules($args)
+function modules_adminapi_getdbmodules(Array $args=array())
 {
     // Get arguments
     extract($args);

@@ -19,10 +19,12 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   childid, parentid
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['childid']<br/>
+ *        integer  $args['parentid']
  * @return  boolean
  */
-function privileges_adminapi_removemember($args)
+function privileges_adminapi_removemember(Array $args=array())
 {
     extract($args);
     //Do nothing if the params aren't there

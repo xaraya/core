@@ -15,11 +15,12 @@
  *
  * @author Jim McDonald
  * @author Paul Rosania
- * @param $args['bid'] the ID of the block to update
- * @param $args['groups'] array of group memberships
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['bid'] the ID of the block to update<br/>
+ *        array    $args['groups'] array of group memberships
  * @return boolean true on success, false on failure
  */
-function blocks_adminapi_update_instance_groups($args)
+function blocks_adminapi_update_instance_groups(Array $args=array())
 {
     $template = null;
     extract($args);

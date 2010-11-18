@@ -9,8 +9,11 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
+/**
+ * @param array    $args array of optional parameters<br/>
+ */
 
-function base_adminapi_getusersettings($args)
+function base_adminapi_getusersettings(Array $args=array())
 {
     if (empty($args['module']))
         throw new Exception(xarML('The getusersettings function requires a module parameter'));

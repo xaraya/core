@@ -13,11 +13,12 @@
  * Activate a module if it has an active function, otherwise just set the state to active
  *
  * @access public
- * @param regid module's registered id
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] module's registered id
  * @return boolean
  * @throws BAD_PARAM
  */
-function modules_adminapi_activate ($args)
+function modules_adminapi_activate(Array $args=array())
 {
     extract($args);
 

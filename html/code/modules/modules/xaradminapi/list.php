@@ -13,10 +13,11 @@
  * Obtain list of modules (deprecated)
  *
  * @author Xaraya Development Team
+ * @param array    $args array of optional parameters<br/>
  * @return array the known modules
  * @throws NO_PERMISSION
  */
-function modules_adminapi_list($args)
+function modules_adminapi_list(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

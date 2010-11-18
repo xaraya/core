@@ -13,7 +13,7 @@
  * @return array data for the template display
  */
 
-    function modules_admin_aliases($args)
+    function modules_admin_aliases(Array $args=array())
     {
         if (!xarVarFetch('name',   'str', $modname,     NULL, XARVAR_NOT_REQUIRED)) {return;}
         if (!xarVarFetch('remove', 'str', $removealias, NULL, XARVAR_NOT_REQUIRED)) {return;}

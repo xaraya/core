@@ -19,7 +19,7 @@
  * @param   no parameters
  * @return  array data for the template display
 */
-function mail_admin_viewq($args)
+function mail_admin_viewq(Array $args=array())
 {
     extract($args);
     if (!xarVarFetch('action','str', $action, '')) return;

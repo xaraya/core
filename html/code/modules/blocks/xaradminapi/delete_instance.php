@@ -14,10 +14,11 @@
  * delete a block
  * @author Jim McDonald
  * @author Paul Rosania
- * @param $args['bid'] the ID of the block to delete
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['bid'] the ID of the block to delete
  * @return boolean true on success, false on failure
  */
-function blocks_adminapi_delete_instance($args)
+function blocks_adminapi_delete_instance(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

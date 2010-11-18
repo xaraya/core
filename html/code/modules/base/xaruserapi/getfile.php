@@ -16,16 +16,17 @@
  * Returns the content of the file (possibly cached). Don't use this to download huge files :)
  * @author mikespub
  * @access public
- * @param $args['url'] string the absolute URL for the file
- * @param $args['cached'] bool indicates whether this file can be cached or not
- * @param $args['cachedir'] string directory (under var/) where the file should be cached
- * @param $args['refresh'] integer refresh time for the file in seconds
- * @param $args['extension'] string file extension to use after the MD5-hashed filename in cache
- * @param $args['archive'] bool indicates if we want to re-create a directory structure and archive the file as is
- * @param $args['superrors'] bool indicates whether we want to die without an error shown (for blocks)
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['url'] the absolute URL for the file<br/>
+ *        boolean  $args['cached'] indicates whether this file can be cached or not<br/>
+ *        string   $args['cachedir'] directory (under var/) where the file should be cached<br/>
+ *        integer  $args['refresh'] integer refresh time for the file in seconds<br/>
+ *        string   $args['extension'] file extension to use after the MD5-hashed filename in cache<br/>
+ *        boolean  $args['archive'] indicates if we want to re-create a directory structure and archive the file as is<br/>
+ *        boolean  $args['superrors'] indicates whether we want to die without an error shown (for blocks)
  * @return string content of the file
  */
-function base_userapi_getfile($args)
+function base_userapi_getfile(Array $args=array())
 {
     extract($args);
 

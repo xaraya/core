@@ -17,7 +17,7 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-function dynamicdata_utilapi_export($args)
+function dynamicdata_utilapi_export(Array $args=array())
 {
         $myobject = & DataObjectMaster::getObject(array('name' => 'objects'));
     if (isset($args['objectref'])) {

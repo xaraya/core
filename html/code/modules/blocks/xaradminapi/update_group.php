@@ -18,11 +18,12 @@
  *
  * @author Jim McDonald
  * @author Paul Rosania
- * @param $args['id'] the ID of the group to update
- * @param $args['instance_order'] the new instance sequence (array of bid)
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['id'] the ID of the group to update<br/>
+ *        array    $args['instance_order'] the new instance sequence (array of bid)
  * @return boolean true on success, false on failure
  */
-function blocks_adminapi_update_group($args)
+function blocks_adminapi_update_group(Array $args=array())
 {
     // Get arguments from argument array
     $template = null;

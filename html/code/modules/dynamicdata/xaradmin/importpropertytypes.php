@@ -14,7 +14,7 @@
  * @author mikespub <mikespub@xaraya.com>
  * @return array empty array for the template display
  */
-function dynamicdata_admin_importpropertytypes ($args)
+function dynamicdata_admin_importpropertytypes (Array $args=array())
 {
     
     $args['flush'] = 'false';

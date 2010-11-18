@@ -14,11 +14,12 @@
  * utility function utility function to replace %%calls%%
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
+ * @param array    $args array of optional parameters<br/>
  * @return array containing the search and replace items
  */
-function mail_adminapi_replace($args)
+function mail_adminapi_replace(Array $args=array())
 {
-    extract ($args);
+    extract($args);
 
     $sitename   = xarModVars::get('themes', 'SiteName');
     $siteslogan = xarModVars::get('themes', 'SiteSlogan');

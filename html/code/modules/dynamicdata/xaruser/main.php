@@ -21,7 +21,7 @@
  *
  * @return array empty array of data for the template display
  */
-function dynamicdata_user_main($args)
+function dynamicdata_user_main(Array $args=array())
 {
     return array();
 }

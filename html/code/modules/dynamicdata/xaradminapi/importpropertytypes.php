@@ -15,12 +15,13 @@
 /**
  * Check the properties directory for properties and import them into the Property Type table.
  *
- * @param $args[flush] flush the property type table before import true/false (optional)
- * @param array $args[dirs]
+ * @param array    $args array of optional parameters<br/>
+ *        boolean  $args[flush] flush the property type table before import true/false (optional)<br/>
+ *        array    $args[dirs]
  * @return array an array of the property types currently available
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_importpropertytypes($args)
+function dynamicdata_adminapi_importpropertytypes(Array $args=array())
 {
     sys::import('modules.dynamicdata.class.properties.registration');
     extract($args);

@@ -19,12 +19,13 @@
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   string with module name
-     * @param   string with component name
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['module']  module name<br/>
+ *        string   $args['component']  component name
      * @return  array of instance ids and names for the module
     */
 
-    function privileges_adminapi_getinstances($args)
+    function privileges_adminapi_getinstances(Array $args=array())
     {
         extract($args);
         

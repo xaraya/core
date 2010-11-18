@@ -13,8 +13,9 @@
 /*
  * @author Jim McDonald
  * @author Paul Rosania
+ * @param array    $args array of optional parameters<br/>
 */
-function blocks_userapi_drawStateIcon($args)
+function blocks_userapi_drawStateIcon(Array $args=array())
 {
     if (xarUserIsLoggedIn() && !empty($args['bid'])) {
         if(xarMod::apiFunc('blocks', 'user', 'getState', $args) == true) {

@@ -26,11 +26,12 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * @author Chris Powis
+ * @param array    $args array of optional parameters<br/>
  * @throws DB_EXCEPTION
  * @return array of block instances
 */
 
-function blocks_userapi_getall($args)
+function blocks_userapi_getall(Array $args=array())
 {
     extract($args);
 

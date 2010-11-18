@@ -16,12 +16,13 @@
  * @author Jason Judge
  * @access public
  * @param modName the module name
- * @param $args['type'] name of the block type (optional)
- * @param $args['module'] name of the module (optional)
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['type'] name of the block type (optional)<br/>
+ *        string   $args['module'] name of the module (optional)
  * @return integer count of block types that meet the required criteria
  * @throws DATABASE_ERROR
  */
-function blocks_userapi_countblocktypes($args)
+function blocks_userapi_countblocktypes(Array $args=array())
 {
     extract($args);
 

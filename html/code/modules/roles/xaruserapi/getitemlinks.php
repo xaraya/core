@@ -15,11 +15,12 @@
  * utility function to pass individual item links to whoever
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param  $args ['itemtype'] item type (optional)
- * @param  $args ['itemids'] array of item ids to get
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args ['itemtype'] item type (optional)<br/>
+ *        array    $args ['itemids'] array of item ids to get
  * @return array the itemlink(s) for the item(s).
  */
-function roles_userapi_getitemlinks($args)
+function roles_userapi_getitemlinks(Array $args=array())
 {
     $itemlinks = array();
     if (!xarSecurityCheck('ViewRoles', 0)) {

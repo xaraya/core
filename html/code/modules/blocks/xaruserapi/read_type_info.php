@@ -17,8 +17,9 @@
  * from which it attempts to call the getInfo method to retrieve
  * default block information
  *
- * @param args['module'] the module name
- * @param args['type'] the block type name
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['module'] the module name<br/>
+ *        string   $args['type'] the block type name
  * @return the block init details (an array)
  * @throws EmptyParameterException, ClassNotFoundException,
  *
@@ -26,7 +27,7 @@
  * @author Paul Rosania
  */
 
-function blocks_userapi_read_type_info($args)
+function blocks_userapi_read_type_info(Array $args=array())
 {
     extract($args);
 

@@ -19,7 +19,7 @@
  *
  * @return boolean and redirect to view_propertydefs
  */
-function dynamicdata_admin_update_propertydefs($args)
+function dynamicdata_admin_update_propertydefs(Array $args=array())
 {
     extract($args);
 

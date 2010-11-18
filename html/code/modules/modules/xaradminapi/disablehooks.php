@@ -14,13 +14,14 @@
  * Note : generic hooks will not be disabled if a specific item type is given
  *
  * @author Xaraya Development Team
- * @param $args['callerModName'] caller module
- * @param $args['callerItemType'] optional item type for the caller module
- * @param $args['hookModName'] hook module
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['callerModName'] caller module<br/>
+ *        string   $args['callerItemType'] optional item type for the caller module<br/>
+ *        string   $args['hookModName'] hook module
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function modules_adminapi_disablehooks($args)
+function modules_adminapi_disablehooks(Array $args=array())
 {
     // Security Check (called by other modules, so we can't use one this here)
     //    if(!xarSecurityCheck('ManageModules')) return;

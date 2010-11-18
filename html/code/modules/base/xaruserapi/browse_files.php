@@ -15,27 +15,29 @@
  * Browse for files and directories (recursion supported).
  * Originally in Xarpages, and used to provide lists of APIs and templates.
  *
- * Identifying the base directory:
- * @param basedir string the absolute or relative base directory
- * @param module string the name of the module to look in (treated as optional root)
+ * @param array   $args array of optional parameters<br/>
  *
- * Matching files and directories (filtering rules):
- * @param match_glob string file glob expression
- * @param match_re string regular expression
- * @param match_exact string expression
- * @param is_writeable return only writable files and directories
- * @param is_readable return only readable files and directories
- * @param skipdirs array list of directories to skip; '.' and '..' will always be added
- * @param skipdirscc boolean skip common configuration control directories
+ * Identifying the base directory:<br/>
+ *        string  $args['basedir'] the absolute or relative base directory<br/>
+ *        string  $args['module'] the name of the module to look in (treated as optional root)<br/>
  *
- * Transform functions (modifying the filename to be returned):
- * @param strip_re string regular expression matching details to strip out of the filename
+ * Matching files and directories (filtering rules):<br/>
+ *        string  $args['match_glob'] file glob expression<br/>
+ *        string  $args['match_re'] regular expression<br/>
+ *        string  $args['match_exact'] expression<br/>
+ *        string  $args['is_writeable'] return only writable files and directories<br/>
+ *        string  $args['is_readable'] return only readable files and directories<br/>
+ *        array   $args['skipdirs'] list of directories to skip; '.' and '..' will always be added<br/>
+ *        boolean $args['skipdirscc'] skip common configuration control directories<br/>
  *
- * Other flags:
- * @param levels integer number of levels to recurse (default=max_levels)
- * @param retpath string 'abs' will return the absolute OS path, 'rel' the relative path to the basedir, 'file' just the filename
- * @param retdirs boolean flag that indicates directories should be returned (default false)
- * @param retfiles boolean flag that indicates files should be returned (default true)
+ * Transform functions (modifying the filename to be returned):<br/>
+ *        string  $args['strip_re'] regular expression matching details to strip out of the filename<br/>
+ *
+ * Other flags:<br/>
+ *        integer $args['levels'] number of levels to recurse (default=max_levels)<br/>
+ *        string  $args['etpath'] 'abs' will return the absolute OS path, 'rel' the relative path to the basedir, 'file' just the filename<br/>
+ *        boolean $args['retdirs'] flag that indicates directories should be returned (default false)<br/>
+ *        boolean $args['retfiles'] flag that indicates files should be returned (default true)<br/>
  *
  * @todo support sorting of the files (by name, by date, asc/desc, etc)
  * @todo support timestamp matching (older, younger, range)
@@ -50,7 +52,7 @@
  * @todo support 'maxfiles' to limit the number of files that can be returned
  */
 
-function base_userapi_browse_files($args)
+function base_userapi_browse_files(Array $args=array())
 {
     extract($args);
 

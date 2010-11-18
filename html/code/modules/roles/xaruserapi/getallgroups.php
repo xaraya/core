@@ -14,11 +14,12 @@
 /**
  * viewallgroups - generate all groups listing.
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param array    $args array of optional parameters<br/>
  * @return groups listing of available groups
  * @todo this code is unreadable
  */
 
-function roles_userapi_getallgroups($args)
+function roles_userapi_getallgroups(Array $args=array())
 {
     extract($args);
     $xartable = xarDB::getTables();

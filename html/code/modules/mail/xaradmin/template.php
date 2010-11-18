@@ -14,7 +14,7 @@
  *
  * @return array data for the template display
  */
-function mail_admin_template($args)
+function mail_admin_template(Array $args=array())
 {
     // Security Check
     if (!xarSecurityCheck('AdminMail')) return;

@@ -15,13 +15,14 @@
  * create a new block instance
  * @author Jim McDonald
  * @author Paul Rosania
- * @param $args['name'] unique name for the block
- * @param $args['title'] the title of the block
- * @param $args['type'] the block's type
- * @param $args['template'] the block's template
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['name'] unique name for the block<br/>
+ *        string   $args['title'] the title of the block<br/>
+ *        string   $args['type'] the block's type<br/>
+ *        string   $args['template'] the block's template
  * @return integer block instance id on success, false on failure
  */
-function blocks_adminapi_create_instance($args)
+function blocks_adminapi_create_instance(Array $args=array())
 {
     // Get arguments from argument array
     $template = null;

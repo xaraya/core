@@ -209,7 +209,7 @@ class xarMod extends Object implements IxarMod
      * Initialize
      *
      */
-    static function init($args)
+    static function init(Array $args=array())
     {
         self::$genShortUrls = $args['enableShortURLsSupport'];
         self::$genXmlUrls   = $args['generateXMLURLs'];

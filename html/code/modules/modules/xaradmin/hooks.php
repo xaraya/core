@@ -18,7 +18,7 @@
  * @return array data for the template display
  *
  */
-function modules_admin_hooks($args)
+function modules_admin_hooks(Array $args=array())
 {
 // Security Check
     if(!xarSecurityCheck('ManageModules')) return;

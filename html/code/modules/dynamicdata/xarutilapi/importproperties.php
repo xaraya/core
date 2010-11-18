@@ -22,7 +22,7 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_utilapi_importproperties($args)
+function dynamicdata_utilapi_importproperties(Array $args=array())
 {
     extract($args);
 

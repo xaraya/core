@@ -193,7 +193,7 @@ class xarCache extends Object
     /**
      * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
      */
-    public static function addStyle($args)
+    public static function addStyle(Array $args=array())
     {
         if (!xarCache::$outputCacheIsEnabled) {
             return;

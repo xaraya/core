@@ -13,11 +13,12 @@
  * Set the state of a theme
  *
  * @author Marty Vance
- * @param $args['regid'] the theme id
- * @param $args['state'] the state
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the theme id<br/>
+ *        integer  $args['state'] the state
  * @throws BAD_PARAM,NO_PERMISSION
  */
-function themes_adminapi_setstate($args)
+function themes_adminapi_setstate(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

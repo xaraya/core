@@ -17,7 +17,7 @@
  * based on (simple) rules.
  * @return array data for the template display
 */
-function mail_admin_mapping($args)
+function mail_admin_mapping(Array $args=array())
 {
     // Construct the list of queues.
     $queues = xarMod::apiFunc('mail','user','getitemtypes');

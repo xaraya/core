@@ -13,12 +13,13 @@
  * Update theme information
  *
  * @author Marty Vance
- * @param $args['regid'] the id number of the theme to update
- * @param $args['displayname'] the new display name of the theme
- * @param $args['description'] the new description of the theme
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the id number of the theme to update<br/>
+ *        string   $args['displayname'] the new display name of the theme<br/>
+ *        string   $args['description'] the new description of the theme
  * @return boolean true on success, false on failure
  */
-function themes_adminapi_update($args)
+function themes_adminapi_update(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

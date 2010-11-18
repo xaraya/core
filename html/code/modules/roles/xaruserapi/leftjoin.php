@@ -22,7 +22,8 @@
  *               AND $where
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['ids'] optional array of ids that we are selecting on
+ * @param array    $args array of optional parameters<br/>
+ *        array    $args['ids'] optional array of ids that we are selecting on
  * @return array array('table' => 'xar_roles',
  *               'field' => 'xar_roles.id',
  *               'where' => 'xar_roles.id IN (...)',
@@ -30,7 +31,7 @@
  *               ...
  *               'email'  => 'xar_roles.email')
  */
-function roles_userapi_leftjoin($args)
+function roles_userapi_leftjoin(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

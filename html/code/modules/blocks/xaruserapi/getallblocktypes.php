@@ -11,15 +11,16 @@
  */
 /*
  * Get one or more block types.
- * @param args['tid'] block type ID (optional)
- * @param args['module'] module name (optional)
- * @param args['type'] block type name (optional)
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['tid'] block type ID (optional)<br/>
+ *        string   $args['module'] module name (optional)<br/>
+ *        string   $args['type'] block type name (optional)
  * @return array the block types, keyed on block type ID
  *
  * @author Jason Judge
 */
 
-function blocks_userapi_getallblocktypes($args)
+function blocks_userapi_getallblocktypes(Array $args=array())
 {
     extract($args);
 

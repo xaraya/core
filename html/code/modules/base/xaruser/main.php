@@ -20,7 +20,7 @@
  * @param string page The page to use if the admin has enabled different page templates
  * @return mixed output display string
  */
-function base_user_main($args)
+function base_user_main(Array $args=array())
 {
     // Security Check
     if(!xarSecurityCheck('ViewBase')) return;

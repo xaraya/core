@@ -14,11 +14,12 @@
  * Remove a theme
  *
  * @author Marty Vance
- * @param $args['regid'] the id of the theme
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the id of the theme
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function themes_adminapi_remove($args)
+function themes_adminapi_remove(Array $args=array())
 {
     extract($args);
 

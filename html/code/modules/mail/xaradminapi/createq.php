@@ -9,9 +9,12 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/771.html
  */
+/**
+ * @param array    $args array of optional parameters<br/>
+ */
 
 
-function mail_adminapi_createq($args)
+function mail_adminapi_createq(Array $args=array())
 {
     // Security Check
     if (!xarSecurityCheck('AdminMail')) return;

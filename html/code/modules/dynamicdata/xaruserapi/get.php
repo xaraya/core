@@ -13,8 +13,9 @@
  * Dynamic Data Version Information
  *
  * @author mikespub <mikespub@xaraya.com>
+ * @param array    $args array of optional parameters<br/>
 */
-function dynamicdata_userapi_get($args)
+function dynamicdata_userapi_get(Array $args=array())
 {
     return xarMod::apiFunc('dynamicdata','user','getfield',$args);
 }

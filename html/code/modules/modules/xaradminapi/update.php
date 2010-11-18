@@ -11,12 +11,13 @@
  */
 /**
  * Update module information
- * @param $args['regid'] the id number of the module to update
- * @param $args['displayname'] the new display name of the module
- * @param $args['description'] the new description of the module
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the id number of the module to update<br/>
+ *        string   $args['displayname'] the new display name of the module<br/>
+ *        string   $args['description'] the new description of the module
  * @return boolean true on success, false on failure
  */
-function modules_adminapi_update($args)
+function modules_adminapi_update(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

@@ -13,9 +13,10 @@
  *
  * @author Jim McDonald
  * @author Paul Rosania
+ * @param array    $args array of optional parameters<br/>
 */
 
-function blocks_userapi_handleStateIconTag($args)
+function blocks_userapi_handleStateIconTag(Array $args=array())
 {
     return "echo xarMod::apiFunc('blocks', 'user', 'drawStateIcon', array('bid' => \$bid)); ";
 }

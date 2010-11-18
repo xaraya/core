@@ -31,9 +31,11 @@
  * the size of the core blocks.php file by moving the blockgroup handling to a block
  * Note: this function is used solely by the BL renderer, and is subject
  * to change without notice.
+ *
+ * @param array    $args array of optional parameters<br/>
  */
 
-function blocks_userapi_getinfo($args)
+function blocks_userapi_getinfo(Array $args=array())
 {
     extract($args);
 

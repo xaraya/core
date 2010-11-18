@@ -15,20 +15,21 @@
  * delete a property field
  *
  * @author the DynamicData module development team
- * @param $args['id'] property id of the item field to delete
-// TODO: do we want those for security check ? Yes, but the original values...
- * @param $args['module_id'] module id of the item field to delete
- * @param $args['itemtype'] item type of the item field to delete
- * @param $args['name'] name of the field to delete
- * @param $args['label'] label of the field to delete
- * @param $args['type'] type of the field to delete
- * @param $args['defaultvalue'] default of the field to delete
- * @param $args['source'] data source of the field to delete
- * @param $args['configuration'] configuration of the field to delete
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['id'] property id of the item field to delete<br/>
+// TODO: do we want those for security check ? Yes, but the original values...<br/>
+ *        integer  $args['module_id'] module id of the item field to delete<br/>
+ *        string   $args['itemtype'] item type of the item field to delete<br/>
+ *        string   $args['name'] name of the field to delete<br/>
+ *        string   $args['label'] label of the field to delete<br/>
+ *        string   $args['type'] type of the field to delete<br/>
+ *        string   $args['defaultvalue'] default of the field to delete<br/>
+ *        string   $args['source'] data source of the field to delete<br/>
+ *        string   $args['configuration'] configuration of the field to delete
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_deleteprop($args)
+function dynamicdata_adminapi_deleteprop(Array $args=array())
 {
     extract($args);
 

@@ -17,6 +17,7 @@
  * collapseable menu support
  * @author Jim McDonald
  * @author Paul Rosania
+ * @param array    $args array of optional parameters<br/>
  * @return true on success, false on failure
  */
 function blocks_userapi_reactivate_menus()

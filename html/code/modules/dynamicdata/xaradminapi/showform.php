@@ -14,10 +14,11 @@
 /**
  * Show an input form in a template
  *
+ * @param array    $args array of optional parameters<br/>
  * @param array containing the item or fields to show
  * @return string output display string
  */
-function dynamicdata_adminapi_showform($args)
+function dynamicdata_adminapi_showform(Array $args=array())
 {
     extract($args);
     $args['fallbackmodule'] = 'current';

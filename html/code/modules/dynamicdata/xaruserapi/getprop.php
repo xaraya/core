@@ -15,18 +15,19 @@
  * Get field properties for a specific module + item type
  *
  * @author the DynamicData module development team
- * @param $args['objectid'] object id of the properties to get
- * @param $args['module'] module name of the item fields, or
- * @param $args['module_id'] module id of the item field to get
- * @param $args['itemtype'] item type of the item field to get
- * @param $args['fieldlist'] array of field labels to retrieve (default is all)
- * @param $args['status'] limit to property fields of a certain status (e.g. active)
- * @param $args['allprops'] skip disabled properties by default
- * @param $args['static'] include the static properties (= module tables) too (default no)
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['objectid'] object id of the properties to get<br/>
+ *        string   $args['module'] module name of the item fields, or<br/>
+ *        integer  $args['module_id'] module id of the item field to get<br/>
+ *        string   $args['itemtype'] item type of the item field to get<br/>
+ *        array    $args['fieldlist'] array of field labels to retrieve (default is all)<br/>
+ *        integer  $args['status'] limit to property fields of a certain status (e.g. active)<br/>
+ *        integer  $args['allprops'] skip disabled properties by default<br/>
+ *        boolena  $args['static'] include the static properties (= module tables) too (default no)
  * @return mixed value of the field, or false on failure
  * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  */
-function dynamicdata_userapi_getprop($args)
+function dynamicdata_userapi_getprop(Array $args=array())
 {
     static $propertybag = array();
 

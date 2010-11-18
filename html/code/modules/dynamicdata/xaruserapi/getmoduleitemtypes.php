@@ -17,9 +17,10 @@
  * utility function to retrieve the list of item types of a module (if any)
  *
  * @todo remove this before it can propagate
+ * @param array    $args array of optional parameters<br/>
  * @return array containing the item types and their description
  */
-function dynamicdata_userapi_getmoduleitemtypes($args)
+function dynamicdata_userapi_getmoduleitemtypes(Array $args=array())
 {
     return DataObjectMaster::getModuleItemTypes($args);      
 }

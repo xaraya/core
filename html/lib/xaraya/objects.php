@@ -34,7 +34,7 @@ class xarObject extends Object implements IxarObject
      * Initialize
      *
      */
-    static function init($args)
+    static function init(Array $args=array())
     {
         // Nothing to do here
         return true;

@@ -15,7 +15,7 @@
 /**
  * Export an object definition or an object item to XML
  */
-function dynamicdata_util_export($args)
+function dynamicdata_util_export(Array $args=array())
 {
     extract($args);
 
