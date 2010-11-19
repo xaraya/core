@@ -16,5 +16,5 @@
             </xar:mlvar>
         </xar:ml>
     </xar:if>    
-    <xar:data-view object="$object" items="$items"/>
+    <xar:data-view object="$object" items="$items" template="subitems"/>
 </xar:template>
