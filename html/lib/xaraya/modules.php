@@ -47,7 +47,7 @@ class ModuleNotActiveException extends xarExceptions
 **/
 class ModuleBadVersionException extends NotFoundExceptions
 {
-    protected $message = 'A module does not have the correct version';
+    protected $message = 'The module "#(1)" does not have the correct version';
 }
 
 

@@ -20,7 +20,7 @@
  */
 $modversion['name']               = 'Themes Administration';
 $modversion['id']                 = '70';
-$modversion['version']            = '2.1.0';
+$modversion['version']            = '2.1.1';
 $modversion['displayname']        = xarML('Themes');
 $modversion['description']        = 'Configure themes, change site appearance';
 $modversion['displaydescription'] = xarML('Configure themes, change site appearance');

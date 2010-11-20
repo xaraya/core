@@ -1,5 +1,5 @@
 <?php
-function main_210()
+function main_check_210()
 {
     $data['check']['message'] = xarML('The database checks to version 2.1.0 were successfully completed');
     $data['check']['tasks'] = array();

@@ -1,5 +1,5 @@
 <?php
-function main_210()
+function main_upgrade_210()
 {
     $data['upgrade']['message'] = xarML('The upgrade to version 2.1.0 was successfully completed');
     $data['upgrade']['tasks'] = array();
