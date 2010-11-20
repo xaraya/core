@@ -1,6 +1,6 @@
 <?php
 /**
- * Check List file
+ * Upgrade List file
  *
  * @package modules
  * @copyright see the html/credits.html file in this release

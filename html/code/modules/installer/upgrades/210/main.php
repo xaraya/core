@@ -1,4 +1,16 @@
 <?php
+/**
+ * Upgrade file
+ *
+ * @package modules
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
+ * @subpackage installer module
+ * @link http://xaraya.com/index.php/release/200.html
+ */
+
 function main_upgrade_210()
 {
     $data['upgrade']['message'] = xarML('The upgrade to version 2.1.0 was successfully completed');
