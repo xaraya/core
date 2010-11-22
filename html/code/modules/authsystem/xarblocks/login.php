@@ -63,10 +63,10 @@ class Authsystem_LoginBlock extends BasicBlock implements iBlock
             }
         } elseif (xarServer::getVar('REQUEST_METHOD') == 'GET') {
             // URL of this page
-            $args['return_url'] = xarServer::getCurrentURL();
+            xarVarFetch('redirecturl',   'isset', $args['return_url']   , xarServer::getCurrentURL(array(),false), XARVAR_NOT_REQUIRED);
         } else {
             // Base URL of the site
-            $args['return_url'] = xarServer::getBaseURL();
+            xarVarFetch('redirecturl',   'isset', $args['return_url']   , xarServer::getBaseURL(), XARVAR_NOT_REQUIRED);
         }
 
         // Used in the templates.

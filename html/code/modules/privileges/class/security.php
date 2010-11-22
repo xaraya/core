@@ -319,14 +319,20 @@ class xarSecurity extends Object
         // check if the exception needs to be caught here or not
 
         if ($catch && !$pass) {
+            $requrl = xarServer::getCurrentURL(array(),false);
             if (self::$exceptionredirect && !xarUserIsLoggedIn()) {
                 // The current authentication module will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login
-                $requrl = xarServer::getCurrentURL(array(),false);
-                xarResponse::redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
+                $redirectURL = xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false);
             } else {
-                xarResponse::redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
+                // Redirect to the privileges error page
+                $redirectURL = xarModURL('privileges','user','errors',array('layout' => 'no_privileges', 'redirecturl'=> $requrl));
             }
+            // Remove &amp; entites to prevent redirect breakage
+            $redirectURL = str_replace('&amp;', '&', $redirectURL);
+            $header = "Location: " . $redirectURL;
+            header($header, TRUE, 302);
+            exit();
         }
         return $pass;
     }
