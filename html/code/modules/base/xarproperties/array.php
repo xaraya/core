@@ -228,11 +228,11 @@ class ArrayProperty extends DataProperty
                 $configurations = array();
             }
             $data['layout'] = 'table';
+            if (!isset($data['column_configurations']))  $data['column_configurations'] = $configurations;
         }
         
         if (!isset($data['column_titles'])) $data['column_titles'] = $titles;
         if (!isset($data['column_types']))  $data['column_types'] = $types;
-        if (!isset($data['column_configurations']))  $data['column_configurations'] = $configurations;
 
         // If titles or types were passed directly through the tag, they may be lists we need to turn into arrays
         if (!is_array($data['column_titles'])) $data['column_titles'] = explode(',', $data['column_titles']);
@@ -281,7 +281,7 @@ class ArrayProperty extends DataProperty
         $data['value'] = unserialize($this->value);
         $data['column_titles'] = $this->display_column_definition['value'][0];
         $data['column_types'] = $this->display_column_definition['value'][1];
-        $data['rows'] = count($data['value'][0]);
+        $data['rows'] = isset($data['value'][0]) ? count($data['value'][0]) : 0;
         return parent::showOutput($data);
     }
     
