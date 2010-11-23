@@ -19,7 +19,8 @@
                     )
                 </xar:set>
                 <xar:data-input type="dropdown" name="selstyle" options="$options" value="$selstyle"/>
-                <input type="submit" value="#xarML('Refresh')#"/>
+                <xar:var name="label">Refresh</xar:var>
+                <input type="submit" value="#$label#"/>
             </div>
             <div class="xar-form-input-wrapper">
                 <label for="filter" title="#xarML('Filter the instances to be shown.')#" class="xar-form-label">

@@ -57,7 +57,8 @@
                 </div>
                 <div class="xar-align-center">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="submit" value="#xarML('Submit')#"/>
+                    <xar:var name="label">Submit</xar:var>
+                    <input type="submit" value="#$label#"/>
                 </div>
             </form>
             <h4>Note: About stylesheet tags</h4>

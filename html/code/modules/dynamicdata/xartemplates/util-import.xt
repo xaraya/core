@@ -18,7 +18,8 @@
                 <div class="xar-form-input-wrapper">
                     <label for="basedir" title="#xarML('Location of object definitions')#" class="xar-form-label">Base Directory:</label>
                     <input type="text" name="basedir" id="basedir" value="#$basedir#" maxlength="250" class="xar-form-textxlong"/>
-                    <input type="submit" name="refresh" id="refresh" value="#xarML('Refresh')#"/>
+                    <xar:var name="label">Refresh</xar:var>
+                    <input type="submit" name="refresh" id="refresh" value="#$label#"/>
                 </div>
                 <div class="xar-form-input-wrapper">
                     <label for="import" title="#xarML('XML files found in Base Directory')#" class="xar-form-label">
