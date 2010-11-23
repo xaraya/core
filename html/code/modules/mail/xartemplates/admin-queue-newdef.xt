@@ -36,7 +36,8 @@
                     </div>
                 </xar:if>
             </fieldset>
-            <input type="submit" name="create" value="#xarML('Create')#"/>
+            <xar:var name="label">Create</xar:var>
+            <input type="submit" name="create" value="#$label#"/>
         </form>
     </div>
 </xar:template>
