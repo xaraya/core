@@ -282,6 +282,7 @@ class ArrayProperty extends DataProperty
     
     public function updateConfiguration(Array $data = array())
     {
+//        echo "<pre>";var_dump($_POST);exit;
         // Remove any empty rows, i.e. those where there is no title
         $temp = array();
         foreach ($data['configuration']['display_column_definition']['value'][0] as $k => $v) {

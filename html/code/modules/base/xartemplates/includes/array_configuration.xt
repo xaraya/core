@@ -9,9 +9,7 @@
                         <label>#$column_titles[$i]#</label>
                     </th>
                 </xar:for>
-                <!--
-                <th class="xar-align-right">Actions</th>
-                -->        
+                <th class="xar-align-left">Actions</th>
             </tr>        
         </thead>
         <tbody>
@@ -21,7 +19,7 @@
                         <xar:set name="j">$i+1</xar:set>
                         #$j#
                     </td>
-                    <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
+                    <xar:for start="$k=0" test="$k lt count($column_titles)-1" iter="$k++">
                         <td>
                             <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
                             <xar:set name="propid">$id.'_value_'.$k</xar:set>
@@ -29,6 +27,15 @@
                             <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue"/>
                         </td>
                     </xar:for>
+                        <td>
+                            <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
+                            <xar:set name="propid">$id.'_value_' . $i . '_' .$k</xar:set>
+                            <xar:set name="propvalue">$value[$k][$i]</xar:set>
+                            <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue" rows="2" cols="20"/>
+                        </td>
+                    <td>
+                        <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype' => $value[1][$i]))#"><img src="#xarTplGetImage('icons/document-properties.png', 'base')#"/></a>
+                    </td>
                     <!--
                         <td class="xar-align-right">&#160;</td>
                     -->
@@ -39,13 +46,16 @@
                     <xar:set name="extendedrows">$rows+1</xar:set>
                     New
                 </td>
-                <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
+                <xar:for start="$k=0" test="$k lt count($column_titles)-1" iter="$k++">
                     <td>
                         <xar:set name="propname">$name.'[value][' . $k . '][' . $extendedrows . ']'</xar:set>
                         <xar:set name="propid">$id.'_value_'.$k</xar:set>
                         <xar:data-input type="$column_types[$k]" name="$propname" id="$propid"/>
                     </td>
                 </xar:for>
+                <td>
+                    &#160;
+                </td>
             </tr>                    
         </tbody>
     </table>
