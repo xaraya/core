@@ -30,7 +30,7 @@ class ArrayProperty extends DataProperty
     public $default_suffixlabel = "Row";                           // suffix for the Add/Remove Button
     public $initialization_fixed_keys = 0;                         // allow editing keys on input
 
-    public $display_column_definition = array(array("Key","Value"),array("textbox","textbox"),array("",""));  
+    public $display_column_definition = array(array("Key","Value"),array("textbox","textbox"),array("",""),array("",""));  
 
     // Configuration setting to ignore
     public $initialization_other_rule_ignore    = true;
