@@ -15,9 +15,10 @@ function main_upgrade_211()
 {
     $data['upgrade']['message'] = xarML('The upgrade to version 2.1.1 was successfully completed');
     $data['upgrade']['tasks'] = array();
-    
+
     $upgrades = array(
                         'sql_211_01',
+                        'sql_211_02',
                     );
     foreach ($upgrades as $upgrade) {
         if (!Upgrader::loadFile('upgrades/211/database/' . $upgrade . '.php')) {
@@ -30,7 +31,7 @@ function main_upgrade_211()
                             'description' => $result['task'],
                             'reference' => $upgrade,
                             'success' => $result['success'],
-                            );        
+                            );
         if (!$result['success']) {
             $data['upgrade']['errormessage'] = xarML('Some parts of the upgrade failed. Check the reference(s) above to determine the cause.');
 //            break;

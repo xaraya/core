@@ -240,7 +240,7 @@ function xarUserGetNavigationThemeName()
 
     if (xarUserIsLoggedIn() && (bool)xarModVars::get('themes', 'enable_user_menu')){
         $id = xarUserGetVar('id');
-        $userThemeName = xarModUserVars::get('themes', 'default', $id);
+        $userThemeName = xarModUserVars::get('themes', 'default_theme', $id);
         if ($userThemeName) $themeName=$userThemeName;
     }
 
@@ -258,7 +258,7 @@ function xarUserSetNavigationThemeName($themeName)
 {
     assert('$themeName != ""');
     // uservar system takes care of dealing with anynomous
-    xarModUserVars::set('themes', 'default', $themeName);
+    xarModUserVars::set('themes', 'default_theme', $themeName);
 }
 
 /**

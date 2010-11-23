@@ -36,7 +36,7 @@ class Themes_SkinBlock extends BasicBlock implements iBlock
         $data = parent::display($data);
         if (empty($data)) return;
 
-        $current_theme_name = xarModVars::get('themes', 'default');
+        $current_theme_name = xarModVars::get('themes', 'default_theme');
         $site_themes = xarMod::apiFunc('themes', 'admin','getthemelist');
         asort($site_themes);
 

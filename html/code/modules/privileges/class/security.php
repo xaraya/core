@@ -201,7 +201,7 @@ class xarSecurity extends Object
             //perhaps something for later.
             // <mrb> i dont grok this, theme can be realm?
             case "theme":
-                $mask->setRealm(xarModVars::get('themes', 'default'));
+                $mask->setRealm(xarModVars::get('themes', 'default_theme'));
                 break;
             case "domain":
                 $host = xarServer::getHost();
@@ -262,7 +262,7 @@ class xarSecurity extends Object
         } else {
             $role = xarRoles::findRole($rolename);
         }
-        
+
         // check if we already have the irreducible set of privileges for the current user
         if (($rolename == '') || ($rolename == xarUserGetVar('uname'))) {
             // We are checking the privileges of the current user
@@ -421,7 +421,7 @@ class xarSecurity extends Object
             }
             $privs = array();
             foreach ($privileges as $priv) $privs[] = $priv;
-            
+
             $coreset['privileges'] = array_merge($coreset['privileges'],$privs);
             $parents = array_merge($parents,$role->getParents());
         }
