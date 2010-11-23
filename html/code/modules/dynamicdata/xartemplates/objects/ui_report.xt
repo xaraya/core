@@ -56,7 +56,8 @@
                             </xar:if>
                         </xar:foreach>
                     </select>
-                    <input type="submit" value="#xarML('Select')#" class="xar-margin-thickleft"/>
+                    <xar:var name="label">Select</xar:var>
+                    <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
                 </div>
             </fieldset>
         </form>

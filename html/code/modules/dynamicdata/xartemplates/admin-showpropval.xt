@@ -24,8 +24,10 @@
                 <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>#$showval# 
                 <fieldset>
                     <div class="xar-align-center">
-                        <input type="submit" name="confirm" value="#xarML('Update')#"/>&#160;
-                        <input type="submit" name="exit" value="#xarML('Update and Exit')#"/> 
+                        <xar:var name="label">Update</xar:var>
+                        <input type="submit" name="confirm" value="#$label#"/>&#160;
+                        <xar:var name="label">Update and Exit</xar:var>
+                        <input type="submit" name="exit" value="#$label#"/> 
                     </div>
                 </fieldset>
             </form>
@@ -83,7 +85,8 @@
                         <input type="submit" name="preview" value="#$value#"/>
     <!-- See CHECKME in showpropval
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                        <input type="submit" name="confirm" value="#xarML('Update')#" disabled="disabled"/>
+                        <xar:var name="label">Update</xar:var>
+                        <input type="submit" name="confirm" value="#$label#" disabled="disabled"/>
     -->
                     </div>
                 </fieldset>

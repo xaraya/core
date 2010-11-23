@@ -96,7 +96,8 @@
                                 <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>
                                 <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
                                 <input type="hidden" name="table" id="table" value="#$table#"/>
-                                <input type="submit" value="#xarML('Import table')# #$table#"/>
+                                <xar:var name="label">Import table</xar:var>
+                                <input type="submit" value="#$label# #$table#"/>
                             </div>
                         </form>
                     </xar:foreach>

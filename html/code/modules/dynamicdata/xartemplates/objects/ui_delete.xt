@@ -44,8 +44,10 @@
                     <xar:if condition="!empty($return_url)">
                         <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                     </xar:if>
-                    <input type="submit" name="cancel" id="cancel" value="#xarML('Cancel')#" class="xar-margin-thickright"/>
-                    <input type="submit" name="confirm" id="confirm" value="#xarML('Delete')#" class="xar-margin-thickleft"/>
+                    <xar:var name="label">Cancel</xar:var>
+                    <input type="submit" name="cancel" id="cancel" value="#$label#" class="xar-margin-thickright"/>
+                    <xar:var name="label">Delete</xar:var>
+                    <input type="submit" name="confirm" id="confirm" value="#$label#" class="xar-margin-thickleft"/>
                 </div>
             </fieldset>
         </form>
