@@ -79,7 +79,8 @@
                             </xar:foreach>
                         </ul>
                     <xar:else />
-                        <input type="submit" name="command" id="command" value="#xarML('Install All')#" tabindex="9"/>
+                        <xar:var name="label">Install All</xar:var>
+                        <input type="submit" name="command" id="command" value="#$label#" tabindex="9"/>
                     </xar:if>
                 </div>
             </form>

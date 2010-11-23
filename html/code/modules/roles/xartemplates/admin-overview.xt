@@ -196,16 +196,16 @@
         <p>Further information on the Roles module can be found at:</p>
        <ul>
             <li>Roles Module Extension page at 
-            <a title="#xarML('Roles Module - Xaraya Extension 27')#"
-            href="http://www.xaraya.com/index.php/release/27.html">Xaraya Extension and
+            <xar:var name="label">Roles Module - Xaraya Extension 27</xar:var>
+            <a title="#$label#" href="http://www.xaraya.com/index.php/release/27.html">Xaraya Extension and
             Releases</a>. Click on Version History tab at the bottom to get the latest release
             information.</li>
             <li>Related tutorials and documentation on Roles module at 
-            <a href="http://www.xaraya.com/index.php/keywords/roles/"
-            title="#xarML('Related documentation on Roles')#">Xaraya Documentation.</a></li>
+            <xar:var name="label">Related documentation on Roles</xar:var>
+            <a href="http://www.xaraya.com/index.php/keywords/roles/" title="#$label#">Xaraya Documentation.</a></li>
             <li>Extended information for Developers at 
-            <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html"
-            title="#xarML('RFC 30')#">Xaraya RFC-30</a></li>
+            <xar:var name="label">RFC 30</xar:var>
+            <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html" title="#$label#">Xaraya RFC-30</a></li>
         </ul>
         <p class="xar-sub">
         <strong>&#160;Roles Module Overview</strong>

@@ -91,8 +91,8 @@
                 <fieldset>
                     <legend>Default Group and Site Administrator</legend>
                     <div class="xar-form-input-wrapper">
-                        <label for="siteadmin"
-                        title="#xarML('Select the admin user that cannot be deleted')#"
+                        <xar:var name="label">Select the admin user that cannot be deleted</xar:var>
+                        <label for="siteadmin" title="#$label#"
                         class="xar-form-label">Designated Site Admin:</label>
                         <select name="siteadmin" id="siteadmin">
                             <xar:loop name="$siteadmins">
@@ -109,20 +109,23 @@
                         </select>
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="defaultgroup" title="#xarML('New Users automatically get assigned to this Group')#" class="xar-form-label">Default Group For New Users:</label>
+                        <xar:var name="label">New Users automatically get assigned to this Group</xar:var>
+                        <label for="defaultgroup" title="#$label#" class="xar-form-label">Default Group For New Users:</label>
                         <xar:data-input type="grouplist" name="defaultgroup" id="defaultgroup" value="$defaultgroup"/>
                     </div>
                 </fieldset>
                 <fieldset>
                     <legend>Default Authentication &amp; Registration Modules</legend>
                     <div class="xar-form-input-wrapper">
-                        <label for="defaultauthmodule" title="#xarML('Select the module that manages authentication of users')#" class="xar-form-label">
+                        <xar:var name="label">Select the module that manages authentication of users</xar:var>
+                        <label for="defaultauthmodule" title="#$label#" class="xar-form-label">
                             Authentication:
                         </label>
                         <xar:data-input type="module" name="defaultauthmodule" class="Authentication" value="$defaultauthmod" validation="name" firstline="Choose a module"/>
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="defaultregmodule" title="#xarML('Select the module that manages registration of users')#" class="xar-form-label">
+                        <xar:var name="label">Select the module that manages registration of users</xar:var>
+                        <label for="defaultregmodule" title="#$label#" class="xar-form-label">
                             Registration:
                         </label>
                         <xar:data-input type="module" name="defaultregmodule" class="Registration" value="$defaultregmod" validation="name" firstline="Choose a module"/>
@@ -133,7 +136,8 @@
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                         <input type="hidden" name="phase" id="phase" value="update"/>
                         <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                        <input type="submit" value="#xarML('Update Roles Configuration')#"/>
+                        <xar:var name="label">Update Roles Configuration</xar:var>
+                        <input type="submit" value="#$label#"/>
                     </div>
                 </fieldset>
             </form>
@@ -219,7 +223,8 @@
                             <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                             <input type="hidden" name="phase" id="phase" value="update"/>
                             <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                            <input type="submit" value="#xarML('Update Roles Configuration')#"/>
+                            <xar:var name="label">Update Roles Configuration</xar:var>
+                            <input type="submit" value="#$label#"/>
                         </div>
                     </fieldset>
                 </form>
@@ -240,7 +245,8 @@
                       <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                       <input type="hidden" name="phase" id="phase" value="update"/>
                       <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                      <input type="submit" value="#xarML('Update Roles Configuration')#"/>
+                      <xar:var name="label">Update Roles Configuration</xar:var>
+                      <input type="submit" value="#$label#"/>
                     </div>
                   </fieldset>
                 </form>
@@ -264,7 +270,8 @@
                             <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                             <input type="hidden" name="phase" id="phase" value="update"/>
                             <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                            <input type="submit" value="#xarML('Update Roles Configuration')#"/>
+                            <xar:var name="label">Update Roles Configuration</xar:var>
+                            <input type="submit" value="#$label#"/>
                         </div>
                     </fieldset>
                 </form>

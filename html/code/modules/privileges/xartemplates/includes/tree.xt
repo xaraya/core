@@ -8,7 +8,8 @@
                         <xar:set name="dellink">
                             xarModUrl('privileges','admin','deleteprivilege',array('id'=> $node['parent']['id']))
                         </xar:set>
-                        <a href="#$dellink#" title="#xarML('Delete this privilege')#">
+                        <xar:var name="label">Delete this privilege</xar:var>
+                        <a href="#$dellink#" title="#$label#">
                             <img src="#xarTplGetImage('delete.gif')#"/>
                         </a>
                     </xar:sec>
@@ -22,7 +23,8 @@
                         <xar:set name="removelink">
                             xarModUrl('privileges','admin','removebranch',array('id'=> $node['parent']['id']))
                         </xar:set>
-                        <a href="#$removelink#" title="#xarML('Remove this privilege from its parent')#">
+                        <xar:var name="label">Remove this privilege from its parent</xar:var>
+                        <a href="#$removelink#" title="#$label#">
                             <img src="#xarTplGetImage('remove.gif')#"/>
                         </a>
                     </xar:if>

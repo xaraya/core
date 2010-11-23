@@ -4,7 +4,8 @@
     <xar:set name="activetab">#$request.2#</xar:set>
     <div>
         <ul class="xar-tabs xar-alt xar-norm-outline">
-            <li class="xar-tabs-label" title="#xarML('Choose an action to perform on the selected user')#">Manage role:</li>
+            <xar:var name="label">Choose an action to perform on the selected user</xar:var>
+            <li class="xar-tabs-label" title="#$label#">Manage role:</li>
 
             <xar:set name="tabclass">$activetab=='display'?'xar-tab-active':'xar-tab'</xar:set>
             <xar:set name="linkclass">$activetab=='display'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>

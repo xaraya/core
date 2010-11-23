@@ -8,7 +8,8 @@
         </xar:if>
         <xar:if condition="$hookmod['modname'] eq $curhook">
             <p>Use this functionality in the following modules: [ 
-            <a href="javascript:void(0);" title="#xarML('Click to toggle details display.')#" onclick="return toggleDisplay('hookdetails');">Details</a>]</p>
+            <xar:var name="label">Click to toggle details display.</xar:var>
+            <a href="javascript:void(0);" title="#$label#" onclick="return toggleDisplay('hookdetails');">Details</a>]</p>
             <!-- inline style is needed here because IE's DOM support is flaky -->
             <div id="hookdetails" class="xar-displaynone">
                 <xar:if condition="count($hooktypes) gt 0">
@@ -153,7 +154,8 @@
                         </fieldset>
                     </xar:foreach>
                     <div class="xar-align-center">
-                        <input type="submit" value="#xarML('Save Changes')#"/>
+                        <xar:var name="label">Save Changes</xar:var>
+                        <input type="submit" value="#$label#"/>
                     </div>
                 </div>
             </form>

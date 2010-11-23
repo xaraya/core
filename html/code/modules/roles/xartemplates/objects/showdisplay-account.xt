@@ -44,7 +44,9 @@
                 <label class="xar-form-label">
                     Home Page
                 </label>
-                <!-- <a href="#$homelink#" title="#xarML('Home Page')#">#$homelink#</a> -->
+                <!-- 
+                <xar:var name="label">Home Page</xar:var>
+                <a href="#$homelink#" title="#$label#">#$homelink#</a> -->
             </div>
         </xar:if>
         <!-- Revisit in php5.3.0

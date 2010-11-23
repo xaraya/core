@@ -25,7 +25,8 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
+                                <xar:var name="label">Show this group</xar:var>
+                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#$label#" class="xar-norm xar-norm-outline">
                                     <xar:var name="parents[$i].parentname"/>
                                 </a>
                             </li>
@@ -148,14 +149,16 @@
             </xar:if>
           <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
                 <div class="xar-form-input-wrapper">
-                    <label for="privid" title="#xarML('Select the Privilege to add')#" class="xar-form-label">
+                    <xar:var name="label">Select the Privilege to add</xar:var>
+                    <label for="privid" title="#$label#" class="xar-form-label">
                         Assign a Privilege to #$itemtypename# '#xarVarPrepForDisplay($pname)#'
                     </label>
                     <xar:set name="options">xarPrivileges::getprivileges()</xar:set>
                     <xar:data-input type="dropdown" name="privid" options="$options"/>
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="roleid" id="roleid" value="#$roleid#"/>
-                    <input type="submit" value="#xarML('Add Privilege')#"/>
+                    <xar:var name="label">Add Privilege</xar:var>
+                    <input type="submit" value="#$label#"/>
                 </div>
             </form>
         </fieldset>

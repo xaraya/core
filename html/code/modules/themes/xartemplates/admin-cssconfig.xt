@@ -19,31 +19,36 @@
             </p>
             <form class="xar-blocks-admin" action="#xarModURL('themes', 'admin', 'cssconfig')#" method="post">
                 <div class="xar-form-input-wrapper">
-                    <span title="#xarML('Enable manual stylesheet configuration')#" class="xar-form-label">Mode:</span>
+                    <xar:var name="label">Enable manual stylesheet configuration</xar:var>
+                    <span title="#$label#" class="xar-form-label">Mode:</span>
                     <div class="xar-floatleft">
                         <xar:if condition="$configurable">
                             <div>
                                 <input type="radio" value="0" id="configurable_false" name="configurable"/>
-                                <label for="configurable_false" title="#xarML('Let the system handle CSS automatically')#">
+                                <xar:var name="label">Let the system handle CSS automatically</xar:var>
+                                <label for="configurable_false" title="#$label#">
                                     Unmanaged
                                 </label>
                             </div>
                             <div>
                                 <input type="radio" value="1" id="configurable_true" checked="checked" name="configurable"/>
-                                <label for="configurable_true" title="#xarML('Allow manual CSS management')#">
+                                <xar:var name="label">Allow manual CSS management</xar:var>
+                                <label for="configurable_true" title="#$label#">
                                     Managed
                                 </label>
                             </div>
                         <xar:else />
                             <div>
                                 <input type="radio" value="0" id="configurable_false" checked="checked" name="configurable"/>
-                                <label for="configurable_false" title="#xarML('Let the system handle CSS automatically')#">
+                                <xar:var name="label">Let the system handle CSS automatically</xar:var>
+                                <label for="configurable_false" title="#$label#">
                                     Unmanaged
                                 </label>
                             </div>
                             <div>
                                 <input type="radio" value="1" id="configurable_true" name="configurable"/>
-                                <label for="configurable_true" title="#xarML('Allow manual CSS management')#">
+                                <xar:var name="label">Allow manual CSS management</xar:var>
+                                <label for="configurable_true" title="#$label#">
                                     Managed
                                 </label>
                             </div>
