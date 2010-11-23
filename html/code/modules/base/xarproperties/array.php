@@ -30,7 +30,7 @@ class ArrayProperty extends DataProperty
     public $default_suffixlabel = "Row";                           // suffix for the Add/Remove Button
     public $initialization_fixed_keys = 0;                         // allow editing keys on input
 
-    public $display_column_definition = array(array("Key","Value"),array("textbox","textbox"));  
+    public $display_column_definition = array(array("Key","Value"),array("textbox","textbox"),array("",""));  
 
     // Configuration setting to ignore
     public $initialization_other_rule_ignore    = true;
@@ -219,16 +219,20 @@ class ArrayProperty extends DataProperty
                 // New way for configs
                 $titles = $this->display_column_definition['value'][0];
                 $types = $this->display_column_definition['value'][1];
+                $configurations = $this->display_column_definition['value'][2];
             } catch (Exception $e) {
                 // Legacy way for configs
                 $titles = $this->display_column_definition[0];
                 $types = $this->display_column_definition[1];
+                // FIXME: this needs to be checked for in the template
+                $configurations = array();
             }
             $data['layout'] = 'table';
         }
         
         if (!isset($data['column_titles'])) $data['column_titles'] = $titles;
         if (!isset($data['column_types']))  $data['column_types'] = $types;
+        if (!isset($data['column_configurations']))  $data['column_configurations'] = $configurations;
 
         // If titles or types were passed directly through the tag, they may be lists we need to turn into arrays
         if (!is_array($data['column_titles'])) $data['column_titles'] = explode(',', $data['column_titles']);
