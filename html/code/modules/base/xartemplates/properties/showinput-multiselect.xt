@@ -69,17 +69,21 @@
                     <input type="hidden" name="childgroupsimploded" id="childgroupsimploded"/>
                 </li>
                 <li style="float:left; margin-right: 10px">
-                    <xar:var name="label">&lt; Add</xar:var>
-                    <input class="button" type="button" id="add" value="#$label#" onclick="addSelectedToList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');delSelectedFromList('childgroupsselect'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#xarML('Add group')#" style="width: 100px;"/>
+                    <xar:var name="label">Add</xar:var>
+                    <xar:var name="label1">Add Group</xar:var>
+                    <input class="button" type="button" id="add" value="&lt; #$label#" onclick="addSelectedToList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');delSelectedFromList('childgroupsselect'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#$label1#" style="width: 100px;"/>
                     <br />
-                    <xar:var name="label">Remove &gt;</xar:var>
-                    <input class="button" type="button" id="remove" value="#$label#" onclick="addSelectedToList('childgroups','childgroupsselect');implodeListKeys('childgroups','childgroupsimploded',',');delSelectedFromList('childgroups'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#xarML('Remove group')#"  style="width: 100px;"/>
+                    <xar:var name="label">Remove</xar:var>
+                    <xar:var name="label">Remove Group</xar:var>
+                    <input class="button" type="button" id="remove" value="#$label# &gt;" onclick="addSelectedToList('childgroups','childgroupsselect');implodeListKeys('childgroups','childgroupsimploded',',');delSelectedFromList('childgroups'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#$label1#"  style="width: 100px;"/>
                     <br />
-                    <xar:var name="label">&lt;&lt; Add All</xar:var>
-                    <input class="button" type="button" id="addall" value="&lt;&lt; #xarML('Add All')#" onclick="addAllGroup('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');removeAllGroup('childgroupsselect'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#xarML('Add all group')#" style="width: 100px;"/>
+                    <xar:var name="label">Add All</xar:var>
+                    <xar:var name="label1">Add all groups</xar:var>
+                    <input class="button" type="button" id="addall" value="&lt;&lt; #$label#" onclick="addAllGroup('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');removeAllGroup('childgroupsselect'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#$label1#" style="width: 100px;"/>
                     <br />                                                                                                                                                                                                                                                                                                                       
-                    <xar:var name="label">Remove All &gt;&gt;</xar:var>
-                    <input class="button" type="button" id="removeall" value="#xarML('Remove All')# &gt;&gt;" onclick="addAllGroup('childgroups','childgroupsselect');implodeListKeys('childgroups','childgroupsimploded',',');removeAllGroup('childgroups'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',','); checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#xarML('Remove all group')#"  style="width: 100px;" />
+                    <xar:var name="label">Remove All</xar:var>
+                    <xar:var name="label">Remove all groups</xar:var>
+                    <input class="button" type="button" id="removeall" value="#$label# &gt;&gt;" onclick="addAllGroup('childgroups','childgroupsselect');implodeListKeys('childgroups','childgroupsimploded',',');removeAllGroup('childgroups'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',','); checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#$label1#"  style="width: 100px;" />
                 </li>
                 <li style="float:left;">
                     <xar:data-input type="multiselect" name="childgroupsselect" options="$unchosen"/>

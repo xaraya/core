@@ -12,13 +12,15 @@
         <!-- Display first-page link if there is more than one page and we are not on that page -->
         <xar:if condition="$currentpagenum ne $firstpagenum">
             <span class="xar-page">
-            <a title="#xarML('First page')#" href="#$firsturl#">|&lt;</a>
+            <xar:var name="label">First page</xar:var>
+            <a title="#$label#" href="#$firsturl#">|&lt;</a>
             </span>
         </xar:if>
         <!-- Display previous-page link if we are not on the first page -->
         <xar:if condition="$currentpagenum ne $firstpagenum">
             <span class="xar-page">
-            <a title="#xarML('Previous page')#" href="#$prevpageurl#">#xarML('prev')# (#$prevpage#/#$totalpages#)</a>
+            <xar:var name="label">Previous page</xar:var>
+            <a title="#$label#" href="#$prevpageurl#"><span>prev</span> (#$prevpage#/#$totalpages#)</a>
             </span>
         </xar:if>
     </div>

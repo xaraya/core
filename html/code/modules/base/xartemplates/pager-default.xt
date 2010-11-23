@@ -10,12 +10,13 @@
     <div class="xar-pager">
         <!-- Display first-page link or text if there is more than one page -->
         <xar:if condition="$totalpages gt 1">
+            <xar:var name="label">First page</xar:var>
             <xar:if condition="$currentpagenum ne $firstpagenum">
             <span class="xar-page">
-                <a title="#xarML('First page')#" href="#$firsturl#">|&lt;</a>
+                <a title="#$label#" href="#$firsturl#">|&lt;</a>
             </span>
             <xar:else />
-                <span class="xar-page-current" title="#xarML('First page')#">|&lt;</span>
+                <span class="xar-page-current" title="#$label#">|&lt;</span>
             </xar:if>
         </xar:if>
         <!-- Display previous-block link if there is more than one block -->
@@ -81,12 +82,13 @@
         </xar:if>
         <!-- Display last-page link or text if there is more than one page -->
         <xar:if condition="$totalpages gt 1">
+            <xar:var name="label">Last page</xar:var>
             <xar:if condition="$currentpagenum ne $lastpagenum">
-            <span class="xar-page">
-                <a title="#xarML('Last page')#" href="#$lasturl#">&gt;|</a>
-            </span>
+                <span class="xar-page">
+                    <a title="#$label#" href="#$lasturl#">&gt;|</a>
+                </span>
             <xar:else />
-            <span class="xar-page-current" title="#xarML('Last page')#">&gt;|</span>
+                <span class="xar-page-current" title="#$label#">&gt;|</span>
             </xar:if>
         </xar:if>
     </div>

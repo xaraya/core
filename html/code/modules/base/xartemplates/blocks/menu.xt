@@ -116,7 +116,8 @@
                     <!-- Optionally show admins a link to the back end -->
                     <xar:sec mask="ManageBase" catch="false">
                         <li class="xar-menu-item">
-                            <a title="#xarML('View the site back end interface')#" href="#xarModURL($module,'admin','main')#">
+                            <xar:var name="label">View the site back end interface</xar:var>
+                            <a title="#$label#" href="#xarModURL($module,'admin','main')#">
                                 View Back End
                             </a>
                         </li>
@@ -124,14 +125,16 @@
                 </xar:if>
                 <xar:if condition="$showlogout">
                    <li class="xar-menu-item">
-                        <a title="#xarML('Logout')#" href="#$logouturl#">
+                        <xar:var name="label">Logout</xar:var>
+                        <a title="#label#" href="#$logouturl#">
                             #$logoutlabel#
                         </a>
                     </li>
                 </xar:if>
                 <xar:if condition="(xarThemeIsAvailable('print')) and !empty($displayprint)">
                    <li class="xar-menu-item">
-                        <a title="#xarML('Print View')#" href="#$printurl#">
+                        <xar:var name="label">Print View</xar:var>
+                        <a title="#$label#" href="#$printurl#">
                             Print View
                         </a>
                     </li>
@@ -139,7 +142,8 @@
                 <!-- TODO check whether a modules supports syndication, do not hardcode in here -->
                 <xar:if condition="(xarThemeIsAvailable('rss')) and !empty($displayrss) and ($where eq 'articles')">
                    <li class="xar-menu-item">
-                        <a title="#xarML('Syndication')#" href="#$rssurl#">
+                        <xar:var name="label">Syndication</xar:var>
+                        <a title="#$label#" href="#$rssurl#">
                             Syndication
                         </a>
                     </li>

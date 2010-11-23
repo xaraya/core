@@ -73,7 +73,8 @@
                 <xar:data-input type="checkboxlist" name="active" options="$locales" value="$allowedlocales" layout="vertical"/>
             </div>
         <div class="xar-form-input-wrapper">
-            <label for="defaultlocale" title="#xarML('Default locale to load')#" class="xar-form-label">Default Locale:</label>
+            <xar:var name="label">Default locale to load</xar:var>
+            <label for="defaultlocale" title="#$label#" class="xar-form-label">Default Locale:</label>
             <select name="defaultlocale" id="defaultlocale">
                 <xar:loop name="$locales">
                     <xar:if condition="xarMLSGetSiteLocale() eq $loop:item['name']">
@@ -101,7 +102,8 @@
         </p>
 
         <div class="xar-form-input-wrapper">
-            <label for="translationsbackend" title="#xarML('Translations Backend')#" class="xar-form-label">
+            <xar:var name="label">Translations Backend</xar:var>
+            <label for="translationsbackend" title="#$label#" class="xar-form-label">
                 Translations Backend:
             </label>
             <select name="translationsbackend" id="translationsbackend" size="1">
