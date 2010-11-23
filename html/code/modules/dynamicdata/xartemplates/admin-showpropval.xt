@@ -31,15 +31,26 @@
             </form>
 
         <xar:elseif condition="!empty($proptype)"/>
-            <h2>Sample Configuration for DataProperty Type #$proptype#</h2>
+            <h2>Generate Configuration for DataProperty Type #$proptype#</h2>
+            <p>
+                To make a configuration for a dataproperty:
+                <ol>
+                    <li>Choose the type of property from the dropdown below and click on the Select button.</li>
+                    <li>Fill in the initialization, validation and display options you want.</li>
+                    <li>Click on the submit button at the bottom of the page.</li>
+                    <li>The configuration will be placed in the property type summary at the bottom of the page.</li>
+                </ol>
+            </p>
             <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
                 <fieldset>
                     <legend>Select Property Type</legend>
-                    <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="$proptype"/>
-                    <input type="submit" value="#xarML('Select')#"/>
+                    <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="$proptype"/>&#160;
+                    <xar:var name="value">Select</xar:var>
+                    <input type="submit" value="#$value#"/>
                 </fieldset>
             </form>
             <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
+                #$showval#
                 <fieldset>
                     <legend>Property Type Summary</legend>
                     <table class="xar-fullwidth">
@@ -66,10 +77,10 @@
                     </table>
                 </fieldset>
                 <input type="hidden" name="proptype" value="#$proptype#"/>
-                #$showval#
                 <fieldset>
                     <div class="xar-align-center">
-                        <input type="submit" name="preview" value="#xarML('Preview')#"/>
+                        <xar:var name="value">Make Configuration</xar:var>
+                        <input type="submit" name="preview" value="#$value#"/>
     <!-- See CHECKME in showpropval
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                         <input type="submit" name="confirm" value="#xarML('Update')#" disabled="disabled"/>
@@ -84,7 +95,8 @@
                 <fieldset>
                     <legend>Select Property Type</legend>
                     <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="textbox"/>
-                    <input type="submit" value="#xarML('Select')#"/>
+                        <xar:var name="value">Select</xar:var>
+                    <input type="submit" value="#$value#"/>
                 </fieldset>
             </form>
         </xar:if>
