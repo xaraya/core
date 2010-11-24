@@ -31,8 +31,8 @@
                         </xar:if>
                         <xar:var name="label">Users</xar:var>
                         <xar:if condition="($users gt 0) and ($drawchildren)">
-                            <xar:var name="label">Show the Users in this Group</xar:var>
-                            <a href="#xarModURL('roles', 'admin', 'showusers', array('id' =&gt; $id, 'reload' =&gt; 1))#" title="#$label#">
+                            <xar:var name="label1">Show the Users in this Group</xar:var>
+                            <a href="#xarModURL('roles', 'admin', 'showusers', array('id' =&gt; $id, 'reload' =&gt; 1))#" title="#$label1#">
                                 <img src="#$usersicon#" alt="#$label#"/>
                             </a>
                         <xar:else />
@@ -59,7 +59,7 @@
                         <xar:var name="label">Test</xar:var>
                         <xar:if condition="$drawchildren">
                             <xar:var name="label1">Test this Groups's Privileges</xar:var>
-                            <a href="#xarModURL('roles', 'admin', 'testprivileges', array('id' =&gt; $id))#" title="#$label#">
+                            <a href="#xarModURL('roles', 'admin', 'testprivileges', array('id' =&gt; $id))#" title="#$label1#">
                                 <img src="#$testicon#" alt="#$label#"/>
                             </a>
                         <xar:else />

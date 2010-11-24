@@ -103,7 +103,7 @@
                 <div class="xar-form-input-wrapper-after">
                     <xar:var name="label">Add Item</xar:var>
                     <xar:var name="label1">Add</xar:var>
-                    <input type="button" title="#$label#" value="#$label#" onclick="addItem();" style="height: 23px; font-size: small;"/>
+                    <input type="button" title="#$label#" value="#$label1#" onclick="addItem();" style="height: 23px; font-size: small;"/>
                 </div>
                 <div id="itemtemplate" style="display:none;">
                     <xar:data-form object="$emptyobject" layout="prefix" fieldprefix="Item_dummyfieldprefix" fieldlist="$fieldlist"/>
