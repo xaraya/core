@@ -19,7 +19,7 @@
                         </xar:if>
                     </xar:foreach>
                 </select>
-                <input type="hidden" name="install_phase" id="install_phase" value="2"/>
+                <input type="hidden" name="install_phase" id="install_phase" value="2"/>&#160;
                 <input type="submit" value="Continue"/>
             </p>
         </form>
