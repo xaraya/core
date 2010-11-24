@@ -82,6 +82,17 @@ class xarResponse extends Object
         return xarTplModule($modName, $modType, $funcName, array('msg' => $msg), $templateName);
     }
 
+    /**
+     * Carry out a redirect - legacy support for Jamaica 2.0 and 2.1
+     *
+     * @access public
+     * @param redirectURL string the URL to redirect to
+     */
+    static public function Redirect($url = '')
+    {
+        return xarController::redirect($url);
+    }
+
     function getOutput() { return $this->output; }
 }
 ?>
