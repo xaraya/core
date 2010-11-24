@@ -126,7 +126,7 @@
                 <xar:if condition="$showlogout">
                    <li class="xar-menu-item">
                         <xar:var name="label">Logout</xar:var>
-                        <a title="#label#" href="#$logouturl#">
+                        <a title="#$label#" href="#$logouturl#">
                             #$logoutlabel#
                         </a>
                     </li>

@@ -55,7 +55,7 @@
         </xar:if>
         <xar:if condition="isset($properties['user_menu_link'])">
             <div class="xar-form-input-wrapper">
-                <xar:var name="label">Hide the link to this module\'s user functions in the Base module User Menu Block.</xar:var>
+                <xar:var name="label">Hide the link to this module's user functions in the Base module User Menu Block.</xar:var>
                 <label for="user_menu_link" class="xar-form-label" title="#$label#">
                         Hide link in User Menu
                 </label>
@@ -64,7 +64,7 @@
         </xar:if>
         <xar:if condition="isset($properties['admin_menu_link'])">
             <div class="xar-form-input-wrapper">
-                <xar:var name="label">Hide the link to this module\'s admin functions in the Base module Admin Menu Block.</xar:var>
+                <xar:var name="label">Hide the link to this module's admin functions in the Base module Admin Menu Block.</xar:var>
                 <label for="admin_menu_link" class="xar-form-label" title="#$label#">
                         Hide link in Admin Menu
                 </label>
