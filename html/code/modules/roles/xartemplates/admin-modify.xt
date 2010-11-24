@@ -229,7 +229,7 @@
                                     <xar:var name="loop:item.dname"/>
                                 </option>
                             </xar:loop>
-                        </select>
+                        </select>&#160;
                         <input type="hidden" name="id" id="addid" value="#$id#"/>
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                         <xar:var name="label">Add</xar:var>
