@@ -90,7 +90,7 @@
                             <xar:if condition="!$associative_array AND ($k eq 0)">
                                 <xar:data-input type="textbox" name="$prop_name" id="$prop_id"/>
                             <xar:else/>
-                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id"/>
+                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$column_defaults[$k]"  configuration="$column_configurations[$k]"/>
                             </xar:if>
                         </td>
                     </xar:for>

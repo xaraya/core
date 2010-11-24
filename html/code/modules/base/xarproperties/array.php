@@ -208,6 +208,7 @@ class ArrayProperty extends DataProperty
                         $temp[0][] = $v;
                         $temp[1][] = $data['value'][1][$k];
                         $temp[2][] = $data['value'][2][$k];
+                        $temp[3][] = $data['value'][3][$k];
                     }
                 }
                 $data['value'] = $temp;
@@ -219,15 +220,18 @@ class ArrayProperty extends DataProperty
                 // New way for configs
                 $titles = $this->display_column_definition['value'][0];
                 $types = $this->display_column_definition['value'][1];
-                $configurations = $this->display_column_definition['value'][2];
+                $defaults = $this->display_column_definition['value'][2];
+                $configurations = $this->display_column_definition['value'][3];
             } catch (Exception $e) {
                 // Legacy way for configs
                 $titles = $this->display_column_definition[0];
                 $types = $this->display_column_definition[1];
                 // FIXME: this needs to be checked for in the template
+                $defaults = array();
                 $configurations = array();
             }
             $data['layout'] = 'table';
+            if (!isset($data['column_defaults']))  $data['column_defaults'] = $defaults;
             if (!isset($data['column_configurations']))  $data['column_configurations'] = $configurations;
         }
         
@@ -272,6 +276,7 @@ class ArrayProperty extends DataProperty
         if (isset($data['associative_array'])) $this->initialization_associative_array = $data['associative_array'];
         if (isset($data['addremove']))         $this->initialization_addremove =  $data['addremove'];
         if (!isset($data['layout']))           $data['layout'] = 'table';
+        
         return parent::showInput($data);
     }
 
@@ -294,6 +299,7 @@ class ArrayProperty extends DataProperty
                 $temp[0][] = $v;
                 $temp[1][] = $data['configuration']['display_column_definition']['value'][1][$k];
                 $temp[2][] = $data['configuration']['display_column_definition']['value'][2][$k];
+                $temp[3][] = $data['configuration']['display_column_definition']['value'][3][$k];
             }
         }
         $data['configuration']['display_column_definition']['value'] = $temp;
