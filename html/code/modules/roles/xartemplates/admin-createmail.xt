@@ -204,9 +204,7 @@
                                     <td>#$loop:item['uname']#</td>
                                     <td>
                                         <xar:var name="label">Email this user</xar:var>
-                                        <a href="&xar-modurl-roles-admin-createmail;&amp;id=#$loop:item.id#" title="#$label#">
-                                        <a href="#xarModURL('roles','admin','createmail',array('id'=>$loop->item['id']))#"
-                                        title="#xarML('Email this user')#">xxxx
+                                        <a href="#xarModURL('roles','admin','createmail',array('id'=>$loop->item['id']))#" title="#$label#">
                                         #$loop:item['email']#</a>
                                     </td>
                                     <td class="xar-align-center">

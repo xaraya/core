@@ -23,8 +23,7 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
-                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#$label#" class="xar-norm xar-norm-outline">
-                                <a href="#xarModURL('roles','admin','showusers',array('phase'=>$state,'id'=>$parents[$i]['parentid']))#" title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">xxxx
+                                <a href="#xarModURL('roles','admin','showusers',array('phase'=>$state,'id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
                                     #$parents[$i]['parentname']#
                                 </a>
                             </li>
