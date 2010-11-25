@@ -24,8 +24,7 @@
         <xar:template type="module" file="admin-menu"/>
         <h2>#xarVarPrepForDisplay($title)#:
             <xar:var name="label">Modify role</xar:var>
-            <a href="&xar-modurl-roles-admin-modify;&amp;id=#$groupid#" title="#$label#">
-            <a href="#xarModURL('roles','admin','modify',array('id'=>$groupid))#" title="#xarML('Modify role')#">xxxx
+            <a href="#xarModURL('roles','admin','modify',array('id'=>$groupid))#" title="#$label#">
                 #xarVarPrepForDisplay($groupname)#
             </a>
             <xar:if condition="$search ne ''">matching
@@ -69,16 +68,14 @@
                             <xar:if condition="$groupid eq $groups[$i]['id']">
                                 <li class="xar-tab-active">
                                     <xar:var name="label">Display the users in this group</xar:var>
-                                    <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$groups[$i]['id']#&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload" title="#$label#" class="xar-accent xar-accent-outline">
-                                   xxxx <a href="#xarModURL('roles','admin','showusers',array('id'=>$groups[$i]['id'],'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" title="#xarML('Display the users in this group')#" class="xar-accent xar-accent-outline">
+                                    <a href="#xarModURL('roles','admin','showusers',array('id'=>$groups[$i]['id'],'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" title="#$label#" class="xar-accent xar-accent-outline">
                                         #xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
                                     </a>
                                 </li>
                             <xar:else/>
                                 <li class="xar-tab">
                                     <xar:var name="label">Display the users in this group</xar:var>
-                                    <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$groups[$i]['id']#&amp;state=#$state#&amp;order=#$order#&amp;search=#$search#&amp;reload=reload" title="#$label#" class="xar-norm xar-norm-outline">
-                                   xxxx <a href="#xarModURL('roles','admin','showusers',array('id'=>$groups[$i]['id'],'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" title="#xarML('Display the users in this group')#" class="xar-norm xar-norm-outline">
+                                    <a href="#xarModURL('roles','admin','showusers',array('id'=>$groups[$i]['id'],'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" title="#$label#" class="xar-norm xar-norm-outline">
                                         #xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
                                     </a>
                                 </li>
@@ -223,21 +220,18 @@
                                 <xar:if condition="!$users[$itemid]['frozen']">
                                     <xar:if condition="xarModVars::get('roles', 'askpasswordemail')">
                                         <xar:var name="label">Generate a new password for this User</xar:var>
-                                        <a href="&xar-modurl-roles-admin-createpassword;&amp;id=#$fields.id#&amp;state=#$state#&amp;groupid=#$groupid#" title="#$label#">
-                                       xxxx <a href="#xarModURL('roles','admin','createpassword',array('id'=>$fields['id'],'state'=>$state,'groupid'=>$groupid))#" title="#xarML('Generate a new password for this User')#">
+                                        <a href="#xarModURL('roles','admin','createpassword',array('id'=>$fields['id'],'state'=>$state,'groupid'=>$groupid))#" title="#$label#">
                                             <img src="#$icon_password#" class="xar-valign-middle"/>
                                         </a>
                                         &#160;
                                     </xar:if>
                                     <xar:var name="label">Modify this user</xar:var>
-                                    <a href="&xar-modurl-roles-admin-modify;&amp;id=#$fields.id#" title="#$label#">
-                                    <a href="#xarModURL('roles','admin','modify',array('id'=>$fields['id']))#" title="#xarML('Modify this user')#">xxxx
+                                    <a href="#xarModURL('roles','admin','modify',array('id'=>$fields['id']))#" title="#$label#">
                                         <img src="#$icon_modify#" class="xar-valign-middle"/>
                                     </a>
                                     &#160;
                                     <xar:var name="label">Delete this User</xar:var>
-                                    <a href="&xar-modurl-roles-admin-delete;&amp;id=#$fields.id#" title="#$label#">
-                                    <a href="#xarModURL('roles','admin','delete',array('id'=>$fields['id']))#" title="#xarML('Delete this User')#">xxxx
+                                    <a href="#xarModURL('roles','admin','delete',array('id'=>$fields['id']))#" title="#$label#">
                                         <img src="#$icon_delete#" class="xar-valign-middle"/>
                                     </a>
                                     &#160;
@@ -247,14 +241,12 @@
                                     <img src="#$icon_none#" class="xar-valign-middle"/>&#160;
                                 </xar:if>
                                 <xar:var name="label">Show the Privileges assigned to this User</xar:var>
-                                <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$fields.id#" title="#$label#">
-                                <a href="#xarModURL('roles','admin','showprivileges',array('id'=>$fields['id']))#" title="#xarML('Show the Privileges assigned to this User')#">xxxx
+                                <a href="#xarModURL('roles','admin','showprivileges',array('id'=>$fields['id']))#" title="#$label#">
                                     <img src="#$icon_privileges#" class="xar-valign-middle"/>
                                 </a>
                                 &#160;
                                 <xar:var name="label">Test the Privileges of this User</xar:var>
-                                <a href="&xar-modurl-roles-admin-testprivileges;&amp;id=#$fields.id#" title="#$label#">
-                                <a href="#xarModURL('roles','admin','testprivileges',array('id'=>$fields['id']))#" title="#xarML('Test the Privileges of this User')#">xxxx
+                                <a href="#xarModURL('roles','admin','testprivileges',array('id'=>$fields['id']))#" title="#$label#">
                                     <img src="#$icon_test#" class="xar-valign-middle"/>
                                 </a>
                             </td>
@@ -281,8 +273,7 @@
         </xar:if>
         <p>
             <xar:var name="label">Add a new user</xar:var>
-            <a href="&xar-modurl-roles-admin-new;&amp;pparentid=#$groupid#" title="#$label#">
-            <a href="#xarModURL('roles','admin','new',array('ptype'=>0,'pparentid'=>$groupid))#" title="#xarML('Add a new user')#">xxxx
+            <a href="#xarModURL('roles','admin','new',array('ptype'=>0,'pparentid'=>$groupid))#" title="#$label#">
                 Add a new user to this group
             </a>|
             <a href="#xarModURL('roles','admin','createmail')#">Email users in this group</a>

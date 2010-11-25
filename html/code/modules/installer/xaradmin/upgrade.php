@@ -31,7 +31,7 @@ function installer_admin_upgrade()
         $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);
         $data['upgradable'] = xarVersion::compare($fileversion, '2.0.0') > 0;
     }
-    xxxx
+    
     // Core modules
     $data['coremodules'] = array(
                                 42    => 'authsystem',
@@ -68,24 +68,8 @@ function installer_admin_upgrade()
             }
             $upgrade_function = 'main_upgrade_' . $upgrade_version;
             $data = array_merge($data,$upgrade_function());
-
-        switch ($fileversion) {
-            case '2.1.0':
-            if (!Upgrader::loadFile('upgrades/210/main.php')) {
-                $data['upgrade']['errormessage'] = Upgrader::$errormessage;
-                return $data;
-            }
-            $data = array_merge($data,main_210());
-
-            case '2.2.0':
-            if (!Upgrader::loadFile('upgrades/220/main.php')) {
-                $data['upgrade']['errormessage'] = Upgrader::$errormessage;
-                return $data;
-            }
-            $data = array_merge($data,main_220());
         }
-        
-        
+
     } elseif ($data['phase'] == 3) {
         $data['active_step'] = 3;
         // Align the db and filesystem version info
@@ -93,7 +77,7 @@ function installer_admin_upgrade()
         xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
         xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
         xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
-        xxxx
+        
         // Get the list of version checks
         Upgrader::loadFile('checks/check_list.php');
         $check_list = installer_adminapi_get_check_list();
@@ -106,23 +90,7 @@ function installer_admin_upgrade()
             }
             $check_function = 'main_check_' . $check_version;
             $data = array_merge($data,$check_function());
-
-        switch ($fileversion) {
-            case '2.1.0':
-            if (!Upgrader::loadFile('checks/210/main.php')) {
-                $data['check']['errormessage'] = Upgrader::$errormessage;
-                return $data;
-            }
-            $data = array_merge($data,main_210());
-
-            case '2.2.0':
-            if (!Upgrader::loadFile('checks/220/main.php')) {
-                $data['check']['errormessage'] = Upgrader::$errormessage;
-                return $data;
-            }
-            $data = array_merge($data,main_220());
         }
-
 
     } elseif ($data['phase'] == 4) {
         $data['active_step'] = 4;
