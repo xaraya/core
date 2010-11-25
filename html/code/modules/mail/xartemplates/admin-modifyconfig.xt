@@ -365,7 +365,7 @@
                             Scheduled mail:
                         </label>
                         <xar:if condition="xarModIsAvailable('scheduler')">
-                            <xar:data-input type="dropdown" options="$intervals" value="$interval"/>
+                            <xar:data-input type="dropdown" name="interval" options="$intervals" value="$interval"/>
                         <xar:else />
                             <xar:data-input type="hidden" name="interval" value=""/>
                             You need to install the Scheduler module for this
