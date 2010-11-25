@@ -25,7 +25,7 @@
                 <li class="xar-tab-active">
                     <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Site Display</a>
                 </li>
-                <xar:else />
+            <xar:else />
                 <li class="xar-tab">
                     <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'display'))#" class="xar-norm xar-norm-outline">
                     Site Display</a>
@@ -35,7 +35,7 @@
                 <li class="xar-tab-active">
                     <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Sessions/Security</a>
                 </li>
-                <xar:else />
+            <xar:else />
                 <li class="xar-tab">
                     <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'security'))#" class="xar-norm xar-norm-outline">
                     Sessions and Security</a>
@@ -45,17 +45,27 @@
                 <li class="xar-tab-active">
                     <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Languages and Locales</a>
                 </li>
-                <xar:else />
+            <xar:else />
                 <li class="xar-tab">
                     <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'locales'))#" class="xar-norm xar-norm-outline">
                     Languages and Locales</a>
+                </li>
+            </xar:if>
+            <xar:if condition="$tab eq 'logging'">
+                <li class="xar-tab-active">
+                    <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Logging</a>
+                </li>
+            <xar:else />
+                <li class="xar-tab">
+                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'logging'))#" class="xar-norm xar-norm-outline">
+                    Logging</a>
                 </li>
             </xar:if>
             <xar:if condition="$tab eq 'other'">
                 <li class="xar-tab-active">
                     <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Other</a>
                 </li>
-                <xar:else />
+            <xar:else />
                 <li class="xar-tab">
                     <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'other'))#" class="xar-norm xar-norm-outline">
                     Other</a>
