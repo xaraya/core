@@ -17,7 +17,8 @@
                   #$object:label# Details
                 </legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="ptype" title="#xarML('Type of Role')#" class="xar-form-label">
+                    <xar:var name="label">Type of Role</xar:var>
+                    <label for="ptype" title="#$label#" class="xar-form-label">
                         Type:
                     </label>
                     <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"</xar:set>
@@ -25,7 +26,8 @@
                 </div>
                 <xar:data-form object="$object"/>
                 <div class="xar-form-input-wrapper">
-                    <label for="parentid" title="#xarML('Initial Group membership')#" class="xar-form-label">Member Of:</label>
+                    <xar:var name="label">Initial Group membership</xar:var>
+                    <label for="parentid" title="#$label#" class="xar-form-label">Member Of:</label>
                     <xar:data-input type="grouplist" name="parentid" value="$parentid"/>
                 </div>
                 <xar:set name="settings">
@@ -34,7 +36,8 @@
                 <xar:if condition="xarRoles::ROLES_USERTYPE eq $itemtype">
                     <xar:if condition="in_array('useremailformat',$settings)">
                         <div class="xar-form-input-wrapper">
-                            <label for="duvs_useremailformat" title="#xarML('Email Format')#" class="xar-form-label">Email Format:</label>
+                            <xar:var name="label">Email Format</xar:var>
+                            <label for="duvs_useremailformat" title="#$label#" class="xar-form-label">Email Format:</label>
                             <xar:set name="value">
                                 xarModUserVars::get('roles','useremailformat',$id)
                             </xar:set>
@@ -61,7 +64,8 @@
                 </xar:if>
                 <xar:if condition="in_array('userhome',$settings)">
                     <div class="xar-form-input-wrapper">
-                        <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
+                        <xar:var name="label">Home URL</xar:var>
+                        <label for="duvs_userhome" title="#$label#" class="xar-form-label">
                             Home:
                         </label>
                         <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModUserVars::get('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7"/>
@@ -74,7 +78,8 @@
                 <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
                     <input type="hidden" name="tplmodule" id="tplmodule" value="roles"/>
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                    <input type="submit" name="confirm" value="#xarML('Add')#"/>
+                    <xar:var name="label">Add</xar:var>
+                    <input type="submit" name="confirm" value="#$label#"/>
                 </div>
             </fieldset>
         </form>

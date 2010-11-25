@@ -13,7 +13,8 @@
         <span class="xar-mod-title">System Message</span>
     </div>
     <div class="xar-mod-body">
-        <img src="#xarTplGetImage('info.png', 'base')#" alt="#xarML('Message Icon')#"/>
+        <xar:var name="label">Message Icon</xar:var>
+        <img src="#xarTplGetImage('info.png', 'base')#" alt="#$label#"/>
         <h2>#$title#</h2>
         <p>#$short#</p>
         <xar:if condition="$long ne ''">

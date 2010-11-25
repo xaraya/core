@@ -200,7 +200,7 @@ class xarSecurity extends Object
             //perhaps something for later.
             // <mrb> i dont grok this, theme can be realm?
             case "theme":
-                $mask->setRealm(xarModVars::get('themes', 'default'));
+                $mask->setRealm(xarModVars::get('themes', 'default_theme'));
                 break;
             case "domain":
                 $host = xarServer::getHost();
@@ -261,7 +261,7 @@ class xarSecurity extends Object
         } else {
             $role = xarRoles::findRole($rolename);
         }
-        
+
         // check if we already have the irreducible set of privileges for the current user
         if (($rolename == '') || ($rolename == xarUserGetVar('uname'))) {
             // We are checking the privileges of the current user
@@ -318,14 +318,23 @@ class xarSecurity extends Object
         // check if the exception needs to be caught here or not
 
         if ($catch && !$pass) {
+            $requrl = xarServer::getCurrentURL(array(),false);
             if (self::$exceptionredirect && !xarUserIsLoggedIn()) {
                 // The current authentication module will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login
+                $redirectURL = xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false);
                 $requrl = xarServer::getCurrentURL(array(),false);
-                xarController::redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
+                xarController::redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));xxxx
             } else {
-                xarController::redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
+                // Redirect to the privileges error page
+                $redirectURL = xarModURL('privileges','user','errors',array('layout' => 'no_privileges', 'redirecturl'=> $requrl));
+                xarController::redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));xxxx
             }
+            // Remove &amp; entites to prevent redirect breakage
+            $redirectURL = str_replace('&amp;', '&', $redirectURL);
+            $header = "Location: " . $redirectURL;
+            header($header, TRUE, 302);
+            exit();
         }
         return $pass;
     }
@@ -414,7 +423,7 @@ class xarSecurity extends Object
             }
             $privs = array();
             foreach ($privileges as $priv) $privs[] = $priv;
-            
+
             $coreset['privileges'] = array_merge($coreset['privileges'],$privs);
             $parents = array_merge($parents,$role->getParents());
         }

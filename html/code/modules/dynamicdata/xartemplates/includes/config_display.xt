@@ -5,7 +5,8 @@
             implode(',',unserialize(xarModVars::get('dynamicdata', 'administrators')))
         </xar:set>
         Enter a list of user names separated by commas. Incorrect user names  will be ignored.<br />
-        <label for="administrators" title="#xarML('These users have full access to the dynamicdata module')#" class="xar-form-label">
+        <xar:var name="label">These users have full access to the dynamicdata module</xar:var>
+        <label for="administrators" title="#$label#" class="xar-form-label">
             List of Administrators:
         </label>
         <xar:data-input type="textarea" name="administrators" value="$value"/>

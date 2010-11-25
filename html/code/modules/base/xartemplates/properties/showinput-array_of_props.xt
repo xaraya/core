@@ -82,7 +82,8 @@
                             </xar:if>
                             <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#]" id="#$id#_value_#$index#" value="#$val#" size="#$size#"/>
                             <xar:if condition = "$rows le $index AND $allowinput eq 2">
-                                <input type="button" title="#xarML('Remove')#&#160;#$suffixlabel#" value="#xarML('Remove')#&#160;#$suffixlabel#" style="height: 23px; font-size: small;" onclick="javascript:#$id#_removeRow('#$id#','#$index#')"/>
+                                <xar:var name="label">Remove</xar:var>
+                                <input type="button" title="#$label#&#160;#$suffixlabel#" value="#$label#&#160;#$suffixlabel#" style="height: 23px; font-size: small;" onclick="javascript:#$id#_removeRow('#$id#','#$index#')"/>
                             </xar:if>
                             <xar:set name="rowsdisplayed">$rowsdisplayed . "," . $j</xar:set>
                         </div>
@@ -117,10 +118,11 @@
                 </xar:if>
             </div>
             <div class="xar-form-input-wrapper-after">
+                <xar:var name="label">Add</xar:var>
                 <xar:if condition="$allowinput eq 1">
-                    <input class="xar-form-input-wrapper-before" type="button" title="#xarML('Add')#&#160;#$suffixlabel#" value="#xarML('Add')#&#160;#$suffixlabel#" onclick="#$id#_addRow(0);" style="height: 23px; font-size: small;"/>
+                    <input class="xar-form-input-wrapper-before" type="button" title="#$label#&#160;#$suffixlabel#" value="#$label#&#160;#$suffixlabel#" onclick="#$id#_addRow(0);" style="height: 23px; font-size: small;"/>
                 <xar:else />
-                    <input class="xar-form-input-wrapper-before" type="button" title="#xarML('Add')#&#160;#$suffixlabel#" value="#xarML('Add')#&#160;#$suffixlabel#" onclick="#$id#_addRow(1);" style="height: 23px; font-size: small;"/>
+                    <input class="xar-form-input-wrapper-before" type="button" title="#$label#&#160;#$suffixlabel#" value="#$label#&#160;#$suffixlabel#" onclick="#$id#_addRow(1);" style="height: 23px; font-size: small;"/>
                 </xar:if>
             </div>
             <xar:set name="rowsdisplayed">trim($rowsdisplayed,",")</xar:set>
@@ -145,7 +147,8 @@
         </div>
         <div class ="xar-displaynone">
             <div id="#$id#_removetemplate">         
-                <input type="button" title="#xarML('Remove')#&#160;#$suffixlabel#" value="#xarML('Remove')#&#160;#$suffixlabel#" style="height: 23px; font-size: small;" onclick="javascript:#$id#_removeRow('#$id#','dummy')"/>                                                   
+                <xar:var name="label">Remove</xar:var>
+                <input type="button" title="#$label#&#160;#$suffixlabel#" value="#$label#&#160;#$suffixlabel#" style="height: 23px; font-size: small;" onclick="javascript:#$id#_removeRow('#$id#','dummy')"/>                                                   
             </div>
         </div>
         <!--PSspl:Added hidden field for associative array configuration value. -->

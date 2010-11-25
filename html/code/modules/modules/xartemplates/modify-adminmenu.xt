@@ -8,8 +8,8 @@
         <xar:else />
             <input type="checkbox" name="showlogout" id="showlogout#$blockid#" value="1"/>
         </xar:if>
-        <label for="showlogout#$blockid#"
-        title="#xarML('By checking this box a logout link will be shown in the panel instance.')#">
+        <xar:var name="label">By checking this box a logout link will be shown in the panel instance.</xar:var>
+        <label for="showlogout#$blockid#" title="#$label#">
         Show a logout link in this menu</label>
     </div>
     <div class="xar-form-input-wrapper-after">
@@ -19,13 +19,13 @@
         <xar:else />
             <input type="checkbox" name="overview" id="overview#$blockid#" value="1"/>
         </xar:if>
-        <label for="overview#$blockid#"
-        title="#xarML('By checking this box the menu will NOT show the overview page of the module by default.')#">
+        <xar:var name="label">By checking this box the menu will NOT show the overview page of the module by default.</xar:var>
+        <label for="overview#$blockid#" title="#$label#">
         Disable the module overview by default</label>
     </div>
     <div class="xar-form-input-wrapper">
-        <label for="menustyle" title="#xarML('How should the menu items be ordered?')#"
-        class="xar-form-label">Sort menuitems:</label>
+        <xar:var name="label">How should the menu items be ordered?</xar:var>
+        <label for="menustyle" title="#$label#" class="xar-form-label">Sort menuitems:</label>
         <select name="menustyle" id="menustyle">
             <xar:foreach in="$sortorder" value="$v" key="$k">
                 <xar:if condition="$k eq $menustyle">

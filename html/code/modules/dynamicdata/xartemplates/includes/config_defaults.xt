@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <div class="xar-form-input-wrapper">
-        <label for="bar" title="#xarML('An example of a module-specific configuration variable')#" class="xar-form-label">            
+        <xar:var name="label">An example of a module-specific configuration variable</xar:var>
+        <label for="bar" title="#$label#" class="xar-form-label">            
             Enable debug mode:            
         </label>
         <xar:set name="checked">xarModVars::get('dynamicdata', 'debugmode')</xar:set>
@@ -12,7 +13,8 @@
     </xar:set>
     <div class="xar-form-input-wrapper" style="padding-bottom: 10px;">
         Enter a list of user names separated by commas. Incorrect user names  will be ignored.<br />
-        <label for="debugusers" title="#xarML('These users can see the Query debug messages')#" class="xar-form-label">
+        <xar:var name="label">These users can see the Query debug messages</xar:var>
+        <label for="debugusers" title="#$label#" class="xar-form-label">
             Debug Mode Users:
         </label>
         <xar:data-input type="textarea" name="debugusers" value="$users"/>

@@ -16,7 +16,8 @@
         </div>
         <br />
         <div>
-            <input type="submit" name="change_skin" value="#xarML('Set Skin')#"/>
+            <xar:var name="label">Set Skin</xar:var>
+            <input type="submit" name="change_skin" value="#$label#"/>
             <input type="hidden" name="authid" value="#$authid#"/>
         </div>
     </form>

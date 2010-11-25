@@ -35,7 +35,8 @@
             <fieldset>
                 <legend>Select Template</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="mailtype" title="#xarML('Select the template to edit')#" class="xar-form-label">
+                    <xar:var name="label">Select the template to edit</xar:var>
+                    <label for="mailtype" title="#$label#" class="xar-form-label">
                         Template:
                     </label>
                     <select name="mailtype" id="mailtype" size="1" tabindex="5" onchange="this.form.submit()">
@@ -74,13 +75,15 @@
             <fieldset>
                 <legend>Email</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="subject" title="#xarML('Title of the notification')#" class="xar-form-label">
+                    <xar:var name="label">Title of the notification</xar:var>
+                    <label for="subject" title="#$label#" class="xar-form-label">
                         Subject:
                     </label>
                     <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="message" title="#xarML('Body of the notification')#" class="xar-form-label">
+                    <xar:var name="label">Body of the notification</xar:var>
+                    <label for="message" title="#$label#" class="xar-form-label">
                         Message:
                     </label>
                         <div class="xar-form-container-after">
@@ -93,7 +96,8 @@
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="phase" id="phase" value="update"/>
                     <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>
-                    <input type="submit" value="#xarML('Update')#"/>
+                    <xar:var name="label">Update</xar:var>
+                    <input type="submit" value="#$label#"/>
                 </div>
             </fieldset>
             <p>The following variables will be replaced in the text with specific information:</p>

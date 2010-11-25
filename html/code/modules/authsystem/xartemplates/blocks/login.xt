@@ -8,11 +8,13 @@
             <xar:set name="remembermeid">'rememberme'.$blockid</xar:set>
         <p>
             <xar:data-input type="hidden" name="redirecturl" id="$id" value="$return_url"/>
-            <label for="#$unameid#" title="#xarML('Enter your user name')#">Username:</label>
+            <xar:var name="label">Enter your user name</xar:var>
+            <label for="#$unameid#" title="#$label#">Username:</label>
             <xar:data-input type="textbox" class="xar-fullwidth" name="uname" id="$unameid" maxlength="64"/>
         </p>
         <p>
-            <label for="#$passid#" title="#xarML('Enter your password')#">Password:</label>
+            <xar:var name="label">Enter your password</xar:var>
+            <label for="#$passid#" title="#$label#">Password:</label>
             <xar:data-input type="password" class="xar-fullwidth" name="pass" id="$passid" maxlength="64"/>
         </p>
         <p>
@@ -24,7 +26,8 @@
             </xar:if>
         </p>
         <p>
-            <input type="submit" value="#xarML('Log In')#"/>
+            <xar:var name="label">Log In</xar:var>
+            <input type="submit" value="#$label#"/>
         </p>
         <p>
             <a href="#xarModURL('roles','user','lostpassword')#">Request new password</a>

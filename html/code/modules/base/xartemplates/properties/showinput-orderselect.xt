@@ -19,11 +19,15 @@
     <xar:if condition="count($options) gt 0">
         <div class="xar-floatleft">
             <div class="xar-floatleft">
-                <button id="#$id#_up" onclick="return xar_base_reorder('#$id#', true, '#$id#_order');" title="#xarML('Move Up')#" class="xar-displayblock xar-margin-thickbottom">
-                    <img src="#$up_arrow_src#" alt="#xarML('Up Arrow')#"/>
+                <xar:var name="label">Move Up</xar:var>
+                <button id="#$id#_up" onclick="return xar_base_reorder('#$id#', true, '#$id#_order');" title="#$label#" class="xar-displayblock xar-margin-thickbottom">
+                    <xar:var name="label">Up Arrow</xar:var>
+                    <img src="#$up_arrow_src#" alt="#$label#"/>
                 </button>
-                <button id="#$id#_down" onclick="return xar_base_reorder('#$id#', false, '#$id#_order');" title="#xarML('Move Down')#" class="xar-displayblock xar-margin-thicktop">
-                    <img src="#$down_arrow_src#" alt="#xarML('Down Arrow')#"/>
+                <xar:var name="label">Move Down</xar:var>
+                <button id="#$id#_down" onclick="return xar_base_reorder('#$id#', false, '#$id#_order');" title="#$label#" class="xar-displayblock xar-margin-thicktop">
+                    <xar:var name="label">Down Arrow</xar:var>
+                    <img src="#$down_arrow_src#" alt="#$label#"/>
                 </button>
             </div>
             <xar:data-input type="multiselect" name="$name" size="$size" options="$options" tabindex="$tabindex" class="xar-margin-thickleft"/>

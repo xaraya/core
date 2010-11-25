@@ -12,13 +12,15 @@
         <!-- Display next-page link if we are not on the last page -->
         <xar:if condition="$currentpagenum ne $lastpagenum">
             <span class="xar-page">
-            <a title="#xarML('Next page')#" href="#$nextpageurl#">#xarML('next')# (#$nextpage#/#$totalpages#)</a>
+            <xar:var name="label">Next page</xar:var>
+            <a title="#$label#" href="#$nextpageurl#"><span>next</span> (#$nextpage#/#$totalpages#)</a>
             </span>
         </xar:if>
         <!-- Display last-page link if we are not on the last page -->
         <xar:if condition="$currentpagenum ne $lastpagenum">
             <span class="xar-page">
-            <a title="#xarML('Last page')#" href="#$lasturl#">&gt;|</a>
+            <xar:var name="label">Last page</xar:var>
+            <a title="#$label#" href="#$lasturl#">&gt;|</a>
             </span>
         </xar:if>
     </div>

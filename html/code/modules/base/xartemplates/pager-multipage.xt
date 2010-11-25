@@ -10,12 +10,13 @@
     <xar:style scope="module" module="base" file="pager"/>
     <div class="xar-pager">
         <!-- Display first-page link if there is more than one page and we are not on that page -->
+        <xar:var name="label">First Page</xar:var>
         <xar:if condition="$currentpagenum ne $firstpagenum">
             <span class="xar-page">
-            <a title="#xarML('First page')#" href="#$firsturl#">#xarML('First')#</a>
+            <a title="#$label#" href="#$firsturl#">First</a>
             </span>
         <xar:else />
-            <span class="xar-page-current" title="#xarML('First page')#">#xarML('First')#</span>
+            <span class="xar-page-current" title="#$label#">First</span>
         </xar:if>
         <!--  Display previous-block link if there is more than one block -->
         <xar:set name="prevblocklabel">xarML('Previous #(1) pages',$prevblockpages)</xar:set>
@@ -27,12 +28,13 @@
             <span class="xar-page-current" title="#$prevblocklabel#">&lt;&lt;</span>
         </xar:if>
         <!-- Display previous-page link if we are not on the first page -->
+        <xar:var name="label">Previous page</xar:var>
         <xar:if condition="$currentpagenum ne $firstpagenum">
             <span class="xar-page">
-            <a title="#xarML('Previous page')#" href="#$prevpageurl#">&lt;</a>
+            <a title="#$label#" href="#$prevpageurl#">&lt;</a>
             </span>
         <xar:else />
-            <span class="xar-page" title="#xarML('Previous page')#">&lt;</span>
+            <span class="xar-page" title="#$label#">&lt;</span>
         </xar:if>
         <xar:foreach in="$middleurls" key="$pagenumber" value="$pageurl">
             <xar:set name="pageurllabel">xarML('Page #(1)',$pagenumber)</xar:set>
@@ -43,12 +45,13 @@
             <xar:else /><span class="xar-page-current" title="#$pageurllabel#">#$pagenumber#</span></xar:if>
         </xar:foreach>
         <!-- Display next-page link if we are not on the last page -->
+        <xar:var name="label">Next page</xar:var>
         <xar:if condition="$currentpagenum ne $lastpagenum">
             <span class="xar-page">
-            <a title="#xarML('Next page')#" href="#$nextpageurl#">&gt;</a>
+            <a title="#$label#" href="#$nextpageurl#">&gt;</a>
             </span>
         <xar:else />
-            <span class="xar-page" title="#xarML('Next page')#">&gt;</span>
+            <span class="xar-page" title="#$label#">&gt;</span>
         </xar:if>
         <!-- Display next-block link if there is more than one block -->
         <xar:set name="nextblocklabel">xarML('Next #(1) pages',$nextblockpages)</xar:set>
@@ -59,12 +62,13 @@
         <xar:else />
             <span class="xar-page" title="#$nextblocklabel#">&gt;&gt;</span>
         </xar:if>
+        <xar:var name="label">Last page</xar:var>
         <xar:if condition="$currentpagenum ne $lastpagenum">
             <span class="xar-page">
-            <a title="#xarML('Last page')#" href="#$lasturl#">#xarML('Last')#</a>
+            <a title="#$label#" href="#$lasturl#">Last</a>
             </span>
         <xar:else />
-            <span class="xar-page-current" title="#xarML('Last page')#">#xarML('Last')#</span>
+            <span class="xar-page-current" title="#$label#">Last</span>
         </xar:if>
     </div>
 </xar:template>

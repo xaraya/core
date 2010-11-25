@@ -101,12 +101,12 @@
                     </xar:foreach>
                 </div>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="button" title="#xarML('Add Item')#" value="#xarML('Add')#"
-                    onclick="addItem();" style="height: 23px; font-size: small;"/>
+                    <xar:var name="label">Add Item</xar:var>
+                    <xar:var name="label1">Add</xar:var>
+                    <input type="button" title="#$label#" value="#$label1#" onclick="addItem();" style="height: 23px; font-size: small;"/>
                 </div>
                 <div id="itemtemplate" style="display:none;">
-                    <xar:data-form object="$emptyobject" layout="prefix"
-                    fieldprefix="Item_dummyfieldprefix" fieldlist="$fieldlist"/>
+                    <xar:data-form object="$emptyobject" layout="prefix" fieldprefix="Item_dummyfieldprefix" fieldlist="$fieldlist"/>
                 </div>
             </xar:if>
             <br />
@@ -129,7 +129,9 @@
             <xar:data-form object="$object[0]" layout="prefix" fieldprefix="$prefix" fieldlist="$fieldlist"/>
             <br />
             <div id="item"></div>
-            <input type="button" title="#xarML('Add Item')#" value="#xarML('Add')#" onclick="addItem();" style="height: 23px; font-size: small;"/>
+            <xar:var name="label">Add Item</xar:var>
+            <xar:var name="label1">Add</xar:var>
+            <input type="button" title="#$label#')#" value="#$label1#" onclick="addItem();" style="height: 23px; font-size: small;"/>
         </xar:if>
     </table>
     <div id="itemtemplate" style="display:none;">

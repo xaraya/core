@@ -50,13 +50,13 @@ function xarTpl_init(&$args)
     // This is the theme directory, solo (aka, themename)
     $GLOBALS['xarTpl_defaultThemeDir'] = $args['defaultThemeDir'];
     xarTplSetThemeDir($args['defaultThemeDir']);
-    
+
     // This should be always true or better defined if it's a client thing (js internal code generation for example)
     $GLOBALS['xarTpl_generateXMLURLs'] = $args['generateXMLURLs'];
 
     // set when page template root tag is compiled (dtd attribute value)
     $GLOBALS['xarTpl_doctype'] = '';
-    
+
     if (!xarTplSetPageTemplateName('default')) {
         // If there is no page template, we can't show anything
         throw new FileNotFoundException('default.xt',"xarTpl_init: Nonexistent #(1) page in theme directory '". xarTplGetThemeDir() ."'");
@@ -85,7 +85,7 @@ function xarTplGetThemeName()
     // If it is not set, set it return the default theme.
     // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
     if (method_exists('xarModVars','Get')) {
-        $defaultTheme = xarModVars::get('themes', 'default');
+        $defaultTheme = xarModVars::get('themes', 'default_theme');
         if (!empty($defaultTheme)) xarTplSetThemeName($defaultTheme);
     }
     assert('isset($GLOBALS["xarTpl_themeName"]; /* Themename could not be set properly */');
@@ -104,7 +104,7 @@ function xarTplGetThemeName()
 function xarTplSetThemeName($themeName)
 {
     $currentBase = xarConfigVars::get(null, 'Site.BL.ThemesDirectory','themes');
-    
+
     assert('$themeName != "" && $themeName{0} != "/"');
     if (!file_exists($currentBase.'/'.$themeName)) {
         return false;

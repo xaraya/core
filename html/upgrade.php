@@ -70,8 +70,6 @@ class Upgrader extends Object
         xarTplSetPageTitle(xarML('Xaraya Upgrade'));
         if(!xarTplSetThemeName('installer'))
             throw new Exception('You need the installer theme if you want to upgrade Xaraya.');
-        // Build function name from phase
-        $funcName = 'upgrade'.$phase;
 
         // Set the default page title before calling the module function
         xarTplSetPageTitle(xarML("Upgrading Xaraya"));

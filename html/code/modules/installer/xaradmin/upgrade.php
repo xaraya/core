@@ -31,12 +31,43 @@ function installer_admin_upgrade()
         $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);
         $data['upgradable'] = xarVersion::compare($fileversion, '2.0.0') > 0;
     }
+    xxxx
+    // Core modules
+    $data['coremodules'] = array(
+                                42    => 'authsystem',
+                                68    => 'base',
+                                13    => 'blocks',
+                                182   => 'dynamicdata',
+                                200   => 'installer',
+                                771   => 'mail',
+                                1     => 'modules',
+                                1098  => 'privileges',
+                                27    => 'roles',
+                                17    => 'themes',
+    );
+    $data['versions'] = array(
+                                '2.1.1',
+    );
+    
         
     if ($data['phase'] == 1) {
         $data['active_step'] = 1;
 
     } elseif ($data['phase'] == 2) {
         $data['active_step'] = 2;
+
+        // Get the list of version upgrades
+        Upgrader::loadFile('upgrades/upgrade_list.php');
+        $upgrade_list = installer_adminapi_get_upgrade_list();
+
+        // Run the upgrades
+        foreach ($upgrade_list as $upgrade_version) {
+            if (!Upgrader::loadFile('upgrades/' . $upgrade_version .'/main.php')) {
+                $data['upgrade']['errormessage'] = Upgrader::$errormessage;
+                return $data;
+            }
+            $upgrade_function = 'main_upgrade_' . $upgrade_version;
+            $data = array_merge($data,$upgrade_function());
 
         switch ($fileversion) {
             case '2.1.0':
@@ -62,6 +93,19 @@ function installer_admin_upgrade()
         xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
         xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
         xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
+        xxxx
+        // Get the list of version checks
+        Upgrader::loadFile('checks/check_list.php');
+        $check_list = installer_adminapi_get_check_list();
+
+        // Run the checks
+        foreach ($check_list as $check_version) {
+            if (!Upgrader::loadFile('checks/' . $check_version .'/main.php')) {
+                $data['check']['errormessage'] = Upgrader::$errormessage;
+                return $data;
+            }
+            $check_function = 'main_check_' . $check_version;
+            $data = array_merge($data,$check_function());
 
         switch ($fileversion) {
             case '2.1.0':
@@ -84,7 +128,6 @@ function installer_admin_upgrade()
         $data['active_step'] = 4;
 //        xarController::redirect(xarServer::getCurrentURL(array('phase' => 4)));
     }
-
     return $data;
 }
 

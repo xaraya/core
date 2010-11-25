@@ -35,7 +35,8 @@
                         <xar:var scope="module" module="roles" name="askpendingemail"/>
                     </xar:set>
                     <xar:data-input type="checkbox" name="askpendingemail" id="askpendingemail" checked="$checked"/>
-                    <label for="askpendingemail" title="#xarML('When user state is changed to \'pending\'')#">
+                    <xar:var name="label">When user state is changed to 'pending'</xar:var>
+                    <label for="askpendingemail" title="#$label#">
                         Pending
                     </label>
                 </div>
@@ -44,7 +45,8 @@
                         <xar:var scope="module" module="roles" name="askwelcomeemail"/>
                     </xar:set>
                     <xar:data-input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" checked="$checked"/>
-                    <label for="askwelcomeemail" title="#xarML('When user state is changed to \'active\'')#">
+                    <xar:var name="label">When user state is changed to 'active'</xar:var>
+                    <label for="askwelcomeemail" title="#$label#">
                         Active
                     </label>
                 </div>
@@ -53,7 +55,8 @@
                         <xar:var scope="module" module="roles" name="askdeactivationemail"/>
                     </xar:set>
                     <xar:data-input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" checked="$checked"/>
-                    <label for="askdeactivationemail" title="#xarML('When user state is changed to \'inactive\'')#">
+                    <xar:var name="label">When user state is changed to 'inactive'</xar:var>
+                    <label for="askdeactivationemail" title="#$label#">
                         Inactive
                     </label>
                 </div>
@@ -62,7 +65,8 @@
                         <xar:var scope="module" module="roles" name="askvalidationemail"/>
                     </xar:set>
                     <xar:data-input type="checkbox" name="askvalidationemail" id="askvalidationemail" checked="$checked"/>
-                    <label for="askvalidationemail" title="#xarML('When user state is changed to \'not validated\'')#">
+                    <xar:var name="label">When user state is changed to 'not validated'</xar:var>
+                    <label for="askvalidationemail" title="#$label#">
                         Not Validated
                     </label>
                 </div>
@@ -74,7 +78,8 @@
                         <xar:var scope="module" module="roles" name="askpasswordemail"/>
                     </xar:set>
                     <xar:data-input type="checkbox" name="askpasswordemail" id="askpasswordemail" checked="$checked"/>
-                    <label for="askpasswordemail" title="#xarML('When administrator changes a user\'s password')#">
+                    <xar:var name="label">When administrator changes a user's password</xar:var>
+                    <label for="askpasswordemail" title="#$label#">
                         Changes A User's Password
                     </label>
                 </div>
@@ -92,7 +97,8 @@
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="phase" id="phase" value="update"/>
-                    <input type="submit" value="#xarML('Update Notification Configuration')#"/>
+                    <xar:var name="label">Update Notification Configuration</xar:var>
+                    <input type="submit" value="#$label#"/>
                 </div>
             </fieldset>
         </form>

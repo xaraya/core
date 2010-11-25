@@ -22,7 +22,9 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="#xarModURL('roles','admin','showusers',array('phase'=>$state,'id'=>$parents[$i]['parentid']))#" title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
+                                <xar:var name="label">Show this group</xar:var>
+                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#$label#" class="xar-norm xar-norm-outline">
+                                <a href="#xarModURL('roles','admin','showusers',array('phase'=>$state,'id'=>$parents[$i]['parentid']))#" title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">xxxx
                                     #$parents[$i]['parentname']#
                                 </a>
                             </li>
@@ -38,13 +40,15 @@
             <fieldset>
                 <legend>Scope</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="pmodule" title="#xarML('Choose the module to test privileges against.')#" class="xar-form-label">
+                    <xar:var name="label">Choose the module to test privileges against.</xar:var>
+                    <label for="pmodule" title="#$label#" class="xar-form-label">
                         Registered Masks For Module:
                     </label>
                     <xar:set name="onchange">'this.form.submit();'</xar:set>
                     <xar:data-input type="module" name="pmodule" id="pmodule" value="$pmodule" firstline="Choose" onchange="$onchange"/>
                     <input type="hidden" name="id" id="id" value="#$id#"/>
-                    <input type="submit" value="#xarML('Test Privileges')#" class="xar-margin-thickleft"/>
+                    <xar:var name="label">Test Privileges</xar:var>
+                    <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
                 </div>
             </fieldset>
         </form>

@@ -66,7 +66,8 @@
                 <input type="hidden" name="objectid" value="#$objectid#"/>
                 <input type="hidden" name="table" value="#$table#"/>
                 <input type="hidden" name="authid" value="#$authid#"/>
-                <input type="submit" name="delete" id="delete" value="#xarML('Delete')#"/>
+                <xar:var name="label">Delete</xar:var>
+                <input type="submit" name="delete" id="delete" value="#$label#"/>
             </div>
             </fieldset>
         </form>
@@ -103,7 +104,8 @@
             </select>
         </div>
         <div class="xar-form-input-wrapper-after">
-            <input type="submit" name="add" id="add" value="#xarML('Add Relation')#"/>
+            <xar:var name="label">Add Relation</xar:var>
+            <input type="submit" name="add" id="add" value="#$label#"/>
         </div>
         <xar:if condition="!empty($withtable)">
             <div class="xar-floatleft xar-thirdwidth">
@@ -162,7 +164,8 @@
                 </div>
             </div>
             <div class="xar-form-input-wrapper-after">
-                <input type="submit" name="confirm" value="#xarML('Confirm')#"/>
+                <xar:var name="label">Confirm</xar:var>
+                <input type="submit" name="confirm" value="#$label#"/>
             </div>
         </xar:if>
         </fieldset>

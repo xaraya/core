@@ -43,13 +43,6 @@ class ModuleNotActiveException extends xarExceptions
 {
     protected $message = 'The module "#(1)" was called, but it is not active.';
 }
-/**
-**/
-class ModuleBadVersionException extends NotFoundExceptions
-{
-    protected $message = 'A module does not have the correct version';
-}
-
 
 /**
  * State of modules
@@ -976,7 +969,7 @@ class xarMod extends Object implements IxarMod
         
         // Not the correct version - throw exception unless we are upgrading
         if (!self::checkVersion($modName) && !xarVarGetCached('Upgrade', 'upgrading')) {
-            throw new ModuleBadVersionException($modName);
+            die('The core module "' . $modName . '" does not have the correct version. Please run the upgrade routine by clicking <a href="upgrade.php">here</a>');
         }
         
         // Load the module files

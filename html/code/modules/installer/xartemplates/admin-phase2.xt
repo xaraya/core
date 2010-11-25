@@ -314,7 +314,8 @@ POSSIBILITY OF SUCH DAMAGES.
                 <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
                 <input type="hidden" name="install_phase" id="install_phase" value="3"/>
 
-                <input type="submit" value="#xarML('Continue')#"/>
+                <xar:var name="label">Continue</xar:var>
+                <input type="submit" value="#$label#"/>
             </div>
         </form>
     </div>

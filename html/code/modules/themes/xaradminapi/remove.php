@@ -31,7 +31,7 @@ function themes_adminapi_remove(Array $args=array())
 
     // Get theme information
     $themeInfo = xarThemeGetInfo($regid);
-    $defaultTheme = xarModVars::get('themes','default');
+    $defaultTheme = xarModVars::get('themes','default_theme');
 
     // Bail out if we're trying to remove the default theme
     if ($defaultTheme == $themeInfo['name'] ) {
@@ -41,7 +41,7 @@ function themes_adminapi_remove(Array $args=array())
 
     // Bail out if we're trying to remove while one of our users
     // has it set to their default theme
-    $mvid = xarModVars::getId('themes','default');
+    $mvid = xarModVars::getId('themes','default_theme');
     $sql = "SELECT COUNT(*) FROM $tables[module_itemvars] WHERE module_var_id =? AND value = ?";
     $result =& $dbconn->Execute($sql, array($mvid,$defaultTheme));
 

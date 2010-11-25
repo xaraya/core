@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    xxxx<div class="xar-form-input-wrapper">
+        <xar:var name="label">By checking this box a logout link will be shown in the panel instance.</xar:var>
+        <label class="xar-form-label" for="showlogout#$bid#" title="#$label#">
+            Show A Logout Link
+        </label>
+        <xar:data-input type="checkbox" name="showlogout" checked="$showlogout"/>
+    </div>
     <!--
     <div class="xar-form-input-wrapper">
-        <label class="xar-form-label" for="showhelp#$bid#" title="#xarML('By checking this box a help link will be shown in the panel instance.')#">
+        <xar:var name="label">By checking this box a help link will be shown in the panel instance.</xar:var>
+        <label class="xar-form-label" for="showhelp#$bid#" title="#$label#">
             Show A Help Link
         </label>
         <xar:data-input type="checkbox" name="showhelp" checked="$showhelp"/>
     </div>
     -->
     <div class="xar-form-input-wrapper">
+       xxxx <xar:var name="label">By checking this box a link to the front end will be shown in the panel instance.</xar:var>
+        <label class="xar-form-label" for="showfront#$bid#" title="#$label#">
         <label for="marker" title="#xarML('When Xaraya is generating the menu, we can mark the current page. Use this to configure the marker for that display.')#" class="xar-form-label">
         Marker:
         </label>
@@ -28,7 +38,8 @@
         <xar:data-input type="checkbox" name="showfront" checked="$showfront"/>
     </div>
     <div class="xar-form-input-wrapper">
-        <label for="menustyle" title="#xarML('How should the menu items be ordered?')#" class="xar-form-label">
+        <xar:var name="label">How should the menu items be ordered?</xar:var>
+        <label for="menustyle" title="#$label#" class="xar-form-label">
             Sort Admin Menu Items:
         </label>
         <xar:data-input type="dropdown" name="menustyle" id="menustyle" options="$sortorder" value="$menustyle"/>

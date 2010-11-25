@@ -64,15 +64,20 @@
                     <!-- Optionally show admins a link to the back end -->
                     <xar:sec mask="ManageBase" catch="false">
                         <li class="xar-menu-item">
+                            <xar:var name="label">View the site back end interface</xar:var>
+                            <a title="#$label#" href="#xarModURL($module,'admin','main')#">
+                                View Back End
                             <a title="#$backtitle#" href="#xarModURL($thismodname,'admin','main')#">
-                                #$backlabel#
+                                #$backlabel#xxxx
                             </a>
                         </li>
                     </xar:sec>
                 </xar:if>
                 <xar:if condition="$showlogout">
                    <li class="xar-menu-item">
-                        <a title="#$logouttitle#" href="#$logouturl#">
+                        <xar:var name="label">Logout</xar:var>
+                        <a title="#$label#" href="#$logouturl#">
+                        <a title="#$logouttitle#" href="#$logouturl#">xxxx
                             #$logoutlabel#
                         </a>
                     </li>
@@ -81,8 +86,11 @@
                 <xar:if condition="!empty($displayprint)">
                    <!-- pointless having the block get the url, just get it here if needed -->
                    <li class="xar-menu-item">
+                        <xar:var name="label">Print View</xar:var>
+                        <a title="#$label#" href="#$printurl#">
+                            Print View
                         <a title="#$printtitle#" href="#xarServer::getCurrentURL(array('theme' => 'print'))#">
-                            #$printlabel#
+                            #$printlabel#xxxx
                         </a>
                     </li>
                 </xar:if>
@@ -90,9 +98,11 @@
                 <!-- FIXME deprecate this and remove the articles dependency -->
                 <xar:if condition="!empty($displayrss) and ($thismodname eq 'articles')">
                    <li class="xar-menu-item">
+                        <xar:var name="label">Syndication</xar:var>
+                        <a title="#$label#" href="#$rssurl#">
+                            Syndication
                         <a title="#$rsstitle#" href="#xarServer::getCurrentURL(array('theme' => 'rss'))#">
-                            #$rsslabel#
-                        </a>
+                            #$rsslabel#xxxx                        </a>
                     </li>
                 </xar:if>
                 </ul>

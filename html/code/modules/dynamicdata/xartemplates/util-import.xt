@@ -16,12 +16,15 @@
             <fieldset>
                 <legend>Import Object Definition</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="basedir" title="#xarML('Location of object definitions')#" class="xar-form-label">Base Directory:</label>
+                    <xar:var name="label">Location of object definitions</xar:var>
+                    <label for="basedir" title="#$label#" class="xar-form-label">Base Directory:</label>
                     <input type="text" name="basedir" id="basedir" value="#$basedir#" maxlength="250" class="xar-form-textxlong"/>
-                    <input type="submit" name="refresh" id="refresh" value="#xarML('Refresh')#"/>
+                    <xar:var name="label">Refresh</xar:var>
+                    <input type="submit" name="refresh" id="refresh" value="#$label#"/>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="import" title="#xarML('XML files found in Base Directory')#" class="xar-form-label">
+                    <xar:var name="label">XML files found in Base Directory</xar:var>
+                    <label for="import" title="#$label#" class="xar-form-label">
                         Available .xml Files:
                     </label>
                     <select name="import" id="import">
@@ -32,18 +35,21 @@
                 </div>
                 <div class="xar-form-input-wrapper-after">
                     <input type="checkbox" name="overwrite" id="overwrite" value="1"/>&#160;
-                    <label for="overwrite" title="#xarML('Overwrite the definition if it already exists')#">
+                    <xar:var name="label">Overwrite the definition if it already exists</xar:var>
+                    <label for="overwrite" title="#$label#">
                         Overwrite if exists
                     </label>
                 </div>
                 <div class="xar-form-input-wrapper-after">
                     <input type="checkbox" name="keepitemid" id="keepitemid" value="1"/>&#160;
-                    <label for="keepitemid" title="#xarML('Check to attempt to maintain item ids found in definition file')#">
+                    <xar:var name="label">Check to attempt to maintain item ids found in definition file</xar:var>
+                    <label for="keepitemid" title="#$label#">
                         Preserve item ids if possible
                     </label>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="xml" title="#xarML('Object definition to import.')#" class="xar-form-label">
+                    <xar:var name="label">Object definition to import.</xar:var>
+                    <label for="xml" title="#$label#" class="xar-form-label">
                         Select a file in the list above, or paste the object definition in here:
                     </label>
                     <div class="xar-form-container-after">
@@ -52,7 +58,8 @@
                     </div>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="prefix" title="#xarML('The prefix to use for storage definitions')#" class="xar-form-label">
+                    <xar:var name="label">The prefix to use for storage definitions</xar:var>
+                    <label for="prefix" title="#$label#" class="xar-form-label">
                         Prefix:
                     </label>
                     <div class="xar-form-container-after">
@@ -63,7 +70,8 @@
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="submit" value="#xarML('Import Definition')#"/>
+                    <xar:var name="label">Import Definition</xar:var>
+                    <input type="submit" value="#$label#"/>
                 </div>
             </fieldset>
         </form>

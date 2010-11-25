@@ -12,7 +12,8 @@
             <fieldset>
                 <legend>Configuration settings</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="disableoverview" title="#xarML('Disable the display by default of all module overview pages.')#" class="xar-form-label">
+                    <xar:var name="label">Disable the display by default of all module overview pages.</xar:var>
+                    <label for="disableoverview" title="#$label#" class="xar-form-label">
                         Disable overviews
                     </label>
                     <xar:set name="checked">xarModVars::get('modules', 'disableoverview')</xar:set>

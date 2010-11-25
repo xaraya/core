@@ -40,7 +40,9 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="#xarModURL('privileges','admin','displayprivilege',array('id'=>$parents[$i][['parentid']))#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">
+                                <xar:var name="label">Show this privilege</xar:var>
+                                <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$parents.$i.parentid#" title="#$label#" class="xar-norm xar-norm-outline">
+                                <a href="#xarModURL('privileges','admin','displayprivilege',array('id'=>$parents[$i][['parentid']))#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">xxxx
                                     $parents[$i]['parentname']#
                                 </a>
                             </li>

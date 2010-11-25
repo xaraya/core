@@ -23,35 +23,41 @@ function roles_adminapi_getmessagestrings(Array $args=array())
     extract($args);
     if (!isset($template)) throw new EmptyParameterException('template');
 
-    //FIXME: the default is always roles
     if(!isset($module)){
         list($module) = xarController::$request->getInfo();
     }
 
-    $messaginghome = sys::varpath() . "/messaging/" . $module;
-    $subjtemplate = $messaginghome . "/" . $template . "-subject.xt";
-    if (!file_exists($subjtemplate)) throw new FileNotFoundException($subjtemplate);
+	if (!isset($tpl_path)) {
+		$tpl_path = sys::varpath() . "/messaging/" . $module;
+	}
 
-    $string = '';
-    $fd = fopen($subjtemplate, 'r');
-    while(!feof($fd)) {
-        $line = fgets($fd, 1024);
-        $string .= $line;
-    }
-    $subject = $string;
-    fclose($fd);
-
-    $msgtemplate = $messaginghome . "/" . $template . "-message.xt";
-    if (!file_exists($msgtemplate)) throw new FileNotFoundException($msgtemplate);
-
-    $string = '';
-    $fd = fopen($msgtemplate, 'r');
-    while(!feof($fd)) {
-        $line = fgets($fd, 1024);
-        $string .= $line;
-    }
-    $message = $string;
-    fclose($fd);
+    $subjtemplate = $tpl_path . "/" . $template . "-subject.xt";
+	if (file_exists($subjtemplate)) {		
+		$string = '';
+		$fd = fopen($subjtemplate, 'r');
+		while(!feof($fd)) {
+			$line = fgets($fd, 1024);
+			$string .= $line;
+		}
+		$subject = $string;
+		fclose($fd);
+	} else {
+		$subject = '';
+	}
+	
+    $msgtemplate = $tpl_path . "/" . $template . "-message.xt";
+	if (file_exists($msgtemplate)) {
+		$string = '';
+		$fd = fopen($msgtemplate, 'r');
+		while(!feof($fd)) {
+			$line = fgets($fd, 1024);
+			$string .= $line;
+		}
+		$message = $string;
+		fclose($fd);
+	} else {
+		$message = '';
+	}
 
     return array('subject' => $subject, 'message' => $message);
 }

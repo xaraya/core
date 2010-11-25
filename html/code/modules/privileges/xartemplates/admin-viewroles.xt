@@ -40,7 +40,9 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$parents[$i]['parentid']))#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">
+                                <xar:var name="label">Show this privilege</xar:var>
+                                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$parents.$i.parentid#" title="#$label#" class="xar-norm xar-norm-outline">
+                                <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$parents[$i]['parentid']))#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">xxxx
                                     #$parents[$i]['parentname']#
                                 </a>
                             </li>
@@ -95,11 +97,14 @@
                                 <xar:else />Group</xar:if>
                             </td>
                             <td>
+                                <xar:var name="label">Go to this role</xar:var>
+                                <a href="&xar-modurl-roles-admin-modify;&amp;id=#$role['roleid']#" title="#$label#">#$role['name']#</a>
                                 <a href="#xarModURL('roles','admin','modify',array('id'=>$role['roleid']))#"
-                                title="#xarML('Go to this role')#">#$role['name']#</a>
+                                title="#xarML('Go to this role')#">#$role['name']#</a>xxxx
                             </td>
                             <td class="xar-align-center">
-                                <a href="#$removeurl#&amp;roleid=#$role['roleid']#" title="#xarML('Remove this Privilege assignment')#">
+                                <xar:var name="label">Remove this Privilege assignment</xar:var>
+                                <a href="#$removeurl#&amp;roleid=#$role['roleid']#" title="#$label#">
                                     <img src="#sys::code()#modules/privileges/xarimages/delete.gif" class="xar-valign-middle"/>
                                 </a>
                             </td>
@@ -109,7 +114,8 @@
             </xar:if>
           <form action="#xarModURL('roles','admin','addprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
                 <div class="xar-form-input-wrapper">
-                    <label for="roleid" title="#xarML('Choose a new Group to assign this Privilege.')#" class="xar-form-label">
+                    <xar:var name="label">Choose a new Group to assign this Privilege.</xar:var>
+                    <label for="roleid" title="#$label#" class="xar-form-label">
                         Assign to Group:
                     </label>
                     <select name="roleid" id="roleid" class="xar-margin-thickright">
@@ -118,7 +124,8 @@
                             #$groups[$i]['users']#</option>
                         </xar:for>
                     </select>
-                    <input type="submit" value="#xarML('Assign')#"/>
+                    <xar:var name="label">Assign</xar:var>
+                    <input type="submit" value="#$label#"/>
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('roles')#"/>
                     <input type="hidden" name="privid" id="privid" value="#$id#"/>
                     <input type="hidden" name="return_url" id="return_url"

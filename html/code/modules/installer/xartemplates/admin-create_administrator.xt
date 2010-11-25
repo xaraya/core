@@ -49,7 +49,8 @@
                 case letters, numbers and punctuation.
             </p>
             <div class="xar-align-center" style="margin: 2em 0;">
-                <input type="submit" name="create" id="create" value="#xarML('Continue')#"/>
+                <xar:var name="label">Continue</xar:var>
+                <input type="submit" name="create" id="create" value="#$label#"/>
                 <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
                 <xar:data-input property="$properties['id']" hidden="hidden"/>
                 <xar:data-input property="$properties['role_type']" hidden="hidden"/>

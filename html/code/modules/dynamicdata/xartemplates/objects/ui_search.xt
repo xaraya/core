@@ -38,7 +38,8 @@
                         <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                     </xar:if>
                     <input type="text" name="q" id="q" value="#$search['q']#" size="20"/>
-                    <input type="submit" value="#xarML('Search')#" class="xar-margin-thickleft"/>
+                    <xar:var name="label">Search</xar:var>
+                    <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
                     &#160;<a href="#xarObject::getActionURL($object, 'query')#">Advanced</a>
                 </div>
                 <div class="xar-form-input-wrapper">
