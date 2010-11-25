@@ -27,11 +27,11 @@
         </form>
 
     <xar:elseif condition="!empty($proptype)"/>
-        <h2>Sample Configuration for DataProperty Type #$proptype#</h2>
+        <h2>Sample Configuration for DataProperty Type #$propertytype->name#</h2>
         <form method="post" action="#xarModURL('dynamicdata','admin','showpropval')#">
             <fieldset>
                 <legend>Select Property Type</legend>
-                <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="$proptype"/>
+                <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="$propertytype->name"/>
                 <input type="submit" value="#xarML('Select')#"/>
             </fieldset>
         </form>
