@@ -5,33 +5,7 @@
         <span class="xar-mod-title">Dynamic Data Administration</span>
     </div>
     <div class="xar-mod-body">
-        xxxx<xar:if condition="!empty($itemid)">
-            <h2>Configuration for DataProperty #$itemid#</h2>
-            <xar:if condition="!empty($isupload)">
-                <xar:set name="enc_type">'multipart/form-data'</xar:set>
-            <xar:else />
-                <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
-            </xar:if>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;" enctype="#$enc_type#">
-                <fieldset>
-                    <legend>Property summary</legend>
-                    <xar:set name="fieldlist">
-                        array('name','label','objectid','type')
-                    </xar:set>
-                    <xar:data-display object="$object" fieldlist="$fieldlist"/>
-                </fieldset>
-                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>#$showval# 
-                <fieldset>
-                    <div class="xar-align-center">
-                        <xar:var name="label">Update</xar:var>
-                        <input type="submit" name="confirm" value="#$label#"/>&#160;
-                        <xar:var name="label">Update and Exit</xar:var>
-                        <input type="submit" name="exit" value="#$label#"/> 
-                    </div>
-                </fieldset>
-            </form>
-        <xar:set name="typename">$propertytype->name</xar:set>
+        <xar:set name="typename">$proptype</xar:set>
         <xar:if condition="file_exists(sys::code().'properties/'.$typename.'/templates/includes/overview.xt')">
             <![CDATA[
             <script type="text/javascript">
@@ -64,76 +38,6 @@
                 <xar:template file="property-configuration"/>
             </div>
 
-       xxxx <xar:elseif condition="!empty($proptype)"/>
-            <h2>Generate Configuration for DataProperty Type #$proptype#</h2>
-            <p>
-                To make a configuration for a dataproperty:
-                <ol>
-                    <li>Choose the type of property from the dropdown below and click on the Select button.</li>
-                    <li>Fill in the initialization, validation and display options you want.</li>
-                    <li>Click on the submit button at the bottom of the page.</li>
-                    <li>The configuration will be placed in the property type summary at the bottom of the page.</li>
-                </ol>
-            </p>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
-                <fieldset>
-                    <legend>Select Property Type</legend>
-                    <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="$proptype"/>&#160;
-                    <xar:var name="value">Select</xar:var>
-                    <input type="submit" value="#$value#"/>
-                </fieldset>
-            </form>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
-                #$showval#
-                <fieldset>
-                    <legend>Property Type Summary</legend>
-                    <table class="xar-fullwidth">
-                        <tr>
-                            <td>
-                                <div class="xar-form-input-wrapper">
-                                    <label class="xar-form-label" for="#$proptype#_desc" title="" style="">
-                                        Property Type
-                                    </label>
-                                    [#$propinfo:type#] #$propinfo:desc#
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="xar-form-input-wrapper">
-                                    <label class="xar-form-label" for="#$proptype#_config" title="" style="">
-                                        Configuration
-                                    </label>
-                                    <textarea name="#$proptype#_config" id="#$proptype#_config" rows="4" cols="50" readonly="readonly">#$propinfo:configuration#</textarea>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </fieldset>
-                <input type="hidden" name="proptype" value="#$proptype#"/>
-                <fieldset>
-                    <div class="xar-align-center">
-                        <xar:var name="value">Make Configuration</xar:var>
-                        <input type="submit" name="preview" value="#$value#"/>
-    <!-- See CHECKME in showpropval
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                        <xar:var name="label">Update</xar:var>
-                        <input type="submit" name="confirm" value="#$label#" disabled="disabled"/>
-    -->
-                    </div>
-                </fieldset>
-            </form>
-
-        <xar:else/>
-            <h2>Sample Configuration for DataProperty Types</h2>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
-                <fieldset>
-                    <legend>Select Property Type</legend>
-                    <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="textbox"/>
-                        <xar:var name="value">Select</xar:var>
-                    <input type="submit" value="#$value#"/>
-                </fieldset>
-            </form>
             <div id="page-2" style="display: none">
                 <xar:template file="overview" property="$typename"/>
             </div>

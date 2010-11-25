@@ -280,52 +280,7 @@
                 </tr>
             </tfoot>
          </table>
-    </xar:if>xxxx
-    <p>
-        <strong>Add New Menu Item</strong>
-    </p>
-    <div class="xar-form-input-wrapper">
-        <xar:var name="label">Item title</xar:var>
-        <label for="new_linkname" title="#$label#" class="xar-form-label">
-            Title:
-        </label>
-        <input type="text" name="new_linkname" id="new_linkname" maxlength="255" class="xar-form-textmedium"/>
-    </div>
-    <div class="xar-form-input-wrapper">
-        <xar:var name="label">Item URL</xar:var>
-        <label for="new_linkurl" title="#$label#" class="xar-form-label">URL:</label>
-        <input type="text" name="new_linkurl" id="new_linkurl" maxlength="255" class="xar-form-textlong"/>
-    </div>
-    <div class="xar-form-input-wrapper">
-        <xar:var name="label">Item description</xar:var>
-        <label for="new_linkdesc" title="#$label#" class="xar-form-label">
-            Description (optional):
-        </label>
-        <input type="text" name="new_linkdesc" id="new_linkdesc" maxlength="255" class="xar-form-textlong"/>
-    </div>
-    <p class="xar-form-textmedium xar-padding-medium" style="display:block;">
-        <strong>Menu Extras</strong>
-    </p>
-    <div class="xar-form-input-wrapper">
-        <xar:var name="label">To display a restricted list of modules, enter their names separated by commas in the text box at right, and choose Manual List from the dropdown.</xar:var>
-        <label for="displaymodules"
-        title="#$label#" class="xar-form-label">
-            Display Modules
-        </label>
-        <xar:set name="options">
-            array(
-                array('id' => 'None', 'name' => xarML('None')),
-                array('id' => 'All', 'name' => xarML('All Modules')),
-                array('id' => 'List', 'name' => xarML('Manual List')),
-            )
-        </xar:set>
-        <xar:data-input type="dropdown" name="displaymodules" options="$options" value="$displaymodules"/>
-        <div class="xar-form-container-after">
-            <p>To display a restricted list of modules in the menu, enter their names separated by
-            commas in the field below, and choose Manual List from the dropdown.</p>
-                <input type="text" name="modulelist" id="modulelist" size="50" maxlength="255" value="#$modulelist#"/>
-        </div>
-    </div>
+    </xar:if>
 
     <table class="xar-fullwidth xar-margin-nonetop">
         <caption class="xar-align-left xar-margin-thickbottom xar-margin-nonetop">
