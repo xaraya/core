@@ -5,7 +5,7 @@
         <span class="xar-mod-title">Dynamic Data Administration</span>
     </div>
     <div class="xar-mod-body">
-        <xar:set name="typename">$proptype</xar:set>
+        <xar:set name="typename">$propertytype->name</xar:set>
         <xar:if condition="file_exists(sys::code().'properties/'.$typename.'/templates/includes/overview.xt')">
             <![CDATA[
             <script type="text/javascript">
