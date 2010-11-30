@@ -24,7 +24,7 @@ function sql_210_23()
         Removing the now unused block types 'html', 'php', 'text'
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

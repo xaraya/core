@@ -23,7 +23,7 @@ function sql_210_security_acl()
         Checking the structure of $table
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

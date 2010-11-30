@@ -22,7 +22,7 @@ function sql_210_dynamic_properties_def()
         Checking the structure of $table
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

@@ -25,7 +25,7 @@ function sql_211_02()
         Upgrading the default theme module variable
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

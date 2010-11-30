@@ -24,7 +24,7 @@ function sql_210_20()
         Add the version build configuration variable
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

@@ -23,7 +23,7 @@ function sql_210_dynamicdata_objects()
         Checking for required dynamicdata objects
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

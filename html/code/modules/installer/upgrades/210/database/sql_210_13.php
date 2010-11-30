@@ -23,7 +23,7 @@ function sql_210_13()
         Redefining mask names in the Privileges module
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query
