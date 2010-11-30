@@ -17,7 +17,7 @@
 
         <h2>Version Status</h2>
         <h3>Version Information</h3>
-        <table style="width: 90%">
+        <table style="width: 90%; min-width: 900p">
             <tr>
                 <th></th>
                 <th>Your Files</th>
@@ -26,7 +26,7 @@
             <tr>
                 <td>
                     <xar:var name="label">Current Core Version</xar:var>
-                    <label title="#$label#" class="xar-form-label">                            
+                    <label title="#$label#" >                            
                         Xaraya Core:                            
                     </label>
                 </td>
@@ -46,7 +46,7 @@
             <tr>
                 <td>
                     <xar:var name="label">Current Build</xar:var>
-                    <label title="#$label#" class="xar-form-label">                            
+                    <label title="#$label#" >                            
                         Build:                            
                     </label>
                 </td>
