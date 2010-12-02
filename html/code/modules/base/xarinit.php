@@ -126,6 +126,7 @@ function base_init()
 
         // Let's commit this, since we're gonna do some other stuff
         $dbconn->commit();
+
     } catch (Exception $e) {
         $dbconn->rollback();
         throw $e;
@@ -204,7 +205,7 @@ function base_init()
     $systemArgs = array('enableShortURLsSupport' => false,
                         'generateXMLURLs' => false);
     xarMod::init($systemArgs);
-
+    
     // Installation complete; check for upgrades
     return base_upgrade('2.0.0');
 }
@@ -220,7 +221,7 @@ function base_upgrade($oldversion)
     // Upgrade dependent on old version number
     switch ($oldversion) {
         case '2.0.0':
-      break;
+        break;
     }
     return true;
 }

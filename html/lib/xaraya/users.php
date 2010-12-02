@@ -72,14 +72,18 @@ function xarUser_init(Array &$args)
     xarMLS_setCurrentLocale(xarUserGetNavigationLocale());
     xarTplSetThemeName(xarUserGetNavigationThemeName());
 
+    // These events are now registered during authsystem module init
     // Register the UserLogin event
-    xarEvents::register('UserLogin');
+    //xarEvents::register('UserLogin');
     // Register the UserLogout event
-    xarEvents::register('UserLogout');
+    //xarEvents::register('UserLogout');
 
     return true;
 }
 
+/**
+ * @TODO <chris> do login and logout functions belong in here, or in authsystem ?
+**/
 /**
  * Log the user in
  *
@@ -181,8 +185,8 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
     //<jojodee> currently set in individual authsystem when success on login returned to it
 
     // User logged in successfully, trigger the proper event with the new userid
-    xarEvents::trigger('UserLogin',$userId);
-
+    //xarEvents::trigger('UserLogin',$userId);
+    xarEvents::notify('UserLogin', $userId);
     xarSession::delVar('privilegeset');
     return true;
 }
@@ -210,8 +214,9 @@ function xarUserLogOut()
     xarSessionDelVar('authenticationModule');
 
     // User logged out successfully, trigger the proper event with the old userid
-    xarEvents::trigger('UserLogout',$userId);
-
+    //xarEvents::trigger('UserLogout',$userId);
+    xarEvents::notify('UserLogout',$userId);
+    
     xarSession::delVar('privilegeset');
     return true;
 }

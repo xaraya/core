@@ -20,6 +20,7 @@
 function modules_adminapi_gethooklist(Array $args=array())
 {
     // Security Check
+    // @CHECKME: is this info not useful to other modules?
     if(!xarSecurityCheck('ManageModules')) return;
 
     // Get arguments from argument array
@@ -57,6 +58,14 @@ function modules_adminapi_gethooklist(Array $args=array())
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bindvars);
 
+    // @FIXME: this is seriously messed up, this should be two distinct functions
+    // One to supply hook module info and the hooks they/it supplies 
+    // (only module admin hooks needs this, and the event system can already return this info) 
+    // One to supply the modules currently hooked to a module/itemtype 
+    // (the hook system needs this, and the hook system can already get this info)
+    // @TODO: use the event and hook system functions to build this crazy array for any
+    // modules still using it (only crispbb and objecthooks ? afaics), 
+    // and mark it deprecated so we can move away from this mess 
     // hooklist will hold the available hooks
     $hooklist = array();
     while($result->next()) {
