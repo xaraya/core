@@ -345,12 +345,14 @@ class xarHooks extends xarEvents
         $htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];
-        }
+/*
         if (!empty($extraInfo['exclude_module'])) {
+            //$query .= " AND tmods.name NOT IN ('" . join("','", $extraInfo['exclude_module']) . "')"; 
             foreach ($extraInfo['exclude_module'] as $excluded_module) {
                 $query .= " AND tmods.name != '" . $excluded_module . "'";
             }
-        
+        }
+*/
         $query = "SELECT ms.name, h.itemtype, h.scope 
                   FROM $htable h, $mtable mo, $mtable ms
                   WHERE h.observer = ? 
