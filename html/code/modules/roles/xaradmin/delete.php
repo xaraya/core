@@ -87,6 +87,7 @@ function roles_admin_delete()
 
             // call item delete hooks (for DD etc.)
             // TODO: move to remove() function
+            $pargs['exclude_module'] = array('dynamicdata');
             $pargs['module'] = 'roles';
             $pargs['itemtype'] = $itemtype;
             $pargs['itemid'] = $id;

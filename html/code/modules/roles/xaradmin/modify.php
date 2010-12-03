@@ -66,6 +66,7 @@ function roles_admin_modify()
 
     // call item modify hooks (for DD etc.)
     $item = $data;
+    $item['exclude_module'] = array('dynamicdata');
     $item['module']= 'roles';
     $item['itemtype'] = $data['object']->getType();
     $item['itemid']= $id;
