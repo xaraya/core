@@ -409,7 +409,7 @@ class xarModuleHooks
         } else {
             // get the hook list for this module, itemtype, scope and hook action
             xarLogMessage("xarModuleHooks: getting $hookScope $hookAction hooks for $modName.$callerItemType");
-            $hookList = xarModuleHooks::getHookList($modName, $hookScope, $hookAction, $callerItemType);
+            $hookList = xarModuleHooks::getHookList($modName, $hookScope, $hookAction, $callerItemType, $extraInfo);
         }
 
         // try to determine 'API' or 'GUI' from the standard hook actions
@@ -582,7 +582,7 @@ class xarModuleHooks
     /**
      * Get list of available hooks for a particular module, itemtype[, scope] and action
      */
-    public static function getHookList($callerModName, $hookScope, $hookAction, $callerItemType = '')
+    public static function getHookList($callerModName, $hookScope, $hookAction, $callerItemType = '', $extraInfo=array())
     {
         if (empty($callerModName)) throw new EmptyParameterException('callerModName');
 
@@ -619,6 +619,11 @@ class xarModuleHooks
             // Answer: generic hooks apply for *all* itemtypes, so if a caller specifies an itemtype, you
             //         need to check whether hooks are enabled for this particular itemtype or for all
             //         itemtypes here...
+        }
+        if (!empty($extraInfo['exclude_module'])) {
+            foreach ($extraInfo['exclude_module'] as $excluded_module) {
+                $query .= " AND tmods.name != '" . $excluded_module . "'";
+            }
         }
         $query .= " AND hooks.object = ? AND hooks.action = ? ORDER BY hooks.priority ASC";
         $bindvars[] = $hookScope;
