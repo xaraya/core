@@ -41,6 +41,7 @@
                             <xar:else/>
                                 <input type="radio" id="#$subject_id#_hookstate_0" name="#$subject_name#[hookstate]" value="0" onclick="setDisplayOff('#$subject_id#_itemtypes');"/>
                             </xar:if>
+                            &#160;
                             <label for="#$subject_id#_hookstate_0">Do NOT enable
                             #$modinfo['displayname']# functionality in #$displayname#</label>
                         </div>                                                  
@@ -52,31 +53,33 @@
                             <xar:else/>
                                 <input type="radio" id="#$subject_id#_hookstate_1" name="#$subject_name#[hookstate]" value="1" onclick="setDisplayOff('#$subject_id#_itemtypes');"/>
                             </xar:if>
+                            &#160;
                             <label for="#$subject_id#_hookstate_1">Enable
                             #$modinfo['displayname']# functionality for ALL items in #$displayname#</label>
                         </div>
 
                             <xar:if condition="!empty($modinfo['scopes'])">
-                            <!-- hooked to some scopes, all itemtypes -->
-                            <div class="xar-form-input-wrapper">
-                                <xar:if condition="$modinfo['hookstate'] eq 2">
-                                    <input type="radio" id="#$subject_id#_hookstate_2" name="#$subject_name#[hookstate]" value="2" checked="checked" onclick="setDisplayOff('#$subject_id#_itemtypes');setDisplayOn('#$subject_id#_itemtypes_0');"/>
-                                <xar:else/>
-                                    <input type="radio" id="#$subject_id#_hookstate_2" name="#$subject_name#[hookstate]" value="2" onclick="setDisplayOff('#$subject_id#_itemtypes');setDisplayOn('#$subject_id#_itemtypes_0');"/>
-                                </xar:if>
-                                <label for="#$subject_id#_hookstate_2">Enable SOME
-                                #$modinfo['displayname']# hooks for ALL items in #$displayname#</label>
-                            </div>
-                            <ul id="#$subject_id#_itemtypes_0">
-                            <xar:foreach in="$modinfo['scopes']" key="$scope">
-                                <xar:set name="scopehooked">!empty($modinfo['itemtypes'][0]['scopes'][$scope])</xar:set>
-                                <li>
-                                    <xar:set name="type_id">"{$subject_id}_itemtypes_0_{$scope}"</xar:set>
-                                    <xar:set name="type_name">"{$subject_name}[itemtypes][0][{$scope}]"</xar:set>
-                                    <xar:data-input type="checkbox" name="$type_name" id="$type_id" checked="$scopehooked"/><label for="#$type_id#">#$scope# Hooks</label>
-                                </li>
-                            </xar:foreach>
-                            </ul>
+                                <!-- hooked to some scopes, all itemtypes -->
+                                <div class="xar-form-input-wrapper">
+                                    <xar:if condition="$modinfo['hookstate'] eq 2">
+                                        <input type="radio" id="#$subject_id#_hookstate_2" name="#$subject_name#[hookstate]" value="2" checked="checked" onclick="setDisplayOff('#$subject_id#_itemtypes');setDisplayOn('#$subject_id#_itemtypes_0');"/>
+                                    <xar:else/>
+                                        <input type="radio" id="#$subject_id#_hookstate_2" name="#$subject_name#[hookstate]" value="2" onclick="setDisplayOff('#$subject_id#_itemtypes');setDisplayOn('#$subject_id#_itemtypes_0');"/>
+                                    </xar:if>
+                                    &#160;
+                                    <label for="#$subject_id#_hookstate_2">Enable SOME
+                                    #$modinfo['displayname']# hooks for ALL items in #$displayname#</label>
+                                </div>
+                                <ul id="#$subject_id#_itemtypes_0">
+                                    <xar:foreach in="$modinfo['scopes']" key="$scope">
+                                        <xar:set name="scopehooked">!empty($modinfo['itemtypes'][0]['scopes'][$scope])</xar:set>
+                                        <li>
+                                            <xar:set name="type_id">"{$subject_id}_itemtypes_0_{$scope}"</xar:set>
+                                            <xar:set name="type_name">"{$subject_name}[itemtypes][0][{$scope}]"</xar:set>
+                                            <xar:data-input type="checkbox" name="$type_name" id="$type_id" checked="$scopehooked"/><label for="#$type_id#">#$scope# Hooks</label>
+                                        </li>
+                                    </xar:foreach>
+                                </ul>
                             </xar:if>
 
                             <xar:if condition="$modinfo['hookstate'] eq 2">
@@ -101,6 +104,7 @@
                                 <xar:else/>
                                     <input type="radio" id="#$subject_id#_hookstate_3" name="#$subject_name#[hookstate]" value="3" onclick="setDisplayOff('#$subject_id#_itemtypes_0');setDisplayOn('#$subject_id#_itemtypes');"/>
                                 </xar:if>
+                                &#160;
                                 <label for="#$subject_id#_hookstate_3">Enable SOME
                                 #$modinfo['displayname']# hooks for SOME items in #$displayname#</label>
                             </div>
@@ -118,6 +122,7 @@
                                 <xar:else/>
                                     <input type="radio" id="#$type_id#_scopes_0_0" name="#$type_name#[scopes][0]" value="0" onclick="setDisplayOff('#$type_id#_scopes');"/>
                                 </xar:if>
+                                &#160;
                                 <label for="#$type_id#_0_scopes_0_0">Do NOT enable #$modinfo['displayname']# hooks for items in #$typeinfo['label']#</label>
                                 </div>
 
@@ -127,6 +132,7 @@
                                 <xar:else/>
                                     <input type="radio" id="#$type_id#_scopes_0_1" name="#$type_name#[scopes][0]" value="1" onclick="setDisplayOff('#$type_id#_scopes');"/>
                                 </xar:if>
+                                &#160;
                                 <label for="#$type_id#_0_scopes_0_1">Enable ALL #$modinfo['displayname']# hooks for items in #$typeinfo['label']#</label>
                                 </div>
                                 
