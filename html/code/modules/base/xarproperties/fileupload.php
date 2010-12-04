@@ -425,12 +425,28 @@ class FileUploadProperty extends DataProperty
      */
     public function validateExtension($filename = '')
     {
-/*
+        // Make sure we cover the case of an array, as we might have multiple uploads
+        if (!is_array($filename)) $filename = array($filename);
+        
+        // Allow if no filename
+        if (count($filename) == 1) {
+            $name = end($filename);
+            if (empty($name)) return true;
+        }
+        
+        // If no filetype restriction then let it through
         $filetype = $this->validation_file_extensions;
-        $filename = xarVarPrepForOS(basename(strval($filename)));
-        return (!empty($filetype) && preg_match("/\.$filetype$/",$filename));
-*/
-        $pos = strrpos($filename, '.');
+        if (empty($filetype)) return true;
+        
+        // Validate each array element (name)
+        $valid = true;
+        foreach ($filename as $name) {
+            $name = xarVarPrepForOS(basename(strval($name)));
+            $valid = $valid && preg_match("/\.$filetype$/",$name);
+        }
+        return $valid;
+
+/*        $pos = strrpos($filename, '.');
         if ($pos !== false) {
             $extension = substr($filename, $pos + 1);
         } else {
@@ -447,6 +463,7 @@ class FileUploadProperty extends DataProperty
             return false;
         }
         return true;
+*/
     }
 }
 
