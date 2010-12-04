@@ -98,6 +98,17 @@ class xarHooks extends xarEvents
         // only get observers of active modules
         $where[] = "mo.state = ?";
         $bindvars[] = XARMOD_STATE_ACTIVE;  
+
+        // This excludes observers of one or more modules in order to avoid duplication
+        // The common case is hooking DD to some itemtype that is already a dataobject:
+        // We pass the itemid of the object through the hooks call, causing DD to display an object of the same itemid, which is of course the original object
+        if (!empty($args['exclude_module'])) {
+            //$query .= " AND mo.regid NOT IN ('" . join("','", xarMod::getRegid($extraInfo['exclude_module'])) . "')"; 
+            foreach ($args['exclude_module'] as $excluded_module) {
+                $where[] = "mo.regid != " . xarMod::getRegid($excluded_module);
+            }
+        }
+        
         if (!empty($subject_itemtype)) {
             $where[] = "(h.itemtype = ? OR h.itemtype = ?)";
             $bindvars[] = $subject_itemtype;
@@ -110,15 +121,14 @@ class xarHooks extends xarEvents
         $where[] = "eo.event = es.event";
         $where[] = "( h.scope = es.scope OR h.scope = ? )";
         $bindvars[] = '0';
-
         $query .= " WHERE " . join(" AND ", $where);
         // order by module, event
         // @TODO: allow ordering ?
-        $query .= " ORDER BY mo.name ASC, eo.event ASC";                  
+        $query .= " ORDER BY mo.name ASC, eo.event ASC";  
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
         if (!$result) return;
-        $obs = array();
+        self::$hookobservers[$subject_module][$subject_itemtype][$event] = array();
         while($result->next()) {
             list($id, $evt, $module_id, $area, $type, $func, $itemtype, $module) = $result->fields;
             self::$hookobservers[$subject_module][$subject_itemtype][$event][$module] = array(
@@ -345,14 +355,6 @@ class xarHooks extends xarEvents
         $htable = $xartable['hooks'];
         $etable = $xartable['eventsystem'];
         $mtable = $xartable['modules'];
-/*
-        if (!empty($extraInfo['exclude_module'])) {
-            //$query .= " AND tmods.name NOT IN ('" . join("','", $extraInfo['exclude_module']) . "')"; 
-            foreach ($extraInfo['exclude_module'] as $excluded_module) {
-                $query .= " AND tmods.name != '" . $excluded_module . "'";
-            }
-        }
-*/
         $query = "SELECT ms.name, h.itemtype, h.scope 
                   FROM $htable h, $mtable mo, $mtable ms
                   WHERE h.observer = ? 

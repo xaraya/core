@@ -127,8 +127,8 @@ class Role extends DataObject
         $item['module'] = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid'] = $id;
+        $item['exclude_module'] = array('dynamicdata');
         xarModCallHooks('item', 'create', $id, $item);
-
         return $id;
     }
 
@@ -142,6 +142,7 @@ class Role extends DataObject
         $item['module'] = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid'] = $id;
+        $item['exclude_module'] = array('dynamicdata');
         xarModCallHooks('item', 'update', $id, $item);
         return $id;
     }
@@ -328,6 +329,7 @@ class Role extends DataObject
         $item['module'] = 'roles';
         $item['itemid'] = $this->getID();
         $item['method'] = 'delete';
+        $item['exclude_module'] = array('dynamicdata');
         xarModCallHooks('item', 'delete', $this->getID(), $item);
 
         // CHECKME: re-assign all privileges to the child roles ? (probably not)
