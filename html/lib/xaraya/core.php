@@ -258,10 +258,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Start Event Messaging System
      *
      * The event messaging system can be initialized only after the db, but should
-     * be as early as possible in place. This system is for *core* events
+     * be as early as possible in place. This system is for all events
      *
      */
     sys::import('xaraya.events');
+    xarEvents::init($systemArgs);
 
     /*
      * Start autoload

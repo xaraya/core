@@ -1075,8 +1075,60 @@ class DataObjectMaster extends Object
         // CHECKME: prevent recursive hook calls in general
         xarCoreCache::setCached('DynamicData','HookAction',$action);
 
+        // <chris> moved this from xarObjectHooks::initHookSubject()
+        // This is the correct place to handle it, hooks system doesn't need to know
+        // initialize hookvalues
+        $this->hookvalues = array();
+    
+        // Note: you can preset the list of properties to be transformed via $this->hooktransform
+        
+        // add property values to hookvalues
+        if ($action == 'transform') {
+            if (!empty($this->hooktransform)) {
+                $fields = $this->hooktransform;
+            } else {
+                $fields = array_keys($this->properties);
+            }
+            $this->hookvalues['transform'] = array();
+
+            foreach($fields as $name) {
+            // TODO: this is exactly the same as in the dataobject display function, consolidate it ?
+                if(!isset($this->properties[$name])) continue;
+
+                if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)) continue;
+
+                // *never* transform an ID
+                // TODO: there is probably lots more to skip here.
+                if ($this->properties[$name]->type != 21) {
+                    $this->hookvalues['transform'][] = $name;
+                }
+                $this->hookvalues[$name] = $this->properties[$name]->value;
+            }
+            $this->hooktransform = $this->hookvalues['transform'];
+        } else {
+            foreach(array_keys($this->properties) as $name)
+                $this->hookvalues[$name] = $this->properties[$name]->value;
+            $this->hooktransform = array();
+        }
+
+        // add extra info for traditional hook modules
+        $this->hookvalues['module'] = xarMod::getName($this->moduleid);
+        $this->hookvalues['itemtype'] = $this->itemtype;
+        $this->hookvalues['itemid'] = $this->itemid;
+        // CHECKME: is this sufficient in most cases, or do we need an explicit xarModURL() ?
+        $this->hookvalues['returnurl'] = xarServer::getCurrentURL();
+
+        // Use the standard method to call hooks 
+        $hooks = xarModCallHooks('item', $action, $this->itemid, $this->hookvalues);
+        // FIXME: we don't need two distinct properties to store gui and api hook responses
+        // A response is a response, it's up to the caller to decide if it's appropriate
+        // For now we'll populate both with the same data
+        $this->hookvalues = $this->hookoutput = $hooks;       
+        
         // let xarObjectHooks worry about calling the different hooks
-        xarObjectHooks::callHooks($this, $action);
+        //xarObjectHooks::callHooks($this, $action);
 
         // the result of API actions will be in $this->hookvalues
         // the result of GUI actions will be in $this->hookoutput

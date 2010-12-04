@@ -32,44 +32,8 @@ function modules_adminapi_gethookedmodules(Array $args=array())
 
     // Argument check
     if (empty($hookModName)) throw new EmptyParameterException('hookModName');
+    
+    return xarHooks::getObserverSubjects($hookModName);
 
-    $dbconn = xarDB::getConn();
-    $xartable      = xarDB::getTables();
-
-    $bindvars = array();
-    // TODO: This looks awfally similar to gethooklist in xarMod.php, investigate later
-    $query = "SELECT DISTINCT smods.name, hooks.s_type
-              FROM $xartable[hooks] hooks, $xartable[modules] mods, $xartable[modules] smods
-              WHERE hooks.t_module_id = mods.id AND hooks.s_module_id = smods.id AND mods.name = ?";
-    $bindvars[] = $hookModName;
-    if (!empty($hookObject)) {
-        $query .= " AND hooks.object = ?";
-        $bindvars[] = $hookObject;
-    }
-    if (!empty($hookAction)) {
-        $query .= " AND hooks.action = ?";
-        $bindvars[] = $hookAction;
-    }
-    if (!empty($hookArea)) {
-        $query .= " AND hooks.t_area = ?";
-        $bindvars[] = $hookArea;
-    }
-    $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuery($bindvars);
-
-    // modlist will hold the hooked modules
-    $modlist = array();
-    while($result->next()) {
-        list($callerModName,$callerItemType) = $result->fields;
-        if (empty($callerModName)) continue;
-        if (empty($callerItemType)) {
-            $callerItemType = 0;
-        }
-        $modlist[$callerModName][$callerItemType] = 1;
-    }
-    $result->close();
-
-    return $modlist;
 }
-
 ?>

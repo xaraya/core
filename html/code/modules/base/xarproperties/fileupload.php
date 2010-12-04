@@ -57,6 +57,10 @@ class FileUploadProperty extends DataProperty
             $this->UploadsModule_isHooked = TRUE;
         } else {
         // FIXME: this doesn't take into account the itemtype or non-main module objects
+            if (xarModIsHooked('uploads', xarModGetName())) {
+                $this->UploadsModule_isHooked = true;
+            }
+            /*
             $list = xarModGetHookList(xarModGetName(), 'item', 'transform');
             foreach ($list as $hook) {
                 if ($hook['module'] == 'uploads') {
@@ -64,6 +68,7 @@ class FileUploadProperty extends DataProperty
                     break;
                 }
             }
+            */
         }
 
         if(xarServer::getVar('PATH_TRANSLATED')) {
