@@ -74,8 +74,8 @@ abstract class HookSubject extends EventSubject implements ixarEventSubject, ixa
         // it's ok for the objectid to be empty (eg, for module, and itemtype scope hooks)
         if (empty($objectid) && isset($extrainfo['itemid']))
             $objectid = $extrainfo['itemid'];
-        if (!isset($objectid))
-            $objectid = null;
+        if (empty($objectid))
+            $objectid = 0;
         // object id may be a string here, so we can't do type validation,
         // we leave that to the subjects overloading this method 
         
