@@ -6,5 +6,6 @@
     -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Mail Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
 </xar:template>
