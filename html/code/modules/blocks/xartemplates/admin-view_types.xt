@@ -133,7 +133,7 @@
             <h4>
                 <a href="#xarModURL('blocks','admin','new_type')#">New Block Type</a>
             </h4>
-            <table class="xar-fullwidth">
+            <table class="xar-items">
                 <tr>
                     <th title="#xarML('The module listed is the module from which this block originates')#">
                     Module</th>

@@ -66,7 +66,7 @@
         <xar:var name="wwwcheck">Check the URL for this link</xar:var>
         <xar:var name="wwwnone">URL is empty</xar:var>
         <xar:var name="wwwalt">Check URL</xar:var>
-        <table id="menulinks_#$blockid#" class="xar-fullwidth xar-margin-nonebottom">
+        <table id="menulinks_#$blockid#" class="xar-items">
             <caption class="xar-align-left xar-margin-thickbottom xar-margin-nonetop">
                 <strong>Menu Links</strong>
             </caption>
@@ -224,7 +224,7 @@
                 </tr>
             </tfoot>
          </table>
-        <table class="xar-fullwidth xar-margin-nonetop">
+        <table class="xar-items">
             <caption class="xar-align-left xar-margin-thickbottom xar-margin-thicktop">
                 <strong>Insert New Menu Link</strong>
             </caption>
@@ -282,7 +282,7 @@
          </table>
     </xar:if>
 
-    <table class="xar-fullwidth xar-margin-nonetop">
+    <table class="xar-items">
         <caption class="xar-align-left xar-margin-thickbottom xar-margin-nonetop">
             <strong>Module Links</strong>
         </caption>
