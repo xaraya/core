@@ -23,6 +23,9 @@
  */
 function themes_admin_remove()
 { 
+    // Security
+    if (!xarSecurityCheck('ManageThemes')) return; 
+    
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));

@@ -18,6 +18,7 @@
  */
 function themes_admin_main()
 {
+    // Security
     if(!xarSecurityCheck('EditThemes')) return;
 
     $refererinfo = xarRequest::getInfo(xarServer::getVar('HTTP_REFERER'));

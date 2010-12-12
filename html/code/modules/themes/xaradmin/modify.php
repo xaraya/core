@@ -29,7 +29,8 @@ function themes_admin_modify()
     if (!isset($themeInfo)) return;
 
     $themeName = $themeInfo['name'];
-    // Security Check
+    
+    // Security
     if (!xarSecurityCheck('AdminThemes', 0, 'All', '$themeName::$regId')) return;
 
     $themevars = array();

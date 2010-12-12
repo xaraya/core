@@ -24,6 +24,9 @@
  */
 function themes_admin_activate()
 { 
+    // Security
+    if (!xarSecurityCheck('AdminThemes')) return; 
+    
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));

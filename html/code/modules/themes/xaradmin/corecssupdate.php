@@ -19,16 +19,16 @@
 */
 function themes_admin_corecssupdate()
 {
-    // Confirm authorisation code
-    if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
     // Security Check
     if (!xarSecurityCheck('AdminThemes')) return;
 
+    // Confirm authorisation code
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }  
+    
     // params
     if (!xarVarFetch('linkoptions', 'str::', $linkoptions, '', XARVAR_NOT_REQUIRED)) return;
-
 
     // set modvars
     xarModVars::set('themes', 'csslinkoption', $linkoptions);

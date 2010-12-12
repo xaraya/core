@@ -15,7 +15,7 @@
  */
 function themes_admin_list()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminThemes')) return;
 
     // form parameters

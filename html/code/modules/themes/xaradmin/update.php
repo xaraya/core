@@ -20,6 +20,9 @@
  */
 function themes_admin_update()
 { 
+    // Security
+    if (!xarSecurityCheck('EditThemes')) return; 
+    
     // Get parameters
     if (!xarVarFetch('id', 'int:1:', $regId, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($regId)) return xarResponse::notFound();
