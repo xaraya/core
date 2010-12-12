@@ -20,9 +20,8 @@ function blocks_admin_modify_instance()
     if (!xarVarFetch('bid', 'int:1:', $bid, 0, XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('tab', 'pre:trim:lower:str:1', $tab, 'config', XARVAR_NOT_REQUIRED)) return;
     
+    // Security
     if (empty($bid)) return xarResponse::notFound();
-
-    // Security Check
     if (!xarSecurityCheck('EditBlocks', 0, 'Instance')) {return;}
 
     // Get the instance details.

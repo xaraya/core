@@ -14,7 +14,7 @@
  */
 function blocks_admin_view_instances()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('EditBlocks', 0, 'Instance')) {return;}
 
     $data = array();

@@ -31,7 +31,7 @@ function blocks_admin_create_instance()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }
 
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AddBlocks', 0, 'Instance')) {return;}
 
     // Check if block name has already been used.

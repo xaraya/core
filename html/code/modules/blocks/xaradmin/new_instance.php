@@ -14,7 +14,7 @@
  */
 function blocks_admin_new_instance()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AddBlocks', 0, 'Instance')) {return;}
 
     // Can specify block types for a single module.

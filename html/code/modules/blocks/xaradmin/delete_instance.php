@@ -19,9 +19,9 @@ function blocks_admin_delete_instance()
     if (!xarVarFetch('bid', 'id', $bid, 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('confirm', 'str:1:', $confirm, '', XARVAR_NOT_REQUIRED)) {return;}
 
-    if (empty($bid)) return xarResponse::notFound();
 
-    // Security Check
+    // Security
+    if (empty($bid)) return xarResponse::notFound();
     if (!xarSecurityCheck('ManageBlocks', 0, 'Instance')) {return;}
 
     // Get details on current block

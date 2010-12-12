@@ -16,6 +16,7 @@
  */
 function blocks_admin_main()
 {
+    // Security
     if(!xarSecurityCheck('EditBlocks')) return;
 
     $refererinfo = xarRequest::getInfo(xarServer::getVar('HTTP_REFERER'));
