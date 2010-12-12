@@ -1,6 +1,9 @@
 <?php
     function modules_admin_aliases($args)
     {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
         if (!xarVarFetch('name',   'str', $modname,     NULL, XARVAR_NOT_REQUIRED)) {return;}
         if (!xarVarFetch('remove', 'str', $removealias, NULL, XARVAR_NOT_REQUIRED)) {return;}
         if (!xarVarFetch('add',    'str', $addalias,    NULL, XARVAR_NOT_REQUIRED)) {return;}

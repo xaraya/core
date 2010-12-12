@@ -37,7 +37,7 @@ function modules_admin_modify($args)
     $modName     = $modInfo['name'];
     $displayName = $modInfo['displayname'];
 
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminModules',0,'All',"$modName::$id")) return;
 
     $data['savechangeslabel'] = xarML('Save Changes');

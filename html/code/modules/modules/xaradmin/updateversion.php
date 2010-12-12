@@ -19,15 +19,15 @@
  */
 function modules_admin_updateversion()
 {
+    // Security
+    if(!xarSecurityCheck('AdminModules')) return;
+
     // Get parameters from input
     xarVarFetch('id', 'int:1', $regId, 0, XARVAR_NOT_REQUIRED);
     if (empty($regId)) return xarResponse::notFound();
 
 
     if (!isset($regId)) throw new EmptyParameterException('regid');
-
-    // Security Check
-    if(!xarSecurityCheck('AdminModules')) return;
 
     // Pass to API
     $updated = xarMod::apiFunc('modules',

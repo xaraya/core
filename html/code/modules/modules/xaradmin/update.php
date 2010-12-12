@@ -20,6 +20,9 @@
  */
 function modules_admin_update()
 {
+    // Security
+    if (!xarSecurityCheck('EditModules')) return; 
+    
     // Get parameters
     xarVarFetch('id','id',$regId);
     xarVarFetch('newdisplayname','str::',$newDisplayName);

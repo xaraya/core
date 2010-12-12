@@ -19,6 +19,9 @@
  */
 function modules_admin_viewerror()
 {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     // Get parameters
     xarVarFetch('id', 'int', $regId, 0, XARVAR_NOT_REQUIRED);
     if (empty($regId)) return xarResponse::notFound();

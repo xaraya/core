@@ -23,7 +23,9 @@
  */
 function modules_admin_regenerate()
 {
-    // Security check
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        

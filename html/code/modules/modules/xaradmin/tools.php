@@ -19,7 +19,9 @@
  */
 function modules_admin_tools()
 {
-    
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+        
     // Security check - not needed here
 
     $data = array();

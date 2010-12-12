@@ -23,6 +23,9 @@
 */
 function modules_admin_confirmlogout()
 {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     // Template does it all
     return array();    
 }

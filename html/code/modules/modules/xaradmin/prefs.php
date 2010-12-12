@@ -19,7 +19,6 @@
  */
 function modules_admin_prefs()
 {
-    
     // Security check
     if(!xarSecurityCheck('AdminModules')) return;
     

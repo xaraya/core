@@ -28,6 +28,9 @@ sys::import('modules.modules.class.installer');
 
 function modules_admin_install()
 {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     $installer = Installer::getInstance();    
     // Security and sanity checks
     // TODO: check under what conditions this is needed

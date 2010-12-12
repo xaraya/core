@@ -25,6 +25,9 @@ function modules_admin_upgrade()
 {
     $success = true;
 
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));

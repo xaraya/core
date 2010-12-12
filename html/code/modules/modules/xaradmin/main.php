@@ -18,6 +18,7 @@
  */
 function modules_admin_main()
 {
+    // Security
     if(!xarSecurityCheck('EditModules')) return;
 
     $refererinfo = xarRequest::getInfo(xarServer::getVar('HTTP_REFERER'));
