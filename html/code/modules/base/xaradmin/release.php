@@ -21,7 +21,7 @@
  */
 function base_admin_release()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('ManageBase')) return;
 
     //number of releases to show

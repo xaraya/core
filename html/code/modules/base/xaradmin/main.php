@@ -20,6 +20,7 @@
  */
 function base_admin_main()
 {
+    // Security
     if(!xarSecurityCheck('EditBase')) return;
 
     $refererinfo = xarRequest::getInfo(xarServer::getVar('HTTP_REFERER'));

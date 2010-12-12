@@ -17,8 +17,9 @@
  */
 function base_admin_modifyconfig()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminBase')) return;
+    
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'display', XARVAR_NOT_REQUIRED)) return;
 
