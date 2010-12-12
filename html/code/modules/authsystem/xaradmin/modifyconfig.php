@@ -15,8 +15,9 @@
  */
 function authsystem_admin_modifyconfig()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminAuthsystem')) return;
+    
     if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('uselockout',   'checkbox',  $data['uselockout'],  xarModVars::get('authsystem', 'uselockout'),     XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('lockouttime',  'int:1:',    $data['lockouttime'], (int)xarModVars::get('authsystem', 'lockouttime'),       XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;

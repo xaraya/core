@@ -17,6 +17,7 @@
  */
 function authsystem_admin_main()
 {
+    // Security
     if (!xarSecurityCheck('EditAuthsystem')) return;
    
     $refererinfo = xarRequest::getInfo(xarServer::getVar('HTTP_REFERER'));
