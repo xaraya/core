@@ -18,7 +18,7 @@
 
 function roles_admin_sitelock($args)
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('ManageRoles')) return;
 
     if (!xarVarFetch('cmd', 'isset', $cmd, NULL, XARVAR_DONT_SET)) return;

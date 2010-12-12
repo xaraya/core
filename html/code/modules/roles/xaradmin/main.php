@@ -15,6 +15,7 @@
  */
 function roles_admin_main()
 {
+    // Security
     if (!xarSecurityCheck('EditRoles')) return;
 
     $refererinfo = xarRequest::getInfo(xarServer::getVar('HTTP_REFERER'));

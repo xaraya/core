@@ -36,7 +36,7 @@ function roles_admin_addmember()
     $role   = xarRoles::get($roleid);
     $member = xarRoles::get($id);
 
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AttachRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
 
     // check that this assignment hasn't already been made

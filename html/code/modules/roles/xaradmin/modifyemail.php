@@ -13,7 +13,7 @@
  */
 function roles_admin_modifyemail($args)
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('EditRoles')) return;
 
     extract($args);

@@ -34,7 +34,7 @@ function roles_admin_addprivilege()
     sys::import('modules.privileges.class.privileges');
     $priv = xarPrivileges::getPrivilege($privid);
 
-    //Security Check
+    // Security
     if (!xarSecurityCheck('ManagePrivileges',0,'Privileges',$priv->getName())) return;
 
     // If this privilege is already assigned do nothing

@@ -18,7 +18,7 @@
  */
 function roles_admin_purge($args)
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('ManageRoles')) return;
 
     // Get parameters from whatever input we need

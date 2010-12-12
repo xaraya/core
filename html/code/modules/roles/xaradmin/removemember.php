@@ -36,7 +36,7 @@ function roles_admin_removemember()
     $role   = xarRoles::get($parentid);
     $member = xarRoles::get($childid);
 
-    // Security Check
+    // Security
     if(!xarSecurityCheck('RemoveRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
 
     // remove the child from the parent and bail if an error was thrown
