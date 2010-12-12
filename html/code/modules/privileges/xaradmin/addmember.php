@@ -27,6 +27,9 @@
 function privileges_admin_addmember()
 {
 
+    // Security
+    if (!xarSecurityCheck('AddPrivileges')) return; 
+    
 // Check for authorization code
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));

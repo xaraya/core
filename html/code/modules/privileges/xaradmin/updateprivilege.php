@@ -14,6 +14,9 @@
  */
 function privileges_admin_updateprivilege()
 {
+    // Security
+    if (!xarSecurityCheck('EditPrivileges')) return; 
+    
 // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
 

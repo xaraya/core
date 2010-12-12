@@ -17,7 +17,7 @@
  */
 function privileges_admin_modifyrealm()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('EditPrivileges',0,'Realm')) return;
 
     if (!xarVarFetch('id',       'int', $id,      '',      XARVAR_NOT_REQUIRED)) {return;}
