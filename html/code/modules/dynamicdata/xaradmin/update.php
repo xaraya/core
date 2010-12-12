@@ -42,6 +42,9 @@ function dynamicdata_admin_update($args)
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
+    // Security
+    if(!xarSecurityCheck('EditDynamicData')) return;
+
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'join'     => $join,
                                          'table'    => $table,

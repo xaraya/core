@@ -24,7 +24,8 @@ function dynamicdata_admin_access($args)
 {
     extract($args);
 
-    if(!xarVarFetch('itemid',   'isset', $itemid)) {return;}
+    if(!xarVarFetch('itemid',   'isset', $itemid,    NULL, XARVAR_DONT_SET)) {return;}
+    if (empty($itemid)) return xarResponse::notFound();
     if(!xarVarFetch('name',     'isset', $name, 'objects', XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule','isset', $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
@@ -48,6 +49,8 @@ function dynamicdata_admin_access($args)
 
     // check security of the parent object ... or DD Admin as fail-safe here
     $tmpobject = DataObjectMaster::getObject(array('objectid' => $object->itemid));
+    
+    // Security
     if (!$tmpobject->checkAccess('config') && !xarSecurityCheck('AdminDynamicData',0))
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
     unset($tmpobject);

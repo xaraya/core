@@ -14,7 +14,7 @@
  */
 function dynamicdata_admin_query($args)
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     extract($args);

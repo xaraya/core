@@ -20,6 +20,9 @@
  */
 function dynamicdata_admin_newhook($args)
 {
+    // Security
+    if(!xarSecurityCheck('AddDynamicData')) return;
+
     extract($args);
 
     if (!isset($extrainfo)) throw new EmptyParameterException('extrainfo');

@@ -38,6 +38,9 @@ function dynamicdata_admin_updateprop()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
+    // Security
+    if(!xarSecurityCheck('AdminDynamicData')) return;
+
     $objectinfo = DataObjectMaster::getObjectInfo(
                                     array(
                                     'objectid' => $objectid,

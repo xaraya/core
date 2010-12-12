@@ -39,6 +39,8 @@ function dynamicdata_admin_delete($args)
                                          'tplmodule'  => $tplmodule,
                                          'template'   => $template));
     if (empty($myobject)) return;
+    
+    // Security
     if (!$myobject->checkAccess('delete'))
         return xarResponse::Forbidden(xarML('Delete #(1) is forbidden', $myobject->label));
 

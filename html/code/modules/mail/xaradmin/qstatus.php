@@ -5,7 +5,7 @@
  */
 function mail_admin_qstatus($args)
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminMail')) return;
 
     $data = array();

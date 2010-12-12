@@ -44,6 +44,8 @@ function dynamicdata_admin_form($args)
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid));
+    
+    // Security
     if (!$myobject->checkAccess('create'))
         return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
 

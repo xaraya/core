@@ -7,6 +7,9 @@
 */
 function mail_admin_mapping($args)
 {
+     // Security
+    if (!xarSecurityCheck('AdminMail')) return;
+     
     // Construct the list of queues.
     $queues = xarMod::apiFunc('mail','user','getitemtypes');
     $data = array(); 

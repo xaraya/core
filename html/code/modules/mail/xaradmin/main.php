@@ -22,6 +22,7 @@
 */
 function mail_admin_main()
 {
+    // Security
     if (!xarSecurityCheck('EditMail')) return;
 
     $refererinfo = xarRequest::getInfo(xarServer::getVar('HTTP_REFERER'));

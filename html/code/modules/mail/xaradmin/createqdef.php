@@ -7,6 +7,9 @@ function mail_admin_createqdef($args)
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
+    // Security
+    if (!xarSecurityCheck('AdminMail')) return; 
+    
     // First determine whether we need to look at the name entered, or the object chosen
     if(!xarVarFetch('qdef_choose','int:1',$qdef_choose, 0, XARVAR_NOT_REQUIRED)) return;
     switch($qdef_choose) {
