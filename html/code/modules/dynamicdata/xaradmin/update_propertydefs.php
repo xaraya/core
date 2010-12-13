@@ -23,12 +23,12 @@ function dynamicdata_admin_update_propertydefs($args)
 
     if (!xarVarFetch('flushPropertyCache', 'isset', $flushPropertyCache,  NULL, XARVAR_DONT_SET)) {return;}
 
+    // Security
+    if (!xarSecurityCheck('AdminDynamicData')) return;
+
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
-
-    // Security
-    if (!xarSecurityCheck('AdminDynamicData')) return;
 
     if ( isset($flushPropertyCache) && ($flushPropertyCache == true) ) {
         $args['flush'] = 'true';

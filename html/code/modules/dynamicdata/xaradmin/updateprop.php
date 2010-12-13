@@ -34,12 +34,12 @@ function dynamicdata_admin_updateprop()
     if(!xarVarFetch('input_dd_status',   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_configuration',  'isset', $dd_configuration,  NULL, XARVAR_DONT_SET)) {return;}
 
+    // Security
+    if(!xarSecurityCheck('AdminDynamicData')) return;
+
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
-
-    // Security
-    if(!xarSecurityCheck('AdminDynamicData')) return;
 
     $objectinfo = DataObjectMaster::getObjectInfo(
                                     array(

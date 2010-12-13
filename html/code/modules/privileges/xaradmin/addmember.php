@@ -26,7 +26,6 @@
  */
 function privileges_admin_addmember()
 {
-
     // Security
     if (!xarSecurityCheck('AddPrivileges')) return; 
     

@@ -19,8 +19,10 @@
 function roles_admin_addprivilege()
 {
     // get parameters
-    if (!xarVarFetch('privid', 'int:1:', $privid)) return;
-    if (!xarVarFetch('roleid', 'int:1:', $roleid)) return;
+    if (!xarVarFetch('privid', 'int:1:', $privid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('roleid', 'int:1:', $roleid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($privid)) return xarResponse::notFound();
+    if (empty($roleid)) return xarResponse::notFound();
 
     // Check for authorization code
     if (!xarSecConfirmAuthKey()) {

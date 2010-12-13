@@ -22,9 +22,6 @@ function blocks_admin_modify_instance()
     
     // Security
     if (empty($bid)) return xarResponse::notFound();
-    if (!xarSecurityCheck('EditBlocks', 0, 'Instance')) {return;}
-
-    // Get the instance details.
     // @CHECKME: exception if the block is not found, does get do that?
     $instance = xarMod::apiFunc('blocks', 'user', 'get', array('bid' => $bid));
     // user needs admin access to modify block instance (name, title, etc)

@@ -61,6 +61,7 @@ function dynamicdata_admin_modifyprop()
         }
         unset($tmpobject);
     } else {
+        // Security
         if(!xarSecurityCheck('AdminDynamicData')) return;
         $objectid = null;
         $data['visibility'] = 'public';

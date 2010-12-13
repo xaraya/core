@@ -23,13 +23,13 @@ function modules_admin_update()
     // Security
     if (!xarSecurityCheck('EditModules')) return; 
     
-    // Get parameters
-    xarVarFetch('id','id',$regId);
-    xarVarFetch('newdisplayname','str::',$newDisplayName);
-
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
+
+    // Get parameters
+    xarVarFetch('id','id',$regId);
+    xarVarFetch('newdisplayname','str::',$newDisplayName);
 
     // Pass to API
     $updated = xarMod::apiFunc('modules',

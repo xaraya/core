@@ -25,10 +25,6 @@
  */
 function roles_admin_removemember()
 {
-    // Check for authorization code
-    if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
     // get input from any view of this page
     if (!xarVarFetch('parentid', 'int', $parentid, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('childid',  'int', $childid, XARVAR_NOT_REQUIRED)) return;
@@ -38,6 +34,11 @@ function roles_admin_removemember()
 
     // Security
     if(!xarSecurityCheck('RemoveRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
+
+    // Check for authorization code
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     // remove the child from the parent and bail if an error was thrown
     if (!xarMod::apiFunc('roles','user','removemember', array('id' => $childid, 'gid' => $parentid))) return;
