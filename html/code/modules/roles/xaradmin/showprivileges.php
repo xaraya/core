@@ -17,7 +17,7 @@
  */
 function roles_admin_showprivileges()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('EditRoles')) return;
     
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;

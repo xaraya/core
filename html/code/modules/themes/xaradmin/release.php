@@ -19,7 +19,7 @@
  */
 function themes_admin_release()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('EditThemes')) return;
     
     // allow fopen

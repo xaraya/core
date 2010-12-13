@@ -19,7 +19,7 @@
 */
 function themes_admin_corecssupdate()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminThemes')) return;
 
     // Confirm authorisation code

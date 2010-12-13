@@ -18,12 +18,10 @@
 function base_admin_sysinfo()
 {
     // Security
-    if(!xarSecurityCheck('ManageBase')) return;
+    if(!xarSecurityCheck('AdminBase')) return;
 
     xarVarFetch('what','int:-1:127',$what,INFO_GENERAL, XARVAR_NOT_REQUIRED);
     $data['what'] = $what;
-    // Security Check
-    if(!xarSecurityCheck('AdminBase')) return;
     // FIXME: dirty dirty
     ob_start();
     // FIXME: can we split this up in more manageable parts?

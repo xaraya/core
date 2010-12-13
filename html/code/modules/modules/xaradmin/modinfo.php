@@ -24,8 +24,6 @@ function modules_admin_modinfo()
     // Security
     if (!xarSecurityCheck('AdminModules')) return; 
         
-    // Security check - not needed here, imo 
-    // we just show some info here, not changing anything
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        

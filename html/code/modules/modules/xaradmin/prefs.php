@@ -19,7 +19,7 @@
  */
 function modules_admin_prefs()
 {
-    // Security check
+    // Security
     if(!xarSecurityCheck('AdminModules')) return;
     
     $data = array();

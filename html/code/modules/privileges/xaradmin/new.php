@@ -16,7 +16,7 @@
  */
 function privileges_admin_new()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AddPrivileges')) return;
 
     $data = array();
