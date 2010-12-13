@@ -22,6 +22,8 @@ function privileges_admin_removerole()
     if (!xarVarFetch('id',          'isset', $id,          NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('roleid',       'isset', $roleid,       NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('confirmation', 'isset', $confirmation, NULL, XARVAR_DONT_SET)) {return;}
+    if (empty($id)) return xarResponse::notFound();
+    if (empty($roleid)) return xarResponse::notFound();
 
 //Call the Roles class and get the role to be removed
     $role = xarRoles::get($roleid);
