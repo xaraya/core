@@ -14,6 +14,7 @@
     
     function dynamicdata_util_delete_static()
     {
+        //Security
         if (!xarSecurityCheck('AdminDynamicData')) return;
 
         if (!xarVarFetch('table',      'str:1',  $data['table'],    '',     XARVAR_NOT_REQUIRED)) return;
