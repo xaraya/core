@@ -54,6 +54,7 @@ function themes_init()
         'regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
         'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
         'version' => array('type' => 'varchar', 'size' => 10, 'null' => false, 'charset' => $charset),
+        'configuration' => array('type' => 'text', 'size' => 'medium', 'null' => false, 'charset' => $charset),
         'state' => array('type' => 'integer', 'size' => 'tiny', 'unsigned'=> true, 'null' => false, 'default' => '1')
         );
 
