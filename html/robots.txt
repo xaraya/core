@@ -1,6 +1,5 @@
 User-agent: *
 Disallow: /lib
 Disallow: /themes
-Disallow: /modules
-Disallow: /creole
+Disallow: /code
 Disallow: /var

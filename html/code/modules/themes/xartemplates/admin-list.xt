@@ -11,9 +11,9 @@
     <xar:set name="imgremove">'Remove'</xar:set>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Themes Administration</span>
-        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
         <h2>View Themes</h2>
         <p>Total listed: 
         <xar:set name="modscount">count($listrowsitems)</xar:set>#$modscount#</p>
@@ -242,7 +242,9 @@
                                 <!--
                                     if module is active and configurable (admin type) make its name a link to module main admin function
                                 -->
-                                #$modinfo['displayname']#
+                                <a href="#xarModURL('themes','admin','build')#" title="#$imgsetdefault#">
+                                    #$modinfo['displayname']#
+                                </a>
                             </td>
                             <td class="xar-align-right">#$modinfo['version']#</td>
                             <td class="xar-align-center">
@@ -292,6 +294,10 @@
                                     <xar:else />
                                         <img src="#xarTplGetImage('icons/none.png','base')#" alt="#$label#"/>
                                     </xar:if>
+                                    &#160;
+                                    <a href="#xarModURL('themes','admin','configure')#" title="#$imgsetdefault#">
+                                        <img src="#xarTplGetImage('icons/modify.png','base')#" alt="#$imgsetdefault#"/>
+                                    </a>
                                 <xar:else />
                                     <a href="#$modinfo['actionurl']#">#$modinfo['actionlabel']#</a>
                                     <xar:if condition="$modinfo['state'] eq 2">| 
@@ -305,6 +311,10 @@
                                             Set as Default
                                         </a>
                                     </xar:if>
+                                    &#160;
+                                    <a href="#xarModURL('themes','admin','configure')#" title="#$imgsetdefault#">
+                                        Configure
+                                    </a>
                                 </xar:if>
                             </td>
                         </tr>
