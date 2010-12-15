@@ -60,6 +60,19 @@ function themes_init()
     $query = xarDBCreateTable($tables['themes'], $fields);
     $result =& $dbconn->Execute($query);
 
+    // Create the table to hold configurations
+    $fields = array(
+        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
+        'name' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => '', 'charset' => $charset),
+        'description' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'default' => '', 'charset' => $charset),
+        'property_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
+        'label' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'default' => '', 'charset' => $charset),
+        'configuration' => array('type' => 'text', 'size' => 'medium', 'null' => false, 'charset' => $charset)
+        );
+
+    $query = xarDBCreateTable($tables['themes_configurations'], $fields);
+    $result =& $dbconn->Execute($query);
+
     xarModVars::set('themes', 'default_theme', 'default');
     xarModVars::set('themes', 'selsort', 'nameasc');
 
