@@ -20,9 +20,9 @@
  */
 class ThemeInitialization extends Object
 {
-    static function clearCache()
+    static public function clearCache()
     {
-        $dbconn = xarDB::getConn()
+        $dbconn = xarDB::getConn();
         xarMod::loadDbInfo('themes','themes');
         $tables = xarDB::getTables();
         $sql = "DELETE FROM $tables[themes_configurations]";
@@ -62,17 +62,21 @@ class ThemeInitialization extends Object
 
                 foreach($activeThemes as $themeInfo) {
                     // FIXME: the themeInfo directory does NOT end with a /
-                    $themeDirs = 'themes/' .$themeInfo['directory'];
+                    $themeDirs[] = $themeInfo['directory'];
                 }
             }
 
-            $dir = new RelativeDirectoryIterator($themeDirs);
             // Loop through theme directories
-            for ($dir->rewind();$dir->valid();$dir->next()) {
-                if ($dir->isDot()) continue; // temp for emacs insanity and skip hidden files while we're at it
-                // Load the configurations
+            foreach($themeDirs as $dir) {
+                // Run the initialization routine
                 self::inittheme($dir);
             } 
+            $dbconn->commit();
+        } catch(Exception $e) {
+            // TODO: catch more specific exceptions than all?
+            $dbconn->rollback();
+            throw $e;
+        }
 
                 
         // Clear the property types from cached memory
@@ -83,17 +87,18 @@ class ThemeInitialization extends Object
     
     static public function inittheme($dir) 
     {
+        sys::import('modules.dynamicdata.class.objects.descriptor');
         $class = UCFirst($dir) . 'Init';
         if (file_exists($dir . '/init.php')) {
-            // Assume this is a standalone property
+            // Assume this theme has its own init routine
             sys::import($dir . '.init');
         } else {
             $class = 'ThemeInit';
-            sys::import('themes.class.init');
+            sys::import('modules.themes.class.init');
         }
         $descriptor = new DataObjectDescriptor();
         $installer = new $class($descriptor);
-        $installer->init(array{'name' => $dir});
+        $installer->init(array('name' => $dir));
     }
 }
 ?>
