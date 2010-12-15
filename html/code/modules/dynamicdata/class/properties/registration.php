@@ -229,7 +229,7 @@ class PropertyRegistration extends DataContainer
                 $propDirs = $dirs;
             } else {
                 // Clear the cache
-                PropertyRegistration::ClearCache();
+                self::ClearCache();
 
                 if (!xarVarGetCached('installer','installing')) {
                     // Repopulate the configurations table
