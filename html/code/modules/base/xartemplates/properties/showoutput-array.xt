@@ -10,7 +10,7 @@
                 </td>
             </xar:for>
         </tr>
-        <xar:for start="$i=0" test="$i lt $rows" iter="$i++">
+        <xar:for start="$i=1" test="$i le $rows" iter="$i++">
             <tr>
                 <td>
                     <xar:set name="j">$i+1</xar:set>
