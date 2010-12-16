@@ -58,7 +58,7 @@ class PropertyRegistration extends DataContainer
         return $res;
     }
 
-    function public getRegistrationInfo(Object $class)
+    public function getRegistrationInfo(Object $class)
     {
         $this->id   = $class->id;
         $this->name = $class->name;
