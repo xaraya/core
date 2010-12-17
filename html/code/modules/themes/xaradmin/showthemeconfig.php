@@ -36,6 +36,7 @@ function themes_admin_showthemeconfig(Array $args=array())
     $newid = $myobject->getItem();
     
     $data['theme'] = $myobject;
+    $data['properties'] = $myobject->properties;
 
     sys::import('xaraya.structures.query');
     $tables = xarDB::getTables();

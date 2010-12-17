@@ -23,6 +23,7 @@
             </fieldset>
             <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
             <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>
+            <xar:data-input property="$properties['configuration']"/>
             <fieldset>
                 <div class="xar-align-center">
                     <input type="submit" name="confirm" value="#xarML('Update')#"/>&#160;
