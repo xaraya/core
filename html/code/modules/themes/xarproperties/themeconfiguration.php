@@ -34,7 +34,8 @@ class ThemeConfigurationProperty extends TextBoxProperty
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $this->filepath   = 'modules/dynamicdata/xarproperties';
+        $this->filepath   = 'modules/themes/xarproperties';
+        // Make sure we get an object reference so we can get the theme ID value
         $this->include_reference = 1;
     }
 
@@ -67,21 +68,23 @@ class ThemeConfigurationProperty extends TextBoxProperty
 
     public function showInput(Array $data = array())
     {
+        sys::import('xaraya.structures.query');
+        $tables = xarDB::getTables();
+        $q = new Query('SELECT',$tables['themes_configurations']);
+        $q->eq('theme_id',$themeid);
+    //    $q->qecho();
+        $q->run();
+        $result = $q->output();
+    //    var_dump($result);//exit;
+    
         //$data['type'] = $data['value']['initialization_prop_type']; only shows once
 
-        // set property type from object reference (= dynamic configuration) if possible
-        if (!empty($this->objectref) && !empty($this->objectref->properties['property_id'])) {
-            $this->proptype = $this->objectref->properties['property_id']->value;
-            $data['type'] = $this->proptype;
+        // set theme regid the from object reference (= theme_configuration) if possible
+        if (!empty($this->objectref) && !empty($this->objectref->properties['theme_id'])) {
+            $this->theme_id = $this->objectref->properties['theme_id']->value;
+            $data['theme_id'] = $this->theme_id;
         }
 
-        // Override from input
-        if (!empty($data['type'])) {
-            $this->proptype = $data['type'];
-        } else {
-            $data['type'] = $this->proptype;
-        }
-        
         $property =& DataPropertyMaster::getProperty($data);
         $property->id = $this->id;
         $property->parseConfiguration($this->value);
