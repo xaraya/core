@@ -242,9 +242,7 @@
                                 <!--
                                     if module is active and configurable (admin type) make its name a link to module main admin function
                                 -->
-                                <a href="#xarModURL('themes','admin','build')#" title="#$imgsetdefault#">
-                                    #$modinfo['displayname']#
-                                </a>
+                                #$modinfo['displayname']#
                             </td>
                             <td class="xar-align-right">#$modinfo['version']#</td>
                             <td class="xar-align-center">
