@@ -1,0 +1,84 @@
+<object name="themes">
+  <objectid>11</objectid>
+  <label>Themes</label>
+  <module_id>182</module_id>
+  <itemtype>8</itemtype>
+  <class>DataObject</class>
+  <filepath>auto</filepath>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config>a:0:{}</config>
+  <isalias>true</isalias>
+  <properties>
+    <property name="id">
+      <id>88</id>
+      <label>ID</label>
+      <type>itemid</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_themes.id</source>
+      <status>65</status>
+      <seq>1</seq>
+      <configuration></configuration>
+    </property>
+    <property name="name">
+      <id>89</id>
+      <label>Name</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_themes.name</source>
+      <status>33</status>
+      <seq>2</seq>
+      <configuration></configuration>
+    </property>
+    <property name="regid">
+      <id>90</id>
+      <label>Regid</label>
+      <type>integerbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_themes.regid</source>
+      <status>33</status>
+      <seq>3</seq>
+      <configuration></configuration>
+    </property>
+    <property name="directory">
+      <id>91</id>
+      <label>Directory</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_themes.directory</source>
+      <status>33</status>
+      <seq>4</seq>
+      <configuration></configuration>
+    </property>
+    <property name="version">
+      <id>92</id>
+      <label>Version</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_themes.version</source>
+      <status>33</status>
+      <seq>5</seq>
+      <configuration></configuration>
+    </property>
+    <property name="configuration">
+      <id>93</id>
+      <label>Configuration</label>
+      <type>textarea_medium</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_themes.configuration</source>
+      <status>34</status>
+      <seq>6</seq>
+      <configuration></configuration>
+    </property>
+    <property name="state">
+      <id>94</id>
+      <label>State</label>
+      <type>dropdown</type>
+      <defaultvalue>3</defaultvalue>
+      <source>xar_themes.state</source>
+      <status>33</status>
+      <seq>7</seq>
+      <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:48:"1,Uninitialized;2,Inactive;3,Active;6,Installed;";}</configuration>
+    </property>
+  </properties>
+</object>

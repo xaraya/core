@@ -168,6 +168,7 @@ function themes_admin_list()
 
         // common listitems
         $listrows[$i]['coretheme']      = $coretheme;
+        $listrows[$i]['id']             = $theme['systemid'];
         $listrows[$i]['displayname']    = $theme['name'];
         $listrows[$i]['description']    = $theme['description'];
         $listrows[$i]['version']        = $theme['version'];

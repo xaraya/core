@@ -295,7 +295,7 @@
                                         <img src="#xarTplGetImage('icons/none.png','base')#" alt="#$label#"/>
                                     </xar:if>
                                     &#160;
-                                    <a href="#xarModURL('themes','admin','showthemeconfig',array('id' => $modinfo['regid']))#" title="#$imgsetdefault#">
+                                    <a href="#xarModURL('themes','admin','showthemeconfig',array('id' => $modinfo['id']))#" title="#$imgsetdefault#">
                                         <img src="#xarTplGetImage('icons/modify.png','base')#" alt="#$imgsetdefault#"/>
                                     </a>
                                 <xar:else />
@@ -312,7 +312,7 @@
                                         </a>
                                     </xar:if>
                                     &#160;
-                                    <a href="#xarModURL('themes','admin','showthemeconfig',array('id' => $modinfo['regid']))#" title="#$imgsetdefault#">
+                                    <a href="#xarModURL('themes','admin','showthemeconfig',array('id' => $modinfo['id']))#" title="#$imgsetdefault#">
                                         Configure
                                     </a>
                                 </xar:if>
