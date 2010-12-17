@@ -64,6 +64,7 @@ function themes_init()
     // Create the table to hold configurations
     $fields = array(
         'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
+        'theme_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
         'name' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => '', 'charset' => $charset),
         'description' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'default' => '', 'charset' => $charset),
         'property_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
