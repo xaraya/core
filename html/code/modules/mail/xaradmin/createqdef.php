@@ -12,6 +12,9 @@
 
 function mail_admin_createqdef(Array $args=array())
 {
+    // Security
+    if (!xarSecurityCheck('AdminMail')) return; 
+    
     // Are we legitimately here
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));

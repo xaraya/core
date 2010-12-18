@@ -23,7 +23,7 @@ function sql_210_16()
         Removing old masks from the Roles module
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

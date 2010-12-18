@@ -19,11 +19,11 @@
 */
 function themes_admin_cssconfig()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminThemes',0)) return;
+    
     // Generate security key
     $data['authid'] = xarSecGenAuthKey();
-
 
     // where are we?
     if (!xarVarFetch('component', 'str::', $component, '', XARVAR_NOT_REQUIRED)) return;

@@ -24,7 +24,7 @@ function sql_210_09()
         Adding SiteManager level masks to the core modules
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

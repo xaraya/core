@@ -25,7 +25,7 @@ function sql_210_08()
         Adding the 'Site Management' privilege, SiteManagers group and SiteManager user
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

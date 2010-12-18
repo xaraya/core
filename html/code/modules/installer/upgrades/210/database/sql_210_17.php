@@ -23,7 +23,7 @@ function sql_210_17()
         Redefining mask names in the Themes module
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

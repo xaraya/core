@@ -39,7 +39,9 @@ function roles_admin_display()
 
     $name = $role->getName();
 
+    // Security
     if (!xarSecurityCheck('EditRoles',1,'Roles',$name)) return;
+    
     $data['frozen'] = xarSecurityCheck('ViewRoles',0,'Roles',$name);
 
     $data['id'] = $id;
@@ -49,6 +51,7 @@ function roles_admin_display()
     $data['name'] = $name;
 
     $item = $data;
+    $item['exclude_module'] = array('dynamicdata');
     $item['module'] = 'roles';
     $item['itemtype'] = $data['itemtype']; // handle groups differently someday ?
     $item['returnurl'] = xarModURL('roles', 'user', 'display',

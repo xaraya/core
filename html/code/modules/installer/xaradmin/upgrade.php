@@ -15,6 +15,9 @@
  */
 function installer_admin_upgrade()
 {
+    // Security
+    if (!xarSecurityCheck('AdminInstaller')) return; 
+    
     if(!xarVarFetch('phase','int', $data['phase'], 1, XARVAR_DONT_SET)) {return;}
 
     // Version information
@@ -78,19 +81,25 @@ function installer_admin_upgrade()
         xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
         xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
         
+        sys::import('xaraya.version');
         // Get the list of version checks
         Upgrader::loadFile('checks/check_list.php');
         $check_list = installer_adminapi_get_check_list();
 
         // Run the checks
-        foreach ($check_list as $check_version) {
-            if (!Upgrader::loadFile('checks/' . $check_version .'/main.php')) {
-                $data['check']['errormessage'] = Upgrader::$errormessage;
-                return $data;
+        $checks = array();
+        foreach ($check_list as $abbr_version => $check_version) {
+            if (!Upgrader::loadFile('checks/' . $abbr_version .'/main.php')) {
+                $checks[$check_version]['message'] = xarML('There are no checks for version #(1)', $check_version);
+                $checks[$check_version]['tasks'] = array();
+                //return $data;
+            } else {
+                $check_function = 'main_check_' . $abbr_version;
+                $result = $check_function();
+                $checks[$check_version] = $result['check'];
             }
-            $check_function = 'main_check_' . $check_version;
-            $data = array_merge($data,$check_function());
         }
+        $data['checks'] =& $checks;
 
     } elseif ($data['phase'] == 4) {
         $data['active_step'] = 4;

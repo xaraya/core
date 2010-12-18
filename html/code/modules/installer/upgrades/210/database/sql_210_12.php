@@ -23,7 +23,7 @@ function sql_210_12()
         Removing old masks from the Mail module
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

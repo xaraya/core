@@ -17,7 +17,7 @@
  */
 function modules_admin_settings()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminModules')) return;
 
     if (!xarVarFetch('hidecore', 'str:1:', $hidecore, '0', XARVAR_NOT_REQUIRED)) return; 

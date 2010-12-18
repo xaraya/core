@@ -35,62 +35,16 @@ function modules_adminapi_enablehooks(Array $args=array())
 
     // CHECKME: don't allow hooking to yourself !?
     if ($callerModName == $hookModName) {
-        throw new BadParameterException('hookModName');
+        // <chris> this is allowed, for now (eg, roles usermenu > roles)        
+        //throw new BadParameterException('hookModName');
     }
 
     if (empty($callerItemType)) {
-        $callerItemType = '';
+        $callerItemType = 0;
     }
 
-    // Rename operation
-    $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
-
-    // Delete hooks regardless
-    try {
-        $dbconn->begin();
-        // TODO: do this differently, the baseinfo function is supposed to be protected
-        $smodInfo = xarMod_GetBaseInfo($callerModName);
-        $smodId = $smodInfo['systemid'];
-        $tmodInfo = xarMod_GetBaseInfo($hookModName);
-        $tmodId = $tmodInfo['systemid'];
-        $sql = "DELETE FROM $xartable[hooks] WHERE s_module_id = ? AND s_type = ? AND t_module_id = ?";
-        $bindvars = array($smodId,$callerItemType,$tmodId);
-        $dbconn->Execute($sql,$bindvars);
-
-        $sql = "SELECT DISTINCT id, s_module_id, s_type, object,
-                                action, t_area, t_module_id, t_type,
-                                t_func, t_file
-                FROM $xartable[hooks]
-                WHERE t_module_id = ?";
-//                WHERE s_module_id = ? AND t_module_id = ?";
-        $stmt1 = $dbconn->prepareStatement($sql);
-//        $result = $stmt1->executeQuery(array(null,$tmodId));
-        $result = $stmt1->executeQuery(array($tmodId));
-
-        // Prepare the statement outside the loop
-        $sql = "INSERT INTO $xartable[hooks]
-                (object,action,s_module_id,s_type,t_area,t_module_id,t_type,t_func,t_file)
-                VALUES (?,?,?,?,?,?,?,?,?)";
-        $stmt = $dbconn->prepareStatement($sql);
-
-        while($result->next()) {
-            list($hookid,$hooksmodId,$hookstype,$hookobject,$hookaction,
-                 $hooktarea,$tmodId,$hookttype,$hooktfunc,$hooktfile) = $result->fields;
-
-            $bindvars = array($hookobject, $hookaction, $smodId,
-                              $callerItemType, $hooktarea, $tmodId,
-                              $hookttype, $hooktfunc,$hooktfile);
-            $stmt->executeUpdate($bindvars);
-        }
-        $dbconn->commit();
-    } catch (SQLException $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
-    $result->close();
-
-    return true;
+    return xarHooks::attach($hookModName, $callerModName, $callerItemType);
+    
 }
 
 ?>

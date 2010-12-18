@@ -42,7 +42,9 @@ function roles_admin_delete()
     $data['object'] = $role;
     $name = $role->getName();
 
+    // Security
     if (!xarSecurityCheck('ManageRoles',1,'Roles',$name)) return;
+    
     $data['frozen'] = !xarSecurityCheck('ManageRoles',0,'Roles',$name);
 
     // Prohibit removal of any groups that have children
@@ -87,6 +89,7 @@ function roles_admin_delete()
 
             // call item delete hooks (for DD etc.)
             // TODO: move to remove() function
+            $pargs['exclude_module'] = array('dynamicdata');
             $pargs['module'] = 'roles';
             $pargs['itemtype'] = $itemtype;
             $pargs['itemid'] = $id;

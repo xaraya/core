@@ -24,7 +24,7 @@ function sql_210_06()
         Removing the 'DenyBlocks' privilege
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

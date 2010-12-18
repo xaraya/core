@@ -14,6 +14,9 @@
 
 function roles_admin_sendmail()
 {
+    // Security
+    if (!xarSecurityCheck('MailRoles')) return;
+    
     // Get parameters from whatever input we need
     if (!xarVarFetch('id',     'int:0:', $id, 0)) return;
     if (!xarVarFetch('state',   'int:0:', $state, xarRoles::ROLES_STATE_CURRENT)) return;
@@ -25,8 +28,6 @@ function roles_admin_sendmail()
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
-    // Security check
-    if (!xarSecurityCheck('MailRoles')) return;
     // Get user information
     // Get the current query
     sys::import('xaraya.structures.query');

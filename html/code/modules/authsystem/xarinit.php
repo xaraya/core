@@ -89,6 +89,9 @@ function authsystem_upgrade($oldversion)
     // Upgrade dependent on old version number
     switch ($oldversion) {
         case '2.0.0':
+            // Register event subjects
+            xarEvents::registerSubject('UserLogin', 'user', 'authsystem');
+            xarEvents::registerSubject('UserLogout', 'user', 'authsystem');
       break;
     }
     return true;

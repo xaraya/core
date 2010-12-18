@@ -37,7 +37,7 @@ function modules_admin_modifyproperties(Array $args=array())
 
     $modName     = $modInfo['name'];
 
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminModules',0,'All',"$modName::$id")) return;
 
     $object = xarMod::apiFunc('base', 'admin', 'getmodulesettings', array('module' => $modName));

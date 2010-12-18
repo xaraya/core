@@ -17,7 +17,7 @@
 
         <h2>Version Status</h2>
         <h3>Version Information</h3>
-        <table style="width: 90%">
+        <table style="width: 90%; min-width: 900p">
             <tr>
                 <th></th>
                 <th>Your Files</th>
@@ -26,7 +26,7 @@
             <tr>
                 <td>
                     <xar:var name="label">Current Core Version</xar:var>
-                    <label title="#$label#" class="xar-form-label">                            
+                    <label title="#$label#" >                            
                         Xaraya Core:                            
                     </label>
                 </td>
@@ -46,7 +46,7 @@
             <tr>
                 <td>
                     <xar:var name="label">Current Build</xar:var>
-                    <label title="#$label#" class="xar-form-label">                            
+                    <label title="#$label#" >                            
                         Build:                            
                     </label>
                 </td>
@@ -153,36 +153,38 @@
             </form>
         <xar:elseif condition="$phase eq 3"/>
             <form action="upgrade.php" method="post">
-                <table style="margin-top:10px; width:100%">
-                    <tr>
-                        <th style="border-bottom: dotted 1px; text-align: left">Task</th>
-                        <th style="border-bottom: dotted 1px; width:10%; text-align: left">Result</th>
-                        <th style="border-bottom: dotted 1px; width:10%; text-align: left">Reference</th>
-                    </tr>
-                    <xar:if condition="empty($check['tasks'])">
+                <xar:foreach in="$checks" key="$version" value="$check">
+                    <table style="margin-top:10px; width:100%">
                         <tr>
-                            <td colspan="3" style="text-align: center">
-                                No checks required
-                            </td>
+                            <th style="border-bottom: dotted 1px; text-align: left">Task</th>
+                            <th style="border-bottom: dotted 1px; width:10%; text-align: left">Result</th>
+                            <th style="border-bottom: dotted 1px; width:10%; text-align: left">Reference</th>
                         </tr>
-                    <xar:else/>
-                        <xar:foreach in="$check['tasks']" value="$task">
-                            <tr>
-                                <td>#$task['description']#</td>
-                                <xar:if condition="$task['success']">
-                                    <xar:set name="reply_color">'green'</xar:set>
-                                <xar:else/>
-                                    <xar:set name="reply_color">'red'</xar:set>
-                                </xar:if>
-                                <td style="color: #$reply_color#">#$task['reply']#</td>
-                                <td>#$task['reference']#</td>
-                            </tr>
-                        </xar:foreach>
+                            <xar:if condition="empty($check['tasks'])">
+                                <tr>
+                                    <td colspan="3" style="text-align: center">
+                                        No checks available/required
+                                    </td>
+                                </tr>
+                            <xar:else/>
+                                <xar:foreach in="$check['tasks']" value="$task">
+                                    <tr>
+                                        <td>#$task['description']#</td>
+                                        <xar:if condition="$task['success']">
+                                            <xar:set name="reply_color">'green'</xar:set>
+                                        <xar:else/>
+                                            <xar:set name="reply_color">'red'</xar:set>
+                                        </xar:if>
+                                        <td style="color: #$reply_color#">#$task['reply']#</td>
+                                        <td>#$task['reference']#</td>
+                                    </tr>
+                                </xar:foreach>
+                            </xar:if>
+                    </table>
+                    <xar:if condition="!empty($check['message']) AND empty($upgrade['errormessage'])">
+                        <h3>#$check['message']#</h3>
                     </xar:if>
-                </table>
-                <xar:if condition="!empty($check['message']) AND empty($upgrade['errormessage'])">
-                    <h3>#$check['message']#</h3>
-                </xar:if>
+                </xar:foreach>
                 <p class="center">
                     <input type="hidden" name="phase" id="phase" value="4"/>
                     <xar:var name="label">Back</xar:var>
@@ -199,12 +201,6 @@
             </form>
         <xar:elseif condition="$phase eq 4"/>
             <h3>Your upgrade is complete</h3>
-            <h2>Notes for Version #XARCORE_VERSION_NUM#</h2>
-            <xar:if condition="XARCORE_VERSION_NUM eq '2.1.0'">
-                <xar:template file="notes-210"/>
-            <xar:elseif condition="XARCORE_VERSION_NUM eq '2.2.0'"/>
-                <xar:template file="notes-220"/>
-            </xar:if>
             <h2>Next Steps:</h2>
             <p>
                 You can now customize your installation to match your needs. Manage sitewide settings with the configuration options of the <strong>Base module</strong>. Use the <strong>Modules administration</strong> to install any additional features, or use the <strong>Blocks administration</strong> to adjust the look of your sidebars or add blocks to your site. You can do either of these at any time via the Admin menu.
@@ -224,6 +220,12 @@
             <br />
             <br />
             <h2>Thank you for using Xaraya.</h2>
+            <h2>Notes for Version #XARCORE_VERSION_NUM#</h2>
+            <xar:if condition="XARCORE_VERSION_NUM eq '2.1.0'">
+                <xar:template file="notes-210"/>
+            <xar:elseif condition="XARCORE_VERSION_NUM eq '2.2.0'"/>
+                <xar:template file="notes-220"/>
+            </xar:if>
         </xar:if>
         <xar:if condition="!empty($upgrade['errormessage'])">
             <p class="warning">#$upgrade['errormessage']#</p>

@@ -23,7 +23,7 @@ function sql_210_18()
         Adding the 'confirm'configuration option for the email dataproperty
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

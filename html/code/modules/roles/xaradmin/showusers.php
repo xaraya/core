@@ -15,7 +15,7 @@
  */
 function roles_admin_showusers()
 {
-
+    // Security
     if (!xarSecurityCheck('EditRoles')) return;
 
     if (xarVarIsCached('roles', 'defaultgroupid')) {
@@ -98,6 +98,8 @@ function roles_admin_showusers()
     }
 
     // Sort ye
+    // FIXME: this hardwiring is only possible because this list os not configurable
+    if ($data['order'] == 'regdate')  $data['order'] ='date_reg';
     $q->setorder($data['order']);
 
     // Add limits

@@ -22,7 +22,7 @@ function sql_210_cache_blocks()
         Checking the structure of $table
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

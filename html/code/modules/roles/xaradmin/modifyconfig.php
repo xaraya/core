@@ -17,8 +17,9 @@
  */
 function roles_admin_modifyconfig()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminRoles')) return;
+    
     if (!xarVarFetch('phase', 'str:1:100', $phase,       'modify',  XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab',   'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
 
@@ -83,16 +84,24 @@ function roles_admin_modifyconfig()
     switch ($data['tab']) {
 
         case 'hooks':
+            $item = array('module' => 'roles', 'itemtype' => xarRoles::ROLES_USERTYPE);
+            $hooks = xarHooks::notify('ModuleModifyconfig', $item);
+            /* 
             // Item type 1 is the default itemtype for 'user' roles.
             $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
                                      array('module' => 'roles',
                                            'itemtype' => xarRoles::ROLES_USERTYPE));
+            */            
             break;
         case 'grouphooks':
-            // Item type 1 is the (current) itemtype for 'group' roles.
+            $item = array('module' => 'roles', 'itemtype' => xarRoles::ROLES_GROUPTYPE);
+            $hooks = xarHooks::notify('ModuleModifyconfig', $item);
+            /*
+            // Item type 2 is the itemtype for 'group' roles.
             $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
                                      array('module' => 'roles',
                                            'itemtype' => xarRoles::ROLES_GROUPTYPE));
+            */            
             break;
         case 'duvs':
             $data['user_settings'] = xarMod::apiFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => 0));

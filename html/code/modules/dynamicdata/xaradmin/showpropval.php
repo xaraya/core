@@ -18,6 +18,9 @@
  */
 function dynamicdata_admin_showpropval(Array $args=array())
 {
+    // Security
+    if(!xarSecurityCheck('AdminDynamicData')) return;
+
     extract($args);
 
     // get the property id

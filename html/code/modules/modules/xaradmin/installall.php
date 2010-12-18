@@ -24,7 +24,9 @@
  */
 function modules_admin_installall()
 {
-    // Security and sanity checks
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     //Testing it directly for now... Insert this back when it is put into the template
 //    if (!xarSecConfirmAuthKey()) return;
 

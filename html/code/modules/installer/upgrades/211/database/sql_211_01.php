@@ -22,7 +22,7 @@ function sql_211_01()
         Upgrading the core module version numbers
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
     $core_modules = array(
                             'authsystem',

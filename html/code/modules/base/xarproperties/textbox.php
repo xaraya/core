@@ -32,6 +32,7 @@ class TextBoxProperty extends DataProperty
     public $validation_regex                = null;
     public $validation_regex_invalid;
     public $initialization_encrypt          = false;
+    public $initialization_sanitize         = false;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -51,6 +52,10 @@ class TextBoxProperty extends DataProperty
             $value = serialize($value);
         }
 
+        // Remove any unwanted characters
+        if ($this->initialization_sanitize)
+            $value = filter_var($value, FILTER_SANITIZE_STRING);
+        
         if (isset($this->validation_max_length)  && strlen($value) > $this->display_maxlength) {
             if (!empty($this->validation_max_length_invalid)) {
                 $this->invalid = xarML($this->validation_max_length_invalid);
@@ -77,6 +82,7 @@ class TextBoxProperty extends DataProperty
             return false;
         } else {
     // TODO: allowable HTML ?
+            $this->value = $value;
             return true;
         }
     }

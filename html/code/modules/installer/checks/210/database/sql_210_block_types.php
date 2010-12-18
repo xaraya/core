@@ -19,7 +19,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/200.html
- */xxx
+ */
 
 function sql_210_block_types()
 {
@@ -32,7 +32,7 @@ function sql_210_block_types()
         Checking the structure of $table
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

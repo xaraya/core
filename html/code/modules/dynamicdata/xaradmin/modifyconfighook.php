@@ -22,6 +22,9 @@
  */
 function dynamicdata_admin_modifyconfighook(Array $args=array())
 {
+    // Security
+    if(!xarSecurityCheck('AdminDynamicData')) return;
+
     extract($args);
 
     if (!isset($extrainfo)) throw new EmptyParameterException('extrainfo');

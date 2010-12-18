@@ -27,7 +27,7 @@ function sql_210_02()
         Creating a block type 'blockgroup' and adding the blockgroups to the blocks instance table
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

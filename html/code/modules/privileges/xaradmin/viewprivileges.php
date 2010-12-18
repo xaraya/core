@@ -17,7 +17,7 @@
  */
 function privileges_admin_viewprivileges()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('EditPrivileges')) return;
 
     $data = array();

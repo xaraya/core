@@ -24,7 +24,7 @@ function sql_210_19()
         Remove the roles_roles object and reset the user and group itemtypes
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

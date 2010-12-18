@@ -205,7 +205,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     try {
         date_default_timezone_set(xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
     } catch (Exception $e) {
-        die('Your configuration file appears to be missing. This usually indicates Xaraya has not been installed. <br/>Please refer to point 4 of the installation instructions <a href="readme.html" target="_blank">here</a>');
+        die('Your configuration file appears to be missing. This usually indicates Xaraya has not been installed. <br/>Please refer to the installation instructions <a href="readme.html" target="_blank">here</a>');
     }
 
     /*
@@ -258,10 +258,11 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Start Event Messaging System
      *
      * The event messaging system can be initialized only after the db, but should
-     * be as early as possible in place. This system is for *core* events
+     * be as early as possible in place. This system is for all events
      *
      */
     sys::import('xaraya.events');
+    xarEvents::init($systemArgs);
 
     /*
      * Start autoload

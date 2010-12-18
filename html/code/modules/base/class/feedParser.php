@@ -166,9 +166,9 @@ class feedParser extends Object
     }
 
     function getXmlTree() { return $this->data;}
-    function setXmlData(Array $data=array()) { $this->xmldata = $data; }
+    function setXmlData($data) { $this->xmldata = $data; }
     
-    function parseEntities(Array &$data=array()) 
+    function parseEntities(&$data) 
     {
 
         foreach($this->entities as $entity => $replace) {
@@ -180,7 +180,7 @@ class feedParser extends Object
     }
 
 
-    function parseFeed(Array $xmldata=array()) 
+    function parseFeed($xmldata) 
     {
         $data = $this->buildStruct($xmldata);
         if(is_array($data) && count($data) > 0) {
@@ -277,7 +277,7 @@ class feedParser extends Object
             
     }
 
-    function getRDFChannel(Array $data=array()) 
+    function getRDFChannel($data) 
     {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {
@@ -345,7 +345,7 @@ class feedParser extends Object
         return $channel;
     }
 
-    function getRSSChannel(Array $data=array()) 
+    function getRSSChannel($data) 
     {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {
@@ -406,7 +406,7 @@ class feedParser extends Object
         return array('channel' => $channel, 'item' => $item);
     }
 
-    function getRDFItem(Array $data=array()) 
+    function getRDFItem($data) 
     {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {
@@ -471,7 +471,7 @@ class feedParser extends Object
         return $item;
     }
     
-    function getRSSItem(Array $data=array()) 
+    function getRSSItem($data) 
     {
         if(is_array($data['children'])) {
             foreach($data['children'] as $child) {

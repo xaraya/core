@@ -60,12 +60,14 @@ function roles_admin_modify()
                                             'basetype' => $data['itemtype'],
                                                 ));
 
+    // Security
     if (!xarSecurityCheck('EditRole',0,'Roles',$data['object']->getName())) {
         if (!xarSecurityCheck('ReadRoles',1,'Roles',$data['object']->getName())) return;
     }
 
     // call item modify hooks (for DD etc.)
     $item = $data;
+    $item['exclude_module'] = array('dynamicdata');
     $item['module']= 'roles';
     $item['itemtype'] = $data['object']->getType();
     $item['itemid']= $id;

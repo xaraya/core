@@ -23,7 +23,10 @@
  */
 function privileges_admin_removemember()
 {
-// Check for authorization code
+    // Security
+    if (!xarSecurityCheck('EditPrivileges')) return; 
+    
+    // Check for authorization code
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        

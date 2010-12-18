@@ -23,7 +23,7 @@ function sql_210_07()
         Adding configuration information to objects 'objects' and 'properties'
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

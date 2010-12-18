@@ -46,6 +46,7 @@ function dynamicdata_admin_new(Array $args=array())
                                          'tplmodule' => $tplmodule,
                                          'template'  => $template,
                                          ));
+    // Security
     if (!$myobject->checkAccess('create'))
         return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
 

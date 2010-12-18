@@ -23,7 +23,7 @@ function sql_210_05()
         Removing all masks with component 'Block'
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query
