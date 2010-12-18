@@ -19,12 +19,13 @@
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  data for template
- * @throws  no exceptions
- * @todo    nothing
+ * @return  array data for the template display
 */
 function modules_admin_confirmlogout()
 {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     // Template does it all
     return array();    
 }

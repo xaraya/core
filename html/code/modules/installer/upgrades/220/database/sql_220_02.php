@@ -21,7 +21,7 @@ function sql_220_02()
         Changing the dynamic_properties_def.modid default value from null to 0
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

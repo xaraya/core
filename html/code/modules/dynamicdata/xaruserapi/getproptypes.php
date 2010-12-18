@@ -15,10 +15,11 @@
  * Get the list of defined property types
  *
  * @author the DynamicData module development team
+ * @param array    $args array of optional parameters<br/>
  * @return array of property types
  * @throws DATABASE_ERROR, NO_PERMISSION
  */
-function dynamicdata_userapi_getproptypes($args)
+function dynamicdata_userapi_getproptypes(Array $args=array())
 {
     return DataPropertyMaster::getPropertyTypes();
 }

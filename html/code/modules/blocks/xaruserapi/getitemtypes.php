@@ -1,6 +1,6 @@
 <?php
 /**
- * Utility function to retrieve the list of item types
+ * Retrieve a list of itemtypes of this module
  *
  * @package modules
  * @subpackage blocks module
@@ -12,12 +12,11 @@
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
- * utility function to retrieve the list of item types of this module (if any)
- *
- * @returns array
- * @return array containing the item types and their description
+ * Utility function to retrieve the list of itemtypes of this module (if any).
+ * @param array    $args array of optional parameters<br/>
+ * @return array the itemtypes of this module and their description *
  */
-function blocks_userapi_getitemtypes($args)
+function blocks_userapi_getitemtypes(Array $args=array())
 {
     $itemtypes = array();
 

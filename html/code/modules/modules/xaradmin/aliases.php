@@ -9,9 +9,15 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/1.html
  */
+/**
+ * @return array data for the template display
+ */
 
-    function modules_admin_aliases($args)
+    function modules_admin_aliases(Array $args=array())
     {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
         if (!xarVarFetch('name',   'str', $modname,     NULL, XARVAR_NOT_REQUIRED)) {return;}
         if (!xarVarFetch('remove', 'str', $removealias, NULL, XARVAR_NOT_REQUIRED)) {return;}
         if (!xarVarFetch('add',    'str', $addalias,    NULL, XARVAR_NOT_REQUIRED)) {return;}

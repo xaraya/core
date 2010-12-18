@@ -18,6 +18,7 @@ function main_220()
     $upgrades = array(
                         'sql_220_01',
                         'sql_220_02',
+                        'sql_220_03',
                     );
     foreach ($upgrades as $upgrade) {
         if (!Upgrader::loadFile('upgrades/220/database/' . $upgrade . '.php')) {

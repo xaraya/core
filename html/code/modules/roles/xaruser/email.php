@@ -17,11 +17,11 @@
  * @author  John Cox
  * @access  public
  * @param   id is the id of the user being sent
- * @return  true on success or void on falure
+ * @return mixed data array for the template display or output display string if invalid data submitted
  * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
  * @todo    handle empty subject and/or message?
  */
-function roles_user_email($args)
+function roles_user_email(Array $args=array())
 {
     // we can only send emails to other members if we are logged in
     if(!xarUserIsLoggedIn())

@@ -20,11 +20,13 @@
  *
  * @access public
  * @param id the mdoule id to deactivate
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 function modules_admin_deactivate ()
 {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));

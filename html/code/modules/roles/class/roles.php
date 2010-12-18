@@ -193,7 +193,7 @@ class xarRoles extends Object
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param string $childname
      * @param string $parentname
-     * @return bool
+     * @return boolean
      * @todo create exceptions for bad input
      * @todo seems we could do this in one query instead of two?
      */

@@ -11,10 +11,13 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/27.html
  */
+/**
+ * @return array data for the template display
+  */
 function roles_admin_createmail()
 {
     // TODO allow selection by group or user or all users.
-    // Security check
+    // Security
     if (!xarSecurityCheck('MailRoles')) return;
 
     if (!xarVarFetch('id',       'int:0:', $id,        -1, XARVAR_NOT_REQUIRED)) return;

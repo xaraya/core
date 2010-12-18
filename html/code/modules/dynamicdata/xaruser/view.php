@@ -16,9 +16,9 @@
  * This is a standard function to provide an overview of all of the items
  * available from the module.
  *
- * @return array
+ * @return string output display string
  */
-function dynamicdata_user_view($args)
+function dynamicdata_user_view(Array $args=array())
 {
     // Old-style arguments
     if(!xarVarFetch('objectid', 'int',   $objectid,  NULL, XARVAR_DONT_SET)) {return;}

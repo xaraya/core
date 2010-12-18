@@ -22,8 +22,8 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="#xarModURL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#"
-                                title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
+                                <xar:var name="label">Show this group</xar:var>
+                                <a href="#xarModURL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
                                 #xarVarPrepForDisplay($parents[$i]['parentname'])#</a>
                             </li>
                         </xar:if>
@@ -77,8 +77,10 @@
                     <input type="hidden" name="id" id="id" value="#$id#"/>
                     <input type="hidden" name="confirmation" id="confirmation" value="1"/>
                     <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#"/>
-                    <input type="submit" value="#xarML('Delete')#" class="xar-margin-thickright"/>
-                    <input type="button" value="#xarML('Cancel')#" onclick="document.location='&xar-modurl-roles-admin-display;&amp;id=#$id#';" class="xar-margin-thickleft"/>
+                    <xar:var name="label">Delete</xar:var>
+                    <input type="submit" value="#$label#" class="xar-margin-thickright"/>
+                    <xar:var name="label">Cancel</xar:var>
+                    <input type="button" value="#$label#" onclick="document.location='&xar-modurl-roles-admin-display;&amp;id=#$id#';" class="xar-margin-thickleft"/>
                 </div>
             </form>
         </xar:if>

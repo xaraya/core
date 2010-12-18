@@ -61,13 +61,15 @@
         <p>Further information on the Authsystem Authentication module can be found at:</p>
         <ul>
             <li>Authsystem Module Extension page at 
-            <a title="#xarML('Authsystem Module - Xaraya Extension 42')#"
+            <xar:var name="label">Authsystem Module - Xaraya Extension 42</xar:var>
+            <a title="#$label#"
             href="http://www.xaraya.com/index.php/release/42.html">Xaraya Extension and
             Releases</a>. Click on Version History tab at the bottom to get the latest release
             information.</li>
             <li>Related tutorials and documentation on Authsystem module at 
+            <xar:var name="label">Related documentation on Authsystem</xar:var>
             <a href="http://www.xaraya.com/index.php/keywords/authsystem/"
-            title="#xarML('Related documentation on Authsystem')#">Xaraya Documentation.</a></li>
+            title="#$label#">Xaraya Documentation.</a></li>
         </ul>
         <p class="xar-sub">
         <strong>&#160;Authentication Module - Overview</strong>

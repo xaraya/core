@@ -14,12 +14,13 @@
 /**
  * delete fields for an item - hook for ('item','delete','API')
  *
- * @param $args['objectid'] ID of the object
- * @param $args['extrainfo'] extra information
- * @return bool true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['objectid'] ID of the object<br/>
+ *        string   $args['extrainfo'] extra information
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
-function dynamicdata_adminapi_deletehook($args)
+function dynamicdata_adminapi_deletehook(Array $args=array())
 {
     extract($args);
 

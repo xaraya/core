@@ -34,6 +34,7 @@ function roles_user_changelanguage()
         // that's the whole point of exceptions.
     }
     xarController::redirect($return_url);
+    return true;
 }
 
 ?>

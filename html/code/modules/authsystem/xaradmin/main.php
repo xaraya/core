@@ -1,6 +1,6 @@
 <?php
 /**
- * Main admin function
+ * Main entry point for the admin interface of this module
  *
  * @package modules
  * @subpackage authsystem module
@@ -12,12 +12,17 @@
  * @link http://xaraya.com/index.php/release/42.html
  */
 /**
- * the main administration function
+ * The main admin interface function of this module.
+ * This function is the default function for the admin interface, and is called whenever the module is
+ * initiated with only an admin type but no func parameter passed.  
+ * The function displays the module's overview page, or redirects to the modifyconfig page if overviews are disabled.
  *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
+ * @return mixed output display string or boolean true if redirected
  */
 function authsystem_admin_main()
 {
+    // Security
     if (!xarSecurityCheck('EditAuthsystem')) return;
    
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));

@@ -19,6 +19,9 @@
  */
 function roles_admin_removeprivilege()
 {
+    // Security
+    if (!xarSecurityCheck('EditRoles')) return;
+    
     if (!xarVarFetch('privid',       'int:1:', $privid)) return;
     if (!xarVarFetch('roleid',       'int:1:', $roleid)) return;
     if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
@@ -44,8 +47,6 @@ function roles_admin_removeprivilege()
             return xarTplModule('roles','user','errors',array('layout' => 'remove_privilege'));
         }
 
-    // Security Check
-    if (!xarSecurityCheck('EditRoles')) return;
     // some info for the template display
     $rolename = $role->getName();
     $privname = $priv->getName();
@@ -81,6 +82,7 @@ function roles_admin_removeprivilege()
 
         // redirect to the next page
         xarController::redirect(xarModURL('roles', 'admin', 'showprivileges', array('id' => $roleid)));
+        return true;
     }
 }
 

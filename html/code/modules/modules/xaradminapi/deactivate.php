@@ -16,11 +16,12 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @param regid module's registered id
- * @returns bool
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['regid'] module's registered id
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function modules_adminapi_deactivate ($args)
+function modules_adminapi_deactivate(Array $args=array())
 {
     extract($args);
 

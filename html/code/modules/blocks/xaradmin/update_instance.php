@@ -22,16 +22,15 @@
  * @param $args['template'] the template of the block instance
  * @param $args['content'] the new content of the block
  * @param $args['refresh'] the new refresh rate of the block
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  */
 function blocks_admin_update_instance()
 {
     if (!xarVarFetch('bid', 'int:1:', $bid, 0, XARVAR_NOT_REQUIRED)) return;
-    if (empty($bid)) return xarResponse::notFound();
     if (!xarVarFetch('tab', 'pre:trim:lower:str:1:', $tab, 'config', XARVAR_NOT_REQUIRED)) return;
 
-    // Security Check
+    // Security
+    if (empty($bid)) return xarResponse::notFound();
     if (!xarSecurityCheck('EditBlocks', 0, 'Instance')) {return;}
 
     if (!xarSecConfirmAuthKey())
@@ -236,7 +235,8 @@ function blocks_admin_update_instance()
     $return_url =  !empty($blockinfo['return_url']) ? $blockinfo['return_url'] :
         xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $bid, 'tab' => $tab));
 
-    return xarController::redirect($return_url);
+    xarController::redirect($return_url);
+    return true;
 
 }
 ?>

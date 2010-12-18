@@ -43,13 +43,6 @@ class ModuleNotActiveException extends xarExceptions
 {
     protected $message = 'The module "#(1)" was called, but it is not active.';
 }
-/**
-**/
-class ModuleBadVersionException extends NotFoundExceptions
-{
-    protected $message = 'A module does not have the correct version';
-}
-
 
 /**
  * State of modules
@@ -209,14 +202,15 @@ class xarMod extends Object implements IxarMod
      * Initialize
      *
      */
-    static function init($args)
+    static function init(Array $args=array())
     {
         self::$genShortUrls = $args['enableShortURLsSupport'];
         self::$genXmlUrls   = $args['generateXMLURLs'];
 
         // Register the events for this subsystem
-        xarEvents::register('ModLoad');
-        xarEvents::register('ModAPILoad');
+        // events are now registered during modules module init        
+        //xarEvents::register('ModLoad');
+        //xarEvents::register('ModAPILoad');
 
         // Modules Support Tables
         $prefix = xarDB::getPrefix();
@@ -976,7 +970,7 @@ class xarMod extends Object implements IxarMod
         
         // Not the correct version - throw exception unless we are upgrading
         if (!self::checkVersion($modName) && !xarVarGetCached('Upgrade', 'upgrading')) {
-            throw new ModuleBadVersionException($modName);
+            die('The core module "' . $modName . '" does not have the correct version. Please run the upgrade routine by clicking <a href="upgrade.php">here</a>');
         }
         
         // Load the module files
@@ -1005,7 +999,12 @@ class xarMod extends Object implements IxarMod
         self::loadDbInfo($modName, $modDir);
 
         // Module loaded successfully, trigger the proper event
-        xarEvents::trigger('ModLoad', $modName);
+        //xarEvents::trigger('ModLoad', $modName);
+        if (preg_match('/(.*)?api$/', $modType)) {
+            xarEvents::notify('ModApiLoad', $modName);
+        } else {
+            xarEvents::notify('ModLoad', $modName);
+        }        
         return true;
     }
 
@@ -1053,7 +1052,7 @@ class xarMod extends Object implements IxarMod
      * @param moduleName string the module we want to check access for
      * @param action string the action we want to take on this module (view/admin) // CHECKME: any others we really use on module level ?
      * @param roleid mixed override the current user or null
-     * @return bool true if access
+     * @return boolean true if access
      */
     static function checkAccess($moduleName, $action, $roleid = null)
     {

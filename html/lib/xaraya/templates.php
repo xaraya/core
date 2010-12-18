@@ -43,20 +43,20 @@ sys::import('xaraya.variables.config');
  * @global string xarTpl_JavaScript
  * @param  array  $args                  Elements: defaultThemeName, enableTemplateCaching
  * @throws FileNotFoundException
- * @return bool true
+ * @return boolean true
 **/
 function xarTpl_init(&$args)
 {
     // This is the theme directory, solo (aka, themename)
     $GLOBALS['xarTpl_defaultThemeDir'] = $args['defaultThemeDir'];
     xarTplSetThemeDir($args['defaultThemeDir']);
-    
+
     // This should be always true or better defined if it's a client thing (js internal code generation for example)
     $GLOBALS['xarTpl_generateXMLURLs'] = $args['generateXMLURLs'];
 
     // set when page template root tag is compiled (dtd attribute value)
     $GLOBALS['xarTpl_doctype'] = '';
-    
+
     if (!xarTplSetPageTemplateName('default')) {
         // If there is no page template, we can't show anything
         throw new FileNotFoundException('default.xt',"xarTpl_init: Nonexistent #(1) page in theme directory '". xarTplGetThemeDir() ."'");
@@ -85,7 +85,7 @@ function xarTplGetThemeName()
     // If it is not set, set it return the default theme.
     // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
     if (method_exists('xarModVars','Get')) {
-        $defaultTheme = xarModVars::get('themes', 'default');
+        $defaultTheme = xarModVars::get('themes', 'default_theme');
         if (!empty($defaultTheme)) xarTplSetThemeName($defaultTheme);
     }
     assert('isset($GLOBALS["xarTpl_themeName"]; /* Themename could not be set properly */');
@@ -99,12 +99,12 @@ function xarTplGetThemeName()
  * @global string xarTpl_themesBaseDir
  * @global string xarTpl_themeName
  * @param  string $themeName Themename to set
- * @return bool
+ * @return boolean
  */
 function xarTplSetThemeName($themeName)
 {
     $currentBase = xarConfigVars::get(null, 'Site.BL.ThemesDirectory','themes');
-    
+
     assert('$themeName != "" && $themeName{0} != "/"');
     if (!file_exists($currentBase.'/'.$themeName)) {
         return false;
@@ -121,7 +121,7 @@ function xarTplSetThemeName($themeName)
  * @global string xarTpl_themesBaseDir
  * @global string xarTpl_themeDir
  * @param  string themeDir
- * @return bool
+ * @return boolean
  * @todo   on removal of the global, we need to bring in standard caching here!!
  */
 function xarTplSetThemeDir($themeDir)
@@ -183,7 +183,7 @@ function xarTplGetPageTemplateName()
  * 
  * @global xarTpl_pageTemplateName string
  * @param  string $templateName Name of the page template
- * @return bool
+ * @return boolean
  */
 function xarTplSetPageTemplateName($templateName)
 {
@@ -213,7 +213,7 @@ function xarTplGetDoctype()
  * 
  * @global string xarTpl_doctype
  * @param  string $doctypeName Identifier string of the doctype
- * @return bool
+ * @return boolean
  */
 function xarTplSetDoctype($doctypeName)
 {
@@ -230,7 +230,7 @@ function xarTplSetDoctype($doctypeName)
  * @param  string $title
  * @param  string $module
  * @todo   this needs to be moved into the templating domain somehow
- * @return bool
+ * @return boolean
  */
 function xarTplSetPageTitle($title = NULL, $module = NULL)
 {
@@ -294,7 +294,7 @@ function xarTplGetPageTitle()
  * @param  string $type             Either 'src' or 'code'
  * @param  string $data             pathname or raw JavaScript
  * @param  string $index            optional (unique key and/or ordering)
- * @return bool
+ * @return boolean
  */
 function xarTplAddJavaScript($position, $type, $data, $index = '')
 {
@@ -663,7 +663,7 @@ function xarTpl_renderPage($mainModuleOutput, $pageTemplate = NULL)
  * 
  * @param  array  $blockInfo  Information on the block
  * @param  string $templateName string
- * @return bool xarTpl__executeFromFile($sourceFileName, $blockInfo)
+ * @return boolean xarTpl__executeFromFile($sourceFileName, $blockInfo)
  *
  * @todo the search logic for the templates can perhaps use the private function?
  * @todo fallback to some internal block box template?
@@ -991,7 +991,7 @@ function xarTpl_outputTemplateFilenames()
  * 
  * @param  string $sourceFileName
  * @param  string $tplOutput
- * @return bool found header content
+ * @return boolean found header content
  *
  * @todo it is possible that the first regex <!DOCTYPE[^>].*]> is too
  *       greedy in more complex xml documents and others.

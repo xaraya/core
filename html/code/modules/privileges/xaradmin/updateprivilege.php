@@ -16,6 +16,9 @@
  */
 function privileges_admin_updateprivilege()
 {
+    // Security
+    if (!xarSecurityCheck('EditPrivileges')) return; 
+    
 // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
 
@@ -81,6 +84,7 @@ function privileges_admin_updateprivilege()
 
 // redirect to the next page
     xarController::redirect(xarModURL('privileges', 'admin', 'modifyprivilege', array('id' => $id)));
+    return true;
 }
 
 ?>

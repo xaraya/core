@@ -16,10 +16,11 @@
 /**
  * modifyRealm - modify an existing realm
  * @param id of the realm to be modified
+ * @return array data for the template display
  */
 function privileges_admin_modifyrealm()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('EditPrivileges',0,'Realm')) return;
 
     if (!xarVarFetch('id',       'int', $id,      '',      XARVAR_NOT_REQUIRED)) {return;}

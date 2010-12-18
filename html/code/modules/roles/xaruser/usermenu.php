@@ -14,8 +14,9 @@
  * Show the user menu
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return string output display string
  */
-function roles_user_usermenu($args)
+function roles_user_usermenu(Array $args=array())
 {
     if (!xarSecurityCheck('ViewRoles')) return;
     extract($args);

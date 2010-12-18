@@ -1,6 +1,6 @@
 <?php
 /**
- * Exceptions defined by this subsystem
+ * Version Object
  *
  * @package core
  * @subpackage version
@@ -80,8 +80,8 @@ class xarVersion extends Object
  */
     public static function assemble($versionnumber=0)
     {
-        $major = (int)($args['versionnumber']/100000000);
-        $versionnumber = $args['versionnumber'] - $major * 100000000;
+        $major = (int)($versionnumber/100000000);
+        $versionnumber = $versionnumber - $major * 100000000;
         $minor = (int)($versionnumber/1000000);
         $versionnumber = $versionnumber - $minor * 1000000;
         $micro = (int)($versionnumber/10000);

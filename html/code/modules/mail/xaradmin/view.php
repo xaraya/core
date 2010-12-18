@@ -13,9 +13,9 @@
  *
  * @author Marcel van der Boom <marcel@xaraya.com>
  */
-function mail_admin_view($args)
+function mail_admin_view(Array $args=array())
 {
-     // Security Check
+     // Security
     if (!xarSecurityCheck('AdminMail')) return;
      
     // Retrieve the object which holds our queue definition
@@ -28,6 +28,9 @@ function mail_admin_view($args)
     }
 }
 
+/**
+ * @return array data for the template display
+ */
 function OfferCreate($qDef = null)
 {
     $data['authid'] = xarSecGenAuthKey();

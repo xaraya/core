@@ -12,17 +12,16 @@
 /**
  * Update hooks by hook module
  *
- * @param none
  *
  * @author Xaraya Development Team
  */
 function modules_admin_updatehooks()
 {
-// Security Check
+    // Security
     if(!xarSecurityCheck('ManageModules')) {return;}
 
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        //return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
     // Curhook contains module name
     if (!xarVarFetch('curhook', 'str:1:', $curhook)) {return;}
@@ -33,11 +32,18 @@ function modules_admin_updatehooks()
         throw new Exception($msg);
     }
 
+    if (!xarVarFetch('subjects', 'array', $subjects, null, XARVAR_NOT_REQUIRED)) return;
+  
+    
+
+    $data = array();
     // Only update if the module is active.
     $modinfo = xarMod::getInfo($regId);
     if (!empty($modinfo) && xarModIsAvailable($modinfo['name'])) {
-        // Pass to API
-        if(!xarMod::apiFunc('modules', 'admin', 'updatehooks', array('regid' => $regId))) return;
+        $data['regid'] = $regId;
+        if (!empty($subjects))
+            $data['subjects'] = $subjects;
+        if(!xarMod::apiFunc('modules', 'admin', 'updatehooks', $data)) return;
     }
 
     if (!xarVarFetch('return_url', 'isset', $return_url, '', XARVAR_NOT_REQUIRED)) {return;}

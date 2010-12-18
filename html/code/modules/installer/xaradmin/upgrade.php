@@ -10,8 +10,14 @@
  * @link http://xaraya.com/index.php/release/200.html
  */
 
+/**
+ * @return array data for the template display
+ */
 function installer_admin_upgrade()
 {
+    // Security
+    if (!xarSecurityCheck('AdminInstaller')) return; 
+    
     if(!xarVarFetch('phase','int', $data['phase'], 1, XARVAR_DONT_SET)) {return;}
 
     // Version information
@@ -28,6 +34,24 @@ function installer_admin_upgrade()
         $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);
         $data['upgradable'] = xarVersion::compare($fileversion, '2.0.0') > 0;
     }
+    
+    // Core modules
+    $data['coremodules'] = array(
+                                42    => 'authsystem',
+                                68    => 'base',
+                                13    => 'blocks',
+                                182   => 'dynamicdata',
+                                200   => 'installer',
+                                771   => 'mail',
+                                1     => 'modules',
+                                1098  => 'privileges',
+                                27    => 'roles',
+                                17    => 'themes',
+    );
+    $data['versions'] = array(
+                                '2.1.1',
+    );
+    
         
     if ($data['phase'] == 1) {
         $data['active_step'] = 1;
@@ -35,23 +59,20 @@ function installer_admin_upgrade()
     } elseif ($data['phase'] == 2) {
         $data['active_step'] = 2;
 
-        switch ($fileversion) {
-            case '2.1.0':
-            if (!Upgrader::loadFile('upgrades/210/main.php')) {
-                $data['upgrade']['errormessage'] = Upgrader::$errormessage;
-                return $data;
-            }
-            $data = array_merge($data,main_210());
+        // Get the list of version upgrades
+        Upgrader::loadFile('upgrades/upgrade_list.php');
+        $upgrade_list = installer_adminapi_get_upgrade_list();
 
-            case '2.2.0':
-            if (!Upgrader::loadFile('upgrades/220/main.php')) {
+        // Run the upgrades
+        foreach ($upgrade_list as $upgrade_version) {
+            if (!Upgrader::loadFile('upgrades/' . $upgrade_version .'/main.php')) {
                 $data['upgrade']['errormessage'] = Upgrader::$errormessage;
                 return $data;
             }
-            $data = array_merge($data,main_220());
+            $upgrade_function = 'main_upgrade_' . $upgrade_version;
+            $data = array_merge($data,$upgrade_function());
         }
-        
-        
+
     } elseif ($data['phase'] == 3) {
         $data['active_step'] = 3;
         // Align the db and filesystem version info
@@ -59,29 +80,31 @@ function installer_admin_upgrade()
         xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
         xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
         xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
+        
+        sys::import('xaraya.version');
+        // Get the list of version checks
+        Upgrader::loadFile('checks/check_list.php');
+        $check_list = installer_adminapi_get_check_list();
 
-        switch ($fileversion) {
-            case '2.1.0':
-            if (!Upgrader::loadFile('checks/210/main.php')) {
-                $data['check']['errormessage'] = Upgrader::$errormessage;
-                return $data;
+        // Run the checks
+        $checks = array();
+        foreach ($check_list as $abbr_version => $check_version) {
+            if (!Upgrader::loadFile('checks/' . $abbr_version .'/main.php')) {
+                $checks[$check_version]['message'] = xarML('There are no checks for version #(1)', $check_version);
+                $checks[$check_version]['tasks'] = array();
+                //return $data;
+            } else {
+                $check_function = 'main_check_' . $abbr_version;
+                $result = $check_function();
+                $checks[$check_version] = $result['check'];
             }
-            $data = array_merge($data,main_210());
-
-            case '2.2.0':
-            if (!Upgrader::loadFile('checks/220/main.php')) {
-                $data['check']['errormessage'] = Upgrader::$errormessage;
-                return $data;
-            }
-            $data = array_merge($data,main_220());
         }
-
+        $data['checks'] =& $checks;
 
     } elseif ($data['phase'] == 4) {
         $data['active_step'] = 4;
 //        xarController::redirect(xarServer::getCurrentURL(array('phase' => 4)));
     }
-
     return $data;
 }
 

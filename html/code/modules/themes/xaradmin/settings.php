@@ -16,7 +16,7 @@
  */
 function themes_admin_settings()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminThemes')) return;
 
     // form parameters
@@ -34,6 +34,7 @@ function themes_admin_settings()
     if (!xarModUserVars::set('themes', 'useicons', $useicons)) return;
 
     xarController::redirect(xarModURL('themes', 'admin', 'list', array('regen' => $regen = 1)));
+    return true;
 }
 
 ?>

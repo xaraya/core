@@ -15,16 +15,14 @@
  * Provides extra processing to roles user account function for user_settings
  *
  * @author Chris Powis <crisp@xaraya.com>
- * @param $args['id'] id of the user to get settings for (default current user)
- * @param $args['phase'] phase to process (valid phases are showform, checkinput, and updateitem)
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['id'] id of the user to get settings for (default current user)<br/>
+ *        string   $args['phase'] phase to process (valid phases are showform, checkinput, and updateitem)<br/>
  * NOTE: If you provide this function in your module, you must include return values for all phases
- * @param $args['object'] user_settings object (default roles_user_settings)
- * @returns mixed
- * @return array on showform
- * @return bool on checkinput, invalid = false, valid = true
- * @return bool on updateitem, error = false, success = true
+ *        string   $args['object'] user_settings object (default roles_user_settings)
+ * @return mixed array on showform, bool on checkinput, invalid = false, valid = true, bool on updateitem, error = false, success = true
  */
-function roles_userapi_usermenu($args)
+function roles_userapi_usermenu(Array $args=array())
 {
     // not logged in?
     if (!xarUserIsLoggedIn()){

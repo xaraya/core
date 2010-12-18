@@ -14,9 +14,10 @@
  * Perform standard module removal actions
  *
  * @author Marc Lutolf (mfl@netspan.ch)
+ * @param array    $args array of optional parameters<br/>
  * @return boolean result of action
 **/
-function modules_adminapi_standarddeinstall($args)
+function modules_adminapi_standarddeinstall(Array $args=array())
 {
     extract($args);
     if (!isset($module)) return false;
@@ -68,13 +69,17 @@ function modules_adminapi_standarddeinstall($args)
     } catch (Exception $e) {}
 
     // Remove hooks
+    #
+    /* Since this is hooks, the ModuleRemove subject should deal with it
+    xarHooks::notify('ModuleRemove', array('module' => $module, 'id' => $module));
     $modInfo = xarMod::getBaseInfo($module);
     $modId = $modInfo['systemid'];
     $query = "DELETE FROM " . $xartables['hooks'] .
              " WHERE s_module_id = " . $modId .
              " OR t_module_id = " . $modId;
     $dbconn->Execute($query);
-
+    */
+    
     // Remove modvars, masks and privilege instances
     xarRemoveMasks($module);
     xarRemoveInstances($module);

@@ -19,14 +19,16 @@
  * @author Xaraya Development Team
  * @access public
  * @param  id the module id
- * @returns mixed
- * @return true on success
+ * @return mixed true on success
  */
 
 // Remove/Deactivate/Install GUI functions are basically copied and pasted versions...
 // Refactor later on
 function modules_admin_remove ()
 {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
      // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));

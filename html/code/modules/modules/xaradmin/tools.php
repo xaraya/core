@@ -14,15 +14,14 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @param none
- * @returns array
+ * @return array data for the template display
  * @todo some facelift
  */
 function modules_admin_tools()
 {
-    
-    // Security check - not needed here
-
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+        
     $data = array();
     
 /*     if (!xarVarFetch('id', 'id', $id)) {return;} */

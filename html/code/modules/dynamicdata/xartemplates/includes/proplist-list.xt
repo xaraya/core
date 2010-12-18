@@ -162,7 +162,8 @@
             <input type="hidden" name="objectid" id="objectid" value="#$objectid#"/>
             <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>
             <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
-            <input type="submit" value="#xarML('Update Properties')#"/>
+            <xar:var name="label">Update Properties</xar:var>
+            <input type="submit" value="#$label#"/>
         </div>
     </fieldset>
 </xar:template>

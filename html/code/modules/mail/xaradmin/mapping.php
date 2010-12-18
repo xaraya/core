@@ -15,9 +15,13 @@
  * This shows the mapping screen for mapping
  * messages onto a queue. The mapping is done
  * based on (simple) rules.
+ * @return array data for the template display
 */
-function mail_admin_mapping($args)
+function mail_admin_mapping(Array $args=array())
 {
+     // Security
+    if (!xarSecurityCheck('AdminMail')) return;
+     
     // Construct the list of queues.
     $queues = xarMod::apiFunc('mail','user','getitemtypes');
     $data = array(); 

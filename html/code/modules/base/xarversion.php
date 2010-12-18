@@ -1,6 +1,6 @@
 <?php
 /**
- * Base Module Initialisation
+ * Configuration information for the Base module
  *
  * @package modules
  * @subpackage base module
@@ -14,12 +14,14 @@
  * @author John Robeson
  * @author Greg Allan
 */
+
 /* WARNING
  * Modification of this file is not supported.
  * Any modification is at your own risk and
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
+ 
 $modversion['name']               = 'Base';
 $modversion['id']                 = '68';
 $modversion['displayname']        = xarML('Base');

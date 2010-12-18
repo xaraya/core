@@ -19,11 +19,13 @@
  * @author Marty Vance
  * @access public 
  * @param id $ the theme id    to deactivate
- * @returns    
- * @return 
+ * @return boolean true on success, false on failure
  */
 function themes_admin_deactivate()
 { 
+    // Security
+    if (!xarSecurityCheck('AdminThemes')) return; 
+    
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
@@ -50,7 +52,6 @@ function themes_admin_deactivate()
     // Hmmm, I wonder if the target adding is considered a hack
     // it certainly depends on the implementation of xarModUrl
     xarController::redirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
-
     return true;
 }
 ?>

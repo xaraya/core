@@ -17,10 +17,7 @@
  *
  * @author  John Cox <admin@dinerminor.com>
  * @access  public
- * @param   none
- * @return  nothing
- * @throws  no exceptions
- * @todo    nothing
+ * @return  void
 */
 // Inherit properties and methods from MenuBlock class
 sys::import('xaraya.structures.containers.blocks.menublock');
@@ -60,6 +57,15 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                                         'url' => '[base]&page=docs',
                                         'label'=> 'Documentation',
                                         'title' => 'General Documentation',
+                                        'visible' => 1,
+                                        'menulinks' => array(),
+                                    ),
+                                    array(
+                                        'id' => 1,
+                                        'name' => 'eventsystem',
+                                        'url' => '[base]page=events',
+                                        'label'=> 'Event System',
+                                        'title' => 'Event Messaging System Overview',
                                         'visible' => 1,
                                         'menulinks' => array(),
                                     ),

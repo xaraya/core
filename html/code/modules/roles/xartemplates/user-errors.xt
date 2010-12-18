@@ -5,7 +5,8 @@
     <div class="xar-mod-body">
         <fieldset>
             <legend>Roles Problem</legend>
-            <img src="#xarTplGetImage('user-error.png','base')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon"/>
+            <xar:var name="label">System Message</xar:var>
+            <img src="#xarTplGetImage('user-error.png','base')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
             <xar:if condition="!isset($layout)">
                 <div style="margin-top: 20px; margin-left: 20px">
                     No error message is available.

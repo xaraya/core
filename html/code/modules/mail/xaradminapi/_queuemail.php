@@ -17,8 +17,9 @@
  * called directly. Its arguments are classified on a need-to-know
  * basis :-)
  * @author  John Cox <niceguyeddie@xaraya.com>
+ * @param array    $args array of optional parameters<br/>
  */
-function mail_adminapi__queuemail($args)
+function mail_adminapi__queuemail(Array $args=array())
 {
     // see if we have a scheduler job running to send queued mail
     $job = xarMod::apiFunc('scheduler','user','get',

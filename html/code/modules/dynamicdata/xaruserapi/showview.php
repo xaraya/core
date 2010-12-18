@@ -13,11 +13,11 @@
 // TODO: move this to some common place in Xaraya (base module ?)
  * list some items in a template
  *
- * @param $args array containing the items or fields to show
- * @return string containing the HTML (or other) text to output in the BL template
+ * @param array    $args array of optional parameters<br/>
+ * @return string output display string
  */
 
-function dynamicdata_userapi_showview($args)
+function dynamicdata_userapi_showview(Array $args=array())
 {
     extract($args);
 

@@ -14,13 +14,14 @@
 /**
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @param $args['module'] module directory in var/messaging
- * @param $args['template'] name of the email type which has apair of -subject and -message files
- * @param $args['subject'] new subject
- * @param $args['message'] new message
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['module'] module directory in var/messaging<br/>
+ *        string   $args['template'] name of the email type which has apair of -subject and -message files<br/>
+ *        string   $args['subject'] new subject<br/>
+ *        string   $args['message'] new message
  * @return array of strings of file contents read
  */
-function mail_adminapi_updatemessagestrings($args)
+function mail_adminapi_updatemessagestrings(Array $args=array())
 {
     extract($args);
     if (empty($template)) throw new EmptyParameterException('template');

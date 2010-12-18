@@ -1,6 +1,6 @@
 <?php
 /**
- * Initialise the Authsystem module
+ * Configuration information for the Authsystem module
  *
  * @package modules
  * @subpackage authsystem module
@@ -20,6 +20,7 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
+ 
 $modversion['name']               = 'authsystem';
 $modversion['displayname']        = xarML('Authsystem');
 $modversion['id']                 = '42';

@@ -18,8 +18,9 @@
  * available from the module.
  *
  * @param $args an array of arguments (if called by other modules)
+ * @return string output display string
  */
-function dynamicdata_user_display($args)
+function dynamicdata_user_display(Array $args=array())
 {
     extract($args);
 

@@ -23,7 +23,8 @@
  *
  * @access public
  * @param create
- * @return bool
+ * @return boolean
+ * @return mixed boolean after redirect or output display string if invalid data submitted
  * @todo make confirm password work
  * @todo remove URL field from users table
  * @todo normalize user's table
@@ -195,6 +196,7 @@ function installer_admin_create_administrator()
     xarAssignPrivilege('GeneralLock','Users');
 
     xarController::redirect(xarModURL('installer', 'admin', 'security',array('install_language' => $install_language)));
+    return true;
 }
 
 

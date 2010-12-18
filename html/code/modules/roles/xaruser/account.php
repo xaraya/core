@@ -16,6 +16,7 @@
  * Currently does not work, due to design
  * of menu not in place, and DD not in place.
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return array data for the template display
  * @todo   Finish this function.
  */
 function roles_user_account()
@@ -174,7 +175,9 @@ function roles_user_account()
                 $data['formdata'] = $formdata;
             }
             $object->getItem(array('itemid' => $id));
-            $data['object'] = $object;
+            $data['object'] = $object;   
+            // Bug 6566: name property only applies to roles_users object  
+            $data['object']->properties['name']->display_layout = 'single';
         }
         // set some sensible defaults for common stuff
         if (empty($data['formaction'])) {
@@ -194,7 +197,6 @@ function roles_user_account()
         }
         $data['menutabs'] = $menutabs;
         
-        $data['object']->properties['name']->display_layout = 'single';
     }
     $data['id']          = xarUserGetVar('id');
     $data['name']         = xarUserGetVar('name');

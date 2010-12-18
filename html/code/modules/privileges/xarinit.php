@@ -18,7 +18,7 @@ sys::import('xaraya.tableddl');
  * Initialise the privileges module
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  *
- * @returns bool
+ * @return boolean true on success, false on failure
  * @throws DATABASE_ERROR
  */
 function privileges_init()
@@ -266,13 +266,13 @@ function privileges_activate()
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function privileges_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0.0':
+        default:
       break;
     }
     return true;
@@ -281,7 +281,7 @@ function privileges_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return bool
+ * @return boolean
  */
 function privileges_delete()
 {

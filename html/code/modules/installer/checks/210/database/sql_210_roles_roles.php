@@ -1,5 +1,7 @@
 <?php
 /**
+ * Check SQL file
+ *
  * @package modules
  * @subpackage installer module
  * @category Xaraya Web Applications Framework
@@ -21,7 +23,7 @@ function sql_210_roles_roles()
         Checking for required roles objects
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

@@ -16,13 +16,12 @@
  *
  * @author John Cox
  * @access public
- * @param none
- * @return array Information of recent releases from http://www.xaraya.com/
+ * @return array data for the template display
  * @todo change feed url once release module is moved
  */
 function base_admin_release()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('ManageBase')) return;
 
     //number of releases to show

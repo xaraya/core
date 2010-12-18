@@ -13,14 +13,15 @@
  */
 /**
  * @desct
- * @param   userurl to check
- * @param   truecurenturl calling url
- * @param   redirecturl page to return user
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['userurl'] to check<br/>
+ *        string   $args['truecurenturl'] calling url<br/>
+ *        string   $args['redirecturl'] page to return user
  * @return  externalurl boolean true if external URL
  */
-function roles_userapi_parseuserhome($args)
+function roles_userapi_parseuserhome(Array $args=array())
 {
-    extract ($args);
+    extract($args);
     if(!isset($url) || !isset($truecurrenturl)) {
         throw new BadParameterException(null,'Wrong arguments to roles_userapi_userhome.');
     }

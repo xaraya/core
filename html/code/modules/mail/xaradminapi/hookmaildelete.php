@@ -16,10 +16,11 @@
  * This is a hook function that is called to send mail on deletion of an item
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @param  $ 'modid' is the module that is sending mail.
- * @param  $ 'objectid' is the item deleted.
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['modid'] is the module that is sending mail.<br/>
+ *        integer  $args['objectid'] is the item deleted.
  */
-function mail_adminapi_hookmaildelete($args)
+function mail_adminapi_hookmaildelete(Array $args=array())
 {
     extract($args);
 

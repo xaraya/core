@@ -21,8 +21,7 @@ sys::import('xaraya.tableddl');
 /**
  * Initialise the base module
  *
- * @return bool
- * @throws DATABASE_ERROR
+ * @return boolean
  */
 function base_init()
 {
@@ -127,6 +126,7 @@ function base_init()
 
         // Let's commit this, since we're gonna do some other stuff
         $dbconn->commit();
+
     } catch (Exception $e) {
         $dbconn->rollback();
         throw $e;
@@ -205,7 +205,7 @@ function base_init()
     $systemArgs = array('enableShortURLsSupport' => false,
                         'generateXMLURLs' => false);
     xarMod::init($systemArgs);
-
+    
     // Installation complete; check for upgrades
     return base_upgrade('2.0.0');
 }
@@ -214,14 +214,14 @@ function base_init()
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function base_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0.0':
-      break;
+        default:
+        break;
     }
     return true;
 }
@@ -229,7 +229,7 @@ function base_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return bool
+ * @return boolean
  */
 function base_delete()
 {

@@ -20,12 +20,13 @@
  *
  * @author Xaraya Development Team
  * @param id the module id to initialise
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 function modules_admin_installall()
 {
-    // Security and sanity checks
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     //Testing it directly for now... Insert this back when it is put into the template
 //    if (!xarSecConfirmAuthKey()) return;
 
@@ -55,7 +56,6 @@ function modules_admin_installall()
     }
 
     xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL));
-
     return true;
 }
 

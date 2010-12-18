@@ -18,11 +18,13 @@
  * status message and returns true.
  * @author Marty Vance
  * @param id $ the theme id to initialise
- * @returns 
- * @return 
+ * @return boolean true on success, false on failure
  */
 function themes_admin_initialise()
 { 
+    // Security
+    if (!xarSecurityCheck('AdminThemes')) return; 
+    
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
@@ -40,7 +42,6 @@ function themes_admin_initialise()
     if (!isset($initialised)) return;
 
     xarController::redirect(xarModURL('themes', 'admin', 'list'));
-
     return true;
 } 
 

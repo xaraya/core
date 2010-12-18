@@ -14,12 +14,12 @@
  * Remove a module when the files are missing
  *
  * @author Xaraya Development Team
- * @param $args['regid'] the id of the module
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the id of the module
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function modules_adminapi_removemissing($args)
+function modules_adminapi_removemissing(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

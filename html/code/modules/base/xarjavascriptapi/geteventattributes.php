@@ -33,10 +33,9 @@
  * @author Jason Judge
  * @param $args[position] the location of the event trigger; defaults to 'body'
  * @param $args[type] the type of event trigger; several as a comma-separated list
- * @returns string
- * @return empty string
+ * @return string an empty string
  */ 
-function base_javascriptapi_geteventattributes($args)
+function base_javascriptapi_geteventattributes(Array $args=array())
 {
     extract($args);
 

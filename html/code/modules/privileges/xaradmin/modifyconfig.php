@@ -1,6 +1,7 @@
 <?php
 /**
- * Modify configuration of this module
+ * Modify the configuration settings of this module
+ *
  * @package modules
  * @subpackage privileges module
  * @category Xaraya Web Applications Framework
@@ -13,12 +14,14 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
- * modify configuration
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
 function privileges_admin_modifyconfig()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminPrivileges')) return;
+    
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('testergroup', 'int', $testergroup, xarModVars::get('privileges', 'testergroup'), XARVAR_NOT_REQUIRED)) return;

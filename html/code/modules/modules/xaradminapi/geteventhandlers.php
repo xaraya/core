@@ -13,8 +13,7 @@
  * Get the list of active event handlers
  *
  * @author Xaraya Development Team
- * @param none
- * @return bool null on exceptions, true on sucess to update
+ * @return boolean null on exceptions, true on sucess to update
  * @throws NO_PERMISSION
  */
 function modules_adminapi_geteventhandlers()

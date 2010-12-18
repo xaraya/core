@@ -15,8 +15,11 @@
 /**
  * migrate module items
  */
-function dynamicdata_util_migrate($args)
+function dynamicdata_util_migrate(Array $args=array())
 {
+    // Security
+    if (!xarSecurityCheck('AdminDynamicData')) return;
+
     extract($args);
 
     // the actual from-to mapping

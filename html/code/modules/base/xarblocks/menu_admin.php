@@ -17,10 +17,7 @@
  *
  * @author  John Cox <admin@dinerminor.com>
  * @access  public
- * @param   none
- * @return  nothing
- * @throws  no exceptions
- * @todo    nothing
+ * @return  void
 */
 sys::import('modules.base.xarblocks.menu');
 

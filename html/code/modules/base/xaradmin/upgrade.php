@@ -12,17 +12,16 @@
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
- * View recent module releases via central repository
+ * 
  *
  * @author John Cox
  * @access public
- * @param none
- * @return array Information of recent releases from http://www.xaraya.com/
+ * @return array data for the template display
  * @todo change feed url once release module is moved
  */
 function base_admin_upgrade()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminBase')) return;
     
     $fileversion = XARCORE_VERSION_NUM;

@@ -13,14 +13,14 @@
  * Update module information
  *
  * @author Xaraya Development Team
- * @param $args['regid'] the id number of the module to update
- * @param $args['displayname'] the new display name of the module
- * @param admincapable the whether the module shows an admin menu
- * @param usercapable the whether the module shows a user menu
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the id number of the module to update<br/>
+ *        string   $args['displayname'] the new display name of the module<br/>
+ *        string   $args['admincapable'] the whether the module shows an admin menu<br/>
+ *        string   $args['usercapable'] the whether the module shows a user menu
+ * @return boolean true on success, false on failure
  */
-function modules_adminapi_updateproperties($args)
+function modules_adminapi_updateproperties(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

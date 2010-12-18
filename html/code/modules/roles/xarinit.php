@@ -20,7 +20,7 @@
  * Initialise the roles module
  *
  * @access public
- * @return bool
+ * @return boolean
  * @throws DATABASE_ERROR
  */
 function roles_init()
@@ -246,13 +246,13 @@ function roles_activate()
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function roles_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0.0':
+        default:
             break;
     }
     return true;
@@ -261,7 +261,7 @@ function roles_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return bool
+ * @return boolean
  */
 function roles_delete()
 {

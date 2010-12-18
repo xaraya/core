@@ -16,6 +16,7 @@
  * This assumes the install.php and index.php are in the same directory.
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
 
 /**
@@ -29,7 +30,7 @@
  * @param dbPrefix
  * @param dbType
  * @param createDb
- * @todo better error checking on arguments
+ * @return array data for the template display
  */
 function installer_admin_phase5()
 {
@@ -201,6 +202,8 @@ function installer_admin_phase5()
     sys::import('xaraya.modules');
     sys::import('xaraya.hooks');
     sys::import('xaraya.blocks');
+    // load events so register functions work 
+    sys::import('xaraya.events');
 
     // 1. Load base and modules module
     $modules = array('base','modules');

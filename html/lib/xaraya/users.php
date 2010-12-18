@@ -51,7 +51,7 @@ define('XARUSER_LAST_RESORT', -3);
  * 
  * @global xarUser_authentication modules array
  * @param args[authenticationModules] array
- * @return bool true on success
+ * @return boolean true on success
  */
 function xarUser_init(Array &$args)
 {
@@ -72,14 +72,18 @@ function xarUser_init(Array &$args)
     xarMLS_setCurrentLocale(xarUserGetNavigationLocale());
     xarTplSetThemeName(xarUserGetNavigationThemeName());
 
+    // These events are now registered during authsystem module init
     // Register the UserLogin event
-    xarEvents::register('UserLogin');
+    //xarEvents::register('UserLogin');
     // Register the UserLogout event
-    xarEvents::register('UserLogout');
+    //xarEvents::register('UserLogout');
 
     return true;
 }
 
+/**
+ * @TODO <chris> do login and logout functions belong in here, or in authsystem ?
+**/
 /**
  * Log the user in
  *
@@ -87,7 +91,7 @@ function xarUser_init(Array &$args)
  * @param  string  $userName the name of the user logging in
  * @param  string  $password the password of the user logging in
  * @param  integer $rememberMe whether or not to remember this login
- * @return bool true if the user successfully logged in
+ * @return boolean true if the user successfully logged in
  * @throws EmptyParameterException, SQLException
  * @todo <marco> #1 here we could also set a last_logon timestamp
  */
@@ -181,8 +185,8 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
     //<jojodee> currently set in individual authsystem when success on login returned to it
 
     // User logged in successfully, trigger the proper event with the new userid
-    xarEvents::trigger('UserLogin',$userId);
-
+    //xarEvents::trigger('UserLogin',$userId);
+    xarEvents::notify('UserLogin', $userId);
     xarSession::delVar('privilegeset');
     return true;
 }
@@ -191,7 +195,7 @@ function xarUserLogIn($userName, $password, $rememberMe = 0)
  * Log the user out
  *
  * 
- * @return bool true if the user successfully logged out
+ * @return boolean true if the user successfully logged out
  */
 function xarUserLogOut()
 {
@@ -210,8 +214,9 @@ function xarUserLogOut()
     xarSessionDelVar('authenticationModule');
 
     // User logged out successfully, trigger the proper event with the old userid
-    xarEvents::trigger('UserLogout',$userId);
-
+    //xarEvents::trigger('UserLogout',$userId);
+    xarEvents::notify('UserLogout',$userId);
+    
     xarSession::delVar('privilegeset');
     return true;
 }
@@ -220,7 +225,7 @@ function xarUserLogOut()
  * Check if the user logged in
  *
  * 
- * @return bool true if the user is logged in, false if they are not
+ * @return boolean true if the user is logged in, false if they are not
  */
 function xarUserIsLoggedIn()
 {
@@ -242,7 +247,7 @@ function xarUserGetNavigationThemeName()
 
     if (xarUserIsLoggedIn() && (bool)xarModVars::get('themes', 'enable_user_menu')){
         $id = xarUserGetVar('id');
-        $userThemeName = xarModUserVars::get('themes', 'default', $id);
+        $userThemeName = xarModUserVars::get('themes', 'default_theme', $id);
         if ($userThemeName) $themeName=$userThemeName;
     }
 
@@ -260,7 +265,7 @@ function xarUserSetNavigationThemeName($themeName)
 {
     assert('$themeName != ""');
     // uservar system takes care of dealing with anynomous
-    xarModUserVars::set('themes', 'default', $themeName);
+    xarModUserVars::set('themes', 'default_theme', $themeName);
 }
 
 /**
@@ -297,7 +302,7 @@ function xarUserGetNavigationLocale()
  *
  * 
  * @param  string $locale
- * @return bool true if the navigation locale is set, false if not
+ * @return boolean true if the navigation locale is set, false if not
  */
 function xarUserSetNavigationLocale($locale)
 {
@@ -435,7 +440,7 @@ function xarUserGetVar($name, $userId = NULL)
  * @param  string  $name  the name of the variable
  * @param  mixed   $value the value of the variable
  * @param  integer $userId integer user's ID
- * @return bool true if the set was successful, false if validation fails
+ * @return boolean true if the set was successful, false if validation fails
  * @throws EmptyParameterException, BadParameterException, NotLoggedInException, xarException, IDNotFoundException
  * @todo redesign the delegation to auth* modules for handling user variables
  * @todo some securitycheck for retrieving at least other users variables ?
@@ -502,7 +507,7 @@ function xarUserSetVar($name, $value, $userId = null)
  * @param  string $realPassword   the reference password to compare to
  * @param  string $userName       name of the corresponding user?
  * @param  string $cryptSalt      ?
- * @return bool true if the passwords match, false otherwise
+ * @return boolean true if the passwords match, false otherwise
  * @todo   weird duckling here
  * @todo   consider something strong than md5 here (not trivial wrt upgrading though)
  */
@@ -578,7 +583,7 @@ function xarUser__getAuthModule($userId)
  *
  * 
  * @param  string $name name of the variable to check
- * @return bool true if the variable is defined
+ * @return boolean true if the variable is defined
  * @todo   rething this.
  */
 function xarUser__isVarDefined($name)
@@ -602,7 +607,7 @@ function xarUser__isVarDefined($name)
 
 /**
  * 
- * @return bool
+ * @return boolean
  * @throws SQLException
  * @todo replace with some roles API ?
 **/

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Upgrade SQL file
+ *
  * @package modules
  * @subpackage installer module
  * @category Xaraya Web Applications Framework
@@ -22,7 +24,7 @@ function sql_210_04()
         Changing the name of the 'installation_rows' configuration to 'installation_addremove'
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

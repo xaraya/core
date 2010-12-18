@@ -12,8 +12,8 @@
             <fieldset>
                 <legend>Configuration Options</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="themedir"
-                    title="#xarML('The default directory for site themes - no trailing slash.')#" class="xar-form-label">
+                    <xar:var name="label">The default directory for site themes - no trailing slash.</xar:var>
+                    <label for="themedir" title="#$label#" class="xar-form-label">
                         Default Theme Directory:
                     </label>
                     <xar:set name="value">
@@ -23,7 +23,8 @@
                 </div>
                 <!--
                 <div class="xar-form-input-wrapper">
-                    <label for="dashboard" title="#xarML('Use the Admin Dashboard to manage all your Admin settings from a single page.')#" class="xar-form-label">
+                    <xar:var name="label">Use the Admin Dashboard to manage all your Admin settings from a single page.</xar:var>
+                    <label for="dashboard" title="#$label#" class="xar-form-label">
                         Enable the Admin Dashboard.
                     </label>
                     <xar:set name="checked">
@@ -32,7 +33,8 @@
                     <xar:data-input type="checkbox" name="usedashboard" checked="$checked"/>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="dashtemplate" title="#xarML('Template name for the dashboard - no trailing suffix, defaults to \'dashboard\'')#" class="xar-form-label">
+                    <xar:var name="label">Template name for the dashboard - no trailing suffix, defaults to 'dashboard'</xar:var>
+                    <label for="dashtemplate" title="#$label#" class="xar-form-label">
                         Dashboard Template name
                     </label>
                     <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100"/>&#160;(without the .xt extension) 
@@ -45,7 +47,8 @@
                 </div>
                 -->
                 <div class="xar-form-input-wrapper">
-                    <label for="adminpagemenu" title="#xarML('Use submenus in the page for admin functions.')#" class="xar-form-label">
+                    <xar:var name="label">Use submenus in the page for admin functions.</xar:var>
+                    <label for="adminpagemenu" title="#$label#" class="xar-form-label">
                         Enable InPage Admin SubMenus
                     </label>
                     <xar:set name="checked">

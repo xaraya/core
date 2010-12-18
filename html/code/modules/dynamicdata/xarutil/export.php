@@ -15,8 +15,11 @@
 /**
  * Export an object definition or an object item to XML
  */
-function dynamicdata_util_export($args)
+function dynamicdata_util_export(Array $args=array())
 {
+    // Security
+    if (!xarSecurityCheck('AdminDynamicData')) return;
+
     extract($args);
 
     if(!xarVarFetch('objectid', 'isset', $objectid, 1, XARVAR_DONT_SET)) {return;}

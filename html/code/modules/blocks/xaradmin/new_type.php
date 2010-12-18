@@ -14,11 +14,11 @@
  * Register New Block Type
  * @author Jim McDonald
  * @author Paul Rosania
+ * @return array data for the template display
  */
 function blocks_admin_new_type()
 {
-    // Security Check
-    // FIXME: not sure what the security check should be?
+    // Security
     if (!xarSecurityCheck('AdminBlocks', 0, 'Instance')) {return;}
 
     // Get parameters

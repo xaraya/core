@@ -20,22 +20,19 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @param none $
- * @return none
- * @throws none
- * @todo none
+ * @return array data for the template display
  */
 function roles_admin_testprivileges()
 {
+    // Security
+    if (!xarSecurityCheck('EditRoles')) return;
+
     // Get Parameters
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
     if (!xarVarFetch('pmodule', 'int', $modRegId, xarSecurity::PRIVILEGES_ALL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('name', 'str:1', $name, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('test', 'str:1:35:', $test, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-
-    // Security Check
-    if (!xarSecurityCheck('EditRoles')) return;
 
     // Call the Roles class and get the role
     $role = xarRoles::get($id);
@@ -113,8 +110,6 @@ function roles_admin_testprivileges()
     }
     $data['authid'] = xarSecGenAuthKey();
     return $data;
-    // redirect to the next page
-    xarController::redirect(xarModURL('roles', 'admin', 'new'));
 }
 
 ?>

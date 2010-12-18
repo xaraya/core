@@ -16,12 +16,14 @@
  *
  * @author Marty Vance
  * @access public
- * @param none
- * @returns array
+ * @return array data for the template display
  * @todo some facelift
  */
 function themes_admin_themesinfo()
 {
+    // Security
+    if (!xarSecurityCheck('EditThemes')) return; 
+    
     $data = array();
     
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return; 

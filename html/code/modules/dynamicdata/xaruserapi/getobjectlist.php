@@ -15,12 +15,13 @@
  * get a dynamic object list
  *
  * @author the DynamicData module development team
- * @param $args['objectid'] id of the object you're looking for, or
- * @param $args['moduleid'] module id of the item field to get
- * @param $args['itemtype'] item type of the item field to get
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['objectid'] id of the object you're looking for, or<br/>
+ *        integer  $args['moduleid'] module id of the item field to get<br/>
+ *        string   $args['itemtype'] item type of the item field to get
  * @return object a particular DataObjectList
  */
-function &dynamicdata_userapi_getobjectlist($args)
+function &dynamicdata_userapi_getobjectlist(Array $args=array())
 {
     return DataObjectMaster::getObjectList($args);
 }

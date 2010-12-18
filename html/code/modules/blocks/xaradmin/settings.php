@@ -18,7 +18,7 @@
  */
 function blocks_admin_settings()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('EditBlocks')) return;
 
     if (!xarVarFetch('selstyle', 'str:1:', $selstyle, 'plain', XARVAR_NOT_REQUIRED)) return;
@@ -31,7 +31,6 @@ function blocks_admin_settings()
         $return_url = xarModURL('blocks', 'admin', 'view_instances',array('filter' => $filter));
 
     xarController::redirect($return_url);
-
     return true;
 }
 

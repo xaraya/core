@@ -13,12 +13,12 @@
  * Initialise a module
  *
  * @author Xaraya Development Team
- * @param regid registered module id
- * @returns bool
- * @return
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['regid'] registered module id
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_NOT_EXIST
  */
-function modules_adminapi_initialise($args)
+function modules_adminapi_initialise(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

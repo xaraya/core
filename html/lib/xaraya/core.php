@@ -155,7 +155,7 @@ sys::import('xaraya.caching.core');
  *
  * 
  * @param integer whatToLoad What optional systems to load.
- * @return bool true
+ * @return boolean true
  * @todo <johnny> fix up sitetable prefix when we have a place to store it
 **/
 function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
@@ -205,7 +205,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     try {
         date_default_timezone_set(xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
     } catch (Exception $e) {
-        die('Your configuration file appears to be missing. This usually indicates Xaraya has not been installed. <br/>Please refer to point 4 of the installation instructions <a href="readme.html" target="_blank">here</a>');
+        die('Your configuration file appears to be missing. This usually indicates Xaraya has not been installed. <br/>Please refer to the installation instructions <a href="readme.html" target="_blank">here</a>');
     }
 
     /*
@@ -258,15 +258,24 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
      * Start Event Messaging System
      *
      * The event messaging system can be initialized only after the db, but should
-     * be as early as possible in place. This system is for *core* events
+     * be as early as possible in place. This system is for all events
      *
      */
     sys::import('xaraya.events');
+    xarEvents::init($systemArgs);
 
-/* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ?
-    sys::import('xaraya.autoload');
-    xarAutoload::initialize();
-
+    /*
+     * Start autoload
+     *
+     * Note: we only need this for variable caching for now, but if we generalize autoloading
+     *       of Xaraya classes someday, we could initialize this earlier, e.g. in bootstrap ?
+     */
+/* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ? */
+    if (xarCache::$variableCacheIsEnabled) {
+        sys::import('xaraya.autoload');
+        xarAutoload::initialize();
+    }
+/*
 // Testing of autoload + second-level cache storage - please do not use on live sites
     sys::import('xaraya.caching.storage');
     $cache = xarCache_Storage::getCacheStorage(array('storage' => 'xcache', 'type' => 'core'));
@@ -419,7 +428,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     $systemArgs = array(
         'enableTemplatesCaching' => xarConfigVars::get(null, 'Site.BL.CacheTemplates'),
-        'defaultThemeDir'        => xarModVars::get('themes', 'default','default'),
+        'defaultThemeDir'        => xarModVars::get('themes', 'default_theme','default'),
         'generateXMLURLs'        => true
     );
 
@@ -488,7 +497,7 @@ function xarCoreActivateDebugger($flags)
  * Check if the debugger is active
  *
  * 
- * @return bool true if the debugger is active, false otherwise
+ * @return boolean true if the debugger is active, false otherwise
 **/
 function xarCoreIsDebuggerActive()
 {
@@ -500,7 +509,7 @@ function xarCoreIsDebuggerActive()
  *
  * 
  * @param integer flag the debugger flag to check for activity
- * @return bool true if the flag is active, false otherwise
+ * @return boolean true if the flag is active, false otherwise
 **/
 function xarCoreIsDebugFlagSet($flag)
 {

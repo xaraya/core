@@ -21,7 +21,7 @@
  * @param details
  * @param string layout (optional)
  * @throws BAD_PARAM
- * @return array with $data
+ * @return array data for the template display
  */
 function dynamicdata_admin_modifyprop()
 {
@@ -64,6 +64,7 @@ function dynamicdata_admin_modifyprop()
         }
         unset($tmpobject);
     } else {
+        // Security
         if(!xarSecurityCheck('AdminDynamicData')) return;
         $objectid = null;
         $data['visibility'] = 'public';

@@ -1,6 +1,6 @@
 <?php
 /**
- * Shows the user login form when login block is not active
+ * Display the user login form
  *
  * @package modules
  * @subpackage authsystem module
@@ -18,7 +18,7 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @author  Jo Dalle Nogare <jojodeexaraya.com>
  */
-function authsystem_user_showloginform($args = array())
+function authsystem_user_showloginform(Array $args = array())
 {
     extract($args);
     xarVarFetch('redirecturl', 'str:1:254', $data['redirecturl'], xarServer::getBaseURL(), XARVAR_NOT_REQUIRED);

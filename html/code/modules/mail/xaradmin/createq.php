@@ -10,10 +10,11 @@
  * @link http://xaraya.com/index.php/release/771.html
  */
 
-function mail_admin_createq($args)
+function mail_admin_createqArray(Array $args=array())
 {
-    // Are we allowed to be here?
+    // Security
     if (!xarSecurityCheck('AdminMail')) return;
+    
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        

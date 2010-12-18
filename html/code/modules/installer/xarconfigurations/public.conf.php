@@ -61,7 +61,7 @@ function installer_public_privilegeoptions()
  * @access public
  * @return boolean
  */
-function installer_public_configuration_load($args)
+function installer_public_configuration_load(Array $args=array())
 {
 // now do the necessary loading for each item
 

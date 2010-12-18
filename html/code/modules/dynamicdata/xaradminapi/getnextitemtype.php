@@ -17,6 +17,7 @@
  * get the next itemtype of objects pertaining to a given module
  *
  * @author the DynamicData module development team
+ * @param array    $args array of optional parameters<br/>
  * @return array of object definitions
  * @raise DATABASE_ERROR, NO_PERMISSION
  * @todo should we wrap this?

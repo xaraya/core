@@ -152,7 +152,7 @@ class xarPageCache extends Object
      *
      * 
      * @param  string $url optional url to be checked if not the current url
-     * @return bool   true if the page is suitable for caching, false if not
+     * @return boolean   true if the page is suitable for caching, false if not
      */
     public static function checkCachingRules($url = null)
     {
@@ -269,7 +269,7 @@ class xarPageCache extends Object
      *
      * 
      * @param  string $cacheKey the key identifying the particular page you want to access
-     * @return bool   true if the page is available in cache, false if not
+     * @return boolean   true if the page is available in cache, false if not
      */
     public static function isCached($cacheKey)
     {
@@ -309,7 +309,7 @@ class xarPageCache extends Object
      *
      * 
      * @param  string $cacheKey the key identifying the particular page you want to access
-     * @return bool   true if succeeded, false otherwise
+     * @return boolean   true if succeeded, false otherwise
      */
     public static function getCached($cacheKey)
     {
@@ -409,7 +409,7 @@ class xarPageCache extends Object
  * check if the user can benefit from page caching
  *
  * 
- * @return bool
+ * @return boolean
  * @todo Note : don't do this if admins get cached too :)
  */
 function xarPage_checkUserCaching($cacheGroups)

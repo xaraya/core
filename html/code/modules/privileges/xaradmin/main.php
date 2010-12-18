@@ -1,6 +1,6 @@
 <?php
 /**
- * Main administration function
+ * Main entry point for the admin interface of this module
  *
  * @package modules
  * @subpackage privileges module
@@ -14,10 +14,15 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
- * the main administration function - pass-thru
+ * The main admin interface function of this module.
+ * This function is the default function for the admin interface, and is called whenever the module is
+ * initiated with only an admin type but no func parameter passed.  
+ * The function displays the module's overview page, or redirects to the viewprivileges page if overviews are disabled.
+ * @return mixed output display string or boolean true if redirected
  */
 function privileges_admin_main()
 {
+    // Security
     if(!xarSecurityCheck('EditPrivileges')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));

@@ -114,10 +114,11 @@ function xarMain()
         }
 
         // We're all done, one ServerRequest made
-        xarEvents::trigger('ServerRequest');
-
+        //xarEvents::trigger('ServerRequest');
+        xarEvents::notify('ServerRequest');
+        
         // Set page template
-        if ($request->getType() == 'admin' && xarTplGetPageTemplateName() == 'default') {
+        if (xarUserIsLoggedIn() && $request->getType() == 'admin' && xarTplGetPageTemplateName() == 'default') {
              // Use the admin-$modName.xt page if available when $modType is admin
             // falling back on admin.xt if the former isn't available
             if (!xarTplSetPageTemplateName('admin-'.$request->getModule())) {

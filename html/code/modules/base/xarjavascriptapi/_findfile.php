@@ -19,11 +19,10 @@
  * @param $args['moduleid'] module ID (deprecated)
  * @param $args['modid'] module ID
  * @param $args['filename'] file name
- * @returns the virtual pathname for the JS file; an empty value if not found
- * @return sring
+ * @return string|void the virtual pathname for the JS file; an empty value if not found
  * @checkme: the default module should be the current *template* module, not the *request* module?
  */
-function base_javascriptapi__findfile($args)
+function base_javascriptapi__findfile(Array $args=array())
 {
     extract($args);
 

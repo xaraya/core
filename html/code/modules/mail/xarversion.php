@@ -1,6 +1,6 @@
 <?php
 /**
- * Initialization function 
+ * Configuration information for the Mail module
  *
  * @package modules
  * @subpackage mail module
@@ -20,6 +20,7 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
+ 
 $modversion['name']               = 'Mail';
 $modversion['id']                 = '771';
 $modversion['displayname']        = xarML('Mail');

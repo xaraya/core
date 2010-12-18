@@ -36,7 +36,7 @@ class xarObjectCache extends Object
     /**
      * Initialise the object caching options
      *
-     * @return bool true on success, false on failure
+     * @return boolean true on success, false on failure
      */
     public static function init(array $args = array())
     {
@@ -152,7 +152,7 @@ class xarObjectCache extends Object
      * @param string $objectName string registered name of object
      * @param string $methodName string specific method to run
      * @param array  $args arguments to pass to the method
-     * @return bool  true if the module function is suitable for caching, false if not
+     * @return boolean  true if the module function is suitable for caching, false if not
      */
     public static function checkCachingRules($objectName, $methodName = 'view', $args = array())
     {
@@ -199,7 +199,7 @@ class xarObjectCache extends Object
      * Check whether a object is cached
      *
      * @param  string $cacheKey the key identifying the particular object you want to access
-     * @return bool   true if the object is available in cache, false if not
+     * @return boolean   true if the object is available in cache, false if not
      */
     public static function isCached($cacheKey = null)
     {
@@ -341,7 +341,7 @@ class xarObjectCache extends Object
      * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
      * @return void
      */
-    public static function addStyle($args)
+    public static function addStyle(Array $args=array())
     {
         if (empty(self::$cacheKey)) return;
         self::$styleList[] = $args;

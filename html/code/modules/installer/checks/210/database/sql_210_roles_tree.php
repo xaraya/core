@@ -1,5 +1,7 @@
 <?php
 /**
+ * Check SQL file
+ *
  * @package modules
  * @subpackage installer module
  * @category Xaraya Web Applications Framework
@@ -22,7 +24,7 @@ function sql_210_roles_tree()
         Checking for consistency in the roles tree
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query
@@ -33,14 +35,14 @@ function sql_210_roles_tree()
         SELECT 
         `id`,
         `uname`
-        FROM $roles r LEFT JOIN $rolemembers rm ON r.id = rm.role_id WHERE r.id != 1 AND rm.parent_id IS NULL
+        FROM $roles r LEFT JOIN $rolemembers rm ON r.id = rm.role_id WHERE r.id != 1 AND r.state != 0 AND rm.parent_id IS NULL
         ";
         $result = $dbconn->Execute($data['sql']);
         if (!$result->EOF) {
             list($id, $uname) = $result->fields;
             $data['success'] = false;
             $data['reply'] = xarML("
-            No parent: $uname
+            No parent: $uname (ID $id)
             ");
         }
 

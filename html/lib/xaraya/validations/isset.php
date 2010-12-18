@@ -18,7 +18,7 @@
  * @param bool supress_soft_exc
  * @param parameters
  * @param subject The parameter to check for
- * @return bool true on isset, false on !isset
+ * @return boolean true on isset, false on !isset
  * @throws VariableValidationException
 **/
 sys::import('xaraya.validations');

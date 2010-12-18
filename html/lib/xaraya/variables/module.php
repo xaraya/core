@@ -122,7 +122,7 @@ class xarModVars extends xarVars implements IxarModVars
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
      * @param  mixed  $value The value of the variable
-     * @return bool true on success
+     * @return boolean true on success
      * @throws EmptyParameterException
      * @todo  We could delete the item vars for the module with the new value to save space?
      */
@@ -167,7 +167,7 @@ class xarModVars extends xarVars implements IxarModVars
      * 
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
-     * @return bool true on success
+     * @return boolean true on success
      * @throws EmptyParameterException
      * @todo Add caching for item variables?
      */
@@ -207,7 +207,7 @@ class xarModVars extends xarVars implements IxarModVars
      *
      * 
      * @param  string $scope The name of the module
-     * @return bool true on success
+     * @return boolean true on success
      * @throws EmptyParameterException, SQLException
      * @todo Add caching for item variables?
      */

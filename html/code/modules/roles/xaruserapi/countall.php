@@ -14,10 +14,10 @@
 /**
  * count all users
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @returns integer
- * @return number of users matching the selection criteria (cfr. getall)
+ * @param array    $args array of optional parameters<br/>
+ * @return integer the number of users matching the selection criteria (cfr. getall)
  */
-function roles_userapi_countall($args)
+function roles_userapi_countall(Array $args=array())
 {
     extract($args);
 

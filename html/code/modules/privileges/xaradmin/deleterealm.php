@@ -37,7 +37,7 @@ function privileges_admin_deleterealm()
         list($result_id, $name) = $result->fields; 
     }
 
-// Security Check
+    // Security
     if(!xarSecurityCheck('ManagePrivileges',0,'Realm',$name)) return;
 
     if (empty($confirmed)) {
@@ -63,6 +63,7 @@ function privileges_admin_deleterealm()
 
 // redirect to the next page
     xarController::redirect(xarModURL('privileges', 'admin', 'viewrealms'));
+    return true;
 }
 
 ?>

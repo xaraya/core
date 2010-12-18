@@ -34,8 +34,7 @@
  * @author  Jason Judge <judgej@xaraya.com>
  * @access  public
  * @param   $args['url'] The main URL for the curl session (optional)
- * @return  nothing
- * @throws  no exceptions
+ * @return  void
  * @todo    nice handling of protocols other than http.
  */
 class xarCurl extends Object
@@ -125,7 +124,7 @@ class xarCurl extends Object
      * A session will be opened immediately the object is created.
      * @return array
      */
-    function __construct($args)
+    function __construct(Array $args=array())
     {
         extract($args);
 

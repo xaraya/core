@@ -20,7 +20,7 @@
  * @param $args['entry'] optional array of external references.
  * @return array object id on success, null on failure
  */
-function dynamicdata_utilapi_import($args)
+function dynamicdata_utilapi_import(Array $args=array())
 {
     if(!xarSecurityCheck('AdminDynamicData')) return;
 

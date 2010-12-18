@@ -19,17 +19,10 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @param none $
  * @return none
- * @throws none
- * @todo none
  */
 function roles_admin_removemember()
 {
-    // Check for authorization code
-    if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
     // get input from any view of this page
     if (!xarVarFetch('parentid', 'int', $parentid, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('childid',  'int', $childid, XARVAR_NOT_REQUIRED)) return;
@@ -37,8 +30,13 @@ function roles_admin_removemember()
     $role   = xarRoles::get($parentid);
     $member = xarRoles::get($childid);
 
-    // Security Check
+    // Security
     if(!xarSecurityCheck('RemoveRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
+
+    // Check for authorization code
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     // remove the child from the parent and bail if an error was thrown
     if (!xarMod::apiFunc('roles','user','removemember', array('id' => $childid, 'gid' => $parentid))) return;
@@ -51,5 +49,6 @@ function roles_admin_removemember()
 
     // redirect to the next page
     xarController::redirect(xarModURL('roles', 'admin', 'modify',  array('id' => $childid)));
+    return true;
 }
 ?>

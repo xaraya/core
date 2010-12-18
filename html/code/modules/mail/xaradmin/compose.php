@@ -18,14 +18,13 @@
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  true on success or void on failure
- * @throws  no exceptions
- * @todo    nothing
+ * @return array data for the template display
 */
 function mail_admin_compose()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('ManageMail')) return;
+    
     // Generate a one-time authorisation code for this operation
     $data['authid']         = xarSecGenAuthKey();
 

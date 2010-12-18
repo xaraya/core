@@ -141,11 +141,12 @@ class xarServer extends Object
      * Initialize
      *
      */
-    static function init($args)
+    static function init(Array $args=array())
     {
         self::$allowShortURLs = $args['enableShortURLsSupport'];
         self::$generateXMLURLs = $args['generateXMLURLs'];
-        xarEvents::register('ServerRequest');
+        // This event is now registered during base module init        
+        //xarEvents::register('ServerRequest');
     }
     /**
      * Gets a server variable

@@ -17,8 +17,7 @@
  *
  * @author Marty Vance 
  * @param id $ theme id
- * @returns array
- * @return an array of variables to pass to the template
+ * @return array data for the template display
  */
 function themes_admin_modify()
 {
@@ -30,7 +29,8 @@ function themes_admin_modify()
     if (!isset($themeInfo)) return;
 
     $themeName = $themeInfo['name'];
-    // Security Check
+    
+    // Security
     if (!xarSecurityCheck('AdminThemes', 0, 'All', '$themeName::$regId')) return;
 
     $themevars = array();

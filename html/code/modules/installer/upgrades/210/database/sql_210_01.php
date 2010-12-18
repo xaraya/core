@@ -1,5 +1,7 @@
 <?php
 /**
+ * Upgrade SQL file
+ *
  * @package modules
  * @subpackage installer module
  * @category Xaraya Web Applications Framework
@@ -21,7 +23,7 @@ function sql_210_01()
         Upgrading the core module version numbers
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

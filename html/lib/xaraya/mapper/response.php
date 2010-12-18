@@ -21,7 +21,7 @@ class xarResponse extends Object
      * initialize
      *
      */
-    static function init($args) { }
+    static function init(Array $args=array()) { }
 
 // CHECKME: Should we support this kind of high-level user response in module GUI functions ?
 //          And should some of the existing exceptions (to be defined) call those methods too ?
@@ -40,7 +40,7 @@ class xarResponse extends Object
      * 
      * @param msg string the message
      * @param ... string template overrides, cfr. xarTplModule (optional)
-     * @return string the template message-notfound.xt from the base module filled in
+     * @return string output display string
      */
     static public function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = NULL)
     {
@@ -68,7 +68,7 @@ class xarResponse extends Object
      * 
      * @param msg string the message
      * @param ... string template overrides, cfr. xarTplModule (optional)
-     * @return string the template message-forbidden.xt from the base module filled in
+     * @return string output display string
      */
     static public function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = NULL)
     {
@@ -80,6 +80,17 @@ class xarResponse extends Object
         xarTplSetPageTitle('403 Forbidden');
 
         return xarTplModule($modName, $modType, $funcName, array('msg' => $msg), $templateName);
+    }
+
+    /**
+     * Carry out a redirect - legacy support for Jamaica 2.0 and 2.1
+     *
+     * @access public
+     * @param redirectURL string the URL to redirect to
+     */
+    static public function Redirect($url = '')
+    {
+        return xarController::redirect($url);
     }
 
     function getOutput() { return $this->output; }

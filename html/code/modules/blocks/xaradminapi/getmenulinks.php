@@ -1,6 +1,7 @@
 <?php
 /**
- * Utility function to pass individual menu items
+ * Pass individual menu items to the admin menu
+ *
  * @package modules
  * @subpackage blocks module
  * @category Xaraya Web Applications Framework
@@ -11,12 +12,11 @@
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
- * utility function pass individual menu items to the main menu
+ * Utility function pass individual menu items to the admin menu.
  *
  * @author Jim McDonald
  * @author Paul Rosania
- * @returns array
- * @return array containing the menulinks for the main menu items.
+ * @return array the menulinks for the admin menu items of this module.
  */
 function blocks_adminapi_getmenulinks()
 {

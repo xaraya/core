@@ -1,6 +1,6 @@
 <?php
 /**
- * Modify configuration
+ * Modify the configuration settings of this module
  *
  * @package modules
  * @subpackage authsystem module
@@ -12,12 +12,14 @@
  * @link http://xaraya.com/index.php/release/42.html
  */
 /**
- * modify configuration
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
 function authsystem_admin_modifyconfig()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminAuthsystem')) return;
+    
     if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('uselockout',   'checkbox',  $data['uselockout'],  xarModVars::get('authsystem', 'uselockout'),     XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('lockouttime',  'int:1:',    $data['lockouttime'], (int)xarModVars::get('authsystem', 'lockouttime'),       XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;

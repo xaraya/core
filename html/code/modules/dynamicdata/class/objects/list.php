@@ -653,7 +653,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         return xarTplObject($args['tplmodule'],$args['template'],'showview',$args);
     }
 
-    public function getSortURL($currenturl = null)
+    public function getSortURL($currenturl=null)
     {
         if (empty($currenturl)) {
             $currenturl = xarServer::getCurrentURL(array('startnum' => null, 'sort' => null));

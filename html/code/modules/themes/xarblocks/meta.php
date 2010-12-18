@@ -15,10 +15,7 @@
  * @author  John Cox
  * @author  Carl Corliss
  * @access  public
- * @param   none
- * @return  nothing
- * @throws  no exceptions
- * @todo    nothing
+ * @return  void
 */
 
 sys::import('xaraya.structures.containers.blocks.basicblock');

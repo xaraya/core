@@ -27,7 +27,7 @@ class SessionException extends Exception
 /**
  * Initialise the Session Support
  *
- * @return bool true
+ * @return boolean true
  */
 function xarSession_init(&$args)
 {
@@ -35,7 +35,8 @@ function xarSession_init(&$args)
     $GLOBALS['xarSession_systemArgs'] = $args;
 
     // Register the SessionCreate event
-    xarEvents::register('SessionCreate');
+    // this is now registered during modules module init
+    // xarEvents::register('SessionCreate');
 
     // Register tables this subsystem uses
     $tables = array('session_info' => xarDB::getPrefix() . '_session_info');
@@ -62,7 +63,8 @@ function xarSession_init(&$args)
     if ($session->isNew()) {
         if($session->register($ipAddress)) {
             // Congratulations. We have created a new session
-            xarEvents::trigger('SessionCreate');
+            //xarEvents::trigger('SessionCreate');
+            xarEvents::notify('SessionCreate');
         } else {
             // Registering failed, now what?
         }
@@ -189,7 +191,7 @@ class xarSession extends Object implements IsessionHandler
      * @param $args['securityLevel'] the current security level
      * @param $args['duration'] duration of the session
      * @param $args['inactivityTimeout']
-     * @return bool
+     * @return boolean
      */
     private function setup(&$args)
     {

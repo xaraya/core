@@ -62,8 +62,10 @@
                     <xar:if condition="!empty($return_url)">
                         <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                     </xar:if>
-                    <input type="submit" name="preview" value="#xarML('Preview')#" class="xar-margin-thickright"/>
-                    <input type="submit" value="#xarML('Create')#" class="xar-margin-thickleft"/>
+                    <xar:var name="label">Preview</xar:var>
+                    <input type="submit" name="preview" value="#$label#" class="xar-margin-thickright"/>
+                    <xar:var name="label">Create</xar:var>
+                    <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
                 </div>
             </fieldset>
         </form>

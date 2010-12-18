@@ -17,7 +17,7 @@
  */
 function modules_admin_settings()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminModules')) return;
 
     if (!xarVarFetch('hidecore', 'str:1:', $hidecore, '0', XARVAR_NOT_REQUIRED)) return; 
@@ -32,6 +32,7 @@ function modules_admin_settings()
     xarModUserVars::set('modules', 'selsort', $selsort);
     
     xarController::redirect(xarModURL('modules', 'admin', 'list', array('regen' => $regen)));
+    return true;
 }
 
 ?>

@@ -17,20 +17,21 @@
  * (identified by module + item type + item id or table + item id)
  *
  * @author the DynamicData module development team
- * @param string $args['module'] module name of the item fields to get or
- * @param int $args['module_id'] module id of the item fields to get +
- * @param int $args['itemtype'] item type of the item fields to get, or
- * @param $args['table'] database table to turn into an object
- * @param int $args['itemid'] item id of the item fields to get
- * @param array $args['fieldlist'] array of field labels to retrieve (default is all)
- * @param $args['status'] limit to property fields of a certain status (e.g. active)
- * @param $args['join'] join a module table to the dynamic object (if it extends the table)
- * @param bool $args['getobject'] flag indicating if you want to get the whole object back
- * @param bool $args['preview'] flag indicating if you're previewing an item
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['module'] module name of the item fields to get or<br/>
+ *        integer  $args['module_id'] module id of the item fields to get +<br/>
+ *        integer  $args['itemtype'] item type of the item fields to get, or<br/>
+ *        string   $args['table'] database table to turn into an object<br/>
+ *        integer  $args['itemid'] item id of the item fields to get<br/>
+ *        array    $args['fieldlist'] array of field labels to retrieve (default is all)<br/>
+ *        integer  $args['status'] limit to property fields of a certain status (e.g. active)<br/>
+ *        string   $args['join'] join a module table to the dynamic object (if it extends the table)<br/>
+ *        boolean  $args['getobject'] flag indicating if you want to get the whole object back<br/>
+ *        boolean  $args['preview'] flag indicating if you're previewing an item
  * @return array of (name => value), or false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function &dynamicdata_userapi_getitem($args)
+function &dynamicdata_userapi_getitem(Array $args=array())
 {
     extract($args);
 

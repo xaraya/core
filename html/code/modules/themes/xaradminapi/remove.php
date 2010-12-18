@@ -14,12 +14,12 @@
  * Remove a theme
  *
  * @author Marty Vance
- * @param $args['regid'] the id of the theme
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the id of the theme
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function themes_adminapi_remove($args)
+function themes_adminapi_remove(Array $args=array())
 {
     extract($args);
 
@@ -31,7 +31,7 @@ function themes_adminapi_remove($args)
 
     // Get theme information
     $themeInfo = xarThemeGetInfo($regid);
-    $defaultTheme = xarModVars::get('themes','default');
+    $defaultTheme = xarModVars::get('themes','default_theme');
 
     // Bail out if we're trying to remove the default theme
     if ($defaultTheme == $themeInfo['name'] ) {
@@ -41,7 +41,7 @@ function themes_adminapi_remove($args)
 
     // Bail out if we're trying to remove while one of our users
     // has it set to their default theme
-    $mvid = xarModVars::getId('themes','default');
+    $mvid = xarModVars::getId('themes','default_theme');
     $sql = "SELECT COUNT(*) FROM $tables[module_itemvars] WHERE module_var_id =? AND value = ?";
     $result =& $dbconn->Execute($sql, array($mvid,$defaultTheme));
 

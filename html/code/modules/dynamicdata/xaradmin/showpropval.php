@@ -14,10 +14,13 @@
  */
 /**
  * Show configuration of some property
- * @return array
+ * @return array data for the template display
  */
-function dynamicdata_admin_showpropval($args)
+function dynamicdata_admin_showpropval(Array $args=array())
 {
+    // Security
+    if(!xarSecurityCheck('AdminDynamicData')) return;
+
     extract($args);
 
     // get the property id

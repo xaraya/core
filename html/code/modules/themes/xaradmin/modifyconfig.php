@@ -1,6 +1,6 @@
 <?php
 /**
- * Modify the configuration parameters
+ * Modify the configuration settings of this module
  *
  * @package modules
  * @subpackage themes module
@@ -12,14 +12,14 @@
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
- * This is a standard function to modify the configuration parameters of the
- * module
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ * @return mixed data array for the template display or output display string if invalid data submitted
  *
  * @author Marty Vance
  */
 function themes_admin_modifyconfig()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminThemes')) return;
 
     // FIXME: remove at next upgrade
@@ -99,6 +99,7 @@ function themes_admin_modifyconfig()
             xarModVars::set('themes', 'selsort', $data['selsort']);
 
             // Adjust the usermenu hook according to the setting
+            /* The usermenu isn't a hook...
             sys::import('xaraya.structures.hooks.observer');
             $observer = new BasicObserver('themes','user','usermenu');
             $subject = new HookSubject('roles');
@@ -107,6 +108,7 @@ function themes_admin_modifyconfig()
             } else {
                 $subject->detach($observer);
             }
+            */
             break;
     }
     return $data;

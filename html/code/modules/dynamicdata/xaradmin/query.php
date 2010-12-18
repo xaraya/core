@@ -13,10 +13,11 @@
  */
 /**
  * query items
+ * @return array data for the template display
  */
-function dynamicdata_admin_query($args)
+function dynamicdata_admin_query(Array $args=array())
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     extract($args);

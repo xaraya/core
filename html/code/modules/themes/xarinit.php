@@ -16,7 +16,7 @@ sys::import('xaraya.tableddl');
 /**
  * Initialise the themes module
  * @author Marty Vance
- * @return bool
+ * @return boolean
  * @throws DATABASE_ERROR
  */
 function themes_init()
@@ -60,7 +60,7 @@ function themes_init()
     $query = xarDBCreateTable($tables['themes'], $fields);
     $result =& $dbconn->Execute($query);
 
-    xarModVars::set('themes', 'default', 'default');
+    xarModVars::set('themes', 'default_theme', 'default');
     xarModVars::set('themes', 'selsort', 'nameasc');
 
     // Make sure we dont miss empty variables (which were not passed thru)
@@ -117,13 +117,13 @@ function themes_init()
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function themes_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0.0':
+        default:
       break;
     }
     return true;
@@ -132,7 +132,7 @@ function themes_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return bool
+ * @return boolean
  */
 function themes_delete()
 {

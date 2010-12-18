@@ -16,15 +16,16 @@
  * @TODO: update this with all the new stuff
  *
  * @author the DynamicData module development team
- * @param string $args['module'] module name of the item field to get, or
- * @param int $args['module_id'] module id of the item field to get
- * @param int $args['itemtype'] item type of the item field to get
- * @param int $args['itemid'] item id of the item field to get
- * @param string $args['name'] name of the field to get
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['module'] module name of the item field to get, or<br/>
+ *        integer  $args['module_id'] module id of the item field to get<br/>
+ *        integer  $args['itemtype'] item type of the item field to get<br/>
+ *        integer  $args['itemid'] item id of the item field to get<br/>
+ *        string   $args['name'] name of the field to get<br/>
  * @return mixed value of the field, or false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_userapi_getfield($args)
+function dynamicdata_userapi_getfield(Array $args=array())
 {
     extract($args);
 

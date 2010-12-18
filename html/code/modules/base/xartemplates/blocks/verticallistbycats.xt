@@ -8,15 +8,20 @@
                 <h4>Help System</h4>
                 <ul class="xar-menu-item">
                     <li class="xar-menu-item">
-                        <a title="#xarML('System help')#" href="#$overviewlink#">Help</a>
+                        <xar:var name="label">System help</xar:var>
+                        <a title="#$label#" href="#$overviewlink#">Help</a>
                     </li>
                 </ul>
             </li>
         </ul>
     </xar:if>
     -->
-    <xar:foreach in="$catmods" key="$catname" value="$menulinks">
-        <xar:if condition="count($menulinks) ne 0">
+    <xar:foreach in="$catmods" key="$catname" value="$cats">
+        <!--
+            we dont really want to display a category if there are no modules that belong to it,
+            even though we're passing all category names to this template from API [andyv]
+        -->
+        <xar:if condition="count($cats) ne 0">
             <ul class="xar-menu-section">
                 <li class="xar-menu-section">
                     <h4>#$catname#</h4>
@@ -27,7 +32,7 @@
                          to provide unique styling for individual menus
                     -->
                     <xar:set name="subdata">array(
-                        'menulinks' => $menulinks,          // pass the menulinks
+                        'menulinks' => $cats,               // pass the menulinks
                         'menuid' => 'adminmenu' . $blockid, // pass a unique menuid
                         'marker' => $marker,                // pass through the marker
                         'maxlevels' => 2,                   // specify max levels
@@ -48,14 +53,16 @@
                 <ul class="xar-menu-item">
                 <xar:if condition="$showfront">
                     <li class="xar-menu-item">
-                        <a title="#xarML('View the site front end')#" href="#xarServer::getBaseURL()#">
+                        <xar:var name="label">View the site front end</xar:var>
+                        <a title="#$label#" href="#xarServer::getBaseURL()#">
                             View Front End
                         </a>
                     </li>
                 </xar:if>
                 <xar:if condition="$showlogout">
                    <li class="xar-menu-item">
-                        <a title="#xarML('Logout as administrator')#" href="#xarModURL('base','admin','confirmlogout')#">
+                        <xar:var name="label">Logout as administrator</xar:var>
+                        <a title="#$label#" href="#xarModURL('base','admin','confirmlogout')#">
                             Logout
                         </a>
                     </li>

@@ -13,10 +13,10 @@
 /*
  * Determine wether a mail queue is active
  *
- * @param $qInfo in args as returned by getobjectinfo of dd
- * @returns bool 
+ * @param array    $args array of optional parameters<br/>
+ * @return boolean true on success, false on failure
  */
-function mail_userapi_qisactive($args)
+function mail_userapi_qisactive(Array $args=array())
 {
     extract($args);
     if(!isset($objectid)) return false; // we're lazy

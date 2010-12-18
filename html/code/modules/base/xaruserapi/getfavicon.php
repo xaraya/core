@@ -17,10 +17,11 @@
  *
  * @author Panayotis Vryonis (lilina package)
  * @access public
- * @param $args['url'] string the absolute URL for the file
+ * @param array    $args array of optional parameters<br/>
+ *        string  $args['url'] the absolute URL for the file
  * @return string content of the file
  */
-function base_userapi_getfavicon($args)
+function base_userapi_getfavicon(Array $args=array())
 {
     extract($args);
     if (!isset($url)) throw new BadParameterException($url);

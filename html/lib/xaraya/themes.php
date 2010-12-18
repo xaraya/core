@@ -56,7 +56,7 @@ function xarThemeGetInfo($regId) { return xarMod::getInfo($regId, $type = 'theme
  *
  * 
  * @param themeName registered name of theme
- * @return bool true if the theme is available, false if not
+ * @return boolean true if the theme is available, false if not
  */
 function xarThemeIsAvailable($themeName) { return xarMod::isAvailable($themeName, $type = 'theme'); }
 

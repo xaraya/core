@@ -1,6 +1,7 @@
 <?php
 /**
- * Module initialization
+ * Configuration information for the Modules module
+ *
  * @package modules
  * @subpackage modules module
  * @category Xaraya Web Applications Framework
@@ -17,6 +18,7 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
+ 
 $modversion['name']               = 'Modules Administration';
 $modversion['id']                 = '1';
 $modversion['version']            = '2.2.0';

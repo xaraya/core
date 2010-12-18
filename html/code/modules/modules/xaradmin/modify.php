@@ -20,11 +20,11 @@
  * @author Xaraya Development Team
  * @param id registered module id
  * @param return_url optional return URL after updating the hooks
- * @returns array
- * @return an array of variables to pass to the template
+ * @return array data for the template display
  */
-function modules_admin_modify($args)
+function modules_admin_modify(Array $args=array())
 {
+    
     extract($args);
 
     // xarVarFetch does validation if not explicitly set to be not required
@@ -35,66 +35,104 @@ function modules_admin_modify($args)
     $modInfo = xarMod::getInfo($id);
     if (!isset($modInfo)) return;
 
-    $modName     = $modInfo['name'];
+    $modname     = $modInfo['name'];
     $displayName = $modInfo['displayname'];
 
-    // Security Check
-    if(!xarSecurityCheck('AdminModules',0,'All',"$modName::$id")) return;
-
-    $data['savechangeslabel'] = xarML('Save Changes');
-
-    // Get the list of all hook modules, and the current hooks enabled for this module
-    $hooklist = xarMod::apiFunc('modules','admin','gethooklist',
-                              array('modName' => $modName));
+    // Security
+    if(!xarSecurityCheck('AdminModules',0,'All',"$modname::$id")) return;
 
     // Get the list of all item types for this module (if any)
     try {
-        $itemtypes = xarMod::apiFunc($modName,'user','getitemtypes',array());
+        $itemtypes = xarMod::apiFunc($modname,'user','getitemtypes',array());
     } catch ( FunctionNotFoundException $e) {
+        $itemtypes = array();
         // No worries
     }
 
-    if (isset($itemtypes)) {
-        $data['itemtypes'] = $itemtypes;
-    } else {
-        $data['itemtypes'] = array();
-    }
-
-    // $data[hooklist] is the master array which holds all info
-    // about the registered hooks.
-    $data['hooklist'] = array();
-
-    // Loop over available $key => $value pairs in hooklist
-    // $modname is assigned key (name of module)
-    // $hooks is assigned object:action:area
-    // MrB: removed the details check, it's simpler to have the same datastructure
-    // allways, and I think there's not much of a performance hit.
-    // TODO: make the different hooks selectable per type of hook
-    foreach ($hooklist as $hookmodname => $hooks) {
-        // CHECKME: don't allow hooking to yourself !?
-        if ($hookmodname == $modName) {
-            continue;
-        }
-        $data['hooklist'][$hookmodname]['modname'] = $hookmodname;
-        $data['hooklist'][$hookmodname]['checked'] = array();
-        $data['hooklist'][$hookmodname]['hooks'] = array();
-        // Fill in the details for the different hooks
-        foreach ($hooks as $hook => $modules) {
-            if (!empty($modules[$modInfo['systemid']])) {
-                foreach ($modules[$modInfo['systemid']] as $itemType => $val) {
-                    $data['hooklist'][$hookmodname]['checked'][$itemType] = 1;
+    // Get list of hook module(s) (observers) and the available hooks supplied 
+    $observers = xarHooks::getObserverModules(); 
+    foreach ($observers as $observer => $modinfo) {
+        $curhook = $observer;
+        // get subject itemtypes this observer is hooked to (if any)
+        $subjects = xarHooks::getObserverSubjects($observer, $modname);
+            $hookstate = 0;
+            if (!empty($subjects[$modname][0][0])) {
+                // Hooked by ALL scopes to ALL itemtypes
+                $hookstate = 1;
+            } elseif (!empty($subjects[$modname][0])) {
+                // Hooked by SOME scopes to ALL itemtypes 
+                if (!empty($modinfo['scopes'])) {
+                    foreach ($modinfo['scopes'] as $scope => $val) {
+                        $ishooked = !empty($subjects[$modname][0][$scope]);
+                        if ($ishooked) $hookstate = 2;
+                        $itemtypes[0]['scopes'][$scope] = $ishooked;
+                    }
                 }
-            }
-            $data['hooklist'][$hookmodname]['hooks'][$hook] = 1;
-        }
-    }
-  //print_r($data['hooklist']);
-    // End form
+            } 
 
-    $data['available'] = xarModIsAvailable($modName);
-    $data['authid'] = xarSecGenAuthKey('modules');
+            if (!empty($itemtypes)) {
+                // Hooked by SOME scopes to SOME itemtypes
+                foreach ($itemtypes as $typeid => $itemtype) {
+                    if (empty($typeid)) continue;
+                    $itemtypes[$typeid]['scopes'] = array();                    
+                    if ($hookstate != 0) {
+                        $itemtypes[$typeid]['scopes'][0] = 0;
+                        // already matched the state
+                        $ishooked = false;
+                    } else {
+                        if (!empty($subjects[$modname][$typeid][0])) {
+                            // ALL scopes this itemtype
+                            $itemtypes[$typeid]['scopes'][0] = 1;
+                            $newstate = 3;
+                        } else {
+                            if (!empty($modinfo['scopes'])) {
+                                // SOME scopes this itemtype
+                                foreach ($modinfo['scopes'] as $scope => $val) {
+                                    $ishooked = !empty($subjects[$modname][$typeid][$scope]);
+                                    if ($ishooked) {
+                                        $newstate = 3;
+                                        $itemtypes[$typeid]['scopes'][0] = 2;
+                                    }
+                                    $itemtypes[$typeid]['scopes'][$scope] = $ishooked;                 
+                                }
+                            }
+                            if (!isset($itemtypes[$typeid]['scopes'][0]))
+                                $itemtypes[$typeid]['scopes'][0] = 0;
+                        }
+                        
+                    }
+                }
+                if (!empty($newstate)) { $hookstate = $newstate; unset($newstate); }        
+            }
+        /*
+        $hookstate = !empty($subjects[$modname][0]);
+        if (!empty($itemtypes)) {
+            foreach ($itemtypes as $key => $itemtype) {
+                if ($hookstate == 1) {
+                    // hooked to all itemtypes
+                    $ishooked = false;
+                } else {
+                    // otherwise see if hooked to some
+                    $ishooked = !empty($subjects[$modname][$key]);
+                }
+                // set hook state to some if not hooked to all                    
+                if ($hookstate != 1 && $ishooked) 
+                    $hookstate = 2;
+                // add ishooked value to itemtype                     
+                $itemtypes[$key]['ishooked'] = $ishooked;
+            }
+        }
+        */
+        $observers[$observer]['hookstate'] = $hookstate;
+        $observers[$observer]['itemtypes'] = $itemtypes;
+    }
+    
     $data['id'] = $id;
-    $data['displayname'] = $modInfo['displayname'];
+    $data['observers'] = $observers;
+    $data['module'] = $modname;
+    $data['displayname'] = $displayName;
+    $data['authid'] = xarSecGenAuthKey('modules');
+
     if (!empty($return_url)) {
         $data['return_url'] = $return_url;
     }

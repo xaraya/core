@@ -10,10 +10,11 @@
  * @link http://xaraya.com/index.php/release/771.html
  */
 
-function mail_user_display($args)
+function mail_user_display(Array $args=array())
 {
     if(!xarVarFetch('itemid','int:1:',$itemid,0,XARVAR_NOT_REQUIRED)) return;
     if (empty($itemid)) return xarResponse::notFound();
     xarController::redirect(xarModUrl('mail','admin','view',array('itemid' => $itemid)));
+    return true;
 }
 ?>

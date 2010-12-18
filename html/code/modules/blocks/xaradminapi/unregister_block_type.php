@@ -16,13 +16,12 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * @access public
- * @param modName the module name
- * @param blockType the block type
- * @returns bool
- * @return true on success, false on failure
- * @throws DATABASE_ERROR, BAD_PARAM
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['modName'] the module name<br/>
+ *        string   $args['blockType'] the block type
+ * @return boolean true on success, false on failure
  */
-function blocks_adminapi_unregister_block_type($args)
+function blocks_adminapi_unregister_block_type(Array $args=array())
 {
     $res = xarMod::apiFunc('blocks','admin','block_type_exists',$args);
     if (!isset($res)) return; // throw back

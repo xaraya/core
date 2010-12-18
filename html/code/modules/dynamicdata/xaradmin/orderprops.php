@@ -20,10 +20,13 @@
  * @param int modid
  * @param int itemtype
  * @throws BAD_PARAM
- * @return bool true on success and redirect to modifyprop
+ * @return boolean true on success and redirect to modifyprop
  */
 function dynamicdata_admin_orderprops()
 {
+    // Security
+    if(!xarSecurityCheck('EditDynamicData')) return;
+
     // Get parameters from whatever input we need.  All arguments to this
     // function should be obtained from xarVarFetch()
     if(!xarVarFetch('objectid',          'isset', $objectid,          NULL, XARVAR_DONT_SET)) {return;}

@@ -17,11 +17,13 @@
  * @param newdisplayname the new display name
  * @param admincapable the whether the module shows an admin menu
  * @param usercapable the whether the module shows a user menu
- * @returns bool
- * @return true on success, error message on failure
+ * @return mixed true on success, error message on failure
  */
 function modules_admin_updateproperties()
 {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        

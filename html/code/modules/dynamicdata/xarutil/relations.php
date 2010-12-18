@@ -15,8 +15,11 @@
 /**
  * Return relationship information (test only)
  */
-function dynamicdata_util_relations($args)
+function dynamicdata_util_relations(Array $args=array())
 {
+    // Security
+    if (!xarSecurityCheck('AdminDynamicData')) return;
+
     if(!xarVarFetch('module',    'isset', $module,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('module_id', 'isset', $module_id, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype',  'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}

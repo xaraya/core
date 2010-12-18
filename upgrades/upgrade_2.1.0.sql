@@ -1,21 +1,21 @@
 /*
-  Upgrade script for the table changes made in Xaraya 2.1.0
+  Upgrade script for the table changes made in Xaraya 2.1.1
   compared to Xaraya 2.0.0
   
   This script works with MySQL. It should be appropriately modified for other databases
 */
 
 /* Upgrading the core module version numbers */
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'authsystem';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'base';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'blocks';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'dynamicdata';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'installer';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'mail';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'modules';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'privileges';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'roles';
-UPDATE `xar_modules` SET version = '2.1.0' WHERE `name` = 'themes';
+UPDATE `xar_modules` SET version = '2.1.1' WHERE `name` = 'authsystem';
+UPDATE `xar_modules` SET version = '2.1.1' WHERE `name` = 'base';
+UPDATE `xar_modules` SET version = '2.1.1' WHERE `name` = 'blocks';
+UPDATE `xar_modules` SET version = '2.1.1' WHERE `name` = 'dynamicdata';
+UPDATE `xar_modules` SET version = '2.1.1' WHERE `name` = 'installer';
+UPDATE `xar_modules` SET version = '2.1.1' WHERE `name` = 'mail';
+UPDATE `xar_modules` SET version = '2.1.1' WHERE `name` = 'modules';
+UPDATE `xar_modules` SET version = '2.1.1' WHERE `name` = 'privileges';
+UPDATE `xar_modules` SET version = '2.1.1' WHERE `name` = 'roles';
+UPDATE `xar_modules` SET version = '2.1.1' WHERE `name` = 'themes';
 
 /* --------------------------------------------------------- */
 

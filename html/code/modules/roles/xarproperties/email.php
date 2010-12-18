@@ -55,9 +55,11 @@ class EmailProperty extends TextBoxProperty
 
         if (!parent::validateValue($value)) return false;
         if (!empty($value)) {
-            // cfr. pnVarValidate in pnLegacy.php
-            $regexp = '/^(?:[^\s\000-\037\177\(\)<>@,;:\\"\[\]]\.?)+@(?:[^\s\000-\037\177\(\)<>@,;:\\\"\[\]]\.?)+\.[a-z]{2,6}$/Ui';
-            if (!preg_match($regexp,$value)) {
+            sys::import('xaraya.validations');
+            $boolean = ValueValidations::get('email');
+            try {
+                $boolean->validate($value, array());
+            } catch (Exception $e) {
                 if (!empty($this->validation_email_invalid)) {
                     $this->invalid = xarML($this->validation_email_invalid);
                 } else {

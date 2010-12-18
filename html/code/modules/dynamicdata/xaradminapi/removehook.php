@@ -15,12 +15,13 @@
 /**
  * delete all dynamicdata fields for a module - hook for ('module','remove','API')
  *
- * @param $args['objectid'] ID of the object (must be the module name here !!)
- * @param $args['extrainfo'] extra information
- * @return bool true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['objectid'] ID of the object (must be the module name here !!)<br/>
+ *        string   $args['extrainfo'] extra information
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
-function dynamicdata_adminapi_removehook($args)
+function dynamicdata_adminapi_removehook(Array $args=array())
 {
     extract($args);
 

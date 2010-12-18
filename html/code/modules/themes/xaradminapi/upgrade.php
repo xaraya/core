@@ -13,12 +13,12 @@
  * Upgrade a theme
  *
  * @author Marty Vance
- * @param regid registered theme id
- * @returns bool
- * @return
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] registered theme id
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function themes_adminapi_upgrade($args)
+function themes_adminapi_upgrade(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

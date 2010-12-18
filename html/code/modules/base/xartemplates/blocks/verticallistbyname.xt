@@ -36,14 +36,16 @@
                 <ul class="xar-menu-item">
                 <xar:if condition="$showfront">
                     <li class="xar-menu-item">
-                        <a title="#xarML('View the site front end')#" href="#xarServer::getBaseURL()#">
+                        <xar:var name="label">View the site front end</xar:var>
+                        <a title="#$label#" href="#xarServer::getBaseURL()#">
                             View Front End
                         </a>
                     </li>
                 </xar:if>
                 <xar:if condition="$showlogout">
                    <li class="xar-menu-item">
-                        <a title="#xarML('Logout as administrator')#" href="#xarModURL('base','admin','confirmlogout')#">
+                        <xar:var name="label">Logout as administrator</xar:var>
+                        <a title="#$label#" href="#xarModURL('base','admin','confirmlogout')#">
                             Logout
                         </a>
                     </li>

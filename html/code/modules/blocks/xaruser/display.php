@@ -16,8 +16,9 @@
  * @return array
  * @author Marcel van der Boom <mrb@hsdev.com>
  * @param  string $name name of the block to render
+ * @return array data for the template display
  */
-function blocks_user_display($args)
+function blocks_user_display(Array $args=array())
 {
     extract($args);
 

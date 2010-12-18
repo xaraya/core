@@ -32,10 +32,9 @@
  * @author Jason Judge
  * @param $args[position] the location of the event trigger; defaults to 'body'
  * @param $args[type] the type of event trigger; e.g. 'onload', 'onmouseover'
- * @returns string
- * @return empty string
+ * @return string an empty string
  */ 
-function base_javascriptapi_geteventjs($args)
+function base_javascriptapi_geteventjs(Array $args=array())
 {
     extract($args);
 

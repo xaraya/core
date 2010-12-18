@@ -17,16 +17,15 @@
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  true on success or void on failure
- * @throws  no exceptions
- * @todo    nothing
+ * @return  array data for the template display
 */
-function mail_admin_viewq($args)
+function mail_admin_viewq(Array $args=array())
 {
+    // Security
+    if (!xarSecurityCheck('AdminMail')) return;
+
     extract($args);
     if (!xarVarFetch('action','str', $action, '')) return;
-
-    if (!xarSecurityCheck('AdminMail')) return;
 
     $data = array();
     if (!empty($action)) {

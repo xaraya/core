@@ -15,16 +15,16 @@
  */
 /**
  * viewRealms - view the defined realms
- * Takes no parameters
+ * @return array data for the template display
  */
 function privileges_admin_viewrealms()
 {
+    // Security
+    if(!xarSecurityCheck('AdminPrivileges',0,'Realm')) return;
+
     $data = array();
 
     if (!xarVarFetch('show', 'isset', $data['show'], 'assigned', XARVAR_NOT_REQUIRED)) return;
-
-    // Security Check
-    if(!xarSecurityCheck('AdminPrivileges',0,'Realm')) return;
 
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
@@ -42,6 +42,5 @@ function privileges_admin_viewrealms()
     }
     return $data;
 }
-
 
 ?>

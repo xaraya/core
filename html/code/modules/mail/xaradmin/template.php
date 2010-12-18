@@ -11,10 +11,12 @@
  */
 /**
  * Modify the email templates for hooked notifications
+ *
+ * @return array data for the template display
  */
-function mail_admin_template($args)
+function mail_admin_template(Array $args=array())
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminMail')) return;
 
     extract($args);

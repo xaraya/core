@@ -12,9 +12,10 @@
 /**
  * Get all items
  * @author mikespub <mikespub@xaraya.com>
+ * @param array    $args array of optional parameters<br/>
 */
 
-function dynamicdata_userapi_getall($args)
+function dynamicdata_userapi_getall(Array $args=array())
 {
     return xarMod::apiFunc('dynamicdata','user','getitem',$args);
 }

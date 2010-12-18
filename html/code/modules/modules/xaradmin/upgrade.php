@@ -19,13 +19,13 @@
  *
  * @author Xaraya Development Team
  * @param id the module id to upgrade
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 function modules_admin_upgrade()
 {
-    $success = true;
-
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
@@ -33,6 +33,8 @@ function modules_admin_upgrade()
 
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) {return;}
     if (empty($id)) return xarResponse::notFound();
+
+    $success = true;
 
     // See if we have lost any modules since last generation
     sys::import('modules.modules.class.installer');

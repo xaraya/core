@@ -13,10 +13,11 @@
  */
 /**
  * viewroles - display the roles this privilege is assigned to
+ * @return array data for the template display
  */
 function privileges_admin_viewroles()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('EditRoles')) return;
 
     $data = array();

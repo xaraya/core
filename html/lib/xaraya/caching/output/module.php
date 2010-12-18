@@ -37,7 +37,7 @@ class xarModuleCache extends Object
     /**
      * Initialise the module caching options
      *
-     * @return bool true on success, false on failure
+     * @return boolean true on success, false on failure
      */
     public static function init(array $args = array())
     {
@@ -168,7 +168,7 @@ class xarModuleCache extends Object
      * @param string $modType type of function to run
      * @param string $funcName specific function to run
      * @param array  $args arguments to pass to the function
-     * @return bool  true if the module function is suitable for caching, false if not
+     * @return boolean  true if the module function is suitable for caching, false if not
      */
     public static function checkCachingRules($modName, $modType = 'user', $funcName = 'main', $args = array())
     {
@@ -222,7 +222,7 @@ class xarModuleCache extends Object
      * Check whether a module is cached
      *
      * @param  string $cacheKey the key identifying the particular module you want to access
-     * @return bool   true if the module is available in cache, false if not
+     * @return boolean   true if the module is available in cache, false if not
      */
     public static function isCached($cacheKey = null)
     {
@@ -364,7 +364,7 @@ class xarModuleCache extends Object
      * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
      * @return void
      */
-    public static function addStyle($args)
+    public static function addStyle(Array $args=array())
     {
         if (empty(self::$cacheKey)) return;
         self::$styleList[] = $args;

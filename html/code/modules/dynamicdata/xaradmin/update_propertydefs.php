@@ -17,14 +17,15 @@
  * This is a standard function to update the configuration parameters of the
  * module given the information passed back by the modification form
  *
- * @return bool and redirect to view_propertydefs
+ * @return boolean and redirect to view_propertydefs
  */
-function dynamicdata_admin_update_propertydefs($args)
+function dynamicdata_admin_update_propertydefs(Array $args=array())
 {
     extract($args);
 
     if (!xarVarFetch('flushPropertyCache', 'isset', $flushPropertyCache,  NULL, XARVAR_DONT_SET)) {return;}
 
+    // Security
     if (!xarSecurityCheck('AdminDynamicData')) return;
 
     if (!xarSecConfirmAuthKey()) {

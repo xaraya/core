@@ -19,26 +19,26 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @param none $
  * @return none
- * @throws none
- * @todo none
  */
 function roles_admin_addmember()
 {
-    // Check for authorization code
-    if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
     // get parameters
-    if (!xarVarFetch('id',    'int:1:', $id)) return;
-    if (!xarVarFetch('roleid', 'int:1:', $roleid)) return;
+    if (!xarVarFetch('id',    'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('roleid', 'int:1:', $roleid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($id)) return xarResponse::notFound();
+    if (empty($roleid)) return xarResponse::notFound();
     // call the Roles class and get the parent and child objects
     $role   = xarRoles::get($roleid);
     $member = xarRoles::get($id);
 
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AttachRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
+
+    // Check for authorization code
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
 
     // check that this assignment hasn't already been made
     if ($member->isEqual($role))
@@ -58,6 +58,7 @@ function roles_admin_addmember()
     // redirect to the next page
     xarController::redirect(xarModURL('roles', 'admin', 'modify',
             array('id' => $id)));
+    return true;
 }
 
 ?>

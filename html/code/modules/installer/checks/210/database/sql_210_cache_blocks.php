@@ -1,5 +1,7 @@
 <?php
 /**
+ * Check SQL file
+ *
  * @package modules
  * @subpackage installer module
  * @category Xaraya Web Applications Framework
@@ -9,7 +11,6 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/200.html
  */
-
 function sql_210_cache_blocks()
 {
     // Define parameters
@@ -21,7 +22,7 @@ function sql_210_cache_blocks()
         Checking the structure of $table
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

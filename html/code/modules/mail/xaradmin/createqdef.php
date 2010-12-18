@@ -10,8 +10,11 @@
  * @link http://xaraya.com/index.php/release/771.html
  */
 
-function mail_admin_createqdef($args)
+function mail_admin_createqdef(Array $args=array())
 {
+    // Security
+    if (!xarSecurityCheck('AdminMail')) return; 
+    
     // Are we legitimately here
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
@@ -61,5 +64,6 @@ function mail_admin_createqdef($args)
         xarModVars::set('mail','queue-definition',$qdefName);
     }
     xarController::redirect(xarModUrl('mail','admin','view'));
+    return ttue;
 }
 ?>

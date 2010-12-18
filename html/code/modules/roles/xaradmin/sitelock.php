@@ -15,11 +15,12 @@
 /* Site lock
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return array data for the template display
  */
 
-function roles_admin_sitelock($args)
+function roles_admin_sitelock(Array $args=array())
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('ManageRoles')) return;
 
     if (!xarVarFetch('cmd', 'isset', $cmd, NULL, XARVAR_DONT_SET)) return;

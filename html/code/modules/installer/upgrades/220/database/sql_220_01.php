@@ -21,7 +21,7 @@ function sql_220_01()
         Upgrading the core module version numbers
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

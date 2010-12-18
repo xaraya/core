@@ -11,14 +11,15 @@
  */
 /*
  * Get a single block type.
- * @param args['tid'] block type ID (optional)
- * @param args['module'] module name (optional, but requires 'type')
- * @param args['type'] block type name (optional, but requires 'module')
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['tid'] block type ID (optional)<br/>
+ *        string   $args['module'] module name (optional, but requires 'type')<br/>
+ *        string   $args['type'] block type name (optional, but requires 'module')
  * @return array of block types, keyed on block type ID
  * @author Jason Judge
 */
 
-function blocks_userapi_getblocktype($args)
+function blocks_userapi_getblocktype(Array $args=array())
 {
     // Minimum parameters allowed, to fetch a single block type: id or type.
     if (empty($args['tid']) && (empty($args['module']) || empty($args['type']))) {

@@ -18,7 +18,7 @@
  * @param int module_id
  * @param int itemtype
  * @throws BAD_PARAM
- * @return bool true on success and redirect to modifyprop
+ * @return boolean true on success and redirect to modifyprop
  */
 function dynamicdata_admin_updateprop()
 {
@@ -35,6 +35,9 @@ function dynamicdata_admin_updateprop()
     if(!xarVarFetch('display_dd_status', 'isset', $display_dd_status, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('input_dd_status',   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_configuration',  'isset', $dd_configuration,  NULL, XARVAR_DONT_SET)) {return;}
+
+    // Security
+    if(!xarSecurityCheck('AdminDynamicData')) return;
 
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));

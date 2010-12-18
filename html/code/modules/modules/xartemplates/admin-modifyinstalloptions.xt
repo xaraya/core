@@ -9,7 +9,8 @@
             <!--        <xar:module main="false" module="#$modname#" type="admin" func="installoptions"/> -->
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="submit" name="update" value="#xarML('Save Configuration')#"/>
+                    <xar:var name="label">Save Configuration</xar:var>
+                    <input type="submit" name="update" value="#$label#"/>
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 </div>
             </fieldset>

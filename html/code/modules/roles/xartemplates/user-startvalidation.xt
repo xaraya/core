@@ -29,13 +29,15 @@
                         <p>Please enter your username and validation code below:</p>
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="uname" class="xar-form-label" title="#xarML('Please enter your user name')#">
+                        <xar:var name="label">Please enter your user name</xar:var>
+                        <label for="uname" class="xar-form-label" title="#$label#">
                             Username
                         </label>
                         <input type="text" name="uname" id="uname" value="#xarVarPrepForDisplay($uname)#"/>
                     </div>
                     <div class="xar-form-input-wrapper">
-                        <label for="valcode" class="xar-form-label" title="#xarML('Please enter your validation code')#">
+                        <xar:var name="label">Please enter your validation code</xar:var>
+                        <label for="valcode" class="xar-form-label" title="#$label#">
                             Validation Code:
                         </label>
                         <input type="text" name="valcode" id="valcode" value=""/>
@@ -51,7 +53,8 @@
                 <fieldset>
                     <legend>Resend Validation</legend>
                     <div class="xar-form-input-wrapper">
-                        <label for="unameresend" class="xar-form-label" title="#xarML('Please enter your username')#">
+                        <xar:var name="label">Please enter your username</xar:var>
+                        <label for="unameresend" class="xar-form-label" title="#$label#">
                             Username:
                         </label>
                         &#160; 

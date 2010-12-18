@@ -588,10 +588,6 @@ function dynamicdata_upgrade($oldversion)
 
             // fall through to next upgrade
 
-        case '2.0.1':
-
-            // fall through to next upgrade
-
         default:
             break;
     }
@@ -602,7 +598,7 @@ function dynamicdata_upgrade($oldversion)
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function dynamicdata_delete()
 {

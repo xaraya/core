@@ -20,12 +20,13 @@
  *
  * @author Marty Vance
  * @access public
- * @param none
- * @returns bool
- * @
+ * @return boolean true on success, false on failure
  */
 function themes_admin_regenerate()
 {
+    // Security
+    if (!xarSecurityCheck('AdminThemes')) return; 
+    
     // Security check
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
@@ -36,7 +37,6 @@ function themes_admin_regenerate()
     if (!isset($regenerated)) return;
     // Redirect
     xarController::redirect(xarModURL('themes', 'admin', 'list'));
-
     return true;
 }
 

@@ -18,11 +18,12 @@
  * @access  public
  * @param   no parameters
  * @return  true on success or void on failure
- * @throws  no exceptions
- * @todo    nothing
 */
 function mail_admin_sendtest()
 {
+    // Security
+    if (!xarSecurityCheck('ManageMail')) return;
+
     // Get parameters from whatever input we need
     if (!xarVarFetch('message', 'str:1:', $message)) return;
     if (!xarVarFetch('subject', 'str:1', $subject)) return;
@@ -37,9 +38,6 @@ function mail_admin_sendtest()
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
-    // Security check
-    if (!xarSecurityCheck('ManageMail')) return;
-
     if (empty($email)) {
         $email = xarModVars::get('mail', 'adminmail');
     }
@@ -74,7 +72,6 @@ function mail_admin_sendtest()
 
     // lets update status and display updated configuration
     xarController::redirect(xarModURL('mail', 'admin', 'compose'));
-    // Return
     return true;
 }
 ?>

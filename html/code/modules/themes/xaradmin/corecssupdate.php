@@ -16,20 +16,20 @@
 * Module admin function to update configuration Xaraya core CSS
 *
 * @author AndyV_at_Xaraya_dot_Com
-* @returns true
+ * @return boolean true on success, false on failure
 */
 function themes_admin_corecssupdate()
 {
+    // Security
+    if (!xarSecurityCheck('AdminThemes')) return;
+
     // Confirm authorisation code
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
-    // Security Check
-    if (!xarSecurityCheck('AdminThemes')) return;
-
+    }  
+    
     // params
     if (!xarVarFetch('linkoptions', 'str::', $linkoptions, '', XARVAR_NOT_REQUIRED)) return;
-
 
     // set modvars
     xarModVars::set('themes', 'csslinkoption', $linkoptions);

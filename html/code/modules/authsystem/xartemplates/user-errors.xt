@@ -7,7 +7,8 @@
     <div class="xar-mod-body">
         <fieldset>
             <legend>Problem Logging In</legend>
-            <img src="#xarTplGetImage('user-error.png','base')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon"/>
+            <xar:var name="label">System Message</xar:var>
+            <img src="#xarTplGetImage('user-error.png','base')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
             <xar:if condition="!isset($layout)">
                 <div style="margin-top: 20px">No error message is available. 
                 <br />Please contact the system administrator.</div>
@@ -17,8 +18,14 @@
                 <br />Check the browser configuration options to make sure cookies are
                 enabled.</div>
             <xar:elseif condition="$layout eq 'locked_out'"/>
-                <div style="margin-top: 20px">Your account has been locked for #$lockouttime#
-                minutes.</div>
+                <div style="margin-top: 20px">
+                   <xar:ml>
+                       <xar:mlstring>
+                           Your account has been locked for #(1) minutes.
+                       </xar:mlstring>
+                       <xar:mlvar>#$lockouttime#</xar:mlvar>
+                   </xar:ml>
+                </div>
             <xar:elseif condition="$layout eq 'bad_data'"/>
                 <div style="margin-top: 20px">The username or password entered is not valid. 
                 <br />Try logging in again or contact the system administrator if you think this is
@@ -34,11 +41,27 @@
                 <div style="margin-top: 20px">Your account has been marked as inactive. 
                 <br />Contact the system adminstrator for further details.</div>
             <xar:elseif condition="$layout eq 'bad_try'"/>
-                <div style="margin-top: 20px">The username or password entered is not valid. 
-                <br />You have tried to log in #$attempts# times.</div>
+                <div style="margin-top: 20px">
+                    The username or password entered is not valid. 
+                    <br />
+                   <xar:ml>
+                       <xar:mlstring>
+                           You have tried to log in #(1) times.
+                       </xar:mlstring>
+                       <xar:mlvar>#$attempts#</xar:mlvar>
+                   </xar:ml>
+                </div>
             <xar:elseif condition="$layout eq 'bad_tries_exceeded'"/>
-                <div style="margin-top: 20px">The username or password entered is not valid. 
-                <br />Your account has been locked for #$lockouttime# minutes.</div>
+                <div style="margin-top: 20px">
+                    The username or password entered is not valid. 
+                    <br />
+                   <xar:ml>
+                       <xar:mlstring>
+                           Your account has been locked for #(1) minutes.
+                       </xar:mlstring>
+                       <xar:mlvar>#$lockouttime#</xar:mlvar>
+                   </xar:ml>
+                </div>
             <xar:elseif condition="$layout eq 'account_pending'"/>
                 <div style="margin-top: 20px">Your account has not yet been activated 
                 <br />Contact the system adminstrator for further details.</div>

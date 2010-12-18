@@ -13,8 +13,9 @@
 /**
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * view users
+ * @return string output display string
  */
-function roles_user_view($args)
+function roles_user_view(Array $args=array())
 {
     if (!xarSecurityCheck('ViewRoles')) return;
 

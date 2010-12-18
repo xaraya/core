@@ -15,10 +15,11 @@
  * This is a hook function that is called to send mail on creation of an item
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @param  $ 'modid' is the module that is sending mail.
- * @param  $ 'itemid' is the item created.
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['modid'] is the module that is sending mail.<br/>
+ *        integer  $args['itemid'] is the item created.
  */
-function mail_adminapi_hookmailcreate($args)
+function mail_adminapi_hookmailcreate(Array $args=array())
 {
     extract($args);
 

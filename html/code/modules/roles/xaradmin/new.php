@@ -14,9 +14,11 @@
  *
  * @author Marc Lutolf
  * @author Johnny Robeson
+ * @return array data for the template display
  */
 function roles_admin_new()
 {
+    // Security
     if (!xarSecurityCheck('AddRoles')) return;
 
     if (!xarVarFetch('parentid',    'id',    $data['parentid'], (int)xarModVars::get('roles','defaultgroup'), XARVAR_NOT_REQUIRED)) return;
@@ -31,6 +33,7 @@ function roles_admin_new()
 
     // call item new hooks
     $item = $data;
+    $item['exclude_module'] = array('dynamicdata');
     $item['module'] = 'roles';
     $item['itemtype'] = $data['itemtype'];
     $data['hooks'] = xarModCallHooks('item', 'new', '', $item);

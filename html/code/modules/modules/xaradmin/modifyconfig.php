@@ -1,6 +1,6 @@
 <?php
 /**
- * Modify the configuration parameters
+ * Modify the configuration settings of this module
  *
  * @package modules
  * @subpackage modules module
@@ -14,19 +14,18 @@
  * @author Andy Varganov <andyv@xaraya.com>
  */
 /**
- * standard function to modify the configuration parameters
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  the data for template
- * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
- * @todo    remove at some stage if not used. Created for the move of mod overview var
- *          and never in a release, but this var is not used now due to help system.
+ * @return  mixed data array for the template display or output display string if invalid data submitted
 */
 function modules_admin_modifyconfig()
 {
+    // Security
     if(!xarSecurityCheck('AdminModules')) return;
+    
     if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if(!xarVarFetch('disableoverview','checkbox', $data['disableoverview'], (bool)xarModVars::get('modules', 'disableoverview'), XARVAR_NOT_REQUIRED)) return;
 

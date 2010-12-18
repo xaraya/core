@@ -13,10 +13,11 @@
  * view block instances
  * @author Jim McDonald
  * @author Paul Rosania
+ * @return array data for the template display
  */
 function blocks_admin_view_instances()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('EditBlocks', 0, 'Instance')) {return;}
 
     $data = array();

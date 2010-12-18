@@ -1,6 +1,7 @@
 <?php
 /**
- * Modify site configuration
+ * Modify the configuration settings of this module
+ *
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
@@ -11,15 +12,16 @@
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
- * Modify site configuration
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
  * @author John Robeson
  * @author Greg Allan
- * @return array of template values
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
 function base_admin_modifyconfig()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminBase')) return;
+    
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'display', XARVAR_NOT_REQUIRED)) return;
 

@@ -345,7 +345,7 @@ class DataObjectMaster extends Object
      * @todo why not keep the scope here and do this:
      *       $this->properties[$args['id']] = new Property($args); (with a reference probably)
     **/
-    function addProperty($args)
+    function addProperty(Array $args=array())
     {
         // TODO: find some way to have unique IDs across all objects if necessary
         if(!isset($args['id']))
@@ -743,7 +743,7 @@ class DataObjectMaster extends Object
      * @todo  get rid of the classname munging
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
-    static function &getObjectInterface($args)
+    static function &getObjectInterface(Array $args=array())
     {
         sys::import('modules.dynamicdata.class.userinterface');
 
@@ -792,7 +792,7 @@ class DataObjectMaster extends Object
      * @param $args['class'] optional classname (e.g. <module>_DataObject)
      * @return integer object id of the created item
     **/
-    static function createObject(Array $args)
+    static function createObject(Array $args=array())
     {
         // TODO: if we extend dobject classes then probably we need to put the class name here
         $object = self::getObject(array('name' => 'objects'));
@@ -806,7 +806,7 @@ class DataObjectMaster extends Object
         return $objectid;
     }
 
-    static function updateObject(Array $args)
+    static function updateObject(Array $args=array())
     {
         $object = self::getObject(array('name' => 'objects'));
 
@@ -818,7 +818,7 @@ class DataObjectMaster extends Object
         return $itemid;
     }
 
-    static function deleteObject($args)
+    static function deleteObject(Array $args=array())
     {
         $descriptor = new DataObjectDescriptor($args);
         $args = $descriptor->getArgs();
@@ -861,7 +861,7 @@ class DataObjectMaster extends Object
      * @todo pick moduleid or module
      * @todo move this into a utils class?
      */
-    static function getModuleItemTypes(Array $args)
+    static function getModuleItemTypes(Array $args=array())
     {
         extract($args);
         // Argument checks
@@ -977,8 +977,60 @@ class DataObjectMaster extends Object
         // CHECKME: prevent recursive hook calls in general
         xarCoreCache::setCached('DynamicData','HookAction',$action);
 
+        // <chris> moved this from xarObjectHooks::initHookSubject()
+        // This is the correct place to handle it, hooks system doesn't need to know
+        // initialize hookvalues
+        $this->hookvalues = array();
+    
+        // Note: you can preset the list of properties to be transformed via $this->hooktransform
+        
+        // add property values to hookvalues
+        if ($action == 'transform') {
+            if (!empty($this->hooktransform)) {
+                $fields = $this->hooktransform;
+            } else {
+                $fields = array_keys($this->properties);
+            }
+            $this->hookvalues['transform'] = array();
+
+            foreach($fields as $name) {
+            // TODO: this is exactly the same as in the dataobject display function, consolidate it ?
+                if(!isset($this->properties[$name])) continue;
+
+                if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)) continue;
+
+                // *never* transform an ID
+                // TODO: there is probably lots more to skip here.
+                if ($this->properties[$name]->type != 21) {
+                    $this->hookvalues['transform'][] = $name;
+                }
+                $this->hookvalues[$name] = $this->properties[$name]->value;
+            }
+            $this->hooktransform = $this->hookvalues['transform'];
+        } else {
+            foreach(array_keys($this->properties) as $name)
+                $this->hookvalues[$name] = $this->properties[$name]->value;
+            $this->hooktransform = array();
+        }
+
+        // add extra info for traditional hook modules
+        $this->hookvalues['module'] = xarMod::getName($this->moduleid);
+        $this->hookvalues['itemtype'] = $this->itemtype;
+        $this->hookvalues['itemid'] = $this->itemid;
+        // CHECKME: is this sufficient in most cases, or do we need an explicit xarModURL() ?
+        $this->hookvalues['returnurl'] = xarServer::getCurrentURL();
+
+        // Use the standard method to call hooks 
+        $hooks = xarModCallHooks('item', $action, $this->itemid, $this->hookvalues);
+        // FIXME: we don't need two distinct properties to store gui and api hook responses
+        // A response is a response, it's up to the caller to decide if it's appropriate
+        // For now we'll populate both with the same data
+        $this->hookvalues = $this->hookoutput = $hooks;       
+        
         // let xarObjectHooks worry about calling the different hooks
-        xarObjectHooks::callHooks($this, $action);
+        //xarObjectHooks::callHooks($this, $action);
 
         // the result of API actions will be in $this->hookvalues
         // the result of GUI actions will be in $this->hookoutput
@@ -1111,7 +1163,7 @@ class DataObjectMaster extends Object
      * @param action string the action we want to take on this object (= method or func)
      * @param itemid mixed the specific item id or null
      * @param roleid mixed override the current user or null // CHECKME: do we want this ?
-     * @return bool true if access
+     * @return boolean true if access
      */
     public function checkAccess($action, $itemid = null, $roleid = null)
     {

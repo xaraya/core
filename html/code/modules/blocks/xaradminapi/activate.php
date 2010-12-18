@@ -13,11 +13,11 @@
  * activate a block
  * @author Jim McDonald
  * @author Paul Rosania
- * @param $args['bid'] the ID of the block to activate
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['bid'] the ID of the block to activate
+ * @return boolean true on success, false on failure
  */
-function blocks_adminapi_activate($args)
+function blocks_adminapi_activate(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

@@ -38,7 +38,7 @@ class xarController extends Object
      * Initialize
      *
      */
-    static function init($args)
+    static function init(Array $args=array())
     {
         self::$allowShortURLs = $args['enableShortURLsSupport'];
 
@@ -161,7 +161,7 @@ class xarController extends Object
      * Check to see if this is a local referral
      *
      * 
-     * @return bool true if locally referred, false if not
+     * @return boolean true if locally referred, false if not
      */
     static function isLocalReferer()
     {

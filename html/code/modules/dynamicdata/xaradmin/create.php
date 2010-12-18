@@ -23,9 +23,9 @@
  * @param string table
  * @param string template
  * @param string tplmodule
- * @return bool
+ * @return boolean
  */
-function dynamicdata_admin_create($args)
+function dynamicdata_admin_create(Array $args=array())
 {
     extract($args);
 
@@ -44,6 +44,9 @@ function dynamicdata_admin_create($args)
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
+
+    // Security
+    if(!xarSecurityCheck('AddDynamicData')) return;
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'join'     => $join,

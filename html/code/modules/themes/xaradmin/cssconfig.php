@@ -15,15 +15,15 @@
 * Module admin function to review and configure Xaraya CSS
 *
 * @author AndyV_at_Xaraya_dot_Com
-* @returns array
+ * @return array data for the template display
 */
 function themes_admin_cssconfig()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminThemes',0)) return;
+    
     // Generate security key
     $data['authid'] = xarSecGenAuthKey();
-
 
     // where are we?
     if (!xarVarFetch('component', 'str::', $component, '', XARVAR_NOT_REQUIRED)) return;

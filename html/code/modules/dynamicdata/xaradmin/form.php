@@ -15,8 +15,9 @@
  * add new item
  * This is a standard function that is called whenever an administrator
  * wishes to create a new module item
+ * @return string output display string
  */
-function dynamicdata_admin_form($args)
+function dynamicdata_admin_form(Array $args=array())
 {
     extract($args);
 
@@ -46,6 +47,8 @@ function dynamicdata_admin_form($args)
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid));
+    
+    // Security
     if (!$myobject->checkAccess('create'))
         return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
 

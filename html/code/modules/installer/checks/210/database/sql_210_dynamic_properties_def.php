@@ -1,5 +1,7 @@
 <?php
 /**
+ * Check SQL file
+ *
  * @package modules
  * @subpackage installer module
  * @copyright see the html/credits.html file in this release
@@ -20,7 +22,7 @@ function sql_210_dynamic_properties_def()
         Checking the structure of $table
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

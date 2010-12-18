@@ -17,7 +17,7 @@
  * @author mikespub
  * @access public
  */
-function mail_schedulerapi_sendmail($args)
+function mail_schedulerapi_sendmail(Array $args=array())
 {
     $log = xarML('Starting to send queued mail') . "\n";
 

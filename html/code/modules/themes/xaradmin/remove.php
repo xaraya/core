@@ -19,11 +19,13 @@
  * @author Marty Vance 
  * @access public 
  * @param id $ the theme id
- * @returns mixed
- * @return true on success
+ * @return boolean true on success, false on failure
  */
 function themes_admin_remove()
 { 
+    // Security
+    if (!xarSecurityCheck('ManageThemes')) return; 
+    
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
@@ -41,7 +43,6 @@ function themes_admin_remove()
     if (!isset($removed)) return;
 
     xarController::redirect(xarModURL('themes', 'admin', 'list'));
-
     return true;
 } 
 

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Main entry point for the utility interface of this module
+ *
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
@@ -12,11 +14,15 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * Main menu for utility functions
+ * The main utility interface function of this module.
+ * This function is the default function for the admin interface, and is called whenever the module is
+ * initiated with only a util type but no func parameter passed.  
+ * The function displays the utilities page of this module.
+ * @return array array of template data
  */
 function dynamicdata_util_main()
 {
-// Security Check
+    // Security
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     $data = array();

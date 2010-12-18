@@ -28,7 +28,7 @@ Class xarBlock extends Object implements IxarBlock
  * @author Paul Rosania
  * 
  * @param  array args
- * @return bool
+ * @return boolean
  */
     public static function init(&$args)
     {
@@ -273,7 +273,7 @@ Class xarBlock extends Object implements IxarBlock
      * @param block object the block we want to check access for
      * @param action string the action we want to take on this block (display/modify/delete)
      * @param roleid mixed override the current user or null
-     * @return bool true if access
+     * @return boolean true if access
      */
     static function checkAccess($block, $action, $roleid = null)
     {

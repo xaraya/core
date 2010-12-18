@@ -19,11 +19,13 @@
  *
  * @author Marty Vance
  * @param id the theme id to upgrade
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 function themes_admin_upgrade()
 {
+    // Security
+    if (!xarSecurityCheck('AdminThemes')) return; 
+    
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
@@ -40,7 +42,6 @@ function themes_admin_upgrade()
     if(!isset($upgraded)) return;
 
     xarController::redirect(xarModURL('themes', 'admin', 'list'));
-
     return true;
 }
 

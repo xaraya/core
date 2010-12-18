@@ -395,7 +395,7 @@ class Query
         }
     }
 
-    public function addtablelink($args)
+    public function addtablelink(Array $args=array())
     {
         $key = $this->key;
         $this->key++;
@@ -413,7 +413,7 @@ class Query
         }
         return $key;
     }
-    public function addhaving($args)
+    public function addhaving(Array $args=array())
     {
         $key = $this->key;
         $this->key++;
@@ -653,7 +653,7 @@ class Query
             }
     }
 
-    public function addsecuritycheck($args)
+    public function addsecuritycheck(Array $args=array())
     {
         $numargs = func_num_args();
         if ($numargs == 2) {

@@ -14,9 +14,13 @@
 
 /**
  * View items
+ * @return string output display string
  */
-function dynamicdata_admin_view($args)
+function dynamicdata_admin_view(Array $args=array())
 {
+    // Security
+    if(!xarSecurityCheck('EditDynamicData')) return;
+
     if(!xarVarFetch('itemid',   'int',   $itemid,    1, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('startnum', 'int',   $startnum,  NULL, XARVAR_DONT_SET)) {return;}
@@ -29,8 +33,6 @@ function dynamicdata_admin_view($args)
 
     // Override if needed from argument array
     extract($args);
-
-    if(!xarSecurityCheck('EditDynamicData')) return;
 
     // Default number of items per page in user view
     if (empty($numitems)) {

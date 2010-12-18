@@ -15,11 +15,13 @@
  *
  * @author Xaraya Development Team
  * @param id the module's registered id
- * @returns bool
- * @return true on success, error message on failure
+ * @return mixed true on success, error message on failure
  */
 function modules_admin_viewerror()
 {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     // Get parameters
     xarVarFetch('id', 'int', $regId, 0, XARVAR_NOT_REQUIRED);
     if (empty($regId)) return xarResponse::notFound();

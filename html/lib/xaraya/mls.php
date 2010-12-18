@@ -43,7 +43,7 @@ sys::import('xaraya.mlsbackends.reference');
  *
  * 
  * @throws Exception
- * @return bool true
+ * @return boolean true
  */
 function xarMLS_init(&$args)
 {
@@ -86,9 +86,13 @@ function xarMLS_init(&$args)
 
     // Register MLS events
     // These should be done before the xarMLS_setCurrentLocale function
-    xarEvents::register('MLSMissingTranslationString');
-    xarEvents::register('MLSMissingTranslationKey');
-    xarEvents::register('MLSMissingTranslationDomain');
+    // These are now registered during base module init
+    // @CHECKME: <chris> grep -R xarEvents::trigger . finds no results
+    // It appears these events are never raised ?
+    // In addition, these seem more like exceptions than 'events' ?
+    //xarEvents::register('MLSMissingTranslationString');
+    //xarEvents::register('MLSMissingTranslationKey');
+    //xarEvents::register('MLSMissingTranslationDomain');
 
     // FIXME: this was previously conditional on User subsystem initialisation,
     // but in the 2.x flow we need it earlier apparently, so made this unconditional
@@ -115,7 +119,6 @@ function xarMLSGetMode()
  *
  * 
  * @return string the site locale
- * @todo   check
  */
 function xarMLSGetSiteLocale() { return $GLOBALS['xarMLS_defaultLocale']; }
 
@@ -124,7 +127,6 @@ function xarMLSGetSiteLocale() { return $GLOBALS['xarMLS_defaultLocale']; }
  *
  * 
  * @return array of locales
- * @todo   check
  */
 function xarMLSListSiteLocales()
 {
@@ -434,7 +436,7 @@ function xarMLS_setCurrentLocale($locale)
  * Loads translations for the specified context
  *
  * 
- * @return bool
+ * @return boolean
  */
 function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
 {
@@ -488,7 +490,7 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
 /**
  * Load relevant translations for a specified relatvive path (be it file or directory)
  *
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  * @todo slowly add more intelligence for more scopes. (core, version, init?)
  * @todo static hash on path to prevent double loading?
  * @todo is directory support needed? i.e. modules/base/ load all for base module? or how does this work?
@@ -674,7 +676,7 @@ function xarMLS__getSingleByteCharset($langISO2Code)
  * Create directories tree
  *
  * 
- * @return bool true
+ * @return boolean true
  */
 function xarMLS__mkdirr($path)
 {
@@ -703,7 +705,7 @@ function xarMLS__mkdirr($path)
  * Check directory writability and create directory if it doesn't exist
  *
  * 
- * @return bool true
+ * @return boolean true
  */
 function xarMLS__iswritable($directory=NULL)
 {

@@ -11,17 +11,18 @@
  */
 /*
  * Count block instances
- * @param args[$order] optionally count from group instances table
- * @param args[$type] optionally count by block type
- * @param args[$module] optionally count by module
- * @param args[$gid] optionally count by group id
- * @param args[$state] optionally count by block state
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['order'] optionally count from group instances table<br/>
+ *        integer  $args['type'] optionally count by block type<br/>
+ *        string   $args['module'] optionally count by module<br/>
+ *        integer  $args['gid'] optionally count by group id<br/>
+ *        integer  $args['state'] optionally count by block state
  * @author Chris Powis <crisp@xaraya.com>
  * @throws DB_ERROR
  * @return int number of instances
 */
 
-function blocks_userapi_count_instances($args)
+function blocks_userapi_count_instances(Array $args=array())
 {
     extract($args);
 

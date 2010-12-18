@@ -15,15 +15,16 @@
  * create a new item (the whole item or some dynamic data fields for it)
  *
  * @author the DynamicData module development team
- * @param $args['module_id'] module id for the original item
- * @param $args['itemtype'] item type of the original item
- * @param $args['itemid'] item id of the original item
- * @param $args['values'] array of id => value, or
- * @param $args['fields'] array containing the field definitions and values
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['module_id'] module id for the original item<br/>
+ *        string   $args['itemtype'] item type of the original item<br/>
+ *        integer  $args['itemid'] item id of the original item<br/>
+ *        string   $args['values'] array of id => value, or<br/>
+ *        string   $args['fields'] array containing the field definitions and values
  * @return item id on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_create($args)
+function dynamicdata_adminapi_create(Array $args=array())
 {
 
     $args = DataObjectDescriptor::getObjectID($args);

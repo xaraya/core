@@ -15,14 +15,14 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * @access public
- * @param modName the module name
- * @param blockType the block type
- * @returns bool
- * @return true if exists, false if not found
- * @throws DATABASE_ERROR, BAD_PARAM
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['modName'] the module name<br/>
+ *        string   $args['blockType'] the block type
+ * @return boolean true on success, false on failure
+ * @throws BAD_PARAM
  * @deprec Deprecated 11 Jan 2004 - use countblocktypes directly
  */
-function blocks_adminapi_block_type_exists($args)
+function blocks_adminapi_block_type_exists(Array $args=array())
 {
     extract($args);
 

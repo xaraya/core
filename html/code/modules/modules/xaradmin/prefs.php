@@ -14,14 +14,11 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @param none
- * @returns array
- * @todo 
+ * @return array data for the template display
  */
 function modules_admin_prefs()
 {
-    
-    // Security check
+    // Security
     if(!xarSecurityCheck('AdminModules')) return;
     
     $data = array();

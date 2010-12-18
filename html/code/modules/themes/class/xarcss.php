@@ -86,7 +86,7 @@ class xarCSS extends Object
     public $suppress   = false;        // true == this css is suppressed
 
     // constructor
-    function __construct($args)
+    function __construct(Array $args=array())
     {
         extract($args);
         if (isset($method)) $this->method               = $method;
@@ -257,7 +257,7 @@ class tagqueue extends Object
         }
     }
 
-    function register($args)
+    function register(Array $args=array())
     {
         return $this->queue('register',$args);
     }

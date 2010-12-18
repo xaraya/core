@@ -22,9 +22,9 @@
  * @param int itemtype the id of the itemtype of the item
  * @param join
  * @param table
- * @return string
+ * @return string output display string
  */
-function dynamicdata_admin_modify($args)
+function dynamicdata_admin_modify(Array $args=array())
 {
     extract($args);
 
@@ -54,6 +54,8 @@ function dynamicdata_admin_modify($args)
                                          'itemid'   => $itemid,
                                          'tplmodule' => $tplmodule));
     if (empty($object)) return;
+    
+    // Security
     if (!$object->checkAccess('update'))
         return xarResponse::Forbidden(xarML('Update #(1) is forbidden', $object->label));
 

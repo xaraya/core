@@ -63,7 +63,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * @param  string  $name    The name of the variable to set
      * @param  mixed   $value   Value to set the variable to.
      * @param  integer $itemid  User id for which value needs to be set
-     * @return bool true on success false on failure
+     * @return boolean true on success false on failure
      * @throws EmptyParameterException
      * @see xarModVars::set()
      * @todo Add caching?
@@ -91,7 +91,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
      * @param  string  $scope The name of the module to set a variable for
      * @param  string  $name  The name of the variable to set
      * @param  integer $itemid User id of the user to delete the variable for.
-     * @return bool true on success
+     * @return boolean true on success
      * @see xarModVars::delete()
      * @todo Add caching?
      */

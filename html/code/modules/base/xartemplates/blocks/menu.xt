@@ -64,7 +64,8 @@
                     <!-- Optionally show admins a link to the back end -->
                     <xar:sec mask="ManageBase" catch="false">
                         <li class="xar-menu-item">
-                            <a title="#$backtitle#" href="#xarModURL($thismodname,'admin','main')#">
+                            <xar:var name="label">View the site back end interface</xar:var>
+                            <a title="#$label#" href="#xarModURL($module,'admin','main')#">
                                 #$backlabel#
                             </a>
                         </li>

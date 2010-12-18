@@ -5,7 +5,8 @@
         <span class="xar-mod-title">Xaraya Help System</span>
     </div>
     <div class="xar-mod-body">
-        <img src="#xarTplGetImage('admin.gif','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon"/>
+        <xar:var name="label">official icon</xar:var>
+        <img src="#xarTplGetImage('admin.gif','base')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
         <h2>Help File Not Found</h2>
         <p>There is no help information for this Xaraya extension.</p>
         <p>

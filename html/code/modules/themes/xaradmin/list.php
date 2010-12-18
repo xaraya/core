@@ -12,11 +12,11 @@
 /**
  * List themes and current settings
  * @author Marty Vance
- * @param none
+ * @return array data for the template display
  */
 function themes_admin_list()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminThemes')) return;
 
     // form parameters
@@ -62,7 +62,7 @@ function themes_admin_list()
     $data['filter'][XARTHEME_STATE_MISSING_FROM_ACTIVE]         = xarML('Missing (Active)');
     $data['filter'][XARTHEME_STATE_MISSING_FROM_UPGRADED]       = xarML('Missing (Upgraded)');
 
-    $data['default']                           = xarModVars::get('themes', 'default', 1);
+    $data['default']                           = xarModVars::get('themes', 'default_theme', 1);
 
     // obtain list of modules based on filtering criteria
 /*     if($regen){ */

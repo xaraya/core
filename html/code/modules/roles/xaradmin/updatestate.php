@@ -16,8 +16,9 @@
  */
 function roles_admin_updatestate()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('EditRoles')) return;
+    
     // Get parameters
     if (!xarVarFetch('status',      'int:0:', $data['status'],   NULL,    XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('state',       'int:0:', $data['state'],    0,       XARVAR_NOT_REQUIRED)) {return;}
@@ -90,11 +91,11 @@ function roles_admin_updatestate()
      if ((!xarModVars::get('roles', 'ask'.$mailtype.'email')) || (count($idnotify) == 0)) {
             xarController::redirect(xarModURL('roles', 'admin', 'showusers',
                           array('id' => $data['groupid'], 'state' => $data['state'])));
-            return true;
      }
      else {
         xarController::redirect(xarModURL('roles', 'admin', 'asknotification',
                           array('id' => $ids, 'mailtype' => $mailtype, 'groupid' => $data['groupid'], 'state' => $data['state'])));
      }
+     return true;
 }
 ?>

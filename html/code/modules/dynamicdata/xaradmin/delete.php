@@ -17,7 +17,7 @@
  * @param 'itemid' the id of the item to be deleted
  * @param 'confirm' confirm that this item can be deleted
  */
-function dynamicdata_admin_delete($args)
+function dynamicdata_admin_delete(Array $args=array())
 {
    extract($args);
 
@@ -41,6 +41,8 @@ function dynamicdata_admin_delete($args)
                                          'tplmodule'  => $tplmodule,
                                          'template'   => $template));
     if (empty($myobject)) return;
+    
+    // Security
     if (!$myobject->checkAccess('delete'))
         return xarResponse::Forbidden(xarML('Delete #(1) is forbidden', $myobject->label));
 

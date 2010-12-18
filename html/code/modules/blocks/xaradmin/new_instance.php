@@ -13,10 +13,11 @@
  * display form for a new block instance
  * @author Jim McDonald
  * @author Paul Rosania
- */
+ * @return array data for the template display
+*/
 function blocks_admin_new_instance()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AddBlocks', 0, 'Instance')) {return;}
 
     // Can specify block types for a single module.

@@ -9,10 +9,15 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/1098.html
  */
+/**
+ * @return array data for the template display
+ */
 
     function privileges_admin_assignprivileges()
     {
+        // Security
         if (!xarSecurityCheck('ManagePrivileges')) return;
+        
         if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
         if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'all', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('tabmodule', 'str:1:100', $tabmodule, 'All Modules', XARVAR_NOT_REQUIRED)) return;
