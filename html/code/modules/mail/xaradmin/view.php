@@ -15,7 +15,7 @@
  */
 function mail_admin_view(Array $args=array())
 {
-     // Security Check
+     // Security
     if (!xarSecurityCheck('AdminMail')) return;
      
     // Retrieve the object which holds our queue definition

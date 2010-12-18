@@ -39,7 +39,9 @@ function roles_admin_display()
 
     $name = $role->getName();
 
+    // Security
     if (!xarSecurityCheck('EditRoles',1,'Roles',$name)) return;
+    
     $data['frozen'] = xarSecurityCheck('ViewRoles',0,'Roles',$name);
 
     $data['id'] = $id;

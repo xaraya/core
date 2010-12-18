@@ -23,6 +23,7 @@
  */
 function dynamicdata_admin_main()
 {
+    // Security
     if(!xarSecurityCheck('EditDynamicData')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));

@@ -1,6 +1,6 @@
 <?php
 /**
- * Exceptions defined by this subsystem
+ * Version Object
  *
  * @package core
  * @subpackage version

@@ -17,6 +17,9 @@
  */
 function dynamicdata_util_export(Array $args=array())
 {
+    // Security
+    if (!xarSecurityCheck('AdminDynamicData')) return;
+
     extract($args);
 
     if(!xarVarFetch('objectid', 'isset', $objectid, NULL, XARVAR_DONT_SET)) {return;}

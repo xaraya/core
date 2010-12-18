@@ -283,7 +283,7 @@ function blocks_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0.0':
+      default:
       break;
     }
     return true;

@@ -38,7 +38,7 @@ function modules_admin_modify(Array $args=array())
     $modname     = $modInfo['name'];
     $displayName = $modInfo['displayname'];
 
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminModules',0,'All',"$modname::$id")) return;
 
     // Get the list of all item types for this module (if any)

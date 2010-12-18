@@ -45,6 +45,9 @@ function dynamicdata_admin_create(Array $args=array())
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
+    // Security
+    if(!xarSecurityCheck('AddDynamicData')) return;
+
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'join'     => $join,
                                          'table'    => $table,

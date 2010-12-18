@@ -20,6 +20,13 @@
  */
 function modules_admin_update()
 {
+    // Security
+    if (!xarSecurityCheck('EditModules')) return; 
+    
+    if (!xarSecConfirmAuthKey()) {
+        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    }        
+
     // Get parameters
     xarVarFetch('id','id',$regId);
     // CHECKME: what's this?

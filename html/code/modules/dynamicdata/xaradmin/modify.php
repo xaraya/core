@@ -53,6 +53,8 @@ function dynamicdata_admin_modify(Array $args=array())
                                          'itemid'   => $itemid,
                                          'tplmodule' => $tplmodule));
     if (empty($object)) return;
+    
+    // Security
     if (!$object->checkAccess('update'))
         return xarResponse::Forbidden(xarML('Update #(1) is forbidden', $object->label));
 

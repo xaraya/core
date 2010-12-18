@@ -19,6 +19,9 @@
  */
 function privileges_admin_new()
 {
+    // Security
+    if(!xarSecurityCheck('AddPrivileges')) return;
+
     $data = array();
 
     if (!xarVarFetch('id',         'isset', $data['id'],        '',          XARVAR_NOT_REQUIRED)) {return;}
@@ -35,9 +38,6 @@ function privileges_admin_new()
 
 // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
-
-// Security Check
-    if(!xarSecurityCheck('AddPrivileges')) return;
 
 // remove duplicate entries from the list of privileges
     $privileges = array();

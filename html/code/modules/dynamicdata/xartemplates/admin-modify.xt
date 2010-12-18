@@ -14,11 +14,22 @@
         <xar:if condition="empty($tab) or $tab eq 'edit'">
             <h2>
                 <xar:if condition="!empty($objectid) and $objectid eq 1">
-                    Modify DataObject for #$object:properties.label:value#
+                    <xar:ml>
+                        <xar:mlstring>
+                            Modify DataObject for #(1)
+                        </xar:mlstring>
+                        <xar:mlvar>#$object:properties.label:value#</xar:mlvar>
+                    </xar:ml>
                     <xar:set name="tab">'edit'</xar:set>
                     <xar:template type="module" file="object_menu"/>
                 <xar:else/>
-                    Modify Item #$object:itemid# in #$object:label#&#160;
+                    <xar:ml>
+                        <xar:mlstring>
+                            Modify Item #(1) in #(2)&#160;
+                        </xar:mlstring>
+                        <xar:mlvar>#$object:itemid#</xar:mlvar>
+                        <xar:mlvar>#$object:label#</xar:mlvar>
+                    </xar:ml>
                     <a href="#$viewlink#" title="View #$object:label#">
                         <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
                     </a>

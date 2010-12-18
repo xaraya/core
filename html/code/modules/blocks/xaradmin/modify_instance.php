@@ -22,13 +22,9 @@ function blocks_admin_modify_instance()
     // Get parameters
     if (!xarVarFetch('bid', 'int:1:', $bid, 0, XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('tab', 'pre:trim:lower:str:1', $tab, 'config', XARVAR_NOT_REQUIRED)) return;
-
+    
+    // Security
     if (empty($bid)) return xarResponse::notFound();
-
-    // Security Check
-    if (!xarSecurityCheck('EditBlocks', 0, 'Instance')) {return;}
-
-    // Get the instance details.
     // @CHECKME: exception if the block is not found, does get do that?
     $instance = xarMod::apiFunc('blocks', 'user', 'get', array('bid' => $bid));
     // user needs admin access to modify block instance (name, title, etc)

@@ -24,6 +24,9 @@
  */
 function modules_admin_deactivate ()
 {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));

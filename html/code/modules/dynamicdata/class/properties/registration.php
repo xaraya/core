@@ -48,7 +48,7 @@ class PropertyRegistration extends DataContainer
         }
     }
 
-    static function clearCache()
+    static public function clearCache()
     {
         $dbconn = xarDB::getConn();
         xarMod::loadDbInfo('dynamicdata','dynamicdata');
@@ -58,7 +58,7 @@ class PropertyRegistration extends DataContainer
         return $res;
     }
 
-    function getRegistrationInfo(Object $class)
+    public function getRegistrationInfo(Object $class)
     {
         $this->id   = $class->id;
         $this->name = $class->name;
@@ -73,7 +73,7 @@ class PropertyRegistration extends DataContainer
     /**
      * Register a DataProperty in the database
      */
-    function Register()
+    public function Register()
     {
         static $stmt = null;
         static $types = array();
@@ -147,7 +147,7 @@ class PropertyRegistration extends DataContainer
         return $res;
     }
 
-    static function Retrieve()
+    static public function Retrieve()
     {
         if(xarCoreCache::isCached('DynamicData','PropertyTypes')) {
             return xarCoreCache::getCached('DynamicData','PropertyTypes');
@@ -229,7 +229,7 @@ class PropertyRegistration extends DataContainer
                 $propDirs = $dirs;
             } else {
                 // Clear the cache
-                PropertyRegistration::ClearCache();
+                self::ClearCache();
 
                 if (!xarVarGetCached('installer','installing')) {
                     // Repopulate the configurations table

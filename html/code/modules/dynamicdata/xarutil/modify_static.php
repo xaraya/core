@@ -18,6 +18,7 @@
     
     function dynamicdata_util_modify_static()
     {
+        // Security
         if (!xarSecurityCheck('EditDynamicData')) return;
 
         if (!xarVarFetch('table',      'str:1',  $data['table'], '',     XARVAR_NOT_REQUIRED)) return;

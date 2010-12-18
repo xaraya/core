@@ -19,11 +19,12 @@
  */
 function roles_admin_showprivileges()
 {
+    // Security
+    if (!xarSecurityCheck('EditRoles')) return;
+    
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
 
-    // Security Check
-    if (!xarSecurityCheck('EditRoles')) return;
     // Call the Roles class and get the role
     $role = xarRoles::get($id);
 

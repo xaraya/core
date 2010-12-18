@@ -17,7 +17,7 @@
  */
 function dynamicdata_util_importprops()
 {
-// Security Check
+    // Security
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_DONT_SET)) {return;}

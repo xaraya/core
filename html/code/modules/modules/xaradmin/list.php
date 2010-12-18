@@ -19,7 +19,7 @@
  */
 function modules_admin_list()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminModules')) return;
 
     // form parameters

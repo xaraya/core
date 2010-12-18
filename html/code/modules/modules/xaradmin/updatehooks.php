@@ -17,7 +17,7 @@
  */
 function modules_admin_updatehooks()
 {
-// Security Check
+    // Security
     if(!xarSecurityCheck('ManageModules')) {return;}
 
     if (!xarSecConfirmAuthKey()) {

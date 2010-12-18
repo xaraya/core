@@ -18,9 +18,10 @@
  */
 function dynamicdata_admin_view_propertydefs()
 {
-    $data = xarMod::apiFunc('dynamicdata','admin','menu');
-
+    // Security
     if(!xarSecurityCheck('AdminDynamicData')) return;
+
+    $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
     $data['authid'] = xarSecGenAuthKey();
 

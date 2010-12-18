@@ -37,7 +37,7 @@ function privileges_admin_deleterealm()
         list($result_id, $name) = $result->fields; 
     }
 
-// Security Check
+    // Security
     if(!xarSecurityCheck('ManagePrivileges',0,'Realm',$name)) return;
 
     if (empty($confirmed)) {
