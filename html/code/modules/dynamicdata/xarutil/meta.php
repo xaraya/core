@@ -16,7 +16,7 @@
  */
 function dynamicdata_util_meta(Array $args=array())
 {
-// Security Check
+    // Security
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     extract($args);

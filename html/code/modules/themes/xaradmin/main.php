@@ -22,6 +22,7 @@
  */
 function themes_admin_main()
 {
+    // Security
     if(!xarSecurityCheck('EditThemes')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));

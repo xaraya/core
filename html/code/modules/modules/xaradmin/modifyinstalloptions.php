@@ -15,6 +15,9 @@
 
 function modules_admin_modifyinstalloptions(Array $args=array())
 {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     sys::import('modules.modules.class.installer');
     $installer = Installer::getInstance();    
     if (!$installer->modulestack->size()) {

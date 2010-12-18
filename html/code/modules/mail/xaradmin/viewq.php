@@ -21,10 +21,11 @@
 */
 function mail_admin_viewq(Array $args=array())
 {
+    // Security
+    if (!xarSecurityCheck('AdminMail')) return;
+
     extract($args);
     if (!xarVarFetch('action','str', $action, '')) return;
-
-    if (!xarSecurityCheck('AdminMail')) return;
 
     $data = array();
     if (!empty($action)) {

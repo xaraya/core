@@ -29,7 +29,7 @@ function privileges_admin_deleteprivilege()
     $priv = xarPrivileges::getprivilege($id);
     $name = $priv->getName();
 
-// Security Check
+    // Security
     if(!xarSecurityCheck('ManagePrivileges',0,'Privileges',$name)) return;
 
     if (empty($confirmation)) {

@@ -28,13 +28,13 @@ function blocks_admin_create_instance()
     if (!xarVarFetch('block_template_inner', 'str:1:', $template_inner, NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('block_template_outer', 'str:1:', $template_outer, NULL, XARVAR_NOT_REQUIRED)) return;
 
+    // Security
+    if(!xarSecurityCheck('AddBlocks', 0, 'Instance')) {return;}
+
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }
-
-    // Security Check
-    if(!xarSecurityCheck('AddBlocks', 0, 'Instance')) {return;}
 
     // Check if block name has already been used.
     $checkname = xarMod::apiFunc('blocks', 'user', 'get', array('name' => $name));

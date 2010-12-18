@@ -21,7 +21,7 @@
  */
 function base_admin_upgrade()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminBase')) return;
     
     $fileversion = XARCORE_VERSION_NUM;

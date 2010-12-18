@@ -16,7 +16,7 @@
  */
 function mail_admin_template(Array $args=array())
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminMail')) return;
 
     extract($args);
