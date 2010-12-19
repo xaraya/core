@@ -94,7 +94,7 @@ function xarTheme_getVarsByTheme($themeName)
     // mod  = themes
     // item = the theme
     // For now, return the vars of the themes module
-    return xarModVars::load('themes');
+    return xarModVars::preload('themes');
 }
 
 ?>
