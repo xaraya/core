@@ -211,6 +211,8 @@ function dynamicdata_config_propval($proptype)
     $data['showval'] = $property->showConfiguration($data);
     $data['proptype'] = $proptype;
     $data['propinfo'] =& $property;
+    $object = & DataPropertyMaster::getProperty(array('type' => $proptype));
+    $data['propertytype'] = $object;
 
     xarTplSetPageTitle(xarML('Sample Configuration for DataProperty Type #(1)', $proptype));
 
