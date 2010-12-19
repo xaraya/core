@@ -22,7 +22,7 @@ function installer_admin_upgrade()
 
     // Version information
     $fileversion = xarCore::VERSION_NUM;
-    $dbversion = '2.1.1';//xarConfigVars::get(null, 'System.Core.VersionNum');
+    $dbversion = xarConfigVars::get(null, 'System.Core.VersionNum');
     sys::import('xaraya.version');
     
     // Versions prior to 2.1.0 had the revision number as version number, or something else
