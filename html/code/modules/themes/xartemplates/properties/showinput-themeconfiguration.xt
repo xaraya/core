@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <fieldset>
+        <legend>Configuration options</legend>
+        <xar:if condition="count($configs) eq 0">
+            No configuration options defined. Define some <a href="#xarModURL('dynamicdata','admin','new',array('name'=>'themes_configurations'))#">here</a>.
+        <xar:else />
+            <xar:foreach in="$configs" key="$key" value="$init">
+                <xar:set name="fieldname">$name . '[' . $key . ']'</xar:set>
+                <xar:set name="fieldid">$id . '_' . $key</xar:set>
+                <xar:if condition="isset($init['configuration'])">
+                    <xar:set name="configuration">$init['configuration']</xar:set>
+                <xar:else />
+                    <xar:set name="configuration">''</xar:set>
+                </xar:if>
+                <div class="xar-form-input-wrapper">
+                    <label for="#$fieldid#" title="#$init['description']#" class="xar-form-label">
+                        #$init['label']#
+                    </label>
+                    <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']"/>
+                    &#160;(#$key#)
+                </div>
+            </xar:foreach>
+        </xar:if>
+    </fieldset>
+    <xar:template file="dataproperty_additions" module="base"/>
+</xar:template>
