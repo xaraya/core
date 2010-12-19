@@ -23,21 +23,45 @@ function themes_admin_showthemeconfig(Array $args=array())
     if (!xarVarFetch('id',  'id',    $themeid, NULL, XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('exit', 'isset', $exit, NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('confirm', 'isset', $confirm, NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
 
     if (empty($themeid)) return xarResponse::NotFound();
 
     // get the theme object corresponding to this theme
     sys::import('modules.dynamicdata.class.objects.master');
-    $myobject = & DataObjectMaster::getObject(array('name'   => 'themes',
+    $theme = & DataObjectMaster::getObject(array('name'   => 'themes',
                                                     'itemid' => $themeid));
-    if (empty($myobject)) return;
+    if (empty($theme)) return;
 
-    $newid = $myobject->getItem();
+    $id = $theme->getItem();
     
-    $data['theme'] = $myobject;
-    $data['properties'] = $myobject->properties;
+    $data['theme'] = $theme;
+    $data['themeid'] = $themeid;
+    $data['properties'] = $theme->properties;
 
+    if ($confirm || $exit) {
+    
+        // Check for a valid confirmation key
+        if(!xarSecConfirmAuthKey()) return;
+
+        // Get the data from the form
+        $isvalid = $data['theme']->properties['configuration']->checkInput();
+        
+        if (!$isvalid) {
+            // Bad data: redisplay the form with error messages
+            return xarTplModule('themes','admin','showthemeconfig', $data);        
+        } else {
+            // Good data: create the item
+            $itemid = $data['theme']->updateItem(array('itemid' => $data['themeid']));
+            
+            // Jump to the next page
+            if ($exit) {
+                xarController::redirect(xarModURL('themes','admin','list'));
+            } else {
+                xarController::redirect(xarModURL('themes','admin','showthemeconfig',array('id' => $themeid)));
+            }
+            return true;
+        }
+    }
     return $data;
 }
 

@@ -13,7 +13,7 @@
         <xar:else />
             <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
         </xar:if>
-        <form method="post" action="#xarModURL('dynamicdata','admin','showpropval')#" enctype="#$enc_type#">
+        <form method="post" action="#xarModURL('themes','admin','showthemeconfig')#" enctype="#$enc_type#">
             <fieldset>
                 <legend>Theme summary</legend>
                 <xar:set name="fieldlist">
@@ -21,11 +21,11 @@
                 </xar:set>
                 <xar:data-display object="$theme" fieldlist="$fieldlist"/>
             </fieldset>
-            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-            <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>
             <xar:data-input property="$properties['configuration']"/>
             <fieldset>
                 <div class="xar-align-center">
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="hidden" name="id" id="id" value="#$themeid#"/>
                     <input type="submit" name="confirm" value="#xarML('Update')#"/>&#160;
                     <input type="submit" name="exit" value="#xarML('Update and Exit')#"/> 
                 </div>

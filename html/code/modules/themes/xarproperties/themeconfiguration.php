@@ -27,83 +27,87 @@ class ThemeConfigurationProperty extends TextBoxProperty
     public $desc       = 'Theme Configuration';
     public $reqmodules = array('themes');
 
-    // Default to static text
-    public $proptype = 1;
-    //public $initialization_prop_type = null;
+    public $theme_id;   // The regid of the theme this property belongs to
 
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/themes/xarproperties';
+        $this->tplmodule  = 'themes';
+        $this->template   = 'themeconfiguration';
         // Make sure we get an object reference so we can get the theme ID value
         $this->include_reference = 1;
     }
 
     public function checkInput($name = '', $value = null)
     {
-        // set property type from object reference (= dynamic configuration) if possible
-        if (!empty($this->objectref) && !empty($this->objectref->properties['property_id'])) {
-            $this->proptype = $this->objectref->properties['property_id']->value;
-        }
-        $data['type'] = $this->proptype;
-
-// TODO: support nested configurations (e.g. for array of properties) ?
-//       Problem is setting the proptype of the child config in the parent config
-
-        if (empty($data['type'])) {
-            $data['type'] = 1; // default DataProperty class
-        }
-
-        $data['name'] = !empty($name) ? $name : 'dd_'.$this->id;
-        $property =& DataPropertyMaster::getProperty($data);
-        if (empty($property)) return;
-
-        if (!xarVarFetch($data['name'],'isset',$data['configuration'],NULL,XARVAR_NOT_REQUIRED)) return;
-
-        if (!$property->updateConfiguration($data)) return false;
-        $this->value = $property->configuration;
-
+        $name = !empty($name) ? $name : 'dd_'.$this->id;        
+        if (!xarVarFetch($name,'isset',$configuration,NULL,XARVAR_NOT_REQUIRED)) return;        
+        $this->value = serialize($configuration);
         return true;
     }
 
     public function showInput(Array $data = array())
     {
-        sys::import('xaraya.structures.query');
-        $tables = xarDB::getTables();
-        $q = new Query('SELECT',$tables['themes_configurations']);
-        $q->eq('theme_id',$themeid);
-    //    $q->qecho();
-        $q->run();
-        $result = $q->output();
-    //    var_dump($result);//exit;
-    
-        //$data['type'] = $data['value']['initialization_prop_type']; only shows once
-
         // set theme regid the from object reference (= theme_configuration) if possible
-        if (!empty($this->objectref) && !empty($this->objectref->properties['theme_id'])) {
-            $this->theme_id = $this->objectref->properties['theme_id']->value;
+        if (!empty($this->objectref) && !empty($this->objectref->properties['regid'])) {
+            $this->theme_id = $this->objectref->properties['regid']->value;
             $data['theme_id'] = $this->theme_id;
         }
 
-        $property =& DataPropertyMaster::getProperty($data);
-        $property->id = $this->id;
-        $property->parseConfiguration($this->value);
+        // Get the configuration of this theme and parse it
+        $this->parseConfiguration($this->value);
 
-        // call its showConfiguration() method and return
-        return $property->showConfiguration($data);
+        $data['configs'] = $this->configuration;
+        return parent::showInput($data);
     }
 
-    public function showOutput(Array $args = array())
+    public function parseConfiguration($configuration = '')
     {
-        extract($args);
-
-        if (isset($value)) {
-            $value = xarVarPrepHTMLDisplay($value);
+        if (is_array($configuration)) {
+            $fields = $configuration;
+        } elseif (empty($configuration)) {
+            $fields = array();
+        // try normal serialized configuration
         } else {
-            $value = xarVarPrepHTMLDisplay($this->value);
+            try {
+                $fields = unserialize($configuration);
+            } catch (Exception $e) {
+                return true;
+            }
         }
-
-        return $value;
+        // Now match the parsed configurationproperties to those defined in the theme
+        $properties = $this->getThemeConfigProperties(1);
+        $this->configuration = array();
+        foreach ($properties as $name => $configarg) {
+            if (isset($fields[$name])) {
+                $configarg['value'] = $fields[$name];
+            } else {
+                $configarg['value'] = null;
+            }
+            $this->configuration[$name] = $configarg;
+        }
+    }
+    public function getThemeConfigProperties($fullname=0)
+    {
+        // cache configuration for all properties
+        if (xarCoreCache::isCached('Themes','Configurations')) {
+             $allconfigproperties = xarCoreCache::getCached('Themes','Configurations');
+        } else {
+            sys::import('xaraya.structures.query');
+            $tables = xarDB::getTables();
+            $q = new Query('SELECT',$tables['themes_configurations']);
+            $q->eq('theme_id',$this->theme_id);
+            $q->run();
+            $result = $q->output();
+            $allconfigproperties = array();
+            foreach ($q->output() as $row)
+            {
+                $allconfigproperties[$row['name']] = $row;
+            }
+            xarCoreCache::setCached('Themes','Configurations', $allconfigproperties);
+        }
+        return $allconfigproperties;
     }
 }
 ?>

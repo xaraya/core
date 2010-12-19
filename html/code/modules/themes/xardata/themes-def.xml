@@ -63,7 +63,7 @@
     <property name="configuration">
       <id>93</id>
       <label>Configuration</label>
-      <type>textarea_medium</type>
+      <type>themeconfiguration</type>
       <defaultvalue></defaultvalue>
       <source>xar_themes.configuration</source>
       <status>34</status>
