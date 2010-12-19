@@ -25,6 +25,7 @@ function dynamicdata_admin_update_propertydefs(Array $args=array())
 
     if (!xarVarFetch('flushPropertyCache', 'isset', $flushPropertyCache,  NULL, XARVAR_DONT_SET)) {return;}
 
+    // Security
     if (!xarSecurityCheck('AdminDynamicData')) return;
 
     if (!xarSecConfirmAuthKey()) {

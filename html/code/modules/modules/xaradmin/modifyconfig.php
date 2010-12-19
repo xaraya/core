@@ -23,7 +23,9 @@
 */
 function modules_admin_modifyconfig()
 {
+    // Security
     if(!xarSecurityCheck('AdminModules')) return;
+    
     if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if(!xarVarFetch('disableoverview','checkbox', $data['disableoverview'], (bool)xarModVars::get('modules', 'disableoverview'), XARVAR_NOT_REQUIRED)) return;
 

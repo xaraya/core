@@ -19,10 +19,10 @@
  */
 function dynamicdata_admin_privileges(Array $args=array())
 { 
-    extract($args);
-
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminDynamicData')) return;
+
+    extract($args);
 
     if (!xarVarFetch('objectid', 'id' , $objectid, NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('moduleid', 'str', $moduleid, 0, XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric or modulename

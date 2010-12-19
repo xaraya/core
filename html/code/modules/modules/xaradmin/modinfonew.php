@@ -20,6 +20,9 @@
  */
 function modules_admin_modinfonew()
 {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     $data = array();
     
     if (!xarVarFetch('id', 'notempty', $id)) {return;}

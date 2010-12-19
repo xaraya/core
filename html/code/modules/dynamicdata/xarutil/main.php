@@ -22,7 +22,7 @@
  */
 function dynamicdata_util_main()
 {
-// Security Check
+    // Security
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     $data = array();

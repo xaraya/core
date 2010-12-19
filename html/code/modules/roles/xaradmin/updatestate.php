@@ -16,8 +16,9 @@
  */
 function roles_admin_updatestate()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('EditRoles')) return;
+    
     // Get parameters
     if (!xarVarFetch('status',      'int:0:', $data['status'],   NULL,    XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('state',       'int:0:', $data['state'],    0,       XARVAR_NOT_REQUIRED)) {return;}

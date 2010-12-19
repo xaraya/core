@@ -19,13 +19,13 @@
  */
 function privileges_admin_newrealm()
 {
+    // Security
+    if(!xarSecurityCheck('AddPrivileges',0,'Realm')) return;
+
     $data = array();
 
     if (!xarVarFetch('name',      'str:1:20', $name,      '',      XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('confirmed', 'bool', $confirmed, false, XARVAR_NOT_REQUIRED)) return;
-
-    // Security Check
-    if(!xarSecurityCheck('AddPrivileges',0,'Realm')) return;
 
     if ($confirmed) {
         if (!xarSecConfirmAuthKey()) {

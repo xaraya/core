@@ -16,6 +16,7 @@
  */
 function dynamicdata_util_import(Array $args=array())
 {
+    // Security
     if(!xarSecurityCheck('AdminDynamicData')) return;
 
     if(!xarVarFetch('basedir',    'isset', $basedir,     NULL,  XARVAR_DONT_SET)) {return;}

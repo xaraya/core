@@ -15,8 +15,9 @@
  */
 function dynamicdata_admin_utilities(Array $args=array())
 {
-    // Security check
+    // Security
     if (!xarSecurityCheck('EditDynamicData')) return;
+    
     extract($args);
     if(!xarVarFetch('q','str', $data['option'], 'query', XARVAR_NOT_REQUIRED)) {return;}
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML($data['option'])));

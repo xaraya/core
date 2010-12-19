@@ -561,10 +561,6 @@ function dynamicdata_upgrade($oldversion)
 
             // fall through to next upgrade
 
-        case '2.0.1':
-
-            // fall through to next upgrade
-
         default:
             break;
     }

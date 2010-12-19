@@ -17,6 +17,8 @@
  */
 function privileges_admin_modifyprivilege()
 {
+    // Security
+    if(!xarSecurityCheck('EditPrivileges')) return;
 
     if(!xarVarFetch('id',            'isset', $id,           NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pname',         'isset', $name,         NULL, XARVAR_DONT_SET)) {return;}
@@ -32,9 +34,6 @@ function privileges_admin_modifyprivilege()
 
 // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
-
-// Security Check
-    if(!xarSecurityCheck('EditPrivileges')) return;
 
 //Call the Privileges class and get the privilege to be modified
     sys::import('modules.privileges.class.privileges');

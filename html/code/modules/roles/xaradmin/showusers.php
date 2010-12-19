@@ -15,7 +15,7 @@
  */
 function roles_admin_showusers()
 {
-
+    // Security
     if (!xarSecurityCheck('EditRoles')) return;
 
     if (xarVarIsCached('roles', 'defaultgroupid')) {

@@ -17,8 +17,9 @@
  */
 function roles_admin_modifynotice()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminRoles')) return;
+    
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
     $hooks = array();
     switch (strtolower($phase)) {

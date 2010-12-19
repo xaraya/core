@@ -19,8 +19,9 @@
  */
 function themes_admin_release()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('EditThemes')) return;
+    
     // allow fopen
     if (!xarFuncIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
     if (!ini_get('allow_url_fopen')) {

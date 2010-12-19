@@ -24,6 +24,7 @@ function base_user_main(Array $args=array())
 {
     // Security Check
     if(!xarSecurityCheck('ViewBase')) return;
+    
     /* fetch some optional 'page' argument or parameter */
     extract($args);
     if (!xarVarFetch('page','str',$page,'',XARVAR_NOT_REQUIRED)) return;

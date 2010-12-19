@@ -21,6 +21,9 @@
  */
 function modules_admin_updateproperties()
 {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        

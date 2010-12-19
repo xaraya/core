@@ -19,9 +19,9 @@
  */
 function modules_admin_tools()
 {
-    
-    // Security check - not needed here
-
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+        
     $data = array();
     
 /*     if (!xarVarFetch('id', 'id', $id)) {return;} */

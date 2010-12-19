@@ -25,6 +25,7 @@
  */
 function base_admin_main()
 {
+    // Security
     if(!xarSecurityCheck('EditBase')) return;
 
     $request = new xarRequest();

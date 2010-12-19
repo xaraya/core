@@ -15,6 +15,7 @@
     
     function dynamicdata_util_rename_static_table()
     {
+        // Security
         if (!xarSecurityCheck('AdminDynamicData')) return;
 
         if (!xarVarFetch('table',      'str:1',  $data['table'],    '',     XARVAR_NOT_REQUIRED)) return;

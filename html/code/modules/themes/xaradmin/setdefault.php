@@ -21,11 +21,14 @@
  */
 function themes_admin_setdefault()
 {
+    // Security
+    if (!xarSecurityCheck('AdminThemes')) return;
+    
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }
-    if (!xarSecurityCheck('AdminThemes')) return;
+    
     if (!xarVarFetch('id', 'int:1:', $defaulttheme, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($defaulttheme)) return xarResponse::notFound();
 

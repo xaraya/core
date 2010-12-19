@@ -15,7 +15,7 @@
  */
 function roles_admin_modifyemail(Array $args=array())
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('EditRoles')) return;
 
     extract($args);

@@ -17,7 +17,7 @@
  */
 function privileges_admin_viewroles()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('EditRoles')) return;
 
     $data = array();
