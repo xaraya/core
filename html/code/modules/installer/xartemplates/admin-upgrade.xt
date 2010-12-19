@@ -160,26 +160,26 @@
                             <th style="border-bottom: dotted 1px; width:10%; text-align: left">Result</th>
                             <th style="border-bottom: dotted 1px; width:10%; text-align: left">Reference</th>
                         </tr>
-                            <xar:if condition="empty($check['tasks'])">
+                        <xar:if condition="empty($check['tasks'])">
+                            <tr>
+                                <td colspan="3" style="text-align: center">
+                                    No checks available/required
+                                </td>
+                            </tr>
+                        <xar:else/>
+                            <xar:foreach in="$check['tasks']" value="$task">
                                 <tr>
-                                    <td colspan="3" style="text-align: center">
-                                        No checks available/required
-                                    </td>
+                                    <td>#$task['description']#</td>
+                                    <xar:if condition="$task['success']">
+                                        <xar:set name="reply_color">'green'</xar:set>
+                                    <xar:else/>
+                                        <xar:set name="reply_color">'red'</xar:set>
+                                    </xar:if>
+                                    <td style="color: #$reply_color#">#$task['reply']#</td>
+                                    <td>#$task['reference']#</td>
                                 </tr>
-                            <xar:else/>
-                                <xar:foreach in="$check['tasks']" value="$task">
-                                    <tr>
-                                        <td>#$task['description']#</td>
-                                        <xar:if condition="$task['success']">
-                                            <xar:set name="reply_color">'green'</xar:set>
-                                        <xar:else/>
-                                            <xar:set name="reply_color">'red'</xar:set>
-                                        </xar:if>
-                                        <td style="color: #$reply_color#">#$task['reply']#</td>
-                                        <td>#$task['reference']#</td>
-                                    </tr>
-                                </xar:foreach>
-                            </xar:if>
+                            </xar:foreach>
+                        </xar:if>
                     </table>
                     <xar:if condition="!empty($check['message']) AND empty($upgrade['errormessage'])">
                         <h3>#$check['message']#</h3>
