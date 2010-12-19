@@ -10,7 +10,7 @@
  * @link http://xaraya.com/index.php/release/200.html
  */
 
-function main_220()
+function main_upgrade_220()
 {
     $data['upgrade']['message'] = xarML('The upgrade to version 2.2.0 was successfully completed');
     $data['upgrade']['tasks'] = array();
@@ -18,12 +18,23 @@ function main_220()
     $upgrades = array(
                         'sql_220_01',
                         'sql_220_02',
-                        'sql_220_03',
+                        'sql_220_03', // Create event system table
+                        'sql_220_04', // Initialise event system, register event subjects and observers
+                        'sql_220_05', // Initialize hooks system, register hook subjects
+                        'sql_220_06', // Register hook observers
+                        'sql_220_07', // Create hooks table, register hooks
+                        
                     );
     foreach ($upgrades as $upgrade) {
         if (!Upgrader::loadFile('upgrades/220/database/' . $upgrade . '.php')) {
-            $data['upgrade']['errormessage'] = Upgrader::$errormessage;
-            return $data;
+            $data['upgrade']['tasks'][] = array(
+                'reply' => xarML('Failed!'),
+                'description' => Upgrader::$errormessage,
+                'reference' => $upgrade,
+                'success' => false,
+            );
+            $data['upgrade']['errormessage'] = xarML('Some checks failed. Check the reference(s) above to determine the cause.');
+            continue;
         }
         $result = $upgrade();
         $data['upgrade']['tasks'][] = array(

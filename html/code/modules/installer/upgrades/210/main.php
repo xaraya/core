@@ -54,8 +54,14 @@ function main_upgrade_210()
                     );
     foreach ($upgrades as $upgrade) {
         if (!Upgrader::loadFile('upgrades/210/database/' . $upgrade . '.php')) {
-            $data['upgrade']['errormessage'] = Upgrader::$errormessage;
-            return $data;
+            $data['upgrade']['tasks'][] = array(
+                'reply' => xarML('Failed!'),
+                'description' => Upgrader::$errormessage,
+                'reference' => $check,
+                'success' => false,
+            );
+            $data['upgrade']['errormessage'] = xarML('Some checks failed. Check the reference(s) above to determine the cause.');
+            continue;
         }
         $result = $upgrade();
         $data['upgrade']['tasks'][] = array(
