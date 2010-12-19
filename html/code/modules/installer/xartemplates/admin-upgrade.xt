@@ -106,7 +106,8 @@
                 </xar:if>
             </xar:if>
         <xar:elseif condition="$phase eq 2"/>
-            <form action="upgrade.php" method="post">
+            <form action="upgrade.php" method="post">            
+                <xar:foreach in="$upgrades" key="$version" value="$upgrade">
                 <table style="margin-top:10px; width:100%">
                     <tr>
                         <th style="border-bottom: dotted 1px; text-align: left">Task</th>
@@ -136,7 +137,10 @@
                 </table>
                 <xar:if condition="!empty($upgrade['message']) AND empty($upgrade['errormessage'])">
                     <h3>#$upgrade['message']#</h3>
+                <xar:else/>
+                    <h3>#$upgrade['errormessage']#</h3>
                 </xar:if>
+                </xar:foreach>
                 <p class="center">
                     <input type="hidden" name="phase" id="phase" value="3"/>
                     <xar:var name="label">Back</xar:var>
@@ -181,8 +185,10 @@
                                 </xar:foreach>
                             </xar:if>
                     </table>
-                    <xar:if condition="!empty($check['message']) AND empty($upgrade['errormessage'])">
+                    <xar:if condition="!empty($check['message']) AND empty($check['errormessage'])">
                         <h3>#$check['message']#</h3>
+                    <xar:else/>
+                        <h3>#$check['errormessage']#</h3>
                     </xar:if>
                 </xar:foreach>
                 <p class="center">
