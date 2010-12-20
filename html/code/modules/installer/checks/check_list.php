@@ -29,8 +29,9 @@
  */
     function installer_adminapi_get_check_list() {
         return array(
-                    '210',
-                    // No 211 checks
+                    '210' => '2.1.0',
+                    '211' => '2.1.1',
+                    '212' => '2.1.2',
         );
     }
 

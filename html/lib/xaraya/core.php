@@ -28,7 +28,7 @@ if(file_exists('../_MTN/revision'))
         $rev = str_replace(array('old_revision [',']'),'',$t[4]);
 }
 define('XARCORE_VERSION_ID',  'Jamaica');
-define('XARCORE_VERSION_NUM', '2.1.1');
+define('XARCORE_VERSION_NUM', '2.1.2');
 define('XARCORE_VERSION_SUB', 'post rabiem risus');
 define('XARCORE_VERSION_REV', $rev);
 
