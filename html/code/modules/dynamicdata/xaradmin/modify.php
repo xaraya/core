@@ -53,6 +53,7 @@ function dynamicdata_admin_modify($args)
     
     // Security
     if (empty($object)) return xarResponse::NotFound();
+    if (empty($itemid)) return xarResponse::NotFound();
     if (!$object->checkAccess('update'))
         return xarResponse::Forbidden(xarML('Update #(1) is forbidden', $object->label));
 
