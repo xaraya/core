@@ -37,5 +37,5 @@ $modversion['contact']            = 'http://www.xaraya.com/';
 $modversion['admin']              = true;
 $modversion['user']               = false;
 $modversion['class']              = 'Authentication';
-$modversion['category']           = 'System';
+$modversion['category']           = 'Users & Groups';
 ?>

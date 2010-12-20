@@ -47,6 +47,7 @@ function dynamicdata_admin_new(Array $args=array())
                                          'template'  => $template,
                                          ));
     // Security
+    if (empty($myobject)) return xarResponse::NotFound();
     if (!$myobject->checkAccess('create'))
         return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
 

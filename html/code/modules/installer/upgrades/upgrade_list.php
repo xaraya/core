@@ -16,12 +16,13 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
-    function installer_adminapi_get_upgrade_list() {
+    function installer_adminapi_get_upgrade_list() 
+    {    
         return array(
-                    '210',
-                    '211',
-                    '212',
-                    '220',
+                    '210' => '2.1.0',
+                    '211' => '2.1.1',
+                    '212' => '2.1.2',
+                    '220' => '2.2.0',
         );
     }
 

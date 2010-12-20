@@ -73,15 +73,12 @@ class xarEvents extends Object implements ixarEvents
     **/
     public static function notify($event, $args=array())
     {
-        // check module subsystem is up before running (SessionCreate is raised during install)
-        if (!class_exists('xarMod')) return;
-        
-        // get info for specified event
-        $info = static::getSubject($event);
-        if (empty($info)) return;
-       
+
         // Attempt to load subject 
         try {
+            // get info for specified event
+            $info = static::getSubject($event);
+            if (empty($info)) return;
             // file load takes care of validation for us 
             if (!self::fileLoad($info)) return; 
             $module = xarMod::getName($info['module_id']);
@@ -141,6 +138,7 @@ class xarEvents extends Object implements ixarEvents
                 break;          
             }
         } catch (Exception $e) {
+            $info = array();
             // Events never fail, ever!
             $response = false;
         }
@@ -208,8 +206,6 @@ class xarEvents extends Object implements ixarEvents
     
     final public static function register($event,$module,$area='class',$type='eventobservers',$func='notify', $itemtype, $scope="") 
     {
-        // check module subsystem is up before running
-        if (!class_exists('xarMod')) return;
 
         $info = array(
             'event' => $event,
