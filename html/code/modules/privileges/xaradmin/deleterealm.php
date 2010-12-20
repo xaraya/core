@@ -36,6 +36,7 @@ function privileges_admin_deleterealm()
     }
 
     // Security
+    if (empty($name)) return xarResponse::NotFound();
     if(!xarSecurityCheck('ManagePrivileges',0,'Realm',$name)) return;
 
     if (empty($confirmed)) {
