@@ -62,6 +62,21 @@ class ThemeConfigurationProperty extends TextBoxProperty
         return parent::showInput($data);
     }
 
+    public function showOutput(Array $data = array())
+    {
+        // set theme regid the from object reference (= theme_configuration) if possible
+        if (!empty($this->objectref) && !empty($this->objectref->properties['regid'])) {
+            $this->theme_id = $this->objectref->properties['regid']->value;
+            $data['theme_id'] = $this->theme_id;
+        }
+
+        // Get the configuration of this theme and parse it
+        $this->parseConfiguration($this->value);
+
+        $data['configs'] = $this->configuration;
+        return parent::showOutput($data);
+    }
+
     public function parseConfiguration($configuration = '')
     {
         if (is_array($configuration)) {
