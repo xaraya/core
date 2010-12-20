@@ -11,6 +11,7 @@
         <p>
             All fields are required to create a new role on the system.
         </p>
+        <xar:set name="itemtype">$object->properties['role_type']->value</xar:set>
         <form id="newrole" action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>
@@ -28,6 +29,11 @@
                 <div class="xar-form-input-wrapper">
                     <xar:var name="label">Initial Group membership</xar:var>
                     <label for="parentid" title="#$label#" class="xar-form-label">Member Of:</label>
+                    <xar:if condition="empty($parentid)">
+                        <xar:set name="parentid">
+                            xarModVars::get('roles','defaultgroup')
+                        </xar:set>
+                    </xar:if>
                     <xar:data-input type="grouplist" name="parentid" value="$parentid"/>
                 </div>
                 <xar:set name="settings">
