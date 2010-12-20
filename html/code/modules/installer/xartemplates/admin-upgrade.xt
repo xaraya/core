@@ -26,7 +26,7 @@
             <tr>
                 <td>
                     <xar:var name="label">Current Core Version</xar:var>
-                    <label title="#$label#" >                            
+                    <label title="#$label#">                            
                         Xaraya Core:                            
                     </label>
                 </td>
@@ -46,7 +46,7 @@
             <tr>
                 <td>
                     <xar:var name="label">Current Build</xar:var>
-                    <label title="#$label#" >                            
+                    <label title="#$label#">                            
                         Build:                            
                     </label>
                 </td>

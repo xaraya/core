@@ -51,6 +51,7 @@ function installer_admin_upgrade()
     );
     $data['versions'] = array(
                                 '2.1.1',
+                                '2.1.2',
                                 '2.2.0',
     );
     
@@ -89,6 +90,7 @@ function installer_admin_upgrade()
         xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
         xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
         
+        sys::import('xaraya.version');
         // Get the list of version checks
         Upgrader::loadFile('checks/check_list.php');
         $check_list = installer_adminapi_get_check_list();
