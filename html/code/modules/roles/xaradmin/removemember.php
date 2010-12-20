@@ -33,6 +33,8 @@ function roles_admin_removemember()
     $member = xarRoles::get($childid);
 
     // Security
+    if (empty($role)) return xarResponse::NotFound();
+    if (empty($member)) return xarResponse::NotFound();
     if(!xarSecurityCheck('RemoveRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
 
     // Check for authorization code

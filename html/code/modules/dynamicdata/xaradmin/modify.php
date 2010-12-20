@@ -28,16 +28,16 @@ function dynamicdata_admin_modify($args)
 
     if(!xarVarFetch('objectid', 'id',    $objectid,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id','isset', $module_id,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id','isset', $module_id, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('notfresh', 'isset', $notfresh,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule','isset', $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
 
-    if(!xarVarFetch('itemid',   'isset', $itemid)) {return;}
+    if(!xarVarFetch('itemid',   'isset', $itemid,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('preview',  'isset', $preview,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('preview',  'isset', $preview,   NULL, XARVAR_DONT_SET)) {return;}
 
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
     if (!xarVarFetch('tab', 'pre:trim:lower:str:1', $data['tab'], 'edit', XARVAR_NOT_REQUIRED)) return;
@@ -50,9 +50,9 @@ function dynamicdata_admin_modify($args)
                                          'table'    => $table,
                                          'itemid'   => $itemid,
                                          'tplmodule' => $tplmodule));
-    if (empty($object)) return;
     
     // Security
+    if (empty($object)) return xarResponse::NotFound();
     if (!$object->checkAccess('update'))
         return xarResponse::Forbidden(xarML('Update #(1) is forbidden', $object->label));
 

@@ -24,6 +24,7 @@ function roles_admin_modify()
     if (!xarVarFetch('duvs', 'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
 
     $data['object'] = xarRoles::get($id);
+    if (empty($data['object'])) return xarResponse::NotFound();
     $data['object']->properties['name']->display_layout = 'single';
     $data['itemtype'] = $data['object']->getType();
 
