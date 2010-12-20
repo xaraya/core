@@ -16,7 +16,7 @@
 function installer_admin_upgrade()
 {
     // Security
-    if (!xarSecurityCheck('AdminInstaller')) return; 
+    //if (!xarSecurityCheck('AdminInstaller')) return; 
     
     if(!xarVarFetch('phase','int', $data['phase'], 1, XARVAR_DONT_SET)) {return;}
 

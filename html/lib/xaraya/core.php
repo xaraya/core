@@ -172,6 +172,7 @@ sys::import('xaraya.exceptions');
 // Load core caching in case we didn't go through xarCache::init()
 sys::import('xaraya.caching.core');
 
+
 /**
  * Convenience class for keeping track of core stuff
  *
@@ -207,17 +208,18 @@ class xarCore extends xarCoreCache
     const SYSTEM_HOOKS         = XARCORE_SYSTEM_HOOKS;
     const SYSTEM_ALL           = XARCORE_SYSTEM_ALL;    
 
+}
+
 /**
  * Initializes the core engine
  *
- * @author Chris Powis <crisp@crispcreations.co.uk>
+ * 
  * @param integer whatToLoad What optional systems to load.
  * @return boolean true
- * @todo <chris> check todo :)
  * @todo <johnny> fix up sitetable prefix when we have a place to store it
-**/    
-    public static function init($whatToLoad = xarCore::SYSTEM_ALL)
-    {
+**/
+function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
+{
         static $current_SYSTEM_level = xarCore::SYSTEM_NONE;
         static $first_load = true;
 
@@ -555,21 +557,7 @@ class xarCore extends xarCoreCache
         $current_SYSTEM_level = $new_SYSTEM_level;
         return true;
 
-    }
     // end init();
-}
-
-/**
- * Initializes the core engine
- *
- * 
- * @param integer whatToLoad What optional systems to load.
- * @return boolean true
- * @todo <johnny> fix up sitetable prefix when we have a place to store it
-**/
-function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
-{
-    return xarCore::init($whatToLoad);
 }
 
 /**
