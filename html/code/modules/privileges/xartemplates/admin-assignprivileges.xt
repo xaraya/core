@@ -12,12 +12,12 @@
                 Privileges Administration
             </xar:if>
         </span>
+        <xar:template module="privileges" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
         <h2>            
             Assign Privileges            
         </h2>
-        <xar:template module="privileges" file="admin-menu"/>
 
         <div>
             <xar:template file="headerconfig" type="module"/>

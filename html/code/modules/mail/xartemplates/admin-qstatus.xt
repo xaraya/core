@@ -2,7 +2,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:template file="mod-head"/>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <xar:set name="active_tab">'status'</xar:set>
         <xar:template file="queue-tabs"/>
 

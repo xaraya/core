@@ -1,0 +1,20 @@
+<items>
+  <themes_configurations itemid="1">
+    <id>1</id>
+    <theme_id>11005</theme_id>
+    <name>background_color</name>
+    <label>Background Color</label>
+    <description>The color used in the background</description>
+    <property_id>44</property_id>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </themes_configurations>
+  <themes_configurations itemid="2">
+    <id>2</id>
+    <theme_id>11005</theme_id>
+    <name>show_logo</name>
+    <label>Show logo image</label>
+    <description>Display a logo image</description>
+    <property_id>34</property_id>
+    <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:11:"0,No;1,Yes;";}</configuration>
+  </themes_configurations>
+</items>
