@@ -174,7 +174,7 @@ class SelectProperty extends DataProperty
         if (!empty($this->initialization_function)) {
             @eval('$items = ' . $this->initialization_function .';');
             if (!isset($items) || !is_array($items)) $items = array();
-            if (isset($items[0]) && is_array($items[0])) {
+            if (is_array(reset($items))) {
                 foreach($items as $id => $name) {
                     $options[] = array('id' => $name['id'], 'name' => $name['name']);
                 }
