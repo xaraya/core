@@ -7,11 +7,14 @@
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
+    <div class="xar-mod-content-head">    
         <h2>Utilities - Import DataObject Definition</h2>
         <xar:template type="module" file="utility-menu"/>
         <xar:if condition="!empty($warning)">
             <p>#$warning#</p>
         </xar:if>
+    </div><!--/xar-mod-content-head-->
+    <div class="xar-mod-content">
         <form method="post" action="#xarModURL('dynamicdata','util','import')#">
             <fieldset>
                 <legend>Import Object Definition</legend>
@@ -75,5 +78,6 @@
                 </div>
             </fieldset>
         </form>
-    </div>
+    </div><!--/xar-mod-content-->
+    </div><!--/xar-mod-body-->
 </xar:template>

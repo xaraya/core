@@ -22,6 +22,7 @@
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
+    <div class="xar-mod-content-head">
         <h2>#xarVarPrepForDisplay($title)#:
             <xar:var name="label">Modify role</xar:var>
             <a href="#xarModURL('roles','admin','modify',array('id'=>$groupid))#" title="#$label#">
@@ -44,8 +45,7 @@
                 </div>
             </fieldset>
         <xar:elseif condition="$selstyle eq '2'"/>
-            <div>
-                <ul class="xar-tabs xar-alt xar-norm-outline">
+                <ul class="xar-tabs">
                     <xar:var name="title">Click on a group tab to display users from that group</xar:var>
                     <xar:var name="label">Help</xar:var>
                     <li class="xar-tabs-label" title="#$title#">#$label#</li>
@@ -85,8 +85,9 @@
                         #xarVarPrepForDisplay($groups[$i]['name'])#</xar:set>
                     </xar:for>
                 </ul>
-            </div>
         </xar:if>
+        </div><!--/xar-mod-content-head-->
+        <div class="xar-mod-content">
         <form method="post" action="#xarModURL('roles','admin','showusers',array('reload'=>'reload'))#">
             <!-- User List Sort and Filter Controls table (taken from the modules module) @todo make this general -->
             <table class="xar-fullwidth">
@@ -187,7 +188,6 @@
                 <!-- @todo: add this to the filter GUI? -->
                 <xar:set name="fieldlist">array('id','uname','email','regdate')</xar:set>
                 <xar:data-getitems object="$object" values="$values" properties="$properties" sort="$order" fieldlist="$fieldlist"/>
-                <br class="xar-clearboth"/>
                 <table class="xar-fullwidth">
                     <tr>
                         <xar:foreach in="$properties" key="$name">
@@ -266,17 +266,16 @@
                         Uncheck All
                     </a>
                 </div>
-                <div class="xar-align-center">
                     <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
-                </div>
             </form>
         </xar:if>
-        <p>
+        <ul class="xar-mod-actions">
             <xar:var name="label">Add a new user</xar:var>
-            <a href="#xarModURL('roles','admin','new',array('ptype'=>0,'pparentid'=>$groupid))#" title="#$label#">
+            <li><a href="#xarModURL('roles','admin','new',array('ptype'=>0,'pparentid'=>$groupid))#" title="#$label#">
                 Add a new user to this group
-            </a>|
-            <a href="#xarModURL('roles','admin','createmail')#">Email users in this group</a>
-        </p>
-    </div>
+            </a></li>
+            <li><a href="#xarModURL('roles','admin','createmail')#">Email users in this group</a></li>
+        </ul>
+    </div><!--/xar-mod-content-->
+    </div><!--/xar-mod-body-->
 </xar:template>

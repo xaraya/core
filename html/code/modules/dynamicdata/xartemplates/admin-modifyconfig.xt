@@ -12,6 +12,7 @@
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
+    <div class="xar-mod-content-head">
         <h2>            
             Modify DynamicData Configuration            
         </h2>
@@ -25,11 +26,11 @@
             <xar:var name="label">Aspect</xar:var>
             <li class="xar-tabs-label" title="#$title#">#$label#</li>
             <xar:set name="tabclass">'xar-tab'</xar:set>
-            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+            <xar:set name="linkclass">''</xar:set>
             <xar:set name="y">$params['tab']='general'</xar:set>
             <xar:if condition="$tab eq 'general'">
                 <xar:set name="tabclass">'xar-tab-active'</xar:set>
-                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                <xar:set name="linkclass">''</xar:set>
             </xar:if>
             <li class="#$tabclass#">
                 <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">General</a>
@@ -37,16 +38,18 @@
             
             <xar:set name="y">$params['tab']='managehooks'</xar:set>
             <xar:set name="tabclass">'xar-tab'</xar:set>
-            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+            <xar:set name="linkclass">''</xar:set>
             <xar:if condition="$tab eq 'managehooks'">
                 <xar:set name="tabclass">'xar-tab-active'</xar:set>
-                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                <xar:set name="linkclass">''</xar:set>
             </xar:if>
             <xar:set name="y">$params['tab']='managehooks'</xar:set>
             <li class="#$tabclass#">
                 <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">Manage Hooks</a>
             </li>
         </ul>
+    </div><!--/xar-mod-content-head-->
+    <div class="xar-mod-content">
 
         <!-- General tab -->
         <xar:if condition="$tab eq 'general'">
@@ -86,5 +89,6 @@
                 <xar:module main="false" module="modules" type="admin" func="hooks" curhook="dynamicdata" return_url="$url"/>
             </fieldset>
         </xar:if>
+    </div><!--/xar-mod-content-->
     </div>
 </xar:template>

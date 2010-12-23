@@ -5,7 +5,7 @@
         <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
     </div>
             #$pager#
-<table class="xar-fullwidth">
+<table class="xar-items">
     <tr>
             <th>Name</th>
             <th>Groups</th>

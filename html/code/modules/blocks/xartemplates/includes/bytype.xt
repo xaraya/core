@@ -20,11 +20,11 @@
             <xar:set name="thistype">$loop->item['type']</xar:set>
             <xar:if condition="$thistype ne $currenttype">
                 <tr>
-                    <td colspan="6">
-                        <a style="font-size: 11pt" href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
+                    <th class="xar-subhead xar-item-linked" colspan="6">
+                        <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
                             #$loop:item['type']#
                         </a>
-                    </td>
+                    </th>
                 </tr>
                 <xar:set name="currenttype">$thistype</xar:set>
             </xar:if>
