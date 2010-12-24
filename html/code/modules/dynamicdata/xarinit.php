@@ -493,6 +493,7 @@ function dynamicdata_init()
 
     xarRegisterMask('ViewDynamicData','All','dynamicdata','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditDynamicData','All','dynamicdata','All','All','ACCESS_EDIT');
+    xarRegisterMask('AddDynamicData','All','dynamicdata','All','All','ACCESS_ADD');
     xarRegisterMask('ManageDynamicData','All','dynamicdata','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminDynamicData','All','dynamicdata','All','All','ACCESS_ADMIN');
 
