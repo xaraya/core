@@ -210,6 +210,7 @@ function dynamicdata_config_propval($proptype)
     // call its showConfiguration() method and return
     $data['showval'] = $property->showConfiguration($data);
     $data['proptype'] = $proptype;
+    $data['propertytype'] = $property;
     $data['propinfo'] =& $property;
 
     xarTplSetPageTitle(xarML('Sample Configuration for DataProperty Type #(1)', $proptype));
