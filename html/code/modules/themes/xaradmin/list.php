@@ -40,7 +40,7 @@ function themes_admin_list()
     $data['selstyle']                               = xarModUserVars::get('themes', 'selstyle');
     $data['selfilter']                              = xarModUserVars::get('themes', 'selfilter');
     $data['selclass']                               = xarModUserVars::get('themes', 'selclass');
-    $data['useicons']                               = xarModUserVars::get('themes', 'useicons');
+    $data['useicons']                               = xarModVars::get('themes', 'use_module_icons');
 
     // select vars for drop-down menus
     $data['style']['plain']                         = xarML('Plain');

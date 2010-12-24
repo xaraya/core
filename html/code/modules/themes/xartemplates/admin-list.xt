@@ -33,9 +33,6 @@
                         <label for="class">Class</label>
                     </th>
                     <th>
-                        <br />
-                    </th>
-                    <th>
                         <label for="reload">Action</label>
                     </th>
                 </tr>
@@ -72,10 +69,6 @@
                                 </xar:if>
                             </xar:foreach>
                         </select>
-                    </td>
-                    <td class="xar-align-center">
-                        <xar:data-input type="checkbox" name="useicons" checked="$useicons" onchange="this.form.submit()"/>
-                        <label for="useicons">Use Icons</label>
                     </td>
                     <td class="xar-align-center">
                         <xar:var name="label">Refresh</xar:var>
