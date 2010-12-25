@@ -1,5 +1,7 @@
 <?php
 /**
+ * Display a configuration option
+ *
  * @package modules
  * @subpackage themes module
  * @category Xaraya Web Applications Framework
