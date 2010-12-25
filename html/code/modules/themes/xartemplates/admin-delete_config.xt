@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">
+            <xar:if condition="xarModVars::get('themes','use_module_alias')">
+                <xar:var scope="module" module="themes" name="module_alias_name"/>
+            <xar:else />
+                Delete Item
+            </xar:if>
+        </span>
+        <xar:template type="module" file="admin-menu"/>
+    </div>
+    <div class="xar-mod-body">
+        <h2>
+            <xar:ml>
+                <xar:mlstring>Delete Item #(1) in #(2)</xar:mlstring>
+                <xar:mlvar>#$object:itemid#</xar:mlvar>
+                <xar:mlvar>#$object:label#</xar:mlvar>
+            </xar:ml>
+        </h2>
+        <h3 class="xar-align-center">
+            Confirm Deleting This Configuration?
+        </h3>
+
+        <xar:data-display object="$object"/>
+
+        <form method="post" action="#xarModURL('themes','admin','delete_config')#">
+            <div class="xar-align-center">
+                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+                <input type="hidden" name="confirm" id="confirm" value="1"/>
+                <xar:var name="label">Delete</xar:var>
+                <input type="submit" id="confirm" value="#$label#" class="xar-margin-thickright"/>
+                <xar:var name="label">Cancel</xar:var>
+                <input type="button" value="#$label#" class="xar-margin-thickleft" onclick="history.go(-1)"/>
+            </div>
+        </form>
+    </div>
+</xar:template>
