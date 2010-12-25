@@ -45,21 +45,21 @@
                     <td class="xar-align-center">
                         <xar:if condition="xarModVars::get('themes','use_module_icons')">
                             <xar:var name="title">Display Configuration</xar:var>
-                            <a href="#xarModURL('themes','admin','display_config',array('id' => $fields['id']))#" title="#$title#">
+                            <a href="#xarModURL('themes','admin','display_config',array('itemid' => $fields['id']))#" title="#$title#">
                                 <img src="#xarTplGetImage('icons/display.png', 'base')#" width="16" height="16" alt="#$title#"/>
                             </a>&#160;
                             <xar:var name="title">Modify Configuration</xar:var>
-                            <a href="#xarModURL('themes','admin','modify_config',array('id' => $fields['id']))#" title="#$title#">
+                            <a href="#xarModURL('themes','admin','modify_config',array('itemid' => $fields['id']))#" title="#$title#">
                                 <img src="#xarTplGetImage('icons/modify.png', 'base')#" width="16" height="16" alt="#$title#"/>
                             </a>&#160;
                             <xar:var name="title">Delete Configuration</xar:var>
-                            <a href="#xarModURL('themes','admin','delete_config',array('id' => $fields['id']))#" title="#$title#">
+                            <a href="#xarModURL('themes','admin','delete_config',array('itemid' => $fields['id']))#" title="#$title#">
                                 <img src="#xarTplGetImage('icons/delete.png', 'base')#" width="16" height="16" alt="#$title#"/>
                             </a>&#160;
                         <xar:else/>
-                            <a href="#xarModURL('themes','admin','display_config',array('id' => $fields['id']))#">Display</a>&#160;
-                            <a href="#xarModURL('themes','admin','modify_config',array('id' => $fields['id']))#">Modify</a>&#160;
-                            <a href="#xarModURL('themes','admin','delete_config',array('id' => $fields['id']))#">Delete</a>&#160;
+                            <a href="#xarModURL('themes','admin','display_config',array('itemid' => $fields['id']))#">Display</a>&#160;
+                            <a href="#xarModURL('themes','admin','modify_config',array('itemid' => $fields['id']))#">Modify</a>&#160;
+                            <a href="#xarModURL('themes','admin','delete_config',array('itemid' => $fields['id']))#">Delete</a>&#160;
                         </xar:if>
                     </td>
                 </tr>
