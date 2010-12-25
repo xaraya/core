@@ -288,6 +288,9 @@ function themes_admin_list()
     // detailed info image url
     $data['infoimage'] = xarTplGetImage('help.gif');
 
+    sys::import('modules.dynamicdata.class.objects.master');
+    $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_configurations'));
+    
     // Send to template
     return $data;
 }
