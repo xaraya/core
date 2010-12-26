@@ -76,7 +76,7 @@ function modules_adminapi_remove(Array $args=array())
         xarModCallHooks('module','remove',$modinfo['name'],'',$modinfo['name']);
 
         // Delete any hooks assigned for that module, or by that module
-        $query = "DELETE FROM $tables[hooks] WHERE s_module_id = ? OR t_module_id = ?";
+        $query = "DELETE FROM $tables[hooks] WHERE observer = ? OR subject = ?";
         $bindvars = array($modinfo['systemid'],$modinfo['systemid']);
         $dbconn->Execute($query,$bindvars);
 

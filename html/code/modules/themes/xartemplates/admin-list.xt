@@ -36,9 +36,6 @@
                         <label for="class">Class</label>
                     </th>
                     <th>
-                        <label for="display">Display</label>
-                    </th>
-                    <th>
                         <label for="reload">Action</label>
                     </th>
                 </tr>
@@ -75,10 +72,6 @@
                                 </xar:if>
                             </xar:foreach>
                         </select>
-                    </td>
-                    <td>
-                        <xar:data-input type="checkbox" name="useicons" checked="$useicons" onchange="this.form.submit()"/>
-                        <label for="useicons">Use Icons</label>
                     </td>
                     <td class="xar-align-center">
                         <xar:var name="label">Refresh</xar:var>
@@ -255,7 +248,7 @@
                             <td>#$modinfo['version']#</td>
                             <td>
                                 <xar:if condition="$useicons eq true">
-                                    <a href="#$modinfo['infourlnew']#&amp;theme=print" title="#$infolabel#" onclick="window.open(this.getAttribute('href'));return false;">
+                                    <a href="#$modinfo['infourlnew']#" title="#$infolabel#">
                                         <img src="#$infoimg#" alt="#$infolabel#"/>
                                     </a>
                                     <noscript>
@@ -264,7 +257,7 @@
                                         </a>
                                     </noscript>
                                 <xar:else />
-                                    <a href="#$modinfo['infourlnew']#&amp;theme=print" onclick="window.open(this.getAttribute('href'));return false;">
+                                    <a href="#$modinfo['infourlnew']#">
                                         Info
                                     </a>
                                     <noscript>
@@ -300,10 +293,6 @@
                                     <xar:else />
                                         <img src="#xarTplGetImage('icons/none.png','base')#" alt="#$label#"/>
                                     </xar:if>
-                                    &#160;
-                                    <a href="#xarModURL('themes','admin','showthemeconfig',array('id' => $modinfo['id']))#" title="#$imgsetdefault#">
-                                        <img src="#xarTplGetImage('icons/modify.png','base')#" alt="#$imgsetdefault#"/>
-                                    </a>
                                 <xar:else />
                                     <a href="#$modinfo['actionurl']#">#$modinfo['actionlabel']#</a>
                                     <xar:if condition="$modinfo['state'] eq 2">| 
@@ -317,10 +306,6 @@
                                             Set as Default
                                         </a>
                                     </xar:if>
-                                    &#160;
-                                    <a href="#xarModURL('themes','admin','showthemeconfig',array('id' => $modinfo['id']))#" title="#$imgsetdefault#">
-                                        Configure
-                                    </a>
                                 </xar:if>
                             </td>
                         </tr>

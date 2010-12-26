@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Themes Administration</span>
+        <xar:template type="module" file="admin-menu"/>
+    </div>
+    <div class="xar-mod-body">
+        <h2>
+            View Configurations&#160;
+        </h2>
+        <xar:if condition="$object:checkAccess('create')">
+            <xar:var name="label">Create New Configuration Item</xar:var>
+            <a href="#xarModURL('themes','admin','new_config')#" title="#$label#">
+                <xar:if condition="xarModVars::get('themes','use_module_icons')">
+                    <img src="#xarTplGetImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/>
+                <xar:else />
+                    Create New Theme Configuration
+                </xar:if>
+            </a>
+        </xar:if>
+
+        <xar:if condition="empty($numitems)">
+            <xar:set name="numitems">30</xar:set>
+        </xar:if>
+        <xar:data-view object="$object" tplmodule="themes"/>
+    </div>
+</xar:template>

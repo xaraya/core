@@ -4,7 +4,7 @@
     <fieldset>
         <legend>Configuration options</legend>
         <xar:if condition="count($configs) eq 0">
-            No configuration options defined. Define some <a href="#xarModURL('dynamicdata','admin','new',array('name'=>'themes_configurations'))#">here</a>.
+            No configuration options defined. Define some <a href="#xarModURL('themes','admin','new_config')#">here</a>.
         <xar:else />
             <xar:foreach in="$configs" key="$key" value="$init">
                 <xar:set name="fieldname">$name . '[' . $key . ']'</xar:set>

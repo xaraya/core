@@ -40,7 +40,7 @@ function themes_admin_list()
     $data['selstyle']                               = xarModUserVars::get('themes', 'selstyle');
     $data['selfilter']                              = xarModUserVars::get('themes', 'selfilter');
     $data['selclass']                               = xarModUserVars::get('themes', 'selclass');
-    $data['useicons']                               = xarModUserVars::get('themes', 'useicons');
+    $data['useicons']                               = xarModVars::get('themes', 'use_module_icons');
 
     // select vars for drop-down menus
     $data['style']['plain']                         = xarML('Plain');
@@ -288,6 +288,9 @@ function themes_admin_list()
     // detailed info image url
     $data['infoimage'] = xarTplGetImage('help.gif');
 
+    sys::import('modules.dynamicdata.class.objects.master');
+    $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_configurations'));
+    
     // Send to template
     return $data;
 }

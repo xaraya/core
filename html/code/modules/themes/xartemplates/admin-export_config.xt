@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="module" file="dd"/>labe
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">
+            <xar:if condition="xarModVars::get('themes','use_module_alias')">
+                <xar:var scope="module" module="themes" name="module_alias_name"/>
+            <xar:else />
+                Export Theme Configurtion
+            </xar:if>
+        </span>
+        <xar:template type="module" file="admin-menu"/>
+    </div>
+    <div class="xar-mod-body">
+        <h2>Export Theme Definition</h2>
+        <form method="post" action="#xarModURL('themes','admin','export_config')#">
+            <fieldset>
+                <legend>Select Theme</legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="xml" class="xar-form-label">Theme:</label>
+                    <div class="xar-form-container-after">
+                        <xar:data-input type="objectref" name="itemid" refobject="themes" display_prop="name" store_prop="regid" onchange="submit()" value="$itemid"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <form>
+            <fieldset>
+                <legend>Configuration</legend>
+                <div class="xar-form-input-wrapper">
+                    <xar:if condition="empty($xml)">
+                        There are no configuration options defined for this theme. Define some <a href="#xarModURL('themes','admin','new_config')#">here</a>.
+                    <xar:else/>
+                        <label for="xml" class="xar-form-label">Paste this in the theme's data/configurations-dat.xml file</label>
+                        <div class="xar-form-container-after">
+                            <textarea name="xml" id="xml" class="xar-form-textarealarge">#$xml#</textarea>
+                        </div>
+                    </xar:if>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</xar:template>
