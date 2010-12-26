@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div class="xar-blockgroup xar-blockgroup-#$group_name#">
+        <xar:if condition="!empty($title)">
+            <div class="xar-block-title">
+                <xar:var name="title" prep="false"/>
+                <xar:if condition="$group_name ne 'admin'">
+                    <xar:sec mask="AdminBase" catch="false">
+                        <a href="#xarModURL('blocks','admin','modify_instance',array('bid' => $bid))#" title="Edit this block">
+                            <img src="#xarTplGetImage('icons/modify.png','base')#"/>
+                        </a>
+                    </xar:sec>
+                </xar:if>
+            </div>
+        </xar:if>
+        <div class="xar-block-wrapper">
+            <xar:var name="content" prep="false" />
+        </div>
+    </div>
+</xar:template>

@@ -6,12 +6,12 @@
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-    <div class="xar-mod-content-head">
+    <div class="xar-mod-page-head">
         <xar:var name="label">official icon</xar:var>
         <img src="#xarTplGetImage('base.png','base')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
-    </div><!--/xar-mod-content-head-->
-	<div class="xar-mod-content">
+    </div><!--/xar-mod-page-head-->
+	<div class="xar-mod-page-body">
         <h3>What is it?</h3>
         <p>
             The Base module provides overall site configuration options and displays global information about the site to the administrator(s) through its administration menu. It also provides a simple means of adding custom static pages to your site. The Base module is a core module within Xaraya and cannot be removed.
@@ -236,6 +236,6 @@
         <strong>&#160;Base Module Overview</strong>
         <br />&#160;Version 1.0.2&#160; 2006-02-09</p>
         -->
-    </div><!--/xar-mod-content-->
+    </div><!--/xar-mod-page-body-->
     </div><!--/xar-mod-body-->
 </xar:template>

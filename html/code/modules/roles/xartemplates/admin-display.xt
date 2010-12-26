@@ -6,6 +6,7 @@
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
+    <div class="xar-mod-page-head">
         <xar:if condition="$itemtype eq xarRoles::ROLES_USERTYPE">
             <xar:set name="thisname">$object->properties['uname']->getValue()</xar:set>
         <xar:else />
@@ -13,27 +14,27 @@
         </xar:if>
         <h2>Manage #$object:label# '#$thisname#':</h2>
         <xar:if condition="count($parents) ne 0">
-            <div>
-                <ul class="xar-tabs xar-alt xar-norm-outline">
-                    <xar:var name="title">These are the groups that #$name# is a member of</xar:var>
-                    <xar:var name="label">Parent Groups</xar:var>
-                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
-                    <xar:set name="prevgroup">""</xar:set>
-                    <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
-                        <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                            <li class="xar-tab">
-                                <xar:var name="label">Show this group</xar:var>
-                                <a href="#xarModURL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">#$parents[$i]['parentname']#</a>
-                            </li>
-                        </xar:if>
-                        <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
-                    </xar:for>
-                </ul>
-            </div>
+            <ul class="xar-tabs">
+                <xar:var name="title">These are the groups that #$name# is a member of</xar:var>
+                <xar:var name="label">Parent Groups</xar:var>
+                <li class="xar-tabs-label" title="#$title#">#$label#</li>
+                <xar:set name="prevgroup">""</xar:set>
+                <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+                    <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+                        <li class="xar-tab">
+                            <xar:var name="label">Show this group</xar:var>
+                            <a href="#xarModURL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#">#$parents[$i]['parentname']#</a>
+                        </li>
+                    </xar:if>
+                    <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
+                </xar:for>
+            </ul>
         </xar:if>
         <!-- TODO set the active tab here -->
         <!-- Show the general tab list for roles -->
         <xar:template file="tablist"/>
+    </div>
+    <div class="xar-mod-page-body">
         <fieldset>
             <legend>Role properties</legend>
             <xar:set name="fields">array('id','name','uname','email','state','regdate')</xar:set>
@@ -108,6 +109,6 @@
             </xar:if>
             <xar:foreach in="$hooks" key="$module" value="$output">#$output#</xar:foreach>
         </fieldset>
-        <br class="xar-clearboth"/>
-    </div>
+		</div>
+	    </div>
 </xar:template>

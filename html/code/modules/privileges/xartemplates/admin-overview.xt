@@ -6,9 +6,11 @@
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
+    <div class="xar-mod-page-head">
         <img src="#xarTplGetImage('privileges.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
-
+	</div>
+	<div class="xar-mod-page-body">
         <h3>What is it?</h3>
         <p>
             The Privileges module manages privileges on a Xaraya site. Privileges give users and groups
@@ -167,5 +169,6 @@
         <strong>&#160;Privileges Module Overview</strong>
         <br />&#160;Version 1.0.0&#160; 2006-05-03</p>
         -->
+    </div>
     </div>
 </xar:template>

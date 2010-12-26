@@ -6,12 +6,15 @@
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <h2>View Privileges</h2>
-        <xar:template file="tablist"/>
-        <br />
-        <fieldset>
-            <legend>Privilege hierarchy</legend>
-            <xar:data-input type="privilegestree" show="$show"/>
-        </fieldset>
+	    <div class="xar-mod-page-head">
+	        <h2>View Privileges</h2>
+	        <xar:template file="tablist"/>
+	    </div>
+	    <div class="xar-mod-page-body">
+	        <fieldset>
+	            <legend>Privilege hierarchy</legend>
+	            <xar:data-input type="privilegestree" show="$show"/>
+	        </fieldset>
+        </div>
     </div>
 </xar:template>

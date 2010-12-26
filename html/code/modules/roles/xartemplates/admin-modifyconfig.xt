@@ -6,7 +6,7 @@
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-    <div class="xar-mod-content-head">
+    <div class="xar-mod-page-head">
         <h2>Modify Roles Configuration</h2>
             <ul class="xar-tabs xar-alt xar-norm-outline">
                 <xar:var name="title">Configure</xar:var>
@@ -81,11 +81,11 @@
                     </li>
                 </xar:if>
             </ul>
-        </div><!--/xar-mod-content-head-->
+        </div><!--/xar-mod-page-head-->
         <!--
             - - - - - - - - - - - - - - - - - - - Begin General Options - - - - - - - - - - - - - - - - - - - - -
         -->
-        <div class="xar-mod-content">
+        <div class="xar-mod-page-body">
         <xar:if condition="$tab eq 'general'">
             <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                 <xar:data-form object="$module_settings"/>
@@ -319,6 +319,6 @@
                 </fieldset>
             </form>
         </xar:if>
-    </div><!--xar-mod-content-->
+    </div><!--xar-mod-page-body-->
     </div><!--/xar-mod-body-->
 </xar:template>

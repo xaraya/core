@@ -11,17 +11,20 @@
     <xar:set name="imgremove">'Remove'</xar:set>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Themes Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
-        <h2>View Themes</h2>
-        <p>Total listed: 
-        <xar:set name="modscount">count($listrowsitems)</xar:set>#$modscount#</p>
+        <div class="xar-mod-page-head">
+	        <h2>View Themes</h2>
+	        <div class="xar-mod-stat">Total listed: 
+	        <xar:set name="modscount">count($listrowsitems)</xar:set>#$modscount#</div>
+        </div>
+        <div class="xar-mod-page-body">
         <form method="post" action="#xarModURL('themes','admin','settings')#">
             <!--
                 Theme List Sort and Filter Controls table
             -->
-            <table class="xar-fullwidth">
+            <table class="xar-items-controls">
                 <tr>
                     <th>
                         <label for="selstyle">Style</label>
@@ -33,14 +36,14 @@
                         <label for="class">Class</label>
                     </th>
                     <th>
-                        <br />
+                        <label for="display">Display</label>
                     </th>
                     <th>
                         <label for="reload">Action</label>
                     </th>
                 </tr>
                 <tr>
-                    <td class="xar-align-center">
+                    <td>
                         <select name="selstyle" id="selstyle" onchange="this.form.submit()">
                             <xar:foreach in="$style" key="$key" value="$value">
                                 <xar:if condition="$key eq $selstyle">
@@ -51,7 +54,7 @@
                             </xar:foreach>
                         </select>
                     </td>
-                    <td class="xar-align-center">
+                    <td>
                         <select name="selfilter" id="selfilter" onchange="this.form.submit()">
                             <xar:foreach in="$filter" key="$key" value="$value">
                                 <xar:if condition="$key eq $selfilter">
@@ -62,7 +65,7 @@
                             </xar:foreach>
                         </select>
                     </td>
-                    <td class="xar-align-center">
+                    <td>
                         <select name="selclass" id="selclass" onchange="this.form.submit()">
                             <xar:foreach in="$class" key="$key" value="$value">
                                 <xar:if condition="$key eq $selclass">
@@ -73,7 +76,7 @@
                             </xar:foreach>
                         </select>
                     </td>
-                    <td class="xar-align-center">
+                    <td>
                         <xar:data-input type="checkbox" name="useicons" checked="$useicons" onchange="this.form.submit()"/>
                         <label for="useicons">Use Icons</label>
                     </td>
@@ -219,7 +222,7 @@
                 <!--
                     the Module Lists table-based styles
                 -->
-                <table class="xar-fullwidth">
+                <table class="xar-items">
                     <tr>
                         <th>
                             <a href="#$sorturl#" title="#$sortlabel#">Name</a>
@@ -234,7 +237,12 @@
                         <th>Actions</th>
                     </tr>
                     <xar:foreach in="$listrowsitems" value="$modinfo">
-                        <tr>
+                        <xar:if condition="($modinfo['state'] eq 3) and $modinfo['directory'] eq $default">
+                        	<xar:set name="mod_status">'xar-active'</xar:set>
+                        <xar:else />
+                        	<xar:set name="mod_status">''</xar:set>
+                        </xar:if>
+                        <tr class="#$mod_status#">
                             <!--
                                 please note any element can be a named anchor as long as it has id (and name for some browsers) so we shouldnt waste space with empty anchors here
                             -->
@@ -244,8 +252,8 @@
                                 -->
                                 #$modinfo['displayname']#
                             </td>
-                            <td class="xar-align-right">#$modinfo['version']#</td>
-                            <td class="xar-align-center">
+                            <td>#$modinfo['version']#</td>
+                            <td>
                                 <xar:if condition="$useicons eq true">
                                     <a href="#$modinfo['infourlnew']#&amp;theme=print" title="#$infolabel#" onclick="window.open(this.getAttribute('href'));return false;">
                                         <img src="#$infoimg#" alt="#$infolabel#"/>
@@ -268,7 +276,7 @@
                             <td>#$modinfo['statelabel']# 
                                 <xar:if condition="($modinfo['state'] eq 3) and ($modinfo['class'] eq 2) and $modinfo['directory'] eq $default">
                             (Default)</xar:if></td>
-                            <td class="xar-nowrap xar-align-center">
+                            <td class="xar-nowrap">
                                 <xar:if condition="$useicons eq true">
                                     <xar:var name="label">n/a</xar:var>
                                     <xar:if condition="$modinfo['actionurl'] eq ''">
@@ -321,20 +329,24 @@
             </xar:if>
         </form>
     </div>
+    </div>
     <xar:if condition="$useicons eq true">
-        <div class="xar-mod-foot xar-align-center">
-            <img src="#xarTplGetImage('icons/activate.png','base')#" alt="#$imgactivate#" class="xar-margin-thicksides"/>
-            #$imgactivate#
-            <img src="#xarTplGetImage('icons/deactivate.png','base')#" alt="#$imgdeactivate#" class="xar-margin-thicksides"/>
-            #$imgdeactivate#
-            <img src="#xarTplGetImage('icons/set-default.png','base')#" alt="#$imgsetdefault#" class="xar-margin-thicksides"/>
-            #$imgsetdefault#
-            <img src="#xarTplGetImage('icons/software-upgrade.png','base')#" alt="#$imgupgrade#" class="xar-margin-thicksides"/>
-            #$imgupgrade#
-            <img src="#xarTplGetImage('icons/initialize.png','base')#" alt="#$imginstall#" class="xar-margin-thicksides"/>
-            #$imginstall#
-            <img src="#xarTplGetImage('icons/remove.png','base')#" alt="#$imgremove#" class="xar-margin-thicksides"/>
-            #$imgremove#
+        <div class="xar-mod-foot">
+        	<dl class="xar-legend">
+        		<dt>Legend</dt>
+	            <dd><img src="#xarTplGetImage('icons/activate.png','base')#" alt="#$imgactivate#"/>
+	            #$imgactivate#</dd>
+	            <dd><img src="#xarTplGetImage('icons/deactivate.png','base')#" alt="#$imgdeactivate#"/>
+	            #$imgdeactivate#</dd>
+	            <dd><img src="#xarTplGetImage('icons/set-default.png','base')#" alt="#$imgsetdefault#"/>
+	            #$imgsetdefault#</dd>
+	            <dd><img src="#xarTplGetImage('icons/software-upgrade.png','base')#" alt="#$imgupgrade#"/>
+	            #$imgupgrade#</dd>
+	            <dd><img src="#xarTplGetImage('icons/initialize.png','base')#" alt="#$imginstall#"/>
+	            #$imginstall#</dd>
+	            <dd><img src="#xarTplGetImage('icons/remove.png','base')#" alt="#$imgremove#"/>
+	            #$imgremove#</dd>
+        	</dl>
         </div>
     </xar:if>
     <xar:if condition="xarSession::setVar('statusmsg', '')"></xar:if>

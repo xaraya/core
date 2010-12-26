@@ -1,0 +1,38 @@
+<items>
+  <themes_configurations itemid="1">
+    <id>1</id>
+    <theme_id>1046</theme_id>
+    <name>color_scheme</name>
+    <label>Color Scheme</label>
+    <description>Kingston comes with two prebuilt color schemes. Algae is a business affair, inspired by the ubiquitous blue-green algae. Reggae is for good times... red, green, and black predominating.</description>
+    <property_id>6</property_id>
+    <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:17:"0,Algae;1,Reggae;";}</configuration>
+  </themes_configurations>
+  <themes_configurations itemid="2">
+    <id>2</id>
+    <theme_id>1046</theme_id>
+    <name>nav_pos</name>
+    <label>Backend Navigation Position</label>
+    <description>Admin navigation can be positioned top, right, or left. Left is default. "Top" provides the maximum horizontal width for content display. This setting only applies to the backend.</description>
+    <property_id>6</property_id>
+    <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:21:"1,Left;2,Right;3,Top;";}</configuration>
+  </themes_configurations>
+  <themes_configurations itemid="3">
+    <id>3</id>
+    <theme_id>1046</theme_id>
+    <name>xar_footer</name>
+    <label>Show Xaraya Footer</label>
+    <description>The Xaraya footer includes a "Powered by Xaraya" icon and links to Xaraya documentation and resources.</description>
+    <property_id>34</property_id>
+    <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:11:"0,Yes;1,No;";}</configuration>
+  </themes_configurations>
+  <themes_configurations itemid="4">
+    <id>4</id>
+    <theme_id>1046</theme_id>
+    <name>fonts_custom</name>
+    <label>Use Custom Fonts</label>
+    <description>Use custom fonts, as the design intends. Custom fonts work in IE4+, Opera 10+, Firefox 3.5+, Safari 3.1+, and Chrome 4.0+; that is to say, support is almost universal. However, custom fonts can be disabled to lower page load overhead.</description>
+    <property_id>34</property_id>
+    <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:11:"0,Yes;1,No;";}</configuration>
+  </themes_configurations>
+</items>

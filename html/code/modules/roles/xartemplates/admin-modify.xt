@@ -8,6 +8,7 @@
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
+    <div class="xar-mod-page-head">
         <xar:set name="properties">$object->properties</xar:set>
         <xar:if condition="$itemtype eq xarRoles::ROLES_USERTYPE">
             <xar:set name="thisname">$object->properties['uname']->getValue()</xar:set>
@@ -16,8 +17,7 @@
         </xar:if>
         <h2>Manage #$object:label# '#$thisname#':</h2>
         <xar:if condition="count($parents) ne 0">
-            <div>
-                <ul class="xar-tabs xar-alt xar-norm-outline">
+                <ul class="xar-tabs">
                     <xar:var name="title">These are the groups that #$name# is a member of</xar:var>
                     <xar:var name="label">Parent Groups</xar:var>
                     <li class="xar-tabs-label" title="#$title#">#$label#</li>
@@ -36,11 +36,12 @@
                         </xar:set>
                     </xar:for>
                 </ul>
-            </div>
         </xar:if>
         <!-- TODO: set the active tab here -->
         <!-- Show the general tab list for roles -->
         <xar:template file="tablist"/>
+    </div>
+    <div class="xar-mod-page-body">
         <fieldset>
             <legend>#$object:label# Properties:</legend>
             <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
@@ -238,5 +239,6 @@
                 </form>
             </xar:if>
         </fieldset>
+    </div>
     </div>
 </xar:template>

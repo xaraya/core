@@ -16,7 +16,6 @@
           Show privileges of #$itemtypename# '#$pname#':
         </h2>
         <xar:if condition="count($parents) ne 0">
-            <div>
                 <ul class="xar-tabs xar-alt xar-norm-outline">
                     <xar:var name="title">These are the groups that #$pname# is a member of</xar:var>
                     <xar:var name="label">Parent Groups</xar:var>
@@ -36,7 +35,6 @@
                         </xar:set>
                     </xar:for>
                 </ul>
-            </div>
         </xar:if>
         <xar:comment>TODO set the active tab here</xar:comment>
         <!-- Show the general tab list for roles -->

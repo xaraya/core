@@ -6,7 +6,7 @@
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-    <div class="xar-mod-content-head">
+    <div class="xar-mod-page-head">
         <xar:if condition="!empty($object) and $object:objectid eq 1">
             <xar:set name="label">'DataObjects'</xar:set>
         </xar:if>
@@ -33,7 +33,7 @@
                 </li>
             </xar:if>
             </ul><!--/xar-mod-actions-->
-        </div><!--/xar-mod-content-head-->
+        </div><!--/xar-mod-page-head-->
         <!--
             this does all the hard work
         -->

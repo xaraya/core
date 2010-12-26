@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- TODO: multi-column output -->
-    <div class="xar-mod-content-head">
+    <div class="xar-mod-page-head">
     <xar:style scope="module" module="dynamicdata" file="dd"/>
     <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
         <xar:template file="catnavigation"/>
@@ -22,8 +22,8 @@
     <xar:if condition="empty($layout)">
         <xar:set name="layout">'default'</xar:set>
     </xar:if>
-    </div><!--/xar-mod-content-head-->
-    <div class="xar-mod-content">
+    </div><!--/xar-mod-page-head-->
+    <div class="xar-mod-page-body">
         <table class="xar-items">
             <tr>
                 <xar:foreach in="$properties" key="$name">
@@ -105,8 +105,8 @@
                 </tr>
             </xar:foreach>
         </table>
-	</div><!--/xar-mod-content-->
-	<div class="xar-mod-content-foot">
+	</div><!--/xar-mod-page-body-->
+	<div class="xar-mod-page-foot">
     <xar:if condition="empty($object:itemcount)">
         <!-- if we don't have an item total show prev / next links -->
         <div>
@@ -129,5 +129,5 @@
             <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->itemcount" urltemplate="$object->pagerurl"/>
         </div>
     </xar:if>
-    </div><!--/xar-mod-content-foot-->
+    </div><!--/xar-mod-page-foot-->
 </xar:template>

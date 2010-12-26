@@ -21,7 +21,7 @@
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-    <div class="xar-mod-content-head">
+    <div class="xar-mod-page-head">
         <img src="#xarTplGetImage('dynamicdata.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
         <ul class="xar-tabs">
@@ -41,8 +41,8 @@
                 </a>
             </li>
         </ul>
-    </div><!--xar-mod-content-head-->
-    <div class="xar-mod-content">
+    </div><!--xar-mod-page-head-->
+    <div class="xar-mod-page-body">
         <div id="page-1">
             <h3>What is it?</h3>
             <p>
@@ -435,7 +435,7 @@
             </table>
 
         </div>
-    </div><!--/xar-mod-content-->
+    </div><!--/xar-mod-page-body-->
     </div><!--/xar-mod-body-->
     <script type="text/javascript">
         showtab (1,3)

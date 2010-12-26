@@ -16,7 +16,7 @@
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-    <div class="xar-mod-content-head">
+    <div class="xar-mod-page-head">
         <h2>Modify System Configuration</h2>
         <ul class="xar-tabs xar-alt xar-norm-outline">
             <xar:var name="title">Choose a set of configuration options to modify</xar:var>
@@ -73,8 +73,8 @@
                 </li>
             </xar:if>
         </ul>
-        </div><!--/xar-mod-content-head-->
-        <div class="xar-mod-content">
+        </div><!--/xar-mod-page-head-->
+        <div class="xar-mod-page-body">
         <!-- Begin Site Display Options -->
         <xar:if condition="$tab eq 'display'">
             <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
@@ -408,15 +408,17 @@
             <xar:elseif condition="$tab eq 'locales'"/>
             <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                 <xar:template file="modifyconfig-locales" module="base" type="module"/>
-                <fieldset>
-                    <div class="xar-form-input-wrapper-after">
+                <fieldset class="xar-form-input-hidden">
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                         <input type="hidden" name="phase" id="phase" value="update"/>
                         <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                        <xar:var name="label">Update</xar:var>
-                        <xar:button type="submit" label="$label"/>
-                    </div>
                 </fieldset>
+                <dl class="xar-form-actions">
+                	<dd>
+	                	<xar:var name="label">Update</xar:var>
+	                    <xar:button type="submit" label="$label"/>
+                    </dd>
+                </dl>
             </form>
             <!-- Begin Other Options -->
             <xar:elseif condition="$tab eq 'other'"/>
@@ -520,6 +522,6 @@
                 </fieldset>
             </form>
         </xar:if>
-    </div><!--/xar-mod-content-->
+    </div><!--/xar-mod-page-body-->
     </div><!--/xar-mod-body-->
 </xar:template>

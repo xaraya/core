@@ -9,7 +9,7 @@
         <xar:if condition="empty($option)">
             <xar:set name="option">'query'</xar:set>
         </xar:if>
-        <div class="xar-mod-content-head">
+        <div class="xar-mod-page-head">
         <h2>Dynamic Data Utilities</h2>
             <ul class="xar-tabs">
                 <xar:var name="title">Options</xar:var>
@@ -87,7 +87,7 @@
                     </li>
                 </xar:if>
             </ul>
-        </div><!--/xar-mod-content-head-->
+        </div><!--/xar-mod-page-head-->
     </div>
     <xar:if condition="empty($option) or $option eq 'query'">
         <xar:module main="false" module="dynamicdata" type="admin" func="query"/>
