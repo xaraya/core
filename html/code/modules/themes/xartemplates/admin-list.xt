@@ -17,13 +17,6 @@
         <h2>View Themes</h2>
         <p>Total listed: 
         <xar:set name="modscount">count($listrowsitems)</xar:set>#$modscount#</p>
-        <xar:if condition="$object:checkAccess('config')">
-            <xar:set name="configlink">xarModURL('themes','admin','view_configs')</xar:set>
-            <xar:var name="label">View Theme Configurations</xar:var>
-            <a href="#$configlink#" title="Configure #$label#">
-                <img src="#xarTplGetImage('icons/modify-config.png', 'base')#" width="16" height="16" alt="view_configs"/>
-            </a>
-        </xar:if>
         <form method="post" action="#xarModURL('themes','admin','settings')#">
             <!--
                 Theme List Sort and Filter Controls table
