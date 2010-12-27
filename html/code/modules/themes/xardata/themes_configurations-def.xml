@@ -28,7 +28,7 @@
       <source>xar_themes_configurations.theme_id</source>
       <status>33</status>
       <seq>2</seq>
-      <configuration>a:6:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:6:"themes";s:25:"initialization_store_prop";s:5:"regid";s:27:"initialization_display_prop";s:4:"name";s:24:"initialization_firstline";s:14:"0,Pick a Theme";}</configuration>
+      <configuration>a:6:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:6:"themes";s:25:"initialization_store_prop";s:5:"regid";s:27:"initialization_display_prop";s:4:"name";s:24:"initialization_firstline";s:12:"0,All Themes";}</configuration>
     </property>
     <property name="name">
       <id>97</id>
