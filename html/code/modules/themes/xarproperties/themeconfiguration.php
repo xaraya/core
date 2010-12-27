@@ -113,14 +113,41 @@ class ThemeConfigurationProperty extends TextBoxProperty
             xarMod::load('themes');
             $tables = xarDB::getTables();
             $q = new Query('SELECT',$tables['themes_configurations']);
-            $q->eq('theme_id',$this->theme_id);
+            $c[] = $q->peq('theme_id',$this->theme_id);
+            $c[] = $q->peq('theme_id',0);
+            $q->qor($c);
             $q->run();
             $result = $q->output();
-            $allconfigproperties = array();
-            foreach ($q->output() as $row)
-            {
+            foreach ($q->output() as $row){
                 $allconfigproperties[$row['name']] = $row;
             }
+            
+            $allconfigproperties = array();
+            sys::import('modules.themes.class.configurations');
+            $config = new Configurations();
+            $info = xarMod::getInfo($this->theme_id,'theme');
+            
+            // Get the theme specific options
+            $config->parseTheme($this->theme_id,"/xarConfigGetVar\(\W*[\'\"]" . $info['displayname'] . "[\'\"]\W*,\W*[\'\"](.+)[\'\"]\W*\)/");
+            $activeoptions = array_keys($config->configurations);
+            foreach ($q->output() as $row) {
+                if (in_array($row['name'],$activeoptions)) {
+                    $row['applies'] = 'specific';
+                    $allconfigproperties[$row['name']] = $row;
+                }
+            }
+            $configoptions['specific'] = $config->configurations;
+//            var_dump($config->configurations);
+            $commonlabel = "common";
+            $config->parseTheme($this->theme_id,"/xarConfigGetVar\(\W*[\'\"]" . $commonlabel . "[\'\"]\W*,\W*[\'\"](.+)[\'\"]\W*\)/");
+            $activeoptions = array_keys($config->configurations);
+            foreach ($q->output() as $row) {
+                if (in_array($row['name'],$activeoptions)) {
+                    $row['applies'] = 'specific';
+                    $allconfigproperties[$row['name']] = $row;
+                }
+            }
+
             xarCoreCache::setCached('Themes','Configurations', $allconfigproperties);
         }
         return $allconfigproperties;

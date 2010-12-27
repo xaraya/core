@@ -140,8 +140,9 @@ class Configurations extends Object
             } else {
                 continue;
             }
-            preg_match_all($pattern, $string, $matches);
-            foreach ($matches as $match) {
+            preg_match_all($pattern, $string, $matches);//var_dump();//exit;
+            if (empty($matches[1])) return true;
+            foreach ($matches[1] as $match) {
                 $this->configurations[$match][] = array('line' => $i, 'file' => $this->filename);
             }            
         }

@@ -59,5 +59,3 @@ function themes_admin_export_config()
 }
 
 ?>
-
-
