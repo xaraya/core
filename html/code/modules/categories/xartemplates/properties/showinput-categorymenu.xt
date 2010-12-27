@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:style scope="module" module="base" file="navtabs"/>
 
-    <xar:set name="urlinfo">xarRequest::getInfo()</xar:set>
+    <xar:set name="urlinfo">xarController::$request->getInfo()</xar:set>
     <div>
         <dl class="xar-tabs">
             <xar:if condition="$layout eq 'toplevel'">

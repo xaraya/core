@@ -69,7 +69,7 @@
                     $itemid = $data['module_settings']->updateItem();
                 }
 
-                xarResponse::Redirect(xarModURL('categories', 'admin', 'modifyconfig',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
+                xarController::redirect(xarModURL('categories', 'admin', 'modifyconfig',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
                 // Return
                 return true;
                 break;
