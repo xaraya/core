@@ -104,6 +104,10 @@ class DataStoreFactory extends Object
     {
         switch ($type)
         {
+            case 'relational':
+                sys::import('xaraya.datastores.sql.relational');
+                $datastore = new RelationalDataStore();
+                break;
             case 'table':
                 sys::import('xaraya.datastores.sql.flattable');
                 $datastore = new FlatTableDataStore($name);
@@ -144,10 +148,13 @@ class DataStoreFactory extends Object
                 sys::import('xaraya.datastores.file.csv');
                 $datastore = new CSVFileDataStore($name);
                 break;
-            case 'dummy':
-            default:
-                sys::import('xaraya.datastores.dummy');
+            case 'none':
+                sys::import('xaraya.datastores.virtual');
                 $datastore = new DummyDataStore($name);
+                break;
+            default:
+                sys::import('xaraya.datastores.sql.variabletable');
+                $datastore = new VariableTableDataStore($name);
                 break;
         }
         return $datastore;
@@ -158,65 +165,38 @@ class DataStoreFactory extends Object
     }
 
     /**
-     * Get possible data sources (// TODO: for a module ?)
+     * Get possible data sources
      *
      * @param $args['table'] optional extra table whose fields you want to add as potential data source
      */
     static function &getDataSources($args = array())
     {
-        $sources = array();
-
-        // default data source is dynamic data
-        $sources[] = 'dynamic_data';
-
-        // TODO: re-evaluate this once we're further along
-        // module variables
-        $modules = xarMod::apiFunc('modules', 'admin', 'getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
-        foreach ($modules as $module) {
-            $sources[] = 'module variable: ' . $module['name'];
-        }
-
-        // session variables // TODO: perhaps someday, if this makes sense
-        //$sources[] = 'session variables';
-
-        // TODO: re-evaluate this once we're further along
-        // hook modules manage their own data
-        $sources[] = 'hook module';
-
-        // user functions manage their own data
-        $sources[] = 'user function';
-
-        // no local storage
-        $sources[] = 'dummy';
-
-        // try to get the meta table definition
-        if (!empty($args['table']))
-        {
-            try
-            {
-                $meta = xarMod::apiFunc('dynamicdata','util','getmeta',$args);
-            }
-            catch ( NotFoundExceptions $e )
-            {
-                // No worries
-            }
-            if (!empty($meta) && !empty($meta[$args['table']]))
-            {
-                foreach ($meta[$args['table']] as $column)
-                    if (!empty($column['source']))
-                        $sources[] = $column['source'];
-            }
-        }
+        $sources[] = array('id' => '', 'name' => xarML('None'));
 
         $dbconn = xarDB::getConn();
         $dbInfo = $dbconn->getDatabaseInfo();
-        $dbTables = $dbInfo->getTables();
-        foreach($dbTables as $tblInfo)
+
+        // TODO: re-evaluate this once we're further along
+        $modules = xarMod::apiFunc('modules', 'admin', 'getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+        foreach ($modules as $module) {
+            $sources[] = array('id'=> $module['regid'], 'name' => 'module variable: ' . $module['name']);
+        }
+        // try to get the meta table definition
+        if (!empty($args))
         {
-            $tblName = $tblInfo->getName();
-            $tblColumns = $tblInfo->getColumns();
-            foreach($tblColumns as $colInfo)
-                $sources[] = $tblName.".".$colInfo->getName();
+            foreach ($args as $key => $value) {
+                if (is_array($value)){
+                    $tableobject = $dbInfo->getTable(current($value));
+                } else {
+                    $tableobject = $dbInfo->getTable($value);
+                }
+                $fields = $tableobject->getColumns();
+                foreach ($fields as $field) {
+                    $sources[] = array('id'=> $key . "." . $field->getName(), 'name' => $key . "." . $field->getName());
+                }
+            }
+        } else {
+            $sources[] = array('id'=> 'dynamicdata', 'name' => xarML('DynamicData'));
         }
         return $sources;
     }

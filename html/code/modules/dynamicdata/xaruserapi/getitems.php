@@ -119,8 +119,10 @@ function &dynamicdata_userapi_getitems(Array $args=array())
         $catid = '';
     }
 
-    $object = & DataObjectMaster::getObjectList(array('moduleid'  => $module_id,
-                                           'itemtype'  => $itemtype,
+    $args = DataObjectDescriptor::getObjectID(array('moduleid'  => $module_id,
+                                       'itemtype'  => $itemtype));
+    if (empty($args['objectid'])) return array();
+    $object = & DataObjectMaster::getObjectList(array('objectid'  => $args['objectid'],
                                            'itemids' => $itemids,
                                            'sort' => $sort,
                                            'numitems' => $numitems,
