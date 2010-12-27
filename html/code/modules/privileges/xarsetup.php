@@ -32,6 +32,7 @@ function initializeSetup()
     $privilegesTable     = $prefix . '_privileges';
     $privMembersTable    = $prefix . '_privmembers';
     $themesTable         = $prefix . '_themes';
+    $categorytable       = $prefix . '_categories';
 
    //--------------------------------- Roles Module
     $info = xarMod::getBaseInfo('roles');
@@ -114,6 +115,31 @@ function initializeSetup()
                              'query' => $query3,
                              'limit' => 20));
     xarDefineInstance('themes','Block',$instances);
+
+   // ------------------------------- Categories Module
+    $info = xarMod::getBaseInfo('categories');
+    $sysid = $info['systemid'];
+    $query = "SELECT DISTINCT instances.title FROM blockInstancesTable as instances LEFT JOIN blockTypesTable as btypes ON btypes.id = instances.type_id WHERE module_id = $sysid";
+    $instances = array(
+                        array('header' => 'Category Block Title:',
+                                'query' => $query,
+                                'limit' => 20
+                            )
+                    );
+    xarDefineInstance('categories','Block',$instances);
+
+    // use external privilege wizard for 'Category' and 'Link' instances
+    $instances = array(
+                       array('header' => 'external', // this keyword indicates an external "wizard"
+                             'query'  => xarModURL('categories', 'admin', 'privileges'),
+                             'limit'  => 0
+                            )
+                    );
+    xarDefineInstance('categories', 'Link', $instances);
+// TODO: get this parent/child stuff to work someday, or implement some other way ?
+    //xarDefineInstance('categories', 'Category', $instances);
+    xarDefineInstance('categories', 'Category', $instances,1,$categorytable,'id',
+    'parent_id','Instances of the categories module, including multilevel nesting');
 
     /*********************************************************************
     * Register the module components that are privileges objects

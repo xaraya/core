@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">
+            <xar:if condition="xarModVars::get('categories','use_module_alias')">
+                <xar:var scope="module" module="categories" name="module_alias_name"/>
+            <xar:else />
+                <xar:mlstring>Categories Administration</xar:mlstring>
+            </xar:if>
+        </span>
+    </div>
+    <div class="xar-mod-body">
+       <xar:template type="module" file="admin-menu"/>
+        <h2>
+            <xar:mlstring>
+                Modify Categories Configuration
+            </xar:mlstring>
+        </h2>
+        <div>
+            <xar:template file="headerconfig" type="module"/>
+        </div>
+
+        <!-- Begin General Options
+        -->
+
+        <form method="post" action="&xar-modurl-categories-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+            <xar:if condition="$tab eq 'categories_general'">
+                <h3>
+                    <xar:mlstring>
+                        General Options
+                    </xar:mlstring>
+                </h3>
+                <xar:data-form object="$module_settings"/>
+            <xar:elseif condition="$tab eq 'categories_hooks'"/>
+                <fieldset>
+                    <legend>
+                        Configure Categories Hooks
+                    </legend>
+                    <xar:set name="url">#xarModURL('categories','admin','hooks')#</xar:set>
+                    <xar:module main="false" module="modules" type="admin" func="hooks" curhook="categories" return_url="$url"/>
+                </fieldset>
+                <p>
+                    Note: this will allow you to define base categories in your module configuration, and to assign your module items to categories when you create or update them.
+                    However, it will not automatically handle filtering the items by category for you, and you will need to use the categories navigation block or add the xar:data-output
+                    type="categoriesnavigation" tag in your view and display templates to be able to browse by category afterwards.
+                    Some modules like articles and xarpages already do that for you...
+                </p>
+            <xar:else />
+                <h3>
+                    <xar:set name="ucname">UCFirst($tabmodule)</xar:set>
+                    <xar:ml>
+                        <xar:mlstring>
+                            Module Defaults for #(1)
+                        </xar:mlstring>
+                        <xar:mlvar>#$ucname#</xar:mlvar>
+                    </xar:ml>
+                </h3>
+            </xar:if>
+            <fieldset>
+                <legend>
+                    <xar:mlstring>
+                        Defaults
+                    </xar:mlstring>
+                </legend>
+                <xar:template file="defaults"/>
+            </fieldset>
+            <fieldset>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#"/>
+                    <xar:var name="label">Update</xar:var>
+                    <xar:button type="submit" label="$label"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</xar:template>

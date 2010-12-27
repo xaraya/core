@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Categories Administration</xar:mlstring></span></div>
+    <div class="xar-mod-body">
+    <xar:if condition="$extcomponent eq 'Link'">
+        <h2><xar:ml><xar:mlstring>Select Hooked Modules and/or Categories for Privilege '#(1)'</xar:mlstring><xar:mlvar>#$extname#</xar:mlvar></xar:ml></h2>
+    <xar:else/>
+        <h2><xar:ml><xar:mlstring>Select Category for Privilege '#(1)'</xar:mlstring><xar:mlvar>#$extname#</xar:mlvar></xar:ml></h2>
+    </xar:if>
+    <div style="margin: auto;">
+
+    <form method="post" action="&xar-modurl-categories-admin-privileges;">
+        <input type="hidden" name="extpid" id="extpid" value="#$extpid#"/>
+        <input type="hidden" name="extname" id="extname" value="#$extname#"/>
+        <input type="hidden" name="extrealm" id="extrealm" value="#$extrealm#"/>
+        <input type="hidden" name="extmodule" id="extmodule" value="#$extmodule#"/>
+        <input type="hidden" name="extcomponent" id="extcomponent" value="#$extcomponent#"/>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+
+    <xar:if condition="$extcomponent eq 'Link'">
+    <tr><th valign="top" align="right">
+    <xar:mlstring>Hooked Module</xar:mlstring>
+    </th><td>
+        <select name="moduleid" onchange="submit()">
+            <option value="0"><xar:mlstring>All</xar:mlstring></option>
+            <xar:foreach in="$modlist" key="$modid" value="$modname">
+                <xar:if condition="!empty($moduleid) and $moduleid eq $modid">
+                    <option value="#$modid#" selected="selected">#$modname#</option>
+                    <xar:set name="modulename">$modname</xar:set>
+                <xar:else />
+                    <option value="#$modid#">#$modname#</option>
+                </xar:if>
+            </xar:foreach>
+        </select>
+    </td></tr>
+
+    <tr><th valign="top" align="right">
+    <xar:mlstring>Item Type</xar:mlstring>
+    </th><td>
+        <select name="itemtype" onchange="submit()">
+            <option value="0"><xar:mlstring>All</xar:mlstring></option>
+            <xar:foreach in="$typelist" key="$typeid" value="$typename">
+                <xar:if condition="!empty($itemtype) and $itemtype eq $typeid">
+                    <option value="#$typeid#" selected="selected">#$typename#</option>
+                <xar:else />
+                    <option value="#$typeid#">#$typename#</option>
+                </xar:if>
+            </xar:foreach>
+        </select>
+    </td></tr>
+
+    <tr><th valign="top" align="right">
+    <xar:mlstring>Item ID</xar:mlstring>
+    </th><td>
+        <input type="text" name="itemid" id="itemid" value="#$itemid#" size="10" onchange="submit()"/>
+        <!-- TODO: show dropdown box for all relevant item ids (if not too many) -->
+    </td></tr>
+
+    </xar:if>
+
+    <tr>
+        <th valign="top" align="right">
+            <xar:mlstring>Category</xar:mlstring>
+        </th>
+        <td>
+            <xar:if condition="isset($modulename)">
+                <xar:data-input type="categories" name="privcategories" value="$cids" module="$modulename" layout="vertical" returnitself="true"/>
+            <xar:else />
+                <xar:data-input type="categories" name="privcategories" value="$cids" bases="All" layout="vertical" returnitself="true"/>
+           </xar:if>
+        </td>
+    </tr>
+
+    <!--
+        // TODO: add option to apply this privilege for all child categories too
+        //       (once privileges supports this)
+    -->
+
+    <tr><th valign="top" align="right">
+    <xar:mlstring>Access Level</xar:mlstring>
+    </th><td>
+        <select name="extlevel" id="extlevel">
+            <xar:if condition="$extlevel eq 0">
+                <option value="0" selected="selected"><xar:mlstring>No Access</xar:mlstring></option>
+            <xar:else />
+                <option value="0"><xar:mlstring>No Access</xar:mlstring></option>
+            </xar:if>
+            <xar:if condition="$extlevel eq 100">
+                <option value="100" selected="selected"><xar:mlstring>Overview</xar:mlstring></option>
+            <xar:else />
+                <option value="100"><xar:mlstring>Overview</xar:mlstring></option>
+            </xar:if>
+            <xar:if condition="$extlevel eq 300">
+                <option value="300" selected="selected"><xar:mlstring>Submit (Comment)</xar:mlstring></option>
+            <xar:else />
+                <option value="300"><xar:mlstring>Submit (Comment)</xar:mlstring></option>
+            </xar:if>
+            <xar:if condition="$extlevel eq 500">
+                <option value="500" selected="selected"><xar:mlstring>Modify (Edit)</xar:mlstring></option>
+            <xar:else />
+                <option value="500"><xar:mlstring>Modify (Edit)</xar:mlstring></option>
+            </xar:if>
+            <xar:if condition="$extlevel eq 700">
+                <option value="700" selected="selected"><xar:mlstring>Delete All</xar:mlstring></option>
+            <xar:else />
+                <option value="700"><xar:mlstring>Delete All</xar:mlstring></option>
+            </xar:if>
+        </select>
+    </td></tr>
+
+    <tr><td colspan="2" align="center">
+        <input type="submit" value="#$refreshlabel#"/>
+    </td></tr>
+    </table>
+
+    <xar:if condition="$extcomponent eq 'Link'">
+    <br />
+    <xar:ml><xar:mlstring>There are #(1) category links matching these selection criteria at the moment</xar:mlstring><xar:mlvar>#$numitems#</xar:mlvar></xar:ml>
+    </xar:if>
+
+    <br /><hr /><br />
+    (Instance Definition #$extinstance#)
+    <br /><br />
+    <input type="submit" name="apply" value="#$applylabel#"/>
+    </form>
+    <br />
+
+    <xar:mlstring>
+    Note : if you want to limit access to categories in general, you should use the 'Category' component
+    of categories, and if you want to limit access to articles based on pubtype/category/author/... you
+    should use the 'Article' component of articles.
+    </xar:mlstring>
+
+    </div>
+    </div>
+</xar:template>

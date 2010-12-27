@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:javascript module="base" filename="orderitem.js" position="head"/>
+
+    <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Categories Administration</xar:mlstring></span></div>
+    <div class="xar-mod-body">
+       <xar:template type="module" file="admin-menu"/>
+        <h2>
+        <xar:if condition="$func eq 'modify'">
+            <xar:mlstring>Modify Category Base</xar:mlstring>
+        <xar:else />
+            <xar:mlstring>Create New Category Base</xar:mlstring>
+        </xar:if>
+        </h2>
+
+        <div style="margin: auto;">
+            <p><xar:mlstring>Module:</xar:mlstring> #$module#; <xar:mlstring>Item type:</xar:mlstring> #$itemtype#</p>
+
+            <form action="#xarModURL('categories', 'admin', 'updatecatbase')#" method="post">
+                <p>
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="hidden" name="bid" id="bid" value="#$bid#"/>
+                    <input type="hidden" name="modid" id="modid" value="#$modid#"/>
+                    <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
+
+                    <label for="name"><xar:mlstring>Name (TODO)</xar:mlstring></label>
+                    <input type="text" name="name" id="name" value="#$catbase['name']#" size="32" maxlength="100"/>
+                </p>
+                <p>
+                    <label for="cids"><xar:mlstring>Base category</xar:mlstring></label> #$cidselect#
+                </p>
+                <p>
+                    <label for="multiple"><xar:mlstring>Multiple select (TODO)</xar:mlstring></label>
+                    <xar:if condition="!empty($catbase['multiple'])">
+                        <input type="checkbox" name="multiple" id="multiple" value="1" selected="selected"/>
+                    <xar:else/>
+                        <input type="checkbox" name="multiple" id="multiple" value="1"/>
+                    </xar:if>
+                </p>
+                <p>
+                    <label for="display"><xar:mlstring>Display (TODO)</xar:mlstring></label>
+                    <xar:if condition="!empty($catbase['display'])">
+                        <input type="checkbox" name="display" id="display" value="1" selected="selected"/>
+                    <xar:else/>
+                        <input type="checkbox" name="display" id="display" value="1"/>
+                    </xar:if>
+                </p>
+                <!-- Display the ordering select list if modifying, and there are two or more category bases to order -->
+                <xar:if condition="$groupcount gt 1 and !empty($bid)">
+                    <p>
+                        <label for="order"><xar:mlstring>Order</xar:mlstring></label>
+                        <input type="hidden" value="" name="orderresult" id="orderresult"/>
+
+                        <input type="image" src="#xarTplGetImage('up.gif','base')#" onclick="return xar_base_reorder('order', true);" title="#xarML('Move selected instance up')#"/>
+                        <input type="image" src="#xarTplGetImage('down.gif','base')#" onclick="return xar_base_reorder('order', false);" title="#xarML('Move selected instance down')#"/>
+
+                        <select name="order" id="order" size="#$groupcount#">
+                            <xar:loop name="$catbases">
+                                <xar:if condition="$loop:item.bid eq $bid">
+                                    <option value="#$loop:item.bid#" selected="selected">* #$loop:item.name# (#$loop:item.order#)</option>
+                                <xar:else />
+                                    <option value="#$loop:item.bid#">#$loop:item.name# (#$loop:item.order#)</option>
+                                </xar:if>
+                            </xar:loop>
+                        </select>
+                    </p>
+                </xar:if>
+                <p><input type="submit" name="submit" id="submit" value="#xarML('Submit')#"/></p>
+            </form>
+        </div>
+    </div>
+</xar:template>
