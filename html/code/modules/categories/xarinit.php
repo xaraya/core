@@ -154,6 +154,8 @@ function categories_init()
 
     // Set up module variables
 //    xarModVars::set('categories', 'bold', 0);
+
+/*  FIXME: clean up, update, whatever :)
     xarModVars::set('categories', 'catsperpage', 40);
 
     // when a new module item is being specified
@@ -204,7 +206,7 @@ function categories_init()
                        'register_block_type',
                        array('modName'  => 'categories',
                              'blockType'=> 'navigation'))) return;
-
+*/
     /*********************************************************************
     * Define instances for this module
     * Format is
