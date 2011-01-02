@@ -12,10 +12,12 @@
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
- * The main admin interface function of this module.
+ * Main entry point for the admin interface of this module
+ *
  * This function is the default function for the admin interface, and is called whenever the module is
  * initiated with only an admin type but no func parameter passed.  
- * The function displays the module's overview page, or redirects to the view_instances page if overviews are disabled.
+ * The function displays the module's overview page, or redirects to another page if overviews are disabled.
+ *
  * @author Jim McDonald
  * @author Paul Rosania
  * @return mixed output display string or boolean true if redirected

@@ -17,7 +17,7 @@
  * do below very quickly to prevent real-time lock-ups. 
  * In other words, the current code assumes we dont get many mails :-)
  *
- * @return int exitcode to gateway script
+ * @return integer exitcode to gateway script
  * @todo what do we do with security here?
  */
 function mail_cliapi_process(Array $args=array())

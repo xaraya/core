@@ -991,7 +991,7 @@ class SMTP extends Object
      * SMTP CODE FAILURE: 550,551,553
      * SMTP CODE ERROR  : 500,501,502,421
      * @access public
-     * @return int
+     * @return integer
      */
     function Verify($name)
     {

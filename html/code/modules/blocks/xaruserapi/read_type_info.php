@@ -20,7 +20,7 @@
  * @param array    $args array of optional parameters<br/>
  *        string   $args['module'] the module name<br/>
  *        string   $args['type'] the block type name
- * @return the block init details (an array)
+ * @return array the block init details
  * @throws EmptyParameterException, ClassNotFoundException,
  *
  * @author Jim McDonald

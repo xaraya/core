@@ -16,7 +16,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['id'] group id
- * @return $users array containing uname, id
+ * @return array array containing uname, id of the users
  */
 function roles_userapi_getUsers(Array $args=array())
 {
