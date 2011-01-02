@@ -14,6 +14,8 @@
  * @author Andy Varganov <andyv@xaraya.com>
  */
 /**
+ * Modify the configuration settings of this module
+ *
  * Standard GUI function to display and update the configuration settings of the module based on input data.
  *
  * @author  Andy Varganov <andyv@xaraya.com>
