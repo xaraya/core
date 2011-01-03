@@ -141,7 +141,8 @@ function xarLocaleParseCurrency($currency, $localeData = NULL)
 /**
  * Parses a string as a number according to specified locale data
  *
- * 
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @access public
  * @return string representing a number
  */
 function xarLocaleParseNumber($number, $localeData = NULL, $isCurrency = false)
@@ -160,7 +161,8 @@ function xarLocaleParseNumber($number, $localeData = NULL, $isCurrency = false)
 /**
  * Formats a currency according to specified locale data
  *
- * 
+ * @author Marco Canini <marco@xaraya.com>
+ * @access public
  * @return string formatted currency
  */
 function xarLocaleFormatCurrency($currency, $localeData = NULL)
