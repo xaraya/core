@@ -15,7 +15,7 @@
  * viewallgroups - generate all groups listing.
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
- * @return groups listing of available groups
+ * @return array listing of available groups
  * @todo this code is unreadable
  */
 

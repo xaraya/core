@@ -16,7 +16,7 @@
  * @param array    $args array of optional parameters<br/>
  *        string   $args['privilege'] name of a privilege<br/>
  *        string   $args['role_id'] id of a role
- * @return  bool
+ * @return  boolean
  */
 function roles_userapi_checkprivilege(Array $args=array())
 {

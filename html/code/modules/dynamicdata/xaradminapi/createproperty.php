@@ -27,7 +27,7 @@
  *        string   $args['status'] status of the property to create (disabled/active/...)<br/>
  *        integer  $args['seq'] order of the property to create<br/>
  *        string   $args['configuration'] configuration of the property to create
- * @return int property ID on success, null on failure
+ * @return integer property ID on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_createproperty(Array $args=array())

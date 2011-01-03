@@ -16,7 +16,7 @@
  *
  * @author  John Cox <admin@dinerminor.com>
  * @access  public
- * @return  true on success or void on failure
+ * @return  boolean true on success, false on failure
 */
 function base_adminapi_waitingcontent()
 {

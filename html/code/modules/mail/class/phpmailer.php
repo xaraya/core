@@ -1,4 +1,17 @@
 <?php
+/**
+ * PHPMailer Class - Xaraya Modification
+ *
+ * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright  2001 - 2003  Brent R. Matzelle
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/771.html
+ * @authorBrent R. Matzelle
+ */
 ////////////////////////////////////////////////////
 // PHPMailer - PHP email class
 //

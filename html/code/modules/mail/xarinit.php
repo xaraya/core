@@ -17,7 +17,7 @@
  *
  * @author John Cox <niceguyeddie@xaraya.com>
  * @access public
- * @return true on success or void or false on failure
+ * @return  boolean true on success or false on failure
 **/
 function mail_init()
 {
