@@ -577,7 +577,7 @@ class Role extends DataObject
      * @param integer state count user in this state
      * @param string selection count user within this selection criteria
      * @param integer itemtype group or user
-     * @return int
+     * @return integer
      */
     public function countChildren($state = xarRoles::ROLES_STATE_CURRENT, $selection = NULL, $itemtype = NULL)
     {
@@ -621,7 +621,7 @@ class Role extends DataObject
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param int    $state count user in this state
      * @param string $selection count user within this selection criteria
-     * @return int
+     * @return integer
      */
     public function countUsers($state = xarRoles::ROLES_STATE_CURRENT, $selection = NULL)
     {

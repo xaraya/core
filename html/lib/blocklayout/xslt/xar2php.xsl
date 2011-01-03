@@ -176,6 +176,9 @@
 <xsl:template name="translateText">
   <xsl:param name="expr"/>
   <xsl:choose>
+    <xsl:when test="normalize-space($expr)=''">
+      <xsl:value-of select="$expr"/>
+    </xsl:when>
     <xsl:when test="string(number($expr))!='NaN'">
       <xsl:value-of select="$expr"/>
     </xsl:when>

@@ -16,7 +16,7 @@
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['regid'] the module id<br/>
  *        integer  $args['state'] the state
- * @return int state
+ * @return integer state
  * @throws BAD_PARAM,NO_PERMISSION
  * @todo Do the db changes in a transaction to completely fail or succeed?
  */

@@ -24,7 +24,7 @@
  *        string   $args['config'] some configuration for the object (free to define and use)<br/>
  *        integer  $args['objectid'] object id of the object to create (for import only)<br/>
  *        integer  $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
- * @return int object ID on success, null on failure
+ * @return integer object ID on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_createobject(Array $args=array())

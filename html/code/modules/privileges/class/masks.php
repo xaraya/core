@@ -208,7 +208,7 @@ class xarMasks extends xarSecurity
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   string $levelname the
-     * @return  int access level
+     * @return  integer access level
     */
     public static function xarSecLevel($levelname)
     {
@@ -279,7 +279,7 @@ class xarMasks extends xarSecurity
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   array representing the privilege set
-     * @return  none
+     * @return  void
     */
     public static function normalizeprivset(&$privset)
     {
