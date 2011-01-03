@@ -94,7 +94,7 @@
                     <xar:set name="value">
                         <xar:var scope="module" module="themes" name="SiteFooter"/>
                     </xar:set>
-                    <xar:data-input type="textarea" name="footer" cols="80" value="$value"/>
+                    <xar:data-input type="textarea" name="footer" cols="40" rows="3" value="$value"/>
                 </div>
                 #xarVarDelCached('Mod.Variables.themes','SiteFooter')# 
                 <div class="xar-form-input-wrapper">
