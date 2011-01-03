@@ -673,14 +673,16 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
     // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
     $templateName = xarVarPrepForOS($templateName);
     $themeDir = xarTplGetThemeDir();
-
+       
     if (!empty($templateName) && file_exists("$themeDir/blocks/$templateName.xt")) {
         $sourceFileName = "$themeDir/blocks/$templateName.xt";
-    } else {
-        // We must fall back to the default, as the template passed in could be the group
+    } elseif (file_exists("$themeDir/blocks/default.xt")) {
+        // Fall back to the theme default, as the template passed in could be the group
         // name, allowing an optional template to be utilised.
-        $templateName = 'default';
         $sourceFileName = "$themeDir/blocks/default.xt";
+    } else {
+        // theme didn't supply a default, fall back to blocks module default
+        $sourceFileName = sys::code() . "modules/blocks/xartemplates/blocks/block.xt";
     }
     return xarTpl__executeFromFile($sourceFileName, $blockInfo);
 }

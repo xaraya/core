@@ -41,6 +41,33 @@ class ModulesModuleRemoveSubject extends ApiHookSubject
         // API and GUI observers will be passed $this->getArgs()
         // Class observers can obtain the same args from $subject->getArgs() or
         // just retrieve extrainfo from $subject->getExtrainfo() 
-    } 
+    }
+    
+    public function notify()
+    {
+        // notify observers...
+        parent::notify();
+
+        // get extrainfo
+        $extrainfo = $this->getExtrainfo();
+        // get id of the module removed
+        $module_id = $extrainfo['module_id'];
+        
+        // remove the module from hooks and events...
+        $dbconn = xarDB::getConn();
+        $tables = xarDB::getTables();
+
+        // Delete any hooks assigned for that module, or by that module
+        $query = "DELETE FROM $tables[hooks] WHERE observer = ? OR subject = ?";
+        $bindvars = array($module_id,$module_id);
+        $dbconn->Execute($query,$bindvars);
+        
+        // Delete any event and hooks subjects and observers registered for that module
+        $query = "DELETE FROM $tables[eventsystem] WHERE module_id = ?";
+        $bindvars = array($module_id);
+        $dbconn->Execute($query,$bindvars);
+        
+        return $extrainfo;
+   }
 }
 ?>

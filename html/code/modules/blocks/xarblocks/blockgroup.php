@@ -39,7 +39,8 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlock
         if (empty($data)) return;
 
         // blockgroup name (if any)
-        $data['group_name'] = $data['name'];
+        $data['group'] = $data['name'];
+        $data['groupid'] = $data['bid'];
 
         // get block instances for this blockgroup
         $instances = xarMod::apiFunc('blocks', 'user', 'getall',
@@ -57,19 +58,21 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlock
                 $group_inst_template = explode(';',$info['group_inst_template'],3);
                 $inst_template = explode(';',$info['template'],3);
                 $group_template = explode(';',$info['group_template'],3);
-                if (empty($group_template[0])) {
+                // groups have no outer template, we just want the inner setting
+                if (empty($group_template[1])) {
                     // Default the box template to the group name.
-                    $group_template[0] = $data['group_name'];
+                    $group_template[1] = $data['group'];
                 }
-
-                if (empty($group_bl_template[1])) {
+                /*
+                if (empty($group_template[1])) {
                     // Default the block template to the instance name.
                     $group_template[1] = $info['name'];
                 }
+                */
 
                 // Cascade level over-rides for the box template.
                 $info['_bl_box_template'] = !empty($group_inst_template[0]) ? $group_inst_template[0]
-                    : (!empty($inst_template[0]) ? $inst_template[0] : $group_template[0]);
+                    : (!empty($inst_template[0]) ? $inst_template[0] : $group_template[1]);
 
                 // Global override of box template - usually comes from the 'template'
                 // attribute of the xar:blockgroup tag.
@@ -79,13 +82,13 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlock
 
                 // Cascade level over-rides for the block template.
                 $info['_bl_block_template'] = !empty($group_inst_template[1]) ? $group_inst_template[1]
-                    : (!empty($inst_template[1]) ? $inst_template[1] : $group_template[1]);
+                    : (!empty($inst_template[1]) ? $inst_template[1] : $info['name']);
 
                 $info['_bl_template_base'] = $info['type'];
 
                 // add blockgroup details to info
-                $info['bgid'] = $data['bid'];
-                $info['group_name'] = $data['group_name'];
+                $info['groupid'] = $data['groupid'];
+                $info['group'] = $data['group'];
 
                 // render the block
                 $output .= xarBlock::render($info);

@@ -102,7 +102,7 @@ function blocks_adminapi_update_instance_groups(Array $args=array())
     if (!empty($toupdate)) {
         $updQuery = "UPDATE $group_instances
                      SET template = ?
-                     WHERE id = ?";
+                     WHERE group_id = ?";
         $updStmt  = $dbconn->prepareStatement($updQuery);
         foreach ($toupdate as $block) {
             $id = $block['bid'];
