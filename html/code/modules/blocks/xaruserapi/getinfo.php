@@ -186,8 +186,8 @@ function blocks_userapi_getinfo(Array $args=array())
         $blockinfo['_bl_block_template'] = $template[1];
     }
 
-    // Allow a global override to the box template for the xar:blockgroup tag.
-    if (!empty($box_template) && empty($blockinfo['_bl_box_template'])) {$blockinfo['_bl_box_template'] = $box_template;}
+    // Allow a global override to the block box template from the xar:blockgroup tag.
+    if (!empty($box_template)) $blockinfo['_bl_box_template'] = $box_template;
 
     // Legacy support.
     $instance['id'] = $blockinfo['bid'];

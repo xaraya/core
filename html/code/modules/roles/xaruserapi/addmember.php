@@ -17,7 +17,7 @@
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['gid'] group id<br/>
  *        integer  $args['id'] role id
- * @return true on success, false on failure
+ * @return boolean true on succes, false on failure
  */
 function roles_userapi_addmember(Array $args=array())
 {

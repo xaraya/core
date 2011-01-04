@@ -48,7 +48,7 @@ class xarMask extends Object
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   array of values
-     * @return  mask
+     * @return  void
     */
     function __construct($pargs=array())
     {

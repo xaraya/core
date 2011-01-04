@@ -21,7 +21,7 @@
  *        integer  $args['itemid'] item id of the original item<br/>
  *        string   $args['values'] array of id => value, or<br/>
  *        string   $args['fields'] array containing the field definitions and values
- * @return item id on success, null on failure
+ * @return integer item id on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_create(Array $args=array())

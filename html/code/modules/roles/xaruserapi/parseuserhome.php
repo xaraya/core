@@ -17,7 +17,7 @@
  *        string   $args['userurl'] to check<br/>
  *        string   $args['truecurenturl'] calling url<br/>
  *        string   $args['redirecturl'] page to return user
- * @return  externalurl boolean true if external URL
+ * @return boolean true if external URL
  */
 function roles_userapi_parseuserhome(Array $args=array())
 {

@@ -17,7 +17,7 @@
  * @author Roger Keays <r.keays@ninthave.net>
  * @param array    $args array of optional parameters<br/>
  *        string   $args['directory'] of the theme
- * @return  the theme name in this directory, or false if theme is not
+ * @return  string the theme name in this directory, or false if theme is not
  *          found
  */
 function themes_adminapi_themedir2name(Array $args=array())

@@ -19,7 +19,7 @@
  *        integer  $args['state'] optionally count by block state
  * @author Chris Powis <crisp@xaraya.com>
  * @throws DB_ERROR
- * @return int number of instances
+ * @return integer number of instances
 */
 
 function blocks_userapi_count_instances(Array $args=array())

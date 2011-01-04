@@ -13,10 +13,11 @@
  */
 
 /**
- * The main admin interface function of this module.
+ * Main entry point for the admin interface of this module
+ *
  * This function is the default function for the admin interface, and is called whenever the module is
  * initiated with only an admin type but no func parameter passed.  
- * The function displays the module's overview page, or redirects to the modifyconfig page if overviews are disabled.
+ * The function displays the module's overview page, or redirects to another page if overviews are disabled.
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
