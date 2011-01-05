@@ -3,11 +3,12 @@
  * Hook called to send mail on deletion of an item
  *
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 
@@ -15,10 +16,11 @@
  * This is a hook function that is called to send mail on deletion of an item
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @param  $ 'modid' is the module that is sending mail.
- * @param  $ 'objectid' is the item deleted.
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['modid'] is the module that is sending mail.<br/>
+ *        integer  $args['objectid'] is the item deleted.
  */
-function mail_adminapi_hookmaildelete($args)
+function mail_adminapi_hookmaildelete(Array $args=array())
 {
     extract($args);
 

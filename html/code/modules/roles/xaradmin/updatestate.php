@@ -3,11 +3,12 @@
  * Update users from roles_admin_showusers
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /* Update users from roles_admin_showusers
@@ -35,7 +36,7 @@ function roles_admin_updatestate()
     }
      if (isset($invalid)) {
         // if so, return to the previous template
-        return xarResponse::redirect(xarModURL('roles','admin', 'showusers',
+        return xarController::redirect(xarModURL('roles','admin', 'showusers',
                              array('authid'  => $data['authid'],
                                    'state'   => $data['state'],
                                    'invalid' => $invalid,
@@ -88,13 +89,13 @@ function roles_admin_updatestate()
     $ids = $idnotify;
     // Success
      if ((!xarModVars::get('roles', 'ask'.$mailtype.'email')) || (count($idnotify) == 0)) {
-            xarResponse::redirect(xarModURL('roles', 'admin', 'showusers',
+            xarController::redirect(xarModURL('roles', 'admin', 'showusers',
                           array('id' => $data['groupid'], 'state' => $data['state'])));
-            return true;
      }
      else {
-        xarResponse::redirect(xarModURL('roles', 'admin', 'asknotification',
+        xarController::redirect(xarModURL('roles', 'admin', 'asknotification',
                           array('id' => $ids, 'mailtype' => $mailtype, 'groupid' => $data['groupid'], 'state' => $data['state'])));
      }
+     return true;
 }
 ?>

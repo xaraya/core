@@ -5,9 +5,13 @@
  * The compiler is responsible for compiling xar + xml -> php + xml
  *
  * @package blocklayout
+ * @subpackage compiler
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Marco Canini <marco@xaraya.com>
  * @author Paul Rosania  <paul@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
@@ -15,20 +19,6 @@
  * @author Garrett Hunter <garrett@blacktower.com>
  * @todo  This is still the architecture of BL1, just stripped. We can do a lot better.
  */
-
-/* This one exception depends on BL being inside Xaraya, try to correct this later */
-if (!class_exists('xarExceptions')) {
-    sys::import('xaraya.exceptions');
-}
-/**
- * Exceptions raised by this subsystem
- *
- * @package compiler
- */
-class BLCompilerException extends xarExceptions
-{
-    protected $message = "Cannot open template file '#(1)'";
-}
 
 /**
  *  Interface definition for the blocklayout compiler, these are the things
@@ -85,7 +75,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         $this->lastFile = $fileName;
         // The @ makes the code better to handle, leave it.
         if (!($fp = @fopen($fileName, 'r'))) {
-            throw new BLCompilerException($fileName);
+            throw new Exception("Cannot open template file '" . $fileName . "'");
         }
 
         if ($fsize = filesize($fileName)) {
@@ -96,12 +86,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
                 $templateSource .= fread($fp, 4096);
             }
         }
-
         fclose($fp);
-        if (!function_exists('xarLogMessage')) {
-            sys::import('xaraya.log');
-        }
-        xarLogMessage("BL: compiling $fileName");
 
         $res = $this->compile($templateSource);
         return $res;

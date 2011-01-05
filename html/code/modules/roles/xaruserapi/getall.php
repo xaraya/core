@@ -3,24 +3,25 @@
  * Get all users
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * get all users
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['order'] comma-separated list of order items; default 'name'
- * @param $args['selection'] extra coonditions passed into the where-clause
- * @param $args['group'] comma-separated list of group names or IDs, or
- * @param $args['idlist'] array of user ids
- * @returns array
- * @return array of users, or false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['order'] comma-separated list of order items; default 'name'<br/>
+ *        string   $args['selection'] extra coonditions passed into the where-clause<br/>
+ *        string   $args['group'] comma-separated list of group names or IDs, or<br/>
+ *        array    $args['idlist'] array of user ids
+ * @return mixed array of users, or false on failure
  */
-function roles_userapi_getall($args)
+function roles_userapi_getall(Array $args=array())
 {
     extract($args);
     // LEGACY

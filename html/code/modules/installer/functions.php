@@ -2,11 +2,12 @@
 /**
  * Call an installer function
  * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage installer module
  * @link http://xaraya.com/index.php/release/200.html
  */
 /**
@@ -24,8 +25,7 @@
  * @access public
  * @param funcName specific function to run
  * @param args argument array
- * @returns mixed
- * @return The output of the function, or false on failure
+ * @return string output display string
  * @throws BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
  */
 function xarInstallFunc($funcName = 'main', $args = array())
@@ -86,8 +86,7 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
  * @access public
  * @param modName registered name of the module
  * @param modType type of functions to load
- * @returns bool
- * @return true on success
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
 function xarInstallAPILoad()
@@ -120,8 +119,7 @@ function xarInstallAPILoad()
  * Loads the modType of installer identified by modName.
  *
  * @access public
- * @returns string
- * @return true
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
 function xarInstallLoad($func)

@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  */
 
@@ -41,7 +42,7 @@ class DataPropertyMaster extends Object
      * @param $args['objectref'] a reference to the object to add those properties to (optional)
      * @param $args['allprops'] skip disabled properties by default
      */
-    static function getProperties(Array $args)
+    static function getProperties(Array $args=array())
     {
         // we can't use our own classes here, because we'd have an endless loop :-)
 
@@ -160,7 +161,7 @@ class DataPropertyMaster extends Object
     /**
      * Class method to get a new dynamic property of the right type
      */
-    static function &getProperty(Array $args)
+    static function &getProperty(Array $args=array())
     {
         if(!isset($args['name']) && !isset($args['type'])) {
             throw new BadParameterException(null,xarML('The getProperty method needs either a name or type parameter.'));
@@ -235,7 +236,7 @@ class DataPropertyMaster extends Object
         return $property;
     }
 
-    static function createProperty(Array $args)
+    static function createProperty(Array $args=array())
     {
         $descriptor = new DataObjectDescriptor(array('name' => 'properties')); // the Dynamic Properties = 2
         if (!class_exists('DataObject')) {
@@ -247,12 +248,12 @@ class DataPropertyMaster extends Object
         return $objectid;
     }
 
-    static function updateProperty(Array $args)
+    static function updateProperty(Array $args=array())
     {
         // TODO: what if the property type changes to something incompatible ?
     }
 
-    static function deleteProperty(Array $args)
+    static function deleteProperty(Array $args=array())
     {
         if(empty($args['itemid']))
             return;

@@ -1,5 +1,14 @@
 <?php
 /**
+ * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/70.html
+ *
  * Gets a list of themes that matches required criteria.
  *
  * Supported criteria are UserCapable, AdminCapable, Class, Category, State.
@@ -29,15 +38,19 @@
  * 'class/category/name' as orderBy parameter
  *
  * @author Marco Canini <marco.canini@postnuke.com>
- * @param filter array of criteria used to filter the entire list of installed
- *        themes.
- * @param startNum the start offset in the list
- * @param numItems the length of the list
- * @param orderBy the order type of the list
+ * @param array    $args array of optional parameters<br/>
+ *        array    $args['filter'] array of criteria used to filter the entire list of installed<br/>
+ *                 themes.<br/>
+ *        integer  $args['startNum'] the start offset in the list<br/>
+ *        integer  $args['numItems'] the length of the list<br/>
+ *        string   $args['orderBy'] the order type of the list
  * @return array of theme information arrays
  * @throws DATABASE_ERROR, BAD_PARAM
  */
-function themes_adminapi_dropdownlist($args)
+/**
+ * @param array    $args array of optional parameters<br/>
+ */
+function themes_adminapi_dropdownlist(Array $args=array())
 {
 
     $themelist = xarMod::apiFunc('themes', 'admin', 'getlist', $args);

@@ -1,5 +1,14 @@
 <?php
 /**
+ * @package core
+ * @subpackage structures
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+/**
  * Sequence implemented as a dd object, very inefficient implementation for now.
  *
  * @todo check the object definition, optionally autocreating one if none found
@@ -19,7 +28,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
      * @param $args['name'] string name of the object containing the sequence
      *
      */
-    public function __construct(array $args)
+    public function __construct(Array $args=array())
     {
         // TODO: check the object definition, it needs id, data and nextid
         assert('isset($args["name"]); /* To construct a dd sequence, an objectname must be passed in */');

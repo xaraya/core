@@ -1,26 +1,28 @@
 <?php
 /**
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
  * Check for existance of a block type
  *
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @access public
- * @param modName the module name
- * @param blockType the block type
- * @returns bool
- * @return true if exists, false if not found
- * @throws DATABASE_ERROR, BAD_PARAM
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['modName'] the module name<br/>
+ *        string   $args['blockType'] the block type
+ * @return boolean true on success, false on failure
+ * @throws BAD_PARAM
  * @deprec Deprecated 11 Jan 2004 - use countblocktypes directly
  */
-function blocks_adminapi_block_type_exists($args)
+function blocks_adminapi_block_type_exists(Array $args=array())
 {
     extract($args);
 

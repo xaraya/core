@@ -1,4 +1,14 @@
 <?php
+/**
+ * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/1098.html
+ */
 
     /**
      * returnPrivilege: adds or modifies a privilege coming from an external wizard .
@@ -6,11 +16,17 @@
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   strings with pid, name, realm, module, component, instance and level
-     * @return  mixed id if OK, void if not
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['pid']<br/>
+ *        string   $args['name']<br/>
+ *        string   $args['realm']<br/>
+ *        string   $args['module']<br/>
+ *        string   $args['component']<br/>
+ *        string   $args['instance']<br/>
+ *        integer  $args['level']
     */
 
-    function privileges_adminapi_returnprivilege($args)
+    function privileges_adminapi_returnprivilege(Array $args=array())
     {
         extract($args);
 

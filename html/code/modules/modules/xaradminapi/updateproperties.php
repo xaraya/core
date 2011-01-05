@@ -1,24 +1,26 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Modules module
+ * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * Update module information
  *
  * @author Xaraya Development Team
- * @param $args['regid'] the id number of the module to update
- * @param $args['displayname'] the new display name of the module
- * @param admincapable the whether the module shows an admin menu
- * @param usercapable the whether the module shows a user menu
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the id number of the module to update<br/>
+ *        string   $args['displayname'] the new display name of the module<br/>
+ *        string   $args['admincapable'] the whether the module shows an admin menu<br/>
+ *        string   $args['usercapable'] the whether the module shows a user menu
+ * @return boolean true on success, false on failure
  */
-function modules_adminapi_updateproperties($args)
+function modules_adminapi_updateproperties(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

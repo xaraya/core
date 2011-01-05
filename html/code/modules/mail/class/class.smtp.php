@@ -78,7 +78,7 @@ class SMTP extends Object
      * SMTP CODE SUCCESS: 220
      * SMTP CODE FAILURE: 421
      * @access public
-     * @return bool
+     * @return boolean
      */
     function Connect($host,$port=0,$tval=30)
     {
@@ -141,7 +141,7 @@ class SMTP extends Object
      * Performs SMTP authentication.  Must be run after running the
      * Hello() method.  Returns true if successfully authenticated.
      * @access public
-     * @return bool
+     * @return boolean
      */
     function Authenticate($username, $password)
     {
@@ -205,7 +205,7 @@ class SMTP extends Object
     /**
      * Returns true if connected to a server otherwise false
      * @access private
-     * @return bool
+     * @return boolean
      */
     function Connected()
     {
@@ -266,7 +266,7 @@ class SMTP extends Object
      * SMTP CODE FAILURE: 451,554
      * SMTP CODE ERROR  : 500,501,503,421
      * @access public
-     * @return bool
+     * @return boolean
      */
     function Data($msg_data)
     {
@@ -458,7 +458,7 @@ class SMTP extends Object
      * SMTP CODE SUCCESS: 250
      * SMTP CODE ERROR  : 500, 501, 504, 421
      * @access public
-     * @return bool
+     * @return boolean
      */
     function Hello($host="")
     {
@@ -491,7 +491,7 @@ class SMTP extends Object
     /**
      * Sends a HELO/EHLO command.
      * @access private
-     * @return bool
+     * @return boolean
      */
     function SendHello($hello, $host)
     {
@@ -587,7 +587,7 @@ class SMTP extends Object
      * SMTP CODE SUCCESS: 552,451,452
      * SMTP CODE SUCCESS: 500,501,421
      * @access public
-     * @return bool
+     * @return boolean
      */
     function Mail($from)
     {
@@ -630,7 +630,7 @@ class SMTP extends Object
      * SMTP CODE SUCCESS: 250
      * SMTP CODE ERROR  : 500, 421
      * @access public
-     * @return bool
+     * @return boolean
      */
     function Noop()
     {
@@ -674,7 +674,7 @@ class SMTP extends Object
      * SMTP CODE SUCCESS: 221
      * SMTP CODE ERROR  : 500
      * @access public
-     * @return bool
+     * @return boolean
      */
     function Quit($close_on_error=true)
     {
@@ -729,7 +729,7 @@ class SMTP extends Object
      * SMTP CODE FAILURE: 550,551,552,553,450,451,452
      * SMTP CODE ERROR  : 500,501,503,421
      * @access public
-     * @return bool
+     * @return boolean
      */
     function Recipient($to)
     {
@@ -774,7 +774,7 @@ class SMTP extends Object
      * SMTP CODE SUCCESS: 250
      * SMTP CODE ERROR  : 500,501,504,421
      * @access public
-     * @return bool
+     * @return boolean
      */
     function Reset()
     {
@@ -824,7 +824,7 @@ class SMTP extends Object
      * SMTP CODE SUCCESS: 552,451,452
      * SMTP CODE SUCCESS: 500,501,502,421
      * @access public
-     * @return bool
+     * @return boolean
      */
     function Send($from)
     {
@@ -873,7 +873,7 @@ class SMTP extends Object
      * SMTP CODE SUCCESS: 552,451,452
      * SMTP CODE SUCCESS: 500,501,502,421
      * @access public
-     * @return bool
+     * @return boolean
      */
     function SendAndMail($from)
     {
@@ -922,7 +922,7 @@ class SMTP extends Object
      * SMTP CODE SUCCESS: 552,451,452
      * SMTP CODE SUCCESS: 500,501,502,421
      * @access public
-     * @return bool
+     * @return boolean
      */
     function SendOrMail($from)
     {
@@ -968,7 +968,7 @@ class SMTP extends Object
      * SMTP CODE FAILURE: 502
      * SMTP CODE ERROR  : 500, 503
      * @access public
-     * @return bool
+     * @return boolean
      */
     function Turn()
     {
@@ -991,7 +991,7 @@ class SMTP extends Object
      * SMTP CODE FAILURE: 550,551,553
      * SMTP CODE ERROR  : 500,501,502,421
      * @access public
-     * @return int
+     * @return integer
      */
     function Verify($name)
     {

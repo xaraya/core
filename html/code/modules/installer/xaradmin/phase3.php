@@ -3,11 +3,12 @@
  * Installer
  *
  * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage installer module
  * @link http://xaraya.com/index.php/release/200.html
  */
 
@@ -22,9 +23,7 @@
  *
  * @access private
  * @param agree string
- * @return array
- * @todo <johnny> make sure php version checking works with
- *       php versions that contain strings
+ * @return array data for the template display
  */
 function installer_admin_phase3()
 {
@@ -36,11 +35,12 @@ function installer_admin_phase3()
 
     if ($agree != 'agree') {
         // didn't agree to license, don't install
-        xarResponse::redirect('install.php?install_phase=2&install_language='.$install_language.'&retry=1');
+        header("Location: install.php?install_phase=2&install_language='.$install_language.'&retry=1");
     }
 
     //Defaults
     $systemConfigIsWritable   = false;
+    $systemConfigDistIsWritable   = false;
     $cacheTemplatesIsWritable = false;
     $rssTemplatesIsWritable   = false;
     $metRequiredPHPVersion    = false;
@@ -50,6 +50,7 @@ function installer_admin_phase3()
     $cacheTemplatesDir        = $systemVarDir . XARCORE_TPL_CACHEDIR;
     $rssTemplatesDir          = $systemVarDir . XARCORE_RSS_CACHEDIR;
     $systemConfigFile         = $systemVarDir . '/' . sys::CONFIG;
+    $systemConfigDistFile     = $systemVarDir . '/' . sys::CONFIG . '.dist';
     $phpLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/php';
     $xmlLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/xml';
 
@@ -57,6 +58,12 @@ function installer_admin_phase3()
         if (version_compare(PHP_VERSION,PHP_REQUIRED_VERSION,'>=')) $metRequiredPHPVersion = true;
     }
 
+    // If there is no system.config file, attempt to create it
+    $systemConfigDistIsReadable = is_writable($systemConfigDistFile);
+    if ($systemConfigDistIsReadable && !file_exists($systemConfigFile)) {
+        copy($systemConfigDistFile, $systemConfigFile);
+    }
+    
     $systemConfigIsWritable     = is_writable($systemConfigFile);
     $cacheIsWritable            = check_dir($cacheDir);
     $cacheTemplatesIsWritable   = (check_dir($cacheTemplatesDir) || @mkdir($cacheTemplatesDir, 0700));
@@ -81,16 +88,18 @@ function installer_admin_phase3()
     $data['sqliteextension']          = extension_loaded('sqlite');
     $data['pdosqliteextension']       = extension_loaded('pdo_sqlite');
 
-    $data['metRequiredPHPVersion']    = $metRequiredPHPVersion;
-    $data['phpVersion']               = PHP_VERSION;
-    $data['cacheDir']                 = $cacheDir;
-    $data['cacheIsWritable']          = $cacheIsWritable;
-    $data['cacheTemplatesDir']        = $cacheTemplatesDir;
-    $data['cacheTemplatesIsWritable'] = $cacheTemplatesIsWritable;
-    $data['rssTemplatesDir']          = $rssTemplatesDir;
-    $data['rssTemplatesIsWritable']   = $rssTemplatesIsWritable;
-    $data['systemConfigFile']         = $systemConfigFile;
-    $data['systemConfigIsWritable']   = $systemConfigIsWritable;
+    $data['metRequiredPHPVersion']      = $metRequiredPHPVersion;
+    $data['phpVersion']                 = PHP_VERSION;
+    $data['cacheDir']                   = $cacheDir;
+    $data['cacheIsWritable']            = $cacheIsWritable;
+    $data['cacheTemplatesDir']          = $cacheTemplatesDir;
+    $data['cacheTemplatesIsWritable']   = $cacheTemplatesIsWritable;
+    $data['rssTemplatesDir']            = $rssTemplatesDir;
+    $data['rssTemplatesIsWritable']     = $rssTemplatesIsWritable;
+    $data['systemConfigFile']           = $systemConfigFile;
+    $data['systemConfigIsWritable']     = $systemConfigIsWritable;
+    $data['systemConfigDistFile']       = $systemConfigDistFile;
+    $data['systemConfigDistIsReadable'] = $systemConfigDistIsReadable;
     $data['phpLanguageDir']             = $phpLanguageDir;
     $data['phpLanguageFilesIsWritable'] = $phpLanguageFilesIsWritable;
     $data['xmlLanguageDir']             = $xmlLanguageDir;
@@ -126,7 +135,7 @@ function installer_admin_phase3()
  *
  * @access private
  * @param string dirname directory name
- * @return bool true if directory is writable, readable and executable
+ * @return boolean true if directory is writable, readable and executable
  */
 function check_dir($dirname)
 {

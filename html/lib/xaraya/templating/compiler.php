@@ -1,10 +1,32 @@
 <?php
+/**
+ * @package core
+ * @subpackage templating
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+
+/* This one exception depends on BL being inside Xaraya, try to correct this later */
+if (!class_exists('xarExceptions')) {
+    sys::import('xaraya.exceptions');
+}
+/**
+ * Exceptions raised by this subsystem
+ *
+ * @package compiler
+ */
+class BLCompilerException extends xarExceptions
+{
+    protected $message = "Cannot open template file '#(1)'";
+}
 
 /**
  * XarayaCompiler - the abstraction of the BL compiler
  *
- * @package xaraya
- * @access public
+ * 
  */
 sys::import('blocklayout.compiler');
 
@@ -33,6 +55,16 @@ class XarayaCompiler extends xarBLCompiler
         // Add the custom tags from modules
         $xslFiles = array_merge($xslFiles,$this->getModuleTagPaths());
         return $xslFiles;
+    }
+
+    public function compileFile($fileName)
+    {
+        if (!function_exists('xarLogMessage')) {
+            sys::import('xaraya.log');
+        }
+        xarLogMessage("BL: compiling $fileName");
+
+        return parent::compileFile($fileName);
     }
 
     /**

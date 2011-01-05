@@ -11,7 +11,7 @@
         <h2>Module Upgrade Failed</h2>
         <xar:template file="install-errors" type="module"/>
         <p>
-            <a href="&xar-modurl-modules-admin-list;">Go back to the modules list.</a>
+            <a href="#xarModURL('modules','admin','list')#">Go back to the modules list.</a>
         </p>
     </div>
 </xar:template>

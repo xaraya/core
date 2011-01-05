@@ -3,10 +3,13 @@
  * Xaraya Variable Cache
  *
  * @package core
+ * @subpackage caching
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage caching
+ *
  * @author mikespub
  * @author jsb
  */
@@ -26,7 +29,7 @@ class xarVariableCache extends Object
      * Initialise the variable caching options
      *
      * @param array $config caching configuration from config.caching.php
-     * @return bool true on success, false on failure
+     * @return boolean true on success, false on failure
      */
     public static function init(array $config = array())
     {
@@ -82,7 +85,7 @@ class xarVariableCache extends Object
      * Check if a variable value is cached
      *
      * @param string $cacheKey the key identifying the particular variable you want to access
-     * @return bool true if the variable is cached, false if not
+     * @return boolean true if the variable is cached, false if not
     **/
     public static function isCached($cacheKey)
     {

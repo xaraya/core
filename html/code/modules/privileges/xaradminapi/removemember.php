@@ -1,11 +1,14 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Privileges module
+ * @link http://xaraya.com/index.php/release/1098.html
+ * 
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
@@ -16,12 +19,12 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   childid, parentid
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['childid']<br/>
+ *        integer  $args['parentid']
  * @return  boolean
- * @throws  none
- * @todo    none
  */
-function privileges_adminapi_removemember($args)
+function privileges_adminapi_removemember(Array $args=array())
 {
     extract($args);
     //Do nothing if the params aren't there

@@ -2,27 +2,29 @@
 /**
  * Get message
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['template'] name of the email type which has apair of -subject and -message files
- * @param $args['module'] module directory in var/messaging
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['template'] name of the email type which has apair of -subject and -message files<br/>
+ *        string   $args['module'] module directory in var/messaging
  * @return array of strings of file contents read
  */
-function mail_adminapi_getmessagestrings($args)
+function mail_adminapi_getmessagestrings(Array $args=array())
 {
     extract($args);
     if (!isset($template)) throw new EmptyParameterException('template');
 
     if(!isset($module)){
-        list($module) = xarRequest::getInfo();
+        list($module) = xarController::$request->getInfo();
     }
 
     $messaginghome = sys::varpath() . "/messaging/" . $module;

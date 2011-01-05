@@ -26,7 +26,7 @@
         <h3>
             Privilege Assignments for #$tabmodule#
         </h3>
-        <form id="groupassignments" method="post" action="&xar-modurl-privileges-admin-assignprivileges;" enctype="application/x-www-form-urlencoded">
+        <form id="groupassignments" method="post" action="#xarModURL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>
                     Privileges on groups
@@ -93,7 +93,7 @@
                 </fieldset>
             </fieldset>
         </form>
-        <form id="anonassignments" method="post" action="&xar-modurl-privileges-admin-assignprivileges;" enctype="application/x-www-form-urlencoded">
+        <form id="anonassignments" method="post" action="#xarModURL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>
                     Privileges on the anonymous user
@@ -162,7 +162,7 @@
                 </fieldset>
             </fieldset>
         </form>
-        <form id="userassignments" method="post" action="&xar-modurl-privileges-admin-assignprivileges;" enctype="application/x-www-form-urlencoded">
+        <form id="userassignments" method="post" action="#xarModURL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>
                     Privileges on other users

@@ -2,9 +2,14 @@
 /**
  * Representing blocklayout source templates in Xaraya
  *
- * @package xaraya
+ * @package core
+ * @subpackage templating
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
 
@@ -13,7 +18,6 @@ sys::import('blocklayout.template.source');
 /**
  * Class to model the source template
  *
- * @package blocklayout
  * @todo    decorate this with a Stream object so we can compile anything that is a stream.
 **/
 class XarayaSourceTemplate extends SourceTemplate

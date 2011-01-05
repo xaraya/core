@@ -3,10 +3,13 @@
  * Xaraya Caching Configuration
  *
  * @package core
+ * @subpackage caching
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage caching
+ *
  * @author mikespub
  * @author jsb
  */
@@ -190,7 +193,7 @@ class xarCache extends Object
     /**
      * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
      */
-    public static function addStyle($args)
+    public static function addStyle(Array $args=array())
     {
         if (!xarCache::$outputCacheIsEnabled) {
             return;
@@ -228,7 +231,7 @@ class xarCache extends Object
     /**
      * Get a storage class instance for some type of cached data
      *
-     * @access protected
+     * 
      * @param string  $storage the storage you want (filesystem, database or memcached)
      * @param string  $type the type of cached data (page, block, template, ...)
      * @param string  $cachedir the path to the cache directory (for filesystem)
@@ -248,7 +251,7 @@ class xarCache extends Object
     /**
      * Get the parent group ids of the current user (with minimal overhead)
      *
-     * @access private
+     * 
      * @return array of parent gids
      * @todo avoid DB lookup by passing groups via cookies ?
      * @todo Note : don't do this if admins get cached too :)

@@ -88,10 +88,16 @@
       <xsl:when test="$dtd = 'svg-xhtml-math'">
         <xsl:text disable-output-escaping="yes">svg:svg PUBLIC  "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN" "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd"&gt;</xsl:text>
       </xsl:when>
+      <!-- <chris/> the rss 0.91 dtd formerly at http://my.netscape.com/publish/formats/rss-0.91.dtd 
+           was dropped in 2007, we're using the archive version from web.archive.org, 
+           it may be more desirable/reliable to copy and serve this locally -->
       <xsl:when test="$dtd = 'rss'">
-        <xsl:text disable-output-escaping="yes">rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"   "http://my.netscape.com/publish/formats/rss-0.91.dtd"&gt;</xsl:text>
+        <xsl:text disable-output-escaping="yes">rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"   "http://web.archive.org/web/20030601160443/http://my.netscape.com/publish/formats/rss-0.91.dtd"&gt;</xsl:text>
       </xsl:when>
-
+      <!-- html5 [NOT a standard yet] -->
+      <xsl:when test="$dtd = 'html5'">
+        <xsl:text disable-output-escaping="yes">HTML&gt;</xsl:text>
+      </xsl:when>
     </xsl:choose>
   </xsl:template>
 

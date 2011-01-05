@@ -2,10 +2,14 @@
 /**
  * Session Support
  *
- * @package sessions
+ * @package core
+ * @subpackage sessions
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Jim McDonald
  * @author Marco Canini <marco@xaraya.com>
  * @author Michel Dalle
@@ -23,7 +27,7 @@ class SessionException extends Exception
 /**
  * Initialise the Session Support
  *
- * @return bool true
+ * @return boolean true
  */
 function xarSession_init(&$args)
 {
@@ -31,7 +35,8 @@ function xarSession_init(&$args)
     $GLOBALS['xarSession_systemArgs'] = $args;
 
     // Register the SessionCreate event
-    xarEvents::register('SessionCreate');
+    // this is now registered during modules module init
+    // xarEvents::register('SessionCreate');
 
     // Register tables this subsystem uses
     $tables = array('session_info' => xarDB::getPrefix() . '_session_info');
@@ -58,7 +63,8 @@ function xarSession_init(&$args)
     if ($session->isNew()) {
         if($session->register($ipAddress)) {
             // Congratulations. We have created a new session
-            xarEvents::trigger('SessionCreate');
+            //xarEvents::trigger('SessionCreate');
+            xarEvents::notify('SessionCreate');
         } else {
             // Registering failed, now what?
         }
@@ -185,7 +191,7 @@ class xarSession extends Object implements IsessionHandler
      * @param $args['securityLevel'] the current security level
      * @param $args['duration'] duration of the session
      * @param $args['inactivityTimeout']
-     * @return bool
+     * @return boolean
      */
     private function setup(&$args)
     {
@@ -361,7 +367,7 @@ class xarSession extends Object implements IsessionHandler
 
     /**
      * PHP function to open the session
-     * @access public
+     * 
      */
     function open($path, $name)
     {   // Nothing to do - database opened elsewhere
@@ -370,7 +376,7 @@ class xarSession extends Object implements IsessionHandler
 
     /**
      * PHP function to close the session
-     * @access public
+     * 
      */
     function close()
     {   // Nothing to do - database closed elsewhere
@@ -379,7 +385,7 @@ class xarSession extends Object implements IsessionHandler
 
     /**
      * PHP function to read a set of session variables
-     * @access public
+     * 
      */
     function read($sessionId)
     {
@@ -419,7 +425,7 @@ class xarSession extends Object implements IsessionHandler
     /**
      * PHP function to write a set of session variables
      *
-     * @access public
+     * 
      * @throws Exception
      */
     function write($sessionId, $vars)
@@ -447,7 +453,7 @@ class xarSession extends Object implements IsessionHandler
     /**
      * PHP function to destroy a session
      *
-     * @access public
+     * 
      * @throws SQLException
      */
     function destroy($sessionId)
@@ -467,7 +473,7 @@ class xarSession extends Object implements IsessionHandler
     /**
      * PHP function to garbage collect session information
      *
-     * @access public
+     * 
      * @throws SQLException
      */
     function gc($maxlifetime)

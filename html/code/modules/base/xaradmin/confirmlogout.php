@@ -3,12 +3,14 @@
  * Confirm logout from Admin panels system
  *
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
+ *
  * @author Andy Varganov <andyv@xaraya.com>
  */
 /**
@@ -17,9 +19,7 @@
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  array data for template
- * @throws  no exceptions
- * @todo    nothing
+ * @return  array data for the template display
 */
 function base_admin_confirmlogout()
 {

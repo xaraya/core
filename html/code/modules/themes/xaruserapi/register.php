@@ -2,11 +2,12 @@
 /**
  * Handle css tag
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
@@ -14,8 +15,7 @@
  *
  * @author andyv <andyv@xaraya.com>
  * @param $args array containing the parameters
- * @returns string
- * @return the PHP code needed to show the css tag in the BL template
+ * @return string the PHP code needed to show the css tag in the BL template
  */
 /**
  * Handler for the xar:style tag
@@ -32,7 +32,10 @@
  *
  * <xar:style file="basename" scope="theme" type="text/css" media="all" alternate="no" title="Great style" method="import"/>
  */
-function themes_userapi_register($args)
+/**
+ * @param array    $args array of optional parameters<br/>
+ */
+function themes_userapi_register(Array $args=array())
 {
     // keep track of style when we're caching
     xarCache::addStyle($args);

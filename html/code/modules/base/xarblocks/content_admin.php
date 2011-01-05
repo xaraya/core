@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 
@@ -26,12 +27,6 @@
         public function modify(Array $data=array())
         {
             $data = parent::modify($data);
-
-            // Defaults
-            if (!isset($data['content_text'])) $data['content_text'] = $this->content_text;
-
-            if (empty($data['expire'])) $data['expire'] = $this->expire;
-            if (empty($data['html_content'])) $data['html_content'] = $this->html_content;
 
             // Drop-down list defining content type.
             $content_types = array();

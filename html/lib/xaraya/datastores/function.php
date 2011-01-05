@@ -2,16 +2,22 @@
 /**
  * Data Store is offered by a user function
  *
- * @package dynamicdata
+ * @package core
  * @subpackage datastores
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
 **/
 
 /**
  * Handly function data store
  *
- * @package dynamicdata
  *
 **/
+sys::import('modules.dynamicdata.class.datastores.base');
+
 class Dynamic_Function_DataStore extends BasicDataStore
 {
     /**
@@ -93,7 +99,7 @@ class Dynamic_Function_DataStore extends BasicDataStore
 
         /* default values - you shouldn't rely on these! */
         if (!isset($args['modname'])) {
-            list($mod, $type, $func) = xarRequest::getInfo();
+            list($mod, $type, $func) = xarController::$request->getInfo();
             $args['modname'] = $mod;
         }
         if (!isset($args['modid'])) {

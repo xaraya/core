@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
@@ -15,20 +16,22 @@
  * The function also checks the block class exists, and if a func is
  * specified, will check if the method named func exists in the block class
  *
- * @author Paul Rosania, Marco Canini <marco@xaraya.com>
+ * @author Marco Canini <marco@xaraya.com>
+ * @author Paul Rosania
  * @access protected
- * @param string modName the module name (deprec)
- * @param string module the module name
- * @param string blockType the name of the block (deprec)
- * @param string type the name of the block
- * @param string blockFunc the block function to load (deprec)
- * @param string func the block function to load ('modify', 'update', 'display', 'info', 'help') (deprec)
- * @param string func the block function to load ('modify', 'update', 'display', 'getInfo', 'getInit')
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['modName'] the module name (deprec)<br/>
+ *        string   $args['module'] the module name<br/>
+ *        string   $args['blockType'] the name of the block (deprec)<br/>
+ *        string   $args['type'] the name of the block<br/>
+ *        string   $args['blockFunc'] the block function to load (deprec)<br/>
+ *        string   $args['func'] the block function to load ('modify', 'update', 'display', 'info', 'help') (deprec)<br/>
+ *        string   $args['func'] the block function to load ('modify', 'update', 'display', 'getInfo', 'getInit')
  * @return boolean success or failure
  * @throws EmptyParameterException, ClassNotFoundException, FunctionNotFoundException,
  *         FileNotFoundException
  */
-function blocks_adminapi_load($args)
+function blocks_adminapi_load(Array $args=array())
 {
     // Array of block loaded flags.
     static $loaded = array();

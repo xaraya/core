@@ -1,8 +1,16 @@
 <?php
 /**
+ * @package core
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+/**
  * SQL based logger
  *
- * @package logging
  * @copyright see the html/credits.html file in this release
  *
 */
@@ -34,7 +42,6 @@ sys::import('xaraya.log.loggers.xarLogger');
  * @author  Jon Parise <jon@php.net>
  * @version $Revision: 1.21 $
  * @since   Horde 1.3
- * @package logging
  */
 class xarLogger_sql extends xarLogger
 {
@@ -55,7 +62,7 @@ class xarLogger_sql extends xarLogger
     *
     * @param  array $conf  with
     *               'table  '     => string      The name of the logger table.
-    * @access public
+    * 
     */
     function setConfig(array &$conf)
     {
@@ -77,7 +84,7 @@ class xarLogger_sql extends xarLogger
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
      *                  The default is PEAR_LOG_INFO.
      * @return boolean  True on success or false on failure.
-     * @access public
+     * 
      */
     function notify($message, $priority)
     {

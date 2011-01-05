@@ -8,10 +8,14 @@
  *      xarModUserVars
  *      xarMod
  *
- * @package modules
+ * @package core
+ * @subpackage modules
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Jim McDonald
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
@@ -22,21 +26,18 @@
 /**
  * Exceptions defined by this subsystem
  *
- * @package modules
  */
 class ModuleBaseInfoNotFoundException extends NotFoundExceptions
 {
     protected $message = 'The base info for module "#(1)" could not be found';
 }
 /**
- * @package modules
 **/
 class ModuleNotFoundException extends NotFoundExceptions
 {
     protected $message = 'A module is missing, the module name could not be determined in the current context';
 }
 /**
- * @package modules
 **/
 class ModuleNotActiveException extends xarExceptions
 {
@@ -119,157 +120,9 @@ function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
     return xarURL::addParametersToPath($args, $path, $pini, $psep);
 }
 
-/**
- * Generates an URL that reference to a module function.
- *
- * @access public
- * @param modName string registered name of module
- * @param modType string type of function
- * @param funcName string module function
- * @param string fragment document fragment target (e.g. somesite.com/index.php?foo=bar#target)
- * @param args array of arguments to put on the URL
- * @param entrypoint array of arguments for different entrypoint than index.php
- * @return mixed absolute URL for call, or false on failure
- * @todo allow for an alternative entry point (e.g. stream.php) without affecting the other parameters
- */
-function xarModURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array())
-{
-    // Parameter separator and initiator.
-    $psep = '&';
-    $pini = '?';
-    $pathsep = '/';
-
-    // Initialise the path.
-    $path = '';
-
-    // The following allows you to modify the BaseModURL from the config file
-    // it can be used to configure Xaraya for mod_rewrite by
-    // setting BaseModURL = '' in config.system.php
-    try {
-        $BaseModURL = xarSystemVars::get(sys::LAYOUT, 'BaseModURL');
-    } catch(Exception $e) {
-        $BaseModURL = 'index.php';
-    }
-
-    // No module specified - just jump to the home page.
-    if (empty($modName)) return xarServer::getBaseURL() . $BaseModURL;
-
-    // Take the global setting for XML format generation, if not specified.
-    if (!isset($generateXMLURL)) $generateXMLURL = xarMod::$genXmlUrls;
-
-    // If an entry point has been set, then modify the URL entry point and modType.
-    if (!empty($entrypoint)) {
-        if (is_array($entrypoint)) {
-            $modType = $entrypoint['action'];
-            $entrypoint = $entrypoint['entry'];
-        }
-        $BaseModURL = $entrypoint;
-    }
-
-    // If we have an empty argument (ie null => null) then set a flag and
-    // remove that element.
-    // FIXME: this is way too hacky, NULL as a key for an array sooner or later will fail. (php 4.2.2 ?)
-    if (is_array($args) && @array_key_exists(NULL, $args) && $args[NULL] === NULL) {
-        // This flag means that the GET part of the URL must be opened.
-        $open_get_flag = true;
-        unset($args[NULL]);
-    }
-
-    // Check the global short URL setting before trying to load the URL encoding function
-    // for the module. This also applies to custom entry points.
-    if (xarMod::$genShortUrls) {
-        // The encode_shorturl will be in userapi.
-        // Note: if a module declares itself as supporting short URLs, then the encoding
-        // API subsequently fails to load, then we want those errors to be raised.
-        if ($modType == 'user' && xarModVars::get($modName, 'enable_short_urls') && xarMod::apiLoad($modName, $modType)) {
-            $encoderArgs = $args;
-            $encoderArgs['func'] = $funcName;
-
-            // Execute the short URL function.
-            // It must exist if the enable_short_urls variable is set for the module.
-            // FIXME: if the function does not exist, then errors are not handled well, often hidden.
-            // Ensure a missing short URL encoding function gets written to the log file.
-            $short = xarMod::apiFunc($modName, $modType, 'encode_shorturl', $encoderArgs);
-            if (!empty($short)) {
-                if (is_array($short)) {
-                    // An array of path and args has been returned (both optional) - new style.
-                    if (!empty($short['path'])) {
-                        foreach($short['path'] as $pathpart) {
-                            // Use path encoding method, which can differ from
-                            // the GET parameter encoding method.
-                            if ($pathpart != '') {
-                                $path .= $pathsep . xarURL::encode($pathpart, 'path');
-                            }
-                        }
-                    }
-                    // Unconsumed arguments, to be treated as additional GET parameters.
-                    // These may actually be additional GET parameters injected by the
-                    // short URL function - it makes no difference either way.
-                    if (!empty($short['get']) && is_array($short['get'])) {
-                        $path = xarURL::addParametersToPath($short['get'], $path, $pini, $psep);
-                    } else {
-                        $args = array();
-                    }
-                } else {
-                    // A string URL has been returned - old style - deprecated.
-                    $path = $short;
-                    $args = array();
-                }
-
-                // Use xaraya default (index.php) or BaseModURL if provided in config.system.php
-                $path = $BaseModURL . $path;
-
-                // Remove the leading / from the path (if any).
-                $path = preg_replace('/^\//', '', $path);
-
-                // Workaround for bug 3603
-                // why: template might add extra params we dont see here
-                if (!empty($open_get_flag) && !strpos($path, $pini)) {$path .= $pini;}
-
-                // We now have the short form of the URL.
-                // Further custom manipulation of the URL can be added here.
-                // It may be worthwhile allowing for some kind of hook?
-            }
-        }
-    }
-
-    // If the path is still empty, then there is either no short URL support
-    // at all, or no short URL encoding was available for these arguments.
-    if (empty($path)) {
-        if (!empty($entrypoint)) {
-            // Custom entry-point.
-            // TODO: allow the alt entry point to work without assuming it is calling
-            // ws.php, so retaining the module and type params, and short url.
-            // Entry Point comes as an array since ws.php sets a type var.
-            // Entry array should be $entrypoint['entry'], $entrypoint['action']
-            // e.g. ws.php?type=xmlrpc&args=foo
-            // * Can also pass in the 'action' to $modType, and the entry point as
-            // a string. It makes sense using existing parameters that way.
-            $args = array('type' => $modType) + $args;
-        }  else {
-            $baseargs = array('module' => $modName);
-            if ($modType !== 'user')  $baseargs['type'] = $modType;
-            if ($funcName !== 'main') $baseargs['func'] = $funcName;
-
-            // Standard entry point - index.php or BaseModURL if provided in config.system.php
-            $args = $baseargs + $args;
-        }
-
-        // Add GET parameters to the path, ensuring each value is encoded correctly.
-        $path = xarURL::addParametersToPath($args, $BaseModURL, $pini, $psep);
-
-        // We have the long form of the URL here.
-        // Again, some form of hook may be useful.
-    }
-
-    // Add the fragment if required.
-    if (isset($fragment)) $path .= '#' . urlencode($fragment);
-
-    // Encode the URL if an XML-compatible format is required.
-    if ($generateXMLURL) $path = htmlspecialchars($path);
-
-    // Return the URL.
-    return xarServer::getBaseURL() . $path;
+function xarModURL($modName=NULL, $modType='user', $funcName='main', $args=array(), $generateXMLURL=NULL, $fragment=NULL, $entrypoint=array())
+{   
+    return xarController::URL($modName, $modType, $funcName, $args, $generateXMLURL, $fragment, $entrypoint); 
 }
 
 // (Module) Hooks handling subsystem - moved from modules to hooks for (future) clarity
@@ -349,14 +202,15 @@ class xarMod extends Object implements IxarMod
      * Initialize
      *
      */
-    static function init($args)
+    static function init(Array $args=array())
     {
         self::$genShortUrls = $args['enableShortURLsSupport'];
         self::$genXmlUrls   = $args['generateXMLURLs'];
 
         // Register the events for this subsystem
-        xarEvents::register('ModLoad');
-        xarEvents::register('ModAPILoad');
+        // events are now registered during modules module init        
+        //xarEvents::register('ModLoad');
+        //xarEvents::register('ModAPILoad');
 
         // Modules Support Tables
         $prefix = xarDB::getPrefix();
@@ -378,14 +232,14 @@ class xarMod extends Object implements IxarMod
      * If regID is passed in, return the name of that module, otherwise use
      * current toplevel module.
      *
-     * @access public
+     * 
      * @param  $regID integer optional regID for module
      * @return string the name of the current top-level module
      */
     static function getName($regID = NULL)
     {
         if(!isset($regID)) {
-            list($modName) = xarRequest::getInfo();
+            $modName = xarController::$request->getModule();
         } else {
             $modinfo = self::getInfo($regID);
             $modName = $modinfo['name'];
@@ -399,7 +253,7 @@ class xarMod extends Object implements IxarMod
      *
      * The displayable name is sensible to user language.
      *
-     * @access public
+     * 
      * @param modName string registered name of module
      * @return string the displayable name
      * @todo   re-evaluate this, i think it causes more harm than joy
@@ -416,7 +270,7 @@ class xarMod extends Object implements IxarMod
      *
      * The displayable description is sensible to user language.
      *
-     * @access public
+     * 
      * @param modName string registered name of module
      * @return string the displayable description
      */
@@ -447,7 +301,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Get module registry ID by name
      *
-     * @access public
+     * 
      * @param modName string The name of the module
      * @param type determines theme or module
      * @return string The module registry ID.
@@ -461,7 +315,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Get module system ID by name
      *
-     * @access public
+     * 
      * @param modName string The name of the module
      * @param type determines theme or module
      * @return string The module registry ID.
@@ -475,7 +329,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Get the module's current state
      *
-     * @access public
+     * 
      * @param  integer the module's registered id
      * @param type determines theme or module
      * @return mixed the module's current state
@@ -492,7 +346,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Check if a module is installed and its state is XARMOD_STATE_ACTIVE
      *
-     * @access public
+     * 
      * @static modAvailableCache array
      * @param modName string registered name of module
      * @param type determines theme or module
@@ -532,7 +386,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Get information on module
      *
-     * @access public
+     * 
      * @param modRegId string module id
      * @param type determines theme or module
      * @return array of module information
@@ -683,7 +537,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Load a module's base information
      *
-     * @access public
+     * 
      * @param modName string the module's name
      * @param type determines theme or module
      * @return mixed an array of base module info on success
@@ -761,7 +615,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Get info from xarversion.php for module specified by modOsDir
      *
-     * @access protected
+     * 
      * @param modOSdir the module's directory
      * @param type determines theme or module
      * @return array an array of module file information
@@ -854,7 +708,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Load database definition for a module
      *
-     * @access private
+     * 
      * @param modName string name of module to load database definition for
      * @param modOsDir string directory that module is in
      * @return mixed true on success
@@ -908,7 +762,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Call a module GUI function.
      *
-     * @access public
+     * 
      * @param modName string registered name of module
      * @param modType string type of function to run
      * @param funcName string specific function to run
@@ -928,9 +782,7 @@ class xarMod extends Object implements IxarMod
             // Return the cached module function output
             return xarModuleCache::getCached($cacheKey);
         }
-
         $tplData = self::callFunc($modName,$modType,$funcName,$args);
-
         // If we have a string of data, we assume someone else did xarTpl* for us
         if (!is_array($tplData)) {
             // Set the output of the module function in cache
@@ -964,7 +816,7 @@ class xarMod extends Object implements IxarMod
      * like so:
      * Ex: modName_modTypeapi_modFunc($args);
      *
-     * @access public
+     * 
      * @param modName string registered name of module
      * @param modType string type of function to run
      * @param funcName string specific function to run
@@ -981,21 +833,21 @@ class xarMod extends Object implements IxarMod
     /**
      * Work horse method for the lazy calling of module functions
      *
-     * @access private
+     * 
      */
     private static function callFunc($modName,$modType,$funcName,$args,$funcType = '')
     {
         assert('($funcType == "api" or $funcType==""); /* Wrong funcType argument in private callFunc method */');
         if (empty($modName) || empty($funcName)) {
             // This is not a valid function syntax - CHECKME: also for api functions ?
-            return xarResponse::NotFound();
+            return xarController::$response->NotFound();
         }
 
         // good thing this information is cached :)
         $modBaseInfo = self::getBaseInfo($modName);
         if (!isset($modBaseInfo)) {
             // This is not a valid module - CHECKME: also for api functions ?
-            return xarResponse::NotFound();
+            return xarController::$response->NotFound();
         }
 
         // Build function name and call function
@@ -1021,7 +873,7 @@ class xarMod extends Object implements IxarMod
                         $found = false;
                     } else {
                         // fatal error for unknown gui functions !?
-                        return xarResponse::NotFound();
+                        return xarController::$response->NotFound();
                     }
                 } else {
                     ob_start();
@@ -1060,7 +912,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Load the modType of module identified by modName.
      *
-     * @access public
+     * 
      * @param modName string - name of module to load
      * @param modType string - type of functions to load
      * @return mixed
@@ -1074,7 +926,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Load the modType API for module identified by modName.
      *
-     * @access public
+     * 
      * @param modName string registered name of the module
      * @param modType string type of functions to load
      * @return mixed true on success
@@ -1088,7 +940,7 @@ class xarMod extends Object implements IxarMod
     /**
      * Load the modType of module identified by modName.
      *
-     * @access private
+     * 
      * @param modName string - name of module to load
      * @param modType string - type of functions to load
      * @param flags number - flags to modify function behaviour
@@ -1147,7 +999,12 @@ class xarMod extends Object implements IxarMod
         self::loadDbInfo($modName, $modDir);
 
         // Module loaded successfully, trigger the proper event
-        xarEvents::trigger('ModLoad', $modName);
+        //xarEvents::trigger('ModLoad', $modName);
+        if (preg_match('/(.*)?api$/', $modType)) {
+            xarEvents::notify('ModApiLoad', $modName);
+        } else {
+            xarEvents::notify('ModLoad', $modName);
+        }        
         return true;
     }
 
@@ -1191,11 +1048,11 @@ class xarMod extends Object implements IxarMod
     /**
      * Check access for a specific action on module level (see also xarObject and xarBlock)
      *
-     * @access public
+     * 
      * @param moduleName string the module we want to check access for
      * @param action string the action we want to take on this module (view/admin) // CHECKME: any others we really use on module level ?
      * @param roleid mixed override the current user or null
-     * @return bool true if access
+     * @return boolean true if access
      */
     static function checkAccess($moduleName, $action, $roleid = null)
     {

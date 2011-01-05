@@ -3,12 +3,13 @@
  * Update the configuration parameters
  *
  * @package modules
- * @copyright (C) 2002-2006 The Digital Development Foundation
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage xarCacheManager module
- * @link http://xaraya.com/index.php/release/1652.html
+ * @link http://xaraya.com/index.php/release/13.html
  */
 /**
  * Update the configuration parameters of the module based on data from the modification form
@@ -16,13 +17,13 @@
  * @author Jon Haworth
  * @author jsb <jsb@xaraya.com>
  * @access public
- * @param string $args['starttime'] (seconds or hh:mm:ss)
- * @param string $args['direction'] (from or to)
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['starttime'] (seconds or hh:mm:ss)<br/>
+ *        string   $args['direction'] (from or to)
  * @return string $convertedtime (hh:mm:ss or seconds)
- * @throws nothing
  * @todo maybe add support for days?
  */
-function blocks_userapi_convertseconds($args)
+function blocks_userapi_convertseconds(Array $args=array())
 {
     extract($args);
 
