@@ -24,6 +24,7 @@ function main_upgrade_220()
                         'sql_220_06', // Register hook observers
                         'sql_220_07', // Create hooks table, register hooks
                         'sql_220_08', // Re-classify Authsystem to Users & Groups
+                        'sql_220_09', // Add 2 configvars to themes module (one was already there)
                         
                     );
     foreach ($upgrades as $upgrade) {

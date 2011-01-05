@@ -25,13 +25,6 @@ function themes_admin_modifyconfig()
     // Security
     if (!xarSecurityCheck('AdminThemes')) return;
 
-    // FIXME: remove at next upgrade
-    try {
-        $tmp = xarConfigVars::get(null, 'Site.BL.MemCacheTemplates');
-    } catch (Exception $e) {
-        xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
-    }
-
     if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('sitename', 'str', $data['sitename'], xarModVars::get('themes', 'SiteName'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('separator', 'str:1:', $data['separator'], xarModVars::get('themes', 'SiteTitleSeparator'), XARVAR_NOT_REQUIRED)) return;
@@ -112,6 +105,24 @@ function themes_admin_modifyconfig()
                 $subject->detach($observer);
             }
             */
+            
+            if (!xarVarFetch('themes_debug_user', 'int', $themes_debug_user, xarConfigVars::get(null, 'Site.BL.Debug_User'), XARVAR_NOT_REQUIRED)) return;
+
+            sys::import('modules.dynamicdata.class.properties.master');
+            $caches = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
+            $caches->checkInput('bl_flushcaches');
+            xarModVars::set('themes','flushcaches', $caches->value);
+            
+            // Flush the caches
+            $cachestoflush = $caches->getValue();
+            $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
+            foreach ($cachestoflush as $cachetoflush) {
+                $picker->initialization_basedirectory = sys::varpath() . "/cache/" . $cachetoflush;
+                if (!file_exists($picker->initialization_basedirectory)) continue;
+                $files = $picker->getOptions();
+                foreach ($files as $file) unlink($picker->initialization_basedirectory . "/" . $file['id']);
+            }
+            
             break;
     }
     return $data;
