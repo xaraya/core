@@ -61,7 +61,7 @@
     and then correct for the elements which cause us trouble. In theory
     there shouldnt be any, but alas.
   -->
-  <xsl:strip-space elements="*"/>
+  <xsl:compresswhitespace />
 
   <!--
     Start of the transform usually starts with matching the root, so do we

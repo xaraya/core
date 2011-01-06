@@ -157,8 +157,8 @@
                         )
                     </xar:set>
                     <xar:set name="checked"><xar:var scope="config" name="Site.BL.CompressWhitespace"/></xar:set>
-                    <xar:data-input type="radio" name="compresswhitespace" value="$value" options="$options"/>&#160;
-                    Eliminates all superfluous whitespace from the input template. Multiple spaces, CRs etc. are reduced to a single space.
+                    <xar:data-input type="radio" name="compresswhitespace" value="$checked" options="$options"/>&#160;
+                    Eliminates all superfluous whitespace from the templates. Multiple spaces, CRs etc. are reduced to a single space.
                 </div>
             </fieldset>
             <fieldset>
