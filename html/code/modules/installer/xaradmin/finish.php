@@ -36,7 +36,7 @@ function installer_admin_finish()
     xarConfigVars::set(null, 'Site.Core.TimeZone', xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
 
     // Defaults for templating engine options 
-    xarConfigVars::set(null, 'Site.BL.CompressWhitespace', true);
+    xarConfigVars::set(null, 'Site.BL.CompressWhitespace', 1);
     xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
     xarConfigVars::set(null, 'Site.BL.Debug_User', xarModVars::get('roles','admin'));
 
