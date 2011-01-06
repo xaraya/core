@@ -35,7 +35,8 @@ function installer_admin_finish()
     // Default for the site time zone is the system time zone
     xarConfigVars::set(null, 'Site.Core.TimeZone', xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
 
-    // Defaults for meory caching and the themes debug user
+    // Defaults for templating engine options 
+    xarConfigVars::set(null, 'Site.BL.CompressWhitespace', true);
     xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
     xarConfigVars::set(null, 'Site.BL.Debug_User', xarModVars::get('roles','admin'));
 

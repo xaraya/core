@@ -914,19 +914,23 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
         $isHeaderContent = false;
 
     $finalTemplate ='';
-    if(xarTpl_outputTemplateFilenames() && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'))) {
-        $outputStartComment = true;
-        if($isHeaderContent === false) {
-            if($isHeaderContent = xarTpl_modifyHeaderContent($sourceFileName, $tplOutput))
-                $outputStartComment = false;
+    try {
+        if(xarTpl_outputTemplateFilenames() && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'))) {
+            $outputStartComment = true;
+            if($isHeaderContent === false) {
+                if($isHeaderContent = xarTpl_modifyHeaderContent($sourceFileName, $tplOutput))
+                    $outputStartComment = false;
+            }
+            // optionally show template filenames if start comment has not already
+            // been added as part of a header determination.
+            if($outputStartComment === true)
+                $finalTemplate .= "<!-- start: " . $sourceFileName . " -->\n";
+            $finalTemplate .= $tplOutput;
+            $finalTemplate .= "<!-- end: " . $sourceFileName . " -->\n";
+        } else {
+            $finalTemplate .= $tplOutput;
         }
-        // optionally show template filenames if start comment has not already
-        // been added as part of a header determination.
-        if($outputStartComment === true)
-            $finalTemplate .= "<!-- start: " . $sourceFileName . " -->\n";
-        $finalTemplate .= $tplOutput;
-        $finalTemplate .= "<!-- end: " . $sourceFileName . " -->\n";
-    } else {
+    } catch (Exception $e) {
         $finalTemplate .= $tplOutput;
     }
     return $finalTemplate;
@@ -941,17 +945,21 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
  */
 function xarTpl_outputPHPCommentBlockInTemplates()
 {
-    if (!isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates']) && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'))) {
-        // Default to not show the comments
-        $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
-        // CHECKME: not sure if this is needed, e.g. during installation
-        // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
-        if (method_exists('xarModVars','Get')){
-            $showphpcbit = xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates');
-            if (!empty($showphpcbit)) {
-                $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
+    try {
+        if (!isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates']) && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'))) {
+            // Default to not show the comments
+            $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
+            // CHECKME: not sure if this is needed, e.g. during installation
+            // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
+            if (method_exists('xarModVars','Get')){
+                $showphpcbit = xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates');
+                if (!empty($showphpcbit)) {
+                    $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
+                }
             }
         }
+    } catch (Exception $e) {
+        $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
     }
     return $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'];
 }

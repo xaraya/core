@@ -144,6 +144,24 @@
                 </div>
             </fieldset>
             <fieldset>
+                <legend>BlockLayout Templating Engine</legend>
+                <div class="xar-form-input-wrapper">
+                    <xar:var name="label">Compress whitespace in the template</xar:var>
+                    <label for="bl_compresswhitespace" title="#$label#" class="xar-form-label">
+                        Compress whitespace:
+                    </label>
+                    <xar:set name="options">
+                        array(
+                            array('id' => 0, 'name' => xarML('No')),
+                            array('id' => 1, 'name' => xarML('Yes')),
+                        )
+                    </xar:set>
+                    <xar:set name="checked"><xar:var scope="config" name="Site.BL.CompressWhitespace"/></xar:set>
+                    <xar:data-input type="radio" name="compresswhitespace" value="$value" options="$options"/>&#160;
+                    Eliminates all superfluous whitespace from the input template. Multiple spaces, CRs etc. are reduced to a single space.
+                </div>
+            </fieldset>
+            <fieldset>
                 <legend>Template Debugging options</legend>
                 <div class="xar-form-input-wrapper">
                     <label for="themes_debug_user" class="xar-form-label">                        
