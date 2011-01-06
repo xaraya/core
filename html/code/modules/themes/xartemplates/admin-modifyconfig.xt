@@ -196,5 +196,33 @@
                 </div>
             </fieldset>
         </form>
+        <form action="#xarServer::getCurrentURL()#" method="post">
+            <fieldset>
+                <legend>Flush Caches</legend>
+                <div class="xar-form-input-wrapper">
+                    <xar:var name="label">Remove all the cached templates</xar:var>
+                    <label for="bl_flushcache" title="#$label#" class="xar-form-label">
+                        Flush caches:
+                    </label>
+                    <xar:set name="options">
+                        array(
+                            array('id' => 'templates', 'name' => xarML('Templates')),
+                            array('id' => 'rss', 'name' => xarML('RSS')),
+                            array('id' => 'database', 'name' => xarML('Database')),
+                            array('id' => 'output', 'name' => xarML('Output')),
+                        )
+                    </xar:set>
+                    <xar:set name="value">xarModVars::get('themes','flushcaches')</xar:set>
+                    <xar:data-input type="checkboxlist" name="flushcaches" value="$value" options="$options"/>&#160;
+                    Removes all cached files, forcing their recompilation
+                </div>
+                <div class="xar-form-input-wrapper-after">
+                    <xar:data-input type="hidden" name="phase" id="phase" value="flush"/>
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <xar:var name="label">Flush</xar:var>
+                    <xar:button type="submit" label="$label"/>
+                </div>
+            </fieldset>
+        </form>
     </div>
 </xar:template>

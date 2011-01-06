@@ -124,6 +124,22 @@ function themes_admin_modifyconfig()
             }
             
             break;
+        case 'flush':
+            sys::import('modules.dynamicdata.class.properties.master');
+            $caches = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
+            $caches->checkInput('flushcaches');
+            xarModVars::set('themes','flushcaches', $caches->value);
+            
+            // Flush the caches
+            $cachestoflush = $caches->getValue();
+            $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
+            foreach ($cachestoflush as $cachetoflush) {
+                $picker->initialization_basedirectory = sys::varpath() . "/cache/" . $cachetoflush;
+                if (!file_exists($picker->initialization_basedirectory)) continue;
+                $files = $picker->getOptions();
+                foreach ($files as $file) unlink($picker->initialization_basedirectory . "/" . $file['id']);
+            }
+            break;
     }
     return $data;
 }
