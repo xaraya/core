@@ -402,6 +402,20 @@
                 </fieldset>
             </form>
             <!-- Begin Locale Options -->
+            <xar:elseif condition="$tab eq 'logging'"/>
+            <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
+               <!-- <xar:template file="modifyconfig-logging" module="base" type="module"/> -->
+                <fieldset>
+                    <div class="xar-form-input-wrapper-after">
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="phase" id="phase" value="update"/>
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </fieldset>
+            </form>
+            <!-- Begin Locale Options -->
             <xar:elseif condition="$tab eq 'locales'"/>
             <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                 <xar:template file="modifyconfig-locales" module="base" type="module"/>

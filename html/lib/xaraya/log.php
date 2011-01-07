@@ -64,7 +64,7 @@ function xarLog_init(&$args)
 
     } elseif (xarLogFallbackPossible()) {
         //Fallback mechanism to allow some logging in important cases when
-        //the user might now have logging yet installed, or for some reason we
+        //the user might not have logging yet installed, or for some reason we
         //should be able to have a way to get error messages back => installation?!
         $logFile = xarLogFallbackFile();
         if ($logFile) {
@@ -72,7 +72,7 @@ function xarLog_init(&$args)
                 'type'      => 'simple',
                 'config'    => array(
                     'fileName' => $logFile,
-                    'logLevel'  => XARLOG_LEVEL_ALL));
+                    'loglevel'  => XARLOG_LEVEL_ALL));
         }
     }
 
