@@ -111,6 +111,14 @@
       select="string-length($expr) - string-length(translate($expr, '#', ''))"/>
 
   <xsl:choose>
+    <!-- Ignore empty strings -->
+    <xsl:when test="string-length(translate($expr, '&#x20;&#x9;&#xD;&#xA;', '')) = 0">
+      <xsl:value-of select="$expr"/>
+    </xsl:when>
+    <!-- Ignore numbers -->
+    <xsl:when test="string(number($expr))!='NaN'">
+      <xsl:value-of select="$expr"/>
+    </xsl:when>
     <!-- If we have zero or one hash, just output the text node -->
     <xsl:when test="$nrOfHashes &lt; 2">
       <xsl:text>'</xsl:text>
@@ -153,7 +161,7 @@
           <xsl:with-param name="expr" select="substring-before($expr-after,'#')"/>
       </xsl:call-template>
 
-      <xsl:if test="string-length(substring-after($expr-after,'#')) &gt; 0">
+      <xsl:if test="string-length(translate(substring-after($expr-after,'#'), '&#x20;&#x9;&#xD;&#xA;', '')) &gt; 0">
         <xsl:text>.</xsl:text>
         <!-- ....#....#[....#....#....etc.] -->
         <xsl:call-template name="resolveText">
@@ -176,9 +184,11 @@
 <xsl:template name="translateText">
   <xsl:param name="expr"/>
   <xsl:choose>
-    <xsl:when test="normalize-space($expr)=''">
+<!-- Ignore empty strings -->
+    <xsl:when test="string-length(translate($expr, '&#x20;&#x9;&#xD;&#xA;', '')) = 0">
       <xsl:value-of select="$expr"/>
     </xsl:when>
+<!-- Ignore numbers -->
     <xsl:when test="string(number($expr))!='NaN'">
       <xsl:value-of select="$expr"/>
     </xsl:when>
