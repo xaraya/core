@@ -417,8 +417,8 @@
                                 array('id' => 1, 'name' => xarML('Yes')),
                             )
                         </xar:set>
-                        <xar:set name="checked"><xar:var scope="config" name="Site.Core.EnableLogging"/></xar:set>
-                        <xar:data-input type="radio" name="enablelogging" value="$checked" options="$options"/>
+                        <xar:set name="checked">xarSystemVars::get(sys::CONFIG, 'Log.Enabled')</xar:set>
+                        <xar:data-input type="radio" name="logenabled" value="$checked" options="$options"/>
                     </div>
                     <div class="xar-form-input-wrapper">
                         <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
@@ -432,7 +432,7 @@
                         <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
                             The current log file is:                                
                         </label>
-                        <xar:var scope="config" name="Site.Core.LogFilename"/>
+                        #xarSystemVars::get(sys::CONFIG, 'Log.Filename')#
                     </div>
                 </fieldset>
                 <fieldset>

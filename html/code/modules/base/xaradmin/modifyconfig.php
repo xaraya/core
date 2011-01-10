@@ -94,7 +94,7 @@ function base_admin_modifyconfig()
         $data['modes'] = $modes;
     }
 
-    if (!xarVarFetch('logfilename','str:1',$data['logfilename'], xarConfigVars::get(null, 'Site.Core.LogFilename'),XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('logfilename','str:1',$data['logfilename'], xarSystemVars::get(sys::CONFIG, 'Log.Filename'),XARVAR_NOT_REQUIRED)) return;
     sys::import('modules.dynamicdata.class.properties.master');
     $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
     $picker->initialization_basedirectory = sys::varpath() . "/logs/";
@@ -223,9 +223,10 @@ function base_admin_modifyconfig()
                     xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
                     break;
                 case 'logging':
-                    if (!xarVarFetch('enablelogging','int',$enablelogging,0,XARVAR_NOT_REQUIRED)) return;
-                    xarConfigVars::set(null, 'Site.Core.EnableLogging', $enablelogging);
-                    xarConfigVars::set(null, 'Site.Core.LogFilename', $data['logfilename']);
+                    if (!xarVarFetch('logenabled','int',$logenabled,0,XARVAR_NOT_REQUIRED)) return;
+                    $variables = array('Log.Enabled' => $logenabled, 'Log.Filename' => $data['logfilename']);
+                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
+                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'logging')));
                     break;
                 case 'other':
                     if (!xarVarFetch('loadlegacy',   'checkbox', $loadLegacy,    xarConfigVars::get(null, 'Site.Core.LoadLegacy'), XARVAR_NOT_REQUIRED)) return;
