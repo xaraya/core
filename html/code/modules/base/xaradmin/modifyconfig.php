@@ -94,8 +94,11 @@ function base_admin_modifyconfig()
         $data['modes'] = $modes;
     }
 
-    if (!xarVarFetch('logfilename','str:1',$data['logfilename'], xarSystemVars::get(sys::CONFIG, 'Log.Filename'),XARVAR_NOT_REQUIRED)) return;
     sys::import('modules.dynamicdata.class.properties.master');
+    $combobox = DataPropertyMaster::getProperty(array('name' => 'combobox'));
+    $combobox->checkInput('logfilename');
+    $data['logfilename'] = !empty($combobox->value) ? $combobox->value : xarSystemVars::get(sys::CONFIG, 'Log.Filename');
+
     $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
     $picker->initialization_basedirectory = sys::varpath() . "/logs/";
     $picker->display_fullname = true;
@@ -222,7 +225,7 @@ function base_admin_modifyconfig()
 
                     xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
                     break;
-                case 'logging':
+                case 'logging':                    
                     if (!xarVarFetch('logenabled','int',$logenabled,0,XARVAR_NOT_REQUIRED)) return;
                     $variables = array('Log.Enabled' => $logenabled, 'Log.Filename' => $data['logfilename']);
                     xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));

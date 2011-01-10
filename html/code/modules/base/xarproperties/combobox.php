@@ -42,7 +42,7 @@ sys::import('modules.base.xarproperties.dropdown');
             // store the fieldname for configurations who need them (e.g. file uploads)
             $this->fieldname = $tbname;
 
-            if( isset($tbvalue) && ($tbvalue != ''))
+            if(isset($tbvalue) && ($tbvalue != ''))
             {
                 // check as a textbox
                 $value = $tbvalue;
