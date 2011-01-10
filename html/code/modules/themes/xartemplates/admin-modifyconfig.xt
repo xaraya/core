@@ -227,7 +227,7 @@
                             array('id' => 'templates', 'name' => xarML('Templates')),
                             array('id' => 'rss', 'name' => xarML('RSS')),
                             array('id' => 'database', 'name' => xarML('Database')),
-                            array('id' => 'output', 'name' => xarML('Output')),
+                            // array('id' => 'output', 'name' => xarML('Output')),
                         )
                     </xar:set>
                     <xar:set name="value">xarModVars::get('themes','flushcaches')</xar:set>

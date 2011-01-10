@@ -401,10 +401,40 @@
                     </div>
                 </fieldset>
             </form>
-            <!-- Begin Locale Options -->
+            <!-- Begin Logging Options -->
             <xar:elseif condition="$tab eq 'logging'"/>
             <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                <!-- <xar:template file="modifyconfig-logging" module="base" type="module"/> -->
+                <fieldset>
+                    <legend>Basic Logging</legend>
+                    <div class="xar-form-input-wrapper">
+                        <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                            Enable logging:                                
+                        </label>
+                        <xar:set name="options">
+                            array(
+                                array('id' => 0, 'name' => xarML('No')),
+                                array('id' => 1, 'name' => xarML('Yes')),
+                            )
+                        </xar:set>
+                        <xar:set name="checked"><xar:var scope="config" name="Site.Core.EnableLogging"/></xar:set>
+                        <xar:data-input type="radio" name="enablelogging" value="$checked" options="$options"/>
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                            Log file name:                                
+                        </label>
+                        <xar:var name="firstline">Choose a file</xar:var>
+                        <xar:set name="firstline">",$firstline"</xar:set>
+                        <xar:data-input type="combobox" name="logfilename" value="$logfilename" options="$logfiles" layout="horizontal" firstline="$firstline"/>
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                            The current log file is:                                
+                        </label>
+                        <xar:var scope="config" name="Site.Core.LogFilename"/>
+                    </div>
+                </fieldset>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>

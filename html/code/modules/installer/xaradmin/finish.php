@@ -40,6 +40,9 @@ function installer_admin_finish()
     xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
     xarConfigVars::set(null, 'Site.BL.Debug_User', xarModVars::get('roles','admin'));
 
+    xarConfigVars::set(null, 'Site.Core.EnableLogging', false);
+    xarConfigVars::set(null, 'Site.Core.LogFilename', 'xarayalog.txt');
+
     switch ($returnurl) {
         case ('base'):
             xarController::redirect(xarModURL('base','admin','modifyconfig'));

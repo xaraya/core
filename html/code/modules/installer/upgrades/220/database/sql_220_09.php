@@ -27,6 +27,8 @@ function sql_220_09()
         xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
         xarConfigVars::set(null, 'Site.BL.CompressWhitespace', 1);
         xarConfigVars::set(null, 'Site.BL.Debug_User', xarModVars('roles','admin'));
+        xarConfigVars::set(null, 'Site.Core.EnableLogging', false);
+        xarConfigVars::set(null, 'Site.Core.LogFilename', 'xarayalog.txt');
     }
     
     return $data;

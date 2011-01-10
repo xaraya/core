@@ -94,6 +94,13 @@ function base_admin_modifyconfig()
         $data['modes'] = $modes;
     }
 
+    if (!xarVarFetch('logfilename','str:1',$data['logfilename'], xarConfigVars::get(null, 'Site.Core.LogFilename'),XARVAR_NOT_REQUIRED)) return;
+    sys::import('modules.dynamicdata.class.properties.master');
+    $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
+    $picker->initialization_basedirectory = sys::varpath() . "/logs/";
+    $picker->display_fullname = true;
+    $data['logfiles'] = $picker->getOptions();
+
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -214,6 +221,11 @@ function base_admin_modifyconfig()
                     xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $localesList);
 
                     xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
+                    break;
+                case 'logging':
+                    if (!xarVarFetch('enablelogging','int',$enablelogging,0,XARVAR_NOT_REQUIRED)) return;
+                    xarConfigVars::set(null, 'Site.Core.EnableLogging', $enablelogging);
+                    xarConfigVars::set(null, 'Site.Core.LogFilename', $data['logfilename']);
                     break;
                 case 'other':
                     if (!xarVarFetch('loadlegacy',   'checkbox', $loadLegacy,    xarConfigVars::get(null, 'Site.Core.LoadLegacy'), XARVAR_NOT_REQUIRED)) return;
