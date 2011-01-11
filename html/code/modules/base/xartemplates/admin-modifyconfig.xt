@@ -425,7 +425,7 @@
                                     )
                                 </xar:set>
                                 <xar:set name="checked">xarSystemVars::get(sys::CONFIG, 'Log.Enabled')</xar:set>
-                                <xar:data-input type="radio" name="logenabled" value="$checked" options="$options" disabled="$disabled"/>
+                                <xar:data-input type="radio" name="logenabled" value="$checked" options="$options"/>
                             </div>
                             <div class="xar-form-input-wrapper">
                                 <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
