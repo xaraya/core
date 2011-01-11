@@ -38,19 +38,21 @@
     <xsl:text>&nl;</xsl:text>
     <xsl:choose>
       <xsl:when test="@code and @type">
-        <xsl:text>xarTplAddJavaScript('</xsl:text>
+        <xsl:text>xarMod::apiFunc('themes','user','registerjs',array('position'=&gt;'</xsl:text>
         <xsl:value-of select="$position"/>
-        <xsl:text>','</xsl:text>
+        <xsl:text>','type'=&gt;'</xsl:text>
         <xsl:value-of select="@type"/>
-        <xsl:text>',"</xsl:text>
+        <xsl:text>','code'=&gt;"</xsl:text>
         <xsl:value-of select="@code"/>
-        <xsl:text>");&nl;</xsl:text>
+        <xsl:text>"));&nl;</xsl:text>
       </xsl:when>
       <xsl:when test="string-length(@filename) &gt; 0">
-        <xsl:text>xarMod::apiFunc('base','javascript','modulefile',array('module'=&gt;</xsl:text>
+        <xsl:text>xarMod::apiFunc('themes','user','registerjs',array('module'=&gt;</xsl:text>
         <xsl:value-of select="$module"/>
         <xsl:text>,'filename'=&gt;'</xsl:text>
         <xsl:value-of select="@filename"/>
+        <xsl:text>','type'=&gt;'</xsl:text>
+        <xsl:value-of select="@type"/>
         <xsl:text>','position'=&gt;'</xsl:text>
         <xsl:value-of select="$position"/>
         <xsl:text>')); </xsl:text>
