@@ -132,11 +132,9 @@ function xarLogFallbackFile ()
 
     if (isset($logFile)) return $logFile;
 
-    $logFile = sys::varpath() . '/logs/log.txt';
-
-    if (file_exists($logFile)) {
-        $logFile = realpath($logFile);
-    }
+    $logFile = sys::varpath() . '/logs/' . xarSystemVars::get(sys::CONFIG, 'Log.Filename');
+    if (!file_exists($logFile)) touch($logFile);
+    $logFile = realpath($logFile);
 
     return $logFile;
 }
