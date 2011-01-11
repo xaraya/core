@@ -203,7 +203,7 @@ class DataPropertyMaster extends Object
                 {
                     // @todo: The preg determines the module name (in a sloppy way, FIX this)
                     // @todo: do we still do properties from includes/properties?
-                    xarMLSLoadTranslations($propertyInfo['filepath']);
+                    xarMLSLoadTranslations(sys::code() . $propertyInfo['filepath']);
                 }
                 else
                     xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
