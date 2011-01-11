@@ -942,6 +942,8 @@ function xarTpl_outputPHPCommentBlockInTemplates()
                     $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
                 }
             }
+        } else {
+            $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
         }
     } catch (Exception $e) {
         $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
