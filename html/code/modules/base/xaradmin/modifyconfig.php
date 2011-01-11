@@ -101,6 +101,7 @@ function base_admin_modifyconfig()
 
     $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
     $picker->initialization_basedirectory = sys::varpath() . "/logs/";
+    $picker->setExtensions('txt,html');
     $picker->display_fullname = true;
     $data['logfiles'] = $picker->getOptions();
 

@@ -434,6 +434,7 @@
                                 <xar:var name="firstline">Choose a file</xar:var>
                                 <xar:set name="firstline">",$firstline"</xar:set>
                                 <xar:data-input type="combobox" name="logfilename" value="$logfilename" options="$logfiles" layout="horizontal" firstline="$firstline"/>
+                                Allowed extensions are txt and html
                             </div>
                             <div class="xar-form-input-wrapper">
                                 <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
