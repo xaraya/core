@@ -66,11 +66,7 @@ class XarayaCompiler extends xarBLCompiler
 
     public function compileFile($fileName)
     {
-        if (!function_exists('xarLogMessage')) {
-            sys::import('xaraya.log');
-        }
         xarLogMessage("BL: compiling $fileName");
-
         return parent::compileFile($fileName);
     }
 
