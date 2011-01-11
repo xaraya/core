@@ -47,6 +47,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
     private $lastFile        = null;
     private $processor       = null;
     
+    protected $compresswhitespace = 1;
 
     /**
      * Private constructor, since this is a Singleton
@@ -151,6 +152,9 @@ class xarBLCompiler extends Object implements IxarBLCompiler
             }
         } catch (Exception $e) {}        
         
+        // Compress excess whitespace
+        $xslProc->setParameter('', 'compresswhitespace', $this->compresswhitespace);        
+        
         // Compile the compiler
         $outDoc = $xslProc->transformToXML($doc);
         return $outDoc;
@@ -166,10 +170,10 @@ class xarBLCompiler extends Object implements IxarBLCompiler
             $this->processor->importStyleSheet($xslDoc);
         }
 
-        // This is confusing, dont do this here.
+        // This is confusing, don't do this here.
         $this->processor->xmlFile = $this->lastFile;
         
-        // This generates php code, the documentree is not visible here anymore
+        // This generates php code, the document tree is not visible here anymore
         $outDoc = $this->processor->transform($templateSource);
         return $outDoc;
     }

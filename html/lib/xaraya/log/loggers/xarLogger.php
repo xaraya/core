@@ -80,7 +80,7 @@ class xarLogger extends Object
      */
     function setConfig(array &$conf)
     {
-        $this->_logLevel = $conf['logLevel'];
+        $this->_logLevel = $conf['loglevel'];
 
         $microtime = explode(" ", microtime());
         $this->_elapsed = ((float)$microtime[0] + (float)$microtime[1]);
