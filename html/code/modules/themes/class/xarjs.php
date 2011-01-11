@@ -60,7 +60,7 @@ class xarJS extends Object
  *                 file(s) to get contents from if $type is code and $code isn't supplied<br/>
  *         string  $args[module] name of module to look for file(s) in, optional, default current module<br/>
  *         string  $args[position] position to render the js, eg head or body, optional, default head<br/>
- *         integer $args[index] optional index in queue relative to other scripts<br/>
+ *         string  $args[index] optional index in queue relative to other scripts<br/>
  * @return boolean true on success
  * @throws none
 **/
@@ -142,24 +142,42 @@ class xarJS extends Object
  * @param array   $args array of optional parameters<br/>
  *        string  $args[position] position to render, optional<br/>
  *        string  $args[index] index to render, optional<br/>
- *        string  $args[type] type to render, optional<br/>
+ *        string  $args[type] type to render, optional
  * @return string templated output of js to render
  * @throws none
 **/    
     public function render($args)
     {
-        extract($args);        
-        if (empty($position) && empty($index)) {
-            $javascript = self::$queue;
-        } elseif (!empty($position) && empty($index) && isset(self::$queue[$position])) {
-            $javascript = self::$queue[$position];
-        } elseif (!empty($position) && !empty($index) && isset(self::$queue[$position][$index])) {
-            $javascript = self::$queue[$position][$index];
-        }
+        $javascript = $this->getQueued($args);
         if (empty($javascript)) return;    
         $args['javascript'] = $javascript;
-
         return xarTplModule('themes', 'javascript', 'render', $args);
+    }
+
+/**
+ * Get Queued function
+ *
+ * Get queued JS, optionally by position, index
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access public
+ * @param array   $args array of optional parameters<br/>
+ *        string  $args[position] position to get JS for, optional<br/>
+ *        string  $args[index] index to get JS for, optional
+ * @return mixed array of queued js, false if none found
+ * @throws none
+**/
+    public function getQueued($args)
+    {
+        extract($args);        
+        if (empty($position) && empty($index)) {
+            return self::$queue;
+        } elseif (!empty($position) && empty($index) && isset(self::$queue[$position])) {
+            return self::$queue[$position];
+        } elseif (!empty($position) && !empty($index) && isset(self::$queue[$position][$index])) {
+            return self::$queue[$position][$index];
+        }
+        return;
     }
 
 /**
@@ -168,14 +186,15 @@ class xarJS extends Object
  * Add javascript to queue
  *
  * @author Chris Powis <crisp@xaraya.com>
- * @access private
+ * @access public
  * @param string  $position position to place js, (head or body), required
  * @param string  $type type of data to queue, (src or code), required
  * @param string  $data data to queue (filepath, or code fragment), required
  * @param string  $index index to use, optional
  * @return boolean true on success
+ * @todo make private once xarTpl functions are deprecated
 **/
-    private function queue($position, $type, $data, $index = '')
+    public function queue($position, $type, $data, $index = '')
     {
         if (empty($position) || empty($type) || empty($data)) {return;}
 

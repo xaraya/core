@@ -11,6 +11,20 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/70.html
 **/
+/**
+ * Renderjs function
+ *
+ * Render queued javascript
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access public
+ * @param array   $args array of optional parameters<br/>
+ *        string  $args[position] position to render, optional<br/>
+ *        string  $args[index] index to render, optional<br/>
+ *        string  $args[type] type to render, optional
+ * @return string templated output of js to render
+ * @throws none
+**/    
 function themes_userapi_renderjs($args)
 {    
     sys::import('modules.themes.class.xarjs');

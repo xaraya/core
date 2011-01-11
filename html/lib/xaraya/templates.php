@@ -287,57 +287,42 @@ function xarTplGetPageTitle()
 
 /**
  * Add JavaScript code or links to template output
- *
+ * NOTE: this function is marked for deprecation, use the xarJS object
+ * and themes module registerjs userapi function instead.
  * 
- * @global array  xarTpl_JavaScript
+ * @global array  xarTpl_JavaScript (deprecated)
  * @param  string $position         Either 'head' or 'body'
  * @param  string $type             Either 'src' or 'code'
  * @param  string $data             pathname or raw JavaScript
  * @param  string $index            optional (unique key and/or ordering)
  * @return boolean
+ * @todo deprecate this function
  */
 function xarTplAddJavaScript($position, $type, $data, $index = '')
 {
     if (empty($position) || empty($type) || empty($data)) {return;}
-
-    // keep track of javascript when we're caching
-    xarCache::addJavaScript($position, $type, $data, $index);
-
-    //Do lazy initialization of the array. There are instances of the logging system
-    //where we need to use this function before the Template System was initialized
-    //Maybe this can be used with a new shutdown event (not based on the
-    // php's register_shutdown_function) as at that time it's already too late to be able
-    // to log anything
-    if (!isset($GLOBALS['xarTpl_JavaScript'])) {
-        // Initialise the JavaScript array. Start with placeholders for the head and body.
-        $GLOBALS['xarTpl_JavaScript'] = array('head'=>array(), 'body'=>array());
-    }
-
-    if (empty($index)) {
-        $GLOBALS['xarTpl_JavaScript'][$position][] = array('type'=>$type, 'data'=>$data);
-    } else {
-        $GLOBALS['xarTpl_JavaScript'][$position][$index] = array('type'=>$type, 'data'=>$data);
-    }
-
-    return true;
+    
+    sys::import('modules.themes.class.xarjs');
+    $javascript = xarJS::getInstance();
+    return $javascript->queue($position, $type, $data, $index);
 }
 
 /**
  * Get JavaScript code or links cached for template output
- *
+ * NOTE: this function is marked for deprecation, use the xarJS object
+ * and themes module renderjs userapi function instead.
  * 
- * @global array  xarTpl_JavaScript
+ * @global array  xarTpl_JavaScript (deprecated)
  * @param  string $position
  * @param  string $index
  * @return array
+ * @todo deprecate this function
  */
 function xarTplGetJavaScript($position = '', $index = '')
 {
-    if (empty($position)) {return $GLOBALS['xarTpl_JavaScript'];}
-    if (!isset($GLOBALS['xarTpl_JavaScript'][$position])) {return;}
-    if (empty($index)) {return $GLOBALS['xarTpl_JavaScript'][$position];}
-    if (!isset($GLOBALS['xarTpl_JavaScript'][$position][$index])) {return;}
-    return $GLOBALS['xarTpl_JavaScript'][$position][$index];
+    sys::import('modules.themes.class.xarjs');
+    $javascript = xarJS::getInstance();
+    return $javascript->getQueued(array('position' => $position, 'index' => $index));    
 }
 
 /**
