@@ -248,6 +248,16 @@ class SubItemsProperty extends DataProperty
         if (is_array($this->defaultvalue)) $data['items'] = $data['items'] + $this->defaultvalue;
         $data['object'] = DataObjectMaster::getObjectList(array('name' => $this->subitemsobject->name));
         $data['object']->items =& $data['items'];
+
+        // Fallback to the module that is using this property
+        if (isset($data['localmodule'])) {
+            $this->localmodule = $data['localmodule'];
+        } else {
+            $info = xarController::$request->getInfo();
+            $this->localmodule = $info[0];
+            $data['localmodule'] = $this->localmodule;
+        }
+
         return parent::showOutput($data);
     }
 
