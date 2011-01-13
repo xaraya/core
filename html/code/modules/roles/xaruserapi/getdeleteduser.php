@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -15,13 +16,14 @@
  * uname, id and email are guaranteed to be unique,
  * otherwise the first hit will be returned
  * @author Richard Cave <rcave@xaraya.com>
- * @param $args['id'] id of user to get
- * @param $args['uname'] user name of user to get
- * @param $args['name'] name of user to get
- * @param $args['email'] email of user to get
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['id'] id of user to get<br/>
+ *        string   $args['uname'] user name of user to get<br/>
+ *        string   $args['name'] name of user to get<br/>
+ *        string   $args['email'] email of user to get
  * @return array
  */
-function roles_userapi_getdeleteduser($args)
+function roles_userapi_getdeleteduser(Array $args=array())
 {
     // Extract arguments
     extract($args);

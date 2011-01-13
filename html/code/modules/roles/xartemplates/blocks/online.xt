@@ -81,7 +81,7 @@
     <xar:if condition="isset($lastuser) AND $showlastuser">
          <p>
              Welcome to our latest member,
-             <a href="&xar-modurl-roles-user-display;&amp;id=#$lastuser['id']#">
+             <a href="#xarModURL('roles','user','display',array('id'=>$lastuser['id']))#">
                  #xarVarPrepForDisplay($lastuser['name'])#
              </a>
          </p>

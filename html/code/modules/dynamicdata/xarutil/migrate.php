@@ -2,18 +2,20 @@
 /**
  * migrate module items
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * migrate module items
  */
-function dynamicdata_util_migrate($args)
+function dynamicdata_util_migrate(Array $args=array())
 {
     // Security
     if (!xarSecurityCheck('AdminDynamicData')) return;
@@ -359,7 +361,7 @@ function dynamicdata_util_migrate($args)
             // return and load the same map again
             $url = xarModURL('dynamicdata','util','migrate',
                              array('load' => 1, 'map' => $map));
-            xarResponse::redirect($url);
+            xarController::redirect($url);
             return true;
         }
     }

@@ -1,17 +1,20 @@
 <?php
 /**
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
  * modify a block instance
  * @TODO Need to sperate this out to API calls.
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
+ * @return array data for the template display
  */
 
 function blocks_admin_modify_instance()
@@ -303,6 +306,8 @@ function blocks_admin_modify_instance()
 
         break;
     }
+    // display the reported block version too
+    $instance['xarversion'] = !empty($block->xarversion) ? $block->xarversion : xarML('Unknown');
 
     // variables available to all tabs
     $data['bid'] = $bid;

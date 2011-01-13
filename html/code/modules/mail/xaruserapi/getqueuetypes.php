@@ -1,9 +1,21 @@
 <?php
-  /**
-   * Return a list of queue types in a structured format, also suitable for dd validation
+/**
+ * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/771.html
+ */
+
+/**
+ * @param array    $args array of optional parameters<br/>
+ * Return a list of queue types in a structured format, also suitable for dd validation
    *
    */
-function mail_userapi_getqueuetypes($args)
+function mail_userapi_getqueuetypes(Array $args=array())
 {
     // We do this here because this way the queue types are translateable
     // and we can easily add qTypes later (like a /dev/null like one) without

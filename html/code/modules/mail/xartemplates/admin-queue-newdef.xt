@@ -15,7 +15,7 @@
         <p>
             At this moment there does not seem to be an object which can hold our queue definitions. We need this to be able to continue for basically every operation in the mail module. This is the reason we are a bit verbose on this page.
         </p>
-        <form action="&xar-modurl-mail-admin-createqdef;" method="post">
+        <form action="#xarModURL('mail','admin','createqdef')#" method="post">
             <xar:data-input type="hidden" id="authid" name="authid" value="$authid"/>
             <fieldset>
                 <legend>Create object to hold queue definitions</legend>

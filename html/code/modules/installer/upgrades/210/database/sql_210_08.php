@@ -3,11 +3,12 @@
  * Upgrade SQL file
  *
  * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage installer module
  * @link http://xaraya.com/index.php/release/200.html
  */
 
@@ -24,7 +25,7 @@ function sql_210_08()
         Adding the 'Site Management' privilege, SiteManagers group and SiteManager user
     ");
     $data['reply'] = xarML("
-        Done!
+        Success!
     ");
 
     // Run the query

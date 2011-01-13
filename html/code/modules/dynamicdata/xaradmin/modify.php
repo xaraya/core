@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -20,9 +22,9 @@
  * @param int itemtype the id of the itemtype of the item
  * @param join
  * @param table
- * @return string
+ * @return string output display string
  */
-function dynamicdata_admin_modify($args)
+function dynamicdata_admin_modify(Array $args=array())
 {
     extract($args);
 

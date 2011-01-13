@@ -1,4 +1,14 @@
 <?php
+/**
+ * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/1098.html
+ */
 
     /**
      * getinstances: returns all the current privilege instances of a module/component combination.
@@ -9,13 +19,13 @@
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   string with module name
-     * @param   string with component name
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['module']  module name<br/>
+ *        string   $args['component']  component name
      * @return  array of instance ids and names for the module
-     * @throws  none
     */
 
-    function privileges_adminapi_getinstances($args)
+    function privileges_adminapi_getinstances(Array $args=array())
     {
         extract($args);
         

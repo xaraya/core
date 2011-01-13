@@ -53,7 +53,7 @@
 <!--
   xar:var tags as children of xar:ml need to get placeholders
 -->
-<xsl:template match="xar:ml//xar:var">
+<xsl:template match="xar:ml/xar:var">
   <xsl:text>.' #(</xsl:text>
   <xsl:number from="xar:ml" level="any"/>
   <xsl:text>) '</xsl:text>

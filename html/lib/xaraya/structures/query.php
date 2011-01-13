@@ -1,4 +1,15 @@
 <?php
+/**
+ * @package core
+ * @subpackage structures
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * 
+ * 
+ */
   /**************************************************************************\
   * Query class for SQL abstraction                                          *
   * Written by Marc Lutolf (marcinmilan@xaraya.com)                          *
@@ -383,7 +394,7 @@ class Query
         }
     }
 
-    public function addtablelink($args)
+    public function addtablelink(Array $args=array())
     {
         $key = $this->key;
         $this->key++;
@@ -401,7 +412,7 @@ class Query
         }
         return $key;
     }
-    public function addhaving($args)
+    public function addhaving(Array $args=array())
     {
         $key = $this->key;
         $this->key++;
@@ -666,7 +677,7 @@ class Query
             }
     }
 
-    public function addsecuritycheck($args)
+    public function addsecuritycheck(Array $args=array())
     {
         $numargs = func_num_args();
         if ($numargs == 2) {

@@ -3,21 +3,23 @@
  * Add a role to a group
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * addmember - add a role to a group
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['gid'] group id
- * @param $args['id'] role id
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['gid'] group id<br/>
+ *        integer  $args['id'] role id
+ * @return boolean true on succes, false on failure
  */
-function roles_userapi_addmember($args)
+function roles_userapi_addmember(Array $args=array())
 {
     extract($args);
 

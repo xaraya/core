@@ -1,27 +1,30 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * update an item (the whole item or the dynamic data fields of it)
  *
  * @author the DynamicData module development team
- * @param $args['itemid'] item id of the original item
- * @param $args['module_id'] module id for the original item
- * @param $args['itemtype'] item type of the original item
- * @param $args['values'] array of id => value, or
- * @param $args['fields'] array containing the field definitions and values
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['itemid'] item id of the original item<br/>
+ *        integer  $args['module_id'] module id for the original item<br/>
+ *        string   $args['itemtype'] item type of the original item<br/>
+ *        array    $args['values'] array of id => value, or<br/>
+ *        array    $args['fields'] array containing the field definitions and values
  * @return mixed item id on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_update($args)
+function dynamicdata_adminapi_update(Array $args=array())
 {
     extract($args);
 

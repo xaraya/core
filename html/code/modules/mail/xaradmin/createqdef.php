@@ -1,6 +1,16 @@
 <?php
+/**
+ * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/771.html
+ */
 
-function mail_admin_createqdef($args)
+function mail_admin_createqdef(Array $args=array())
 {
     // Security
     if (!xarSecurityCheck('AdminMail')) return; 
@@ -53,6 +63,7 @@ function mail_admin_createqdef($args)
         // All went well, we can set the modvar now
         xarModVars::set('mail','queue-definition',$qdefName);
     }
-    xarResponse::redirect(xarModUrl('mail','admin','view'));
+    xarController::redirect(xarModUrl('mail','admin','view'));
+    return ttue;
 }
 ?>

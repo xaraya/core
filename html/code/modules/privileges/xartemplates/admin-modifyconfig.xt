@@ -14,35 +14,35 @@
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <xar:if condition="$tab eq 'general'">
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=general" class="xar-accent xar-accent-outline">
+                        <a href="#xarModURL('privileges','admin','modifyconfig',array('tab'=>'general'))#" class="xar-accent xar-accent-outline">
                         General</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=general" class="xar-norm xar-norm-outline">
+                        <a href="#xarModURL('privileges','admin','modifyconfig',array('tab'=>'general'))#" class="xar-norm xar-norm-outline">
                         General</a>
                     </li>
                 </xar:if>
                 <xar:if condition="$tab eq 'realms'">
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=realms" class="xar-accent xar-accent-outline">
+                        <a href="#xarModURL('privileges','admin','modifyconfig',array('tab'=>'realms'))#" class="xar-accent xar-accent-outline">
                         Realms</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=realms" class="xar-norm xar-norm-outline">
+                        <a href="#xarModURL('privileges','admin','modifyconfig',array('tab'=>'realms'))#" class="xar-norm xar-norm-outline">
                         Realms</a>
                     </li>
                 </xar:if>
                 <xar:if condition="xarModVars::get('privileges','lastresort')">
                     <xar:if condition="$tab eq 'lastresort'">
                         <li class="xar-tab-active">
-                            <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=lastresort" class="xar-accent xar-accent-outline">
+                            <a href="#xarModURL('privileges','admin','modifyconfig',array('tab'=>'lastresort'))#" class="xar-accent xar-accent-outline">
                             Last Resort</a>
                         </li>
                     <xar:else />
                         <li class="xar-tab">
-                            <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=lastresort" class="xar-norm xar-norm-outline">
+                            <a href="#xarModURL('privileges','admin','modifyconfig',array('tab'=>'lastresort'))#" class="xar-norm xar-norm-outline">
                             Last Resort</a>
                         </li>
                     </xar:if>
@@ -50,12 +50,12 @@
                 <!--
                 <xar:if condition="$tab eq 'masks'">
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=masks" class="xar-accent xar-accent-outline">
+                        <a href="#xarModURL('privileges','admin','modifyconfig',array('tab'=>'masks'))#" class="xar-accent xar-accent-outline">
                         Masks</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=masks" class="xar-norm xar-norm-outline">
+                        <a href="#xarModURL('privileges','admin','modifyconfig',array('tab'=>'masks'))#" class="xar-norm xar-norm-outline">
                         Masks</a>
                     </li>
                 </xar:if>
@@ -63,24 +63,24 @@
                 <!--
                 <xar:if condition="$tab eq 'maskbased'">
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=maskbased" class="xar-accent xar-accent-outline">
+                        <a href="#xarModURL('privileges','admin','modifyconfig',array('tab'=>'maskbased'))#" class="xar-accent xar-accent-outline">
                         Basic Access</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=maskbased" class="xar-norm xar-norm-outline">
+                        <a href="#xarModURL('privileges','admin','modifyconfig',array('tab'=>'maskbased'))#" class="xar-norm xar-norm-outline">
                         Basic Access</a>
                     </li>
                 </xar:if>
                 -->
                 <xar:if condition="$tab eq 'testing'">
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=testing" class="xar-accent xar-accent-outline">
+                        <a href="#xarModURL('privileges','admin','modifyconfig',array('tab'=>'testing'))#" class="xar-accent xar-accent-outline">
                         Testing</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="&xar-modurl-privileges-admin-modifyconfig;&amp;tab=testing" class="xar-norm xar-norm-outline">
+                        <a href="#xarModURL('privileges','admin','modifyconfig',array('tab'=>'testing'))#" class="xar-norm xar-norm-outline">
                         Testing</a>
                     </li>
                 </xar:if>

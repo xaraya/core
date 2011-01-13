@@ -1,4 +1,14 @@
 <?php
+/**
+ * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/771.html
+ */
 
 function mail_admin_delete($args = array())
 {
@@ -20,6 +30,7 @@ function mail_admin_delete($args = array())
     $result = $qdefObject->deleteItem(array('itemid' => $itemid));
     if(!$result) return;
 
-    return xarResponse::redirect(xarModUrl('mail','admin','view'));
+    return xarController::redirect(xarModUrl('mail','admin','view'));
+    return true;
 }
 ?>

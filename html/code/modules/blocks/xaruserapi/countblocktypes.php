@@ -2,11 +2,12 @@
 /**
  * Count the number of block types
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
@@ -15,13 +16,13 @@
  * @author Jason Judge
  * @access public
  * @param modName the module name
- * @param $args['type'] name of the block type (optional)
- * @param $args['module'] name of the module (optional)
- * @returns integer
- * @return count of block types that meet the required criteria
- * @throws DATABASE_ERROR, BAD_PARAM
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['type'] name of the block type (optional)<br/>
+ *        string   $args['module'] name of the module (optional)
+ * @return integer count of block types that meet the required criteria
+ * @throws DATABASE_ERROR
  */
-function blocks_userapi_countblocktypes($args)
+function blocks_userapi_countblocktypes(Array $args=array())
 {
     extract($args);
 

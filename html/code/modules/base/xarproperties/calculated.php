@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 sys::import('modules.base.xarproperties.textbox');
@@ -63,7 +65,7 @@ class CalculatedProperty extends TextBoxProperty
         return parent::showOutput($args);
     }
 
-    private function calculateValue($args)
+    private function calculateValue(Array $args=array())
     {
         if (empty($this->calculation)) {
             // nothing to calculate

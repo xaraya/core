@@ -62,17 +62,17 @@
                                 </div>
                             </div>
                             <div id="main_left">
-                              <h1>How to Configure and Install Xaraya 2.1.2</h1>
+                              <h1>How to Configure and Install Xaraya 2.2.0</h1>
                                 <p class="center">
-                                    This page is here to guide you through the steps of configuring the Xaraya web applications framework for a NEW installation. If you are upgrading an EXISTING Xaraya 2.0.0 installation to Xaraya 2.1.2, please point your browser to upgrade.php and run the upgrade script.
+                                    This page is here to guide you through the steps of configuring the Xaraya web applications framework for a NEW installation. If you are upgrading an EXISTING Xaraya 2.0.0 (or later) installation to Xaraya 2.2.0, please point your browser to upgrade.php and run the upgrade script.
                                 </p>
                                 <p class="center">
                                     For more support resources click on the first link in the header above. Once you have completed the simple steps outlined below, you should run the installer script by pointing your web browser at http://www.mydomain.com/install.php.
                                 </p>
-                              <h2>What is Xaraya 2.1.2</h2>
+                              <h2>What is Xaraya 2.2.0</h2>
                                 <p class="center">
                                     Xaraya is an Open Source web applications framework. It provides a stable and secure core, with a function rich API and powerful templating engine in place for third-party
-                                    developers. Xaraya 2.1.2 is a major rewrite that offers enhanced performance with a smaller foorprint, more versatile functionality, easier usability and strict adherence to XHTML standards.
+                                    developers. Xaraya 2.2.0 is a major rewrite that offers enhanced performance with a smaller foorprint, more versatile functionality, easier usability and strict adherence to XHTML standards.
 
                                     If you would like to help develop this software, please visit our homepage at  http://www.xaraya.com, or send email to info@xaraya.com.
                                 </p>
@@ -90,7 +90,7 @@
                                             <b>code</b> folder: contains code elements, notably the modules your Xaraya installation will run.
                                         </li>
                                     </ul>
-                                    The top level of your installation (the xaraya-2.1.2 folder) is called the <em>root directory</em>. For special situations the root directory can be redefined to as different directory on your server (see Custom Installations below).
+                                    The top level of your installation (the xaraya-2.2.0 folder) is called the <em>root directory</em>. For special situations the root directory can be redefined to as different directory on your server (see Custom Installations below).
                                 </p>
                                 <p class="center">
                                     <b>To run properly your installation requires only the three folders listed above and their contents. All other contents of your unpacked installation file are for information only, or additional functionality for special situations, and can be safely removed.</b>
@@ -103,13 +103,10 @@
                                             Unpack the distribution file you downloaded (since you are reading this you have already done that).
                                         </li>
                                         <li>
-                                            Place the folder xaraya-2.1.2 containing the distribution on your web server.
+                                            Place the folder xaraya-2.2.0 containing the distribution on your web server.
                                         </li>
                                         <li>
                                             Configure your web server (www.mydomain.com) to make the html directory in your installation its root directory.
-                                        </li>
-                                        <li>
-                                            Make a copy of the file var/config.system.php.dist, place it in the var folder and name it config.system.php. Be sure this file is writable by the web server.
                                         </li>
                                         <li>
                                             Point your web browser to www.mydomain.com/install.php and run the installation routine. The installation process takes 5-10 minutes, and you will be asked to make a number of decisions concerning your Xaraya site's configuration. Apart from defining the database your site will work with, <b>all other configuration settings can be changed later</b>. If you are unsure about a specific configuration, choose the defaults the installer provides.
@@ -138,9 +135,6 @@
     //$systemConfiguration['codeDir'] = "code/";
                                             </pre>
                                             Save the file modified var/layout.system.php.
-                                        </li>
-                                        <li>
-                                            Make a copy of the file var/config.system.php.dist, place it in the var folder and name it config.system.php. Be sure this file is writable by the web server.
                                         </li>
                                         <li>
                                             Point your web browser to www.mydomain.com/install.php and run the installation routine. The installation process takes 5-10 minutes, and you will be asked to make a number of decisions concerning your Xaraya site's configuration. Apart from defining the database your site will work with, <b>all other configuration settings can be changed later</b>. If you are unsure about a specific configuration, choose the defaults the installer provides.
@@ -235,7 +229,7 @@ $systemConfiguration['codeDir'] = "public_html/code/";
                                     </ul>
                                 <a name="legacy" style="text-decoration: none;"><h2>Legacy Support</h2></a> <a href="#top">top</a>
                                 <p class="center">
-                                    Xaraya 2.1.2 provides limited legacy support for Xaraya 1.x modules. You can enable legacy support by checking the appropriate checkbox in the Base module Modify Config page (Other tab). Legacy support covers:
+                                    Xaraya 2.2.0 provides limited legacy support for Xaraya 1.x modules. You can enable legacy support by checking the appropriate checkbox in the Base module Modify Config page (Other tab). Legacy support covers:
                                     <ul>
                                         <li>
                                             Xaraya 1.x function calls that have been deprecated.

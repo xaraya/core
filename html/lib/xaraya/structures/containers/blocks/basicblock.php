@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package core
+ * @subpackage blocks
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
     // @TODO: see validations note in constructor
 /**
  * BasicBlock class, default parent class for all blocks
@@ -24,6 +33,8 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     public $module          = 'BlockModule';  // Module your child class belongs to
     public $text_type       = 'Basic Block';  // Block name
     public $text_type_long  = 'Parent class for blocks'; // Block description
+    // version check so blocks can supply an upgrade method (called in constructor)
+    public $xarversion             = '0.0.0'; // expects a 3 point version number
 
     // block instance properties
     // these will be filled in by blockinfo when a new object is instantiated
@@ -71,6 +82,8 @@ class BasicBlock extends ObjectDescriptor implements iBlock
     // eg parent::__construct($data);
     public function __construct(Array $data=array())
     {
+        // get the current block version before we over-write with content
+        $newver = $this->xarversion;
         // expand content here if necessary (shouldn't be now)
         if (isset($data['content']) && !is_array($data['content'])) {
             $content = @unserialize($data['content']);
@@ -84,6 +97,57 @@ class BasicBlock extends ObjectDescriptor implements iBlock
             parent::setArgs($data['content']);
         // update properties from content args
         parent::refresh($this);
+         // populate content on first run
+        if (empty($this->content)) $this->content = $this->getInfo();
+        // set a sensible default for blocks not yet using xarversion
+        $oldver = !empty($this->content['xarversion']) ? $this->content['xarversion'] : '0.0.0';
+        // compare versions if we have a new version that is different to the old version,
+        if (!empty($newver) && $newver != $oldver) {
+            sys::import('xaraya.version');
+            $vercompare = xarVersion::compare($newver, $oldver, 3);
+            // compare new block with old block,
+            if ($vercompare > 0) {
+                // since blocks can have children we need to ensure we only call
+                // the upgrade method for this block if it has one (and not defer to its parent)
+                // To do this we use reflection...
+                // First we need the Class Name of the block,
+                $refName = ucfirst($this->module) . '_' . ucfirst($this->type) . 'Block';
+                // create a reflection object from the class
+                $refObject  = new ReflectionClass($refName);
+                // find all public and protected methods in ParentClass
+                $parentMethods = $refObject->getParentClass()->getMethods(
+                    ReflectionMethod::IS_PUBLIC ^ ReflectionMethod::IS_PROTECTED
+                );
+                // find all parentmethods that were redeclared in ChildClass
+                foreach($parentMethods as $parentMethod) {
+                    $declaringClass = $refObject->getMethod($parentMethod->getName())
+                                                ->getDeclaringClass()
+                                                ->getName();
+                    if($declaringClass === $refObject->getName() && $parentMethod->getName() == 'upgrade') {
+                        $hasUpgrade = 1;
+                        unset($declaringClass);
+                        break;
+                    }
+                }
+                // clean up unneeded variables
+                unset($parentMethods); unset($refName); unset($refObject);
+                if (!empty($hasUpgrade)) {
+                    // only run upgrade if new version is greater than old version
+                    // modules can over-ride the upgrade method with their own :)
+                    // pass the old version to the upgrade method
+                    if (!$this->upgrade($oldver)) {
+                        // if upgrade method didn't return true, upgrade failed
+                        throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to upgrade #(1) module block #(2) from version #(3) to version #(4)');
+                        // update to new version
+                        $this->content['xarversion'] = $newver;
+                    } elseif ($vercompare < 0) {
+                        // can't downgrade blocks
+                        throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to downgrade #(1) module block #(2) from version #(3) to version #(4)');
+                    }
+                }
+            }
+        }
+
     }
 
     public function getInfo()
@@ -131,10 +195,30 @@ class BasicBlock extends ObjectDescriptor implements iBlock
         return $data;
     }
 
+    // this method is called by the constructor to run upgrades from older block versions
+    // this method should be placed in the Module_BlockNameBlock class,
+    // eg in Base_MenuBlock not in Base_MenuBlockAdmin
+    public function upgrade($oldversion)
+    {
+        // use it much as you would the xarinit upgrade function in modules
+        switch ($oldversion) {
+            case '0.0.0': // if no version was previously set, the default is 0.0.0
+            default:
+                // upgrades from 0.0.0 go here
+            // fall through to subsequent upgrades
+            case '0.0.1':
+                // upgrades from 0.0.1 go here
+
+            // etc...
+            break;
+        }
+        return true;
+    }
+
     // @param access (display|modify|delete)
     // this method is called by blocks_admin_modify|update|delete functions
     // and by xarBlock::render() method to determine access for current user
-    // @return bool true if access allowed
+    // @return boolean true if access allowed
     public function checkAccess($access)
     {
         if (empty($access)) throw new EmptyParameterException('Access method');
@@ -174,6 +258,7 @@ interface iBlock
 {
     public function getInfo();
     public function getInit();
+    public function upgrade($oldversion);
     public function display(Array $args=array());
     public function modify(Array $args=array());
     public function update(Array $args=array());

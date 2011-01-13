@@ -6,7 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <h2>Request Lost Password</h2>
-        <form action="&xar-modurl-roles-user-lostpassword;" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarModURL('roles','user','lostpassword')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Enter your username or your e-mail address.</legend>
                 <div class="xar-form-input-wrapper">

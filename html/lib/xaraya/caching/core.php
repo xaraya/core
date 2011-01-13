@@ -3,10 +3,13 @@
  * Xaraya Core Cache
  *
  * @package core
+ * @subpackage caching
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage caching
+ *
  * @author mikespub
  * @author jsb
  */
@@ -24,7 +27,7 @@ class xarCoreCache extends Object
      * Initialise the caching options
      *
      * @param array $config caching configuration from config.caching.php
-     * @return bool
+     * @return boolean
      * @todo configure optional second-level cache here ?
     **/
     public static function init(array $config = array())
@@ -37,7 +40,7 @@ class xarCoreCache extends Object
      *
      * @param string $scope the scope identifying which part of the cache you want to access
      * @param string $name  the name of the variable in that particular scope
-     * @return bool true if the variable is cached, false if not
+     * @return boolean true if the variable is cached, false if not
     **/
     public static function isCached($scope, $name)
     {

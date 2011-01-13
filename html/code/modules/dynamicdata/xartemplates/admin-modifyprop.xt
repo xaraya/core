@@ -45,7 +45,7 @@
         <xar:if condition="!isset($layout)">
             <xar:set name="layout">'default'</xar:set>
         </xar:if>
-        <form method="post" action="&xar-modurl-dynamicdata-admin-updateprop;">
+        <form method="post" action="#xarModURL('dynamicdata','admin','updateprop')#">
             <xar:template file="proplist-$layout"/>
         </form>
         <p>[ 
@@ -76,8 +76,7 @@
                             <td>#$field['name']#</td>
                             <td>#$field['label']#</td>
                             <td>
-                                <xar:data-output property="$fieldtypeprop"
-                                name="static_type['.$field['id'].']" value="$field['type']"/>
+                                <xar:data-output property="$fieldtypeprop" name="static_type['.$field['id'].']" value="$field['type']"/>
                             </td>
                             <td>#$field['defaultvalue']#</td>
                             <td>#$field['source']#</td>
@@ -90,7 +89,7 @@
                 <!-- xar:data-view module="dynamicdata" itemtype="1" where="$where" param="itemid" layout="cells" / -->
                 <xar:if condition="count($tables) gt 0">
                     <xar:foreach in="$tables" value="$table">
-                        <form method="post" action="&xar-modurl-dynamicdata-util-importprops;">
+                        <form method="post" action="#xarModURL('dynamicdata','util','importprops')#">
                             <div class="xar-align-center">
                                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                                 <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>
@@ -109,7 +108,7 @@
             <!--
             TODO: very much under construction, obviously :-)
             -->
-            <form method="post" action="&xar-modurl-dynamicdata-admin-modifyprop;">
+            <form method="post" action="#xarModURL('dynamicdata','admin','modifyprop')#">
                 <!-- don't accept updates for this (for now) -->
                 <xar:foreach in="$relations" value="$relation">
                     <xar:if condition="count($relation['links']) gt 0">

@@ -1,12 +1,13 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
- * @link http://xaraya.com/index.php/release/27.html
+ * @link http://xaraya.com/index.php/release/182.html
  */
 
 sys::import('modules.dynamicdata.class.objects.master');
@@ -357,6 +358,15 @@ class DataObject extends DataObjectMaster implements iDataObject
         } else {
             foreach ($args as $key => $value)
                 if (isset($this->properties[$key]))  $this->properties[$key]->setValue($value);
+        }
+        return true;
+    }
+
+    public function clearFieldValues(Array $args = array())
+    {
+        $properties = $this->getProperties($args);
+        foreach ($properties as $property) {
+            $fields[$property->name] = $property->clearValue();
         }
         return true;
     }

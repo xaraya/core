@@ -2,17 +2,19 @@
 /**
  * List modules and current settings
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
  * List modules and current settings
  * @param several params from the associated form in template
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  */
 function blocks_admin_settings()
 {
@@ -25,11 +27,10 @@ function blocks_admin_settings()
 
     xarModUserVars::set('blocks', 'selstyle', $selstyle);
 
-    if (empty($return_url))
+    xarController::redirect(xarModURL('blocks', 'admin', 'view_instances',array('filter' => $filter)));
         $return_url = xarModURL('blocks', 'admin', 'view_instances',array('filter' => $filter));
 
-    xarResponse::redirect($return_url);
-
+    xarController::redirect($return_url);
     return true;
 }
 

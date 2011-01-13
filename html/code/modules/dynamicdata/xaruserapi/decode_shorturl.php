@@ -2,18 +2,20 @@
 /**
  * Decode short URLS
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * extract function and arguments from short URLs for this module, and pass
  * them back to xarGetRequestInfo()
- * @param array $params containing the elements of PATH_INFO
+ * @param array    $params array of optional parameters<br/>
  * @return array containing func the function to be called and args the query
  *         string arguments, or empty if it failed
  */

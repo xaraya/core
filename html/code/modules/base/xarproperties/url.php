@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -39,8 +41,8 @@ class URLProperty extends TextBoxProperty
            //let's process futher then
            //check it is not invalid eg html tag
             if (preg_match('/[<>"]/',$value)) {
-                $this->invalid = xarML('URL: #(1)', $this->name);
-                $this->value = '';
+                $this->invalid = xarML('Invalid URL: #(1)', $value);
+                $this->value = null;
                 return false;
             } else {
               // If we have a scheme but nothing following it,
@@ -51,16 +53,13 @@ class URLProperty extends TextBoxProperty
                     // Do some URL validation below. Separate for better understanding
                     // Still not perfect. Add as seen fit.
                     $uri = parse_url($value);
-                    if (empty($uri['scheme']) && empty($uri['host']) && empty($uri['path'])) {
-                        $this->invalid = xarML('URL');
-                        $this->value = '';
+                    if (empty($uri['scheme'])) $value = 'http://' . $value;
+                    if (!filter_var($value, FILTER_VALIDATE_URL)) {
+                        $this->invalid = xarML('Invalid URL: #(1)', $value);
+                        $this->value = null;
                         return false;
-                    } elseif (empty($uri['scheme'])) {
-                        $this->value = 'http://' . $value;
-                    } else {
-                        // it has at least a scheme (http/ftp/etc) and a host (domain.tld)
-                        $this->value = $value;
-                    }
+                    } 
+                    $this->value = $value;
                 }
 
             } //end checks for other schemes

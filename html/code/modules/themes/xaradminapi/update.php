@@ -1,23 +1,25 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
+ * @link http://xaraya.com/index.php/release/70.html
  */
 /**
  * Update theme information
  *
  * @author Marty Vance
- * @param $args['regid'] the id number of the theme to update
- * @param $args['displayname'] the new display name of the theme
- * @param $args['description'] the new description of the theme
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the id number of the theme to update<br/>
+ *        string   $args['displayname'] the new display name of the theme<br/>
+ *        string   $args['description'] the new description of the theme
+ * @return boolean true on success, false on failure
  */
-function themes_adminapi_update($args)
+function themes_adminapi_update(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

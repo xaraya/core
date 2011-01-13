@@ -14,69 +14,69 @@
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <xar:if condition="$tab eq 'general'">
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=general" class="xar-accent xar-accent-outline">General</a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'general'))#" class="xar-accent xar-accent-outline">General</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=general" class="xar-norm xar-norm-outline">General</a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'general'))#" class="xar-norm xar-norm-outline">General</a>
                     </li>
                 </xar:if>
                 <xar:if condition="$tab eq 'duvs'">
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs" class="xar-accent xar-accent-outline">User
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'duvs'))#" class="xar-accent xar-accent-outline">User
                         Variables</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=duvs" class="xar-norm xar-norm-outline">User
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'duvs'))#" class="xar-norm xar-norm-outline">User
                         Variables</a>
                     </li>
                 </xar:if>
                 <xar:if condition="$tab eq 'hooks'">
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=hooks" class="xar-accent xar-accent-outline">User
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'hooks'))#" class="xar-accent xar-accent-outline">User
                         Hooks</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=hooks" class="xar-norm xar-norm-outline">User
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'hooks'))#" class="xar-norm xar-norm-outline">User
                         Hooks</a>
                     </li>
                 </xar:if>
                 <!--
                     <xar:if condition="$tab eq 'grouphooks'">
                         <li class="xar-tab-active">
-                            <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks" class="xar-accent xar-accent-outline">
+                            <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'grouphooks'))#" class="xar-accent xar-accent-outline">
                             Group Hooks</a>
                         </li>
                     <xar:else />
                         <li class="xar-tab">
-                            <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=grouphooks" class="xar-norm xar-norm-outline">
+                            <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'grouphooks'))#" class="xar-norm xar-norm-outline">
                             Group Hooks</a>
                         </li>
                     </xar:if>
                 -->
                 <xar:if condition="$tab eq 'managehooks'">
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=managehooks" class="xar-accent xar-accent-outline">
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'managehooks'))#" class="xar-accent xar-accent-outline">
                             Manage Hooks
                         </a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=managehooks" class="xar-norm xar-norm-outline">
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'managehooks'))#" class="xar-norm xar-norm-outline">
                             Manage Hooks
                         </a>
                     </li>
                 </xar:if>
                 <xar:if condition="$tab eq 'memberlist'">
                     <li class="xar-tab-active">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist" class="xar-accent xar-accent-outline">Member
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'memberlist'))#" class="xar-accent xar-accent-outline">Member
                         Options</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="&xar-modurl-roles-admin-modifyconfig;&amp;tab=memberlist" class="xar-norm xar-norm-outline">Member
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'memberlist'))#" class="xar-norm xar-norm-outline">Member
                         Options</a>
                     </li>
                 </xar:if>
@@ -145,7 +145,7 @@
                 - - - - - - - - - - - - - - - - - Begin User Variable Options - - - - - - - - - - - - - - - - - - -
             -->
             <xar:elseif condition="$tab eq 'duvs'"/>
-                <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+                <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
                     <fieldset>
                     <legend>Basic User Variables</legend>
                     <p>Always available in a user role, and can be retrieved as
@@ -233,7 +233,7 @@
             -->
             <xar:elseif condition="$tab eq 'hooks'"/>
             <xar:if condition="!empty($hooks)">
-              <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+              <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
                   <fieldset>
                         <legend>Default Hooks For Users</legend>
                         <xar:foreach in="$hooks" key="$hookmodule">
@@ -258,7 +258,7 @@
             -->
             <xar:elseif condition="$tab eq 'grouphooks'"/>
             <xar:if condition="!empty($hooks)">
-                <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+                <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
                 enctype="application/x-www-form-urlencoded">
                     <fieldset>
                         <legend>Default Hooks For Groups</legend>
@@ -293,7 +293,7 @@
                 - - - - - - - - - - - - - - - - - Begin Member List Options - - - - - - - - - - - - - - - - - - -
             -->
             <xar:elseif condition="$tab eq 'memberlist'"/>
-            <form method="post" action="&xar-modurl-roles-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+            <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <!-- display the default settings properties -->
                     <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="admin"/>

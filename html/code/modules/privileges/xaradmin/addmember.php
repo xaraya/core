@@ -2,13 +2,15 @@
 /**
  * AddMember
  *
- * @package core modules
+ * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Privileges module
  * @link http://xaraya.com/index.php/release/1098.html
+ *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
@@ -19,10 +21,7 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param   none
  * @return  none
- * @throws  none
- * @todo    none
  */
 function privileges_admin_addmember()
 {
@@ -38,7 +37,7 @@ function privileges_admin_addmember()
     if(!xarVarFetch('privid', 'isset', $privid, NULL, XARVAR_DONT_SET)) {return;}
 
     if (empty($id) || empty($privid)) {
-        xarResponse::redirect(xarModURL('privileges',
+        xarController::redirect(xarModURL('privileges',
                                       'admin',
                                       'modifyprivilege',
                                       array('id'=>$id)));
@@ -70,10 +69,11 @@ function privileges_admin_addmember()
     xarSession::setVar('privileges_statusmsg', xarML('Added to Privilege',
                     'privileges'));
 // redirect to the next page
-    xarResponse::redirect(xarModURL('privileges',
+    xarController::redirect(xarModURL('privileges',
                              'admin',
                              'modifyprivilege',
                              array('id'=>$id)));
+    return true;
 }
 
 

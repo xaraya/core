@@ -26,7 +26,7 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
-                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#$label#" class="xar-norm xar-norm-outline">
+                                <a href="#xarModURL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
                                     <xar:var name="parents[$i].parentname"/>
                                 </a>
                             </li>
@@ -66,7 +66,7 @@
                         <xar:loop name="$inherited">
                             <tr>
                                 <td>
-                                    <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$loop:item['privid']#">
+                                    <a href="#xarModURL('roles','admin','modifyprivilege',array('id'=>$loop->item['privid']))#">
                                         <xar:var name="loop:item.name"/>
                                     </a>
                                 </td>
@@ -117,7 +117,7 @@
                     <xar:loop name="$privileges">
                         <tr>
                             <td>
-                                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$loop:item['privid']#">
+                                <a href="#xarModURL('roles','admin','modifyprivilege',array('id'=>$loop->item['privid']))#">
                                     <xar:var name="loop:item.name"/>
                                 </a>
                             </td>
@@ -147,7 +147,7 @@
                     </xar:loop>
                 </table>
             </xar:if>
-          <form action="&xar-modurl-roles-admin-addprivilege;" method="post" enctype="application/x-www-form-urlencoded">
+          <form action="#xarModURL('roles','admin','addprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
                 <div class="xar-form-input-wrapper">
                     <xar:var name="label">Select the Privilege to add</xar:var>
                     <label for="privid" title="#$label#" class="xar-form-label">

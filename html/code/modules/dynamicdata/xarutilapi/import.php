@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -18,7 +20,7 @@
  * @param $args['entry'] optional array of external references.
  * @return array object id on success, null on failure
  */
-function dynamicdata_utilapi_import($args)
+function dynamicdata_utilapi_import(Array $args=array())
 {
     if(!xarSecurityCheck('AdminDynamicData')) return;
 

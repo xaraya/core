@@ -1,11 +1,13 @@
 <?php
 /**
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage modules
+ * @link http://xaraya.com/index.php/release/1.html
  */
 
 /**
@@ -20,10 +22,11 @@
  * SCCS - where Bitkeeper stores source files
  * PENDING - where Bitkeeper stores pending merges
  *
- * @param $args['regid'] - optional regid to retrieve
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] - optional regid to retrieve
  * @return array modules from the file system
  */
-function modules_adminapi_getfilemodules($args)
+function modules_adminapi_getfilemodules(Array $args=array())
 {
     // Get arguments
     extract($args);

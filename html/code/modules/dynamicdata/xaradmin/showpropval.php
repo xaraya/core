@@ -2,19 +2,21 @@
 /**
  * Show configuration of some property
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * Show configuration of some property
- * @return array
+ * @return array data for the template display
  */
-function dynamicdata_admin_showpropval($args)
+function dynamicdata_admin_showpropval(Array $args=array())
 {
     // Security
     if(!xarSecurityCheck('AdminDynamicData')) return;
@@ -77,7 +79,8 @@ function dynamicdata_admin_showpropval($args)
     $data['id']         = $id;
     // pass the original invalid value here
     $data['invalid']    = !empty($invalid) ? $invalid :'';
-    $property =& DataPropertyMaster::getProperty($data);
+    $property = DataPropertyMaster::getProperty($data);
+    $data['propertytype'] = DataPropertyMaster::getProperty(array('type' => $data['type']));
     if (empty($property)) return;
 
     if (!empty($preview) || !empty($confirm) || !empty($exit)) {
@@ -107,7 +110,7 @@ function dynamicdata_admin_showpropval($args)
                     $return_url = xarModURL('dynamicdata', 'admin', 'modifyprop',
                                             array('itemid' => $parentobjectid));
                 }
-                xarResponse::redirect($return_url);
+                xarController::redirect($return_url);
                 return true;
             }
             // show preview/updated values
@@ -207,6 +210,7 @@ function dynamicdata_config_propval($proptype)
     // call its showConfiguration() method and return
     $data['showval'] = $property->showConfiguration($data);
     $data['proptype'] = $proptype;
+    $data['propertytype'] = $property;
     $data['propinfo'] =& $property;
 
     xarTplSetPageTitle(xarML('Sample Configuration for DataProperty Type #(1)', $proptype));

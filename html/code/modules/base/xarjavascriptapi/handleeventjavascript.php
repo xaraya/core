@@ -2,11 +2,12 @@
 /**
  * Base JavaScript management functions
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 
@@ -20,10 +21,9 @@
  *
  * @author Jason Judge
  * @param $args array containing the form field definition or the type, position, ...
- * @returns string
- * @return empty string
+ * @return string an empty string
  */ 
-function base_javascriptapi_handleeventjavascript($args)
+function base_javascriptapi_handleeventjavascript(Array $args=array())
 {
     extract($args);
 

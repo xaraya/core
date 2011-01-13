@@ -1,22 +1,24 @@
 <?php
 /**
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage themes
+ * @link http://xaraya.com/index.php/release/70.html
  */
 /**
  * Initialise a theme
  *
  * @author Marty Vance
- * @param regid registered theme id
- * @returns bool
- * @return
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['regid'] registered theme id
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, THEME_NOT_EXIST
  */
-function themes_adminapi_initialise($args)
+function themes_adminapi_initialise(Array $args=array())
 {
 
     extract($args);

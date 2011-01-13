@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  */
 
@@ -30,7 +31,7 @@ class DataProperty extends Object implements iDataProperty
     public $status         = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     public $seq            = 0;
     public $format         = '0'; //<-- eh?
-    public $filepath       = 'modules/dynamicdata/xarproperties';
+    public $filepath       = 'auto';
     public $class          = '';         // this property's class
 
     // Attributes for runtime
@@ -189,6 +190,11 @@ class DataProperty extends Object implements iDataProperty
     public function setValue($value=null)
     {
         $this->value = $value;
+    }
+
+    public function clearValue()
+    {
+        $this->value = null;
     }
 
     /**
@@ -379,11 +385,12 @@ class DataProperty extends Object implements iDataProperty
             $data['invalid']  = '';
         }
 
-        // Add the configuration options if they have not been overridden
+        // Add the configuration options defined via UI
         if(isset($data['configuration'])) {
             $this->parseConfiguration($data['configuration']);
             unset($data['configuration']);
         }
+        // Now check for overrides from the template
         foreach ($this->configurationtypes as $configtype) {
             $properties = $this->getConfigProperties($configtype,1);
             foreach ($properties as $name => $configarg) {
@@ -419,24 +426,23 @@ class DataProperty extends Object implements iDataProperty
         $data['name'] = $this->name;
         if (empty($data['_itemid'])) $data['_itemid'] = 0;
 
-        if(!isset($data['value'])) $data['value'] = $this->getValue();
+        if(!isset($data['value']))    $data['value']    = $this->value;
         // TODO: does this hurt when it is an array?
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
 
-        // Add the configuration options if they have not been overridden
+        // Add the configuration options defined via UI
         if(isset($data['configuration'])) {
             $this->parseConfiguration($data['configuration']);
             unset($data['configuration']);
         }
+        // Now check for overrides from the template
         foreach ($this->configurationtypes as $configtype) {
-            $properties = $this->getPublicProperties();
-            foreach ($properties as $name => $value) {
-                if (strpos($name,$configtype) === 0) {
-                    $shortname = substr($name,strlen($configtype)+1);
-                    if(!isset($shortname)) $data[$shortname] = $value;
-                }
+            $properties = $this->getConfigProperties($configtype,1);
+            foreach ($properties as $name => $configarg) {
+                if (!isset($data[$configarg['shortname']]))
+                    $data[$configarg['shortname']] = $this->{$configarg['fullname']};
             }
         }
         return xarTplProperty($data['tplmodule'], $data['template'], 'showoutput', $data);
@@ -509,13 +515,13 @@ class DataProperty extends Object implements iDataProperty
         // The value might be an array
         if (is_array($data['value'])){
             $temp = array();
-            foreach ($data['value'] as $tmp) $temp[] = xarVarPrepForDisplay($tmp);
+            foreach ($data['value'] as $key => $tmp) $temp[$key] = xarVarPrepForDisplay($tmp);
             $data['value'] = $temp;
         } else {
             $data['value'] = xarVarPrepForDisplay($data['value']);
         }
 
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : $this->invalid;
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
@@ -651,7 +657,7 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
      * @param $args['configuration'] configuration rule (default is the current configuration)
      * @param $args['id'] id of the field
-     * @return bool true if the configuration rule could be processed, false otherwise
+     * @return boolean true if the configuration rule could be processed, false otherwise
      */
     public function updateConfiguration(Array $data = array())
     {
@@ -739,20 +745,19 @@ class DataProperty extends Object implements iDataProperty
         $configproperties = array();
         $properties = $this->getPublicProperties();
         foreach ($properties as $name => $arg) {
-            if (!isset($allconfigproperties[$name])) continue;
+            // Ignore properties that are not defined as configs in the configurations table
+            // and also those that are flagged as not to be active for this property object
+            $flagname = $name . "_ignore";
+            if (!isset($allconfigproperties[$name]) || !empty($this->$flagname)) continue;
+            // Ignore properties that are not of the config $type passed
             $pos = strpos($name, "_");
             if (!$pos || (substr($name,0,$pos) != $type)) continue;
-            if ($fullname) {
-                $configproperties[$name] = $allconfigproperties[$name];
-                $configproperties[$name]['value'] = $arg;
-                $configproperties[$name]['shortname'] = substr($name,$pos+1);
-                $configproperties[$name]['fullname'] = $name;
-            } else {
-                $configproperties[substr($name,$pos+1)] = $allconfigproperties[$name];
-                $configproperties[substr($name,$pos+1)]['value'] = $arg;
-                $configproperties[substr($name,$pos+1)]['shortname'] = substr($name,$pos+1);
-                $configproperties[substr($name,$pos+1)]['fullname'] = $name;
-            }
+            // This one is good. Make an entry for it
+            $key = $fullname ? $name : substr($name,$pos+1);
+            $configproperties[$name] = $allconfigproperties[$name];
+            $configproperties[$key]['value'] = $arg;
+            $configproperties[$key]['shortname'] = substr($name,$pos+1);
+            $configproperties[$key]['fullname'] = $name;
         }
         return $configproperties;
     }

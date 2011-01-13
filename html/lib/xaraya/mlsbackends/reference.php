@@ -1,11 +1,19 @@
 <?php
 /**
+ * @package core
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+/**
  * Translations backend interface
  *.
  * It defines a simple interface used by the Multi Language System to fetch both
  * string and key based translations. Each MLS backend must implement this interface.
  *
- * @package multilanguage
  * @todo    interface once php5 is there
  */
 interface ITranslationsBackend {
@@ -38,7 +46,6 @@ interface ITranslationsBackend {
  * but also the a list of references where it appears in the source by
  * reporting the file name and the line number.
  *
- * @package multilanguage
  * @throws Exception, BadParameterException
  */
 abstract class xarMLS__ReferencesBackend  extends Object implements ITranslationsBackend
