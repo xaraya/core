@@ -124,6 +124,7 @@ function themes_init()
 
     xarModVars::set('themes', 'selclass', 'all');
     xarModVars::set('themes', 'useicons', false);
+    xarModVars::set('themes','flushcaches', '');
 
     // Installation complete; check for upgrades
     return themes_upgrade('2.0.0');

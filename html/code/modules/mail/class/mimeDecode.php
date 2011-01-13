@@ -1,4 +1,18 @@
 <?php
+/**
+* Mime Decoding class
+ *
+ * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright 2003-2005  The PHP Group    
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/771.html
+ * @author Richard Heyes
+ */
+
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 // +-----------------------------------------------------------------------+
 // | Copyright (c) 2002-2003  Richard Heyes                                |

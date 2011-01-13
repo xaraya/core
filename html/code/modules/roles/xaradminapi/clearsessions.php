@@ -15,7 +15,7 @@
  * 
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param $args['id']
- * @return true on success, false otherwise
+ * @return boolean true on succes, false on failure
  * @todo Move this to sessions subsystem, doesnt belong here.
  */
 function roles_adminapi_clearsessions($spared)

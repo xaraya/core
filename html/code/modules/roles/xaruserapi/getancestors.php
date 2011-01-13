@@ -16,7 +16,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
  *        string   $args['id'] role id
- * @return $ancestors array containing name, id
+ * @return array array containing name, id of the ancstors
  */
 function roles_userapi_getancestors(Array $args=array())
 {

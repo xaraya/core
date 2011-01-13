@@ -158,7 +158,7 @@ Class xarBlock extends Object implements IxarBlock
             $blockinfo['content']['_bl_block_id'] = $blockinfo['bid'];
             $blockinfo['content']['_bl_block_name'] = $blockinfo['name'];
             $blockinfo['content']['_bl_block_type'] = $blockinfo['type'];
-            if (!empty($blockinfo['groupid'])) {
+            if (isset($blockinfo['groupid'])) {
                 // The block may not be rendered as part of a group.
                 $blockinfo['content']['_bl_block_groupid'] = $blockinfo['groupid'];
                 $blockinfo['content']['_bl_block_group'] = $blockinfo['group'];
@@ -200,25 +200,29 @@ Class xarBlock extends Object implements IxarBlock
             }
             return "";
         }
-
-        // Now wrap the block up in a box.
-        // TODO: pass the group name into this function (param 2?) for the template path.
-        // $blockinfo itself is passed to the outer template
-        // Attempt to render this block template data.
-        try {
-            $boxOutput = xarTpl_renderBlockBox($blockinfo, $data['_bl_box_template']);
-        } catch (Exception $e) {
-            // Set the output of the block in cache
-            if (!empty($cacheKey)) {
-                xarBlockCache::setCached($cacheKey, '');
-            }
-            if ((bool)xarModVars::get('blocks', 'noexceptions')) {
-                return '';
-            } else {
-                throw ($e);
+        
+        if ($blockinfo['type'] == 'blockgroup') {
+            // Blockgroups don't have an outer template
+            $boxOutput = $blockinfo['content'];
+        } else {
+            // Now wrap the block up in a box.
+            // TODO: pass the group name into this function (param 2?) for the template path.
+            // $blockinfo itself is passed to the outer template
+            // Attempt to render this block template data.
+            try {
+                $boxOutput = xarTpl_renderBlockBox($blockinfo, $data['_bl_box_template']);
+            } catch (Exception $e) {
+                // Set the output of the block in cache
+                if (!empty($cacheKey)) {
+                    xarBlockCache::setCached($cacheKey, '');
+                }
+                if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                    return '';
+                } else {
+                    throw ($e);
+                }
             }
         }
-
         xarLogMessage("xarBlock::render: end $data[module]:$data[type]:$data[name]");
 
         // Set the output of the block in cache

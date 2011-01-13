@@ -21,7 +21,7 @@
  *        string   $args['blockType'] the block type (deprecated)<br/>
  *        string   $args['module'] the module name<br/>
  *        string   $args['type'] the block type
- * @return ID of block type registered (even if already registered)
+ * @return integer ID of block type registered (even if already registered)
  * @return true on success, false on failure
  * @throws DATABASE_ERROR, BAD_PARAM
  */

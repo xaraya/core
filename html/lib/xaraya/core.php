@@ -44,9 +44,9 @@ define('XARCORE_VERSION_REV', $rev);
  * |
  * |- EXCEPTIONS
  * |
- * |- LOG
- * |
  * |- SYSTEMVARS
+ * |
+ * |- LOG
  * |
  * |- DATABASE                     (00000001)
  *    |
@@ -254,6 +254,11 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
         xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );       
         // xarCoreActivateDebugger(XARDBG_INACTIVE);
         
+        /**
+         * Load system variables
+        **/
+        sys::import('xaraya.variables.system');
+        
         /*
          * Start logging subsystem
          */
@@ -261,10 +266,6 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
         sys::import('xaraya.log');
         xarLog_init($systemArgs);
         
-        /**
-         * Load system variables
-        **/
-        sys::import('xaraya.variables.system');
         /**
          * Make sure we can get time for logging
         **/

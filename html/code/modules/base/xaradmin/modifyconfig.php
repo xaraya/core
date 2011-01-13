@@ -12,7 +12,10 @@
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
+ * Modify the configuration settings of this module
+ *
  * Standard GUI function to display and update the configuration settings of the module based on input data.
+ *
  * @author John Robeson
  * @author Greg Allan
  * @return mixed data array for the template display or output display string if invalid data submitted
@@ -90,6 +93,17 @@ function base_admin_modifyconfig()
             $modes[] = array('id' => $item, 'name' => $item);
         $data['modes'] = $modes;
     }
+
+    sys::import('modules.dynamicdata.class.properties.master');
+    $combobox = DataPropertyMaster::getProperty(array('name' => 'combobox'));
+    $combobox->checkInput('logfilename');
+    $data['logfilename'] = !empty($combobox->value) ? $combobox->value : xarSystemVars::get(sys::CONFIG, 'Log.Filename');
+
+    $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
+    $picker->initialization_basedirectory = sys::varpath() . "/logs/";
+    $picker->setExtensions('txt,html');
+    $picker->display_fullname = true;
+    $data['logfiles'] = $picker->getOptions();
 
     switch (strtolower($phase)) {
         case 'modify':
@@ -211,6 +225,12 @@ function base_admin_modifyconfig()
                     xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $localesList);
 
                     xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
+                    break;
+                case 'logging':                    
+                    if (!xarVarFetch('logenabled','int',$logenabled,0,XARVAR_NOT_REQUIRED)) return;
+                    $variables = array('Log.Enabled' => $logenabled, 'Log.Filename' => $data['logfilename']);
+                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
+                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'logging')));
                     break;
                 case 'other':
                     if (!xarVarFetch('loadlegacy',   'checkbox', $loadLegacy,    xarConfigVars::get(null, 'Site.Core.LoadLegacy'), XARVAR_NOT_REQUIRED)) return;

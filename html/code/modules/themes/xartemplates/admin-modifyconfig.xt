@@ -97,7 +97,7 @@
                     <xar:set name="value">
                         <xar:var scope="module" module="themes" name="SiteFooter"/>
                     </xar:set>
-                    <xar:data-input type="textarea" name="footer" cols="80" value="$value"/>
+                    <xar:data-input type="textarea" name="footer" cols="40" rows="3" value="$value"/>
                 </div>
                 #xarVarDelCached('Mod.Variables.themes','SiteFooter')# 
                 <div class="xar-form-input-wrapper">
@@ -147,7 +147,33 @@
                 </div>
             </fieldset>
             <fieldset>
+                <legend>BlockLayout Templating Engine</legend>
+                <div class="xar-form-input-wrapper">
+                    <xar:var name="label">Compress whitespace in the template</xar:var>
+                    <label for="bl_compresswhitespace" title="#$label#" class="xar-form-label">
+                        Compress whitespace:
+                    </label>
+                    <xar:set name="options">
+                        array(
+                            array('id' => 0, 'name' => xarML('No')),
+                            array('id' => 1, 'name' => xarML('Yes')),
+                        )
+                    </xar:set>
+                    <xar:set name="checked"><xar:var scope="config" name="Site.BL.CompressWhitespace"/></xar:set>
+                    <xar:data-input type="radio" name="compresswhitespace" value="$checked" options="$options"/>&#160;
+                    Eliminates all superfluous whitespace from the templates. Multiple spaces, CRs etc. are reduced to a single space.
+                </div>
+            </fieldset>
+            <fieldset>
                 <legend>Template Debugging options</legend>
+                <div class="xar-form-input-wrapper">
+                    <label for="themes_debug_user" class="xar-form-label">                        
+                        Debug user:                        
+                    </label>
+                    <xar:set name="value">xarConfigVars::get(null, 'Site.BL.Debug_User')</xar:set>
+                    <xar:data-input type="userlist" name="themes_debug_user" value="" group_list="Administrators"/>&#160;
+                    The options activated below are visible to this user, who must belong to the Administrators group
+                </div>
                 <xar:if condition="xarConfigVars::get(null,'Site.BL.CacheTemplates')">
                     <div class="xar-form-input-wrapper">
                         <label for="showphpcbit" class="xar-form-label">                            
@@ -187,6 +213,34 @@
                     <xar:data-input type="hidden" name="phase" id="phase" value="update"/>
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                     <xar:var name="label">Update</xar:var>
+                    <xar:button type="submit" label="$label"/>
+                </div>
+            </fieldset>
+        </form>
+        <form action="#xarServer::getCurrentURL()#" method="post">
+            <fieldset>
+                <legend>Flush Caches</legend>
+                <div class="xar-form-input-wrapper">
+                    <xar:var name="label">Remove all the cached templates</xar:var>
+                    <label for="bl_flushcache" title="#$label#" class="xar-form-label">
+                        Flush caches:
+                    </label>
+                    <xar:set name="options">
+                        array(
+                            array('id' => 'templates', 'name' => xarML('Templates')),
+                            array('id' => 'rss', 'name' => xarML('RSS')),
+                            array('id' => 'database', 'name' => xarML('Database')),
+                            // array('id' => 'output', 'name' => xarML('Output')),
+                        )
+                    </xar:set>
+                    <xar:set name="value">xarModVars::get('themes','flushcaches')</xar:set>
+                    <xar:data-input type="checkboxlist" name="flushcaches" value="$value" options="$options"/>&#160;
+                    Removes all cached files, forcing their recompilation
+                </div>
+                <div class="xar-form-input-wrapper-after">
+                    <xar:data-input type="hidden" name="phase" id="phase" value="flush"/>
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <xar:var name="label">Flush</xar:var>
                     <xar:button type="submit" label="$label"/>
                 </div>
             </fieldset>

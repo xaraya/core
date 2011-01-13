@@ -985,7 +985,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Get items one at a time, instead of storing everything in $this->items
      *
-     * @return int
+     * @return integer
      */
     public function getNext(Array $args = array())
     {

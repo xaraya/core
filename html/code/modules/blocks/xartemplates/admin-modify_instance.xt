@@ -202,8 +202,13 @@
 	                                        </label>
 	                                        <div class="xar-form-container-after">
 	                                        <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
+                                            <!-- don't allow outer templates in blockgroups -->
+                                            <xar:if condition="$instance['type'] ne 'blockgroup'">
 	                                            <label for="block_template_outer">Outer:</label>&#160;
 	                                            <input type="text" name="group_templates[#$loop:item.id#][outer]" id="group_templates_#$loop:item.id#_outer" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($loop:item.template_outer)#"/>&#160;
+                                            <xar:else/>
+                                            <input type="hidden" name="group_templates[#$loop:item.id#][outer]" id="group_templates_#$loop:item.id#_outer" value=""/>
+                                            </xar:if>
 	                                            <label for="block_template_inner">Inner:</label>&#160;
 	                                            <input type="text" name="group_templates[#$loop:item.id#][inner]" id="group_templates_#$loop:item.id#_inner" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($loop:item.template_inner)#"/>&#160;
 	                                            <xar:if condition="$group_method eq 'min'">
@@ -234,8 +239,13 @@
 	                                    Instance Template (optional):
 	                                </label>
 	                                <div class="xar-form-container-after">
+                                    <!-- don't allow outer templates in blockgroups -->
+                                    <xar:if condition="$instance['type'] ne 'blockgroup'">
 	                                    <label for="block_template_outer">Outer:</label>&#160;
 	                                    <input type="text" name="block_template_outer" id="block_template_outer" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($instance['template_outer'])#"/>&#160;
+                                    <xar:else/>
+                                    <input type="hidden" name="block_template_outer" id="block_template_outer" value=""/>
+                                    </xar:if>
 	                                    <label for="block_template_inner">Inner:</label>&#160;
 	                                    <input type="text" name="block_template_inner" id="block_template_inner" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($instance['template_inner'])#"/>
 	                                </div>

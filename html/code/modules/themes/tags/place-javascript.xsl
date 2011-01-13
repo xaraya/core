@@ -10,9 +10,8 @@
 
 <xsl:template match="xar:place-javascript">
   <xsl:processing-instruction name="php">
-    <xsl:text>echo trim(xarTplModule('base','javascript','render',array('javascript'=&gt;xarTplGetJavaScript('</xsl:text>
-    <xsl:value-of select="@position"/>
-    <xsl:text>'),'position'=&gt;'</xsl:text>
+    <xsl:text>echo trim(xarMod::apiFunc('themes','user','renderjs', array(</xsl:text>
+    <xsl:text>'position'=&gt;'</xsl:text>
     <xsl:value-of select="@position"/>
     <xsl:text>','type'=&gt;'</xsl:text>
     <xsl:value-of select="@type"/>

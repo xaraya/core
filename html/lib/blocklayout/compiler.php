@@ -20,20 +20,6 @@
  * @todo  This is still the architecture of BL1, just stripped. We can do a lot better.
  */
 
-/* This one exception depends on BL being inside Xaraya, try to correct this later */
-if (!class_exists('xarExceptions')) {
-    sys::import('xaraya.exceptions');
-}
-/**
- * Exceptions raised by this subsystem
- *
- * @package compiler
- */
-class BLCompilerException extends xarExceptions
-{
-    protected $message = "Cannot open template file '#(1)'";
-}
-
 /**
  *  Interface definition for the blocklayout compiler, these are the things
  *  it offers, no more, no less
@@ -61,6 +47,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
     private $lastFile        = null;
     private $processor       = null;
     
+    protected $compresswhitespace = 1;
 
     /**
      * Private constructor, since this is a Singleton
@@ -89,7 +76,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         $this->lastFile = $fileName;
         // The @ makes the code better to handle, leave it.
         if (!($fp = @fopen($fileName, 'r'))) {
-            throw new BLCompilerException($fileName);
+            throw new Exception("Cannot open template file '" . $fileName . "'");
         }
 
         if ($fsize = filesize($fileName)) {
@@ -100,12 +87,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
                 $templateSource .= fread($fp, 4096);
             }
         }
-
         fclose($fp);
-        if (!function_exists('xarLogMessage')) {
-            sys::import('xaraya.log');
-        }
-        xarLogMessage("BL: compiling $fileName");
 
         $res = $this->compile($templateSource);
         return $res;
@@ -170,6 +152,9 @@ class xarBLCompiler extends Object implements IxarBLCompiler
             }
         } catch (Exception $e) {}        
         
+        // Compress excess whitespace
+        $xslProc->setParameter('', 'compresswhitespace', $this->compresswhitespace);        
+        
         // Compile the compiler
         $outDoc = $xslProc->transformToXML($doc);
         return $outDoc;
@@ -185,10 +170,10 @@ class xarBLCompiler extends Object implements IxarBLCompiler
             $this->processor->importStyleSheet($xslDoc);
         }
 
-        // This is confusing, dont do this here.
+        // This is confusing, don't do this here.
         $this->processor->xmlFile = $this->lastFile;
         
-        // This generates php code, the documentree is not visible here anymore
+        // This generates php code, the document tree is not visible here anymore
         $outDoc = $this->processor->transform($templateSource);
         return $outDoc;
     }

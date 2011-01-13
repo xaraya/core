@@ -704,8 +704,9 @@ function xarMLS__mkdirr($path)
 /**
  * Check directory writability and create directory if it doesn't exist
  *
- * 
- * @return boolean true
+ * @author Volodymyr Metenchuk <voll@xaraya.com>
+ * @access protected
+ * @return bool true
  */
 function xarMLS__iswritable($directory=NULL)
 {

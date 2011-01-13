@@ -15,7 +15,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
  * @param int $itemid whether
- * @return id representing the role's primary parent group
+ * @return integer id representing the role's primary parent group
  */
 function roles_userapi_getprimaryparent(Array $args=array())
 {
