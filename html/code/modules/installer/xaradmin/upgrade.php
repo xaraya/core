@@ -20,7 +20,6 @@ function installer_admin_upgrade()
         $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);
         $data['upgradable'] = xarVersion::compare($fileversion, '2.0.0') > 0;
     }
-    
     // Core modules
     $data['coremodules'] = array(
                                 42    => 'authsystem',
