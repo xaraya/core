@@ -96,11 +96,9 @@ class xarJS extends Object
                     foreach ($files as $file) {
                         $filePath = $this->findfile(array('filename' => trim($file), 'module' => $module));
                         if (empty($filePath)) continue;
-                        // Read the file.
-                        $fp = fopen($filePath, 'rb');
-                        if (!$fp) continue;
-                        $code = fread($fp, filesize($filePath));
-                        fclose($fp);
+                        // get file contents
+                        $code = file_get_contents($filePath);
+                        if (!$code) continue;
                         // Use a hash index to prevent the same JS code fragment
                         // from being included more than once.
                         if (empty($index)) {
