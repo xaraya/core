@@ -61,7 +61,7 @@
  *         string $args[module] module for module|block scope, optional, default current module<br/>
  *         string $args[property] property required for property scope 
  * @throws none
- * @return string the templated css to render
+ * @return boolean true on success
  */
 
 function themes_userapi_register(Array $args=array())
