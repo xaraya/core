@@ -1,5 +1,8 @@
-@import url(tabs.css);
-
+/*  [Xaraya core xhtml1 strict css] - html/themes/common/style/xarcore-xhtml1-strict.css
+    <xar:style scope="theme" file="xarcore-xhtml1-strict"/>
+    Place core xhtml1 strict css for all themes here
+        Over-ride per theme by copying file to html/themes/themename/style/xarcore-xhtml1-strict.css
+ ----[/comment]  */
 /* explicit removal of default or inherited borders */
 .xar-noborder { border: 0 none; }
 
@@ -76,7 +79,7 @@
 .xar-clearnone { clear: none; }
 
 /* this class will magically fix floated elements that "bleed" out of their parents
-most common usage is on a <br /> as the last child of the parent.  Only exists 
+most common usage is on a <br /> as the last child of the parent.  Only exists
 because ie6 and below doesn't support :last-child and :after pseudo-classes */
 .xar-clearall { clear:both; content: '.'; font-size: 0; display: block; height: 0; visibility: hidden; }
 

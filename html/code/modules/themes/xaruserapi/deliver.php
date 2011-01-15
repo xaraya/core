@@ -14,15 +14,21 @@
  * Handle css tag
  *
  * @author andyv <andyv@xaraya.com>
+ * @author Chris Powis <crisp@xaraya.com>
  * @param array    $args array of optional parameters<br/>
  * @return string output display string
  */
 function themes_userapi_deliver(Array $args=array())
 {
     sys::import('modules.themes.class.xarcss');
+    $css = xarCSS::getInstance();
+    return $css->render($args);
+    /*
+    sys::import('modules.themes.class.xarcssold');
     $obj = new xarCSS($args);
     $styles = $obj->run_output();
-    return xarTplModule('themes','user','additionalstyles',$styles);
+    return xarTplModule('themes','user','additionalstyles',$styles).$css->render($args);;
+    */
 }
 
 ?>

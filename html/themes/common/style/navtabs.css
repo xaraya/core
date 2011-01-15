@@ -1,3 +1,8 @@
+/* [Xaraya common navtabs css] - html/themes/common/style/navtabs.css
+    <xar:style scope="theme" file="navtabs"/>
+    Place common navtabs css for all themes here
+        Over-ride per theme by copying file to html/themes/themename/style/navtabs.css
+ ----[/comment]  */
 /* system-wide navigation tabs nicely wrappable and made out of a list */
 dl.xar-tabs {
     margin: 0 0 .5em 0;

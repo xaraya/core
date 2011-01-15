@@ -13,6 +13,7 @@
             <link rel='icon' href="favicon.ico"/>
             <xar:style scope="common"/>
             <xar:style scope="theme" file="style" title="Xaraya Default Stylesheet"/>
+            <xar:style scope="theme" file="admin" title="Xaraya Default Admin Stylesheet"/>
             <xar:place-css />
             <xar:place-javascript position="head"/>
         </head>

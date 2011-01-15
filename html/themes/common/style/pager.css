@@ -1,10 +1,15 @@
+/* [Xaraya common pager css] - html/themes/common/style/pager.css
+    <xar:style scope="theme" file="pager"/>
+    Place common pager css for all themes here
+        Over-ride per theme by copying file to html/themes/themename/style/pager.css
+ ----[/comment]  */
 /* pager layout */
 div.xar-pager {
 
 }
 div.xar-pager span {
     white-space: nowrap;
-	display: inline-block;
+    display: inline-block;
     margin: 0 1px 0 1px !important;
 }
 div.xar-pager span.xar-norm-outline,
@@ -23,7 +28,7 @@ div.xar-pager span.xar-page-current {
 }
 div.xar-pager span.xar-page a {
     white-space: nowrap !important;
-	text-decoration: none;
+    text-decoration: none;
     padding: .1em 3px .1em 3px !important;
-	display: block;
+    display: block;
 }

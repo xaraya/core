@@ -1,3 +1,8 @@
+/* [Xaraya common tabs css] - html/themes/common/style/tabs.css
+    <xar:style scope="theme" file="tabs"/>
+    Place common tabs css for all themes here
+        Over-ride per theme by copying file to html/themes/themename/style/tabs.css
+ ----[/comment]  */
 /* tabs */
 ul.xar-tabs {
     list-style: none !important;
