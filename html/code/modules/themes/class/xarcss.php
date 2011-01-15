@@ -149,6 +149,8 @@ class xarCSS extends Object
                     $module = xarMod::getName();
                 // handle legacy calls to base module for core styles                
                 if ($module == 'base') {
+                    // look in themes/theme/style
+                    // @checkme: limit to navtabs, tabs, pager, tree, xarcore-xhtml1-strict ?
                     $scope = 'theme';
                     $base = 'style';
                 } else {
