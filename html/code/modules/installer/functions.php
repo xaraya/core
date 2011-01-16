@@ -1,6 +1,7 @@
 <?php
 /**
  * Call an installer function
+ *
  * @package modules
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
