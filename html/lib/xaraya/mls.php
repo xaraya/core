@@ -362,6 +362,7 @@ function xarMLS_userOffset($timestamp = null)
 /**
  * Sets current locale
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @param locale site locale
  */
@@ -443,6 +444,7 @@ function xarMLS_setCurrentLocale($locale)
 /**
  * Loads translations for the specified context
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @access protected
  * @return bool
  */
@@ -499,6 +501,7 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
  * Load relevant translations for a specified relatvive path (be it file or directory)
  *
  * @return bool true on success, false on failure
+ * @author Marcel van der Boom <mrb@hsdev.com>
  * @todo slowly add more intelligence for more scopes. (core, version, init?)
  * @todo static hash on path to prevent double loading?
  * @todo is directory support needed? i.e. modules/base/ load all for base module? or how does this work?
@@ -523,7 +526,7 @@ function xarMLSLoadTranslations($path)
 
     // Determine dnType
     // Lets get core files out of the way
-    if($pathElements[0] == 'includes') return xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
+    if($pathElements[0] == 'lib') return xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
 
     // modules have a fixed place, so if it's not 'modules/blah/blah' it's themes, period.
     // NOTE: $pathElements changes here!
@@ -610,6 +613,7 @@ function xarMLS__bindVariables($string, $args)
  * Gets a list of alternatives for a certain locale.
  * The first alternative is the locale itself
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @return array alternative locales
  */
 function xarMLS__getLocaleAlternatives($locale)
@@ -628,6 +632,7 @@ function xarMLS__getLocaleAlternatives($locale)
  * Parses a locale string into an associative array composed of
  * lang, country, specializer and charset keys
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @return array parsed locale
  */
 function xarMLS__parseLocaleString($locale)
@@ -651,6 +656,7 @@ function xarMLS__parseLocaleString($locale)
  * Gets the single byte charset most typically used in the Web for the
  * requested language
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @return string the charset
  * @todo   Dont hardcode this
  */
@@ -678,11 +684,10 @@ function xarMLS__getSingleByteCharset($langISO2Code)
 }
 
 
-
-
 /**
  * Create directories tree
  *
+ * @author Volodymyr Metenchuk <voll@xaraya.com>
  * @access protected
  * @return bool true
  */
@@ -712,6 +717,7 @@ function xarMLS__mkdirr($path)
 /**
  * Check directory writability and create directory if it doesn't exist
  *
+ * @author Volodymyr Metenchuk <voll@xaraya.com>
  * @access protected
  * @return bool true
  */
