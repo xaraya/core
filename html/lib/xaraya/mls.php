@@ -100,6 +100,7 @@ function xarMLS_init(&$args)
  * Gets the current MLS mode
  *
  * @access public
+ * @author Marco Canini <marco@xaraya.com>
  * @return integer MLS Mode
  */
 function xarMLSGetMode()
@@ -111,6 +112,7 @@ function xarMLSGetMode()
  * Returns the site locale if running in SINGLE mode,
  * returns the site default locale if running in BOXED or UNBOXED mode
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the site locale
  * @todo   check
@@ -120,6 +122,7 @@ function xarMLSGetSiteLocale() { return $GLOBALS['xarMLS_defaultLocale']; }
 /**
  * Returns an array of locales available in the site
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return array of locales
  * @todo   check
@@ -137,6 +140,7 @@ function xarMLSListSiteLocales()
 /**
  * Gets the current locale
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string current locale
  */
@@ -145,6 +149,7 @@ function xarMLSGetCurrentLocale() { return $GLOBALS['xarMLS_currentLocale']; }
 /**
  * Gets the charset component from a locale
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the charset name
  * @throws BAD_PARAM
@@ -160,6 +165,7 @@ function xarMLSGetCharsetFromLocale($locale)
 /**
  * Translates a string
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string the translated string, or the original string if no translation is available
  */
@@ -205,6 +211,7 @@ function xarML($rawstring/*, ...*/)
 /**
  * Return the translation associated to passed key
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @throws BadParameterException
  * @return string the translation string, or the key if no translation is available
@@ -241,6 +248,7 @@ function xarMLByKey($key/*, ...*/)
  * Gets the locale info for the specified locale string.
  * Info is an array composed by the 'lang', 'country', 'specializer' and 'charset' items.
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return array locale info
  */
@@ -250,6 +258,7 @@ function xarLocaleGetInfo($locale) { return xarMLS__parseLocaleString($locale); 
  * Gets the locale string for the specified locale info.
  * Info is an array composed by the 'lang', 'country', 'specializer' and 'charset' items.
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @throws BadParameterException
  * @return string locale string
@@ -286,6 +295,7 @@ function xarLocaleGetString($localeInfo)
  * Filter criteria are set as item of $filter parameter, they can be one or more of the following:
  * lang, country, specializer, charset.
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return array locale list
  */
@@ -309,6 +319,7 @@ function xarLocaleGetList($filter=array())
  *  make adjustments for timezone and should be used in gmstrftime
  *  or gmdate functions only.
  *
+ *  @author Roger Raymond <roger@asphyxia.com>
  *  @access protected
  *  @return int unix timestamp.
  */
@@ -326,6 +337,7 @@ function xarMLS_userTime($time=null,$flag=1)
 /**
  *  Returns the user's current tz offset (+ daylight saving) in hours
  *
+ *  @author Roger Raymond <roger@asphyxia.com>
  *  @access protected
  *  @param int $timestamp optional unix timestamp that we want to get the offset for
  *  @return float tz offset + possible daylight saving adjustment
