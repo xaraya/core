@@ -24,4 +24,3 @@ function setDisplayOff(id)
         document.getElementById(id).style.display = 'none';
     }
 }
-
