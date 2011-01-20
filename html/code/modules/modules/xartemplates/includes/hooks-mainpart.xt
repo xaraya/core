@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:javascript module="base" filename="toggle.js"/>
+    <xar:javascript scope="theme" filename="toggle.js"/>
     <xar:var name="toggletitle">Click to toggle display of available hooks for this module.</xar:var>
     <xar:if condition="empty($observers[$curhook])">
             <xar:var name="label">Click to toggle details display.</xar:var>
