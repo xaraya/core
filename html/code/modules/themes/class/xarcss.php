@@ -218,7 +218,7 @@ class xarCSS extends xarThemes
  * @param string  $scope the scope of the file (common, theme, module, block, property)
  * @param string  $method the method to use (link, import, embed)
  * @param string  $url source, either code to embed or url of file to link or import  
- * @param string  $data tag data to cache
+ * @param array   $data tag data to cache
  * @return boolean true on success
  * @todo make private once xarTpl functions are deprecated
 **/
