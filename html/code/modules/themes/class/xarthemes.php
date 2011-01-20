@@ -1,8 +1,44 @@
 <?php
+/**
+ * Xaraya Themes class library
+ *
+ * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/70.html
+**/
+
+/**
+ * Base Themes class
+**/
 class xarThemes extends Object
 {
     const COMMON = 'common'; // themes/common
 
+/**
+ * Find file function
+ *
+ * Returns the full URL or relative path from webroot to a file
+ * obeying standard template cascade paths
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access public
+ * @param  string  $scope the scope in which to look for files, required
+ * @param  string  $filename the name of the file to look for, required
+ * @param  string  $base optional sub folder to look in
+ * @param  string  $package the name of the theme, module or property to look in<br/>
+ *                 Optional in theme scope, default ""<br/>
+ *                 Optional in module scope, default current module<br/>
+ *                 Optional in block scope, default current block module<br/>
+ *                 Required in property scope
+ * @param  boolean $rel optionally return relative path from web root, default false
+ * @return string path to file if found, empty otherwise
+ * @throws none
+**/
     public function findFile($scope, $filename, $base='', $package='', $rel=false)
     {
         if (empty($scope) || empty($filename)) return;
@@ -14,7 +50,7 @@ class xarThemes extends Object
         $baseUrl = xarServer::getBaseURL();
         $commonDir = is_dir($themesDir.'/'.xarThemes::COMMON) ? $themesDir.'/'.xarThemes::COMMON : 'themes/'.xarThemes::COMMON;
 
-        // set path part relative to common paths
+        // set path part relative to common cascade paths
         $relpath = !empty($base) ? $base . '/' . $filename : $filename;
         
         $paths = array();
@@ -37,7 +73,8 @@ class xarThemes extends Object
                 $package = $modInfo['osdirectory'];
                 $paths[] = $themeDir . '/modules/' . $package . '/' . $relpath;
                 $paths[] = $commonDir . '/modules/' . $package . '/' . $relpath;
-                $paths[] = $codeDir . 'modules/' . $package . '/xartemplates/' . $relpath; 
+                $paths[] = $codeDir . 'modules/' . $package . '/xartemplates/' . $relpath;
+                break; 
             case 'property':
                 if (empty($package)) return;
                 $paths[] = $themeDir . '/properties/' . $package . '/' . $relpath;
