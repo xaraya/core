@@ -9,7 +9,7 @@
     <div class="xar-mod-page-head">
         <img src="#xarTplGetImage('blocks.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
-        <xar:style scope="module" module="base" file="navtabs"/>
+        <xar:style scope="theme" file="navtabs"/>
         <div>
             <ul class="xar-tabs xar-alt xar-norm-outline">
                 <li class="xar-tabs-label help" title="#xarML('Choose an action to perform')#">Overview:</li>

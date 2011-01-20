@@ -1,109 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:if condition="!empty($styles) and is_array($styles)">
-    <!-- render styles in pre-defined scope order supplied by tag/class -->
-    <xar:if condition="!empty($scopeorder) and is_array($scopeorder)">
-        <!-- loop through each scope order -->
-        <xar:foreach in="$scopeorder" value="$component">
-            <!-- scope has methods -->
-            <xar:if condition="isset($styles[$component])">
-                <!-- loop through scope methods -->
-                <xar:foreach in="$styles[$component]" key="$method" value="$sources">
-                    <xar:if condition="empty($sources)"><xar:continue/></xar:if>
-                        <xar:if condition="$comments">
-    <xar:comment> the following styles were supplied from #$component# scope </xar:comment>
-    <xar:comment> #$method# style </xar:comment></xar:if>                    
-                    <!-- loop through scope method items -->
-                    <xar:foreach in="$sources" value="$style">
-                        <!-- link method -->
-                        <xar:if condition="$method eq 'link'">
-                            <xar:if condition="!empty($style['title'])">
-                                <xar:if condition="$style['condition'] ne ''">
-    <xar:comment iecondition="#$style['condition']#"><link rel="#$style['rel']#" type="#$style['type']#" href="#$style['url']#" media="#$style['media']#" title="#$style['title']#"/></xar:comment>
-                                <xar:else/>
-    <link rel="#$style['rel']#" type="#$style['type']#" href="#$style['url']#" media="#$style['media']#" title="#$style['title']#"/>
-                                </xar:if>
-                            <xar:else/>
-                                <xar:if condition="$style['condition'] ne ''">
-    <xar:comment iecondition="#$style['condition']#"><link rel="#$style['rel']#" type="#$style['type']#" href="#$style['url']#" media="#$style['media']#"/></xar:comment>
-                                <xar:else/>
-    <link rel="#$style['rel']#" type="#$style['type']#" href="#$style['url']#" media="#$style['media']#"/>
-                                </xar:if>
-                            </xar:if>
-                        <!-- import method -->
-                        <xar:elseif condition="$method eq 'import'"/>
-                            <xar:if condition="$style['condition'] ne ''">
-    <xar:comment iecondition="#$style['condition']#"><style type="#$style['type']#" media="#$style['media']#">@import url(#$style['url']#); #$style['media']#;</style></xar:comment>
-                            <xar:else/>
+    <xar:foreach in="$styles" value="$methods">
+        <!-- Begin methods -->
+        <xar:foreach in="$methods" value="$scopes">
+            <xar:if condition="empty($scopes)"><xar:continue/></xar:if>
+            <!-- Begin scopes -->             
+            <xar:foreach in="$scopes" value="$style">
+                <xar:if condition="empty($style)"><xar:continue/></xar:if>
+
+                    <xar:if condition="!empty($comments)">
+    <xar:comment> The following styles were supplied from #$style['method']# method #$style['scope']# scope </xar:comment>
+                    </xar:if>
+                    <!-- Import method -->
+                    <xar:if condition="$style['method'] eq 'import'">
+                        <xar:if condition="$style['condition'] ne ''">
+    <xar:comment iecondition="#$style['condition']#"><style type="#$style['type']#" media="#$style['media']#">@import url("#$style['url']#"); #$style['media']#;</style></xar:comment>
+                        <xar:else/>
     <style type="#$style['type']#" media="#$style['media']#">@import url(#$style['url']#); #$style['media']#;</style>
-                            </xar:if>
-                        <!-- embed method -->
-                        <xar:elseif condition="$method eq 'embed'"/>
-                            <xar:if condition="$style['condition'] ne ''">
-    <xar:comment iecondition="#$style['condition']#"><style type="#$style['type']#" media="#$style['media']#">#$style['source']#</style></xar:comment>
-                            <xar:else/>
-    <style type="#$style['type']#" media="#$style['media']#">#$style['source']#</style>
-                            </xar:if>>
                         </xar:if>
-                    </xar:foreach>
-                </xar:foreach>
-            </xar:if>
-        </xar:foreach>
-    <xar:else/>
-        <!-- loop through scopes -->
-        <xar:foreach in="$styles" key="$scope" value="$components">
-                <!-- loop through scope methods -->
-                <xar:foreach in="$components" key="$method" value="$sources">
-                    <xar:if condition="empty($sources)"><xar:continue/></xar:if>
-    <xar:if condition="$comments">   
-        <xar:if condition="empty($current) or ($current ne $scope)">
-            <xar:set name="current">$scope</xar:set>
-    <xar:comment> Begin: styles supplied by #$current# scope </xar:comment>
-        </xar:if>
-    </xar:if>
-                    <!-- loop through scope method items -->
-                    <xar:foreach in="$sources" value="$style">
-                        <xar:if condition="$comments">   
-    <xar:comment> Begin: #$method# style </xar:comment></xar:if>
-                        <!-- link method -->
-                        <xar:if condition="$method eq 'link'">
-                        <xar:if condition="$comments">   
-    <xar:comment> Link: #$style['url']# </xar:comment></xar:if>
-                            <xar:if condition="!empty($style['title'])">
-                                <xar:if condition="$style['condition'] ne ''">
-    <xar:comment iecondition="#$style['condition']#"><link rel="#$style['rel']#" type="#$style['type']#" href="#$style['url']#" media="#$style['media']#" title="#$style['title']#"/></xar:comment>
-                                <xar:else/>
-    <link rel="#$style['rel']#" type="#$style['type']#" href="#$style['url']#" media="#$style['media']#" title="#$style['title']#"/>
-                                </xar:if>
-                            <xar:else/>
-                                <xar:if condition="$style['condition'] ne ''">
-    <xar:comment iecondition="#$style['condition']#"><link rel="#$style['rel']#" type="#$style['type']#" href="#$style['url']#" media="#$style['media']#"/></xar:comment>
-                                <xar:else/>
-    <link rel="#$style['rel']#" type="#$style['type']#" href="#$style['url']#" media="#$style['media']#"/>
-                                </xar:if>
-                            </xar:if>
-                        <!-- import method -->
-                        <xar:elseif condition="$method eq 'import'"/>
-                        <xar:if condition="$comments">   
-    <xar:comment> Import: #$style['url']# </xar:comment></xar:if>
+                    <!-- Link method -->
+                    <xar:elseif condition="$style['method'] eq 'link'"/>
+                        <xar:if condition="!empty($style['title'])">
                             <xar:if condition="$style['condition'] ne ''">
-    <xar:comment iecondition="#$style['condition']#"><style type="#$style['type']#" media="#$style['media']#">@import url(#$style['url']#); #$style['media']#;</style></xar:comment>
+<xar:comment iecondition="#$style['condition']#"><link rel="#$style['rel']#" type="#$style['type']#" href="#$style['url']#" media="#$style['media']#" title="#$style['title']#"/></xar:comment>
                             <xar:else/>
-    <style type="#$style['type']#" media="#$style['media']#">@import url(#$style['url']#); #$style['media']#;</style>
+<link rel="#$style['rel']#" type="#$style['type']#" href="#$style['url']#" media="#$style['media']#" title="#$style['title']#"/>
                             </xar:if>
-                        <!-- embed method -->
-                        <xar:elseif condition="$method eq 'embed'"/>
+                        <xar:else/>
                             <xar:if condition="$style['condition'] ne ''">
-    <xar:comment iecondition="#$style['condition']#"><style type="#$style['type']#" media="#$style['media']#">#$style['source']#</style></xar:comment>
+<xar:comment iecondition="#$style['condition']#"><link rel="#$style['rel']#" type="#$style['type']#" href="#$style['url']#" media="#$style['media']#"/></xar:comment>
                             <xar:else/>
-    <style type="#$style['type']#" media="#$style['media']#">#$style['source']#</style>
+<link rel="#$style['rel']#" type="#$style['type']#" href="#$style['url']#" media="#$style['media']#"/>
                             </xar:if>
                         </xar:if>
-                    </xar:foreach>
-                    <xar:if condition="$comments">
-    <xar:comment> End: #$method# style </xar:comment></xar:if>
-                </xar:foreach>
+                    <!-- Embed method -->
+                    <xar:elseif condition="$style['method'] eq 'embed'"/>
+                        <xar:if condition="$style['condition'] ne ''">
+<xar:comment iecondition="#$style['condition']#"><style type="#$style['type']#" media="#$style['media']#">#$style['source']#</style></xar:comment>
+                        <xar:else/>
+<style type="#$style['type']#" media="#$style['media']#">#$style['source']#</style>
+                        </xar:if>
+                    </xar:if>
+                    
+            </xar:foreach>
+            <!-- End scope -->
         </xar:foreach>
-    </xar:if>
-</xar:if>         
+        <!-- End method -->
+    </xar:foreach>
+</xar:if>       
+      
 </xar:template>

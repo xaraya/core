@@ -8,9 +8,8 @@ dtd="xhtml1-strict">
         <head>
             <title>#$tpl:pageTitle#</title>
             <base href="&xar-baseurl;index.php"/>
-            <style type="text/css">@import url(&xar-baseurl;#xarTplGetThemeDir()#/style/style.css);</style>
-            <xar:style scope="module" module="base" file="xarcore-xhtml1-strict"/>
-            <xar:style scope="module" module="base" file="tabs"/>
+            <xar:style scope="common"/>
+            <xar:style scope="theme" method="import" file="style"/>
             <xar:place-css />
         </head>
         <body>
