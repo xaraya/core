@@ -350,7 +350,7 @@ function xarMLS_userOffset($timestamp = null)
     if (xarUserIsLoggedIn()) {
         $usertz = xarModItemVars::get('roles','usertimezone',xarSession::getVar('role_id'));
     } else {
-        $usertz = xarModVars::get('roles','usertimezone');
+        $usertz = xarConfigVars::get(null, 'Site.Core.TimeZone');
     }
     $useroffset = $datetime->getTZOffset($usertz);
 
