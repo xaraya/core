@@ -76,8 +76,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         }*/
                 
         /* General sequence:
-         * 2. Run the datastore's getItem method
-         * 3. Assign the itemid to properties using the virtual datastore
+         * 1. Run the datastore's getItem method
          *
          * This may need to be adjusted in the future
          */
@@ -85,21 +84,6 @@ class DataObject extends DataObjectMaster implements iDataObject
         $itemid = $this->datastore->getItem($args);
 
         if(!empty($args['fieldlist'])) $this->setFieldList($fields);
-
-        foreach ($this->getFieldList() as $fieldname) {
-            if (empty($this->properties[$fieldname]->source)) {
-                $this->properties[$fieldname]->value = $this->itemid;
-				if (method_exists($this->properties[$fieldname],'getitem')) {
-//					$this->properties[$fieldname]->getItem($this->itemid);
-				}
-            }
-        }
-
-/*        // only worry about finding something in primary datastore (if any)
-        if(empty($itemid) && !empty($primarystore) && $primarystore == $this->datastore) {
-            return;
-        }
-        */
 
         // Turn the values retrieved into proper PHP values
         foreach($this->properties as $property) {
@@ -459,7 +443,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function createItem(Array $args = array())
     {
-        // The id of the item^to be created is
+        //  The id of the item to be created is
         //  1. An itemid arg passed
         //  2. An id arg passed ot the primary index
         //  3. 0

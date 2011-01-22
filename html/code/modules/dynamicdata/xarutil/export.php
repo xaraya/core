@@ -100,7 +100,7 @@ function dynamicdata_util_export(Array $args=array())
         $mylist = DataObjectMaster::getObjectList(array('objectid' => $objectid,
                                                 'moduleid' => $moduleid,
                                                 'itemtype' => $itemtype));
-        $mylist->getItems();
+        $mylist->getItems(array('getvirtuals' => 1));
 
         if (empty($tofile)) {
             $xml .= "<items>\n";

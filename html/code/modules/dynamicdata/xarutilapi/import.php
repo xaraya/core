@@ -228,14 +228,14 @@ function dynamicdata_utilapi_import(Array $args=array())
         $count = count($xmlobject->children());
 
         // pass on a generic value so that the class(es) will know where we are
-        $args['import'] = true;
+        $args['dd_import'] = true;
 
         foreach($xmlobject->children() as $child) {
 
             // pass on some generic values so that the class(es) will know where we are
-            if ($index == 1) $args['position'] = 'first';
-            elseif ($index == $count) $args['position'] = 'last';
-            else $args['position'] = '';
+            if ($index == 1) $args['dd_position'] = 'first';
+            elseif ($index == $count) $args['dd_position'] = 'last';
+            else $args['dd_position'] = '';
 
             $thisname = $child->getName();
             $args['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
