@@ -60,17 +60,6 @@ function xarThemeGetInfo($regId) { return xarMod::getInfo($regId, $type = 'theme
  */
 function xarThemeIsAvailable($themeName) { return xarMod::isAvailable($themeName, $type = 'theme'); }
 
-function xarThemeGetConfigVar($themeName, $var) { 
-    try {
-        $themeBaseInfo = xarMod::getBaseInfo($themeName, 'theme');
-        $varvalue = $themeBaseInfo['configuration'][$var];
-        return $varvalue;
-    } catch (Exception $e) {
-        return null;
-    }
-    return xarMod::isAvailable($themeName, $type = 'theme'); 
-}
-
 // PROTECTED FUNCTIONS
 
 /**
