@@ -10,6 +10,7 @@
                 <tr>
                     <th>Option</th>
                     <th>Value</th>
+                    <th>Description</th>
                     <th>Variable Name</th>
                     <th>Applies to</th>
                 </tr>
@@ -26,6 +27,7 @@
                         <td>
                             <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']"/>
                         </td>
+                        <td>#$init['description']#</td>
                         <td>#$key#</td>
                         <td>
                             <xar:if condition="$init['applies'] eq 1">
