@@ -122,7 +122,6 @@ class ThemeConfigurationProperty extends TextBoxProperty
                 $allconfigproperties[$row['name']] = $row;
             }
             
-            $allconfigproperties = array();
             sys::import('modules.themes.class.configurations');
             $config = new Configurations();
             $info = xarMod::getInfo($this->theme_id,'theme');
@@ -143,7 +142,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
             $activeoptions = array_keys($config->configurations);
             foreach ($q->output() as $row) {
                 if (in_array($row['name'],$activeoptions)) {
-                    $row['applies'] = 'specific';
+                    $row['applies'] = 'common';
                     $allconfigproperties[$row['name']] = $row;
                 }
             }
