@@ -37,7 +37,7 @@ class Configurations extends Object
 
         $checked_files = array();
         foreach ($items as $item) {
-            $basedir = 'themes/' . $item['name'];
+            $basedir = 'themes/' . $item['directory'];
             $files = $this->get_theme_files($basedir,'xt');
             foreach ($files as $file) {
                 $this->parse_theme_template($file,$pattern);

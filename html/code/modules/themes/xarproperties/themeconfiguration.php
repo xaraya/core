@@ -127,7 +127,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
             $info = xarMod::getInfo($this->theme_id,'theme');
             
             // Get the theme specific options being used in the theme
-            $config->parseTheme($this->theme_id,"/xarThemeVars::get\(\W*[\'\"]" . $info['displayname'] . "[\'\"]\W*,\W*[\'\"](.+)[\'\"]\W*\)/");
+            $config->parseTheme($this->theme_id,"/xarThemeVars::get\(\W*[\'\"]" . $info['name'] . "[\'\"]\W*,\W*[\'\"](.+)[\'\"]\W*\)/");
             $activeoptions = array_keys($config->configurations);
             foreach ($allconfigurations as $key => $row) {
                 if (in_array($key,$activeoptions)) {
