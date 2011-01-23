@@ -92,7 +92,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
             }
         }
         // Now match the parsed configurationproperties to those defined in the theme
-        $properties = $this->getThemeConfigProperties(1);
+        $properties = $this->getThemeConfigurations();
         $this->configuration = array();
         foreach ($properties as $name => $configarg) {
             if (isset($fields[$name])) {
@@ -103,11 +103,11 @@ class ThemeConfigurationProperty extends TextBoxProperty
             $this->configuration[$name] = $configarg;
         }
     }
-    public function getThemeConfigProperties($fullname=0)
+    public function getThemeConfigurations()
     {
         // cache configuration for all properties
         if (xarCoreCache::isCached('Themes','Configurations')) {
-             $allconfigproperties = xarCoreCache::getCached('Themes','Configurations');
+             $allconfigurations = xarCoreCache::getCached('Themes','Configurations');
         } else {
             sys::import('xaraya.structures.query');
             xarMod::load('themes');
@@ -117,9 +117,9 @@ class ThemeConfigurationProperty extends TextBoxProperty
             $c[] = $q->peq('theme_id',0);
             $q->qor($c);
             $q->run();
-            $result = $q->output();
             foreach ($q->output() as $row){
-                $allconfigproperties[$row['name']] = $row;
+                $row['applies'] = 0;
+                $allconfigurations[$row['name']] = $row;
             }
             
             sys::import('modules.themes.class.configurations');
@@ -127,29 +127,26 @@ class ThemeConfigurationProperty extends TextBoxProperty
             $info = xarMod::getInfo($this->theme_id,'theme');
             
             // Get the theme specific options
-            $config->parseTheme($this->theme_id,"/xarConfigGetVar\(\W*[\'\"]" . $info['displayname'] . "[\'\"]\W*,\W*[\'\"](.+)[\'\"]\W*\)/");
+            $config->parseTheme($this->theme_id,"/xarThemeVars::get\(\W*[\'\"]" . $info['displayname'] . "[\'\"]\W*,\W*[\'\"](.+)[\'\"]\W*\)/");
             $activeoptions = array_keys($config->configurations);
-            foreach ($q->output() as $row) {
-                if (in_array($row['name'],$activeoptions)) {
-                    $row['applies'] = 'specific';
-                    $allconfigproperties[$row['name']] = $row;
+            foreach ($allconfigurations as $key => $row) {
+                if (in_array($key,$activeoptions)) {
+                    $allconfigurations[$key]['applies'] = 2;
                 }
             }
             $configoptions['specific'] = $config->configurations;
-//            var_dump($config->configurations);
             $commonlabel = "common";
-            $config->parseTheme($this->theme_id,"/xarConfigGetVar\(\W*[\'\"]" . $commonlabel . "[\'\"]\W*,\W*[\'\"](.+)[\'\"]\W*\)/");
+            $config->parseTheme($this->theme_id,"/xarThemeVars::get\(\W*[\'\"]" . $commonlabel . "[\'\"]\W*,\W*[\'\"](.+)[\'\"]\W*\)/");
             $activeoptions = array_keys($config->configurations);
-            foreach ($q->output() as $row) {
-                if (in_array($row['name'],$activeoptions)) {
-                    $row['applies'] = 'common';
-                    $allconfigproperties[$row['name']] = $row;
+            foreach ($allconfigurations as $key => $row) {
+                if (in_array($key,$activeoptions)) {
+                    $allconfigurations[$key]['applies'] = 1;
                 }
             }
 
-            xarCoreCache::setCached('Themes','Configurations', $allconfigproperties);
+            xarCoreCache::setCached('Themes','Configurations', $allconfigurations);
         }
-        return $allconfigproperties;
+        return $allconfigurations;
     }
 }
 ?>
