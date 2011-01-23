@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:style scope="module" module="base" file="navtabs"/>
+    <xar:style scope="theme" file="navtabs"/>
     <xar:set name="dummy">xarVarFetch('tab', 'pre:trim:lower:str:1:', $tab, '', XARVAR_NOT_REQUIRED)</xar:set>
     <xar:set name="activetab">'xar-tab-active'</xar:set>
     <xar:set name="activelink">'xar-accent xar-accent-outline'</xar:set>

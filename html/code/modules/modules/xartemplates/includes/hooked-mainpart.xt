@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="base" filename="toggle.js"/>
+    <xar:javascript scope="theme" filename="toggle.js"/>
         <h3>Configure modules hooked to #$displayname#</h3>
         <xar:if condition="!empty($observers)">
             <form action="#xarModURL('modules','admin','update')#" method="post" enctype="application/x-www-form-urlencoded">

@@ -3,55 +3,30 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!--  Process only if there is JavaScript present -->
     <xar:if condition="!empty($javascript) and is_array($javascript)">
-        <!-- loop through positions -->
-        <!-- Position order is head, body -->
-        <xar:foreach in="$javascript" key="$pos" value="$types">
-            <!-- If position is specified, skip others -->
-            <xar:if condition="!empty($position) and ($pos ne $position)">
-                <xar:continue/></xar:if>
-                <!--loop through types for this scope -->
-                <!-- Type order for head position is framework, plugin, src, code, event -->
-                <!-- Type order for body position is src, code -->
-                <xar:foreach in="$types" key="$tpe" value="$scripts">
-                    <!-- if type is specified, skip others -->
-                    <xar:if condition="!empty($type) and ($tpe ne $type)">
-                        <xar:continue/></xar:if>
-                    <!-- loop through scripts of this type -->
-                    <xar:foreach in="$scripts" value="$script">
-                        <!-- render js frameworks -->
-                        <xar:if condition="$tpe eq 'framework'">
+        <xar:foreach in="$javascript" value="$positions">
+            <xar:if condition="empty($positions)"><xar:continue/></xar:if>
+            <xar:foreach in="$positions" value="$types">
+                <xar:if condition="empty($types)"><xar:contine/></xar:if>
+                <xar:foreach in="$types" value="$scopes">
+                    <xar:if condition="empty($scopes)"><xar:continue/></xar:if>
+                    <xar:foreach in="$scopes" value="$script">
+                        <xar:if condition="$script['type'] eq 'framework'">
                         
-                        <!-- render framework plugins -->
-                        <xar:elseif condition="$tpe eq 'plugin'"/>
-                                                
-                        <!-- render script sources -->
-                        <xar:elseif condition="$tpe eq 'src'"/>
-                            <xar:if condition="!empty($script['url'])">
-                                <xar:if condition="$comments">
-    <xar:comment> javascript: position=#$pos#, type=#$tpe#, filename=#$script['filename']# </xar:comment>
-    <xar:comment> Include src file #$script['url']# </xar:comment>
-                                </xar:if>
-    <script type="text/javascript" src="#$script['url']#">&#160;</script> 
-                            </xar:if>                       
-                        <!-- render code snippets -->
-                        <xar:elseif condition="$tpe eq 'code'"/>
-                            <xar:if condition="!empty($script['code'])">
-                                <xar:if condition="$comments">
-    <xar:comment> javascript: position=#$pos#, type=#$tpe# </xar:comment>
-                                <xar:if condition="!empty($script['url'])">
-    <xar:comment> Include code from file #$script['url']# </xar:comment>
-                                </xar:if>
-                            </xar:if>
+                        <xar:elseif condition="$script['type'] eq 'plugin'"/>
+                        
+                        <xar:elseif condition="$script['type'] eq 'src'"/>
+    <script type="text/javascript" src="#$script['url']#">&#160;
+    </script>                        
+                        <xar:elseif condition="$script['type'] eq 'code'"/>
     <script type="text/javascript">
         #$script['code']#
-    </script>
-                            </xar:if>
-                        <!-- render framework events -->
-                        <xar:elseif condition="$tpe == 'event'"/>
+    </script>                        
+                        <xar:elseif condition="$script['type'] eq 'event'"/>
                         
                         </xar:if>
                     </xar:foreach>
                 </xar:foreach>
+            </xar:foreach>
         </xar:foreach>
     </xar:if>
 </xar:template>

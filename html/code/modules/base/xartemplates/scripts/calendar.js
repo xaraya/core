@@ -27,7 +27,7 @@ var calendars = [];
 var RE_NUM = /^\-?\d+$/;
 
 // URL of the calendar.html file
-var STR_HTMLPATH = 'code/modules/base/xartemplates/includes/';
+var STR_HTMLPATH = 'code/modules/base/xartemplates/scripts/';
 
 function xar_base_calendar_init(obj_target, base_url) {
     var testvar = typeof(window[obj_target+"_cal"]);

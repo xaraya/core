@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:style scope="module" module="base" file="tree"/>
-    <xar:javascript module="privileges" filename="xarTree.js"/>
+    <xar:style scope="theme" file="tree"/>
+    <xar:javascript scope="module" module="privileges" filename="xarTree.js"/>
     <script type="text/javascript">
         <!--
         var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");

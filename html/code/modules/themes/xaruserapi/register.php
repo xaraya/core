@@ -69,13 +69,5 @@ function themes_userapi_register(Array $args=array())
     sys::import('modules.themes.class.xarcss');
     $css = xarCSS::getInstance();
     return $css->register($args);
-    /*
-    // keep track of style when we're caching
-    xarCache::addStyle($args);
-    sys::import('modules.themes.class.xarcssold');
-    $obj = new xarCSS($args);
-    return $obj->run_output();
-    */
 }
-
 ?>

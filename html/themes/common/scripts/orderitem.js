@@ -64,7 +64,7 @@ function xar_base_collapse_select(src, dest) {
  *
  * Example:
  * 1. Include this JS file in the page header, usually like this:
- *    <xar:javascript module="base" filename="orderitem.js" position="head"/>
+ *    <xar:javascript scope="theme" filename="orderitem.js" position="head"/>
  * 2. Include inline JS in the header if you want to over-ride the default error message,
  *    e.g. xar_base_reorder_warn = 'You must select the widget to move.';
  * 3. Create a select element for the items you want to allow the user to order, with item ids as

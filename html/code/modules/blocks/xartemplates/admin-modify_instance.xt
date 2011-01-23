@@ -12,7 +12,7 @@
         <form action="#xarModURL('blocks', 'admin', 'update_instance')#" method="post" enctype="application/x-www-form-urlencoded">
 	            <!-- block tabs -->
 	            <xar:if condition="!empty($blocktabs)">
-	                <xar:style scope="module" module="base" file="navtabs"/>
+	                <xar:style scope="theme" file="navtabs"/>
 	                <div>
 	                    <ul class="xar-tabs xar-alt xar-norm-outline">
 	                        <li class="xar-tabs-label help" title="#xarML('Choose an action to perform')#">Actions:</li>
