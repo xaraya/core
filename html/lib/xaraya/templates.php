@@ -525,62 +525,92 @@ class xarTpl extends Object
  * @todo    provide examples, improve description, add functionality
  * @todo    provide XML URL override flag
  * @todo    XML encode absolute URIs too?
- * @todo    <chris/> This function deals only in module images and as such<br/>
- *          is probably better thought of right now as xarMod::getImage(),<br/>
- *          need to expand search paths to include theme and property scope
+ * @todo    <chris/> Rewrite the above and document correct practice/examples elsewhere
 */
-    public static function getImage($modImage, $modName = NULL)
+    public static function getImage($fileName, $scope=NULL, $package=NULL)
     {
         // return absolute URIs and URLs "as is"
-        if (empty($modImage) || substr($modImage,0,1) == '/' || preg_match('/^https?\:\/\//',$modImage)) {
-            return $modImage;
+        if (empty($fileName) || substr($fileName,0,1) == '/' || preg_match('/^https?\:\/\//',$fileName)) {
+            return $fileName;
         }
-
-        // obtain current module name if not specified
-        // FIXME: make a fallback for weird requests
-        // CHECKME: <chris/> what constitutes a 'weird' request !?
-        if(!isset($modName)){
-            list($modName) = xarController::$request->getInfo();
+        
+        // handle legacy calls still passing module as second param
+        // @todo remove this when all modules are passing correct params 
+        if ($scope != 'theme' && $scope != 'module' && $scope != 'property') {
+            // assume module scope 
+            $package = $scope;
+            $scope = 'module';
         }
-
-        // get module directory (could be different from module name)
-        if (method_exists('xarMod', 'getBaseInfo')) {
-            $modBaseInfo = xarMod::getBaseInfo($modName);
-            if (!isset($modBaseInfo)) return; // throw back
-            $modOsDir = $modBaseInfo['osdirectory'];
-        } else {
-            // Assume dir = modname
-            $modOsDir = $modName;
+        
+        $paths = array();
+        switch ($scope) {
+            case 'theme':
+                // optional theme images to look in passed as third param
+                if (!empty($package)) {
+                    $package = xarVarPrepForOS($package);
+                    $paths[] = self::getThemeDir($package) . '/images/' . $fileName;
+                }                
+                // current theme images
+                $paths[] = self::getThemeDir() . '/images/' . $fileName;
+                // common images 
+                $paths[] = self::getThemeDir('common') . '/images/' . $fileName;
+                break;
+            case 'module':
+                if (empty($package))
+                    list($package) = xarController::$request->getInfo();
+                if (method_exists('xarMod', 'getBaseInfo')) {
+                    $modBaseInfo = xarMod::getBaseInfo($package);
+                    if (!isset($modBaseInfo)) return;
+                    $modOsDir = $modBaseInfo['osdirectory'];
+                } else {
+                    $modOsDir = xarVarPrepForOS($package);
+                }
+                // handle legacy calls to base module images moved to common/images or themename/images
+                // @todo remove this when all modules are passing correct params 
+                if ($package == 'base') {
+                    // current theme images
+                    $paths[] = self::getThemeDir() . '/images/' . $fileName;
+                    // common images 
+                    $paths[] = self::getThemeDir('common') . '/images/' . $fileName;
+                }                
+                // current theme module images
+                $paths[] = self::getThemeDir() . '/modules/' . $modOsDir . '/images/' . $fileName;
+                // common module images
+                $paths[] = self::getThemeDir('common') . '/modules/' . $modOsDir . '/images/' . $fileName;
+                // module images (legacy)
+                $paths[] = sys::code() . 'modules/' . $modOsDir . '/xarimages/' . $fileName;
+                // module images
+                $paths[] = sys::code() . 'modules/' . $modOsDir . '/xartemplates/images/' . $fileName;
+                break;
+            case 'property':
+                if (empty($package)) return;
+                $package = xarVarPrepForOS($package);
+                // current theme property images
+                $paths[] = self::getThemeDir() . '/properties/' . $package . '/images/' . $fileName;
+                // common property images
+                $paths[] = self::getThemeDir('common') . '/properties/' . $package . '/images/' . $fileName;
+                // property images (legacy)
+                $paths[] = sys::code() . 'properties/' . $package . '/xarimages/' . $fileName;
+                // property images
+                $paths[] = sys::code() . 'properties/' . $package . '/xartemplates/images/' . $fileName;
+                break;
         }
-
-        // relative url to the current module's image
-        $moduleImage = sys::code() . 'modules/'.$modOsDir.'/xarimages/'.$modImage;
-
-        // obtain current theme directory
-        $themedir = self::getThemeDir();
-
-        // relative url to the replacement image in current theme
-        $themeImage = $themedir . '/modules/'.$modOsDir.'/images/'.$modImage;
-
-        $return = NULL;
-
-        // check if replacement image exists in the theme
-        if (file_exists($themeImage)) {
-            // image found, return its path in the theme
-            $return = $themeImage;
-        } elseif (file_exists($moduleImage)) {
-            // image found, return it's path in the module
-            $return = $moduleImage;
+        if (empty($paths)) return;
+        
+        $filePath = null;
+        foreach ($paths as $path) {
+            if (!file_exists($path)) continue;
+            $filePath = $path;
+            break;
         }
 
         // Return as an XML URL if required.
         // This will generally have little effect, but is here for
         // completeness to support alternative types of URL.
-        if (isset($return) && self::$generateXMLURLs) {
-            $return = htmlspecialchars($return);
+        if (isset($filePath) && self::$generateXMLURLs) {
+            $filePath = htmlspecialchars($filePath);
         }
-
-        return $return;
+        return $filePath;
     }
 
 /**
