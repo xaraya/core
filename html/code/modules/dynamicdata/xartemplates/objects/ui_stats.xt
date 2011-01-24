@@ -11,13 +11,13 @@
         <h2>
             Statistics for #$object:label#&#160;
             <a href="#$viewlink#" title="View #$object:label#">
-                <img src="#xarTpl::getImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                <xar:img scope="theme" file="icons/item-list.png" class="xar-icon" alt="view"/>
             </a>&#160;
             <a href="#$statslink#" title="Reset Statistics">
-                <img src="#xarTpl::getImage('icons/view-refresh.png', 'base')#" width="16" height="16" alt="reset"/>
+                <xar:img scope="theme" file="icons/view-refresh.png" class="xar-icon" alt="reset"/>
             </a>&#160;
             <a href="#$reportlink#" title="View Reports">
-                <img src="#xarTpl::getImage('icons/accessories-calculator.png', 'base')#" width="16" height="16" alt="report"/>
+                <xar:img scope="theme" file="icons/accessories-calculator.png" class="xar-icon" alt="report"/>
             </a>
         </h2>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->

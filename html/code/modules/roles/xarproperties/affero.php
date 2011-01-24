@@ -34,7 +34,7 @@ class AfferoProperty extends TextBoxProperty
         $this->template = 'affero';
         $this->filepath   = 'modules/roles/xarproperties';
         if (empty($this->initialization_icon_url)) {
-            $this->initialization_icon_url = xarTpl::getImage('contact/affero.png','roles');
+            $this->initialization_icon_url = xarTpl::getImage('contact/affero.png','module','roles');
         }
     }
 

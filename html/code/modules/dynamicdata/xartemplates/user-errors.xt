@@ -6,7 +6,7 @@
         <fieldset>
             <legend>DynamicData Problem</legend>
             <xar:var name="label">System Message</xar:var>
-            <img src="#xarTpl::getImage('user-error.png','base')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
+            <xar:img scope="theme" file="user-error.png" class="xar-module-icon" alt="$label"/>
             <xar:if condition="!isset($layout)">
                 <div style="margin-top: 20px; margin-left: 20px">
                     No error message is available.

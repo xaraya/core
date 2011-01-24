@@ -66,14 +66,14 @@
                             xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $field['id']))
                         </xar:set>
                         <xar:set name="icon">
-                            xarTpl::getImage('icons/modify.png', 'base')
+                            xarTpl::getImage('icons/modify.png', 'theme')
                         </xar:set>
                         <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
                         &#160;
 
                         <xar:set name="title">xarML('Move property up')</xar:set>
                         <xar:set name="icon">
-                            xarTpl::getImage('icons/go-up.png', 'base')
+                            xarTpl::getImage('icons/go-up.png', 'theme')
                         </xar:set>
                         <xar:if condition="$index gt 1 and $numprops gt 1">
                             <xar:set name="link">
@@ -87,7 +87,7 @@
 
                         <xar:set name="title">xarML('Move property down')</xar:set>
                         <xar:set name="icon">
-                            xarTpl::getImage('icons/go-down.png', 'base')
+                            xarTpl::getImage('icons/go-down.png', 'theme')
                         </xar:set>
                         <xar:if condition="$index lt $numprops and $numprops ne 1">
                             <xar:set name="link">

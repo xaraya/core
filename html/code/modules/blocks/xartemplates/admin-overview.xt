@@ -7,7 +7,8 @@
     </div>
     <div class="xar-mod-body">
     <div class="xar-mod-page-head">
-        <img src="#xarTpl::getImage('blocks.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon"/>
+        <xar:var name="label">Official Icon</xar:var>
+        <xar:img scope="theme" file="blocks.png" alt="$label" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
         <xar:style scope="theme" file="navtabs"/>
         <div>

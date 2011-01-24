@@ -10,10 +10,10 @@
         <h2>
             Delete Item #$object:itemid# in #$object:label#&#160;
             <a href="#$viewlink#" title="View #$object:label#">
-                <img src="#xarTpl::getImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                <xar:img scope="theme" file="icons/item-list.png" class="xar-icon" alt="view"/>
             </a>&#160;
             <a href="#$displaylink#" title="Display #$object:label#">
-                <img src="#xarTpl::getImage('icons/display.png', 'base')#" width="16" height="16" alt="display"/>
+                <xar:img scope="theme" file="icons/display.png" class="xar-icon" alt="display"/>
             </a>
         </h2>
         <h3 class="xar-align-center">Confirm Deleting This Item?</h3>

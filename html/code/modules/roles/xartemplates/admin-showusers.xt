@@ -7,13 +7,13 @@
     <xar:javascript scope="module" module="roles" filename="xarTree.js" position="head"/>
     <xar:style scope="theme" file="tree"/>
 
-    <xar:set name="icon_password">xarTpl::getImage('icons/user-password.png','base')</xar:set>
-    <xar:set name="icon_info">xarTpl::getImage('icons/info.png','base')</xar:set>
-    <xar:set name="icon_privileges">xarTpl::getImage('icons/privileges.png','base')</xar:set>
-    <xar:set name="icon_delete">xarTpl::getImage('icons/delete.png','base')</xar:set>
-    <xar:set name="icon_modify">xarTpl::getImage('icons/modify.png','base')</xar:set>
-    <xar:set name="icon_none">xarTpl::getImage('icons/none.png','base')</xar:set>
-    <xar:set name="icon_test">xarTpl::getImage('icons/test.png','base')</xar:set>
+    <xar:set name="icon_password">xarTpl::getImage('icons/user-password.png','theme')</xar:set>
+    <xar:set name="icon_info">xarTpl::getImage('icons/info.png','theme')</xar:set>
+    <xar:set name="icon_privileges">xarTpl::getImage('icons/privileges.png','theme')</xar:set>
+    <xar:set name="icon_delete">xarTpl::getImage('icons/delete.png','theme')</xar:set>
+    <xar:set name="icon_modify">xarTpl::getImage('icons/modify.png','theme')</xar:set>
+    <xar:set name="icon_none">xarTpl::getImage('icons/none.png','theme')</xar:set>
+    <xar:set name="icon_test">xarTpl::getImage('icons/test.png','theme')</xar:set>
 
     <div class="xar-mod-head">
         <span class="xar-mod-title">Roles Administration</span>

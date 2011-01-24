@@ -7,9 +7,6 @@
         xar_base_reorder_warn = '#xarML('You must select an option to move.')#';
     </script>
 
-    <xar:set name="up_arrow_src">xarTpl::getImage('up.gif', 'base')</xar:set>
-    <xar:set name="down_arrow_src">xarTpl::getImage('down.gif', 'base')</xar:set>
-
     <xar:if condition="count($options) gt 10">
         <xar:set name="size">10</xar:set>
     <xar:else />
@@ -22,12 +19,12 @@
                 <xar:var name="label">Move Up</xar:var>
                 <button id="#$id#_up" onclick="return xar_base_reorder('#$id#', true, '#$id#_order');" title="#$label#" class="xar-displayblock xar-margin-thickbottom">
                     <xar:var name="label">Up Arrow</xar:var>
-                    <img src="#$up_arrow_src#" alt="#$label#"/>
+                    <xar:img scope="module" module="base" file="up.gif" alt="$label" class="xar-icon"/>
                 </button>
                 <xar:var name="label">Move Down</xar:var>
                 <button id="#$id#_down" onclick="return xar_base_reorder('#$id#', false, '#$id#_order');" title="#$label#" class="xar-displayblock xar-margin-thicktop">
                     <xar:var name="label">Down Arrow</xar:var>
-                    <img src="#$down_arrow_src#" alt="#$label#"/>
+                    <xar:img scope="module" module="base" file="down.gif" alt="$label" class="xar-icon"/>
                 </button>
             </div>
             <xar:data-input type="multiselect" name="$name" size="$size" options="$options" tabindex="$tabindex" class="xar-margin-thickleft"/>

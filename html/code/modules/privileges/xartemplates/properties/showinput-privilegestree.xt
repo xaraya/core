@@ -17,10 +17,10 @@
     // -->
     </script>
     <xar:if condition="!empty($trees)">
-        <xar:set name="deleteicon">xarTpl::getImage('icons/delete.png','base')</xar:set>
-        <xar:set name="groupsicon">xarTpl::getImage('icons/system-user-groups.png','base')</xar:set>
-        <xar:set name="removeicon">xarTpl::getImage('icons/remove.png','base')</xar:set>
-        <xar:set name="blankicon">xarTpl::getImage('icons/blank.png','base')</xar:set>
+        <xar:set name="deleteicon"><xar:img scope="theme" file="icons/delete.png" render="false"/></xar:set>
+        <xar:set name="groupsicon"><xar:img scope="theme" file="icons/system-user-groups.png" render="false"/></xar:set>
+        <xar:set name="removeicon"><xar:img scope="theme" file="icons/remove.png" render="false"/></xar:set>
+        <xar:set name="blankicon"><xar:img scope="theme" file="icons/blank.png" render="false"/></xar:set>
         
         <xar:foreach in="$trees" value="$tree">
             <ul class="xar-tree">

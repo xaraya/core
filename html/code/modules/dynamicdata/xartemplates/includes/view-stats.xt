@@ -51,7 +51,8 @@
                                 <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
                                     <xar:if condition="!empty($option['olink'])">
                                         <xar:if condition="!empty($option['oicon'])">
-                                            <a href="#$option['olink']#" title="#$option['otitle']#"><img src="#xarTpl::getImage('icons/'.$option['oicon'], 'base')#" width="16" height="16" alt="#$otype#"/></a>&#160;
+                                            <xar:set name="imgfile">'icons/'.$option['oicon']</xar:set>
+                                            <a href="#$option['olink']#" title="#$option['otitle']#"><xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$otype"/></a>&#160;
                                         <xar:else/>
                                             #$option['ojoin']# 
                                             <a href="#$option['olink']#">#$option['otitle']#</a>

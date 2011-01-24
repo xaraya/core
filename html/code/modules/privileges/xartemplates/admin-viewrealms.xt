@@ -23,11 +23,11 @@
                         <td class="xar-align-center">
                             <xar:var name="label">Modify this realm</xar:var>
                             <a class="xar-valign-middle" href="#xarModURL('privileges','admin','modifyrealm',array('id'=>$loop->item['id']))#" alt="#$label#" title="#$label#">
-                                <img src="#xarTpl::getImage('infoicon.gif', 'roles')#"/>
+                                <xar:img scope="module" module="roles" file="infoicon.gif"/>
                             </a>&#160; 
                             <xar:var name="label">Delete this realm</xar:var>
                             <a class="xar-valign-middle" href="#xarModURL('privileges','admin','deleterealm',array('id'=>$loop->item['id']))#" alt="#$label#" title="#$label#">
-                                <img src="#xarTpl::getImage('delete.png', 'roles')#"/>
+                                <xar:img scope="module" module="roles" file="delete.png"/>
                             </a>
                         </td>
                     </tr>

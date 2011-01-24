@@ -8,7 +8,7 @@
     <div class="xar-mod-body">
     <div class="xar-mod-page-head">
         <xar:var name="label">official icon</xar:var>
-        <img src="#xarTpl::getImage('base.png','base')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
+        <xar:img scope="theme" file="base.png" alt="$label" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
     </div><!--/xar-mod-page-head-->
 	<div class="xar-mod-page-body">
