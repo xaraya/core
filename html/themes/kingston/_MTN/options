@@ -1,0 +1,4 @@
+database "/Web/jamaicathemes.db"
+  branch "com.xaraya.themes.jamaica.kingston"
+     key "xaraya@bhold.biz"
+  keydir "/Users/nbjacobson/.monotone/keys"

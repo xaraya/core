@@ -3,9 +3,9 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Modules Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <h2>Manage Module Aliases</h2>
         <form method="post" action="#xarModURL('modules','admin','aliases')#">
             <fieldset>
@@ -20,7 +20,7 @@
                         <div class="xar-form-input-wrapper-after">
                             <a href="#xarModURL('modules','admin','aliases',array('name' => $value, 'remove' => $key))#">
                                 <xar:var name="imagealt">[remove]</xar:var>
-                                <xar:set name="iconurl">xarTplGetImage('icons/delete.png', 'base')</xar:set>
+                                <xar:set name="iconurl">xarTpl::getImage('icons/delete.png', 'base')</xar:set>
                                 <xar:data-output type="image" value="$iconurl" imagetext="$imagealt"/>
                             </a>
                             &#160;#$key#
@@ -38,7 +38,7 @@
                     <input type="text" name="add"/>&#160;
                     <input type="hidden" name="name" value="#$modname#"/>
                     <xar:var name="label">Add Alias</xar:var>
-                    <xar:set name="iconurl">xarTplGetImage('icons/add.png', 'base')</xar:set>
+                    <xar:set name="iconurl">xarTpl::getImage('icons/add.png', 'base')</xar:set>
                     <xar:var name="imagealt">[add]</xar:var>
                     <xar:button type="submit" label="$label" src="$iconurl" title="$imagealt"/>
                 </div>

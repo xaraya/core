@@ -16,7 +16,7 @@ function mail_admin_createqArray(Array $args=array())
     if (!xarSecurityCheck('AdminMail')) return;
     
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     // What do we need to do

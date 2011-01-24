@@ -32,7 +32,7 @@
         <xsl:text>echo </xsl:text>
         <xsl:choose>
           <xsl:when test="@type='theme'">
-            <xsl:text>xarTpl_includeThemeTemplate("</xsl:text>
+            <xsl:text>xarTpl::includeThemeTemplate("</xsl:text>
             <xsl:value-of select="@file"/>
             <xsl:text>",</xsl:text>
             <xsl:value-of select="$subdata"/>
@@ -40,7 +40,7 @@
           </xsl:when>
           <xsl:when test="@type='system'">
             <!-- The name is to be interpreted relative to the file we're parsing now -->
-            <xsl:text>xarTplFile("</xsl:text>
+            <xsl:text>xarTpl::file("</xsl:text>
             <xsl:value-of select="$bl_dirname"/><xsl:text>/</xsl:text><xsl:value-of select="@file"/>
             <xsl:text>",</xsl:text>
             <xsl:call-template name="resolvePHP">
@@ -49,7 +49,7 @@
             <xsl:text>);</xsl:text>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:text>xarTpl_includeModuleTemplate(</xsl:text>
+            <xsl:text>xarTpl::includeModuleTemplate(</xsl:text>
             <xsl:choose>
               <xsl:when test="@module != ''">
                 <xsl:text>"</xsl:text>
@@ -64,7 +64,7 @@
                     <xsl:text>'</xsl:text>
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:text>xarModGetName()</xsl:text>
+                    <xsl:text>xarMod::getName()</xsl:text>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:otherwise>

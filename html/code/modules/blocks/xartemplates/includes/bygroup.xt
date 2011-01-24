@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:set name="icon_delete">xarTplGetImage('icons/delete.png','base')</xar:set>
-    <xar:set name="icon_modify">xarTplGetImage('icons/modify.png','base')</xar:set>
+    <xar:set name="icon_delete">xarTpl::getImage('icons/delete.png','base')</xar:set>
+    <xar:set name="icon_modify">xarTpl::getImage('icons/modify.png','base')</xar:set>
     <div>
         <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
     </div>
-    <table class="xar-fullwidth">
+    <table class="xar-items">
         <tr>
             <th>Name</th>
             <th>Module</th>
@@ -20,11 +20,11 @@
             <xar:set name="thisgroup">$loop->item['group']</xar:set>
             <xar:if condition="$thisgroup ne $currentgroup">
                 <tr>
-                    <td colspan="6">
-                        <a style="font-size: 11pt" href="#$loop:item['groupurl']#" title="#xarML('View block group details')#">
+                    <th class="xar-item-linked" colspan="6">
+                        <a href="#$loop:item['groupurl']#" title="#xarML('View block group details')#">
                             #$loop:item['group']#
                         </a>
-                    </td>
+                    </th>
                 </tr>
                 <xar:set name="currentgroup">$thisgroup</xar:set>
             </xar:if>

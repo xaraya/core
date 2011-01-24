@@ -19,9 +19,9 @@
                 <xar:foreach in="$levels" key="$level" value="$info">
                     <xar:set name="allow">xarSecurity::check($info['mask'],0,'Item',$instance,'',$rolename,0,0)</xar:set>
                     <xar:if condition="!empty($allow)">
-                        <td style="text-align: center"><img src="#xarTplGetImage('icons/activate.png','base')#" width="16" height="16" border="0"/></td>
+                        <td style="text-align: center"><img src="#xarTpl::getImage('icons/activate.png','base')#" width="16" height="16" border="0"/></td>
                     <xar:else/>
-                        <td style="text-align: center"><img src="#xarTplGetImage('icons/deactivate.png','base')#" width="16" height="16" border="0"/></td>
+                        <td style="text-align: center"><img src="#xarTpl::getImage('icons/deactivate.png','base')#" width="16" height="16" border="0"/></td>
                     </xar:if>
                 </xar:foreach>
             </tr>

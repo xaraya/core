@@ -3,91 +3,91 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Dynamic Data Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <xar:if condition="empty($option)">
             <xar:set name="option">'query'</xar:set>
         </xar:if>
+        <div class="xar-mod-page-head">
         <h2>Dynamic Data Utilities</h2>
-        <div>
-            <ul class="xar-tabs xar-alt xar-norm-outline">
+            <ul class="xar-tabs">
                 <xar:var name="title">Options</xar:var>
                 <xar:var name="label">Options</xar:var>
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <xar:if condition="$option eq 'query'">
                     <li class="xar-tab-active">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'query'))#" class="xar-accent xar-accent-outline">Query</a>
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'query'))#">Query</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'query'))#" class="xar-norm xar-norm-outline">Query</a>
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'query'))#">Query</a>
                     </li>
                 </xar:if>
                 <xar:if condition="$option eq 'import'">
                     <li class="xar-tab-active">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'import'))#" class="xar-accent xar-accent-outline">Import</a>
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'import'))#">Import</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'import'))#" class="xar-norm xar-norm-outline">Import</a>
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'import'))#">Import</a>
                     </li>
                 </xar:if>
                 <xar:if condition="$option eq 'export'">
                     <li class="xar-tab-active">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'export'))#" class="xar-accent xar-accent-outline">Export</a>
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'export'))#">Export</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'export'))#" class="xar-norm xar-norm-outline">Export</a>
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'export'))#">Export</a>
                     </li>
                 </xar:if>
                 <xar:if condition="$option eq 'static'">
                     <li class="xar-tab-active">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'static'))#" class="xar-accent xar-accent-outline">Table
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'static'))#">Table
                         Definition</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'static'))#" class="xar-norm xar-norm-outline">Table
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'static'))#">Table
                         Definition</a>
                     </li>
                 </xar:if>
                 <xar:if condition="$option eq 'relations'">
                     <li class="xar-tab-active">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'relations'))#" class="xar-accent xar-accent-outline">
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'relations'))#">
                         Relationships</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'relations'))#" class="xar-norm xar-norm-outline">
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'relations'))#">
                         Relationships</a>
                     </li>
                 </xar:if>
                 <xar:if condition="$option eq 'meta'">
                     <li class="xar-tab-active">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'meta'))#" class="xar-accent xar-accent-outline">Meta
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'meta'))#">Meta
                         Definitions</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'meta'))#" class="xar-norm xar-norm-outline">Meta
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'meta'))#">Meta
                         Definitions</a>
                     </li>
                 </xar:if>
                 <xar:if condition="$option eq 'migrate'">
                     <li class="xar-tab-active">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'migrate'))#" class="xar-accent xar-accent-outline">Migrate
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'migrate'))#">Migrate
                         Items</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'migrate'))#" class="xar-norm xar-norm-outline">Migrate
+                        <a href="#xarModURL('dynamicdata','admin','utilities',array('q'=>'migrate'))#">Migrate
                         Items</a>
                     </li>
                 </xar:if>
             </ul>
-        </div>
+        </div><!--/xar-mod-page-head-->
     </div>
     <xar:if condition="empty($option) or $option eq 'query'">
         <xar:module main="false" module="dynamicdata" type="admin" func="query"/>

@@ -32,7 +32,7 @@ function authsystem_user_login()
     global $xarUser_authenticationModules;
 
     if (!$_COOKIE) {
-        return xarTplModule('authsystem','user','errors',array('layout' => 'no_cookies'));
+        return xarTpl::module('authsystem','user','errors',array('layout' => 'no_cookies'));
     }
 
     $unlockTime  = (int) xarSession::getVar('authsystem.login.lockedout');
@@ -40,15 +40,15 @@ function authsystem_user_login()
     $lockouttries = xarModVars::get('authsystem','lockouttries') ? xarModVars::get('authsystem','lockouttries') : 3;
 
     if ((time() < $unlockTime) && (xarModVars::get('authsystem','uselockout') == true)) {
-        return xarTplModule('authsystem','user','errors',array('layout' => 'locked_out', 'lockouttime' => $lockouttime));
+        return xarTpl::module('authsystem','user','errors',array('layout' => 'locked_out', 'lockouttime' => $lockouttime));
     }
 
     if (!xarVarFetch('uname','str:0:64',$uname,'',XARVAR_NOT_REQUIRED)) return;
     if (empty($uname))
-        return xarTplModule('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
+        return xarTpl::module('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
     if (!xarVarFetch('pass','str:0:254',$pass,'',XARVAR_NOT_REQUIRED)) return;
     if (empty($pass))
-    return xarTplModule('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
+    return xarTpl::module('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
 
     $redirect = xarServer::getBaseURL();
     if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
@@ -114,7 +114,7 @@ function authsystem_user_login()
                 // Make sure we haven't already found authldap module
                 if (empty($user) && ($extAuthentication == false))
                 {
-                    return xarTplModule('authsystem','user','errors',array('layout' => 'bad_data'));
+                    return xarTpl::module('authsystem','user','errors',array('layout' => 'bad_data'));
                 } elseif (empty($user)) {
                     // Check if user has been deleted.
                     try {
@@ -157,13 +157,13 @@ function authsystem_user_login()
         case xarRoles::ROLES_STATE_DELETED:
 
             // User is deleted by all means.  Return a message that says the same.
-            return xarTplModule('authsystem','user','errors',array('layout' => 'account_deleted'));
+            return xarTpl::module('authsystem','user','errors',array('layout' => 'account_deleted'));
             break;
 
         case xarRoles::ROLES_STATE_INACTIVE:
 
             // User is inactive.  Return message stating.
-            return xarTplModule('authsystem','user','errors',array('layout' => 'account_inactive'));
+            return xarTpl::module('authsystem','user','errors',array('layout' => 'account_inactive'));
             break;
 
         case xarRoles::ROLES_STATE_NOTVALIDATED:
@@ -211,8 +211,8 @@ function authsystem_user_login()
 
                 if (!$letthru) {
                     // If there is a locked.xt page then use that, otherwise show the default.xt page
-                    xarTplSetPageTemplateName('locked');
-                    return xarTplModule('authsystem','user','errors',array('layout' => 'site_locked', 'message'  => $lockvars['message']));
+                    xarTpl::setPageTemplateName('locked');
+                    return xarTpl::module('authsystem','user','errors',array('layout' => 'site_locked', 'message'  => $lockvars['message']));
                 }
             }
 
@@ -231,11 +231,11 @@ function authsystem_user_login()
                     // Set the time for fifteen minutes from now
                     xarSession::setVar('authsystem.login.lockedout', time() + (60 * $lockouttime));
                     xarSession::setVar('authsystem.login.attempts', 0);
-                    return xarTplModule('authsystem','user','errors',array('layout' => 'bad_tries_exceeded', 'lockouttime' => $lockouttime));
+                    return xarTpl::module('authsystem','user','errors',array('layout' => 'bad_tries_exceeded', 'lockouttime' => $lockouttime));
                 } else{
                     $newattempts = $attempts + 1;
                     xarSession::setVar('authsystem.login.attempts', $newattempts);
-                    return xarTplModule('authsystem','user','errors',array('layout' => 'bad_try', 'attempts' => $newattempts));
+                    return xarTpl::module('authsystem','user','errors',array('layout' => 'bad_try', 'attempts' => $newattempts));
                 }
             }
             //FR for last login - first capture the last login for this user
@@ -273,7 +273,7 @@ function authsystem_user_login()
                 /* Open in IFrame - works if you need it */
                 /* $data['page'] = $redirecturl;
                    $data['title'] = xarML('Home Page');
-                   return xarTplModule('roles','user','homedisplay', $data);
+                   return xarTpl::module('roles','user','homedisplay', $data);
                  */
                  xarController::redirect($redirecturl);
             }else {
@@ -285,7 +285,7 @@ function authsystem_user_login()
         case xarRoles::ROLES_STATE_PENDING:
 
             // User is pending activation
-                return xarTplModule('authsystem','user','errors',array('layout' => 'account_pending'));
+                return xarTpl::module('authsystem','user','errors',array('layout' => 'account_pending'));
             break;
     }
 

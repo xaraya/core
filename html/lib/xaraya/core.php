@@ -452,7 +452,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
                 'generateXMLURLs'        => true
             );
 
-            xarTpl_init($systemArgs);
+            xarTpl::init($systemArgs);
             $whatToLoad ^= xarCore::BIT_TEMPLATES;
         // we're about done here - everything else requires templates !?
         } else {

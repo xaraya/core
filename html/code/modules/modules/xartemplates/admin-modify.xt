@@ -8,9 +8,9 @@
         -->
         <div class="xar-mod-head">
             <span class="xar-mod-title">Modules Administration</span>
+            <xar:template type="module" file="admin-menu"/>
         </div>
         <div class="xar-mod-body">
-            <xar:template type="module" file="admin-menu"/>
             <xar:template file="hooked-mainpart" module="modules"/>
         </div>
     <xar:else />

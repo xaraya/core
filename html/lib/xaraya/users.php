@@ -70,7 +70,7 @@ function xarUser_init(Array &$args)
     $GLOBALS['xarUser_authenticationModules'] = $args['authenticationModules'];
 
     xarMLS_setCurrentLocale(xarUserGetNavigationLocale());
-    xarTplSetThemeName(xarUserGetNavigationThemeName());
+    xarTpl::setThemeName(xarUserGetNavigationThemeName());
 
     // These events are now registered during authsystem module init
     // Register the UserLogin event
@@ -243,7 +243,7 @@ function xarUserIsLoggedIn()
  */
 function xarUserGetNavigationThemeName()
 {
-    $themeName = xarTplGetThemeName();
+    $themeName = xarTpl::getThemeName();
 
     if (xarUserIsLoggedIn() && (bool)xarModVars::get('themes', 'enable_user_menu')){
         $id = xarUserGetVar('id');

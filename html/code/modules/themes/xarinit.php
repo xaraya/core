@@ -54,10 +54,25 @@ function themes_init()
         'regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
         'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
         'version' => array('type' => 'varchar', 'size' => 10, 'null' => false, 'charset' => $charset),
+        'configuration' => array('type' => 'text', 'size' => 'medium', 'null' => false, 'charset' => $charset),
         'state' => array('type' => 'integer', 'size' => 'tiny', 'unsigned'=> true, 'null' => false, 'default' => '1')
         );
 
     $query = xarDBCreateTable($tables['themes'], $fields);
+    $result =& $dbconn->Execute($query);
+
+    // Create the table to hold configurations
+    $fields = array(
+        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
+        'theme_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
+        'name' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'default' => '', 'charset' => $charset),
+        'description' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'default' => '', 'charset' => $charset),
+        'property_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
+        'label' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'default' => '', 'charset' => $charset),
+        'configuration' => array('type' => 'text', 'size' => 'medium', 'null' => false, 'charset' => $charset)
+        );
+
+    $query = xarDBCreateTable($tables['themes_configurations'], $fields);
     $result =& $dbconn->Execute($query);
 
     xarModVars::set('themes', 'default_theme', 'default');
@@ -93,6 +108,7 @@ function themes_init()
 
     xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditThemes','All','themes','All','All','ACCESS_EDIT');
+    xarRegisterMask('AddThemes','All','themes','All','All','ACCESS_ADD');
     xarRegisterMask('ManageThemes','All','themes','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminThemes','All','themes','All','All','ACCESS_ADMIN');
 

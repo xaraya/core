@@ -239,7 +239,7 @@ class xarTplPager Extends Object
             xarCore::setCached('Pager.last', 'rightarrow', $data['lasturl']);
         }
 
-        return trim(xarTplModule($tplmodule, 'pager', $template, $data));
+        return trim(xarTpl::module($tplmodule, 'pager', $template, $data));
     }
 /**
  * Return a properly formatted pager url (startnum=%%) for use in getPager() method

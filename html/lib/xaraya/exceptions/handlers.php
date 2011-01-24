@@ -60,14 +60,14 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
                                 ));
             // If we have em, use em
 
-            if(function_exists('xarTplGetThemeDir') && function_exists('xarTplFile')) {
-                $theme_dir = xarTplGetThemeDir(); $template="systemerror";
+            if(method_exists('xarTpl','getThemeDir') && method_exists('xarTpl','file')) {
+                $theme_dir = xarTpl::getThemeDir(); $template="systemerror";
                 if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
-                    $msg = xarTplFile($theme_dir . '/modules/base/message-' . $template . '.xt', self::$data);
+                    $msg = xarTpl::file($theme_dir . '/modules/base/message-' . $template . '.xt', self::$data);
                 } else {
-                    $msg = xarTplFile('modules/base/xartemplates/message-' . $template . '.xt', self::$data);
+                    $msg = xarTpl::file('modules/base/xartemplates/message-' . $template . '.xt', self::$data);
                 }
-                echo xarTpl_renderPage($msg);
+                echo xarTpl::renderPage($msg);
             } else {
                 // Rethrow it, we cant handle it.
                 throw $e;

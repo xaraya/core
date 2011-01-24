@@ -3,12 +3,14 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Roles Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
-        <img src="#xarTplGetImage('roles.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
+    <div class="xar-mod-page-head">
+        <img src="#xarTpl::getImage('roles.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
-
+    </div>
+	<div class="xar-mod-page-body">
         <h3>What is it?</h3>
         <p>
             The Roles module lets you create and manage roles on your Xaraya site. Roles are
@@ -31,19 +33,19 @@
             The roles on your site are arranged in a tree, at the top of which is a role called Everybody, which represents the "group of all groups" on your site. Every user and every group is a member or descendent of Everybody. The structure of the default roles that are installed with Xaraya is shown below:
         </p>
         <pre>
-            Everybody (group)
-            |
-            |---Anonymous (user)
-            |
-            |---Administrators (group)
-            |   |
-            |   |---Admin (user)
-            |
-            |---SiteManagers (group)
-            |   |
-            |   |---SiteManager (user)
-            |
-            |---Users (group)
+        Everybody (group)
+        |
+        |---Anonymous (user)
+        |
+        |---Administrators (group)
+        |   |
+        |   |---Admin (user)
+        |
+        |---SiteManagers (group)
+        |   |
+        |   |---SiteManager (user)
+        |
+        |---Users (group)
         </pre>
         <p>
             At installation time you are asked to choose a configuration that affects preinstalled
@@ -212,4 +214,5 @@
         <br />&#160;Version 1.1.2&#160; 2006-04-30</p>
         -->
     </div>
+   	</div>
 </xar:template>

@@ -54,7 +54,7 @@
             case 'update':
                 // Confirm authorisation code
                 if (!xarSecConfirmAuthKey()) {
-                    return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                    return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
                 }        
                 if (!xarVarFetch('role', 'int', $role_id, 0, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                 if (!xarVarFetch('rolename', 'str', $rolename, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;

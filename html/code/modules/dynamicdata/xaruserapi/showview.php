@@ -31,7 +31,7 @@ function dynamicdata_userapi_showview(Array $args=array())
     // we got everything via template parameters
     if (isset($items) && is_array($items)) {
         $args['count'] = count($items);
-        return xarTplModule('dynamicdata','user','showview',
+        return xarTpl::module('dynamicdata','user','showview',
                             $args,
                             $template);
     }

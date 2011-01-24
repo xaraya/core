@@ -17,7 +17,7 @@ function mail_admin_createqdef(Array $args=array())
     
     // Are we legitimately here
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     // First determine whether we need to look at the name entered, or the object chosen

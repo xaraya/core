@@ -3,23 +3,26 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Dynamic Data Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
+    <div class="xar-mod-page-head">
         <h2>Configure Property Types</h2>
         <p>Click Flush Property Cache to clear the DynamicData Property Definitions cache and to
         reload the properties definitions from the file system.</p>
         <form method="post" action="#xarModURL('dynamicdata','admin','update_propertydefs')#">
-            <div class="xar-align-center">
+            <ul class="xar-mod-actions">
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="flushPropertyCache" value="true"/>
-                <input type="submit" value="Flush Property Cache"/>
-            </div>
+                <li><input type="submit" value="Flush Property Cache"/></li>
+            </ul>
         </form>
-        <form method="post" action="#xarModURL('dynamicdata','admin','update_propertydefs')#">
-            <p>The following property types are predefined in Xaraya and may be used in your own
+        </div><!--xar-mod-page-head-->
+        <div class="xar-mod-page-body">
+        <p class="xar-note">The following property types are predefined in Xaraya and may be used in your own
             dynamic properties.</p>
-            <table class="xar-fullwidth">
+        <form method="post" action="#xarModURL('dynamicdata','admin','update_propertydefs')#">      
+           	<table class="xar-items">
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
@@ -47,7 +50,7 @@
                         <td>
                             <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
                                 <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype'=>$field['name']))#" title="Edit">
-                                    <img src="#xarTplGetImage('icons/modify-config.png', 'base')#" width="16" height="16" alt="modify-config"/>
+                                    <img src="#xarTpl::getImage('icons/modify-config.png', 'base')#" width="16" height="16" alt="modify-config"/>
                                 </a>
                             <xar:else />
                                 <xar:var name="field.configuration"/>
@@ -94,5 +97,6 @@
                 <xar:button type="submit" label="$label"/>
             </div>
         </form>
-    </div>
+    </div><!--/xar-mod-page-body-->
+    </div><!--/xar-mod-body-->
 </xar:template>

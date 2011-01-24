@@ -28,7 +28,7 @@ function themes_admin_update()
     if (empty($regId)) return xarResponse::notFound();
 
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     $themeInfo = xarThemeGetInfo($regId);

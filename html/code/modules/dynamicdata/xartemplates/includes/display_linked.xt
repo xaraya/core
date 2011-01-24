@@ -183,7 +183,7 @@
                 <xar:elseif condition="!empty($newlink)"/>
                     <div style="text-align: right;">
                         <a href="#$newlink#" title="Create New #$link.list:label#">
-                            <img src="#xarTplGetImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/>
+                            <img src="#xarTpl::getImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/>
                         </a>
                     </div>
                 </xar:if>

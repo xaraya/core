@@ -26,7 +26,7 @@ function roles_admin_sendmail()
 
     // Confirm authorisation code.
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
     // Get user information
     // Get the current query
@@ -71,8 +71,8 @@ function roles_admin_sendmail()
     xarModVars::set('themes','ShowTemplates',0);
 
     // Add root tage and compile the subject and message
-    $subject  = xarTplCompileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$subject.'</xar:template>');
-    $message  = xarTplCompileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$message.'</xar:template>');
+    $subject  = xarTpl::compileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$subject.'</xar:template>');
+    $message  = xarTpl::compileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$message.'</xar:template>');
 
     // Define the variables automatically available to all templates
     // LEGACY
@@ -96,8 +96,8 @@ function roles_admin_sendmail()
         $data['recipientemail']    = $user['email'];
 
         // Get the output through BL
-        $mailsubject = xarTplString($subject, $data);
-        $mailmessage = xarTplString($message, $data);
+        $mailsubject = xarTpl::string($subject, $data);
+        $mailmessage = xarTpl::string($message, $data);
 
         if (!xarMod::apiFunc('mail', 'admin', 'sendmail',
             array('info'    => $user['email'],

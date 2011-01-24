@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="privileges" filename="xarTree.js"/>
+    <xar:javascript scope="module" module="privileges" filename="xarTree.js"/>
     <script type="javascript">
     <!--
         var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
@@ -25,9 +25,9 @@
     </script>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Privileges Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-       <xar:template type="module" file="admin-menu"/>
         <form id="privilegeform" action="#xarModURL('privileges','admin','addprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>                    

@@ -85,8 +85,8 @@
             This is the layout used to display the form to admins for the roles_user_settings object
         -->
         <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
-        <h4>Member Options</h4>
         <fieldset>
+        <legend>Member Options</legend>
             <div class="xar-form-input-wrapper">
                 <xar:data-label property="$properties['usereditaccount']" for="id"/>
                 <xar:data-input property="$properties['usereditaccount']"/>
@@ -103,8 +103,8 @@
             </div>
 
         </fieldset>
-        <h4>Members List Options</h4>
         <fieldset>
+        <legend>Members List Options</legend>
             <div class="xar-form-input-wrapper">
                 <xar:data-label property="$properties['displayrolelist']" for="id"/>
                 <xar:data-input property="$properties['displayrolelist']"/>
@@ -116,8 +116,8 @@
                 <p class="xar-form-container-after">CAUTION: this may reveal enough information to compromise a user's login.</p>
             </div>
         </fieldset>
-        <h4>Homepage Options</h4>
         <fieldset>
+        <legend>Homepage Options</legend>
         <xar:if condition="in_array('userhome', $settings)">
             <div class="xar-form-input-wrapper">
                 <xar:data-label property="$properties['allowuserhomeedit']" for="id"/>

@@ -69,12 +69,12 @@ class Upgrader extends Object
         if(!xarVarFetch('upgrade_phase','int', $phase, 1, XARVAR_DONT_SET)) {return;}
 
         // Make sure we can render a page
-        xarTplSetPageTitle(xarML('Xaraya Upgrade'));
-        if(!xarTplSetThemeName('installer'))
+        xarTpl::setPageTitle(xarML('Xaraya Upgrade'));
+        if(!xarTpl::setThemeName('installer'))
             throw new Exception('You need the installer theme if you want to upgrade Xaraya.');
 
         // Set the default page title before calling the module function
-        xarTplSetPageTitle(xarML("Upgrading Xaraya"));
+        xarTpl::setPageTitle(xarML("Upgrading Xaraya"));
     
         $output = xarModFunc('installer','admin','upgrade');
         $this->renderPage($output);
@@ -97,7 +97,7 @@ class Upgrader extends Object
         }
 
         // Render page with the output
-        $pageOutput = xarTpl_renderPage($output);
+        $pageOutput = xarTpl::renderPage($output);
         echo $pageOutput;
         return true;
     }

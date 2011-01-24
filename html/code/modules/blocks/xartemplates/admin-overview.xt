@@ -3,13 +3,13 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Blocks Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
-        <img src="#xarTplGetImage('blocks.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon"/>
+    <div class="xar-mod-page-head">
+        <img src="#xarTpl::getImage('blocks.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
-        <xar:style scope="module" module="base" file="navtabs"/>
-        <br class="xar-clearall"/>
+        <xar:style scope="theme" file="navtabs"/>
         <div>
             <ul class="xar-tabs xar-alt xar-norm-outline">
                 <li class="xar-tabs-label help" title="#xarML('Choose an action to perform')#">Overview:</li>
@@ -57,7 +57,8 @@
                 <!-- add tabs as required here, then add a condition for them below -->
             </ul>
         </div>
-
+	</div>
+	<div class="xar-mod-page-body">
         <!-- About, basic module overview info and concept -->
         <xar:if condition="empty($tab)">
 
@@ -325,5 +326,6 @@
         <xar:else/>
 
         </xar:if>
+    </div>
     </div>
 </xar:template>

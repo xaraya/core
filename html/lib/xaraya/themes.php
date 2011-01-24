@@ -60,7 +60,6 @@ function xarThemeGetInfo($regId) { return xarMod::getInfo($regId, $type = 'theme
  */
 function xarThemeIsAvailable($themeName) { return xarMod::isAvailable($themeName, $type = 'theme'); }
 
-
 // PROTECTED FUNCTIONS
 
 /**

@@ -3,9 +3,9 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Dynamic Data Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <xar:if condition="!empty($object:objectid)">
             <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
         <xar:else/>
@@ -15,12 +15,12 @@
             <xar:if condition="!empty($objectid) and $objectid eq 1">
                 Delete DataObject #$object:properties.label:value#&#160;
                 <a href="#$viewlink#" title="Back to DataObjects">
-                    <img src="#xarTplGetImage('icons/go-home.png', 'base')#" width="16" height="16" alt="home"/>
+                    <img src="#xarTpl::getImage('icons/go-home.png', 'base')#" width="16" height="16" alt="home"/>
                 </a>
             <xar:else/>
                 Delete Item #$object:itemid# in #$object:label#&#160;
                 <a href="#$viewlink#" title="View #$object:label#">
-                    <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                    <img src="#xarTpl::getImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
                 </a>
             </xar:if>
         </h2>

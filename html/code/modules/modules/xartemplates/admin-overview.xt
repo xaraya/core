@@ -3,12 +3,14 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Modules Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
-        <img src="#xarTplGetImage('modules.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
+    <div class="xar-mod-page-head">
+        <img src="#xarTpl::getImage('modules.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
-
+	</div>
+	<div class="xar-mod-page-body">
         <h3>What is it?</h3>
         <p>
             The Modules module controls the installation, upgrade, and removal of modules on your Xaraya site. The module also lets you connect different modules via "hooks" to allow them to share functionality  The Modules module is a core module within Xaraya and cannot be removed. 
@@ -148,5 +150,6 @@
         <strong>&#160;Modules Module Overview</strong>
         <br />&#160;Version 2.3.1&#160; 2006-02-08</p>
         -->
+    </div>
     </div>
 </xar:template>

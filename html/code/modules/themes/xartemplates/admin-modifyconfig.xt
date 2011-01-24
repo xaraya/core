@@ -3,10 +3,13 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Themes Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
+    <div class="xar-mod-page-head">
         <h2>Modify Themes Configuration</h2>
+    </div>
+    <div class="xar-mod-page-body">
         <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
             <xar:data-form object="$module_settings"/>
             <fieldset>
@@ -242,5 +245,6 @@
                 </div>
             </fieldset>
         </form>
+    </div>
     </div>
 </xar:template>
