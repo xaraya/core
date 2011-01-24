@@ -87,10 +87,11 @@ function themes_admin_modifyconfig()
             xarModVars::set('themes', 'adminpagemenu', $data['adminpagemenu']);
 //            xarModVars::set('themes', 'usedashboard', $data['usedashboard']);
 //            xarModVars::set('themes', 'dashtemplate', $data['dashtemplate']);
-            // @fixme: <chris/> changing this needs more checks, and maybe 
-            // if dir doesn't exist/isn't accessible/missing current theme
-            // blocklayout should fall back to /themes 
-            xarConfigVars::set(null,'Site.BL.ThemesDirectory', $data['defaultThemeDir']);
+            // <chris/> Instead of setting the base theme config var dir directly, 
+            // let xarTpl take care of it, it'll complain if the directory doesn't
+            // exist or the current theme isn't in the directory specified  
+            // xarConfigVars::set(null,'Site.BL.ThemesDirectory', $data['defaultThemeDir']);
+            xarTpl::setBaseDir($data['defaultThemeDir']);
             xarConfigVars::set(null, 'Site.BL.CacheTemplates',$data['cachetemplates']);
             xarConfigVars::set(null, 'Site.BL.MemCacheTemplates',$data['memcachetemplates']);
             xarConfigVars::set(null, 'Site.BL.CompressWhitespace',$data['compresswhitespace']);
