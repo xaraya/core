@@ -765,7 +765,7 @@ class xarTpl extends Object
 /**
  * Execute template from file
  *
- * @access public NOTE: this is meant to be private, but is used by other modules (mail)
+ * @access private
  * @param  string $sourceFileName       From which file do we want to execute? Assume it exists by now ;-)
  * @param  array  $tplData              Template variables
  * @param  string $tplType              'module' or 'page'
@@ -773,7 +773,7 @@ class xarTpl extends Object
  * @todo  insert log warning when double entry in cachekeys occurs? (race condition)
  * @todo  make the checking whether templatecode is set more robust (related to templated exception handling)
  */
-    public static function executeFromFile($sourceFileName, $tplData, $tplType = 'module')
+    private static function executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     {
         assert('!empty($sourceFileName); /* The source file for the template is empty in xarTpl::executeFromFile */');
         assert('is_array($tplData); /* Template data should always be passed in as array */');
