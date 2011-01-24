@@ -371,7 +371,6 @@ class xarTpl extends Object
         // 1. Only create a link somewhere on the page, when clicked opens a page with the variables on that page
         // 2. Create a page in the themes module with an interface
         // 3. Use 1. to link to 2.
-        // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
         if (method_exists('xarModVars','Get')){
             $var_dump = xarModVars::get('themes', 'variable_dump') && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'));
             if ($var_dump == true){
@@ -713,6 +712,7 @@ class xarTpl extends Object
     {
         // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
         $templateName = xarVarPrepForOS($templateName);
+        // @checkme No file exists check here?
         $sourceFileName = self::getThemeDir() ."/includes/$templateName.xt";
         return self::executeFromFile($sourceFileName, $tplData);
     }
@@ -725,6 +725,7 @@ class xarTpl extends Object
  * @param  string $templateName Basically handler function for <xar:template type="module".../>
  * @param  array  $tplData      template variables
  * @param  array  $propertyName name of the property from which to include the template
+ * @throws FileNotFoundException
  * @todo implement common templates in cascade 
  * @return string
  */
@@ -757,7 +758,7 @@ class xarTpl extends Object
         if (file_exists($sourceFileName)) return self::executeFromFile($sourceFileName, $tplData);
         echo $sourceFileName;exit;
         // Not found: raise an exception
-        throw new Exception("Could not find include template $templateName.xt");
+        throw new FileNotFoundException($templateName, 'Could not find include template #(1).xt');
     }
 
 /* PRIVATE FUNCTIONS */
@@ -968,7 +969,6 @@ class xarTpl extends Object
                 // Default to not show the comments
                 self::$showPHPCommentBlockInTemplates = 0;
                 // CHECKME: not sure if this is needed, e.g. during installation
-                // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
                 if (method_exists('xarModVars','Get')){
                     $showphpcbit = xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates');
                     if (!empty($showphpcbit)) {
