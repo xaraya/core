@@ -13,11 +13,11 @@
             <h2>
                 #$object:label#&#160;
                 <a href="#$viewlink#" title="View #$object:label#">
-                    <img src="#xarTpl::getImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                    <xar:img scope="theme" file="icons/item-list.png" class="xar-icon" alt="view"/>
                 </a>
                 <xar:if condition="!empty($modifylink)">
                     &#160;<a href="#$modifylink#" title="Edit #$object:label#">
-                        <img src="#xarTpl::getImage('icons/modify.png', 'base')#" width="16" height="16" alt="modify"/>
+                        <xar:img scope="theme" file="icons/modify.png" class="xar-icon" alt="modify"/>
                     </a>
                 </xar:if>
             </h2>

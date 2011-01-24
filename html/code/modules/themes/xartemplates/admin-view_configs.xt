@@ -13,7 +13,7 @@
             <xar:var name="label">Create New Configuration Item</xar:var>
             <a href="#xarModURL('themes','admin','new_config')#" title="#$label#">
                 <xar:if condition="xarModVars::get('themes','use_module_icons')">
-                    <img src="#xarTpl::getImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/>
+                    <xar:img scope="theme" file="icons/add.png" class="xar-icon" alt="new"/>
                 <xar:else />
                     Create New Theme Configuration
                 </xar:if>

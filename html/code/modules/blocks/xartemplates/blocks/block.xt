@@ -7,7 +7,7 @@
                     <xar:var name="title" prep="false"/>
                     <xar:sec mask="AdminBase" catch="false">
                         <a class="xar-icon" href="#xarModURL('blocks','admin','modify_instance',array('bid' => $bid))#" title="Edit this block" style="float: right">
-                            <img class="xar-icon" src="#xarTpl::getImage('icons/modify.png','base')#"/>
+                            <xar:img scope="theme" class="xar-icon" file="icons/modify.png"/>
                         </a>
                     </xar:sec>
                 </div>

@@ -90,11 +90,11 @@ function themes_admin_list()
     if ($sort == 'desc') {
         $themelist = array_reverse($themelist);
         $newsort = 'asc';
-        $sortimage = xarTpl::getImage('arrow_up.gif', 'base');
+        $sortimage = xarTpl::getImage('arrow_up.gif', 'module', 'base');
         $sortlabel = xarML('Sort Ascending');
     } else {
         $newsort = 'desc';
-        $sortimage = xarTpl::getImage('arrow_down.gif', 'base');
+        $sortimage = xarTpl::getImage('arrow_down.gif', 'module', 'base');
         $sortlabel = xarML('Sort Descending');
     }
     $data['sorturl'] = xarServer::getCurrentURL(array('sort' => $newsort));
@@ -102,17 +102,17 @@ function themes_admin_list()
     $data['sortlabel'] = $sortlabel;
 
     // get action icons/images
-    $img_disabled       = xarTpl::getImage('icons/disabled.png','base');
-    $img_none           = xarTpl::getImage('icons/none.png','base');
-    $img_activate       = xarTpl::getImage('icons/activate.png','base');
-    $img_deactivate     = xarTpl::getImage('icons/deactivate.png','base');
-    $img_upgrade        = xarTpl::getImage('icons/software-upgrade.png','base');
-    $img_initialise     = xarTpl::getImage('icons/initialize.png','base');
-    $img_remove         = xarTpl::getImage('icons/remove.png','base');
+    $img_disabled       = xarTpl::getImage('icons/disabled.png','theme');
+    $img_none           = xarTpl::getImage('icons/none.png','theme');
+    $img_activate       = xarTpl::getImage('icons/activate.png','theme');
+    $img_deactivate     = xarTpl::getImage('icons/deactivate.png','theme');
+    $img_upgrade        = xarTpl::getImage('icons/software-upgrade.png','theme');
+    $img_initialise     = xarTpl::getImage('icons/initialize.png','theme');
+    $img_remove         = xarTpl::getImage('icons/remove.png','theme');
 
     // get other images
-    $data['infoimg']    = xarTpl::getImage('icons/info.png','base');
-    $data['editimg']    = xarTpl::getImage('icons/hooks.png','base');
+    $data['infoimg']    = xarTpl::getImage('icons/info.png','theme');
+    $data['editimg']    = xarTpl::getImage('icons/hooks.png','theme');
 
     $data['listrowsitems'] = array();
     $listrows = array();
@@ -278,6 +278,7 @@ function themes_admin_list()
         $listrows[$i]['regid']          = $thisthemeid;
 
         // preview images
+        //$previewpath = xarTpl::getImage('preview.jpg', 'theme', $theme['directory']);
         $previewpath = "themes/$theme[directory]/images/preview.jpg";
         $listrows[$i]['preview'] = file_exists($previewpath) ? $previewpath : '';
 
@@ -286,7 +287,7 @@ function themes_admin_list()
     }
 
     // detailed info image url
-    $data['infoimage'] = xarTpl::getImage('help.gif');
+    $data['infoimage'] = xarTpl::getImage('icons/help-browser.png', 'theme');
 
     sys::import('modules.dynamicdata.class.objects.master');
     $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_configurations'));

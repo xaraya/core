@@ -15,12 +15,12 @@
             <xar:if condition="!empty($objectid) and $objectid eq 1">
                 Delete DataObject #$object:properties.label:value#&#160;
                 <a href="#$viewlink#" title="Back to DataObjects">
-                    <img src="#xarTpl::getImage('icons/go-home.png', 'base')#" width="16" height="16" alt="home"/>
+                    <xar:img scope="theme" file="icons/go-home.png" class="xar-icon" alt="home"/>
                 </a>
             <xar:else/>
                 Delete Item #$object:itemid# in #$object:label#&#160;
                 <a href="#$viewlink#" title="View #$object:label#">
-                    <img src="#xarTpl::getImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                    <xar:img scope="theme" file="icons/item-list.png" class="xar-icon" alt="view"/>
                 </a>
             </xar:if>
         </h2>

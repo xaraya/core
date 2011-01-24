@@ -7,7 +7,7 @@
     <div class="xar-mod-body">
         <fieldset>
             <legend>Problem From the Installer</legend>
-            <img src="#xarTpl::getImage('user-error.png','base')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon"/>
+            <img src="#xarTpl::getImage('user-error.png','theme')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon"/>
             <xar:if condition="!isset($layout)">
                 <div style="margin-top: 20px">No error message is available. 
                 <br />Please contact the system administrator.</div>

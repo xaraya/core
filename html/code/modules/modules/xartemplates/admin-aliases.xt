@@ -20,7 +20,7 @@
                         <div class="xar-form-input-wrapper-after">
                             <a href="#xarModURL('modules','admin','aliases',array('name' => $value, 'remove' => $key))#">
                                 <xar:var name="imagealt">[remove]</xar:var>
-                                <xar:set name="iconurl">xarTpl::getImage('icons/delete.png', 'base')</xar:set>
+                                <xar:set name="iconurl">xarTpl::getImage('icons/delete.png', 'theme')</xar:set>
                                 <xar:data-output type="image" value="$iconurl" imagetext="$imagealt"/>
                             </a>
                             &#160;#$key#
@@ -38,7 +38,7 @@
                     <input type="text" name="add"/>&#160;
                     <input type="hidden" name="name" value="#$modname#"/>
                     <xar:var name="label">Add Alias</xar:var>
-                    <xar:set name="iconurl">xarTpl::getImage('icons/add.png', 'base')</xar:set>
+                    <xar:set name="iconurl">xarTpl::getImage('icons/add.png', 'theme')</xar:set>
                     <xar:var name="imagealt">[add]</xar:var>
                     <xar:button type="submit" label="$label" src="$iconurl" title="$imagealt"/>
                 </div>

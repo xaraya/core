@@ -14,7 +14,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:var name="label">Message Icon</xar:var>
-        <img src="#xarTpl::getImage('info.png', 'base')#" alt="#$label#"/>
+        <xar:img scope="theme" file="info.png" alt="$label" width="96" height="96" class="xar-module-icon"/>
         <h2>#$title#</h2>
         <p>#$short#</p>
         <xar:if condition="$long ne ''">
