@@ -98,22 +98,24 @@ class xarJS extends xarThemes
             'base'      => xarJS::JSCOMMONBASE,
             'filename'  => '',
             'code'      => !empty($code) ? $code : '',
-            'package'   => '',
+            'module'    => '',
+            'property'  => '',
             'url'       => '',
         );
 
         // set additional params based on scope
         switch ($scope) {
             case 'theme':
+                $package = '';
                 break;
             case 'module':
-                $tag['package'] = !empty($module) ? $module : xarMod::getName();
+                $tag['module'] = $package = !empty($module) ? $module : xarMod::getName();
                 break;
             case 'block':
-                $tag['package'] = empty($module) ? xarVarGetCached('Security.Variables', 'currentmodule') : $module; 
+                $tag['module'] = $package = empty($module) ? xarVarGetCached('Security.Variables', 'currentmodule') : $module; 
                 break;
             case 'property':
-                $tag['package'] = $property;
+                $tag['property'] = $package = $property;
                 break;
         }
 
@@ -136,7 +138,7 @@ class xarJS extends xarThemes
             if (strpos($file, '?') !== false) 
                 list($file, $params) = explode('?', $file, 2);
             // get path relative to web root            
-            $relPath = $this->findFile($scope, trim($file), $tag['base'], $tag['package'], true);
+            $relPath = $this->findFile($scope, trim($file), $tag['base'], $package, true);
             if (empty($relPath)) continue;
             // if type is code, we want the file contents
             if ($type == 'code') {
@@ -236,7 +238,7 @@ class xarJS extends xarThemes
         if (empty($position) || empty($type) || empty($scope) || empty($url) || empty($data)) return;
         
         // keep track of javascript when we're caching
-        xarCache::addJavascript($position, $type, $url, $index);
+        xarCache::addJavascript($data);
         
         if (!isset(self::$js)) {
             // scope rendering order

@@ -210,9 +210,9 @@ class xarCache extends Object
     }
 
     /**
-     * Keep track of some javascript for caching - see xarTplAddJavaScript()
+     * Keep track of some javascript for caching - xarMod::apiFunc('themes','user','registerjs')
      */
-    public static function addJavaScript($position, $type, $data, $index = '')
+    public static function addJavaScript(Array $args=array())
     {
         if (!xarCache::$outputCacheIsEnabled) {
             return;

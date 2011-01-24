@@ -259,9 +259,7 @@ class xarObjectCache extends Object
         }
         if (!empty($content['script']) && is_array($content['script'])) {
             foreach ($content['script'] as $info) {
-                // @todo: <chris/> this function is deprecated
-                // needs aligning with themes user registerjs api function and xarJS class
-                //xarTplAddJavaScript($info[0], $info[1], $info[2], $info[2]);
+                xarMod::apiFunc('themes','user','registerjs',$info);
             }
         }
         return $content['output'];
@@ -350,14 +348,13 @@ class xarObjectCache extends Object
     }
 
     /**
-     * Keep track of some javascript for caching - see xarTplAddJavaScript()
-     * @return void
-     * @todo <chris/> bring this method in line with xarJS class     
+     * Keep track of some javascript for caching - see xarMod::apiFunc('themes','user','registerjs')
+     * @return void    
      */
-    public static function addJavaScript($position, $type, $data, $index = '')
+    public static function addJavaScript(Array $args = array())
     {
         if (empty(self::$cacheKey)) return;
-        self::$scriptList[] = array($position, $type, $data, $index = '');
+        self::$scriptList[] = $args;
     }
 }
 ?>

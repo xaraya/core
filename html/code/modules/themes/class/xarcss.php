@@ -130,7 +130,8 @@ class xarCSS extends xarThemes
             'source'     => !empty($source)    ? $source    : '',
             'title'      => !empty($title)     ? $title     : '',
             'condition'  => !empty($condition) ? $condition : '',
-            'package'    => '',
+            'module'     => '',
+            'property'   => '',
             'url'        => '',
         );       
         
@@ -139,17 +140,17 @@ class xarCSS extends xarThemes
             case 'common':
                 if (empty($file))
                     $tag['file'] = xarCSS::CSSCOMMONCORE;
-                break;
             case 'theme':
+                $package = '';
                 break;
             case 'module':
-                $tag['package'] = empty($module) ? xarMod::getName() : $module;
+                $tag['module'] = $package = empty($module) ? xarMod::getName() : $module;
                 break;
             case 'block': 
-                $tag['package'] = empty($module) ? xarVarGetCached('Security.Variables', 'currentmodule') : $module; 
+                $tag['module'] = $package = empty($module) ? xarVarGetCached('Security.Variables', 'currentmodule') : $module; 
                 break;
             case 'property':
-                $tag['package'] = $property;
+                $tag['property'] = $package = $property;
                 break;
         }
             
@@ -177,7 +178,7 @@ class xarCSS extends xarThemes
         // if the alternatedir wasn't supplied, or we didn't find a file
         // look for the file in the usual places        
         if (empty($filePath))
-            $filePath = $this->findFile($scope, $fileName, $tag['base'], $tag['package']);
+            $filePath = $this->findFile($scope, $fileName, $tag['base'], $package);
         if (empty($filePath)) return;
         $tag['url'] = $filePath;
         
