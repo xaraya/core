@@ -32,7 +32,7 @@ class YahooProperty extends TextBoxProperty
         $this->template = 'yahoo';
         $this->filepath   = 'modules/roles/xarproperties';
         if (empty($this->initialization_icon_url)) {
-            $this->initialization_icon_url = xarTplGetImage('contact/yahoo.png','roles');
+            $this->initialization_icon_url = xarTpl::getImage('contact/yahoo.png','roles');
         }
     }
 

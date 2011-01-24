@@ -815,7 +815,7 @@ class xarMod extends Object implements IxarMod
         if (isset($tplData['_bl_template'])) $templateName = $tplData['_bl_template'];
 
         // Create the output.
-        $tplOutput = xarTplModule($modName, $modType, $funcName, $tplData, $templateName);
+        $tplOutput = xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
 
         // Set the output of the module function in cache
         if (!empty($cacheKey)) {

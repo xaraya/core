@@ -6,7 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:var name="label">Privileges Icon</xar:var>
-        <img src="#xarTplGetImage('privileges.png', 'base')#" alt="#$label#" class="xar-module-icon"/>
+        <img src="#xarTpl::getImage('privileges.png', 'base')#" alt="#$label#" class="xar-module-icon"/>
         <xar:if condition="!empty($msg)">
             <h2><xar:var name="msg"/></h2>
         </xar:if>

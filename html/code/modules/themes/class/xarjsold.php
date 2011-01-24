@@ -149,7 +149,7 @@ class xarJS extends Object
         $javascript = $this->getQueued($args);
         if (empty($javascript)) return;    
         $args['javascript'] = $javascript;
-        return xarTplModule('themes', 'javascript', 'render', $args);
+        return xarTpl::module('themes', 'javascript', 'render', $args);
     }
 
 /**
@@ -258,7 +258,7 @@ class xarJS extends Object
         }
 
         // Theme base directory.
-        $themedir = xarTplGetThemeDir();
+        $themedir = xarTpl::getThemeDir();
 
         // Initialise the search path.
         $searchPath = array();

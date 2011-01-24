@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:if condition="!empty($nodes)">
-        <xar:set name="deleteicon">xarTplGetImage('icons/delete.png', 'base')</xar:set>
-        <xar:set name="usersicon">xarTplGetImage('icons/system-users.png','base')</xar:set>
-        <xar:set name="mailicon">xarTplGetImage('icons/mail-message-new.png','base')</xar:set>
-        <xar:set name="privsicon">xarTplGetImage('icons/privileges.png','base')</xar:set>
-        <xar:set name="testicon">xarTplGetImage('icons/test.png','base')</xar:set>
-        <xar:set name="blankicon">xarTplGetImage('icons/blank.png','base')</xar:set>
+        <xar:set name="deleteicon">xarTpl::getImage('icons/delete.png', 'base')</xar:set>
+        <xar:set name="usersicon">xarTpl::getImage('icons/system-users.png','base')</xar:set>
+        <xar:set name="mailicon">xarTpl::getImage('icons/mail-message-new.png','base')</xar:set>
+        <xar:set name="privsicon">xarTpl::getImage('icons/privileges.png','base')</xar:set>
+        <xar:set name="testicon">xarTpl::getImage('icons/test.png','base')</xar:set>
+        <xar:set name="blankicon">xarTpl::getImage('icons/blank.png','base')</xar:set>
 
         <ul class="xar-tree">
             <xar:set name="nodecount">count($nodes)</xar:set>

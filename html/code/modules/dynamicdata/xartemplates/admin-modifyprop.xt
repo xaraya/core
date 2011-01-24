@@ -24,7 +24,7 @@
                     }
                     </script>
                     &#160;<a href="javascript:xar_dynamicdata_formpreview();" title="Preview Input Form #$label#">
-                        <img src="#xarTplGetImage('icons/document-properties.png', 'base')#" width="16" height="16" alt="preview"/>
+                        <img src="#xarTpl::getImage('icons/document-properties.png', 'base')#" width="16" height="16" alt="preview"/>
                     </a>
                 </xar:if>
             </h2>

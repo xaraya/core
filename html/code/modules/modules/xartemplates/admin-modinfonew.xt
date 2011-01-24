@@ -14,9 +14,9 @@
             </div>
             <div class="xar-floatright xar-halfwidth xar-align-right">
                 <xar:if condition="file_exists(sys::code() . 'modules/base/xarimages/' . $modname . '.png')">
-                    <xar:set name="modiconurl">xarTplGetImage($modname . '.png', 'base')</xar:set>
+                    <xar:set name="modiconurl">xarTpl::getImage($modname . '.png', 'base')</xar:set>
                 <xar:elseif condition="file_exists(sys::code() . 'modules/' . $modname . '/xarimages/' . $modname . '.png')"/>
-                    <xar:set name="modiconurl">xarTplGetImage($modname . '.png', $modname)</xar:set>
+                    <xar:set name="modiconurl">xarTpl::getImage($modname . '.png', $modname)</xar:set>
                 </xar:if>
                 <xar:var name="imagetext">#$moddispname#</xar:var>
                 <xar:set name="imagealt">$imagetext</xar:set>
@@ -55,7 +55,7 @@
                 </label>
                 <a href="#xarModURL('modules','admin','aliases',array('name' => $modname))#">
                     <xar:var name="imagealt">[set aliases]</xar:var>
-                    <xar:set name="iconurl">xarTplGetImage('icons/modify.png', 'base')</xar:set>
+                    <xar:set name="iconurl">xarTpl::getImage('icons/modify.png', 'base')</xar:set>
                     <xar:data-output type="image" value="$iconurl" imagetext="$imagealt"/>
                 </a>
                 #$aliases#

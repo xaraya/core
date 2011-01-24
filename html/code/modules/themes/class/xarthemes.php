@@ -17,7 +17,6 @@
 **/
 class xarThemes extends Object
 {
-    const COMMON = 'common'; // themes/common
 
 /**
  * Find file function
@@ -39,16 +38,15 @@ class xarThemes extends Object
  * @return string path to file if found, empty otherwise
  * @throws none
 **/
-    public function findFile($scope, $filename, $base='', $package='', $rel=false)
+    public static function findFile($scope, $filename, $base='', $package='', $rel=false)
     {
         if (empty($scope) || empty($filename)) return;
         
         // set common template paths
-        $themesDir = xarConfigVars::get(null, 'Site.BL.ThemesDirectory', 'themes');
-        $themeDir = xarTplGetThemeDir();
+        $themeDir = xarTpl::getThemeDir();
         $codeDir = sys::code();
         $baseUrl = xarServer::getBaseURL();
-        $commonDir = is_dir($themesDir.'/'.xarThemes::COMMON) ? $themesDir.'/'.xarThemes::COMMON : 'themes/'.xarThemes::COMMON;
+        $commonDir = xarTpl::getThemeDir('common');
 
         // set path part relative to common cascade paths
         $relpath = !empty($base) ? $base . '/' . $filename : $filename;
@@ -58,7 +56,7 @@ class xarThemes extends Object
             case 'common':
             case 'theme':
                 if (!empty($package))
-                    $paths[] = $themesDir . '/' . $package . '/' . $relpath;
+                    $paths[] = xarTpl::getThemeDir($package) . '/' . $relpath;
                 $paths[] = $themeDir . '/' . $relpath;
                 $paths[] = $commonDir . '/' . $relpath;
             break;

@@ -66,11 +66,11 @@ function themes_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
-                return xarTplModule('themes','admin','modifyconfig', $data);        
+                return xarTpl::module('themes','admin','modifyconfig', $data);        
             } else {
                 $itemid = $data['module_settings']->updateItem();
             }

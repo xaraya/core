@@ -32,7 +32,7 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
      * @param $args['sort'] optional sort for the view
      * @param $args['where'] optional where clause(s) for the view
      * @param $args['startnum'] optional start number for the view
-     * @return string output of xarTplObject() using 'ui_view'
+     * @return string output of xarTpl::object() using 'ui_view'
      */
     function run(array $args = array())
     {
@@ -73,7 +73,7 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
             }
         }
         $title = xarML('View #(1)', $this->object->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
 
         if (!$this->object->checkAccess('view'))
             return xarController::$response->Forbidden(xarML('View #(1) is forbidden', $this->object->label));
@@ -84,7 +84,7 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
 
 $this->object->callHooks('view');
 
-        $output = xarTplObject(
+        $output = xarTpl::object(
             $this->tplmodule, $this->object->template, 'ui_view',
             array('object'   => $this->object,
                   'tpltitle' => $this->tpltitle)

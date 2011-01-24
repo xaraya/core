@@ -179,7 +179,7 @@ class xarJS extends xarThemes
         if (empty($javascript)) return;  
         $args['javascript'] = $javascript;
         $args['comments'] = !empty($args['comments']);
-        return xarTplModule('themes', 'javascript', 'render', $args);
+        return xarTpl::module('themes', 'javascript', 'render', $args);
     }
 
 /**

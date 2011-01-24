@@ -15,12 +15,12 @@
             <xar:if condition="!empty($object:objectid) and $object:objectid eq 1">
                 Create New DataObject&#160;
                 <a href="#$viewlink#" title="Back to DataObjects">
-                    <img src="#xarTplGetImage('icons/go-home.png', 'base')#" width="16" height="16" alt="home"/>
+                    <img src="#xarTpl::getImage('icons/go-home.png', 'base')#" width="16" height="16" alt="home"/>
                 </a>
             <xar:else/>
                 Create New Item in #$object:label#&#160;
                 <a href="#$viewlink#" title="View #$object:label#">
-                    <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                    <img src="#xarTpl::getImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
                 </a>
             </xar:if>
         </h2>

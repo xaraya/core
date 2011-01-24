@@ -35,7 +35,7 @@
     	<xar:style scope="theme" file="admin" title="Xaraya Default Stylesheet"/>
     	<xar:place-css />
     -->
-    <link rel="stylesheet" type="text/css" href="#xarTplGetThemeDir()#/style/admin.css" media="screen" title="Kingston Stylesheet" />
+    <link rel="stylesheet" type="text/css" href="#xarTpl::getThemeDir()#/style/admin.css" media="screen" title="Kingston Stylesheet" />
     
     <xar:place-javascript position="head"/>
     

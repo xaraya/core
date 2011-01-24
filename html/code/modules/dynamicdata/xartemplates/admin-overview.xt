@@ -22,7 +22,7 @@
     </div>
     <div class="xar-mod-body">
     <div class="xar-mod-page-head">
-        <img src="#xarTplGetImage('dynamicdata.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
+        <img src="#xarTpl::getImage('dynamicdata.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
         <ul class="xar-tabs">
             <li id="tab-1" class="xar-tab">

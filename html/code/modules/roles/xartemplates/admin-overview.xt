@@ -7,7 +7,7 @@
     </div>
     <div class="xar-mod-body">
     <div class="xar-mod-page-head">
-        <img src="#xarTplGetImage('roles.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
+        <img src="#xarTpl::getImage('roles.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
     </div>
 	<div class="xar-mod-page-body">

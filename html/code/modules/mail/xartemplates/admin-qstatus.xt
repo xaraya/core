@@ -22,9 +22,9 @@
             <legend>Queue status overview</legend>
             <xar:foreach in="$queues" key="$index" value="$qinfo">
                 <xar:set name="rowclass">$index % 2?'xar-alt':''</xar:set>
-                <ul class="qstatus #$rowclass#" style="background-image: url(#xarTplGetImage($qinfo.status .'.gif')#);">
+                <ul class="qstatus #$rowclass#" style="background-image: url(#xarTpl::getImage($qinfo.status .'.gif')#);">
                     <li style="width: 16px;">
-                        <img style="vertical-align: middle;" src="#xarTplGetImage('qtype_'.$qinfo['qtype'].'.gif')#"/>
+                        <img style="vertical-align: middle;" src="#xarTpl::getImage('qtype_'.$qinfo['qtype'].'.gif')#"/>
                     </li>
                     <li style="width: 5em;">#$qinfo.name#</li>
                     <li style="width: 12em; text-align: right;">#$qinfo.count# items</li>
@@ -33,10 +33,10 @@
             </xar:foreach>
             <div class="qstatus">
                 <a href="#xarModURL('mail','admin','qstatus')#">
-                    <img src="#xarTplGetImage('refresh.gif')#"/>Refresh current status
+                    <img src="#xarTpl::getImage('refresh.gif')#"/>Refresh current status
                 </a>
                 <a href="#xarModURL('mail','admin','qstatus')#">
-                    <img src="#xarTplGetImage('reprocess.gif')#"/>Reprocess queues
+                    <img src="#xarTpl::getImage('reprocess.gif')#"/>Reprocess queues
                 </a>
             </div>
         </fieldset>
@@ -47,7 +47,7 @@
                     <li>#$qname#
                         <ul class="qstatus">
                             <xar:foreach in="$measure" value="$action">
-                            <xar:set name="bckgrndimg">xarTplGetImage($action['action']).'.gif'</xar:set>
+                            <xar:set name="bckgrndimg">xarTpl::getImage($action['action']).'.gif'</xar:set>
                                 <li style="background-image: url($bckgrndimg)">
                                     <a style="text-decoration: none; font-size: 0.85em;" href="#xarModUrl('mail','admin',$action['action'],array('name' =&gt; $qname, 'authid' =&gt; $authid))#">
                                     #$action.text#
@@ -61,17 +61,17 @@
         <fieldset class="qslip" style="margin-left: 5pt;">
             <legend>Legend</legend>
             <ul class="qslip">
-                <li style="background-image: url(#xarTplGetImage('active.gif')#);">
+                <li style="background-image: url(#xarTpl::getImage('active.gif')#);">
                     Queue is active and in good condition
                 </li>
-                <li style="background-image: url(#xarTplGetImage('inactive.gif')#);">
+                <li style="background-image: url(#xarTpl::getImage('inactive.gif')#);">
                     Queue is inactive
                 </li>
-                <li style="background-image: url(#xarTplGetImage('problematic.gif')#);">
+                <li style="background-image: url(#xarTpl::getImage('problematic.gif')#);">
                     Queue is inactive due to a problem
                 </li>
                 <xar:foreach in="$qtypes" key="$type" value="$description">
-                    <li style="background-image: url(#xarTplGetImage('qtype_'.$type.'.gif')#);">
+                    <li style="background-image: url(#xarTpl::getImage('qtype_'.$type.'.gif')#);">
                         #$description#
                     </li>
                 </xar:foreach>

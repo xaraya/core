@@ -52,17 +52,17 @@
     </div>
 
     <xar:if condition="!empty($userlinks)">
-        <xar:set name="visibleicon">#xarTplGetImage('icons/enabled.png', 'base')#</xar:set>
-        <xar:set name="invisibleicon">#xarTplGetImage('icons/disabled.png', 'base')#</xar:set>
+        <xar:set name="visibleicon">#xarTpl::getImage('icons/enabled.png', 'base')#</xar:set>
+        <xar:set name="invisibleicon">#xarTpl::getImage('icons/disabled.png', 'base')#</xar:set>
         <xar:var name="visibletitle">Link is visible in the menu</xar:var>
         <xar:var name="invisibletitle">Link is not visible in the menu</xar:var>
-        <xar:set name="imgup">#xarTplGetImage('icons/go-up.png', 'base')#</xar:set>
-        <xar:set name="imgdown">#xarTplGetImage('icons/go-down.png', 'base')#</xar:set>
+        <xar:set name="imgup">#xarTpl::getImage('icons/go-up.png', 'base')#</xar:set>
+        <xar:set name="imgdown">#xarTpl::getImage('icons/go-down.png', 'base')#</xar:set>
         <xar:var name="imgupalt">Up</xar:var>
         <xar:var name="imgdownalt">Down</xar:var>
         <xar:var name="imguptitle">Move this link up</xar:var>
         <xar:var name="imgdowntitle">Move this link down</xar:var>
-        <xar:set name="wwwicon">#xarTplGetImage('icons/www-url.png', 'base')#</xar:set>
+        <xar:set name="wwwicon">#xarTpl::getImage('icons/www-url.png', 'base')#</xar:set>
         <xar:var name="wwwcheck">Check the URL for this link</xar:var>
         <xar:var name="wwwnone">URL is empty</xar:var>
         <xar:var name="wwwalt">Check URL</xar:var>

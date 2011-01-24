@@ -35,7 +35,7 @@ function themes_admin_new_config()
         
         if (!$isvalid) {
             // Bad data: redisplay the form with error messages
-            return xarTplModule('themes','admin','new_config', $data);        
+            return xarTpl::module('themes','admin','new_config', $data);        
         } else {
             // Good data: create the item
             $itemid = $data['object']->createItem();

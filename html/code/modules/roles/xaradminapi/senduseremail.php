@@ -38,8 +38,8 @@ function roles_adminapi_senduseremail(Array $args=array())
     // Get the predefined email if none is defined
     $strings = xarMod::apiFunc('roles','admin','getmessagestrings', array('module' => 'roles','template' => $mailtype));
 
-    if (!isset($subject)) $subject = xarTplCompileString($strings['subject']);
-    if (!isset($message)) $message = xarTplCompileString($strings['message']);
+    if (!isset($subject)) $subject = xarTpl::compileString($strings['subject']);
+    if (!isset($message)) $message = xarTpl::compileString($strings['message']);
     //Get the common search and replace values
     //if (is_array($id)) {
         foreach ($id as $userid => $val) {
@@ -89,8 +89,8 @@ function roles_adminapi_senduseremail(Array $args=array())
                 }
             }
 
-            $subject = xarTplString($subject, $data);
-            $message = xarTplString($message, $data);
+            $subject = xarTpl::string($subject, $data);
+            $message = xarTpl::string($message, $data);
             // TODO Make HTML Message.
             // Send confirmation email
             if (!xarMod::apiFunc('mail',

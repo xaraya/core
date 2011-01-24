@@ -7,8 +7,8 @@
         xar_base_reorder_warn = '#xarML('You must select an option to move.')#';
     </script>
 
-    <xar:set name="up_arrow_src">xarTplGetImage('up.gif', 'base')</xar:set>
-    <xar:set name="down_arrow_src">xarTplGetImage('down.gif', 'base')</xar:set>
+    <xar:set name="up_arrow_src">xarTpl::getImage('up.gif', 'base')</xar:set>
+    <xar:set name="down_arrow_src">xarTpl::getImage('down.gif', 'base')</xar:set>
 
     <xar:if condition="count($options) gt 10">
         <xar:set name="size">10</xar:set>

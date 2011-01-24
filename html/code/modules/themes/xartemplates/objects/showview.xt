@@ -46,19 +46,19 @@
                         <xar:if condition="xarModVars::get('themes','use_module_icons')">
                             <xar:var name="title">Display Configuration</xar:var>
                             <a href="#xarModURL('themes','admin','display_config',array('itemid' => $fields['id']))#" title="#$title#">
-                                <img src="#xarTplGetImage('icons/display.png', 'base')#" width="16" height="16" alt="#$title#"/>
+                                <img src="#xarTpl::getImage('icons/display.png', 'base')#" width="16" height="16" alt="#$title#"/>
                             </a>&#160;
                             <xar:var name="title">Modify Configuration</xar:var>
                             <a href="#xarModURL('themes','admin','modify_config',array('itemid' => $fields['id']))#" title="#$title#">
-                                <img src="#xarTplGetImage('icons/modify.png', 'base')#" width="16" height="16" alt="#$title#"/>
+                                <img src="#xarTpl::getImage('icons/modify.png', 'base')#" width="16" height="16" alt="#$title#"/>
                             </a>&#160;
                             <xar:var name="title">Delete Configuration</xar:var>
                             <a href="#xarModURL('themes','admin','delete_config',array('itemid' => $fields['id']))#" title="#$title#">
-                                <img src="#xarTplGetImage('icons/delete.png', 'base')#" width="16" height="16" alt="#$title#"/>
+                                <img src="#xarTpl::getImage('icons/delete.png', 'base')#" width="16" height="16" alt="#$title#"/>
                             </a>&#160;
                             <xar:var name="title">Export Configuration</xar:var>
                             &#160;<a href="#xarModURL('themes','admin','export_config',array('itemid' => $fields['theme_id']))#" title="#$title#">
-                                <img src="#xarTplGetImage('icons/export-xml.png', 'base')#" width="16" height="16" alt="#$title#"/>
+                                <img src="#xarTpl::getImage('icons/export-xml.png', 'base')#" width="16" height="16" alt="#$title#"/>
                             </a>
                         <xar:else/>
                             <a href="#xarModURL('themes','admin','display_config',array('itemid' => $fields['id']))#">Display</a>&#160;

@@ -7,7 +7,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:var name="label">official icon</xar:var>
-        <img src="#xarTplGetImage('mail.png','base')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
+        <img src="#xarTpl::getImage('mail.png','base')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
 
         <h3>What is it?</h3>

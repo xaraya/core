@@ -26,7 +26,7 @@ function themes_admin_setdefault()
     
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }
     
     if (!xarVarFetch('id', 'int:1:', $defaulttheme, 0, XARVAR_NOT_REQUIRED)) return;
@@ -55,7 +55,7 @@ function themes_admin_setdefault()
     }
 
     // update the data
-    xarTplSetThemeDir($themeInfo['directory']);
+    xarTpl::setThemeDir($themeInfo['directory']);
     xarModVars::set('themes', 'default_theme', $themeInfo['directory']);
 
     // set the target location (anchor) to go to within the page

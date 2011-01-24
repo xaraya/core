@@ -31,7 +31,7 @@
                         <xar:mlvar>#$object:label#</xar:mlvar>
                     </xar:ml>
                     <a href="#$viewlink#" title="View #$object:label#">
-                        <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                        <img src="#xarTpl::getImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
                     </a>
                 </xar:if>
             </h2>
@@ -99,7 +99,7 @@
                 <xar:else/>
                     Modify Item #$object:itemid# in #$object:label#&#160;
                     <a href="#$viewlink#" title="View #$object:label#">
-                        <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                        <img src="#xarTpl::getImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
                     </a>
                 </xar:if>
             </h2>

@@ -184,7 +184,7 @@ class xarCSS extends Object
 
         if ($this->scope == 'theme') {
             // pretty straightforward
-            $themestylesheet =  xarTplGetThemeDir() . "/style/" . $this->filename . "." . $this->fileext;
+            $themestylesheet =  xarTpl::getThemeDir() . "/style/" . $this->filename . "." . $this->fileext;
             if(!file_exists($themestylesheet)) throw new FileNotFoundException($themestylesheet);
             return $themestylesheet;
         } elseif ($this->scope == 'module' || $this->scope == 'block') {            
@@ -195,9 +195,9 @@ class xarCSS extends Object
             // how about the overridden one?
             // Look for theme-based stylesheet whether the module contains one or not.
             if($this->alternatedir != '') {
-                $overridden = xarTplGetThemeDir() . "/" . $this->alternatedir . "/" . $this->filename . "." . $this->fileext;
+                $overridden = xarTpl::getThemeDir() . "/" . $this->alternatedir . "/" . $this->filename . "." . $this->fileext;
             } else {
-                $overridden = xarTplGetThemeDir() . "/modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
+                $overridden = xarTpl::getThemeDir() . "/modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
             }
             if(file_exists($overridden)) {
                 // prolly need to check if it's not a directory too (?)

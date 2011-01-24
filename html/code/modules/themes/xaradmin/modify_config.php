@@ -33,7 +33,7 @@
             
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
-                return xarTplModule('themes','admin','modify_config', $data);        
+                return xarTpl::module('themes','admin','modify_config', $data);        
             } else {
                 // Good data: create the item
                 $itemid = $data['object']->updateItem(array('itemid' => $data['itemid']));

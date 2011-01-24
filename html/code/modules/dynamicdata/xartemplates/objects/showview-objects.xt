@@ -11,7 +11,7 @@
         <!-- we already have an icon in admin-view -->
         <!-- indeed we do -->
             <a href="#xarModURL('dynamicdata','admin','new')#" title="Create New Data Object">
-                <img src="#xarTplGetImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/>
+                <img src="#xarTpl::getImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/>
             </a>
     <xar:else />
         <ul class="xar-mod-actions">
@@ -78,7 +78,7 @@
                                     </xar:if>
                                         <xar:if condition="!empty($option['olink'])">
                                             <xar:if condition="!empty($option['oicon'])">
-                                                <a href="#$option['olink']#" title="#$option['otitle']#"><img src="#xarTplGetImage('icons/'.$option['oicon'], 'base')#" width="16" height="16" alt="#$otype#"/></a>&#160;
+                                                <a href="#$option['olink']#" title="#$option['otitle']#"><img src="#xarTpl::getImage('icons/'.$option['oicon'], 'base')#" width="16" height="16" alt="#$otype#"/></a>&#160;
                                             <xar:else/>
                                                 #$option['ojoin']#
                                                 <a href="#$option['olink']#">#$option['otitle']#</a>

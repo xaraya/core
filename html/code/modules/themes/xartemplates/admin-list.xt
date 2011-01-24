@@ -177,10 +177,10 @@
                                                 </xar:if>
                                                 <xar:if condition="($modinfo['state'] eq 3) and ($modinfo['class'] eq 2) and $modinfo['directory'] ne $default">
                                                     <a href="#$modinfo['defaulturl']#" title="#$imgsetdefault#">
-                                                        <img src="#xarTplGetImage('icons/set-default.png','base')#" alt="#$imgsetdefault#"/>
+                                                        <img src="#xarTpl::getImage('icons/set-default.png','base')#" alt="#$imgsetdefault#"/>
                                                     </a>
                                                 <xar:else />
-                                                    <img src="#xarTplGetImage('icons/none.png','base')#" alt="#$label#"/>
+                                                    <img src="#xarTpl::getImage('icons/none.png','base')#" alt="#$label#"/>
                                                 </xar:if>
                                             <xar:else />
                                                 <a href="#$modinfo['infourlnew']#&amp;theme=print" onclick="window.open(this.getAttribute('href'));return false;">
@@ -288,10 +288,10 @@
                                     </xar:if>
                                     <xar:if condition="($modinfo['state'] eq 3) and ($modinfo['class'] eq 2) and $modinfo['directory'] ne $default">
                                         <a href="#$modinfo['defaulturl']#" title="#$imgsetdefault#">
-                                            <img src="#xarTplGetImage('icons/set-default.png','base')#" alt="#$imgsetdefault#"/>
+                                            <img src="#xarTpl::getImage('icons/set-default.png','base')#" alt="#$imgsetdefault#"/>
                                         </a>
                                     <xar:else />
-                                        <img src="#xarTplGetImage('icons/none.png','base')#" alt="#$label#"/>
+                                        <img src="#xarTpl::getImage('icons/none.png','base')#" alt="#$label#"/>
                                     </xar:if>
                                 <xar:else />
                                     <a href="#$modinfo['actionurl']#">#$modinfo['actionlabel']#</a>
@@ -319,17 +319,17 @@
         <div class="xar-mod-foot">
         	<dl class="xar-legend">
         		<dt>Legend</dt>
-	            <dd><img src="#xarTplGetImage('icons/activate.png','base')#" alt="#$imgactivate#"/>
+	            <dd><img src="#xarTpl::getImage('icons/activate.png','base')#" alt="#$imgactivate#"/>
 	            #$imgactivate#</dd>
-	            <dd><img src="#xarTplGetImage('icons/deactivate.png','base')#" alt="#$imgdeactivate#"/>
+	            <dd><img src="#xarTpl::getImage('icons/deactivate.png','base')#" alt="#$imgdeactivate#"/>
 	            #$imgdeactivate#</dd>
-	            <dd><img src="#xarTplGetImage('icons/set-default.png','base')#" alt="#$imgsetdefault#"/>
+	            <dd><img src="#xarTpl::getImage('icons/set-default.png','base')#" alt="#$imgsetdefault#"/>
 	            #$imgsetdefault#</dd>
-	            <dd><img src="#xarTplGetImage('icons/software-upgrade.png','base')#" alt="#$imgupgrade#"/>
+	            <dd><img src="#xarTpl::getImage('icons/software-upgrade.png','base')#" alt="#$imgupgrade#"/>
 	            #$imgupgrade#</dd>
-	            <dd><img src="#xarTplGetImage('icons/initialize.png','base')#" alt="#$imginstall#"/>
+	            <dd><img src="#xarTpl::getImage('icons/initialize.png','base')#" alt="#$imginstall#"/>
 	            #$imginstall#</dd>
-	            <dd><img src="#xarTplGetImage('icons/remove.png','base')#" alt="#$imgremove#"/>
+	            <dd><img src="#xarTpl::getImage('icons/remove.png','base')#" alt="#$imgremove#"/>
 	            #$imgremove#</dd>
         	</dl>
         </div>

@@ -172,7 +172,7 @@ class xarCache extends Object
     }
 
     /**
-     * Keep track of some page title for caching - see xarTplSetPageTitle()
+     * Keep track of some page title for caching - see xarTpl::setPageTitle()
      */
     public static function setPageTitle($title = NULL, $module = NULL)
     {

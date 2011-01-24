@@ -205,7 +205,7 @@ class xarCSS extends xarThemes
         $args['styles'] = self::$css;
         $args['comments'] = !empty($comments);
         
-        return xarTplModule('themes', 'css', 'render', $args);
+        return xarTpl::module('themes', 'css', 'render', $args);
     }
 
 /**

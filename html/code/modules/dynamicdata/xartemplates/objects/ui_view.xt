@@ -20,11 +20,11 @@
                 <h2>
                     View #$object:label#&#160;
                     <a href="#$searchlink#" title="Search #$object:label#">
-                        <img src="#xarTplGetImage('icons/system-search.png', 'base')#" width="16" height="16" alt="search"/>
+                        <img src="#xarTpl::getImage('icons/system-search.png', 'base')#" width="16" height="16" alt="search"/>
                     </a>
                     <xar:if condition="!empty($newlink)">
                         &#160;<a href="#$newlink#" title="Create New #$object:label#">
-                            <img src="#xarTplGetImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/>
+                            <img src="#xarTpl::getImage('icons/add.png', 'base')#" width="16" height="16" alt="new"/>
                         </a>
                     </xar:if>
                 </h2>
