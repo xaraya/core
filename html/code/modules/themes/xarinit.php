@@ -96,7 +96,7 @@ function themes_init()
     xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright 2003 ');
     xarModVars::set('themes', 'SiteTitleSeparator', ' :: ');
     xarModVars::set('themes', 'SiteTitleOrder', 'default');
-    xarModVars::set('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="' . sys::code() . 'modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder"/></a>');
+    xarModVars::set('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="themes/common/images/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder"/></a>');
     xarModVars::set('themes', 'ShowPHPCommentBlockInTemplates', false);
     xarModVars::set('themes', 'ShowTemplates', false);
     xarModVars::set('themes', 'variable_dump', false);
