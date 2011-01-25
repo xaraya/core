@@ -11,8 +11,6 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/70.html
 **/
-// import the base themes class
-sys::import('modules.themes.class.xarthemes');
 /**
  * Base CSS class
 **/
