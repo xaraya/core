@@ -128,24 +128,19 @@ class Configurations extends Object
         
         while ($this->reader->read()) {
             $i++;
-            
-        // Ignore certain nodes            
-            if ($this->reader->name == "xar:comment") {
-                if (!$this->reader->next()) break;
-                $i++;
+            if ($this->reader->name != 'xar:comment' &&
+                $this->reader->nodeType == XMLReader::TEXT &&            
+                $this->reader->hasValue) {
+                $string = $this->reader->value;
+                preg_match_all($pattern, $string, $matches);
+                if (!empty($matches[1])) {
+                    foreach ($matches[1] as $match) {
+                        $this->configurations[$match][] = array('line' => $i, 'file' => $this->filename);
+                    }
+                }                    
             }
-            
-            if ($this->reader->nodeType == XMLReader::TEXT) {
-               $string = $this->reader->value;
-            } else {
-                continue;
-            }
-            preg_match_all($pattern, $string, $matches);//var_dump();//exit;
-            if (empty($matches[1])) return true;
-            foreach ($matches[1] as $match) {
-                $this->configurations[$match][] = array('line' => $i, 'file' => $this->filename);
-            }            
         }
+        $this->reader->close();
         return true;
     }
 }

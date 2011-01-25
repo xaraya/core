@@ -127,7 +127,9 @@ class ThemeConfigurationProperty extends TextBoxProperty
             $info = xarMod::getInfo($this->theme_id,'theme');
             
             // Get the theme specific options being used in the theme
-            $config->parseTheme($this->theme_id,"/xarThemeVars::get\(\W*[\'\"]" . $info['name'] . "[\'\"]\W*,\W*[\'\"](.+)[\'\"]\W*\)/");
+            $var_re = "!xarThemeVars::get\(\s*[\"|\']" . $info['name'] . "[\"|\']+\s*,\s*[\'|\"]+([^\"|\']*)[\"|\']\s*\)!is";
+            $config->parseTheme($this->theme_id, $var_re); 
+            //$config->parseTheme($this->theme_id,"/xarThemeVars::get\(\W*[\'\"]" . $info['name'] . "[\'\"]\W*,\W*[\'\"](.+)[\'\"]\W*\)/");
             $activeoptions = array_keys($config->configurations);
             foreach ($allconfigurations as $key => $row) {
                 if (in_array($key,$activeoptions)) {
@@ -135,11 +137,14 @@ class ThemeConfigurationProperty extends TextBoxProperty
                 }
             }
             $configoptions['specific'] = $config->configurations;
+           
             
             // Get the common options being called in the theme
             $config = new Configurations();
             $commonlabel = "common";
-            $config->parseTheme($this->theme_id,"/xarThemeVars::get\(\W*[\'\"]" . $commonlabel . "[\'\"]\W*,\W*[\'\"](.+)[\'\"]\W*\)/");
+            $var_re = "!xarThemeVars::get\(\s*[\"|\']" . $commonlabel . "[\"|\']+\s*,\s*[\'|\"]+([^\"|\']*)[\"|\']\s*\)!is";
+            $config->parseTheme($this->theme_id, $var_re);
+            //$config->parseTheme($this->theme_id,"/xarThemeVars::get\(\W*[\'\"]" . $commonlabel . "[\'\"]\W*,\W*[\'\"](.+)[\'\"]\W*\)/");
             $activeoptions = array_keys($config->configurations);
             foreach ($allconfigurations as $key => $row) {
                 if (in_array($key,$activeoptions)) {
