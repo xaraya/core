@@ -221,7 +221,7 @@ class xarCSS extends Object
                 // themes/common/properties/property/style
                 $paths[] = $commonDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
                 // code/properties/property/xartemplates/style
-                $paths[] = $codeDir . 'properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
+                $paths[] = $codeDir . 'properties/' . $property . '/xartemplates/' . $tag['base'] . '/' . $fileName;
                 break;
         }
         if (empty($paths)) return;
