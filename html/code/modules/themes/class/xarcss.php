@@ -16,7 +16,7 @@ sys::import('modules.themes.class.xarthemes');
 /**
  * Base CSS class
 **/
-class xarCSS extends xarThemes
+class xarCSS extends Object
 {
 /**
  * Defines for this library
@@ -93,6 +93,7 @@ class xarCSS extends xarThemes
  *         string $args[media] media attribute, optional, default "screen"<br/>
  *         string $args[title] title attribute, optional, default ""<br/>
  *         string $args[condition] conditionals for ie browser, optional, default ""<br/>
+ *         string $args[theme] theme name, optional first theme to look in theme scope
  *         string $args[module] module for module|block scope, optional, default current module<br/>
  *         string $args[property] standalone property name, required for property scope
  * @todo: support other W3C standard attributes of link and style tags? 
@@ -121,7 +122,7 @@ class xarCSS extends xarThemes
         $tag = array(
             'method'     => $method,
             'scope'      => $scope,
-            'base'       => !empty($base)      ? $base      : xarCSS::CSSCOMMONBASE,
+            'base'       => !empty($base)      ? xarVarPrepForOS($base) : xarCSS::CSSCOMMONBASE,
             'file'       => !empty($file)      ? $file      : xarCSS::CSSCOMMONFILE,
             'fileext'    => !empty($fileext)   ? $fileext   : xarCSS::CSSCOMMONFILEEXT,
             'type'       => !empty($type)      ? $type      : xarCSS::CSSTYPETEXT,
@@ -130,30 +131,13 @@ class xarCSS extends xarThemes
             'source'     => !empty($source)    ? $source    : '',
             'title'      => !empty($title)     ? $title     : '',
             'condition'  => !empty($condition) ? $condition : '',
+            'theme'      => '',
             'module'     => '',
             'property'   => '',
             'url'        => '',
+            'alternatedir' => !empty($alternatedir) ? xarVarPrepForOS($alternatedir) : '',
         );       
-        
-        // set additional params based on scope
-        switch ($scope) {
-            case 'common':
-                if (empty($file))
-                    $tag['file'] = xarCSS::CSSCOMMONCORE;
-            case 'theme':
-                $package = '';
-                break;
-            case 'module':
-                $tag['module'] = $package = empty($module) ? xarMod::getName() : $module;
-                break;
-            case 'block': 
-                $tag['module'] = $package = empty($module) ? xarVarGetCached('Security.Variables', 'currentmodule') : $module; 
-                break;
-            case 'property':
-                $tag['property'] = $package = $property;
-                break;
-        }
-            
+
         // set additional params based on method
         switch ($method) {
             case 'embed':
@@ -170,19 +154,89 @@ class xarCSS extends xarThemes
                 }
                 break;
         }
-        
+
+        if ($scope == 'common' && empty($file))
+            $tag['file'] = xarCSS::CSSCOMMONCORE;
+
+        // set common paths to look in
         $fileName = $tag['file'] . '.' . $tag['fileext'];
-        // support for alternatedir param, if supplied we look there first
-        if (!empty($alternatedir))
-            $filePath = $this->findFile('theme', $fileName, $alternatedir);        
-        // if the alternatedir wasn't supplied, or we didn't find a file
-        // look for the file in the usual places        
-        if (empty($filePath))
-            $filePath = $this->findFile($scope, $fileName, $tag['base'], $package);
+        $themeDir = xarTpl::getThemeDir();
+        $commonDir = xarTpl::getThemeDir('common');
+        $codeDir = sys::code();
+
+        $paths = array();
+        // if an alternatedir was supplied, look there first
+        if (!empty($alternatedir)) {
+            // themes/theme/alternate
+            $paths[] = $themeDir . '/' . $alternatedir . '/' . $fileName;
+            // themes/common/alternate
+            $paths[] = $commonDir . '/' . $alternatedir . '/' . $fileName;
+        }
+        switch ($scope) {
+            case 'common':
+            case 'theme':
+                if (!empty($theme)) {
+                    // themes/theme/style
+                    $paths[] = xarTpl::getThemeDir($theme) . '/' . $tag['base'] . '/' . $fileName;
+                    $tag['theme'] = $theme;
+                }
+                // themes/theme/style
+                $paths[] = $themeDir . '/' . $tag['base'] . '/' . $fileName;
+                // themes/common/style
+                $paths[] = $commonDir . '/' . $tag['base'] . '/' . $fileName;
+                break;
+            case 'module':
+                if (empty($module))
+                    $module = xarMod::getName();
+            case 'block':
+                if (empty($module))
+                    $module = xarVarGetCached('Security.Variables', 'currentmodule');
+                $modInfo = xarMod::getBaseInfo($module);
+                if (!isset($modInfo)) return;
+                $tag['module'] = $module;
+                $modOsDir = $modInfo['osdirectory'];
+                // handle legacy calls to styles in base module now located in common/style
+                if ($module == 'base') {
+                    // themes/theme/style
+                    $paths[] = $themeDir . '/' . $tag['base'] . '/' . $fileName;
+                    // themes/common/style
+                    $paths[] = $commonDir . '/' . $tag['base'] . '/' . $fileName;
+                }
+                // themes/theme/modules/module/style
+                $paths[] = $themeDir . '/modules/' . $modOsDir . '/' . $tag['base'] . '/' . $fileName;
+                // themes/theme/modules/module/styles (legacy)
+                $paths[] = $themeDir . '/modules/' . $modOsDir . '/styles/' . $fileName;
+                // themes/common/modules/module/style
+                $paths[] = $commonDir . '/modules/' . $modOsDir . '/' . $tag['base'] . '/' . $fileName;
+                // code/modules/module/xarstyles (legacy)
+                $paths[] = $codeDir . 'modules/' . $modOsDir . '/xarstyles/' . $fileName;
+                // code/modules/module/xartemplates/style
+                $paths[] = $codeDir . 'modules/' . $modOsDir . '/xartemplates/' . $tag['base'] . '/' . $fileName;
+                break;
+            case 'property':
+                $tag['property'] = $property;
+                $property = xarVarPrepForOS($property);
+                // themes/theme/properties/property/style
+                $paths[] = $themeDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
+                // themes/common/properties/property/style
+                $paths[] = $commonDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
+                // code/properties/property/xartemplates/style
+                $paths[] = $codeDir . 'properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
+                break;
+        }
+        if (empty($paths)) return;
+        
+        foreach ($paths as $path) {
+            if (!file_exists($path)) continue;
+            $filePath = $path;
+            break;
+        }
         if (empty($filePath)) return;
-        $tag['url'] = $filePath;
+        
+        $tag['url'] = xarServer::getBaseURL() . $filePath;
         
         return $this->queue($method, $scope, $tag['url'], $tag);
+        
     }
 
 /**
