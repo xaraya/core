@@ -11,12 +11,10 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/70.html
 **/
-// import the base themes class
-sys::import('modules.themes.class.xarthemes');
 /**
  * Base JS Class
 **/
-class xarJS extends xarThemes
+class xarJS extends Object
 {
 /**
  * Defines for this library
@@ -103,6 +101,17 @@ class xarJS extends xarThemes
             'url'       => '',
         );
 
+        // set additional params based on type
+        switch ($type) {
+            case 'code':
+                if (!empty($code))
+                    return $this->queue($position, $type, $scope, $code, $tag);
+                // if code isn't present we get it from a file, fall through to src type
+            case 'src':
+                if (empty($filename)) return;
+                break;
+        }
+
         // set additional params based on scope
         switch ($scope) {
             case 'theme':
@@ -119,17 +128,6 @@ class xarJS extends xarThemes
                 break;
         }
 
-        // set additional params based on type
-        switch ($type) {
-            case 'code':
-                if (!empty($code))
-                    return $this->queue($position, $type, $scope, $code, $tag);
-                // if code isn't present we get it from a file, fall through to src type
-            case 'src':
-                if (empty($filename)) return;
-                break;
-        }
-        
         // if we're here, we have files to look for
         $files = !is_array($filename) ? explode(',', $filename) : $filename;        
 
@@ -275,6 +273,87 @@ class xarJS extends xarThemes
         
         self::$js[$position][$type][$scope][$index] = $data;
         return true;
+    }
+
+/**
+ * Find file function
+ *
+ * Returns the full URL or relative path from webroot to a file
+ * obeying standard template cascade paths
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access private
+ * @param  string  $scope the scope in which to look for files, required
+ * @param  string  $file the name of the file to look for, required
+ * @param  string  $base optional sub folder to look in
+ * @param  string  $package the name of the theme, module or property to look in<br/>
+ *                 Optional in module scope, default current module<br/>
+ *                 Required in property scope
+ * @return string path to file if found, empty otherwise
+ * @throws none
+**/
+    private function findFile($scope, $file, $base, $package='')
+    {
+        if (empty($scope) || empty($file) || empty($base)) return;
+        
+        $themeDir = xarTpl::getThemeDir();
+        $commonDir = xarTpl::getThemeDir('common');
+        $codeDir = sys::code();
+
+        $paths = array();        
+        switch ($scope) {
+            case 'theme':
+                // themes/theme/scripts
+                $paths[] = $themeDir . '/' . $base . '/' . $file;
+                // themes/common/scripts
+                $paths[] = $commonDir . '/' . $base . '/' . $file;
+                break;
+            case 'module':
+                if (empty($package))
+                    $package = xarMod::getName();
+                $modInfo = xarMod::getBaseInfo($package);
+                if (!isset($modInfo)) return;
+                $modOsDir = $modInfo['osdirectory'];
+                // support legacy calls to base module scripts now moved to common/scripts
+                if ($package == 'base') {
+                    // themes/theme/scripts
+                    $paths[] = $themeDir . '/' . $base . '/' . $file;
+                    // themes/common/scripts
+                    $paths[] = $commonDir . '/' . $base . '/' . $file;
+                }
+                // themes/theme/modules/module/scripts
+                $paths[] = $themeDir . '/modules/' . $modOsDir . '/' . $base . '/' . $file;
+                // themes/theme/modules/module/includes (legacy)
+                $paths[] = $themedir . '/modules/' . $modOsDir . '/includes/' . $file;
+                // themes/theme/modules/module/xarincludes (legacy)
+                $paths[] = $themedir . '/modules/' . $modOsDir . '/xarincludes/' . $file;
+                // themes/common/modules/module/scripts
+                $paths[] = $commonDir . '/modules/' . $modOsDir . '/' . $base . '/' . $file;
+                // code/modules/module/xartemplates/scripts
+                $paths[] = $codeDir . 'modules/' . $modOsDir . '/xartemplates/' . $base . '/' . $file;
+                // code/modules/module/xartemplates/includes (legacy)
+                $paths[] = $codeDir . 'modules/' . $modOsDir . '/xartemplates/includes/' . $file;
+                break;
+            case 'property':
+                if (empty($package)) return;
+                // themes/theme/properties/property/scripts
+                $paths[] = $themeDir . '/properties/' . $package . '/' . $base . '/' . $file;
+                // themes/common/properties/property/scripts
+                $paths[] = $commonDir . '/properties/' . $package . '/' . $base . '/' . $file;
+                // code/properties/property/xartemplates/scripts
+                $paths[] = $codeDir . 'properties/' . $package . '/xartemplates/' . $base . '/' . $file;
+                break;
+         }
+         if (empty($paths)) return;
+         
+         foreach ($paths as $path) {
+             if (!file_exists($path)) continue;
+             $filePath = $path;
+             break;
+         }
+         if (empty($filePath)) return;
+         
+         return $filePath;
     }
   
     // prevent cloning of singleton instance
