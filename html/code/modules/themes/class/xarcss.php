@@ -93,7 +93,7 @@ class xarCSS extends Object
  *         string $args[media] media attribute, optional, default "screen"<br/>
  *         string $args[title] title attribute, optional, default ""<br/>
  *         string $args[condition] conditionals for ie browser, optional, default ""<br/>
- *         string $args[theme] theme name, optional first theme to look in theme scope
+ *         string $args[theme] theme name, optional first theme to look for in theme scope
  *         string $args[module] module for module|block scope, optional, default current module<br/>
  *         string $args[property] standalone property name, required for property scope
  * @todo: support other W3C standard attributes of link and style tags? 
