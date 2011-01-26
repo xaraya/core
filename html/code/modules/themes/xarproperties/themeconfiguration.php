@@ -117,6 +117,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
             $c[] = $q->peq('theme_id',0);
             $q->qor($c);
             $q->run();
+            $allconfigurations = array();
             foreach ($q->output() as $row){
                 $row['applies'] = 0;
                 $allconfigurations[$row['name']] = $row;
