@@ -1,9 +1,6 @@
 <?php
 function installer_admin_upgrade()
-{
-    // Security
-    if (!xarSecurityCheck('AdminInstaller')) return; 
-    
+{    
     if(!xarVarFetch('phase','int', $data['phase'], 1, XARVAR_DONT_SET)) {return;}
 
     // Version information
@@ -20,7 +17,6 @@ function installer_admin_upgrade()
         $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);
         $data['upgradable'] = xarVersion::compare($fileversion, '2.0.0') > 0;
     }
-    
     // Core modules
     $data['coremodules'] = array(
                                 42    => 'authsystem',
@@ -60,6 +56,9 @@ function installer_admin_upgrade()
         }
         
     } elseif ($data['phase'] == 3) {
+        // Security
+        if (!xarSecurityCheck('AdminInstaller')) return; 
+        
         $data['active_step'] = 3;
         // Align the db and filesystem version info
         xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);

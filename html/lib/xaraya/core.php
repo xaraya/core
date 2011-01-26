@@ -12,7 +12,7 @@
 **/
 
 /**
- * Core version informations
+ * Core version information
  *
  * should be upgraded on each release for
  * better control on config settings
@@ -173,6 +173,21 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
     }
 
     /*
+     * If something happens we want to be able to log it
+     * And to do so we will need the system time
+     */
+    $systemArgs = array();
+    sys::import('xaraya.log');
+    xarLog_init($systemArgs);
+
+    sys::import('xaraya.variables.system');
+    try {
+        date_default_timezone_set(xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
+    } catch (Exception $e) {
+        die('Your configuration file appears to be missing. This usually indicates Xaraya has not been installed. <br/>Please refer to point 4 of the installation instructions <a href="readme.html" target="_blank">here</a>');
+    }
+
+    /*
      * At this point we should be able to catch all low level errors, so we can start the debugger
      *
      * FLAGS:
@@ -188,21 +203,6 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 // CHECKME: make this configurable too !?
     xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );
 //    xarCoreActivateDebugger(XARDBG_INACTIVE);
-
-    /*
-     * If something happens we want to be able to log it
-     * And to do so we will need the system time
-     */
-    $systemArgs = array();
-    sys::import('xaraya.log');
-    xarLog_init($systemArgs);
-
-    sys::import('xaraya.variables.system');
-    try {
-        date_default_timezone_set(xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
-    } catch (Exception $e) {
-        die('Your configuration file appears to be missing. This usually indicates Xaraya has not been installed. <br/>Please refer to point 4 of the installation instructions <a href="readme.html" target="_blank">here</a>');
-    }
 
     /*
      * Start Database Connection Handling System
@@ -414,7 +414,7 @@ function xarCoreInit($whatToLoad = XARCORE_SYSTEM_ALL)
 
     $systemArgs = array(
         'enableTemplatesCaching' => xarConfigVars::get(null, 'Site.BL.CacheTemplates'),
-        'defaultThemeDir'        => xarModVars::get('themes', 'default_theme','default'),
+        'defaultThemeDir'        => xarModVars::get('themes', 'default_theme', 'default'),
         'generateXMLURLs'        => true
     );
 
@@ -461,7 +461,6 @@ function xarCoreActivateDebugger($flags)
     } elseif ($flags & XARDBG_ACTIVE) {
         // See if config.system.php has info for us on the errorlevel, but dont break if it has not
         try {
-            sys::import('xaraya.variables.system');
             $errLevel = xarSystemVars::get(sys::CONFIG, 'Exception.ErrorLevel');
         } catch(Exception $e) {
             $errLevel = E_ALL;

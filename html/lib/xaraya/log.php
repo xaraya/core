@@ -204,6 +204,12 @@ function xarLog__add_logger($type, $config_args)
       $GLOBALS['xarLog_loggers'][] = &$observer;
 }
 
+/**
+ * Log a message
+ * @param string message. The message to log
+ * @param string level. The level for this message OPTIONAL Defaults to XARLOG_LEVEL_DEBUG
+ *
+ */
 function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG)
 {
 

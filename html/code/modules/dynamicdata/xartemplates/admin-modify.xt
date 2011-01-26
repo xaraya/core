@@ -47,7 +47,7 @@
             <xar:else/>
                 <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
             </xar:if>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-update;" enctype="#$enc_type#">
+            <form method="post" action="#xarModURL('dynamicdata','admin','update')#" enctype="#$enc_type#">
                 <fieldset>
                     <legend>Modify Object Definition</legend>
                     <xar:if condition="$object:visibility ne 'public'">
@@ -85,7 +85,7 @@
                     </div>
                     <xar:if condition="!empty($objectid) and $objectid eq 2">
                         <p>
-                            <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#">
+                            <a href="#xarModURL('dynamicdata','admin','showpropval',array('itemid'=>$itemid))#">
                                 Edit configuration</a>
                         </p>
                     </xar:if>
@@ -103,13 +103,13 @@
                     </a>
                 </xar:if>
             </h2>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-update;">
+            <form method="post" action="#xarModURL('dynamicdata','admin','update')#">
                 <xar:if condition="$adminaccess">
                     <fieldset>
                         <legend>
                             Clone this object
                         </legend>
-                        Do you want to create a copy of the dataobject #$object:properties.name:value# (#$object:properties.label:value#)?
+                        Do you want to create a copy of the dataobject #$object:properties.name:value# (#$label#)?
                         <div>
                             Name for the new object:&#160;<input type="textbox" name="newname" value="#$object:properties.name:value#_copy" size="50"/>
                         </div>
@@ -130,7 +130,7 @@
                         </div>
                         <xar:if condition="!empty($objectid) and $objectid eq 2">
                             <p>
-                                <a href="&xar-modurl-dynamicdata-admin-showpropval;&amp;itemid=#$itemid#">
+                                <a href="#xarModURL('dynamicdata','admin','showpropval',array('itemid'=>$itemid))#">
                                     Edit configuration</a>
                             </p>
                         </xar:if>

@@ -33,7 +33,7 @@
             </xar:if>
         <xar:else />
             <div class="xar-align-center">
-                <a href="&xar-modurl-dynamicdata-object-main;">Please select one of the available objects</a>
+                <a href="#xarModURL('object','dynamicdata','main')#">Please select one of the available objects</a>
             </div>
         </xar:if>
     </div>

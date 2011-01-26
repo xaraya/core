@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <form action="&xar-modurl-authsystem-user-login;" method="post" class="xar-margin-none">
+    <form action="#xarModURL('authsystem','user','login')#" method="post" class="xar-margin-none">
             <xar:set name="id">'returnurl'.$blockid</xar:set>
             <xar:set name="unameid">'uname'.$blockid</xar:set>
             <xar:set name="passid">'pass'.$blockid</xar:set>
@@ -30,7 +30,7 @@
             <input type="submit" value="#$label#"/>
         </p>
         <p>
-            <a href="&xar-modurl-roles-user-lostpassword;">Request new password</a>
+            <a href="#xarModURL('roles','user','lostpassword')#">Request new password</a>
         </p>
     </form>
 </xar:template>
