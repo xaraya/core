@@ -284,7 +284,6 @@ function xarTplGetPageTitle()
     return '';
 }
 
-
 /**
  * Add JavaScript code or links to template output
  * NOTE: this function is marked for deprecation, use the xarJS object
@@ -328,6 +327,8 @@ function xarTplGetJavaScript($position = '', $index = '')
 /**
  * Turns module output into a template.
  *
+ * @author Paul Rosania <paul@xaraya.com>
+ * @author Marco Canini <marco@xaraya.com>
  * 
  * @param  string $modName      the module name
  * @param  string $modType      user|admin
@@ -347,8 +348,6 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
 
     // Get the right source filename
     $sourceFileName = xarTpl__getSourceFileName($modName, $tplBase, $templateName);
-
-    //assert('!empty($sourceFileName); /* The source file for the template is empty in xarTplModule */');
 
     // Common data for BL
     $tplData['_bl_module_name'] = $modName;
@@ -384,6 +383,8 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
 /**
  * Renders a block content through a block template.
  *
+ * @author Paul Rosania <paul@xaraya.com>
+ * @author Marco Canini <marco@xaraya.com>
  * 
  * @param  string $modName   the module name
  * @param  string $blockType the block type (xar_block_types.type)
@@ -494,6 +495,7 @@ function xarTplObject($modName, $objectName, $tplType = 'showdisplay', $tplData 
  *        don't contain nasty stuff. Filter as appropriate when using
  *        this function to generate image URLs...
  *
+ * @author  Andy Varganov <andyv@xaraya.com>
  * 
  * @param   string $modImage the module image url relative to xarimages/
  * @param   string $modName  the module to check for the image <optional>
@@ -616,6 +618,8 @@ function xarTplCompileString($templateSource)
 /**
  * Renders a page template.
  *
+ * @author Paul Rosania <paul@xaraya.com>
+ * @author Marco Canini <marco@xaraya.com>
  * 
  * @param  string $mainModuleOutput       the module output
  * @param  string $pageTemplate           the page template to use (without extension .xt)
@@ -811,7 +815,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
  */
 function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tplSubPart = '')
 {
-    if(function_exists('xarMod_getBaseInfo')) {
+    if(function_exists('xarMo::getBaseInfo')) {
         if(!($modBaseInfo = xarMod::getBaseInfo($modName))) return;
         $modOsDir = $modBaseInfo['osdirectory'];
     } elseif(!empty($modName)) {
@@ -879,7 +883,6 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
 
     return $sourceFileName;
 }
-
 
 /**
  * Output template
