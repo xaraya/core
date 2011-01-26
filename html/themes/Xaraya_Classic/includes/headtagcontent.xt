@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <title>#$tpl:pageTitle#</title>
     <xar:blockgroup name="header" id="header"/>
-    <base href="&xar-baseurl;index.php"/>
+    <base href="#xarServer::getBaseURL()#"/>
     <!-- Main CSS rules (note: all default parameters in the tag can be omitted) -->
     <xar:style />
     <!-- Styleswitcher CSS files to link to -->
