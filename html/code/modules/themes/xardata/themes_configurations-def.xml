@@ -53,7 +53,7 @@
     <property name="description">
       <id>99</id>
       <label>Description</label>
-      <type>textbox</type>
+      <type>textarea</type>
       <defaultvalue></defaultvalue>
       <source>xar_themes_configurations.description</source>
       <status>34</status>
