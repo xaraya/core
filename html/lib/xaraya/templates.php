@@ -343,7 +343,9 @@ class xarTpl extends Object
 /**
  * Turns module output into a template.
  *
- * @access public
+ * @author Paul Rosania <paul@xaraya.com>
+ * @author Marco Canini <marco@xaraya.com>
+ * 
  * @param  string $modName      the module name
  * @param  string $modType      user|admin
  * @param  string $funcName     module function to template
@@ -399,7 +401,9 @@ class xarTpl extends Object
 /**
  * Renders a block content through a block template.
  *
- * @access public
+ * @author Paul Rosania <paul@xaraya.com>
+ * @author Marco Canini <marco@xaraya.com>
+ * 
  * @param  string $modName   the module name
  * @param  string $blockType the block type (xar_block_types.type)
  * @param  array  $tplData   arguments for the template
@@ -524,7 +528,8 @@ class xarTpl extends Object
  *        don't contain nasty stuff. Filter as appropriate when using
  *        this function to generate image URLs...
  *
- * @access  public
+ * @author  Andy Varganov <andyv@xaraya.com>
+ * 
  * @param   string $modImage the module image url relative to xarimages/
  * @param   string $modName  the module to check for the image <optional>
  * @return  string image url if it exists or module image url if not, or NULL if neither found
@@ -680,7 +685,9 @@ class xarTpl extends Object
 /**
  * Renders a page template.
  *
- * @access public
+ * @author Paul Rosania <paul@xaraya.com>
+ * @author Marco Canini <marco@xaraya.com>
+ * 
  * @param  string $mainModuleOutput       the module output
  * @param  string $pageTemplate           the page template to use (without extension .xt)
  * @return string

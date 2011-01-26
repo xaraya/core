@@ -16,7 +16,7 @@
 **/
 
 /**
- * Core version informations
+ * Core version information
  *
  * should be upgraded on each release for
  * better control on config settings
@@ -580,7 +580,6 @@ function xarCoreActivateDebugger($flags)
     } elseif ($flags & XARDBG_ACTIVE) {
         // See if config.system.php has info for us on the errorlevel, but dont break if it has not
         try {
-            sys::import('xaraya.variables.system');
             $errLevel = xarSystemVars::get(sys::CONFIG, 'Exception.ErrorLevel');
         } catch(Exception $e) {
             $errLevel = E_ALL;

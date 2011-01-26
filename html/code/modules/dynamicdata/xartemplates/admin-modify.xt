@@ -109,7 +109,7 @@
                         <legend>
                             Clone this object
                         </legend>
-                        Do you want to create a copy of the dataobject #$object:properties.name:value# (#$object:properties.label:value#)?
+                        Do you want to create a copy of the dataobject #$object:properties.name:value# (#$label#)?
                         <div>
                             Name for the new object:&#160;<input type="textbox" name="newname" value="#$object:properties.name:value#_copy" size="50"/>
                         </div>
