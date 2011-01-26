@@ -148,15 +148,18 @@ class xarTpl extends Object
  * @param  string themeDir
  * @throws DirectoryNotFoundException
  * @return boolean
- * @todo   this is almost identical to setThemeName, will there ever<br/> 
- *         be a time when theme name and theme dir aren't identical?
  * @todo   see checkme's
  */
     public static function setThemeDir($themeDir)
     {
         assert('$themeDir != "" && $themeDir{0} != "/"');
         $currentBase = self::getBaseDir();
-        if (!is_dir($currentBase . '/'.$themeDir)) {
+        if (is_dir($currentBase . '/' . $themeDir)) {
+            // use current
+        } elseif (is_dir($currentBase . '/common')) {
+            // fall back to common
+            $themeDir = 'common';
+        } else {
             // @checkme: throw exception here vs return false in setThemeName ?
             throw new DirectoryNotFoundException("$currentBase/$themeDir", 'xarTpl::setThemeDir: Nonexistent theme directory #(1)');
         }
@@ -226,7 +229,11 @@ class xarTpl extends Object
     public static function setPageTemplateName($templateName)
     {
         assert('$templateName != ""');
-        if (!file_exists(self::getThemeDir() . "/pages/$templateName.xt")) {
+        if (file_exists(self::getThemeDir() . "/pages/$templateName.xt")) {
+            // use current theme
+        } elseif (file_exists(self::getThemeDir('common') . "/pages/$templateName.xt")) {
+            // use common
+        } else {
             return false;
         }
         self::$pageTemplateName = $templateName;
