@@ -12,7 +12,7 @@
             <xar:else />
                 <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
             </xar:if>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;" enctype="#$enc_type#">
+            <form method="post" action="#xarModURL('dynamicdata','admin','showpropval')#" enctype="#$enc_type#">
                 <fieldset>
                     <legend>Property summary</legend>
                     <xar:set name="fieldlist">
@@ -43,7 +43,7 @@
                     <li>The configuration will be placed in the property type summary at the bottom of the page.</li>
                 </ol>
             </p>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
+            <form method="post" action="#xarModURL('dynamicdata','admin','showpropval')#">
                 <fieldset>
                     <legend>Select Property Type</legend>
                     <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="$proptype"/>&#160;
@@ -51,7 +51,7 @@
                     <input type="submit" value="#$value#"/>
                 </fieldset>
             </form>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
+            <form method="post" action="#xarModURL('dynamicdata','admin','showpropval')#">
                 #$showval#
                 <fieldset>
                     <legend>Property Type Summary</legend>
@@ -94,7 +94,7 @@
 
         <xar:else/>
             <h2>Sample Configuration for DataProperty Types</h2>
-            <form method="post" action="&xar-modurl-dynamicdata-admin-showpropval;">
+            <form method="post" action="#xarModURL('dynamicdata','admin','showpropval')#">
                 <fieldset>
                     <legend>Select Property Type</legend>
                     <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="textbox"/>
