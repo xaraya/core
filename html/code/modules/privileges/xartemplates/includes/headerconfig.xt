@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <br />
     <ul class="xar-tabs xar-alt xar-norm-outline">
         <xar:var name="title">Module</xar:var>
         <xar:var name="label">Module</xar:var>

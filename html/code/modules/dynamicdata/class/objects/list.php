@@ -567,7 +567,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Show a view of an object
      *
-     * @return xarTplObject
+     * @return xarTpl::object
      */
     public function showView(Array $args = array())
     {
@@ -730,7 +730,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if (!isset($this->startnum)) $this->startnum = 1;
 
         $args['object'] = $this;
-        return xarTplObject($args['tplmodule'],$args['template'],'showview',$args);
+        return xarTpl::object($args['tplmodule'],$args['template'],'showview',$args);
     }
 
     public function getSortURL($currenturl=null)

@@ -60,7 +60,7 @@ function base_javascriptapi__findfile(Array $args=array())
     }
 
     // Theme base directory.
-    $themedir = xarTplGetThemeDir();
+    $themedir = xarTpl::getThemeDir();
 
     // Initialise the search path.
     $searchPath = array();

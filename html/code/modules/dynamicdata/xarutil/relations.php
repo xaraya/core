@@ -95,7 +95,7 @@ function dynamicdata_util_relations(Array $args=array())
         $data['object'] = $object;
         $data['fields'] = $object->properties;
 
-        xarTplSetPageTitle(xarML('Links for #(1)', $object->label));
+        xarTpl::setPageTitle(xarML('Links for #(1)', $object->label));
 
         // get all links, including 'info' for reverse one-way information
         $links = DataObjectLinks::getLinks($object,'all');
@@ -215,7 +215,7 @@ function dynamicdata_util_relations(Array $args=array())
         }
         if (!empty($confirm)) {
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }
 /* no longer in use (for now ?)
             if (!empty($value)) {
@@ -240,7 +240,7 @@ function dynamicdata_util_relations(Array $args=array())
 
         } elseif (!empty($delete) && !empty($what)) {
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }
             // remove selected link(s)
             foreach ($what as $link_id => $val) {
@@ -273,7 +273,7 @@ function dynamicdata_util_relations(Array $args=array())
         }
         $data['fields'] = $object->properties;
 
-        xarTplSetPageTitle(xarML('Links for #(1)', $object->label));
+        xarTpl::setPageTitle(xarML('Links for #(1)', $object->label));
 
         sys::import('modules.dynamicdata.class.datastores.links');
 
@@ -295,7 +295,7 @@ function dynamicdata_util_relations(Array $args=array())
         }
         if (!empty($confirm)) {
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
 /* no longer in use (for now ?)
             if (!empty($value)) {
@@ -320,7 +320,7 @@ function dynamicdata_util_relations(Array $args=array())
 
         } elseif (!empty($delete) && !empty($what)) {
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             // remove selected link(s)
             foreach ($what as $link_id => $val) {
@@ -344,14 +344,14 @@ function dynamicdata_util_relations(Array $args=array())
                                            array('module_id' => $module_id,
                                                  'itemtype' => $itemtype));
     } else {
-        xarTplSetPageTitle(xarML('Links'));
+        xarTpl::setPageTitle(xarML('Links'));
     }
 
     if (!isset($data['relations']) || $data['relations'] == false) {
         $data['relations'] = array();
     }
 
-    xarTplSetPageTemplateName('admin');
+    xarTpl::setPageTemplateName('admin');
 
     return $data;
 }

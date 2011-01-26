@@ -398,7 +398,7 @@ class DataProperty extends Object implements iDataProperty
                     $data[$configarg['shortname']] = $this->{$configarg['fullname']};
             }
         }
-        return xarTplProperty($data['tplmodule'], $data['template'], 'showinput', $data);
+        return xarTpl::property($data['tplmodule'], $data['template'], 'showinput', $data);
     }
 
     /**
@@ -445,7 +445,7 @@ class DataProperty extends Object implements iDataProperty
                     $data[$configarg['shortname']] = $this->{$configarg['fullname']};
             }
         }
-        return xarTplProperty($data['tplmodule'], $data['template'], 'showoutput', $data);
+        return xarTpl::property($data['tplmodule'], $data['template'], 'showoutput', $data);
     }
 
     /**
@@ -485,7 +485,7 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
         if(!isset($data['title']))   $data['title']   = $this->display_tooltip;
-        return xarTplProperty($data['tplmodule'], $data['template'], 'label', $data);
+        return xarTpl::property($data['tplmodule'], $data['template'], 'label', $data);
     }
 
     /**
@@ -526,7 +526,7 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
 
-        return xarTplProperty($data['tplmodule'], $data['template'], 'showhidden', $data);
+        return xarTpl::property($data['tplmodule'], $data['template'], 'showhidden', $data);
     }
 
     /**
@@ -648,7 +648,7 @@ class DataProperty extends Object implements iDataProperty
             if (isset($this->$msgname)) $data['validation'][$msgname] = $this->$msgname;
             else $data['validation'][$msgname] = '';
         }
-        return xarTplProperty($data['module'], $data['template'], 'configuration', $data);
+        return xarTpl::property($data['module'], $data['template'], 'configuration', $data);
     }
 
     /**

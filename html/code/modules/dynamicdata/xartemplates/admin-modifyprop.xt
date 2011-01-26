@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="base" filename="toggle.js"/>
+    <xar:javascript scope="theme" filename="toggle.js"/>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Dynamic Data Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <xar:if condition="!empty($objectid)">
             <h2>
                 Modify DataProperties #$label#
@@ -24,7 +24,7 @@
                     }
                     </script>
                     &#160;<a href="javascript:xar_dynamicdata_formpreview();" title="Preview Input Form #$label#">
-                        <img src="#xarTplGetImage('icons/document-properties.png', 'base')#" width="16" height="16" alt="preview"/>
+                        <xar:img scope="theme" file="icons/document-properties.png" class="xar-icon" alt="preview"/>
                     </a>
                 </xar:if>
             </h2>

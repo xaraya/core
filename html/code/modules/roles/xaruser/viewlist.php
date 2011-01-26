@@ -115,7 +115,7 @@ function roles_user_viewlist(Array $args=array())
                     'include_anonymous' => false,
                 )
             );
-            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Active Members')));
+            xarTpl::setPageTitle(xarVarPrepForDisplay(xarML('Active Members')));
 
             if (!$data['total']) {
                 $data['message'] = xarML('There are no online members selected');
@@ -149,7 +149,7 @@ function roles_user_viewlist(Array $args=array())
                 )
             );
 
-            xarTplSetPageTitle(xarVarPrepForDisplay(xarML('All Members')));
+            xarTpl::setPageTitle(xarVarPrepForDisplay(xarML('All Members')));
 
             if (!$data['total']) {
                 $data['message'] = xarML('There are no members selected');
@@ -198,8 +198,8 @@ function roles_user_viewlist(Array $args=array())
         if (empty($items[$i]['ipaddr'])) {
             $items[$i]['ipaddr'] = '';
         }
-        $items[$i]['emailicon'] = xarTplGetImage('emailicon.gif');
-        $items[$i]['infoicon'] = xarTplGetImage('infoicon.gif');
+        $items[$i]['emailicon'] = xarTpl::getImage('icons/mail.png', 'theme');
+        $items[$i]['infoicon'] = xarTpl::getImage('icons/dialog-information.png', 'theme');
     }
     $data['pmicon'] = '';
     // Add the array of items to the template variables

@@ -13,6 +13,7 @@
             <link rel='icon' href="favicon.ico"/>
             <xar:style scope="common"/>
             <xar:style scope="theme" file="style" title="Xaraya Default Stylesheet"/>
+            <xar:style scope="theme" file="admin" title="Xaraya Default Admin Stylesheet"/>
             <xar:place-css />
             <xar:place-javascript position="head"/>
         </head>
@@ -37,12 +38,12 @@
 
                     <div id="doctab-1" style="display: none">
                         <a id="href-1" href="javascript:showtab(1,2)">
-                            <img src="#xarTplGetImage('icons/toggle.png', 'base')#" />
+                            <xar:img scope="theme" file="icons/toggle.png"/>
                         </a>
                     </div>
                     <div id="doctab-2">
                         <a id="href-2" href="javascript:showtab(2,2)">
-                            <img src="#xarTplGetImage('icons/toggle.png', 'base')#" />
+                            <xar:img scope="theme" file="icons/toggle.png"/>
                         </a>
                     </div>
                     -->

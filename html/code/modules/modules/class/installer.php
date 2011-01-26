@@ -317,7 +317,7 @@ class Installer extends Object
     {
         if ($this->extType == 'modules') $this->assembledependencies($regid);
         if ($this->extType == 'themes') $this->modulestack->push($regid);
-        $this->installdependencies($regid);
+        return $this->installdependencies($regid);
     }
     
     public function assembledependencies($regid=null)
@@ -395,7 +395,7 @@ class Installer extends Object
             default:                    $initialised = false; break;
         }
 
-        if ($regid == $topid) {
+        if ($regid == $topid && ($this->extType == 'themes')) {
             // First time we've come to this module
             // Is there an install page?
             if (!$initialised && file_exists(sys::code() . 'modules/' . $extInfo['osdirectory'] . '/xartemplates/includes/installoptions.xt')) {
@@ -422,6 +422,10 @@ class Installer extends Object
 
         // if this is a theme we're done
         if ($this->extType == 'themes') {
+            // Reinit the theme configurations
+            sys::import('modules.themes.class.initialization');
+            ThemeInitialization::importConfigurations();
+            // Show the theme list
             xarController::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0)));
             return true;
         }

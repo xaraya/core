@@ -7,7 +7,7 @@
          style.css or by applying classes directly in your template.
          This template uses the default Xaraya classes xar-alt, xar-accent
          and xar-norm to indicate the current state of links -->
-    <xar:style scope="module" module="base" file="pager"/>
+    <xar:style scope="theme" file="pager"/>
     <div class="xar-pager">
         <!-- Display next-page link if we are not on the last page -->
         <xar:if condition="$currentpagenum ne $lastpagenum">

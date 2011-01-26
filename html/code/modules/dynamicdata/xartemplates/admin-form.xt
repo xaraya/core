@@ -17,7 +17,7 @@
         </form>
         <form>
             <div>
-                <table class="xar-fullwidth">
+                <table class="xar-options">
                     <xar:data-form object="$object"/>
                 </table>
             </div>

@@ -47,11 +47,11 @@ function blocks_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
-                return xarTplModule('blocks','admin','modifyconfig', $data);
+                return xarTpl::module('blocks','admin','modifyconfig', $data);
             } else {
                 $itemid = $data['module_settings']->updateItem();
                 if (!xarVarFetch('noexceptions', 'int:0:1', $noexceptions, 0, XARVAR_NOT_REQUIRED)) return;

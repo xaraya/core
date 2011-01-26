@@ -25,11 +25,11 @@
                     <td>&#160;</td>
                     <td class="xar-align-center">
                         <xar:var name="label">Unread messages</xar:var>
-                        <img src="#xarTplGetImage('ob_mail_unreaded.gif','roles')#" alt="#$label#"/>
+                        <xar:img scope="module" module="roles" file="ob_mail_unreaded.gif" class="xar-icon" alt="$label"/>
                     </td>
                     <td class="xar-align-center">
                         <xar:var name="label">Total messages</xar:var>
-                        <img src="#xarTplGetImage('ob_mail_total.gif','roles')#" alt="#$label#"/>
+                        <xar:img scope="module" module="roles" file="ob_mail_total.gif" class="xar-icon" alt="$label"/>
                     </td>
                 </tr>
             </xar:if>
@@ -37,9 +37,9 @@
                 <tr>
                     <td>
                         <xar:if condition="!empty($dd['userurl'])">
-                            <img src="#xarTplGetImage('ob_user.gif','roles')#" alt="" class="xar-valign-middle"/>
+                            <xar:img scope="module" module="roles" file="ob_user.gif" class="xar-icon"/>
                         <xar:else />
-                            <img src="#xarTplGetImage('ob_user_other.gif','roles')#" alt="" class="xar-valign-middle"/>
+                            <xar:img scope="module" module="roles" file="ob_user_other.gif" class="xar-icon"/>
                         </xar:if>
                         <a href="#$dd['userurl']#">#xarVarPrepForDisplay($dd['name'])#</a>
                     </td>
@@ -59,7 +59,7 @@
             <xar:if condition="$showusertotal">
                 <tr>
                     <td>
-                        <img src="#xarTplGetImage('ob_users.gif','roles')#" alt="" class="xar-valign-middle"/>
+                        <xar:img scope="module" module="roles" file="ob_users.gif" class="xar-icon"/>
                         Total users
                     </td>
                     <td></td>
@@ -69,7 +69,7 @@
             <xar:if condition="$showanontotal">
                 <tr>
                     <td>
-                        <img src="#xarTplGetImage('ob_users_an.gif','roles')#" alt="" class="xar-valign-middle"/>
+                        <xar:img scope="module" module="roles" file="ob_users_an.gif" class="xar-icon"/>
                         Total guests
                     </td>
                     <td></td>

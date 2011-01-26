@@ -66,11 +66,11 @@ function themes_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
-                return xarTplModule('themes','admin','modifyconfig', $data);        
+                return xarTpl::module('themes','admin','modifyconfig', $data);        
             } else {
                 $itemid = $data['module_settings']->updateItem();
             }
@@ -87,7 +87,11 @@ function themes_admin_modifyconfig()
             xarModVars::set('themes', 'adminpagemenu', $data['adminpagemenu']);
 //            xarModVars::set('themes', 'usedashboard', $data['usedashboard']);
 //            xarModVars::set('themes', 'dashtemplate', $data['dashtemplate']);
-            xarConfigVars::set(null,'Site.BL.ThemesDirectory', $data['defaultThemeDir']);
+            // <chris/> Instead of setting the base theme config var dir directly, 
+            // let xarTpl take care of it, it'll complain if the directory doesn't
+            // exist or the current theme isn't in the directory specified  
+            // xarConfigVars::set(null,'Site.BL.ThemesDirectory', $data['defaultThemeDir']);
+            xarTpl::setBaseDir($data['defaultThemeDir']);
             xarConfigVars::set(null, 'Site.BL.CacheTemplates',$data['cachetemplates']);
             xarConfigVars::set(null, 'Site.BL.MemCacheTemplates',$data['memcachetemplates']);
             xarConfigVars::set(null, 'Site.BL.CompressWhitespace',$data['compresswhitespace']);

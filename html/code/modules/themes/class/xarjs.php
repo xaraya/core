@@ -11,14 +11,22 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/70.html
 **/
-
 /**
  * Base JS Class
 **/
 class xarJS extends Object
 {
+/**
+ * Defines for this library
+ *
+ * @author Chris Powis   <crisp@xaraya.com>
+ * @todo evaluate if these are really necessary
+**/
+    const JSCOMMONBASE             = 'scripts';
+    const JSLIBBASE                = 'lib';
+    
     private static $instance;
-    private static $queue;
+    private static $js;
 
     // prevent direct creation of this object
     private function __construct()
@@ -53,13 +61,13 @@ class xarJS extends Object
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
  * @param  array   $args array of optional parameters<br/>
- *         string  $args[type] type of js to include, either src or code, optional, default src<br/>
- *         string  $args[code] code to include if $type is code<br/>
- *         mixed   $args[filename] array containing filename(s) or string comma delimited list
- *                 name of file(s) to include, required if $type is src, or<br/> 
- *                 file(s) to get contents from if $type is code and $code isn't supplied<br/>
- *         string  $args[module] name of module to look for file(s) in, optional, default current module<br/>
  *         string  $args[position] position to render the js, eg head or body, optional, default head<br/>
+ *         string  $args[type] type of js to include, either src or code, optional, default src<br/>
+ *         string  $args[code] code to include if type is code<br/>
+ *         mixed   $args[filename] array containing filename(s) or string comma delimited list
+ *                 name of file(s) to include, required if type is src, or<br/> 
+ *                 file(s) to get contents from if type is code and code isn't supplied<br/>
+ *         string  $args[module] name of module to look for file(s) in, optional, default current module<br/>
  *         string  $args[index] optional index in queue relative to other scripts<br/>
  * @return boolean true on success
  * @throws none
@@ -68,65 +76,86 @@ class xarJS extends Object
     {
         extract($args);        
 
-        if (empty($code) && empty($filename)) return;
-        if (empty($type)) $type = 'src';
-        if (empty($position)) $position = 'head';
-        if (empty($index)) $index = null;
+        // set some defaults
+        if (empty($position)) 
+            $position = 'head';        
+
+        if (empty($type)) 
+            $type = 'src';
+
+        if (empty($scope))
+            $scope = 'theme'; 
         
-        if (!empty($filename)) {
-            $files = !is_array($filename) ? explode(',', $filename) : $filename;
-        }   
+        if ($scope == 'property' && empty($property)) return;
 
-        switch(strtolower($type)) {
-    
+        // init tag from args / defaults
+        $tag = array(
+            'position'  => $position,
+            'type'      => $type,
+            'scope'     => $scope,
+            'base'      => xarJS::JSCOMMONBASE,
+            'filename'  => '',
+            'code'      => !empty($code) ? $code : '',
+            'module'    => '',
+            'property'  => '',
+            'url'       => '',
+        );
+
+        // set additional params based on type
+        switch ($type) {
             case 'code':
-                // inline code 
-                if (!empty($code)) {
-                    // inline code supplied by attribute
-                    // Use a hash index to prevent the same JS code fragment
-                    // from being included more than once.
-                    if (empty($index)) {
-                        $index = md5($code);
-                    }
-                    $this->queue($position, $type, $code, $index);
-                } elseif (!empty($files)) {
-                    // inline code from file contents
-                    if (empty($module))
-                        list($module) = xarController::$request->getInfo(); 
-                    foreach ($files as $file) {
-                        $filePath = $this->findfile(array('filename' => trim($file), 'module' => $module));
-                        if (empty($filePath)) continue;
-                        // get file contents
-                        $code = file_get_contents($filePath);
-                        if (!$code) continue;
-                        // Use a hash index to prevent the same JS code fragment
-                        // from being included more than once.
-                        if (empty($index)) {
-                            $index = md5($code);
-                        }
-                        $this->queue($position, $type, $code, $index);                  
-                    }
-                }
-                break;
-            
+                if (!empty($code))
+                    return $this->queue($position, $type, $scope, $code, $tag);
+                // if code isn't present we get it from a file, fall through to src type
             case 'src':
-                // include file
-                if (empty($module))
-                    list($module) = xarController::$request->getInfo();        
-                foreach ($files as $file) {
-                    $filePath = $this->findfile(array('filename' => trim($file), 'module' => $module));
-                    if (empty($filePath)) continue;
-                    // Use filepath as index to prevent the same file 
-                    // from being included more than once.
-                    if (empty($index)) {
-                        $index = $filePath;
-                    }
-                    $this->queue($position, $type, xarServer::getBaseURL() . $filePath, $index);
-                } 
+                if (empty($filename)) return;
                 break;
-
         }
 
+        // set additional params based on scope
+        switch ($scope) {
+            case 'theme':
+                $package = '';
+                break;
+            case 'module':
+                $tag['module'] = $package = !empty($module) ? $module : xarMod::getName();
+                break;
+            case 'block':
+                $tag['module'] = $package = empty($module) ? xarVarGetCached('Security.Variables', 'currentmodule') : $module; 
+                break;
+            case 'property':
+                $tag['property'] = $package = $property;
+                break;
+        }
+
+        // if we're here, we have files to look for
+        $files = !is_array($filename) ? explode(',', $filename) : $filename;        
+
+        foreach ($files as $file) {
+            // break off any params 
+            if (strpos($file, '?') !== false) 
+                list($file, $params) = explode('?', $file, 2);
+            // get path relative to web root            
+            $relPath = $this->findFile($scope, trim($file), $tag['base'], $package, true);
+            if (empty($relPath)) continue;
+            // if type is code, we want the file contents
+            if ($type == 'code') {
+                $code = file_get_contents($relPath);
+                if (empty($code)) continue;
+                $tag['code'] = $code;
+            }
+            // fill in the other tag parameters
+            $tag['filename'] = $file;
+            $filePath = xarServer::getBaseURL() . $relPath;
+            if (!empty($params)) {
+                $filePath .= '?'.$params;
+                unset($params);
+            }
+            $tag['url'] = $filePath;
+            // queue the tag
+            $this->queue($position, $type, $scope, $tag['url'], $tag);
+        }
+        
         return true;
     }
 
@@ -147,9 +176,10 @@ class xarJS extends Object
     public function render($args)
     {
         $javascript = $this->getQueued($args);
-        if (empty($javascript)) return;    
+        if (empty($javascript)) return;  
         $args['javascript'] = $javascript;
-        return xarTplModule('themes', 'javascript', 'render', $args);
+        $args['comments'] = !empty($args['comments']);
+        return xarTpl::module('themes', 'javascript', 'render', $args);
     }
 
 /**
@@ -161,21 +191,29 @@ class xarJS extends Object
  * @access public
  * @param array   $args array of optional parameters<br/>
  *        string  $args[position] position to get JS for, optional<br/>
- *        string  $args[index] index to get JS for, optional
+ *        string  $args[type] type to get JS for, optional
+ *        string  $args[scope] scope of data source, optional
  * @return mixed array of queued js, false if none found
  * @throws none
 **/
     public function getQueued($args)
     {
-        extract($args);        
-        if (empty($position) && empty($index)) {
-            return self::$queue;
-        } elseif (!empty($position) && empty($index) && isset(self::$queue[$position])) {
-            return self::$queue[$position];
-        } elseif (!empty($position) && !empty($index) && isset(self::$queue[$position][$index])) {
-            return self::$queue[$position][$index];
+        extract($args);
+        $javascript = array();
+        if (!empty($position) && !empty($type) && !empty($scope) && 
+            isset(self::$js[$position][$type][$scope])) {
+            $javascript[$position][$type][$scope] = self::$js[$position][$type][$scope];
+        } elseif (!empty($position) && !empty($type) && 
+            isset(self::$js[$position][$type])) {
+            $javascript[$position][$type] = self::$js[$position][$type];
+        } elseif (!empty($position) &&
+            isset(self::$js[$position])) {
+            $javascript[$position] = self::$js[$position];
+        } elseif (isset(self::$js)) {
+            $javascript = self::$js;
         }
-        return;
+        if (empty($javascript)) return;
+        return $javascript;
     }
 
 /**
@@ -185,105 +223,139 @@ class xarJS extends Object
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param string  $position position to place js, (head or body), required
- * @param string  $type type of data to queue, (src or code), required
- * @param string  $data data to queue (filepath, or code fragment), required
+ * @param string  $position position to place js, [(head)|body], required
+ * @param string  $type type of data to queue, [framework|plugin|event|(src)|code], required
+ * @param string  $scope scope of data source [(theme)|module|block|property]
+ * @param string  $url url to file, or source code to include
+ * @param array   $data tag data to queue
  * @param string  $index index to use, optional
  * @return boolean true on success
- * @todo make private once xarTpl functions are deprecated
 **/
-    public function queue($position, $type, $data, $index = '')
+    public function queue($position, $type, $scope, $url, $data, $index='')
     {
-        if (empty($position) || empty($type) || empty($data)) {return;}
-
+        if (empty($position) || empty($type) || empty($scope) || empty($url) || empty($data)) return;
+        
         // keep track of javascript when we're caching
-        xarCache::addJavaScript($position, $type, $data, $index);
+        xarCache::addJavascript($data);
         
-        if (!isset(self::$queue[$position]))
-            self::$queue[$position] = array();
-        
-        if (empty($index)) {
-            self::$queue[$position][] = array('type' => $type, 'data' => $data);
-        } else {        
-            self::$queue[$position][$index] = array('type' => $type, 'data' => $data);        
+        if (!isset(self::$js)) {
+            // scope rendering order
+            $scopes = array(
+                'theme' => array(),
+                'module' => array(),
+                'block' => array(),
+                'property' => array(),
+            );
+            // head rendering order
+            $head = array(
+                'lib' => $scopes,
+                'plugin' => $scopes,
+                'src' => $scopes,
+                'code' => $scopes,
+                'event' => $scopes,
+            );
+            // body rendering order
+            $body = array(
+                'src' => $scopes,
+                'code' => $scopes,
+            );                        
+            self::$js = array(
+                'head' => $head,
+                'body' => $body,
+            );
+            unset($scopes); unset($head); unset($body);
         }
+        // skip unknown position/type/scope (for now)
+        if (!isset(self::$js[$position][$type][$scope])) return;
+        
+        if (empty($index))
+            $index = md5($url);
+        
+        self::$js[$position][$type][$scope][$index] = $data;
         return true;
-    }    
+    }
 
 /**
  * Find file function
  *
- * Searches over-ride paths for specified file
- * @author Jason Judge
+ * Returns the full URL or relative path from webroot to a file
+ * obeying standard template cascade paths
+ *
  * @author Chris Powis <crisp@xaraya.com>
  * @access private
- * @param  array   $args array of optional parameters<br/>
- *         string  $args[filename] name of file to find<br/> 
- *         string  $args[module] name of module to look for filename in, optional, default current module<br/>
- *         integer $args[modid] regid of module to look for filename in (deprecated, use module name)<br/>
+ * @param  string  $scope the scope in which to look for files, required
+ * @param  string  $file the name of the file to look for, required
+ * @param  string  $base optional sub folder to look in
+ * @param  string  $package the name of the theme, module or property to look in<br/>
+ *                 Optional in module scope, default current module<br/>
+ *                 Required in property scope
  * @return string path to file if found, empty otherwise
  * @throws none
 **/
-    private function findfile($args)
+    private function findFile($scope, $file, $base, $package='')
     {
-        extract($args);
+        if (empty($scope) || empty($file) || empty($base)) return;
         
-        if (empty($filename) || !is_string($filename)) return '';
+        $themeDir = xarTpl::getThemeDir();
+        $commonDir = xarTpl::getThemeDir('common');
+        $codeDir = sys::code();
 
-        // Bug 5910: If the path has GET parameters, then move them aside for now.
-        if (strpos($filename, '?') !== false) {
-            list($filename, $params) = explode('?', $filename, 2);
-            $params = '?' . $params;
-        } else {
-            $params = '';
-        } 
-
-        // Use the current module if none supplied.
-        if (empty($module) && empty($modid)) {
-            list($module) = xarController::$request->getInfo();
-        }
-
-        // Get the module ID from the module name.
-        if (empty($modid) && !empty($module)) {
-            $modid = xarMod::getRegID($module);
-        }
-
-        // Get details for the module if we have a valid module id.
-        if (!empty($modid)) {
-            $modInfo = xarMod::getInfo($modid);
-            // Get module directory if we have a valid module.
-            if (!empty($modInfo)) {
+        $paths = array();        
+        switch ($scope) {
+            case 'theme':
+                // themes/theme/scripts
+                $paths[] = $themeDir . '/' . $base . '/' . $file;
+                // themes/common/scripts
+                $paths[] = $commonDir . '/' . $base . '/' . $file;
+                break;
+            case 'module':
+                if (empty($package))
+                    $package = xarMod::getName();
+                $modInfo = xarMod::getBaseInfo($package);
+                if (!isset($modInfo)) return;
                 $modOsDir = $modInfo['osdirectory'];
-            }
-        }
-
-        // Theme base directory.
-        $themedir = xarTplGetThemeDir();
-
-        // Initialise the search path.
-        $searchPath = array();
-
-        // The search path for the JavaScript file.
-        $searchPath[] = $themedir . '/scripts/' . $filename;
-        if (isset($modOsDir)) {
-            $searchPath[] = $themedir . '/modules/' . $modOsDir . '/includes/' . $filename;
-            $searchPath[] = $themedir . '/modules/' . $modOsDir . '/xarincludes/' . $filename;
-            $searchPath[] = sys::code() . 'modules/' . $modOsDir . '/xartemplates/includes/' . $filename;
-        }
-
-        foreach($searchPath as $filePath) {
-            if (file_exists($filePath)) {break;}
-            $filePath = '';
-        }
-
-        if (empty($filePath)) {
-            return;
-        }
-
-        return $filePath . $params;
-                       
+                // support legacy calls to base module scripts now moved to common/scripts
+                if ($package == 'base') {
+                    // themes/theme/scripts
+                    $paths[] = $themeDir . '/' . $base . '/' . $file;
+                    // themes/common/scripts
+                    $paths[] = $commonDir . '/' . $base . '/' . $file;
+                }
+                // themes/theme/modules/module/scripts
+                $paths[] = $themeDir . '/modules/' . $modOsDir . '/' . $base . '/' . $file;
+                // themes/theme/modules/module/includes (legacy)
+                $paths[] = $themedir . '/modules/' . $modOsDir . '/includes/' . $file;
+                // themes/theme/modules/module/xarincludes (legacy)
+                $paths[] = $themedir . '/modules/' . $modOsDir . '/xarincludes/' . $file;
+                // themes/common/modules/module/scripts
+                $paths[] = $commonDir . '/modules/' . $modOsDir . '/' . $base . '/' . $file;
+                // code/modules/module/xartemplates/scripts
+                $paths[] = $codeDir . 'modules/' . $modOsDir . '/xartemplates/' . $base . '/' . $file;
+                // code/modules/module/xartemplates/includes (legacy)
+                $paths[] = $codeDir . 'modules/' . $modOsDir . '/xartemplates/includes/' . $file;
+                break;
+            case 'property':
+                if (empty($package)) return;
+                // themes/theme/properties/property/scripts
+                $paths[] = $themeDir . '/properties/' . $package . '/' . $base . '/' . $file;
+                // themes/common/properties/property/scripts
+                $paths[] = $commonDir . '/properties/' . $package . '/' . $base . '/' . $file;
+                // code/properties/property/xartemplates/scripts
+                $paths[] = $codeDir . 'properties/' . $package . '/xartemplates/' . $base . '/' . $file;
+                break;
+         }
+         if (empty($paths)) return;
+         
+         foreach ($paths as $path) {
+             if (!file_exists($path)) continue;
+             $filePath = $path;
+             break;
+         }
+         if (empty($filePath)) return;
+         
+         return $filePath;
     }
-    
+  
     // prevent cloning of singleton instance
     public function __clone()
     {

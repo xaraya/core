@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:set name="icon_delete">xarTplGetImage('icons/delete.png','base')</xar:set>
-    <xar:set name="icon_modify">xarTplGetImage('icons/modify.png','base')</xar:set>
+    <xar:set name="icon_delete">xarTpl::getImage('icons/delete.png','theme')</xar:set>
+    <xar:set name="icon_modify">xarTpl::getImage('icons/modify.png','theme')</xar:set>
     <div>
         <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
     </div>
@@ -20,11 +20,11 @@
             <xar:set name="thistype">$loop->item['type']</xar:set>
             <xar:if condition="$thistype ne $currenttype">
                 <tr>
-                    <td colspan="6">
-                        <a style="font-size: 11pt" href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
+                    <th class="xar-subhead xar-item-linked" colspan="6">
+                        <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
                             #$loop:item['type']#
                         </a>
-                    </td>
+                    </th>
                 </tr>
                 <xar:set name="currenttype">$thistype</xar:set>
             </xar:if>

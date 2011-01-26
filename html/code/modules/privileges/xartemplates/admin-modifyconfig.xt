@@ -3,11 +3,11 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Privileges Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
-        <h2>Modify Privileges Configuration</h2>
-        <div>
+	    <div class="xar-mod-page-head">
+	        <h2>Modify Privileges Configuration</h2>
             <ul class="xar-tabs xar-alt xar-norm-outline">
                 <xar:var name="title">Options</xar:var>
                 <xar:var name="label">Options</xar:var>
@@ -86,6 +86,7 @@
                 </xar:if>
             </ul>
         </div>
+        <div class="xar-mod-page-body">
         <!--  Begin General Options -->
         <xar:if condition="$tab eq 'general'">
             <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
@@ -309,10 +310,9 @@
             <form method="post" id="testerform" name="testerform" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Testing Settings</legend>
-                    <div>
+                    <p class="xar-note">
                         These settings let a designated tester see security check messages on a live site.
-                    </div>
-                    <br />
+                    </p>
                     <div class="xar-form-input-wrapper">
                         <xar:var name="label">Group containing the tester</xar:var>
                         <label for="testergroup" title="#$label#" class="xar-form-label">
@@ -398,5 +398,6 @@
                 </div>
             </form>
         </xar:if>
+    </div>
     </div>
 </xar:template>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <fieldset>
+        <legend>Configuration options</legend>
+        <xar:if condition="count($configs) eq 0">
+            No configuration options are defined, or those defined are not used in the theme. Define some <a href="#xarModURL('themes','admin','new_config')#">here</a>.
+        <xar:else />
+            <table>
+                <tr>
+                    <th>Option</th>
+                    <th>Value</th>
+                    <th>Description</th>
+                    <th>Variable Name</th>
+                    <th>Applies to</th>
+                </tr>
+                <xar:foreach in="$configs" key="$key" value="$init">
+                    <tr>
+                        <xar:set name="fieldname">$name . '[' . $key . ']'</xar:set>
+                        <xar:set name="fieldid">$id . '_' . $key</xar:set>
+                        <xar:if condition="isset($init['configuration'])">
+                            <xar:set name="configuration">$init['configuration']</xar:set>
+                        <xar:else />
+                            <xar:set name="configuration">''</xar:set>
+                        </xar:if>
+                        <td>#$init['label']#</td>
+                        <td>
+                            <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']"/>
+                        </td>
+                        <td>#$init['description']#</td>
+                        <td>#$key#</td>
+                        <td>
+                            <xar:if condition="$init['applies'] eq 1">
+                                All themes
+                            <xar:elseif condition="$init['applies'] eq 2"/>
+                                This theme
+                            <xar:else/>
+                                Unused
+                            </xar:if>
+                        </td>
+                    </tr>
+                </xar:foreach>
+            </table>
+        </xar:if>
+    </fieldset>
+    <xar:template file="dataproperty_additions" module="base"/>
+</xar:template>

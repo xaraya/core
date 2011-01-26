@@ -32,7 +32,7 @@ function privileges_admin_main()
     $samemodule = $info[0] == $refererinfo[0];
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTplModule('privileges','admin','overview');
+        return xarTpl::module('privileges','admin','overview');
     } else {
         xarController::redirect(xarModURL('privileges', 'admin', 'viewprivileges'));
         return true;

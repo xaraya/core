@@ -43,7 +43,7 @@ function roles_user_getvalidation()
     if (!xarVarFetch('sent','int:0:2',$sent,0,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('phase','str:1:100',$phase,'startvalidation',XARVAR_NOT_REQUIRED)) return;
 
-    xarTplSetPageTitle(xarML('Validate Your Account'));
+    xarTpl::setPageTitle(xarML('Validate Your Account'));
     /* This function to be provided with support functions to ensure we have got a default regmodule,
         if we need it. Tis should make it easier to move the User registration validation out of
         email revalidation soon, once we have all the registration default module instances captured in the new function.
@@ -80,7 +80,7 @@ function roles_user_getvalidation()
 
         case 'startvalidation':
         default:
-            $data = xarTplModule($regmodule,'user', 'startvalidation',
+            $data = xarTpl::module($regmodule,'user', 'startvalidation',
                                                     array('phase'   => $phase,
                                                           'uname'   => $uname,
                                                           'sent'    => $sent,
@@ -96,7 +96,7 @@ function roles_user_getvalidation()
 
             // Trick the system when a user has double validated.
             if (empty($status['valcode'])){
-                $data = xarTplModule('roles','user','getvalidation',$tplvars);
+                $data = xarTpl::module('roles','user','getvalidation',$tplvars);
                     return $data;
             }
 
@@ -195,7 +195,7 @@ function roles_user_getvalidation()
 
             xarModVars::set('roles', 'lastuser', $status['id']);
 
-            $data = xarTplModule('roles','user', 'getvalidation', $tplvars);
+            $data = xarTpl::module('roles','user', 'getvalidation', $tplvars);
 
             break;
 
@@ -211,7 +211,7 @@ function roles_user_getvalidation()
                     throw new GeneralException(null,'Problem resending confirmation email');
                 }
 
-            $data = xarTplModule('roles','user', 'getvalidation', $tplvars);
+            $data = xarTpl::module('roles','user', 'getvalidation', $tplvars);
 
             // Redirect
             xarController::redirect(xarModURL('roles', 'user', 'getvalidation',array('sent' => 1)));

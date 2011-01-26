@@ -3,9 +3,10 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Dynamic Data Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
+    	<div class="xar-mod-page-head">
         <xar:if condition="!empty($objectid)">
             <h2>Utilities - Links for Object #$object:label#</h2>
         <xar:elseif condition="!empty($table)"/>
@@ -16,10 +17,11 @@
             <h2>Utilities - Links between Objects or Tables</h2>
         </xar:if>
         <xar:template type="module" file="utility-menu"/>
-
+       </div><!--/xar-mod-page-head-->
+		<div class="xar-mod-page-body">
         <xar:set name="authid">#xarSecGenAuthKey()#</xar:set>
 
-        <form method="get" action="&xar-baseurl;index.php">
+        <form method="get" action="#xarServer::getBaseURL()#">
             <fieldset>
                 <input type="hidden" name="module" value="dynamicdata"/>
                 <input type="hidden" name="type" value="util"/>
@@ -47,7 +49,7 @@
             <xar:template type="module" file="link-objects"/>
         </xar:if>
 
-        <form method="get" action="&xar-baseurl;index.php">
+        <form method="get" action="#xarServer::getBaseURL()#">
             <fieldset>
                 <input type="hidden" name="module" value="dynamicdata"/>
                 <input type="hidden" name="type" value="util"/>
@@ -83,7 +85,7 @@
 
 <!-- TODO: re-examine module links
 
-        <form method="get" action="&xar-baseurl;index.php">
+        <form method="get" action="#xarServer::getBaseURL()#">
             <fieldset>
                 <input type="hidden" name="module" value="dynamicdata"/>
                 <input type="hidden" name="type" value="util"/>
@@ -102,6 +104,6 @@
         </xar:if>
 
 -->
-
-    </div>
+	</div><!--xar-mod-page-body-->
+    </div><!--xar-mod-body-->
 </xar:template>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="base" filename="formcheck.js"/>
+    <xar:javascript scope="theme" filename="formcheck.js"/>
     <script type="text/javascript">
     <!--
         // Enter name of mandatory fields
@@ -10,12 +10,11 @@
         var blocks_fieldDescription = Array("Name");
     //-->
     </script>
-    <xar:style scope="common"/>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Blocks Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <h2>New Block</h2>
         <form action="#xarModURL('blocks', 'admin', 'create_instance')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
             <fieldset>

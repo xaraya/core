@@ -31,7 +31,7 @@
         
             // Check for a valid confirmation key
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             
             // Get the data from the form
@@ -39,7 +39,7 @@
             
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
-                return xarTplModule('dynamicdata','util','new_static', $data);        
+                return xarTpl::module('dynamicdata','util','new_static', $data);        
             } else {
                 if (empty($data['table'])) throw new Exception(xarML('Table name missing'));
                 

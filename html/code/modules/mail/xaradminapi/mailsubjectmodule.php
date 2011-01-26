@@ -20,7 +20,7 @@
  *        string   $args['templateName'] string the specific template to call<br/>
  *        string   $args['tplData']     arguments for the template<br/>
  *        string   $args['mailtype']     The type of mail html|text
- * @return string xarTpl__executeFromFile($sourceFileName, $tplData) 
+ * @return string xarTpl::file($sourceFileName, $tplData) 
  */
 function mail_adminapi_mailsubjectmodule(Array $args=array())
 {
@@ -32,7 +32,7 @@ function mail_adminapi_mailsubjectmodule(Array $args=array())
                     'mailType' => $mailType,
                     'messagepart' => 'subject');
     $sourceFileName = xarMod::apiFunc('mail', 'admin', 'getsourcefilename', $params);     
-    return xarTpl__executeFromFile($sourceFileName, $tplData);  
+    return xarTpl::file($sourceFileName, $tplData);  
 }
 
 ?>

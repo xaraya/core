@@ -81,7 +81,7 @@ function dynamicdata_admin_newhook(Array $args=array())
     }
 
     $properties = $object->getProperties();
-    return xarTplModule('dynamicdata','admin','newhook',
+    return xarTpl::module('dynamicdata','admin','newhook',
                         array('properties' => $properties),
                         $template);
 }

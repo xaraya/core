@@ -79,18 +79,18 @@ function modules_admin_list()
     $modlist = xarMod::apiFunc('modules','admin','getlist',array('filter' => array('State' => $data['selfilter'], 'numitems' =>20)));
 
     // get action icons/images
-    $img_disabled       = xarTplGetImage('icons/disabled.png', 'base');
-    $img_none           = xarTplGetImage('icons/none.png', 'base');
-    $img_activate       = xarTplGetImage('icons/activate.png', 'base');
-    $img_deactivate     = xarTplGetImage('icons/deactivate.png', 'base');
-    $img_upgrade        = xarTplGetImage('icons/upgrade.png', 'base');
-    $img_initialise     = xarTplGetImage('icons/initialize.png', 'base');
-    $img_remove         = xarTplGetImage('icons/remove.png', 'base');
+    $img_disabled       = xarTpl::getImage('icons/disabled.png', 'theme');
+    $img_none           = xarTpl::getImage('icons/none.png', 'theme');
+    $img_activate       = xarTpl::getImage('icons/activate.png', 'theme');
+    $img_deactivate     = xarTpl::getImage('icons/deactivate.png', 'theme');
+    $img_upgrade        = xarTpl::getImage('icons/upgrade.png', 'theme');
+    $img_initialise     = xarTpl::getImage('icons/initialize.png', 'theme');
+    $img_remove         = xarTpl::getImage('icons/remove.png', 'theme');
 
     // get other images
-    $data['infoimg']    = xarTplGetImage('icons/info.png', 'base');
-    $data['editimg']    = xarTplGetImage('icons/hooks.png', 'base');
-    $data['propimg']    = xarTplGetImage('icons/hooks.png', 'base');
+    $data['infoimg']    = xarTpl::getImage('icons/info.png', 'theme');
+    $data['editimg']    = xarTpl::getImage('icons/hooks.png', 'theme');
+    $data['propimg']    = xarTpl::getImage('icons/hooks.png', 'theme');
 
     $data['listrowsitems'] = array();
     $listrows = array();
@@ -292,7 +292,7 @@ function modules_admin_list()
     $data['totalitems'] = $i;
 
     // detailed info image url
-    $data['infoimage'] = xarTplGetImage('help.gif');
+    $data['infoimage'] = xarTpl::getImage('icons/help-browser.png', 'theme');
 
     // not ideal but would do for now - reverse sort by module names
     if($data['selsort'] == 'namedesc') krsort($data['listrowsitems']);
