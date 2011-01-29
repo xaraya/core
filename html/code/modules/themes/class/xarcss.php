@@ -44,10 +44,17 @@ class xarCSS extends Object
 
     private static $instance;
     private static $css;
+    
+    // experimental combine/compress options
+    private $cacheDir   = 'cache/css';
+    private $combined   = true;
+    private $compressed = true;
         
     // prevent direct creation of this object
     private function __construct()
     {
+        $this->combined   = xarModVars::get('themes', 'css.combined');
+        $this->compressed = xarModVars::get('themes', 'css.compressed');
     }   
 
 /**
@@ -231,7 +238,7 @@ class xarCSS extends Object
         }
         if (empty($filePath)) return;
         
-        $tag['url'] = xarServer::getBaseURL() . $filePath;
+        $tag['url'] = $filePath; //xarServer::getBaseURL() . $filePath;
         
         return $this->queue($method, $scope, $tag['url'], $tag);
         
@@ -254,7 +261,9 @@ class xarCSS extends Object
     {
         if (empty(self::$css)) return;
         extract($args);
-        
+        if ($this->combined) {
+            $this->combine();
+        }
         $args['styles'] = self::$css;
         $args['comments'] = !empty($comments);
         
@@ -313,6 +322,196 @@ class xarCSS extends Object
         return true;
     }   
 
+/**
+ * Combine CSS
+ *
+ * Takes the content of queued css files and embedded source code, 
+ * or @imported styles contained within other stylesheets and combines 
+ * them into a single stylesheet
+ *
+ * @access private
+ * @params none
+ * @throws none
+ * @return bool true on success
+ * @todo implement proper caching using xarCache
+**/
+    private function combine()
+    {
+        if (empty(self::$css) || !$this->combined) return;
+        $content = '';
+        foreach (self::$css as $method => $scopes) {
+            if (empty($scopes)) continue;
+            foreach ($scopes as $scope => $styles) {
+                if (empty($styles)) continue;
+                foreach ($styles as $index => $style) {
+                    if (empty($style)) continue;
+                    if (($style['media'] != 'all' && $style['media'] != 'screen') ||
+                        !empty($style['condition'])) continue;
+                    if ($style['method'] != 'embed') {
+                        $string = @file_get_contents($style['url']);
+                        if (empty($string)) continue;
+                        if ($this->compressed) {
+                            $string = $this->compress($string, $style['url']);
+                        } else {
+                            $string = $this->fixurlpaths($string, $style['url']);
+                            $string = $this->combineimports($string, $style['url']);
+                        }
+                        //if (empty($string)) continue;
+                        $content .= "/* Combined CSS from file $style[url] */\n\n";                        
+                        $content .= $string;
+                    } else {
+                        if ($this->compressed) {
+                            $string = $this->compress($style['source']);
+                        } else {
+                            $string = $style['source'];
+                        }
+                        //if (empty($string)) continue;
+                        $content .= "/* Combined embedded CSS */\n\n";
+                        $content .= $string;
+                    }
+                    $content .= "\n\n";
+                    // remove combined css from queue
+                    // @todo: this should be queued and only removed when the file is written
+                    unset(self::$css[$method][$scope][$index]);
+                }
+            }
+        }                                    
+        if (empty($content)) return;
+        // @todo: implement proper caching
+        $cacheKey = md5($content);
+        $filePath = sys::varpath() . '/' . $this->cacheDir . '/' . $cacheKey . '.css';
+        if (!file_exists($filePath)) {
+            $fp = @fopen($filePath,'wb');
+            if (!$fp) return;
+            $size = fwrite($fp, $content);
+            if (!$size || $size < strlen($content)) return;
+            fclose($fp);
+        }
+        // Queue the combined stylesheet
+        $index = md5($cacheKey . '.css');
+        self::$css['link']['theme'][$index] = array(
+            'method' => 'link',
+            'scope' => 'theme',
+            'rel' => 'stylesheet',
+            'title' => 'Combined Styles',
+            'url' => $filePath,
+            'type' => 'text/css',
+            'media' => 'all',
+            'condition' => '',
+        );
+        return true;
+    }
+
+/**
+ * Compress CSS
+ *
+ * Compress CSS (when combining and caching) 
+ *
+ * @access private
+ * @param  string css to compress
+ * @throws none
+ * return  string compressed css
+**/
+    private function compress($string='', $fileName='')
+    {
+        if (empty($string)) return '';
+        // remove comments 
+        $string = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $string);
+        // remove tabs, spaces, newlines, etc. 
+        $string = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $string);
+        if (!empty($fileName)) {
+            // replace relative paths like url(../images/somefile.png)   
+            $string = $this->fixurlpaths($string, $fileName);
+            // combine any @imports from this file 
+            $string = $this->combineimports($string, $fileName);
+        }
+        return $string;
+    }
+
+/**
+ * Fix url paths
+ *
+ * transform paths relative to current file into paths relative to web root
+ * eg, url(../images/myfile.png) in file /themes/common/style/style.css
+ * will be transformed into url(/themes/common/images/myfile.png);
+ *
+ * @access private
+ * @param  string $string the string to look in for replacements
+ * @param  string $fileName the name of the file the string belongs to
+ * @throws none
+ * return  string the string with urls replaced
+**/     
+    private function fixurlpaths($string, $fileName)
+    {
+        // remove the domain name from path (if any)
+        $base = xarServer::getBaseURL();
+        if (strpos($base, $fileName) === 0) {
+            $fileName = str_replace($base, '', $fileName);
+        }
+        // add leading slash if required so url is relative to web root
+        if (strpos($fileName, '/') !== 0) {
+            $fileName = '/'.$fileName;
+        }
+        // get the directory the file declaring the url lives in
+        $filePath = dirname($fileName);
+        // find all url() declarations
+        preg_match_all('!url\(([^\)]*)\)!', $string, $matches);
+        if (!empty($matches)) {
+            foreach ($matches[1] as $i => $match) {
+                // skip replacements on paths already relative to web root
+                if (strpos('/', $match) === 0) continue;
+                $curPath = $filePath;
+                // see if the declaration is relative to current file directory                
+                $count = substr_count($match,'../');
+                if (!empty($count)) {
+                    while ($count > 0) {
+                        // move up the path once for each occurence of ../
+                        $curPath = dirname($curPath);
+                        $count--;
+                    }
+                }
+                // replace all occurences of ../ in the url
+                $match = str_replace('../', '', $match);
+                // replace the url with the full path relative to web root
+                $string = str_replace($matches[0][$i], "url($curPath/$match)", $string);
+            }
+        }
+        return $string;
+    }    
+
+/**
+ * Combine imports
+ *
+ * embeds css from @import url() into combined stylesheet
+ *
+ * @access private
+ * @param  string $string the string to look in for replacements
+ * @param  string $fileName the name of the file the string belongs to
+ * @throws none
+ * return  string the string with @imports replaced with content
+**/  
+    private function combineimports($string, $fileName)
+    {
+        if (preg_match_all('!@import\s*url\([\'|"]?([^\'|"|\)]*)[\'|"]?\);!', $string, $matches)) {
+            foreach ($matches[1] as $i => $match) {
+                if (strpos($match, '/') === 0) {
+                    $match = substr($match, 1, strlen($match));
+                }
+                $ifile = @file_get_contents($match);
+                if (empty($ifile)) continue;
+                $istring = "/* Replaced @import url($match) in file $fileName */\n\n";
+                if ($this->compressed) {
+                    $istring .= $this->compress($ifile, $match);
+                } else {
+                    $istring .= $this->fixurlpaths($ifile, $match);
+                }
+                $istring .= "\n\n";
+                $string = str_replace($matches[0][$i], $istring, $string);
+            }
+        }
+        return $string;     
+    }
+    
     // prevent cloning of singleton instance
     public function __clone()
     {

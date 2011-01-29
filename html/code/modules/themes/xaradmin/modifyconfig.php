@@ -49,6 +49,12 @@ function themes_admin_modifyconfig()
     if (!xarVarFetch('selfilter','int',$data['selfilter'],XARMOD_STATE_ANY,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('hidecore', 'checkbox', $data['hidecore'], false, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('selstyle','str:1:',$data['selstyle'],'plain',XARVAR_NOT_REQUIRED)) return;
+    
+    // experimental combine/compress css options
+    if (!xarVarFetch('combinecss', 'checkbox', $data['combinecss'], false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('compresscss', 'checkbox', $data['compresscss'], false, XARVAR_NOT_REQUIRED)) return;
+    // can't compress if not combined :)    
+    if ($data['combinecss'] == false) $data['compresscss'] = false;
 
     // Dashboard
 //    if (!isset($data['dashtemplate']) || trim($data['dashtemplate']=='')) {
@@ -100,6 +106,10 @@ function themes_admin_modifyconfig()
             xarModVars::set('themes', 'selfilter', $data['selfilter']);
             xarModVars::set('themes', 'selsort', $data['selsort']);
 
+            // css combine/compress options
+            xarModVars::set('themes', 'css.combined', $data['combinecss']);
+            xarModVars::set('themes', 'css.compressed', $data['compresscss']);
+            
             // Adjust the usermenu hook according to the setting
             /* The usermenu isn't a hook...
             sys::import('xaraya.structures.hooks.observer');
