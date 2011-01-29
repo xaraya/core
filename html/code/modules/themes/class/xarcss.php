@@ -251,7 +251,7 @@ class xarCSS extends Object
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params array   $args array of optional paramaters<br/>
+ * @params array   $args array of optional parameters<br/>
  *         boolean $args[comments] show comments, optional, default false
  * @todo option to turn on/off style comments in UI, cfr template comments
  * @return string templated output of css to render
@@ -329,6 +329,7 @@ class xarCSS extends Object
  * or @imported styles contained within other stylesheets and combines 
  * them into a single stylesheet
  *
+ * @author Chris Powis <crisp@xaraya.com>
  * @access private
  * @params none
  * @throws none
@@ -407,6 +408,7 @@ class xarCSS extends Object
  *
  * Compress CSS (when combining and caching) 
  *
+ * @author Chris Powis <crisp@xaraya.com>
  * @access private
  * @param  string css to compress
  * @throws none
@@ -435,6 +437,7 @@ class xarCSS extends Object
  * eg, url(../images/myfile.png) in file /themes/common/style/style.css
  * will be transformed into url(/themes/common/images/myfile.png);
  *
+ * @author Chris Powis <crisp@xaraya.com>
  * @access private
  * @param  string $string the string to look in for replacements
  * @param  string $fileName the name of the file the string belongs to
@@ -459,7 +462,7 @@ class xarCSS extends Object
         if (!empty($matches)) {
             foreach ($matches[1] as $i => $match) {
                 // skip replacements on paths already relative to web root
-                if (strpos('/', $match) === 0) continue;
+                if (strpos($match, '/') === 0) continue;
                 $curPath = $filePath;
                 // see if the declaration is relative to current file directory                
                 $count = substr_count($match,'../');
@@ -484,6 +487,7 @@ class xarCSS extends Object
  *
  * embeds css from @import url() into combined stylesheet
  *
+ * @author Chris Powis <crisp@xaraya.com>
  * @access private
  * @param  string $string the string to look in for replacements
  * @param  string $fileName the name of the file the string belongs to
