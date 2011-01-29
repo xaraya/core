@@ -455,7 +455,7 @@ class xarCSS extends Object
         // get the directory the file declaring the url lives in
         $filePath = dirname($fileName);
         // find all url() declarations
-        preg_match_all('!url\(([^\)]*)\)!', $string, $matches);
+        preg_match_all('!url\([\'|"]?([^\'|"|\)]*)[\'|"]?\)!', $string, $matches);
         if (!empty($matches)) {
             foreach ($matches[1] as $i => $match) {
                 // skip replacements on paths already relative to web root
