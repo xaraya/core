@@ -445,7 +445,7 @@ class xarCSS extends Object
     {
         // remove the domain name from path (if any)
         $base = xarServer::getBaseURL();
-        if (strpos($base, $fileName) === 0) {
+        if (strpos($fileName, $base) === 0) {
             $fileName = str_replace($base, '', $fileName);
         }
         // add leading slash if required so url is relative to web root
@@ -499,14 +499,16 @@ class xarCSS extends Object
                 }
                 $ifile = @file_get_contents($match);
                 if (empty($ifile)) continue;
-                $istring = "/* Replaced @import url($match) in file $fileName */\n\n";
                 if ($this->compressed) {
-                    $istring .= $this->compress($ifile, $match);
+                    $ifile = $this->compress($ifile, $match);
                 } else {
-                    $istring .= $this->fixurlpaths($ifile, $match);
+                    $ifile = $this->fixurlpaths($ifile, $match);
+                    $ifile = $this->combineimports($ifile, $match);
                 }
-                $istring .= "\n\n";
-                $string = str_replace($matches[0][$i], $istring, $string);
+                $content = "/* Replaced @import url($match) in file $fileName */\n\n";
+                $content .= $ifile;
+                $content .= "\n\n";
+                $string = str_replace($matches[0][$i], $content, $string);
             }
         }
         return $string;     
