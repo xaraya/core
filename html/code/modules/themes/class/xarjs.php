@@ -324,9 +324,9 @@ class xarJS extends Object
                 // themes/theme/modules/module/scripts
                 $paths[] = $themeDir . '/modules/' . $modOsDir . '/' . $base . '/' . $file;
                 // themes/theme/modules/module/includes (legacy)
-                $paths[] = $themedir . '/modules/' . $modOsDir . '/includes/' . $file;
+                $paths[] = $themeDir . '/modules/' . $modOsDir . '/includes/' . $file;
                 // themes/theme/modules/module/xarincludes (legacy)
-                $paths[] = $themedir . '/modules/' . $modOsDir . '/xarincludes/' . $file;
+                $paths[] = $themeDir . '/modules/' . $modOsDir . '/xarincludes/' . $file;
                 // themes/common/modules/module/scripts
                 $paths[] = $commonDir . '/modules/' . $modOsDir . '/' . $base . '/' . $file;
                 // code/modules/module/xartemplates/scripts
