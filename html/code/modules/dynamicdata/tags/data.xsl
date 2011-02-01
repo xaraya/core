@@ -297,7 +297,7 @@
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>);}catch(Exception $e){}</xsl:text>
+        <xsl:text>);}catch(Exception $e){if(xarModVars::get('dynamicdata','debugmode'))echo "&lt;pre&gt;".$e->getMessage()."&lt;/pre&gt;";}</xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <!-- We do have a property in the attribute -->
