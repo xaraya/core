@@ -23,10 +23,10 @@ fi
 
 # 1. Make sure our mtn database is up to data
 echo "1. Pulling $MTNHOST for new revisions..."
-# Note: with jamaica being on mt.xaraya.com in a separate db, 
-# mtn pull mt.xaraya.com com.xaraya.core.{unstable,jamaica} will not work anymore
+# Note: with bermuda being on mt.xaraya.com in a separate db, 
+# mtn pull mt.xaraya.com com.xaraya.core.{unstable,bermuda} will not work anymore
 $MTN pull $MTNHOST "com.xaraya.core.unstable"
-$MTN pull $MTNHOST "com.xaraya.core.jamaica"
+$MTN pull $MTNHOST "com.xaraya.core.bermuda"
 
 # 2. Update the git repository, reading in import and saving export marks
 MTNARGS="--authors-file=$AUTHORS  --export-marks=$MTNMARKS "
