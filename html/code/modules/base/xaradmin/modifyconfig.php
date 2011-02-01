@@ -94,6 +94,17 @@ function base_admin_modifyconfig()
         $data['modes'] = $modes;
     }
 
+    sys::import('modules.dynamicdata.class.properties.master');
+    $combobox = DataPropertyMaster::getProperty(array('name' => 'combobox'));
+    $combobox->checkInput('logfilename');
+    $data['logfilename'] = !empty($combobox->value) ? $combobox->value : xarSystemVars::get(sys::CONFIG, 'Log.Filename');
+
+    $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
+    $picker->initialization_basedirectory = sys::varpath() . "/logs/";
+    $picker->setExtensions('txt,html');
+    $picker->display_fullname = true;
+    $data['logfiles'] = $picker->getOptions();
+
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -215,6 +226,12 @@ function base_admin_modifyconfig()
 
                     xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
                     break;
+                case 'logging':                    
+                    if (!xarVarFetch('logenabled','int',$logenabled,0,XARVAR_NOT_REQUIRED)) return;
+                    $variables = array('Log.Enabled' => $logenabled, 'Log.Filename' => $data['logfilename']);
+                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
+                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'logging')));
+                    break;
                 case 'other':
                     if (!xarVarFetch('loadlegacy',   'checkbox', $loadLegacy,    xarConfigVars::get(null, 'Site.Core.LoadLegacy'), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('proxyhost',    'str:1:',   $proxyhost,     xarModVars::get('base', 'proxyhost'), XARVAR_NOT_REQUIRED)) return;
@@ -245,6 +262,7 @@ function base_admin_modifyconfig()
                         xarConfigVars::set(null, 'Site.Core.TimeZone', "UTC");
                         xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', 0);
                     }
+                    xarModVars::set('roles', 'usertimezone', xarConfigVars::get(null, 'Site.Core.TimeZone'));
                     xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other')));
                     break;
             }

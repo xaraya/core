@@ -11,6 +11,7 @@
     <meta name="Generator" content="#$generator#"/>
     <meta name="Keywords" content="#$keywords#"/>
     <meta name="Description" content="#$description#"/>
+    <meta name="author" content="#xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY)#"/>
     <meta name="rating" content="General"/>
     <xar:if condition="(!empty($refreshurl)) and (!empty($refreshtime))">
         <meta http-equiv="refresh" content="#$refreshtime#;URL=#$refreshurl#"/>
@@ -41,7 +42,7 @@
     <link rel="pingback" href="&xar-baseurl;ws.php"/>
     <link rel="Top" type="text/html" href="#$baseurl#"/>
     <link rel="Parent" type="text/html" href="#$baseurl#"/>
-    <link rel="author" href="#$sitename#"/>
+    <link rel="author" href="#$baseurl#" title="#$sitename#"/>
     <xar:if condition="!empty($copyrightpage)">
         <link rel="copyright" type="text/html" href="#$copyrightpage#"/>
     </xar:if>

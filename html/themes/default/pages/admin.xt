@@ -3,7 +3,7 @@
 <!DOCTYPE blocklayout PUBLIC "-//XAR//DTD BL 2.0 Strict//EN"
 "http://xaraya.com/bl2/DTD/bl2-strict.dtd">
 <xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
-    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <html xml:lang="en" lang="en">
         <head>
             <xar:blockgroup name="header" id="header"/>
             <title>

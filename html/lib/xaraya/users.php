@@ -396,8 +396,7 @@ function xarUserGetVar($name, $userId = NULL)
                         xarLogMessage($msg, XARLOG_LEVEL_ERROR);
                     }
                     return;
-                }
-                else {
+                } else {
                     xarCoreCache::setCached('User.Variables.'.$userId, $name, $value);
                 }
             }
@@ -435,6 +434,7 @@ function xarUserGetVar($name, $userId = NULL)
 /**
  * Set a user variable
  *
+ * @author Marco Canini
  * @since 1.23 - 2002/02/01
  * 
  * @param  string  $name  the name of the variable

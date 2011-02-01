@@ -53,6 +53,10 @@ function xarLog_init(&$args)
 {
 
     $GLOBALS['xarLog_loggers'] = array();
+    
+    // Only log if logging is enabled
+    if (!xarSystemVars::get(sys::CONFIG, 'Log.Enabled')) return true;
+    
     $xarLogConfig = array();
 
     if (xarLogConfigReadable())
@@ -64,7 +68,7 @@ function xarLog_init(&$args)
 
     } elseif (xarLogFallbackPossible()) {
         //Fallback mechanism to allow some logging in important cases when
-        //the user might now have logging yet installed, or for some reason we
+        //the user might not have logging yet installed, or for some reason we
         //should be able to have a way to get error messages back => installation?!
         $logFile = xarLogFallbackFile();
         if ($logFile) {
@@ -72,7 +76,7 @@ function xarLog_init(&$args)
                 'type'      => 'simple',
                 'config'    => array(
                     'fileName' => $logFile,
-                    'logLevel'  => XARLOG_LEVEL_ALL));
+                    'loglevel'  => XARLOG_LEVEL_ALL));
         }
     }
 
@@ -128,11 +132,9 @@ function xarLogFallbackFile ()
 
     if (isset($logFile)) return $logFile;
 
-    $logFile = sys::varpath() . '/logs/log.txt';
-
-    if (file_exists($logFile)) {
-        $logFile = realpath($logFile);
-    }
+    $logFile = sys::varpath() . '/logs/' . xarSystemVars::get(sys::CONFIG, 'Log.Filename');
+    if (!file_exists($logFile)) touch($logFile);
+    $logFile = realpath($logFile);
 
     return $logFile;
 }
@@ -205,6 +207,12 @@ function xarLog__add_logger($type, $config_args)
       $GLOBALS['xarLog_loggers'][] = &$observer;
 }
 
+/**
+ * Log a message
+ * @param string message. The message to log
+ * @param string level. The level for this message OPTIONAL Defaults to XARLOG_LEVEL_DEBUG
+ *
+ */
 function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG)
 {
 

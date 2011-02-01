@@ -19,7 +19,7 @@
             </xar:if>
         </xar:foreach>
     </select>
-
+    &#160;
     <xar:set name="tabindex">$tabindex + 1</xar:set>
     <select name="input_#$name#" id="input_#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
         <xar:foreach in="$options['input']" value="$row">

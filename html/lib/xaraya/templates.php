@@ -284,65 +284,51 @@ function xarTplGetPageTitle()
     return '';
 }
 
-
 /**
  * Add JavaScript code or links to template output
- *
+ * NOTE: this function is marked for deprecation, use the xarJS object
+ * and themes module registerjs userapi function instead.
  * 
- * @global array  xarTpl_JavaScript
+ * @global array  xarTpl_JavaScript (deprecated)
  * @param  string $position         Either 'head' or 'body'
  * @param  string $type             Either 'src' or 'code'
  * @param  string $data             pathname or raw JavaScript
  * @param  string $index            optional (unique key and/or ordering)
  * @return boolean
+ * @todo deprecate this function
  */
 function xarTplAddJavaScript($position, $type, $data, $index = '')
 {
     if (empty($position) || empty($type) || empty($data)) {return;}
-
-    // keep track of javascript when we're caching
-    xarCache::addJavaScript($position, $type, $data, $index);
-
-    //Do lazy initialization of the array. There are instances of the logging system
-    //where we need to use this function before the Template System was initialized
-    //Maybe this can be used with a new shutdown event (not based on the
-    // php's register_shutdown_function) as at that time it's already too late to be able
-    // to log anything
-    if (!isset($GLOBALS['xarTpl_JavaScript'])) {
-        // Initialise the JavaScript array. Start with placeholders for the head and body.
-        $GLOBALS['xarTpl_JavaScript'] = array('head'=>array(), 'body'=>array());
-    }
-
-    if (empty($index)) {
-        $GLOBALS['xarTpl_JavaScript'][$position][] = array('type'=>$type, 'data'=>$data);
-    } else {
-        $GLOBALS['xarTpl_JavaScript'][$position][$index] = array('type'=>$type, 'data'=>$data);
-    }
-
-    return true;
+    
+    sys::import('modules.themes.class.xarjs');
+    $javascript = xarJS::getInstance();
+    return $javascript->queue($position, $type, $data, $index);
 }
 
 /**
  * Get JavaScript code or links cached for template output
- *
+ * NOTE: this function is marked for deprecation, use the xarJS object
+ * and themes module renderjs userapi function instead.
  * 
- * @global array  xarTpl_JavaScript
+ * @global array  xarTpl_JavaScript (deprecated)
  * @param  string $position
  * @param  string $index
  * @return array
+ * @todo deprecate this function
  */
 function xarTplGetJavaScript($position = '', $index = '')
 {
-    if (empty($position)) {return $GLOBALS['xarTpl_JavaScript'];}
-    if (!isset($GLOBALS['xarTpl_JavaScript'][$position])) {return;}
-    if (empty($index)) {return $GLOBALS['xarTpl_JavaScript'][$position];}
-    if (!isset($GLOBALS['xarTpl_JavaScript'][$position][$index])) {return;}
-    return $GLOBALS['xarTpl_JavaScript'][$position][$index];
+    sys::import('modules.themes.class.xarjs');
+    $javascript = xarJS::getInstance();
+    return $javascript->getQueued(array('position' => $position, 'index' => $index));    
 }
 
 /**
  * Turns module output into a template.
  *
+ * @author Paul Rosania <paul@xaraya.com>
+ * @author Marco Canini <marco@xaraya.com>
  * 
  * @param  string $modName      the module name
  * @param  string $modType      user|admin
@@ -363,8 +349,6 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     // Get the right source filename
     $sourceFileName = xarTpl__getSourceFileName($modName, $tplBase, $templateName);
 
-    //assert('!empty($sourceFileName); /* The source file for the template is empty in xarTplModule */');
-
     // Common data for BL
     $tplData['_bl_module_name'] = $modName;
     $tplData['_bl_module_type'] = $modType;
@@ -379,7 +363,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     // 3. Use 1. to link to 2.
     // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
     if (method_exists('xarModVars','Get')){
-        $var_dump = xarModVars::get('themes', 'var_dump');
+        $var_dump = xarModVars::get('themes', 'variable_dump') && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'));
         if ($var_dump == true){
             if (function_exists('var_export')) {
                 $pre = var_export($tplData, true);
@@ -399,6 +383,8 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
 /**
  * Renders a block content through a block template.
  *
+ * @author Paul Rosania <paul@xaraya.com>
+ * @author Marco Canini <marco@xaraya.com>
  * 
  * @param  string $modName   the module name
  * @param  string $blockType the block type (xar_block_types.type)
@@ -509,6 +495,7 @@ function xarTplObject($modName, $objectName, $tplType = 'showdisplay', $tplData 
  *        don't contain nasty stuff. Filter as appropriate when using
  *        this function to generate image URLs...
  *
+ * @author  Andy Varganov <andyv@xaraya.com>
  * 
  * @param   string $modImage the module image url relative to xarimages/
  * @param   string $modName  the module to check for the image <optional>
@@ -631,6 +618,8 @@ function xarTplCompileString($templateSource)
 /**
  * Renders a page template.
  *
+ * @author Paul Rosania <paul@xaraya.com>
+ * @author Marco Canini <marco@xaraya.com>
  * 
  * @param  string $mainModuleOutput       the module output
  * @param  string $pageTemplate           the page template to use (without extension .xt)
@@ -826,7 +815,7 @@ function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
  */
 function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tplSubPart = '')
 {
-    if(function_exists('xarMod_getBaseInfo')) {
+    if(function_exists('xarMo::getBaseInfo')) {
         if(!($modBaseInfo = xarMod::getBaseInfo($modName))) return;
         $modOsDir = $modBaseInfo['osdirectory'];
     } elseif(!empty($modName)) {
@@ -895,7 +884,6 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     return $sourceFileName;
 }
 
-
 /**
  * Output template
  *
@@ -914,19 +902,23 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
         $isHeaderContent = false;
 
     $finalTemplate ='';
-    if(xarTpl_outputTemplateFilenames()) {
-        $outputStartComment = true;
-        if($isHeaderContent === false) {
-            if($isHeaderContent = xarTpl_modifyHeaderContent($sourceFileName, $tplOutput))
-                $outputStartComment = false;
+    try {
+        if(xarTpl_outputTemplateFilenames() && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'))) {
+            $outputStartComment = true;
+            if($isHeaderContent === false) {
+                if($isHeaderContent = xarTpl_modifyHeaderContent($sourceFileName, $tplOutput))
+                    $outputStartComment = false;
+            }
+            // optionally show template filenames if start comment has not already
+            // been added as part of a header determination.
+            if($outputStartComment === true)
+                $finalTemplate .= "<!-- start: " . $sourceFileName . " -->\n";
+            $finalTemplate .= $tplOutput;
+            $finalTemplate .= "<!-- end: " . $sourceFileName . " -->\n";
+        } else {
+            $finalTemplate .= $tplOutput;
         }
-        // optionally show template filenames if start comment has not already
-        // been added as part of a header determination.
-        if($outputStartComment === true)
-            $finalTemplate .= "<!-- start: " . $sourceFileName . " -->\n";
-        $finalTemplate .= $tplOutput;
-        $finalTemplate .= "<!-- end: " . $sourceFileName . " -->\n";
-    } else {
+    } catch (Exception $e) {
         $finalTemplate .= $tplOutput;
     }
     return $finalTemplate;
@@ -941,17 +933,23 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
  */
 function xarTpl_outputPHPCommentBlockInTemplates()
 {
-    if (!isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates'])) {
-        // Default to not show the comments
-        $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
-        // CHECKME: not sure if this is needed, e.g. during installation
-        // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
-        if (method_exists('xarModVars','Get')){
-            $showphpcbit = xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates');
-            if (!empty($showphpcbit)) {
-                $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
+    try {
+        if (!isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates']) && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'))) {
+            // Default to not show the comments
+            $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
+            // CHECKME: not sure if this is needed, e.g. during installation
+            // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
+            if (method_exists('xarModVars','Get')){
+                $showphpcbit = xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates');
+                if (!empty($showphpcbit)) {
+                    $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
+                }
             }
+        } else {
+            $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
         }
+    } catch (Exception $e) {
+        $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
     }
     return $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'];
 }

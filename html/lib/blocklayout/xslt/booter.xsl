@@ -6,6 +6,13 @@
   <xsl:param name="bltags"/> 
   <xsl:param name="clienttags"/> 
   <xsl:param name="legacytags"/> 
+  <xsl:param name="compresswhitespace"/> 
+
+  <xsl:template match="xsl:compresswhitespace">
+    <xsl:if test="$compresswhitespace = 1">
+      <xsl:text disable-output-escaping="yes">&lt;</xsl:text>xsl:strip-space elements="*"/<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    </xsl:if>
+  </xsl:template>
 
   <xsl:template match="xsl:includedefaults">
     <xsl:call-template name="includefile">

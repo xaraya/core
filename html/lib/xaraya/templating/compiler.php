@@ -42,6 +42,13 @@ class XarayaCompiler extends xarBLCompiler
 
     public function configure()
     {
+        // Compressing excess whitespace
+        try {
+            $this->compresswhitespace = xarConfigVars::get(null, 'Site.BL.CompressWhitespace');
+        } catch (Exception $e) {
+            $this->compresswhitespace = 1;
+        }
+
         // Get the Xaraya tags
         $baseDir = sys::lib() . 'xaraya/templating/tags';
         $baseDir = realpath($baseDir);
@@ -59,11 +66,7 @@ class XarayaCompiler extends xarBLCompiler
 
     public function compileFile($fileName)
     {
-        if (!function_exists('xarLogMessage')) {
-            sys::import('xaraya.log');
-        }
         xarLogMessage("BL: compiling $fileName");
-
         return parent::compileFile($fileName);
     }
 

@@ -27,10 +27,11 @@ $systemConfiguration['DB.Encoded'] = '0';
 $systemConfiguration['DB.Persistent'] = false;
 
 /* For Logging:
- * Logging will be done automatically if you create a webserver writable
- * file in var/logs/log.txt
+ * These options enable a simple logging system to a text file
  * For more advanced logging options use the logconfig module
  */
+$systemConfiguration['Log.Enabled']  = '0';
+$systemConfiguration['Log.Filename'] = 'xarayalog.txt';
 
 /* System Time Zone
  * This is the local time zone of your host machine. This time is used by the logging subsystem

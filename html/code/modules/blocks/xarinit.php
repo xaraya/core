@@ -222,33 +222,15 @@ function blocks_init()
     $blockTypesTable     = $prefix . '_block_types';
     $blockInstancesTable = $prefix . '_block_instances';
 
-    // @TODO: since blockgroup is now a block itself the blockgroup instance is no longer needed here
-
-    //Set up the block group instances for this module - these are the same as previously defined and retained
-    $query1 = "SELECT DISTINCT name FROM $blockGroupsTable";
-    $query2 = "SELECT DISTINCT id FROM $blockGroupsTable";
-    $instances = array(array('header'  => 'Group Name:',
-                         'query'   => $query1,
-                         'limit'   => 20),
-                   array('header'  => 'Group ID:',
-                         'query'   => $query2,
-                         'limit'   => 20));
-
-    xarDefineInstance('blocks','BlockGroup',$instances);
-
     //The block instances differ and now defined on name (not title)
     //These need to be upgraded
-    $query1 = "SELECT DISTINCT modid FROM $blockTypesTable ";
-    $query2 = "SELECT type FROM $blockTypesTable ";
-    $query3 = "SELECT DISTINCT instances.name FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id";
+    $query1 = "SELECT DISTINCT module_id FROM $blockTypesTable ";
+    $query2 = "SELECT DISTINCT instances.name FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id";
     $instances = array(array('header' => 'Module Name:',
                              'query' => $query1,
                              'limit' => 20),
-                       array('header' => 'Block Type:',
-                             'query' => $query2,
-                             'limit' => 20),
                        array('header' => 'Block Name:',
-                             'query' => $query3,
+                             'query' => $query2,
                              'limit' => 20));
     xarDefineInstance('blocks','Block',$instances);
 
