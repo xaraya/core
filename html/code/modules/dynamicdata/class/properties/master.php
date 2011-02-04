@@ -238,11 +238,12 @@ class DataPropertyMaster extends Object
 
     static function createProperty(Array $args=array())
     {
-        $descriptor = new DataObjectDescriptor(array('name' => 'properties')); // the Dynamic Properties = 2
-        if (!class_exists('DataObject')) {
-            sys::import('modules.dynamicdata.class.objects.base');
-        }
-        $object = new DataObject($descriptor);
+        $object = DataObjectMaster::getObject(
+                                        array(
+                                            'name' => 'properties',
+                                            'itemid'   => $args['itemid']
+                                        )
+                                    );
         $objectid = $object->createItem($args);
         unset($object);
         return $objectid;
@@ -259,18 +260,15 @@ class DataPropertyMaster extends Object
             return;
 
         // TODO: delete all the (dynamic ?) data for this property as well
-        $descriptor = new DataObjectDescriptor(
-            array(
+        $object = DataObjectMaster::getObject(
+                                        array(
                 'name'   => 'properties', // the Dynamic Properties = 2
                 'itemid' => $args['itemid']
-            )
-        );
+                                        )
+                                    );
         if (!class_exists('DataObject')) {
             sys::import('modules.dynamicdata.class.objects.base');
         }
-        $object = new DataObject($descriptor);
-        if (empty($object)) return;
-
         $objectid = $object->getItem();
         if (empty($objectid)) return;
 

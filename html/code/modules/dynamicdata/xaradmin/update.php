@@ -144,10 +144,10 @@ function dynamicdata_admin_update(Array $args=array())
             $newname = strtolower(str_ireplace(" ", "_", $newname));
             
             // Check if this object already exists
-            $testobject = DataObjectMaster::getObject(array('name' => $newname));
-            if (!empty($testobject->name)) {
+            try{
+                $testobject = DataObjectMaster::getObject(array('name' => $newname));
                 return xarTplModule('dynamicdata','user','errors', array('layout' => 'duplicate_name', 'newname' => $newname));
-            }
+            } catch (Exception $e) {}
             
             $itemtype = $myobject->getNextItemtype(array('moduleid' => $myobject->properties['module_id']->getValue()));
             $myobject->properties['name']->setValue($newname);
@@ -171,7 +171,7 @@ function dynamicdata_admin_update(Array $args=array())
             
         break;
     }
-    
+
     if (!empty($return_url)) {
         xarController::redirect($return_url);
     } elseif ($myobject->objectid == 2) { // for dynamic properties, return to modifyprop
