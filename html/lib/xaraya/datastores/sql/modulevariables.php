@@ -123,7 +123,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
         }
 
         $fieldlist = $this->object->getFieldList();
-        if (count($fields) < 1) {
+        if (count($fieldlist) < 1) {
             return;
         }
 //                    var_dump(array_keys($this->fields));
@@ -347,7 +347,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
             }
         */
 
-            foreach ($fields as $field) {
+            foreach ($fieldlist as $field) {
                 $this->setModvarName($field);
                 $modulefields[$this->modulename][] = $field;
             }
@@ -419,7 +419,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
                 $values = $result->getRow();
                 $itemid = array_shift($values);
                 // oops, something went seriously wrong here...
-                if (empty($itemid) || count($values) != count($fields)) {
+                if (empty($itemid) || count($values) != count($fieldlist)) {
                     continue;
                 }
                 if (!$isgrouped) {
@@ -581,8 +581,6 @@ class ModuleVariablesDataStore extends RelationalDataStore
         $modvars = $this->getTable('module_vars');
         $moditemvars = $this->getTable('module_itemvars');
 
-        $fieldlist = $this->object->getFieldList();
-
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
             $bindmarkers = '?' . str_repeat(',?',count($fields)-1);
@@ -655,17 +653,19 @@ class ModuleVariablesDataStore extends RelationalDataStore
         // here we grab everyting
         } else {
 
+            $properties = $this->object->getProperties();
+
             // split the fields to be gotten up by module
-            $modulefields['dynamicdata'] = array();
-            foreach ($fields as $field) {
-                $this->setModvarName($field);
-                $modulefields[$this->modulename][] = $field;
+            foreach ($properties as $field) {
+                $this->setModvarName($field->name);
+                $modulefields[$this->modulename]['name'] = $field->name;
+                $modulefields[$this->modulename]['source'] = $field->source;
             }
             $numitems = 0;
-            foreach ($modulefields as $key => $values) {
+            foreach ($modulefields as $key => $values) {//var_dump($modulefields);exit;
                 if (count($values)<1) continue;
-                $modid = xarMod::getID($key);
-                $bindmarkers = '?' . str_repeat(',?',count($values)-1);
+                $modid = xarMod::getID(substr(trim($values['source']),17));
+                $bindmarkers = '?' . str_repeat(',?',count($values['name'])-1);
                 if($this->getType() == 'sqlite' ) {
                     $query = "SELECT COUNT(*)
                               FROM (SELECT DISTINCT mi.item_id FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
