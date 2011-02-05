@@ -122,8 +122,8 @@ class ModuleVariablesDataStore extends RelationalDataStore
             $this->cache = $args['cache'];
         }
 
-        $fieldlist = $this->object->getFieldList();
-        if (count($fieldlist) < 1) {
+        $properties = $this->object->getProperties();
+        if (count($properties) < 1) {
             return;
         }
 //                    var_dump(array_keys($this->fields));
@@ -347,9 +347,9 @@ class ModuleVariablesDataStore extends RelationalDataStore
             }
         */
 
-            foreach ($fieldlist as $field) {
-                $this->setModvarName($field);
-                $modulefields[$this->modulename][] = $field;
+            foreach ($properties as $field) {
+                $this->setModvarName($field->name);
+                $modulefields[$this->modulename][] = $field->name;
             }
 
             foreach ($modulefields as $key => $fieldvalues) {
@@ -419,7 +419,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
                 $values = $result->getRow();
                 $itemid = array_shift($values);
                 // oops, something went seriously wrong here...
-                if (empty($itemid) || count($values) != count($fieldlist)) {
+                if (empty($itemid) || count($values) != count($properties)) {
                     continue;
                 }
                 if (!$isgrouped) {
@@ -529,15 +529,16 @@ class ModuleVariablesDataStore extends RelationalDataStore
         // here we grab everyting
         } else {
             // split the fields to be gotten up by module
-            $modulefields['dynamicdata'] = array();
-            foreach ($fields as $field) {
-                $modulefields[$this->modulename][] = $field;
+            foreach ($properties as $field) {
+                $this->setModvarName($field->name);
+                $modulefields[$this->modulename]['name'] = $field->name;
+                $modulefields[$this->modulename]['source'] = $field->source;
             }
 
             foreach ($modulefields as $key => $values) {
                 if (count($values)<1) continue;
-                $modid = xarMod::getID($key);
-                $bindmarkers = '?' . str_repeat(',?',count($values)-1);
+                $modid = xarMod::getID(substr(trim($values['source']),17));
+                $bindmarkers = '?' . str_repeat(',?',count($values['name'])-1);
                 $query = "SELECT DISTINCT m.name,
                                  mi.item_id,
                                  mi.value
