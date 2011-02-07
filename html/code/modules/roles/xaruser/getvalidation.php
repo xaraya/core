@@ -53,8 +53,9 @@ function roles_user_getvalidation()
     */
 
     $regmodule = xarModVars::get('roles','defaultregmodule');
-    //FIXME : jojodee - this is convoluted. Probably best we use this as central point for allocating
-    // to whatever pluggable registration we have. If we end up back here so be it for now.
+    $modinfo = xarModGetInfo($regmodule);
+    $regmodule = $modinfo['name'];
+
     if (empty($regmodule)){
         //fallback to?  This is not a core module. Leave for now once until we are sure the default is set elsewhere.
         $regmodule = 'registration';
