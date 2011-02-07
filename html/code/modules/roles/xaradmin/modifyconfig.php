@@ -201,6 +201,7 @@ function roles_admin_modifyconfig()
 //            if (!xarVarFetch('allowinvisible', 'checkbox', $allowinvisible, false, XARVAR_NOT_REQUIRED)) return;
             // Update module variables
 //            xarModVars::set('roles', 'allowinvisible', $allowinvisible);
+            xarResponse::redirect(xarModURL('roles','admin','modifyconfig',array('tab' => $data['tab'])));
             break;
     }
     return $data;
