@@ -1,28 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <!-- 
-        The equiv meta tag now sets text/html as content, but this is 
-        determined by the page template, in our current setup compiled to 
-        late to pull it in here, this is addressed in the tpl_order 
-        scenario, no choice but to leave or delete, leaving it for now 
-    -->
-    <meta http-equiv="Content-Type" content="text/html; charset=#$charset#"/>
-    <meta name="Generator" content="#$generator#"/>
-    <meta name="Keywords" content="#$keywords#"/>
-    <meta name="Description" content="#$description#"/>
-    <meta name="author" content="#xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY)#"/>
-    <meta name="rating" content="General"/>
-    <xar:if condition="(!empty($refreshurl)) and (!empty($refreshtime))">
-        <meta http-equiv="refresh" content="#$refreshtime#;URL=#$refreshurl#"/>
-    </xar:if>
+    <!-- meta data tags set in the meta block are rendered via the xar:place-meta tag
+         this also renders any meta tags added dynamically by the xar:meta tag --> 
+    <xar:place-meta/>
+
     <xar:set name="sitename">
         <xar:var scope="module" module="themes" name="SiteName"/>
     </xar:set>
-    <xar:if condition="!empty($latitude)">
-        <meta name="ICBM" content="#$latitude#, #$longitude#"/>
-        <meta name="DC.title" content="#$sitename#"/>
-    </xar:if>
     <!-- Linking for Mozilla and related browser site tab -->
     <xar:if condition="xarThemeIsAvailable('rss')">
         <link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepagerss#"/>
@@ -39,7 +24,7 @@
     <xar:if condition="xarModIsAvailable('xmlrpcserver')">
         <link rel="EditURI" type="application/rsd+xml" title="RSD" href="#xarModURL('xmlrpcserver','user','main')#"/>
     </xar:if>
-    <link rel="pingback" href="&xar-baseurl;ws.php"/>
+    <link rel="pingback" href="#$baseurl#ws.php"/>
     <link rel="Top" type="text/html" href="#$baseurl#"/>
     <link rel="Parent" type="text/html" href="#$baseurl#"/>
     <link rel="author" href="#$baseurl#" title="#$sitename#"/>

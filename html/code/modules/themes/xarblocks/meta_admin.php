@@ -17,9 +17,8 @@
  * @access  public
  * @return  void
 */
-
-    sys::import('modules.themes.xarblocks.meta');
-
+sys::import('modules.themes.xarblocks.meta');
+sys::import('modules.themes.class.xarmeta');
 class Themes_MetaBlockAdmin extends Themes_MetaBlock
 {
 /**
@@ -30,6 +29,11 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
     {
         $data = parent::modify($data);
         $data['blockid'] = $data['bid'];
+
+        // populate meta tag dropdowns (new format)
+        $data['metatypes'] = xarMeta::getTypes();
+        $data['metadirs'] = xarMeta::getDirs();
+        $data['metalangs'] = xarMeta::getLanguages();
 
         return $data;
     }
@@ -44,18 +48,47 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
 
         // FIXME: use better validation on these parameters.
         $vars = array();
-        if (!xarVarFetch('metakeywords',    'notempty', $vars['metakeywords'],    $this->metakeywords, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('metadescription', 'notempty', $vars['metadescription'], $this->metadescription, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('usegeo',          'int:0:1',  $vars['usegeo'],          $this->usegeo,  XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('longitude',       'notempty', $vars['longitude'],       $this->longitude, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('latitude',        'notempty', $vars['latitude'],        $this->latitude, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('usedk',           'notempty', $vars['usedk'],           $this->usedk, XARVAR_NOT_REQUIRED)) return;
+
         if (!xarVarFetch('copyrightpage',   'notempty', $vars['copyrightpage'],   $this->copyrightpage, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('helppage',        'notempty', $vars['helppage'],        $this->helppage, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('glossary',        'notempty', $vars['glossary'],        $this->glossary, XARVAR_NOT_REQUIRED)) return;
 
-        // Merge the submitted block info content into the existing block info.
-        $data['content'] = $vars; //array_merge($blockinfo['content'], $vars);
+        // fetch the array of meta tags from input
+        if (!xarVarFetch('metatags', 'array', $metatags, array(), XARVAR_NOT_REQUIRED)) return;
+        //print_r($metatags); exit;
+        $newtags = array();     
+        foreach ($metatags as $metatag) {
+            // empty value = delete
+            if (empty($metatag['value'])) continue;
+            // @todo: validation on other params
+            $newtags[] = $metatag;
+        }
+        // fetch the value of the new tag (if any)
+        if (!xarVarFetch('metatypeval', 'pre:trim:lower:str:1:', $metatypeval, '', XARVAR_NOT_REQUIRED)) return;
+        // only fetch the other params if we have a value        
+        if (!empty($metatypeval)) {
+            if (!xarVarFetch('metatype', 'pre:trim:lower:enum:name:http-equiv', $metatype, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('metalang', 'pre:trim:lower:str:1:', $metalang, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('metadir', 'pre:trim:lower:enum:ltr:rtl', $metadir, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('metascheme', 'pre:trim:str:1:', $metascheme, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('metacontent', 'pre:trim:str:1:', $metacontent, '', XARVAR_NOT_REQUIRED)) return;
+            if (!empty($metatype)) {
+                $newtags[] = array(
+                    'type' => $metatype,
+                    'value' => $metatypeval,
+                    'content' => $metacontent,
+                    'lang' => $metalang,
+                    'dir' => $metadir,
+                    'scheme' => $metascheme,
+                );
+            }
+        } 
+        $vars['metatags'] = $newtags;
+        // store the tags for use by the xarMeta class 
+        xarModVars::set('themes','meta.tags', serialize($newtags));
+        // make sure we merge the rest of the content we haven't updated
+        $vars += $data['content'];
+        $data['content'] = $vars;
 
         return $data;
     }
