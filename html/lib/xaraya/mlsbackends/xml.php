@@ -12,7 +12,7 @@
  *
  * @author Marco Canini <marco@xaraya.com>
  */
-
+sys::import('xaraya.mlsbackends.reference');
 /**
  * XML based translation backend
  *
@@ -23,17 +23,17 @@
  */
 class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
-    var $curEntry;
-    var $curData;
+    public $curEntry;
+    public $curData;
 
-    var $parser;
+    public $parser;
 
-    var $trans = array(); // where translations are kept
-    var $transEntries = array(); // mapping for string-based translations
-    var $transKeyEntries = array(); // mapping for key-based translations
+    public $trans = array(); // where translations are kept
+    public $transEntries = array(); // mapping for string-based translations
+    public $transKeyEntries = array(); // mapping for key-based translations
 
-    var $transInd = 0;
-    var $transKeyInd = 0;
+    public $transInd = 0;
+    public $transKeyInd = 0;
 
 
     function __construct($locales)
@@ -42,7 +42,6 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         $this->backendtype = "xml";
     }
 
-    // Implement the ITranslationsBackendInterface
     function translate($string, $type = 0)
     {
         if (!isset($this->transEntries[$string])) {
@@ -166,8 +165,6 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         closedir($dd);
         return $ctxNames;
     }
-    // End ItranslationsBackend interface
-
 
     function getEntry($string)
     {

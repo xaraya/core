@@ -28,6 +28,7 @@
         }
         $data['modname'] = $modname;
         $data['aliasesMap'] = xarConfigVars::get(null,'System.ModuleAliases');
+        ksort($data['aliasesMap']);
         return $data;
     }
 ?>

@@ -19,7 +19,7 @@
  * <marc> why? have changed this to be able to collapse common methods
  *
  */
-sys::import('xaraya.mls');
+sys::import('xaraya.mlsbackends.reference');
 
 class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
@@ -189,7 +189,6 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         if (!$fileName = $this->findContext($ctxType, $ctxName)) {
             return true;
         }
-        // @todo do we need to guard this?
         include $fileName;
 
         return true;
@@ -224,7 +223,7 @@ class PHPBackendGenerator extends Object
     public $baseDir;
     public $baseXMLDir;
 
-    function PHPBackendGenerator($locale)
+    function __construct($locale)
     {
         $this->locale = $locale;
         $l = xarLocaleGetInfo($locale);

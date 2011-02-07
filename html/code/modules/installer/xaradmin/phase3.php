@@ -40,7 +40,7 @@ function installer_admin_phase3()
 
     //Defaults
     $systemConfigIsWritable   = false;
-    $systemConfigDistIsWritable   = false;
+    $systemConfigDistIsReadable   = false;
     $cacheTemplatesIsWritable = false;
     $rssTemplatesIsWritable   = false;
     $metRequiredPHPVersion    = false;
@@ -59,9 +59,11 @@ function installer_admin_phase3()
     }
 
     // If there is no system.config file, attempt to create it
-    $systemConfigDistIsReadable = is_writable($systemConfigDistFile);
+    $systemConfigDistIsReadable = is_readable($systemConfigDistFile);
     if ($systemConfigDistIsReadable && !file_exists($systemConfigFile)) {
-        copy($systemConfigDistFile, $systemConfigFile);
+        try {
+            copy($systemConfigDistFile, $systemConfigFile);
+        } catch (Exception $e) {}
     }
     
     $systemConfigIsWritable     = is_writable($systemConfigFile);

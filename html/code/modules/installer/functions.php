@@ -1,6 +1,7 @@
 <?php
 /**
  * Call an installer function
+ *
  * @package modules
  * @subpackage installer module
  * @category Xaraya Web Applications Framework

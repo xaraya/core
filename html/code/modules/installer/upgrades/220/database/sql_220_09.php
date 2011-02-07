@@ -28,7 +28,11 @@ function sql_220_09()
         xarConfigVars::set(null, 'Site.BL.CompressWhitespace', 1);
         xarConfigVars::set(null, 'Site.BL.Debug_User', xarModVars('roles','admin'));
     }
-    if (!isset(xarSystemVars::get(sys::CONFIG, 'Log.Filename'))) {
+    
+    // Add default values for logging if logging is not turned on
+    try {
+        $logfile = xarSystemVars::get(sys::CONFIG, 'Log.Filename');
+    } catch (Exception $e) {
         $variables = array('Log.Enabled' => 0, 'Log.Filename' => 'xarayalog.txt');
         xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
     }

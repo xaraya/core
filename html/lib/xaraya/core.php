@@ -16,7 +16,7 @@
 **/
 
 /**
- * Core version informations
+ * Core version information
  *
  * should be upgraded on each release for
  * better control on config settings

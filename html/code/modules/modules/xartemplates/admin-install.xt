@@ -67,7 +67,7 @@
                                         </li>
                                     <xar:elseif condition="is_numeric($modInfo) AND isset($dependencyinfo[$modInfo])"/>
                                         <li>
-                                            Missing a module "#$dependencyinfo[$modInfo]['name']#" (ID #$modInfo#). 
+                                            Missing a module "#$dependencyinfo[$modInfo]#" (ID #$modInfo#). 
                                         </li>
                                     <xar:else />
                                         <li>
