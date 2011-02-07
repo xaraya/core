@@ -42,7 +42,7 @@ function themes_admin_cssconfig()
         case "common":
             // get and verify modvars and files - all reporting inline in the form
             $data['csslinkoption'] = xarModVars::get('themes', 'csslinkoption');
-            $cssfilepath = 'modules/themes/xarstyles/';
+            $cssfilepath = sys::code() . 'modules/themes/xarstyles/';
             $filemissing = xarML('none (missing)');
             $notlinked = xarML('none - use for template debugging only!!');
             if($data['csslinkoption'] == '') {
