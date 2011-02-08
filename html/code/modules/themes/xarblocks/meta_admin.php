@@ -92,5 +92,11 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
 
         return $data;
     }
+
+    public function help()
+    {
+        return $this->getInfo();
+    }
+
 }
 ?>
