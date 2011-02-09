@@ -118,7 +118,7 @@ function roles_admin_modifyconfig()
             $data['user_settings'] = xarMod::apiFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => 0));
             $settings = explode(',',xarModVars::get('roles', 'duvsettings'));
             $required = array('usereditaccount', 'allowemail', 'requirevalidation', 'displayrolelist', 'searchbyemail');
-            $skiplist = array('userhome', 'primaryparent', 'passwordupdate', 'duvsettings', 'userlastlogin', 'emailformat');
+            $skiplist = array('userhome', 'primaryparent', 'passwordupdate', 'duvsettings', 'userlastlogin', 'emailformat', 'usertimezone');
             $homelist = array('allowuserhomeedit', 'allowexternalurl', 'loginredirect');
             if (!in_array('userhome', $settings)) {
                 $skiplist = array_merge($skiplist, $homelist);

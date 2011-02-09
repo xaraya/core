@@ -47,6 +47,7 @@ function roles_adminapi_senduseremail(Array $args=array())
             $user = xarMod::apiFunc('roles','user','get', array('id' => $userid, 'itemtype' => xarRoles::ROLES_USERTYPE));
             if (!isset($pass)) $pass = '';
             if (!isset($ip)) $ip = '';
+            
             $validationlink = isset($user['valcode']) ?
                 xarModURL('roles', 'user', 'getvalidation',
                     array(
@@ -54,7 +55,7 @@ function roles_adminapi_senduseremail(Array $args=array())
                         'phase' => 'getvalidate',
                         'valcode' => $user['valcode'],
                     ))
-                : '';    
+                : '';            
 
             //user specific data
             $data = array('myname' => $user['name'],

@@ -39,10 +39,10 @@
     <xar:if condition="xarModIsAvailable('xmlrpcserver')">
         <link rel="EditURI" type="application/rsd+xml" title="RSD" href="#xarModURL('xmlrpcserver','user','main')#"/>
     </xar:if>
-    <link rel="pingback" href="&xar-baseurl;ws.php"/>
+    <link rel="pingback" href="#$baseurl#ws.php"/>
     <link rel="Top" type="text/html" href="#$baseurl#"/>
     <link rel="Parent" type="text/html" href="#$baseurl#"/>
-    <link rel="author" href="#$baseurl#" title="#$sitename#"/>
+    <link rel="author" href="#$authorpage#" title="#$sitename#"/>
     <xar:if condition="!empty($copyrightpage)">
         <link rel="copyright" type="text/html" href="#$copyrightpage#"/>
     </xar:if>
