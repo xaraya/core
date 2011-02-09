@@ -1,26 +1,28 @@
 <?php
 /**
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /*
  * Count block instances
- * @param args[$order] optionally count from group instances table
- * @param args[$type] optionally count by block type
- * @param args[$module] optionally count by module
- * @param args[$gid] optionally count by group id
- * @param args[$state] optionally count by block state
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['order'] optionally count from group instances table<br/>
+ *        integer  $args['type'] optionally count by block type<br/>
+ *        string   $args['module'] optionally count by module<br/>
+ *        integer  $args['gid'] optionally count by group id<br/>
+ *        integer  $args['state'] optionally count by block state
  * @author Chris Powis <crisp@xaraya.com>
  * @throws DB_ERROR
- * @return int number of instances
+ * @return integer number of instances
 */
 
-function blocks_userapi_count_instances($args)
+function blocks_userapi_count_instances(Array $args=array())
 {
     extract($args);
 

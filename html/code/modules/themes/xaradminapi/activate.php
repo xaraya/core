@@ -2,23 +2,26 @@
 /**
  * Activate a theme if it has an active function
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
+ * @link http://xaraya.com/index.php/release/70.html
  */
 /**
  * Activate a theme if it has an active function, otherwise just set the state to active
  *
  * @author Marty Vance
  * @access public
- * @param regid theme's registered id
- * @returns bool
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['regid'] theme's registered id
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function themes_adminapi_activate($args)
+function themes_adminapi_activate(Array $args=array())
 {
     extract($args);
 

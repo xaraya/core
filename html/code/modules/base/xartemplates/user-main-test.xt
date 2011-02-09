@@ -16,6 +16,7 @@
             <xar:comment>Show a sorted list of sample items</xar:comment>
             <xar:data-view object="sample" sort="$sort"/>
         </p>
+            <xar:data-input type="listing" objectname="objects"/>
 -->
     </div>
 </xar:template>

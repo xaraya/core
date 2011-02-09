@@ -3,11 +3,12 @@
  * Expire non-validated accounts or whatever via Scheduler
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -16,7 +17,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access private
  */
-function roles_schedulerapi_expire($args)
+function roles_schedulerapi_expire(Array $args=array())
 {
 
 // TODO: get some configuration info here if necessary

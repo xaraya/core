@@ -2,11 +2,12 @@
 /**
  * Modify the system configuration File
  * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage installer module
  * @link http://xaraya.com/index.php/release/200.html
  */
 
@@ -14,15 +15,16 @@
  * Modify the system configuration file
  *
  * @author Johnny Robeson
- * @param string args['dbHost']
- * @param string args['dbName']
- * @param string args['dbUname']
- * @param string args['dbPass']
- * @param string args['prefix']
- * @param string args['dbType']
- * @return bool
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['dbHost']<br/>
+ *        string   $args['dbName']<br/>
+ *        string   $args['dbUname']<br/>
+ *        string   $args['dbPass']<br/>
+ *        string   $args['prefix']<br/>
+ *        string   $args['dbType']
+ * @return boolean
  */
-function installer_adminapi_modifyconfig($args)
+function installer_adminapi_modifyconfig(Array $args=array())
 {
     extract($args);
 
@@ -52,39 +54,46 @@ function installer_adminapi_modifyconfig($args)
 }
 
 /**
- * Modify a single variable in the system configuration file
+ * Modify one or more variables in a configuration file
  *
  * @author Marc Lutolf
- * @param string args['name']
- * @param string args['value']
- * @return bool
+ * @param array    $args array of optional parameters<br/>
+ * @param string args['variables'] = array($name => $value,...)
+ * @return boolean
  */
 
-function installer_adminapi_modifysystemvar($args)
+function installer_adminapi_modifysystemvars(Array $args=array())
 {
-    extract($args);
-    $systemConfigFile = sys::varpath() . '/config.system.php';
-    $config_php = join('', file($systemConfigFile));
+    if (!isset($args['variables'])) throw new BadParameterException('variables');
+    $configfile = sys::varpath() . '/config.system.php';
+    if (isset($args['filepath'])) $configfile = $args['filepath'];
+    try {
+        $config_php = join('', file($configfile));
+        foreach ($args['variables'] as $name => $value) {
+            $config_php = preg_replace('/\[\''.$name.'\'\]\s*=\s*(\'|\")(.*)\\1;/', "['".$name."'] = '$value';", $config_php);
+        }
 
-    $config_php = preg_replace('/\[\''.$name.'\'\]\s*=\s*(\'|\")(.*)\\1;/', "['".$name."'] = '$value';", $config_php);
+        $fp = fopen ($configfile, 'wb');
+        fwrite ($fp, $config_php);
+        fclose ($fp);
+        return true;
 
-    $fp = fopen ($systemConfigFile, 'wb');
-    fwrite ($fp, $config_php);
-    fclose ($fp);
-
-    return true;
+    } catch (Exception $e) {
+        throw new FileNotFoundException($configfile);
+    }
 }
 
 /**
  * Include a module init file and run a function
  *
  * @access public
- * @param args['directory'] the directory to include
- * @param args['initfunc'] init|upgrade|remove
- * @returns bool
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['directory'] the directory to include<br/>
+ *        string   $args['initfunc'] init|upgrade|remove
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  */
-function installer_adminapi_initialise($args)
+function installer_adminapi_initialise(Array $args=array())
 {
     extract($args);
 
@@ -122,12 +131,13 @@ function installer_adminapi_initialise($args)
  * Create a database
  *
  * @access public
- * @param args['dbName']
- * @param args['dbType']
- * @returns bool
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['dbName']<br/>
+ *        string   $args['dbType']
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, DATABASE_ERROR
  */
-function installer_adminapi_createdb($args)
+function installer_adminapi_createdb(Array $args=array())
 {
     extract($args);
     // Load in Table Maintainance API
@@ -155,12 +165,14 @@ function installer_adminapi_createdb($args)
  * CheckForField
  *
  * @access public
- * @param args['field_name']
- * @param args['table_name']
- * @returns true if field exists false otherwise
- * @author Sean Finkle, John Cox
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['field_name']<br/>
+ *        string   $args['table_name']
+ * @return boolean true if field exists false otherwise
+ * @author Sean Finkle
+ * @author John Cox
  */
-function installer_adminapi_CheckForField($args)
+function installer_adminapi_CheckForField(Array $args=array())
 {
     extract($args);
 
@@ -191,12 +203,14 @@ function installer_adminapi_CheckForField($args)
  * GetFieldType
  *
  * @access public
- * @param args['field_name']
- * @param args['table_name']
- * @returns field type
- * @author Sean Finkle, John Cox
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['field_name']<br/>
+ *        string   $args['table_name']
+ * @return integer field type
+ * @author Sean Finkle
+ * @author John Cox
  */
-function installer_adminapi_GetFieldType($args)
+function installer_adminapi_GetFieldType(Array $args=array())
 {
     extract($args);
 
@@ -224,11 +238,13 @@ function installer_adminapi_GetFieldType($args)
  * CheckTableExists
  *
  * @access public
- * @param args['table_name']
- * @returns true if field exists false otherwise
- * @author Sean Finkle, John Cox
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['table_name']
+ * @return boolean true if field exists false otherwise
+ * @author Sean Finkle
+ * @author John Cox
  */
-function installer_adminapi_CheckTableExists($args)
+function installer_adminapi_CheckTableExists(Array $args=array())
 {
     extract($args);
 

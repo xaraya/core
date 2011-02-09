@@ -1,18 +1,19 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Modules module
+ * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * Checks for change in module versions, and updates the status of them if any is found
  *
  * @author Xaraya Development Team
- * @param none
- * @return bool null on exceptions, true on sucess to update
+ * @return boolean null on exceptions, true on sucess to update
  * @throws NO_PERMISSION
  */
 function modules_adminapi_checkversion()

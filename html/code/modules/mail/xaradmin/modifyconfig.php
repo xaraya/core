@@ -1,25 +1,26 @@
 <?php
 /**
- * Update the configuration parameters
+ * Modify the configuration settings of this module
  *
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 
 /**
- * Update the configuration parameters of the module based on data from the modification form
+ * Modify the configuration settings of this module
+ *
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  true on success or void on failure
- * @throws  no exceptions
- * @todo    nothing
+ * @return mixed data array for the template display or output display string if invalid data submitted
 */
 function mail_admin_modifyconfig()
 {

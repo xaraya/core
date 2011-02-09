@@ -3,43 +3,44 @@
  * base-pager template tag
  *
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base Module
- * @link http://xaraya.com/index.php/release/151.html
+ * @link http://xaraya.com/index.php/release/68.html
 */
 /* Wrapper for xarTplPager::getPager() (see modules/base/class/pager.php)
  * Used by the base-pager template tag
  * Returns a pager based on url, startnum, itemsperpage and totalitems
  * Usage, eg <xar:pager startnum="1" itemsperpage="10" total="30"/>
- * @param int $args['total'] - required, total items of this type
- * @param int $args['startnum'] optional, the current page startnum, if empty
- * the tag will try to fetch the startnum from the currenturl, and fall back to
- * 1 if none found
- * @param int $args['itemsperpage'] optional, the itemsperpage for this type,
- * if empty, the tag will attempt to retrieve the items_per_page moduservar setting
- * for the current module
- * @param int $args['module'] - module to get items_per_page setting for
- * (if itemsperpage is empty)
- * @param int $args['urltemplate'] - optional, the url template to use for
- * building page links defaults to current url, replacing startnum=xx with
- * startnum=[urlitemmatch]
- * @param int $args['urlitemmatch'] - optional, the string signifying the
- * position of the startnum to be replaced in [urltemplate], default '%%'
- * @param int $args['tplmodule'] - optional, the module to look for pager
- * templates in, default 'base'
- * @param int $args['template'] - optional, the template to use
- * (pager-[template]), default 'default',
- * template options are (default|multipage|mulitpagenext|multipageprev|openended)
- * @param int $args['blocksize'] - optional, the number of pages per block, default 10
- * advanced options of xarTplPagerInfo
- * (not sure what they do, included for completeness)
- * @param int $args['firstitem']
- * @param int $args['firstpage']
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['total'] - required, total items of this type<br/>
+ *        integer  $args['startnum'] optional, the current page startnum, if empty<br/>
+ *                 the tag will try to fetch the startnum from the currenturl, and fall back to<br/>
+ *                 1 if none found<br/>
+ *        integer  $args['itemsperpage'] optional, the itemsperpage for this type,<br/>
+ *                 if empty, the tag will attempt to retrieve the items_per_page moduservar setting<br/>
+ *                 for the current module<br/>
+ *        integer  $args['module'] - module to get items_per_page setting for<br/>
+ *                 (if itemsperpage is empty)<br/>
+ *        integer  $args['urltemplate'] - optional, the url template to use for<br/>
+ *                 building page links defaults to current url, replacing startnum=xx with<br/>
+ *                 startnum=[urlitemmatch]<br/>
+ *        string   $args['urlitemmatch'] - optional, the string signifying the<br/>
+ *                 position of the startnum to be replaced in [urltemplate], default '%%'<br/>
+ *        string   $args['tplmodule'] - optional, the module to look for pager<br/>
+ *        string   $args['template'] - optional, the template to use<br/>
+ *                 (pager-[template]), default 'default',<br/>
+ *                 template options are (default|multipage|mulitpagenext|multipageprev|openended)<br/>
+ *        integer  $args['blocksize'] - optional, the number of pages per block, default 10<br/>
+ *                 advanced options of xarTplPagerInfo<br/>
+ *                 (not sure what they do, included for completeness)<br/>
+ *        integer  $args['firstitem']<br/>
+ *        integer  $args['firstpage']<br/>
  */
-function base_userapi_pager($args)
+function base_userapi_pager(Array $args=array())
 {
     extract($args);
     if (empty($startnum) || !is_numeric($startnum))
@@ -47,7 +48,7 @@ function base_userapi_pager($args)
 
     if (!isset($itemsperpage) || !is_numeric($itemsperpage)) {
         if (empty($module))
-            list($module) = xarRequest::getInfo();
+            list($module) = xarController::$request->getInfo();
         if (!empty($module))
             // @TODO: setting per itemtype?
             // if (!empty($itemtype)) $itemsperpage = xarModUserVars::get($module, 'items_per_page'.$itemtype);

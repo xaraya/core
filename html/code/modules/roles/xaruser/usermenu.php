@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -13,8 +14,9 @@
  * Show the user menu
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return string output display string
  */
-function roles_user_usermenu($args)
+function roles_user_usermenu(Array $args=array())
 {
     if (!xarSecurityCheck('ViewRoles')) return;
     extract($args);
@@ -28,7 +30,7 @@ function roles_user_usermenu($args)
     $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
 
     if (!xarUserIsLoggedIn()){
-        xarResponse::redirect(xarModURL($defaultloginmodname,'user','showloginform'));
+        xarController::redirect(xarModURL($defaultloginmodname,'user','showloginform'));
     }
 
     $id = xarUserGetVar('id');
@@ -143,7 +145,7 @@ function roles_user_usermenu($args)
                 }
                 if (empty($returnurl))
                     $returnurl = xarModURL('roles', 'user', 'account', array('tab' => 'basic'));
-                return xarResponse::redirect($returnurl);
+                return xarController::redirect($returnurl);
             } else {
                 // invalid, we need to show the form data again
                 $data = array();
@@ -278,7 +280,7 @@ function roles_user_usermenu($args)
                 }
                 if (empty($returnurl))
                     $returnurl = xarModURL('roles', 'user', 'account', array('moduleload' => $moduleload));
-                return xarResponse::redirect($returnurl);
+                return xarController::redirect($returnurl);
             }
 
             // must have invalid data, show the form again

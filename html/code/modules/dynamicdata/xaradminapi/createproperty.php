@@ -1,33 +1,36 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * create a new property field for an object
  *
  * @author the DynamicData module development team
- * @param $args['name'] name of the property to create
- * @param $args['label'] label of the property to create
- * @param $args['objectid'] object id of the property to create
- * @param $args['moduleid'] module id of the property to create
- * @param $args['itemtype'] item type of the property to create
- * @param $args['type'] type of the property to create
- * @param $args['defaultvalue'] default of the property to create
- * @param $args['source'] data source for the property (dynamic_data table or other)
- * @param $args['status'] status of the property to create (disabled/active/...)
- * @param $args['seq'] order of the property to create
- * @param $args['configuration'] configuration of the property to create
- * @return int property ID on success, null on failure
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['name'] name of the property to create<br/>
+ *        string   $args['label'] label of the property to create<br/>
+ *        integer  $args['objectid'] object id of the property to create<br/>
+ *        integer  $args['moduleid'] module id of the property to create<br/>
+ *        string   $args['itemtype'] item type of the property to create<br/>
+ *        string   $args['type'] type of the property to create<br/>
+ *        string   $args['defaultvalue'] default of the property to create<br/>
+ *        string   $args['source'] data source for the property (dynamic_data table or other)<br/>
+ *        string   $args['status'] status of the property to create (disabled/active/...)<br/>
+ *        integer  $args['seq'] order of the property to create<br/>
+ *        string   $args['configuration'] configuration of the property to create
+ * @return integer property ID on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_createproperty($args)
+function dynamicdata_adminapi_createproperty(Array $args=array())
 {
     extract($args);
 

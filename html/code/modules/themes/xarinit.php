@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage themes
  * @link http://xaraya.com/index.php/release/70.html
  */
 
@@ -15,7 +16,7 @@ sys::import('xaraya.tableddl');
 /**
  * Initialise the themes module
  * @author Marty Vance
- * @return bool
+ * @return boolean
  * @throws DATABASE_ERROR
  */
 function themes_init()
@@ -107,6 +108,7 @@ function themes_init()
 
     xarModVars::set('themes', 'selclass', 'all');
     xarModVars::set('themes', 'useicons', false);
+    xarModVars::set('themes','flushcaches', '');
 
     // Installation complete; check for upgrades
     return themes_upgrade('2.0.0');
@@ -116,13 +118,13 @@ function themes_init()
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function themes_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0.0':
+        default:
       break;
     }
     return true;
@@ -131,7 +133,7 @@ function themes_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return bool
+ * @return boolean
  */
 function themes_delete()
 {

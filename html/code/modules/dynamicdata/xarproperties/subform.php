@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 
@@ -787,7 +789,7 @@ class SubFormProperty extends DataProperty
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
      * @param $args['configuration'] configuration rule (default is the current configuration)
      * @param $args['id'] id of the field
-     * @return bool true if the configuration rule could be processed, false otherwise
+     * @return boolean true if the configuration rule could be processed, false otherwise
      */
     public function updateConfiguration(Array $args = array())
     {

@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage themes module
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage themes
+ * 
  */
 /**
  * Gets a list of themes that matches required criteria
@@ -13,14 +14,15 @@
  * Supported criteria are: UserCapable, AdminCapable, Class, Category, State.
  * @author original - Marco Canini <marco@xaraya.com>,
  * @author andyv - modified
- * @param filter array of criteria used to filter the entire list of installed themes.
- * @param startNum the start offset in the list
- * @param numItems the length of the list
- * @param orderBy the order type of the list
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['filter'] array of criteria used to filter the entire list of installed themes.<br/>
+ *        integer  $args['startNum'] the start offset in the list<br/>
+ *        integer  $args['numItems'] the length of the list<br/>
+ *        string   $args['orderBy'] the order type of the list
  * @return array array of theme information arrays
  * @throws DATABASE_ERROR, BAD_PARAM
  */
-function themes_adminapi_getthemelist($args)
+function themes_adminapi_getthemelist(Array $args=array())
 {
     extract($args);
 

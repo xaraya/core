@@ -2,11 +2,12 @@
 /**
  * Base JavaScript management functions
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 
@@ -32,10 +33,9 @@
  * @author Jason Judge
  * @param $args[position] the location of the event trigger; defaults to 'body'
  * @param $args[type] the type of event trigger; several as a comma-separated list
- * @returns string
- * @return empty string
+ * @return string an empty string
  */ 
-function base_javascriptapi_geteventattributes($args)
+function base_javascriptapi_geteventattributes(Array $args=array())
 {
     extract($args);
 

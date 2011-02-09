@@ -2,10 +2,14 @@
 /**
  * Variable utilities
  *
- * @package variables
+ * @package core
+ * @subpackage variables
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Marco Canini marco@xaraya.com
  * @author Flavio Botelho
  */
@@ -20,7 +24,6 @@ class VariableValidationException extends ValidationExceptions
 }
 /**
  *
- * @package config
  * @todo this exception is too weak
 **/
 class ConfigurationException extends ConfigurationExceptions
@@ -43,7 +46,6 @@ interface IxarVars
 /**
  * Base class for variable handling in core
  *
- * @package variables
  * @author Marcel van der Boom <mrb@hsdev.com>
  **/
 class xarVars extends Object
@@ -76,11 +78,11 @@ define('XARVAR_PREP_TRIM',        8);
  *
  * Sets up allowable html and htmlentities options
  *
- * @access protected
+ * 
  * @global xarVar_allowableHTML array
  * @global xarVar_fixHTMLEntities bool
  * @param args array
- * @return bool
+ * @return boolean
  * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
  * @todo revisit naming of config_vars table
 **/
@@ -125,7 +127,7 @@ function xarVar_init(&$args)
  *  }
  *
  *
- * @access public
+ * 
  * @param arrays The arrays storing information equivalent to the xarVarFetch interface
  * @return array With the respective exceptions in case of failure
 **/
@@ -196,7 +198,7 @@ function xarVarBatchFetch()
  *   XARVAR_PREP_FOR_STORE:      dbconn->qstr($value)
  *   XARVAR_PREP_TRIM:           trim($value)
  *
- * @access public
+ * 
  * @param name string the variable name
  * @param validation string the validation to be performed
  * @param value mixed contains the converted value of fetched variable
@@ -228,7 +230,7 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
     // mrb: what doesn't work then? seems ok within the given workings
     // --------v  this is kinda confusing though, especially when dont_set is used as flag.
     if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
-        $value = xarRequest::getVar($name, $allowOnlyMethod);
+        $value = xarController::getVar($name, $allowOnlyMethod);
     }
 
     // Suppress validation warnings when dont_set, not_required or a default value is specified
@@ -306,11 +308,11 @@ function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags =
  *
  * The $validation parameter can be any of the implemented functions in html/modules/variable/validations/
  *
- * @access public
+ * 
  * @param validation mixed the validation to be performed
  * @param subject string the subject on which the validation must be performed, will be where the validated value will be returned
  * @throws EmptyParameterException
- * @return bool true if the $subject validates correctly, false otherwise
+ * @return boolean true if the $subject validates correctly, false otherwise
  */
 function xarVarValidate($validation, &$subject, $supress = false, $name = '')
 {
@@ -361,7 +363,7 @@ function xarVarValidate($validation, &$subject, $supress = false, $name = '')
  * Wrapper functions for var caching as in Xaraya 1 API
  * See the documentation of protected xarCoreCache::*Cached for details
  *
- * @access public
+ * 
  * @see xarCore
  */
 function xarVarIsCached($scope,  $name)         { return xarCoreCache::isCached($scope, $name);         }
@@ -401,7 +403,7 @@ function xarVarFlushCached($scope)              { return xarCoreCache::flushCach
  * Gets a variable, cleaning it up such that the text is
  * shown exactly as expected. Can have as many parameters as desired.
  *
- * @access public
+ * 
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  */
@@ -441,7 +443,7 @@ function xarVarPrepForDisplay()
  * shown exactly as expected, except for allowed HTML tags which
  * are allowed through. Can have as many parameters as desired.
  *
- * @access public
+ * 
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  */
@@ -533,7 +535,7 @@ function xarVarPrepHTMLDisplay__callback($matches)
  * Gets a variable, cleaning it up such that e-mail addresses are
  * slightly obfuscated against e-mail harvesters.
  *
- * @access public
+ * 
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  * @todo this looks like something for the mail module or an EmailAddress class somewhere
@@ -580,7 +582,7 @@ function xarVarPrepEmailDisplay()
  * to access files outside of the scope of the Xaraya
  * system is not allowed. Can have as many parameters as desired.
  *
- * @access public
+ * 
  * @return mixed prepared variable if only one variable passed
  * in, otherwise an array of prepared variables
  *

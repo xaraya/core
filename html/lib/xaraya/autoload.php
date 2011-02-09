@@ -3,10 +3,13 @@
  * Xaraya Autoload
  *
  * @package core
+ * @subpackage autoload
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage Autoload
+ *
  * @author mikespub
  */
 
@@ -15,7 +18,6 @@
 /**
  * Convenience class for managing autoload functions and methods
  *
- * @package core
  * @todo let modules register functions and class methods during activation ?
  * @todo save the list of registered functions and class methods somewhere ?
  * @todo re-use the list of saved functions and class methods in initialize() ?

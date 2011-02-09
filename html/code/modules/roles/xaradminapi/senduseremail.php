@@ -3,11 +3,12 @@
  * Send emails to users
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -17,17 +18,17 @@
  * Ex: Lost Password, Confirmation
  * @todo FIXME: change name of id parameter to something that implies plurality, review why we need k => v array
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['id'] array of id of the user(s) array($id => '1')
- * @param $args['mailtype'] type of the message to send (confirmation, deactivation, ...)
- * @param $args['message'] the message of the mail (optionnal)
- * @param $args['subject'] the subject of the mail (optionnal)
- * @param $args['pass'] new password of the user (optionnal)
- * @param $args['ip'] ip adress of the user (optionnal)
- * @returns bool
- * @return true on success, false on failures
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['id'] array of id of the user(s) array($id => '1')<br/>
+ *        string   $args['mailtype'] type of the message to send (confirmation, deactivation, ...)<br/>
+ *        string   $args['message'] the message of the mail (optionnal)<br/>
+ *        string   $args['subject'] the subject of the mail (optionnal)<br/>
+ *        string   $args['pass'] new password of the user (optionnal)<br/>
+ *        string   $args['ip'] ip adress of the user (optionnal)
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function roles_adminapi_senduseremail($args)
+function roles_adminapi_senduseremail(Array $args=array())
 {
     // Send Email
     extract($args);

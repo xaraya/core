@@ -3,11 +3,12 @@
  * Core configuration
  *
  * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage installer module
  * @link http://xaraya.com/index.php/release/200.html
  */
 /*
@@ -44,7 +45,7 @@ function installer_core_privilegeoptions()
  * @access public
  * @return boolean
  */
-function installer_core_configuration_load($args)
+function installer_core_configuration_load(Array $args=array())
 {
 // load the privileges chosen
 

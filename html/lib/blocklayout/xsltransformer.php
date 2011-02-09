@@ -2,11 +2,14 @@
 /**
  * XSLT version of the BL compiler
  *
- * @package core
+ * @package blocklayout
+ * @subpackage xsl
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage xsl
  * @author Marcel van der Boom <marcel@xaraya.com>
 **/
 

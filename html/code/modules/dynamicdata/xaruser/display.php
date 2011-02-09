@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 
@@ -16,8 +18,9 @@
  * available from the module.
  *
  * @param $args an array of arguments (if called by other modules)
+ * @return string output display string
  */
-function dynamicdata_user_display($args)
+function dynamicdata_user_display(Array $args=array())
 {
     extract($args);
 

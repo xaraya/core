@@ -2,22 +2,25 @@
 /**
  * Pass individual item links
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * utility function to pass individual item links to whoever
  *
- * @param $args['itemtype'] item type (optional)
- * @param $args['itemids'] array of item ids to get
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['itemtype'] item type (optional)<br/>
+ *        array    $args['itemids'] array of item ids to get
  * @return array containing the itemlink(s) for the item(s).
  */
-function dynamicdata_userapi_getitemlinks($args)
+function dynamicdata_userapi_getitemlinks(Array $args=array())
 {
     extract($args);
 

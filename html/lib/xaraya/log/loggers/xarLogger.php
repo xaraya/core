@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package core
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
 /*
  * @copyright see the html/credits.html file in this release
 
@@ -26,13 +35,11 @@
  * This class implements the Logger
  *
  * @author  Flavio Botelho <nuncanada@ig.com.br>
- * @package logging
  */
 
 /**
  * Base class for all loggers
  *
- * @package logging
  */
 class xarLogger extends Object
 {
@@ -68,12 +75,12 @@ class xarLogger extends Object
      *
      * @param array     $conf               Configuration options for the specific driver.
      *
-     * @access public
+     * 
      * @return boolean
      */
     function setConfig(array &$conf)
     {
-        $this->_logLevel = $conf['logLevel'];
+        $this->_logLevel = $conf['loglevel'];
 
         $microtime = explode(" ", microtime());
         $this->_elapsed = ((float)$microtime[0] + (float)$microtime[1]);

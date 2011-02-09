@@ -1,18 +1,22 @@
 <?php
 /**
- * Modify the configuration parameters
+ * Modify the configuration settings of this module
  *
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
- * This is a standard function to modify the configuration parameters of the
- * module
+ * Modify the configuration settings of this module
+ *
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ *
+ * @return mixed data array for the template display or output display string if invalid data submitted
  *
  * @author Marty Vance
  */
@@ -20,13 +24,6 @@ function themes_admin_modifyconfig()
 {
     // Security
     if (!xarSecurityCheck('AdminThemes')) return;
-
-    // FIXME: remove at next upgrade
-    try {
-        $tmp = xarConfigVars::get(null, 'Site.BL.MemCacheTemplates');
-    } catch (Exception $e) {
-        xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
-    }
 
     if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('sitename', 'str', $data['sitename'], xarModVars::get('themes', 'SiteName'), XARVAR_NOT_REQUIRED)) return;
@@ -41,6 +38,7 @@ function themes_admin_modifyconfig()
     if (!xarVarFetch('footer', 'str', $data['footer'], xarModVars::get('themes', 'SiteFooter'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('copyright', 'str', $data['copyright'], xarModVars::get('themes', 'SiteCopyRight'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('AtomTag', 'str:1:', $data['atomtag'], (bool)xarModVars::get('themes', 'AtomTag'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('compresswhitespace', 'int', $data['compresswhitespace'], 0, XARVAR_NOT_REQUIRED)) return;
 
     if (!xarVarFetch('themedir','str:1:',$data['defaultThemeDir'],'themes',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('adminpagemenu', 'checkbox', $data['adminpagemenu'], (bool)xarModVars::get('themes', 'adminpagemenu'), XARVAR_NOT_REQUIRED)) {return;}
@@ -92,12 +90,14 @@ function themes_admin_modifyconfig()
             xarConfigVars::set(null,'Site.BL.ThemesDirectory', $data['defaultThemeDir']);
             xarConfigVars::set(null, 'Site.BL.CacheTemplates',$data['cachetemplates']);
             xarConfigVars::set(null, 'Site.BL.MemCacheTemplates',$data['memcachetemplates']);
+            xarConfigVars::set(null, 'Site.BL.CompressWhitespace',$data['compresswhitespace']);
             xarModVars::set('themes', 'hidecore', $data['hidecore']);
             xarModVars::set('themes', 'selstyle', $data['selstyle']);
             xarModVars::set('themes', 'selfilter', $data['selfilter']);
             xarModVars::set('themes', 'selsort', $data['selsort']);
 
             // Adjust the usermenu hook according to the setting
+            /* The usermenu isn't a hook...
             sys::import('xaraya.structures.hooks.observer');
             $observer = new BasicObserver('themes','user','usermenu');
             $subject = new HookSubject('roles');
@@ -105,6 +105,41 @@ function themes_admin_modifyconfig()
                 $subject->attach($observer);
             } else {
                 $subject->detach($observer);
+            }
+            */
+            
+            if (!xarVarFetch('themes_debug_user', 'int', $themes_debug_user, xarConfigVars::get(null, 'Site.BL.Debug_User'), XARVAR_NOT_REQUIRED)) return;
+
+            sys::import('modules.dynamicdata.class.properties.master');
+            $caches = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
+            $caches->checkInput('bl_flushcaches');
+            xarModVars::set('themes','flushcaches', $caches->value);
+            
+            // Flush the caches
+            $cachestoflush = $caches->getValue();
+            $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
+            foreach ($cachestoflush as $cachetoflush) {
+                $picker->initialization_basedirectory = sys::varpath() . "/cache/" . $cachetoflush;
+                if (!file_exists($picker->initialization_basedirectory)) continue;
+                $files = $picker->getOptions();
+                foreach ($files as $file) unlink($picker->initialization_basedirectory . "/" . $file['id']);
+            }
+            
+            break;
+        case 'flush':
+            sys::import('modules.dynamicdata.class.properties.master');
+            $caches = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
+            $caches->checkInput('flushcaches');
+            xarModVars::set('themes','flushcaches', $caches->value);
+            
+            // Flush the caches
+            $cachestoflush = $caches->getValue();
+            $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
+            foreach ($cachestoflush as $cachetoflush) {
+                $picker->initialization_basedirectory = sys::varpath() . "/cache/" . $cachetoflush;
+                if (!file_exists($picker->initialization_basedirectory)) continue;
+                $files = $picker->getOptions();
+                foreach ($files as $file) unlink($picker->initialization_basedirectory . "/" . $file['id']);
             }
             break;
     }

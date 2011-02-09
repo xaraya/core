@@ -3,21 +3,23 @@
  * Add a user to a group
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * insertuser - add a user to a group
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['id'] user id
- * @param $args['gid'] group id
- * @return true on succes, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['id'] user id<br/>
+ *        integer  $args['gid'] group id
+ * @return boolean true on succes, false on failure
  */
-function roles_adminapi_addmember($args)
+function roles_adminapi_addmember(Array $args=array())
 {
     return xarMod::apiFunc('roles','user','addmember',$args);
 }

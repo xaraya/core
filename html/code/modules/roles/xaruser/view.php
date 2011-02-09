@@ -2,24 +2,26 @@
 /**
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * view users
+ * @return string output display string
  */
-function roles_user_view($args)
+function roles_user_view(Array $args=array())
 {
     if (!xarSecurityCheck('ViewRoles')) return;
 
     // members list disabled? only show to roles admins
     if ((bool)xarModVars::get('roles', 'displayrolelist') == false && !xarSecurityCheck('AdminRoles', 0)) {
-        xarResponse::redirect(xarModURL('roles', 'user', 'main'));
+        xarController::redirect(xarModURL('roles', 'user', 'main'));
     }
 //    extract($args);
 

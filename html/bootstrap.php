@@ -17,6 +17,7 @@
  * of what you want to do here.
  *
  * @package core
+ * @subpackage core
  * @copyright (C) copyright-placeholder
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -302,6 +303,7 @@ final class sys extends Object
      * Syntax examples:
      *    sys::import('blocklayout.compiler')              -> lib/blocklayout/compiler.php
      *    sys::import('modules.mymodule.xarincludes.test') -> html/code/modules/mymodule/xarincludes/test.php
+     *    sys::import('properties.myproperty.main')        -> html/code/properties/myproperty/main.php
      *
      * The beginning of the dot path is scanned for 'modules.'
      * if found it assumes a module import
@@ -309,11 +311,10 @@ final class sys extends Object
      *
      * @see    sys::once()
      * @todo   do we want to support sys::import('blocklayout.*') ?
-     * @todo   we should probably change our directory structure so we dont have to do specials for modules.
     **/
     public static function import($dp)
     {
-        if((0===strpos($dp,'modules.'))) {
+        if((0===strpos($dp,'modules.')) || (0===strpos($dp,'properties.'))) {
             return self::once(self::shortpath($GLOBALS['systemConfiguration']['codeDir'] . $dp), false);
         }
         return self::once($GLOBALS['systemConfiguration']['libDir'] . $dp);

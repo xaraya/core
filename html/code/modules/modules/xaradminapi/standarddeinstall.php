@@ -1,19 +1,23 @@
 <?php
 /**
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com *
- * @subpackage modules
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/1.html
  */
 
 /**
  * Perform standard module removal actions
  *
  * @author Marc Lutolf (mfl@netspan.ch)
+ * @param array    $args array of optional parameters<br/>
  * @return boolean result of action
 **/
-function modules_adminapi_standarddeinstall($args)
+function modules_adminapi_standarddeinstall(Array $args=array())
 {
     extract($args);
     if (!isset($module)) return false;
@@ -65,13 +69,17 @@ function modules_adminapi_standarddeinstall($args)
     } catch (Exception $e) {}
 
     // Remove hooks
+    #
+    /* Since this is hooks, the ModuleRemove subject should deal with it
+    xarHooks::notify('ModuleRemove', array('module' => $module, 'id' => $module));
     $modInfo = xarMod::getBaseInfo($module);
     $modId = $modInfo['systemid'];
     $query = "DELETE FROM " . $xartables['hooks'] .
              " WHERE s_module_id = " . $modId .
              " OR t_module_id = " . $modId;
     $dbconn->Execute($query);
-
+    */
+    
     // Remove modvars, masks and privilege instances
     xarRemoveMasks($module);
     xarRemoveInstances($module);

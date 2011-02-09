@@ -3,20 +3,22 @@
  * Site lock
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 
 /* Site lock
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return array data for the template display
  */
 
-function roles_admin_sitelock($args)
+function roles_admin_sitelock(Array $args=array())
 {
     // Security
     if(!xarSecurityCheck('ManageRoles')) return;
@@ -86,7 +88,7 @@ function roles_admin_sitelock($args)
                               'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
             xarModVars::set('roles', 'lockdata', serialize($lockdata));
-            xarResponse::redirect(xarModURL('roles', 'admin', 'sitelock'));
+            xarController::redirect(xarModURL('roles', 'admin', 'sitelock'));
         } elseif ($cmd == 'toggle') {
 
             // turn the site on or off
