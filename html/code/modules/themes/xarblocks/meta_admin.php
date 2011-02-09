@@ -28,25 +28,12 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
     public function modify(Array $data=array())
     {
         $data = parent::modify($data);
-
-        if (!isset($data['metakeywords'])) $data['metakeywords'] = $this->metakeywords;
-        if (!isset($data['metadescription'])) $data['metadescription'] = $this->metadescription;
-        if (!isset($data['usegeo'])) $data['usegeo'] = $this->usegeo;
-        if (!isset($data['usedk'])) $data['usedk'] = $this->usedk;
-        if (!isset($data['longitude'])) $data['longitude'] = $this->longitude;
-        if (!isset($data['latitude'])) $data['latitude'] = $this->latitude;
-        if (!isset($data['copyrightpage'])) $data['copyrightpage'] = $this->copyrightpage;
-        if (!isset($data['helppage'])) $data['helppage'] = $this->helppage;
-        if (!isset($data['glossary'])) $data['glossary'] = $this->glossary;
-        if (empty($data['authorpage'])) $data['authorpage'] = xarServer::getBaseURL();
-
         $data['blockid'] = $data['bid'];
 
         // populate meta tag dropdowns (new format)
         $data['metatypes'] = xarMeta::getTypes();
         $data['metadirs'] = xarMeta::getDirs();
         $data['metalangs'] = xarMeta::getLanguages();
-
         return $data;
     }
 
@@ -61,13 +48,8 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
         // FIXME: use better validation on these parameters.
         $vars = array();
 
-        if (!xarVarFetch('copyrightpage',   'notempty', $vars['copyrightpage'],   $this->copyrightpage, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('helppage',        'notempty', $vars['helppage'],        $this->helppage, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('glossary',        'notempty', $vars['glossary'],        $this->glossary, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('authorpage', 'pre:trim:str:1:', $vars['authorpage'], $this->authorpage, XARVAR_NOT_REQUIRED)) return;
         // fetch the array of meta tags from input
         if (!xarVarFetch('metatags', 'array', $metatags, array(), XARVAR_NOT_REQUIRED)) return;
-        //print_r($metatags); exit;
         $newtags = array();     
         foreach ($metatags as $metatag) {
             // empty value = delete
@@ -98,6 +80,31 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
         $vars['metatags'] = $newtags;
         // store the tags for use by the xarMeta class 
         xarModVars::set('themes','meta.tags', serialize($newtags));
+        
+        // fetch the array of link tags from input
+        if (!xarVarFetch('linktags', 'array', $linktags, array(), XARVAR_NOT_REQUIRED)) return;
+        $newlinks = array();
+        foreach ($linktags as $linktag) {
+            // delete if flag is set not empty
+            if (isset($linktag['delete']) && !empty($linktag['delete'])) continue;
+            $newlinks[] = $linktag;
+        }
+        // fetch the value of the new link rel
+        if (!xarVarFetch('linkrel', 'pre:trim:str:1:', $linkrel, '', XARVAR_NOT_REQUIRED)) return;
+        // only fetch other params if rel isn't empty
+        if (!empty($linkrel)) {
+            if (!xarVarFetch('linkhref', 'pre:trim:str:1:', $linkhref, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('linktitle', 'pre:trim:str:1:', $linktitle, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('linktype', 'pre:trim:str:1:', $linktype, '', XARVAR_NOT_REQUIRED)) return;
+            $newlinks[] = array(
+                'rel' => $linkrel,
+                'href' => $linkhref,
+                'title' => $linktitle,
+                'type' => $linktype,
+            );
+        }
+        $vars['linktags'] = $newlinks;
+        
         // make sure we merge the rest of the content we haven't updated
         $vars += $data['content'];
         $data['content'] = $vars;

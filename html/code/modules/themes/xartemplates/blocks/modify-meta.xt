@@ -97,25 +97,82 @@
         </tbody>   
     </table>    
 
-    <div class="xar-form-input-wrapper">
-        <xar:var name="label">Xaraya can generate the proper links for your copyright page as used by Mozilla and other popular browsers.</xar:var>
-        <label for="copyrightpage#$blockid#" title="#$label#" class="xar-form-label">
-            Copyright Page:
-        </label>
-        <input type="text" name="copyrightpage" id="copyrightpage#$blockid#" value="#$copyrightpage#" maxlength="100" class="xar-form-textxxlong"/>
-    </div>
-    <div class="xar-form-input-wrapper">
-        <xar:var name="label">Xaraya can generate the proper links for your help page as used by Mozilla and other popular browsers.</xar:var>
-        <label for="helppage#$blockid#" title="#$label#" class="xar-form-label">
-            Help Page:
-        </label>
-        <input type="text" name="helppage" id="helppage#$blockid#" value="#$helppage#" maxlength="100" class="xar-form-textxxlong"/>
-    </div>
-    <div class="xar-form-input-wrapper">
-        <xar:var name="label">Xaraya can generate the proper links for your glossary page as used by Mozilla and other popular browsers.</xar:var>
-        <label for="glossary#$blockid#" title="#$label#" class="xar-form-label">
-            Glossary:
-        </label>
-        <input type="text" name="glossary" id="glossary#$blockid#" value="#$glossary#" maxlength="100" class="xar-form-textxxlong"/>
-    </div>
+    <!-- Display list of stored link tags -->
+    <xar:if condition="!empty($linktags)">
+    <table class="xar-fullwidth xar-margin-thicktop">
+        <caption class="xar-align-left">Link Tags</caption>
+        <thead>
+            <tr>
+                <th>rel</th>
+                <th>href</th>
+                <th>title</th>
+                <th>type</th>
+                <th>Delete</th>
+            </tr>        
+        </thead>
+        <tbody>
+            <xar:foreach in="$linktags" key="$linkkey" value="$linktag">
+            <xar:set name="linkname">"linktags[{$linkkey}]"</xar:set>
+            <xar:set name="linkid">"linktags_{$linkkey}"</xar:set>
+            <tr>
+                <td>
+                    <xar:set name="relname">"{$linkname}[rel]"</xar:set>
+                    <xar:set name="relid">"{$linkid}_rel"</xar:set>
+                    <input type="text" name="#$relname#" id="#$relid#" value="#$linktag.rel#" class="xar-form-textmedium"/>
+                </td>
+                <td>
+                    <xar:set name="hrefname">"{$linkname}[href]"</xar:set>
+                    <xar:set name="hrefid">"{$linkid}_href"</xar:set>
+                    <input type="text" name="#$hrefname#" id="#$hrefid#" value="#$linktag.href#" class="xar-form-textxlong"/>
+                </td>
+                <td>
+                    <xar:set name="titlename">"{$linkname}[title]"</xar:set>
+                    <xar:set name="titleid">"{$linkid}_title"</xar:set>
+                    <input type="text" name="#$titlename#" id="#$titleid#" value="#$linktag.title#"/>
+                </td>
+                <td>
+                    <xar:set name="typename">"{$linkname}[type]"</xar:set>
+                    <xar:set name="typeid">"{$linkid}_type"</xar:set>
+                    <input type="text" name="#$typename#" id="#$typeid#" value="#$linktag.type#" class="xar-form-textmedium"/>
+                </td>
+                <td>
+                    <xar:set name="delname">"{$linkname}[delete]"</xar:set>
+                    <xar:set name="delid">"{$linkid}_delete"</xar:set>
+                    <input type="checkbox" name="#$delname#" id="#$delid#"/>                
+                </td>
+            </tr>
+            </xar:foreach>
+        </tbody>
+    </table>    
+    </xar:if>
+    
+    <!-- New link tag input -->
+    <table class="xar-fullwidth xar-margin-nonetop">
+        <caption class="xar-align-left">New Link Tag</caption>
+        <thead>
+            <tr>
+                <th>rel</th>
+                <th>href</th>
+                <th>title</th>
+                <th>type</th>
+            </tr>        
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <input type="text" name="linkrel" id="linkrel" value="" class="xar-form-textmedium"/>
+                </td>
+                <td>
+                    <input type="text" name="linkhref" id="linkhref" value="" class="xar-form-textxlong"/>
+                </td>
+                <td>
+                    <input type="text" name="linktitle" id="linktitle" value=""/>                
+                </td>
+                <td>
+                    <input type="text" name="linktype" id="linktype" value="" class="xar-form-textmedium"/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
 </xar:template>

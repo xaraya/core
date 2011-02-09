@@ -26,18 +26,15 @@ class Themes_MetaBlock extends BasicBlock
     public $module              = 'themes';
     public $text_type           = 'Meta';
     public $text_type_long      = 'Meta Keywords';
-    public $xarversion          = '2.2.0';
+    public $xarversion          = '2.2.1';
     public $show_preview        = true;
     public $usershared          = true;
     public $pageshared          = false;
     
     // meta data now stored as array as of 2.2.0
     public $metatags            = array();
-
-    public $copyrightpage       = '';
-    public $helppage            = '';
-    public $glossary            = '';
-    public $authorpage          = '';
+    // link data now stored as array as of 2.2.1
+    public $linktags            = array();
 
 /**
  * Display func.
@@ -49,6 +46,7 @@ class Themes_MetaBlock extends BasicBlock
         $data = parent::display($data);
         if (empty($data)) return;
 
+        $meta = !empty($data['content']) ? $data['content'] : array();
         /** support for dynamic description and dynamic keywords is now
          *  supplied by the xar:meta tag, and not hardcoded here. It is no longer
          *  limited to use by the keywords and articles module, and can be utilised
@@ -93,37 +91,9 @@ class Themes_MetaBlock extends BasicBlock
                 'scheme' => '',
             ));
         }
-       
-        $meta = array();
 
-        // Active Page
-        $meta['activepagerss'] = xarServer::getCurrentURL(array('theme' => 'rss'));
-        $meta['activepageatom'] = xarServer::getCurrentURL(array('theme' => 'atom'));
-        $meta['activepageprint'] = xarServer::getCurrentURL(array('theme' => 'print'));
-
-        $meta['baseurl'] = xarServer::getBaseURL();
-        if (isset($data['copyrightpage'])){
-            $meta['copyrightpage'] = $data['copyrightpage'];
-        } else {
-            $meta['copyrightpage'] = '';
-        }
-
-        if (isset($data['helppage'])){
-            $meta['helppage'] = $data['helppage'];
-        } else {
-            $meta['helppage'] = '';
-        }
-
-        if (isset($data['glossary'])){
-            $meta['glossary'] = $data['glossary'];
-        } else {
-            $meta['glossary'] = '';
-        }
-        if (!empty($data['authorpage'])) {
-            $meta['authorpage'] = $data['authorpage'];
-        } else {
-            $meta['authorpage'] = $meta['baseurl'];
-        }
+        if (!empty($this->linktags))
+            $meta['linktags'] = $this->parseLinkTags();    
 
          //Pager Buttons
         $meta['first']          = xarVarGetCached('Pager.first','leftarrow');
@@ -136,10 +106,11 @@ class Themes_MetaBlock extends BasicBlock
     
     public function upgrade($oldversion)
     {
+        // grab existing content
+        $data = $this->content;
         switch ($oldversion) {
             case '0.0.0':
-                // grab existing content
-                $data = $this->content;
+
                 // build metatags array from current settings
                 $metatags = array();
                 $metatags[] = array(
@@ -213,14 +184,115 @@ class Themes_MetaBlock extends BasicBlock
                 $data['metatags'] = $this->metatags = $metatags;
                 // set the modvar to make tags available to xarMeta class early
                 xarModVars::set('themes','meta.tags', serialize($metatags));
-                // replace content with updated array 
-                $this->content = $data;
 
             case '2.2.0':
-                // upgrades from 2.2.0 go here...            
+                // upgrades from 2.2.0 go here...
+                $linktags = array(
+                    array('rel' => 'author', 'href' => !empty($data['authorpage']) ? $data['authorpage'] : '[baseurl]', 'title' => xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY), 'type' => 'text/html'),
+                    array('rel' => 'copyright', 'href' => !empty($data['copyrightpage']) ? $data['copyrightpage'] : '', 'title' => '', 'type' => 'text/html'),
+                    array('rel' => 'help', 'href' => !empty($data['helppage']) ? $data['helppage'] : '' , 'title' => '', 'type' => 'text/html'),
+                    array('rel' => 'glossary', 'href' => !empty($data['glossary']) ? $data['glossary'] : '', 'title' => '', 'type' => 'text/html'),                                                    
+                    array('rel' => 'pingback', 'href' => '[baseurl]ws.php', 'title' => '', 'type' => ''),
+                    array('rel' => 'Top', 'href' => '[baseurl]', 'title' => '', 'type' => 'text/html'),
+                    array('rel' => 'parent', 'href' => '[baseurl]', 'title' => '', 'type' => 'text/html'),            
+                    array('rel' => 'contents', 'href' => '[articles:user:viewmap]', 'title' => '', 'type' => 'text/html'),
+                    array('rel' => 'search', 'href' => '[search:user:main]', 'title' => '', 'type' => 'text/html'),
+                    array('rel' => 'alternate', 'href' => '[currenturl]theme=rss', 'title' => 'RSS-feed', 'type' => 'application/rss+xml'),
+                    array('rel' => 'service.feed', 'href' => '[currenturl]theme=atom', 'title' => 'Atom-feed', 'type' => 'application/atom+xml'),
+                    array('rel' => 'alternate', 'href' => '[currenturl]theme=print', 'title' => 'Print', 'type' => 'text/html'),
+                );
+                // remove deprecated property values
+                if (isset($data['authorpage'])) unset($data['authorpage']);
+                if (isset($data['copyrightpage'])) unset($data['copyrightpage']);
+                if (isset($data['helppage'])) unset($data['helppage']);
+                if (isset($data['glossary'])) unset($data['glossary']);
+
+                $data['linktags'] = $this->linktags = $linktags;
+            case '2.2.1':
+                // upgrades from 2.2.1 go here...
+                
             break;
         }
+        // replace content with updated array 
+        $this->content = $data;
+        
         return true;
+    }
+
+    public function parseLinkTags()
+    {
+        $linktags = array();
+        if (!empty($this->linktags)) {
+            foreach ($this->linktags as $tag) {
+                // skip tags with empty rel or href attributes
+                if (empty($tag['rel']) || empty($tag['href'])) continue;
+                if (!$tag['url'] = $this->_decodeURL($tag['href'])) continue;
+                $linktags[] = $tag;
+            }
+        }
+        return $linktags;
+    }    
+    
+    public function _decodeURL($url)
+    {
+        $url = preg_replace('/&amp;/','&', $url);
+        $args = array();
+        $qstring = '';
+
+        if (strpos($url, '[') === 0) {
+            // Generic module url shortcut syntax [module:type:func]&param=val
+            // Credit to Elek M?ton for further expansion
+
+            $sections = explode(']',substr($url,1));
+            $modinfo = explode(':', $sections[0]);
+            $modname = $modinfo[0];
+            if ($modname != 'baseurl' && $modname != 'currenturl') {
+                if (!xarMod::isAvailable($modname)) return;
+                $modtype = !empty($modinfo[1]) ? $modinfo[1] : 'user';
+                $funcname = !empty($modinfo[2]) ? $modinfo[2] : 'main';
+            }
+            
+            // parse optional args/query string
+            if (!empty($sections[1])) {
+                if ($modname == 'baseurl') {
+                    if (preg_match('!^(&|\?|/)!',$sections[1])) {
+                        $qstring = substr($sections[1], 1);
+                    } else {
+                        $qstring = $sections[1];
+                    }
+                } else {
+                    $pairs = $sections[1];
+                    if (preg_match('/^(&|\?)/',$pairs)) {
+                        $pairs = substr($pairs, 1);
+                    }
+                    $pairs = explode('&', $pairs);
+                    foreach ($pairs as $pair) {
+                        $params = explode('=', $pair);
+                        $key = $params[0];
+                        $val = isset($params[1]) ? $params[1] : null;
+                        if ($key == 'theme' && !empty($val) && !xarThemeIsAvailable($val)) return;
+                        $args[$key] = $val;
+                    }
+                }
+            }
+            
+            switch ($modname) {
+                case 'baseurl':
+                    $decoded_url = xarServer::getBaseURL() . $qstring;
+                break;
+                case 'currenturl':
+                    $decoded_url = xarServer::getCurrentURL($args);
+                break;
+                default:
+                    $decoded_url = xarModURL($modname, $modtype, $funcname, $args);
+                break;
+            }            
+        } else {
+            // regular url, prepped for xml display if necessary
+            $decoded_url = xarMod::$genXmlUrls ? xarVarPrepForDisplay($url) : $url;
+        } 
+
+        return $decoded_url;
     }
 }
 ?>
