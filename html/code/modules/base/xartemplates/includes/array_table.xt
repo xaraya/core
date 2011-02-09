@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:template module="base" file="arrayjs"/>
+    <xar:javascript module="base" filename="toggle.js"/>
+    <table class="xar-border-none xar-margin-thicktop">
+        <thead>
+            <tr>
+                <xar:for start="$i=0" test="$i lt count($column_titles)" iter="$i++">
+                    <th class="xar-align-left">
+                        <xar:if condition="!$associative_array AND ($i eq 0)">
+                            <label>Array Key</label>
+                        <xar:else/>
+                            <label>#$column_titles[$i]#</label>
+                        </xar:if>
+                    </th>
+                </xar:for>
+                <th class="xar-align-right">Delete/Ignore</th>        
+            </tr>        
+        </thead>
+        <tbody id="#$id#_rows">
+            <xar:for start="$i=1" test="$i le $rows" iter="$i++">
+                <!-- name[row] -->
+                <xar:set name="row_name">"{$name}[value][{$i}]"</xar:set>
+                <xar:set name="row_id">"{$name}_{$i}"</xar:set>
+                <xar:set name="col_name">"{$row_name}[0]"</xar:set>
+                <xar:set name="col_id">"{$row_id}_0"</xar:set>
+                <tr id="#$row_id#">
+                    <xar:data-input type="1" name="$col_name" id="$col_id" value="$i+1" hidden="hidden"/>
+                    <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
+                        <xar:set name="col_index">$k+1</xar:set>
+                        <!-- name[row][column] -->                        
+                        <xar:set name="col_name">"{$row_name}[{$col_index}]"</xar:set>
+                        <xar:set name="col_id">"{$row_id}_{$col_index}"</xar:set>
+                        <!-- name[row][column] -->
+                        <xar:set name="prop_name">"{$col_name}"</xar:set>
+                        <xar:set name="prop_id">"{$col_id}"</xar:set>
+                        <!-- CHECKME: would be better as $value[$i][$k] ? -->
+                        <xar:set name="prop_val">$value[$i][$k]</xar:set>
+                        <td>
+                            <xar:if condition="!$associative_array AND ($k eq 0)">
+                                <xar:data-input type="textbox" name="$prop_name" id="$prop_id" value="$prop_val"/>
+                            <xar:else/>
+                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$prop_val" configuration="$column_configurations[$k]"/>
+                            </xar:if>
+                        </td>
+                    </xar:for>
+                    <td class="xar-align-right">
+                        <!-- name[row][delete] -->
+                        <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
+                        <xar:set name="del_id">"{$row_id}_delete"</xar:set>
+                        <xar:if condition="($rows ge $minimum_rows) AND ($addremove eq 2)">
+                            <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked=""/>
+                            <img class="xar-icon" id="#$row_id#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_delTableRow('#$row_id#')" style="cursor: pointer;display:none;"/> 
+                            <!-- Hide checkboxes, show delete icons if js enabled -->
+                            <script type="text/javascript">
+                                setDisplayOff('#$del_id#');
+                                setDisplayOn('#$row_id#_delbutton');
+                            </script>
+                        <xar:else/>
+                            <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked="" disabled="disabled"/>
+                            <img class="xar-icon-disabled" id="#$row_id#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" style="display:none;"/> 
+                            <!-- Hide checkboxes, show delete icons if js enabled -->
+                            <script type="text/javascript">
+                                setDisplayOff('#$del_id#');
+                                setDisplayOn('#$row_id#_delbutton');
+                            </script>   
+                        </xar:if>
+                    </td>            
+                </tr>
+                <xar:set name="lastrow">$i</xar:set>
+            </xar:for>       
+<!--  Begin dummy line for adding rows --> 
+            <xar:if condition="($rows lt $maximum_rows) AND ($addremove ne 0)">
+                <xar:set name="thisrow">$lastrow+1</xar:set>
+                <xar:set name="row_name">"{$name}[value][{$thisrow}]"</xar:set>
+                <xar:set name="row_id">"{$name}_{$thisrow}"</xar:set>
+                <xar:set name="col_name">"{$row_name}[0]"</xar:set>
+                <xar:set name="col_id">"{$row_id}_0"</xar:set>
+                <tr id="#$id#_rowtemplate">                         
+                    <xar:data-input type="1" name="$col_name" id="$col_id" value="$i+1" hidden="hidden"/>
+                    <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
+                        <xar:set name="col_index">$k+1</xar:set>
+                        <!-- name[row][column] -->                        
+                        <xar:set name="col_name">"{$row_name}[{$col_index}]"</xar:set>
+                        <xar:set name="col_id">"{$row_id}_{$col_index}"</xar:set>
+                        <!-- name[row][column] -->
+                        <xar:set name="prop_name">"{$col_name}"</xar:set>
+                        <xar:set name="prop_id">"{$col_id}"</xar:set>
+                        <td>
+                            <xar:if condition="!$associative_array AND ($k eq 0)">
+                                <xar:data-input type="textbox" name="$prop_name" id="$prop_id"/>
+                            <xar:else/>
+                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$column_defaults[$k]"  configuration="$column_configurations[$k]"/>
+                            </xar:if>
+                        </td>
+                    </xar:for>
+                    <td class="xar-align-right">
+                        <!-- name[row][delete] -->
+                        <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
+                        <xar:set name="del_id">"{$row_id}_delete"</xar:set>
+                        <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked="checked"/>
+                        <img id="#$id#_delbutton" class="xar-icon" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_delTableRow('#$row_id#')"  style="display:none;cursor: pointer;"/>
+                    </td>
+                </tr>
+                <tr id="#$id#_addrow" style="display:none;">
+                    <xar:set name="colspan">count($column_titles)+1</xar:set>                
+                    <td colspan="#$colspan#" class="xar-align-right">
+                        <img src="#xarTplGetImage('icons/add.png', 'base')#" onclick="javascript:#$id#_addTableRow('#$id#_addrow')"/>                
+                    </td>            
+                </tr>
+            </xar:if>
+            <!-- turn off the new row template, turn on the new row button if js enabled -->
+            <script type="text/javascript">
+                setDisplayOff('#$id#_rowtemplate');
+                setDisplayOff('#$del_id#');
+                setDisplayOn('#$id#_addrow');
+                setDisplayOn('#$id#_delbutton');
+            </script>           
+<!--  End dummy line for adding rows -->
+
+        </tbody>
+
+    </table>
+
+    <input type="hidden" name="#$id#_lastrow" id="#$id#_lastrow" value="#$lastrow#"/>
+    <input type="hidden" name="#$name#[associative_array]" id="#$name#_associative_array" value="#$associative_array#"/>        
+ 
+</xar:template>
