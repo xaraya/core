@@ -88,7 +88,7 @@ function dynamicdata_util_meta(Array $args=array())
     }
     $data['proptypes'] = $proptypenames;
 
-    xarTplSetPageTemplateName('admin');
+    xarTpl::setPageTemplateName('admin');
 
     return $data;
 }

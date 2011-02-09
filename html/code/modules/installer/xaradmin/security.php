@@ -23,7 +23,7 @@ function installer_admin_security()
 {
     if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
-    xarTplSetThemeName('installer');
+    xarTpl::setThemeName('installer');
     $data['language']    = $install_language;
     $data['phase'] = 7;
     $data['phase_label'] = xarML('Security Considerations');

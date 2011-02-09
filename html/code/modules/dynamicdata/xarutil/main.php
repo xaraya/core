@@ -28,7 +28,7 @@ function dynamicdata_util_main()
     $data = array();
     $data['menutitle'] = xarML('Dynamic Data Utilities');
 
-    xarTplSetPageTemplateName('admin');
+    xarTpl::setPageTemplateName('admin');
 
     return $data;
 }

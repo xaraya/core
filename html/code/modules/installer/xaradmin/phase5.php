@@ -53,12 +53,12 @@ function installer_admin_phase5()
         $dbHost = '127.0.0.1';
     }
     if ($dbName == '') {
-        return xarTplModule('installer','admin','errors',array('layout' => 'no_database'));
+        return xarTpl::module('installer','admin','errors',array('layout' => 'no_database'));
     }
 
     // allow only a-z 0-9 and _ in table prefix
     if (!preg_match('/^\w*$/',$dbPrefix)) {
-        return xarTplModule('installer','admin','errors',array('layout' => 'bad_character'));
+        return xarTpl::module('installer','admin','errors',array('layout' => 'bad_character'));
     }
     // Save config data
     $config_args = array('dbHost'    => $dbHost,
@@ -97,7 +97,7 @@ function installer_admin_phase5()
         $dbconn = xarDBNewConn($init_args);
       } catch(Exception $e) {
         // It failed without dbname too
-        return xarTplModule('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
+        return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
       }
     }
 
@@ -108,14 +108,14 @@ function installer_admin_phase5()
         $mysql_version_ok = version_compare($data['version'],$data['required_version'],'ge');
         if (!$mysql_version_ok) {
             $data['layout'] = 'bad_version';
-            return xarTplModule('installer','admin','check_database',$data);
+            return xarTpl::module('installer','admin','check_database',$data);
         }
     }
 
     if (!$createDB && !$dbExists) {
         $data['dbName'] = $dbName;
         $data['layout'] = 'not_found';
-        return xarTplModule('installer','admin','check_database',$data);
+        return xarTpl::module('installer','admin','check_database',$data);
     }
 
     $data['confirmDB']  = $confirmDB;

@@ -542,7 +542,7 @@ class SubFormProperty extends DataProperty
         $module    = empty($module)   ? $this->getModule()   : $module;
         $template  = empty($template) ? $this->getTemplate() : $template;
 
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return xarTpl::property($module, $template, 'showoutput', $data);
     }
 
     function &getObject($value)
@@ -780,7 +780,7 @@ class SubFormProperty extends DataProperty
         $module    = empty($module)   ? $this->getModule()   : $module;
         $template  = empty($template) ? $this->getTemplate() : $template;
 
-        return xarTplProperty($module, $template, 'configuration', $data);
+        return xarTpl::property($module, $template, 'configuration', $data);
     }
 
     /**

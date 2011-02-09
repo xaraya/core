@@ -27,7 +27,7 @@ function roles_admin_addprivilege()
 
     // Check for authorization code
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     // Call the Roles class and get the role

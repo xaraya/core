@@ -3,10 +3,13 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Themes Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
+    <div class="xar-mod-page-head">
         <h2>Modify Themes Configuration</h2>
+    </div>
+    <div class="xar-mod-page-body">
         <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
             <xar:data-form object="$module_settings"/>
             <fieldset>
@@ -144,6 +147,40 @@
                 </div>
             </fieldset>
             <fieldset>
+                <legend>CSS Rendering Options</legend>
+                <xar:javascript scope="theme" filename="toggle.js"/>
+                <div class="xar-form-input-wrapper">
+                    <label for="combinecss" class="xar-form-label">
+                        Combine CSS                    
+                    </label>
+                    <div class="xar-form-container-after">
+                    <xar:set name="combined"><xar:var scope="module" module="themes" name="css.combined"/></xar:set>
+                    <xar:if condition="$combined">
+                        <input type="checkbox" name="combinecss" id="combinecss" checked="checked" onclick="toggleDisplay('compressedcss');"/>
+                    <xar:else/>
+                        <input type="checkbox" name="combinecss" id="combinecss" onclick="toggleDisplay('compressedcss');"/>
+                    </xar:if>
+                    &#160;(experimental) Combines all stylesheets and embedded styles into a single file.
+                    </div>
+                </div>            
+                <div id="compressedcss" class="xar-form-input-wrapper">
+                    <label for="compresscss" class="xar-form-label">
+                        Compress CSS                    
+                    </label>
+                    <div class="xar-form-container-after">
+                    <xar:set name="compressed"><xar:var scope="module" module="themes" name="css.compressed"/></xar:set>
+                    <xar:data-input type="checkbox" name="compresscss" id="compresscss" checked="$compressed"/>&#160;(experimental) Compresses combined CSS stylesheet, eliminating whitespace, comments and linebreaks.
+                    </div>
+                </div>
+                <xar:if condition="empty($combined)">
+                    <script type="text/javascript">
+                        //<![CDATA[
+                        setDisplayOff('compressedcss');
+                        //]]>                    
+                    </script>
+                 </xar:if>
+            </fieldset>
+            <fieldset>
                 <legend>BlockLayout Templating Engine</legend>
                 <div class="xar-form-input-wrapper">
                     <xar:var name="label">Compress whitespace in the template</xar:var>
@@ -227,6 +264,7 @@
                             array('id' => 'templates', 'name' => xarML('Templates')),
                             array('id' => 'rss', 'name' => xarML('RSS')),
                             array('id' => 'database', 'name' => xarML('Database')),
+                            array('id' => 'css', 'name' => xarML('CSS')),
                             // array('id' => 'output', 'name' => xarML('Output')),
                         )
                     </xar:set>
@@ -242,5 +280,6 @@
                 </div>
             </fieldset>
         </form>
+    </div>
     </div>
 </xar:template>

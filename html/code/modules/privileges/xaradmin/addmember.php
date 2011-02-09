@@ -30,7 +30,7 @@ function privileges_admin_addmember()
     
 // Check for authorization code
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     if(!xarVarFetch('ppid',   'isset', $id   , NULL, XARVAR_DONT_SET)) {return;}

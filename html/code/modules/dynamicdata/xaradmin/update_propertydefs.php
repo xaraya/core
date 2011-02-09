@@ -29,7 +29,7 @@ function dynamicdata_admin_update_propertydefs(Array $args=array())
     if (!xarSecurityCheck('AdminDynamicData')) return;
 
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     if ( isset($flushPropertyCache) && ($flushPropertyCache == true) ) {

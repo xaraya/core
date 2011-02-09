@@ -26,16 +26,14 @@ class Themes_MetaBlock extends BasicBlock
     public $module              = 'themes';
     public $text_type           = 'Meta';
     public $text_type_long      = 'Meta Keywords';
+    public $xarversion          = '2.2.0';
     public $show_preview        = true;
     public $usershared          = true;
     public $pageshared          = false;
+    
+    // meta data now stored as array as of 2.2.0
+    public $metatags            = array();
 
-    public $metakeywords        = '';
-    public $metadescription     = '';
-    public $usedk               = '';
-    public $usegeo              = '';
-    public $longitude           = '';
-    public $latitude            = '';
     public $copyrightpage       = '';
     public $helppage            = '';
     public $glossary            = '';
@@ -44,51 +42,59 @@ class Themes_MetaBlock extends BasicBlock
 /**
  * Display func.
  * @param $data array containing title,content
+ * @todo: add the same functionality for links we now use for metatags
  */
     function display(Array $data=array())
     {
         $data = parent::display($data);
         if (empty($data)) return;
-        
+
+        /** support for dynamic description and dynamic keywords is now
+         *  supplied by the xar:meta tag, and not hardcoded here. It is no longer
+         *  limited to use by the keywords and articles module, and can be utilised
+         *  by content authors directly within templates.
+         *
+         *  To add a description, overwriting any existing one, use
+         *  <xar:meta type="name" value="description" content="my description"/>
+         *  To append a description, eg adding to the default set in the meta block...
+         *  <xar:meta type="name" value="description" content="my description to append" append="true"/>
+         *  To add keywords, overwriting any existing ones
+         *  <xar:meta type="name" value="keywords" content="my, keywords, to, use"/>
+         *  To append keywords, eg adding to those already set in the meta block...
+         *  <xar:meta type="name" value="keywords" content="my, keywords, to, append" append="true"/>
+        **/
+
+        // By the time we get here, the stored metatags will already be queued
+        // So we just need to add any tags with dynamic values, in this case
+        // the equiv meta tag now sets text/html as content, but this is 
+        // determined by the page template, in our current setup compiled too 
+        // late to pull it in here, this is addressed in the tpl_order 
+        // scenario, no choice but to leave or delete, leaving it for now 
+        sys::import('modules.themes.class.xarmeta');
+        $xarmeta = xarMeta::getInstance();
+        $xarmeta->register(array(
+            'type' => 'http-equiv',
+            'value' => 'Content-Type',
+            'content' => 'text/html; charset=' . xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale()),
+            'lang' => '',
+            'dir' => '',
+            'scheme' => '',
+        ));
+        // while we're here, handle modules setting meta refresh via the cache
+        // NOTE: this functionality is deprecated, instead use the xar:meta tag, eg...
+        // <xar:meta type="http-equiv" value="refresh" content="3; URL=http://www.example.com"/>
+        if (xarVarIsCached('Meta.refresh','url') && xarVarIsCached('Meta.refresh','time')) {
+            $xarmeta->register(array(
+                'type' => 'http-equiv',
+                'value' => 'Refresh',
+                'content' => xarVarGetCached('Meta.refresh','time').'; URL='.xarVarGetCached('Meta.refresh','url'),
+                'lang' => '',
+                'dir' => '',
+                'scheme' => '',
+            ));
+        }
+       
         $meta = array();
-
-        // Description
-        $incomingdesc = xarVarGetCached('Blocks.articles', 'summary');
-
-        $data['usedk'] = isset($data['usedk']) ? $data['usedk'] : $this->usedk;
-        if (!empty($incomingdesc) and $data['usedk'] >= 1) {
-            // Strip -all- html
-            $htmlless = strip_tags($incomingdesc);
-            $meta['description'] = $htmlless;
-        } else {
-            $meta['description'] = isset($data['metadescription']) ? $data['metadescription'] : $this->metadescription;
-        }
-
-        // Dynamic Keywords
-        $incomingkey = xarVarGetCached('Blocks.articles', 'body');
-        $incomingkeys = xarVarGetCached('Blocks.keywords', 'keys');
-
-        if (!empty($incomingkey) and $data['usedk'] == 1) {
-            // Keywords generated from articles module
-            $meta['keywords'] = $incomingkey;
-        } elseif ((!empty($incomingkeys)) and ($data['usedk'] == 2)){
-            // Keywords generated from keywords module
-            $meta['keywords'] = $incomingkeys;
-        } elseif ((!empty($incomingkeys)) and ($data['usedk'] == 3)){
-            $meta['keywords'] = $incomingkeys.','.$incomingkey;
-        } else {
-            $meta['keywords'] = isset($data['metakeywords']) ? $data['metakeywords'] : $this->metakeywords;
-        }
-
-        // Character Set
-        $meta['charset'] = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
-        $meta['generator'] = xarConfigVars::get(null, 'System.Core.VersionId');
-        $meta['generator'] .= ' :: ';
-        $meta['generator'] .= xarConfigVars::get(null, 'System.Core.VersionNum');
-
-        // Geo Url
-        $meta['longitude'] = isset($data['longitude']) ? $data['longitude'] : $this->longitude;
-        $meta['latitude'] = isset($data['latitude']) ? $data['latitude'] : $this->latitude;
 
         // Active Page
         $meta['activepagerss'] = xarServer::getCurrentURL(array('theme' => 'rss'));
@@ -119,15 +125,102 @@ class Themes_MetaBlock extends BasicBlock
             $meta['authorpage'] = $meta['baseurl'];
         }
 
-        //Pager Buttons
-        $meta['refreshurl']     = xarVarGetCached('Meta.refresh','url');
-        $meta['refreshtime']    = xarVarGetCached('Meta.refresh','time');
+         //Pager Buttons
         $meta['first']          = xarVarGetCached('Pager.first','leftarrow');
         $meta['last']           = xarVarGetCached('Pager.last','rightarrow');
 
         $data['content'] = $meta;
         return $data;
 
+    }
+    
+    public function upgrade($oldversion)
+    {
+        switch ($oldversion) {
+            case '0.0.0':
+                // grab existing content
+                $data = $this->content;
+                // build metatags array from current settings
+                $metatags = array();
+                $metatags[] = array(
+                    'type' => 'name', 
+                    'value' => 'author', 
+                    'content' => xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY),
+                    'lang' => '',
+                    'dir' => '',
+                    'scheme' => '',
+                );                
+                $metatags[] = array(
+                    'type' => 'name', 
+                    'value' => 'description', 
+                    'content' => !empty($data['metadescription']) ? $data['metadescription'] : '',
+                    'lang' => '',
+                    'dir' => '',
+                    'scheme' => '',
+                );
+                $metatags[] = array(
+                    'type' => 'name',
+                    'value' => 'keywords',
+                    'content' => !empty($data['metakeywords']) ? $data['metakeywords'] : '',
+                    'lang' => '',
+                    'dir' => '',
+                    'scheme' => '',
+                );
+                $metatags[] = array(
+                    'type' => 'name',
+                    'value' => 'generator',
+                    'content' => xarConfigVars::get(null, 'System.Core.VersionId') . ' :: ' . xarConfigVars::get(null, 'System.Core.VersionNum'),
+                    'lang' => '',
+                    'dir' => '',
+                    'scheme' => '',
+                );
+                $metatags[] = array(
+                    'type' => 'name',
+                    'value' => 'rating',
+                    'content' => xarML('General'),
+                    'lang' => '',
+                    'dir' => '',
+                    'scheme' => '',
+                );
+                if (!empty($data['usegeo'])) {
+                    if (!empty($data['latitude']) && !empty($data['longitude']))
+                        $content = $data['latitude'] . ', ' . $data['longitude'];
+                    $metatags[] = array(
+                        'type' => 'name',
+                        'value' => 'ICBM',
+                        'content' => !empty($content) ? $content : '',
+                        'lang' => '',
+                        'dir' => '',
+                        'scheme' => '',
+                    );
+                    $metatags[] = array(
+                        'type' => 'name',
+                        'value' => 'DC.title',
+                        'content' => xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY),
+                        'lang' => '',
+                        'dir' => '',
+                        'scheme' => '',
+                    );
+                }
+                // unset deprecated property values
+                if (isset($data['metadescription'])) unset($data['metadescription']);
+                if (isset($data['metakeywords'])) unset($data['metakeywords']);
+                if (isset($data['usegeo'])) unset($data['usegeo']);
+                if (isset($data['latitude'])) unset($data['latitude']);
+                if (isset($data['longitude'])) unset($data['longitude']);
+                if (isset($data['usedk'])) unset($data['usedk']);
+                
+                $data['metatags'] = $this->metatags = $metatags;
+                // set the modvar to make tags available to xarMeta class early
+                xarModVars::set('themes','meta.tags', serialize($metatags));
+                // replace content with updated array 
+                $this->content = $data;
+
+            case '2.2.0':
+                // upgrades from 2.2.0 go here...            
+            break;
+        }
+        return true;
     }
 }
 ?>

@@ -75,7 +75,7 @@ function roles_user_display(Array $args=array())
                                        array('id' => $id));
         $data['hooks'] = xarModCallHooks('item', 'display', $id, $item);
 
-        xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
+        xarTpl::setPageTitle(xarVarPrepForDisplay($data['name']));
     } else {
         $data['id'] = $id;
         $data['uname'] = '';
@@ -85,7 +85,7 @@ function roles_user_display(Array $args=array())
     $data['itemtypename'] = $types[$itemtype]['label'];
     $data['layout'] = $args['layout'];
 
-    return xarTplModule($args['tplmodule'],'user','display',$data,$args['template']);
+    return xarTpl::module($args['tplmodule'],'user','display',$data,$args['template']);
 }
 
 ?>

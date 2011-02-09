@@ -18,28 +18,32 @@
     ]]>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Dynamic Data Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
-        <img src="#xarTplGetImage('dynamicdata.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
+    <div class="xar-mod-page-head">
+        <xar:var name="label">Official Icon</xar:var>
+        <xar:img scope="theme" file="dynamicdata.png" class="xar-module-icon" alt="$label"/>
         <h2>Overview</h2>
-        <ul class="xar-tabs xar-alt xar-norm-outline" style="clear:both">
-            <li id="tab-1">
+        <ul class="xar-tabs">
+            <li id="tab-1" class="xar-tab">
                 <a id="href-1" href="javascript:showtab(1,3)">
                     Overview
                 </a>
             </li>
-            <li id="tab-2">
+            <li id="tab-2" class="xar-tab">
                 <a id="href-2" href="javascript:showtab(2,3)">
                     How To
                 </a>
             </li>
-            <li id="tab-3">
+            <li id="tab-3" class="xar-tab">
                 <a id="href-3" href="javascript:showtab(3,3)">
                     Examples
                 </a>
             </li>
         </ul>
+    </div><!--xar-mod-page-head-->
+    <div class="xar-mod-page-body">
         <div id="page-1">
             <h3>What is it?</h3>
             <p>
@@ -432,7 +436,8 @@
             </table>
 
         </div>
-    </div>
+    </div><!--/xar-mod-page-body-->
+    </div><!--/xar-mod-body-->
     <script type="text/javascript">
         showtab (1,3)
     </script>

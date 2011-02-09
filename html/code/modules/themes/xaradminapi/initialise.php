@@ -30,24 +30,9 @@ function themes_adminapi_initialise(Array $args=array())
     if (!isset($themeInfo)) {
         throw new ThemeNotFoundException($regid,'Theme (regid: #(1) does not exist.');
     }
+    $themename = $themeInfo['name'];
+    $themeInfo = xarMod::getBaseInfo($themename, 'theme');
 
-    $xarinitfilename = xarConfigVars::get(null,'Site.BL.ThemesDirectory') . '/'. $themeInfo['directory']  . '/xartheme.php';
-    if (!file_exists($xarinitfilename)) {
-        throw new FileNotFounException($xarinitfilename);
-    }
-    include $xarinitfilename;
-
-//var_dump($themevars);exit;
-    if (!empty($themevars)) {
-        foreach($themevars as $var => $value){
-            $value['prime'] = 1;
-            if(!isset($value['name']) || !isset($value['value'])){
-                $msg = xarML('Malformed Theme Variable (#(1)).', $var);
-                throw new Exception($msg);
-            }
-            xarThemeSetVar($themeInfo['name'], $value['name'], $value['prime'], $value['value'], $value['description']);
-        }
-    }
     // Update state of theme
     $set = xarMod::apiFunc('themes', 'admin', 'setstate',
                         array('regid' => $regid,

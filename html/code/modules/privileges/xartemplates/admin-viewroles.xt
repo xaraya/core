@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:style scope="module" file="privtree"/>
-    <xar:javascript module="privileges" filename="xarTree.js"/>
+    <xar:javascript scope="module" module="privileges" filename="xarTree.js"/>
     <script type="javascript">
         <!--
         var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
@@ -26,58 +26,57 @@
     </script>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Privileges Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
-        <h2>Manage Privilege: #$pname#</h2>
-        <xar:if condition="count($parents) ne 0">
-            <div>
-                <ul class="xar-tabs xar-alt xar-norm-outline">
-                    <xar:var name="title">These are the privileges that contain #$pname# as a component</xar:var>
-                    <xar:var name="label">Used in</xar:var>
-                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
-                    <xar:set name="prevgroup">""</xar:set>
-                    <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
-                        <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                            <li class="xar-tab">
-                                <xar:var name="label">Show this privilege</xar:var>
-                                <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
-                                    #$parents[$i]['parentname']#
-                                </a>
-                            </li>
-                        </xar:if>
-                        <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
-                    </xar:for>
-                </ul>
-            </div>
-        </xar:if>
-        <div>
-            <ul class="xar-tabs xar-alt xar-norm-outline">
-                <xar:var name="title">Choose an action to perform on this privilege</xar:var>
-                <xar:var name="label">Manage privilege</xar:var>
-                <li class="xar-tabs-label" title="#$title#">#$label#</li>
-                <li class="xar-tab">
-                    <a href="#xarModURL('privileges','admin','displayprivilege',array('id'=>$id))#" class="xar-norm xar-norm-outline">
-                        Display
-                    </a>
-                </li>
-                <li class="xar-tab">
-                    <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$id))#" class="xar-norm xar-norm-outline">
-                        Modify
-                    </a>
-                </li>
-                <li class="xar-tab">
-                    <a href="#xarModURL('privileges','admin','deleteprivilege',array('id'=>$id))#" class="xar-norm xar-norm-outline">
-                        Delete
-                    </a>
-                </li>
-                <li class="xar-tab-active">
-                    <a href="#xarModURL('privileges','admin','viewroles',array('id'=>$id))#" class="xar-accent xar-accent-outline">
-                        Groups/Users
-                    </a>
-                </li>
-            </ul>
+    	<div class="xar-mod-page-head">
+	        <h2>Manage Privilege: #$pname#</h2>
+	        <xar:if condition="count($parents) ne 0">
+	                <ul class="xar-tabs xar-alt xar-norm-outline">
+	                    <xar:var name="title">These are the privileges that contain #$pname# as a component</xar:var>
+	                    <xar:var name="label">Used in</xar:var>
+	                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
+	                    <xar:set name="prevgroup">""</xar:set>
+	                    <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+	                        <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+	                            <li class="xar-tab">
+	                                <xar:var name="label">Show this privilege</xar:var>
+	                                <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
+	                                    #$parents[$i]['parentname']#
+	                                </a>
+	                            </li>
+	                        </xar:if>
+	                        <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
+	                    </xar:for>
+	                </ul>
+	        </xar:if>
+	            <ul class="xar-tabs xar-alt xar-norm-outline">
+	                <xar:var name="title">Choose an action to perform on this privilege</xar:var>
+	                <xar:var name="label">Manage privilege</xar:var>
+	                <li class="xar-tabs-label" title="#$title#">#$label#</li>
+	                <li class="xar-tab">
+	                    <a href="#xarModURL('privileges','admin','displayprivilege',array('id'=>$id))#">
+	                        Display
+	                    </a>
+	                </li>
+	                <li class="xar-tab">
+	                    <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$id))#">
+	                        Modify
+	                    </a>
+	                </li>
+	                <li class="xar-tab">
+	                    <a href="#xarModURL('privileges','admin','deleteprivilege',array('id'=>$id))#">
+	                        Delete
+	                    </a>
+	                </li>
+	                <li class="xar-tab-active">
+	                    <a href="#xarModURL('privileges','admin','viewroles',array('id'=>$id))#">
+	                        Groups/Users
+	                    </a>
+	                </li>
+	            </ul>
         </div>
+        <div class="xar-mod-page-body">
         <fieldset>
             <legend>Assignments</legend>
             <xar:if condition="count($roles) eq 0">
@@ -150,5 +149,6 @@
             </form>
             <xar:data-input type="privilegestree" show="$show"/>
         </fieldset>
+    </div>
     </div>
 </xar:template>

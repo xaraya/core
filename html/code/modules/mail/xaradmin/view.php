@@ -38,6 +38,6 @@ function OfferCreate($qDef = null)
     $data['qdef_method'] = 1;
     $data['qdef_create'] = array(array('id' => 1,'name' => xarML('Create new object with name')));
     $data['qdef_choose'] = array(array('id' => 2,'name' => xarML('Use an existing object')));
-    return xarTplModule('mail','admin','queue-newdef',$data);
+    return xarTpl::module('mail','admin','queue-newdef',$data);
 }
 ?>

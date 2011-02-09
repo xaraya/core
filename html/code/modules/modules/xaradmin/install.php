@@ -41,7 +41,7 @@ function modules_admin_install()
 
     // First check for a proper core version
     if (!$installer->checkCore($id)) 
-        return xarTplModule('modules','user','errors',array('layout' => 'invalid_core', 'modname' => xarMod::getName($id)));
+        return xarTpl::module('modules','user','errors',array('layout' => 'invalid_core', 'modname' => xarMod::getName($id)));
 
     //Next check the modules dependencies
     // TODO: investigate try/catch clause here, it's not trivial

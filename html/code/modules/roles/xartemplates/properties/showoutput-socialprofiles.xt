@@ -5,7 +5,7 @@
     <xar:foreach in="$value" key="$site" value="$profile">
         <xar:if condition="!empty($profile['_info_'])">
             <xar:set name="info">$profile['_info_']</xar:set>
-            <a href="#$info['link']#" title="#$info['site']#"><img src="#xarTplGetImage($info['icon'],'roles')#" alt="#$info['site']#" width="16" height="16" border="0"/></a>
+            <a href="#$info['link']#" title="#$info['site']#"><img src="#xarTpl::getImage($info['icon'],'module','roles')#" alt="#$info['site']#" class="xar-icon"/></a>
         </xar:if>
     </xar:foreach>
 </xar:template>

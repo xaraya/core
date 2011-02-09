@@ -6,7 +6,7 @@
     <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
         <head>
             <!-- prepare some other common local variables which may be used in the theme -->
-            <xar:set name="classicthemedir">#xarTplGetThemeDir()#</xar:set>
+            <xar:set name="classicthemedir">#xarTpl::getThemeDir()#</xar:set>
             <xar:set name="sitename"><xar:var scope="module" module="themes" name="SiteName"/></xar:set>
             <!-- Type of styleswitcher to use (if any). Supported values are 'none', 'javascript' or 'php' (not yet). -->
             <xar:set name="styleswitchertype">'javascript'</xar:set>

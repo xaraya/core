@@ -11,10 +11,10 @@
         <h2>
             Search #$object:label#&#160;
             <a href="#$viewlink#" title="View #$object:label#">
-                <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                <xar:img scope="theme" file="icons/item-list.png" class="xar-icon" alt="view"/>
             </a>&#160;
             <a href="#$searchlink#" title="Reset Search">
-                <img src="#xarTplGetImage('icons/view-refresh.png', 'base')#" width="16" height="16" alt="reset"/>
+                <xar:img scope="theme" file="icons/view-refresh.png" class="xar-icon" alt="reset"/>
             </a>
         </h2>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->

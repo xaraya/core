@@ -47,7 +47,7 @@ function dynamicdata_admin_access(Array $args=array())
     $data['template'] = $object->template;
     $data['itemid'] = $object->itemid;
     $data['label'] = $object->properties['label']->value;
-    xarTplSetPageTitle(xarML('Manage Access Rules for #(1)', $data['label']));
+    xarTpl::setPageTitle(xarML('Manage Access Rules for #(1)', $data['label']));
 
     // check security of the parent object ... or DD Admin as fail-safe here
     $tmpobject = DataObjectMaster::getObject(array('objectid' => $object->itemid));
@@ -93,7 +93,7 @@ function dynamicdata_admin_access(Array $args=array())
 
     if (!empty($confirm)) {
         if (!xarSecConfirmAuthKey()) {
-            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }
 
         // Get the access information from the template
@@ -240,9 +240,9 @@ function dynamicdata_admin_access(Array $args=array())
 
     if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access.xt') ||
         file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access-' . $data['template'] . '.xt')) {
-        return xarTplModule($data['tplmodule'],'admin','access',$data,$data['template']);
+        return xarTpl::module($data['tplmodule'],'admin','access',$data,$data['template']);
     } else {
-        return xarTplModule('dynamicdata','admin','access',$data,$data['template']);
+        return xarTpl::module('dynamicdata','admin','access',$data,$data['template']);
     }
 }
 
