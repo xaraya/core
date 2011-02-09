@@ -138,13 +138,14 @@ class BasicBlock extends ObjectDescriptor implements iBlock
                     if (!$this->upgrade($oldver)) {
                         // if upgrade method didn't return true, upgrade failed
                         throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to upgrade #(1) module block #(2) from version #(3) to version #(4)');
-                        // update to new version
-                        $this->content['xarversion'] = $newver;
-                    } elseif ($vercompare < 0) {
-                        // can't downgrade blocks
-                        throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to downgrade #(1) module block #(2) from version #(3) to version #(4)');
+
                     }
                 }
+                // upgrade complete, update to new version
+                $this->content['xarversion'] = $newver;                
+            } elseif ($vercompare < 0) {
+                // can't downgrade blocks
+                throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to downgrade #(1) module block #(2) from version #(3) to version #(4)');
             }
         }
 
