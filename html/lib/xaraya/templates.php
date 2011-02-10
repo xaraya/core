@@ -363,14 +363,9 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     // 3. Use 1. to link to 2.
     // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
     if (method_exists('xarModVars','Get')){
-        $var_dump = xarModVars::get('themes', 'variable_dump') && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'));
-        if ($var_dump == true){
-            if (function_exists('var_export')) {
-                $pre = var_export($tplData, true);
-                echo "<pre>$pre</pre>";
-            } else {
-                echo '<pre>',var_dump($tplData),'</pre>';
-            }
+        $variable_dump = xarModVars::get('themes', 'variable_dump') && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'));
+        if ($variable_dump == true){
+            echo '<pre>',var_dump($tplData),'</pre>';
         }
     }
 
