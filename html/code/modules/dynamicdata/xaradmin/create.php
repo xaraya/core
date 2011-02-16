@@ -43,13 +43,15 @@ function dynamicdata_admin_create($args)
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    // Security
-    if(!xarSecurityCheck('AddDynamicData')) return;
-
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid));
+
+    // Security (Bug: 
+    if (!$myobject->checkAccess('create'))
+        return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
+
     $isvalid = $myobject->checkInput();
 
     // recover any session var information
