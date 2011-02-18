@@ -59,8 +59,21 @@ class XarayaCompiler extends xarBLCompiler
             $baseURI = 'file://' . $baseDir;
         }
         $xslFiles = $this->getTagPaths($baseDir, $baseURI);
+        
+        // Get any custom tags in themes/common/tags
+        $baseDir = 'themes/common/tags';
+        $baseDir = realpath($baseDir);//die($baseDir);
+        if (strpos($baseDir, '\\') != false) {
+            // On Windows, drive letters are preceeded by an extra / [file:///C:/...]
+            $baseURI = 'file:///' . str_replace('\\','/',$baseDir);
+        } else {
+            $baseURI = 'file://' . $baseDir;
+        }
+        $xslFiles = array_merge($xslFiles,$this->getTagPaths($baseDir, $baseURI));
+        
         // Add the custom tags from modules
         $xslFiles = array_merge($xslFiles,$this->getModuleTagPaths());
+        var_dump($xslFiles);exit;
         return $xslFiles;
     }
 
