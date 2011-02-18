@@ -62,7 +62,7 @@ class XarayaCompiler extends xarBLCompiler
         
         // Get any custom tags in themes/common/tags
         $baseDir = 'themes/common/tags';
-        $baseDir = realpath($baseDir);//die($baseDir);
+        $baseDir = realpath($baseDir);
         if (strpos($baseDir, '\\') != false) {
             // On Windows, drive letters are preceeded by an extra / [file:///C:/...]
             $baseURI = 'file:///' . str_replace('\\','/',$baseDir);
@@ -73,7 +73,7 @@ class XarayaCompiler extends xarBLCompiler
         
         // Add the custom tags from modules
         $xslFiles = array_merge($xslFiles,$this->getModuleTagPaths());
-        var_dump($xslFiles);exit;
+
         return $xslFiles;
     }
 
