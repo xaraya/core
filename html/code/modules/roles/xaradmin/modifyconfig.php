@@ -197,11 +197,24 @@ function roles_admin_modifyconfig()
                         $itemid = $data['user_settings']->updateItem();
                     }
                     break;
+                case 'debugging':
+                    if (!xarVarFetch('debugadmins', 'str', $candidates, '', XARVAR_NOT_REQUIRED)) return;
+
+                    // Get the users to be shown the debug messages
+                    if (empty($candidates)) {
+                        $candidates = array();
+                    } else {
+                        $candidates = explode(',',$candidates);
+                    }
+                    $debugadmins = array();
+                    foreach ($candidates as $candidate) {
+                        $admin = xarMod::apiFunc('roles','user','get',array('uname' => trim($candidate)));
+                        if(!empty($admin)) $debugadmins[] = $admin['uname'];
+                    }
+                    xarModVars::set('roles', 'debugadmins', serialize($debugadmins));
+                break;
             }
-//            if (!xarVarFetch('allowinvisible', 'checkbox', $allowinvisible, false, XARVAR_NOT_REQUIRED)) return;
-            // Update module variables
-//            xarModVars::set('roles', 'allowinvisible', $allowinvisible);
-            xarResponse::redirect(xarModURL('roles','admin','modifyconfig',array('tab' => $data['tab'])));
+            xarController::redirect(xarModURL('roles','admin','modifyconfig',array('tab' => $data['tab'])));
             break;
     }
     return $data;

@@ -8,15 +8,4 @@
         <xar:set name="checked">xarModVars::get('dynamicdata', 'debugmode')</xar:set>
         <xar:data-input type="checkbox" name="debugmode"  checked="$checked"/>
     </div>
-    <xar:set name="users">
-        implode(',', array_keys(unserialize(xarModVars::get('dynamicdata', 'debugusers'))))
-    </xar:set>
-    <div class="xar-form-input-wrapper" style="padding-bottom: 10px;">
-        Enter a list of user names separated by commas. Incorrect user names  will be ignored.<br />
-        <xar:var name="label">These users can see the Query debug messages</xar:var>
-        <label for="debugusers" title="#$label#" class="xar-form-label">
-            Debug Mode Users:
-        </label>
-        <xar:data-input type="textarea" name="debugusers" value="$users"/>
-    </div>
 </xar:template>
