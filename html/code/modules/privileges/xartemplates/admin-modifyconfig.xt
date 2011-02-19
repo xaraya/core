@@ -309,53 +309,7 @@
             <form method="post" id="testerform" name="testerform" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Testing Settings</legend>
-                    <div>
-                        These settings let a designated tester see security check messages on a live site.
-                    </div>
-                    <br />
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Group containing the tester</xar:var>
-                        <label for="testergroup" title="#$label#" class="xar-form-label">
-                            Tester Group:
-                        </label>
-                        <select name="testergroup" id="testergroup" size="1" onchange="this.form.submit(testerform.phase.value='modify');">
-                            <xar:foreach in="$grouplist" key="$k" value="$testers">
-                                <xar:if condition="$grouplist[$k]['id'] eq $testergroup">
-                                    <option value="#$grouplist[$k]['id']#" selected="selected">
-                                    #$grouplist[$k]['name']#</option>
-                                <xar:else />
-                                    <option name="testgroup.#$grouplist[$k]#"
-                                    value="#$grouplist[$k]['id']#">#$grouplist[$k]['name']#</option>
-                                </xar:if>
-                            </xar:foreach>
-                        </select>
-                        <!--<xar:data-input type="grouplist" name="testergroup" is="testergroup" value="$testergroup" onchange="this.form.action=this.form.submit();"/>-->
-                        Group to select tester from
-                    </div>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Name of the administator that will see the messages</xar:var>
-                        <label for="tester" title="#$label#" class="xar-form-label">
-                            Tester:
-                        </label>
-                        <select name="tester" id="tester" size="1">
-                            <xar:foreach in="$testusers" key="$k" value="$testers">
-                                <xar:if condition="$testusers[$k]['id'] eq $tester">
-                                    <option value="#$testusers[$k]['id']#" selected="selected">
-                                    #$testusers[$k]['uname']#</option>
-                            <xar:else />
-                                    <option name="tester.#$testusers[$k]#"
-                                    value="#$testusers[$k]['id']#">
-                                    #$testusers[$k]['uname']#</option>
-                            </xar:if>
-                            </xar:foreach>
-                        </select>
-                        <!--<xar:data-input type="userlist" name="tester" id="4" value="$tester"/>-->
-                        <span class="xar-error">The current tester is 
-                        <strong>#xarUserGetVar('uname',$tester)#</strong>.</span>
-                    </div>
-                    <p class="xar-form-input-wrapper-after">
-                        They will see the security check messages.
-                    </p>
+                    The options activated below are visible to the debug administrators, which are defined <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">here</a>.
                     <div class="xar-form-input-wrapper">
                         <xar:var name="label">Non Deny checks only shows checks that do not involve DENYs</xar:var>
                         <label for="test" title="#$label#" class="xar-form-label">
