@@ -43,7 +43,6 @@ function dynamicdata_admin_modifyconfig()
             }
             if (!xarVarFetch('debugmode',    'checkbox', $debugmode, xarModVars::get('dynamicdata', 'debugmode'), XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('administrators', 'str', $administrators, '', XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('debugusers', 'str', $candidates, '', XARVAR_NOT_REQUIRED)) return;
 
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
@@ -61,19 +60,6 @@ function dynamicdata_admin_modifyconfig()
             }
             xarModVars::set('dynamicdata', 'administrators', serialize($validadmins));
             xarModVars::set('dynamicdata', 'debugmode', $debugmode);
-
-            // Get the users to be shown the debug messages
-            if (empty($candidates)) {
-                $candidates = array();
-            } else {
-                $candidates = explode(',',$candidates);
-            }
-            $newusers = array();
-            foreach ($candidates as $candidate) {
-                $user = xarMod::apiFunc('roles','user','get',array('uname' => trim($candidate)));
-                if(!empty($user)) $newusers[$user['uname']] = array('id' => $user['id']);
-            }
-            xarModVars::set('dynamicdata', 'debugusers', serialize($newusers));
             break;
     }
     return $data;

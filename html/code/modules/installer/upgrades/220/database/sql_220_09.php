@@ -26,7 +26,6 @@ function sql_220_09()
     } catch (Exception $e) {
         xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
         xarConfigVars::set(null, 'Site.BL.CompressWhitespace', 1);
-        xarConfigVars::set(null, 'Site.BL.Debug_User', xarModVars('roles','admin'));
     }
     
     // Add default values for logging if logging is not turned on

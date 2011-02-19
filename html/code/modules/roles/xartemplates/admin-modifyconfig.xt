@@ -80,6 +80,15 @@
                         Options</a>
                     </li>
                 </xar:if>
+                <xar:if condition="$tab eq 'debugging'">
+                    <li class="xar-tab-active">
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#" class="xar-accent xar-accent-outline">Debugging</a>
+                    </li>
+                <xar:else />
+                    <li class="xar-tab">
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#" class="xar-norm xar-norm-outline">Debugging</a>
+                    </li>
+                </xar:if>
             </ul>
         </div><!--/xar-mod-page-head-->
         <!--
@@ -307,6 +316,38 @@
                         <h4>More Settings</h4>
                         <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="default" fieldlist="$mylist"/>
                     -->
+                </fieldset>
+                <fieldset>
+                    <div class="xar-form-input-wrapper-after">
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="phase" id="phase" value="update"/>
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </fieldset>
+            </form>
+            <!--
+                - - - - - - - - - - - - - - - - - Begin Member List Options - - - - - - - - - - - - - - - - - - -
+            -->
+            <xar:elseif condition="$tab eq 'debugging'"/>
+            <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
+                <fieldset>
+                    <legend>
+                        Debug Administrators
+                    </legend>
+                    <xar:set name="debugadmins">
+                        implode(',',xarConfigVars::get(null, 'Site.User.DebugAdmins'))
+                    </xar:set>
+                    <div class="xar-form-input-wrapper" style="padding-bottom: 10px;">
+                        Debug administrtors will see exceptions and error messages when debug mode in a given module is activated.<br/>
+                        Enter a list of user names separated by commas. Incorrect user names  will be ignored.<br />
+                        <xar:var name="label">These users can see the Query debug messages</xar:var>
+                        <label for="debugadmins" title="#$label#" class="xar-form-label">
+                            Debug Mode Admins:
+                        </label>
+                        <xar:data-input type="textarea" name="debugadmins" value="$debugadmins"/>
+                    </div>
                 </fieldset>
                 <fieldset>
                     <div class="xar-form-input-wrapper-after">

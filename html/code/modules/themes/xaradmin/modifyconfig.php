@@ -122,8 +122,6 @@ function themes_admin_modifyconfig()
             }
             */
             
-            if (!xarVarFetch('themes_debug_user', 'int', $themes_debug_user, xarConfigVars::get(null, 'Site.BL.Debug_User'), XARVAR_NOT_REQUIRED)) return;
-
             sys::import('modules.dynamicdata.class.properties.master');
             $caches = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
             $caches->checkInput('bl_flushcaches');

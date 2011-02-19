@@ -368,20 +368,13 @@ class xarTpl extends Object
 
         //assert('!empty($sourceFileName); /* The source file for the template is empty in xarTpl::module */');
 
-        // Common data for BL
-        $tplData['_bl_module_name'] = $modName;
-        $tplData['_bl_module_type'] = $modType;
-        $tplData['_bl_module_func'] = $funcName;
-        $tpl = (object) null;
-        $tpl->pageTitle = self::getPageTitle();
-        $tplData['tpl'] = $tpl;
-
-        // TODO: make this work different, for example:
-        // 1. Only create a link somewhere on the page, when clicked opens a page with the variables on that page
-        // 2. Create a page in the themes module with an interface
-        // 3. Use 1. to link to 2.
-        if (method_exists('xarModVars','Get')){
-        $variable_dump = xarModVars::get('themes', 'variable_dump') && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'));
+    // TODO: make this work different, for example:
+    // 1. Only create a link somewhere on the page, when clicked opens a page with the variables on that page
+    // 2. Create a page in the themes module with an interface
+    // 3. Use 1. to link to 2.
+    // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
+    if (method_exists('xarModVars','Get')){
+        $variable_dump = xarModVars::get('themes', 'variable_dump') && (in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')));
         if ($variable_dump == true){
             echo '<pre>',var_dump($tplData),'</pre>';
         }
@@ -1038,22 +1031,13 @@ class xarTpl extends Object
         if(!isset($isHeaderContent))
             $isHeaderContent = false;
 
-        $finalTemplate ='';
-        try {
-            if(self::outputTemplateFilenames() && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'))) {
-                $outputStartComment = true;
-                if($isHeaderContent === false) {
-                    if($isHeaderContent = self::modifyHeaderContent($sourceFileName, $tplOutput))
-                        $outputStartComment = false;
-                }
-                // optionally show template filenames if start comment has not already
-                // been added as part of a header determination.
-                if($outputStartComment === true)
-                    $finalTemplate .= "<!-- start: " . $sourceFileName . " -->\n";
-                $finalTemplate .= $tplOutput;
-                $finalTemplate .= "<!-- end: " . $sourceFileName . " -->\n";
-            } else {
-                $finalTemplate .= $tplOutput;
+    $finalTemplate ='';
+    try {
+        if(xarTpl_outputTemplateFilenames() && (in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))) {
+            $outputStartComment = true;
+            if($isHeaderContent === false) {
+                if($isHeaderContent = xarTpl_modifyHeaderContent($sourceFileName, $tplOutput))
+                    $outputStartComment = false;
             }
         } catch (Exception $e) {
             $finalTemplate .= $tplOutput;
@@ -1067,18 +1051,20 @@ class xarTpl extends Object
  * @access public
  * @return int value of xarTpl::showPHPCommentBlockInTemplates (0 or 1)
  */
-    public static function outputPHPCommentBlockInTemplates()
-    {
-        try {
-            if (!isset(self::$showPHPCommentBlockInTemplates) && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'))) {
-                // Default to not show the comments
-                self::$showPHPCommentBlockInTemplates = 0;
-                // CHECKME: not sure if this is needed, e.g. during installation
-                if (method_exists('xarModVars','Get')){
-                    $showphpcbit = xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates');
-                    if (!empty($showphpcbit)) {
-                        self::$showPHPCommentBlockInTemplates = 1;
-                    }
+function xarTpl_outputPHPCommentBlockInTemplates()
+{
+    try {
+        // We need to make sure enough of the core is loaded to run this
+        $allowed = function_exists(xarUserGetVar);
+        if ($allowed && !isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates']) && (in_array($allowed,xarConfigVars::get(null, 'Site.User.DebugAdmins')))) {
+            // Default to not show the comments
+            $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
+            // CHECKME: not sure if this is needed, e.g. during installation
+            // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
+            if (method_exists('xarModVars','Get')){
+                $showphpcbit = xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates');
+                if (!empty($showphpcbit)) {
+                    $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 1;
                 }
             } else {
                 self::$showPHPCommentBlockInTemplates = 0;

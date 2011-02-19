@@ -121,6 +121,12 @@ function roles_init()
         throw $e;
     }
 
+    // --------------------------------------------------------
+    //
+    // Create some modvars
+    //
+    xarConfigVars::set(null, 'Site.User.DebugAdmins', array('admin'));
+
     //Database Initialisation successful
     return true;
 }
@@ -129,10 +135,6 @@ function roles_activate()
 {
     //TODO: this stuff is happening here because at install blocks is not yet installed
 
-    // --------------------------------------------------------
-    //
-    // Create some modvars
-    //
     //TODO: improve on this hardwiring
     xarModVars::set('roles', 'defaultauthmodule', 'authsystem');
     xarModVars::set('roles', 'defaultregmodule', '');
