@@ -87,7 +87,7 @@ Class xarBlock extends Object implements IxarBlock
             if (!empty($cacheKey)) {
                 xarBlockCache::setCached($cacheKey, '');
             }
-            if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+            if ((bool)xarModVars::get('blocks', 'noexceptions') || !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
                 return '';
             } else {
                 throw($e);
@@ -131,7 +131,7 @@ Class xarBlock extends Object implements IxarBlock
             if (!empty($cacheKey)) {
                 xarBlockCache::setCached($cacheKey, '');
             }
-            if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+            if ((bool)xarModVars::get('blocks', 'noexceptions') || !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
                 return '';
             } else {
                 throw ($e);
@@ -186,7 +186,7 @@ Class xarBlock extends Object implements IxarBlock
                 if (!empty($cacheKey)) {
                     xarBlockCache::setCached($cacheKey, '');
                 }
-                if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                if ((bool)xarModVars::get('blocks', 'noexceptions') || !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
                     return '';
                 } else {
                     throw ($e);
@@ -216,7 +216,7 @@ Class xarBlock extends Object implements IxarBlock
                 if (!empty($cacheKey)) {
                     xarBlockCache::setCached($cacheKey, '');
                 }
-                if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                if ((bool)xarModVars::get('blocks', 'noexceptions') || !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
                     return '';
                 } else {
                     throw ($e);
