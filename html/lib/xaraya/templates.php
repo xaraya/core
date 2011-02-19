@@ -929,7 +929,9 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
 function xarTpl_outputPHPCommentBlockInTemplates()
 {
     try {
-        if (!isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates']) && (in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))) {
+        // We need to make sure enough of the core is loaded to run this
+        $allowed = function_exists(xarUserGetVar);
+        if ($allowed && !isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates']) && (in_array($allowed,xarConfigVars::get(null, 'Site.User.DebugAdmins')))) {
             // Default to not show the comments
             $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
             // CHECKME: not sure if this is needed, e.g. during installation
