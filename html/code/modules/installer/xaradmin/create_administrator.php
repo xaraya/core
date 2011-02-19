@@ -75,7 +75,7 @@ function installer_admin_create_administrator()
     xarModVars::set('roles', 'adminpass', $data['admin']->properties['password']->password);
 
 // CHECKME: misc. undefined module variables
-    xarModVars::set('themes', 'var_dump', false);
+    xarModVars::set('themes', 'variable_dump', false);
     xarModVars::set('base', 'releasenumber', 10);
     xarModVars::set('base', 'AlternatePageTemplateName', '');
     xarModVars::set('base', 'UseAlternatePageTemplate', false);

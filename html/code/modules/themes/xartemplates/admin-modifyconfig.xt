@@ -225,7 +225,7 @@
                     <xar:data-input type="checkbox" name="showtemplates" checked="$checked"/>&#160;(filenames are shown as HTML comments)
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="var_dump" class="xar-form-label">                        
+                    <label for="variable_dump" class="xar-form-label">                        
                         Debug Templates by Showing Variables Available                        
                     </label>
                     <xar:set name="checked"><xar:var scope="module" module="themes" name="variable_dump"/></xar:set>
