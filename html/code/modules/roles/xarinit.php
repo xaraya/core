@@ -125,7 +125,7 @@ function roles_init()
     //
     // Create some modvars
     //
-    xarModVars::set('roles', 'debugadmins', serialize(array('admin')));
+    xarConfigVars::set(null, 'Site.User.DebugAdmins', array('admin'));
 
     //Database Initialisation successful
     return true;

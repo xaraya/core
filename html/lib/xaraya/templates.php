@@ -363,7 +363,7 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
     // 3. Use 1. to link to 2.
     // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
     if (method_exists('xarModVars','Get')){
-        $variable_dump = xarModVars::get('themes', 'variable_dump') && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'));
+        $variable_dump = xarModVars::get('themes', 'variable_dump') && (in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')));
         if ($variable_dump == true){
             echo '<pre>',var_dump($tplData),'</pre>';
         }
@@ -898,7 +898,7 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
 
     $finalTemplate ='';
     try {
-        if(xarTpl_outputTemplateFilenames() && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'))) {
+        if(xarTpl_outputTemplateFilenames() && (in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))) {
             $outputStartComment = true;
             if($isHeaderContent === false) {
                 if($isHeaderContent = xarTpl_modifyHeaderContent($sourceFileName, $tplOutput))
@@ -929,7 +929,7 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
 function xarTpl_outputPHPCommentBlockInTemplates()
 {
     try {
-        if (!isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates']) && (xarConfigVars::get(null, 'Site.BL.Debug_User') == xarSession::getVar('role_id'))) {
+        if (!isset($GLOBALS['xarTpl_showPHPCommentBlockInTemplates']) && (in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))) {
             // Default to not show the comments
             $GLOBALS['xarTpl_showPHPCommentBlockInTemplates'] = 0;
             // CHECKME: not sure if this is needed, e.g. during installation

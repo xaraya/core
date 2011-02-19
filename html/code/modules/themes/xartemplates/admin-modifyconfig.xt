@@ -163,14 +163,7 @@
             </fieldset>
             <fieldset>
                 <legend>Template Debugging options</legend>
-                <div class="xar-form-input-wrapper">
-                    <label for="themes_debug_user" class="xar-form-label">                        
-                        Debug user:                        
-                    </label>
-                    <xar:set name="value">xarConfigVars::get(null, 'Site.BL.Debug_User')</xar:set>
-                    <xar:data-input type="userlist" name="themes_debug_user" value="" group_list="Administrators"/>&#160;
-                    The options activated below are visible to this user, who must belong to the Administrators group
-                </div>
+                The options activated below are visible to the debug administrators, which are defined <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">here</a>.
                 <xar:if condition="xarConfigVars::get(null,'Site.BL.CacheTemplates')">
                     <div class="xar-form-input-wrapper">
                         <label for="showphpcbit" class="xar-form-label">                            

@@ -211,7 +211,7 @@ function roles_admin_modifyconfig()
                         $admin = xarMod::apiFunc('roles','user','get',array('uname' => trim($candidate)));
                         if(!empty($admin)) $debugadmins[] = $admin['uname'];
                     }
-                    xarModVars::set('roles', 'debugadmins', serialize($debugadmins));
+                    xarConfigVars::set(null, 'Site.User.DebugAdmins', $debugadmins);
                 break;
             }
             xarController::redirect(xarModURL('roles','admin','modifyconfig',array('tab' => $data['tab'])));

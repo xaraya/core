@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:set name="debugadmins">unserialize(xarModVars::get('roles', 'debugadmins'))</xar:set>
+    <xar:set name="debugadmins">xarConfigVars::get(null, 'Site.User.DebugAdmins')</xar:set>
     <xar:if condition="xarModVars::get('dynamicdata','debugmode') AND in_array(xarUserGetVar('uname'),$debugadmins)">
         <xar:set name="invalids">$object->getInvalids()</xar:set>
         <xar:if condition="!empty($invalids)">

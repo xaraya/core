@@ -336,7 +336,7 @@
                         Debug Administrators
                     </legend>
                     <xar:set name="debugadmins">
-                        implode(',',unserialize(xarModVars::get('roles', 'debugadmins')))
+                        implode(',',xarConfigVars::get(null, 'Site.User.DebugAdmins'))
                     </xar:set>
                     <div class="xar-form-input-wrapper" style="padding-bottom: 10px;">
                         Debug administrtors will see exceptions and error messages when debug mode in a given module is activated.<br/>
