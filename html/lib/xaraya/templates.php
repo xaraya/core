@@ -368,6 +368,15 @@ class xarTpl extends Object
 
         //assert('!empty($sourceFileName); /* The source file for the template is empty in xarTpl::module */');
 
+        // Common data for BL
+        $tplData['_bl_module_name'] = $modName;
+        $tplData['_bl_module_type'] = $modType;
+        $tplData['_bl_module_func'] = $funcName;
+        $tpl = (object) null;
+        $tpl->pageTitle = self::getPageTitle();
+        $tplData['tpl'] = $tpl;
+
+
     // TODO: make this work different, for example:
     // 1. Only create a link somewhere on the page, when clicked opens a page with the variables on that page
     // 2. Create a page in the themes module with an interface
@@ -687,8 +696,10 @@ class xarTpl extends Object
         if (empty($pageTemplate)) $pageTemplate = self::getPageTemplateName();
 
         // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
-        $pageTemplate = xarVarPrepForOS($pageTemplate);
+        $pageTemplate = xarVarPrepForOS($pageTemplate);        
         $sourceFileName = self::getThemeDir() . "/pages/$pageTemplate.xt";
+        if (!file_exists($sourceFileName))
+            $sourceFileName = self::getThemeDir('common') . "/pages/$pageTemplate.xt";
 
         $tpl = (object) null; // Create an object to hold the 'specials'
         $tpl->pageTitle = self::getPageTitle();
