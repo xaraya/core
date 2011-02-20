@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:set name="commonDir">xarTpl::getThemeDir('common')</xar:set>
     <style>
         .complete {
-            background-image: url(#sys::code()#modules/base/xarimages/icons/activate.png);
+            background-image: url(#$commonDir#/images/icons/activate.png);
             color: ##568A00;
         }
 
         .active {
-            background-image: url(#sys::code()#modules/base/xarimages/icons/initialize.png);
+            background-image: url(#$commonDir#/images/icons/initialize.png);
         }
 
         .greyed {
-            background-image: url(#sys::code()#modules/base/xarimages/icons/none.png);
+            background-image: url(#$commonDir#/images/icons/none.png);
             color: ##999999;
         }
     </style>
