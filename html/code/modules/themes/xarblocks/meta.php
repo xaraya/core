@@ -36,6 +36,15 @@ class Themes_MetaBlock extends BasicBlock
     // link data now stored as array as of 2.2.1
     public $linktags            = array();
 
+    public function __construct(Array $data=array())
+    {
+        if (empty($this->metatags))
+            $this->metatags = $this->default_metatags();
+        if (empty($this->linktags))
+            $this->linktags = $this->default_linktags();
+        parent::__construct($data);
+    }
+
 /**
  * Display func.
  * @param $data array containing title,content
@@ -293,6 +302,72 @@ class Themes_MetaBlock extends BasicBlock
         } 
 
         return $decoded_url;
+    }
+    
+    public function default_metatags()
+    {
+        // metatags array
+        $metatags = array();
+        $metatags[] = array(
+            'type' => 'name', 
+            'value' => 'author', 
+            'content' => xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY),
+            'lang' => '',
+            'dir' => '',
+            'scheme' => '',
+        );        
+        $metatags[] = array(
+            'type' => 'name', 
+            'value' => 'description', 
+            'content' => '',
+            'lang' => '',
+            'dir' => '',
+            'scheme' => '',
+        );
+        $metatags[] = array(
+            'type' => 'name',
+            'value' => 'keywords',
+            'content' => '',
+            'lang' => '',
+            'dir' => '',
+            'scheme' => '',
+        );
+        $metatags[] = array(
+            'type' => 'name',
+            'value' => 'generator',
+            'content' => xarConfigVars::get(null, 'System.Core.VersionId') . ' :: ' . xarConfigVars::get(null, 'System.Core.VersionNum'),
+            'lang' => '',
+            'dir' => '',
+            'scheme' => '',
+        );
+        $metatags[] = array(
+            'type' => 'name',
+            'value' => 'rating',
+            'content' => xarML('General'),
+            'lang' => '',
+            'dir' => '',
+            'scheme' => '',
+        );
+        return $metatags;
+    }
+    
+    public function default_linktags()
+    {
+        $linktags = array(
+            array('rel' => 'author', 'href' => '[baseurl]', 'title' => xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY), 'type' => 'text/html'),
+            array('rel' => 'copyright', 'href' => '', 'title' => '', 'type' => 'text/html'),
+            array('rel' => 'help', 'href' => '' , 'title' => '', 'type' => 'text/html'),
+            array('rel' => 'glossary', 'href' => '', 'title' => '', 'type' => 'text/html'),                            
+            array('rel' => 'pingback', 'href' => '[baseurl]ws.php', 'title' => '', 'type' => ''),
+            array('rel' => 'Top', 'href' => '[baseurl]', 'title' => '', 'type' => 'text/html'),
+            array('rel' => 'parent', 'href' => '[baseurl]', 'title' => '', 'type' => 'text/html'),            
+            array('rel' => 'contents', 'href' => '[articles:user:viewmap]', 'title' => '', 'type' => 'text/html'),
+            array('rel' => 'search', 'href' => '[search:user:main]', 'title' => '', 'type' => 'text/html'),
+            array('rel' => 'alternate', 'href' => '[currenturl]theme=rss', 'title' => 'RSS-feed', 'type' => 'application/rss+xml'),
+            array('rel' => 'service.feed', 'href' => '[currenturl]theme=atom', 'title' => 'Atom-feed', 'type' => 'application/atom+xml'),
+            array('rel' => 'alternate', 'href' => '[currenturl]theme=print', 'title' => 'Print', 'type' => 'text/html'),
+        );
+        return $linktags;   
     }
 }
 ?>
