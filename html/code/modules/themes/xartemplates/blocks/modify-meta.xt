@@ -63,25 +63,33 @@
             </div>
         </div>
     </div>
+
+    <div class="xar-form-input-wrapper">
+        <xar:var name="label">Xaraya can generate the proper links for your author (about) page as used by Mozilla and other popular browsers.</xar:var>
+        <label for="authorpage#$blockid#" title="#$label#" class="xar-form-label">
+            Author (about) Page:
+        </label>
+        <input type="text" name="authorpage" id="authorpage#$blockid#" value="#$authorpage#" maxlength="100" class="xar-form-textxxlong"/>
+    </div>
     <div class="xar-form-input-wrapper">
         <xar:var name="label">Xaraya can generate the proper links for your copyright page as used by Mozilla and other popular browsers.</xar:var>
         <label for="copyrightpage#$blockid#" title="#$label#" class="xar-form-label">
             Copyright Page:
         </label>
-        <input type="text" name="copyrightpage" id="copyrightpage#$blockid#" value="#$copyrightpage#" maxlength="100" class="xar-form-textlong"/>
+        <input type="text" name="copyrightpage" id="copyrightpage#$blockid#" value="#$copyrightpage#" maxlength="100" class="xar-form-textxxlong"/>
     </div>
     <div class="xar-form-input-wrapper">
         <xar:var name="label">Xaraya can generate the proper links for your help page as used by Mozilla and other popular browsers.</xar:var>
         <label for="helppage#$blockid#" title="#$label#" class="xar-form-label">
             Help Page:
         </label>
-        <input type="text" name="helppage" id="helppage#$blockid#" value="#$helppage#" maxlength="100" class="xar-form-textlong"/>
+        <input type="text" name="helppage" id="helppage#$blockid#" value="#$helppage#" maxlength="100" class="xar-form-textxxlong"/>
     </div>
     <div class="xar-form-input-wrapper">
         <xar:var name="label">Xaraya can generate the proper links for your glossary page as used by Mozilla and other popular browsers.</xar:var>
         <label for="glossary#$blockid#" title="#$label#" class="xar-form-label">
             Glossary:
         </label>
-        <input type="text" name="glossary" id="glossary#$blockid#" value="#$glossary#" maxlength="100" class="xar-form-textlong"/>
+        <input type="text" name="glossary" id="glossary#$blockid#" value="#$glossary#" maxlength="100" class="xar-form-textxxlong"/>
     </div>
 </xar:template>

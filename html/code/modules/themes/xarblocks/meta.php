@@ -39,6 +39,7 @@ class Themes_MetaBlock extends BasicBlock
     public $copyrightpage       = '';
     public $helppage            = '';
     public $glossary            = '';
+    public $authorpage          = '';
 
 /**
  * Display func.
@@ -111,6 +112,11 @@ class Themes_MetaBlock extends BasicBlock
             $meta['glossary'] = $data['glossary'];
         } else {
             $meta['glossary'] = '';
+        }
+        if (!empty($data['authorpage'])) {
+            $meta['authorpage'] = $data['authorpage'];
+        } else {
+            $meta['authorpage'] = $meta['baseurl'];
         }
 
         //Pager Buttons

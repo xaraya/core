@@ -25,9 +25,8 @@ function dynamicdata_userapi_getitemlinks(Array $args=array())
     extract($args);
 
     $itemlinks = array();
-    if (empty($itemtype)) {
-        $itemtype = null;
-    }
+    if (empty($itemtype)) $itemtype = null;
+    if (empty($itemids)) $itemids = null;
     $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     list($properties,$items) = xarMod::apiFunc('dynamicdata','user','getitemsforview',
                                                    // for items managed by DD itself only

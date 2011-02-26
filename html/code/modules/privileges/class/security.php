@@ -46,7 +46,6 @@ class xarSecurity extends Object
 
     // copy frequently-called module vars to static vars
     protected static $realmcomparison;
-    protected static $tester;
     protected static $test;
     protected static $testdeny;
     protected static $testmask;
@@ -84,7 +83,6 @@ class xarSecurity extends Object
         // CHECKME: do we need to be careful during installation here or not ?
         if (class_exists('xarModVars')) {
             self::$realmcomparison = xarModVars::get('privileges', 'realmcomparison');
-            self::$tester = xarModVars::get('privileges','tester');
             self::$test = xarModVars::get('privileges','test');
             self::$testdeny = xarModVars::get('privileges','testdeny');
             self::$testmask = xarModVars::get('privileges','testmask');
@@ -441,7 +439,7 @@ class xarSecurity extends Object
     */
     public static function testprivileges($mask,$privilegeset,$pass,$role='')
     {
-        $candebug = (xarSession::getVar('role_id') == self::$tester);
+        $candebug = in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'));
         $test = self::$test && $candebug;
         $testdeny = self::$testdeny && $candebug;
         $testmask = self::$testmask;

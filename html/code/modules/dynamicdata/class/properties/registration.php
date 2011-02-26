@@ -301,7 +301,9 @@ class PropertyRegistration extends DataContainer
                     try {
                         sys::import($dp);
                     } catch (Exception $e) {
-                        throw new Exception(xarML('The file #(1) could not be loaded', $dp . '.php'));
+                        $debugadmins = xarConfigVars::get(null, 'Site.User.DebugAdmins');
+                        if (xarModVars::get('dynamicdata','debugmode') && in_array(xarUserGetVar('uname'),$debugadmins))                       
+                            throw new Exception(xarML('The file #(1) could not be loaded', $dp . '.php'));
                     }
                     $loaded[$file] = true;
                 }

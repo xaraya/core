@@ -22,7 +22,7 @@ function blocks_admin_delete_instance()
     if (!xarVarFetch('confirm', 'str:1:', $confirm, '', XARVAR_NOT_REQUIRED)) {return;}
 
     // Security
-    if (empty($bid)) return xarResponse::notFound();
+    if (empty($bid)) return xarController::notFound();
     if (!xarSecurityCheck('ManageBlocks', 0, 'Instance')) {return;}
 
     // Get details on current block

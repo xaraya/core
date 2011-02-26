@@ -29,6 +29,18 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
     public function modify(Array $data=array())
     {
         $data = parent::modify($data);
+
+        if (!isset($data['metakeywords'])) $data['metakeywords'] = $this->metakeywords;
+        if (!isset($data['metadescription'])) $data['metadescription'] = $this->metadescription;
+        if (!isset($data['usegeo'])) $data['usegeo'] = $this->usegeo;
+        if (!isset($data['usedk'])) $data['usedk'] = $this->usedk;
+        if (!isset($data['longitude'])) $data['longitude'] = $this->longitude;
+        if (!isset($data['latitude'])) $data['latitude'] = $this->latitude;
+        if (!isset($data['copyrightpage'])) $data['copyrightpage'] = $this->copyrightpage;
+        if (!isset($data['helppage'])) $data['helppage'] = $this->helppage;
+        if (!isset($data['glossary'])) $data['glossary'] = $this->glossary;
+        if (empty($data['authorpage'])) $data['authorpage'] = xarServer::getBaseURL();
+
         $data['blockid'] = $data['bid'];
 
         return $data;
@@ -53,9 +65,10 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
         if (!xarVarFetch('copyrightpage',   'notempty', $vars['copyrightpage'],   $this->copyrightpage, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('helppage',        'notempty', $vars['helppage'],        $this->helppage, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('glossary',        'notempty', $vars['glossary'],        $this->glossary, XARVAR_NOT_REQUIRED)) return;
-
+        if (!xarVarFetch('authorpage', 'pre:trim:str:1:', $vars['authorpage'], $this->authorpage, XARVAR_NOT_REQUIRED)) return;
         // Merge the submitted block info content into the existing block info.
-        $data['content'] = $vars; //array_merge($blockinfo['content'], $vars);
+        $vars += $data['content'];
+        $data['content'] = $vars;
 
         return $data;
     }

@@ -121,19 +121,12 @@ function roles_init()
         throw $e;
     }
 
-    //Database Initialisation successful
-    return true;
-}
-
-function roles_activate()
-{
-    //TODO: this stuff is happening here because at install blocks is not yet installed
-
     // --------------------------------------------------------
     //
     // Create some modvars
     //
-    //TODO: improve on this hardwiring
+    xarConfigVars::set(null, 'Site.User.DebugAdmins', array('admin'));
+
     xarModVars::set('roles', 'defaultauthmodule', 'authsystem');
     xarModVars::set('roles', 'defaultregmodule', '');
     xarModVars::set('roles', 'rolesdisplay', 'tabbed');
@@ -151,7 +144,13 @@ function roles_activate()
     xarModVars::set('roles', 'allowexternalurl', false);
     xarModVars::set('roles', 'allowemail', false);
     xarModVars::set('roles', 'requirevalidation', true);
+    
+    //Database Initialisation successful
+    return true;
+}
 
+function roles_activate()
+{
     // --------------------------------------------------------
     // Register block types
     xarMod::apiFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'online'));

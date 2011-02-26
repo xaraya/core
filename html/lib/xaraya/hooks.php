@@ -382,6 +382,54 @@ class xarHooks extends xarEvents
         return $subjects;              
     }
 
+    // Get a list of hook modules (observers) attached (hooked) 
+    // to a specific module (subject) (+itemtype) event 
+    public static function getSubjectObservers($subject, $event, $itemtype=null)
+    {
+        if (empty($subject) || !is_string($subject))
+            throw new BadParameterException('subject', 'Invalid #(1) for xarHooks::getSubjectObservers()');
+        if (empty($event) || !is_string($event))
+            throw new BadParameterException('event', 'Invalid #(1) for xarHooks::getSubjectObservers()');
+        if (isset($itemtype) && !is_numeric($itemtype))
+            throw new BadParameterException('itemtype', 'Invalid #(1) for xarHooks::getSubjectObservers()');
+        
+        $subject_id = xarMod::getRegId($subject);
+        if (empty($subject_id)) return;
+        
+        // Get database info
+        $dbconn   = xarDB::getConn();
+        $xartable = xarDB::getTables();
+        $htable = $xartable['hooks'];
+        $etable = $xartable['eventsystem'];
+        $mtable = $xartable['modules'];
+        $query = "SELECT mo.name, eo.event, eo.scope
+                  FROM $htable h, $mtable mo, $etable eo
+                  WHERE h.subject = ?
+                  AND mo.regid = h.observer
+                  AND eo.module_id = h.observer
+                  AND eo.event = ?";
+        $bindvars = array($subject_id, $event);            
+        if (!empty($itemtype)) {
+            $query .= " AND ( h.itemtype = ? OR h.itemtype = ? )";
+            $bindvars[] = $itemtype;
+            $bindvars[] = 0;
+        } 
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars);
+        if (!$result) return;
+        
+        $observers = array();
+        while($result->next()) {
+            list($module, $event, $scope) = $result->fields;
+            $observers[] = array(
+                'module' => $module,
+                'event' => $event,
+                'scope' => $scope,
+            );
+        }
+        return $observers;                
+    }
+
 }
 
 /**
@@ -434,12 +482,7 @@ function xarModCallHooks($hookScope, $hookAction, $hookId, $extraInfo = NULL, $c
 function xarModGetHookList($callerModName, $hookScope, $hookAction, $callerItemType = '')
 {
     $event = ucfirst($hookScope) . ucfirst($hookAction);
-    $args = array(
-        'event' => $event,
-        'module' => $callerModName,
-        'itemtype' => $callerItemType,
-    );
-    return xarHooks::getObservers($args);
+    return xarHooks::getSubjectObservers($callerModName, $event, $callerItemType);
 }
 
 /**

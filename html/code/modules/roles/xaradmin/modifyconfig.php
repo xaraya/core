@@ -118,7 +118,7 @@ function roles_admin_modifyconfig()
             $data['user_settings'] = xarMod::apiFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => 0));
             $settings = explode(',',xarModVars::get('roles', 'duvsettings'));
             $required = array('usereditaccount', 'allowemail', 'requirevalidation', 'displayrolelist', 'searchbyemail');
-            $skiplist = array('userhome', 'primaryparent', 'passwordupdate', 'duvsettings', 'userlastlogin', 'emailformat');
+            $skiplist = array('userhome', 'primaryparent', 'passwordupdate', 'duvsettings', 'userlastlogin', 'emailformat', 'usertimezone');
             $homelist = array('allowuserhomeedit', 'allowexternalurl', 'loginredirect');
             if (!in_array('userhome', $settings)) {
                 $skiplist = array_merge($skiplist, $homelist);
@@ -197,11 +197,24 @@ function roles_admin_modifyconfig()
                         $itemid = $data['user_settings']->updateItem();
                     }
                     break;
+                case 'debugging':
+                    if (!xarVarFetch('debugadmins', 'str', $candidates, '', XARVAR_NOT_REQUIRED)) return;
+
+                    // Get the users to be shown the debug messages
+                    if (empty($candidates)) {
+                        $candidates = array();
+                    } else {
+                        $candidates = explode(',',$candidates);
+                    }
+                    $debugadmins = array();
+                    foreach ($candidates as $candidate) {
+                        $admin = xarMod::apiFunc('roles','user','get',array('uname' => trim($candidate)));
+                        if(!empty($admin)) $debugadmins[] = $admin['uname'];
+                    }
+                    xarConfigVars::set(null, 'Site.User.DebugAdmins', $debugadmins);
+                break;
             }
-//            if (!xarVarFetch('allowinvisible', 'checkbox', $allowinvisible, false, XARVAR_NOT_REQUIRED)) return;
-            // Update module variables
-//            xarModVars::set('roles', 'allowinvisible', $allowinvisible);
-            xarResponse::redirect(xarModURL('roles','admin','modifyconfig',array('tab' => $data['tab'])));
+            xarController::redirect(xarModURL('roles','admin','modifyconfig',array('tab' => $data['tab'])));
             break;
     }
     return $data;
