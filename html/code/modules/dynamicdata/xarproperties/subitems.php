@@ -67,6 +67,10 @@ class SubItemsProperty extends DataProperty
         $itemids = ('' == $itemids) ? array() : explode(',',$itemids);
         $previous_itemids = ('' == $previous_itemids) ? array() : explode(',',$previous_itemids);
 
+        if (empty($this->objectref)) throw new Exception(xarML('A subitem property must be part of an object'));
+        // Park the current values; they may not be the same as those in the DB
+        $fieldvalues = $this->objectref->getFieldValues();
+        // Now get hte values stored in the DB
         $this->objectref->getItem(array('itemid' => $this->objectref->itemid));
 
         // Calculate what rows require what actions
@@ -75,7 +79,6 @@ class SubItemsProperty extends DataProperty
         $this->todelete = array_diff($previous_itemids,$itemids);
 
         // Get the object we'll be working with
-        if (empty($this->objectref)) throw new Exception(xarML('A subitem property must be part of an object'));
         $data['object'] = $this->subitemsobject;
         
         // Get this propery's name
@@ -95,6 +98,8 @@ class SubItemsProperty extends DataProperty
         // Note these are storage, not display, values
             $this->itemsdata[$newprefix][$prefix] = $data['object']->getFieldValues(array(),1);
         }
+        // Bring the parked values back
+        $this->objectref->setFieldValues($fieldvalues);
         return $isvalid;
     }
 
@@ -110,9 +115,11 @@ class SubItemsProperty extends DataProperty
                 // Creation happens via UI submit, checkInput has run
                 $newprefix = array_shift($this->prefixarray);
             }
+
             // Only do this if we actually have any items to be created/updated (might just be a delete call)
             if (isset($this->itemsdata[$newprefix])) {
                 foreach ($this->itemsdata[$newprefix] as $itemdata) {
+                    $primary =& $this->subitemsobject->properties[$this->subitemsobject->primary];
                     $this->subitemsobject->setFieldValues($itemdata);
                     $primary =& $this->subitemsobject->properties[$this->subitemsobject->primary];
                     if (empty($primary->value)) {
@@ -261,6 +268,7 @@ class SubItemsProperty extends DataProperty
         return parent::showOutput($data);
     }
 
+    // FIXME: getitemsdata and setitemsdata should operate as opposites
     public function getItemsData()
     {
         $name = 'dd_'.$this->id;
