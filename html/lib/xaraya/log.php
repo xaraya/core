@@ -54,7 +54,7 @@ function xarLog_init(&$args)
 
     $GLOBALS['xarLog_loggers'] = array();
     
-    // Only log if logging is enabled
+    // Only log if logging is enabled and if the config.system file is presents
     try {
         if (!xarSystemVars::get(sys::CONFIG, 'Log.Enabled')) return true;
     } catch (Exception $e) {
