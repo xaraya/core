@@ -187,7 +187,7 @@ class SubItemsProperty extends DataProperty
         $data['object']->setFieldPrefix($newprefix);
         
         // Get the object's default values
-        foreach ($data['object']->properties as $name  => $property) $data['defaultfieldvalues'][$name] = $property->defaultvalue;
+        foreach ($data['object']->getProperties() as $name  => $property) $data['defaultfieldvalues'][$name] = $property->defaultvalue;
         $data['itemid'] = $this->_itemid;
 
         // Check for the items data:
