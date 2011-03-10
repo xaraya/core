@@ -200,6 +200,9 @@
                         <th colspan="2" style="text-align: center">Action</th>
                     </tr>
                     <xar:foreach in="$values" key="$itemid" value="$fields">
+                        <xar:if condition="!isset($users[$itemid])">
+                            <xar:continue />
+                        </xar:if>
                         <tr>
                             <xar:foreach in="$properties" key="$name">
                                 <td>

@@ -22,9 +22,9 @@
  */
 function dynamicdata_admin_updateprop()
 {
-    if(!xarVarFetch('objectid',          'isset', $objectid,          NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('objectid',          'isset', $objectid,          1, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('module_id',         'isset', $module_id,         NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype',          'int:1:', $itemtype,         0,    XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('itemtype',          'int:1:', $itemtype,         0, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',             'isset', $table,             NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_name',           'isset', $dd_name,           NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_label',          'isset', $dd_label,          NULL, XARVAR_DONT_SET)) {return;}
@@ -62,7 +62,7 @@ function dynamicdata_admin_updateprop()
             }
             sys::import('modules.dynamicdata.class.objects.master');
             $objectid = DataObjectMaster::createObject(
-                                      array('moduleid' => $modid,
+                                      array('moduleid' => $module_id,
                                             'itemtype' => $itemtype,
                                             'name' => $name,
                                             'label' => ucfirst($name)));
@@ -77,28 +77,20 @@ function dynamicdata_admin_updateprop()
     }
 
     $fields = xarMod::apiFunc('dynamicdata','user','getprop',
-                           array('moduleid' => $module_id,
+                           array('objectid' => $objectid,
+                                 'moduleid' => $module_id,
                                  'itemtype' => $itemtype,
                                  'allprops' => true));
 
-    // get possible data sources (with optional extra table)
-    $params = array();
-    if (!empty($table)) {
-        $params['table'] = $table;
-    }
-    $sources = DataStoreFactory::getDataSources($params);
-    if (empty($sources)) {
-        $sources = array();
-    }
-
     $isprimary = 0;
-
     $i = 0;
     // update old fields
     foreach ($fields as $name => $field) {
         $id = $field['id'];
         $i++;
         if (empty($dd_label[$id])) {
+            $property = DataPropertyMaster::getProperty(array('type' => $field['type']));
+            $res = $property->removeFromObject(array('object_id' => $objectid));
             // delete property (and corresponding data) in xaradminapi.php
             if (!xarMod::apiFunc('dynamicdata','admin','deleteprop',
                               array('id' => $id))) {
@@ -124,15 +116,8 @@ function dynamicdata_admin_updateprop()
                 $input_dd_status[$id] = DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
             }
             $dd_status[$id] = $display_dd_status[$id] + $input_dd_status[$id];
-            // check if we have a valid source
-            if (empty($dd_source[$id]) || !in_array($dd_source[$id], $sources) || $dd_source[$id] == $field['source']) {
-                // don't update the source
-                $dd_source[$id] = null;
-            }
             if (!xarMod::apiFunc('dynamicdata','admin','updateprop',
                               array('id' => $id,
-                              //      'module_id' => $module_id,
-                              //      'itemtype' => $itemtype,
                                     'name' => $dd_name[$id],
                                     'label' => $dd_label[$id],
                                     'type' => $dd_type[$id],
@@ -145,6 +130,14 @@ function dynamicdata_admin_updateprop()
             }
             if ($dd_type[$id] == 21) { // item id
                 $isprimary = 1;
+            }
+            
+            // If we changed the property type, run the appropriate methods
+            if ($field['type'] != $dd_type[$id]) {
+                $property = DataPropertyMaster::getProperty(array('type' => $field['type']));
+                $res = $property->removeFromObject(array('object_id' => $objectid));
+                $property = DataPropertyMaster::getProperty(array('type' => $dd_type[$id]));
+                $res = $property->addToObject(array('object_id' => $objectid));
             }
         }
     }
@@ -166,8 +159,8 @@ function dynamicdata_admin_updateprop()
                                 array('name' => $name,
                                       'label' => $dd_label[0],
                                       'objectid' => $objectid,
-//                                      'moduleid' => $module_id,
-//                                      'itemtype' => $itemtype,
+                                     // 'moduleid' => $module_id,
+                                     // 'itemtype' => $itemtype,
                                       'type' => $dd_type[0],
                                       'defaultvalue' => $dd_defaultvalue[0],
                                       'source' => $dd_source[0],
@@ -178,6 +171,8 @@ function dynamicdata_admin_updateprop()
         if ($dd_type[0] == 21) { // item id
             $isprimary = 1;
         }
+        $property = DataPropertyMaster::getProperty(array('type' => $dd_type[0]));
+        $res = $property->addToObject(array('object_id' => $objectid));
     }
 
     if ($isprimary) {
