@@ -21,15 +21,17 @@ sys::import('xaraya.structures.sequences.adapters.sequence_adapter');
 class Deque extends SequenceAdapter implements iDeque
 {
     // Push an item into the Deque, head or tail
-    public function push(&$item, $whichEnd) 
+    public function push($item, $whichEnd) 
     {
-        return parent::insert($item,$whichEnd);
+        $position = $this->__get($whichEnd);
+        return parent::insert($item,$position);
     }
 
     // Pop an item off the Deque, head or tail
     public function &pop($whichEnd)
     {
-        $item = parent::get($whichEnd);
+        $position = $this->__get($whichEnd);
+        $item = parent::get($position);
         if($item == null) return $item;
         parent::delete($whichEnd);
         return $item;

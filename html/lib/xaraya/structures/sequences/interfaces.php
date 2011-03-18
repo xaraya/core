@@ -41,7 +41,7 @@ interface iSequence
     // r (int)  size   : number of elements in the sequence
     // r (bool) empty  : is the sequence empty
     /* (mixed) item */public function &get($position);
-    /* (bool)  ok   */public function insert(&$item, $position);
+    /* (bool)  ok   */public function insert($item, $position);
     /* (bool)  ok   */public function delete($position);
     /* (bool)  ok   */public function clear();
 }
@@ -113,7 +113,7 @@ interface iDeque
 {
     // r (int)   size : number of elements in the deque
     // r (bool)  empty: is the deque empty
-    /*   (bool)  ok   */public function push(&$item, $whichEnd);
+    /*   (bool)  ok   */public function push($item, $whichEnd);
     /*   (mixed) item */public function &pop($whichEnd);
     /*   (bool)  ok   */public function clear();
 }
