@@ -10,6 +10,8 @@
  */
 /**
  * Base Variable Object Class
+ * Singleton object class which models a module|user|session variable
+ * turning it into a self contained, persistent self storing object 
  *
  * @author Chris Powis <crisp@xaraya.com>
 **/
@@ -24,7 +26,10 @@ abstract class xarVariableObject extends Object
     // classes overloading can supply their own additional properties...
     // the basic premise here is that the values of all public properties will be stored
 
-/*
+/**
+ * By its nature, this method is only called once during the lifetime of a 
+ * variable (subsequent runs are unserialized from a stored object)
+ * If used at all, it's usually to set initial defaults to property values
  * NOTE: unfortunately we can't ever set a private constructor :(
 **/
 /*
@@ -37,6 +42,10 @@ abstract class xarVariableObject extends Object
 
 /**
  * Get instance function
+ *
+ * Get an instance of the variable object
+ * This method will attempt to fetch a stored copy of the variable,
+ * falling back to creating a new object instance and storing it for susbequent use
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
@@ -63,12 +72,27 @@ abstract class xarVariableObject extends Object
             // Otherwise a new instance is created...
             if (empty(static::$instance) || !is_object(static::$instance)) {
                 $c = get_called_class();
-                // NOTE: this is the one and only time the __construct() method 
+                // NOTE: this is the one and only time the objects __construct() method 
                 // will be run unless the variable is deleted outside this class
                 static::$instance = new $c;
+                // user vars inherit from a parent mod var, if the user var
+                // isn't set we need to save the mod var first
+                if (static::$scope == 'user')
+                    static::$instance->save('module');
+                // save the object immediately to the specified variable 
+                static::$instance->save();
             }
         }
+        // session variables don't go out of scope, so we register
+        // a shutdown handler to call the class destructor
+        if (static::$scope == 'session') 
+            register_shutdown_function(array(static::$instance, '__destruct'));
         return static::$instance;       
+    }
+
+    public function getInfo()
+    {
+        return $this->getPublicProperties();
     }
 
 /**
@@ -76,7 +100,9 @@ abstract class xarVariableObject extends Object
  *
  * This method is called when the object goes out of scope, 
  * typically this will be when xaraya exits but can be forced
- * at any time by unsetting the object
+ * at any time by unsetting the object. 
+ * This method calls the save method which sets the variable defined
+ * by the static scope, variable and module properties
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
@@ -86,19 +112,45 @@ abstract class xarVariableObject extends Object
 **/        
     public function __destruct()
     {
+        // save the object 
+        $this->save();
+    }
+/**
+ * Save object
+ *
+ * Save a serialized copy of this object to the variable defined 
+ * by the static scope, variable and module properties
+ * NOTE: you should place any shutdown operations in the __sleep method,
+ * so they are still called should the object be serialized manually
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access public
+ * @params none
+ * @throws none
+ * @return void
+**/
+    public function save($scope=null)
+    {
+        if (!isset($scope))
+            $scope = static::$scope;
         // NOTE: the __sleep() method will be called when the object is serialized here
-        switch (static::$scope) {
+        switch ($scope) {
             case 'module':
-                xarModVars::set(static::$module, static::$variable, serialize($this));
+                xarModVars::set(static::$module, static::$variable, serialize(static::$instance));
             break;
             case 'user':
-                xarModUserVars::set(static::$module, static::$variable, serialize($this));
+                xarModUserVars::set(static::$module, static::$variable, serialize(static::$instance));
             break;
             case 'session':
-                xarSession::setVar(static::$variable, serialize($this));
+                xarSession::setVar(static::$variable, serialize(static::$instance));
             break;
-        }
+            default:
+                return false;
+            break;
+        }        
+        return true;
     }
+
 
 /** 
  * Object wakeup (unserialize)
@@ -120,9 +172,9 @@ abstract class xarVariableObject extends Object
 /** 
  * Object sleep (serialize)
  * 
- * this method gets called when the destructor serializes($this)
- * Classes extending this class can use it to perform 
- * any last minute operations before the object is stored
+ * this method gets called when the object is serialized (usually when saving)
+ * Classes extending this class can use it to perform any last minute
+ * operations before the object is serialized
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
@@ -132,12 +184,9 @@ abstract class xarVariableObject extends Object
 **/
     public function __sleep()
     {
-        // perform any actions before serialize (store) here...
-        
-        // get the names of all public properties...
-        $properties = array_keys($this->getPublicProperties());
-        // return the array of properties to serialize...
-        return $properties;
+        // perform any actions before serialize (save) here...
+        // return an array of property names to save
+        return array_keys($this->getPublicProperties());
     }
 
 /**
