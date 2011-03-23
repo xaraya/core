@@ -8,14 +8,70 @@
     xmlns:php="http://php.net/xsl" 
     exclude-result-prefixes="php xar">
 
-  <xsl:template match="xar:javascript">
-    <xsl:processing-instruction name="php">
-      <xsl:text>xarMod::apiFunc('themes','user','registerjs',</xsl:text>
-        <xsl:call-template name="atts2args">
-          <xsl:with-param name="nodeset" select="@*"/>
-        </xsl:call-template>
-      <xsl:text>);</xsl:text>
-    </xsl:processing-instruction>
-  </xsl:template>
+<xsl:template match="xar:javascript">
+  <!-- Make sure we have sensible values -->
+  <xsl:variable name="module">
+    <xsl:choose>
+      <xsl:when test="not(@module)">
+        <xsl:text>xarMod::getName()</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>'</xsl:text>
+        <xsl:value-of select="@module"/>
+        <xsl:text>'</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
+  <xsl:variable name="property">
+    <xsl:choose>
+      <xsl:when test="not(@property)">
+        <xsl:text>''</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>'</xsl:text>
+        <xsl:value-of select="@property"/>
+        <xsl:text>'</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="position">
+    <xsl:choose>
+      <xsl:when test="not(@position)">
+        <xsl:text>head</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@position"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
+  <xsl:processing-instruction name="php">
+    <xsl:text>&nl;</xsl:text>
+    <xsl:choose>
+      <xsl:when test="@code and @type">
+        <xsl:text>xarTplAddJavaScript('</xsl:text>
+        <xsl:value-of select="$position"/>
+        <xsl:text>','</xsl:text>
+        <xsl:value-of select="@type"/>
+        <xsl:text>',"</xsl:text>
+        <xsl:value-of select="@code"/>
+        <xsl:text>");&nl;</xsl:text>
+      </xsl:when>
+      <xsl:when test="string-length(@filename) &gt; 0">
+        <xsl:text>xarMod::apiFunc('base','javascript','modulefile',array('module'=&gt;</xsl:text>
+        <xsl:value-of select="$module"/>
+        <xsl:text>,'property'=&gt;</xsl:text>
+        <xsl:value-of select="$property"/>
+        <xsl:text>,'filename'=&gt;'</xsl:text>
+        <xsl:value-of select="@filename"/>
+        <xsl:text>','position'=&gt;'</xsl:text>
+        <xsl:value-of select="$position"/>
+        <xsl:text>')); </xsl:text>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:processing-instruction>
+</xsl:template>
 
 </xsl:stylesheet>

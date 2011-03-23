@@ -631,6 +631,60 @@
   </configurations>
   <configurations itemid="71">
     <id>71</id>
+    <name>initialization_update_behavior</name>
+    <description>When updating do we add or replace an existing item?</description>
+    <property_id>6</property_id>
+    <label>Update Behavior</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:83:"none,Do not affect parents;replace,Replace an existing parent;add,Add a new parent;";}</configuration>
+  </configurations>
+  <configurations itemid="72">
+    <id>72</id>
+    <name>initialization_basegroup</name>
+    <description>A reference to a parent group</description>
+    <property_id>45</property_id>
+    <label>Base Group</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:4:{s:14:"display_layout";s:7:"default";s:19:"validation_override";s:1:"1";s:30:"initialization_update_behavior";s:4:"none";s:24:"initialization_basegroup";s:1:"1";}</configuration>
+  </configurations>
+  <configurations itemid="73">
+    <id>73</id>
+    <name>initialization_display_name</name>
+    <description>Whether this field displays the name or username</description>
+    <property_id>6</property_id>
+    <label>Display Name</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:34:"uname,User Name;name,Display Name;";}</configuration>
+  </configurations>
+  <configurations itemid="74">
+    <id>74</id>
+    <name>display_numberformat</name>
+    <description>How is this field displayed</description>
+    <property_id>2</property_id>
+    <label>Number Format</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="75">
+    <id>75</id>
+    <name>display_dateformat</name>
+    <description>How is this date displayed</description>
+    <property_id>507</property_id>
+    <label>Date Format</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:5:{s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:9:"math_date";s:25:"initialization_store_prop";s:2:"id";s:27:"initialization_display_prop";s:4:"name";s:24:"initialization_firstline";s:16:"0,Current Locale";}</configuration>
+  </configurations>
+  <configurations itemid="76">
+    <id>76</id>
+    <name>display_columns_count</name>
+    <description>The number of columns for 2-Dimensional array property</description>
+    <property_id>15</property_id>
+    <label>Columns Count</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="77">
+    <id>71</id>
     <name>validation_email_confirm</name>
     <description>Show a second email field to be filled in</description>
     <property_id>14</property_id>
@@ -680,7 +734,13 @@
     <label>Hash Type</label>
     <description>The hash algorithm used for encrypting passwords</description>
     <property_id>2</property_id>
+  </configurations>
+  <configurations itemid="77">
+    <id>2319</id>
+    <name>validation_ignore_validations</name>
+    <label>Ignore validations</label>
+    <description>Override the validations set for this property</description>
+    <property_id>14</property_id>
     <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
-  </configurations>
-</items>
+  </configurations></items>
