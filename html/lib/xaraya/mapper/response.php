@@ -33,7 +33,7 @@ class xarResponse extends Object
      *
      *    if (something not found, e.g. item $id) {
      *        $msg = xarML("Sorry, item #(1) is not available right now", $id);
-     *        return xarResponse::NotFound($msg);
+     *        return xarController::$response->NotFound($msg);
      *    }
      *    ...
      *
