@@ -57,8 +57,6 @@ function roles_user_display($args)
             $object->tplmodule = $args['tplmodule'];   // roles/xartemplates/objects/
             $object->template = $args['template'];  // showdisplay-account.xt
             $object->layout = $args['layout'];
-            $fieldlist = 'name,uname,state,regdate';
-            $object->setFieldList($fieldlist);
             $object->getItem(array('itemid' => $id));
             $data['object'] = $object;
             $data['uname'] = $object->properties['uname']->getValue();
