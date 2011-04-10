@@ -19,7 +19,7 @@
  */
 $modversion['name']               = 'Privileges Adminstration';
 $modversion['id']                 = '1098';
-$modversion['version']            = '2.1.3';
+$modversion['version']            = '2.1.2';
 $modversion['displayname']        = xarML('Privileges');
 $modversion['description']        = 'Modify privileges security';
 $modversion['displaydescription'] = xarML('Modify privileges security');
