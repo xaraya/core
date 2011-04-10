@@ -10,17 +10,17 @@
  * @link http://xaraya.com/index.php/release/200.html
  */
 
-function main_upgrade_212()
+function main_upgrade_213()
 {
-    $data['upgrade']['message'] = xarML('The upgrade to version 2.1.2 was successfully completed');
+    $data['upgrade']['message'] = xarML('The upgrade to version 2.1.3 was successfully completed');
     $data['upgrade']['tasks'] = array();
     
     $upgrades = array(
-                        'sql_212_01', // Update core module version numbers
+                        'sql_213_01', // Update core module version numbers
                         
                     );
     foreach ($upgrades as $upgrade) {
-        if (!Upgrader::loadFile('upgrades/212/database/' . $upgrade . '.php')) {
+        if (!Upgrader::loadFile('upgrades/213/database/' . $upgrade . '.php')) {
             $data['upgrade']['tasks'][] = array(
                 'reply' => xarML('Failed!'),
                 'description' => Upgrader::$errormessage,

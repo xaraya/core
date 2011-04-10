@@ -20,7 +20,7 @@
 $modversion['name']               = 'Blocks Administration';
 $modversion['id']                 = '13';
 $modversion['displayname']        = xarML('Blocks');
-$modversion['version']            = '2.1.2';
+$modversion['version']            = '2.1.3';
 $modversion['description']        = 'Administration of block instances and groups';
 $modversion['displaydescription'] = xarML('Administration of block instances and groups');
 $modversion['credits']            = '';
