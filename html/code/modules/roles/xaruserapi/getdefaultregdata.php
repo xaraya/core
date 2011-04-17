@@ -3,16 +3,18 @@
  * Get the default registraton module and related data if it exists
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * getdefaultregdata  - get the default registration module data
  *
+ * @param array    $args array of optional parameters<br/>
  * @return array  defaultregmodname string, empty if no active registration module
  *                defaultregmodactive boolean, regmodule is active or not
  *

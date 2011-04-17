@@ -2,11 +2,12 @@
 /**
  * Hook function called to send mail
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 
@@ -14,10 +15,11 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * This is a hook function that is called to send mail when an item changes
  *
- * @param  $ 'modid' is the module that is sending mail.
- * @param  $ 'objectid' is the item changed.
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['modid'] is the module that is sending mail.<br/>
+ *        integer  $args['objectid'] is the item changed.
  */
-function mail_adminapi_hookmailchange($args)
+function mail_adminapi_hookmailchange(Array $args=array())
 {
     extract($args);
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!--  we need to see if type is admin or user here, since we don't know who called us anymore -->
-    <xar:set name="tmpreq">#xarRequest::getInfo()#</xar:set>
+    <xar:set name="tmpreq">#xarController::$request->getInfo()#</xar:set>
     <xar:if condition="empty($viewfunc)">
         <xar:set name="viewfunc">'view'</xar:set>
     </xar:if>

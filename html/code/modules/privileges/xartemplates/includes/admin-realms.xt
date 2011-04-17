@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:comment>Common Administration menu</xar:comment>
-    <xar:set name="request">xarRequest::getInfo()</xar:set>
+    <xar:set name="request">xarController::$request->getInfo()</xar:set>
     <xar:set name="activetab">#$request.2#</xar:set>
     <h2>Manage Realms</h2>
     <div>
@@ -18,7 +18,7 @@
                 <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             </xar:if>
             <li class="#$tabclass#">
-                <a href="&xar-modurl-privileges-admin-viewrealms;" class="#$linkclass#">View Realms</a>
+                <a href="#xarModURL('privileges','admin','viewrealms')#" class="#$linkclass#">View Realms</a>
             </li>
             <xar:if condition="$activetab eq 'newrealm'">
                 <xar:set name="tabclass">'xar-tab-active'</xar:set>
@@ -28,7 +28,7 @@
                 <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             </xar:if>
             <li class="#$tabclass#">
-                <a href="&xar-modurl-privileges-admin-newrealm;" class="#$linkclass#">Add Realm</a>
+                <a href="#xarModURL('privileges','admin','newrealm')#" class="#$linkclass#">Add Realm</a>
             </li>
         </ul>
     </div>

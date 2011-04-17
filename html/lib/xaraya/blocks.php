@@ -2,10 +2,14 @@
 /**
  * Display Blocks
  * *
- * @package blocks
+ * @package core
+ * @subpackage blocks
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Paul Rosania
  * @TODO:
  * - system-level flag to switch between reporting or ignoring errors
@@ -22,9 +26,9 @@ Class xarBlock extends Object implements IxarBlock
  * Initialize blocks subsystem
  *
  * @author Paul Rosania
- * @access protected
+ * 
  * @param  array args
- * @return bool
+ * @return boolean
  */
     public static function init(&$args)
     {
@@ -42,8 +46,9 @@ Class xarBlock extends Object implements IxarBlock
 /**
  * Renders a block instance
  *
- * @author Paul Rosania, Marco Canini <marco@xaraya.com>
- * @access protected
+ * @author Paul Rosania
+ * @author Marco Canini <marco@xaraya.com>
+ * 
  * @param  array data block information parameters
  * @return string output the block to show
  * @throws  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
@@ -82,7 +87,7 @@ Class xarBlock extends Object implements IxarBlock
             if (!empty($cacheKey)) {
                 xarBlockCache::setCached($cacheKey, '');
             }
-            if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+            if ((bool)xarModVars::get('blocks', 'noexceptions') || !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
                 return '';
             } else {
                 throw($e);
@@ -126,7 +131,7 @@ Class xarBlock extends Object implements IxarBlock
             if (!empty($cacheKey)) {
                 xarBlockCache::setCached($cacheKey, '');
             }
-            if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+            if ((bool)xarModVars::get('blocks', 'noexceptions') || !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
                 return '';
             } else {
                 throw ($e);
@@ -153,7 +158,7 @@ Class xarBlock extends Object implements IxarBlock
             $blockinfo['content']['_bl_block_id'] = $blockinfo['bid'];
             $blockinfo['content']['_bl_block_name'] = $blockinfo['name'];
             $blockinfo['content']['_bl_block_type'] = $blockinfo['type'];
-            if (!empty($blockinfo['groupid'])) {
+            if (isset($blockinfo['groupid'])) {
                 // The block may not be rendered as part of a group.
                 $blockinfo['content']['_bl_block_groupid'] = $blockinfo['groupid'];
                 $blockinfo['content']['_bl_block_group'] = $blockinfo['group'];
@@ -181,7 +186,7 @@ Class xarBlock extends Object implements IxarBlock
                 if (!empty($cacheKey)) {
                     xarBlockCache::setCached($cacheKey, '');
                 }
-                if ((bool)xarModVars::get('blocks', 'noexceptions')) {
+                if ((bool)xarModVars::get('blocks', 'noexceptions') || !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
                     return '';
                 } else {
                     throw ($e);
@@ -195,25 +200,29 @@ Class xarBlock extends Object implements IxarBlock
             }
             return "";
         }
-
-        // Now wrap the block up in a box.
-        // TODO: pass the group name into this function (param 2?) for the template path.
-        // $blockinfo itself is passed to the outer template
-        // Attempt to render this block template data.
-        try {
-            $boxOutput = xarTpl_renderBlockBox($blockinfo, $data['_bl_box_template']);
-        } catch (Exception $e) {
-            // Set the output of the block in cache
-            if (!empty($cacheKey)) {
-                xarBlockCache::setCached($cacheKey, '');
-            }
-            if ((bool)xarModVars::get('blocks', 'noexceptions')) {
-                return '';
-            } else {
-                throw ($e);
+        
+        if ($blockinfo['type'] == 'blockgroup') {
+            // Blockgroups don't have an outer template
+            $boxOutput = $blockinfo['content'];
+        } else {
+            // Now wrap the block up in a box.
+            // TODO: pass the group name into this function (param 2?) for the template path.
+            // $blockinfo itself is passed to the outer template
+            // Attempt to render this block template data.
+            try {
+                $boxOutput = xarTpl_renderBlockBox($blockinfo, $data['_bl_box_template']);
+            } catch (Exception $e) {
+                // Set the output of the block in cache
+                if (!empty($cacheKey)) {
+                    xarBlockCache::setCached($cacheKey, '');
+                }
+                if ((bool)xarModVars::get('blocks', 'noexceptions') || !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
+                    return '';
+                } else {
+                    throw ($e);
+                }
             }
         }
-
         xarLogMessage("xarBlock::render: end $data[module]:$data[type]:$data[name]");
 
         // Set the output of the block in cache
@@ -227,7 +236,7 @@ Class xarBlock extends Object implements IxarBlock
  * Renders a single block
  *
  * @author John Cox
- * @access protected
+ * 
  * @param  string args[instance] id or name of block instance to render
  * @param  string args[module] module that owns the block
  * @param  string args[type] module that owns the block
@@ -248,8 +257,9 @@ Class xarBlock extends Object implements IxarBlock
 /**
  * Renders a block group
  *
- * @author Paul Rosania, Marco Canini <marco@xaraya.com>
- * @access protected
+ * @author Paul Rosania
+ * @author Marco Canini <marco@xaraya.com>
+ * 
  * @param string groupname the name of the block group
  * @param string template optional template to apply to all blocks in the group
  * @return string
@@ -264,11 +274,10 @@ Class xarBlock extends Object implements IxarBlock
     /**
      * Check access for a specific action on block level (see also xarMod and xarObject)
      *
-     * @access public
      * @param block object the block we want to check access for
      * @param action string the action we want to take on this block (display/modify/delete)
      * @param roleid mixed override the current user or null
-     * @return bool true if access
+     * @return boolean true if access
      */
     static function checkAccess($block, $action, $roleid = null)
     {

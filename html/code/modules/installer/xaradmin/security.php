@@ -3,11 +3,12 @@
  * Installer
  *
  * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage installer module
  * @link http://xaraya.com/index.php/release/200.html
  */
 
@@ -15,6 +16,7 @@
  * This assumes the install.php and index.php are in the same directory.
  * @author Paul Rosania
  * @author Marcel van der Boom <marcel@hsdev.com>
+ * @return array data for the template display
  */
 
 function installer_admin_security()

@@ -1,22 +1,24 @@
 <?php
 /**
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage modules
+ * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * Remove a module
  *
  * @author Xaraya Development Team
- * @param $args['regid'] the id of the module
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the id of the module
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function modules_adminapi_remove($args)
+function modules_adminapi_remove(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);
@@ -72,11 +74,6 @@ function modules_adminapi_remove($args)
         // extra parameter telling xarModCallHooks for *which* module we're
         // calling hooks here)
         xarModCallHooks('module','remove',$modinfo['name'],'',$modinfo['name']);
-
-        // Delete any hooks assigned for that module, or by that module
-        $query = "DELETE FROM $tables[hooks] WHERE s_module_id = ? OR t_module_id = ?";
-        $bindvars = array($modinfo['systemid'],$modinfo['systemid']);
-        $dbconn->Execute($query,$bindvars);
 
         //
         // Delete block details for this module.

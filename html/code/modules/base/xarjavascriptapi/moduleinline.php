@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 
@@ -19,10 +20,9 @@
  * @param $args['position'] position on the page; generally 'head' or 'body'
  * @param $args['code'] the JavaScript code fragment
  * @param $args['index'] optional index in the JS array; unique identifier
- * @returns true=success; null=fail
- * @return boolean
+ * @return boolean true=success; null=fail
  */
-function base_javascriptapi_moduleinline($args)
+function base_javascriptapi_moduleinline(Array $args=array())
 {
     extract($args);
 

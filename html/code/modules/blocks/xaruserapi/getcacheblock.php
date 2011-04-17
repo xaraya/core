@@ -3,15 +3,20 @@
  * Retrieve a cache block instance
  *
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
+ *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
 */
-function blocks_userapi_getcacheblock($args)
+/**
+ * @param array    $args array of optional parameters<br/>
+*/
+function blocks_userapi_getcacheblock(Array $args=array())
 {
     extract($args);
 

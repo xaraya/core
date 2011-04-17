@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 
@@ -18,11 +19,10 @@
  * @param $args['moduleid'] module ID (deprecated)
  * @param $args['modid'] module ID
  * @param $args['filename'] file name
- * @returns the virtual pathname for the JS file; an empty value if not found
- * @return sring
+ * @return string|void the virtual pathname for the JS file; an empty value if not found
  * @checkme: the default module should be the current *template* module, not the *request* module?
  */
-function base_javascriptapi__findfile($args)
+function base_javascriptapi__findfile(Array $args=array())
 {
     extract($args);
 
@@ -41,7 +41,7 @@ function base_javascriptapi__findfile($args)
 
     // Use the current module if none supplied.
     if (empty($module) && empty($modid)) {
-        list($module) = xarRequest::getInfo();
+        list($module) = xarController::$request->getInfo();
     }
 
     // Get the module ID from the module name.

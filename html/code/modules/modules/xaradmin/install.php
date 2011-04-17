@@ -3,11 +3,12 @@
  * Installs a module
  *
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Module System
  * @link http://xaraya.com/index.php/release/1.html
  */
 /**
@@ -21,8 +22,7 @@
  * <andyv implementation of JC's request> attempt to activate module immediately after it's inited
  *
  * @param id the module id to initialise
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 sys::import('modules.modules.class.installer');
 
@@ -103,8 +103,7 @@ function modules_admin_install()
         xarOutputFlushCached('base-block');
     }
 
-    xarResponse::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
-
+    xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
     return true;
 }
 

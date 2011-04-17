@@ -102,6 +102,20 @@
                 </label>
                 #$moddependencies#
             </div>
+            <div class="xar-form-input-wrapper">
+                <label class="xar-form-label">
+                    Hook Observers
+                </label>
+                <xar:if condition="!empty($hookobservers)">
+                    <ul class="xar-form-container-after">                    
+                        <xar:foreach in="$hookobservers" key="$event" value="$info">
+                            <li>#$event#</li>
+                        </xar:foreach>
+                    </ul>
+                <xar:else/>
+                    None
+                </xar:if>
+            </div>
         </fieldset>
         <fieldset>
             <xar:var name="label">Go Back</xar:var>

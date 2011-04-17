@@ -1,13 +1,16 @@
 <?php
 /**
- * Dynamic Data Initialization
+ * Configuration information for the Dynamicdata module
+ *
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 
@@ -17,10 +20,11 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
+ 
 $modversion['name']               = 'Dynamic Data';
 $modversion['id']                 = '182';
 $modversion['displayname']        = xarML('Dynamic Data');
-$modversion['version']            = '2.1.3';
+$modversion['version']            = '2.2.0';
 $modversion['description']        = 'Dynamic Data Module';
 $modversion['displaydescription'] = xarML('Dynamic Data Module');
 $modversion['credits']            = 'xardocs/credits.txt';

@@ -3,11 +3,12 @@
  * Dynamic data initialization
  *
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  */
 sys::import('xaraya.tableddl');
@@ -442,7 +443,6 @@ function dynamicdata_init()
     xarModVars::set('dynamicdata', 'use_module_alias',0);
     xarModVars::set('dynamicdata', 'module_alias_name','Query');
     xarModVars::set('dynamicdata', 'debugmode', 0);
-    xarModVars::set('dynamicdata', 'debugusers', serialize(array()));
     xarModVars::set('dynamicdata', 'administrators', serialize(array()));
     xarModVars::set('dynamicdata', 'getlinkedobjects', 0);
 
@@ -561,10 +561,6 @@ function dynamicdata_upgrade($oldversion)
 
             // fall through to next upgrade
 
-        case '2.0.1':
-
-            // fall through to next upgrade
-
         default:
             break;
     }
@@ -575,7 +571,7 @@ function dynamicdata_upgrade($oldversion)
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function dynamicdata_delete()
 {
@@ -657,7 +653,8 @@ function dynamicdata_createPropDefTable()
         'modid'  => array(
             'type'        => 'integer',
             'unsigned'    => true,
-            'null'        => false
+            'null'        => false,
+            'default'     => '0'
         ),
         /* the default args for this property -- serialized array */
         'args'    => array(

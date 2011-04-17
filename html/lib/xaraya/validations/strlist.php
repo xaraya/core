@@ -1,5 +1,14 @@
 <?php
 /**
+ * @package core
+ * @subpackage validation
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+/**
  * list:{sep}:...
  * Split the string into separate items using 'sep' as an item
  * separator, then validate each individually.
@@ -12,7 +21,6 @@
  * any required validation type.
  *
  *
- * @package validation
  * @copyright see the html/credits.html file in this release
 **/
 

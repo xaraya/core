@@ -1,21 +1,23 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Modules module
+ * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * Update the module version in the database
  *
  * @author Xaraya Development Team
- * @param $args['regId'] the id number of the module to update
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regId'] the id number of the module to update
+ * @return boolean true on success, false on failure
  */
-function modules_adminapi_updateversion($args)
+function modules_adminapi_updateversion(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);

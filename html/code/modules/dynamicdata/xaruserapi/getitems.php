@@ -2,12 +2,14 @@
 /**
  * Get all dynamic data fields for a list of items
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -15,25 +17,26 @@
  * (identified by module + item type or table, and item ids or other search criteria)
  *
  * @author the DynamicData module development team
- * @param string $args['module'] module name of the item fields to get, or
- * @param int $args['module_id'] module id of the item fields to get +
- * @param int $args['itemtype'] item type of the item fields to get, or
- * @param $args['table'] database table to turn into an object
- * @param array $args['itemids'] array of item ids to return
- * @param array $args['fieldlist'] array of field labels to retrieve (default is all)
- * @param $args['status'] limit to property fields of a certain status (e.g. active)
- * @param $args['join'] join a module table to the dynamic object (if it extends the table)
- * @param $args['table'] make some database table available via DD (without pre-defined object)
- * @param int $args['catid'] select in some category
- * @param string $args['sort'] sort field(s)
- * @param int $args['numitems'] number of items to retrieve
- * @param int $args['startnum'] start number
- * @param $args['where'] WHERE clause to be used as part of the selection
- * @param bool $args['getobject'] flag indicating if you want to get the whole object back
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['module'] module name of the item fields to get, or<br/>
+ *        integer  $args['module_id'] module id of the item fields to get +<br/>
+ *        integer  $args['itemtype'] item type of the item fields to get, or<br/>
+ *        string   $args['table'] database table to turn into an object<br/>
+ *        array    $args['itemids'] array of item ids to return<br/>
+ *        array    $args['fieldlist'] array of field labels to retrieve (default is all)<br/>
+ *        integer  $args['status'] limit to property fields of a certain status (e.g. active)<br/>
+ *        string   $args['join'] join a module table to the dynamic object (if it extends the table)<br/>
+ *        string   $args['table'] make some database table available via DD (without pre-defined object)<br/>
+ *        integer  $args['catid'] select in some category<br/>
+ *        string   $args['sort'] sort field(s)<br/>
+ *        integer  $args['numitems'] number of items to retrieve<br/>
+ *        integer  $args['startnum'] start number<br/>
+ *        string   $args['where'] WHERE clause to be used as part of the selection<br/>
+ *        boolean  $args['getobject'] flag indicating if you want to get the whole object back
  * @return array of (itemid => array of (name => value)), or false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function &dynamicdata_userapi_getitems($args)
+function &dynamicdata_userapi_getitems(Array $args=array())
 {
     extract($args);
     $nullreturn = null;

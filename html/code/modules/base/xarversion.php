@@ -1,27 +1,31 @@
 <?php
 /**
- * Base Module Initialisation
+ * Configuration information for the Base module
  *
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
+ *
  * @author John Robeson
  * @author Greg Allan
 */
+
 /* WARNING
  * Modification of this file is not supported.
  * Any modification is at your own risk and
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
+ 
 $modversion['name']               = 'Base';
 $modversion['id']                 = '68';
 $modversion['displayname']        = xarML('Base');
-$modversion['version']            = '2.1.3';
+$modversion['version']            = '2.2.0';
 $modversion['description']        = 'Home Page';
 $modversion['displaydescription'] = xarML('Home Page');
 $modversion['credits']            = 'xardocs/credits.txt';

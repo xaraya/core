@@ -5,6 +5,7 @@ ul.xar-tabs {
     border-style: solid;
     padding: 0 .5em !important;
     margin: 1em 0 !important;
+    zoom: 1;                    /* fix for IE */
 }
 ul.xar-tabs li.xar-tabs-label {
     list-style: none !important;

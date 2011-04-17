@@ -1,14 +1,24 @@
 <?php
 /**
+ * Modify the configuration settings of this module
+ *
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  */
 
+/**
+ * Modify the configuration settings of this module
+ *
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ *
+ * @return mixed data array for the template display or output display string if invalid data submitted
+ */
 function dynamicdata_admin_modifyconfig()
 {
     // Security
@@ -33,11 +43,10 @@ function dynamicdata_admin_modifyconfig()
             }
             if (!xarVarFetch('debugmode',    'checkbox', $debugmode, xarModVars::get('dynamicdata', 'debugmode'), XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('administrators', 'str', $administrators, '', XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('debugusers', 'str', $candidates, '', XARVAR_NOT_REQUIRED)) return;
 
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
-                return xarTplModule('dynamicdata','admin','view_propertydefs', $data);
+                return xarTplModule('dynamicdata','admin','modifyconfig', $data);
             } else {
                 $itemid = $data['module_settings']->updateItem();
             }
@@ -51,19 +60,6 @@ function dynamicdata_admin_modifyconfig()
             }
             xarModVars::set('dynamicdata', 'administrators', serialize($validadmins));
             xarModVars::set('dynamicdata', 'debugmode', $debugmode);
-
-            // Get the users to be shown the debug messages
-            if (empty($candidates)) {
-                $candidates = array();
-            } else {
-                $candidates = explode(',',$candidates);
-            }
-            $newusers = array();
-            foreach ($candidates as $candidate) {
-                $user = xarMod::apiFunc('roles','user','get',array('uname' => trim($candidate)));
-                if(!empty($user)) $newusers[$user['uname']] = array('id' => $user['id']);
-            }
-            xarModVars::set('dynamicdata', 'debugusers', serialize($newusers));
             break;
     }
     return $data;

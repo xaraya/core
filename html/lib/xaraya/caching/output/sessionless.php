@@ -3,10 +3,13 @@
  * Session-less page caching for first-time visitors
  * 
  * @package core
- * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.com
  * @subpackage caching
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
  * @author mikespub
  * @author jsb
 **/
@@ -16,9 +19,8 @@ class xarSessionLessCache extends Object
     /**
      * Check if this page is suitable for session-less page caching
      *
-     * @access public
-     * @returns bool
-     * @return true if the page is suitable for session-less caching, false if not
+     * 
+     * @return boolean true if the page is suitable for session-less caching, false if not
      */
     public static function checkCachingRules()
     {
@@ -42,8 +44,7 @@ class xarSessionLessCache extends Object
     /**
      * Check session-less page caching
      *
-     * @returns none
-     * @return exit if session-less page caching finds a hit
+     * @return none exit if session-less page caching finds a hit
      */
     public static function isCached($sessionLessList = null, $autoCachePeriod = 0)
     {

@@ -1,10 +1,27 @@
 <?php
+/**
+ * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/200.html
+ */
+
+/**
+ * @return array data for the template display
+ */
 function installer_admin_upgrade()
-{    
+{
+    // Security
+    //if (!xarSecurityCheck('AdminInstaller')) return; 
+    
     if(!xarVarFetch('phase','int', $data['phase'], 1, XARVAR_DONT_SET)) {return;}
 
     // Version information
-    $fileversion = XARCORE_VERSION_NUM;
+    $fileversion = xarCore::VERSION_NUM;
     $dbversion = xarConfigVars::get(null, 'System.Core.VersionNum');
     sys::import('xaraya.version');
     
@@ -17,6 +34,8 @@ function installer_admin_upgrade()
         $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);
         $data['upgradable'] = xarVersion::compare($fileversion, '2.0.0') > 0;
     }
+    
+    // @checkme <chris/> what are these for?
     // Core modules
     $data['coremodules'] = array(
                                 42    => 'authsystem',
@@ -34,28 +53,36 @@ function installer_admin_upgrade()
                                 '2.1.1',
                                 '2.1.2',
                                 '2.1.3',
+                                '2.2.0',
     );
     
+        
     if ($data['phase'] == 1) {
         $data['active_step'] = 1;
 
     } elseif ($data['phase'] == 2) {
         $data['active_step'] = 2;
-
         // Get the list of version upgrades
         Upgrader::loadFile('upgrades/upgrade_list.php');
         $upgrade_list = installer_adminapi_get_upgrade_list();
 
         // Run the upgrades
-        foreach ($upgrade_list as $upgrade_version) {
-            if (!Upgrader::loadFile('upgrades/' . $upgrade_version .'/main.php')) {
-                $data['upgrade']['errormessage'] = Upgrader::$errormessage;
-                return $data;
+        $upgrades = array();
+        foreach ($upgrade_list as $abbr_version => $upgrade_version) {
+            // only run upgrades from dbversion onwards
+            if (xarVersion::compare($upgrade_version, $dbversion) <= 0) continue;
+            if (!Upgrader::loadFile('upgrades/' . $abbr_version .'/main.php')) {
+                $upgrades[$upgrade_version]['message'] = xarML('There are no upgrades for version #(1)', $upgrade_version);
+                $upgrades[$upgrade_version]['tasks'] = array();
+                //return $data;
+            } else {
+                $upgrade_function = 'main_upgrade_' . $abbr_version;
+                $result = $upgrade_function();
+                $upgrades[$upgrade_version] = $result['upgrade'];
             }
-            $upgrade_function = 'main_upgrade_' . $upgrade_version;
-            $data = array_merge($data,$upgrade_function());
         }
-        
+        $data['upgrades'] =& $upgrades;
+
     } elseif ($data['phase'] == 3) {
         // Security
         if (!xarSecurityCheck('AdminInstaller')) return; 
@@ -75,6 +102,8 @@ function installer_admin_upgrade()
         // Run the checks
         $checks = array();
         foreach ($check_list as $abbr_version => $check_version) {
+            // @checkme <chris/> only run checks for current version ?
+            // if (xarVersion::compare($check_version, $dbversion) != 0) continue;
             if (!Upgrader::loadFile('checks/' . $abbr_version .'/main.php')) {
                 $checks[$check_version]['message'] = xarML('There are no checks for version #(1)', $check_version);
                 $checks[$check_version]['tasks'] = array();
@@ -89,7 +118,7 @@ function installer_admin_upgrade()
 
     } elseif ($data['phase'] == 4) {
         $data['active_step'] = 4;
-//        xarResponse::redirect(xarServer::getCurrentURL(array('phase' => 4)));
+//        xarController::redirect(xarServer::getCurrentURL(array('phase' => 4)));
     }
     return $data;
 }

@@ -1,5 +1,16 @@
 <?php
 /**
+ * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/200.html
+ */
+
+/**
  * Upgrade file
  *
  * @package modules
@@ -43,8 +54,14 @@ function main_upgrade_210()
                     );
     foreach ($upgrades as $upgrade) {
         if (!Upgrader::loadFile('upgrades/210/database/' . $upgrade . '.php')) {
-            $data['upgrade']['errormessage'] = Upgrader::$errormessage;
-            return $data;
+            $data['upgrade']['tasks'][] = array(
+                'reply' => xarML('Failed!'),
+                'description' => Upgrader::$errormessage,
+                'reference' => $check,
+                'success' => false,
+            );
+            $data['upgrade']['errormessage'] = xarML('Some checks failed. Check the reference(s) above to determine the cause.');
+            continue;
         }
         $result = $upgrade();
         $data['upgrade']['tasks'][] = array(

@@ -1,18 +1,20 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * Import an object definition or an object item from XML
  */
-function dynamicdata_util_import($args)
+function dynamicdata_util_import(Array $args=array())
 {
     // Security
     if(!xarSecurityCheck('AdminDynamicData')) return;
@@ -80,7 +82,7 @@ function dynamicdata_util_import($args)
         }
         if (empty($objectid)) return;
 
-        xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
+        xarController::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
                                       array('itemid' => $objectid)));
         return true;
     }

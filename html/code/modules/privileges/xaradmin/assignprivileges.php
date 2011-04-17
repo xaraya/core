@@ -1,4 +1,18 @@
 <?php
+/**
+ * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/1098.html
+ */
+/**
+ * @return array data for the template display
+ */
+
     function privileges_admin_assignprivileges()
     {
         // Security
@@ -58,7 +72,7 @@
                     if (!$dbconn->Execute($query,$bindvars)) return;
                 }
 
-                xarResponse::redirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
+                xarController::redirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
                 return true;
                 break;
             case 'remove':
@@ -73,7 +87,7 @@
                     $dbconn->Execute($query,$bindvars);
                 }
 
-                xarResponse::redirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
+                xarController::redirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
                 return true;
                 break;
         }

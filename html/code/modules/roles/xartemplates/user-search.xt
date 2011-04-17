@@ -7,7 +7,7 @@
         <ul>
             <xar:foreach in="$users" key="$id" value="$user">
                 <li>
-                    <a href="&xar-modurl-roles-user-display;&amp;id=#$user.id#">
+                    <a href="#xarModURL('roles','user','display',array('id'=>$user['id']))#">
                         #xarVarPrepForDisplay($user['name'])#
                     </a>
                 </li>

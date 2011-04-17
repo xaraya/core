@@ -2,12 +2,14 @@
 /**
  * Dynamic Object User Interface Handler
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 
@@ -62,7 +64,7 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
         {
             $this->object =& DataObjectMaster::getObjectList($this->args);
             if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
 
             if(empty($this->tplmodule)) 
             {
@@ -74,7 +76,7 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
         xarTplSetPageTitle(xarVarPrepForDisplay($title));
 
         if (!$this->object->checkAccess('view'))
-            return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));
+            return xarController::$response->Forbidden(xarML('View #(1) is forbidden', $this->object->label));
 
         $this->object->countItems();
 

@@ -106,6 +106,7 @@ sys::import('xaraya.variables');
 sys::import('xaraya.server');
 sys::import('xaraya.mls');
 sys::import('xaraya.templates');
+sys::import('xaraya.mapper.main');
 
 // Start Logging Facilities as soon as possible
 $systemArgs = array();
@@ -118,8 +119,8 @@ $systemArgs = array('enableShortURLsSupport' =>false,
                     'defaultModuleFunction'  => 'main',
                     'generateXMLURLs'        => false);
 xarServer::init($systemArgs);
-xarRequest::init($systemArgs);
-xarResponse::init($systemArgs);
+xarController::init($systemArgs);
+//xarResponse::init($systemArgs);
 
 // Start BlockLayout Template Engine
 // This is probably the trickiest part, but we want the installer

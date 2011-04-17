@@ -3,27 +3,29 @@
  * Update a role state
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * Update a user's state
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['id'] user ID
- * @param $args['name'] user real name
- * @param $args['uname'] user nick name
- * @param $args['email'] user email address
- * @param $args['pass'] user password
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['id'] user ID<br/>
+ *        string   $args['name'] user real name<br/>
+ *        string   $args['uname'] user nick name<br/>
+ *        string   $args['email'] user email address<br/>
+ *        string   $args['pass'] user password
  * TODO: move url to dynamic user data
  *       replace with status
  * @param $args['url'] user url
  */
-function roles_adminapi_stateupdate($args)
+function roles_adminapi_stateupdate(Array $args=array())
 {
     extract($args);
     // Argument check - make sure that all required arguments are present,

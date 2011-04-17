@@ -1,4 +1,15 @@
 <?php
+/**
+ * @package core
+ * @subpackage structures
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * 
+ * 
+ */
   /**************************************************************************\
   * Query class for SQL abstraction                                          *
   * Written by Marc Lutolf (marcinmilan@xaraya.com)                          *
@@ -383,7 +394,7 @@ class Query
         }
     }
 
-    public function addtablelink($args)
+    public function addtablelink(Array $args=array())
     {
         $key = $this->key;
         $this->key++;
@@ -401,7 +412,7 @@ class Query
         }
         return $key;
     }
-    public function addhaving($args)
+    public function addhaving(Array $args=array())
     {
         $key = $this->key;
         $this->key++;
@@ -666,7 +677,7 @@ class Query
             }
     }
 
-    public function addsecuritycheck($args)
+    public function addsecuritycheck(Array $args=array())
     {
         $numargs = func_num_args();
         if ($numargs == 2) {
@@ -1667,6 +1678,14 @@ class Query
         echo $string;
     }
 
+/*
+ * This method removes tables from the query that we don't need
+ * Approach: identify all the relevant tables, then what is left is those we don't need
+ * Relevant tables:
+ * - those with fields that are being queried
+ * - those with fields that are in the conditions
+ * - those with more than 1 link
+*/
     public function optimize()
     {
         // If we don't have multiple tables, no need to optimize
@@ -1675,7 +1694,8 @@ class Query
         // If we want ALL fields (i.e. *), no need to optimize
         if (empty($this->fields)) return true;
         
-        // Put the table names in an array for processing
+        // Put the table names in an array for processing. 
+        // We'll remove all the relevant tables from this array
         $tables = array();
         foreach ($this->tables as $table) $tables[$table['alias']] = $table['name'];
         
@@ -1703,7 +1723,7 @@ class Query
         foreach ($this->tablelinks as $link) {
             $fullfield = $this->_deconstructfield($link['field1']);
             if (isset($tables[$fullfield['table']])) $tablehits[$fullfield['table']] += 1;
-            $fullfield = $this->_deconstructfield($link['field1']);
+            $fullfield = $this->_deconstructfield($link['field2']);
             if (isset($tables[$fullfield['table']])) $tablehits[$fullfield['table']] += 1;
         }
         foreach ($tablehits as $key => $hits) if ($hits > 1) unset($tables[$key]);

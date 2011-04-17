@@ -2,16 +2,18 @@
 /**
  * Block management - delete a block
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
  * delete a block instance
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  */
 function blocks_admin_delete_instance()
 {
@@ -20,7 +22,7 @@ function blocks_admin_delete_instance()
     if (!xarVarFetch('confirm', 'str:1:', $confirm, '', XARVAR_NOT_REQUIRED)) {return;}
 
     // Security
-    if (empty($bid)) return xarResponse::notFound();
+    if (empty($bid)) return xarController::notFound();
     if (!xarSecurityCheck('ManageBlocks', 0, 'Instance')) {return;}
 
     // Get details on current block
@@ -77,8 +79,7 @@ function blocks_admin_delete_instance()
         array('bid' => $bid)
     );
 
-    xarResponse::redirect(xarModURL('blocks', 'admin', 'view_instances'));
-
+    xarController::redirect(xarModURL('blocks', 'admin', 'view_instances'));
     return true;
 }
 

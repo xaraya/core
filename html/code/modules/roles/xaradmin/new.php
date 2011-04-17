@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -13,6 +14,7 @@
  *
  * @author Marc Lutolf
  * @author Johnny Robeson
+ * @return array data for the template display
  */
 function roles_admin_new()
 {
@@ -29,6 +31,7 @@ function roles_admin_new()
 
     // call item new hooks
     $item = $data;
+    $item['exclude_module'] = array('dynamicdata');
     $item['module'] = 'roles';
     $item['itemtype'] = $data['itemtype'];
     $data['hooks'] = xarModCallHooks('item', 'new', '', $item);
@@ -48,7 +51,7 @@ function roles_admin_new()
             $itemid = $data['object']->createItem();
 
             // Jump to the next page
-            xarResponse::redirect(xarModURL('roles','admin','new'));
+            xarController::redirect(xarModURL('roles','admin','new'));
             return true;
         }
     }

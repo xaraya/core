@@ -8,11 +8,14 @@
  * BUT THIS ONE WILL BE ABANDONED, YOU MIGHT AS WELL WRITE YOUR CODE TO USE
  * THE MAINTAINED SUBSYSTEM.
  
- * @package database
+ * @package core
+ * @subpackage database
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage table_api
+ *
  * @author Gary Mitchell
  * @todo Check functions!
  *       Check FIXMEs
@@ -24,7 +27,7 @@
 /**
  * Generate the SQLite specific SQL to create a table
  *
- * @access private
+ * 
  * @param tableName the physical table name
  * @param fields an array containing the fields to create
  * @return string|false the generated SQL statement, or false on failure
@@ -70,7 +73,7 @@ function xarDB__sqliteCreateTable($tableName, $fields)
 /**
  * SQLite specific function to alter a table
  *
- * @access private
+ * 
  * @param tableName the table to alter
  * @param args['command'] command to perform on the table
  * @param args['field'] name of column to modify
@@ -121,7 +124,7 @@ function xarDB__sqliteAlterTable($tableName, $args)
  * all other specs are not needed. We left them in here, so the SQL generated
  * is at least more clear. 
  *
- * @access private
+ * 
  * @param field_name
  * @param parameters
  *

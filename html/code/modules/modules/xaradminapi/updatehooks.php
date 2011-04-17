@@ -1,22 +1,24 @@
 <?php
 /**
  * Update hooks for a particular hook module
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Modules module
+ * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * Update hooks for a particular hook module
  *
  * @author Xaraya Development Team
- * @param $args['regid'] the id number of the hook module
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the id number of the hook module
+ * @return boolean true on success, false on failure
  */
-function modules_adminapi_updatehooks($args)
+function modules_adminapi_updatehooks(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);
@@ -27,104 +29,135 @@ function modules_adminapi_updatehooks($args)
     // Security Check
     if(!xarSecurityCheck('ManageModules',0,'All',"All:All:$regid")) return;
 
-    // Get database connection and table names
-    $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
-
     // Get module name
     $modinfo = xarMod::getInfo($regid);
     if (empty($modinfo['name'])) {
         throw new ModuleNotFoundException($regid,'Invalid module name found while updating hooks for module with regid #(1)');
     }
+    $curhook = $modinfo['name'];
+    // new way of handling this (sane way)
+    if (!empty($subjects) && is_array($subjects)) {
+            foreach ($subjects as $module => $values) {
 
-    // Make the whole thing atomic
-    try {
-        $dbconn->begin();
-
-        // Delete all entries of modules using this hook (but don't delete the '' module)
-        // signaling there *is* a hook, we want to keep that knowledge in.
-        $sql = "DELETE FROM $xartable[hooks] WHERE t_module_id = ? AND s_module_id <> ?";
-        $dbconn->Execute($sql,array($modinfo['systemid'],0));
-
-        // get the list of all (active) modules
-        $modList = xarMod::apiFunc('modules', 'admin', 'getlist');
-
-        // see for which one(s) we need to enable this hook
-        $todo = array();
-        foreach ($modList as $mod) {
-            // CHECKME: don't allow hooking to yourself !?
-            if ($mod['systemid'] == $modinfo['systemid']) continue;
-            // Get selected value of hook (which is an array of all the itemtypes selected)
-            // hooked_$mod['name'][0] contains the global setting ( 0 -> not, 1 -> all, 2 -> some)
-            xarVarFetch("hooked_" . $mod['name'],'isset',$ishooked,'',XARVAR_DONT_REUSE);
-            // No setting or explicit NOT, skip it (note: empty shouldn't occur anymore
-            if (!empty($ishooked) && $ishooked[0] != 0) {
-                // There is something in there, either for all itemtypes or for some
-                $todo[$mod['systemid']] = $ishooked;
-            }
-        }
-        // nothing more to do here
-        if (empty($todo)) {
-            $dbconn->commit();
-            return true;
-        }
-
-        // get the list of individual hooks offered by this module
-        $sql = "SELECT DISTINCT id, s_module_id, s_type, object,
-                            action, t_area, t_module_id, t_type,
-                            t_func, t_file
-                FROM $xartable[hooks]
-                WHERE t_module_id = ?";
-        $stmt = $dbconn->prepareStatement($sql);
-        $result = $stmt->executeQuery(array($modinfo['systemid']));
-
-        // Prepare the insert statement outside the loops
-        $sql = "INSERT INTO $xartable[hooks]
-            (object,action,s_module_id,s_type,t_area,t_module_id,t_type,t_func,t_file)
-            VALUES (?,?,?,?,?,?,?,?,?)";
-        $stmt2 = $dbconn->prepareStatement($sql);
-        while($result->next()) {
-            list($hookid, $hooksmodid, $hookstype, $hookobject, $hookaction,
-                 $hooktarea, $hooktmodid, $hookttype, $hooktfunc, $hooktfile) = $result->fields;
-
-            // See if this is checked and isn't in the database
-            if (empty($hooksmodid)) {
-                foreach ($todo as $modId => $hookvalue) {
-                    // Insert hook if required
-                    xarLogMessage('Value: ' . $hookvalue[0] . ' for ' . $modId);
-
-                    // If user specified ALL specifically, set itemtype hard to empty
-                    if ($hookvalue[0] == 1) {
-                        $itemtype = ''; // Make this 0 later on
-                        $bindvars = array($hookobject, $hookaction, $modId,
-                                          $itemtype, $hooktarea, $hooktmodid,
-                                          $hookttype,$hooktfunc,$hooktfile);
-                        $stmt2->executeUpdate($bindvars);
-                        // we're done for this module
-                        continue;
+            // remove current assignments
+            xarHooks::detach($curhook, $module, -1, -1);
+            switch ($values['hookstate']) {
+                case 0:
+                    // hooked to none
+                    continue;
+                break;
+                case 1:
+                    // hooked to all scopes, all items
+                    xarHooks::attach($curhook, $module, 0, 0);
+                    continue;
+                break;
+                case 2:
+                    // hooked to some scopes, all items
+                    // see which scopes
+                    if (!empty($values['itemtypes'][0])) {
+                        foreach ($values['itemtypes'][0] as $scope => $setting) {
+                            if (empty($scope)) continue;
+                            if (!empty($setting)) {
+                                xarHooks::attach($curhook, $module, 0, $scope);
+                            }
+                        }
                     }
-
-                    foreach (array_keys($hookvalue) as $itemtype) {
-                        // If user specified SOME specifically, skip itemtype 0
-                        if ($hookvalue[0] == 2 && $itemtype == 0) continue;
-
-                        $bindvars = array($hookobject, $hookaction, $modId,
-                                          $itemtype, $hooktarea, $hooktmodid,
-                                          $hookttype,$hooktfunc,$hooktfile);
-                        $stmt2->executeUpdate($bindvars);
+                    
+                    continue;
+                break;
+                case 3:
+                    // hooked to some scopes, some items
+                    // see which items
+                    if (!empty($values['itemtypes'])) {
+                        foreach ($values['itemtypes'] as $itemtype => $typeinfo) {
+                            if (empty($itemtype)) continue;
+                            switch ($typeinfo['scopes'][0]) {
+                                case 0:
+                                    // none
+                                    continue;
+                                break;
+                                case 1:
+                                    // all scopes, this itemtype
+                                    xarHooks::attach($curhook, $module, $itemtype, 0);
+                                    continue;
+                                break;
+                                case 2:
+                                    // some scopes, this itemtype                                    
+                                    // see which scopes
+                                    foreach ($typeinfo['scopes'] as $scope => $setting) {
+                                        if (empty($scope)) continue;
+                                        if (!empty($setting)) {
+                                            xarHooks::attach($curhook, $module, $itemtype, $scope);
+                                        }
+                                    }
+                                break;
+                            }
+                        }
+                    }                    
+                                    
+                    continue;
+                break;
+            }
+                    
+            }  
+        /*
+        foreach ($subjects as $module => $values) {
+            // remove current assignments
+            xarHooks::detach($curhook, $module, -1);
+            if ($values['hookstate'] == 0) {
+                // not hooked to any itemtypes
+                continue;
+            } elseif ($values['hookstate'] == 1) {
+                // hooked to all itemtypes
+                xarHooks::attach($curhook, $module, 0, 0);
+                continue;
+            } else {
+                // hooked to some itemtypes
+                if (!empty($values['itemtypes'])) {
+                    foreach ($values['itemtypes'] as $id => $ishooked) {
+                        if (!empty($ishooked)) {
+                            xarHooks::attach($curhook, $module, $id, 0);
+                            continue;
+                        } 
                     }
                 }
             }
         }
-        $dbconn->commit();
-    } catch(Exception $e) {
-        // Catch *any* exception now, split out better, later
-        $dbconn->rollback();
-        throw $e;
+        */
+    } else {
+        // Legacy support, deprecated
+        // get the list of all (active) modules
+        $modList = xarMod::apiFunc('modules', 'admin', 'getlist');
+        // see for which one(s) we need to enable this hook
+        foreach ($modList as $mod) {
+            // CHECKME: don't allow hooking to yourself !? 
+            // <chris> hooking to self is allowed, eg, roles usermenu > roles
+            // We may however wish to consider a way of allowing modules to over-ride
+            // this behaviour, eg, dd really shouldn't be hooked to dd 
+            //if ($mod['systemid'] == $modinfo['systemid']) continue;
+            // Get selected value of hook (which is an array of all the itemtypes selected)
+            // hooked_$mod['name'][0] contains the global setting ( 0 -> not, 1 -> all, 2 -> some)
+            xarVarFetch("hooked_" . $mod['name'],'isset',$ishooked,'',XARVAR_DONT_REUSE);
+            // remove current assignments       
+            xarHooks::detach($curhook, $mod['name'], -1);        
+            // No setting or explicit NOT, skip it (note: empty shouldn't occur anymore
+            if (!empty($ishooked) && $ishooked[0] != 0) {                        
+                if ($ishooked[0] == 1) {
+                    // hooked to all itemtypes
+                    xarHooks::attach($curhook, $mod['name'], 0, 0);
+                } elseif ($ishooked[0] == 2) {
+                    // hooked to some itemtypes
+                    foreach (array_keys($ishooked) as $itemtype) {
+                        // skip itemtype 0                    
+                        if ($itemtype == 0) continue;
+                        xarHooks::attach($curhook, $mod['name'], $itemtype, 0);
+                    }
+                }                
+            }
+        }
     }
-    $result->close();
-
     return true;
+
 }
 
 ?>

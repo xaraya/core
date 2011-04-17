@@ -3,11 +3,13 @@
  * Logging Facilities
  *
  * @package core
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage logging
  * @author Marco Canini <marco@xaraya.com>
  * @author Flavio Botelho <nuncanada@ig.com.br>
  * @author Marcel van der Boom
@@ -35,7 +37,6 @@ define('XARLOG_LEVEL_ALL',       255);
 /**
  * Exceptions raised within the loggers
  *
- * @package logging
  */
 class LoggerException extends Exception
 {
@@ -52,6 +53,14 @@ function xarLog_init(&$args)
 {
 
     $GLOBALS['xarLog_loggers'] = array();
+    
+    // Only log if logging is enabled and if the config.system file is presents
+    try {
+        if (!xarSystemVars::get(sys::CONFIG, 'Log.Enabled')) return true;
+    } catch (Exception $e) {
+        return true;
+    }
+    
     $xarLogConfig = array();
 
     if (xarLogConfigReadable())
@@ -63,7 +72,7 @@ function xarLog_init(&$args)
 
     } elseif (xarLogFallbackPossible()) {
         //Fallback mechanism to allow some logging in important cases when
-        //the user might now have logging yet installed, or for some reason we
+        //the user might not have logging yet installed, or for some reason we
         //should be able to have a way to get error messages back => installation?!
         $logFile = xarLogFallbackFile();
         if ($logFile) {
@@ -71,7 +80,7 @@ function xarLog_init(&$args)
                 'type'      => 'simple',
                 'config'    => array(
                     'fileName' => $logFile,
-                    'logLevel'  => XARLOG_LEVEL_ALL));
+                    'loglevel'  => XARLOG_LEVEL_ALL));
         }
     }
 
@@ -127,18 +136,16 @@ function xarLogFallbackFile ()
 
     if (isset($logFile)) return $logFile;
 
-    $logFile = sys::varpath() . '/logs/log.txt';
-
-    if (file_exists($logFile)) {
-        $logFile = realpath($logFile);
-    }
+    $logFile = sys::varpath() . '/logs/' . xarSystemVars::get(sys::CONFIG, 'Log.Filename');
+    if (!file_exists($logFile)) touch($logFile);
+    $logFile = realpath($logFile);
 
     return $logFile;
 }
 
 /**
  * Will check if the fallback mechanism can be used
- * @return bool
+ * @return boolean
  */
 function xarLogFallbackPossible ()
 {

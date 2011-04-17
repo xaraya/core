@@ -1,15 +1,26 @@
 <?php
 /**
+ * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/771.html
+ */
+
+/**
  * Process a raw email supplied to use by some gateway (ws.php for example)
  *
  * This function is now simple, but not smart. Ideally we want to do what we
  * do below very quickly to prevent real-time lock-ups. 
  * In other words, the current code assumes we dont get many mails :-)
  *
- * @return int exitcode to gateway script
+ * @return integer exitcode to gateway script
  * @todo what do we do with security here?
  */
-function mail_cliapi_process($args)
+function mail_cliapi_process(Array $args=array())
 {
     xarLogMessage("MAIL: processing incoming message");
     extract($args);

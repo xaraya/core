@@ -1,8 +1,14 @@
 <?php
 /**
- * Exceptions defined by this subsystem
+ * Version Object
  *
- * @package version
+ * @package core
+ * @subpackage version
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
  */
 class BadVersionException extends xarExceptions
 {
@@ -12,7 +18,6 @@ class BadVersionException extends xarExceptions
 /**
  * Version utility class
  *
- * @package core
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -75,8 +80,8 @@ class xarVersion extends Object
  */
     public static function assemble($versionnumber=0)
     {
-        $major = (int)($args['versionnumber']/100000000);
-        $versionnumber = $args['versionnumber'] - $major * 100000000;
+        $major = (int)($versionnumber/100000000);
+        $versionnumber = $versionnumber - $major * 100000000;
         $minor = (int)($versionnumber/1000000);
         $versionnumber = $versionnumber - $minor * 1000000;
         $micro = (int)($versionnumber/10000);

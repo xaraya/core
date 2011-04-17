@@ -3,10 +3,17 @@
  * Queue management for mail module
  *
  * @package modules
- * @subpackage mail
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/771.html
+ *
  * @author Marcel van der Boom <marcel@xaraya.com>
  */
-function mail_admin_view($args)
+function mail_admin_view(Array $args=array())
 {
      // Security
     if (!xarSecurityCheck('AdminMail')) return;
@@ -21,6 +28,9 @@ function mail_admin_view($args)
     }
 }
 
+/**
+ * @return array data for the template display
+ */
 function OfferCreate($qDef = null)
 {
     $data['authid'] = xarSecGenAuthKey();

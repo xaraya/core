@@ -3,11 +3,12 @@
  * Installer
  *
  * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage installer module
  * @link http://xaraya.com/index.php/release/200.html
  */
 
@@ -34,16 +35,20 @@ function installer_admin_finish()
     // Default for the site time zone is the system time zone
     xarConfigVars::set(null, 'Site.Core.TimeZone', xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
 
+    // Defaults for templating engine options 
+    xarConfigVars::set(null, 'Site.BL.CompressWhitespace', 1);
+    xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
+
     switch ($returnurl) {
         case ('base'):
-            xarResponse::redirect(xarModURL('base','admin','modifyconfig'));
+            xarController::redirect(xarModURL('base','admin','modifyconfig'));
         case ('modules'):
-            xarResponse::redirect(xarModURL('modules','admin','list'));
+            xarController::redirect(xarModURL('modules','admin','list'));
         case ('blocks'):
-            xarResponse::redirect(xarModURL('blocks','admin','view_instances'));
+            xarController::redirect(xarModURL('blocks','admin','view_instances'));
         case ('site'):
         default:
-            xarResponse::redirect('index.php');
+            xarController::redirect('index.php');
     }
     return true;
 }

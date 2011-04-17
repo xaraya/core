@@ -3,11 +3,12 @@
  * display user
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -15,9 +16,9 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @param int id
- * @return array
+ * @return string output display string
  */
-function roles_user_display($args)
+function roles_user_display(Array $args=array())
 {
     extract($args);
 
@@ -39,7 +40,7 @@ function roles_user_display($args)
 
         $currentid = xarUserGetVar('id');
         if ($currentid == $id) {
-            xarResponse::redirect(xarModURL('roles', 'user', 'account'));
+            xarController::redirect(xarModURL('roles', 'user', 'account'));
         }
 
         $name = $role->getName();

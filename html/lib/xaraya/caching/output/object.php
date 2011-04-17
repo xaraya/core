@@ -3,10 +3,13 @@
  * Object gui method caching
  *
  * @package core
- * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.com
  * @subpackage caching
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
  * @author mikespub
  * @author jsb
 **/
@@ -33,7 +36,7 @@ class xarObjectCache extends Object
     /**
      * Initialise the object caching options
      *
-     * @return bool true on success, false on failure
+     * @return boolean true on success, false on failure
      */
     public static function init(array $args = array())
     {
@@ -65,7 +68,6 @@ class xarObjectCache extends Object
     /**
      * Get a cache key if this object method is suitable for output caching
      *
-     * @access public
      * @param string $objectName string registered name of object
      * @param string $methodName string specific method to run
      * @param array  $args arguments to pass to the method
@@ -150,7 +152,7 @@ class xarObjectCache extends Object
      * @param string $objectName string registered name of object
      * @param string $methodName string specific method to run
      * @param array  $args arguments to pass to the method
-     * @return bool  true if the module function is suitable for caching, false if not
+     * @return boolean  true if the module function is suitable for caching, false if not
      */
     public static function checkCachingRules($objectName, $methodName = 'view', $args = array())
     {
@@ -196,9 +198,8 @@ class xarObjectCache extends Object
     /**
      * Check whether a object is cached
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular object you want to access
-     * @return bool   true if the object is available in cache, false if not
+     * @return boolean   true if the object is available in cache, false if not
      */
     public static function isCached($cacheKey = null)
     {
@@ -227,7 +228,6 @@ class xarObjectCache extends Object
     /**
      * Get the contents of a object from the cache
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular object you want to access
      * @return string the cached output of the object method
      */
@@ -268,7 +268,6 @@ class xarObjectCache extends Object
     /**
      * Set the contents of a object in the cache
      *
-     * @access public
      * @param  string $cacheKey the key identifying the particular object you want to access
      * @param  string $value    the new content for that object
      * @return void
@@ -342,7 +341,7 @@ class xarObjectCache extends Object
      * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
      * @return void
      */
-    public static function addStyle($args)
+    public static function addStyle(Array $args=array())
     {
         if (empty(self::$cacheKey)) return;
         self::$styleList[] = $args;

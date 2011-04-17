@@ -3,22 +3,23 @@
  * Generate all groups listing.
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * viewallgroups - generate all groups listing.
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param none
- * @return groups listing of available groups
+ * @param array    $args array of optional parameters<br/>
+ * @return array listing of available groups
  * @todo this code is unreadable
  */
 
-function roles_userapi_getallgroups($args)
+function roles_userapi_getallgroups(Array $args=array())
 {
     extract($args);
     $xartable = xarDB::getTables();

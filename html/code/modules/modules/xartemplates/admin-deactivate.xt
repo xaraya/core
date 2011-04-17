@@ -14,14 +14,15 @@
                 </xar:foreach>
             </ul>
         </xar:if>
-        <form action="&xar-modurl-modules-admin-deactivate;" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarModURL('modules','admin','deactivate')#" method="post" enctype="application/x-www-form-urlencoded">
             <div class="xar-align-center">
                 <input type="hidden" name="id" id="id" value="#$id#"/>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                
                 <xar:var name="label">Deactivate All</xar:var>
                 <input type="submit" name="command" id="command" value="#$label#" class="xar-margin-thickright"/>
                 <xar:var name="label">Go back to the modules list</xar:var>
-                <input type="button" name="return" id="return" onclick="document.location='&xar-modurl-modules-admin-list;';" value="#$label#" class="xar-margin-thickleft"/>
+                <input type="button" name="return" id="return" onclick="document.location='#xarModURL('modules','admin','list')#';" value="#$label#" class="xar-margin-thickleft"/>
             </div>
         </form>
     </div>

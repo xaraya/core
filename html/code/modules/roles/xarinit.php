@@ -3,20 +3,24 @@
  * Initialise the roles module
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
- * @author Jan Schrage, John Cox, Gregor Rothfuss
+ *
+ * @author Jan Schrage
+ * @author Gregor Rothfuss
+ * @author John Cox
  */
 
 /**
  * Initialise the roles module
  *
  * @access public
- * @return bool
+ * @return boolean
  * @throws DATABASE_ERROR
  */
 function roles_init()
@@ -117,19 +121,12 @@ function roles_init()
         throw $e;
     }
 
-    //Database Initialisation successful
-    return true;
-}
-
-function roles_activate()
-{
-    //TODO: this stuff is happening here because at install blocks is not yet installed
-
     // --------------------------------------------------------
     //
     // Create some modvars
     //
-    //TODO: improve on this hardwiring
+    xarConfigVars::set(null, 'Site.User.DebugAdmins', array('admin'));
+
     xarModVars::set('roles', 'defaultauthmodule', 'authsystem');
     xarModVars::set('roles', 'defaultregmodule', '');
     xarModVars::set('roles', 'rolesdisplay', 'tabbed');
@@ -147,7 +144,13 @@ function roles_activate()
     xarModVars::set('roles', 'allowexternalurl', false);
     xarModVars::set('roles', 'allowemail', false);
     xarModVars::set('roles', 'requirevalidation', true);
+    
+    //Database Initialisation successful
+    return true;
+}
 
+function roles_activate()
+{
     // --------------------------------------------------------
     // Register block types
     xarMod::apiFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'online'));
@@ -242,13 +245,13 @@ function roles_activate()
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function roles_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0.0':
+        default:
             break;
     }
     return true;
@@ -257,7 +260,7 @@ function roles_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return bool
+ * @return boolean
  */
 function roles_delete()
 {

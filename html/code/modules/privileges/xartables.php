@@ -1,21 +1,21 @@
 <?php
 /**
  * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage privileges
  * @link http://xaraya.com/index.php/release/1098.html
  */
 /**
- * Return table name definitions to Xaraya
+ * Return table name definitions to Xaraya.
+ * This function is called internally by the core whenever the module is
+ * loaded. It adds the table names to a globally accessible array
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * This function is called internally by the core whenever the module is
- * loaded. It is called by xarMod__dbInfoLoad()
- *
- * @return array
+ * @return array the registered tables of this module
  */
 function privileges_xartables()
 {

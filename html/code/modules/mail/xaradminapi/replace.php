@@ -2,22 +2,24 @@
 /**
  * Utility function to replace %%calls%%
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 /**
  * utility function utility function to replace %%calls%%
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
+ * @param array    $args array of optional parameters<br/>
  * @return array containing the search and replace items
  */
-function mail_adminapi_replace($args)
+function mail_adminapi_replace(Array $args=array())
 {
-    extract ($args);
+    extract($args);
 
     $sitename   = xarModVars::get('themes', 'SiteName');
     $siteslogan = xarModVars::get('themes', 'SiteSlogan');
