@@ -127,9 +127,6 @@ function roles_user_account()
             $object->tplmodule = 'roles';   // roles/xartemplates/objects/
             $object->template = 'account';  // showdisplay- || showform- account.xt
             if (empty($tab) || $tab == 'profile') {
-                // set up the roles_user object for display
-                $fieldlist = 'name,uname,state,regdate';
-                $object->setFieldList($fieldlist);
             } elseif ($tab == 'basic') {
                 // set up the roles_user object for edit
                 if (xarModVars::get('roles','setuserlastlogin')) {
