@@ -1681,10 +1681,14 @@ class Query
 
         // Check which tables the conditions reference; remove those they do from the array      
         foreach ($this->conditions as $condition) {
-            $fullfield = $this->_deconstructfield($condition['field1']);
-            if (isset($tables[$fullfield['table']])) unset($tables[$fullfield['table']]);
-            $fullfield = $this->_deconstructfield($condition['field2']);
-            if (isset($tables[$fullfield['table']])) unset($tables[$fullfield['table']]);
+            try {
+                $fullfield = $this->_deconstructfield($condition['field1']);
+                if (isset($tables[$fullfield['table']])) unset($tables[$fullfield['table']]);
+            } catch (Exception $e) {}
+            try {
+                $fullfield = $this->_deconstructfield($condition['field2']);
+                if (isset($tables[$fullfield['table']])) unset($tables[$fullfield['table']]);
+            } catch (Exception $e) {}
         }
 
         // Remove any tables that have more than 1 link
