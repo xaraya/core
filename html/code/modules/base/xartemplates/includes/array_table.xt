@@ -1,31 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+
+    <xar:set name="debug">1</xar:set>
+    <xar:if condition="$debug">
+        <xar:set name="index_display">''</xar:set>
+        <xar:set name="key_display">''</xar:set>
+    <xar:else/>
+        <xar:set name="index_display">'none'</xar:set>
+        <xar:if condition="$associative_array">
+            <xar:set name="key_display">''</xar:set>
+        <xar:else/>
+            <xar:set name="key_display">'none'</xar:set>
+        </xar:if>
+    </xar:if>
+    
     <xar:template module="base" file="arrayjs"/>
     <xar:javascript module="base" filename="toggle.js"/>
-    <table class="xar-border-none xar-margin-thicktop">
+    <table class="xar-border-none xar-margin-thicktop" border="1">
         <thead>
             <tr>
+                <!-- This column holds the index of the respective row -->
+                <th style="display: #$index_display#">
+                    Index
+                </th>
+                
                 <xar:for start="$i=0" test="$i lt count($column_titles)" iter="$i++">
                     <th class="xar-align-left">
-                        <xar:if condition="!$associative_array AND ($i eq 0)">
-                            <label>Array Key</label>
-                        <xar:else/>
-                            <label>#$column_titles[$i]#</label>
-                        </xar:if>
+                        #$column_titles[$i]#
                     </th>
                 </xar:for>
                 <th class="xar-align-right">Delete/Ignore</th>        
             </tr>        
         </thead>
         <tbody id="#$id#_rows">
+                                Rows<xar:set name="xxx">var_dump($rows)</xar:set>
+                                Values<xar:set name="xxx">var_dump($value)</xar:set>
+                                Configuration<xar:set name="xxx">var_dump($column_configurations)</xar:set>
+
             <xar:for start="$i=1" test="$i le $rows" iter="$i++">
                 <!-- name[row] -->
-                <xar:set name="row_name">"{$name}[value][{$i}]"</xar:set>
-                <xar:set name="row_id">"{$name}_{$i}"</xar:set>
+                <xar:set name="j">$i-1</xar:set>
+                <xar:set name="row_name">"{$name}[value][{$j}]"</xar:set>
+                <xar:set name="row_id">"{$name}_{$j}"</xar:set>
                 <xar:set name="col_name">"{$row_name}[0]"</xar:set>
                 <xar:set name="col_id">"{$row_id}_0"</xar:set>
                 <tr id="#$row_id#">
-                    <xar:data-input type="1" name="$col_name" id="$col_id" value="$i+1" hidden="hidden"/>
+                
+                    <!-- This column holds the index of the respective row -->
+                    <!-- By definition this is a static value (can't change via the UI) -->
+                    <td style="display: #$index_display#">
+                        #$col_name#
+                        <xar:data-input type="1" name="$col_name" id="$col_id" value="$i-1" />
+                    </td>
+                    
                     <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
                         <xar:set name="col_index">$k+1</xar:set>
                         <!-- name[row][column] -->                        
@@ -34,14 +61,11 @@
                         <!-- name[row][column] -->
                         <xar:set name="prop_name">"{$col_name}"</xar:set>
                         <xar:set name="prop_id">"{$col_id}"</xar:set>
-                        <!-- CHECKME: would be better as $value[$i][$k] ? -->
-                        <xar:set name="prop_val">$value[$i][$k]</xar:set>
-                        <td>
-                            <xar:if condition="!$associative_array AND ($k eq 0)">
-                                <xar:data-input type="textbox" name="$prop_name" id="$prop_id" value="$prop_val"/>
-                            <xar:else/>
-                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$prop_val" configuration="$column_configurations[$k]"/>
-                            </xar:if>
+
+                        <xar:set name="prop_val">''</xar:set>
+                        <td><!-- row #$i# column #$k# -->
+                            <span style="display: #$index_display#">#$prop_name#</span>
+                            <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$prop_val" configuration="$column_configurations[$k]"/>
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
@@ -58,7 +82,7 @@
                             </script>
                         <xar:else/>
                             <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked="" disabled="disabled"/>
-                            <img class="xar-icon-disabled" id="#$row_id#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" style="display:none;"/> 
+                            <img class="xar-icon-disabled" id="#$row_id#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" style="display: none;"/>
                             <!-- Hide checkboxes, show delete icons if js enabled -->
                             <script type="text/javascript">
                                 setDisplayOff('#$del_id#');
@@ -67,8 +91,9 @@
                         </xar:if>
                     </td>            
                 </tr>
-                <xar:set name="lastrow">$i</xar:set>
-            </xar:for>       
+            </xar:for>
+            <xar:set name="lastrow">$i-2</xar:set>
+            
 <!--  Begin dummy line for adding rows --> 
             <xar:if condition="($rows lt $maximum_rows) AND ($addremove ne 0)">
                 <xar:set name="thisrow">$lastrow+1</xar:set>
@@ -76,8 +101,11 @@
                 <xar:set name="row_id">"{$name}_{$thisrow}"</xar:set>
                 <xar:set name="col_name">"{$row_name}[0]"</xar:set>
                 <xar:set name="col_id">"{$row_id}_0"</xar:set>
-                <tr id="#$id#_rowtemplate">                         
-                    <xar:data-input type="1" name="$col_name" id="$col_id" value="$i+1" hidden="hidden"/>
+                <tr id="#$id#_rowtemplate">
+                    <td style="display: #$index_display#">
+                        #$col_name#
+                        <xar:data-input type="1" name="$col_name" id="$col_id" value="$thisrow"/>
+                    </td>
                     <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
                         <xar:set name="col_index">$k+1</xar:set>
                         <!-- name[row][column] -->                        
@@ -87,11 +115,8 @@
                         <xar:set name="prop_name">"{$col_name}"</xar:set>
                         <xar:set name="prop_id">"{$col_id}"</xar:set>
                         <td>
-                            <xar:if condition="!$associative_array AND ($k eq 0)">
-                                <xar:data-input type="textbox" name="$prop_name" id="$prop_id"/>
-                            <xar:else/>
-                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$column_defaults[$k]"  configuration="$column_configurations[$k]"/>
-                            </xar:if>
+                            <span style="display: #$index_display#">#$prop_name#</span>
+                            <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$column_defaults[$k]"  configuration="$column_configurations[$k]"/>
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
@@ -122,6 +147,8 @@
 
     </table>
 
+<!-- Here we store config options for unbound properties, so checkInput knows what to do -->
+<!-- Should we support this? It's not generally supported -->
     <input type="hidden" name="#$id#_lastrow" id="#$id#_lastrow" value="#$lastrow#"/>
     <input type="hidden" name="#$name#[associative_array]" id="#$name#_associative_array" value="#$associative_array#"/>        
  
