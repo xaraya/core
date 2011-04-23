@@ -568,7 +568,7 @@
   </configurations>
   <configurations itemid="64">
     <id>64</id>
-    <name>initialization_associative_array</name>
+    <name>validation_associative_array</name>
     <description>Allow saving as associative array</description>
     <property_id>14</property_id>
     <label>Associative Array Storage</label>
