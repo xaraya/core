@@ -9,6 +9,20 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
+
+/**
+ * Notes
+ *
+ * The value array is of the form $value[column][row]
+ * This is done so that we can easily access the set of values of a given column, which are all of the same property type
+ * 
+ * The value in value[0][row] is always the row number, starting with 1
+ * 
+ * 
+ * 
+ * 
+ */
+
 /* include the base class */
 sys::import('modules.dynamicdata.class.properties.base');
 /**
@@ -26,7 +40,8 @@ class ArrayProperty extends DataProperty
     public $display_minimum_rows = 2;                              // The table displays at least this many rows
     public $display_maximum_rows = 10;                             // The table cannot display more than this many rows
     public $initialization_addremove = 0;                          // 0: no adding/deleting of rows, 1: adding only, 2: adding and deleting    
-    public $initialization_associative_array = 0;                  // flag to display the value as associative array
+    public $validation_associative_array = 0;                      // flag to display the value as an associative array
+    public $validation_associative_array_invalid;                  // Holds an error msg for the validation above
     public $default_suffixlabel = "Row";                           // suffix for the Add/Remove Button
     public $initialization_fixed_keys = 0;                         // allow editing keys on input
 
@@ -61,6 +76,7 @@ class ArrayProperty extends DataProperty
 //            array_pop($elements);
             // Get the number of rows we are saving
             $rows = count($elements);
+
             for ($k=1;$k<=$columncount;$k++) {
                 // Get the property type for this column and get the value from the template
                 $property = DataPropertyMaster::getProperty(array('type' => $this->display_column_definition['value'][1][$k-1]));
@@ -68,22 +84,26 @@ class ArrayProperty extends DataProperty
                 foreach ($elements as $row) {
                     // Ignore rows where the delete checkbox was checked
                     if (isset($row['delete'])) continue;
-                    // $i is the row index we will save with, ensuring saved data has no holes in the index
-                    $i++;
+
                     // $index is the current index of the row. May have holes if rows have been deleted
-                    $index = $row[0]-1;
+                    $index = $row[0];
+                    
                     // Get the field name of the element we are looking at
                     $fieldname = $name . '["value"][' . $index . '][' . $k . ']';
+
+                    // $i is the row index we will save with, ensuring saved data has no holes in the index
+                    $i++;
+                    
                     // Get its data
                     $valid = $property->checkInput($fieldname);
                     // Move the found data to the array we will save
-                    $value[$k-1][$i-1] = $property->value;
+                    $value[$k-1][$i] = $property->value;
                 }
             }
 
-            //Set value to the initialization_associative_array  
+            // Set value to the validation_associative_array  
             if (!xarVarFetch($name . '["associative_array"]', 'int', $associative_array, 0, XARVAR_NOT_REQUIRED)) return;
-            $this->initialization_associative_array = $associative_array;
+            $this->validation_associative_array = $associative_array;
         }
         return $this->validateValue($value);
     }
@@ -92,9 +112,28 @@ class ArrayProperty extends DataProperty
     {
         if (!parent::validateValue($value)) return false;
 
+        // Check if we have an array. We don't really have an error message here
         if (!is_array($value)) {
             $this->value = null;
             return false;
+        }
+        
+        // If this is an associative array, check if the keys are unique
+        if ($this->validation_associative_array) {
+            $initial_count = count($value);
+            $keycol = $value[0];
+            $temp = array();
+            foreach($keycol as $keyvalue) $temp[$keyvalue] = 1;
+            
+            if (count($temp) != $initial_count) {
+                if (!empty($this->validation_associative_array_invalid)) {
+                    $this->invalid = xarML($this->validation_associative_array_invalid);
+                } else {
+                    $this->invalid = xarML('The key values of the array are not unique');
+                }
+                $this->value = null;
+                return false;
+            }
         }
         $this->setValue($value);
         return true;
@@ -106,7 +145,7 @@ class ArrayProperty extends DataProperty
         if (empty($value)) $value = array();
         if (!empty($value) && is_array($value)) {
             //this code is added to store the values as value1,value2 in the DB for non-associative storage
-            if(!$this->initialization_associative_array) {
+            if(!$this->validation_associative_array) {
             /*
                 //Legacy format. remove?
                 $elements = "";
@@ -151,7 +190,7 @@ class ArrayProperty extends DataProperty
                     $temp[$k][$i] = $value[$i][$k];
                 }
             }
-            if(!$this->initialization_associative_array) {
+            if(!$this->validation_associative_array) {
             /*
                 //Legacy format. remove?
                 $outer = explode(';',$this->value);
@@ -181,7 +220,7 @@ class ArrayProperty extends DataProperty
     public function showInput(Array $data = array())
     {
         // If this is a column definition, load its configuration up front
-        // A bound array property contains itself an arry property as part of its configuration
+        // A bound array property contains itself an array property as part of its configuration
         // The recursed parameter signals we are displaying the configuration property
         if (isset($data["configuration"])) {
             $configuration = unserialize($data["configuration"]);
@@ -245,16 +284,20 @@ class ArrayProperty extends DataProperty
         // Now arrange the values contained in this array to the size we need
         // Number of columns is defined by count($data['column_titles'])
         // Number of rows is defined by $data['rows']
-        if (!isset($data['value'])) $value = unserialize($this->value);
+        if (!isset($data['value'])) $value = $this->getValue();
         else $value = $data['value'];
         
+        // ------------------------------------------------------------------
+        // Adjust the number of rows and columns and the appropriate values
+        // Make sure we try for at least the configured minimum number of rows
         try {
             if (!isset($data['rows']))          $data['rows'] = count($value[0]);
         } catch(Exception $e) {
             $data['rows'] = $this->display_minimum_rows;
         }
-
-        // First make sure the number of titles and column types is the same
+        $data['rows'] = max($data['rows'], $this->display_minimum_rows);
+        
+        // Make sure the number of titles and column types is the same
         $titlescount = count($data['column_titles']);
         $typescount = count($data['column_types']);
         if ($titlescount > $typescount) {
@@ -270,10 +313,11 @@ class ArrayProperty extends DataProperty
         }
         $data['value'] = $value;
 
+        // ------------------------------------------------------------------
+        // Add some values we want to pass to the template
         if (!isset($data['fixedkeys'])) $data['fixedkeys'] = $this->initialization_fixed_keys;
-
         if (isset($data['allowinput']))        $this->initialization_addremove = $data['allowinput'];
-        if (isset($data['associative_array'])) $this->initialization_associative_array = $data['associative_array'];
+        if (isset($data['associative_array'])) $this->validation_associative_array = $data['associative_array'];
         if (isset($data['addremove']))         $this->initialization_addremove =  $data['addremove'];
         if (!isset($data['layout']))           $data['layout'] = 'table';
         
@@ -282,8 +326,8 @@ class ArrayProperty extends DataProperty
 
     public function showOutput(Array $data = array())
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
-        $data['value'] = unserialize($this->value);
+        if (isset($data['value'])) $this->value = $data['value'];
+        $data['value'] = $this->getValue();
         $data['column_titles'] = $this->display_column_definition['value'][0];
         $data['column_types'] = $this->display_column_definition['value'][1];
         $data['rows'] = isset($data['value'][0]) ? count($data['value'][0]) : 0;

@@ -33,10 +33,11 @@
             </tr>        
         </thead>
         <tbody id="#$id#_rows">
+        <!--
                                 Rows<xar:set name="xxx">var_dump($rows)</xar:set>
                                 Values<xar:set name="xxx">var_dump($value)</xar:set>
                                 Configuration<xar:set name="xxx">var_dump($column_configurations)</xar:set>
-
+        -->
             <xar:for start="$i=1" test="$i le $rows" iter="$i++">
                 <!-- name[row] -->
                 <xar:set name="j">$i-1</xar:set>
@@ -62,10 +63,14 @@
                         <xar:set name="prop_name">"{$col_name}"</xar:set>
                         <xar:set name="prop_id">"{$col_id}"</xar:set>
 
-                        <xar:set name="prop_val">''</xar:set>
-                        <td><!-- row #$i# column #$k# -->
+                        <td>
+                            <!-- row #$i# column #$k# -->
                             <span style="display: #$index_display#">#$prop_name#</span>
-                            <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$prop_val" configuration="$column_configurations[$k]"/>
+                            <xar:if condition="isset($value[$k][$i])">
+                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$value[$k][$i]" configuration="$column_configurations[$k]"/>
+                            <xar:else/>
+                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" configuration="$column_configurations[$k]"/>
+                            </xar:if>
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
