@@ -153,7 +153,7 @@ class xarServer extends Object
      *
      * Returns the value of $name server variable.
      * Accepted values for $name are exactly the ones described by the
-     * {@link http://www.php.net/manual/en/reserved.variables.html PHP manual}.
+     * {@link http://www.php.net/manual/en/reserved.variables.server.php PHP manual}.
      * If the server variable doesn't exist void is returned.
      *
      * 

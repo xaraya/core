@@ -43,7 +43,12 @@
         <xar:template file="tablist"/>
         <fieldset>
             <legend>#$object:label# Properties:</legend>
-            <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+            <xar:if condition="!empty($object->withupload)">
+                <xar:set name="enctype">'multipart/form-data'</xar:set>
+            <xar:else />
+                <xar:set name="enctype">'application/x-www-form-urlencoded'</xar:set>
+            </xar:if>
+            <form action="#xarServer::getCurrentURL()#" method="post" enctype="#$enctype#">
                 <xar:if condition="!xarSecurityCheck('EditRoles',0,'Roles',$object:getName())">
                     <xar:data-display object="$object" tplmodule="roles"/>
                     <p>This #$object:label# cannot be edited or deleted.</p>

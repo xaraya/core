@@ -30,7 +30,7 @@ class ArraySequence extends Object implements iSequence, iSequenceAdapter
         return $item;
     }
     // Insert an item on the specified position
-    public function insert(&$item, $position)
+    public function insert($item, $position)
     {
         if($position > $this->tail) return false;
         switch($position) {
