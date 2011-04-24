@@ -27,12 +27,12 @@
                             <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue"/>
                         </td>
                     </xar:for>
-                        <td>
-                            <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
-                            <xar:set name="propid">$id.'_value_' . $i . '_' .$k</xar:set>
-                            <xar:set name="propvalue">$value[$k][$i]</xar:set>
-                            <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue" rows="2" cols="20"/>
-                        </td>
+                    <td>
+                        <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
+                        <xar:set name="propid">$id.'_value_' . $i . '_' .$k</xar:set>
+                        <xar:set name="propvalue">$value[$k][$i]</xar:set>
+                        <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue" rows="2" cols="20"/>
+                    </td>
                     <td>
                         <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype' => $value[1][$i]))#"><img src="#xarTplGetImage('icons/document-properties.png', 'base')#"/></a>
                     </td>
@@ -54,7 +54,12 @@
                     </td>
                 </xar:for>
                 <td>
-                    &#160;
+                    <xar:set name="propname">$name.'[value][' . $k . '][' . $extendedrows . ']'</xar:set>
+                    <xar:set name="propid">$id.'_value_' . $extendedrows . '_' .$k</xar:set>
+                    <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" rows="2" cols="20"/>
+                </td>
+                <td>
+                    <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype' => $value[1][1]))#"><img src="#xarTplGetImage('icons/document-properties.png', 'base')#"/></a>
                 </td>
             </tr>                    
         </tbody>

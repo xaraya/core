@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 
-    <xar:set name="debug">1</xar:set>
+    <xar:set name="debug">0</xar:set>
     <xar:if condition="$debug">
         <xar:set name="index_display">''</xar:set>
         <xar:set name="key_display">''</xar:set>
