@@ -9,17 +9,5 @@
             This template <strong>modules/base/xartemplates/user-main<em>-test</em>.xt</strong> can be reached by adding <strong><a href="#xarServer::getModuleURL('base','user','main',array('page' => 'test'))#">page=<em>test</em></a></strong> to the base module URL.
             You can experiment with various blocklayout features and template tags here if you want...
         </p>
-<!--
-        <p>
-            <xar:comment>Get the sort parameter from the URL request</xar:comment>
-            <xar:set name="sort"><xar:var name="sort" scope="request"/></xar:set>
-            <xar:comment>Show a sorted list of sample items</xar:comment>
-            <xar:data-view object="sample" sort="$sort"/>
-        </p>
-            <xar:data-input type="listing" objectname="objects"/>
--->
     </div>
-    <!--
-    <xar:data-output type="mindmap"/>
-    -->
 </xar:template>
