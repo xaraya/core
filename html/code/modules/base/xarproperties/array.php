@@ -120,7 +120,7 @@ class ArrayProperty extends DataProperty
         
         // If this is an associative array, check if the keys are unique
         if ($this->validation_associative_array) {
-            $initial_count = count($value);
+            $initial_count = count($value[0]);
             $keycol = $value[0];
             $temp = array();
             foreach($keycol as $keyvalue) $temp[$keyvalue] = 1;
@@ -162,19 +162,34 @@ class ArrayProperty extends DataProperty
                 }
                 $this->value = $elements;
             */
-                $temp = array();                
+                /*$temp = array();                
                 foreach ($value as $key => $row) {
                     array_unshift($row,$key);
                     $temp[] = $row;
                 }
                 $value = $temp;
-            }
-            $temp = array();                
-            foreach($value as $i => $column) {
-                foreach ($column as $k => $row) {
-                    $temp[$k][$i] = $value[$i][$k];
+                */
+                // Non associative array
+                $temp = array();
+                foreach($value as $i => $column) {
+                    foreach ($column as $k => $row) {
+                        if ($k == 0) continue;
+                        $temp[$k-1][$i] = $value[$i][$k];
+                    }
+                }
+            } else {
+                // Associative array
+                $temp = array();
+                $keys = array_shift($value);
+                foreach($value as $i => $column) {
+                    foreach ($column as $k => $row) {
+                        if ($k == 0) continue;
+                        $temp[$keys[$k]][$i] = $value[$i][$k];
+                    }
                 }
             }
+            $value = $temp;
+        } else {
             $value = $temp;
         }
         $this->value = serialize($value);
@@ -201,13 +216,15 @@ class ArrayProperty extends DataProperty
                     else $value[] = $element;
                 }
             */
+            /*
                 $temp1 = array();                
                 foreach ($temp as $row) {
-                    $newkey = $row[0];
-                    unset($row[0]);
+                    $newkey = $row[1];
+                    unset($row[1]);
                     $temp1[$newkey] = $row;
                 }
-                $value = $temp1;
+                */
+                $value = $temp;
             } else {
                 $value = $temp;
             }
