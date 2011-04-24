@@ -89,7 +89,7 @@ class xarJS extends Object
                     if (empty($index)) {
                         $index = md5($code);
                     }
-                    $this->queue($position, $type, $code, $index);
+                    self::$queue($position, $type, $code, $index);
                 } elseif (!empty($files)) {
                     // inline code from file contents
                     if (empty($module))
@@ -107,7 +107,7 @@ class xarJS extends Object
                         if (empty($index)) {
                             $index = md5($code);
                         }
-                        $this->queue($position, $type, $code, $index);                  
+                        self::$queue($position, $type, $code, $index);                  
                     }
                 }
                 break;
@@ -126,7 +126,7 @@ class xarJS extends Object
                     if (empty($index)) {
                         $index = $filePath;
                     }
-                    $this->queue($position, $type, xarServer::getBaseURL() . $filePath, $index);
+                    self::$queue($position, $type, xarServer::getBaseURL() . $filePath, $index);
                 }
                 break;
 
@@ -247,7 +247,7 @@ class xarJS extends Object
         // Initialise the search path.
         $searchPath = array();
 
-        if (isset($property)) {
+        if (!empty($property)) {
             // This file is in a property
             // The search path for the JavaScript file.
             $searchPath[] = sys::code() . 'properties/' . $property . '/templates/includes/' . $filename;
