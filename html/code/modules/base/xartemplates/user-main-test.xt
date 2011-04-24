@@ -19,4 +19,7 @@
             <xar:data-input type="listing" objectname="objects"/>
 -->
     </div>
+    <!--
+    <xar:data-output type="mindmap"/>
+    -->
 </xar:template>

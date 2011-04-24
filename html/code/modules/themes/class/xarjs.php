@@ -89,7 +89,7 @@ class xarJS extends Object
                     if (empty($index)) {
                         $index = md5($code);
                     }
-                    self::$queue($position, $type, $code, $index);
+                    $this->queue($position, $type, $code, $index);
                 } elseif (!empty($files)) {
                     // inline code from file contents
                     if (empty($module))
@@ -107,7 +107,7 @@ class xarJS extends Object
                         if (empty($index)) {
                             $index = md5($code);
                         }
-                        self::$queue($position, $type, $code, $index);                  
+                        $this->queue($position, $type, $code, $index);                  
                     }
                 }
                 break;
@@ -126,7 +126,7 @@ class xarJS extends Object
                     if (empty($index)) {
                         $index = $filePath;
                     }
-                    self::$queue($position, $type, xarServer::getBaseURL() . $filePath, $index);
+                    $this->queue($position, $type, xarServer::getBaseURL() . $filePath, $index);
                 }
                 break;
 
