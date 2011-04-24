@@ -197,15 +197,16 @@ class ArrayProperty extends DataProperty
 
     public function getValue()
     {
-        try {
+         try {
             $value = unserialize($this->value);
-            $temp = array();                
-            foreach($value as $i => $row) {
-                foreach ($row as $k => $column) {
-                    $temp[$k][$i] = $value[$i][$k];
-                }
-            }
+            $temp = array();
+            
             if(!$this->validation_associative_array) {
+                foreach($value as $i => $row) {
+                    foreach ($row as $k => $column) {
+                        $temp[$k][$i+1] = $value[$i][$k];
+                    }
+                }
             /*
                 //Legacy format. remove?
                 $outer = explode(';',$this->value);
@@ -224,10 +225,19 @@ class ArrayProperty extends DataProperty
                     $temp1[$newkey] = $row;
                 }
                 */
-                $value = $temp;
             } else {
-                $value = $temp;
+                $keys = array_keys($value);
+                $index = 1;
+                foreach ($keys as $key) {$temp[0][$index] = $key; $index++;}
+                $index = 1;
+                foreach($value as $i => $row) {
+                    foreach ($row as $k => $column) {
+                        $temp[$k+1][$index] = $value[$i][$k];
+                    }
+                    $index++;
+                }
             }
+            $value = $temp;
         } catch(Exception $e) {
             $value = null;
         }
@@ -355,6 +365,7 @@ class ArrayProperty extends DataProperty
     {
         // Remove any empty rows, i.e. those where there is no title
         $temp = array();
+        var_dump($data['configuration']['display_column_definition']['value']);
         foreach ($data['configuration']['display_column_definition']['value'][0] as $k => $v) {
             if (!empty($v)) {
                 $temp[0][] = $v;
