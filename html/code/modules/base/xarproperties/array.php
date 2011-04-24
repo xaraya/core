@@ -72,8 +72,7 @@ class ArrayProperty extends DataProperty
             // Get the number of columns and rows
             $columncount = count($this->display_column_definition['value'][0]);
             if (!xarVarFetch($name . '["value"]',    'array', $elements, 'array', XARVAR_NOT_REQUIRED)) return;
-// Ignore the last row for now. It's the one for adding rows
-//            array_pop($elements);
+
             // Get the number of rows we are saving
             $rows = count($elements);
 
@@ -365,7 +364,6 @@ class ArrayProperty extends DataProperty
     {
         // Remove any empty rows, i.e. those where there is no title
         $temp = array();
-        var_dump($data['configuration']['display_column_definition']['value']);
         foreach ($data['configuration']['display_column_definition']['value'][0] as $k => $v) {
             if (!empty($v)) {
                 $temp[0][] = $v;

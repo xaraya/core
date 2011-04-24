@@ -50,7 +50,7 @@
                     <!-- This column holds the index of the respective row -->
                     <!-- By definition this is a static value (can't change via the UI) -->
                     <td style="display: #$index_display#">
-                        #$col_name#
+                        #$col_name# #$col_id#
                         <xar:data-input type="1" name="$col_name" id="$col_id" value="$i-1" />
                     </td>
                     
@@ -99,7 +99,7 @@
             </xar:for>
             <xar:set name="lastrow">$i-2</xar:set>
             
-<!--  Begin dummy line for adding rows --> 
+<!--  Begin dummy line for adding rows when no js enabled --> 
             <xar:if condition="($rows lt $maximum_rows) AND ($addremove ne 0)">
                 <xar:set name="thisrow">$lastrow+1</xar:set>
                 <xar:set name="row_name">"{$name}[value][{$thisrow}]"</xar:set>
@@ -108,7 +108,7 @@
                 <xar:set name="col_id">"{$row_id}_0"</xar:set>
                 <tr id="#$id#_rowtemplate">
                     <td style="display: #$index_display#">
-                        #$col_name#
+                        #$col_name# #$col_id#
                         <xar:data-input type="1" name="$col_name" id="$col_id" value="$thisrow"/>
                     </td>
                     <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
@@ -133,12 +133,14 @@
                     </td>
                 </tr>
                 <tr id="#$id#_addrow" style="display:none;">
-                    <xar:set name="colspan">count($column_titles)+1</xar:set>                
+                    <xar:set name="colspan">$debug ? count($column_titles)+2 : count($column_titles)+1</xar:set>                
                     <td colspan="#$colspan#" class="xar-align-right">
                         <img src="#xarTplGetImage('icons/add.png', 'base')#" onclick="javascript:#$id#_addTableRow('#$id#_addrow')"/>                
                     </td>            
                 </tr>
             </xar:if>
+<!--  End dummy line for adding rows when no js enabled --> 
+
             <!-- turn off the new row template, turn on the new row button if js enabled -->
             <script type="text/javascript">
                 setDisplayOff('#$id#_rowtemplate');
