@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    
+<!-- START: This can be modified (the text) or moved around as a block -->
+    <xar:if condition="$addremove">
+        <div id="add-element_#$fieldprefix#">
+            <span style="cursor: pointer">
+                Add Item
+            </span>
+        </div>
+    </xar:if>
+<!-- END: This can be modified (the text) or moved around as a block -->
+    
+    <div id="item_content_#$fieldprefix#">
+        <xar:set name="index">'index_' . $fieldprefix</xar:set>
+        <xar:set name="$index">0</xar:set>
+        <xar:set name="prefix">$object->getFieldPrefix()</xar:set>
+        <xar:foreach in="$items" key="$key" value="$item">
+            <!-- xar:set name="$index">$$index+1</xar:set> -->
+            <xar:set name="$index">$key</xar:set>
+            <xar:set name="dummy">$object->setFieldPrefix($$index . '_' . $prefix)</xar:set>
+            <xar:set name="dummy">$object->setFieldValues($item)</xar:set>
+            <div id="#$key#">
+
+<!-- START: This can be modified (the text) or moved around as a block -->
+                <xar:if condition="$addremove eq 2">
+                    <div id="template_#$fieldprefix#_#$$index#">
+                        <span style="cursor: pointer">
+                            Remove
+                        </span>
+                        <script>
+                            el = document.getElementById('template_#$fieldprefix#_#$$index#');
+                            setRemove(el);
+                        </script>
+                    </div>
+                </xar:if>
+<!-- END: This can be modified (the text) or moved around as a block -->
+
+                <xar:data-form object="$object" tplmodule="$tplmodule" layout="$layout" />
+            </div>
+        </xar:foreach>
+    </div>
+</xar:template>

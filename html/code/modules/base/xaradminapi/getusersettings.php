@@ -33,7 +33,7 @@ function base_adminapi_getusersettings(Array $args=array())
             $object->properties[$name]->source = 'module variables: ' . $args['module'];
         }
         $object->datastores = array();
-        $object->getDatastores();
+        $object->getDatastore();
         $object->getItem($args);
     }
     return $object;
