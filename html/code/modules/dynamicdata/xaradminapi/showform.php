@@ -21,6 +21,10 @@
 function dynamicdata_adminapi_showform(Array $args=array())
 {
     extract($args);
+    
+    // Support the objectname parameter in the data-form tag 
+    if (isset($args['objectname'])) $args['name'] = $args['objectname'];
+    
     $args['fallbackmodule'] = 'current';
     $descriptor = new DataObjectDescriptor($args);
     $args = $descriptor->getArgs();
