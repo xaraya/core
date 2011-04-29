@@ -26,6 +26,7 @@ function main_upgrade_220()
                         'sql_220_08', // Re-classify Authsystem to Users & Groups
                         'sql_220_09', // Add 2 configvars to themes module (one was already there)
                         'sql_220_10', // Move users that see debug info from DD to roles module
+                        'sql_220_10', // Add a configvar for the ssl port
                         
                     );
     foreach ($upgrades as $upgrade) {
