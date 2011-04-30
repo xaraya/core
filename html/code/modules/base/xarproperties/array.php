@@ -140,7 +140,7 @@ class ArrayProperty extends DataProperty
 
     function setValue($value=null)
     {
-        // If passing an string we assume it is already a serialzed array of the correct type
+        // If passing a string we assume it is already a serialzed array of the correct type
         if (empty($value)) $value = array();
         if (!empty($value) && is_array($value)) {
             //this code is added to store the values as value1,value2 in the DB for non-associative storage
@@ -188,10 +188,10 @@ class ArrayProperty extends DataProperty
                 }
             }
             $value = $temp;
+            $this->value = serialize($value);
         } else {
-            $value = $temp;
+            $this->value = $value;
         }
-        $this->value = serialize($value);
     }
 
     public function getValue()
