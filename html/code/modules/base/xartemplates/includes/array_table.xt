@@ -33,11 +33,6 @@
             </tr>        
         </thead>
         <tbody id="#$id#_rows">
-        <!--
-                                Rows<xar:set name="xxx">var_dump($rows)</xar:set>
-                                Values<xar:set name="xxx">var_dump($value)</xar:set>
-                                Configuration<xar:set name="xxx">var_dump($column_configurations)</xar:set>
-        -->
             <xar:for start="$i=1" test="$i le $rows" iter="$i++">
                 <!-- name[row] -->
                 <xar:set name="j">$i-1</xar:set>

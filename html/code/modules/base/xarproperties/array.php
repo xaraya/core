@@ -130,7 +130,9 @@ class ArrayProperty extends DataProperty
                 } else {
                     $this->invalid = xarML('The key values of the array are not unique');
                 }
-                $this->value = null;
+// This results in the "bad data" (but only the last row of the same key) being displayed
+// Can we do better?
+//                $this->value = null;
                 return false;
             }
         }
