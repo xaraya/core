@@ -6,10 +6,18 @@
     <xar:else/>
      <xar:set name="evt_change">'return true;'</xar:set>
     </xar:if>
-    <xar:if condition="$checked">
-      <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" checked="checked"/>
+    <xar:if condition="isset($disabled)">
+        <xar:if condition="$checked">
+          <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" checked="checked" disabled="disabled"/>
+        <xar:else/>
+          <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" disabled="disabled"/>
+        </xar:if>
     <xar:else/>
-      <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#"/>
+        <xar:if condition="$checked">
+          <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" checked="checked"/>
+        <xar:else/>
+          <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#"/>
+        </xar:if>
     </xar:if>
     <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

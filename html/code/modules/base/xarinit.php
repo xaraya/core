@@ -161,6 +161,7 @@ function base_init()
     xarConfigVars::set(null, 'Site.Core.FixHTMLEntities',true);
     xarConfigVars::set(null, 'Site.Core.TimeZone', 'Etc/UTC');
     xarConfigVars::set(null, 'Site.Core.EnableShortURLsSupport', false);
+    
     // when installing via https, we assume that we want to support that :)
     $HTTPS = xarServer::getVar('HTTPS');
     /* jojodee - monitor this fix.
@@ -175,6 +176,7 @@ function base_init()
     } else {
         xarConfigVars::set(null, 'Site.Core.EnableSecureServer', false);
     }
+    xarConfigVars::set(null, 'Site.Core.SecureServerPort', "i:443;");
 
     xarConfigVars::set(null, 'Site.Core.LoadLegacy', false);
     xarConfigVars::set(null, 'Site.Session.SecurityLevel', 'Medium');

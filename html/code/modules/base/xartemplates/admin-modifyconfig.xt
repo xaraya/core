@@ -247,16 +247,6 @@
                     <fieldset>
                         <legend>Sessions and Security</legend>
                         <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Configure to run on a secure server.</xar:var>
-                            <label for="secureserver" title="#$label#" class="xar-form-label">
-                                Configure for Secure Server
-                            </label>
-                            <xar:set name="checked">
-                                <xar:var scope="config" name="Site.Core.EnableSecureServer"/>
-                            </xar:set>
-                            <xar:data-input type="checkbox" name="secureserver" id="secureserver" checked="$checked"/>
-                        </div>
-                        <div class="xar-form-input-wrapper">
                             <xar:var name="label">Security options for sessions</xar:var>
                             <label for="securitylevel" title="#$label#" class="xar-form-label">
                                 Security Level:
@@ -352,6 +342,27 @@
                             <span>
                                 &#160;Default: #xarServer::getVar('HTTP_HOST')# for security level 'High'
                             </span>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>SSL Support</legend>
+                        <div class="xar-form-input-wrapper">
+                            <xar:var name="label">Configure to run on a secure server.</xar:var>
+                            <label for="secureserver" title="#$label#" class="xar-form-label">
+                                Configure for secure server
+                            </label>
+                            <xar:set name="checked">
+                                <xar:var scope="config" name="Site.Core.EnableSecureServer"/>
+                            </xar:set>
+                            <xar:data-input type="checkbox" name="secureserver" id="secureserver" checked="$checked"/>
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <xar:var name="label">SSL port</xar:var>
+                            <label for="sslport" title="#$label#" class="xar-form-label">SSL port</label>
+                                <xar:set name="value">
+                                    <xar:var scope="config" name="Site.Core.SecureServerPort"/>
+                                </xar:set>
+                            <input type="text" id="sslport" name="sslport" value="#$value#" class="xar-form-textshort"/>
                         </div>
                     </fieldset>
                     <fieldset>
