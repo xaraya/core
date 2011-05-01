@@ -13,8 +13,8 @@
             <xar:set name="key_display">'none'</xar:set>
         </xar:if>
     </xar:if>
-    
-    <xar:template module="base" file="arrayjs"/>
+    <!-- Import the array js -->
+    <xar:javascript module="base" filename="array.js"/>
     <xar:javascript module="base" filename="toggle.js"/>
     <table class="xar-border-none xar-margin-thicktop" border="1">
         <thead>
@@ -77,9 +77,9 @@
                         <!-- name[row][delete] -->
                         <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
                         <xar:set name="del_id">"{$row_id}_delete"</xar:set>
-                        <xar:if condition="($rows ge $minimum_rows) AND ($addremove eq 2)">
+                        <xar:if condition="($rows gt $minimum_rows) AND ($addremove eq 2)">
                             <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked=""/>
-                            <img class="xar-icon" id="#$row_id#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_delTableRow('#$row_id#')" style="cursor: pointer;display:none;"/> 
+                            <img class="xar-icon" id="#$row_id#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_table.removeRow('#$row_id#')" style="cursor: pointer;display:none;"/> 
                             <!-- Hide checkboxes, show delete icons if js enabled -->
                             <script type="text/javascript">
                                 setDisplayOff('#$del_id#');
@@ -99,14 +99,23 @@
             </xar:for>
             <xar:set name="lastrow">$i-2</xar:set>
             
-<!--  Begin dummy line for adding rows when no js enabled --> 
-            <xar:if condition="($rows lt $maximum_rows) AND ($addremove ne 0)">
+<!--  Begin dummy line for adding rows when no js enabled -->
+<!--  NOTE: unless addremove is 0 this must always be present in the markup otherwise js will
+      fail if a row is subsequently deleted and an attempt is made to add a new one -->
+            <xar:if condition="($addremove ne 0)">
                 <xar:set name="thisrow">$lastrow+1</xar:set>
                 <xar:set name="row_name">"{$name}[value][{$thisrow}]"</xar:set>
                 <xar:set name="row_id">"{$name}_{$thisrow}"</xar:set>
                 <xar:set name="col_name">"{$row_name}[0]"</xar:set>
                 <xar:set name="col_id">"{$row_id}_0"</xar:set>
-                <tr id="#$id#_rowtemplate">
+                <!-- Hide this row if we're already at the limit 
+                     NOTE: can't rely on JS for this, it may be disabled -->
+                <xar:if condition="$rows lt $maximum_rows">
+                    <xar:set name="row_display">''</xar:set>
+                <xar:else/>
+                    <xar:set name="row_display">'none'</xar:set>
+                </xar:if>
+                <tr id="#$id#_rowtemplate" style="display: #$row_display#">
                     <td style="display: #$index_display#">
                         #$col_name# #$col_id#
                         <xar:data-input type="1" name="$col_name" id="$col_id" value="$thisrow"/>
@@ -129,18 +138,30 @@
                         <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
                         <xar:set name="del_id">"{$row_id}_delete"</xar:set>
                         <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked="checked"/>
-                        <img id="#$id#_delbutton" class="xar-icon" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_delTableRow('#$row_id#')"  style="display:none;cursor: pointer;"/>
+                        <img id="#$row_id#_delbutton" class="xar-icon" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_table.removeRow('#$row_id#')"  style="display:none;cursor: pointer;"/>
                     </td>
                 </tr>
-                <tr id="#$id#_addrow" style="display:none;">
-                    <xar:set name="colspan">$debug ? count($column_titles)+2 : count($column_titles)+1</xar:set>                
-                    <td colspan="#$colspan#" class="xar-align-right">
-                        <img src="#xarTplGetImage('icons/add.png', 'base')#" onclick="javascript:#$id#_addTableRow('#$id#_addrow')"/>                
-                    </td>            
-                </tr>
+
             </xar:if>
 <!--  End dummy line for adding rows when no js enabled --> 
 
+
+
+        </tbody>
+        <xar:if condition="($addremove ne 0)">
+            <tfoot id="#$id#_addrow" style="display:none;">
+                <tr>
+                    <xar:set name="colspan">$debug ? count($column_titles)+2 : count($column_titles)+1</xar:set>                
+                    <td colspan="#$colspan#" class="xar-align-right">
+                        <xar:if condition="$rows lt $maximum_rows">
+                            <img id="#$id#_addbutton" class="xar-icon" src="#xarTplGetImage('icons/add.png', 'base')#" onclick="javascript:#$id#_table.addRow()"/>     
+                        <xar:else/>
+                            <img id="#$id#_addbutton" class="xar-icon-disabled" src="#xarTplGetImage('icons/add.png', 'base')#" onclick="return false;"/>     
+                        </xar:if>        
+                    </td>            
+                </tr>        
+            </tfoot>
+        </xar:if>
             <!-- turn off the new row template, turn on the new row button if js enabled -->
             <script type="text/javascript">
                 setDisplayOff('#$id#_rowtemplate');
@@ -150,7 +171,23 @@
             </script>           
 <!--  End dummy line for adding rows -->
 
-        </tbody>
+    <!-- Create the js object containing all our methods 
+         NOTE: this must come after the table markup 
+         @TODO: <xar:javascript position="body" code=""/>-->    
+    <script type="text/javascript">
+        var #$id#_table = new arrayTable( 
+            { 
+                id: '#$id#_rows',            // element containing rows 
+                name: '#$id#_table',         // var name of this object 
+                min: '#$minimum_rows#',      // minimum rows
+                max: '#$maximum_rows#',      // maximum rows
+                addremove: '#$addremove#',   // add remove state
+                row_tpl: '#$id#_rowtemplate',// the id of the row template element
+                add_btn: '#$id#_addbutton',  // the id of the add row button
+                debug: false                 // optionally debug 
+            }
+        );
+    </script>    
 
     </table>
 
