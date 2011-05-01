@@ -50,7 +50,12 @@
                     <td>
                         <xar:set name="propname">$name.'[value][' . $k . '][' . $extendedrows . ']'</xar:set>
                         <xar:set name="propid">$id.'_value_'.$k</xar:set>
-                        <xar:data-input type="$column_types[$k]" name="$propname" id="$propid"/>
+                        <!-- Force the fieldtype to a textbox -->
+                        <xar:if condition="$k eq 1">
+                            <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="2"/>
+                        <xar:else/>
+                            <xar:data-input type="$column_types[$k]" name="$propname" id="$propid"/>
+                        </xar:if>
                     </td>
                 </xar:for>
                 <td>
@@ -59,7 +64,7 @@
                     <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" rows="2" cols="20"/>
                 </td>
                 <td>
-                    <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype' => $value[1][1]))#"><img src="#xarTplGetImage('icons/document-properties.png', 'base')#"/></a>
+                    <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype' => 2))#"><img src="#xarTplGetImage('icons/document-properties.png', 'base')#"/></a>
                 </td>
             </tr>                    
         </tbody>
