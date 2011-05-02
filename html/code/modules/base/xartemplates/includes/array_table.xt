@@ -33,6 +33,7 @@
             </tr>        
         </thead>
 
+        <!-- rows container (rows_id: 'rows' for js) -->
         <tbody id="#$id#_rows">
             <xar:for start="$i=1" test="$i le $rows" iter="$i++">
                 <!-- name[row] -->
@@ -70,15 +71,14 @@
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
+                        <!-- If js is available this will be replaced by a delete icon -->
                         <!-- name[row][delete] -->
                         <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
                         <xar:set name="del_id">"{$row_id}_delete"</xar:set>
                         <xar:if condition="($rows gt $minimum_rows) AND ($addremove eq 2)">
                             <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked=""/>
-                            <!-- The JS takes care of displaying a delete icon for us -->  
                         <xar:else/>
                             <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked="" disabled="disabled"/>
-                            <!-- The JS takes care of displaying a delete icon for us -->   
                         </xar:if>
                     </td>            
                 </tr>
@@ -101,6 +101,8 @@
                 <xar:else/>
                     <xar:set name="row_display">'none'</xar:set>
                 </xar:if>
+                <!-- The row template (tpl_id: 'template' for js) 
+                     If JS is available it will hide this and display the add button -->
                 <tr id="#$id#_template" style="display: #$row_display#">
                     <td style="display: #$index_display#">
                         #$col_name# #$col_id#
@@ -120,11 +122,11 @@
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
+                        <!-- If js is available this will be replaced by a delete icon -->
                         <!-- name[row][delete] -->
                         <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
                         <xar:set name="del_id">"{$row_id}_delete"</xar:set>
                         <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked="checked"/>
-                        <!-- The JS takes care of displaying a delete icon for us -->  
                     </td>
                 </tr>
 
@@ -136,11 +138,15 @@
                 <tr>
                     <xar:set name="infospan">$debug?count($column_titles)+1:count($column_titles)</xar:set>
                     <td colspan="#$infospan#">
+                    <!-- Row count container (count_id: 'row_count' for js)
+                         When JS is enabled and count_id is supplied this field will 
+                         be updated with the current row count -->  
                         Total Rows: <span id="#$id#_row_count">#$lastrow#</span>
-                    </td>              
+                    </td>
+                    <!-- Add row container (add_id: 'addrow' for js) -->       
                     <td id="#$id#_addrow" colspan="1" class="xar-align-right">
                         <!-- Placeholder for the add button
-                            JS takes care of actually adding the button for us -->     
+                            If JS is available the add icon will appear here -->    
                     </td>            
                 </tr>        
             </tfoot>
