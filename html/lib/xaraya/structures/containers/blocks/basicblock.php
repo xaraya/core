@@ -100,7 +100,7 @@ class BasicBlock extends ObjectDescriptor implements iBlock
          // populate content on first run
         if (empty($this->content)) $this->content = $this->getInfo();
         // set a sensible default for blocks not yet using xarversion
-        $oldver = !empty($this->content['xarversion']) ? $this->content['xarversion'] : '0.0.0';
+        $oldver = is_array($this->content) && !empty($this->content['xarversion']) ? $this->content['xarversion'] : '0.0.0';
         // compare versions if we have a new version that is different to the old version,
         if (!empty($newver) && $newver != $oldver) {
             sys::import('xaraya.version');
