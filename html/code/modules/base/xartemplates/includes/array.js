@@ -62,6 +62,11 @@ function arrayTable(args)
  * NOTE: this method must be called *after* the table is rendered in the DOM
 **/
     this.init = function() {
+        if (!this.id) {
+            if (this.debug)
+                this.debugMsg(this.id + '.init() id is required');
+            return;
+        }
         this.table = document.getElementById(this.id + '_' + this.rows_id);
         if (!this.table) {
             if (this.debug)
@@ -141,10 +146,11 @@ function arrayTable(args)
     }
 
 /**
- * Util function to reindex rows, called by inint and add/removeRow methods
+ * Util function to reindex rows, called by init and add/removeRow methods
 **/
     this.reIndex = function() {
         numrows = this.table.rows.length;
+        // reindex rows
         for (r=0; r<numrows; r++) {
             var row = this.table.rows[r];
             // index this rows element attributes NOTE: we *must* do this first 
@@ -166,7 +172,7 @@ function arrayTable(args)
                     if (!delbtn) {
                         // not already set, 
                         // look for the delete checkbox dd_id + _ + row + del_id                
-                        var del = document.getElementById(this.id + '_' + r + '_' + this.del_id);  
+                        del = document.getElementById(this.id + '_' + r + '_' + this.del_id);  
                         // if it exists and is a checkbox, disable it, and hide it
                         if (del && del.type == 'checkbox') {
                             del.style.display = 'none';
@@ -200,41 +206,43 @@ function arrayTable(args)
                     }
                 }
             } 
-            // show the add button if add rows only AND not at maximum rows, OR if we can add and remove
-            if ( (this.addremove == 1 && numrows-1 < this.max) || (this.addremove == 2) ) {
-                // see if the buttons already set 
-                addbtn_id = this.id + '_' + this.add_id + '_btn';
-                addbtn = document.getElementById(addbtn_id);
-                if (!addbtn) {    
-                    // not already set, get the button container dd_id + add_id 
-                    add = document.getElementById(this.id + '_' + this.add_id);
-                    if (add) {
-                        // create the button and add attributes from config
-                        addbtn = this.createButton(
-                            addbtn_id, 
-                            this.add_alt, 
-                            this.add_title, 
-                            this.add_icon
-                        );
-                        add.appendChild(addbtn);
-                    }
-                }                
-                if (addbtn) {
-                    // see if we're at the maximum rows
-                    if (numrows-1 >= this.max) {
-                        // disable the button 
-                        addbtn.setAttribute('onclick', 'return false;');
-                        addbtn.setAttribute('class', this.icon_disabled);
-                        addbtn.style.cursor = this.pointer_disabled;
-                    } else {
-                        // enable the button 
-                        addbtn.setAttribute('onclick', this.id + '.addRow();return false;');
-                        addbtn.setAttribute('class', this.icon_enabled);
-                        addbtn.style.cursor = this.pointer_enabled;
-                    }
+        } // end rows
+
+        // show the add button if add rows only AND not at maximum rows, OR if we can add and remove
+        if ( (this.addremove == 1 && numrows-1 < this.max) || (this.addremove == 2) ) {
+            // see if the buttons already set 
+            addbtn_id = this.id + '_' + this.add_id + '_btn';
+            addbtn = document.getElementById(addbtn_id);
+            if (!addbtn) {    
+                // not already set, get the button container dd_id + add_id 
+                add = document.getElementById(this.id + '_' + this.add_id);
+                if (add) {
+                    // create the button and add attributes from config
+                    addbtn = this.createButton(
+                        addbtn_id, 
+                        this.add_alt, 
+                        this.add_title, 
+                        this.add_icon
+                    );
+                    add.appendChild(addbtn);
+                }
+            }                
+            if (addbtn) {
+                // see if we're at the maximum rows
+                if (numrows-1 >= this.max) {
+                    // disable the button 
+                    addbtn.setAttribute('onclick', 'return false;');
+                    addbtn.setAttribute('class', this.icon_disabled);
+                    addbtn.style.cursor = this.pointer_disabled;
+                } else {
+                    // enable the button 
+                    addbtn.setAttribute('onclick', this.id + '.addRow();return false;');
+                    addbtn.setAttribute('class', this.icon_enabled);
+                    addbtn.style.cursor = this.pointer_enabled;
                 }
             }
-        }
+        } // end add button
+
         // if a count_id is specified
         if (this.count_id) {
             // get the container with the specified id
@@ -242,7 +250,12 @@ function arrayTable(args)
             if (count)
                 // update the containers inner html with the current row count  
                 count.innerHTML = numrows-1;
-        }
+        } // end count
+        // update value of hidden last row field 
+        lastrow = document.getElementById(this.id + '_lastrow');
+        if (lastrow)
+            lastrow.value = numrows-1;
+        
         return true;
     }
 
