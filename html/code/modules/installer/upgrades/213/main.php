@@ -3,35 +3,24 @@
  * @package modules
  * @subpackage installer module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.1.3
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/200.html
  */
 
-function main_upgrade_220()
+function main_upgrade_213()
 {
-    $data['upgrade']['message'] = xarML('The upgrade to version 2.2.0 was successfully completed');
+    $data['upgrade']['message'] = xarML('The upgrade to version 2.1.3 was successfully completed');
     $data['upgrade']['tasks'] = array();
     
     $upgrades = array(
-                        'sql_220_01',
-                        'sql_220_02',
-                        'sql_220_03', // Create event system table
-                        'sql_220_04', // Initialise event system, register event subjects and observers
-                        'sql_220_05', // Initialize hooks system, register hook subjects
-                        'sql_220_06', // Register hook observers
-                        'sql_220_07', // Create hooks table, register hooks
-                        'sql_220_08', // Re-classify Authsystem to Users & Groups
-                        'sql_220_09', // Add 2 configvars to themes module (one was already there)
-                        'sql_220_10', // Move users that see debug info from DD to roles module
-                        'sql_220_11', // Add a configvar for the ssl port
-                        'sql_220_12', // Redefine the config property of the objects object
+                        'sql_213_01', // Update core module version numbers
                         
                     );
     foreach ($upgrades as $upgrade) {
-        if (!Upgrader::loadFile('upgrades/220/database/' . $upgrade . '.php')) {
+        if (!Upgrader::loadFile('upgrades/213/database/' . $upgrade . '.php')) {
             $data['upgrade']['tasks'][] = array(
                 'reply' => xarML('Failed!'),
                 'description' => Upgrader::$errormessage,

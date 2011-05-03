@@ -262,9 +262,8 @@ class xarServer extends Object
                 if (preg_match('/^http:/', self::getVar('REQUEST_URI'))) {
                     return 'http';
                 }
-                $HTTPS = self::getVar('HTTPS');
-                // IIS seems to set HTTPS = off for some reason
-                return (!empty($HTTPS) && $HTTPS != 'off') ? self::PROTOCOL_HTTP : self::PROTOCOL_HTTPS;
+                $serverport = $_SERVER['SERVER_PORT'];
+                return ($serverport == xarConfigVars::get(null, 'Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
             }
         }
         return self::PROTOCOL_HTTP;

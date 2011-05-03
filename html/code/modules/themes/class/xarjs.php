@@ -59,6 +59,7 @@ class xarJS extends Object
  *                 name of file(s) to include, required if $type is src, or<br/> 
  *                 file(s) to get contents from if $type is code and $code isn't supplied<br/>
  *         string  $args[module] name of module to look for file(s) in, optional, default current module<br/>
+ *         string  $args[property] name of property to look for file(s) in, optional<br/>
  *         string  $args[position] position to render the js, eg head or body, optional, default head<br/>
  *         string  $args[index] optional index in queue relative to other scripts<br/>
  * @return boolean true on success
@@ -93,8 +94,10 @@ class xarJS extends Object
                     // inline code from file contents
                     if (empty($module))
                         list($module) = xarController::$request->getInfo(); 
+                    // No fallback for this param
+                    if (empty($property)) $property = '';
                     foreach ($files as $file) {
-                        $filePath = $this->findfile(array('filename' => trim($file), 'module' => $module));
+                        $filePath = $this->findfile(array('filename' => trim($file), 'property' => $property, 'module' => $module));
                         if (empty($filePath)) continue;
                         // get file contents
                         $code = file_get_contents($filePath);
@@ -113,8 +116,10 @@ class xarJS extends Object
                 // include file
                 if (empty($module))
                     list($module) = xarController::$request->getInfo();        
+                // No fallback for this param
+                if (empty($property)) $property = '';
                 foreach ($files as $file) {
-                    $filePath = $this->findfile(array('filename' => trim($file), 'module' => $module));
+                    $filePath = $this->findfile(array('filename' => trim($file), 'property' => $property, 'module' => $module));
                     if (empty($filePath)) continue;
                     // Use filepath as index to prevent the same file 
                     // from being included more than once.
@@ -122,7 +127,7 @@ class xarJS extends Object
                         $index = $filePath;
                     }
                     $this->queue($position, $type, xarServer::getBaseURL() . $filePath, $index);
-                } 
+                }
                 break;
 
         }
@@ -221,6 +226,7 @@ class xarJS extends Object
  *         string  $args[filename] name of file to find<br/> 
  *         string  $args[module] name of module to look for filename in, optional, default current module<br/>
  *         integer $args[modid] regid of module to look for filename in (deprecated, use module name)<br/>
+ *         integer $args[property] name of property to look for filename in<br/>
  * @return string path to file if found, empty otherwise
  * @throws none
 **/
@@ -238,37 +244,44 @@ class xarJS extends Object
             $params = '';
         } 
 
-        // Use the current module if none supplied.
-        if (empty($module) && empty($modid)) {
-            list($module) = xarController::$request->getInfo();
-        }
-
-        // Get the module ID from the module name.
-        if (empty($modid) && !empty($module)) {
-            $modid = xarMod::getRegID($module);
-        }
-
-        // Get details for the module if we have a valid module id.
-        if (!empty($modid)) {
-            $modInfo = xarMod::getInfo($modid);
-            // Get module directory if we have a valid module.
-            if (!empty($modInfo)) {
-                $modOsDir = $modInfo['osdirectory'];
-            }
-        }
-
-        // Theme base directory.
-        $themedir = xarTplGetThemeDir();
-
         // Initialise the search path.
         $searchPath = array();
 
-        // The search path for the JavaScript file.
-        $searchPath[] = $themedir . '/scripts/' . $filename;
-        if (isset($modOsDir)) {
-            $searchPath[] = $themedir . '/modules/' . $modOsDir . '/includes/' . $filename;
-            $searchPath[] = $themedir . '/modules/' . $modOsDir . '/xarincludes/' . $filename;
-            $searchPath[] = sys::code() . 'modules/' . $modOsDir . '/xartemplates/includes/' . $filename;
+        if (!empty($property)) {
+            // This file is in a property
+            // The search path for the JavaScript file.
+            $searchPath[] = sys::code() . 'properties/' . $property . '/templates/includes/' . $filename;
+        } else {
+            // This file is in a module
+            // Use the current module if none supplied.
+            if (empty($module) && empty($modid)) {
+                list($module) = xarController::$request->getInfo();
+            }
+    
+            // Get the module ID from the module name.
+            if (empty($modid) && !empty($module)) {
+                $modid = xarMod::getRegID($module);
+            }
+    
+            // Get details for the module if we have a valid module id.
+            if (!empty($modid)) {
+                $modInfo = xarMod::getInfo($modid);
+                // Get module directory if we have a valid module.
+                if (!empty($modInfo)) {
+                    $modOsDir = $modInfo['osdirectory'];
+                }
+            }
+    
+            // Theme base directory.
+            $themedir = xarTplGetThemeDir();
+    
+            // The search path for the JavaScript file.
+            $searchPath[] = $themedir . '/scripts/' . $filename;
+            if (isset($modOsDir)) {
+                $searchPath[] = $themedir . '/modules/' . $modOsDir . '/includes/' . $filename;
+                $searchPath[] = $themedir . '/modules/' . $modOsDir . '/xarincludes/' . $filename;
+                $searchPath[] = sys::code() . 'modules/' . $modOsDir . '/xartemplates/includes/' . $filename;
+            }
         }
 
         foreach($searchPath as $filePath) {

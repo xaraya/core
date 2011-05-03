@@ -23,7 +23,9 @@
                     <br />
                     Contact the system administrator if you think this is an error.
                 </div>
-                <input type="hidden" name="redirecturl" id="returnurl" value="#$redirecturl#"/>
+                <xar:if condition="isset($redirecturl)">
+                    <input type="hidden" name="redirecturl" id="returnurl" value="#$redirecturl#"/>
+                </xar:if>
             <xar:elseif condition="$layout eq 'no_block_privileges'" />
                 <div style="margin-top: 20px; margin-left: 20px">
                     You don't have the correct privileges to view this block
