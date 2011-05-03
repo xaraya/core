@@ -80,7 +80,7 @@ class SequenceAdapter extends Object implements iAdapter, iSequenceAdapter
         $item = $this->implementor->get($position); 
         return $item;
     }
-    protected function insert(&$item, $position) 
+    protected function insert($item, $position) 
     { 
         return $this->implementor->insert($item, $position);
     }
