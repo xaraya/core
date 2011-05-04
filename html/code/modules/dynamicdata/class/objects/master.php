@@ -698,23 +698,23 @@ class DataObjectMaster extends Object
         $current = current($info);
         foreach ($current as $key => $value) 
             if (strpos($key, 'object_') === 0) $data[substr($key,7)] = $value;
-        $data = array_merge($args,$data);        
+        $data = $args + $data;        
         $data['propertyargs'] =& $info;
 
         sys::import('modules.dynamicdata.class.objects.list');
         $class = 'DataObjectList';
         if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) include_once(sys::code() . $data['filepath']);
-        if(!empty($args['class']))
+        if(!empty($data['class']))
         {
-            if(class_exists($args['class'] . 'List'))
+            if(class_exists($data['class'] . 'List'))
             {
                 // this is a generic classname for the object, list and interface
-                $class = $args['class'] . 'List';
+                $class = $data['class'] . 'List';
             }
-            elseif(class_exists($args['class']))
+            elseif(class_exists($data['class']))
             {
                 // this is a specific classname for the list
-                $class = $args['class'];
+                $class = $data['class'];
             }
         }
         $descriptor = new DataObjectDescriptor($data);
@@ -1144,7 +1144,8 @@ class DataObjectMaster extends Object
                     $this->dataquery->leftjoin($leftside,$rightside);
                 }
             } catch (Exception $e) {
-                echo 'Bad object relation: ' . $key . ' or ' . $value;
+                if (isset($key)) echo 'Bad object relation: ' . $key . ' or ' . $value;
+                else echo 'The object relation cannot be read (badly formed)';
             }
         }
         foreach ($object->properties as $name => $property) {
