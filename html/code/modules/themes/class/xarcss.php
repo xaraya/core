@@ -208,7 +208,7 @@ class xarCSS extends Object
             }
 
         } elseif ($this->scope == 'property') {            
-            $propertystylesheet = sys::code() . "properties/" . strtolower($this->base) . "/style/" . $this->filename . "." . $this->fileext;
+            $propertystylesheet = sys::code() . "properties/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
             if(!file_exists($propertystylesheet)) throw new FileNotFoundException($propertystylesheet);
             return $propertystylesheet;
         } else {
