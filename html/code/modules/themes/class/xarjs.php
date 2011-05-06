@@ -250,7 +250,7 @@ class xarJS extends Object
         if (!empty($property)) {
             // This file is in a property
             // The search path for the JavaScript file.
-            $searchPath[] = sys::code() . 'properties/' . $property . '/templates/includes/' . $filename;
+            $searchPath[] = sys::code() . 'properties/' . $property . '/xartemplates/includes/' . $filename;
         } else {
             // This file is in a module
             // Use the current module if none supplied.

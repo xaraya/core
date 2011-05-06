@@ -722,7 +722,7 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData, $proper
     // Check for a property template as a fallback
     $sourceFileName = xarTplGetThemeDir() . "properties/$propertyName/templates/includes/$templateName.xt";
     if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
-    $sourceFileName = sys::code() . "properties/$propertyName/templates/includes/$templateName.xt";
+    $sourceFileName = sys::code() . "properties/$propertyName/xartemplates/includes/$templateName.xt";
     if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
     echo $sourceFileName;exit;
     // Not found: raise an exception
@@ -854,7 +854,7 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
     } elseif(!empty($templateName) &&
         file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt")) {
     } elseif(!empty($templateName) &&
-        file_exists($sourceFileName = sys::code() . "properties/$templateName/templates/$tplBase.xt")) {
+        file_exists($sourceFileName = sys::code() . "properties/$templateName/xartemplates/$tplBase.xt")) {
     } elseif(
         file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt")) {
     } elseif(
