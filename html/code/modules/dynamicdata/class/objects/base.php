@@ -67,14 +67,6 @@ class DataObject extends DataObjectMaster implements iDataObject
             $primarystore = $this->properties[$this->primary]->datastore;
         }
 
-        /*if(!empty($args['fieldlist'])) {
-        // CHECKME: is this line needed?
-            $fields = $this->getFieldList();
-            $this->setFieldList($args['fieldlist']);
-        } else {
-            $this->setFieldList();
-        }*/
-                
         /* General sequence:
          * 1. Run the datastore's getItem method
          *
@@ -83,7 +75,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         $itemid = $this->datastore->getItem($args);
 
-        if(!empty($args['fieldlist'])) $this->setFieldList($fields);
+        if(!empty($args['fieldlist'])) $this->setFieldList($args['fieldlist']);
 
         // Turn the values retrieved into proper PHP values
         foreach($this->properties as $property) {
