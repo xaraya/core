@@ -21,6 +21,20 @@
     <xar:if condition="empty($rows) OR (!empty($rows) AND (count($options) le $rows))">
         <select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" size="#$size#" style="#$style#">
             <xar:foreach in="$options" value="$option">
+                <xar:if condition="isset($option['id'])">
+                    <xar:if condition="$option['id'] eq $value">
+                        <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                    <xar:else/>
+                        <option value="#$option['id']#">#$option['name']#</option>
+                    </xar:if>
+                <xar:else/>
+                    <xar:if condition="$option['name'] eq $value">
+                        <option selected="selected">#$option['name']#</option>
+                    <xar:else/>
+                        <option>#$option['name']#</option>
+                    </xar:if>
+                </xar:if>
+                <!-- this doesn't work if eg id=1, name=1st
                 <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
                     <xar:if condition="$option['id'] eq $value">
                         <option value="#$option['id']#" selected="selected">#$option['name']#</option>
@@ -30,8 +44,9 @@
                 <xar:elseif condition="$option['id'] eq $value"/>
                     <option selected="selected">#$option['name']#</option>
                 <xar:else />
-                    <option>#$option['name']#</option>
+                    <option>#$option['id']# #$option['name']#</option>
                 </xar:if>
+                -->
             </xar:foreach>
         </select>
     <xar:else />
