@@ -16,8 +16,10 @@
         <xar:set name="size">1</xar:set>
     </xar:if>
 
-    <input type="hidden" name="#$name#_previous_value" value="#$value#"/>
-
+    <xar:if condition="!empty($previousvalue)">
+        <input type="hidden" name="#$name#_previous_value" value="#$value#"/>
+    </xar:if>
+    
     <xar:if condition="empty($rows) OR (!empty($rows) AND (count($options) le $rows))">
         <select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" size="#$size#" style="#$style#">
             <xar:foreach in="$options" value="$option">
