@@ -53,7 +53,7 @@ abstract class xarVariableObject extends Object
  * @return Object current instance
  * @throws none
 **/    
-    final public static function getInstance()
+    final public static function getInstance($role_id=null)
     {
         if (!isset(static::$instance)) {
             switch (static::$scope) {
@@ -61,7 +61,8 @@ abstract class xarVariableObject extends Object
                     static::$instance = @unserialize(xarModVars::get(static::$module, static::$variable));
                 break;
                 case 'user':
-                    static::$instance = @unserialize(xarModUserVars::get(static::$module, static::$variable));
+                    $this->_role_id = isset($role_id) ? $role_id : xarSession::getVar('role_id');
+                    static::$instance = @unserialize(xarModUserVars::get(static::$module, static::$variable, $this->_role_id));
                 break;
                 case 'session':
                     static::$instance = @unserialize(xarSession::getVar(static::$variable));
@@ -82,11 +83,11 @@ abstract class xarVariableObject extends Object
                 // save the object immediately to the specified variable 
                 static::$instance->save();
             }
+            // session variables don't go out of scope, so we register
+            // a shutdown handler to call the class destructor
+            if (static::$scope == 'session') 
+                register_shutdown_function(array(static::$instance, '__destruct'));
         }
-        // session variables don't go out of scope, so we register
-        // a shutdown handler to call the class destructor
-        if (static::$scope == 'session') 
-            register_shutdown_function(array(static::$instance, '__destruct'));
         return static::$instance;       
     }
 
@@ -139,7 +140,7 @@ abstract class xarVariableObject extends Object
                 xarModVars::set(static::$module, static::$variable, serialize(static::$instance));
             break;
             case 'user':
-                xarModUserVars::set(static::$module, static::$variable, serialize(static::$instance));
+                xarModUserVars::set(static::$module, static::$variable, serialize(static::$instance), $this->_role_id);
             break;
             case 'session':
                 xarSession::setVar(static::$variable, serialize(static::$instance));
