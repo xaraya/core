@@ -28,7 +28,7 @@ class Sequence extends SequenceAdapter implements iSequence
     {
         return parent::get($position);
     }
-    public function insert(&$item, $position) 
+    public function insert($item, $position) 
     {
         return parent::insert($item, $position);
     }

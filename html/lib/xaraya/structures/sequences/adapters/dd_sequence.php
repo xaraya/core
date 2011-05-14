@@ -58,7 +58,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
     }
 
     /* Insert an item into the sequence at a certain position */
-    public function insert(&$item, $position)
+    public function insert($item, $position)
     {
         // Make sure position is in range
         if($position >  $this->tail) return false;

@@ -132,7 +132,9 @@ function dynamicdata_utilapi_import(Array $args=array())
             foreach ($oldproperties as $propertyitem)
                 $dataproperty->deleteItem(array('itemid' => $propertyitem->id));
         } else {
-            $objectid = $object->createItem($args);
+            // Load the object properties directly with the values to bypass their setValue methods
+            $object->setFieldValues($args,1);
+            $objectid = $object->createItem();
         }
 
         // Now do the item's properties
