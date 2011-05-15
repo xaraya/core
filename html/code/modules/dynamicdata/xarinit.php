@@ -108,6 +108,11 @@ function dynamicdata_init()
                 'null'        => false,
                 'default'     => '0'
             ),
+            /* access settings for this object */
+            'access'   => array(
+                'type'=>'text',
+                'charset'     => $charset,
+            ),
             /* any configuration settings for this object */
             'config'   => array(
                 'type'=>'text',
