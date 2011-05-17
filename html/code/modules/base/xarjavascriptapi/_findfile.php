@@ -71,9 +71,9 @@ function base_javascriptapi__findfile(Array $args=array())
     // A property attribute in the tag overrides a module attribute
     if (!empty($property)) {
         $searchPath[] = $themedir . '/properties/' . $property . '/scripts/' . $filename;
-        $searchPath[] = $themedir . '/properties/' . $property . '/templates/includes/' . $filename;
+        $searchPath[] = $themedir . '/properties/' . $property . '/xartemplates/includes/' . $filename;
         $searchPath[] = sys::code() . 'properties/' . $property . '/scripts/' . $filename;
-        $searchPath[] = sys::code() . 'properties/' . $property . '/templates/includes/' . $filename;
+        $searchPath[] = sys::code() . 'properties/' . $property . '/xartemplates/includes/' . $filename;
     } else {
         if (isset($modOsDir)) {
             $searchPath[] = $themedir . '/modules/' . $modOsDir . '/includes/' . $filename;

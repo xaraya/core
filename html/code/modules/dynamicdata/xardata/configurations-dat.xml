@@ -743,8 +743,8 @@
     <property_id>14</property_id>
     <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
-  </configurations></items>
-  <configurations itemid="77">
+  </configurations>
+  <configurations itemid="78">
     <id>77</id>
     <name>display_column_definition</name>
     <description>Changing definition of row</description>
@@ -753,7 +753,7 @@
     <ignore_empty>1</ignore_empty>
     <configuration>a:8:{s:15:"display_columns";s:2:"30";s:21:"display_columns_count";s:1:"1";s:12:"display_rows";s:1:"4";s:25:"display_column_definition";a:2:{s:13:"configuration";a:3:{s:25:"display_column_definition";a:2:{i:0;a:4:{i:0;s:5:"Title";i:1;s:4:"Type";i:2;s:13:"Default Value";i:3;s:13:"Configuration";}i:1;a:4:{i:0;s:7:"textbox";i:1;s:9:"fieldtype";i:2;s:7:"textbox";i:3;s:8:"textarea";}}s:12:"display_rows";i:4;s:14:"display_layout";s:13:"configuration";}s:8:"recursed";i:1;}s:14:"display_layout";s:7:"default";s:32:"initialization_associative_array";s:1:"1";s:24:"initialization_prop_type";s:9:"fieldtype";s:26:"initialization_prop_config";s:0:"";}</configuration>
   </configurations>
-  <configurations itemid="78">
+  <configurations itemid="79">
     <id>78</id>
     <name>display_minimum_rows</name>
     <label>Minimum Rows</label>
@@ -762,7 +762,7 @@
     <ignore_empty>1</ignore_empty>
     <configuration>a:3:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
-  <configurations itemid="79">
+  <configurations itemid="80">
     <id>79</id>
     <name>display_maximum_rows</name>
     <label>Maximum Rows</label>
@@ -770,4 +770,5 @@
     <property_id>15</property_id>
     <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
-  </configurations></items>
+  </configurations>
+</items>
