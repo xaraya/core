@@ -57,15 +57,15 @@ function dynamicdata_admin_access(Array $args=array())
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
     unset($tmpobject);
 
-    // Get the object's configuration
-    if (!empty($object->properties['config']) && !empty($object->properties['config']->value)) {
+    // Get the object's access rules
+    if (!empty($object->properties['access']) && !empty($object->properties['access']->value)) {
         try {
-            $configuration = unserialize($object->properties['config']->value);
+            $objectaccess = unserialize($object->properties['access']->value);
         } catch (Exception $e) {
-            $configuration = array();
+            $objectaccess = array();
         }
     } else {
-        $configuration = array();
+        $objectaccess = array();
     }
 
     // Specify access levels
@@ -101,7 +101,7 @@ function dynamicdata_admin_access(Array $args=array())
         $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
         foreach ($data['levels'] as $level => $info) {
             $isvalid = $accessproperty->checkInput($object->name . '_' . $level);
-            $configuration['access'][$level] = $accessproperty->value;
+            $objectaccess['access'][$level] = $accessproperty->value;
         }
 */
         if(!xarVarFetch('do_access', 'isset', $do_access, NULL, XARVAR_DONT_SET)) {return;}
@@ -110,6 +110,7 @@ function dynamicdata_admin_access(Array $args=array())
         $accesslist = array();
         if (!empty($do_access)) {
             if(!xarVarFetch('access', 'isset', $access, array(), XARVAR_DONT_SET)) {return;}
+
             foreach ($data['levels'] as $level => $info) {
                 if (empty($access[$level])) {
                     continue;
@@ -126,10 +127,10 @@ function dynamicdata_admin_access(Array $args=array())
                 }
             }
             // serialize the access list first
-            $configuration['access'] = serialize($accesslist);
+            $objectaccess['access'] = serialize($accesslist);
         } else {
             // clear the access list first
-            unset($configuration['access']);
+            unset($objectaccess['access']);
         }
 
         // define the new filter list
@@ -146,15 +147,15 @@ function dynamicdata_admin_access(Array $args=array())
         }
         if (!empty($filterlist)) {
             // serialize the filter list first
-            $configuration['filters'] = serialize($filterlist);
+            $objectaccess['filters'] = serialize($filterlist);
         } else {
             // clear the filter list first
-            unset($configuration['filters']);
+            unset($objectaccess['filters']);
         }
 
-        // then serialize the configuration for update
-        $configstring = serialize($configuration);
-        $itemid = $object->updateItem(array('config' => $configstring));
+        // then serialize the access rules for update
+        $accessstring = serialize($objectaccess);
+        $itemid = $object->updateItem(array('access' => $accessstring));
 
         if(!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
         if (!empty($return_url)) {
@@ -167,10 +168,10 @@ function dynamicdata_admin_access(Array $args=array())
         return true;
     }
 
-    if (!empty($configuration['access'])) {
+    if (!empty($objectaccess['access'])) {
         // unserialize the access list
         try{
-            $data['access'] = unserialize($configuration['access']);
+            $data['access'] = unserialize($objectaccess['access']);
         } catch (Exception $e) {
             $data['access'] = array();
         }
@@ -197,10 +198,10 @@ function dynamicdata_admin_access(Array $args=array())
         $data['do_access'] = 1;
     }
 
-    if (!empty($configuration['filters'])) {
+    if (!empty($objectaccess['filters'])) {
         // unserialize the filter list
         try{
-            $filterlist = unserialize($configuration['filters']);
+            $filterlist = unserialize($objectaccess['filters']);
         } catch (Exception $e) {
             $filterlist = array();
         }

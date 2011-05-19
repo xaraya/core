@@ -29,6 +29,9 @@ function main_upgrade_220()
                         'sql_220_11', // Add a configvar for the ssl port
                         'sql_220_12', // Redefine the config property of the objects object
                         'sql_220_13', // Refactor roles name as textbox property
+                        'sql_220_14', // Create an access field in the objects table
+                        'sql_220_15', // Create an access property in the objects object
+                        'sql_220_16', // Move access data from the config to the access field
                         
                     );
     foreach ($upgrades as $upgrade) {
