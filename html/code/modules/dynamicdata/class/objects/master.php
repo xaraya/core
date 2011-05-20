@@ -36,14 +36,13 @@ class DataObjectMaster extends Object
 
     public $urlparam    = 'itemid';
     public $maxid       = 0;
+    public $access      = 'a:0:{}';       // the access parameters for this DD object
+    public $access_rules;                 // the exploded access parameters for this DD object
+    public $config      = 'a:0:{}';       // the configuration parameters for this DD object
     public $configuration;                // the configuration parameters for this DD object
     public $datastore   = '';             // the datastore for the DD object
     public $datasources = array();        // the db source tables of this object
     public $dataquery;                    // the initialization query of this obect
-    public $config      = 'a:0:{}';       // the configuration parameters for this DD object
-    public $configuration;                // the exploded configuration parameters for this DD object
-    public $access      = 'a:0:{}';       // the access parameters for this DD object
-    public $access_rules;                 // the exploded access parameters for this DD object
     public $isalias     = 0;
 
     public $class       = 'DataObject'; // the class name of this DD object
@@ -163,9 +162,7 @@ class DataObjectMaster extends Object
         }
 //        $this->dataquery->qecho();echo "<br/><br />";
         // build the list of relevant data stores where we'll get/set our data
-       $this->getDataStore();
-        if(count($this->datastores) == 0 && count($this->properties) > 0)
-           $this->getDataStores();
+        $this->getDataStore();
            
         // Explode the configuration
         try{

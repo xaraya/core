@@ -112,4 +112,71 @@
     <xar:data-output type="mindmap"/>
     -->
 
+        <h3>The Calculation Tag</h3>
+
+    <xar:calculation>
+        <xar:set name="qty">'qty_item_'</xar:set>
+        <xar:set name="price">'price_item_'</xar:set>
+        <xar:set name="total">'total_item_'</xar:set>
+        <xar:calc formula="qty * price" target="total_item" select="name">
+            <xar:calcvar name="qty" select="name" field="$qty"/>
+            <xar:calcvar name="price" select="name" field="$price"/>
+            <xar:calcvar name="total_item" select="name" field="$total"/>
+            <xar:calcbinding select="name" field="$qty" event="keyup"/>
+        </xar:calc>
+    </xar:calculation>
+			<table width="500">
+				<col style="width: 50px;" />
+				<col />
+				<col style="width: 60px;" />
+				<col style="width: 110px;" />
+
+				<tr>
+					<th>
+						Qty
+					</th>
+					<th align="left">
+						Product
+					</th>
+					<th>
+						Price
+					</th>
+
+					<th>
+						Total
+					</th>
+				</tr>
+				<tr>
+					<td align="center">
+						<input type="text" name="qty_item_1" id="qty_item_1" value="1" size="2" />
+					</td>
+					<td>
+
+						<a href="http://www.packtpub.com/jQuery/book">Learning jQuery</a>
+					</td>
+					<td align="center" id="">
+						<input type="text" name="price_item_1" id="price_item_1" value="39.99" size="2" />
+					</td>
+					<td align="center" id="">
+						<input type="text" name="total_item_1" id="total_item_1" value="" size="2" />
+					</td>
+				</tr>
+
+				<tr>
+					<td align="center">
+						<input type="text" name="qty_item_2" id="qty_item_2" value="1" size="2" />
+					</td>
+					<td>
+						<a href="http://jquery.com/">jQuery Donation</a>
+					</td>
+					<td align="center" id="">
+						<input type="text" name="price_item_2" id="price_item_2" value="14.99" size="2" />
+					</td>
+					<td align="center" id="">
+						<input type="text" name="total_item_2" id="total_item_2" value="" size="2" />
+					</td>
+				</tr>
+			</table>
+    <xar:data-output type="urlexport" source="test_export"/>
+
 </xar:template>
