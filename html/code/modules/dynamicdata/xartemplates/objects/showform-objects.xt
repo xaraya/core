@@ -4,13 +4,7 @@
     <xar:foreach in="$properties" key="$name" value="$property">
         <div class="xar-form-input-wrapper">
             <xar:data-label property="$properties[$name]" for="id"/>
-            <xar:if condition="$name eq 'module_id'">
-                <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"</xar:set>
-                <!-- FIXME remove the validation attribute when we go from regids to systemids  -->
-                <xar:data-input property="$properties[$name]" onchange="$onchange" store_prop="regid"/>
-            <xar:else />
-                <xar:data-input property="$properties[$name]"/>
-            </xar:if>
+            <xar:data-input property="$properties[$name]"/>
         </div>
     </xar:foreach>
     <xar:if condition="!empty($properties['name']->value)">

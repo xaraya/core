@@ -63,7 +63,7 @@ function roles_userapi_getallactive(Array $args=array())
     }
 
     $query .= " AND itemtype = ? ORDER BY " . $order;
-    $bindvars[] = 2;
+    $bindvars[] = xarRoles::ROLES_USERTYPE;
     $stmt = $dbconn->prepareStatement($query);
 
     // cfr. xarcachemanager - this approach might change later

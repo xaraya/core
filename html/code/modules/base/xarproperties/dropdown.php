@@ -133,6 +133,8 @@ class SelectProperty extends DataProperty
                 $data['options'][] = array('id' => $data['value'], 'name' => $data['value']);
             }
         }
+        // optionally add hidden previous_value field 
+        if (!isset($data['previousvalue'])) $data['previousvalue'] = false;
         if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
         $data['extraparams'] =!empty($extraparams) ? $extraparams : "";
         if(isset($data['rows'])) $this->display_rows = $data['rows']; 
