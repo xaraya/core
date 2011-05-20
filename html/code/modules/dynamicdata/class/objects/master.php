@@ -1067,8 +1067,12 @@ class DataObjectMaster extends Object
         // Set up the db tables
         if ($descriptor->exists('sources')) {
             try {
-                $object->datasources = unserialize($descriptor->get('sources'));
-                if (!empty($object->datasources)) {
+                $sources = unserialize($descriptor->get('sources'));
+                if (!empty($sources)) {
+                    // Transform from array property format to datasource format
+                    $object->datasources = array();
+                    foreach ($sources as $source) $object->datasources[$source[0]] = array($source[1],$source[2]);
+                    
                     foreach ($object->datasources as $key => $value) {
                         // Support simple array form
                         if (is_array($value)) $value = current($value);
