@@ -66,7 +66,12 @@
                             <xar:if condition="isset($value[$k][$i])">
                                 <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$value[$k][$i]" configuration="$column_configurations[$k]"/>
                             <xar:else/>
-                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" configuration="$column_configurations[$k]"/>
+                                <xar:if condition="isset($column_configurations[$k])">
+                                    <xar:set name="configvalue">$column_configurations[$k]</xar:set>
+                                <xar:else/>
+                                    <xar:set name="configvalue">""</xar:set>
+                                </xar:if>
+                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" configuration="$configvalue"/>
                             </xar:if>
                         </td>
                     </xar:for>

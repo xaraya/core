@@ -236,12 +236,12 @@ class DataProperty extends Object implements iDataProperty
         }
 
         // Check for a filter option if found save it
-        list($found,$filter) = $this->fetchValue($name. '_filteroption');
-        if ($found) $this->filter = $filter;
+//        list($found,$filter) = $this->fetchValue($name. '_filteroption');
+//        if ($found) $this->filter = $filter;
 
         // Check for a previous if found save it
-        list($found,$previous_value) = $this->fetchValue($name. '_previous_value');
-        if ($found) $this->previous_value = $previous_value;
+//        list($found,$previous_value) = $this->fetchValue($name. '_previous_value');
+//        if ($found) $this->previous_value = $previous_value;
 
         return $this->validateValue($value);
     }

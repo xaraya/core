@@ -168,6 +168,7 @@ class DataObjectMaster extends Object
         try{
             $this->configuration = unserialize($this->config);
         } catch (Exception $e) {}
+        
         // Explode the access rules
         try{
             $this->access_rules = unserialize($this->access);
@@ -468,6 +469,7 @@ class DataObjectMaster extends Object
                          urlparam,
                          maxid,
                          config,
+                         access,
                          datastore,
                          sources,
                          relations,
@@ -497,6 +499,7 @@ class DataObjectMaster extends Object
             $info['class'], $info['filepath'],
             $info['urlparam'], $info['maxid'],    
             $info['config'],
+            $info['access'],
             $info['datastore'],
             $info['sources'],
             $info['relations'],
@@ -543,6 +546,7 @@ class DataObjectMaster extends Object
         $q->addfield('o.urlparam AS object_urlparam');
         $q->addfield('o.maxid AS object_maxid');
         $q->addfield('o.config AS object_config');
+        $q->addfield('o.access AS object_access');
         $q->addfield('o.datastore AS object_datastore');
         $q->addfield('o.sources AS object_sources');
         $q->addfield('o.relations AS object_relations');
@@ -1106,6 +1110,9 @@ class DataObjectMaster extends Object
                     $value = trim($value);
                     $key = trim($key);
                     
+                    // If this was just the empty first line, bail
+                    if (empty($key)) continue;
+                    
                     // Check if this relation includes a foreign table
                     // If it does do a left or right join, rather than an inner join
                     $fromobjectparts = explode('.',$key);
@@ -1144,6 +1151,9 @@ class DataObjectMaster extends Object
                     $value = trim($value);
                     $key = trim($key);
 
+                    // If this was just the empty first line, bail
+                    if (empty($key)) continue;
+                    
                     if ((strpos($key, 'this') === false) && (strpos($value, 'this') === false)
                     && (strpos($key, $object->name) === false) && (strpos($value, $object->name) === false)
                     ) 
