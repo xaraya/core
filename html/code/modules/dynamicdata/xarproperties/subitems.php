@@ -304,11 +304,11 @@ class SubItemsProperty extends DataProperty
     {
         // Get the link properties of both the parent and the subobject for use in creates and deletes
         $objectarray = unserialize($this->objectref->objects);
-        foreach ($objectarray as $key => $value){
-            $valueparts = explode('.',$value);
+        foreach ($objectarray as $value){
+            $valueparts = explode('.',$value[1]);
             if ($valueparts[0] == $this->initialization_refobject) {
                 $sublink = $valueparts[1];
-                $keyparts = explode('.',$key);
+                $keyparts = explode('.',$value[0]);
                 $link = $keyparts[1];
                 break;
             }
