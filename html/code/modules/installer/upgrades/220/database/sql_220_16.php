@@ -29,8 +29,8 @@ function sql_220_16()
     try {
         $dbconn->begin();
         $objects = array(
-                'dynamic_objects',
-                'dynamic_properties',
+                'objects',
+                'properties',
                 'configurations',
                 'dynamicdata_tablefields',
                 'module_settings',
@@ -45,9 +45,9 @@ function sql_220_16()
                 );
         foreach ($objects as $object) {
             $query = "UPDATE $table SET access = config WHERE `name` = '" . $object . "'";              
-            $dbconn->Execute($data['sql']);        
+            $dbconn->Execute($query);        
             $query = "UPDATE $table SET config = 'a:0:{}' WHERE `name` = '" . $object . "'";              
-            $dbconn->Execute($data['sql']);        
+            $dbconn->Execute($query);        
         }
 
         $dbconn->commit();

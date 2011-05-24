@@ -29,7 +29,7 @@ function sql_220_14()
     try {
         $dbconn->begin();
         $query = "ALTER TABLE $table ADD COLUMN access TEXT";              
-        $dbconn->Execute($data['sql']);        
+        $dbconn->Execute($query);        
         $dbconn->commit();
         
     } catch (Exception $e) { throw($e);

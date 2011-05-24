@@ -28,6 +28,7 @@ function main_check_220()
     $data['upgrade'] = array();
     
     $checks = array(
+                        'sql_220_dynamic_objects',
                         'sql_220_events',
                         'sql_220_hooks',
                     );

@@ -1,7 +1,5 @@
 <?php
 /**
- * Check SQL file
- *
  * @package modules
  * @subpackage installer module
  * @category Xaraya Web Applications Framework
@@ -12,34 +10,23 @@
  * @link http://xaraya.com/index.php/release/200.html
  */
 
-function sql_220_hooks()
+function sql_220_17()
 {
-    // Define parameters
-    $table = xarDB::getPrefix() . '_hooks';
-
     // Define the task and result
     $data['success'] = true;
     $data['task'] = xarML("
-        Checking the structure of $table. Replaces the check in 2.1.0.
+        Refresh the properties cache
     ");
     $data['reply'] = xarML("
         Success!
     ");
-
-    // Run the query
-    $dbconn = xarDB::getConn();
+    
+    // Run the task
+    $dbconn  = xarDB::getConn();
     try {
-        $dbconn->begin();
-        $data['sql'] = "
-        SELECT 
-        `observer`,
-        `subject`,
-        `itemtype`,
-        `scope`
-        FROM $table";
-        $dbconn->Execute($data['sql']);
-        $dbconn->commit();
-    } catch (Exception $e) {
+        sys::import('modules.dynamicdata.class.properties.registration');   
+        $proptypes = PropertyRegistration::importPropertyTypes(0,array('modules/base'));
+        } catch (Exception $e) { throw($e);
         // Damn
         $dbconn->rollback();
         $data['success'] = false;
@@ -47,6 +34,7 @@ function sql_220_hooks()
         Failed!
         ");
     }
-    return $data;
+    return $data;   
+    
 }
 ?>
