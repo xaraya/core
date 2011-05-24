@@ -15,7 +15,7 @@ function sql_220_17()
     // Define the task and result
     $data['success'] = true;
     $data['task'] = xarML("
-        Refresh the properties cache
+        Update the properties cache
     ");
     $data['reply'] = xarML("
         Success!
@@ -25,8 +25,8 @@ function sql_220_17()
     $dbconn  = xarDB::getConn();
     try {
         sys::import('modules.dynamicdata.class.properties.registration');   
-        $proptypes = PropertyRegistration::importPropertyTypes(0,array('modules/base'));
-        } catch (Exception $e) { throw($e);
+//        PropertyRegistration::clearCache();
+    } catch (Exception $e) { throw($e);
         // Damn
         $dbconn->rollback();
         $data['success'] = false;

@@ -14,10 +14,7 @@
  * @return array data for the template display
  */
 function installer_admin_upgrade()
-{
-    // Security
-    //if (!xarSecurityCheck('AdminInstaller')) return; 
-    
+{    
     if(!xarVarFetch('phase','int', $data['phase'], 1, XARVAR_DONT_SET)) {return;}
 
     // Version information
@@ -84,9 +81,6 @@ function installer_admin_upgrade()
         $data['upgrades'] =& $upgrades;
 
     } elseif ($data['phase'] == 3) {
-        // Security
-//        if (!xarSecurityCheck('AdminInstaller')) return; 
-        
         $data['active_step'] = 3;
         // Align the db and filesystem version info
         xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);

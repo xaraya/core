@@ -37,7 +37,7 @@ class ArrayProperty extends DataProperty
 
     public $fields = array();
 
-    public $display_minimum_rows = 2;                              // The table displays at least this many rows
+    public $display_minimum_rows = 1;                              // The table displays at least this many rows
     public $display_maximum_rows = 10;                             // The table cannot display more than this many rows
     public $initialization_addremove = 0;                          // 0: no adding/deleting of rows, 1: adding only, 2: adding and deleting    
     public $validation_associative_array = 0;                      // flag to display the value as an associative array
