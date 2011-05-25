@@ -81,6 +81,9 @@ function installer_admin_upgrade()
         $data['upgrades'] =& $upgrades;
 
     } elseif ($data['phase'] == 3) {
+        // Flush the property cache as a matter of course
+        $success = xarMod::apiFunc('dynamicdata','admin','importpropertytypes');
+
         $data['active_step'] = 3;
         // Align the db and filesystem version info
         xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);
