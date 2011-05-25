@@ -228,9 +228,6 @@ class PropertyRegistration extends DataContainer
                 // the module is active.
                 $propDirs = $dirs;
             } else {
-                // Clear the cache
-                self::ClearCache();
-
                 if (!xarVarGetCached('installer','installing')) {
                     // Repopulate the configurations table
                     $tables = xarDB::getTables();
@@ -252,6 +249,9 @@ class PropertyRegistration extends DataContainer
                         $propDirs[] = $dir;
                     }
                 }
+
+                // Clear the cache
+                self::ClearCache();
             }
 
             // Get list of properties in properties directories

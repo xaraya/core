@@ -58,7 +58,7 @@ function sql_220_13()
                     if (!empty($value[4]))
                         $name .= ' ' . $value[4];
                 }
-                $query = "UPDATE $roles_table SET `name` = $name WHERE `id` = $role[id]";
+                $query = "UPDATE $roles_table SET `name` = '" . $name . "' WHERE `id` = $role[id]";
                 $dbconn->execute($query);
             }
         }

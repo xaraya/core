@@ -22,8 +22,6 @@
  */
 function dynamicdata_utilapi_import(Array $args=array())
 {
-    if(!xarSecurityCheck('AdminDynamicData')) return;
-
     extract($args);
 
     if (!isset($prefix)) $prefix = xarDB::getPrefix();

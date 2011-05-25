@@ -31,7 +31,7 @@ function sql_220_15()
         $dbconn->begin();
         $query = "INSERT INTO $propertytable (name, label, object_id, type, defaultvalue, source, status, seq,configuration)
     VALUES ('access', 'Access', 1, 2, '', '" . $objecttable . ".access', 67, 10, 'a:0:{}')";              
-        $dbconn->Execute($data['sql']);        
+        $dbconn->Execute($query);        
         $dbconn->commit();
         
     } catch (Exception $e) { throw($e);

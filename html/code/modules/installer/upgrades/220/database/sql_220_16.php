@@ -29,14 +29,12 @@ function sql_220_16()
     try {
         $dbconn->begin();
         $objects = array(
-                'dynamic_objects',
-                'dynamic_properties',
+                'objects',
+                'properties',
                 'configurations',
                 'dynamicdata_tablefields',
                 'module_settings',
                 'modules',
-                'roles_users',
-                'roles_groups',
                 'roles_user_settings',
                 'themes_user_settings',
                 'privileges_baseprivileges',
@@ -45,10 +43,20 @@ function sql_220_16()
                 );
         foreach ($objects as $object) {
             $query = "UPDATE $table SET access = config WHERE `name` = '" . $object . "'";              
-            $dbconn->Execute($data['sql']);        
+            $dbconn->Execute($query);        
             $query = "UPDATE $table SET config = 'a:0:{}' WHERE `name` = '" . $object . "'";              
-            $dbconn->Execute($data['sql']);        
+            $dbconn->Execute($query);        
         }
+        
+        // Special case of the roles objects
+        $query = "UPDATE $table SET access = config WHERE `name` = 'roles_users'";              
+        $dbconn->Execute($query);        
+        $query = "UPDATE $table SET config = 'a:1:{s:5:\"where\";a:1:{i:0;s:13:\"role_type = 1\";}}' WHERE `name` = 'roles_users'";              
+        $dbconn->Execute($query);        
+        $query = "UPDATE $table SET access = config WHERE `name` = 'roles_groups'";              
+        $dbconn->Execute($query);        
+        $query = "UPDATE $table SET config = 'a:1:{s:5:\"where\";a:1:{i:0;s:13:\"role_type = 2\";}}' WHERE `name` = 'roles_groups'";              
+        $dbconn->Execute($query);        
 
         $dbconn->commit();
         

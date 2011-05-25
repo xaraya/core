@@ -12,15 +12,15 @@
  * @link http://xaraya.com/index.php/release/200.html
  */
 
-function sql_220_hooks()
+function sql_220_dynamic_objects()
 {
     // Define parameters
-    $table = xarDB::getPrefix() . '_hooks';
+    $table = xarDB::getPrefix() . '_dynamic_objects';
 
     // Define the task and result
     $data['success'] = true;
     $data['task'] = xarML("
-        Checking the structure of $table. Replaces the check in 2.1.0.
+        Checking the structure of $table
     ");
     $data['reply'] = xarML("
         Success!
@@ -32,10 +32,18 @@ function sql_220_hooks()
         $dbconn->begin();
         $data['sql'] = "
         SELECT 
-        `observer`,
-        `subject`,
+        `id`,
+        `name`,
+        `label`,
+        `module_id`,
         `itemtype`,
-        `scope`
+        `class`,
+        `filepath`,
+        `urlparam`,
+        `maxid`,
+        `access`,
+        `config`,
+        `isalias`
         FROM $table";
         $dbconn->Execute($data['sql']);
         $dbconn->commit();
