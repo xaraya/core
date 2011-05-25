@@ -32,7 +32,7 @@ function main_upgrade_220()
                         'sql_220_14', // Create an access field in the objects table
                         'sql_220_15', // Create an access property in the objects object
                         'sql_220_16', // Move access data from the config to the access field
-                        'sql_220_17', // Update the propertes cache
+                        'sql_220_17', // Update the configuration table
                         
                     );
     foreach ($upgrades as $upgrade) {
