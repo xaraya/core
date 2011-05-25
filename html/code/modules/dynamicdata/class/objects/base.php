@@ -86,7 +86,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview'])) $this->checkInput();
-        return $this->itemid;
+        return $itemid;
     }
 
     public function getInvalids(Array $args = array())
