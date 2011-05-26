@@ -61,16 +61,17 @@ function installer_admin_upgrade()
         $role = DataObjectMaster::getObject(array('name' => 'roles_users'));
         $role->getItem(array('itemid' => $adminid));
         $adminpass = $role->properties['password']->value;
+        $role->properties['password']->value = '';
         
         // Get the password from the last page, either entered by the user (and needs to be encrypted)
         // or stored on a previous page
         if(!xarVarFetch('password','str', $data['password'], '', XARVAR_NOT_REQUIRED)) {return;}
         if(!xarVarFetch('pass','str', $pass, '', XARVAR_NOT_REQUIRED)) {return;}
         
-        // Encrypt if needed using the encryption scheme of hte roles module
+        // Encrypt if needed using the encryption scheme of the roles module
         if (!empty($pass)) $data['password'] = $role->properties['password']->setValue($pass);
         $userpass = $role->properties['password']->value;
-        
+
         // If they don't coincide, bail
         if ($adminpass != $userpass) {        
             xarController::redirect(xarServer::getCurrentURL(array('phase' => 1, 'error' => 1)));
