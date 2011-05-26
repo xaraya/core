@@ -67,15 +67,20 @@ function installer_admin_upgrade()
         // or stored on a previous page
         if(!xarVarFetch('password','str', $data['password'], '', XARVAR_NOT_REQUIRED)) {return;}
         if(!xarVarFetch('pass','str', $pass, '', XARVAR_NOT_REQUIRED)) {return;}
-        
+
         // Encrypt if needed using the encryption scheme of the roles module
-        if (!empty($pass)) $data['password'] = $role->properties['password']->setValue($pass);
-        $userpass = $role->properties['password']->value;
+        if (!empty($pass)) {
+            $data['password'] = $role->properties['password']->setValue($pass);
+            $userpass = $role->properties['password']->value;
+        } else {
+            $userpass = $data['password'];
+        }
 
         // If they don't coincide, bail
         if ($adminpass != $userpass) {        
             xarController::redirect(xarServer::getCurrentURL(array('phase' => 1, 'error' => 1)));
         }
+        $data['password'] = $adminpass;
     }
     
     if ($data['phase'] == 1) {
