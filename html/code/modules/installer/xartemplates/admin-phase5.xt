@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <link rel='icon' href="favicon.ico"/>
     <xar:set name="active_step">5</xar:set>
     <xar:if condition="$confirmDB">
         <meta http-equiv="refresh" content="1;URL=#xarModURL('installer','admin','bootstrap',array('install_language'=>$language,))#"/>
