@@ -1105,17 +1105,17 @@ class DataObjectMaster extends Object
                 $relationargs = unserialize($descriptor->get('relations'));
                 foreach ($relationargs as $key => $value) {
                     // Support simple array form
-                    if (is_array($value)) $value = current($value);
+//                    if (is_array($value)) $value = current($value);
                     // Remove any spaces and similar chars
-                    $value = trim($value);
-                    $key = trim($key);
+                    $left = trim($value[0]);
+                    $right = trim($value[0]);
                     
                     // If this was just the empty first line, bail
-                    if (empty($key)) continue;
+                    if (empty($left)) continue;
                     
                     // Check if this relation includes a foreign table
                     // If it does do a left or right join, rather than an inner join
-                    $fromobjectparts = explode('.',$key);
+                    $fromobjectparts = explode('.',$left);
                     $fromobject = $fromobjectparts[0];
                     if (isset($object->datasources[$fromobject])) {
                         if (isset($object->datasources[$fromobject][1]) && $object->datasources[$fromobject][1] == 'internal')
@@ -1124,7 +1124,7 @@ class DataObjectMaster extends Object
                             $join = 'rightjoin';
                     }
                     
-                    $toobjectparts = explode('.',$value);
+                    $toobjectparts = explode('.',$right);
                     $toobject = $toobjectparts[0];
                     if (isset($object->datasources[$toobject])) {
                         if (isset($object->datasources[$toobject][1]) && $object->datasources[$toobject][1] == 'internal')
@@ -1134,8 +1134,8 @@ class DataObjectMaster extends Object
                     }
                     
                     // Add this relation's join to the object's dataquery
-                    if ($prefix) $this->dataquery->{$join}($object->name . "_" . $key,$object->name . "_" . $value);
-                    else $this->dataquery->{$join}($key,$value);                    
+                    if ($prefix) $this->dataquery->{$join}($object->name . "_" . $left,$object->name . "_" . $right);
+                    else $this->dataquery->{$join}($left,$right);                    
                 }
             } catch (Exception $e) {}
         }
@@ -1146,28 +1146,28 @@ class DataObjectMaster extends Object
                 $objectargs = unserialize($descriptor->get('objects'));
                 foreach ($objectargs as $key => $value) {
                     // Support simple array form
-                    if (is_array($value)) $value = current($value);
+//                    if (is_array($value)) $value = current($value);
                     // Remove any spaces and similar chars
-                    $value = trim($value);
-                    $key = trim($key);
+                    $left = trim($value[0]);
+                    $right = trim($value[1]);
 
                     // If this was just the empty first line, bail
-                    if (empty($key)) continue;
+                    if (empty($left)) continue;
                     
-                    if ((strpos($key, 'this') === false) && (strpos($value, 'this') === false)
-                    && (strpos($key, $object->name) === false) && (strpos($value, $object->name) === false)
+                    if ((strpos($left, 'this') === false) && (strpos($right, 'this') === false)
+                    && (strpos($left, $object->name) === false) && (strpos($right, $object->name) === false)
                     ) 
                         echo 'One of the links must be of a property of ' . $object->name . '<br />';
                     try {
-                        $leftside = $object->propertysource($key, $object, $prefix);
+                        $leftside = $object->propertysource($left, $object, $prefix);
                     } catch (Exception $e) {echo 'Cannot translate ' . $key . ' to a valid datasource<br />'; }
                     try {
-                        $rightside = $object->propertysource($value, $object, $prefix);
+                        $rightside = $object->propertysource($right, $object, $prefix);
                     } catch (Exception $e) {echo 'Cannot translate ' . $value . ' to a valid datasource<br />'; }
                     $this->dataquery->leftjoin($leftside,$rightside);
                 }
             } catch (Exception $e) {
-                if (isset($key)) echo 'Bad object relation: ' . $key . ' or ' . $value;
+                if (isset($left)) echo 'Bad object relation: ' . $left . ' or ' . $value;
                 else echo 'The object relation cannot be read (badly formed)';
             }
         }
