@@ -1160,14 +1160,14 @@ class DataObjectMaster extends Object
                         echo 'One of the links must be of a property of ' . $object->name . '<br />';
                     try {
                         $leftside = $object->propertysource($left, $object, $prefix);
-                    } catch (Exception $e) {echo 'Cannot translate ' . $key . ' to a valid datasource<br />'; }
+                    } catch (Exception $e) {echo 'Cannot translate ' . $left . ' to a valid datasource<br />'; }
                     try {
                         $rightside = $object->propertysource($right, $object, $prefix);
-                    } catch (Exception $e) {echo 'Cannot translate ' . $value . ' to a valid datasource<br />'; }
+                    } catch (Exception $e) {echo 'Cannot translate ' . $right . ' to a valid datasource<br />'; }
                     $this->dataquery->leftjoin($leftside,$rightside);
                 }
             } catch (Exception $e) {
-                if (isset($left)) echo 'Bad object relation: ' . $left . ' or ' . $value;
+                if (isset($left)) echo 'Bad object relation: ' . $left . ' or ' . $right;
                 else echo 'The object relation cannot be read (badly formed)';
             }
         }
