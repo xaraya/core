@@ -15,10 +15,11 @@
             color: ##999999;
         }
     </style>
-    <xar:var name="steptext[1]">Prepare for the Upgrade</xar:var>
-    <xar:var name="steptext[2]">Running the Upgrade</xar:var>
-    <xar:var name="steptext[3]">Database Checks</xar:var>
-    <xar:var name="steptext[4]">Notes on this Version</xar:var>
+    <xar:var name="steptext[1]">Log in</xar:var>
+    <xar:var name="steptext[2]">Prepare for the Upgrade</xar:var>
+    <xar:var name="steptext[3]">Running the Upgrade</xar:var>
+    <xar:var name="steptext[4]">Database Checks</xar:var>
+    <xar:var name="steptext[5]">Notes on this Version</xar:var>
     <div id="status">
         <div id="status_body">
             <div class="xar-align-center">
@@ -34,7 +35,7 @@
                 <li class="active">
                     #$steptext[$active_step]# 
                 </li>
-                <xar:for start="$phase = $active_step + 1" test="$phase le 4" iter="$phase++">
+                <xar:for start="$phase = $active_step + 1" test="$phase le 5" iter="$phase++">
                     <li class="greyed">
                         #$steptext[$phase]# 
                     </li>

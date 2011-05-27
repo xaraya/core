@@ -54,11 +54,45 @@ function installer_admin_upgrade()
     );
     
         
+    if ($data['phase'] != 1) {
+        // Get the password of the designated site administrator
+        $adminid = xarModVars::get('roles','admin');
+        sys::import('modules.dynamicdata.class.objects.master');
+        $role = DataObjectMaster::getObject(array('name' => 'roles_users'));
+        $role->getItem(array('itemid' => $adminid));
+        $adminpass = $role->properties['password']->value;
+        $role->properties['password']->value = '';
+        
+        // Get the password from the last page, either entered by the user (and needs to be encrypted)
+        // or stored on a previous page
+        if(!xarVarFetch('password','str', $data['password'], '', XARVAR_NOT_REQUIRED)) {return;}
+        if(!xarVarFetch('pass','str', $pass, '', XARVAR_NOT_REQUIRED)) {return;}
+
+        // Encrypt if needed using the encryption scheme of the roles module
+        if (!empty($pass)) {
+            $data['password'] = $role->properties['password']->setValue($pass);
+            $userpass = $role->properties['password']->value;
+        } else {
+            $userpass = $data['password'];
+        }
+
+        // If they don't coincide, bail
+        if ($adminpass != $userpass) {        
+            xarController::redirect(xarServer::getCurrentURL(array('phase' => 1, 'error' => 1)));
+        }
+        $data['password'] = $adminpass;
+    }
+    
     if ($data['phase'] == 1) {
         $data['active_step'] = 1;
+        if(!xarVarFetch('error','int', $data['error'], 0, XARVAR_NOT_REQUIRED)) {return;}
 
     } elseif ($data['phase'] == 2) {
         $data['active_step'] = 2;
+        
+        
+    } elseif ($data['phase'] == 3) {
+        $data['active_step'] = 3;
         // Get the list of version upgrades
         Upgrader::loadFile('upgrades/upgrade_list.php');
         $upgrade_list = installer_adminapi_get_upgrade_list();
@@ -80,11 +114,11 @@ function installer_admin_upgrade()
         }
         $data['upgrades'] =& $upgrades;
 
-    } elseif ($data['phase'] == 3) {
+    } elseif ($data['phase'] == 4) {
+        $data['active_step'] = 4;
         // Flush the property cache as a matter of course
         $success = xarMod::apiFunc('dynamicdata','admin','importpropertytypes');
 
-        $data['active_step'] = 3;
         // Align the db and filesystem version info
         xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);
         xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
@@ -113,9 +147,9 @@ function installer_admin_upgrade()
         }
         $data['checks'] =& $checks;
 
-    } elseif ($data['phase'] == 4) {
-        $data['active_step'] = 4;
-//        xarController::redirect(xarServer::getCurrentURL(array('phase' => 4)));
+    } elseif ($data['phase'] == 5) {
+        $data['active_step'] = 5;
+//        xarController::redirect(xarServer::getCurrentURL(array('phase' => 5)));
     }
     return $data;
 }
