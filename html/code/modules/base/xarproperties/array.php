@@ -79,6 +79,7 @@ class ArrayProperty extends DataProperty
             for ($k=1;$k<=$columncount;$k++) {
                 // Get the property type for this column and get the value from the template
                 $property = DataPropertyMaster::getProperty(array('type' => $this->display_column_definition['value'][1][$k-1]));
+                $property->parseConfiguration($this->display_column_definition['value'][3][$k-1]);
                 $i=0;
                 foreach ($elements as $row) {
                     // Ignore rows where the delete checkbox was checked
