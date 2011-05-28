@@ -8,7 +8,7 @@
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <datastore>relational</datastore>
-  <sources>a:1:{i:0;a:3:{i:0;s:10:"privileges";i:1;s:14:"xar_privileges";i:2;s:8:"internal";}}</sources>
+  <sources>a:1:{s:10:"privileges";a:2:{i:0;s:14:"xar_privileges";i:1;s:8:"internal";}}</sources>
   <access>a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:5:{i:0;i:5;i:1;i:2;i:2;i:1;i:3;i:3;i:4;i:4;}s:6:"update";a:1:{i:0;i:2;}s:6:"create";a:1:{i:0;i:2;}s:6:"delete";a:1:{i:0;i:2;}s:6:"config";a:1:{i:0;i:2;}}";}</access>
   <config>a:0:{}</config>
   <isalias>true</isalias>

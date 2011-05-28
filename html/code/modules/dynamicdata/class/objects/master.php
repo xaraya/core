@@ -133,7 +133,7 @@ class DataObjectMaster extends Object
         if ($descriptor->exists('config')) {
             try {
                 $configargs = unserialize($descriptor->get('config'));
-                foreach ($configargs as $key => $value) $this->{$key} = $value;
+                foreach ($configargs as $key => $value) if (!empty($key)) $this->{$key} = $value;
                 $this->configuration = $configargs;
             } catch (Exception $e) {}
         }
@@ -1074,9 +1074,9 @@ class DataObjectMaster extends Object
                 $sources = unserialize($descriptor->get('sources'));
                 if (!empty($sources)) {
                     // Transform from array property format to datasource format
-                    $object->datasources = array();
-                    foreach ($sources as $source) $object->datasources[$source[0]] = array($source[1],$source[2]);
-                    
+//                    $object->datasources = array();
+//                    foreach ($sources as $source) $object->datasources[$source[0]] = array($source[1],$source[2]);
+                    $object->datasources = $sources;
                     foreach ($object->datasources as $key => $value) {
                         // Support simple array form
                         if (is_array($value)) $value = current($value);
@@ -1092,7 +1092,7 @@ class DataObjectMaster extends Object
                         } else {
                             if (is_array($value)) $value = current($value);
                             if ($prefix) $this->dataquery->addtable($value,$object->name . "_" . $key);
-                            else $this->dataquery->addtable($value,$key);                    
+                            else $this->dataquery->addtable($value,$key);    
                         }
                     }
                 }
