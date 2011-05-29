@@ -5,6 +5,33 @@
         <span class="xar-mod-title">Base Module Test Template</span>
     </div>
     <div class="xar-mod-body">
+    
+    <xar:set name="XX">var_dump(unserialize('a:0:{}'))</xar:set>
+    
+    Unserialized source
+    <xar:set name="XX">var_dump(
+    array(
+        array('payments','xar_ledgerap_payment','internal'),
+        array('vendors','xar_ledgerap_vendor','internal'),
+        array('companies','xar_companies_companies','internal'),
+    ))</xar:set>
+    Serialized source
+    <xar:set name="XX">var_dump(serialize(
+    array(
+        array('payments','xar_ledgerap_payment','internal'),
+        array('vendors','xar_ledgerap_vendor','internal'),
+        array('companies','xar_companies_companies','internal'),
+    )))</xar:set>
+    Unserialized other
+    <xar:set name="XX">var_dump(
+    array(
+        array('users.id','list_user.user_id'),
+    ))</xar:set>
+    Serialized other
+    <xar:set name="XX">var_dump(serialize(
+    array(
+        array('users.id','list_user.user_id'),
+    )))</xar:set>
         <p>
             This template <strong>modules/base/xartemplates/user-main<em>-test</em>.xt</strong> can be reached by adding <strong><a href="#xarServer::getModuleURL('base','user','main',array('page' => 'test'))#">page=<em>test</em></a></strong> to the base module URL.
             You can experiment with various blocklayout features and template tags here if you want...

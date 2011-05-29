@@ -53,12 +53,15 @@
                     
                     <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
                         <xar:set name="col_index">$k+1</xar:set>
-                        <!-- name[row][column] -->                        
+                        <!-- columnname[row][column] -->                        
                         <xar:set name="col_name">"{$row_name}[{$col_index}]"</xar:set>
                         <xar:set name="col_id">"{$row_id}_{$col_index}"</xar:set>
-                        <!-- name[row][column] -->
+                        <!-- propertyname[row][column] -->
                         <xar:set name="prop_name">"{$col_name}"</xar:set>
                         <xar:set name="prop_id">"{$col_id}"</xar:set>
+                        <!-- property[row][column] -->
+                        <!-- we need to instantiate the property this way so we can insert a default value -->
+                        <xar:set name="property">DataPropertyMaster::getProperty(array('type'=>$column_types[$k],'defaultvalue'=>$column_defaults[$k]))</xar:set>
 
                         <td>
                             <!-- row #$i# column #$k# -->
