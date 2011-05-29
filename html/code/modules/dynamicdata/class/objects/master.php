@@ -1108,7 +1108,7 @@ class DataObjectMaster extends Object
 //                    if (is_array($value)) $value = current($value);
                     // Remove any spaces and similar chars
                     $left = trim($value[0]);
-                    $right = trim($value[0]);
+                    $right = trim($value[1]);
                     
                     // If this was just the empty first line, bail
                     if (empty($left)) continue;
