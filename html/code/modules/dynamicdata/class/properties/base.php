@@ -309,7 +309,7 @@ class DataProperty extends Object implements iDataProperty
     function setItemValue($itemid, $value, $fordisplay=0)
     {
         $this->value = $value;
-        if ($fordisplay) $this->_items[$itemid][$this->name] = $this->getValue();
+        if ($fordisplay) $this->_items[$itemid][$this->label] = $this->getValue();
         else $this->_items[$itemid][$this->name] = $this->value;
     }
 
