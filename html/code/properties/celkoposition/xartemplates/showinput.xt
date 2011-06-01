@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="empty($reference_id)">
+        <xar:set name="reference_id">0</xar:set>
+        <xar:if condition="!empty($func) and $func eq 'modify'">
+            <xar:set name="position">1</xar:set>
+        <xar:else />
+            <xar:set name="position">2</xar:set>
+        </xar:if>
+    </xar:if>
+    <fieldset style="border: none">
+    <xar:if condition="count($items) eq 0">
+        No items defined yet
+        <input type="hidden" name="#$name#_reference_id" id="#$name#_reference_id" value="#$reference_id#"/>
+        <input type="hidden" name="#$name#_position" id="#$name#_position" value="#$position#"/>
+    <xar:else />
+        <div class="xar-form-input-wrapper">
+            <label for="reference_id" class="xar-form-label help" title="#xarML('Item relationship hiearchy.')#">
+                In relation to
+            </label>
+            <select name="#$name#_reference_id" id="#$name#_reference_id">
+                <xar:for start="$i = 0" test="$i lt count($items)" iter="$i++">
+                    <xar:if condition="$items[$i]['left'] eq $item['left_id']-1">
+                        <xar:set name="position">4</xar:set>
+                        <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
+                        <xar:elseif condition="$items[$i]['right'] eq $item['left_id']-1"/>
+                        <xar:set name="position">2</xar:set>
+                        <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
+                        <xar:else />
+                        <option value="#$items[$i]['id']#">#$items[$i]['slash_separated']#</option>
+                    </xar:if>
+                </xar:for>
+            </select>
+        </div>
+        <!-->The position needs to be set after items select because There is no position which we can have a selected item that will work in all cases-->
+        <div class="xar-form-input-wrapper">
+            <label for="#$name#_position" class="xar-form-label help" title="#xarML('Position of this item.')#">
+                Position
+            </label>
+            <xar:set name="options">
+                array(
+                    array('id' => '1', 'name' => xarML('Right before, in the same level')),
+                    array('id' => '2', 'name' => xarML('Right after, in the same level')),
+                    array('id' => '4', 'name' => xarML('The first child item')),
+                    array('id' => '3', 'name' => xarML('The last child item')),
+                )
+            </xar:set>
+            <xar:set name="ddname">$name . '_position'</xar:set>
+            <xar:set name="ddid">$name . '_position'</xar:set>
+            <xar:data-input type="dropdown" name="$ddname" id="$ddid" value="$position" options="$options"/>
+            <div style="clear: both;">&#160;</div>
+        </div>
+    </xar:if>
+    </fieldset>
+</xar:template>

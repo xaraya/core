@@ -66,6 +66,7 @@
         }
 
         $data['categories'] = $categories;
+        var_dump($data['categories']);exit;
         $data['authid'] = xarSecGenAuthKey();
         return $data;
     }
