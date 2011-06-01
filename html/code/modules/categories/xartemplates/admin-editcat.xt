@@ -3,16 +3,16 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">
-            <xar:mlstring>Categories Administration</xar:mlstring>
+            Categories Administration
         </span>
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
        <h2>
             <xar:if condition="$func eq 'modify'">
-                <xar:mlstring>Modify Category</xar:mlstring>
+                Modify Category
                 <xar:else />
-                <xar:mlstring>Create New Category</xar:mlstring>
+                Create New Category
             </xar:if>
         </h2>
         <form action="#xarModURL('categories','admin','updatecat',array())#" method="post" enctype="application/x-www-form-urlencoded">
@@ -21,18 +21,18 @@
                 <fieldset class="xar-norm">
                     <legend>
                         <strong>
-                        <xar:mlstring>Category</xar:mlstring>#$i+1#</strong>
+                        Category#$i+1#</strong>
                     </legend>
                     <div class="xar-form-input-wrapper">
                         <input type="hidden" name="cids[]" id="cids[]" value="#$cid#"/>
                         <label for="name[#$cid#]" class="xar-form-label help" title="#xarML('The name of the category.')#">
-                            <xar:mlstring>Name</xar:mlstring>
+                            Name
                         </label>
                         <input class="xar-form-textlong" type="text" name="name[#$cid#]" id="name[#$cid#]" value="#$category['name']#" size="32" maxlength="64"/>
                     </div>
                     <div class="xar-form-input-wrapper">
                         <label for="description[#$cid#]" class="xar-form-label help" title="#xarML('The description of the category.')#">
-                            <xar:mlstring>Description</xar:mlstring>
+                            Description
                         </label>
                         <div class="xar-form-container-after">
                             <textarea class="xar-form-textareasmall" name="description[#$cid#]" id="description[#$cid#]" cols="40" rows="3" maxlength="255">#$category['description']#</textarea>
@@ -41,7 +41,7 @@
                     <xar:template file="localization" type="module"/>
                     <div class="xar-form-input-wrapper">
                         <label for="image[#$cid#]" class="xar-form-label help" title="#xarML('In modules/categories/xarimages. Theme-dependent versions can then be placed in themes/[theme name]/modules/categories/images')#">
-                            <xar:mlstring>Optional Image</xar:mlstring>
+                            Optional Image
                         </label>
                         <xar:set name="imagename">'image[' . $cid . ']'</xar:set>
                         <xar:data-input type="dropdown" name="$imagename" value="$category['image']" options="$imageoptions"/>
@@ -73,12 +73,12 @@
                 <fieldset class="xar-norm">
                     <legend>
                         <strong>
-                            <xar:mlstring>Batch Processing</xar:mlstring>
+                            Batch Processing
                         </strong>
                     </legend>
                     <div class="xar-form-input-wrapper">
                         <label for="repeat" class="xar-form-label help" title="#xarML('Create Categories in a Batch.')#">
-                            <xar:mlstring>Create in a batch</xar:mlstring>
+                            Create in a batch
                         </label>
                         <input class="xar-form-textlong" type="text" name="repeat" id="repeat" value="#$repeat#"/>
                     </div>

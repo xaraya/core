@@ -6,16 +6,16 @@
             <xar:if condition="xarModVars::get('categories','use_module_alias')">
                 <xar:var scope="module" module="categories" name="module_alias_name"/>
             <xar:else />
-                <xar:mlstring>Categories Administration</xar:mlstring>
+                Categories Administration
             </xar:if>
         </span>
     </div>
     <div class="xar-mod-body">
        <xar:template type="module" file="admin-menu"/>
         <h2>
-            <xar:mlstring>
+            
                 Modify Categories Configuration
-            </xar:mlstring>
+            
         </h2>
         <div>
             <xar:template file="headerconfig" type="module"/>
@@ -27,9 +27,9 @@
         <form method="post" action="&xar-modurl-categories-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
             <xar:if condition="$tab eq 'categories_general'">
                 <h3>
-                    <xar:mlstring>
+                    
                         General Options
-                    </xar:mlstring>
+                    
                 </h3>
                 <xar:data-form object="$module_settings"/>
             <xar:elseif condition="$tab eq 'categories_hooks'"/>
@@ -59,9 +59,9 @@
             </xar:if>
             <fieldset>
                 <legend>
-                    <xar:mlstring>
+                    
                         Defaults
-                    </xar:mlstring>
+                    
                 </legend>
                 <xar:template file="defaults"/>
             </fieldset>

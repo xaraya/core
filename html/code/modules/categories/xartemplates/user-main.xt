@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <h2>
-        <xar:mlstring>
+        
             Browse Categories
-        </xar:mlstring>
+        
     </h2>
 
     <xar:if condition="!empty($parents) and count($parents) gt 0">
-      <a href="&xar-modurl-categories-user-main;"><xar:mlstring>Browse</xar:mlstring></a>
+      <a href="&xar-modurl-categories-user-main;">Browse</a>
       <xar:foreach in="$parents" value="$parent">
         &gt;
         <xar:if condition="!empty($parent['link'])">

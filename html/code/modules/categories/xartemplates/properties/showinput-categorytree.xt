@@ -2,11 +2,11 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <table border="0" width="100%" cellspacing="0" cellpadding="0">
         <tr>
-            <th><xar:mlstring>Name</xar:mlstring></th>
-            <th><xar:mlstring>Description</xar:mlstring></th>
-            <th><xar:mlstring>Child Categories</xar:mlstring></th>
-            <th><xar:mlstring>Image</xar:mlstring></th>
-            <th><xar:mlstring>Options</xar:mlstring></th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Child Categories</th>
+            <th>Image</th>
+            <th>Options</th>
         </tr>
 
         <xar:set name="displayindex">0</xar:set>    
@@ -47,11 +47,11 @@
                     <td class="#$displayclass#"><xar:if condition="empty($image)">&#160;<xar:else />#$image#</xar:if></td>
                     <td class="#$displayclass#" style="text-align: center;">
                         <a href="#xarModURL('categories', 'admin', 'modify', array('cid' => $cid))#">
-                            <xar:mlstring>Modify</xar:mlstring>
+                            Modify
                         </a>
                         &#160;|&#160;
                         <a href="#xarModURL('categories', 'admin', 'deletecat', array('cid' => $cid))#">
-                            <xar:mlstring>Delete</xar:mlstring>
+                            Delete
                         </a>
                     </td>
                 </tr>
@@ -103,7 +103,7 @@
                 <tr>
                     <td>
                         <form action="#xarModURL('categories','admin','viewcats',array())#" method="post">
-                            <xar:mlstring>Categories per page:</xar:mlstring>&#160;
+                            Categories per page:&#160;
                             <input type="hidden" name="startnum" id="startnum" value="#$startnum#"/>
                             <input type="text" name="items_per_page" id="items_per_page" value="#$items_per_page#" size="5"/>&#160;&#160;
                             <input type="hidden" name="activetab" id="activetab" value="#$activetab#" size="5"/>
@@ -114,7 +114,7 @@
             </xar:if>
             <tr>
                 <td>
-                    <xar:mlstring>Categories Total:</xar:mlstring>&#160;&#160;#$pagertotal#
+                    Categories Total:&#160;&#160;#$pagertotal#
                 </td>
             </tr>
         </table>

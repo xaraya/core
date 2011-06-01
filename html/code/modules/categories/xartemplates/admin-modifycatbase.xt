@@ -2,19 +2,19 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:javascript module="base" filename="orderitem.js" position="head"/>
 
-    <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Categories Administration</xar:mlstring></span></div>
+    <div class="xar-mod-head"><span class="xar-mod-title">Categories Administration</span></div>
     <div class="xar-mod-body">
        <xar:template type="module" file="admin-menu"/>
         <h2>
         <xar:if condition="$func eq 'modify'">
-            <xar:mlstring>Modify Category Base</xar:mlstring>
+            Modify Category Base
         <xar:else />
-            <xar:mlstring>Create New Category Base</xar:mlstring>
+            Create New Category Base
         </xar:if>
         </h2>
 
         <div style="margin: auto;">
-            <p><xar:mlstring>Module:</xar:mlstring> #$module#; <xar:mlstring>Item type:</xar:mlstring> #$itemtype#</p>
+            <p>Module: #$module#; Item type: #$itemtype#</p>
 
             <form action="#xarModURL('categories', 'admin', 'updatecatbase')#" method="post">
                 <p>
@@ -23,14 +23,14 @@
                     <input type="hidden" name="modid" id="modid" value="#$modid#"/>
                     <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
 
-                    <label for="name"><xar:mlstring>Name (TODO)</xar:mlstring></label>
+                    <label for="name">Name (TODO)</label>
                     <input type="text" name="name" id="name" value="#$catbase['name']#" size="32" maxlength="100"/>
                 </p>
                 <p>
-                    <label for="cids"><xar:mlstring>Base category</xar:mlstring></label> #$cidselect#
+                    <label for="cids">Base category</label> #$cidselect#
                 </p>
                 <p>
-                    <label for="multiple"><xar:mlstring>Multiple select (TODO)</xar:mlstring></label>
+                    <label for="multiple">Multiple select (TODO)</label>
                     <xar:if condition="!empty($catbase['multiple'])">
                         <input type="checkbox" name="multiple" id="multiple" value="1" selected="selected"/>
                     <xar:else/>
@@ -38,7 +38,7 @@
                     </xar:if>
                 </p>
                 <p>
-                    <label for="display"><xar:mlstring>Display (TODO)</xar:mlstring></label>
+                    <label for="display">Display (TODO)</label>
                     <xar:if condition="!empty($catbase['display'])">
                         <input type="checkbox" name="display" id="display" value="1" selected="selected"/>
                     <xar:else/>
@@ -48,7 +48,7 @@
                 <!-- Display the ordering select list if modifying, and there are two or more category bases to order -->
                 <xar:if condition="$groupcount gt 1 and !empty($bid)">
                     <p>
-                        <label for="order"><xar:mlstring>Order</xar:mlstring></label>
+                        <label for="order">Order</label>
                         <input type="hidden" value="" name="orderresult" id="orderresult"/>
 
                         <input type="image" src="#xarTplGetImage('up.gif','base')#" onclick="return xar_base_reorder('order', true);" title="#xarML('Move selected instance up')#"/>

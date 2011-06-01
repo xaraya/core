@@ -4,9 +4,9 @@
     <br />
     <dl class="xar-tabs">
         <dt class="help">
-            <xar:mlstring>
+            
                 Applies to:
-            </xar:mlstring>
+            
         </dt>
         <xar:if condition="$tab eq 'categories_general'">
             <xar:set name="class">"active"</xar:set>
@@ -17,7 +17,7 @@
         </xar:if>
         <dd class="#$class#">
             <a href="#xarModURL('categories', 'admin', 'modifyconfig', array('tabmodule' => 'categories', 'tab' => 'categories_general'))#">
-            <xar:mlstring>General</xar:mlstring></a>
+            General</a>
         </dd>
         <xar:set name="tabs">$hooks['tabs']</xar:set>
         <xar:foreach in="$tabs" value="$thistab">

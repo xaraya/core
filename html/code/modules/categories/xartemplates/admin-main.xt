@@ -2,48 +2,48 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
-        <span class="xar-mod-title"><xar:mlstring>Categories Administration</xar:mlstring></span>
+        <span class="xar-mod-title">Categories Administration</span>
             </div>
     <div class="xar-mod-body">
        <xar:template type="module" file="admin-menu"/>
        <img src="#xarTplGetImage('categories.png')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
         <h2>
-            <xar:mlstring>Overview</xar:mlstring>
+            Overview
         </h2>
         <h3>
-                <xar:mlstring>What is it?</xar:mlstring>
+                What is it?
         </h3>
-            <p><em><xar:mlstring>Categories is a Xaraya Utility Module.</xar:mlstring></em>
-                <xar:mlstring>It is currently responsible for accomplishing these tasks:</xar:mlstring>
+            <p><em>Categories is a Xaraya Utility Module.</em>
+                It is currently responsible for accomplishing these tasks:
                 <ul>
-                    <li><xar:mlstring>Allows the use of site wide categories for content modules to use as needed.</xar:mlstring></li>
+                    <li>Allows the use of site wide categories for content modules to use as needed.</li>
                 </ul>
             </p>
             <h3>
-                <xar:mlstring>The Admin interface</xar:mlstring>
+                The Admin interface
            </h3>
-            <p><xar:mlstring>From the menu, you have two choices.  'Add a New Category', and 'View Categories'.</xar:mlstring>
+            <p>From the menu, you have two choices.  'Add a New Category', and 'View Categories'.
                 <ul>
-                    <li><xar:mlstring>Add a new category -- Allows you to add a new category to your site categories tree.</xar:mlstring></li>
-                    <li><xar:mlstring>View Categories -- This area allows you to view the entire categorization tree, allowing a easy way to modify it.</xar:mlstring></li>
+                    <li>Add a new category -- Allows you to add a new category to your site categories tree.</li>
+                    <li>View Categories -- This area allows you to view the entire categorization tree, allowing a easy way to modify it.</li>
                 </ul>
             </p>
             <h3>
-                <xar:mlstring>Included Blocks</xar:mlstring>
+                Included Blocks
             </h3>
             <p>
-                <xar:mlstring>The Navigation block allows navigation of any module using the category hooks.</xar:mlstring>
+                The Navigation block allows navigation of any module using the category hooks.
             </p>
              <h3>
-                <xar:mlstring>Included Hooks</xar:mlstring>
+                Included Hooks
         </h3>
             <p>
-                <xar:mlstring>Categories provides all the hooks necessary to allow categories to be available within other modules.</xar:mlstring>
+                Categories provides all the hooks necessary to allow categories to be available within other modules.
             </p>
             </div>
             <div class="xar-mod-foot xar-align-center xar-padding-thick">
         <p>
-            <xar:mlstring>Extended information about this module can be found here. [modules module]</xar:mlstring>
+            Extended information about this module can be found here. [modules module]
         </p>
     </div>
 </xar:template>

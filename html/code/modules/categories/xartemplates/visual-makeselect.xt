@@ -18,7 +18,7 @@
 
     <select size="#$sizestring#" name="#$name_prefix#cids[]" multiple="#$multiplestring#" onchange="#$javascript#">
     <xar:if condition="!empty($select_itself)">
-        <option value=""><xar:mlstring>Select :</xar:mlstring></option>
+        <option value="">Select :</option>
     </xar:if>
 
     <xar:set name="already_passed">false</xar:set>
@@ -64,7 +64,7 @@
     <xar:if condition="!empty($show_edit) and !empty($current_id)">
         <xar:sec id="showEdit" mask="EditCategories" catch="false" component="All" instance="All:$current_id">
             [&#160;<a href="#xarModURL('categories','admin','modifycat',array('cid' => $current_id))#">
-            <xar:mlstring>Edit</xar:mlstring>
+            Edit
             </a> ]
         </xar:sec>
     </xar:if>

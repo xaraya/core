@@ -18,7 +18,7 @@
             <input type="hidden" name="moving[#$cid#]" id="moving_#$cid#" value="true"/>
             <input type="hidden" name="catexists[#$cid#]" id="catexists_#$cid#" value="true"/>
             <label for="refcid[#$cid#]" class="xar-form-label help" title="#xarML('Category relationship hiearchy.')#">
-                <xar:mlstring>In relation to this category</xar:mlstring>
+                In relation to this category
             </label>
             <select name="refcid[#$cid#]" id="refcid_#$cid#">
                 <xar:for start="$i = 0" test="$i lt count($categories)" iter="$i++">
@@ -37,7 +37,7 @@
         <!-- The position needs to be set after categories select because There is no position which we can have a selected category that will work in all cases -->
         <div class="xar-form-input-wrapper">
             <label for="position[#$cid#]" class="xar-form-label help" title="#xarML('Position of this category.')#">
-                <xar:mlstring>Position</xar:mlstring>
+                Position
             </label>
             <xar:set name="options">
                 array(

@@ -3,13 +3,13 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">
-            <xar:mlstring>Categories Administration</xar:mlstring>
+            Categories Administration
         </span>
     </div>
     <div class="xar-mod-body">
        <xar:template type="module" file="admin-menu"/>
         <h2>
-            <xar:mlstring>Create New Category</xar:mlstring>
+            Create New Category
         </h2>
         <form action="#xarModURL('categories','admin','create',array())#" method="post" enctype="application/x-www-form-urlencoded">
             <input type="hidden" name="authid" id="authid" value="#$authid#"/>
@@ -17,7 +17,7 @@
                 <fieldset class="xar-norm">
                     <legend>
                         <strong>
-                        <xar:mlstring>Category</xar:mlstring>&#160;#$i#</strong>
+                        Category&#160;#$i#</strong>
                     </legend>
                     <xar:set name="object">$objects[$i]</xar:set>
                     <xar:data-form object="$object"/>
@@ -42,12 +42,12 @@
                 <fieldset class="xar-norm">
                     <legend>
                         <strong>
-                            <xar:mlstring>Batch Processing</xar:mlstring>
+                            Batch Processing
                         </strong>
                     </legend>
                     <div class="xar-form-input-wrapper">
                         <label for="repeat" class="xar-form-label help" title="#xarML('Input and save a set of categories at the same time.')#">
-                            <xar:mlstring>Category forms to display</xar:mlstring>
+                            Category forms to display
                         </label>
                         <input class="xar-form-textlong" type="text" name="repeat" id="repeat" value="#$repeat#"/>
                     </div>

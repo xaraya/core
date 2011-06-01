@@ -10,9 +10,9 @@
     </xar:if>
     <div class="xar-form-input-wrapper">
         <label for="#$name#_categories_numberofbasecats" class="xar-form-label help" title="#xarML('Enter the number of possible categories that this itemtype will use')#">
-            <xar:mlstring>
+            
                 Number of possible categories
-            </xar:mlstring>
+            
         </label>
         <input type="text" name="#$name#_categories_numberofbasecats" id="#$name#_categories_numberofbasecats" size="3" maxlength="2" value="#$categories_numberofbasecats#"/>
     </div>

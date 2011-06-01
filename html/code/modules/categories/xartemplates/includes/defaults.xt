@@ -7,45 +7,45 @@
     </xar:if>
     <div class="xar-form-input-wrapper">
         <label for="items_per_page" title="#xarML('Object to use to model a category')#" class="xar-form-label">
-            <xar:mlstring>
+            
                 Categories object:
-            </xar:mlstring>
+            
         </label>
         <xar:set name="value"><xar:var scope="module" module="categories" name="categoriesobject"/></xar:set>
         <xar:data-input type="object" name="categoriesobject" value="$value" store_prop="name"/>
     </div>
     <div class="xar-form-input-wrapper">
         <label for="bar" title="#xarML('The categories can be navigated in an explorer style interface.')#" class="xar-form-label">
-            <xar:mlstring>
+            
                 Windows Explorer style tree
-            </xar:mlstring>
+            
         </label>
         <xar:set name="checked">xarModItemVars::get('categories', 'usejsdisplay', $regid)</xar:set>
         <xar:data-input type="checkbox" name="usejsdisplay" checked="$checked"/>
     </div>
     <div class="xar-form-input-wrapper">
         <label for="bar" title="#xarML('Specify how many links you want to see per page.')#" class="xar-form-label">
-            <xar:mlstring>
+            
                 Links shown in statistics
-            </xar:mlstring>
+            
         </label>
         <xar:set name="value">xarModItemVars::get('categories', 'numstats', $regid)</xar:set>
         <input type="text" name="numstats" id="numstats" value="#$value#"/>
     </div>
     <div class="xar-form-input-wrapper">
         <label for="bar" title="#xarML('In many cases, you can see the item title if you want.')#" class="xar-form-label">
-            <xar:mlstring>
+            
                 Show the item title in statistics
-            </xar:mlstring>
+            
         </label>
         <xar:set name="checked">xarModItemVars::get('categories', 'showtitle', $regid)</xar:set>
         <xar:data-input type="checkbox" name="showtitle" checked="$checked"/>
     </div>
     <div class="xar-form-input-wrapper">
         <label for="bar" title="#xarML('Make the batch processing option visible')#" class="xar-form-label">
-            <xar:mlstring>
+            
                 Allow batch processing
-            </xar:mlstring>
+            
         </label>
         <xar:set name="checked">xarModItemVars::get('categories', 'allowbatch', $regid)</xar:set>
         <xar:data-input type="checkbox" name="allowbatch" checked="$checked"/>

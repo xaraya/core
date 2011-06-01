@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <div class="xar-mod-head">
-        <span class="xar-mod-title"><xar:mlstring>Categories Administration</xar:mlstring></span>
+        <span class="xar-mod-title">Categories Administration</span>
     </div>
     <div class="xar-mod-body">
        <xar:template type="module" file="admin-menu"/>
-        <h2><xar:mlstring>View Categories</xar:mlstring></h2>
+        <h2>View Categories</h2>
         <div style="margin: auto;">
             <div style="text-align: right">
-                <a href="#xarModURL('categories','admin','new')#"><xar:mlstring>Add Category</xar:mlstring></a><br /><br />
+                <a href="#xarModURL('categories','admin','new')#">Add Category</a><br /><br />
             </div>
             <xar:data-input type="categorymenu" contextmodule="base"/>
             <div style="clear: both">
                 <xar:if condition="empty($options)">
                     <div align="center">
-                        <h3><xar:mlstring>No base category chosen</xar:mlstring></h3><br />
+                        <h3>No base category chosen</h3><br />
                     </div>
                 <xar:else />
                     <xar:data-input type="categorytree" options="$options" startnum="$startnum" items_per_page="$items_per_page"/>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Categories Administration</xar:mlstring></span></div>
+    <div class="xar-mod-head"><span class="xar-mod-title">Categories Administration</span></div>
     <div class="xar-mod-body">
        <xar:template type="module" file="admin-menu"/>
-    <h2><xar:mlstring>View Categories</xar:mlstring></h2><br />
+    <h2>View Categories</h2><br />
     <div style="margin: auto;">
     <table border="0" width="100%" cellspacing="0" cellpadding="0">
     <tr>
-        <th><xar:mlstring>Name</xar:mlstring></th>
-        <th><xar:mlstring>Description</xar:mlstring></th>
-        <th><xar:mlstring>Image And Hooks</xar:mlstring></th>
-        <th><xar:mlstring>Options</xar:mlstring></th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Image And Hooks</th>
+        <th>Options</th>
     </tr>
     <xar:loop name="$categories">
         <xar:if condition="(($loop:index + 1) % 2)">
@@ -23,11 +23,11 @@
                 <td><xar:if condition="empty($loop:item['image'])">&#160;<xar:else />#$loop:item['image']#</xar:if></td>
                 <td style="text-align: center;">
                     <a href="#xarModURL('categories', 'admin', 'modify', array('cid' => $loop:item['cid']))#">
-                        <xar:mlstring>Modify</xar:mlstring>
+                        Modify
                     </a>
                     &#160;|&#160;
                     <a href="#xarModURL('categories', 'admin', 'deletecat', array('cid' => $loop:item['cid']))#">
-                        <xar:mlstring>Delete</xar:mlstring>
+                        Delete
                     </a>
                 </td>
             </tr>
@@ -45,11 +45,11 @@
                 </td>
                 <td class="xar-accent" style="text-align: center;">
                     <a href="#xarModURL('categories', 'admin', 'modify', array('cid' => $loop:item['cid']))#">
-                        <xar:mlstring>Modify</xar:mlstring>
+                        Modify
                     </a>
                     &#160;|&#160;
                     <a href="#xarModURL('categories', 'admin', 'delete', array('cid' => $loop:item['cid']))#">
-                        <xar:mlstring>Delete</xar:mlstring>
+                        Delete
                     </a>
                 </td>
             </tr>
@@ -95,12 +95,12 @@
         </td>
     </tr>
     <form action="#xarModURL('categories','admin','viewcats',array())#" method="post">
-    <tr><td><xar:mlstring>Categories per page:</xar:mlstring>&#160;&#160;
+    <tr><td>Categories per page:&#160;&#160;
         <input type="text" name="items_per_page" id="items_per_page" value="#$items_per_page#" size="5"/>
         <input type="submit" value="#$reloadlabel#"/>
         </td></tr>
     </form>
-    <tr><td><xar:mlstring>Categories Total:</xar:mlstring>&#160;&#160;#$pagertotal#</td></tr>
+    <tr><td>Categories Total:&#160;&#160;#$pagertotal#</td></tr>
     </table>
     <br />
     </div>

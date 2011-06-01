@@ -13,7 +13,7 @@
     <xar:else />
         <input type="hidden" name="moving[#$cid#]" id="moving[#$cid#]" value="1"/>
         <tr align="left" valign="middle">
-            <td><xar:mlstring>In relation to this category:</xar:mlstring></td>
+            <td>In relation to this category:</td>
             <td><select name="refcid[#$cid#]" id="refcid[#$cid#]">
                 <xar:for start="$i = 0" test="$i lt count($categories)" iter="$i++">
                     <xar:if condition="$categories[$i]['left'] eq $category['left']-1">
@@ -45,35 +45,35 @@
               There is no position which we can have a selected category that will
               work in all cases  -->
         <tr align="left" valign="middle">
-            <td><xar:mlstring>Position</xar:mlstring></td>
+            <td>Position</td>
             <td><select name="position[#$cid#]" id="position[#$cid#]">
                 <xar:if condition="$position eq 1">
                     <option value="1" selected="selected"/>
                 <xar:else />
                     <option value="1"/>
                 </xar:if>
-                <xar:mlstring>Above</xar:mlstring>&#160;-&#160;<xar:mlstring>Same level</xar:mlstring>
+                Above&#160;-&#160;Same level
 
                 <xar:if condition="$position eq 2">
                     <option value="2" selected="selected"/>
                 <xar:else />
                     <option value="2"/>
                 </xar:if>
-                <xar:mlstring>Below</xar:mlstring>&#160;-&#160;<xar:mlstring>Same level</xar:mlstring>
+                Below&#160;-&#160;Same level
 
                 <xar:if condition="$position eq 3">
                     <option value="3" selected="selected"/>
                 <xar:else />
                     <option value="3"/>
                 </xar:if>
-                <xar:mlstring>Below</xar:mlstring>&#160;-&#160;<xar:mlstring>Child Category</xar:mlstring>
+                Below&#160;-&#160;Child Category
 
                 <xar:if condition="$position eq 4">
                     <option value="4" selected="selected"/>
                 <xar:else />
                     <option value="4"/>
                 </xar:if>
-                <xar:mlstring>Above</xar:mlstring>&#160;-&#160;<xar:mlstring>Child Category</xar:mlstring>
+                Above&#160;-&#160;Child Category
 
             </select></td>
         </tr>

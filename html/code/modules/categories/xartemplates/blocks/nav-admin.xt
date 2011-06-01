@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <div style="clear: both; padding-top: 10px;">
         <span style="float: left; width: 20%; text-align: right;">
-        <label for="layout#$blockid#"><xar:mlstring>Category layout</xar:mlstring></label>
+        <label for="layout#$blockid#">Category layout</label>
         </span>
         <span style="float: right; width: 78%; text-align: left;">
             <xar:set name="options">
@@ -21,7 +21,7 @@
 
     <div style="clear: both; padding-top: 10px;">
         <span style="float: left; width: 20%; text-align: right;">
-          <label for="startmodule#$blockid#"><xar:mlstring>Show categories</xar:mlstring></label>
+          <label for="startmodule#$blockid#">Show categories</label>
         </span>
         <span style="float: right; width: 78%; text-align: left;">
           <xar:set name="optgroup">0</xar:set>
@@ -48,7 +48,7 @@
 
     <div style="clear: both; padding-top: 10px;">
         <span style="float: left; width: 20%; text-align: right;">
-         <label for="showempty#$blockid#"><xar:mlstring>Show empty categories</xar:mlstring></label>
+         <label for="showempty#$blockid#">Show empty categories</label>
         </span>
         <span style="float: right; width: 78%; text-align: left;">
         <xar:if condition="!empty($showempty)">
@@ -61,7 +61,7 @@
 
     <div style="clear: both; padding-top: 10px;">
         <span style="float: left; width: 20%; text-align: right;">
-         <label for="dynamictitle#$blockid#"><xar:mlstring>Dynamic title (linked to content)</xar:mlstring></label>
+         <label for="dynamictitle#$blockid#">Dynamic title (linked to content)</label>
         </span>
         <span style="float: right; width: 78%; text-align: left;">
         <xar:if condition="!empty($dynamictitle)">
@@ -74,7 +74,7 @@
 
     <div style="clear: both; padding-top: 10px;">
         <span style="float: left; width: 20%; text-align: right;">
-          <label for="showcatcount#$blockid#"><xar:mlstring>Show count per category</xar:mlstring></label>
+          <label for="showcatcount#$blockid#">Show count per category</label>
         </span>
         <span style="float: right; width: 78%; text-align: left;">
             <xar:set name="options">
@@ -93,7 +93,7 @@
 
     <div style="clear: both; padding-top: 10px;">
         <span style="float: left; width: 20%; text-align: right;">
-          <label for="showchildren#$blockid#"><xar:mlstring>Show children</xar:mlstring></label>
+          <label for="showchildren#$blockid#">Show children</label>
         </span>
         <span style="float: right; width: 78%; text-align: left;">
             <xar:set name="options">

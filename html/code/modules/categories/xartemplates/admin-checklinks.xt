@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <div class="xar-mod-head"><span class="xar-mod-title"><xar:mlstring>Categories Administration</xar:mlstring></span></div>
+    <div class="xar-mod-head"><span class="xar-mod-title">Categories Administration</span></div>
     <div class="xar-mod-body">
        <xar:template type="module" file="admin-menu"/>
-    <h2><xar:mlstring>Check Orphan Links</xar:mlstring></h2><br />
+    <h2>Check Orphan Links</h2><br />
     <div style="margin: auto;">
     <xar:if condition="empty($modid)">
             <table border="0" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                     <th valign="center" width="40%">
-                        <b><xar:mlstring>Module Name</xar:mlstring></b>
+                        <b>Module Name</b>
                     </th>
                     <th align="center" valign="center" width="15%">
-                        <b><xar:mlstring>Module<br />Items</xar:mlstring></b>
+                        <b>Module<br />Items</b>
                     </th>
                     <th align="center" valign="center" width="15%">
-                        <b><xar:mlstring>Distinct<br />Categories</xar:mlstring></b>
+                        <b>Distinct<br />Categories</b>
                     </th>
                     <th align="center" valign="center" width="15%">
-                        <b><xar:mlstring>Total<br />Links</xar:mlstring></b>
+                        <b>Total<br />Links</b>
                     </th>
                 </tr>
 
@@ -32,9 +32,9 @@
                     <tr>
                         <td colspan="4" align="center">
                             <br />
-                            <xar:mlstring>
+                            
                                 There are currently no category links in the database...
-                            </xar:mlstring>
+                            
                             <br />
                             <br />
                         </td>
@@ -68,7 +68,7 @@
                     </xar:foreach>
                     <tr>
                         <td valign="center" width="40%">
-                            <b><xar:mlstring>Grand Total</xar:mlstring></b>
+                            <b>Grand Total</b>
                         </td>
                         <td align="center" valign="center" width="15%">
                             <b>#$numitems#</b>
@@ -100,13 +100,13 @@
                 <tr>
                     <th valign="center" width="50%">
                         <xar:if condition="empty($sortlink['itemid'])">
-                            <b><xar:mlstring>Item Id</xar:mlstring></b>
+                            <b>Item Id</b>
                         <xar:else/>
-                            <a href="#$sortlink['itemid']#"><b><xar:mlstring>Item Id</xar:mlstring></b></a>
+                            <a href="#$sortlink['itemid']#"><b>Item Id</b></a>
                         </xar:if>
                     </th>
                     <th align="center" valign="center" width="30%">
-                        <b><xar:mlstring>Category<br/>Links</xar:mlstring></b>
+                        <b>Category<br/>Links</b>
                     </th>
                 </tr>
 
@@ -120,9 +120,9 @@
                     <tr>
                         <td colspan="2" align="center">
                             <br />
-                            <xar:mlstring>
+                            
                                 There are currently no orphaned category links for this module...
-                            </xar:mlstring>
+                            
                             <br />
                             <br />
                         </td>
@@ -169,7 +169,7 @@
                 </xar:if>
                     <tr>
                         <td valign="center" width="50%">
-                            <b><xar:mlstring>Grand Total</xar:mlstring></b>:
+                            <b>Grand Total</b>:
                         </td>
                         <td align="center" valign="center" width="30%">
                             <b>#$numorphans#</b>
