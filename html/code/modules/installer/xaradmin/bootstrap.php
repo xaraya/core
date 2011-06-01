@@ -75,6 +75,7 @@ function installer_admin_bootstrap()
                         'authsystem',
                         'blocks',
                         'base',
+                        'categories',
                         'dynamicdata',
                         'mail',
                         'modules',

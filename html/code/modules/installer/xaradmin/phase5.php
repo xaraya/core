@@ -229,7 +229,7 @@ function installer_admin_phase5()
                     VALUES (?,?,?,?,?,?,?,?,?)";
     $newStmt     = $dbconn->prepareStatement($newModSql);
 
-    $modules = array('authsystem','roles','privileges','installer','blocks','themes','dynamicdata','mail');
+    $modules = array('authsystem','roles','privileges','installer','blocks','themes','dynamicdata','mail','categories');
     // Series of updates, begin transaction
     try {
         $dbconn->begin();
@@ -257,7 +257,7 @@ function installer_admin_phase5()
     }
 
     // 4. Initialize all the modules we haven't yet
-    $modules = array('privileges','roles','blocks','authsystem','themes','dynamicdata','mail');
+    $modules = array('privileges','roles','blocks','authsystem','themes','dynamicdata','mail','categories');
     foreach ($modules as $module) {
         try {
             sys::import('modules.' . $module . '.xartables');

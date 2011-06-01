@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <h2>
+        <xar:mlstring>
+            Browse Categories
+        </xar:mlstring>
+    </h2>
+
+    <xar:if condition="!empty($parents) and count($parents) gt 0">
+      <a href="&xar-modurl-categories-user-main;"><xar:mlstring>Browse</xar:mlstring></a>
+      <xar:foreach in="$parents" value="$parent">
+        &gt;
+        <xar:if condition="!empty($parent['link'])">
+          <a href="#$parent['link']#">#$parent['name']#</a>
+        <xar:else/>
+          <strong>#$parent['name']#</strong>
+        </xar:if>
+      </xar:foreach>
+      #$hooks#
+      <br/><br/>
+    </xar:if>
+
+    <xar:if condition="!empty($letters) and count($letters) gt 0">
+      [
+      <xar:foreach in="$letters" key="$id" value="$letter">
+        <xar:if condition="!empty($id)">
+          |
+        </xar:if>
+        <a href="#$letter['link']#">#$letter['name']#</a>
+      </xar:foreach>
+      ]
+      <hr/>
+    </xar:if>
+
+    <xar:if condition="!empty($categories) and count($categories) gt 0">
+      <xar:set name="numcats">count($categories)</xar:set>
+      <xar:set name="miditem">round(($numcats - 0.5) / 2)</xar:set>
+      <xar:if condition="$numcats gt 7">
+      <!--  TODO: Review this
+        <table border="0"><tr><td valign="top">
+      <ul>
+      <xar:foreach in="$categories" key="$id" value="$category">
+        <li> <a href="#$category['link']#">#$category['name']#</a> </li>
+          </ul></td>
+          <td valign="top"><ul>
+      </xar:foreach>
+      </ul>
+        </tr></table>
+        -->
+      <xar:else />
+      <ul>
+      <xar:foreach in="$categories" key="$id" value="$category">
+        <li> <a href="#$category['link']#">#$category['name']#</a> </li>
+      </xar:foreach>
+      </ul>
+      </xar:if>
+    </xar:if>
+
+    <xar:if condition="!empty($moditems) and count($moditems) gt 0">
+      <xar:foreach in="$moditems" value="$moditem">
+        &#x2022; <a href="#$moditem['link']#">#$moditem['name']#</a> (#$moditem['numitems']#)
+        <ul>
+        <xar:if condition="!empty($moditem['items'])">
+        <xar:foreach in="$moditem['items']" value="$item">
+           <li> <a href="#$item['url']#" title="#$item['title']#">#$item['label']#</a> </li>
+        </xar:foreach>
+        </xar:if>
+        </ul>
+      </xar:foreach>
+    </xar:if>
+</xar:template>

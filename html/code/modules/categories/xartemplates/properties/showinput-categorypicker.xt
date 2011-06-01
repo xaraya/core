@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="isset($onchange)">
+      <xar:set name="evt_change">$onchange</xar:set>
+    <xar:else/>
+      <xar:set name="evt_change">'return true;'</xar:set>
+    </xar:if>
+    <xar:if condition="!isset($style)">
+        <xar:set name="style">''</xar:set>
+    </xar:if>
+    <div class="xar-form-input-wrapper">
+        <label for="#$name#_categories_numberofbasecats" class="xar-form-label help" title="#xarML('Enter the number of possible categories that this itemtype will use')#">
+            <xar:mlstring>
+                Number of possible categories
+            </xar:mlstring>
+        </label>
+        <input type="text" name="#$name#_categories_numberofbasecats" id="#$name#_categories_numberofbasecats" size="3" maxlength="2" value="#$categories_numberofbasecats#"/>
+    </div>
+    <input type="hidden" name="#$name#_categorypicker_localmodule" value="#$categories_localmodule#"/>
+    <input type="hidden" name="#$name#_categorypicker_localitemtype" value="#$categories_localitemtype#"/>
+    <xar:foreach in="$items" value="$item">
+        <div class="xar-form-input-wrapper">
+            <xar:set name="cidname">$name . "_categories_basecatcid[" . $item['num'] ."]"</xar:set>
+            <xar:set name="cidindex">$item['num']+1</xar:set>
+            <label for="#$cidname#" class="xar-form-label help" title="#xarML('Base category')#">
+                <xar:set name="alias">xarModVars::get($categories_localmodule,'module_alias_name')</xar:set>
+                <xar:ml>
+                    <xar:mlstring>
+                        #(1) base category
+                    </xar:mlstring>
+                <xar:mlvar>#$alias#</xar:mlvar>
+                </xar:ml>
+                 (#$cidindex#)
+             </label>
+            <xar:set name="categories">array($item['category_id'])</xar:set>
+<!-- FIXME: this generates a bunch of hidden fields too -->
+            <xar:data-input type="categories" name="$cidname" module="$categories_localmodule" itemtype="$item['itemtype']" categories="$categories" bases="single" onchange="$evt_change" style="$style"/>
+            &#160;Itemtype:
+            <input type="text" name="#$name#_categories_basecatitemtype[#$item['num']#]" value="#$item['itemtype']#" style="width: 50px"/>
+            &#160;Name:
+            <input type="text" name="#$name#_categories_basecatname[#$item['num']#]" value="#$item['name']#"/>
+        </div>
+    </xar:foreach>
+</xar:template>
