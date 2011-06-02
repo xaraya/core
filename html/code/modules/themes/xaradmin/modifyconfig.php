@@ -55,6 +55,10 @@ function themes_admin_modifyconfig()
     if (!xarVarFetch('compresscss', 'checkbox', $data['compresscss'], false, XARVAR_NOT_REQUIRED)) return;
     // can't compress if not combined :)    
     if ($data['combinecss'] == false) $data['compresscss'] = false;
+    
+    if (!xarVarFetch('enable_user_menu', 'checkbox',
+        $data['enable_user_menu'], xarModVars::get('themes', 'enable_user_menu'), XARVAR_NOT_REQUIRED)) return;
+    
 
     // Dashboard
 //    if (!isset($data['dashtemplate']) || trim($data['dashtemplate']=='')) {
@@ -62,8 +66,14 @@ function themes_admin_modifyconfig()
 //    }
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'themes'));
-    $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls, enable_user_menu');
+    $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
     $data['module_settings']->getItem();
+
+    sys::import('modules.dynamicdata.class.properties.master');
+    $data['user_themes'] = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
+    $data['user_themes']->options = xarMod::apiFunc('themes', 'admin', 'dropdownlist', array('Class' => 2));
+    $data['user_themes']->setValue(xarModVars::get('themes', 'user_themes'));
+    $data['user_themes']->layout = 'vertical';
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -75,10 +85,15 @@ function themes_admin_modifyconfig()
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             $isvalid = $data['module_settings']->checkInput();
-            if (!$isvalid) {
+            $andvalid = ($data['enable_user_menu'] != false) ? $data['user_themes']->checkInput('user_themes') : true;
+          
+            if (!$isvalid || !$andvalid) {
                 return xarTpl::module('themes','admin','modifyconfig', $data);        
             } else {
                 $itemid = $data['module_settings']->updateItem();
+                xarModVars::set('themes', 'enable_user_menu', $data['enable_user_menu']);
+                if (isset($data['user_themes']->value))
+                    xarModVars::set('themes','user_themes', $data['user_themes']->value);
             }
             xarModVars::set('themes', 'SiteName', $data['sitename']);
             xarModVars::set('themes', 'SiteTitleSeparator', $data['separator']);
@@ -109,7 +124,8 @@ function themes_admin_modifyconfig()
             // css combine/compress options
             xarModVars::set('themes', 'css.combined', $data['combinecss']);
             xarModVars::set('themes', 'css.compressed', $data['compresscss']);
-            
+
+           
             // Adjust the usermenu hook according to the setting
             /* The usermenu isn't a hook...
             sys::import('xaraya.structures.hooks.observer');

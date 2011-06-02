@@ -61,6 +61,43 @@
                 </div>
             </fieldset>
             <fieldset>
+                <legend>User Settings</legend>
+                <xar:set name="enable_user_menu"><xar:var scope="module" module="themes" name="enable_user_menu"/></xar:set>
+                <div class="xar-form-input-wrapper">
+                    <xar:var name="varlabel">Allow users to select a theme from their profile</xar:var>
+                    <label for="enable_user_menu" class="xar-form-label" title="#$varlabel#">
+                        Enable User Settings                    
+                    </label>
+                    <div class="xar-form-container-after">
+                        <xar:if condition="empty($enable_user_menu)">
+                            <input type="checkbox" name="enable_user_menu" id="enable_user_menu" onclick="toggleDisplay('user_themes_id');"/>
+                        <xar:else/>
+                            <input type="checkbox" name="enable_user_menu" id="enable_user_menu" onclick="toggleDisplay('user_themes_id');" checked="checked"/>
+                        </xar:if>
+                        #$varlabel#                   
+                    </div> 
+                </div>
+                <div class="xar-form-input-wrapper" id="user_themes_id">
+                    <xar:var name="varlabel">Select themes users may choose from</xar:var>
+                    <label for="user_themes" class="xar-form-label" title="#$varlabel#">
+                        User Themes                    
+                    </label>
+                    <div class="xar-form-container-after">
+                        #$varlabel#
+                    </div>
+                    <div class="xar-form-container-after">
+                        <xar:data-input property="$user_themes" name="user_themes" id="user_themes" layout="vertical"/>
+                    </div>         
+                </div>          
+                <xar:if condition="empty($enable_user_menu)">                
+                    <script type="text/javascript">
+                        //<![CDATA[
+                        setDisplayOff('user_themes_id');
+                        //]]>                    
+                    </script>
+                 </xar:if>
+            </fieldset>
+            <fieldset>
             <legend>Site Display Options</legend>
                 <div class="xar-form-input-wrapper">
                     <label for="sitename" class="xar-form-label">

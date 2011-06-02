@@ -50,15 +50,20 @@
 /**
  * @param array    $args array of optional parameters<br/>
  */
-function themes_adminapi_dropdownlist(Array $args=array())
+function themes_userapi_dropdownlist(Array $args=array())
 {
-
-    $themelist = xarMod::apiFunc('themes', 'admin', 'getthemelist', $args);
     $options = array();
-    if (!empty($themelist)) {
-        foreach ($themelist as $theme) {
-            if (isset($args['Class']) && $theme['class'] != $args['Class']) continue;
-            $options[] = array('id' =>  $theme['name'], 'name' => $theme['displayname']);
+
+    if ((bool) xarModVars::get('themes', 'enable_user_menu')) {        
+        $themelist = xarMod::apiFunc('themes', 'admin', 'getthemelist', $args);
+        $user_themes = xarModVars::get('themes', 'user_themes');
+        $user_themes = !empty($user_themes) ? explode(',',$user_themes) : array();
+        if (!empty($themelist) && !empty($user_themes)) {
+            foreach ($themelist as $theme) {
+                if ( (!empty($user_themes) && !in_array($theme['name'], $user_themes)) ||
+                    $theme['class'] != 2) continue;
+                $options[] = array('id' =>  $theme['name'], 'name' => $theme['displayname']);
+            }
         }
     }
 

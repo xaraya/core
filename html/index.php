@@ -71,6 +71,21 @@ function xarMain()
             xarTpl::setThemeName($themeName);
             xarVarSetCached('Themes.name','CurrentTheme', $themeName);
         }
+    // User Override (configured in themes admin modifyconfig)
+    } elseif ((bool) xarModVars::get('themes', 'enable_user_menu') == true) {
+        // users are allowed to set theme in profile, get user setting...
+        $themeName = xarModUserVars::get('themes', 'default_theme');
+        // get the list of permitted themes
+        $user_themes = xarModVars::get('themes', 'user_themes');
+        $user_themes = !empty($user_themes) ? explode(',',$user_themes) : array();
+
+        // check we have a valid theme 
+        if (!empty($themeName) && xarThemeIsAvailable($themeName) && 
+            !empty($user_themes) && in_array($themeName, $user_themes)) {
+            $themeName = xarVarPrepForOS($themeName);
+            xarTpl::setThemeName(strtolower($themeName));
+            xarVarSetCached('Themes.name','CurrentTheme', $themeName);
+        }
     }
 
     // Get a cache key for this page if it's suitable for page caching
