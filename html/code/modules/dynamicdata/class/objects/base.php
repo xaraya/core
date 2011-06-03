@@ -42,7 +42,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         if (!empty($args['config'])) {
             try {
                 $configargs = unserialize($args['config']);
-                foreach ($configargs as $key => $value) $this->{$key} = $value;
+                foreach ($configargs as $key => $value) if (!empty($key)) $this->{$key} = $value;
                 $this->configuration = $configargs;
             } catch (Exception $e) {}
         }
