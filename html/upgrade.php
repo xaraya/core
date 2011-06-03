@@ -65,9 +65,6 @@ class Upgrader extends Object
        // Let the system know that we are in the process of installing
         xarVarSetCached('Upgrade', 'upgrading',1);
 
-        // @checkme <chris/> why do we fetch phase here?
-        if(!xarVarFetch('upgrade_phase','int', $phase, 1, XARVAR_DONT_SET)) {return;}
-
         // Make sure we can render a page
         xarTpl::setPageTitle(xarML('Xaraya Upgrade'));
         if(!xarTpl::setThemeName('installer'))

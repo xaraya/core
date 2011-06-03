@@ -77,6 +77,8 @@ function dynamicdata_admin_modify(Array $args=array())
             if ($object->objectid == 1) {
                 // check security of the parent object
                 $tmpobject = DataObjectMaster::getObject(array('objectid' => $object->itemid));
+                if (empty($tmpobject))
+                    return xarResponse::NotFound();
                 if (!$tmpobject->checkAccess('config'))
                     return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
 

@@ -38,6 +38,8 @@ class DataObjectMaster extends Object
     public $maxid       = 0;
     public $config      = 'a:0:{}';       // the configuration parameters for this DD object
     public $configuration;                // the exploded configuration parameters for this DD object
+    public $access      = 'a:0:{}';       // the access parameters for this DD object
+    public $access_rules;                 // the exploded access parameters for this DD object
     public $isalias     = 0;
     public $join        = '';
     public $table       = '';
@@ -80,9 +82,6 @@ class DataObjectMaster extends Object
     public $links         = null;       // links between objects
 
     public $isgrouped     = 0;          // indicates that we have operations (COUNT, SUM, etc.) on properties
-
-    // Default access rules
-    public $access        = array();
 
     /**
      * Default constructor to set the object variables, retrieve the dynamic properties
@@ -201,6 +200,10 @@ class DataObjectMaster extends Object
         // Explode the configuration
         try{
             $this->configuration = unserialize($this->config);
+        } catch (Exception $e) {}
+        // Explode the access rules
+        try{
+            $this->access_rules = unserialize($this->access);
         } catch (Exception $e) {}
     }
 
@@ -698,7 +701,7 @@ class DataObjectMaster extends Object
                 // this is a generic classname for the object, list and interface
                 $class = $args['class'] . 'List';
             }
-            elseif(class_exists($args['class']))
+            elseif(class_exists($data['class']) && method_exists($data['class'],'getItems'))
             {
                 // this is a specific classname for the list
                 $class = $args['class'];
@@ -1222,16 +1225,16 @@ class DataObjectMaster extends Object
         // CHECKME: use access checks similar to blocks here someday ?
 
         // unserialize access levels if necessary
-        if (!empty($this->access) && is_string($this->access)) {
+        if (!empty($this->access_rules) && is_string($this->access_rules)) {
             try {
-                $this->access = unserialize($this->access);
+                $this->access_rules = unserialize($this->access_rules);
             } catch (Exception $e) {
-                $this->access = array();
+                $this->access_rules = array();
             }
         }
 
         // check if we have specific access rules for this level
-        if (!empty($this->access) && is_array($this->access) && !empty($this->access[$level])) {
+        if (!empty($this->access_rules) && is_array($this->access_rules) && !empty($this->access_rules[$level])) {
             if (empty($roleid) && xarUserIsLoggedIn()) {
                 // get the direct parents of the current user (no ancestors)
                 $grouplist = xarCache::getParents();
@@ -1244,7 +1247,7 @@ class DataObjectMaster extends Object
             }
             foreach ($grouplist as $groupid) {
                 // list of groups that have access at this level
-                if (in_array($groupid, $this->access[$level])) {
+                if (in_array($groupid, $this->access_rules[$level])) {
                     // one group having access is enough here !
                     return true;
                 }

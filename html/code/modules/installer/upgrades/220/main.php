@@ -24,10 +24,15 @@ function main_upgrade_220()
                         'sql_220_06', // Register hook observers
                         'sql_220_07', // Create hooks table, register hooks
                         'sql_220_08', // Re-classify Authsystem to Users & Groups
-                        'sql_220_09', // Add 2 configvars to themes module (one was already there)
+                        'sql_220_09', // Add 3 configvars to themes module
                         'sql_220_10', // Move users that see debug info from DD to roles module
                         'sql_220_11', // Add a configvar for the ssl port
                         'sql_220_12', // Redefine the config property of the objects object
+                        'sql_220_13', // Refactor roles name as textbox property
+                        'sql_220_14', // Create an access field in the objects table
+                        'sql_220_15', // Create an access property in the objects object
+                        'sql_220_16', // Move access data from the config to the access field
+                        'sql_220_17', // Update the configuration table
                         
                     );
     foreach ($upgrades as $upgrade) {

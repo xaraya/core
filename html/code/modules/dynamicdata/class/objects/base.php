@@ -42,7 +42,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         if (!empty($args['config'])) {
             try {
                 $configargs = unserialize($args['config']);
-                foreach ($configargs as $key => $value) $this->{$key} = $value;
+                foreach ($configargs as $key => $value) if (!empty($key)) $this->{$key} = $value;
                 $this->configuration = $configargs;
             } catch (Exception $e) {}
         }
@@ -95,7 +95,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview'])) $this->checkInput();
-        return $this->itemid;
+        return $itemid;
     }
 
     public function getInvalids(Array $args = array())

@@ -258,12 +258,16 @@ class xarServer extends Object
     static function getProtocol()
     {
         if (method_exists('xarConfigVars','Get')) {
-            if (xarConfigVars::get(null, 'Site.Core.EnableSecureServer') == true) {
-                if (preg_match('/^http:/', self::getVar('REQUEST_URI'))) {
-                    return 'http';
+            try {
+                if (xarConfigVars::get(null, 'Site.Core.EnableSecureServer') == true) {
+                    if (preg_match('/^http:/', self::getVar('REQUEST_URI'))) {
+                        return 'http';
+                    }
+                    $serverport = $_SERVER['SERVER_PORT'];
+                    return ($serverport == xarConfigVars::get(null, 'Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
                 }
-                $serverport = $_SERVER['SERVER_PORT'];
-                return ($serverport == xarConfigVars::get(null, 'Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
+            } catch (Exception $e) {
+                return self::PROTOCOL_HTTP;
             }
         }
         return self::PROTOCOL_HTTP;

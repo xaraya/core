@@ -1,7 +1,5 @@
 <?php
 /**
- * Check SQL file
- *
  * @package modules
  * @subpackage installer module
  * @category Xaraya Web Applications Framework
@@ -12,34 +10,31 @@
  * @link http://xaraya.com/index.php/release/200.html
  */
 
-function sql_220_hooks()
+function sql_220_15()
 {
     // Define parameters
-    $table = xarDB::getPrefix() . '_hooks';
-
+    $propertytable = xarDB::getPrefix() . '_dynamic_properties';
+    $objecttable = xarDB::getPrefix() . '_dynamic_objects';
+    
     // Define the task and result
     $data['success'] = true;
     $data['task'] = xarML("
-        Checking the structure of $table. Replaces the check in 2.1.0.
+        Adding an access property to the objects object
     ");
     $data['reply'] = xarML("
         Success!
     ");
-
+    
     // Run the query
-    $dbconn = xarDB::getConn();
+    $dbconn  = xarDB::getConn();
     try {
         $dbconn->begin();
-        $data['sql'] = "
-        SELECT 
-        `observer`,
-        `subject`,
-        `itemtype`,
-        `scope`
-        FROM $table";
-        $dbconn->Execute($data['sql']);
+        $query = "INSERT INTO $propertytable (name, label, object_id, type, defaultvalue, source, status, seq,configuration)
+    VALUES ('access', 'Access', 1, 2, '', '" . $objecttable . ".access', 67, 10, 'a:0:{}')";              
+        $dbconn->Execute($query);        
         $dbconn->commit();
-    } catch (Exception $e) {
+        
+    } catch (Exception $e) { throw($e);
         // Damn
         $dbconn->rollback();
         $data['success'] = false;
@@ -47,6 +42,7 @@ function sql_220_hooks()
         Failed!
         ");
     }
-    return $data;
+    return $data;   
+    
 }
 ?>

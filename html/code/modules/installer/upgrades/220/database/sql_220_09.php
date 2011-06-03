@@ -25,6 +25,11 @@ function sql_220_09()
         $tmp = xarConfigVars::get(null, 'Site.BL.MemCacheTemplates');
     } catch (Exception $e) {
         xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
+    }
+    
+    try {
+        $tmp = xarConfigVars::get(null, 'Site.BL.CompressWhitespace');
+    } catch (Exception $e) {
         xarConfigVars::set(null, 'Site.BL.CompressWhitespace', 1);
     }
     

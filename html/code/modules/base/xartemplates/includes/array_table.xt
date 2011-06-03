@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-
     <xar:set name="debug">0</xar:set>
     <xar:if condition="$debug">
         <xar:set name="index_display">''</xar:set>
@@ -13,10 +12,11 @@
             <xar:set name="key_display">'none'</xar:set>
         </xar:if>
     </xar:if>
-    <!-- Import the array js -->
+
+    <!-- Import the array table js -->
     <xar:javascript module="base" filename="array.js"/>
-    <xar:javascript module="base" filename="toggle.js"/>
-    <table class="xar-border-none xar-margin-thicktop" border="1">
+
+    <table class="xar-border-none xar-margin-thicktop">
         <thead>
             <tr>
                 <!-- This column holds the index of the respective row -->
@@ -32,6 +32,8 @@
                 <th class="xar-align-right">Delete/Ignore</th>        
             </tr>        
         </thead>
+
+        <!-- rows container (rows_id: 'rows' for js) -->
         <tbody id="#$id#_rows">
             <xar:for start="$i=1" test="$i le $rows" iter="$i++">
                 <!-- name[row] -->
@@ -51,48 +53,40 @@
                     
                     <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
                         <xar:set name="col_index">$k+1</xar:set>
-                        <!-- name[row][column] -->                        
+                        <!-- columnname[row][column] -->                        
                         <xar:set name="col_name">"{$row_name}[{$col_index}]"</xar:set>
                         <xar:set name="col_id">"{$row_id}_{$col_index}"</xar:set>
-                        <!-- name[row][column] -->
+                        <!-- propertyname[row][column] -->
                         <xar:set name="prop_name">"{$col_name}"</xar:set>
                         <xar:set name="prop_id">"{$col_id}"</xar:set>
+                        <!-- property[row][column] -->
+                        <!-- we need to instantiate the property this way so we can insert a default value -->
+                        <xar:set name="property">DataPropertyMaster::getProperty(array('type'=>$column_types[$k],'defaultvalue'=>$column_defaults[$k]))</xar:set>
 
                         <td>
                             <!-- row #$i# column #$k# -->
                             <span style="display: #$index_display#">#$prop_name#</span>
                             <xar:if condition="isset($value[$k][$i])">
-                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$value[$k][$i]" configuration="$column_configurations[$k]"/>
+                                <xar:data-input property="$property" name="$prop_name" id="$prop_id" value="$value[$k][$i]" configuration="$column_configurations[$k]"/>
                             <xar:else/>
-                                <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" configuration="$column_configurations[$k]"/>
+                                <xar:data-input property="$property" name="$prop_name" id="$prop_id" configuration="$column_configurations[$k]"/>
                             </xar:if>
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
+                        <!-- If js is available this will be replaced by a delete icon -->
                         <!-- name[row][delete] -->
                         <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
                         <xar:set name="del_id">"{$row_id}_delete"</xar:set>
                         <xar:if condition="($rows gt $minimum_rows) AND ($addremove eq 2)">
                             <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked=""/>
-                            <img class="xar-icon" id="#$row_id#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_table.removeRow('#$row_id#')" style="cursor: pointer;display:none;"/> 
-                            <!-- Hide checkboxes, show delete icons if js enabled -->
-                            <script type="text/javascript">
-                                setDisplayOff('#$del_id#');
-                                setDisplayOn('#$row_id#_delbutton');
-                            </script>
                         <xar:else/>
                             <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked="" disabled="disabled"/>
-                            <img class="xar-icon-disabled" id="#$row_id#_delbutton" src="#xarTplGetImage('icons/delete.png', 'base')#" style="display: none;"/>
-                            <!-- Hide checkboxes, show delete icons if js enabled -->
-                            <script type="text/javascript">
-                                setDisplayOff('#$del_id#');
-                                setDisplayOn('#$row_id#_delbutton');
-                            </script>   
                         </xar:if>
                     </td>            
                 </tr>
             </xar:for>
-            <xar:set name="lastrow">$i-2</xar:set>
+            <xar:set name="lastrow">$i-1</xar:set>
             
 <!--  Begin dummy line for adding rows when no js enabled -->
 <!--  NOTE: unless addremove is 0 this must always be present in the markup otherwise js will
@@ -110,7 +104,9 @@
                 <xar:else/>
                     <xar:set name="row_display">'none'</xar:set>
                 </xar:if>
-                <tr id="#$id#_rowtemplate" style="display: #$row_display#">
+                <!-- The row template (tpl_id: 'template' for js) 
+                     If JS is available it will hide this and display the add button -->
+                <tr id="#$id#_template" style="display: #$row_display#">
                     <td style="display: #$index_display#">
                         #$col_name# #$col_id#
                         <xar:data-input type="1" name="$col_name" id="$col_id" value="$thisrow"/>
@@ -129,66 +125,72 @@
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
+                        <!-- If js is available this will be replaced by a delete icon -->
                         <!-- name[row][delete] -->
                         <xar:set name="del_name">"{$row_name}[delete]"</xar:set>
                         <xar:set name="del_id">"{$row_id}_delete"</xar:set>
                         <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked="checked"/>
-                        <img id="#$row_id#_delbutton" class="xar-icon" src="#xarTplGetImage('icons/delete.png', 'base')#" onclick="javascript:#$id#_table.removeRow('#$row_id#')"  style="display:none;cursor: pointer;"/>
                     </td>
                 </tr>
 
             </xar:if>
 <!--  End dummy line for adding rows when no js enabled --> 
-
-
-
         </tbody>
         <xar:if condition="($addremove ne 0)">
-            <tfoot id="#$id#_addrow" style="display:none;">
+            <tfoot>
                 <tr>
-                    <xar:set name="colspan">$debug ? count($column_titles)+2 : count($column_titles)+1</xar:set>                
-                    <td colspan="#$colspan#" class="xar-align-right">
-                        <xar:if condition="$rows lt $maximum_rows">
-                            <img id="#$id#_addbutton" class="xar-icon" src="#xarTplGetImage('icons/add.png', 'base')#" onclick="javascript:#$id#_table.addRow()"/>     
-                        <xar:else/>
-                            <img id="#$id#_addbutton" class="xar-icon-disabled" src="#xarTplGetImage('icons/add.png', 'base')#" onclick="return false;"/>     
-                        </xar:if>        
+                    <xar:set name="infospan">$debug?count($column_titles)+1:count($column_titles)</xar:set>
+                    <td colspan="#$infospan#">
+                    <!-- Row count container (count_id: 'row_count' for js)
+                         When JS is enabled and count_id is supplied this field will 
+                         be updated with the current row count -->  
+                        Total Rows: <span id="#$id#_row_count">#$lastrow#</span>
+                    </td>
+                    <!-- Add row container (add_id: 'addrow' for js) -->       
+                    <td id="#$id#_addrow" colspan="1" class="xar-align-right">
+                        <!-- Placeholder for the add button
+                            If JS is available the add icon will appear here -->    
                     </td>            
                 </tr>        
             </tfoot>
         </xar:if>
-            <!-- turn off the new row template, turn on the new row button if js enabled -->
-            <script type="text/javascript">
-                setDisplayOff('#$id#_rowtemplate');
-                setDisplayOff('#$del_id#');
-                setDisplayOn('#$id#_addrow');
-                setDisplayOn('#$id#_delbutton');
-            </script>           
-<!--  End dummy line for adding rows -->
-
-    <!-- Create the js object containing all our methods 
-         NOTE: this must come after the table markup 
-         @TODO: <xar:javascript position="body" code=""/>-->    
-    <script type="text/javascript">
-        var #$id#_table = new arrayTable( 
-            { 
-                id: '#$id#_rows',            // element containing rows 
-                name: '#$id#_table',         // var name of this object 
-                min: '#$minimum_rows#',      // minimum rows
-                max: '#$maximum_rows#',      // maximum rows
-                addremove: '#$addremove#',   // add remove state
-                row_tpl: '#$id#_rowtemplate',// the id of the row template element
-                add_btn: '#$id#_addbutton',  // the id of the add row button
-                debug: false                 // optionally debug 
-            }
-        );
-    </script>    
-
     </table>
-
+    <!-- add and delete icons are now created by the js dynamically on init 
+         set variables to pass to js (includes translated strings for icon alt and title :) )--> 
+    <xar:set name="del_icon">xarTplGetImage("icons/delete.png", "base")</xar:set>
+    <xar:var name="del_alt">Remove</xar:var>
+    <xar:var name="del_title">Remove this row</xar:var>
+    <xar:set name="add_icon">xarTplGetImage("icons/add.png", "base")</xar:set>
+    <xar:var name="add_alt">Add</xar:var>
+    <xar:var name="add_title">Add a new row</xar:var>
+    <!-- Create the table js object and pass in configuration params -->  
+    <script type="text/javascript">
+//<![CDATA[ 
+        var #$id# = new arrayTable( {               // var name is the id of this property
+            id: '#$id#',                            // the id of this property
+            min: '#$minimum_rows#',                 // minimum rows
+            max: '#$maximum_rows#',                 // maximum rows
+            addremove: '#$addremove#',              // addremove state [(0=None)|1=add|2=add/delete]
+            rows_id: 'rows',                        // rows container suffix
+            tpl_id: 'template',                     // row template suffix
+            add_id: 'addrow',                       // add row container suffix 
+            del_icon: '#$del_icon#',                // delete icon src
+            del_alt: '#$del_alt#',                  // delete icon alt text
+            del_title: '#$del_title#',              // delete icon title text
+            add_icon: '#$add_icon#',                // add icon src
+            add_alt: '#$add_alt#',                  // add icon alt text
+            add_title: '#$add_title#',              // add icon title text
+            icon_enabled: 'xar-icon',               // enabled icon class
+            icon_disabled: 'xar-icon-disabled',     // disabled icon class
+            count_id: 'row_count',                  // row count container suffix
+            debug: false                            // debug
+        } );
+        // initialise the object
+        #$id#.init();
+//]]>
+    </script>   
 <!-- Here we store config options for unbound properties, so checkInput knows what to do -->
 <!-- Should we support this? It's not generally supported -->
     <input type="hidden" name="#$id#_lastrow" id="#$id#_lastrow" value="#$lastrow#"/>
-    <input type="hidden" name="#$name#[associative_array]" id="#$name#_associative_array" value="#$associative_array#"/>        
- 
+    <input type="hidden" name="#$name#[associative_array]" id="#$name#_associative_array" value="#$associative_array#"/> 
 </xar:template>

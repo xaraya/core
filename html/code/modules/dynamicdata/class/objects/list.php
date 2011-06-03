@@ -61,8 +61,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $args = $descriptor->getArgs();
         if (!empty($args['config'])) {
             try {
+                // CHECKME: this should be abstracted
                 $configargs = unserialize($args['config']);
-                foreach ($configargs as $key => $value) $this->{$key} = $value;
+                foreach ($configargs as $key => $value) $this->{$key} = $value[0];
                 $this->configuration = $configargs;
             } catch (Exception $e) {}
         }
