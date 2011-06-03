@@ -1,0 +1,34 @@
+.xar-form-input-wrapper,
+.xar-form-input-wrapper-after {
+	padding: 3px 0px 3px 10px;
+	margin: 5px 0px 0px 0px;
+	border-bottom: 1px #bfbfbf dotted;
+	clear: both;
+	text-align: left;
+	background: transparent;
+	}
+
+.xar-form-input-wrapper:last-child,
+.xar-form-input-wrapper-after:last-child {
+	border-bottom-width: 0px;
+	}
+.xar-form-input-wrapper-after {
+	padding-left: 22%;
+	}
+.xar-form-input-wrapper label {
+	float: none;
+	width: 20%;
+	display: inline-block;
+	margin-right: 5px;
+	padding-right: 5px;
+	text-align: left;
+	border-right: 1px #7f7f7f dotted;
+	}
+
+
+.xar-form-input-wrapper input {
+	display: inline;
+	}
+.xar-form-input-wrapper textarea {
+	max-width: 550px !important;
+	}
