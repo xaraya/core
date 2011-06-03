@@ -4,26 +4,27 @@
 
 <xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xml:lang="en" lang="en">
 
 <head>
+
     <xar:blockgroup name="header" id="header"/>
     <title><xar:var name="tpl:pageTitle"/></title>
     <base href="#xarServer::getBaseURL()#index.php"/>
         
     <!-- Theme Options -->
-    <xar:set name="xar_footer">'show'</xar:set> <!-- xaraya footer -> "show" or "hide" -->
-    <xar:set name="page_width">'variable'</xar:set> <!-- page width -> "variable" or "fixed" (pending) -->
-    <xar:set name="color_set">'algae'</xar:set> <!-- color set -> "algae" or "reggae" (pending) -->
-    <xar:set name="nav_pos">'left'</xar:set> <!-- nav position -> "left", "right" or "top" -->
-    <xar:set name="font_set">'custom'</xar:set> <!-- custom fonts -> "custom" or "standard" -->
+    <xar:set name="xar_footer">xarThemeVars::get('Kingston','xar_footer')</xar:set> 
+    <xar:set name="color_scheme">xarThemeVars::get('Kingston','color_scheme')</xar:set> <!-- "algae" or "reggae" (pending) -->
+    <xar:set name="page_width">xarThemeVars::get('Kingston','page_width')</xar:set> <!-- "variable" or "fixed" (pending) -->
+    <xar:set name="nav_pos">xarThemeVars::get('Kingston','nav_pos')</xar:set> <!-- "left", "right" or "top" -->
+    <xar:set name="font_set">xarThemeVars::get('Kingston','font_set')</xar:set> <!-- "custom" or "standard" -->
     
     <!-- Modal Variables -->
     <xar:set name="module_tag">' module-'.xarController::getVar('module')</xar:set>
     <xar:set name="type_tag">' type-'.xarController::getVar('type')</xar:set>
     <xar:set name="order_tag">' order-'.xarController::getVar('order')</xar:set>
     <xar:if condition="xarController::getVar('func') eq '' OR xarController::getVar('func') eq 'main'">
-    	<xar:set name="function_tag">' function-overview '</xar:set>
+    	<xar:set name="function_tag">' function-overview'</xar:set>
     <xar:else/>
     	<xar:set name="function_tag">' function-'.xarController::getVar('func').' '</xar:set>
     </xar:if>
@@ -31,12 +32,11 @@
     <link rel='icon' href="favicon.ico"/>
     
     <!-- Style (For now, I'm not including module provided styles) -->
-    <!--<xar:style scope="common"/>
-    	<xar:style scope="theme" file="admin" title="Xaraya Default Stylesheet"/>
-    	<xar:place-css />
-    -->
-    <link rel="stylesheet" type="text/css" href="#xarTpl::getThemeDir()#/style/admin.css" media="screen" title="Kingston Stylesheet" />
+    <xar:style scope="theme" file="global"/>
+    <xar:style scope="theme" file="admin" title="Kingston Administrative Stylesheet"/>
+    <xar:place-css />
     
+    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js?ver=3.0.4'></script>
     <xar:place-javascript position="head"/>
     
 </head>
@@ -55,15 +55,6 @@
     </div><!--/header-enclosure-->
     </div><!--/header-->
     
-    <!-- !SECONDARY CONTENT -->
-    <div id="secondary-wrapper">
-    <div id="secondary">
-    <div id="secondary-enclosure">
-        <xar:blockgroup name="admin" id="admin"/>
-    </div><!--/secondary-enclosure-->
-    </div><!--/secondary-->
-    </div><!--/secondary-wrapper-->
-    
     <!-- !PRIMARY CONTENT -->
     <div id="primary-wrapper">
     <div id="primary">
@@ -73,18 +64,28 @@
     </div><!--/primary-->
 	</div><!--/primary-wrapper-->
 	
+	<!-- !SECONDARY CONTENT -->
+    <div id="secondary-wrapper">
+    <div id="secondary">
+    <div id="secondary-enclosure">
+        <xar:blockgroup name="admin" id="admin"/>
+        <a id="nav-toggle" href="javascript:void(0)" onclick="javascript:$('body').toggleClass('nav-left nav-top');">+</a>
+    </div><!--/secondary-enclosure-->
+    </div><!--/secondary-->
+    </div><!--/secondary-wrapper-->
+	
 	<!-- !FOOTER -->
-	<xar:if condition="$xar_footer eq 'show'">
+	<xar:if condition="$xar_footer ne 'no'">
 	<div id="page-footer">
-        <a class="xar-icon xar-icon-xaraya" href="http://www.xaraya.com" target="_blank" style="background-image: url(/themes/kingston/images/admin/logos/logo-xaraya-pb-twotone.png); width: 205px;">Powered by Xaraya</a>
-        <b><a href="http://www.xaraya.com/index.php/xarpages/support" target="_blank">Support </a></b>
-        <b><a href="http://www.xaraya.com/index.php/xarpages/community" target="_blank">Community </a></b>
-        <b><a href="http://www.xaraya.com/index.php/documentation/c18/" target="_blank">Knowledgebase </a></b>
-        <b><a href="http://www.xaraya.com/index.php/release/view.html" target="_blank">Extend </a></b>
-        <b><a href="http://bugs.xarya.com" target="_blank">BugReport </a></b>
-        <a class="xar-icon" href="http://www.php.net" style="background-image: url(/themes/kingston/images/admin/logos/logo-php.png); width: 31px;">PHP</a>
-        <a class="xar-icon" href="http://www.mysql.com" style="background-image: url(/themes/kingston/images/admin/logos/logo-mysql.png); width: 48px;">MySQL</a>
-        <a class="xar-icon" href="http://www.w3schools.com/xsl/" style="background-image: url(/themes/kingston/images/admin/logos/logo-xsl.png); width: 28px;">XSL</a>
+        <a class="xar-icon xar-icon-xaraya" href="http://www.xaraya.com" target="_blank" style="background-image: url(#xarTplGetThemeDir()#/images/admin/logos/logo-xaraya-pb-twotone.png); width: 205px;">Powered by Xaraya</a>
+        <a href="http://www.xaraya.com/index.php/xarpages/support" target="_blank">Support </a>
+        <a href="http://www.xaraya.com/index.php/xarpages/community" target="_blank">Community </a>
+        <a href="http://www.xaraya.com/index.php/documentation/c18/" target="_blank">Knowledgebase </a>
+        <a href="http://www.xaraya.com/index.php/release/view.html" target="_blank">Extend </a>
+        <a href="http://bugs.xarya.com" target="_blank">BugReport </a>
+        <a class="xar-icon" href="http://www.php.net" style="background-image: url(#xarTplGetThemeDir()#/images/admin/logos/logo-php.png); width: 31px;">PHP</a>
+        <a class="xar-icon" href="http://www.mysql.com" style="background-image: url(#xarTplGetThemeDir()#/images/admin/logos/logo-mysql.png); width: 48px;">MySQL</a>
+        <a class="xar-icon" href="http://www.w3schools.com/xsl/" style="background-image: url(#xarTplGetThemeDir()#/images/admin/logos/logo-xsl.png); width: 28px;">XSL</a>
     </div>
     </xar:if>
 

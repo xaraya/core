@@ -8,85 +8,73 @@
     <div class="xar-mod-body">
     <div class="xar-mod-page-head">
         <h2>Modify Roles Configuration</h2>
-            <ul class="xar-tabs xar-alt xar-norm-outline">
+            <ul class="xar-tabs">
                 <xar:var name="title">Configure</xar:var>
                 <xar:var name="label">Configure</xar:var>
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <xar:if condition="$tab eq 'general'">
                     <li class="xar-tab-active">
-                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'general'))#" class="xar-accent xar-accent-outline">General</a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'general'))#">General</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'general'))#" class="xar-norm xar-norm-outline">General</a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'general'))#">General</a>
                     </li>
                 </xar:if>
                 <xar:if condition="$tab eq 'duvs'">
                     <li class="xar-tab-active">
-                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'duvs'))#" class="xar-accent xar-accent-outline">User
-                        Variables</a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'duvs'))#">User Variables</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'duvs'))#" class="xar-norm xar-norm-outline">User
-                        Variables</a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'duvs'))#">User Variables</a>
                     </li>
                 </xar:if>
                 <xar:if condition="$tab eq 'hooks'">
                     <li class="xar-tab-active">
-                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'hooks'))#" class="xar-accent xar-accent-outline">User
-                        Hooks</a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'hooks'))#">User Hooks</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'hooks'))#" class="xar-norm xar-norm-outline">User
-                        Hooks</a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'hooks'))#">User Hooks</a>
                     </li>
                 </xar:if>
                 <!--
                     <xar:if condition="$tab eq 'grouphooks'">
                         <li class="xar-tab-active">
-                            <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'grouphooks'))#" class="xar-accent xar-accent-outline">
-                            Group Hooks</a>
+                            <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'grouphooks'))#">Group Hooks</a>
                         </li>
                     <xar:else />
                         <li class="xar-tab">
-                            <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'grouphooks'))#" class="xar-norm xar-norm-outline">
-                            Group Hooks</a>
+                            <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'grouphooks'))#">Group Hooks</a>
                         </li>
                     </xar:if>
                 -->
                 <xar:if condition="$tab eq 'managehooks'">
                     <li class="xar-tab-active">
-                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'managehooks'))#" class="xar-accent xar-accent-outline">
-                            Manage Hooks
-                        </a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'managehooks'))#">Manage Hooks</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'managehooks'))#" class="xar-norm xar-norm-outline">
-                            Manage Hooks
-                        </a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'managehooks'))#">Manage Hooks</a>
                     </li>
                 </xar:if>
                 <xar:if condition="$tab eq 'memberlist'">
                     <li class="xar-tab-active">
-                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'memberlist'))#" class="xar-accent xar-accent-outline">Member
-                        Options</a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'memberlist'))#">Member Options</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'memberlist'))#" class="xar-norm xar-norm-outline">Member
-                        Options</a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'memberlist'))#">Member Options</a>
                     </li>
                 </xar:if>
                 <xar:if condition="$tab eq 'debugging'">
                     <li class="xar-tab-active">
-                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#" class="xar-accent xar-accent-outline">Debugging</a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">Debugging</a>
                     </li>
                 <xar:else />
                     <li class="xar-tab">
-                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#" class="xar-norm xar-norm-outline">Debugging</a>
+                        <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">Debugging</a>
                     </li>
                 </xar:if>
             </ul>
@@ -98,50 +86,61 @@
         <xar:if condition="$tab eq 'general'">
             <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                 <xar:data-form object="$module_settings"/>
-                <fieldset>
+                <fieldset class="table">
                     <legend>Default Group and Site Administrator</legend>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Select the admin user that cannot be deleted</xar:var>
-                        <label for="siteadmin" title="#$label#"
-                        class="xar-form-label">Designated Site Admin:</label>
-                        <select name="siteadmin" id="siteadmin">
-                            <xar:loop name="$siteadmins">
-                                <xar:if condition="$loop:item['id'] eq xarModVars::get('roles','admin')">
-                                    <option name="#$loop:item['id']#" id="#$loop:item['id']#" value="#$loop:item['id']#" selected="selected">
-                                        #$loop:item['name']#
-                                    </option>
-                                <xar:else />
-                                    <option name="#$loop:item['id']#" id="#$loop:item['id']#" value="#$loop:item['id']#">
-                                        #$loop:item['name']#
-                                    </option>
-                                </xar:if>
-                            </xar:loop>
-                        </select>
+                    <div class="row">
+                    	<div class="col">
+	                        <xar:var name="label">Select the admin user that cannot be deleted</xar:var>
+	                        <label for="siteadmin" title="#$label#" class="xar-form-label">Designated Site Admin:</label>
+                        </div>
+                        <div class="col">
+	                        <select name="siteadmin" id="siteadmin">
+	                            <xar:loop name="$siteadmins">
+	                                <xar:if condition="$loop:item['id'] eq xarModVars::get('roles','admin')">
+	                                    <option name="#$loop:item['id']#" id="#$loop:item['id']#" value="#$loop:item['id']#" selected="selected">
+	                                        #$loop:item['name']#
+	                                    </option>
+	                                <xar:else />
+	                                    <option name="#$loop:item['id']#" id="#$loop:item['id']#" value="#$loop:item['id']#">
+	                                        #$loop:item['name']#
+	                                    </option>
+	                                </xar:if>
+	                            </xar:loop>
+	                        </select>
+                        </div>
                     </div>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">New Users automatically get assigned to this Group</xar:var>
-                        <label for="defaultgroup" title="#$label#" class="xar-form-label">Default Group For New Users:</label>
-                        <xar:data-input type="grouplist" name="defaultgroup" id="defaultgroup" value="$defaultgroup"/>
+                    <div class="row">
+                    	<div class="col">
+                        	<xar:var name="label">New Users automatically get assigned to this Group</xar:var>
+                        	<label for="defaultgroup" title="#$label#" class="xar-form-label">Default Group For New Users:</label>
+                        </div>
+                        <div class="col">
+                        	<xar:data-input type="grouplist" name="defaultgroup" id="defaultgroup" value="$defaultgroup"/>
+                        </div>
                     </div>
                 </fieldset>
                 <fieldset>
                     <legend>Default Authentication &amp; Registration Modules</legend>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Select the module that manages authentication of users</xar:var>
-                        <label for="defaultauthmodule" title="#$label#" class="xar-form-label">
-                            Authentication:
-                        </label>
-                        <xar:data-input type="module" name="defaultauthmodule" class="Authentication" value="$defaultauthmod" validation="name" firstline="Choose a module"/>
+                    <div class="row">
+                    	<div class="col">
+	                        <xar:var name="label">Select the module that manages authentication of users</xar:var>
+	                        <label for="defaultauthmodule" title="#$label#" class="xar-form-label">Authentication:</label>
+	                    </div>
+	                    <div class="col">
+	                        <xar:data-input type="module" name="defaultauthmodule" class="Authentication" value="$defaultauthmod" validation="name" firstline="Choose a module"/>
+                        </div>
                     </div>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Select the module that manages registration of users</xar:var>
-                        <label for="defaultregmodule" title="#$label#" class="xar-form-label">
-                            Registration:
-                        </label>
-                        <xar:data-input type="module" name="defaultregmodule" class="Registration" value="$defaultregmod" validation="name" firstline="Choose a module"/>
+                    <div class="row">
+                    	<div class="col">
+	                        <xar:var name="label">Select the module that manages registration of users</xar:var>
+	                        <label for="defaultregmodule" title="#$label#" class="xar-form-label">Registration:</label>
+                    	</div>
+                    	<div class="col">
+	                        <xar:data-input type="module" name="defaultregmodule" class="Registration" value="$defaultregmod" validation="name" firstline="Choose a module"/>
+	                    </div>
                     </div>
                 </fieldset>
-                <fieldset>
+                <fieldset class="xar-form-actions">
                     <div class="xar-form-input-wrapper-after">
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                         <input type="hidden" name="phase" id="phase" value="update"/>
@@ -160,24 +159,24 @@
                     <legend>Basic User Variables</legend>
                     <p>Always available in a user role, and can be retrieved as
                     <strong>xarUserGetVar('varname')</strong></p>
-                        <table style="width: 90%">
+                        <table>
                             <tr>
-                                <th style="width: 100px">Name</th>
-                                <th style="width: 400px">Description</th>
+                                <th>Name</th>
+                                <th>Description</th>
                             </tr>
                             <tr>
-                                <td style="width: 100px">uname</td>
-                                <td style="width: 400px">The handle or nick under which the user is
+                                <td>uname</td>
+                                <td>The handle or nick under which the user is
                                 known to the site. The uname is unique to each user.</td>
                             </tr>
                             <tr>
-                                <td style="width: 100px">name</td>
-                                <td style="width: 400px">The user's display name, as shown in the
+                                <td>name</td>
+                                <td>The user's display name, as shown in the
                                 members list and other displays. The name need not be unique.</td>
                             </tr>
                             <tr>
-                                <td style="width: 100px">email</td>
-                                <td style="width: 400px">The user's email address. The email address
+                                <td>email</td>
+                                <td>The user's email address. The email address
                                 can be defined by the site administrator to be unique or not.</td>
                             </tr>
                         </table>
@@ -186,56 +185,53 @@
                     <legend>Dynamic Roles Variables</legend>
                     <p>Optional in a user role. Once activated they can be retrieved as
                     <strong>xarModUserVars::get('roles','varname','id')</strong></p>
-                        <br />
                         <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="nolabels" fieldlist="duvsettings"/>
-                        <table style="width: 90%">
+                        <table>
                             <tr>
-                                <th style="width: 100px">Name</th>
-                                <th style="width: 400px">Description</th>
+                                <th>Name</th>
+                                <th>Description</th>
                             </tr>
                             <tr>
-                                <td style="width: 100px">userhome</td>
-                                <td style="width: 400px">The role's home page, which is initially
+                                <td>userhome</td>
+                                <td>The role's home page, which is initially
                                 displayed when the user logs in. The home page can be role/user
                                 specific or inherited from the direct parent group. The home page is
                                 specified in a similar manner to user menu item shortcuts in the modify
                                 or edit role page.</td>
                             </tr>
                             <tr>
-                                <td style="width: 100px">primaryparent</td>
-                                <td style="width: 400px">The role's primary parent group. A primary
+                                <td>primaryparent</td>
+                                <td>The role's primary parent group. A primary
                                 parent take precendence over other parent groups for realm and user
                                 role home settings.</td>
                             </tr>
                             <tr>
-                                <td style="width: 100px">passwordupdate</td>
-                                <td style="width: 400px">Shows the date and time this role's password was
+                                <td>passwordupdate</td>
+                                <td>Shows the date and time this role's password was
                                 last changed in their user account.</td>
                             </tr>
                             <tr>
-                                <td style="width: 100px">userlastlogin</td>
-                                <td style="width: 400px">Shows the date and time this role last logged
+                                <td>userlastlogin</td>
+                                <td>Shows the date and time this role last logged
                                 in.</td>
                             </tr>
                             <tr>
-                                <td style="width: 100px">usertimezone</td>
-                                <td style="width: 400px">Shows this role's timezone and allows the role to set their timezone.</td>
+                                <td>usertimezone</td>
+                                <td>Shows this role's timezone and allows the role to set their timezone.</td>
                             </tr>
                             <tr>
-                                <td style="width: 100px">useremailformat</td>
-                                <td style="width: 400px">Allow the role to set their preferred email format (text or
+                                <td>useremailformat</td>
+                                <td>Allow the role to set their preferred email format (text or
                                 html).</td>
                             </tr>
                         </table>
                     </fieldset>
-                    <fieldset>
-                        <div class="xar-form-input-wrapper-after">
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                            <input type="hidden" name="phase" id="phase" value="update"/>
-                            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                            <xar:var name="label">Update Roles Configuration</xar:var>
-                            <input type="submit" value="#$label#"/>
-                        </div>
+                    <fieldset class="xar-form-actions">
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="phase" id="phase" value="update"/>
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                        <xar:var name="label">Update Roles Configuration</xar:var>
+                        <input type="submit" value="#$label#"/>
                     </fieldset>
                 </form>
             <!--
@@ -250,7 +246,7 @@
                             #$hooks[$hookmodule]#
                         </xar:foreach>
                   </fieldset>
-                  <fieldset>
+                  <fieldset class="xar-form-actions">
                     <div class="xar-form-input-wrapper-after">
                       <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                       <input type="hidden" name="phase" id="phase" value="update"/>
@@ -349,8 +345,8 @@
                         <xar:data-input type="textarea" name="debugadmins" value="$debugadmins"/>
                     </div>
                 </fieldset>
-                <fieldset>
-                    <div class="xar-form-input-wrapper-after">
+                <fieldset class="xar-form-actions">
+                    <div class="xar-form-actions-wrapper-after">
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                         <input type="hidden" name="phase" id="phase" value="update"/>
                         <input type="hidden" name="tab" id="tab" value="#$tab#"/>

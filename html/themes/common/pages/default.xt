@@ -11,36 +11,77 @@
             <base href="#xarServer::getBaseURL()#index.php"/>
             <link rel='icon' href="favicon.ico"/>
             <xar:style scope="common"/>
-            <xar:style scope="theme" file="style" title="Xaraya Default Stylesheet"/>
+            <xar:style scope="theme" file="style" title="Kingston Default Stylesheet"/>
             <xar:place-css />
             <xar:place-javascript position="head"/>
         </head>
-        <body>
-            <div id="wrapper">
-                <div id="main">
-                    <div id="logo">
-                        <a href="index.php" title="home">
-                            <img src="#xarTpl::getThemeDir()#/images/xarLogo2.png" width="90" height="90" alt="Xaraya Logo" title="home"/>
-                        </a>
-                        <p>
-                            <xar:var name="SiteSlogan" scope="module" module="themes"/>
-                        </p>
-                    </div>
-                    <xar:module id="modulespace"/>
-                </div>
-                <div id="sideInfo1" class="sideInfo">
-                    <xar:blockgroup name="left" id="left"/>
-                </div>
-                <div id="sideInfo2" class="sideInfo">
-                    <xar:blockgroup name="right" id="right"/>
-                    <!--
-                    <xar:blockgroup name="admin" id="admin"/>
-                    -->
-                </div>
-                <xar:blockgroup name="topnav" id="topnav"/>
-                <xar:blockgroup name="center" id="center"/>
-                <xar:place-javascript position="body"/>
-            </div>
-        </body>
-    </html>
+
+<body>
+
+<img id="bg" src="/themes/kingston/images/frontend/elements/pageback.png" />
+
+<!-- !PAGE -->
+<div id="page-wrapper">
+<div id="page" class="">
+<div id="page-enclosure" class="clearfix">
+
+	<!-- !HEADER -->
+    <div id="header">
+    <div id="header-enclosure">
+        <h1 id="sitename"><xar:var name="SiteName" scope="module" module="themes"/></h1>
+        <div id="siteslogan"><xar:var name="SiteSlogan" scope="module" module="themes"/></div>
+    </div><!--/header-enclosure-->
+    </div><!--/header-->
+    
+    <xar:blockgroup name="topnav" id="topnav"/>
+
+    <!-- !MAIN WRAPPER -->
+    <div id="main">
+    
+    	<!-- !PRIMARY CONTENT -->
+	    <div id="primary-wrapper">
+	    <div id="primary">
+	    <div id="primary-enclosure">
+	        <xar:module id="modulespace"/>
+	        <xar:blockgroup name="center" id="center"/>
+	    </div><!--/primary-enclosure-->
+	    </div><!--/primary-->
+		</div><!--/primary-wrapper-->
+		
+	    <!-- !SECONDARY CONTENT -->
+	    <div id="secondary-wrapper">
+	    <div id="secondary">
+	    <div id="secondary-enclosure">
+	        <xar:blockgroup name="left" id="left"/>
+	    </div><!--/secondary-enclosure-->
+	    </div><!--/secondary-->
+	    </div><!--/secondary-wrapper-->
+	    
+	    <!-- !TERTIARY CONTENT -->
+	    <div id="tertiary-wrapper">
+	    <div id="tertiary">
+	    <div id="tertiary-enclosure">
+	        <xar:blockgroup name="right" id="right"/>
+	    </div><!--/tertiary-enclosure-->
+	    </div><!--/tertiary-->
+	    </div><!--/tertiary-wrapper-->
+	    	
+	</div><!--/main-->
+	
+	<!-- !FOOTER -->
+    <div id="footer">
+    <div id="footer-enclosure">
+        <xar:blockgroup name="right" id="right"/>
+    </div><!--/footer-enclosure-->
+    </div><!--/footer-->
+
+</div><!--/page-enclosure-->
+</div><!--/page-->
+</div><!--/page-wrapper-->
+
+<xar:place-javascript position="body"/> 
+
+</body>
+</html>
+
 </xar:blocklayout>

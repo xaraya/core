@@ -60,8 +60,8 @@
                     </tr>
                 </xar:foreach>
             </table>
-            <p>Add a new Property Type using the fields below. (TODO)</p>
-            <table class="xar-fullwidth">
+            <p class="xar-note">Add a new Property Type using the fields below. (TODO)</p>
+            <table class="xar-items">
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
@@ -89,13 +89,13 @@
 -->
                 </tr>
             </table>
-            <div class="xar-align-center">
-                <p>Note: any changes you make here will be lost whenever the property cache gets
-                flushed.</p>
-                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                <xar:var name="label">Update Property Types</xar:var>
-                <xar:button type="submit" label="$label"/>
-            </div>
+            <p class="xar-alert">Note: any changes you make here will be lost whenever the property cache gets
+            flushed.</p>
+            <fieldset class="xar-form-actions">
+	            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+	            <xar:var name="label">Update Property Types</xar:var>
+	            <xar:button type="submit" label="$label"/>
+            </fieldset>
         </form>
     </div><!--/xar-mod-page-body-->
     </div><!--/xar-mod-body-->

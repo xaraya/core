@@ -1,27 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:template file="user-menu"/>
-    <xar:if condition="(empty($tab) or $tab == 'profile') and empty($moduleload)">
-        <!-- display this users account data - see roles/xartemplates/objects/showdisplay-account.xt -->
-        <xar:data-display object="$object" fieldlist="name,uname,state,regdate"/>
-    <xar:else />
-        <xar:if condition="$object:label">
-            <xar:set name="enc_type">'multipart/form-data'</xar:set>
-        <xar:else />
-            <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
-        </xar:if>
-        <form method="post" action="#$formaction#" enctype="#$enc_type#">
-            <xar:data-form object="$object" formdata="$formdata" fieldlist="name,uname,state,regdate" />
-            <fieldset>
-                <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="id" id="id" value="#$id#"/>
-                    <input type="hidden" name="moduleload" id="moduleload" value="#$moduleload#"/>
-                    <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#"/>
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="submit" value="#$submitlabel#"/>
-                </div>
-            </fieldset>
-        </form>
-    </xar:if>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">
+                Account Information
+        </span>
+    </div>
+    <div class="xar-mod-body">
+    <div class="xar-mod-page-head">
+    	<xar:template file="user-menu"/>
+    </div>
+    <div class="xar-mod-page-body">
+	    <xar:if condition="(empty($tab) or $tab == 'profile') and empty($moduleload)">
+	        <!-- display this users account data - see roles/xartemplates/objects/showdisplay-account.xt -->
+	        <xar:data-display object="$object" fieldlist="name,uname,state,regdate"/>
+	    <xar:else />
+	        <xar:if condition="$object:label">
+	            <xar:set name="enc_type">'multipart/form-data'</xar:set>
+	        <xar:else />
+	            <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
+	        </xar:if>
+	        <form method="post" action="#$formaction#" enctype="#$enc_type#">
+	            <xar:data-form object="$object" formdata="$formdata" fieldlist="name,uname,state,regdate" />
+	            <fieldset>
+	                <div class="xar-form-input-wrapper-after">
+	                    <input type="hidden" name="id" id="id" value="#$id#"/>
+	                    <input type="hidden" name="moduleload" id="moduleload" value="#$moduleload#"/>
+	                    <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#"/>
+	                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+	                    <input type="submit" value="#$submitlabel#"/>
+	                </div>
+	            </fieldset>
+	        </form>
+	    </xar:if>
+	 </div>
+	 </div>
 </xar:template>

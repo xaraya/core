@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:foreach in="$properties" key="$name" value="$property">
-        <div class="xar-form-input-wrapper">
+        <div class="xar-row">
             <xar:data-label property="$properties[$name]" for="id"/>
             <xar:if condition="$name eq 'module_id'">
                 <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"</xar:set>

@@ -8,22 +8,24 @@
         <xar:else />
             <table>
                 <tr>
-                    <th>Option</th>
                     <th>Value</th>
                     <th>Description</th>
-                    <th>Variable Name</th>
-                    <th>Applies to</th>
+                    <th>Variable</th>
+                    <th>Theme</th>
                 </tr>
                 <xar:foreach in="$configs" key="$key" value="$init">
+                    <xar:set name="fieldname">$name . '[' . $key . ']'</xar:set>
+                    <xar:set name="fieldid">$id . '_' . $key</xar:set>
+                    <xar:if condition="isset($init['configuration'])">
+                        <xar:set name="configuration">$init['configuration']</xar:set>
+                    <xar:else />
+                        <xar:set name="configuration">''</xar:set>
+                    </xar:if>
+                        
                     <tr>
-                        <xar:set name="fieldname">$name . '[' . $key . ']'</xar:set>
-                        <xar:set name="fieldid">$id . '_' . $key</xar:set>
-                        <xar:if condition="isset($init['configuration'])">
-                            <xar:set name="configuration">$init['configuration']</xar:set>
-                        <xar:else />
-                            <xar:set name="configuration">''</xar:set>
-                        </xar:if>
-                        <td>#$init['label']#</td>
+                    	<th colspan="4">#$init['label']#</th>
+                    </tr>
+                    <tr>
                         <td>
                             <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']"/>
                         </td>
