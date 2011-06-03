@@ -18,7 +18,6 @@
             </fieldset>
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                     <input type="hidden" name="phase" id="phase" value="update"/>
                     <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                     <xar:var name="submitLabel">Change Theme</xar:var>

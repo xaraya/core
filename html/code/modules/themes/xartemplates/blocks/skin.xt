@@ -10,7 +10,6 @@
             <xar:data-input type="dropdown" name="default_theme" id="$default_theme_id" value="$default_theme" options="$user_themes"/>
         </div>
         <div class="xar-align-right">
-            <input type="hidden" name="authid" id="authid_#$blockid#" value="#xarSecGenAuthKey()#"/>
             <input type="hidden" name="return_url" id="return_url_#$blockid#" value="#$return_url#"/>
             <input type="hidden" name="phase" id="phase_#$blockid#" value="update"/>         
             <xar:var name="submitLabel">Switch</xar:var>

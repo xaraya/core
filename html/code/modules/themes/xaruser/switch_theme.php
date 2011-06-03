@@ -3,7 +3,7 @@ function themes_user_switch_theme(Array $args=array())
 {
     if (!xarUserIsLoggedIn() ||
         (bool) xarModVars::get('themes', 'enable_user_menu') == false) 
-        return xarTpl::module('privileges', 'user', 'error', array('layout' => 'bad_author'));
+        return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
         
     if (!xarVarFetch('phase', 'pre:trim:lower:enum:update',
         $phase, 'form', XARVAR_NOT_REQUIRED)) return;
@@ -19,8 +19,6 @@ function themes_user_switch_theme(Array $args=array())
     $data['user_themes']->value = xarModUserVars::get('themes', 'default_theme');
     
     if ($phase == 'update') {
-        if (!xarSecConfirmAuthKey())
-            return xarTpl::module('privileges', 'user', 'error', array('layout' => 'bad_author'));
         $isvalid = $data['user_themes']->checkInput('default_theme');
         if ($isvalid) {
             xarModUserVars::set('themes', 'default_theme', $data['user_themes']->value);
