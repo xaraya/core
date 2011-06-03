@@ -1,7 +1,8 @@
 <?php
 function themes_user_switch_theme(Array $args=array())
 {
-    if ((bool) xarModVars::get('themes', 'enable_user_menu') == false) 
+    if (!xarUserIsLoggedIn() ||
+        (bool) xarModVars::get('themes', 'enable_user_menu') == false) 
         return xarTpl::module('privileges', 'user', 'error', array('layout' => 'bad_author'));
         
     if (!xarVarFetch('phase', 'pre:trim:lower:enum:update',
@@ -16,9 +17,10 @@ function themes_user_switch_theme(Array $args=array())
     $data['user_themes'] = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
     $data['user_themes']->options = xarMod::apiFunc('themes', 'user', 'dropdownlist');
     $data['user_themes']->value = xarModUserVars::get('themes', 'default_theme');
-    $data['user_themes']->layout = 'vertical';
     
     if ($phase == 'update') {
+        if (!xarSecConfirmAuthKey())
+            return xarTpl::module('privileges', 'user', 'error', array('layout' => 'bad_author'));
         $isvalid = $data['user_themes']->checkInput('default_theme');
         if ($isvalid) {
             xarModUserVars::set('themes', 'default_theme', $data['user_themes']->value);
