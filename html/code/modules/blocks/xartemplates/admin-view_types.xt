@@ -119,6 +119,10 @@
                     </div>
                 </fieldset>
             </form>
+            <xar:elseif condition="$tab eq 'preview'"/>
+                <xar:set name="blockmodule">$detail['module']</xar:set>
+                <xar:set name="blocktype">$detail['type']</xar:set>
+                <xar:block module="$blockmodule" type="$blocktype"/>
             <xar:elseif condition="$tab eq 'help'"/>
                 <xar:if condition="!empty($block_help)">
                     #$block_help#

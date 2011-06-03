@@ -306,7 +306,13 @@
 	                        <xar:data-input type="access" name="$propname" value="$instance['delete_access']"/>
 	                    </fieldset>
 	                </xar:if>
-	
+
+                <!-- Block display preview -->
+                <xar:elseif condition="$tab eq 'preview'"/>
+                
+                    <xar:set name="blockname">$instance['name']</xar:set>
+	                <xar:block instance="$blockname"/>
+	                
 	            <!-- Block help (optional) -->
 	            <xar:elseif condition="$tab eq 'help'"/>
 	

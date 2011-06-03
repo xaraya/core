@@ -342,6 +342,14 @@ function blocks_admin_modify_instance()
                 );
         }
     }
+    if ($block->show_preview == true) {
+        $blocktabs['preview'] = array(
+            'url' => xarServer::getCurrentURL(array('tab' => 'preview')),
+            'title' => xarML('Preview Block Display'),
+            'label' => xarML('Preview'),
+            'active' => $tab == 'preview',
+        );
+    }
     // show a help tab if the block has a help method
     if (method_exists($block, 'help')) {
         $blocktabs['help'] = array(

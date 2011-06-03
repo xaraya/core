@@ -107,6 +107,14 @@ function blocks_admin_view_types()
                 // return classname not found (this is always class [$type]Block)
                 throw new ClassNotFoundException($className);
             }
+            if ($block->show_preview == true) {
+                $blocktabs['preview'] = array(
+                    'url' => xarServer::getCurrentURL(array('tab' => 'preview')),
+                    'title' => xarML('Preview Block Display'),
+                    'label' => xarML('Preview'),
+                    'active' => $tab == 'preview',
+                );
+            }            
             if (method_exists($block, 'help')) {
                 $blocktabs['help'] = array(
                     'url' => xarServer::getCurrentURL(array('tab' => 'help')),
