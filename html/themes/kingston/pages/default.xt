@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xar type="page" ?>
-<!DOCTYPE blocklayout PUBLIC "-//XAR//DTD BL 2.0 Strict//EN" "http://xaraya.com/bl2/DTD/bl2-strict.dtd">
-
 <xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
-
 <html xml:lang="en" lang="en">
 
 <head>
-
+        
     <xar:blockgroup name="header" id="header"/>
     <title><xar:var name="tpl:pageTitle"/></title>
     <base href="#xarServer::getBaseURL()#index.php"/>
+    <link rel='icon' href="favicon.ico"/>
         
     <!-- Theme Options -->
     <xar:set name="xar_footer">xarThemeVars::get('Kingston','xar_footer')</xar:set> 
@@ -18,6 +16,8 @@
     <xar:set name="page_width">xarThemeVars::get('Kingston','page_width')</xar:set> <!-- "variable" or "fixed" (pending) -->
     <xar:set name="nav_pos">xarThemeVars::get('Kingston','nav_pos')</xar:set> <!-- "left", "right" or "top" -->
     <xar:set name="font_set">xarThemeVars::get('Kingston','font_set')</xar:set> <!-- "custom" or "standard" -->
+    <xar:set name="admin_bar">xarThemeVars::get('Kingston','admin_bar')</xar:set> <!-- Frontend Inline Admin Bar -->
+    <xar:set name="palette">' '.$color_scheme</xar:set>
     
     <!-- Modal Variables -->
     <xar:set name="module_tag">' module-'.xarController::getVar('module')</xar:set>
@@ -32,16 +32,21 @@
     <link rel='icon' href="favicon.ico"/>
     
     <!-- Style (For now, I'm not including module provided styles) -->
+    <!--<xar:style scope="common"/>-->
     <xar:style scope="theme" file="global"/>
-    <xar:style scope="theme" file="admin" title="Kingston Administrative Stylesheet"/>
-    <xar:place-css />
+    <xar:style scope="theme" file="style"/>
+    <xar:if condition="$color_scheme eq 'reggae'">
+    	<xar:style scope="theme" file="reggae" title="Reggae Stylesheet"/>
+    </xar:if>
+    
+	<xar:place-css />
     
     <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js?ver=3.0.4'></script>
     <xar:place-javascript position="head"/>
-    
+
 </head>
 
-<body class="nav-#$nav_pos# fonts-#$font_set# #$module_tag# #$function_tag# #$type_tag# #$order_tag#">
+<body class="nav-#$nav_pos# fonts-#$font_set# #$module_tag# #$function_tag# #$type_tag# #$order_tag# #$palette#">
 
 <!-- !PAGE -->
 <div id="page-wrapper">
@@ -52,14 +57,19 @@
     <div id="header">
     <div id="header-enclosure">
         <h1 id="sitename"><xar:var name="SiteName" scope="module" module="themes"/></h1>
+        <h2 id="siteslogan"><xar:var name="SiteSlogan" scope="module" module="themes"/></h2>
+        <!--<xar:img scope="theme" file="xarLogo2.png" width="90" height="90" alt="Xaraya Logo" title="home"/>-->
     </div><!--/header-enclosure-->
     </div><!--/header-->
+    
+    <xar:blockgroup name="topnav" id="topnav"/>
     
     <!-- !PRIMARY CONTENT -->
     <div id="primary-wrapper">
     <div id="primary">
     <div id="primary-enclosure">
         <xar:module id="modulespace"/>
+        <xar:blockgroup name="center" id="center"/>
     </div><!--/primary-enclosure-->
     </div><!--/primary-->
 	</div><!--/primary-wrapper-->
@@ -68,27 +78,41 @@
     <div id="secondary-wrapper">
     <div id="secondary">
     <div id="secondary-enclosure">
-        <xar:blockgroup name="admin" id="admin"/>
-        <a id="nav-toggle" href="javascript:void(0)" onclick="javascript:$('body').toggleClass('nav-left nav-top');">+</a>
+        <xar:blockgroup name="right" id="right"/>
+        <xar:blockgroup name="left" id="left"/>
     </div><!--/secondary-enclosure-->
     </div><!--/secondary-->
     </div><!--/secondary-wrapper-->
+    
+    <!-- !TERTIARY CONTENT -->
+    <div id="tertiary-wrapper">
+    <div id="tertiary">
+    <div id="tertiary-enclosure">
+        
+    </div><!--/tertiary-enclosure-->
+    </div><!--/tertiary-->
+    </div><!--/tertiary-wrapper-->
 	
 	<!-- !FOOTER -->
-	<xar:if condition="$xar_footer ne 'no'">
 	<div id="page-footer">
-        <a class="xar-icon xar-icon-xaraya" href="http://www.xaraya.com" target="_blank" style="background-image: url(#xarTplGetThemeDir()#/images/admin/logos/logo-xaraya-pb-twotone.png); width: 205px;">Powered by Xaraya</a>
-        <a href="http://www.xaraya.com/index.php/xarpages/support" target="_blank">Support </a>
-        <a href="http://www.xaraya.com/index.php/xarpages/community" target="_blank">Community </a>
-        <a href="http://www.xaraya.com/index.php/documentation/c18/" target="_blank">Knowledgebase </a>
-        <a href="http://www.xaraya.com/index.php/release/view.html" target="_blank">Extend </a>
-        <a href="http://bugs.xarya.com" target="_blank">BugReport </a>
-        <a class="xar-icon" href="http://www.php.net" style="background-image: url(#xarTplGetThemeDir()#/images/admin/logos/logo-php.png); width: 31px;">PHP</a>
-        <a class="xar-icon" href="http://www.mysql.com" style="background-image: url(#xarTplGetThemeDir()#/images/admin/logos/logo-mysql.png); width: 48px;">MySQL</a>
-        <a class="xar-icon" href="http://www.w3schools.com/xsl/" style="background-image: url(#xarTplGetThemeDir()#/images/admin/logos/logo-xsl.png); width: 28px;">XSL</a>
+	    
     </div>
+    
+	<xar:if condition="$admin_bar ne 'no'">
+	<xar:sec mask="AdminBase" catch="false">
+    <div id="admin-bar">
+	<div id="admin-bar-enclosure">
+    	<div id="controls">
+        	<a id="collapse" href="javascript:void(0);" onclick="javascript:$('#admin-bar').hide();">–</a>
+        	<a id="edit" href="">Edit</a>
+        </div>
+        <xar:blockgroup name="admin" id="admin"/>
+    </div>
+    </div><!--/admin-bar-->
+    </xar:sec>
     </xar:if>
-
+    
+   
 </div><!--/page-enclosure-->
 </div><!--/page-->
 </div><!--/page-wrapper-->
@@ -96,6 +120,6 @@
 <xar:place-javascript position="body"/>
      
 </body>
-</html>
 
+</html>
 </xar:blocklayout>

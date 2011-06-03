@@ -38,7 +38,7 @@
                 <a title="#$prevpagelabel#" href="#$prevpageurl#">&lt;</a>
             </span>
             <xar:else />
-                <span class="xar-page" title="#$prevpagelabel#">&lt;</span>
+                <span class="xar-page-inactive" title="#$prevpagelabel#">&lt;</span>
             </xar:if>
         </xar:if>
         <xar:foreach in="$middleurls" key="$pagenumber" value="$pageurl">
@@ -66,7 +66,7 @@
                 <a title="#$nextpagelabel#" href="#$nextpageurl#">&gt;</a>
             </span>
             <xar:else />
-            <span class="xar-page" title="#$nextpagelabel#">&gt;</span>
+            <span class="xar-page-inactive" title="#$nextpagelabel#">&gt;</span>
             </xar:if>
         </xar:if>
         <!-- Display next-block link if there is more than one block -->
@@ -77,7 +77,7 @@
                 <a title="#$nextblocklabel#" href="#$nextblockurl#">&gt;&gt;</a>
             </span>
             <xar:else />
-                <span class="xar-page" title="#$nextblocklabel#">&gt;&gt;</span>
+                <span class="xar-page-inactive" title="#$nextblocklabel#">&gt;&gt;</span>
             </xar:if>
         </xar:if>
         <!-- Display last-page link or text if there is more than one page -->
@@ -88,7 +88,7 @@
                     <a title="#$label#" href="#$lasturl#">&gt;|</a>
                 </span>
             <xar:else />
-                <span class="xar-page-current" title="#$label#">&gt;|</span>
+                <span class="xar-page-inactive" title="#$label#">&gt;|</span>
             </xar:if>
         </xar:if>
     </div>

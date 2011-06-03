@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">
-                Account Information
-        </span>
-    </div>
-    <div class="xar-mod-body">
         <xar:if condition="!empty($message)">
             #$message#
         <xar:else />
-            <div>
-                <ul class="xar-tabs xar-alt xar-norm-outline">
+                <ul class="xar-tabs">
                     <xar:foreach in="$menutabs" value="$menutab">
                         <xar:if condition="$menutab['active']">
                             <xar:set name="tabclass">'xar-tab-active'</xar:set>
@@ -25,7 +18,6 @@
                         </li>
                     </xar:foreach>
                 </ul>
-            </div>
         </xar:if>
-    </div>
+    
 </xar:template>

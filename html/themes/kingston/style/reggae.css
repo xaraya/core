@@ -1,0 +1,90 @@
+/* Primary Colors
+Black: #000000
+Green: #A8D921
+Yellow: #E1E81C
+Orange: #F29130
+Red: #F53636
+*/
+
+/* !Layout */
+body {
+	background: black;
+	}
+#page-enclosure {
+	background: #f29130;
+	}
+.xar-mod-body {
+	background: #e1e81c;
+	}
+
+/* !Header */
+#header {
+	background: #f53636;
+	background: url(../images/frontend/headers/reggae.png) no-repeat;
+	}
+#primary .xar-mod-head .xar-mod-title {
+	background: #a8d921;
+	background: white -webkit-gradient(linear, left top, left bottom, from(#b8e043), to(#a8d921));
+	}
+	
+ul.xar-tabs:nth-last-of-type(1) {
+	background: #a8d921;
+	}
+	
+/* !Primary */
+#primary .xar-mod-page-body {
+	background: white -webkit-gradient(linear, left top, left bottom, from(white), to(#fffecf));
+	-webkit-box-shadow: 0px 0px 5px #9fa100;
+	}
+
+/* !Secondary */
+#secondary .xar-block-title {
+	color: #a41d1b;
+	}
+#secondary .xar-block-body {
+	color: black;
+	}
+
+/* Main Menu */
+.xar-block-mainmenu {
+	background:#87C32A;
+    background:#00cfff -webkit-gradient(linear, left top, right top, from(#f53636), to(#a41d1b));
+    background:#87C32A -moz-linear-gradient(top, #5f9013, #87C32A);
+	}
+#secondary .xar-block-mainmenu .xar-block-title {
+	color: white;
+	background:#262626 -webkit-gradient(linear, left top, left bottom, from(#f53636), to(#a41d1b));
+	-webkit-box-shadowx:inset -3px 0px 3px #538505;
+	}
+#secondary .xar-block-mainmenu .xar-block-body {
+	margin: 10px 0px;
+	}
+#secondary .xar-block-mainmenu h4 {
+	background: #5f9013;
+	background: #5f9013 -webkit-gradient(linear, left top, right top, from(#ff6f02), to(#a41d1b));
+	text-shadow: -1px -1px 0px #455e1b;
+	border-bottom: 1px #a41d1b solid;
+	}
+#secondary ul ul li a {
+	color: #e1e81c;
+	}
+#secondary ul ul li a:hover {
+	background: #87c32a;
+	}
+#secondary ul ul li.xar-menu-item-current a {
+	color: #5f9013;
+	background: #edfece;
+	border-bottom: 1px #5f9013 solid;
+	}
+#secondary ul ul li.xar-menu-item-current ul li.xar-menu-subitem-current a {
+	background: #5f9013;
+	}
+#secondary .xar-block-title {
+	color: #008cb7;
+	}
+#secondary .xar-block-body {
+	color: #5f9013;
+	}
+#secondary .xar-block-body br {
+	display: none;
+	}

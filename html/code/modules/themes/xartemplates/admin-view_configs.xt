@@ -6,23 +6,30 @@
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <h2>
-            View Configurations&#160;
-        </h2>
-        <xar:if condition="$object:checkAccess('create')">
-            <xar:var name="label">Create New Configuration Item</xar:var>
-            <a href="#xarModURL('themes','admin','new_config')#" title="#$label#">
+    	<div class="xar-mod-page-head">
+	        <h2>
+	            View Configurations
+	        </h2>
+	        <xar:if condition="$object:checkAccess('create')">
+	        <ul class="xar-mod-actions">
                 <xar:if condition="xarModVars::get('themes','use_module_icons')">
-                    <xar:img scope="theme" file="icons/add.png" class="xar-icon" alt="new"/>
+                	<xar:set name="xar_icon">'xar-icon-add'</xar:set>
+                    <!-- <xar:img scope="theme" file="icons/add.png" class="xar-icon" alt="new"/> -->
                 <xar:else />
-                    Create New Theme Configuration
+                    <xar:set name="xar_icon">''</xar:set>
                 </xar:if>
-            </a>
-        </xar:if>
-
-        <xar:if condition="empty($numitems)">
-            <xar:set name="numitems">30</xar:set>
-        </xar:if>
-        <xar:data-view object="$object" tplmodule="themes"/>
+	            <xar:var name="label">Create New Configuration Item</xar:var>
+	            <li>
+		            <a href="#xarModURL('themes','admin','new_config')#" title="#$label#" class="#$xar-icon">New Configuration</a>
+	            </li>
+	        </ul>
+	        </xar:if>
+	    </div>
+		<div class="xar-mod-page-body">
+	        <xar:if condition="empty($numitems)">
+	            <xar:set name="numitems">30</xar:set>
+	        </xar:if>
+	        <xar:data-view object="$object" tplmodule="themes"/>
+        </div>
     </div>
 </xar:template>

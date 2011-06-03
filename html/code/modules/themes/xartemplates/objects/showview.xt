@@ -9,17 +9,21 @@
     -->
     <xar:style scope="module" module="dynamicdata" file="dd"/>
     <!-- You can give a custom 'newlink' argument to showView() higher up -->
-    <div class="xar-fullwidth">
-        <table class="xar-fullwidth">
+        <table class="xar-items">
             <tr>
                 <xar:foreach in="$properties" key="$name">
-                    <th class="xar-form-textlong">
+            		<xar:if condition="xarController::getVar('sort') eq $name">
+                    	<xar:set name="xar_status">'xar-active '</xar:set>
+                    <xar:else />
+                    	<xar:set name="xar_status">''</xar:set>
+                    </xar:if>
+                    <th class="#$xar_status# #$name#">
                         <a href="#$sorturl#=#$name#">
                             <xar:data-label property="$properties[$name]"/>
                         </a>
                     </th>
                 </xar:foreach>
-                <th class="xar-form-textlong">Action</th>
+                <th class="action">Action</th>
             </tr>
             <xar:set name="item_no">0</xar:set>
             <xar:foreach in="$items" key="$itemid" value="$fields">
@@ -31,7 +35,12 @@
                 <tr class="#$rowclass#">
                     <!-- we could use xar:data-display here too, instead of looping over fields ourselves -->
                     <xar:foreach in="$properties" key="$name">
-                        <td>
+                		<xar:if condition="xarController::getVar('sort') eq $name">
+                        	<xar:set name="xar_status">'xar-active '</xar:set>
+                        <xar:else />
+                        	<xar:set name="xar_status">''</xar:set>
+                        </xar:if>
+                        <td class="#$xar_status# #$name#">
                             <xar:if condition="empty($fields[$name])">&#160; 
                             <xar:elseif condition="!empty($linkfield) and $linkfield eq $name and !empty($links[$itemid]['display'])"/>
                                 <a href="#$links[$itemid]['display']['olink']#" title="#$links[$itemid]['display']['otitle']#">
@@ -42,22 +51,22 @@
                             </xar:if>
                         </td>
                     </xar:foreach>
-                    <td class="xar-align-center">
+                    <td class="action">
                         <xar:if condition="xarModVars::get('themes','use_module_icons')">
                             <xar:var name="title">Display Configuration</xar:var>
-                            <a href="#xarModURL('themes','admin','display_config',array('itemid' => $fields['id']))#" title="#$title#">
+                            <a href="#xarModURL('themes','admin','display_config',array('itemid' => $fields['id']))#" title="#$title#" class="xar-icon-display">
                                 <xar:img scope="theme" file="icons/display.png" class="xar-icon" alt="$title"/>
                             </a>&#160;
                             <xar:var name="title">Modify Configuration</xar:var>
-                            <a href="#xarModURL('themes','admin','modify_config',array('itemid' => $fields['id']))#" title="#$title#">
+                            <a href="#xarModURL('themes','admin','modify_config',array('itemid' => $fields['id']))#" title="#$title#" class="xar-icon-modify">
                                 <xar:img scope="theme" file="icons/modify.png" class="xar-icon" alt="$title"/>
                             </a>&#160;
                             <xar:var name="title">Delete Configuration</xar:var>
-                            <a href="#xarModURL('themes','admin','delete_config',array('itemid' => $fields['id']))#" title="#$title#">
+                            <a href="#xarModURL('themes','admin','delete_config',array('itemid' => $fields['id']))#" title="#$title#" class="xar-icon-delete">
                                 <xar:img scope="theme" file="icons/delete.png" class="xar-icon" alt="$title"/>
                             </a>&#160;
                             <xar:var name="title">Export Configuration</xar:var>
-                            &#160;<a href="#xarModURL('themes','admin','export_config',array('itemid' => $fields['theme_id']))#" title="#$title#">
+                            &#160;<a href="#xarModURL('themes','admin','export_config',array('itemid' => $fields['theme_id']))#" title="#$title#" class="xar-icon-export">
                                 <xar:img scope="theme" file="icons/export-xml.png" class="xar-icon" alt="$title"/>
                             </a>
                         <xar:else/>
@@ -70,7 +79,6 @@
                 </tr>
             </xar:foreach>
         </table>
-    </div>
     <xar:if condition="empty($object:itemcount)">
         <!-- if we don't have an item total show prev / next links -->
         <div>
