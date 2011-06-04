@@ -17,7 +17,7 @@ class ThemeInit implements iThemeInit
 {
     public function init(Array $data=array())
     {
-        $dat_file = 'themes/' . $data['name'] . '/data/themes_configurations-dat.xml';
+        $dat_file = 'themes/' . $data['name'] . '/configuration.xml';
         $data = array('file' => $dat_file);
         try {
             $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
