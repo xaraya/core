@@ -125,8 +125,8 @@
                 Note: other variables may be available depending on the module
                 </p>
             </fieldset>
-            <fieldset>
-                <div class="xar-col dummy">
+            <fieldset class="xar-form-actions">
+                <div class="xar-form-actions-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="phase" id="phase" value="update"/>
                     <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>

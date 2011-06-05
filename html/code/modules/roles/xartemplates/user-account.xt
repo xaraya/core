@@ -22,8 +22,8 @@
 	        </xar:if>
 	        <form method="post" action="#$formaction#" enctype="#$enc_type#">
 	            <xar:data-form object="$object" formdata="$formdata" fieldlist="name,uname,state,regdate" />
-	            <fieldset>
-	                <div class="xar-col dummy">
+                <fieldset class="xar-form-actions">
+                    <div class="xar-form-actions-after">
 	                    <input type="hidden" name="id" id="id" value="#$id#"/>
 	                    <input type="hidden" name="moduleload" id="moduleload" value="#$moduleload#"/>
 	                    <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#"/>

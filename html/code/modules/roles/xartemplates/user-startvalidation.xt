@@ -52,7 +52,9 @@
                             <input type="text" name="valcode" id="valcode" value=""/>
                         </div>
                     </div>
-                    <div class="xar-col dummy">
+                </fieldset>
+                <fieldset class="xar-form-actions">
+                    <div class="xar-form-actions-after">
                         <input type="hidden" name="phase" id="phase" value="getvalidate"/>
                         <input type="submit" value="#xarVarPrepForDisplay($validatelabel)#"/>
                     </div>
@@ -73,7 +75,9 @@
                             <input type="text" name="uname" id="unameresend" value="#$uname#"/>
                        </div>
                     </div>
-                    <div class="xar-col dummy">
+                </fieldset>
+                <fieldset class="xar-form-actions">
+                    <div class="xar-form-actions-after">
                         <input type="hidden" name="phase" id="phase" value="resend"/>
                         <input type="submit" value="#$resendlabel#"/>
                     </div>

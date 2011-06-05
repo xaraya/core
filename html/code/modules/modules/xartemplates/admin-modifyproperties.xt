@@ -10,8 +10,8 @@
         <xar:if condition="!empty($object)">
             <form action="#xarModURL('modules','admin','modifyproperties')#" method="post" enctype="application/x-www-form-urlencoded">
                 <xar:data-form object="$object"/>
-                <fieldset>
-                    <div class="xar-col dummy">
+                <fieldset class="xar-form-actions">
+                    <div class="xar-form-actions-after">
                         <xar:if condition="!empty($return_url)">
                             <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                         </xar:if>

@@ -98,8 +98,8 @@
                     </div>
                 </div>
             </fieldset>
-            <fieldset>
-                <div class="xar-col dummy">
+            <fieldset class="xar-form-actions">
+                <div class="xar-form-actions-after">
                     <input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#"/>
                     <input type="hidden" name="toggle" id="toggle" value="#$toggle#"/>
                     <xar:var name="label">Save Site Lock Settings</xar:var>

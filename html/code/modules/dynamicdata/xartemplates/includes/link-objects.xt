@@ -90,13 +90,15 @@
                     </tr>
                 </xar:foreach>
             </table>
-            <div class="xar-col dummy">
-                <input type="hidden" name="objectid" value="#$objectid#"/>
-                <input type="hidden" name="table" value="#$table#"/>
-                <input type="hidden" name="authid" value="#$authid#"/>
-                <xar:var name="label">Delete</xar:var>
-                <input type="submit" name="delete" id="delete" value="#$label#"/>
-            </div>
+            </fieldset>
+            <fieldset class="xar-form-actions">
+                <div class="xar-form-actions-after">
+                    <input type="hidden" name="objectid" value="#$objectid#"/>
+                    <input type="hidden" name="table" value="#$table#"/>
+                    <input type="hidden" name="authid" value="#$authid#"/>
+                    <xar:var name="label">Delete</xar:var>
+                    <input type="submit" name="delete" id="delete" value="#$label#"/>
+                </div>
             </fieldset>
         </form>
     </xar:if>

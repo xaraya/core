@@ -144,8 +144,8 @@
                         </div>
                     </div>
                 </fieldset>
-                <fieldset>
-                    <div class="xar-col dummy">
+                <fieldset class="xar-form-actions">
+                    <div class="xar-form-actions-after">
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                         <input type="hidden" name="phase" id="phase" value="update"/>
                         <input type="hidden" name="tab" id="tab" value="#$tab#"/>
@@ -241,8 +241,8 @@
                         </div>
                     </fieldset>
                 </xar:if>
-                <fieldset>
-                    <div class="xar-col dummy">
+                <fieldset class="xar-form-actions">
+                    <div class="xar-form-actions-after">
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                         <input type="hidden" name="phase" id="phase" value="update"/>
                         <input type="hidden" name="tab" id="tab" value="#$tab#"/>
@@ -308,8 +308,8 @@
                     </xar:if>
                     <xar:set name="dummy">xarSession::setVar('statusmsg','')</xar:set>
                 </fieldset>
-                <fieldset>
-                    <div class="xar-col dummy">
+                <fieldset class="xar-form-actions">
+                    <div class="xar-form-actions-after">
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                         <input type="hidden" name="phase" id="phase" value="update"/>
                         <input type="hidden" name="tab" id="tab" value="#$tab#"/>
@@ -330,8 +330,8 @@
                 <xar:set name="object">DataObjectMaster::getObjectList(array('name' => 'privileges_privileges', 'where' => $where))</xar:set>
                 <xar:data-view object="$object"/>
             </fieldset>
-            <fieldset>
-                <div class="xar-col dummy">
+            <fieldset class="xar-form-actions">
+                <div class="xar-form-actions-after">
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                     <input type="hidden" name="phase" id="phase" value="update"/>
                     <input type="hidden" name="tab" id="tab" value="#$tab#"/>
@@ -397,13 +397,15 @@
                         </div>
                 </div>
                 </fieldset>
-                <div class="xar-col dummy">
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                    <input type="hidden" name="phase" id="phase" value="update"/>
-                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                    <xar:var name="label">Update</xar:var>
-                    <xar:button type="submit" label="$label"/>
-                </div>
+                <fieldset class="xar-form-actions">
+                    <div class="xar-form-actions-after">
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="phase" id="phase" value="update"/>
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </fieldset>
             </form>
         </xar:if>
     </div>

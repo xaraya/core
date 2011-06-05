@@ -24,8 +24,8 @@
                     </div>
                 </div>
             </fieldset>
-            <fieldset>
-                <div class="xar-col dummy">
+            <fieldset class="xar-form-actions">
+                <div class="xar-form-actions-after">
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                     <xar:data-input type="hidden" name="phase" id="phase" value="update"/>
                     <xar:var name="label">Update</xar:var>

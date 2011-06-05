@@ -407,8 +407,8 @@
 	            </xar:if>
 	
 	            <xar:if condition="($adminaccess OR !empty($instance['allowaccess'])) and $tab ne 'help'">
-	                <fieldset>
-	                    <div class="xar-col dummy">
+                    <fieldset class="xar-form-actions">
+                        <div class="xar-form-actions-after">
 	                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
 	                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
 	                        <input type="hidden" name="bid" id="bid" value="#$bid#"/>

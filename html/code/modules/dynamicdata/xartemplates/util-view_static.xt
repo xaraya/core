@@ -83,8 +83,8 @@
                 </table>
                             <!--
                 <form method="post" action="#xarModURL('dynamicdata','util','importprops')#">
-                    <fieldset>
-                        <div class="xar-col dummy">
+                    <fieldset class="xar-form-actions">
+                        <div class="xar-form-actions-after">
                             <input type="hidden" name="authid" value="#$authid#"/>
                             <input type="hidden" name="module_id" value="#$module_id#"/>
                             <input type="hidden" name="itemtype" value="#$itemtype#"/>

@@ -174,8 +174,8 @@
                     </xar:if>
                 </xar:if>
             </fieldset>
-            <fieldset>
-                <div class="xar-col dummy">
+            <fieldset class="xar-form-actions">
+                <div class="xar-form-actions-after">
                     <input type="hidden" name="step" value="#$step#"/>
                     <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
                     <xar:var name="label">Back</xar:var>

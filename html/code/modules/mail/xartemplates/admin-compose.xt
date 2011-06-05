@@ -123,8 +123,8 @@
                     </div>
                 </xar:if>
             </fieldset>
-            <fieldset>
-                <div class="xar-col dummy">
+            <fieldset class="xar-form-actions">
+                <div class="xar-form-actions-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <xar:var name="label">Send Message</xar:var>
                     <xar:button type="submit" label="$label"/>

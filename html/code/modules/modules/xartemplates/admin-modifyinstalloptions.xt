@@ -7,8 +7,8 @@
         <form action="#xarModURL('modules', 'admin', 'updateinstalloptions', array('regid' => $regid))#" method="post" enctype="application/x-www-form-urlencoded">
             <xar:template module="$modname" file="installoptions"/>
             <!--        <xar:module main="false" module="#$modname#" type="admin" func="installoptions"/> -->
-            <fieldset>
-                <div class="xar-col dummy">
+            <fieldset class="xar-form-actions">
+                <div class="xar-form-actions-after">
                     <xar:var name="label">Save Configuration</xar:var>
                     <input type="submit" name="update" value="#$label#"/>
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>

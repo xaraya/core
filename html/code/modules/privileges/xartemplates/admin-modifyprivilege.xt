@@ -286,7 +286,9 @@
                             </select>
                         </div>
                     </div>
-	                <div class="xar-col dummy">
+	            </fieldset>
+                <fieldset class="xar-form-actions">
+                    <div class="xar-form-actions-after">
 	                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
 	                    <input type="hidden" name="poldcomponent" id="poldcomponent" value="#$oldcomponent#"/>
 	                    <input type="hidden" name="id" id="id" value="#$ppid#"/>

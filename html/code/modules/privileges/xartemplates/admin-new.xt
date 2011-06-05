@@ -200,8 +200,8 @@
                     </xar:if>
                 </xar:if>
             </fieldset>
-            <fieldset>
-                <div class="xar-col dummy">
+            <fieldset class="xar-form-actions">
+                <div class="xar-form-actions-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="id" id="id" value="#$id#"/>
                     <xar:var name="tmpaddvalue">Add</xar:var>
