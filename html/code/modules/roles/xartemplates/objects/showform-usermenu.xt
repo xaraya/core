@@ -15,6 +15,8 @@
                 <div class="xar-row">
                     <div class="xar-col">
                         <xar:data-label property="$properties[$name]" for="id"/>
+                    </div>
+                    <div class="xar-col">
                         <xar:data-input property="$properties[$name]"/>
                     </div>
                 </div>
@@ -40,6 +42,8 @@
                 <div class="xar-row">
                     <div class="xar-col">
                         <xar:data-label property="$properties['userhome']" for="id"/>
+                    </div>
+                    <div class="xar-col">
                         <xar:data-input property="$properties['userhome']"/>
                     </div>
                 </div>
@@ -52,6 +56,8 @@
                 <div class="xar-row">
                     <div class="xar-col">
                         <xar:data-label property="$properties['usertimezone']" for="id"/>
+                    </div>
+                    <div class="xar-col">
                         <xar:data-input property="$properties['usertimezone']"/>
                     </div>
                 </div>
@@ -59,12 +65,14 @@
             -->
             <xar:if condition="(bool)xarModVars::get('roles', 'allowemail') == true">
             <div class="xar-row">
-                <div class="xar-col dummy">
-                    <xar:data-input property="$properties['allowemail']"/>
+                <div class="xar-col">
                     <xar:var name="label">Allow users to send you emails?</xar:var>
                     <label for="#$properties['allowemail']->id#" title="#$label#">
                         Allow other users to send you an email via a form?
                     </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties['allowemail']"/>
                 </div>
             </div>
             <p class="xar-col dummy">
@@ -77,6 +85,8 @@
                         <label class="xar-form-label">
                             Password last updated:
                         </label>
+                    </div>
+                    <div class="xar-col">
                         #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))#
                         #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
                     </div>
@@ -88,6 +98,8 @@
                         <label class="xar-form-label">
                             Last login time:
                         </label>
+                    </div>
+                    <div class="xar-col">
                         #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#
                         #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
                     </div>
@@ -104,12 +116,16 @@
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:data-label property="$properties['usereditaccount']" for="id"/>
+                </div>
+                <div class="xar-col">
                     <xar:data-input property="$properties['usereditaccount']"/>
                 </div>
             </div>
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:data-label property="$properties['allowemail']" for="id"/>
+                </div>
+                <div class="xar-col">
                     <xar:data-input property="$properties['allowemail']"/>
                 </div>
             </div>
@@ -118,6 +134,8 @@
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:data-label property="$properties['requirevalidation']" for="id"/>
+                </div>
+                <div class="xar-col">
                     <xar:data-input property="$properties['requirevalidation']"/>
                 </div>
             </div>
@@ -128,6 +146,8 @@
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:data-label property="$properties['displayrolelist']" for="id"/>
+                </div>
+                <div class="xar-col">
                     <xar:data-input property="$properties['displayrolelist']"/>
                     <p class="xar-form-container-after">Note: This enables access to the members list for everyone. Roles administrators can always access this list.</p>
                 </div>
@@ -135,6 +155,8 @@
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:data-label property="$properties['searchbyemail']" for="id"/>
+                </div>
+                <div class="xar-col">
                     <xar:data-input property="$properties['searchbyemail']"/>
                     <p class="xar-form-container-after">CAUTION: this may reveal enough information to compromise a user's login.</p>
                 </div>
@@ -153,6 +175,8 @@
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:data-label property="$properties['allowexternalurl']" for="id"/>
+                </div>
+                <div class="xar-col">
                     <xar:data-input property="$properties['allowexternalurl']"/>
                     <p class="xar-form-container-after">Allow users to set their homepage to an external url.</p>
                 </div>
@@ -160,6 +184,8 @@
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:data-label property="$properties['loginredirect']" for="id"/>
+                </div>
+                <div class="xar-col">
                     <xar:data-input property="$properties['loginredirect']"/>
                     <p class="xar-form-container-after">Automatically redirect users to their home page when they log in.</p>
                 </div>

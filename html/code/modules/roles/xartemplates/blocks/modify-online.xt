@@ -7,6 +7,8 @@
             <label for="showusers" class="help xar-form-label" title="#$label#">
                 List the active users
             </label>
+        </div>
+        <div class="xar-col">
             <xar:data-input type="checkbox" name="showusers" checked="$showusers"/>
         </div>
     </div>
@@ -16,6 +18,8 @@
             <label for="showusertotal" class="help xar-form-label" title="#$label#">
                 Number of active users
             </label>
+        </div>
+        <div class="xar-col">
             <xar:data-input type="checkbox" name="showusertotal" checked="$showusertotal"/>
         </div>
     </div>
@@ -25,6 +29,8 @@
             <label for="showanontotal" class="help xar-form-label" title="#$label#">
                 Number of anon users
             </label>
+        </div>
+        <div class="xar-col">
             <xar:data-input type="checkbox" name="showanontotal" checked="$showanontotal"/>
         </div>
     </div>
@@ -34,6 +40,8 @@
             <label for="showlastuser" class="help xar-form-label" title="#$label#">
                 Show the last registered user
             </label>
+        </div>
+        <div class="xar-col">
             <xar:data-input type="checkbox" name="showlastuser" checked="$showlastuser"/>
         </div>
     </div>

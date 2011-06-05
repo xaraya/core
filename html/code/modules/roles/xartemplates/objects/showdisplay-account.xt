@@ -12,7 +12,9 @@
         <xar:foreach in="$properties" key="$name" value="$property">
             <div class="xar-row">
                 <div class="xar-col">
-                        <xar:data-label property="$properties[$name]" for="id"/>
+                    <xar:data-label property="$properties[$name]" for="id"/>
+                </div>
+                <div class="xar-col">
                     <xar:if condition="$name eq 'parent'">
                         <xar:set name="module_id">$properties['module_id']->value</xar:set>
                         <xar:data-output property="$properties[$name]" modid="$module_id"/>
@@ -28,6 +30,8 @@
                     <label class="xar-form-label">
                         Last Login
                     </label>
+                </div>
+                <div class="xar-col">
                     #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$userid))#  #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$userid))#
                 </div>
             </div>
@@ -38,6 +42,8 @@
                     <label class="xar-form-label">
                         Email
                     </label>
+                </div>
+                <div class="xar-col">
                     <a href="#xarModURL('roles','user','email',array('id'=>$userid))#">
                         Send an Email to #xarVarPrepForDisplay(xarUserGetVar('name', $userid))#
                     </a>
@@ -51,6 +57,8 @@
                     <label class="xar-form-label">
                         Home Page
                     </label>
+                </div>
+                <div class="xar-col">
                     <!-- 
                     <xar:var name="label">Home Page</xar:var>
                     <a href="#$homelink#" title="#$label#">#$homelink#</a> -->
@@ -64,6 +72,8 @@
                     <label class="xar-form-label">
                         User Timezone:
                     </label>
+                </div>
+                <div class="xar-col">
                     <xar:set name="value">
                         xarModUserVars::get('roles','usertimezone',$id)
                     </xar:set>

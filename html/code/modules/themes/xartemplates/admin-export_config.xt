@@ -20,9 +20,9 @@
                 <div class="xar-row">
                     <div class="xar-col">
                         <label for="xml" class="xar-form-label">Theme:</label>
-                        <div class="xar-form-container-after">
-                            <xar:data-input type="objectref" name="itemid" refobject="themes" display_prop="name" store_prop="regid" onchange="submit()" value="$itemid"/>
-                        </div>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input type="objectref" name="itemid" refobject="themes" display_prop="name" store_prop="regid" onchange="submit()" value="$itemid"/>
                     </div>
                 </div>
             </fieldset>

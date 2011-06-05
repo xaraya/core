@@ -38,6 +38,8 @@
                     <label class="xar-form-label" for="install_database_type">
                         Database Type
                     </label>
+                </div>
+                <div class="xar-col">
                     <select name="install_database_type" id="install_database_type">
                         <xar:foreach in="$database_types" key="$dbdriver" value="$info">
                             <xar:if condition="!$info.available">
@@ -60,6 +62,8 @@
                     <label class="xar-form-label" for="install_database_host">
                         Host
                     </label>
+                </div>
+                <div class="xar-col">
                     <input type="text" name="install_database_host" id="install_database_host" maxlength="80" value="#$database_host#"/>
                 </div>
             </div>
@@ -68,6 +72,8 @@
                     <label class="xar-form-label" for="install_database_username">
                         Username
                     </label>
+                </div>
+                <div class="xar-col">
                     <input type="text" name="install_database_username" id="install_database_username" maxlength="80" value="#$database_username#"/>
                 </div>
             </div>
@@ -76,6 +82,8 @@
                     <label class="xar-form-label" for="install_database_password">
                         Password
                     </label>
+                </div>
+                <div class="xar-col">
                     <input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#"/>
                     &#160;(Only valid characters)
                 </div>
@@ -85,6 +93,8 @@
                     <label class="xar-form-label" for="install_database_name">
                         Database Name
                     </label>
+                </div>
+                <div class="xar-col">
                     <input type="text" name="install_database_name" id="install_database_name" maxlength="80" value="#$database_name#"/>
                 </div>
             </div>
@@ -93,6 +103,8 @@
                     <label class="xar-form-label" for="install_database_prefix">
                         Table Prefix
                     </label>
+                </div>
+                <div class="xar-col">
                     <input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#"/>
                     &#160;(for Table Sharing)
                 </div>
@@ -102,6 +114,8 @@
                     <label class="xar-form-label" for="install_database_charset">
                         Character Set
                     </label>
+                </div>
+                <div class="xar-col">
                     <input type="text" name="install_database_charset" id="install_database_charset" maxlength="10" value="#$database_charset#"/>
                 </div>
             </div>
@@ -110,6 +124,8 @@
                     <label class="xar-form-label" for="install_create_database">
                         Create the database
                     </label>
+                </div>
+                <div class="xar-col">
                     <input type="checkbox" name="install_create_database" id="install_create_database" value="1"/>
                     &#160;(MySQL only)
                 </div>

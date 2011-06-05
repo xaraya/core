@@ -9,6 +9,8 @@
             <div class="xar-row">
                 <div class="xar-col">
                     <label class="xar-form-label" for="qlist">Show rules for queue:</label>
+                </div>
+                <div class="xar-col">
                     <xar:data-input type="checkboxmask" id="qlist" name="showq" options="$qlist"/>
                 </div>
             </div>

@@ -7,6 +7,8 @@
                 <div class="xar-row">
                     <div class="xar-col">
                         <xar:data-label property="$properties[$name]" for="id"/>
+                    </div>
+                    <div class="xar-col">
                         <xar:if condition="$name eq 'name'">
                             <xar:data-output property="$properties[$name]" layout="single"/>
                         <xar:else/>

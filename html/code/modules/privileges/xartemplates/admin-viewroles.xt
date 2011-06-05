@@ -115,6 +115,8 @@
                         <label for="roleid" title="#$label#" class="xar-form-label">
                             Assign to Group:
                         </label>
+                    </div>
+                    <div class="xar-col">
                         <select name="roleid" id="roleid" class="xar-margin-thickright">
                             <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
                                 <option value="#$groups[$i]['id']#">#$groups[$i]['name']# -

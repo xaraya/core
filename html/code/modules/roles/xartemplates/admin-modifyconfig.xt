@@ -343,6 +343,8 @@
                             <label for="debugadmins" title="#$label#" class="xar-form-label">
                                 Debug Mode Admins:
                             </label>
+                        </div>
+                        <div class="xar-col">
                             <xar:data-input type="textarea" name="debugadmins" value="$debugadmins"/>
                         </div>
                     </div>

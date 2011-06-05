@@ -31,66 +31,76 @@
                     Admin will be prompted to send an email to an existing user if the user status is changed to any of the following checked options. Admin will also be notified when status is changed automatically by the system (eg when an account is set to pending and requires approval):
                 </div>
                 <div class="xar-row">
-                    <div class="xar-col dummy">
-                        <xar:set name="checked">
-                            <xar:var scope="module" module="roles" name="askpendingemail"/>
-                        </xar:set>
-                        <xar:data-input type="checkbox" name="askpendingemail" id="askpendingemail" checked="$checked"/>
+                    <div class="xar-col">
                         <xar:var name="label">When user state is changed to 'pending'</xar:var>
                         <label for="askpendingemail" title="#$label#">
                             Pending
                         </label>
                     </div>
+                    <div class="xar-col">
+                        <xar:set name="checked">
+                            <xar:var scope="module" module="roles" name="askpendingemail"/>
+                        </xar:set>
+                        <xar:data-input type="checkbox" name="askpendingemail" id="askpendingemail" checked="$checked"/>
+                    </div>
                 </div>
                 <div class="xar-row">
-                    <div class="xar-col dummy">
-                        <xar:set name="checked">
-                            <xar:var scope="module" module="roles" name="askwelcomeemail"/>
-                        </xar:set>
-                        <xar:data-input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" checked="$checked"/>
+                    <div class="xar-col">
                         <xar:var name="label">When user state is changed to 'active'</xar:var>
                         <label for="askwelcomeemail" title="#$label#">
                             Active
                         </label>
                     </div>
+                    <div class="xar-col">
+                        <xar:set name="checked">
+                            <xar:var scope="module" module="roles" name="askwelcomeemail"/>
+                        </xar:set>
+                        <xar:data-input type="checkbox" name="askwelcomeemail" id="askwelcomeemail" checked="$checked"/>
+                    </div>
                 </div>
                 <div class="xar-row">
-                    <div class="xar-col dummy">
-                        <xar:set name="checked">
-                            <xar:var scope="module" module="roles" name="askdeactivationemail"/>
-                        </xar:set>
-                        <xar:data-input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" checked="$checked"/>
+                    <div class="xar-col">
                         <xar:var name="label">When user state is changed to 'inactive'</xar:var>
                         <label for="askdeactivationemail" title="#$label#">
                             Inactive
                         </label>
                     </div>
+                    <div class="xar-col">
+                        <xar:set name="checked">
+                            <xar:var scope="module" module="roles" name="askdeactivationemail"/>
+                        </xar:set>
+                        <xar:data-input type="checkbox" name="askdeactivationemail" id="askdeactivationemail" checked="$checked"/>
+                    </div>
                 </div>
                 <div class="xar-row">
-                    <div class="xar-col dummy">
-                        <xar:set name="checked">
-                            <xar:var scope="module" module="roles" name="askvalidationemail"/>
-                        </xar:set>
-                        <xar:data-input type="checkbox" name="askvalidationemail" id="askvalidationemail" checked="$checked"/>
+                    <div class="xar-col">
                         <xar:var name="label">When user state is changed to 'not validated'</xar:var>
                         <label for="askvalidationemail" title="#$label#">
                             Not Validated
                         </label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:set name="checked">
+                            <xar:var scope="module" module="roles" name="askvalidationemail"/>
+                        </xar:set>
+                        <xar:data-input type="checkbox" name="askvalidationemail" id="askvalidationemail" checked="$checked"/>
                     </div>
                 </div>
                 <div class="xar-col xar-padding-thick">
                     Ask about sending a notification when an administrator:
                 </div>
                 <div class="xar-row">
-                    <div class="xar-col dummy">
-                        <xar:set name="checked">
-                            <xar:var scope="module" module="roles" name="askpasswordemail"/>
-                        </xar:set>
-                        <xar:data-input type="checkbox" name="askpasswordemail" id="askpasswordemail" checked="$checked"/>
+                    <div class="xar-col">
                         <xar:var name="label">When administrator changes a user's password</xar:var>
                         <label for="askpasswordemail" title="#$label#">
                             Changes A User's Password
                         </label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:set name="checked">
+                            <xar:var scope="module" module="roles" name="askpasswordemail"/>
+                        </xar:set>
+                        <xar:data-input type="checkbox" name="askpasswordemail" id="askpasswordemail" checked="$checked"/>
                     </div>
                 </div>
                 <!-- jojodee - we already have user hooks in the modifyconfig user hooks sections,

@@ -12,9 +12,9 @@
                         <label for="default_theme" class="xar-form-label">
                             Select Theme
                         </label>
-                        <div class="xar-form-container-after">
-                            <xar:data-input property="$user_themes" name="default_theme" id="default_theme"/>
-                        </div>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input property="$user_themes" name="default_theme" id="default_theme"/>
                     </div>
                 </div>
             </fieldset>

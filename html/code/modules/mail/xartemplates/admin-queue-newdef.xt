@@ -22,6 +22,8 @@
                 <div class="xar-row">
                     <div class="xar-col">
                         <label class="xar-form-label" for="qdef_name_enter">Queue definition name</label>
+                    </div>
+                    <div class="xar-col">
                         <div>
                             <xar:data-input type="radio" name="qdef_choose" id="qdef_enter" value="$qdef_method" options="$qdef_create"/>
                             <xar:data-input type="textbox" name="qdef_name_enter" id="qdef_name_enter" maxlength="12" size="12" value="$qdef_name" validation="1:12:\w+" onfocus="document.getElementById(\'qdef_enter\').checked=true"/>

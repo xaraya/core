@@ -17,6 +17,8 @@
                         <label for="disableoverview" title="#$label#" class="xar-form-label">
                             Disable overviews
                         </label>
+                    </div>
+                    <div class="xar-col">
                         <xar:set name="checked">xarModVars::get('modules', 'disableoverview')</xar:set>
                         <xar:data-input type="checkbox" name="disableoverview" checked="$checked"/>&#160;(disable the display by default of the module overview pages)
                     </div>

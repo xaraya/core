@@ -28,6 +28,8 @@
                         <label for="ptype" title="#$label#" class="xar-form-label">
                             Type:
                         </label>
+                    </div>
+                    <div class="xar-col">
                         <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"</xar:set>
                         <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1"/>
                     </div>
@@ -37,6 +39,8 @@
                     <div class="xar-col">
                         <xar:var name="label">Initial Group membership</xar:var>
                         <label for="parentid" title="#$label#" class="xar-form-label">Member Of:</label>
+                    </div>
+                    <div class="xar-col">
                         <xar:if condition="empty($parentid)">
                             <xar:set name="parentid">
                                 xarModVars::get('roles','defaultgroup')
@@ -54,6 +58,8 @@
                             <div class="xar-col">
                                 <xar:var name="label">Email Format</xar:var>
                                 <label for="duvs_useremailformat" title="#$label#" class="xar-form-label">Email Format:</label>
+                            </div>
+                            <div class="xar-col">
                                 <xar:set name="value">
                                     xarModUserVars::get('roles','useremailformat',$id)
                                 </xar:set>
@@ -73,6 +79,8 @@
                                 <label for="duvs_usertimezone" class="xar-form-label">
                                     User Timezone:
                                 </label>
+                            </div>
+                            <div class="xar-col">
                                 <xar:set name="value">
                                     xarModUserVars::get('roles','usertimezone',$id)
                                 </xar:set>
@@ -88,6 +96,8 @@
                             <label for="duvs_userhome" title="#$label#" class="xar-form-label">
                                 Home:
                             </label>
+                        </div>
+                        <div class="xar-col">
                             <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModUserVars::get('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7"/>
                         </div>
                     </div>

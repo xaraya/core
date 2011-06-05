@@ -238,6 +238,8 @@
                         <label for="subject" title="#$label#" class="xar-form-label">
                             Subject:
                         </label>
+                    </div>
+                    <div class="xar-col">
                         <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
                     </div>
                 </div>
@@ -247,6 +249,8 @@
                         <label for="message" title="#$label#" class="xar-form-label">
                             Message:
                         </label>
+                    </div>
+                    <div class="xar-col">
                         <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
                     </div>
                 </div>

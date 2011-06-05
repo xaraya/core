@@ -23,6 +23,8 @@
                             <label for="#$propname#" title="#$label#" class="xar-form-label">
                                 Required Group Membership:
                             </label>
+                        </div>
+                        <div class="xar-col">
                             <xar:data-input type="grouplist" name="$propname" options="$groupoptions" value="$group"/>
                         </div>
                     </div>
@@ -33,6 +35,8 @@
                             <label for="#$propname#" title="#$label#" class="xar-form-label">
                                 Required Access Level:
                             </label>
+                        </div>
+                        <div class="xar-col">
                             <xar:data-input type="dropdown" name="$propname" options="$leveloptions" value="$level"/>&#160;
                             (applies if <em>No requirement</em> is chosen above)
                         </div>
@@ -45,6 +49,8 @@
                                 <label for="#$propname#" title="#$label#" class="xar-form-label">
                                     Behavior on Failure:
                                 </label>
+                            </div>
+                            <div class="xar-col">
                                 <xar:data-input type="radio" name="$propname" options="$failureoptions" value="$failure"/>
                             </div>
                         </div>

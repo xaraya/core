@@ -49,6 +49,8 @@
                             <label class="xar-form-label">
                                 Home:
                             </label>
+                        </div>
+                        <div class="xar-col">
                             #xarModUserVars::get('roles','userhome',$id)#&#160;
                         </div>
                     </div>
@@ -60,6 +62,8 @@
                                 <label class="xar-form-label">
                                     Primary Parent Home:
                                 </label>
+                            </div>
+                            <div class="xar-col">
                                 <xar:set name="value">
                                     xarModUserVars::get('roles','primaryparent',$id)
                                 </xar:set>
@@ -73,6 +77,8 @@
                             <label for="duvs_primaryparent" title="#$label#" class="xar-form-label">
                                 Primary Parent Group:
                             </label>
+                        </div>
+                        <div class="xar-col">
                             <xar:set name="value">
                                 xarMod::apiFunc('roles','user','getprimaryparent',array('itemid' =&gt; $id))
                             </xar:set>
@@ -89,6 +95,8 @@
                             <label class="xar-form-label">
                                 Last Login:
                             </label>
+                        </div>
+                        <div class="xar-col">
                             #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#
                             #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
                         </div>
@@ -100,6 +108,8 @@
                             <label class="xar-form-label">
                                 Password last updated:
                             </label>
+                        </div>
+                        <div class="xar-col">
                             #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))#
                             #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
                         </div>
@@ -111,6 +121,8 @@
                             <label class="xar-form-label">
                                 User Timezone:
                             </label>
+                        </div>
+                        <div class="xar-col">
                             <xar:set name="value">
                                 xarModUserVars::get('roles','usertimezone',$id)
                             </xar:set>

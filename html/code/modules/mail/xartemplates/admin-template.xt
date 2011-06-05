@@ -39,6 +39,8 @@
                     <div class="xar-col">
                         <xar:var name="label">Select the template to edit</xar:var>
                         <label for="mailtype" title="#$label#" class="xar-form-label">Name:</label>
+                    </div>
+                    <div class="xar-col">
                         <select name="mailtype" id="mailtype" onchange="this.form.submit()">
                             <xar:loop name="$templates">
                                 <xar:if condition="$mailtype eq $loop:item['key']">
@@ -81,6 +83,8 @@
                     <div class="xar-col">
                         <xar:var name="label">Title of the notification</xar:var>
                         <label for="subject" title="#$label#" class="xar-form-label">Subject:</label>
+                    </div>
+                    <div class="xar-col">
                         <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
                     </div>
                 </div>
@@ -88,9 +92,9 @@
                     <div class="xar-col">
                         <xar:var name="label">Body of the notification</xar:var>
                         <label for="message" title="#$label#" class="xar-form-label">Message:</label>
-                        <div class="xar-form-container-after">
-                            <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
-                        </div>
+                    </div>
+                    <div class="xar-col">
+                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
                     </div>
                 </div>
                 <p>

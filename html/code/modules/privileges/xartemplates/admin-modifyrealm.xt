@@ -14,6 +14,8 @@
                     <div class="xar-col">
                         <xar:var name="label">Name of the realm</xar:var>
                         <label for="newname" title="#$label#" class="xar-form-label">Name:</label>
+                    </div>
+                    <div class="xar-col">
                         <input type="text" name="newname" id="newname" value="#$name#" size="20" maxlength="20" tabindex="1" class="xar-form-textmedium"/>
                     </div>
                 </div>

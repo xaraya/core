@@ -12,12 +12,16 @@
                 <div class="xar-row">
                     <div class="xar-col">
                         <label class="xar-form-label" for="username">Username:</label>
+                </div>
+                <div class="xar-col">
                         <input type="text" name="uname" id="username" size="25" maxlength="255"/>
                     </div>
                 </div>
                 <div class="xar-row">
                     <div class="xar-col">
                         <label class="xar-form-label" for="email">E-mail address:</label>
+                </div>
+                <div class="xar-col">
                         <input type="text" name="email" id="email" size="25" maxlength="255"/>
                     </div>
                 </div>

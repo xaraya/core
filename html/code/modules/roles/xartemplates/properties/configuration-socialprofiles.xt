@@ -10,6 +10,8 @@
                 <label for="#$name#_info1_5">
                     <xar:img scope="theme" file="icons/help-browser.png" class="xar-icon" alt="Help" title="Enable All Profiles or None"/>&#160;
                 </label>
+            </div>
+            <div class="xar-col">
                 <input type="checkbox" id="#$name#_info1_5" value="1" checked="checked" onclick="xar_base_checkall(this.form,this.checked);return true;"/>&#160;
                 <xar:img scope="theme" file="icons/go-up.png" class="xar-icon" alt="Up" title="Move Up" onClick="xar_base_moveElementUp(this.parentNode);"/>&#160;
                 <input type="text" value="Site Name" size="16" disabled="disabled"/>&#160;
@@ -25,6 +27,8 @@
                     <label for="#$name#_#$key#_5">
                         <img src="#xarTpl::getImage($profile[4],'module','roles')#" alt="#$key#" title="#$key#" width="16" height="16" border="0"/>&#160;
                     </label>
+                </div>
+                <div class="xar-col">
                     <xar:if condition="!empty($profile[5])">
                         <input type="checkbox" name="#$name#[#$key#][5]" id="#$name#_#$key#_5" value="1" checked="checked"/>
                     <xar:else/>

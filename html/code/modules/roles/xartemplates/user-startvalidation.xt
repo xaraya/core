@@ -36,6 +36,8 @@
                             <label for="uname" class="xar-form-label" title="#$label#">
                                 Username
                             </label>
+                        </div>
+                        <div class="xar-col">
                             <input type="text" name="uname" id="uname" value="#xarVarPrepForDisplay($uname)#"/>
                         </div>
                     </div>
@@ -45,6 +47,8 @@
                             <label for="valcode" class="xar-form-label" title="#$label#">
                                 Validation Code:
                             </label>
+                        </div>
+                        <div class="xar-col">
                             <input type="text" name="valcode" id="valcode" value=""/>
                         </div>
                     </div>
@@ -64,7 +68,8 @@
                             <label for="unameresend" class="xar-form-label" title="#$label#">
                                 Username:
                             </label>
-                            &#160; 
+                        </div>
+                        <div class="xar-col">
                             <input type="text" name="uname" id="unameresend" value="#$uname#"/>
                        </div>
                     </div>

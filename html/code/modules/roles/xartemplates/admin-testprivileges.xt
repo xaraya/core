@@ -44,6 +44,8 @@
                         <label for="pmodule" title="#$label#" class="xar-form-label">
                             Registered Masks For Module:
                         </label>
+                    </div>
+                    <div class="xar-col">
                         <xar:set name="onchange">'this.form.submit();'</xar:set>
                         <xar:data-input type="module" name="pmodule" id="pmodule" value="$pmodule" firstline="Choose" onchange="$onchange"/>
                         <input type="hidden" name="id" id="id" value="#$id#"/>

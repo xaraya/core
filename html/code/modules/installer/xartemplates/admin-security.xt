@@ -22,6 +22,8 @@
                     <label class="xar-form-label" for="remove">
                         Remove the install script
                     </label>
+                </div>
+                <div class="xar-col">
                     <xar:data-input type="checkbox" id="remove" name="remove"/>
                 </div>
             </div>
@@ -33,6 +35,8 @@
                     <label class="xar-form-label" for="rename">
                         Rename the install script
                     </label>
+                </div>
+                <div class="xar-col">
                     <xar:data-input type="checkbox" name="rename" id="rename"/>
                     &#160;&#160;
                     <label for="newname">

@@ -40,16 +40,18 @@
                         <label for="mailtype" title="#$label#" class="xar-form-label">
                             Template:
                         </label>
+                    </div>
+                    <div class="xar-col">
                         <select name="mailtype" id="mailtype" size="1" tabindex="5" onchange="this.form.submit()">
-                                <xar:loop name="$templates">
-                                    <xar:if condition="$mailtype eq $loop:item['key']">
-                                        <option value="#$loop:item['key']#" selected="selected">
-                                        #$loop:item['value']#</option>
-                                    <xar:else />
-                                        <option value="#$loop:item['key']#">#$loop:item['value']#</option>
-                                    </xar:if>
-                                </xar:loop>
-                            </select>
+                            <xar:loop name="$templates">
+                                <xar:if condition="$mailtype eq $loop:item['key']">
+                                    <option value="#$loop:item['key']#" selected="selected">
+                                    #$loop:item['value']#</option>
+                                <xar:else />
+                                    <option value="#$loop:item['key']#">#$loop:item['value']#</option>
+                                </xar:if>
+                            </xar:loop>
+                        </select>
                     </div>
                 </div>
                 <p>
@@ -82,6 +84,8 @@
                         <label for="subject" title="#$label#" class="xar-form-label">
                             Subject:
                         </label>
+                    </div>
+                    <div class="xar-col">
                         <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
                     </div>
                 </div>
@@ -91,9 +95,9 @@
                         <label for="message" title="#$label#" class="xar-form-label">
                             Message:
                         </label>
-                        <div class="xar-form-container-after">
-                            <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
-                        </div>
+                    </div>
+                    <div class="xar-col">
+                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
                     </div>
                 </div>
             </fieldset>

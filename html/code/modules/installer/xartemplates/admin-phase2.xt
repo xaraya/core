@@ -298,6 +298,8 @@ POSSIBILITY OF SUCH DAMAGES.
             <div class="xar-row">
                 <div class="xar-col">
                     <input type="radio" name="agree" id="agree" value="agree"/>            
+                </div>
+                <div class="xar-col">
                     <label for="agree">
                         I have read and agree to abide by the Terms and Conditions as stated above
                     </label>
@@ -306,6 +308,8 @@ POSSIBILITY OF SUCH DAMAGES.
             <div class="xar-row">
                 <div class="xar-col">
                     <input type="radio" name="agree" id="disagree" value="disagree" checked="checked"/>
+                </div>
+                <div class="xar-col">
                     <label for="disagree">
                         I have read and do NOT agree to abide by the Terms and Conditions as stated above
                     </label>

@@ -2,21 +2,25 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-row">
-        <div class="xar-col dummy">
-            <xar:data-input type="checkbox" name="showlogout" value="$showlogout"/>
+        <div class="xar-col">
             <xar:var name="label">By checking this box a logout link will be shown in the panel instance.</xar:var>
             <label for="showlogout" title="#$label#">
                 Show a logout link in this menu
             </label>
         </div>
+        <div class="xar-col">
+            <xar:data-input type="checkbox" name="showlogout" value="$showlogout"/>
+        </div>
     </div>
     <div class="xar-row">
-        <div class="xar-col dummy">
-            <xar:data-input type="checkbox" name="overview" value="$overview"/>
+         <div class="xar-col">
             <xar:var name="label">By checking this box the menu will NOT show the overview page of the module by default.</xar:var>
             <label for="overview" title="#$label#">
                 Disable the module overview by default
             </label>
+        </div>
+       <div class="xar-col">
+            <xar:data-input type="checkbox" name="overview" value="$overview"/>
         </div>
     </div>
     <div class="xar-row">
@@ -25,6 +29,8 @@
             <label for="menustyle" title="#$label#" class="xar-form-label">
                 Sort menuitems:
             </label>
+        </div>
+        <div class="xar-col">
             <select name="menustyle" id="menustyle">
                 <xar:foreach in="$sortorder" value="$v" key="$k">
                     <xar:if condition="$k eq $menustyle">

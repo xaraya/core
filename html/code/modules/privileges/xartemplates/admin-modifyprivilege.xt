@@ -81,8 +81,10 @@
 	                <xar:if condition="$frozen">
                         <div class="xar-row">
                             <div class="xar-col">
-                            <span class="xar-form-label">Name:</span>#$pname# 
-                            <input type="hidden" name="pname" id="pname" value="#$pname#"/>
+                                <span class="xar-form-label">Name:</span>#$pname# 
+                            </div>
+                            <div class="xar-col">
+                                <input type="hidden" name="pname" id="pname" value="#$pname#"/>
                             </div>
                         </div>
 	                    <p>This privilege cannot be edited or deleted</p>
@@ -92,6 +94,8 @@
                                 <label for="pname" title="#xarML('TITLE')#" class="xar-form-label">
                                     Name:
                                 </label>
+                            </div>
+                            <div class="xar-col">
                                 <input type="text" name="pname" id="pname" value="#$pname#" maxlength="40" class="xar-form-textlong"/>
                             </div>
                         </div>
@@ -109,42 +113,52 @@
 	                    -->
 	                    <xar:if condition="$ptype eq 'empty'">
                             <div class="xar-row">
-                                <div class="xar-col dummy">
-                                    <input type="radio" name="ptype" id="ptype1_empty" value="empty" checked="checked" onclick=""/>
+                                <div class="xar-col">
                                     <label for="ptype1_empty" title="#xarML('This privilege has no children')#">
                                         empty
                                     </label>
                                 </div>
+                                <div class="xar-col">
+                                    <input type="radio" name="ptype" id="ptype1_empty" value="empty" checked="checked" onclick=""/>
+                                </div>
                             </div>
                             <div class="xar-row">
-                                <div class="xar-col dummy">
-                                    <input type="radio" name="ptype" id="ptype1_full" value="full" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();"/>
+                                <div class="xar-col">
                                     <label for="ptype1_full" title="#xarML('This privilege has children')#">
                                         with rights
                                     </label>
                                 </div>
+                                <div class="xar-col">
+                                    <input type="radio" name="ptype" id="ptype1_full" value="full" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();"/>
+                                </div>
                             </div>
 	                    <xar:else />
                             <div class="xar-row">
-                                <div class="xar-col dummy">
-                                    <input type="radio" name="ptype" id="ptype_empty" value="empty" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();"/>
+                                <div class="xar-col">
                                     <label for="ptype_empty" title="#xarML('This privilege has no children')#">
                                         empty
                                     </label>
                                 </div>
-                            </div>
+                                 <div class="xar-col">
+                                    <input type="radio" name="ptype" id="ptype_empty" value="empty" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();"/>
+                                </div>
+                           </div>
                             <div class="xar-row">
-                                <div class="xar-col dummy">
-                                    <input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();"/>
+                                <div class="xar-col">
                                     <label for="ptype_full" title="#xarML('This privilege has children')#">
                                         with rights
                                     </label>
+                                </div>
+                                <div class="xar-col">
+                                    <input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();"/>
                                 </div>
                             </div>
 	                        <xar:if condition="xarModVars::get('privileges','showrealms')">
                                 <div class="xar-row">
                                     <div class="xar-col">
                                         <label for="prealm" title="#xarML('Realm to which this privilege applies')#" class="xar-form-label">Realm:</label>
+                                    </div>
+                                    <div class="xar-col">
                                         <xar:data-input type="dropdown" name="prealm" options="$realms" value="$prealm"/>
                                     </div>
                                 </div>
@@ -156,6 +170,8 @@
                                     <label for="pmodule" title="#xarML('Module which holds the target component')#" class="xar-form-label">
                                         Module:
                                     </label>
+                                </div>
+                                <div class="xar-col">
                                     <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="all,All" onchange="$onclick" store_prop="name"/>
                                 </div>
                             </div>
@@ -164,6 +180,8 @@
                                     <label for="pcomponent" title="#xarML('Component to which this privilege applies')#" class="xar-form-label">
                                         Component:
                                     </label>
+                                </div>
+                                <div class="xar-col">
                                     <select name="pcomponent" id="pcomponent" onchange="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();">
                                         <xar:loop name="$components">
                                             <xar:if condition="strtolower($loop:item['name']) eq strtolower($pcomponent)">
@@ -183,6 +201,8 @@
                                     <label for="plevel" title="#xarML('Level of access')#" class="xar-form-label">
                                         Level:
                                     </label>
+                                </div>
+                                <div class="xar-col">
                                     <xar:set name="levels">SecurityLevel::$displayMap</xar:set>
                                     <!-- TODO: this needs to go -->
                                     <xar:set name="foo">1; array_shift($levels)</xar:set>
@@ -204,6 +224,8 @@
                                         <label for="pinstance#$id#" class="xar-form-label">
                                             #$instance['header']#
                                         </label>
+                                    </div>
+                                    <div class="xar-col">
                                         <xar:if condition="$instance['type'] eq 'manual'">
                                             <input type="text" name="pinstance['#$id#']" id="pinstance#$id#" value="#$instance['default']#" size="20" tabindex="7"/>
                                         <xar:else />
@@ -226,6 +248,8 @@
                                     <label for="pinstance0" class="xar-form-label">
                                         Current Instances:
                                     </label>
+                                </div>
+                                <div class="xar-col">
                                     <input type="text" name="pinstance[0]" id="pinstance0" value="#$curinstance#" tabindex="7"/>
                                 </div>
                             </div>
@@ -252,6 +276,8 @@
                             <label for="privid" title="#xarML('Privilege to add')#" class="xar-form-label">
                                 Add new component
                             </label>
+                        </div>
+                        <div class="xar-col">
                             <select name="privid" id="privid">
                                 <option value=""></option>
                                 <xar:loop name="$privileges">

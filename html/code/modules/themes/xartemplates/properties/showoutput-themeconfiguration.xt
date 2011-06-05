@@ -18,6 +18,8 @@
                         <label for="#$fieldid#" title="#$init['description']#" class="xar-form-label">
                             #$init['label']#
                         </label>
+                    </div>
+                    <div class="xar-col">
                         <xar:data-output type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']"/>
                         &#160;(#$key#)
                     </div>

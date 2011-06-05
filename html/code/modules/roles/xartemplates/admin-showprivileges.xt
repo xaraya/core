@@ -152,6 +152,8 @@
                         <label for="privid" title="#$label#" class="xar-form-label">
                             Assign a Privilege to #$itemtypename# '#xarVarPrepForDisplay($pname)#'
                         </label>
+                    </div>
+                    <div class="xar-col">
                         <xar:set name="options">xarPrivileges::getprivileges()</xar:set>
                         <xar:data-input type="dropdown" name="privid" options="$options"/>&#160;
                         <input type="hidden" name="authid" id="authid" value="#$authid#"/>

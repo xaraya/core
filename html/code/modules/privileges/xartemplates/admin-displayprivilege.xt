@@ -83,6 +83,8 @@
             <div class="xar-row">
                 <div class="xar-col">
                     <label class="xar-form-label">Name:</label>
+                </div>
+                <div class="xar-col">
                     <span>#$pname#</span>
                 </div>
             </div>
@@ -92,24 +94,32 @@
             <div class="xar-row">
                 <div class="xar-col">
                     <label class="xar-form-label">Realm:</label>
+                </div>
+                <div class="xar-col">
                     <span>#$prealm#</span>
                 </div>
             </div>
             <div class="xar-row">
                 <div class="xar-col">
                     <label class="xar-form-label">Module:</label>
+                </div>
+                <div class="xar-col">
                     <span>#$pmodule#</span>
                 </div>
             </div>
             <div class="xar-row">
                 <div class="xar-col">
                     <label class="xar-form-label">Component:</label>
+                </div>
+                <div class="xar-col">
                     <span>#$pcomponent#</span>
                 </div>
             </div>
             <div class="xar-row">
                 <div class="xar-col">
                     <label class="xar-form-label">Level:</label>
+                </div>
+                <div class="xar-col">
                     <span>
                         <xar:if condition="$plevel eq 0">None 
                         <xar:elseif condition="$plevel eq 100"/>Overview 
@@ -126,6 +136,8 @@
             <div class="xar-row">
                 <div class="xar-col">
                     <label class="xar-form-label">Instances:</label>
+                </div>
+                <div class="xar-col">
                     <span>#$instance#</span>
                 </div>
             </div>

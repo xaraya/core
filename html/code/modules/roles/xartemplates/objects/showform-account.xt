@@ -28,6 +28,8 @@
                 <div class="xar-row">
                     <div class="xar-col">
                         <xar:data-label property="$properties[$name]" for="id"/>
+                    </div>
+                    <div class="xar-col">
                         <xar:data-input property="$properties[$name]"/>
                     </div>
                 </div>
@@ -49,6 +51,8 @@
                             <label for="passwordupdate" class="xar-form-label">
                                 Password last updated:
                             </label>
+                    </div>
+                    <div class="xar-col">
                             #xarLocaleGetFormattedDate('medium', $passwordupdate)#
                             #xarLocaleGetFormattedTime('medium', $passwordupdate)#
                         </div>
@@ -64,6 +68,8 @@
                             <label for="userlastlogin" class="xar-form-label">
                                 Time of Last Login:
                             </label>
+                        </div>
+                        <div class="xar-col">
                             #xarLocaleGetFormattedDate('medium', $userlastlogin)#
                             #xarLocaleGetFormattedTime('medium', $userlastlogin)#
                         </div>

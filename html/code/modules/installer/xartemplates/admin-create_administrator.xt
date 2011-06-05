@@ -22,6 +22,8 @@
                     <label class="xar-form-label" for="install_admin_name">
                         Display Name
                     </label>
+                </div>
+                <div class="xar-col">
                     <xar:data-input property="$properties['name']"/>
                 </div>
             </div>
@@ -30,8 +32,9 @@
                     <label class="xar-form-label" for="install_admin_username">
                         Username&#160;(Used for logon)
                     </label>
-                    <xar:data-input property="$properties['uname']"/>
-                    
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties['uname']"/>                    
                 </div>
             </div>
             <div class="xar-row">
@@ -39,6 +42,8 @@
                     <label class="xar-form-label" for="install_admin_password">
                         Password
                     </label>
+                </div>
+                <div class="xar-col">
                     <xar:data-input property="$properties['password']"/>
                 </div>
             </div>
@@ -47,6 +52,8 @@
                     <label class="xar-form-label" for="install_admin_email">
                         Email
                     </label>
+                </div>
+                <div class="xar-col">
                     <xar:data-input property="$properties['email']"/>
                 </div>
             </div>
