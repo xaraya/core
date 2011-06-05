@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-form-input-wrapper-after">
-        <xar:data-input type="checkbox" name="showlogout" value="$showlogout"/>
-        <xar:var name="label">By checking this box a logout link will be shown in the panel instance.</xar:var>
-        <label for="showlogout" title="#$label#">
-            Show a logout link in this menu
-        </label>
+    <div class="xar-row">
+        <div class="xar-col dummy">
+            <xar:data-input type="checkbox" name="showlogout" value="$showlogout"/>
+            <xar:var name="label">By checking this box a logout link will be shown in the panel instance.</xar:var>
+            <label for="showlogout" title="#$label#">
+                Show a logout link in this menu
+            </label>
+        </div>
     </div>
-    <div class="xar-form-input-wrapper-after">
-        <xar:data-input type="checkbox" name="overview" value="$overview"/>
-        <xar:var name="label">By checking this box the menu will NOT show the overview page of the module by default.</xar:var>
-        <label for="overview" title="#$label#">
-            Disable the module overview by default
-        </label>
+    <div class="xar-row">
+        <div class="xar-col dummy">
+            <xar:data-input type="checkbox" name="overview" value="$overview"/>
+            <xar:var name="label">By checking this box the menu will NOT show the overview page of the module by default.</xar:var>
+            <label for="overview" title="#$label#">
+                Disable the module overview by default
+            </label>
+        </div>
     </div>
-    <div class="xar-form-input-wrapper">
-        <xar:var name="label">How should the menu items be ordered?</xar:var>
-        <label for="menustyle" title="#$label#" class="xar-form-label">
-            Sort menuitems:
-        </label>
-        <select name="menustyle" id="menustyle">
-            <xar:foreach in="$sortorder" value="$v" key="$k">
-                <xar:if condition="$k eq $menustyle">
-                    <option value="#$k#" selected="selected">#$v#</option>
-                <xar:else />
-                    <option value="#$k#">#$v#</option>
-                </xar:if>
-            </xar:foreach>
-        </select>
+    <div class="xar-row">
+        <div class="xar-col">
+            <xar:var name="label">How should the menu items be ordered?</xar:var>
+            <label for="menustyle" title="#$label#" class="xar-form-label">
+                Sort menuitems:
+            </label>
+            <select name="menustyle" id="menustyle">
+                <xar:foreach in="$sortorder" value="$v" key="$k">
+                    <xar:if condition="$k eq $menustyle">
+                        <option value="#$k#" selected="selected">#$v#</option>
+                    <xar:else />
+                        <option value="#$k#">#$v#</option>
+                    </xar:if>
+                </xar:foreach>
+            </select>
+        </div>
     </div>
 </xar:template>

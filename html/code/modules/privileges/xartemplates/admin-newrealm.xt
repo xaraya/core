@@ -10,16 +10,18 @@
         <form id="privilegeform" action="#xarModURL('privileges','admin','newrealm')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Add Realm</legend>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Name of the realm</xar:var>
-                    <label for="pname" title="#$label#" class="xar-form-label">
-                        Name:
-                    </label>
-                    <input type="text" name="name" id="name" value="" size="20" maxlength="20" tabindex="1" class="xar-form-textmedium"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Name of the realm</xar:var>
+                        <label for="pname" title="#$label#" class="xar-form-label">
+                            Name:
+                        </label>
+                        <input type="text" name="name" id="name" value="" size="20" maxlength="20" tabindex="1" class="xar-form-textmedium"/>
+                    </div>
                 </div>
             </fieldset>
             <fieldset>
-                <div class="xar-form-input-wrapper-after">
+                <div class="xar-col dummy">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="confirmed" id="confirmed" value="true"/>
                     <xar:var name="value">Add</xar:var>

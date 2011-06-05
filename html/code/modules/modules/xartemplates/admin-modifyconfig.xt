@@ -11,17 +11,19 @@
             <xar:data-form object="$module_settings"/>
             <fieldset>
                 <legend>Configuration settings</legend>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Disable the display by default of all module overview pages.</xar:var>
-                    <label for="disableoverview" title="#$label#" class="xar-form-label">
-                        Disable overviews
-                    </label>
-                    <xar:set name="checked">xarModVars::get('modules', 'disableoverview')</xar:set>
-                    <xar:data-input type="checkbox" name="disableoverview" checked="$checked"/>&#160;(disable the display by default of the module overview pages)
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Disable the display by default of all module overview pages.</xar:var>
+                        <label for="disableoverview" title="#$label#" class="xar-form-label">
+                            Disable overviews
+                        </label>
+                        <xar:set name="checked">xarModVars::get('modules', 'disableoverview')</xar:set>
+                        <xar:data-input type="checkbox" name="disableoverview" checked="$checked"/>&#160;(disable the display by default of the module overview pages)
+                    </div>
                 </div>
             </fieldset>
             <fieldset>
-                <div class="xar-form-input-wrapper-after">
+                <div class="xar-col dummy">
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                     <xar:data-input type="hidden" name="phase" id="phase" value="update"/>
                     <xar:var name="label">Update</xar:var>

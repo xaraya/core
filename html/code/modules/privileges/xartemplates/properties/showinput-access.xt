@@ -16,31 +16,37 @@
         <table>
             <tr>
                 <td>
-                    <div class="xar-form-input-wrapper">
-                        <xar:set name="propname">$name . '_group'</xar:set>
-                        <xar:var name="label">The group the current user must belong to</xar:var>
-                        <label for="#$propname#" title="#$label#" class="xar-form-label">
-                            Required Group Membership:
-                        </label>
-                        <xar:data-input type="grouplist" name="$propname" options="$groupoptions" value="$group"/>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:set name="propname">$name . '_group'</xar:set>
+                            <xar:var name="label">The group the current user must belong to</xar:var>
+                            <label for="#$propname#" title="#$label#" class="xar-form-label">
+                                Required Group Membership:
+                            </label>
+                            <xar:data-input type="grouplist" name="$propname" options="$groupoptions" value="$group"/>
+                        </div>
                     </div>
-                    <div class="xar-form-input-wrapper">
-                        <xar:set name="propname">$name . '_level'</xar:set>
-                        <xar:var name="label">The access level the current user must have</xar:var>
-                        <label for="#$propname#" title="#$label#" class="xar-form-label">
-                            Required Access Level:
-                        </label>
-                        <xar:data-input type="dropdown" name="$propname" options="$leveloptions" value="$level"/>&#160;
-                        (applies if <em>No requirement</em> is chosen above)
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:set name="propname">$name . '_level'</xar:set>
+                            <xar:var name="label">The access level the current user must have</xar:var>
+                            <label for="#$propname#" title="#$label#" class="xar-form-label">
+                                Required Access Level:
+                            </label>
+                            <xar:data-input type="dropdown" name="$propname" options="$leveloptions" value="$level"/>&#160;
+                            (applies if <em>No requirement</em> is chosen above)
+                        </div>
                     </div>
                     <xar:set name="propname">$name . '_failure'</xar:set>
                     <xar:if condition="!isset($showfailure)">
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">What happens when the security check fails</xar:var>
-                            <label for="#$propname#" title="#$label#" class="xar-form-label">
-                                Behavior on Failure:
-                            </label>
-                            <xar:data-input type="radio" name="$propname" options="$failureoptions" value="$failure"/>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">What happens when the security check fails</xar:var>
+                                <label for="#$propname#" title="#$label#" class="xar-form-label">
+                                    Behavior on Failure:
+                                </label>
+                                <xar:data-input type="radio" name="$propname" options="$failureoptions" value="$failure"/>
+                            </div>
                         </div>
                     <xar:else />
                         <xar:data-input type="radio" name="$propname" options="$failureoptions" value="$failure" hidden="hidden"/>

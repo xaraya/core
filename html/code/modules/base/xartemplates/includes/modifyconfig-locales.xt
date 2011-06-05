@@ -135,26 +135,30 @@
             The translated information for Xaraya and its modules can be stored in different back-ends. The following back-ends are supported:
         </p>
 
-        <div class="xar-form-input-wrapper">
-            <xar:var name="label">Translations Backend</xar:var>
-            <label for="translationsbackend" title="#$label#" class="xar-form-label">
-                Translations Backend:
-            </label>
-            <select name="translationsbackend" id="translationsbackend" size="1">
-                <xar:if condition="xarConfigVars::get(null, 'Site.MLS.TranslationsBackend') eq 'xml'">
-                <option value="xml" selected="selected">XML (good for interoperability)</option>
-                <option value="php">PHP (good for programmed access)</option>
-                <option value="xml2php">XML with caching in PHP (new experimental)</option>
-                <xar:elseif condition="xarConfigVars::get(null, 'Site.MLS.TranslationsBackend') eq 'php'"/>
-                <option value="xml">XML (good for interoperability)</option>
-                <option value="php" selected="selected">PHP (good for programmed access)</option>
-                <option value="xml2php">XML with caching in PHP (new experimental)</option>
-                <xar:elseif condition="xarConfigVars::get(null, 'Site.MLS.TranslationsBackend') eq 'xml2php'"/>
-                <option value="xml">XML (good for interoperability)</option>
-                <option value="php">PHP (good for programmed access)</option>
-                <option value="xml2php" selected="selected">XML with caching in PHP (new experimental)</option>
-                </xar:if>
-            </select>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Translations Backend</xar:var>
+                <label for="translationsbackend" title="#$label#" class="xar-form-label">
+                    Translations Backend:
+                </label>
+            </div>
+            <div class="xar-col">
+                <select name="translationsbackend" id="translationsbackend" size="1">
+                    <xar:if condition="xarConfigVars::get(null, 'Site.MLS.TranslationsBackend') eq 'xml'">
+                    <option value="xml" selected="selected">XML (good for interoperability)</option>
+                    <option value="php">PHP (good for programmed access)</option>
+                    <option value="xml2php">XML with caching in PHP (new experimental)</option>
+                    <xar:elseif condition="xarConfigVars::get(null, 'Site.MLS.TranslationsBackend') eq 'php'"/>
+                    <option value="xml">XML (good for interoperability)</option>
+                    <option value="php" selected="selected">PHP (good for programmed access)</option>
+                    <option value="xml2php">XML with caching in PHP (new experimental)</option>
+                    <xar:elseif condition="xarConfigVars::get(null, 'Site.MLS.TranslationsBackend') eq 'xml2php'"/>
+                    <option value="xml">XML (good for interoperability)</option>
+                    <option value="php">PHP (good for programmed access)</option>
+                    <option value="xml2php" selected="selected">XML with caching in PHP (new experimental)</option>
+                    </xar:if>
+                </select>
+            </div>
         </div>
     </fieldset>
     -->

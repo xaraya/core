@@ -35,19 +35,21 @@
         </xar:if>
         <form method="post" action="#xarModURL('mail','admin','template')#">
             <fieldset>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Select the template to edit</xar:var>
-                    <label for="mailtype" title="#$label#" class="xar-form-label">Name:</label>
-                    <select name="mailtype" id="mailtype" onchange="this.form.submit()">
-                        <xar:loop name="$templates">
-                            <xar:if condition="$mailtype eq $loop:item['key']">
-                                <option value="#$loop:item['key']#" selected="selected">
-                                #$loop:item['value']#</option>
-                            <xar:else />
-                                <option value="#$loop:item['key']#">#$loop:item['value']#</option>
-                            </xar:if>
-                        </xar:loop>
-                    </select>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Select the template to edit</xar:var>
+                        <label for="mailtype" title="#$label#" class="xar-form-label">Name:</label>
+                        <select name="mailtype" id="mailtype" onchange="this.form.submit()">
+                            <xar:loop name="$templates">
+                                <xar:if condition="$mailtype eq $loop:item['key']">
+                                    <option value="#$loop:item['key']#" selected="selected">
+                                    #$loop:item['value']#</option>
+                                <xar:else />
+                                    <option value="#$loop:item['key']#">#$loop:item['value']#</option>
+                                </xar:if>
+                            </xar:loop>
+                        </select>
+                    </div>
                 </div>
                 <p>
                     <xar:if condition="$mailtype eq 'createhook'">
@@ -75,16 +77,20 @@
         <form action="#xarModURL('mail','admin','template')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Template Details</legend>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Title of the notification</xar:var>
-                    <label for="subject" title="#$label#" class="xar-form-label">Subject:</label>
-                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Title of the notification</xar:var>
+                        <label for="subject" title="#$label#" class="xar-form-label">Subject:</label>
+                        <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                    </div>
                 </div>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Body of the notification</xar:var>
-                    <label for="message" title="#$label#" class="xar-form-label">Message:</label>
-                    <div class="xar-form-container-after">
-                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Body of the notification</xar:var>
+                        <label for="message" title="#$label#" class="xar-form-label">Message:</label>
+                        <div class="xar-form-container-after">
+                            <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
+                        </div>
                     </div>
                 </div>
                 <p>
@@ -116,7 +122,7 @@
                 </p>
             </fieldset>
             <fieldset>
-                <div class="xar-form-input-wrapper-after">
+                <div class="xar-col dummy">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="phase" id="phase" value="update"/>
                     <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>

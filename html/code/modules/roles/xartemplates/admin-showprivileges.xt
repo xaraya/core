@@ -146,17 +146,19 @@
                 </table>
             </xar:if>
           <form action="#xarModURL('roles','admin','addprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Select the Privilege to add</xar:var>
-                    <label for="privid" title="#$label#" class="xar-form-label">
-                        Assign a Privilege to #$itemtypename# '#xarVarPrepForDisplay($pname)#'
-                    </label>
-                    <xar:set name="options">xarPrivileges::getprivileges()</xar:set>
-                    <xar:data-input type="dropdown" name="privid" options="$options"/>&#160;
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="roleid" id="roleid" value="#$roleid#"/>
-                    <xar:var name="label">Add Privilege</xar:var>
-                    <input type="submit" value="#$label#"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Select the Privilege to add</xar:var>
+                        <label for="privid" title="#$label#" class="xar-form-label">
+                            Assign a Privilege to #$itemtypename# '#xarVarPrepForDisplay($pname)#'
+                        </label>
+                        <xar:set name="options">xarPrivileges::getprivileges()</xar:set>
+                        <xar:data-input type="dropdown" name="privid" options="$options"/>&#160;
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <input type="hidden" name="roleid" id="roleid" value="#$roleid#"/>
+                        <xar:var name="label">Add Privilege</xar:var>
+                        <input type="submit" value="#$label#"/>
+                    </div>
                 </div>
             </form>
         </fieldset>

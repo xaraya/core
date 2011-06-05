@@ -232,23 +232,27 @@
                 <legend>Message</legend>
                 <p>Choose a message template from the Templates dropdown above, or type in your
                 message directly :</p>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Subject line of the email</xar:var>
-                    <label for="subject" title="#$label#" class="xar-form-label">
-                        Subject:
-                    </label>
-                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Subject line of the email</xar:var>
+                        <label for="subject" title="#$label#" class="xar-form-label">
+                            Subject:
+                        </label>
+                        <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                    </div>
                 </div>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Body of the email</xar:var>
-                    <label for="message" title="#$label#" class="xar-form-label">
-                        Message:
-                    </label>
-                    <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Body of the email</xar:var>
+                        <label for="message" title="#$label#" class="xar-form-label">
+                            Message:
+                        </label>
+                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
+                    </div>
                 </div>
             </fieldset>
             <fieldset>
-                <div class="xar-form-input-wrapper-after">
+                <div class="xar-col dummy">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="id" id="id" value="#$id#"/>
                     <input type="hidden" name="state" id="state" value="#$state#"/>

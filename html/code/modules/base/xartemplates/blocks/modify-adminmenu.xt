@@ -2,40 +2,60 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!--
-    <div class="xar-form-input-wrapper">
-        <xar:var name="label">By checking this box a help link will be shown in the panel instance.</xar:var>
-        <label class="xar-form-label" for="showhelp#$bid#" title="#$label#">
-            Show A Help Link
-        </label>
-        <xar:data-input type="checkbox" name="showhelp" checked="$showhelp"/>
+    <div class="xar-row">
+        <div class="xar-col">
+            <label class="xar-form-label" for="showhelp#$bid#" title="#$label#">
+                Show A Help Link
+            </label>
+            <xar:data-input type="checkbox" name="showhelp" checked="$showhelp"/>
+        </div>
+        <div class="xar-col">
+            <xar:var name="label">By checking this box a help link will be shown in the panel instance.</xar:var>
+        </div>
     </div>
     -->
-    <div class="xar-form-input-wrapper">
-        <xar:var name="label">By checking this box a link to the front end will be shown in the panel instance.</xar:var>
-        <label class="xar-form-label" for="showfront#$bid#" title="#$label#">
-            Marker:
-        </label>
-        <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort"/>
+    <div class="xar-row">
+        <div class="xar-col">
+            <xar:var name="label">By checking this box a link to the front end will be shown in the panel instance.</xar:var>
+            <label class="xar-form-label" for="showfront#$bid#" title="#$label#">
+                Marker:
+            </label>
+        </div>
+        <div class="xar-col">
+            <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort"/>
+        </div>
     </div>
-    <div class="xar-form-input-wrapper">
-        <xar:var name="label">By checking this box a logout link will be shown in the panel instance.</xar:var>
-        <label class="xar-form-label" for="showlogout#$bid#" title="#$label#">
-            Show A Logout Link
-        </label>
-        <xar:data-input type="checkbox" name="showlogout" checked="$showlogout"/>
+    <div class="xar-row">
+        <div class="xar-col">
+            <xar:var name="label">By checking this box a logout link will be shown in the panel instance.</xar:var>
+            <label class="xar-form-label" for="showlogout#$bid#" title="#$label#">
+                Show A Logout Link
+            </label>
+        </div>
+        <div class="xar-col">
+            <xar:data-input type="checkbox" name="showlogout" checked="$showlogout"/>
+        </div>
     </div>
-    <div class="xar-form-input-wrapper">
-        <label class="xar-form-label" for="showfront#$bid#" title="#xarML('By checking this box a link to the front end will be shown in the panel instance.')#">
-            Show Link to Front End
-        </label>
-        <xar:data-input type="checkbox" name="showfront" checked="$showfront"/>
+    <div class="xar-row">
+        <div class="xar-col">
+            <label class="xar-form-label" for="showfront#$bid#" title="#xarML('By checking this box a link to the front end will be shown in the panel instance.')#">
+                Show Link to Front End
+            </label>
+        </div>
+        <div class="xar-col">
+            <xar:data-input type="checkbox" name="showfront" checked="$showfront"/>
+        </div>
     </div>
-    <div class="xar-form-input-wrapper">
-        <xar:var name="label">How should the menu items be ordered?</xar:var>
-        <label for="menustyle" title="#$label#" class="xar-form-label">
-            Sort Admin Menu Items:
-        </label>
-        <xar:data-input type="dropdown" name="menustyle" id="menustyle" options="$sortorder" value="$menustyle"/>
+    <div class="xar-row">
+        <div class="xar-col">
+            <xar:var name="label">How should the menu items be ordered?</xar:var>
+            <label for="menustyle" title="#$label#" class="xar-form-label">
+                Sort Admin Menu Items:
+            </label>
+        </div>
+        <div class="xar-col">
+            <xar:data-input type="dropdown" name="menustyle" id="menustyle" options="$sortorder" value="$menustyle"/>
+        </div>
     </div>
     <table class="xar-items">
         <thead>

@@ -17,10 +17,12 @@
         <form method="post" action="#xarModURL('themes','admin','export_config')#">
             <fieldset>
                 <legend>Select Theme</legend>
-                <div class="xar-form-input-wrapper">
-                    <label for="xml" class="xar-form-label">Theme:</label>
-                    <div class="xar-form-container-after">
-                        <xar:data-input type="objectref" name="itemid" refobject="themes" display_prop="name" store_prop="regid" onchange="submit()" value="$itemid"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="xml" class="xar-form-label">Theme:</label>
+                        <div class="xar-form-container-after">
+                            <xar:data-input type="objectref" name="itemid" refobject="themes" display_prop="name" store_prop="regid" onchange="submit()" value="$itemid"/>
+                        </div>
                     </div>
                 </div>
             </fieldset>
@@ -28,15 +30,17 @@
         <form>
             <fieldset>
                 <legend>Configuration</legend>
-                <div class="xar-form-input-wrapper">
-                    <xar:if condition="empty($xml)">
-                        There are no configuration options defined for this theme. Define some <a href="#xarModURL('themes','admin','new_config')#">here</a>.
-                    <xar:else/>
-                        <label for="xml" class="xar-form-label">Paste this in the theme's data/configurations-dat.xml file</label>
-                        <div class="xar-form-container-after">
-                            <textarea name="xml" id="xml" class="xar-form-textarealarge">#$xml#</textarea>
-                        </div>
-                    </xar:if>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:if condition="empty($xml)">
+                            There are no configuration options defined for this theme. Define some <a href="#xarModURL('themes','admin','new_config')#">here</a>.
+                        <xar:else/>
+                            <label for="xml" class="xar-form-label">Paste this in the theme's data/configurations-dat.xml file</label>
+                            <div class="xar-form-container-after">
+                                <textarea name="xml" id="xml" class="xar-form-textarealarge">#$xml#</textarea>
+                            </div>
+                        </xar:if>
+                    </div>
                 </div>
             </fieldset>
         </form>

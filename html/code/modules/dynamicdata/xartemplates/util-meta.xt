@@ -14,9 +14,11 @@
                 <form method="post" action="#xarModURL('dynamicdata','util','meta')#">
                     <fieldset>
                         <legend>Select Database</legend>
-                        <div class="xar-form-input-wrapper">
-                            <label for="xml" class="xar-form-label">Database :</label>
-                            <div class="xar-form-container-after">
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <label for="xml" class="xar-form-label">Database :</label>
+                            </div>
+                            <div class="xar-col">
                                 <xar:data-input type="dropdown" name="db" value="$db" options="$databases" onchange="submit()"/>
                                 <input type="submit" value="Refresh"/>
                             </div>
@@ -109,30 +111,32 @@
                     <xar:else/>
                         <legend>Object definition for #$table#</legend>
                     </xar:if>
-                    <div class="xar-form-input-wrapper">
-                        <label for="xml" class="xar-form-label">Definition:</label>
-                        <div class="xar-form-container-after">
-                            <textarea name="xml" id="xml" class="xar-form-textarealarge">
-                                <xar:if condition="$export eq 'ddl'">
-                                <xar:template file="exportddl"/>
-                                <xar:else />
-                                <xar:foreach in="$tables" key="$curtable" value="$fields">
-                                <xar:set name="tablename">strtr($curtable,'.','_')</xar:set>
-&lt;object name="#$tablename#"&gt; 
-  &lt;label&gt;#$curtable#&lt;/label&gt;
-  &lt;module_id&gt;182&lt;/module_id&gt;
-  &lt;itemtype&gt;-1&lt;/itemtype&gt;
-  &lt;urlparam&gt;itemid&lt;/urlparam&gt;
-  &lt;maxid&gt;0&lt;/maxid&gt; &lt;config&gt;&lt;/config&gt;
-  &lt;isalias&gt;0&lt;/isalias&gt; 
-  &lt;properties&gt;  <xar:foreach in="$fields" key="$name" value="$field">
-    &lt;property name="#$name#"&gt;  <xar:foreach in="$field" key="$key" value="$value"> <xar:if condition="$key eq 'type'">
-      &lt;#$key#&gt;#$proptypes[$value]#&lt;/#$key#&gt; <xar:elseif condition="$key ne 'name'"/>
-      &lt;#$key#&gt;#$value#&lt;/#$key#&gt; </xar:if> </xar:foreach>
-    &lt;/property&gt; </xar:foreach>
- &lt;/properties&gt;
-&lt;/object&gt; </xar:foreach></xar:if>
-                            </textarea>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="xml" class="xar-form-label">Definition:</label>
+                        </div>
+                        <div class="xar-col">
+                                <textarea name="xml" id="xml" class="xar-form-textarealarge">
+                                    <xar:if condition="$export eq 'ddl'">
+                                    <xar:template file="exportddl"/>
+                                    <xar:else />
+                                    <xar:foreach in="$tables" key="$curtable" value="$fields">
+                                    <xar:set name="tablename">strtr($curtable,'.','_')</xar:set>
+    &lt;object name="#$tablename#"&gt; 
+      &lt;label&gt;#$curtable#&lt;/label&gt;
+      &lt;module_id&gt;182&lt;/module_id&gt;
+      &lt;itemtype&gt;-1&lt;/itemtype&gt;
+      &lt;urlparam&gt;itemid&lt;/urlparam&gt;
+      &lt;maxid&gt;0&lt;/maxid&gt; &lt;config&gt;&lt;/config&gt;
+      &lt;isalias&gt;0&lt;/isalias&gt; 
+      &lt;properties&gt;  <xar:foreach in="$fields" key="$name" value="$field">
+        &lt;property name="#$name#"&gt;  <xar:foreach in="$field" key="$key" value="$value"> <xar:if condition="$key eq 'type'">
+          &lt;#$key#&gt;#$proptypes[$value]#&lt;/#$key#&gt; <xar:elseif condition="$key ne 'name'"/>
+          &lt;#$key#&gt;#$value#&lt;/#$key#&gt; </xar:if> </xar:foreach>
+        &lt;/property&gt; </xar:foreach>
+     &lt;/properties&gt;
+    &lt;/object&gt; </xar:foreach></xar:if>
+                                </textarea>
                         </div>
                     </div>
                 </fieldset>

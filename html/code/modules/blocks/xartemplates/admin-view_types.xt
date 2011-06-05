@@ -36,41 +36,74 @@
             <xar:if condition="empty($tab) or $tab == 'detail'">
             <fieldset>
                 <legend>Selected Block Type Properties</legend>
-                <div class="xar-form-input-wrapper">
-                    <label class="xar-form-label">
-                Module:</label>#xarVarPrepForDisplay($detail['module'])#</div>
-                <div class="xar-form-input-wrapper">
-                <label class="xar-form-label">Block
-                Type:</label>#xarVarPrepForDisplay($detail['type'])#</div>
-                <div class="xar-form-input-wrapper">
-                    <label class="xar-form-label">Block Version:</label>
-                    <xar:if condition="empty($info['xarversion']) or $info['xarversion'] eq '0.0.0'">
-                        Unknown
-                    <xar:else/>
-                        #xarVarPrepForDisplay($info['xarversion'])#
-                    </xar:if>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label">Module:</label>
+                    </div>
+                    <div class="xar-col">
+                        #xarVarPrepForDisplay($detail['module'])#
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label">Block Type:</label>
+                    </div>
+                    <div class="xar-col">
+                        #xarVarPrepForDisplay($detail['type'])#
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label">Block Version:</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:if condition="empty($info['xarversion']) or $info['xarversion'] eq '0.0.0'">
+                            Unknown
+                        <xar:else/>
+                            #xarVarPrepForDisplay($info['xarversion'])#
+                        </xar:if>
+                    </div>
                 </div>
                 <xar:if condition="!empty($info['text_type'])">
-                    <div class="xar-form-input-wrapper">
-                    <label class="xar-form-label">Short
-                    Title:</label>#xarVarPrepForDisplay($info['text_type'])#</div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label class="xar-form-label">Short Title:</label>
+                        </div>
+                        <div class="xar-col">
+                            #xarVarPrepForDisplay($info['text_type'])#
+                        </div>
+                    </div>
                 </xar:if>
                 <xar:if condition="!empty($info['text_type_long'])">
-                    <div class="xar-form-input-wrapper">
-                    <label class="xar-form-label">Long
-                    Title:</label>#xarVarPrepForDisplay($info['text_type_long'])#</div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label class="xar-form-label">Long Title:</label>
+                        </div>
+                        <div class="xar-col">
+                            #xarVarPrepForDisplay($info['text_type_long'])#
+                        </div>
+                    </div>
                 </xar:if>
                 <xar:if condition="isset($info['allow_multiple'])">
-                    <div class="xar-form-input-wrapper">
-                        <label class="xar-form-label">Allow Multiple:</label>
-                        <xar:if condition="!empty($info['allow_multiple'])">True
-                        <xar:else />False</xar:if>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label class="xar-form-label">Allow Multiple:</label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:if condition="!empty($info['allow_multiple'])">True
+                            <xar:else />False</xar:if>
+                        </div>
                     </div>
                 </xar:if>
                 <xar:if condition="!empty($info['notes'])">
-                    <div class="xar-form-input-wrapper">
-                        <label class="xar-form-label">
-                    Notes:</label>#xarVarPrepForDisplay($info['notes'])#</div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label class="xar-form-label">Notes:</label>
+                        </div>
+                        <div class="xar-col">
+                            #xarVarPrepForDisplay($info['notes'])#
+                        </div>
+                    </div>
                 </xar:if>
             </fieldset>
             <!-- Table of overrideable parameters (see xar:block tag) -->
@@ -111,7 +144,7 @@
                     <xar:data-input type="access" name="$propname" value="$info['new_access']" />
                 </fieldset>
                 <fieldset>
-                    <div class="xar-form-input-wrapper-after">
+                    <div class="xar-col dummy">
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                         <input type="hidden" name="tid" id="tid" value="#$tid#" />
                         <input type="hidden" name="confirm" id="confirm" value="1" />

@@ -16,7 +16,7 @@ function addItem()
     newhtml = newhtml.replace(regex,num+"_"+prefix);
 
     // Add a remove button and insert the new item
-    newdiv.innerHTML =newhtml+"<div class=\"xar-form-input-wrapper-after\"><input type=\"button\" title=\"Remove\"value=\"Remove\" style=\"height: 23px; font-size: small;\" onclick=\"javascript:removeItem(\'"+divIdName+"\')\"></div>";
+    newdiv.innerHTML =newhtml+"<div class=\"xar-col dummy\"><input type=\"button\" title=\"Remove\"value=\"Remove\" style=\"height: 23px; font-size: small;\" onclick=\"javascript:removeItem(\'"+divIdName+"\')\"></div>";
     itemdiv.appendChild(newdiv);
 }
 

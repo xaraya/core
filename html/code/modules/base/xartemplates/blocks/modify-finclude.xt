@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-form-input-wrapper">
-        <xar:var name="label">Enter the path of the file to include.</xar:var>
-        <label for="url#$blockid#" title="#$label#" class="xar-form-label">
-            File:
-        </label>
-        <input type="text" name="url" id="url#$blockid#" value="#$url#" maxlength="255" size="60"/>
+    <div class="xar-row">
+        <div class="xar-col">
+            <xar:var name="label">Enter the path of the file to include.</xar:var>
+            <label for="url#$blockid#" title="#$label#" class="xar-form-label">
+                File:
+            </label>
+        </div>
+        <div class="xar-col">
+            <input type="text" name="url" id="url#$blockid#" value="#$url#" maxlength="255" size="60"/>
+        </div>
     </div>
 </xar:template>

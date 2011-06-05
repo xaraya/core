@@ -29,27 +29,31 @@
                     </div>
                 </div>
                 <!--
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Use the Admin Dashboard to manage all your Admin settings from a single page.</xar:var>
-                    <label for="dashboard" title="#$label#" class="xar-form-label">
-                        Enable the Admin Dashboard.
-                    </label>
-                    <xar:set name="checked">
-                        <xar:var scope="module" module="themes" name="usedashboard"/>
-                    </xar:set>
-                    <xar:data-input type="checkbox" name="usedashboard" checked="$checked"/>
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Template name for the dashboard - no trailing suffix, defaults to 'dashboard'</xar:var>
-                    <label for="dashtemplate" title="#$label#" class="xar-form-label">
-                        Dashboard Template name
-                    </label>
-                    <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100"/>&#160;(without the .xt extension) 
-                    <div class="xar-form-input-wrapper-after">
-                        The Admin Dashboard is automatically used with all admin functions. The default page template name is  <strong>dashboard.xt</strong>.
+                <div class="xar-row">
+                    <div class="xar-form-input-wrapper">
+                        <xar:var name="label">Use the Admin Dashboard to manage all your Admin settings from a single page.</xar:var>
+                        <label for="dashboard" title="#$label#" class="xar-form-label">
+                            Enable the Admin Dashboard.
+                        </label>
+                        <xar:set name="checked">
+                            <xar:var scope="module" module="themes" name="usedashboard"/>
+                        </xar:set>
+                        <xar:data-input type="checkbox" name="usedashboard" checked="$checked"/>
                     </div>
-                    <div class="xar-form-input-wrapper-after">
-                        A page template called  <strong>admin.xt</strong>will be used automatically without this switch and can be customised on a module by module basis (eg admin-articles.xt).
+                </div>
+                <div class="xar-row">
+                    <div class="xar-form-input-wrapper">
+                        <xar:var name="label">Template name for the dashboard - no trailing suffix, defaults to 'dashboard'</xar:var>
+                        <label for="dashtemplate" title="#$label#" class="xar-form-label">
+                            Dashboard Template name
+                        </label>
+                        <input type="text" name="dashtemplate" id="dashtemplate" value="#$dashtemplate#" size="30" maxlength="100"/>&#160;(without the .xt extension) 
+                        <div class="xar-col dummy">
+                            The Admin Dashboard is automatically used with all admin functions. The default page template name is  <strong>dashboard.xt</strong>.
+                        </div>
+                        <div class="xar-col dummy">
+                            A page template called  <strong>admin.xt</strong>will be used automatically without this switch and can be customised on a module by module basis (eg admin-articles.xt).
+                        </div>
                     </div>
                 </div>
                 -->
@@ -71,32 +75,36 @@
             <fieldset>
                 <legend>User Settings</legend>
                 <xar:set name="enable_user_menu"><xar:var scope="module" module="themes" name="enable_user_menu"/></xar:set>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="varlabel">Allow users to select a theme from their profile</xar:var>
-                    <label for="enable_user_menu" class="xar-form-label" title="#$varlabel#">
-                        Enable User Settings                    
-                    </label>
-                    <div class="xar-form-container-after">
-                        <xar:if condition="empty($enable_user_menu)">
-                            <input type="checkbox" name="enable_user_menu" id="enable_user_menu" onclick="toggleDisplay('user_themes_id');"/>
-                        <xar:else/>
-                            <input type="checkbox" name="enable_user_menu" id="enable_user_menu" onclick="toggleDisplay('user_themes_id');" checked="checked"/>
-                        </xar:if>
-                        #$varlabel#                   
-                    </div> 
-                </div>
-                <div class="xar-form-input-wrapper" id="user_themes_id">
-                    <xar:var name="varlabel">Select themes users may choose from</xar:var>
-                    <label for="user_themes" class="xar-form-label" title="#$varlabel#">
-                        User Themes                    
-                    </label>
-                    <div class="xar-form-container-after">
-                        #$varlabel#
+                <div class="xar-row">
+                    <div class="xar-form-input-wrapper">
+                        <xar:var name="varlabel">Allow users to select a theme from their profile</xar:var>
+                        <label for="enable_user_menu" class="xar-form-label" title="#$varlabel#">
+                            Enable User Settings                    
+                        </label>
+                        <div class="xar-form-container-after">
+                            <xar:if condition="empty($enable_user_menu)">
+                                <input type="checkbox" name="enable_user_menu" id="enable_user_menu" onclick="toggleDisplay('user_themes_id');"/>
+                            <xar:else/>
+                                <input type="checkbox" name="enable_user_menu" id="enable_user_menu" onclick="toggleDisplay('user_themes_id');" checked="checked"/>
+                            </xar:if>
+                            #$varlabel#                   
+                        </div> 
                     </div>
-                    <div class="xar-form-container-after">
-                        <xar:data-input property="$user_themes" name="user_themes" id="user_themes" layout="vertical"/>
-                    </div>         
-                </div>          
+                </div>
+                <div class="xar-row">
+                    <div class="xar-form-input-wrapper" id="user_themes_id">
+                        <xar:var name="varlabel">Select themes users may choose from</xar:var>
+                        <label for="user_themes" class="xar-form-label" title="#$varlabel#">
+                            User Themes                    
+                        </label>
+                        <div class="xar-form-container-after">
+                            #$varlabel#
+                        </div>
+                        <div class="xar-form-container-after">
+                            <xar:data-input property="$user_themes" name="user_themes" id="user_themes" layout="vertical"/>
+                        </div>         
+                    </div>          
+                </div>
                 <xar:if condition="empty($enable_user_menu)">                
                     <script type="text/javascript">
                         //<![CDATA[
@@ -326,12 +334,14 @@
                 </div>
                 <xar:if condition="xarThemeIsAvailable('atom')">
                     <!-- This should be moved if we ever fully support the atom spec -->
-                    <div class="xar-form-input-wrapper">
-                        <label for="AtomTag" class="xar-form-label">                            
-                            Atom Tag                            
-                        </label>
-                        <xar:set name="value"><xar:var scope="module" module="themes" name="AtomTag"/></xar:set>
-                        <input type="text" name="AtomTag" id="AtomTag" value="#$value#" size="30" maxlength="100"/>
+                    <div class="xar-row">
+                        <div class="xar-form-input-wrapper">
+                            <label for="AtomTag" class="xar-form-label">                            
+                                Atom Tag                            
+                            </label>
+                            <xar:set name="value"><xar:var scope="module" module="themes" name="AtomTag"/></xar:set>
+                            <input type="text" name="AtomTag" id="AtomTag" value="#$value#" size="30" maxlength="100"/>
+                        </div>
                     </div>
                 </xar:if>
             </fieldset>

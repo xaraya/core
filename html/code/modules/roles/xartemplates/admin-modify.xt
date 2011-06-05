@@ -55,34 +55,38 @@
                     <p>This #$object:label# cannot be edited or deleted.</p>
                 <xar:else />
                     <xar:if condition="$itemtype eq xarRoles::ROLES_GROUPTYPE AND $object:countChildren()">
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Type of Role</xar:var>
-                            <label title="#$label#" class="xar-form-label">
-                                Type:
-                            </label>
-                            #$object:label#
-                            <!--
-                                value should still be there in the form, otherwise validation will fail,
-                                do it with a hidden input now, but this should really be done with readonly attribute
-                            -->
-                            <input type="hidden" name="itemtype" value="#$itemtype#"/>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Type of Role</xar:var>
+                                <label title="#$label#" class="xar-form-label">
+                                    Type:
+                                </label>
+                                #$object:label#
+                                <!--
+                                    value should still be there in the form, otherwise validation will fail,
+                                    do it with a hidden input now, but this should really be done with readonly attribute
+                                -->
+                                <input type="hidden" name="itemtype" value="#$itemtype#"/>
+                            </div>
                         </div>
                     <xar:else />
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Type of Role</xar:var>
-                            <label for="itemtype" title="#$label#" class="xar-form-label">
-                                Type:
-                            </label>
-                            <xar:set name="onchange">
-                                "this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"
-                            </xar:set>
-                                <xar:set name="options">
-                                    array( 
-                                        array('id' => xarRoles::ROLES_USERTYPE, 'name' => 'User'),
-                                        array('id' => xarRoles::ROLES_GROUPTYPE, 'name' => 'Group'),
-                                    )
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Type of Role</xar:var>
+                                <label for="itemtype" title="#$label#" class="xar-form-label">
+                                    Type:
+                                </label>
+                                <xar:set name="onchange">
+                                    "this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"
                                 </xar:set>
-                                <xar:data-output type="dropdown" name="itemtype" value="$itemtype" options="$options"/>
+                                    <xar:set name="options">
+                                        array( 
+                                            array('id' => xarRoles::ROLES_USERTYPE, 'name' => 'User'),
+                                            array('id' => xarRoles::ROLES_GROUPTYPE, 'name' => 'Group'),
+                                        )
+                                    </xar:set>
+                                    <xar:data-output type="dropdown" name="itemtype" value="$itemtype" options="$options"/>
+                            </div>
                         </div>
                     </xar:if>
                     <xar:data-form object="$object" tplmodule="roles"/>
@@ -90,88 +94,102 @@
                         explode(',',xarModVars::get('roles','duvsettings'))
                     </xar:set>
                     <xar:if condition="in_array('primaryparent',$settings)">
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Primary parent group</xar:var>
-                            <label for="duvs_primaryparent" title="#$label#" class="xar-form-label">
-                                Primary Parent Group:
-                            </label>
-                            <xar:set name="value">
-                                xarMod::apiFunc('roles','user','getprimaryparent',array('itemid' => $id))
-                            </xar:set>
-                            <xar:set name="options">
-                                xarMod::apiFunc('roles','user','getancestors',array('id' =&gt; $id, 'parents' =&gt; 1))
-                            </xar:set>
-                            <xar:data-input type="dropdown" name="duvs[primaryparent]" id="duvs_primaryparent" options="$options" value="$value" tabindex="8"/>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Primary parent group</xar:var>
+                                <label for="duvs_primaryparent" title="#$label#" class="xar-form-label">
+                                    Primary Parent Group:
+                                </label>
+                                <xar:set name="value">
+                                    xarMod::apiFunc('roles','user','getprimaryparent',array('itemid' => $id))
+                                </xar:set>
+                                <xar:set name="options">
+                                    xarMod::apiFunc('roles','user','getancestors',array('id' =&gt; $id, 'parents' =&gt; 1))
+                                </xar:set>
+                                <xar:data-input type="dropdown" name="duvs[primaryparent]" id="duvs_primaryparent" options="$options" value="$value" tabindex="8"/>
+                            </div>
                         </div>
                     </xar:if>
                     <xar:if condition="in_array('userhome',$settings)">
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Home URL</xar:var>
-                            <label for="duvs_userhome" title="#$label#" class="xar-form-label">Home:</label>
-                            <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModUserVars::get('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7"/>
-                            <p class="xar-form-input-wrapper-after">
-                                You can use the module shortcut syntax available in the Base user menu block.
-                            </p>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Home URL</xar:var>
+                                <label for="duvs_userhome" title="#$label#" class="xar-form-label">Home:</label>
+                                <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModUserVars::get('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7"/>
+                                <p class="xar-col dummy">
+                                    You can use the module shortcut syntax available in the Base user menu block.
+                                </p>
+                            </div>
                         </div>
                     </xar:if>
                     <xar:if condition="$itemtype eq xarRoles::ROLES_USERTYPE">
                         <xar:if condition="in_array('useremailformat',$settings)">
-                            <div class="xar-form-input-wrapper">
-                                <xar:var name="label">Email Format</xar:var>
-                                <label for="duvs_useremailformat" title="#$label#" class="xar-form-label">
-                                    Email Format:
-                                </label>
-                                <xar:set name="value">
-                                    xarModUserVars::get('roles','useremailformat',$id)
-                                </xar:set>
-                                <xar:set name="options">
-                                    array( 
-                                        array('id' => 'text', 'name' => 'text'),
-                                        array('id' => 'html', 'name' => 'html'),
-                                    )
-                                </xar:set>
-                                <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options"/>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <xar:var name="label">Email Format</xar:var>
+                                    <label for="duvs_useremailformat" title="#$label#" class="xar-form-label">
+                                        Email Format:
+                                    </label>
+                                    <xar:set name="value">
+                                        xarModUserVars::get('roles','useremailformat',$id)
+                                    </xar:set>
+                                    <xar:set name="options">
+                                        array( 
+                                            array('id' => 'text', 'name' => 'text'),
+                                            array('id' => 'html', 'name' => 'html'),
+                                        )
+                                    </xar:set>
+                                    <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options"/>
+                                </div>
                             </div>
                         </xar:if>
                         <!-- revisit in php5.3.0
                         <xar:if condition="in_array('usertimezone',$settings)">
-                            <div class="xar-form-input-wrapper">
-                                <label for="duvs_usertimezone" class="xar-form-label">
-                                    User Timezone:
-                                </label>
-                                <xar:set name="value">
-                                    xarModUserVars::get('roles','usertimezone',$id)
-                                </xar:set>
-                                <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value"/>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="duvs_usertimezone" class="xar-form-label">
+                                        User Timezone:
+                                    </label>
+                                    <xar:set name="value">
+                                        xarModUserVars::get('roles','usertimezone',$id)
+                                    </xar:set>
+                                    <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value"/>
+                                </div>
                             </div>
                         </xar:if>
                         -->
                         <xar:if condition="(bool)xarModVars::get('roles', 'allowemail')">
-                            <div class="xar-form-input-wrapper-after">
-                                <xar:set name="checked">(bool)xarModUserVars::get('roles', 'allowemail',$id)</xar:set>
-                                <xar:data-input type="checkbox" name="duvs[allowemail]" id="duvs_allowemail" checked="$checked"/>
-                                <xar:var name="label">Allow users to send emails?</xar:var>
-                                <label for="allowemail" title="#$label#">
-                                    User has allowed other users to send them an email?
-                                </label>
+                            <div class="xar-row">
+                                <div class="xar-col dummy">
+                                    <xar:set name="checked">(bool)xarModUserVars::get('roles', 'allowemail',$id)</xar:set>
+                                    <xar:data-input type="checkbox" name="duvs[allowemail]" id="duvs_allowemail" checked="$checked"/>
+                                    <xar:var name="label">Allow users to send emails?</xar:var>
+                                    <label for="allowemail" title="#$label#">
+                                        User has allowed other users to send them an email?
+                                    </label>
+                                </div>
                             </div>
                         </xar:if>
                         <xar:if condition="in_array('passwordupdate',$settings)">
-                            <div class="xar-form-input-wrapper">
-                                <label class="xar-form-label">
-                                    Password last updated:
-                                </label>
-                                #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))#
-                                #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label class="xar-form-label">
+                                        Password last updated:
+                                    </label>
+                                    #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))#
+                                    #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
+                                </div>
                             </div>
                         </xar:if>
                         <xar:if condition="in_array('userlastlogin',$settings)">
-                            <div class="xar-form-input-wrapper">
-                                <label class="xar-form-label">
-                                    Last login time:
-                                </label>
-                                #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#
-                                #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label class="xar-form-label">
+                                        Last login time:
+                                    </label>
+                                    #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#
+                                    #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
+                                </div>
                             </div>
                         </xar:if>
                     </xar:if>
@@ -225,21 +243,23 @@
                 <p>This #$object:label# cannot be edited or deleted.</p>
                 <xar:else />
               <form action="#xarModURL('roles','admin','addmember')#" method="post" enctype="application/x-www-form-urlencoded">
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Choose a parent to assign membership</xar:var>
-                        <label for="roleid" title="#$label#"
-                        class="xar-form-label">Add to:</label>
-                        <select name="roleid" id="roleid">
-                            <xar:loop name="$groups">
-                                <option value="#$loop:item['did']#">
-                                    <xar:var name="loop:item.dname"/>
-                                </option>
-                            </xar:loop>
-                        </select>&#160;
-                        <input type="hidden" name="id" id="addid" value="#$id#"/>
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                        <xar:var name="label">Add</xar:var>
-                        <input type="submit" value="#$label#"/>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Choose a parent to assign membership</xar:var>
+                            <label for="roleid" title="#$label#"
+                            class="xar-form-label">Add to:</label>
+                            <select name="roleid" id="roleid">
+                                <xar:loop name="$groups">
+                                    <option value="#$loop:item['did']#">
+                                        <xar:var name="loop:item.dname"/>
+                                    </option>
+                                </xar:loop>
+                            </select>&#160;
+                            <input type="hidden" name="id" id="addid" value="#$id#"/>
+                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                            <xar:var name="label">Add</xar:var>
+                            <input type="submit" value="#$label#"/>
+                        </div>
                     </div>
                 </form>
             </xar:if>

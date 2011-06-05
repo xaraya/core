@@ -43,21 +43,29 @@
                 <table class="xar-fullwidth">
                     <tr>
                         <td>
-                            <div class="xar-form-input-wrapper">
-                                <label class="xar-form-label" for="#$proptype#_desc" title="" style="">
-                                    Property Type
-                                </label>
-                                [#$propinfo:type#] #$propinfo:desc#
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label class="xar-form-label" for="#$proptype#_desc" title="" style="">
+                                        Property Type
+                                    </label>
+                            </div>
+                            <div class="xar-col">
+                                    [#$propinfo:type#] #$propinfo:desc#
+                                </div>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <div class="xar-form-input-wrapper">
-                                <label class="xar-form-label" for="#$proptype#_config" title="" style="">
-                                    Configuration
-                                </label>
-                                <textarea name="#$proptype#_config" id="#$proptype#_config" rows="4" cols="50" readonly="readonly">#$propinfo:configuration#</textarea>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label class="xar-form-label" for="#$proptype#_config" title="" style="">
+                                        Configuration
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <textarea name="#$proptype#_config" id="#$proptype#_config" rows="4" cols="50" readonly="readonly">#$propinfo:configuration#</textarea>
+                                </div>
                             </div>
                         </td>
                     </tr>

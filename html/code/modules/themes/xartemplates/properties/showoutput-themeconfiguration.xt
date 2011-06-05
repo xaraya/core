@@ -13,12 +13,14 @@
                 <xar:else />
                     <xar:set name="configuration">''</xar:set>
                 </xar:if>
-                <div class="xar-form-input-wrapper">
-                    <label for="#$fieldid#" title="#$init['description']#" class="xar-form-label">
-                        #$init['label']#
-                    </label>
-                    <xar:data-output type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']"/>
-                    &#160;(#$key#)
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="#$fieldid#" title="#$init['description']#" class="xar-form-label">
+                            #$init['label']#
+                        </label>
+                        <xar:data-output type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']"/>
+                        &#160;(#$key#)
+                    </div>
                 </div>
             </xar:foreach>
         </xar:if>

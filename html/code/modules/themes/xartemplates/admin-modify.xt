@@ -14,23 +14,29 @@
                 <xar:loop name="$themevars">
                     <fieldset>
                         <legend>#$loop:item['name']#</legend>
-                        <div class="xar-form-input-wrapper">
-                            <label class="xar-form-label">
-                                Name:
-                            </label>
-                            #$loop:item['name']#
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <label class="xar-form-label">
+                                    Name:
+                                </label>
+                                #$loop:item['name']#
+                            </div>
                         </div>
-                        <div class="xar-form-input-wrapper">
-                            <label for="#$loop:item['name']#" class="xar-form-label">Value:</label>
-                            <input type="text" name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['value']#" class="xar-form-textlong"/>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <label for="#$loop:item['name']#" class="xar-form-label">Value:</label>
+                                <input type="text" name="#$loop:item['name']#" id="#$loop:item['name']#" value="#$loop:item['value']#" class="xar-form-textlong"/>
+                            </div>
                         </div>
                         <p>#$loop:item['description']#</p>
                         <xar:if condition="$loop:item['prime'] ne 1">
-                            <div class="xar-form-input-wrapper-after">
-                                <input type="checkbox" name="#$loop:item['name']#-del" id="#$loop:item['name']#-del" value="delete"/>
-                                <label for="#$loop:item['name']#-del">
-                                    Delete
-                                </label>
+                            <div class="xar-row">
+                                <div class="xar-col dummy">
+                                    <input type="checkbox" name="#$loop:item['name']#-del" id="#$loop:item['name']#-del" value="delete"/>
+                                    <label for="#$loop:item['name']#-del">
+                                        Delete
+                                    </label>
+                                </div>
                             </div>
                         <xar:else />
                             <p>This is a primary theme variable.</p>
@@ -42,30 +48,38 @@
             </xar:if>
             <fieldset>
                 <legend>Add New Theme Variable</legend>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Name of the new variable</xar:var>
-                    <label for="newvarname" title="#$label#" class="xar-form-label">Name:</label>
-                    <input type="text" name="newvarname" id="newvarname" value="" maxlength="64" class="xar-form-textlong"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Name of the new variable</xar:var>
+                        <label for="newvarname" title="#$label#" class="xar-form-label">Name:</label>
+                        <input type="text" name="newvarname" id="newvarname" value="" maxlength="64" class="xar-form-textlong"/>
+                    </div>
                 </div>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Value of the new variable</xar:var>
-                    <label for="newvarvalue" title="#$label#" class="xar-form-label">Name:</label>
-                    <input type="text" name="newvarvalue" id="newvarvalue" value="" maxlength="64" class="xar-form-textlong"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Value of the new variable</xar:var>
+                        <label for="newvarvalue" title="#$label#" class="xar-form-label">Name:</label>
+                        <input type="text" name="newvarvalue" id="newvarvalue" value="" maxlength="64" class="xar-form-textlong"/>
+                    </div>
                 </div>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Description of the new variable</xar:var>
-                    <label for="newvardescription" title="#$label#" class="xar-form-label">
-                        Description:
-                    </label>
-                    <input type="text" name="newvardescription" id="newvardescription" value="" maxlength="64" class="xar-form-textxlong"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Description of the new variable</xar:var>
+                        <label for="newvardescription" title="#$label#" class="xar-form-label">
+                            Description:
+                        </label>
+                        <input type="text" name="newvardescription" id="newvardescription" value="" maxlength="64" class="xar-form-textxlong"/>
+                    </div>
                 </div>
             </fieldset>
-            <div class="xar-form-input-wrapper-after">
-                <input type="checkbox" name="return" id="return" checked="1"/>
-                <xar:var name="label">Update</xar:var>
-                <label for="return" title="#$label#">
-                    Update and return to this screen
-                </label>
+            <div class="xar-row">
+                <div class="xar-col dummy">
+                    <input type="checkbox" name="return" id="return" checked="1"/>
+                    <xar:var name="label">Update</xar:var>
+                    <label for="return" title="#$label#">
+                        Update and return to this screen
+                    </label>
+                </div>
             </div>
             <div class="xar-align-center">
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>

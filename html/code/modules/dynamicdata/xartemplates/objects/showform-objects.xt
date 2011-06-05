@@ -4,6 +4,8 @@
     <xar:foreach in="$properties" key="$name" value="$property">
         <div class="xar-row">
             <xar:data-label property="$properties[$name]" for="id"/>
+        </div>
+        <div class="xar-col">
             <xar:data-input property="$properties[$name]"/>
         </div>
     </xar:foreach>

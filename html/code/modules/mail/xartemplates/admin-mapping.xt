@@ -6,9 +6,11 @@
         <xar:template file="queue-tabs"/>
         <fieldset>
             <legend>Map items to queues</legend>
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label" for="qlist">Show rules for queue:</label>
-                <xar:data-input type="checkboxmask" id="qlist" name="showq" options="$qlist"/>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label" for="qlist">Show rules for queue:</label>
+                    <xar:data-input type="checkboxmask" id="qlist" name="showq" options="$qlist"/>
+                </div>
             </div>
         </fieldset>
     </div>

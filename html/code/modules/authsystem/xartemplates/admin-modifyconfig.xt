@@ -11,28 +11,40 @@
             <xar:data-form object="$module_settings"/>
             <fieldset>
                 <legend>Login Security Options</legend>
-                <div class="xar-form-input-wrapper">
-                    <label for="uselockout" class="xar-form-label" title="Lock a user out after a number of failed logins">
-                        Enable lockout option?
-                    </label>
-                    <xar:set name="checked">xarModVars::get('authsystem', 'uselockout')</xar:set>
-                    <xar:data-input type="checkbox" name="uselockout" id="uselockout" checked="$checked"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="uselockout" class="xar-form-label" title="Lock a user out after a number of failed logins">
+                            Enable lockout option?
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:set name="checked">xarModVars::get('authsystem', 'uselockout')</xar:set>
+                        <xar:data-input type="checkbox" name="uselockout" id="uselockout" checked="$checked"/>
+                    </div>
                 </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="lockouttries" class="xar-form-label" title="The number of attempts allowed before lockout">
-                        Allowed attempts:
-                    </label>
-                    <xar:data-input type="integerbox" name="lockouttries" id="lockouttries" value="$lockouttries" size="2" maxlength="2"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="lockouttries" class="xar-form-label" title="The number of attempts allowed before lockout">
+                            Allowed attempts:
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input type="integerbox" name="lockouttries" id="lockouttries" value="$lockouttries" size="2" maxlength="2"/>
+                    </div>
                 </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="lockouttime" class="xar-form-label" title="The time a lockout is in effect">
-                        Lockout time (minutes) :
-                    </label>
-                    <xar:data-input type="textbox" name="lockouttime" id="lockouttime" value="$lockouttime" size="2" maxlength="2"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="lockouttime" class="xar-form-label" title="The time a lockout is in effect">
+                            Lockout time (minutes) :
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input type="textbox" name="lockouttime" id="lockouttime" value="$lockouttime" size="2" maxlength="2"/>
+                    </div>
                 </div>
             </fieldset>
             <fieldset>
-                <div class="xar-form-input-wrapper-after">
+                <div class="xar-col dummy">
                     <xar:data-input type="hidden" name="phase" id="phase" value="update"/>
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                     <xar:var name="label">Update</xar:var>

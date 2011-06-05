@@ -91,7 +91,7 @@
                             <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix"
                             fieldlist="$fieldlist"/>
                             <xar:if condition="$i gt 1">
-                                <div class="xar-form-input-wrapper-after">
+                                <div class="xar-col dummy">
                                     <input type="button" title="Remove" value="Remove"
                                     style="height: 23px; font-size: small;"
                                     onclick="javascript:removeItem('#$prefix#')"/>
@@ -100,7 +100,7 @@
                         </div>
                     </xar:foreach>
                 </div>
-                <div class="xar-form-input-wrapper-after">
+                <div class="xar-col dummy">
                     <xar:var name="label">Add Item</xar:var>
                     <xar:var name="label1">Add</xar:var>
                     <input type="button" title="#$label#" value="#$label1#" onclick="addItem();" style="height: 23px; font-size: small;"/>

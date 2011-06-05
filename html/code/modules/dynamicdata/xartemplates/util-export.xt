@@ -12,11 +12,13 @@
         <form method="post" action="#xarModURL('dynamicdata','util','export')#">
             <fieldset>
                 <legend>Select Object</legend>
-                <div class="xar-form-input-wrapper">
-                    <label for="xml" class="xar-form-label">Object :</label>
-                    <div class="xar-form-container-after">
-                        <xar:data-input type="object" name="objectid" value="$objectid" display_prop="name" store_prop="objectid" onchange="submit()"/>
-                        <input type="submit" value="Refresh"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="xml" class="xar-form-label">Object :</label>
+                        <div class="xar-form-container-after">
+                            <xar:data-input type="object" name="objectid" value="$objectid" display_prop="name" store_prop="objectid" onchange="submit()"/>
+                            <input type="submit" value="Refresh"/>
+                        </div>
                     </div>
                 </div>
             </fieldset>
@@ -24,10 +26,14 @@
         <form>
             <fieldset>
                 <legend>#$label#</legend>
-                <div class="xar-form-input-wrapper">
-                    <label for="xml" class="xar-form-label">Definition :</label>
-                    <div class="xar-form-container-after">
-                        <textarea name="xml" id="xml" class="xar-form-textarealarge">#$xml#</textarea>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="xml" class="xar-form-label">Definition :</label>
+                    </div>
+                    <div class="xar-col">
+                        <div class="xar-form-container-after">
+                            <textarea name="xml" id="xml" class="xar-form-textarealarge">#$xml#</textarea>
+                        </div>
                     </div>
                 </div>
             </fieldset>

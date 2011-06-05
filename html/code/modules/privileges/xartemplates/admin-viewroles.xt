@@ -109,23 +109,25 @@
                 </table>
             </xar:if>
           <form action="#xarModURL('roles','admin','addprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Choose a new Group to assign this Privilege.</xar:var>
-                    <label for="roleid" title="#$label#" class="xar-form-label">
-                        Assign to Group:
-                    </label>
-                    <select name="roleid" id="roleid" class="xar-margin-thickright">
-                        <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
-                            <option value="#$groups[$i]['id']#">#$groups[$i]['name']# -
-                            #$groups[$i]['users']#</option>
-                        </xar:for>
-                    </select>
-                    <xar:var name="label">Assign</xar:var>
-                    <input type="submit" value="#$label#"/>
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('roles')#"/>
-                    <input type="hidden" name="privid" id="privid" value="#$id#"/>
-                    <input type="hidden" name="return_url" id="return_url"
-                    value="#xarModURL('privileges','admin','viewroles',array('id'=>$id))#"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Choose a new Group to assign this Privilege.</xar:var>
+                        <label for="roleid" title="#$label#" class="xar-form-label">
+                            Assign to Group:
+                        </label>
+                        <select name="roleid" id="roleid" class="xar-margin-thickright">
+                            <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
+                                <option value="#$groups[$i]['id']#">#$groups[$i]['name']# -
+                                #$groups[$i]['users']#</option>
+                            </xar:for>
+                        </select>
+                        <xar:var name="label">Assign</xar:var>
+                        <input type="submit" value="#$label#"/>
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('roles')#"/>
+                        <input type="hidden" name="privid" id="privid" value="#$id#"/>
+                        <input type="hidden" name="return_url" id="return_url"
+                        value="#xarModURL('privileges','admin','viewroles',array('id'=>$id))#"/>
+                    </div>
                 </div>
             </form>
         </fieldset>

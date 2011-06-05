@@ -141,7 +141,7 @@
                     </div>
                 </fieldset>
                 <fieldset class="xar-form-actions">
-                    <div class="xar-form-input-wrapper-after">
+                    <div class="xar-col dummy">
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                         <input type="hidden" name="phase" id="phase" value="update"/>
                         <input type="hidden" name="tab" id="tab" value="#$tab#"/>
@@ -247,7 +247,7 @@
                         </xar:foreach>
                   </fieldset>
                   <fieldset class="xar-form-actions">
-                    <div class="xar-form-input-wrapper-after">
+                    <div class="xar-col dummy">
                       <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                       <input type="hidden" name="phase" id="phase" value="update"/>
                       <input type="hidden" name="tab" id="tab" value="#$tab#"/>
@@ -272,7 +272,7 @@
                         #$hooks[$hookmodule]#</xar:foreach>
                     </fieldset>
                     <fieldset>
-                        <div class="xar-form-input-wrapper-after">
+                        <div class="xar-col dummy">
                             <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                             <input type="hidden" name="phase" id="phase" value="update"/>
                             <input type="hidden" name="tab" id="tab" value="#$tab#"/>
@@ -314,7 +314,7 @@
                     -->
                 </fieldset>
                 <fieldset>
-                    <div class="xar-form-input-wrapper-after">
+                    <div class="xar-col dummy">
                         <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                         <input type="hidden" name="phase" id="phase" value="update"/>
                         <input type="hidden" name="tab" id="tab" value="#$tab#"/>
@@ -335,14 +335,16 @@
                     <xar:set name="debugadmins">
                         implode(',',xarConfigVars::get(null, 'Site.User.DebugAdmins'))
                     </xar:set>
-                    <div class="xar-form-input-wrapper" style="padding-bottom: 10px;">
-                        Debug administrtors will see exceptions and error messages when debug mode in a given module is activated.<br/>
-                        Enter a list of user names separated by commas. Incorrect user names  will be ignored.<br />
-                        <xar:var name="label">These users can see the Query debug messages</xar:var>
-                        <label for="debugadmins" title="#$label#" class="xar-form-label">
-                            Debug Mode Admins:
-                        </label>
-                        <xar:data-input type="textarea" name="debugadmins" value="$debugadmins"/>
+                    <div class="xar-row">
+                        <div class="xar-col" style="padding-bottom: 10px;">
+                            Debug administrtors will see exceptions and error messages when debug mode in a given module is activated.<br/>
+                            Enter a list of user names separated by commas. Incorrect user names  will be ignored.<br />
+                            <xar:var name="label">These users can see the Query debug messages</xar:var>
+                            <label for="debugadmins" title="#$label#" class="xar-form-label">
+                                Debug Mode Admins:
+                            </label>
+                            <xar:data-input type="textarea" name="debugadmins" value="$debugadmins"/>
+                        </div>
                     </div>
                 </fieldset>
                 <fieldset class="xar-form-actions">
