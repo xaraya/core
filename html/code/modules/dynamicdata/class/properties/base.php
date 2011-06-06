@@ -240,8 +240,8 @@ class DataProperty extends Object implements iDataProperty
 //        if ($found) $this->filter = $filter;
 
         // Check for a previous if found save it
-//        list($found,$previous_value) = $this->fetchValue($name. '_previous_value');
-//        if ($found) $this->previous_value = $previous_value;
+        list($found,$previous_value) = $this->fetchValue('previous_value_' . $name);
+        if ($found) $this->previous_value = $previous_value;
 
         return $this->validateValue($value);
     }
