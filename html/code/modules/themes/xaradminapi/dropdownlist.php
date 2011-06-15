@@ -53,10 +53,11 @@
 function themes_adminapi_dropdownlist(Array $args=array())
 {
 
-    $themelist = xarMod::apiFunc('themes', 'admin', 'getlist', $args);
+    $themelist = xarMod::apiFunc('themes', 'admin', 'getthemelist', $args);
     $options = array();
     if (!empty($themelist)) {
         foreach ($themelist as $theme) {
+            if (isset($args['Class']) && $theme['class'] != $args['Class']) continue;
             $options[] = array('id' =>  $theme['name'], 'name' => $theme['displayname']);
         }
     }

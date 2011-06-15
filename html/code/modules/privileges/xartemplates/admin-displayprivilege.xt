@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:style scope="module" file="privtree"/>
-    <xar:javascript module="privileges" filename="xarTree.js"/>
+    <xar:javascript scope="module" module="privileges" filename="xarTree.js"/>
     <script type="javascript">
     <!--
         var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
@@ -26,9 +26,9 @@
     </script>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Privileges Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <h2>Display Privilege: #$pname#</h2>
         <xar:if condition="count($parents) ne 0">
             <div>
@@ -80,42 +80,66 @@
         </div>
         <fieldset>
             <legend>Privilege properties</legend>
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label">Name:</label>
-                <span>#$pname#</span>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label">Name:</label>
+                </div>
+                <div class="xar-col">
+                    <span>#$pname#</span>
+                </div>
             </div>
             <xar:if condition="$ptype eq null">
                 <p>This is an empty container for other privileges.</p>
             </xar:if>
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label">Realm:</label>
-                <span>#$prealm#</span>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label">Realm:</label>
+                </div>
+                <div class="xar-col">
+                    <span>#$prealm#</span>
+                </div>
             </div>
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label">Module:</label>
-                <span>#$pmodule#</span>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label">Module:</label>
+                </div>
+                <div class="xar-col">
+                    <span>#$pmodule#</span>
+                </div>
             </div>
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label">Component:</label>
-                <span>#$pcomponent#</span>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label">Component:</label>
+                </div>
+                <div class="xar-col">
+                    <span>#$pcomponent#</span>
+                </div>
             </div>
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label">Level:</label>
-                <span>
-                    <xar:if condition="$plevel eq 0">None 
-                    <xar:elseif condition="$plevel eq 100"/>Overview 
-                    <xar:elseif condition="$plevel eq 200"/>Read 
-                    <xar:elseif condition="$plevel eq 300"/>Comment 
-                    <xar:elseif condition="$plevel eq 400"/>Moderate 
-                    <xar:elseif condition="$plevel eq 500"/>Edit 
-                    <xar:elseif condition="$plevel eq 600"/>Add 
-                    <xar:elseif condition="$plevel eq 700"/>Delete 
-                    <xar:elseif condition="$plevel eq 800"/>Admin</xar:if>
-                </span>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label">Level:</label>
+                </div>
+                <div class="xar-col">
+                    <span>
+                        <xar:if condition="$plevel eq 0">None 
+                        <xar:elseif condition="$plevel eq 100"/>Overview 
+                        <xar:elseif condition="$plevel eq 200"/>Read 
+                        <xar:elseif condition="$plevel eq 300"/>Comment 
+                        <xar:elseif condition="$plevel eq 400"/>Moderate 
+                        <xar:elseif condition="$plevel eq 500"/>Edit 
+                        <xar:elseif condition="$plevel eq 600"/>Add 
+                        <xar:elseif condition="$plevel eq 700"/>Delete 
+                        <xar:elseif condition="$plevel eq 800"/>Admin</xar:if>
+                    </span>
+                </div>
             </div>
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label">Instances:</label>
-                <span>#$instance#</span>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label">Instances:</label>
+                </div>
+                <div class="xar-col">
+                    <span>#$instance#</span>
+                </div>
             </div>
         </fieldset>
         <br class="xar-clearboth"/>

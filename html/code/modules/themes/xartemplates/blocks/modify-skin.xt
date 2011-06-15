@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="empty($enable_user_menu)">
+        <p><strong>Warning</strong>: In order for this block to function you must <a href="#xarModURL('themes', 'admin', 'modifyconfig')#">enable user settings</a> in the themes module</p>
+    <xar:else/>
+        <p>This block has no options</p>
+    </xar:if>
+</xar:template>

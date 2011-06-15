@@ -2,13 +2,17 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:foreach in="$properties" key="$name" value="$property">
-        <div class="xar-form-input-wrapper">
-            <xar:data-label property="$properties[$name]" for="id"/>
-            <xar:if condition="$name eq 'name'">
-                <xar:data-input property="$properties[$name]" layout="single"/>
-            <xar:else/>
-                <xar:data-input property="$properties[$name]"/>
-            </xar:if>
+        <div class="xar-row">
+        	<div class="xar-col">
+	            <xar:data-label property="$properties[$name]" for="id"/>
+            </div>
+            <div class="xar-col">
+	            <xar:if condition="$name eq 'name'">
+	                <xar:data-input property="$properties[$name]" layout="single"/>
+	            <xar:else/>
+	                <xar:data-input property="$properties[$name]"/>
+	            </xar:if>
+           </div>
         </div>
     </xar:foreach>
 </xar:template>

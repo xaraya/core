@@ -2,9 +2,9 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <div class="xar-mod-head">
         <h2>Create mail queue definition</h2>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <h3>Mailqueue definition needed</h3>
         <p>
             There seems to be no mailqueue definition yet, or the right object could not be found.
@@ -19,15 +19,19 @@
             <xar:data-input type="hidden" id="authid" name="authid" value="$authid"/>
             <fieldset>
                 <legend>Create object to hold queue definitions</legend>
-                <div class="xar-form-input-wrapper">
-                    <label class="xar-form-label" for="qdef_name_enter">Queue definition name</label>
-                    <div>
-                        <xar:data-input type="radio" name="qdef_choose" id="qdef_enter" value="$qdef_method" options="$qdef_create"/>
-                        <xar:data-input type="textbox" name="qdef_name_enter" id="qdef_name_enter" maxlength="12" size="12" value="$qdef_name" validation="1:12:\w+" onfocus="document.getElementById(\'qdef_enter\').checked=true"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="qdef_name_enter">Queue definition name</label>
                     </div>
-                    <div>
-                        <xar:data-input type="radio" name="qdef_choose" id="qdef_choose" value="$qdef_method" options="$qdef_choose"/>
-                        <xar:data-input type="object" name="qdef_name_choose" id="qdef_name_choose" onchange="document.getElementById(\'qdef_choose\').checked=true"/>
+                    <div class="xar-col">
+                        <div>
+                            <xar:data-input type="radio" name="qdef_choose" id="qdef_enter" value="$qdef_method" options="$qdef_create"/>
+                            <xar:data-input type="textbox" name="qdef_name_enter" id="qdef_name_enter" maxlength="12" size="12" value="$qdef_name" validation="1:12:\w+" onfocus="document.getElementById(\'qdef_enter\').checked=true"/>
+                        </div>
+                        <div>
+                            <xar:data-input type="radio" name="qdef_choose" id="qdef_choose" value="$qdef_method" options="$qdef_choose"/>
+                            <xar:data-input type="object" name="qdef_name_choose" id="qdef_name_choose" onchange="document.getElementById(\'qdef_choose\').checked=true"/>
+                        </div>
                     </div>
                 </div>
                 <xar:if condition="isset($error)">

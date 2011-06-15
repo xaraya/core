@@ -4,9 +4,9 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Roles Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <h2>Add #$object:label#</h2>
         <p>
             All fields are required to create a new role on the system.
@@ -22,71 +22,91 @@
                 <legend>
                   #$object:label# Details
                 </legend>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Type of Role</xar:var>
-                    <label for="ptype" title="#$label#" class="xar-form-label">
-                        Type:
-                    </label>
-                    <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"</xar:set>
-                    <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Type of Role</xar:var>
+                        <label for="ptype" title="#$label#" class="xar-form-label">
+                            Type:
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"</xar:set>
+                        <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1"/>
+                    </div>
                 </div>
                 <xar:data-form object="$object"/>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Initial Group membership</xar:var>
-                    <label for="parentid" title="#$label#" class="xar-form-label">Member Of:</label>
-                    <xar:if condition="empty($parentid)">
-                        <xar:set name="parentid">
-                            xarModVars::get('roles','defaultgroup')
-                        </xar:set>
-                    </xar:if>
-                    <xar:data-input type="grouplist" name="parentid" value="$parentid"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Initial Group membership</xar:var>
+                        <label for="parentid" title="#$label#" class="xar-form-label">Member Of:</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:if condition="empty($parentid)">
+                            <xar:set name="parentid">
+                                xarModVars::get('roles','defaultgroup')
+                            </xar:set>
+                        </xar:if>
+                        <xar:data-input type="grouplist" name="parentid" value="$parentid"/>
+                    </div>
                 </div>
                 <xar:set name="settings">
                     explode(',',xarModVars::get('roles','duvsettings'))
                 </xar:set>
                 <xar:if condition="xarRoles::ROLES_USERTYPE eq $itemtype">
                     <xar:if condition="in_array('useremailformat',$settings)">
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Email Format</xar:var>
-                            <label for="duvs_useremailformat" title="#$label#" class="xar-form-label">Email Format:</label>
-                            <xar:set name="value">
-                                xarModUserVars::get('roles','useremailformat',$id)
-                            </xar:set>
-                            <xar:set name="options">
-                                array( 
-                                    array('id' => 'text', 'name' => 'text'), 
-                                    array('id' => 'html', 'name' => 'html'), 
-                                )
-                            </xar:set>
-                            <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options"/>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Email Format</xar:var>
+                                <label for="duvs_useremailformat" title="#$label#" class="xar-form-label">Email Format:</label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="value">
+                                    xarModUserVars::get('roles','useremailformat',$id)
+                                </xar:set>
+                                <xar:set name="options">
+                                    array( 
+                                        array('id' => 'text', 'name' => 'text'), 
+                                        array('id' => 'html', 'name' => 'html'), 
+                                    )
+                                </xar:set>
+                                <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options"/>
+                            </div>
                         </div>
                     </xar:if>
                     <xar:if condition="in_array('usertimezone',$settings)">
-                        <div class="xar-form-input-wrapper">
-                            <label for="duvs_usertimezone" class="xar-form-label">
-                                User Timezone:
-                            </label>
-                            <xar:set name="value">
-                                xarModUserVars::get('roles','usertimezone',$id)
-                            </xar:set>
-                            <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value"/>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <label for="duvs_usertimezone" class="xar-form-label">
+                                    User Timezone:
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="value">
+                                    xarModUserVars::get('roles','usertimezone',$id)
+                                </xar:set>
+                                <xar:data-input type="timezone" name="duvs[usertimezone]" id="duvs_usertimezone" value="$value"/>
+                            </div>
                         </div>
                     </xar:if>
                 </xar:if>
                 <xar:if condition="in_array('userhome',$settings)">
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Home URL</xar:var>
-                        <label for="duvs_userhome" title="#$label#" class="xar-form-label">
-                            Home:
-                        </label>
-                        <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModUserVars::get('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7"/>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Home URL</xar:var>
+                            <label for="duvs_userhome" title="#$label#" class="xar-form-label">
+                                Home:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModUserVars::get('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7"/>
+                        </div>
                     </div>
                 </xar:if>
                 <xar:foreach in="$hooks" key="$hookmodule">#$hooks[$hookmodule]#</xar:foreach>
             </fieldset>
-            <fieldset>
-                <div class="xar-form-input-wrapper-after">
-                <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
+            <fieldset class="xar-form-actions">
+                <div class="xar-form-actions-after">
+                    <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
                     <input type="hidden" name="tplmodule" id="tplmodule" value="roles"/>
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                     <xar:var name="label">Add</xar:var>

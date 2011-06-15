@@ -282,7 +282,7 @@ class Role extends DataObject
         if (!empty($data['itemid'])) $this->setID($data['itemid']);
 
         if($this->getID() == (int)xarModVars::get('roles','defaultgroup'))
-            return xarTplModule('roles','user','errors',array('layout' => 'remove_defaultusergroup', 'group' => $this->getID()));
+            return xarTpl::module('roles','user','errors',array('layout' => 'remove_defaultusergroup', 'group' => $this->getID()));
 
         // get a list of all relevant entries in the rolemembers table
         // where this role is the child
@@ -292,7 +292,7 @@ class Role extends DataObject
         $result = $stmt->executeQuery(array($this->getID()));
 
         if(count($result->fields) == 1)
-            return xarTplModule('roles','user','errors',array('layout' => 'remove_sole_parent'));
+            return xarTpl::module('roles','user','errors',array('layout' => 'remove_sole_parent'));
 
         sys::import('modules.roles.class.roles');
         // go through the list, retrieving the roles and detaching each one

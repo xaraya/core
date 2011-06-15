@@ -50,7 +50,7 @@ class URLIconProperty extends URLProperty
                                           array('url' => $data['value']));
             if (empty($data['icon'])) {
                 /* we'll have to use the default system icon */
-                $data['icon'] = xarTplGetImage('icons/go-home.png','base');
+                $data['icon'] = xarTpl::getImage('icons/go-home.png','theme');
             }
         }
         return parent::showOutput($data);

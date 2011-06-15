@@ -23,7 +23,7 @@ function installer_admin_cleanup()
 {
     if (!file_exists('install.php')) { throw new Exception('Already installed');}
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
-    xarTplSetThemeName('installer');
+    xarTpl::setThemeName('installer');
 
     xarVarFetch('remove', 'checkbox', $remove, false, XARVAR_NOT_REQUIRED);
     xarVarFetch('rename', 'checkbox', $rename, false, XARVAR_NOT_REQUIRED);
@@ -33,20 +33,20 @@ function installer_admin_cleanup()
         try {
             unlink('install.php');
         } catch (Exception $e) {
-            return xarTplModule('installer','user','errors',array('layout' => 'no_permission_delete', 'filename' => 'install.php'));
+            return xarTpl::module('installer','user','errors',array('layout' => 'no_permission_delete', 'filename' => 'install.php'));
         }
     } elseif ($rename) {
         if (empty($newname)) {
             try {
                 unlink('install.php');
             } catch (Exception $e) {
-                return xarTplModule('installer','user','errors',array('layout' => 'no_permission_delete', 'filename' => 'install.php'));
+                return xarTpl::module('installer','user','errors',array('layout' => 'no_permission_delete', 'filename' => 'install.php'));
             }
         } else {
             try {
                 rename('install.php',$newname . '.php');
             } catch (Exception $e) {
-                return xarTplModule('installer','user','errors',array('layout' => 'no_permission_rename', 'filename' => 'install.php'));
+                return xarTpl::module('installer','user','errors',array('layout' => 'no_permission_rename', 'filename' => 'install.php'));
             }
         }
     }

@@ -3,25 +3,24 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="statelist">xarMod::apiFunc('roles','user','getstates')</xar:set>
     <xar:set name="modstatus">xarSession::getVar('statusmsg')</xar:set>
-    <xar:javascript module="base" filename="checkall.js" position="head"/>
-    <xar:javascript module="roles" filename="xarTree.js" position="head"/>
-    <xar:javascript module="roles" filename="tree.js" position="head"/>
-    <xar:style scope="module" module="base" file="tree"/>
-    <xar:place-css />
+    <xar:javascript scope="theme" filename="checkall.js" position="head"/>
+    <xar:javascript scope="module" module="roles" filename="xarTree.js" position="head"/>
+    <xar:style scope="theme" file="tree"/>
 
-    <xar:set name="icon_password">xarTplGetImage('icons/user-password.png','base')</xar:set>
-    <xar:set name="icon_info">xarTplGetImage('icons/info.png','base')</xar:set>
-    <xar:set name="icon_privileges">xarTplGetImage('icons/privileges.png','base')</xar:set>
-    <xar:set name="icon_delete">xarTplGetImage('icons/delete.png','base')</xar:set>
-    <xar:set name="icon_modify">xarTplGetImage('icons/modify.png','base')</xar:set>
-    <xar:set name="icon_none">xarTplGetImage('icons/none.png','base')</xar:set>
-    <xar:set name="icon_test">xarTplGetImage('icons/test.png','base')</xar:set>
+    <xar:set name="icon_password">xarTpl::getImage('icons/user-password.png','theme')</xar:set>
+    <xar:set name="icon_info">xarTpl::getImage('icons/info.png','theme')</xar:set>
+    <xar:set name="icon_privileges">xarTpl::getImage('icons/privileges.png','theme')</xar:set>
+    <xar:set name="icon_delete">xarTpl::getImage('icons/delete.png','theme')</xar:set>
+    <xar:set name="icon_modify">xarTpl::getImage('icons/modify.png','theme')</xar:set>
+    <xar:set name="icon_none">xarTpl::getImage('icons/none.png','theme')</xar:set>
+    <xar:set name="icon_test">xarTpl::getImage('icons/test.png','theme')</xar:set>
 
     <div class="xar-mod-head">
         <span class="xar-mod-title">Roles Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
+    <div class="xar-mod-page-head">
         <h2>#xarVarPrepForDisplay($title)#:
             <xar:var name="label">Modify role</xar:var>
             <a href="#xarModURL('roles','admin','modify',array('id'=>$groupid))#" title="#$label#">
@@ -44,8 +43,7 @@
                 </div>
             </fieldset>
         <xar:elseif condition="$selstyle eq '2'"/>
-            <div>
-                <ul class="xar-tabs xar-alt xar-norm-outline">
+                <ul class="xar-tabs">
                     <xar:var name="title">Click on a group tab to display users from that group</xar:var>
                     <xar:var name="label">Help</xar:var>
                     <li class="xar-tabs-label" title="#$title#">#$label#</li>
@@ -85,11 +83,12 @@
                         #xarVarPrepForDisplay($groups[$i]['name'])#</xar:set>
                     </xar:for>
                 </ul>
-            </div>
         </xar:if>
+        </div><!--/xar-mod-page-head-->
+        <div class="xar-mod-page-body">
         <form method="post" action="#xarModURL('roles','admin','showusers',array('reload'=>'reload'))#">
             <!-- User List Sort and Filter Controls table (taken from the modules module) @todo make this general -->
-            <table class="xar-fullwidth">
+            <table class="xar-items-controls">
                 <tr>
                     <th>
                         <xar:var name="label">Select display type</xar:var>
@@ -112,7 +111,7 @@
                     <th>Action</th>
                 </tr>
                 <tr>
-                    <td class="xar-align-center">
+                    <td>
                         <select name="selstyle" id="selstyle" onchange="this.form.submit()">
                             <xar:foreach in="$style" key="$key" value="$value">
                                 <xar:if condition="$key eq $selstyle">
@@ -123,7 +122,7 @@
                             </xar:foreach>
                         </select>
                     </td>
-                    <td class="xar-align-center">
+                    <td>
                         <xar:set name="prevgroup">""</xar:set>
                         <select name="id" id="groupid" onchange="this.form.submit()">
                             <xar:if condition="$groupid eq 0">
@@ -149,16 +148,16 @@
                             </xar:for>
                         </select>
                     </td>
-                    <td class="xar-align-center">
+                    <td>
                         <xar:set name="firstline">
                             array('id' => xarRoles::ROLES_STATE_CURRENT, 'name' => 'All')
                         </xar:set>
                         <xar:data-input type="dropdown" name="state" value="$state" options="$statelist" firstline="$firstline" onchange="this.form.submit()"/>
                     </td>
-                    <td class="xar-align-center">
+                    <td>
                         <input type="text" name="search" id="search" value="#$search#" maxlength="255" class="xar-form-textshort"/>
                     </td>
-                    <td class="xar-align-center">
+                    <td>
                         <xar:var name="label">Reload</xar:var>
                         <input type="submit" name="reload" id="reload" value="#$label#"/>
                     </td>
@@ -170,39 +169,42 @@
             <xar:if condition="$search ne ''">&#160;matching '#$search#'</xar:if></p>
         <xar:else />
             <form method="post" action="#xarModURL('roles','admin','updatestate')#" name="state">
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Change the state of the users who have been selected below</xar:var>
-                    <label for="status" title="#$label#" class="xar-form-label" style="width: 200px">
-                        Change state of selected users:
-                    </label>
-                    <xar:data-input type="dropdown" name="status" id="status" options="$statelist" class="xar-margin-thickright"/>
-                    <input type="hidden" name="groupid" id="groupid" value="#$groupid#"/>
-                    <input type="hidden" name="state" id="state" value="#$state#"/>
-                    <input type="hidden" name="order" id="order" value="#$order#"/>
-                    <input type="hidden" name="search" id="search" value="#xarVarPrepForDisplay($search)#"/>
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <xar:var name="label">Change Status</xar:var>
-                    <input type="submit" value="#$label#" class="xar-margin-thick-left"/>
-                </div>
                 <!-- @todo: add this to the filter GUI? -->
                 <xar:set name="fieldlist">array('id','uname','email','regdate')</xar:set>
                 <xar:data-getitems object="$object" values="$values" properties="$properties" sort="$order" fieldlist="$fieldlist"/>
-                <br class="xar-clearboth"/>
-                <table class="xar-fullwidth">
+                <table class="xar-items">
                     <tr>
                         <xar:foreach in="$properties" key="$name">
-                            <th class="xar-align-center">
+                        	<xar:if condition="xarController::getVar('order') eq $name">
+                            	<xar:set name="xar_status">'xar-active '</xar:set>
+                            <xar:else />
+                            	<xar:set name="xar_status">''</xar:set>
+                            </xar:if>
+                            <th class="#$xar_status# #$name#">
                                 <a title="Sort by #$name#" href="#xarModURL('roles','admin','showusers',array('id'=>$groupid,'state'=>$state,'order'=>$name,'search'=>$search,'reload'=>'reload'))#">
                                     <xar:data-label property="$properties[$name]"/>
                                 </a>
                             </th>
                         </xar:foreach>
-                        <th colspan="2" style="text-align: center">Action</th>
+                        <th>Action</th>
+                        <th>
+                    		<input type="checkbox" onclick="xar_base_checkall(document.forms['state'],true);return false;" />
+                        </th>
                     </tr>
                     <xar:foreach in="$values" key="$itemid" value="$fields">
                         <tr>
                             <xar:foreach in="$properties" key="$name">
-                                <td>
+                            <xar:if condition="xarController::getVar('order') eq $name">
+                            	<xar:set name="xar_status">'xar-active '</xar:set>
+                            <xar:else />
+                            	<xar:set name="xar_status">''</xar:set>
+                            </xar:if>
+                            <xar:if condition="$name eq 'email'">
+                            	<xar:set name="xar_linked">'xar-link '</xar:set>
+                            <xar:else />
+                            	<xar:set name="xar_linked">''</xar:set>
+                            </xar:if>
+                                <td class="#$xar_status# #$xar_linked# #$name#">
                                     <xar:if condition="!empty($fields[$name])">
                                         <xar:if condition="$name eq 'name' and $users[$itemid]['frozen']">
                                             <strong>#xarVarPrepForDisplay($fields['name'])#</strong>
@@ -216,7 +218,7 @@
                                     </xar:if>
                                 </td>
                             </xar:foreach>
-                            <td class="xar-align-center xar-nowrap">
+                            <td>
                                 <xar:if condition="!$users[$itemid]['frozen']">
                                     <xar:if condition="xarModVars::get('roles', 'askpasswordemail')">
                                         <xar:var name="label">Generate a new password for this User</xar:var>
@@ -250,33 +252,61 @@
                                     <img src="#$icon_test#" class="xar-valign-middle"/>
                                 </a>
                             </td>
-                            <td class="xar-align-center">
+                            <td>
                                 <xar:if condition="!$users[$itemid]['frozen']">
                                     <input type="checkbox" name="ids[#$fields['id']#]" id="ids_#$fields['id']#" value="1"/>
                                 </xar:if>
                             </td>
                         </tr>
                     </xar:foreach>
+                    <tfoot>
+                    	<tr>
+                    		<td colspan="5">
+                    			<a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['state'],true);return false;">
+			                        Check All
+			                    </a>|
+			                    <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['state'],false);return false;">
+			                        Uncheck All
+			                    </a>
+                    		</td>
+                    		<td>
+                    			<input type="checkbox" readonly="readonly" onclick="xar_base_checkall(document.forms['state'],false);return false;" />
+                    		</td>
+                    	</tr>
+                    </tfoot>
                 </table>
-                <div class="xar-align-right">
-                    <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['state'],true);return false;">
-                        Check All
-                    </a>|
-                    <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['state'],false);return false;">
-                        Uncheck All
-                    </a>
-                </div>
-                <div class="xar-align-center">
-                    <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
-                </div>
+                
+                <fieldset>
+                	<div class="xar-row">
+                		<div class="xar-col">
+	                    	<xar:var name="label">Change the state of the users who have been selected below</xar:var>
+		                    <label for="status" title="#$label#" class="xar-form-label">
+		                        Change state of selected users:
+		                    </label>
+	                   	</div>
+	                   	<div class="xar-col">
+		                    <xar:data-input type="dropdown" name="status" id="status" options="$statelist" />
+		                    <input type="hidden" name="groupid" id="groupid" value="#$groupid#"/>
+		                    <input type="hidden" name="state" id="state" value="#$state#"/>
+		                    <input type="hidden" name="order" id="order" value="#$order#"/>
+		                    <input type="hidden" name="search" id="search" value="#xarVarPrepForDisplay($search)#"/>
+		                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+		                    <xar:var name="label">Change Status</xar:var>
+		                    <input type="submit" value="#$label#" />
+		                </div>
+                    </div>
+                </fieldset>
             </form>
         </xar:if>
-        <p>
+        
+    </div><!--/xar-mod-page-->
+    	<div class="xar-mod-page-foot">
+    	<xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
+    		<ul class="xar-mod-actions">
             <xar:var name="label">Add a new user</xar:var>
-            <a href="#xarModURL('roles','admin','new',array('ptype'=>0,'pparentid'=>$groupid))#" title="#$label#">
-                Add a new user to this group
-            </a>|
-            <a href="#xarModURL('roles','admin','createmail')#">Email users in this group</a>
-        </p>
-    </div>
+            <li><a href="#xarModURL('roles','admin','new',array('ptype'=>0,'pparentid'=>$groupid))#" title="#$label#">Add user to group</a></li>
+            <li><a href="#xarModURL('roles','admin','createmail')#">Email group</a></li>
+        </ul>
+    	</div>
+    </div><!--/xar-mod-body-->
 </xar:template>

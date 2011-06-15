@@ -18,9 +18,9 @@
     </xar:var>
     <div class="xar-mod-head">
         <span class="xar-mod-title">Roles Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <h2>
             <a href="#xarModURL('roles','admin','createmail')#">Messaging System:</a> Send Mail To Users/Groups
         </h2>
@@ -232,23 +232,31 @@
                 <legend>Message</legend>
                 <p>Choose a message template from the Templates dropdown above, or type in your
                 message directly :</p>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Subject line of the email</xar:var>
-                    <label for="subject" title="#$label#" class="xar-form-label">
-                        Subject:
-                    </label>
-                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Subject line of the email</xar:var>
+                        <label for="subject" title="#$label#" class="xar-form-label">
+                            Subject:
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                    </div>
                 </div>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Body of the email</xar:var>
-                    <label for="message" title="#$label#" class="xar-form-label">
-                        Message:
-                    </label>
-                    <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Body of the email</xar:var>
+                        <label for="message" title="#$label#" class="xar-form-label">
+                            Message:
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
+                    </div>
                 </div>
             </fieldset>
-            <fieldset>
-                <div class="xar-form-input-wrapper-after">
+            <fieldset class="xar-form-actions">
+                <div class="xar-form-actions-after">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="id" id="id" value="#$id#"/>
                     <input type="hidden" name="state" id="state" value="#$state#"/>

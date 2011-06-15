@@ -3,15 +3,20 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:foreach in="$items" key="$itemid" value="$fields">
     <xar:foreach in="$properties" key="$name">
-        <div class="xar-form-input-wrapper">
-        <xar:data-label property="$properties[$name]" label="$name"/>: 
-        <xar:if condition="empty($fields[$name])">&#160; 
-        <xar:elseif condition="!empty($linkfield) and $linkfield eq $name and !empty($links[$itemid]['display'])"/>
-            <a href="#$links[$itemid]['display']['olink']#" title="#$links[$itemid]['display']['otitle']#">
-                <xar:data-output property="$properties[$name]" value="$fields[$name]"/>
-            </a>
-        <xar:else />
-        <xar:data-output property="$properties[$name]" value="$fields[$name]"/></xar:if></div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:data-label property="$properties[$name]" label="$name"/>: 
+            </div>
+            <div class="xar-col">
+                <xar:if condition="empty($fields[$name])">&#160; 
+                <xar:elseif condition="!empty($linkfield) and $linkfield eq $name and !empty($links[$itemid]['display'])"/>
+                    <a href="#$links[$itemid]['display']['olink']#" title="#$links[$itemid]['display']['otitle']#">
+                        <xar:data-output property="$properties[$name]" value="$fields[$name]"/>
+                    </a>
+                <xar:else />
+                <xar:data-output property="$properties[$name]" value="$fields[$name]"/></xar:if>
+            </div>
+        </div>
     </xar:foreach>
     <xar:if condition="empty($linkfield) and !empty($links[$itemid]) and count($links[$itemid]) gt 0">
     &#160; 

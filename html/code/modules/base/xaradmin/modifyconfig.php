@@ -132,7 +132,7 @@ function base_admin_modifyconfig()
 
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
-                        return xarTplModule('base','admin','modifyconfig', $data);
+                        return xarTpl::module('base','admin','modifyconfig', $data);
                     } else {
                         $itemid = $data['module_settings']->updateItem();
                     }

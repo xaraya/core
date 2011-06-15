@@ -30,7 +30,7 @@ function roles_admin_main()
     $samemodule = $info[0] == $refererinfo[0];
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTplModule('roles','admin','overview');
+        return xarTpl::module('roles','admin','overview');
     } else {
         xarController::redirect(xarModURL('roles', 'admin', 'showusers'));
         return true;

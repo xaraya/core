@@ -109,7 +109,7 @@ class xarPageCache extends Object
         // set the cacheCode for the current cacheKey
 
         // the output depends on the current host, theme and locale
-        $factors = xarServer::getVar('HTTP_HOST') . xarTplGetThemeDir() .
+        $factors = xarServer::getVar('HTTP_HOST') . xarTpl::getThemeDir() .
                 xarUserGetNavigationLocale();
 
         // add user groups as a factor if necessary
@@ -162,7 +162,7 @@ class xarPageCache extends Object
             // define the cacheKey
             $cacheKey = "$modName-$modType-$funcName";
             // get the current themeDir
-            $themeDir = xarTplGetThemeDir();
+            $themeDir = xarTpl::getThemeDir();
 
         } else {
             $params = parse_url($url);

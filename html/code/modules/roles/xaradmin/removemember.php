@@ -37,7 +37,7 @@ function roles_admin_removemember()
 
     // Check for authorization code
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     // remove the child from the parent and bail if an error was thrown

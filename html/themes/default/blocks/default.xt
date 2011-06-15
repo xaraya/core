@@ -7,7 +7,8 @@
                 <xar:if condition="$group ne 'admin'">
                     <xar:sec mask="AdminBase" catch="false">
                         <a href="#xarModURL('blocks','admin','modify_instance',array('bid' => $bid))#" title="Edit this block" style="float: right">
-                            <img src="#xarTplGetImage('icons/modify.png','base')#"/>
+                            <xar:var name="alttext">Modify</xar:var>
+                            <xar:img scope="theme" file="icons/modify.png" class="xar-icon" alt="$alttext"/>
                         </a>
                     </xar:sec>
                 </xar:if>

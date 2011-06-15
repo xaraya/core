@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-form-input-wrapper">
-        <label class="xar-form-label">Legend of Actions</label>
-        <strong>[D]efault [H]idden [M]aximized [E]dit [R]emove</strong>
+    <div class="xar-row">
+        <div class="xar-col">
+            <label class="xar-form-label">Legend of Actions</label>
+        </div>
+        <div class="xar-col">
+            <strong>[D]efault [H]idden [M]aximized [E]dit [R]emove</strong>
+        </div>
     </div>
     <div class="xar-overflow-auto" style="clear:both">
         <xar:loop name="$blocks">
@@ -42,7 +46,7 @@
                         #$loop:item['name']#</span>
                     </xar:if>
                 </div>
-                <xar:else />
+            <xar:else />
                 <div class="xar-floatright xar-halfwidth xar-border-thinbottom">
                     <div class="xar-sub xar-floatright xar-align-right">[
                         <xar:if condition="!empty($loop:item.groups)">

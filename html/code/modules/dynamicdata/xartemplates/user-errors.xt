@@ -6,7 +6,7 @@
         <fieldset>
             <legend>DynamicData Problem</legend>
             <xar:var name="label">System Message</xar:var>
-            <img src="#xarTplGetImage('user-error.png','base')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
+            <xar:img scope="theme" file="user-error.png" class="xar-module-icon" alt="$label"/>
             <xar:if condition="!isset($layout)">
                 <div style="margin-top: 20px; margin-left: 20px">
                     No error message is available.
@@ -25,8 +25,8 @@
                 </div>                    
             </xar:if>                
         </fieldset>
-        <fieldset>
-            <div class="xar-form-input-wrapper-after">
+        <fieldset class="xar-form-actions">
+            <div class="xar-form-actions-after">
                 <xar:var name="label">Go back</xar:var>
                 <xar:button type="cancel" label="$label"/>
             </div>

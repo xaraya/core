@@ -24,7 +24,7 @@ function privileges_admin_updateprivilege()
 
 // Check for authorization code
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     if(!xarVarFetch('id',         'isset', $id,        NULL, XARVAR_DONT_SET)) {return;}

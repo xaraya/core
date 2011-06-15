@@ -16,14 +16,14 @@
                 Reports for #$object:label#&#160;
             </xar:if>
             <a href="#$viewlink#" title="View #$object:label#">
-                <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                <xar:img scope="theme" file="icons/item-list.png" class="xar-icon" alt="view"/>
             </a>&#160;
             <a href="#$reportlink#" title="Reset Report">
-                <img src="#xarTplGetImage('icons/view-refresh.png', 'base')#" width="16" height="16" alt="reset"/>
+                <xar:img scope="theme" file="icons/view-refresh.png" class="xar-icon" alt="reset"/>
             </a>&#160;
             <a href="#$statslink#&amp;report=#$report['report']#" title="Edit Report">
-                <!-- img src="#xarTplGetImage('icons/accessories-calculator.png', 'base')#" width="16" height="16" alt="stats"/-->
-                <img src="#xarTplGetImage('icons/modify.png', 'base')#" width="16" height="16" alt="stats"/>
+                <!-- img src="#xarTpl::getImage('icons/accessories-calculator.png', 'base')#" width="16" height="16" alt="stats"/-->
+                <xar:img scope="theme" file="icons/modify.png" class="xar-icon" alt="stats"/>
             </a>
         </h2>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
@@ -44,20 +44,24 @@
                     <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                 </xar:if>
                 <legend>Select Report</legend>
-                <div class="xar-form-input-wrapper">
-                    <label class="xar-form-label" for="report" title="Select the report">Available Reports</label>
-                    <select name="report" id="report" onchange="javascript:submit();">
-                        <option value=""></option>
-                        <xar:foreach in="$report.reportlist" value="$label">
-                            <xar:if condition="!empty($report['report']) and $report['report'] eq $label">
-                                <option value="#$label#" selected="selected">#$label#</option>
-                            <xar:else/>
-                                <option value="#$label#">#$label#</option>
-                            </xar:if>
-                        </xar:foreach>
-                    </select>
-                    <xar:var name="label">Select</xar:var>
-                    <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="report" title="Select the report">Available Reports</label>
+                    </div>
+                    <div class="xar-col">
+                        <select name="report" id="report" onchange="javascript:submit();">
+                            <option value=""></option>
+                            <xar:foreach in="$report.reportlist" value="$label">
+                                <xar:if condition="!empty($report['report']) and $report['report'] eq $label">
+                                    <option value="#$label#" selected="selected">#$label#</option>
+                                <xar:else/>
+                                    <option value="#$label#">#$label#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                        <xar:var name="label">Select</xar:var>
+                        <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
+                    </div>
                 </div>
             </fieldset>
         </form>

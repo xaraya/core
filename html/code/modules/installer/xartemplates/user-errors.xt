@@ -7,7 +7,7 @@
     <div class="xar-mod-body">
         <fieldset>
             <legend>Problem From the Installer</legend>
-            <img src="#xarTplGetImage('user-error.png','base')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon"/>
+            <img src="#xarTpl::getImage('user-error.png','theme')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon"/>
             <xar:if condition="!isset($layout)">
                 <div style="margin-top: 20px">No error message is available. 
                 <br />Please contact the system administrator.</div>
@@ -24,8 +24,8 @@
                 <br />Please contact the system administrator.</div>
             </xar:if>
         </fieldset>
-        <fieldset>
-            <div class="xar-form-input-wrapper-after">
+        <fieldset class="xar-form-actions">
+            <div class="xar-form-actions-after">
                 <xar:var name="label">Go back</xar:var>
                 <xar:button type="cancel" label="$label"/>
             </div>

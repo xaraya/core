@@ -4,69 +4,89 @@
     <!--
         We know that blocks.css file is already included by admin-modify_instance.xd, so no need to do it twice
     -->
-    <div class="xar-form-input-wrapper">
-        <label for="marker" title="#xarML('When Xaraya is generating the menu, we can mark the current page. Use this to configure the marker for that display.')#" class="xar-form-label">
-        Marker:
-        </label>
-        <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort"/>
+    <div class="xar-row">
+        <div class="xar-col">
+            <label for="marker" title="#xarML('When Xaraya is generating the menu, we can mark the current page. Use this to configure the marker for that display.')#" class="xar-form-label">
+            Marker:
+            </label>
+        </div>
+        <div class="xar-col">
+            <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort"/>
+        </div>
     </div>
-    <div class="xar-form-input-wrapper">
-        <label for="showback" title="#xarML('Select if you would like Xaraya to generate a link to the back end for administrative users at the bottom of the menu.')#" class="xar-form-label">
-            Display Admin Link to Back End
-        </label>
-        <xar:data-input type="checkbox" name="showback" id="showback" checked="$showback"/>&#160;
-        <label for="backlabel" title="#xarML('Set the label for the link to the back end')#">Label</label>:
-        <xar:data-input type="textbox" class="xar-form-textmedium" name="backlabel" id="backlabel" maxlength="255" value="$backlabel"/>&#160;
-        <label for="backtitle" title="#xarML('Set the title for the link to the back end')#">Title</label>:
-        <xar:data-input type="textbox" class="xar-form-textlong" name="backtitle" id="backtitle" maxlength="255" value="$backtitle"/>
+    <div class="xar-row">
+        <div class="xar-col">
+            <label for="showback" title="#xarML('Select if you would like Xaraya to generate a link to the back end for administrative users at the bottom of the menu.')#" class="xar-form-label">
+                Display Admin Link to Back End
+            </label>
+        </div>
+        <div class="xar-col">
+            <xar:data-input type="checkbox" name="showback" id="showback" checked="$showback"/>&#160;
+            <br/><label for="backlabel" title="#xarML('Set the label for the link to the back end')#">Label</label>:
+            <xar:data-input type="textbox" class="xar-form-textmedium" name="backlabel" id="backlabel" maxlength="255" value="$backlabel"/>&#160;
+            <br/><label for="backtitle" title="#xarML('Set the title for the link to the back end')#">Title</label>:
+            <xar:data-input type="textbox" class="xar-form-textlong" name="backtitle" id="backtitle" maxlength="255" value="$backtitle"/>
+        </div>
     </div>
-    <div class="xar-form-input-wrapper">
-        <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link for non-administrative users at the bottom of the menu.')#" class="xar-form-label">
-            Display Logout
-        </label>
-        <xar:data-input type="checkbox" name="showlogout" checked="$showlogout" />&#160;
-        <label for="logoutlabel" title="#xarML('Set the label for the logout link')#">Label</label>:
-        <xar:data-input type="textbox" class="xar-form-textmedium" name="logoutlabel" id="logoutlabel" maxlength="255" value="$logoutlabel"/>&#160;
-        <label for="logouttitle" title="#xarML('Set the title for the logout link')#">Title</label>:
-        <xar:data-input type="textbox" class="xar-form-textlong" name="logouttitle" id="logouttitle" maxlength="255" value="$logouttitle"/>
+    <div class="xar-row">
+        <div class="xar-col">
+            <label for="showlogout" title="#xarML('Select if you would like Xaraya to generate a logout link for non-administrative users at the bottom of the menu.')#" class="xar-form-label">
+                Display Logout
+            </label>
+        </div>
+        <div class="xar-col">
+            <xar:data-input type="checkbox" name="showlogout" checked="$showlogout" />&#160;
+            <br/><label for="logoutlabel" title="#xarML('Set the label for the logout link')#">Label</label>:
+            <xar:data-input type="textbox" class="xar-form-textmedium" name="logoutlabel" id="logoutlabel" maxlength="255" value="$logoutlabel"/>&#160;
+            <br/><label for="logouttitle" title="#xarML('Set the title for the logout link')#">Title</label>:
+            <xar:data-input type="textbox" class="xar-form-textlong" name="logouttitle" id="logouttitle" maxlength="255" value="$logouttitle"/>
+        </div>
     </div>
-    <div class="xar-form-input-wrapper">
-        <label for="displayprint" title="#xarML('Select if you would like Xaraya to generate a link to your print page at the bottom of the menu.')#" class="xar-form-label">
-            Display Print Link
-        </label>
-        <xar:data-input type="checkbox" name="displayprint" checked="$displayprint" />&#160;
-        <label for="printlabel" title="#xarML('Set the label for the print link')#">Label</label>:
-        <xar:data-input type="textbox" class="xar-form-textmedium" name="printlabel" id="printlabel" maxlength="255" value="$printlabel"/>&#160;
-        <label for="printtitle" title="#xarML('Set the title for the print link')#">Title</label>:
-        <xar:data-input type="textbox" class="xar-form-textlong" name="printtitle" id="printtitle" maxlength="255" value="$printtitle"/>
+    <div class="xar-row">
+        <div class="xar-col">
+            <label for="displayprint" title="#xarML('Select if you would like Xaraya to generate a link to your print page at the bottom of the menu.')#" class="xar-form-label">
+                Display Print Link
+            </label>
+        </div>
+        <div class="xar-col">
+            <xar:data-input type="checkbox" name="displayprint" checked="$displayprint" />&#160;
+            <br/><label for="printlabel" title="#xarML('Set the label for the print link')#">Label</label>:
+            <xar:data-input type="textbox" class="xar-form-textmedium" name="printlabel" id="printlabel" maxlength="255" value="$printlabel"/>&#160;
+            <br/><label for="printtitle" title="#xarML('Set the title for the print link')#">Title</label>:
+            <xar:data-input type="textbox" class="xar-form-textlong" name="printtitle" id="printtitle" maxlength="255" value="$printtitle"/>
+        </div>
     </div>
-    <div class="xar-form-input-wrapper">
-        <label for="displayrss" title="#xarML('Select if you would like Xaraya to generate a link to your RSS at the bottom of the menu.')#" class="xar-form-label">
-            Display RSS Link
-        </label>
-        <xar:data-input type="checkbox" name="displayrss" checked="$displayrss" />&#160;
-        <label for="rsslabel" title="#xarML('Set the label for the rss link')#">Label</label>:
-        <xar:data-input type="textbox" class="xar-form-textmedium" name="rsslabel" id="rsslabel" maxlength="255" value="$rsslabel"/>&#160;
-        <label for="rsstitle" title="#xarML('Set the title for the rss link')#">Title</label>:
-        <xar:data-input type="textbox" class="xar-form-textlong" name="rsstitle" id="rsstitle" maxlength="255" value="$rsstitle"/>
+    <div class="xar-row">
+        <div class="xar-col">
+            <label for="displayrss" title="#xarML('Select if you would like Xaraya to generate a link to your RSS at the bottom of the menu.')#" class="xar-form-label">
+                Display RSS Link
+            </label>
+        </div>
+        <div class="xar-col">
+            <xar:data-input type="checkbox" name="displayrss" checked="$displayrss" />&#160;
+            <br/><label for="rsslabel" title="#xarML('Set the label for the rss link')#">Label</label>:
+            <xar:data-input type="textbox" class="xar-form-textmedium" name="rsslabel" id="rsslabel" maxlength="255" value="$rsslabel"/>&#160;
+            <br/><label for="rsstitle" title="#xarML('Set the title for the rss link')#">Title</label>:
+            <xar:data-input type="textbox" class="xar-form-textlong" name="rsstitle" id="rsstitle" maxlength="255" value="$rsstitle"/>
+        </div>
     </div>
 
     <xar:if condition="!empty($userlinks)">
-        <xar:set name="visibleicon">#xarTplGetImage('icons/enabled.png', 'base')#</xar:set>
-        <xar:set name="invisibleicon">#xarTplGetImage('icons/disabled.png', 'base')#</xar:set>
+        <xar:set name="visibleicon">#xarTpl::getImage('icons/enabled.png', 'theme')#</xar:set>
+        <xar:set name="invisibleicon">#xarTpl::getImage('icons/disabled.png', 'theme')#</xar:set>
         <xar:var name="visibletitle">Link is visible in the menu</xar:var>
         <xar:var name="invisibletitle">Link is not visible in the menu</xar:var>
-        <xar:set name="imgup">#xarTplGetImage('icons/go-up.png', 'base')#</xar:set>
-        <xar:set name="imgdown">#xarTplGetImage('icons/go-down.png', 'base')#</xar:set>
+        <xar:set name="imgup">#xarTpl::getImage('icons/go-up.png', 'theme')#</xar:set>
+        <xar:set name="imgdown">#xarTpl::getImage('icons/go-down.png', 'theme')#</xar:set>
         <xar:var name="imgupalt">Up</xar:var>
         <xar:var name="imgdownalt">Down</xar:var>
         <xar:var name="imguptitle">Move this link up</xar:var>
         <xar:var name="imgdowntitle">Move this link down</xar:var>
-        <xar:set name="wwwicon">#xarTplGetImage('icons/www-url.png', 'base')#</xar:set>
+        <xar:set name="wwwicon">#xarTpl::getImage('icons/www-url.png', 'theme')#</xar:set>
         <xar:var name="wwwcheck">Check the URL for this link</xar:var>
         <xar:var name="wwwnone">URL is empty</xar:var>
         <xar:var name="wwwalt">Check URL</xar:var>
-        <table id="menulinks_#$blockid#" class="xar-fullwidth xar-margin-nonebottom">
+        <table id="menulinks_#$blockid#" class="xar-items">
             <caption class="xar-align-left xar-margin-thickbottom xar-margin-nonetop">
                 <strong>Menu Links</strong>
             </caption>
@@ -224,7 +244,7 @@
                 </tr>
             </tfoot>
          </table>
-        <table class="xar-fullwidth xar-margin-nonetop">
+        <table class="xar-items">
             <caption class="xar-align-left xar-margin-thickbottom xar-margin-thicktop">
                 <strong>Insert New Menu Link</strong>
             </caption>
@@ -282,7 +302,7 @@
          </table>
     </xar:if>
 
-    <table class="xar-fullwidth xar-margin-nonetop">
+    <table class="xar-items">
         <caption class="xar-align-left xar-margin-thickbottom xar-margin-nonetop">
             <strong>Module Links</strong>
         </caption>

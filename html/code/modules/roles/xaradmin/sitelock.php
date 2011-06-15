@@ -146,7 +146,7 @@ function roles_admin_sitelock(Array $args=array())
             xarModVars::set('roles', 'lockdata', serialize($lockdata));
 
             if($badmails) {
-                return xarTplModule('roles','user','errors',array('layout' => 'mail_failed', 'badmails' => $badmails));
+                return xarTpl::module('roles','user','errors',array('layout' => 'mail_failed', 'badmails' => $badmails));
             }
         }
     }

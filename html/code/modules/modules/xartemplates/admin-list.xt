@@ -1,35 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="modules" filename="smoothscroll.js"/>
     <xar:set name="modstatus">xarSession::getVar('statusmsg')</xar:set>
     <xar:style scope="module" file="modules"/>
 
     <xar:set name="$modstatus">xarSessionGetVar('statusmsg')</xar:set>
-    <xar:set name="icon_modify">xarTplGetImage('icons/modify.png','base')</xar:set>
-    <xar:set name="icon_info">xarTplGetImage('icons/info.png','base')</xar:set>
-    <xar:set name="icon_install">xarTplGetImage('icons/software-install.png','base')</xar:set>
-    <xar:set name="icon_upgrade">xarTplGetImage('icons/software-upgrade.png','base')</xar:set>
-    <xar:set name="icon_hooks">xarTplGetImage('icons/hooks.png','base')</xar:set>
-    <xar:set name="icon_enabled">xarTplGetImage('icons/enabled.png','base')</xar:set>
-    <xar:set name="icon_disabled">xarTplGetImage('icons/disabled.png','base')</xar:set>
-    <xar:set name="icon_activate">xarTplGetImage('icons/activate.png','base')</xar:set>
-    <xar:set name="icon_deactivate">xarTplGetImage('icons/deactivate.png','base')</xar:set>
-    <xar:set name="icon_remove">xarTplGetImage('icons/remove.png','base')</xar:set>
-    <xar:set name="icon_none">xarTplGetImage('icons/none.png','base')</xar:set>
+    <xar:set name="icon_modify">xarTpl::getImage('icons/modify.png','theme')</xar:set>
+    <xar:set name="icon_info">xarTpl::getImage('icons/info.png','theme')</xar:set>
+    <xar:set name="icon_install">xarTpl::getImage('icons/software-install.png','theme')</xar:set>
+    <xar:set name="icon_upgrade">xarTpl::getImage('icons/software-upgrade.png','theme')</xar:set>
+    <xar:set name="icon_hooks">xarTpl::getImage('icons/hooks.png','theme')</xar:set>
+    <xar:set name="icon_enabled">xarTpl::getImage('icons/enabled.png','theme')</xar:set>
+    <xar:set name="icon_disabled">xarTpl::getImage('icons/disabled.png','theme')</xar:set>
+    <xar:set name="icon_activate">xarTpl::getImage('icons/activate.png','theme')</xar:set>
+    <xar:set name="icon_deactivate">xarTpl::getImage('icons/deactivate.png','theme')</xar:set>
+    <xar:set name="icon_remove">xarTpl::getImage('icons/remove.png','theme')</xar:set>
+    <xar:set name="icon_none">xarTpl::getImage('icons/none.png','theme')</xar:set>
 
     <div class="xar-mod-head">
         <span class="xar-mod-title">Modules Administration</span>
+        <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
+    <div class="xar-mod-page-head">
         <h2>View Modules</h2>
-        <p>
+        <div class="xar-mod-stat">
             Total listed:  <xar:set name="modscount">count($listrowsitems)</xar:set>#$modscount#
-        </p>
+        </div>
+    </div>
+    <div class="xar-mod-page-body">
         <form method="post" action="#xarModURL('modules','admin','settings')#">
             <!-- Module List Sort and Filter Controls table -->
-            <table class="xar-fullwidth">
+            <table class="xar-items-controls">
                 <tr>
                 <!--
                     <th>
@@ -106,7 +108,7 @@
                 <xar:template file="compactlist-ab" type="module"/>
             <xar:else />
                 <!-- the Module Lists table-based styles -->
-                    <table class="xar-fullwidth">
+                    <table class="xar-items">
                         <tr>
                         <th>Name</th>
                         <th>Version</th>
@@ -254,15 +256,18 @@
             </xar:if>
         </form>
     </div>
+    </div>
     <xar:if condition="xarModVars::get('modules','use_module_icons')">
-        <div class="xar-mod-foot xar-align-center">
-            <div class="xar-accent-outline xar-margin-thick xar-padding-thick">
-            <img src="#xarTplGetImage('icons/disabled.png', 'base')#" alt="disabled" hspace="5"/>Disabled 
-            <img src="#xarTplGetImage('icons/activate.png', 'base')#" alt="activate" hspace="5"/>Activate 
-            <img src="#xarTplGetImage('icons/deactivate.png', 'base')#" alt="deactivate"  hspace="5"/>Deactivate 
-            <img src="#xarTplGetImage('icons/software-upgrade.png', 'base')#" alt="upgrade" hspace="5"/>Upgrade 
-            <img src="#xarTplGetImage('icons/initialize.png', 'base')#" alt="initialise" hspace="5"/>Install 
-            <img src="#xarTplGetImage('icons/remove.png', 'base')#" alt="remove" hspace="5"/>Remove</div>
+        <div class="xar-mod-foot">
+	        <dl class="xar-legend">
+	            <dt>Legend</dt>
+	            <dd><img src="#xarTpl::getImage('icons/disabled.png', 'theme')#" alt="disabled" hspace="5"/>Disabled</dd>
+	            <dd><img src="#xarTpl::getImage('icons/activate.png', 'theme')#" alt="activate" hspace="5"/>Activate</dd>
+	            <dd><img src="#xarTpl::getImage('icons/deactivate.png', 'theme')#" alt="deactivate"  hspace="5"/>Deactivate</dd>
+	            <dd><img src="#xarTpl::getImage('icons/software-upgrade.png', 'theme')#" alt="upgrade" hspace="5"/>Upgrade</dd>
+	            <dd><img src="#xarTpl::getImage('icons/initialize.png', 'theme')#" alt="initialise" hspace="5"/>Install</dd>
+	            <dd><img src="#xarTpl::getImage('icons/remove.png', 'theme')#" alt="remove" hspace="5"/>Remove</dd>
+	        </dl>
         </div>
     </xar:if>
 </xar:template>

@@ -25,7 +25,7 @@ function modules_admin_modinfo()
     if (!xarSecurityCheck('AdminModules')) return; 
         
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     $data = array();

@@ -87,7 +87,7 @@ function roles_admin_modify()
 
         if (!$isvalid) {
             // Bad data: redisplay the form with error messages
-            return xarTplModule('roles','admin','modify', $data);        
+            return xarTpl::module('roles','admin','modify', $data);        
         } else {
             // Good data: create the item
             $itemid = $data['object']->updateItem(array('itemid' => $data['itemid']));
