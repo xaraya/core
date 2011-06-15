@@ -230,7 +230,7 @@ class xarController extends Object
     public static function getRouter()
     {
         if (null == self::$router) {
-            sys::import('xaraya.mapper.routers.router');;
+            sys::import('xaraya.mapper.routers.router');
             self::setRouter(new xarRouter());
         }
         return self::$router;
