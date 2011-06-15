@@ -104,7 +104,7 @@
                 <xar:if condition="$systemConfigIsWritable">
                     <li class="success">SUCCESS: The installer can write to your configuration
                     file.</li>
-                 <xar:else />
+                 <xar:else /> 
                     <li class="failure">ERROR: The installer cannot write to the configuration
                     file or the file is missing, or could not be created. Please verify that your webserver has write
                     access to the file #$systemConfigFile# if you placed it manually, or else that the webserver has write access to the var directory your default configuration file is in (#$systemConfigDistFile#), and read access to the file itself.</li>

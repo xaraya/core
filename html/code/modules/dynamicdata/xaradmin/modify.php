@@ -44,7 +44,8 @@ function dynamicdata_admin_modify(Array $args=array())
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
     if (!xarVarFetch('tab', 'pre:trim:lower:str:1', $data['tab'], 'edit', XARVAR_NOT_REQUIRED)) return;
 
-    $object = DataObjectMaster::getObject(array('objectid' => $objectid,
+    if (empty($objectid) && empty($name)) $objectid = 1;
+    $object = & DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,
                                          'moduleid' => $module_id,
                                          'itemtype' => $itemtype,
