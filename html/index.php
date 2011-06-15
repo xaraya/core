@@ -129,6 +129,11 @@ function xarMain()
             if (!xarTplSetPageTemplateName('user-'.$request->getModule())) {
                 xarTplSetPageTemplateName('user');
             }
+        } elseif ($request->getType() == 'user' && xarTplGetPageTemplateName() == 'default') {
+            // For the anonymous user, see if a module specific page exists
+            if (!xarTplSetPageTemplateName('user-'.$request->getModule())) {
+                xarTplSetPageTemplateName($request->getModule());
+            }
         }
 
         xarVarFetch('pageName','str:1:', $pageName, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
