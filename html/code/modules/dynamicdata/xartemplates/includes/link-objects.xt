@@ -227,23 +227,23 @@
 
     <form method="post" action="#xarModURL('dynamicdata','util','relations')#">
         <fieldset>
-        <legend>Display Options for #$object:label#</legend>
-        <xar:set name="getlinkedobjects">xarModItemVars::get('dynamicdata','getlinkedobjects',$objectid)</xar:set>
-        <div class="xar-row">
-            <div class="xar-col">
-                <xar:if condition="!empty($getlinkedobjects)">
-                    <input type="checkbox" name="getlinkedobjects" id="getlinkedobjects" value="1" checked="checked"/>
-                <xar:else/>
-                    <input type="checkbox" name="getlinkedobjects" id="getlinkedobjects" value="1"/>
-                </xar:if>
-                &#160;<label for="getlinkedobjects">Show linked objects on display (when using the dynamic object user interface)</label>
+            <legend>Display Options for #$object:label#</legend>
+            <xar:set name="getlinkedobjects">xarModItemVars::get('dynamicdata','getlinkedobjects',$objectid)</xar:set>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:if condition="!empty($getlinkedobjects)">
+                        <input type="checkbox" name="getlinkedobjects" id="getlinkedobjects" value="1" checked="checked"/>
+                    <xar:else/>
+                        <input type="checkbox" name="getlinkedobjects" id="getlinkedobjects" value="1"/>
+                    </xar:if>
+                    &#160;<label for="getlinkedobjects">Show linked objects on display (when using the dynamic object user interface)</label>
+                </div>
             </div>
-        </div>
-        <div class="xar-col dummy">
+        </fieldset>
+        <fieldset class="xar-form-actions">
             <input type="hidden" name="objectid" value="#$objectid#"/>
             <xar:var name="label">Update</xar:var>
             <input type="submit" name="update" value="#$label#"/>
-        </div>
         </fieldset>
     </form>
 
