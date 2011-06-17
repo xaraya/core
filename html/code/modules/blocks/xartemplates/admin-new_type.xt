@@ -56,9 +56,7 @@
                 </div>
             </fieldset>
             <fieldset class="xar-form-actions">
-                <div class="xar-form-actions-after">
-                    <input type="submit" name="submit" value="#xarML('Add Block Type')#" class="xar-margin-thick"/>
-                </div>
+                <input type="submit" name="submit" value="#xarML('Add Block Type')#" class="xar-margin-thick"/>
             </fieldset>
         </form>
     </div>

@@ -10,16 +10,12 @@
         <h2>Utilities - Export DataObject Definition</h2>
         <xar:template type="module" file="utility-menu"/>
         <form method="post" action="#xarModURL('dynamicdata','util','export')#">
-            <fieldset>
+            <fieldset class="xar-form-actions">
                 <legend>Select Object</legend>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <label for="xml" class="xar-form-label">Object :</label>
-                        <div class="xar-form-container-after">
-                            <xar:data-input type="object" name="objectid" value="$objectid" display_prop="name" store_prop="objectid" onchange="submit()"/>
-                            <input type="submit" value="Refresh"/>
-                        </div>
-                    </div>
+                <label for="xml" class="xar-form-label">Object :</label>
+                <div class="xar-form-container-after">
+                    <xar:data-input type="object" name="objectid" value="$objectid" display_prop="name" store_prop="objectid" onchange="submit()"/>
+                    <input type="submit" value="Refresh"/>
                 </div>
             </fieldset>
         </form>

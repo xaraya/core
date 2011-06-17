@@ -181,10 +181,10 @@
                     </div>
                 </div>
             </div>
-            <div class="xar-col dummy">
+            <fieldset class="xar-form-actions">
                 <xar:var name="label">Confirm</xar:var>
                 <input type="submit" name="confirm" value="#$label#"/>
-            </div>
+            </fieldset>
         </xar:if>
         </fieldset>
     </form>

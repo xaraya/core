@@ -27,16 +27,14 @@
                 </p>
             </fieldset>
             <fieldset class="xar-form-actions">
-                <div class="xar-form-actions-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="confirm" id="confirm" value="true"/>
-                    <input type="hidden" name="bid" id="bid" value="#$instance['bid']#"/>
-                    <input type="submit" value="#xarML('Delete Block')#" class="xar-margin-thick"/>
-                    <xar:set name="returnurl">
-                        #xarModURL('blocks', 'admin', 'view_instances')#
-                    </xar:set>
-                    <input type="button" value="#xarML('Cancel')#" class="xar-margin-thick" onclick="window.location='#$returnurl#';"/>
-                </div>
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="confirm" id="confirm" value="true"/>
+                <input type="hidden" name="bid" id="bid" value="#$instance['bid']#"/>
+                <input type="submit" value="#xarML('Delete Block')#" class="xar-margin-thick"/>
+                <xar:set name="returnurl">
+                    #xarModURL('blocks', 'admin', 'view_instances')#
+                </xar:set>
+                <input type="button" value="#xarML('Cancel')#" class="xar-margin-thick" onclick="window.location='#$returnurl#';"/>
             </fieldset>
         </form>
     </div>

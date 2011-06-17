@@ -102,13 +102,11 @@
                 </div>
             </fieldset>
             <fieldset class="xar-form-actions">
-                <div class="xar-form-actions-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="phase" id="phase" value="update"/>
-                    <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>
-                    <xar:var name="label">Update</xar:var>
-                    <input type="submit" value="#$label#"/>
-                </div>
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="phase" id="phase" value="update"/>
+                <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>
+                <xar:var name="label">Update</xar:var>
+                <input type="submit" value="#$label#"/>
             </fieldset>
             <p>The following variables will be replaced in the text with specific information:</p>
             <xar:if condition="$mailtype eq 'confirmation' or $mailtype eq 'validation'">

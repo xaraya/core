@@ -105,13 +105,11 @@
                 <xar:foreach in="$hooks" key="$hookmodule">#$hooks[$hookmodule]#</xar:foreach>
             </fieldset>
             <fieldset class="xar-form-actions">
-                <div class="xar-form-actions-after">
-                    <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
-                    <input type="hidden" name="tplmodule" id="tplmodule" value="roles"/>
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                    <xar:var name="label">Add</xar:var>
-                    <input type="submit" name="confirm" value="#$label#"/>
-                </div>
+                <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
+                <input type="hidden" name="tplmodule" id="tplmodule" value="roles"/>
+                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                <xar:var name="label">Add</xar:var>
+                <input type="submit" name="confirm" value="#$label#"/>
             </fieldset>
         </form>
     </div>

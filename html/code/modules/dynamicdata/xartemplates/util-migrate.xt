@@ -175,28 +175,26 @@
                 </xar:if>
             </fieldset>
             <fieldset class="xar-form-actions">
-                <div class="xar-form-actions-after">
-                    <input type="hidden" name="step" value="#$step#"/>
-                    <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
-                    <xar:var name="label">Back</xar:var>
-                    <xar:if condition="$step gt 1">
-                        <input class="dd-norm" type="submit" name="back" value="#$label#"/>
-                    <xar:else />
-                        <input class="dd-norm" type="submit" name="back" value="#$label#"
-                        disabled="disabled"/>
-                    </xar:if>
-                    <xar:var name="label">Next</xar:var>
-                    <input class="dd-norm" type="submit" name="next" value="#$label#"/>
-                    <xar:var name="label">Test</xar:var>
-                    <xar:var name="label1">Finish</xar:var>
-                    <xar:if condition="!empty($check)">
-                        <input class="dd-norm" type="submit" name="test" value="#$label#"/>
-                        <input class="dd-norm" type="submit" name="confirm" value="#$label1#"/>
-                    <xar:else />
-                        <input class="dd-norm" type="submit" name="test" value="#$label#" disabled="disabled"/>
-                        <input class="dd-norm" type="submit" name="confirm" value="#$label1#" disabled="disabled"/>
-                    </xar:if>
-                </div>
+                <input type="hidden" name="step" value="#$step#"/>
+                <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
+                <xar:var name="label">Back</xar:var>
+                <xar:if condition="$step gt 1">
+                    <input class="dd-norm" type="submit" name="back" value="#$label#"/>
+                <xar:else />
+                    <input class="dd-norm" type="submit" name="back" value="#$label#"
+                    disabled="disabled"/>
+                </xar:if>
+                <xar:var name="label">Next</xar:var>
+                <input class="dd-norm" type="submit" name="next" value="#$label#"/>
+                <xar:var name="label">Test</xar:var>
+                <xar:var name="label1">Finish</xar:var>
+                <xar:if condition="!empty($check)">
+                    <input class="dd-norm" type="submit" name="test" value="#$label#"/>
+                    <input class="dd-norm" type="submit" name="confirm" value="#$label1#"/>
+                <xar:else />
+                    <input class="dd-norm" type="submit" name="test" value="#$label#" disabled="disabled"/>
+                    <input class="dd-norm" type="submit" name="confirm" value="#$label1#" disabled="disabled"/>
+                </xar:if>
             </fieldset>
             <xar:if condition="!empty($from['module']) and !empty($to['module'])">
                 <xar:if condition="!empty($from['itemtype']) and !empty($to['itemtype'])">

@@ -44,12 +44,10 @@
                 </div>
             </fieldset>
             <fieldset class="xar-form-actions">
-                <div class="xar-form-actions-after">
-                    <xar:data-input type="hidden" name="phase" id="phase" value="update"/>
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                    <xar:var name="label">Update</xar:var>
-                    <xar:button type="submit" label="$label"/>
-                </div>
+                <xar:data-input type="hidden" name="phase" id="phase" value="update"/>
+                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                <xar:var name="label">Update</xar:var>
+                <xar:button type="submit" label="$label"/>
             </fieldset>
         </form>
     </div>

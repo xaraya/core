@@ -256,21 +256,19 @@
                 </div>
             </fieldset>
             <fieldset class="xar-form-actions">
-                <div class="xar-form-actions-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="id" id="id" value="#$id#"/>
-                    <input type="hidden" name="state" id="state" value="#$state#"/>
-                    <input type="hidden" name="includesubgroups" id="includesubgroups" value="#$includesubgroups#"/>
-                    <!--<input type="hidden" name="ids" id="ids" value="#$ids#"/>-->
-                    <xar:var name="label">Send</xar:var>
-                    <xar:if condition="!isset($users) or $users eq 0">
-                        <input type="submit" value="#$label#" disabled="disabled" class="xar-margin-thickright"/>
-                    <xar:else />
-                        <input type="submit" value="#$label#" class="xar-margin-thickright"/>
-                    </xar:if>
-                    <xar:var name="label">Cancel</xar:var>
-                    <input type="button" value="#$label#" onclick="history.back(-1);" class="xar-margin-thickright"/>
-                </div>
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="id" id="id" value="#$id#"/>
+                <input type="hidden" name="state" id="state" value="#$state#"/>
+                <input type="hidden" name="includesubgroups" id="includesubgroups" value="#$includesubgroups#"/>
+                <!--<input type="hidden" name="ids" id="ids" value="#$ids#"/>-->
+                <xar:var name="label">Send</xar:var>
+                <xar:if condition="!isset($users) or $users eq 0">
+                    <input type="submit" value="#$label#" disabled="disabled" class="xar-margin-thickright"/>
+                <xar:else />
+                    <input type="submit" value="#$label#" class="xar-margin-thickright"/>
+                </xar:if>
+                <xar:var name="label">Cancel</xar:var>
+                <input type="button" value="#$label#" onclick="history.back(-1);" class="xar-margin-thickright"/>
             </fieldset>
         </form>
     </div>

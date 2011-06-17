@@ -103,11 +103,9 @@
             </fieldset>
 
             <fieldset class="xar-form-actions">
-                <div class="xar-form-actions-after">
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                    <xar:var name="label">Create</xar:var>
-                    <xar:button type="submit" label="$label" class="xar-margin-thickright"/>
-                </div>
+                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                <xar:var name="label">Create</xar:var>
+                <xar:button type="submit" label="$label" class="xar-margin-thickright"/>
             </fieldset>
         </form>
     </div>
