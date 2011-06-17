@@ -149,10 +149,10 @@
                         </div>
                     </div>
                 </xar:foreach>
-                <div class="xar-col dummy">
-                    <xar:var name="label">Show Statistics</xar:var>
-                    <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
-                </div>
+            </fieldset>
+            <fieldset class="xar-form-actions">
+                <xar:var name="label">Show Statistics</xar:var>
+                <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
             </fieldset>
             <xar:if condition="$object:checkAccess('config')">
                 <fieldset class="xar-form-actions">
