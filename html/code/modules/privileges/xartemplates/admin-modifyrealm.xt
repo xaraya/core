@@ -21,14 +21,12 @@
                 </div>
             </fieldset>
             <fieldset class="xar-form-actions">
-                <div class="xar-form-actions-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="id" id="id" value="#$id#"/>
-                    <input type="hidden" name="name" id="name" value="#$name#"/>
-                    <input type="hidden" name="confirmed" id="confirmed" value="true"/>
-                    <xar:var name="value">Save</xar:var>
-                    <input type="submit" value="#$value#" tabindex="2"/>
-                </div>
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="id" id="id" value="#$id#"/>
+                <input type="hidden" name="name" id="name" value="#$name#"/>
+                <input type="hidden" name="confirmed" id="confirmed" value="true"/>
+                <xar:var name="value">Save</xar:var>
+                <input type="submit" value="#$value#" tabindex="2"/>
             </fieldset>
         </form>
     </div>

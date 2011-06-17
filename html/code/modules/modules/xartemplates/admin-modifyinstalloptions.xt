@@ -8,11 +8,9 @@
             <xar:template module="$modname" file="installoptions"/>
             <!--        <xar:module main="false" module="#$modname#" type="admin" func="installoptions"/> -->
             <fieldset class="xar-form-actions">
-                <div class="xar-form-actions-after">
-                    <xar:var name="label">Save Configuration</xar:var>
-                    <input type="submit" name="update" value="#$label#"/>
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                </div>
+                <xar:var name="label">Save Configuration</xar:var>
+                <input type="submit" name="update" value="#$label#"/>
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
             </fieldset>
         </form>
     </div>

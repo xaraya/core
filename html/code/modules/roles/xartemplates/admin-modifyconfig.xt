@@ -141,13 +141,11 @@
                     </div>
                 </fieldset>
                 <fieldset class="xar-form-actions">
-                    <div class="xar-col dummy">
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                        <input type="hidden" name="phase" id="phase" value="update"/>
-                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                        <xar:var name="label">Update Roles Configuration</xar:var>
-                        <input type="submit" value="#$label#"/>
-                    </div>
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <xar:var name="label">Update Roles Configuration</xar:var>
+                    <input type="submit" value="#$label#"/>
                 </fieldset>
             </form>
             <!--
@@ -247,13 +245,11 @@
                         </xar:foreach>
                   </fieldset>
                   <fieldset class="xar-form-actions">
-                    <div class="xar-col dummy">
                       <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                       <input type="hidden" name="phase" id="phase" value="update"/>
                       <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                       <xar:var name="label">Update Roles Configuration</xar:var>
                       <input type="submit" value="#$label#"/>
-                    </div>
                   </fieldset>
                 </form>
                 <xar:else />
@@ -271,14 +267,12 @@
                         <xar:foreach in="$hooks" key="$hookmodule">
                         #$hooks[$hookmodule]#</xar:foreach>
                     </fieldset>
-                    <fieldset>
-                        <div class="xar-col dummy">
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                            <input type="hidden" name="phase" id="phase" value="update"/>
-                            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                            <xar:var name="label">Update Roles Configuration</xar:var>
-                            <input type="submit" value="#$label#"/>
-                        </div>
+                    <fieldset class="xar-form-actions">
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="phase" id="phase" value="update"/>
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                        <xar:var name="label">Update Roles Configuration</xar:var>
+                        <input type="submit" value="#$label#"/>
                     </fieldset>
                 </form>
                 <xar:else />
@@ -313,14 +307,12 @@
                         <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="default" fieldlist="$mylist"/>
                     -->
                 </fieldset>
-                <fieldset>
-                    <div class="xar-col dummy">
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                        <input type="hidden" name="phase" id="phase" value="update"/>
-                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                        <xar:var name="label">Update</xar:var>
-                        <xar:button type="submit" label="$label"/>
-                    </div>
+                <fieldset class="xar-form-actions">
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <xar:var name="label">Update</xar:var>
+                    <xar:button type="submit" label="$label"/>
                 </fieldset>
             </form>
             <!--
@@ -350,13 +342,11 @@
                     </div>
                 </fieldset>
                 <fieldset class="xar-form-actions">
-                    <div class="xar-form-actions-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                        <input type="hidden" name="phase" id="phase" value="update"/>
-                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                        <xar:var name="label">Update</xar:var>
-                        <xar:button type="submit" label="$label"/>
-                    </div>
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <xar:var name="label">Update</xar:var>
+                    <xar:button type="submit" label="$label"/>
                 </fieldset>
             </form>
         </xar:if>

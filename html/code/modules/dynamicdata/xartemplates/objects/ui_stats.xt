@@ -155,15 +155,11 @@
                 </div>
             </fieldset>
             <xar:if condition="$object:checkAccess('config')">
-                <fieldset>
-                    <div class="xar-row">
-                        <div class="xar-col">
-                            <label class="xar-form-label" for="report" title="Specify a name for this report if you want to save it">Save Report As</label>
-                            <input type="text" name="report" id="report" value="#$stats['report']#"/>
-                            <xar:var name="label">Save Report</xar:var>
-                            <input type="submit" name="save" value="#$label#" class="xar-margin-thickleft"/>
-                        </div>
-                    </div>
+                <fieldset class="xar-form-actions">
+                    <label class="xar-form-label" for="report" title="Specify a name for this report if you want to save it">Save Report As</label>
+                    <input type="text" name="report" id="report" value="#$stats['report']#"/>
+                    <xar:var name="label">Save Report</xar:var>
+                    <input type="submit" name="save" value="#$label#" class="xar-margin-thickleft"/>
                 </fieldset>
             </xar:if>
         </form>

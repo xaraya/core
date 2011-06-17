@@ -54,10 +54,8 @@
                     </div>
                 </fieldset>
                 <fieldset class="xar-form-actions">
-                    <div class="xar-form-actions-after">
-                        <input type="hidden" name="phase" id="phase" value="getvalidate"/>
-                        <input type="submit" value="#xarVarPrepForDisplay($validatelabel)#"/>
-                    </div>
+                    <input type="hidden" name="phase" id="phase" value="getvalidate"/>
+                    <input type="submit" value="#xarVarPrepForDisplay($validatelabel)#"/>
                 </fieldset>
             </form>
             <p>If you did not receive your validation code, we will try to resend it now.</p>
@@ -77,10 +75,8 @@
                     </div>
                 </fieldset>
                 <fieldset class="xar-form-actions">
-                    <div class="xar-form-actions-after">
-                        <input type="hidden" name="phase" id="phase" value="resend"/>
-                        <input type="submit" value="#$resendlabel#"/>
-                    </div>
+                    <input type="hidden" name="phase" id="phase" value="resend"/>
+                    <input type="submit" value="#$resendlabel#"/>
                 </fieldset>
             </form>
         </xar:if>

@@ -114,12 +114,10 @@
                 -->
             </fieldset>
             <fieldset class="xar-form-actions">
-                <div class="xar-form-actions-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="phase" id="phase" value="update"/>
-                    <xar:var name="label">Update Notification Configuration</xar:var>
-                    <input type="submit" value="#$label#"/>
-                </div>
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="phase" id="phase" value="update"/>
+                <xar:var name="label">Update Notification Configuration</xar:var>
+                <input type="submit" value="#$label#"/>
             </fieldset>
         </form>
     </div>
