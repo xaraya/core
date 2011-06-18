@@ -167,9 +167,9 @@ class xarRoles extends Object
      * @return object role
      * @todo cache this too?
      */
-    public static function findRole($name)
+    public static function findRole($name,$itemtype=self::ROLES_USERTYPE)
     {
-        return self::_lookuprole('name',$name,$state=self::ROLES_STATE_ACTIVE);
+        return self::_lookuprole('name',$name,$itemtype,$state=self::ROLES_STATE_ACTIVE);
     }
 
     /**
@@ -179,9 +179,9 @@ class xarRoles extends Object
      * @return object role
      * @todo cache this too?
      */
-    public static function ufindRole($uname)
+    public static function ufindRole($uname,$itemtype=self::ROLES_USERTYPE)
     {
-        return self::_lookuprole('uname',$uname,$state=self::ROLES_STATE_ACTIVE);
+        return self::_lookuprole('uname',$uname,$itemtype,$state=self::ROLES_STATE_ACTIVE);
     }
 
     /**
@@ -247,9 +247,9 @@ class xarRoles extends Object
         self::initialize();
         $query = "SELECT * FROM " . self::$rolestable . " WHERE $field = " . self::$dbconn->qstr($value) ;
         if ($state == self::ROLES_STATE_CURRENT) {
-            $query .= " state != " . self::ROLES_STATE_DELETED;
+            $query .= " AND state != " . self::ROLES_STATE_DELETED;
         } elseif ($state != self::ROLES_STATE_ALL) {
-            $query .= " state = " . $state;
+            $query .= " AND state = " . $state;
         }
         $stmt = self::$dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(), ResultSet::FETCHMODE_ASSOC);
