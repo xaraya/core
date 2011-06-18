@@ -214,9 +214,8 @@ class xarRoles extends Object
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
         sys::import('modules.dynamicdata.class.objects.master');
         switch ($itemtype) {
-            case 1: $name = "roles_roles"; break;
-            case 2: $name = "roles_users"; break;
-            case 3: $name = "roles_groups"; break;
+            case 1: $name = "roles_users"; break;
+            case 2: $name = "roles_groups"; break;
         }
         $parent = DataObjectMaster::getObject(array('name' => $name));
         $parent->getItem(array('itemid' => $id));
@@ -231,9 +230,8 @@ class xarRoles extends Object
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
         sys::import('modules.roles.class.role');
         switch ($itemtype) {
-            case 1: $name = "roles_roles"; break;
-            case 2: $name = "roles_users"; break;
-            case 3: $name = "roles_groups"; break;
+            case 1: $name = "roles_users"; break;
+            case 2: $name = "roles_groups"; break;
         }
         $child = DataObjectMaster::getObject(array('name' => $name));
         $child->getItem(array('itemid' => $id));
