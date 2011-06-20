@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head"><span class="xar-mod-title">User Error</span></div>
+    <div class="xar-mod-head"><h2 class="xar-mod-pagetitle">User Error</h2></div>
     <div class="xar-mod-body">
         <fieldset>
             <legend>Privileges Problem</legend>

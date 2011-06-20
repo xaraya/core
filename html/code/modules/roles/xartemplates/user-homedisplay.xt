@@ -18,7 +18,7 @@
     </xar:if>
     <xar:if condition="xarUserIsLoggedIn() and xarSecurityCheck('ReadBase')">
         <div class="xar-mod-head">
-            <span class="xar-mod-title">#$title#</span>
+            <h2 class="xar-mod-pagetitle">#$title#</h2>
         </div>
         <div id="integratordiv">
             <iframe onload="IntegrateIt();" id="integrator" src="#$page#" frameborder="no" class="xar-fullwidth" height="600" scrolling="auto">

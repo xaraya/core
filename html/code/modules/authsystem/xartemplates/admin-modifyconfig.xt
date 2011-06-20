@@ -2,11 +2,11 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
-        <span class="xar-mod-title">Authsystem Authentication Administration</span>
+        <h2 class="xar-mod-pagetitle">Authsystem Authentication Administration</h2>
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">
-        <h2>Modify Authsystem Configuration</h2>
+        <h2 class="xar-mod-pagetitle">Modify Authsystem Configuration</h2>
         <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
             <xar:data-form object="$module_settings"/>
             <fieldset>

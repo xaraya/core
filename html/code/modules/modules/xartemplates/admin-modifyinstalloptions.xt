@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <div class="xar-mod-head">
-        <span class="xar-mod-title">#$displayname# Module Configuration</span>
+        <h2 class="xar-mod-pagetitle">#$displayname# Module Configuration</h2>
     </div>
     <div class="xar-mod-body">
         <form action="#xarModURL('modules', 'admin', 'updateinstalloptions', array('regid' => $regid))#" method="post" enctype="application/x-www-form-urlencoded">
