@@ -6,7 +6,7 @@
         <xar:var scope="module" module="mail" name="adminmail"/>
     </xar:set>
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">Change of Email</h2>
+        <span class="xar-mod-title">Change of Email</span>
     </div>
     <div class="xar-mod-body">
         <h2>Instructions Sent</h2>

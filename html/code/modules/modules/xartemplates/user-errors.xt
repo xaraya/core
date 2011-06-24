@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">Installation Error</h2>
+        <span class="xar-mod-title">Installation Error</span>
     </div>
     <div class="xar-mod-body">
         <fieldset>

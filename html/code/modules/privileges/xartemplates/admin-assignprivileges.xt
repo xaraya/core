@@ -5,13 +5,13 @@
         xarPrivileges::getPrivileges(array('module' => $tab))
     </xar:set>
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">
+        <span class="xar-mod-title">
             <xar:if condition="xarModVars::get('privileges','use_module_alias')">
                 <xar:var scope="module" module="privileges" name="module_alias_name"/>
             <xar:else />
                 Privileges Administration
             </xar:if>
-        </h2>
+        </span>
         <xar:template module="privileges" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">

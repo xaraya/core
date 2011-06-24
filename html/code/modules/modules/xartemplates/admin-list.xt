@@ -18,7 +18,7 @@
     <xar:set name="icon_none">xarTpl::getImage('icons/none.png','theme')</xar:set>
 
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">Modules Administration</h2>
+        <span class="xar-mod-title">Modules Administration</span>
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">

@@ -4,7 +4,7 @@
     <xar:style scope="module" file="privtree"/>
     <xar:javascript scope="module" module="privileges" filename="xarTree.js"/>
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">Privileges Administration</h2>
+        <span class="xar-mod-title">Privileges Administration</span>
     </div>
     <div class="xar-mod-body">
         <h2>Remove Privilege From Role</h2>

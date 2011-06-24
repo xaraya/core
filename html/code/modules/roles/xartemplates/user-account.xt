@@ -2,9 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">
-                Account Information
-        </h2>
+        <span class="xar-mod-title">Account Information</span>
     </div>
     <div class="xar-mod-body">
     <div class="xar-mod-page-head">

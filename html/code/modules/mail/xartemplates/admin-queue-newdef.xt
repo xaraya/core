@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <div class="xar-mod-head">
-        <h2>Create mail queue definition</h2>
+        <span class="xar-mod-title">Create mail queue definition</span>
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">

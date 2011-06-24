@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:style scope="module" file="privileges"/>
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">Roles Administration</h2>
+        <span class="xar-mod-title">Roles Administration</span>
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">

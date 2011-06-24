@@ -17,7 +17,7 @@
     </script>
     ]]>
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">Base Module</h2>
+        <span class="xar-mod-title">Base Module</span>
     </div>
     <div class="xar-mod-body">
 

@@ -5,7 +5,7 @@
         easy, if the header needs to be suppressed
     -->
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">Mail Administration</h2>
+        <span class="xar-mod-title">Mail Administration</span>
         <xar:template type="module" file="admin-menu"/>
     </div>
 </xar:template>

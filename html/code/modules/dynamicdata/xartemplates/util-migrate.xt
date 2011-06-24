@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:style scope="module" file="dd"/>
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">Dynamic Data Utilities</h2>
+        <span class="xar-mod-title">Dynamic Data Utilities</span>
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">

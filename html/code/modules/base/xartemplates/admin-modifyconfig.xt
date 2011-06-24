@@ -12,7 +12,7 @@
     //</xar:comment>
     </script>
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">Base Administration</h2>
+        <span class="xar-mod-title">Base Administration</span>
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">

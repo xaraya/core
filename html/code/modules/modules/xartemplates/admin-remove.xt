@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">Modules Administration</h2>
+        <span class="xar-mod-title">Modules Administration</span>
     </div>
     <div class="xar-mod-body">
         <h2>Module Removal with dependents still not removed</h2>

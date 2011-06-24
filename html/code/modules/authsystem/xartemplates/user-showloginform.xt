@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">Login to an existing account</h2>
+        <span class="xar-mod-title">Login to an existing account</span>
     </div>
     <div class="xar-mod-body">
         <form action="#xarModURL('authsystem','user','login')#" method="post" enctype="application/x-www-form-urlencoded">

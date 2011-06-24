@@ -10,7 +10,7 @@
     ***********
     -->
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">Error Message</h2>
+        <span class="xar-mod-title">Error Message</span>
     </div>
     <div class="xar-mod-body">
         <xar:var name="label">Exception Icon</xar:var>

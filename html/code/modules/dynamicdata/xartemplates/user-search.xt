@@ -3,7 +3,7 @@
     <!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="empty($ishooked)">
         <div class="xar-mod-head">
-            <h2 class="xar-mod-pagetitle">Dynamic Data</h2>
+            <span class="xar-mod-title">Dynamic Data</span>
         </div>
         <div class="xar-mod-body">
             <xar:if condition="empty($gotobject)">

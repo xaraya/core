@@ -6,9 +6,7 @@
     -->
     <xar:style scope="common"/>
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">            
-            Themes Administration             
-        </h2>
+        <span class="xar-mod-title">Themes Administration</span>
     </div>
     <div class="xar-mod-body">
         <h2>Cascading Style Sheets (CSS) Manager</h2>

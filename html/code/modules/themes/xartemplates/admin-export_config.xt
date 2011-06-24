@@ -3,13 +3,13 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:style scope="module" file="dd"/>
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">
+        <span class="xar-mod-title">
             <xar:if condition="xarModVars::get('themes','use_module_alias')">
                 <xar:var scope="module" module="themes" name="module_alias_name"/>
             <xar:else />
                 Export Theme Configuration
             </xar:if>
-        </h2>
+        </span>
         <xar:template type="module" file="admin-menu"/>
     </div>
     <div class="xar-mod-body">

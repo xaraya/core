@@ -8,7 +8,7 @@
     <xar:set name="inactivetab">'xar-tab'</xar:set>
     <xar:set name="inactivelink">'xar-norm xar-norm-outline'</xar:set>
     <div class="xar-mod-head">
-        <h2 class="xar-mod-pagetitle">Base Module</h2>
+        <span class="xar-mod-title">Base Module</span>
     </div>
     <div class="xar-mod-body">
         <h2>EventSystem Scenario</h2>
