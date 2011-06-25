@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Dynamic Data</span>
-    </div>
+    <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object)">
             <!-- here we retrieve the complete object in the function, and we only pass a reference of it to the data-display tag -->

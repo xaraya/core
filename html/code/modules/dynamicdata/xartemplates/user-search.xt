@@ -2,9 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="empty($ishooked)">
-        <div class="xar-mod-head">
-            <span class="xar-mod-title">Dynamic Data</span>
-        </div>
+        <xar:template file="user-mod-head"/>
         <div class="xar-mod-body">
             <xar:if condition="empty($gotobject)">
                 <xar:set name="label">xarML('Dynamic Data')</xar:set>

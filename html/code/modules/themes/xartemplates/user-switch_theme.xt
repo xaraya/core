@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Themes</span>
-    </div>
+    <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
         <form action="#xarModURL('themes', 'user', 'switch_theme')#" method="post">
             <fieldset>

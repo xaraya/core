@@ -7,9 +7,7 @@
     <xar:set name="activelink">'xar-accent xar-accent-outline'</xar:set>
     <xar:set name="inactivetab">'xar-tab'</xar:set>
     <xar:set name="inactivelink">'xar-norm xar-norm-outline'</xar:set>
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Base Module</span>
-    </div>
+    <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
         <h2>EventSystem Scenario</h2>
         <p>The event system is used by packages of Xaraya to trigger certain events in the system. These events are dispatched to the active modules which may define special functions that can act on those events.</p>
