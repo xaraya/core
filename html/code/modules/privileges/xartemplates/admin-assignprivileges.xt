@@ -4,16 +4,7 @@
     <xar:set name="options">
         xarPrivileges::getPrivileges(array('module' => $tab))
     </xar:set>
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">
-            <xar:if condition="xarModVars::get('privileges','use_module_alias')">
-                <xar:var scope="module" module="privileges" name="module_alias_name"/>
-            <xar:else />
-                Privileges Administration
-            </xar:if>
-        </span>
-        <xar:template module="privileges" file="admin-menu"/>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
     <div class="xar-mod-page-head">
         <h2>            

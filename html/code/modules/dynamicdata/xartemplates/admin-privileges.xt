@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Dynamic Data Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>
             <xar:if condition="!empty($extcomponent) and $extcomponent eq 'Field'">Select Fields

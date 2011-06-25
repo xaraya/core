@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">
-            <xar:if condition="xarModVars::get('dynamicdata','use_module_alias')">
-                <xar:var scope="module" module="dynamicdata" name="module_alias_name"/>
-            <xar:else />
-                 Dynamic Data Administration
-            </xar:if>
-        </span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Rename Item #$table#</h2>
 
