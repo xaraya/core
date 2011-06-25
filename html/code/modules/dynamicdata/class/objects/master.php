@@ -1065,8 +1065,11 @@ class DataObjectMaster extends Object
         return DataObjectLinks::getLinkedObjects($this, $linktype, $itemid);
     }
 
-    private function assembleQuery($object, $prefix=false)
+    private function assembleQuery($object, $prefix=false, $type="SELECT")
     {
+        // We start from scratch
+        $this->dataquery->cleartables();
+
         $descriptor = $object->descriptor;
         // Set up the db tables
         if ($descriptor->exists('sources')) {
@@ -1078,8 +1081,14 @@ class DataObjectMaster extends Object
 //                    foreach ($sources as $source) $object->datasources[$source[0]] = array($source[1],$source[2]);
                     $object->datasources = $sources;
                     foreach ($object->datasources as $key => $value) {
+                    
                         // Support simple array form
-                        if (is_array($value)) $value = current($value);
+                        if (is_array($value)) {
+                            $tabletype = $value[1];
+                            $value = $value[0];
+                        } else {
+                            $tabletype = 'internal';
+                        }
                         // Remove any spaces and similar chars
                         $value = trim($value);
                         $key = trim($key);
@@ -1090,7 +1099,8 @@ class DataObjectMaster extends Object
                             $this->dataquery->cleartables();
                             break;
                         } else {
-                            if (is_array($value)) $value = current($value);
+                            if ($type != "SELECT" && $tabletype != "internal") continue;
+//                            if (is_array($value)) $value = current($value);
                             if ($prefix) $this->dataquery->addtable($value,$object->name . "_" . $key);
                             else $this->dataquery->addtable($value,$key);    
                         }
@@ -1118,24 +1128,28 @@ class DataObjectMaster extends Object
                     $fromobjectparts = explode('.',$left);
                     $fromobject = $fromobjectparts[0];
                     if (isset($object->datasources[$fromobject])) {
-                        if (isset($object->datasources[$fromobject][1]) && $object->datasources[$fromobject][1] == 'internal')
+                        if (isset($object->datasources[$fromobject][1]) && $object->datasources[$fromobject][1] == 'internal') {
                             $join = 'join';
-                        else
+                        } else {
+                            if ($type != "SELECT") continue;
                             $join = 'rightjoin';
+                        }
                     }
                     
                     $toobjectparts = explode('.',$right);
                     $toobject = $toobjectparts[0];
                     if (isset($object->datasources[$toobject])) {
-                        if (isset($object->datasources[$toobject][1]) && $object->datasources[$toobject][1] == 'internal')
+                        if (isset($object->datasources[$toobject][1]) && $object->datasources[$toobject][1] == 'internal') {
                             $join = 'join';
-                        else
+                        } else {
+                            if ($type != "SELECT") continue;
                             $join = 'leftjoin';
+                        }                        
                     }
                     
                     // Add this relation's join to the object's dataquery
                     if ($prefix) $this->dataquery->{$join}($object->name . "_" . $left,$object->name . "_" . $right);
-                    else $this->dataquery->{$join}($left,$right);                    
+                    else $this->dataquery->{$join}($left,$right);
                 }
             } catch (Exception $e) {}
         }
