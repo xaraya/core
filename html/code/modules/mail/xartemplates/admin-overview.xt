@@ -8,121 +8,122 @@
             <xar:img scope="theme" file="mail.png" alt="$label" width="96" height="96" class="xar-module-icon"/>
             <h2 class="xar-mod-pagetitle">Overview</h2>
         </div>
-
-        <h3>What is it?</h3>
-        <p>
-            The Mail module controls the ways that your site sends email to users or groups of users.
-            This is a utility module that takes information from other modules installed on your site,
-            and formats and sends email for them. The Mail module is a core module within Xaraya and cannot be removed.
-        </p>
-        <p>
-            Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('mail')))#">here</a>.
-        </p>
-
-        <h3>The Admin interface</h3>
-        <p>
-            As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Mail &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
-        </p>
-        <p>
-            In addition, this module also supports the following configuration options:
+        <div class="xar-mod-page-body">
+            <h3>What is it?</h3>
+            <p>
+                The Mail module controls the ways that your site sends email to users or groups of users.
+                This is a utility module that takes information from other modules installed on your site,
+                and formats and sends email for them. The Mail module is a core module within Xaraya and cannot be removed.
+            </p>
+            <p>
+                Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('mail')))#">here</a>.
+            </p>
+    
+            <h3>The Admin interface</h3>
+            <p>
+                As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Mail &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
+            </p>
+            <p>
+                In addition, this module also supports the following configuration options:
+                <ul>
+                    <li>
+                        <strong>Mail Admin:</strong> lets you define the user that will receive notification emails. This must be a member of the Administrators group. This is also the user whose email address is the reply-to address on the emails Xaraya sends.
+                    </li>
+                    <li>
+                        <strong>Different reply-to:</strong> lets you define a different reply-to address on the emails Xaraya sends to users.
+                    </li>
+                    <li>
+                        <strong>Show templates in emails:</strong> If this option is checked, the names of the templates used in emails will appear in the email texts. This is a debugging aid and should not be checked in production sites.
+                    </li>
+                    <li>
+                        <strong>HTML options:</strong> lets you define a HTML header and footer for emails sent as HTML..
+                    </li>
+                    <li>
+                        <strong>Text options:</strong> lets you define settings for emails sent as plain text..
+                    </li>
+                    <li>
+                        <strong>Sending server options:</strong> lets you define the server for outgoing mail. The choices are:
+                        <ul>
+                            <li>
+                                <em>Sendmail:</em> the Sendmail MTA needs to be installed on your server for this to work..
+                            </li>
+                            <li>
+                                <em>Qmail:</em> the Qmail MTA needs to be installed on your server for this to work..
+                            </li>
+                            <li>
+                                <em>Mail:</em> uses the PHP mail() function to send emails..
+                            </li>
+                            <li>
+                                <em>SMTP server:</em> lets you define your own SMTP server for the Mail module to use...
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Scheduled mails:</strong> lets send emails at predetermined intervals. The Scheduler module must be installed in order to configure this option..
+                    </li>
+                    <li>
+                        <strong>Filtering options:</strong> lets you filter email texts fro certain strings and replace them with others. This can be used to customize generic email templates for specific purposes.
+                    </li>
+                    <li>
+                        <strong>Redirect emails:</strong> This debugging option lets you redirect all mail output to a defined email address. CCs and BCCs are suppressed...
+                    </li>
+                    <li>
+                        <strong>Supress emails:</strong> This debugging option suppresses emails sent from the Mail module. You can use it to test other modules using email without actually sending the mail.
+                    </li>
+                </ul>
+            </p>
+            <p>
+                Clicking on the <strong>Test Configuration</strong> link in the Admin menu lets you send a test email to an email address of your choice (the default is the site administrator email address entered when Xaraya is installed).
+            </p>
+            
+            <!-- Hide for now
+            <p>
+                Clicking on the <strong>Queue Management</strong> link in the Admin menu lets you create and manage mail queues in your Xaraya installation.
+            </p>
+            -->
+            
+            <p>
+                Clicking on the <strong>Notification Templates</strong> link in the Admin menu lets you to customize the notification
+                templates that are sent when the Mail module is hooked to another module.
+            </p>
+    
+            <h3>Available Blocks</h3>
+            <p>The Mail module has no blocks.</p>
+    
+            <h3>Available Dataproperties</h3>
+            <p>The Mail module has no dataproperties</p>
+    
+            <h3>Available Hooks</h3>
             <ul>
                 <li>
-                    <strong>Mail Admin:</strong> lets you define the user that will receive notification emails. This must be a member of the Administrators group. This is also the user whose email address is the reply-to address on the emails Xaraya sends.
+                    <strong>Create Hook</strong>:&#160;lets other modules send an email when an item is created.
                 </li>
                 <li>
-                    <strong>Different reply-to:</strong> lets you define a different reply-to address on the emails Xaraya sends to users.
+                    <strong>Delete Hook</strong>:&#160;lets other modules send an email when an item is deleted.
                 </li>
                 <li>
-                    <strong>Show templates in emails:</strong> If this option is checked, the names of the templates used in emails will appear in the email texts. This is a debugging aid and should not be checked in production sites.
-                </li>
-                <li>
-                    <strong>HTML options:</strong> lets you define a HTML header and footer for emails sent as HTML..
-                </li>
-                <li>
-                    <strong>Text options:</strong> lets you define settings for emails sent as plain text..
-                </li>
-                <li>
-                    <strong>Sending server options:</strong> lets you define the server for outgoing mail. The choices are:
-                    <ul>
-                        <li>
-                            <em>Sendmail:</em> the Sendmail MTA needs to be installed on your server for this to work..
-                        </li>
-                        <li>
-                            <em>Qmail:</em> the Qmail MTA needs to be installed on your server for this to work..
-                        </li>
-                        <li>
-                            <em>Mail:</em> uses the PHP mail() function to send emails..
-                        </li>
-                        <li>
-                            <em>SMTP server:</em> lets you define your own SMTP server for the Mail module to use...
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <strong>Scheduled mails:</strong> lets send emails at predetermined intervals. The Scheduler module must be installed in order to configure this option..
-                </li>
-                <li>
-                    <strong>Filtering options:</strong> lets you filter email texts fro certain strings and replace them with others. This can be used to customize generic email templates for specific purposes.
-                </li>
-                <li>
-                    <strong>Redirect emails:</strong> This debugging option lets you redirect all mail output to a defined email address. CCs and BCCs are suppressed...
-                </li>
-                <li>
-                    <strong>Supress emails:</strong> This debugging option suppresses emails sent from the Mail module. You can use it to test other modules using email without actually sending the mail.
+                    <strong>Update Hook</strong>:&#160;lets other modules send an email when an item is updated.
                 </li>
             </ul>
-        </p>
-        <p>
-            Clicking on the <strong>Test Configuration</strong> link in the Admin menu lets you send a test email to an email address of your choice (the default is the site administrator email address entered when Xaraya is installed).
-        </p>
-        
-        <!-- Hide for now
-        <p>
-            Clicking on the <strong>Queue Management</strong> link in the Admin menu lets you create and manage mail queues in your Xaraya installation.
-        </p>
-        -->
-        
-        <p>
-            Clicking on the <strong>Notification Templates</strong> link in the Admin menu lets you to customize the notification
-            templates that are sent when the Mail module is hooked to another module.
-        </p>
-
-        <h3>Available Blocks</h3>
-        <p>The Mail module has no blocks.</p>
-
-        <h3>Available Dataproperties</h3>
-        <p>The Mail module has no dataproperties</p>
-
-        <h3>Available Hooks</h3>
-        <ul>
-            <li>
-                <strong>Create Hook</strong>:&#160;lets other modules send an email when an item is created.
-            </li>
-            <li>
-                <strong>Delete Hook</strong>:&#160;lets other modules send an email when an item is deleted.
-            </li>
-            <li>
-                <strong>Update Hook</strong>:&#160;lets other modules send an email when an item is updated.
-            </li>
-        </ul>
-
-        <!--
-        <h3>Further Information</h3>
-        <p>Further information on the Mail module can be found at</p>
-        <ul>
-            <li>Mail Module Extension page at 
-            <xar:var name="label">Mail Module - Xaraya Extension 771</xar:var>
-            <a title="#$label#"
-            href="http://www.xaraya.com/index.php/release/771.html">Xaraya Extension and
-            Releases</a>. Click on Version History tab at the bottom to get the latest release
-            information.</li>
-            <li>Related tutorials and documentation on Mail module found at 
-            <xar:var name="label">Related documentation on Mail</xar:var>
-            <a href="http://www.xaraya.com/index.php/keywords/mail/" title="#$label#">Xaraya Documentation.</a></li>
-        </ul>
-        <p class="xar-sub">
-        <strong>&#160;Mail Module - Overview</strong>
-        <br />&#160;Version 0.1.1&#160; 2005-11-02</p>
-        -->
+    
+            <!--
+            <h3>Further Information</h3>
+            <p>Further information on the Mail module can be found at</p>
+            <ul>
+                <li>Mail Module Extension page at 
+                <xar:var name="label">Mail Module - Xaraya Extension 771</xar:var>
+                <a title="#$label#"
+                href="http://www.xaraya.com/index.php/release/771.html">Xaraya Extension and
+                Releases</a>. Click on Version History tab at the bottom to get the latest release
+                information.</li>
+                <li>Related tutorials and documentation on Mail module found at 
+                <xar:var name="label">Related documentation on Mail</xar:var>
+                <a href="http://www.xaraya.com/index.php/keywords/mail/" title="#$label#">Xaraya Documentation.</a></li>
+            </ul>
+            <p class="xar-sub">
+            <strong>&#160;Mail Module - Overview</strong>
+            <br />&#160;Version 0.1.1&#160; 2005-11-02</p>
+            -->
+        </div>
     </div>
 </xar:template>

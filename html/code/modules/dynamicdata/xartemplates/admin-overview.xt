@@ -39,7 +39,7 @@
                     </a>
                 </li>
             </ul>
-        </div><!--xar-mod-page-head-->
+        </div>
         <div class="xar-mod-page-body">
             <div id="page-1">
                 <h3>What is it?</h3>
@@ -433,8 +433,8 @@
                 </table>
     
             </div>
-        </div><!--/xar-mod-page-body-->
-    </div><!--/xar-mod-body-->
+        </div>
+    </div>
     <script type="text/javascript">
         showtab (1,3)
     </script>

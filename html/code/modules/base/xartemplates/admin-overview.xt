@@ -233,6 +233,6 @@
             <strong>&#160;Base Module Overview</strong>
             <br />&#160;Version 1.0.2&#160; 2006-02-09</p>
             -->
-        </div><!--/xar-mod-page-body-->
-    </div><!--/xar-mod-body-->
+        </div>
+    </div>
 </xar:template>
