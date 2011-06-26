@@ -3,9 +3,11 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:var name="label">official icon</xar:var>
-        <xar:img scope="theme" file="mail.png" alt="$label" width="96" height="96" class="xar-module-icon"/>
-        <h2>Overview</h2>
+        <div class="xar-mod-page-head">
+            <xar:var name="label">Official Icon</xar:var>
+            <xar:img scope="theme" file="mail.png" alt="$label" width="96" height="96" class="xar-module-icon"/>
+            <h2 class="xar-mod-pagetitle">Overview</h2>
+        </div>
 
         <h3>What is it?</h3>
         <p>
