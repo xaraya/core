@@ -40,7 +40,9 @@
                                 </xar:if>
                             </xar:foreach>
                         </select>
-                        &#160;<input type="submit" value="Select"/>
+                        &#160;
+                        <xar:var name="label">Select</xar:var>
+                        <xar:button type="submit" label="$label"/>
                     </div>
                 </div>
             </fieldset>
@@ -72,7 +74,9 @@
                                 </xar:if>
                             </xar:foreach>
                         </select>
-                        &#160;<input type="submit" value="Select"/>
+                        &#160;
+                        <xar:var name="label">Select</xar:var>
+                        <xar:button type="submit" label="$label"/>
                     </div>
                 </div>
             </fieldset>
@@ -102,7 +106,9 @@
                     </div>
                     <div class="xar-col">
                         <xar:data-input type="module" name="module_id" value="$module_id" firstline=" " onchange="javascript:submit();"/>
-                        &#160;<input type="submit" value="Select"/>
+                        &#160;
+                        <xar:var name="label">Select</xar:var>
+                        <xar:button type="submit" label="$label"/>
                     </div>
                 </div>
             </fieldset>

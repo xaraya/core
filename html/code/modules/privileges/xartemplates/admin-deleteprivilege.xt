@@ -62,9 +62,9 @@
                 <input type="hidden" name="confirm" id="confirm" value="1"/>
                 <input type="hidden" name="confirmation" id="confirmation" value="1"/>
                 <xar:var name="label">Delete Privilege</xar:var>
-                <xar:button type="submit" label="$label" class="xar-margin-thickright"/>
+                <xar:button type="submit" label="$label"/>
                 <xar:var name="label">Cancel</xar:var>
-                <xar:button type="cancel" label="$label" class="xar-margin-thickleft"/>
+                <xar:button type="cancel" label="$label"/>
             </div>
         </form>
     </div>

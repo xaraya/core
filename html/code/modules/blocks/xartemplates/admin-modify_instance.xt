@@ -408,7 +408,8 @@
                         <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                         <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                         <input type="hidden" name="bid" id="bid" value="#$bid#"/>
-                        <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright"/>
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label"/>
 	                </fieldset>
 	            </xar:if>
         </div>

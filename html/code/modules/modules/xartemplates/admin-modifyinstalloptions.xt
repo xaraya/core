@@ -12,7 +12,7 @@
             <!--        <xar:module main="false" module="#$modname#" type="admin" func="installoptions"/> -->
             <fieldset class="xar-form-actions">
                 <xar:var name="label">Save Configuration</xar:var>
-                <input type="submit" name="update" value="#$label#"/>
+                <xar:button type="submit" label="$label" name="update"/>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
             </fieldset>
         </form>

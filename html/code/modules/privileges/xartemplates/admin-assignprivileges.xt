@@ -85,7 +85,7 @@
                     	</dt>
                     	<dd>                    	
                     		<xar:var name="label">Update Assignments</xar:var>
-                    		<input type="submit" value="#$label#"/>
+                            <xar:button type="submit" label="$label"/>
                     	</dd>
                     </dl>
                 	<input type="hidden" name="authid" id="authid" value="#$authid#"/>
@@ -159,7 +159,7 @@
                     	<dt><label>Assign</label></dt>
                     	<dd>
                     		<xar:var name="label">Update Assignments</xar:var>
-                    		<input type="submit" value="#$label#"/>
+                            <xar:button type="submit" label="$label"/>
                     	</dd>
                     </dl>
                     <input type="hidden" name="role" value="#$anon#"/>    
@@ -233,9 +233,10 @@
                     </dl>
                     <dl>
                     <dt><label>Assign</label></dt>
-	                    <dd><xar:var name="label">Update Assignments</xar:var>
-	                    <input type="submit" value="#$label#"/>
-                    </dd>
+	                    <dd>
+                            <xar:var name="label">Update Assignments</xar:var>
+                            <xar:button type="submit" label="$label"/>
+                        </dd>
                     </dl>
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="phase" id="phase" value="update"/>

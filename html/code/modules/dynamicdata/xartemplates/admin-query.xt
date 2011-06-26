@@ -237,7 +237,7 @@
                 <tr>
                     <td>&#160;</td>
                     <td colspan="#$numfields#">
-                        <input type="submit" value="#$submit#"/>
+                        <xar:button type="submit" label="$submit"/>
                     </td>
                 </tr>
             </table>
@@ -349,7 +349,7 @@
                 </xar:if>
                 <tr>
                     <td colspan="4">
-                        <input type="submit" value="#$submit#"/>
+                        <xar:button type="submit" label="$submit"/>
                     </td>
                 </tr>
             </table>

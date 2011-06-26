@@ -12,7 +12,8 @@
                 <label for="xml" class="xar-form-label">Object :</label>
                 <div class="xar-form-container-after">
                     <xar:data-input type="object" name="objectid" value="$objectid" display_prop="name" store_prop="objectid" onchange="submit()"/>
-                    <input type="submit" value="Refresh"/>
+                    <xar:var name="label">Refresh</xar:var>
+                    <xar:button type="submit" label="$label"/>
                 </div>
             </fieldset>
         </form>

@@ -72,7 +72,7 @@
                     </td>
                     <td class="xar-align-center">
                         <xar:var name="label">Refresh</xar:var>
-                        <input type="submit" name="reload" id="reload" value="#$label#"/>
+                        <xar:button type="submit" label="$label" name="reload" id="reload"/>
                     </td>
                 </tr>
             </table>

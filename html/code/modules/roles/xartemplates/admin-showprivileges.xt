@@ -156,7 +156,7 @@
                         <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                         <input type="hidden" name="roleid" id="roleid" value="#$roleid#"/>
                         <xar:var name="label">Add Privilege</xar:var>
-                        <input type="submit" value="#$label#"/>
+                        <xar:button type="submit" label="$label"/>
                     </div>
                 </div>
             </form>

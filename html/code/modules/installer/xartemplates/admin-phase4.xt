@@ -138,9 +138,10 @@
             <strong>not</strong>be able to create the database for you. It will be able to populate
             an already existing database.
             </p>
-            <div class="xar-align-center" style="margin: 2em 0;">
+            <div class="xar-form-actions" style="margin: 2em 0;">
                 <input type="hidden" name="install_phase" id="install_phase" value="5"/>
-                <input type="submit" value="Continue"/>
+                <xar:var name="label">Continue</xar:var>
+                <xar:button type="submit" label="$label"/>
             </div>
         </form>
     </div>

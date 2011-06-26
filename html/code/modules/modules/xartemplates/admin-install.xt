@@ -78,7 +78,7 @@
                         </ul>
                     <xar:else />
                         <xar:var name="label">Install All</xar:var>
-                        <input type="submit" name="command" id="command" value="#$label#" tabindex="9"/>
+                        <xar:button type="submit" label="$label" name="command" id="command" tabindex="9"/>
                     </xar:if>
                 </div>
             </form>

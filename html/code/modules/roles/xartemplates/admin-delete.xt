@@ -69,15 +69,15 @@
         <xar:else />
             <form method="post" action="#xarModURL('roles','admin','delete')#" enctype="application/x-www-form-urlencoded">
                 <h3 class="xar-align-center">Confirm the deletion of #$itemtypename# #$name#</h3>
-                <div class="xar-align-center">
+                <div class="xar-form-actions">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="id" id="id" value="#$id#"/>
                     <input type="hidden" name="confirmation" id="confirmation" value="1"/>
                     <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#"/>
                     <xar:var name="label">Delete</xar:var>
-                    <input type="submit" value="#$label#" class="xar-margin-thickright"/>
+                    <xar:button type="submit" label="$label"/>
                     <xar:var name="label">Cancel</xar:var>
-                    <input type="button" value="#$label#" onclick="document.location='&xar-modurl-roles-admin-display;&amp;id=#$id#';" class="xar-margin-thickleft"/>
+                    <xar:button type="cancel" label="$label"/>
                 </div>
             </form>
         </xar:if>

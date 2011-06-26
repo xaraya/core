@@ -37,7 +37,7 @@
 	            </label>
 	        </xar:if>
 	        <xar:var name="label">Log In</xar:var>
-	        <input type="submit" value="#$label#"/>
+            <xar:button type="submit" label="$label"/>
 	        <a href="#xarModURL('roles','user','lostpassword')#" class="xar-action-secondary">Request new password</a>
         </fieldset>
     </form>

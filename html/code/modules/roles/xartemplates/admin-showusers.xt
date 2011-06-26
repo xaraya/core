@@ -156,7 +156,7 @@
                     </td>
                     <td>
                         <xar:var name="label">Reload</xar:var>
-                        <input type="submit" name="reload" id="reload" value="#$label#"/>
+                        <xar:button type="submit" label="$label" name="reload" id="reload"/>
                     </td>
                 </tr>
             </table>
@@ -289,7 +289,7 @@
 		                    <input type="hidden" name="search" id="search" value="#xarVarPrepForDisplay($search)#"/>
 		                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
 		                    <xar:var name="label">Change Status</xar:var>
-		                    <input type="submit" value="#$label#" />
+                            <xar:button type="submit" label="$label"/>
 		                </div>
                     </div>
                 </fieldset>

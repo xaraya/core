@@ -259,7 +259,8 @@
 	                </xar:if>
 	                <xar:if condition="!$frozen">
 	                    <div class="xar-col dummy">
-	                        <input type="submit" value="#xarML('Update')#"/>
+                            <xar:var name="label">Update</xar:var>
+                            <xar:button type="submit" label="$label"/>
 	                    </div>
 	                </xar:if>
 	            </fieldset>

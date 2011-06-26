@@ -47,7 +47,7 @@
                         <xar:data-input type="module" name="pmodule" id="pmodule" value="$pmodule" firstline="Choose" onchange="$onchange"/>
                         <input type="hidden" name="id" id="id" value="#$id#"/>
                         <xar:var name="label">Test Privileges</xar:var>
-                        <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
+                        <xar:button type="submit" label="$label"/>
                     </div>
                 </div>
             </fieldset>

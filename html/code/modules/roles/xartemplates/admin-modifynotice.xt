@@ -114,7 +114,7 @@
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="phase" id="phase" value="update"/>
                 <xar:var name="label">Update Notification Configuration</xar:var>
-                <input type="submit" value="#$label#"/>
+                <xar:button type="submit" label="$label"/>
             </fieldset>
         </form>
     </div>

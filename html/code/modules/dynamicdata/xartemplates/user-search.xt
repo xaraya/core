@@ -64,8 +64,8 @@
                                 <tr>
                                     <td colspan="2">
                                         <input type="hidden" name="numitems" value="#$numitems#"/>
-                                        <xar:set name="search">'Search'</xar:set>
-                                        <input type="submit" value="#$search#"/>
+                                        <xar:var name="label">Search</xar:var>
+                                        <xar:button type="submit" label="$label"/>
                                     </td>
                                 </tr>
                             </table>

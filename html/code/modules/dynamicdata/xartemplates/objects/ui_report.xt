@@ -58,7 +58,7 @@
                             </xar:foreach>
                         </select>
                         <xar:var name="label">Select</xar:var>
-                        <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
+                        <xar:button type="submit" label="$label"/>
                     </div>
                 </div>
             </fieldset>

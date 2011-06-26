@@ -36,11 +36,10 @@
                     </div>
                 </div>
             </fieldset>
-            <fieldset>
-                <div class="xar-align-center">
-                    <input type="submit" value="Login" tabindex="4"/>
-                    <input type="hidden" name="redirecturl" id="returnurl" value="#$redirecturl#"/>
-                </div>
+            <fieldset class="xar-form-actions">
+                <xar:var name="label">Login</xar:var>
+                <xar:button type="submit" label="$label" tabindex="4"/>
+                <input type="hidden" name="redirecturl" id="returnurl" value="#$redirecturl#"/>
             </fieldset>
         </form>
         <script type="text/javascript">

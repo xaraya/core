@@ -20,7 +20,7 @@
                 <input type="hidden" name="phase" id="phase" value="update"/>
                 <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                 <xar:var name="submitLabel">Change Theme</xar:var>
-                <input type="submit" value="#$submitLabel#"/>
+                <xar:button type="submit" label="$submitLabel"/>
             </fieldset>
         </form>
     </div>

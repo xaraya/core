@@ -48,12 +48,14 @@
                             <input type="text" name="blockname" id="blockname" value="" maxlength="255" class="xar-form-textlong"/>
                         </xar:if>
                         &#160;
-                        <input type="submit" name="scan" value="#xarML('Scan Module')#"/>
+                        <xar:var name="label">Scan Module</xar:var>
+                        <xar:button type="submit" label="$label"/>
                     </div>
                 </div>
             </fieldset>
             <fieldset class="xar-form-actions">
-                <input type="submit" name="submit" value="#xarML('Add Block Type')#" class="xar-margin-thick"/>
+                <xar:var name="label">Add Block Type</xar:var>
+                <xar:button type="submit" label="$label"/>
             </fieldset>
         </form>
     </div>

@@ -27,7 +27,7 @@
             <fieldset class="xar-form-actions">
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="phase" id="phase" value="send"/>
-                <input type="submit" value="#$emaillabel#"/>
+                <xar:button type="submit" label="$emaillabel"/>
             </fieldset>
         </form>
     </div>

@@ -142,7 +142,7 @@
                         <input type="hidden" name="phase" id="phase" value="update"/>
                         <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                         <xar:var name="label">Update Roles Configuration</xar:var>
-                        <input type="submit" value="#$label#"/>
+                        <xar:button type="submit" label="$label"/>
                     </fieldset>
                 </form>
                 <!--
@@ -226,7 +226,7 @@
                             <input type="hidden" name="phase" id="phase" value="update"/>
                             <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                             <xar:var name="label">Update Roles Configuration</xar:var>
-                            <input type="submit" value="#$label#"/>
+                            <xar:button type="submit" label="$label"/>
                         </fieldset>
                     </form>
                 <!--
@@ -246,7 +246,7 @@
                           <input type="hidden" name="phase" id="phase" value="update"/>
                           <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                           <xar:var name="label">Update Roles Configuration</xar:var>
-                          <input type="submit" value="#$label#"/>
+                          <xar:button type="submit" label="$label"/>
                       </fieldset>
                     </form>
                     <xar:else />
@@ -269,7 +269,7 @@
                             <input type="hidden" name="phase" id="phase" value="update"/>
                             <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                             <xar:var name="label">Update Roles Configuration</xar:var>
-                            <input type="submit" value="#$label#"/>
+                            <xar:button type="submit" label="$label"/>
                         </fieldset>
                     </form>
                     <xar:else />

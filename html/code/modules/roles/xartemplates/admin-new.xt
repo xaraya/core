@@ -106,7 +106,7 @@
                 <input type="hidden" name="tplmodule" id="tplmodule" value="roles"/>
                 <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                 <xar:var name="label">Add</xar:var>
-                <input type="submit" name="confirm" value="#$label#"/>
+                <xar:button type="submit" label="$label" name="confirm"/>
             </fieldset>
         </form>
     </div>

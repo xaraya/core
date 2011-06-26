@@ -121,7 +121,8 @@
 	                                This Page</option>
 	                            </select>
 	                            <noscript>
-	                                <input type="submit" value="Go"/>
+                                    <xar:var name="label">Go</xar:var>
+                                    <xar:button type="submit" label="$label"/>
 	                            </noscript>
 	                        <xar:else />
 	                            Theme not active, activate it first.
@@ -139,9 +140,9 @@
 	                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
 	                <input type="hidden" name="id" id="id" value="#$themeid#"/>
 	                <xar:var name="label">Update</xar:var>
-	                <input type="submit" name="confirm" value="#$label#"/>&#160;
+                    <xar:button type="submit" label="$label" name="confirm"/>&#160;
 	                <xar:var name="label">Update and Exit</xar:var>
-	                <input type="submit" name="exit" value="#$label#"/> 
+                    <xar:button type="submit" label="$label" name="exit"/>
 	            </fieldset>
 	        </form>
 	    </div>

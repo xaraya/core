@@ -42,7 +42,7 @@
                 </xar:if>
             </fieldset>
             <xar:var name="label">Create</xar:var>
-            <input type="submit" name="create" value="#$label#"/>
+            <xar:button type="submit" label="$label" name="create"/>
         </form>
     </div>
 </xar:template>

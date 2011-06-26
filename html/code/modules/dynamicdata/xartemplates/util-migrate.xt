@@ -39,7 +39,7 @@
                                     </xar:foreach>
                                 </select>
                                 <xar:var name="label">Load</xar:var>
-                                <input type="submit" name="load" value="#$label#"/>
+                                <xar:button type="submit" label="$label" name="load"/>
                             <xar:else />No mappings available.</xar:if>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                     <div class="xar-col">
                         <input type="text" name="newmap" id="newmap" value="#$newmap#" class="xar-form-textlong"/>
                         <xar:var name="label">Save</xar:var>
-                        <input type="submit" name="save" value="#$label#"/>
+                        <xar:button type="submit" label="$label" name="save"/>
                     </div>
                 </div>
             </fieldset>
@@ -176,18 +176,18 @@
                 <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
                 <xar:var name="label">Back</xar:var>
                 <xar:if condition="$step gt 1">
-                    <input class="dd-norm" type="submit" name="back" value="#$label#"/>
+                    <xar:button type="submit" label="$label" name="back"/>
                 <xar:else />
                     <input class="dd-norm" type="submit" name="back" value="#$label#"
                     disabled="disabled"/>
                 </xar:if>
                 <xar:var name="label">Next</xar:var>
-                <input class="dd-norm" type="submit" name="next" value="#$label#"/>
+                <xar:button type="submit" label="$label" name="next"/>
                 <xar:var name="label">Test</xar:var>
                 <xar:var name="label1">Finish</xar:var>
                 <xar:if condition="!empty($check)">
-                    <input class="dd-norm" type="submit" name="test" value="#$label#"/>
-                    <input class="dd-norm" type="submit" name="confirm" value="#$label1#"/>
+                    <xar:button type="submit" label="$label" name="test"/>
+                    <xar:button type="submit" label="$label1" name="confirm"/>
                 <xar:else />
                     <input class="dd-norm" type="submit" name="test" value="#$label#" disabled="disabled"/>
                     <input class="dd-norm" type="submit" name="confirm" value="#$label1#" disabled="disabled"/>

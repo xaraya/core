@@ -146,7 +146,7 @@
                     <input type="hidden" name="phase" id="phase" value="update"/>
                     <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                     <xar:var name="label">Update Privileges Configuration</xar:var>
-                    <input type="submit" value="#$label#"/>
+                    <xar:button type="submit" label="$label"/>
                 </fieldset>
             </form>
         </xar:if>
@@ -241,7 +241,7 @@
                     <input type="hidden" name="phase" id="phase" value="update"/>
                     <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                     <xar:var name="label">Update Privileges Configuration</xar:var>
-                    <input type="submit" value="#$label#"/>
+                    <xar:button type="submit" label="$label"/>
                 </fieldset>
             </form>
         </xar:if>
@@ -306,7 +306,7 @@
                     <input type="hidden" name="phase" id="phase" value="update"/>
                     <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                     <xar:var name="label">Update Privileges Configuration</xar:var>
-                    <input type="submit" value="#$label#"/>
+                    <xar:button type="submit" label="$label"/>
                 </fieldset>
             </form>
         </xar:if>
@@ -326,7 +326,7 @@
                 <input type="hidden" name="phase" id="phase" value="update"/>
                 <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                 <xar:var name="label">Update Privileges Configuration</xar:var>
-                <input type="submit" value="#$label#"/>
+                <xar:button type="submit" label="$label"/>
             </fieldset>
         </xar:if>
         <!-- Begin Mask-Based Security Checks by Group -->

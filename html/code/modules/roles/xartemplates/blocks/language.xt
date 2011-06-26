@@ -16,7 +16,7 @@
                 </xar:loop>
             </select>
             <xar:var name="label">Set Language</xar:var>
-            <input type="submit" name="change_language" value="#$label#"/>
+            <xar:button type="submit" label="$label" name="change_language"/>
         </div>
     </form>
 </xar:template>

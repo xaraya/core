@@ -160,21 +160,19 @@
     <xar:if condition="!empty($hooks)">
         <xar:foreach in="$hooks" key="$module" value="$output">#$output#</xar:foreach>
     </xar:if>
-    <fieldset>
-        <div class="xar-align-center">
-            <!--
-            Optional extra table for data sources - use a text box if you want to make this configurable
-            <input type="text" name="table" id="table" value="#$table#"/>
-            -->
-            <xar:if condition="!empty($table)">
-                <input type="hidden" name="table" id="table" value="#$table#"/>
-            </xar:if>
-            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-            <input type="hidden" name="objectid" id="objectid" value="#$objectid#"/>
-            <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>
-            <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
-            <xar:var name="label">Update Properties</xar:var>
-            <input type="submit" value="#$label#"/>
-        </div>
+    <fieldset class="xar-form-actions">
+        <!--
+        Optional extra table for data sources - use a text box if you want to make this configurable
+        <input type="text" name="table" id="table" value="#$table#"/>
+        -->
+        <xar:if condition="!empty($table)">
+            <input type="hidden" name="table" id="table" value="#$table#"/>
+        </xar:if>
+        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+        <input type="hidden" name="objectid" id="objectid" value="#$objectid#"/>
+        <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>
+        <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
+        <xar:var name="label">Update Properties</xar:var>
+        <xar:button type="submit" label="$label"/>
     </fieldset>
 </xar:template>

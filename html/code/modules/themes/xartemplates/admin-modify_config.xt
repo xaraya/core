@@ -11,13 +11,13 @@
             <xar:data-form object="$object" tplmodule="themes"/>
           </fieldset>
           <fieldset>
-            <div class="xar-align-center">
+            <div class="xar-form-actions">
                 <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                 <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
                 <input type="hidden" name="tplmodule" id="tplmodule" value="themes"/>
                 <input type="hidden" name="confirm" id="confirm" value="true"/>
                 <xar:var name="label">Update</xar:var>
-                <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
+                <xar:button type="submit" label="$label"/>
             </div>
           </fieldset>
         </form>

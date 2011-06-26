@@ -162,7 +162,7 @@
             </fieldset>
             <fieldset class="xar-form-actions">
                 <xar:var name="label">Query</xar:var>
-                <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
+                <xar:button type="submit" label="$label"/>
             </fieldset>
         </form>
         <xar:if condition="!empty($result)">

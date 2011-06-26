@@ -37,7 +37,8 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="xar-align-center">
-                        <input type="submit" value="Send Notification(s)" tabindex="9"/>
+                        <xar:var name="label">Send Notification(s)</xar:var>
+                        <xar:button type="submit" label="$label" tabindex="9"/>
                     </td>
                 </tr>
             </table>

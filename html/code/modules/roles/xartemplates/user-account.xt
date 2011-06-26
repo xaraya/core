@@ -25,7 +25,7 @@
                         <input type="hidden" name="moduleload" id="moduleload" value="#$moduleload#"/>
                         <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#"/>
                         <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                        <input type="submit" value="#$submitlabel#"/>
+                        <xar:button type="submit" label="$submitlabel"/>
                     </fieldset>
                 </form>
             </xar:if>

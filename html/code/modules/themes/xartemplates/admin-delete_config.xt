@@ -17,14 +17,14 @@
         <xar:data-display object="$object"/>
 
         <form method="post" action="#xarModURL('themes','admin','delete_config')#">
-            <div class="xar-align-center">
+            <div class="xar-form-actions">
                 <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                 <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
                 <input type="hidden" name="confirm" id="confirm" value="1"/>
                 <xar:var name="label">Delete</xar:var>
-                <input type="submit" id="confirm" value="#$label#" class="xar-margin-thickright"/>
+                <xar:button type="submit" label="$label" id="confirm"/>
                 <xar:var name="label">Cancel</xar:var>
-                <input type="button" value="#$label#" class="xar-margin-thickleft" onclick="history.go(-1)"/>
+                <xar:button type="cancel" label="$label"/>
             </div>
         </form>
     </div>

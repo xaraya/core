@@ -23,7 +23,7 @@
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="confirmed" id="confirmed" value="true"/>
                 <xar:var name="value">Add</xar:var>
-                <input type="submit" value="$value" tabindex="2"/>
+                <xar:button type="submit" label="$label" tabindex="2"/>
             </fieldset>
         </form>
     </div>

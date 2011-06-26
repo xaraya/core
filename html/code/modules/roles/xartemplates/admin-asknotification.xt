@@ -81,7 +81,7 @@
                 <input type="hidden" name="groupid" id="groupid" value="#$groupid#"/>
                 <input type="hidden" name="state" id="state" value="#$state#"/>
                 <xar:var name="label">Send</xar:var>
-                <input type="submit" value="#$label#" class="xar-margin-thickright"/>
+                <xar:button type="submit" label="$label"/>
                 <xar:var name="label">Cancel</xar:var>
                 <input type="button" value="#$label#" onclick="history.back(-1);" class="xar-margin-thickleft"/>
             </fieldset>

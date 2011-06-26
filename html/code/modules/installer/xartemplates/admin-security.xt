@@ -45,8 +45,9 @@
                     <xar:data-input type="textbox" name="newname" id="newname" size="30"/>.php                
                 </div>
             </div>
-            <div class="xar-align-center" style="margin: 2em 0;">
-                <input type="submit" name="create" id="create" value="Continue"/>
+            <div class="xar-form-actions" style="margin: 2em 0;">
+                <xar:var name="label">Continue</xar:var>
+                <xar:button type="submit" label="$label" name="create" id="create"/>
                 <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
                 <input type="hidden" name="confirmed" id="confirmed" value="true"/>
             </div>

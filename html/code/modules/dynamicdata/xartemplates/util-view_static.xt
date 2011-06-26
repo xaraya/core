@@ -7,12 +7,13 @@
         <xar:template type="module" file="utility-menu"/>
         <xar:var name="firstline">Choose a table</xar:var>
         <form action="#xarServer::getCurrentURL()#" method="post">
-            <div>
+            <div class="xar-form-actions">
                 New Table:
                 &#160;
                 <xar:data-input type="textbox" name="newtable"/>
                 &#160;
-                <input type="submit" value="Add a new table"/>                    
+                <xar:var name="label">Add a new table</xar:var>
+                <xar:button type="submit" label="$label"/>
             </div>
             <div>
                 Current Table:&#160;

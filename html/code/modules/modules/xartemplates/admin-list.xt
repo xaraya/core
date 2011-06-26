@@ -91,7 +91,7 @@
                         <label for="hidecore">Core Modules</label>
                     </td>
                     <td class="xar-align-center">
-                        <input type="submit" name="reload" id="reload" value="#$reloadlabel#"/>
+                        <xar:button type="submit" label="$reloadlabel" name="reload" id="reload"/>
                     </td>
                 </tr>
             </table>
@@ -137,7 +137,7 @@
                                 </td>
                                 <td class="xar-align-center">
                                     <xar:if condition="$selstyle eq 'pro'">
-                                        <input type="submit" name="info" id="info" value="#$infolabel#"/>
+                                        <xar:button type="submit" label="$infolabel" name="info" id="info"/>
                                     <xar:elseif condition="xarModVars::get('modules','use_module_icons')"/>
                                         <a href="#$modinfo['infourlnew']#">
                                             <img src="#$icon_info#" alt="#$infolabel#"/>
@@ -180,7 +180,7 @@
                                                 <option label="Remove" disabled="disabled"></option>
                                             </select>
                                             <noscript>
-                                                <input type="submit" name="ok" id="ok" value="OK"/>
+                                                <xar:button type="submit" label="$label" name="ok" id="ok"/>
                                             </noscript>
                                         </xar:if>
                                     <xar:elseif condition="xarModVars::get('modules','use_module_icons')"/>
@@ -222,7 +222,8 @@
                                 <td class="xar-align-center">
                                     <xar:if condition="$modinfo['modid'] ne 1 and ($modinfo['state'] eq XARMOD_STATE_INACTIVE or $modinfo['state'] eq XARMOD_STATE_ACTIVE)">
                                         <xar:if condition="$selstyle eq 'pro'">
-                                            <input type="submit" name="prop" id="prop" value="Set"/>
+                                            <xar:var name="label">Set</xar:var>
+                                            <xar:button type="submit" label="$label" name="prop" id="prop"/>
                                         <xar:elseif condition="xarModVars::get('modules','use_module_icons')"/>
                                             <a href="#$modinfo['propurl']#">
                                                 <img src="#$icon_modify#" alt="#$modinfo['prop']#"/>
@@ -237,7 +238,8 @@
                                 <td class="xar-align-center">
                                     <xar:if condition="xarModIsAvailable($modinfo['name'])">
                                         <xar:if condition="$selstyle eq 'pro'">
-                                            <input type="submit" name="edit" id="edit" value="Edit"/>
+                                            <xar:var name="label">Edit</xar:var>
+                                            <xar:button type="submit" label="$label" name="edit" id="edit"/>
                                         <xar:elseif condition="xarModVars::get('modules','use_module_icons')"/>
                                             <a href="#$modinfo['editurl']#">
                                                 <img src="#$icon_hooks#" alt="#$modinfo['edit']#"/>

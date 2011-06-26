@@ -223,7 +223,8 @@
                   <input type="hidden" name="id" id="id" value="#$id#"/>
                   <input type="hidden" name="displayname" id="displayname" value="#$displayname#"/>
                   <input type="hidden" name="newdisplayname" id="newdisplayname" value="#$displayname#"/>
-                  <input type="submit" value="#xarML('Save Changes')#" class="xar-margin-thick"/>
+                  <xar:var name="label">Save Changes</xar:var>
+                  <xar:button type="submit" label="$label"/>
                 </fieldset>
             </form>
         </xar:if>

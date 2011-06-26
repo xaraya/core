@@ -8,11 +8,12 @@
         <p>Click Flush Property Cache to clear the DynamicData Property Definitions cache and to
         reload the properties definitions from the file system.</p>
         <form method="post" action="#xarModURL('dynamicdata','admin','update_propertydefs')#">
-            <ul class="xar-mod-actions">
+            <fieldset class="xar-form-actions">
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="flushPropertyCache" value="true"/>
-                <li><input type="submit" value="Flush Property Cache"/></li>
-            </ul>
+                <xar:var name="label">Flush Property Cache</xar:var>
+                <xar:button type="submit" label="$label"/>
+            </fieldset>
         </form>
         </div><!--xar-mod-page-head-->
         <div class="xar-mod-page-body">

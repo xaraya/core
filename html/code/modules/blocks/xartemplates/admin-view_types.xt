@@ -144,7 +144,8 @@
                     <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
                     <input type="hidden" name="tid" id="tid" value="#$tid#" />
                     <input type="hidden" name="confirm" id="confirm" value="1" />
-                    <input type="submit" value="#xarML('Update')#" class="xar-margin-thickright" />
+                    <xar:var name="label">Update</xar:var>
+                    <xar:button type="submit" label="$label"/>
                 </fieldset>
             </form>
             <xar:elseif condition="$tab eq 'preview'"/>
