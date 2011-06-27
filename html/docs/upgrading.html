@@ -145,24 +145,24 @@
                                         </li>
                                         <li>
                                             <p>
-                                                Add the (new) roles data objects: For reference (i.e. the id index values may vary in your database):
+                                                Add or update the (new) roles data objects: For reference (i.e. the id index values may vary in your database):
                                                 <pre>
-INSERT INTO `xar_dynamic_objects` (`id`, `name`, `label`, `module_id`, `itemtype`, `parent_id`, `class`,
+INSERT INTO `xar_dynamic_objects` (`id`, `name`, `label`, `module_id`, `itemtype`, `class`,
 `filepath`, `urlparam`, `maxid`, `config`, `isalias`) VALUES
-(7, 'roles_roles', 'Role', 27, 1, 0, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1),
-(8, 'roles_users', 'User', 27, 2, 0, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1),
-(9, 'roles_groups', 'Group', 27, 3, 0, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1);
+(7, 'roles_roles', 'Role', 27, 1, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1),
+(8, 'roles_users', 'User', 27, 2, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1),
+(9, 'roles_groups', 'Group', 27, 3, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1);
                                                 </pre>
                                             </p>
                                         </li>
                                         <li>
                                             <p>
-                                                Add the (new) privileges data objects: For reference (i.e. the id index values may vary in your database):
+                                                Add or update the (new) privileges data objects: For reference (i.e. the id index values may vary in your database):
                                                 <pre>
-INSERT INTO `xar_dynamic_objects` (`id`, `name`, `label`, `module_id`, `itemtype`, `parent_id`, `class`,
+INSERT INTO `xar_dynamic_objects` (`id`, `name`, `label`, `module_id`, `itemtype`, `class`,
 `filepath`, `urlparam`, `maxid`, `config`, `isalias`) VALUES
-(10, 'privileges_baseprivileges', 'Base Privileges', 1098, 1, 0, 'DataObject', '', 'itemid', 0, '', 1),
-(11, 'privileges_privileges', 'Privileges', 1098, 2, 0, 'DataObject', '', 'itemid', 0, '', 1);
+(10, 'privileges_baseprivileges', 'Base Privileges', 1098, 1, 'DataObject', '', 'itemid', 0, '', 1),
+(11, 'privileges_privileges', 'Privileges', 1098, 2, 'DataObject', '', 'itemid', 0, '', 1);
                                                 </pre>
                                             </p>
                                         </li>
@@ -188,12 +188,12 @@ INSERT INTO `xar_dynamic_objects` (`id`, `name`, `label`, `module_id`, `itemtype
                                         </li>
                                         <li>
                                             <p>
-                                                Change xar_dynamic_properties.value to xar_dynamic_properties.defaultvalue in the dd properties table if required.
+                                                Change xar_dynamic_properties.default to xar_dynamic_properties.defaultvalue in the dd properties table if required.
                                             </p>
                                         </li>
                                         <li>
                                             <p>
-                                                Add the modules modvars:
+                                                Add the modules modvars to the module variables table with module_id = 1:
                                                 <br/>
                                                     defaultmoduletype:   user
                                                 <br/>
@@ -324,6 +324,21 @@ DELETE FROM `xar_roles` WHERE `xar_roles`.`name` = 'Myself' LIMIT 1;
 DELETE FROM xar_security_acl s INNER JOIN xar_privileges p ON p.id = s.privilege_id
 INNER JOIN xar_modules m ON p.module_id = m.id AND m.regid = 9
                                                 </pre>
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Remove any usermenu hooks. These hooks are no longer used in 2.x and cannot be updated. Check the hooks table for entries with area GUI and type user.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Check if the dynamic_configurations table contains a column named <b>ignore_empty</b>. If not, add it.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Check if the module_vars table contains an entry with module_id NULL and name System.Core.VersionRev. If no such entryy exists, create it and give it the value <b>s:0:""</b>.
                                             </p>
                                         </li>
                                     </ol>
