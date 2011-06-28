@@ -288,10 +288,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function setWhere($where)
     {
+        if (empty($where)) return true;
+        
         // find all single-quoted pieces of text with and/or and replace them first, to
         // allow where clauses like : title eq 'this and that' and body eq 'here or there'
         $idx = 0;
         $found = array();
+        if (is_array($where)) $where = $where[0];
         if(preg_match_all("/'(.*?)'/",$where,$matches)) {
             foreach($matches[1] as $match) {
                 // skip if it doesn't contain and/or
@@ -328,6 +331,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
 
             $pieces = preg_split('/\s+/',$part);
+            if (count($pieces) == 0) continue;
             $pre = '';
             $post = '';
             $name = array_shift($pieces);
