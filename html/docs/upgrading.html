@@ -149,10 +149,14 @@
                                                 <pre>
 INSERT INTO `xar_dynamic_objects` (`id`, `name`, `label`, `module_id`, `itemtype`, `class`,
 `filepath`, `urlparam`, `maxid`, `config`, `isalias`) VALUES
-(7, 'roles_roles', 'Role', 27, 1, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1),
-(8, 'roles_users', 'User', 27, 2, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1),
-(9, 'roles_groups', 'Group', 27, 3, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1);
+(8, 'roles_users', 'User', 27, 1, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1),
+(9, 'roles_groups', 'Group', 27, 2, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1);
                                                 </pre>
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                               Check the roles table that users have type = 1 and groups type = 2. In Xaraya 1x the corresponding values are 0 for users and 1 for groups. If that is the case then the values need to be adjusted.
                                             </p>
                                         </li>
                                         <li>
@@ -376,7 +380,7 @@ INNER JOIN xar_modules m ON p.module_id = m.id AND m.regid = 9
                                             </pre>
                                         </li>
                                         <li>
-                                            Change all "label" attributes in dataproperty tags to "for".
+                                            Change all "label" attributes in data-label tags to "for".
                                         </li>
                                         <li>
                                             Change legacy code calls:
@@ -403,6 +407,9 @@ INNER JOIN xar_modules m ON p.module_id = m.id AND m.regid = 9
     xarModDelVar                      xarModVars::delete($modName, $name)
     xarModDelAllVars                  xarModVars::delete_all
 
+    xarConfigGetVars                  xarConfigVars::get(null, ...)
+    xarConfigSetVar                   xarConfigVars::set(null, ...)
+    
     xarModGetUserVar                  xarModUserVars::get
     xarModSetUserVar                  xarModUserVars::set
 
@@ -411,6 +418,9 @@ INNER JOIN xar_modules m ON p.module_id = m.id AND m.regid = 9
     xarDBGetTables                    xarDB::getTables
 
     xarRegisterMask                   xarMasks::register
+    
+    xarRequestgetInfo                 xarController::$request->getInfo
+    xarResponseRedirect               xarController::redirect
                                             </pre>.
                                         </li>
                                         <li>
@@ -419,6 +429,7 @@ INNER JOIN xar_modules m ON p.module_id = m.id AND m.regid = 9
     &lt;xar:base-include-javascript...   &lt;xar:javascript...
     &lt;xar:base-render-javascript...    &lt;xar:place-javascript...
     &lt;xar:additional-styles />         &lt;xar:place-css />
+    #$tpl:additionalStyles#           &lt;xar:place-css />
                                             </pre>.
                                         </li>
                                         <li>
@@ -462,7 +473,7 @@ nbsp   160
                                             If the module has dataproperties these will need to be rewritten to conform with the Jamaica structure of dataproperties. See e.g. the properties in the Base module's xarproperties directory for examples.
                                         </li>
                                         <li>
-                                            If the module uses &lt;xar:getitem or &lt;xar:getitem tags these need to be adjusted.
+                                            If the module uses &lt;xar:getitem or &lt;xar:getitems tags these need to be adjusted.
                                             <ul>
                                                 <li>
                                                     Use the object attribute to pass the tag an object, and the objectnameattribute to pass the name of an object.
@@ -512,6 +523,9 @@ if (!$good) throw new Exception('Not good');
                                 </p>
                                 <p>
                                     The block group of any admin menus in your themes should be changed to "admin". This makes the admin menus show in the back end when the admin page template mentioned above is being displayed.
+                                </p>
+                                <p>
+                                    Although not required, it is good practice to remove any &lt;xar:mlstring> tags from your theme that are <i>not inside a &lt;xar:ml> tag</i>. Such tags are not longer used to indicate translatable text, as in Xaraya 2x all text nodes in the DOM are considered translatable.
                                 </p>
                                 <a name="misc" style="text-decoration: none;"><h2>Miscellaneous</h2></a> <a href="#top">top</a>
                                 <p>
