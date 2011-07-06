@@ -268,7 +268,7 @@ class xarController extends Object
                 $modType = $entrypoint['action'];
                 $entrypoint = $entrypoint['entry'];
             }
-            self::$emtryPoint = $entrypoint;
+            self::$entryPoint = $entrypoint;
         }
 
         // Create a new request and make its route the current route
