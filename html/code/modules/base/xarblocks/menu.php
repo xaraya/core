@@ -159,6 +159,12 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 
         switch ($oldversion) {
             case '0.0.0': // upgrade menu blocks to version 2.2.0
+                // fix for blocks coming from a 1x install
+                // @todo: this shouldn't happen, need to figure out why it does
+                if (!is_array($this->content)) {
+                    $content = @unserialize($this->content);
+                    $this->content = !empty($content) && is_array($content) ? $content : array();
+                }
                 // convert the old modulelist string to an array
                 if (!empty($this->modulelist) && !is_array($this->modulelist)) {
                     $oldlist = @explode(',', $this->modulelist);
