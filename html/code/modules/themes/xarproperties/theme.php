@@ -25,8 +25,7 @@ class ThemeProperty extends ObjectRefProperty
 
     public $filter = array();
 
-// CHECKME: we're not actually using the objectref property here, because we want displayname etc.
-    public $initialization_refobject    = 'themes';            // ID of the object we want to reference
+    public $initialization_refobject    = 'themes';            // The object we want to reference
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -34,13 +33,12 @@ class ThemeProperty extends ObjectRefProperty
         $this->filepath = 'modules/themes/xarproperties';
         // these correspond to what we actually get from the modules getlist() function below
         $this->initialization_store_prop   = 'regid';
-        $this->initialization_display_prop = 'displayname';
+        $this->initialization_display_prop = 'name';
     }
 
     function showInput(Array $data=array())
     {
         if (!empty($data['filter'])) $this->filter = $data['filter'];
-        if (!empty($data['store_prop'])) $this->initialization_store_prop = $data['store_prop'];
         return parent::showInput($data);
     }
 
