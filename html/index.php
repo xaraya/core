@@ -1,5 +1,5 @@
 <?php
-/**
+/** 
  * Xaraya Web Interface Entry Point 
  *
  * @copyright see the html/credits.html file in this release
