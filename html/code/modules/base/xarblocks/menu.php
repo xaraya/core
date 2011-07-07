@@ -57,7 +57,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                                         'url' => '[base]&page=docs',
                                         'label'=> 'Documentation',
                                         'title' => 'General Documentation',
-                                        'visible' => 1,
+                                        'visible' => 0,
                                         'menulinks' => array(),
                                     ),
                                     array(
@@ -66,7 +66,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                                         'url' => '[base]page=events',
                                         'label'=> 'Event System',
                                         'title' => 'Event Messaging System Overview',
-                                        'visible' => 1,
+                                        'visible' => 0,
                                         'menulinks' => array(),
                                     ),
                                   );
