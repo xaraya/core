@@ -9,6 +9,7 @@
         <h2>Utilities - Manage Tables</h2>
         <xar:template type="module" file="utility-menu"/>
         <xar:var name="firstline">Choose a table</xar:var>
+        <xar:set name="firstline">"0,$firstline"</xar:set>
         <form action="#xarServer::getCurrentURL()#" method="post">
             <div>
                 New Table:
