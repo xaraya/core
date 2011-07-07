@@ -122,7 +122,7 @@ function dynamicdata_admin_modify(Array $args=array())
         break;
 
         case 'clone':
-            // user needs admin access to changethe access rules
+            // user needs admin access to change the access rules
             $data['adminaccess'] = xarSecurityCheck('',0,'All',$object->objectid . ":" . $name . ":" . "$itemid",0,'',0,800);
             $data['name'] = $object->properties['name']->value;
             if ($object->objectid == 1) {
