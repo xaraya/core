@@ -15,7 +15,7 @@
 /**
  * Return static table information
  */
-function dynamicdata_util_view_static(Array $args=array())
+function dynamicdata_admin_view_static(Array $args=array())
 {
     // Security
     if(!xarSecurityCheck('AdminDynamicData')) return;

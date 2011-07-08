@@ -25,7 +25,7 @@
                 <xar:set name="tabclass">$activetab=='import'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='import'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','util','import')#" class="#$linkclass#">Import Object</a>
+                    <a href="#xarModURL('dynamicdata','admin','import')#" class="#$linkclass#">Import Object</a>
                 </li>
             </xar:sec>
             <xar:sec mask="EditDynamicData" catch="false">
@@ -33,7 +33,7 @@
                 <xar:set name="tabclass">$activetab=='export'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='export'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','util','export')#" class="#$linkclass#">Export Object</a>
+                    <a href="#xarModURL('dynamicdata','admin','export')#" class="#$linkclass#">Export Object</a>
                 </li>
             </xar:sec>
             <xar:sec mask="EditDynamicData" catch="false">
@@ -41,7 +41,7 @@
                 <xar:set name="tabclass">$activetab=='view_static'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='view_static'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','util','view_static')#" class="#$linkclass#">Manage Tables</a>
+                    <a href="#xarModURL('dynamicdata','admin','view_static')#" class="#$linkclass#">Manage Tables</a>
                 </li>
             </xar:sec>
             <xar:sec mask="AdminDynamicData" catch="false">
@@ -49,7 +49,7 @@
                 <xar:set name="tabclass">$activetab=='meta'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='meta'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','util','meta')#" class="#$linkclass#">Table Browser</a>
+                    <a href="#xarModURL('dynamicdata','admin','meta')#" class="#$linkclass#">Table Browser</a>
                 </li>
             </xar:sec>
             <xar:sec mask="AdminDynamicData" catch="false">
@@ -57,7 +57,7 @@
                 <xar:set name="tabclass">$activetab=='relations'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='relations'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','util','relations')#" class="#$linkclass#">Object Mapping</a>
+                    <a href="#xarModURL('dynamicdata','admin','relations')#" class="#$linkclass#">Object Mapping</a>
                 </li>
             </xar:sec>
             <!--
@@ -66,7 +66,7 @@
                 <xar:set name="tabclass">$activetab=='migrate'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='migrate'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarModURL('dynamicdata','util','migrate')#" class="#$linkclass#">Migrate Items</a>
+                    <a href="#xarModURL('dynamicdata','admin','migrate')#" class="#$linkclass#">Migrate Items</a>
                 </li>
             </xar:sec>
             -->

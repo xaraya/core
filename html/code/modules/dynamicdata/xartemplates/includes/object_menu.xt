@@ -29,7 +29,7 @@
         </a>
     </xar:if>
     <xar:if condition="$tab ne 'export'">
-        <xar:set name="exportlink">xarModURL('dynamicdata','util','export',array('objectid' => $itemid))</xar:set>
+        <xar:set name="exportlink">xarModURL('dynamicdata','admin','export',array('objectid' => $itemid))</xar:set>
         &#160;<a href="#$exportlink#" title="Export Object Definition for #$label#">
             <img src="#xarTplGetImage('icons/export-xml.png', 'base')#" width="16" height="16" alt="export"/>
         </a>

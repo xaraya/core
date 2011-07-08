@@ -22,7 +22,7 @@
         <form method="get" action="&xar-baseurl;index.php">
             <fieldset>
                 <input type="hidden" name="module" value="dynamicdata"/>
-                <input type="hidden" name="type" value="util"/>
+                <input type="hidden" name="type" value="admin"/>
                 <input type="hidden" name="func" value="relations"/>
                 <legend>Links between Objects</legend>
                 <div class="xar-form-input-wrapper">
@@ -50,7 +50,7 @@
         <form method="get" action="&xar-baseurl;index.php">
             <fieldset>
                 <input type="hidden" name="module" value="dynamicdata"/>
-                <input type="hidden" name="type" value="util"/>
+                <input type="hidden" name="type" value="admin"/>
                 <input type="hidden" name="func" value="relations"/>
                 <legend>Links between Tables</legend>
                 <div class="xar-form-input-wrapper">
@@ -86,7 +86,7 @@
         <form method="get" action="&xar-baseurl;index.php">
             <fieldset>
                 <input type="hidden" name="module" value="dynamicdata"/>
-                <input type="hidden" name="type" value="util"/>
+                <input type="hidden" name="type" value="admin"/>
                 <input type="hidden" name="func" value="relations"/>
                 <legend>Links between Modules</legend>
                 <div class="xar-form-input-wrapper">

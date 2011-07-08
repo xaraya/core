@@ -21,7 +21,7 @@ function dynamicdata_admin_utilities(Array $args=array())
     extract($args);
     if(!xarVarFetch('q','str', $data['option'], 'query', XARVAR_NOT_REQUIRED)) {return;}
     xarTplSetPageTitle(xarVarPrepForDisplay(xarML($data['option'])));
-    xarController::redirect(xarModURL('dynamicdata', 'util', 'import'));
+    xarController::redirect(xarModURL('dynamicdata', 'admin', 'import'));
     return true;
 }
 ?>

@@ -51,7 +51,7 @@
         <p>[ 
             <xar:if condition="empty($details)">
                 <xar:if condition="!empty($objectid)">
-                    <a href="#xarModURL('dynamicdata','util','relations',array('objectid' => $objectid))#">Show Object Links</a>
+                    <a href="#xarModURL('dynamicdata','admin','relations',array('objectid' => $objectid))#">Show Object Links</a>
                 <xar:else />
                     <a href="#$detailslink#">Show Static Properties and Relations</a>
                 </xar:if>
@@ -89,7 +89,7 @@
                 <!-- xar:data-view module="dynamicdata" itemtype="1" where="$where" param="itemid" layout="cells" / -->
                 <xar:if condition="count($tables) gt 0">
                     <xar:foreach in="$tables" value="$table">
-                        <form method="post" action="#xarModURL('dynamicdata','util','importprops')#">
+                        <form method="post" action="#xarModURL('dynamicdata','admin','importprops')#">
                             <div class="xar-align-center">
                                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                                 <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>

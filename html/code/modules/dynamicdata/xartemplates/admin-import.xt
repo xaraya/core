@@ -12,7 +12,7 @@
         <xar:if condition="!empty($warning)">
             <p>#$warning#</p>
         </xar:if>
-        <form method="post" action="#xarModURL('dynamicdata','util','import')#">
+        <form method="post" action="#xarModURL('dynamicdata','admin','import')#">
             <fieldset>
                 <legend>Import Object Definition</legend>
                 <div class="xar-form-input-wrapper">

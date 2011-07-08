@@ -16,7 +16,7 @@
  */
     sys::import('modules.dynamicdata.class.objects.master');
     
-    function dynamicdata_util_new_static()
+    function dynamicdata_admin_new_static()
     {
         // Security
         if (!xarSecurityCheck('AdminDynamicData')) return;
@@ -39,7 +39,7 @@
             
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
-                return xarTplModule('dynamicdata','util','new_static', $data);        
+                return xarTplModule('dynamicdata','admin','new_static', $data);        
             } else {
                 if (empty($data['table'])) throw new Exception(xarML('Table name missing'));
                 
@@ -66,7 +66,7 @@
                 $dbconn->Execute($query);
                 
                 // Jump to the next page
-                xarController::redirect(xarModURL('dynamicdata','util','view_static',array('table' => $data['table'])));
+                xarController::redirect(xarModURL('dynamicdata','admin','view_static',array('table' => $data['table'])));
                 return true;
             }
         }

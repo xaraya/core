@@ -15,7 +15,7 @@
 /**
  * Return relationship information (test only)
  */
-function dynamicdata_util_relations(Array $args=array())
+function dynamicdata_admin_relations(Array $args=array())
 {
     // Security
     if (!xarSecurityCheck('AdminDynamicData')) return;
@@ -234,7 +234,7 @@ function dynamicdata_util_relations(Array $args=array())
 
             // add link
             DataObjectLinks::addLink($objectid, $field, $withobjectid, $withfield, $relation, $direction, $extra);
-            xarController::redirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarController::redirect(xarModURL('dynamicdata', 'admin', 'relations',
                                             array('objectid' => $objectid)));
             return true;
 
@@ -247,7 +247,7 @@ function dynamicdata_util_relations(Array $args=array())
                 if (empty($link_id) || empty($val)) continue;
                 DataObjectLinks::removeLink($link_id);
             }
-            xarController::redirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarController::redirect(xarModURL('dynamicdata', 'admin', 'relations',
                                             array('objectid' => $objectid)));
             return true;
 
@@ -314,7 +314,7 @@ function dynamicdata_util_relations(Array $args=array())
             // CHECKME: always bi-directional for tables ?
             $direction = 'bi';
             DataStoreLinks::addLink($table, $field, $withtable, $withfield, $relation, $direction, $extra);
-            xarController::redirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarController::redirect(xarModURL('dynamicdata', 'admin', 'relations',
                                           array('table' => $table)));
             return true;
 
@@ -327,7 +327,7 @@ function dynamicdata_util_relations(Array $args=array())
                 if (empty($link_id) || empty($val)) continue;
                 DataStoreLinks::removeLink($link_id);
             }
-            xarController::redirect(xarModURL('dynamicdata', 'util', 'relations',
+            xarController::redirect(xarModURL('dynamicdata', 'admin', 'relations',
                                           array('table' => $table)));
             return true;
         }

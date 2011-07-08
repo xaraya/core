@@ -1,6 +1,6 @@
 <?php
 /**
- * Delete a table field
+ * Delete a table
  *
  * @package modules
  * @subpackage dynamicdata module
@@ -13,31 +13,28 @@
  */
     sys::import('modules.dynamicdata.class.objects.master');
     
-    function dynamicdata_util_delete_static()
+    function dynamicdata_admin_rename_static_table()
     {
-        //Security
+        // Security
         if (!xarSecurityCheck('AdminDynamicData')) return;
 
         if (!xarVarFetch('table',      'str:1',  $data['table'],    '',     XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('field' ,     'str:1',  $data['field'] , '' ,          XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('newtable',   'str:1',  $data['newtable'],    '',     XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('confirm',    'bool',   $data['confirm'], false,       XARVAR_NOT_REQUIRED)) return;
 
         $data['object'] = DataObjectMaster::getObject(array('name' => 'dynamicdata_tablefields'));
 
         $data['tplmodule'] = 'dynamicdata';
-        $data['authid'] = xarSecGenAuthKey('dynamicdata');
 
         if ($data['confirm']) {
-        
-            // Check for a valid confirmation key
-//            if(!xarSecConfirmAuthKey()) return;
-
-            $query = 'ALTER TABLE ' .$data['table'] . ' DROP COLUMN ' . $data['field'];
+            if (empty($data['newtable'])) 
+                xarController::redirect(xarModURL('dynamicdata','admin','view_static',array('table' => $data['table'])));
+            $query = 'RENAME TABLE ' . $data['table'] . ' TO ' . $data['newtable'];
             $dbconn = xarDB::getConn();
             $dbconn->Execute($query);
 
             // Jump to the next page
-            xarController::redirect(xarModURL('dynamicdata','util','view_static',array('table' => $data['table'])));
+            xarController::redirect(xarModURL('dynamicdata','admin','view_static',array('table' => $data['newtable'])));
             return true;
         }
         return $data;

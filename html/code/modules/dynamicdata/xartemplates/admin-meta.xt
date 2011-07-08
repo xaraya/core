@@ -11,7 +11,7 @@
         <xar:template type="module" file="utility-menu"/>
         <xar:if condition="empty($export)">
             <xar:if condition="!empty($databases)">
-                <form method="post" action="#xarModURL('dynamicdata','util','meta')#">
+                <form method="post" action="#xarModURL('dynamicdata','admin','meta')#">
                     <fieldset>
                         <legend>Select Database</legend>
                         <div class="xar-form-input-wrapper">
@@ -34,7 +34,7 @@
                     <xar:foreach in="$tables" key="$curtable" value="$fields">
                         <tr>
                             <td>
-                                <a href="#xarModURL('dynamicdata','util','meta',array('table'=>$curtable))#">
+                                <a href="#xarModURL('dynamicdata','admin','meta',array('table'=>$curtable))#">
                                 #$curtable#</a>
                             </td>
                             <td class="xar-align-center">
@@ -42,12 +42,12 @@
                             View</a>| 
                                 <a href="#xarModURL('dynamicdata','admin','query',array('table'=>$curtable))#">
                             Query</a>| 
-                                <a href="#xarModURL('dynamicdata','util','meta',array('export'=>'object','table'=>$curtable))#">
+                                <a href="#xarModURL('dynamicdata','admin','meta',array('export'=>'object','table'=>$curtable))#">
                             Export Object</a>| 
-                                <a href="#xarModURL('dynamicdata','util','meta',array('export'=>'ddl','table'=>$curtable))#">
+                                <a href="#xarModURL('dynamicdata','admin','meta',array('export'=>'ddl','table'=>$curtable))#">
                             Export DDL</a>
                             <!--
-                                | <a href="#xarModURL('dynamicdata','util','relations',array('table'=>$curtable))#">
+                                | <a href="#xarModURL('dynamicdata','admin','relations',array('table'=>$curtable))#">
                             Add Relation</a>
                             -->
                            </td>
@@ -59,12 +59,12 @@
                 <p>
                 <a href="#xarModURL('dynamicdata','admin','view',array('table'=>$table))#">View</a>| 
                 <a href="#xarModURL('dynamicdata','admin','query',array('table'=>$table))#">Query</a>| 
-                    <a href="#xarModURL('dynamicdata','util','meta',array('table'=>$table,'export'=>'object'))#">
+                    <a href="#xarModURL('dynamicdata','admin','meta',array('table'=>$table,'export'=>'object'))#">
                 Export Object</a>| 
-                    <a href="#xarModURL('dynamicdata','util','meta',array('table'=>$table,'export'=>'ddl'))#">
+                    <a href="#xarModURL('dynamicdata','admin','meta',array('table'=>$table,'export'=>'ddl'))#">
                 Export DDL</a>
                 <!--
-                | <a href="#xarModURL('dynamicdata','util','relations',array('table'=>$table))#">Add
+                | <a href="#xarModURL('dynamicdata','admin','relations',array('table'=>$table))#">Add
                 Relation</a>
                 -->
                 </p>
@@ -96,13 +96,13 @@
                 </table>
             </xar:if>
             <p class="xar-align-center">
-            <a href="#xarModURL('dynamicdata','util','meta',array('export'=>'object'))#">Export all tables to
+            <a href="#xarModURL('dynamicdata','admin','meta',array('export'=>'object'))#">Export all tables to
             Objects</a>| 
-            <a href="#xarModURL('dynamicdata','util','meta',array('export'=>'ddl'))#">Export all tables to
+            <a href="#xarModURL('dynamicdata','admin','meta',array('export'=>'ddl'))#">Export all tables to
             DDL</a>| 
-            <a href="#xarModURL('dynamicdata','util','meta',array('showdb'=>1))#">Show other databases</a></p>
+            <a href="#xarModURL('dynamicdata','admin','meta',array('showdb'=>1))#">Show other databases</a></p>
         <xar:else />
-            <form method="post" action="#xarModURL('dynamicdata','util','export')#">
+            <form method="post" action="#xarModURL('dynamicdata','admin','export')#">
                 <fieldset>
                     <xar:if condition="$export eq 'ddl'">
                         <legend>Data definition for #$table#</legend>

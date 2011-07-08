@@ -15,7 +15,7 @@
 /**
  * migrate module items
  */
-function dynamicdata_util_migrate(Array $args=array())
+function dynamicdata_admin_migrate(Array $args=array())
 {
     // Security
     if (!xarSecurityCheck('AdminDynamicData')) return;
@@ -351,7 +351,7 @@ function dynamicdata_util_migrate(Array $args=array())
         if (!empty($test)) {
             $data['debug'] = xarML('Test Results') . "\n";
         }
-        $result = xarMod::apiFunc('dynamicdata','util','migrate',
+        $result = xarMod::apiFunc('dynamicdata','admin','migrate',
                                 $data);
         if (!$result) return;
         if (!empty($test)) {
@@ -359,7 +359,7 @@ function dynamicdata_util_migrate(Array $args=array())
             $data['debug'] = xarVarPrepForDisplay($result);
         } elseif (!empty($confirm)) {
             // return and load the same map again
-            $url = xarModURL('dynamicdata','util','migrate',
+            $url = xarModURL('dynamicdata','admin','migrate',
                              array('load' => 1, 'map' => $map));
             xarController::redirect($url);
             return true;

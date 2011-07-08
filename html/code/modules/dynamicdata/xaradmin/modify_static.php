@@ -16,7 +16,7 @@
  */
     sys::import('modules.dynamicdata.class.objects.master');
     
-    function dynamicdata_util_modify_static()
+    function dynamicdata_admin_modify_static()
     {
         // Security
         if (!xarSecurityCheck('EditDynamicData')) return;
@@ -41,7 +41,7 @@
             
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
-                return xarTplModule('dynamicdata','util','modify_static', $data);        
+                return xarTplModule('dynamicdata','admin','modify_static', $data);        
             } else {
                 if (empty($data['table'])) throw new Exception(xarML('Table name missing'));
                 if (empty($data['oldname'])) throw new Exception(xarML('Previous field name missing'));
@@ -69,7 +69,7 @@
                 $dbconn->Execute($query);
                 
                 // Jump to the next page
-                xarController::redirect(xarModURL('dynamicdata','util','view_static',array('table' => $data['table'])));
+                xarController::redirect(xarModURL('dynamicdata','admin','view_static',array('table' => $data['table'])));
                 return true;
             }
         } else {

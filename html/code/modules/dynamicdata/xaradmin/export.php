@@ -15,7 +15,9 @@
 /**
  * Export an object definition or an object item to XML
  */
-function dynamicdata_util_export(Array $args=array())
+sys::import('modules.dynamicdata.class.objects.master');
+
+function dynamicdata_admin_export(Array $args=array())
 {
     // Security
     if (!xarSecurityCheck('AdminDynamicData')) return;
@@ -65,16 +67,16 @@ function dynamicdata_util_export(Array $args=array())
         $xml = xarMod::apiFunc('dynamicdata','util','export',
                              array('objectref' => &$myobject));
 
-        $data['formlink'] = xarModURL('dynamicdata','util','export',
+        $data['formlink'] = xarModURL('dynamicdata','admin','export',
                                       array('objectid' => $myobject->objectid,
                                             'itemid'   => 'all'));
-        $data['filelink'] = xarModURL('dynamicdata','util','export',
+        $data['filelink'] = xarModURL('dynamicdata','admin','export',
                                       array('objectid' => $myobject->objectid,
                                             'itemid'   => 'all',
                                             'tofile'   => 1));
 
         if (!empty($myobject->datastores) && count($myobject->datastores) == 1 && !empty($myobject->datastores['_dynamic_data_'])) {
-            $data['convertlink'] = xarModURL('dynamicdata','util','export',
+            $data['convertlink'] = xarModURL('dynamicdata','admin','export',
                                              array('objectid' => $myobject->objectid,
                                                    'convert'  => 1));
             if (!empty($convert)) {

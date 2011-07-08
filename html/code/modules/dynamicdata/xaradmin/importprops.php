@@ -15,7 +15,7 @@
 /**
  * Import the dynamic properties for a module + itemtype from a static table
  */
-function dynamicdata_util_importprops()
+function dynamicdata_admin_importprops()
 {
     // Security
     if(!xarSecurityCheck('AdminDynamicData')) return;
