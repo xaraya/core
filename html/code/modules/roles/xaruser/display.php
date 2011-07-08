@@ -3,11 +3,12 @@
  * display user
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -15,9 +16,9 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @param int id
- * @return array
+ * @return string output display string
  */
-function roles_user_display($args)
+function roles_user_display(Array $args=array())
 {
     extract($args);
 
@@ -39,7 +40,7 @@ function roles_user_display($args)
 
         $currentid = xarUserGetVar('id');
         if ($currentid == $id) {
-            xarResponse::redirect(xarModURL('roles', 'user', 'account'));
+            xarController::redirect(xarModURL('roles', 'user', 'account'));
         }
 
         $name = $role->getName();
@@ -51,14 +52,12 @@ function roles_user_display($args)
         $data['itemtype'] = $itemtype;
         $data['name'] = $name;
         //get the data for a user
-        if ($data['itemtype'] == ROLES_USERTYPE) {
+        if ($data['itemtype'] == xarRoles::ROLES_USERTYPE) {
             sys::import('modules.dynamicdata.class.objects.master');
             $object = DataObjectMaster::getObject(array('name' => 'roles_users'));
             $object->tplmodule = $args['tplmodule'];   // roles/xartemplates/objects/
             $object->template = $args['template'];  // showdisplay-account.xt
             $object->layout = $args['layout'];
-            $fieldlist = 'name,uname,state,regdate';
-            $object->setFieldList($fieldlist);
             $object->getItem(array('itemid' => $id));
             $data['object'] = $object;
             $data['uname'] = $object->properties['uname']->getValue();

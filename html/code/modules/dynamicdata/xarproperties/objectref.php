@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @todo match the type of the local field to the store property type (must be the same)
  * @todo extra option to limit displaying
@@ -34,7 +36,7 @@ class ObjectRefProperty extends SelectProperty
     // We explicitly use names here instead of id's, so we are independent of
     // how dd assigns them at a given time. Otherwise the configuration is not
     // exportable to other sites.
-    public $initialization_refobject    = 'objects';    // ID of the object we want to reference
+    public $initialization_refobject    = 'objects';    // Name of the object we want to reference
     public $initialization_store_prop   = 'name';       // Name of the property we want to use for storage
     public $initialization_display_prop = 'name';       // Name of the property we want to use for displaying.
 
@@ -52,13 +54,20 @@ class ObjectRefProperty extends SelectProperty
         if (isset($data['refobject']))    $this->initialization_refobject = $data['refobject'];
         if (isset($data['store_prop']))   $this->initialization_store_prop = $data['store_prop'];
         if (isset($data['display_prop'])) $this->initialization_display_prop = $data['display_prop'];
+        if (isset($data['firstline']))    $this->initialization_firstline = $data['firstline'];
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
+        // Allow overriding by specific parameters
+        if (isset($data['refobject']))    $this->initialization_refobject = $data['refobject'];
+        if (isset($data['store_prop']))   $this->initialization_store_prop = $data['store_prop'];
+        if (isset($data['display_prop'])) $this->initialization_display_prop = $data['display_prop'];
+        if (isset($data['firstline']))    $this->initialization_firstline = $data['firstline'];
+
         if (isset($data['value'])) $this->value = $data['value'];
-        if (xarRequest::isObjectURL() && !empty($this->value) && !isset($data['link'])) {
+        if (!empty($this->value) && !isset($data['link'])) {
             // CHECKME: store_prop_is_itemid only gets checked once getOptions() is called later on !
             if (is_numeric($this->value) && $this->store_prop_is_itemid) {
                 $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'display', array('itemid' => $this->value));

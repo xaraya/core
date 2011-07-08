@@ -1,5 +1,5 @@
 <adminmenu>
-    <menuitems>
+    <menuitems> 
         <menuitem>
             <includes>
                 <includeitem>main</includeitem>
@@ -9,7 +9,7 @@
             <label>Overview</label>
         </menuitem>
         <menuitem>
-            <mask>EditBlock</mask>
+            <mask>EditBlocks</mask>
             <includes>
                 <includeitem>view_instances</includeitem>
                 <includeitem>modify_instance</includeitem>
@@ -20,7 +20,7 @@
             <label>View Blocks</label>
         </menuitem>
         <menuitem>
-            <mask>AddBlock</mask>
+            <mask>AddBlocks</mask>
             <includes>
                 <includeitem>new_instance</includeitem>
             </includes>
@@ -29,18 +29,7 @@
             <label>New Block</label>
         </menuitem>
         <menuitem>
-            <mask>DeleteBlock</mask>
-            <includes>
-                <includeitem>view_groups</includeitem>
-                <includeitem>modify_group</includeitem>
-                <includeitem>delete_group</includeitem>
-            </includes>
-            <target>view_groups</target>
-            <title>View the defined block groups</title>
-            <label>Block Groups</label>
-        </menuitem>
-        <menuitem>
-            <mask>AdminBlock</mask>
+            <mask>AdminBlocks</mask>
             <includes>
                 <includeitem>view_types</includeitem>
             </includes>
@@ -49,7 +38,7 @@
             <label>Block Types</label>
         </menuitem>
         <menuitem>
-            <mask>AdminBlock</mask>
+            <mask>AdminBlocks</mask>
             <includes>
                 <includeitem>modifyconfig</includeitem>
             </includes>

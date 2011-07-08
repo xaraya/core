@@ -3,28 +3,29 @@
  * Determine User Home URL
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * @desct
- * @param   userurl to check
- * @param   truecurenturl calling url
- * @param   redirecturl page to return user
- * @return  externalurl boolean true if external URL
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['userurl'] to check<br/>
+ *        string   $args['truecurenturl'] calling url<br/>
+ *        string   $args['redirecturl'] page to return user
+ * @return boolean true if external URL
  */
-function roles_userapi_parseuserhome($args)
+function roles_userapi_parseuserhome(Array $args=array())
 {
-    extract ($args);
+    extract($args);
     if(!isset($url) || !isset($truecurrenturl)) {
         throw new BadParameterException(null,'Wrong arguments to roles_userapi_userhome.');
     }
 
-    if(!xarSecurityCheck('ReadRole')) return;
     $data=array();
     $externalurl=false; //used as a flag for userhome external url
     // FIXME: this probably causes bug #3393

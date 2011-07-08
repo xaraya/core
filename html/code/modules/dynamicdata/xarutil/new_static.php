@@ -2,11 +2,23 @@
 /**
  * Create a new table field
  *
+ * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/182.html
+ */
+/**
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
     sys::import('modules.dynamicdata.class.objects.master');
     
     function dynamicdata_util_new_static()
     {
+        // Security
         if (!xarSecurityCheck('AdminDynamicData')) return;
 
         if (!xarVarFetch('table',    'str:1',  $data['table'], '',     XARVAR_NOT_REQUIRED)) return;
@@ -54,7 +66,7 @@
                 $dbconn->Execute($query);
                 
                 // Jump to the next page
-                xarResponse::redirect(xarModURL('dynamicdata','util','view_static',array('table' => $data['table'])));
+                xarController::redirect(xarModURL('dynamicdata','util','view_static',array('table' => $data['table'])));
                 return true;
             }
         }

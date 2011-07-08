@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head"><span class="xar-mod-title">User Error</span></div>
+    <div class="xar-mod-body">
+        <fieldset>
+            <legend>DynamicData Problem</legend>
+            <xar:var name="label">System Message</xar:var>
+            <img src="#xarTplGetImage('user-error.png','base')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
+            <xar:if condition="!isset($layout)">
+                <div style="margin-top: 20px; margin-left: 20px">
+                    No error message is available.
+                    <br />
+                    Please contact the system administrator.
+                </div>                    
+            <xar:elseif condition="$layout eq 'duplicate_name'"/>
+                <div style="margin-top: 20px; margin-left: 20px">
+                    A dataobject #$newname# already exists
+                </div>
+            <xar:else />
+                <div style="margin-top: 20px; margin-left: 20px">
+                    No error message is available.
+                    <br />
+                    Please contact the system administrator.
+                </div>                    
+            </xar:if>                
+        </fieldset>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+                <xar:var name="label">Go back</xar:var>
+                <xar:button type="cancel" label="$label"/>
+            </div>
+        </fieldset>
+    </div>
+</xar:template>

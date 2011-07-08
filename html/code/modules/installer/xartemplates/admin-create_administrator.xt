@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <link rel='icon' href="favicon.ico"/>
     <xar:set name="active_step">6</xar:set>
     <div id="main_right">
         <xar:template file="status"/>
@@ -49,7 +50,8 @@
                 case letters, numbers and punctuation.
             </p>
             <div class="xar-align-center" style="margin: 2em 0;">
-                <input type="submit" name="create" id="create" value="#xarML('Continue')#"/>
+                <xar:var name="label">Continue</xar:var>
+                <input type="submit" name="create" id="create" value="#$label#"/>
                 <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
                 <xar:data-input property="$properties['id']" hidden="hidden"/>
                 <xar:data-input property="$properties['role_type']" hidden="hidden"/>

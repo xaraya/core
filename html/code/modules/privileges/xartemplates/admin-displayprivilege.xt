@@ -40,7 +40,8 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">
+                                <xar:var name="label">Show this privilege</xar:var>
+                                <a href="#xarModURL('privileges','admin','displayprivilege',array('id'=>$parents[$i][['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
                                     $parents[$i]['parentname']#
                                 </a>
                             </li>
@@ -56,22 +57,22 @@
                 <xar:var name="label">Manage privilege</xar:var>
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <li class="xar-tab-active">
-                    <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$ppid#" class="xar-accent xar-accent-outline">
+                    <a href="#xarModURL('privileges','admin','displayprivilege',array('id'=>$ppid))#" class="xar-accent xar-accent-outline">
                      Display
                      </a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$ppid#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$ppid))#" class="xar-norm xar-norm-outline">
                         Modify
                     </a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$ppid#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('privileges','admin','deleteprivilege',array('id'=>$ppid))#" class="xar-norm xar-norm-outline">
                         Delete
                     </a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-privileges-admin-viewroles;&amp;id=#$ppid#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('privileges','admin','viewroles',array('id'=>$ppid))#" class="xar-norm xar-norm-outline">
                         Groups/Users
                     </a>
                 </li>

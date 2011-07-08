@@ -1,25 +1,27 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Dynamic Data module
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * update fields for an item - hook for ('item','update','API')
  * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
  *
- * @param $args['objectid'] ID of the object
- * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['objectid'] ID of the object<br/>
+ *        string   $args['extrainfo'] extra information
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
-function dynamicdata_adminapi_updatehook($args)
+function dynamicdata_adminapi_updatehook(Array $args=array())
 {
     $verbose = false;
 
@@ -86,8 +88,7 @@ function dynamicdata_adminapi_updatehook($args)
 
     $myobject = & DataObjectMaster::getObject(array('moduleid' => $module_id,
                                          'itemtype' => $itemtype,
-                                         'itemid'   => $itemid,
-                                         'extend' => false));
+                                         'itemid'   => $itemid));
 
     // If no object returned, bail and pass the extrainfo to the next hook
     if (!isset($myobject)) return $extrainfo;

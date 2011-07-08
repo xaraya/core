@@ -1,12 +1,22 @@
 #!/usr/bin/php5
 <?php
+/**
+ * @package core
+ * @subpackage structures
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
 
+/* Uncomment to run
 // Save the directory where we are now
 $savedir = getcwd();
 chdir('/var/mt/xar/core/core.2.x/html');
 
-include('lib/bootstrap.php');
-sys::import('xaraya.xarCore');
+include_once('bootstrap.php');
+sys::import('xaraya.core');
 
 // TODO: don't load the whole core
 xarCoreInit(XARCORE_SYSTEM_ALL);
@@ -47,6 +57,7 @@ m('Testing array stack',$l++);
 $q = new Stack();
 $q->clear();
 _tests($q,$l--);
+*/
 
 function _tests($seq,$l=0)
 {
@@ -82,8 +93,4 @@ function _tests($seq,$l=0)
     m($seq->pop(),$l);
     $l--;
 }
-
-
-
-
 ?>

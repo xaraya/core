@@ -9,25 +9,7 @@
             <label>Overview</label>
         </menuitem>
         <menuitem>
-            <mask>EditPrivilege</mask>
-            <includes>
-                <includeitem>viewprivileges</includeitem>
-            </includes>
-            <target>viewprivileges</target>
-            <title>View all privileges on the system</title>
-            <label>View Privileges</label>
-        </menuitem>
-        <menuitem>
-            <mask>AddPrivilege</mask>
-            <includes>
-                <includeitem>new</includeitem>
-            </includes>
-            <target>new</target>
-            <title>Add a new privilege to the system</title>
-            <label>Add Privilege</label>
-        </menuitem>
-        <menuitem>
-            <mask>AdminPrivilege</mask>
+            <mask>ManagePrivileges</mask>
             <includes>
                 <includeitem>assignprivileges</includeitem>
             </includes>
@@ -36,7 +18,25 @@
             <label>Assign Privileges</label>
         </menuitem>
         <menuitem>
-            <mask>AdminPrivilege</mask>
+            <mask>EditPrivileges</mask>
+            <includes>
+                <includeitem>viewprivileges</includeitem>
+            </includes>
+            <target>viewprivileges</target>
+            <title>View all privileges on the system</title>
+            <label>View Privileges</label>
+        </menuitem>
+        <menuitem>
+            <mask>AddPrivileges</mask>
+            <includes>
+                <includeitem>new</includeitem>
+            </includes>
+            <target>new</target>
+            <title>Add a new privilege to the system</title>
+            <label>Add Privilege</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminPrivileges</mask>
             <includes>
                 <includeitem>viewrealms</includeitem>
                 <includeitem>newrealm</includeitem>
@@ -48,7 +48,7 @@
             <label>Manage Realms</label>
         </menuitem>
         <menuitem>
-            <mask>AdminPrivilege</mask>
+            <mask>AdminPrivileges</mask>
             <includes>
                 <includeitem>modifyconfig</includeitem>
             </includes>

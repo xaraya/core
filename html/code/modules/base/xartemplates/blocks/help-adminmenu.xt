@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <h3 id="menublockhelp">Admin Menu Block Help Information</h3>
+
+    <p>The menu block is responsible for providing links to site administrators. It is able to display links to modules with admin capable functions.</p>
+
+    <h3 id="displayoptions">Display Options</h3>
+    <p>The menu display options control various links you may or may not wish to show to your administrators.</p>
+    <ul>
+        <li><strong>Show Link to Front End</strong> As the name suggests, this option allows you to display a link to the front end interface.</li>
+        <li><strong>Show a Logout Link</strong> Shows a logout link to the admin logout function.</li>
+        <li><strong>Sort Admin Menu Items</strong> Option to display modules ordered either by name or by module category in the menu.</li>
+    </ul>
+
+    <h3 id="modulelinks">Module Links</h3>
+    <p>The Module Links listing shows a list of all admin capable modules available.</p>
+    <ul>
+        <li><strong>Alias</strong> If you have aliases specified for a module, you can choose one of them to be used as the label to be displayed in links to that module. The default is to use the modules display name.</li>
+        <li><strong>Visible</strong> By unchecking the checkbox you can remove a link from the menu entirely.</li>
+    </ul>
+    <p><strong>NOTE:</strong> When you add a new module to the system, it will automatically be available to all administrators with the necessary privileges to view until you edit the block it appears in.</p>
+    <div class="xar-align-center xar-margin-thickends xar-padding-thickends">
+        <a href="#xarServer::getCurrentURL(array(), null, 'menublockhelp')#">back to top</a>
+    </div>
+
+</xar:template>

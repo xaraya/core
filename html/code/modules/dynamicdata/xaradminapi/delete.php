@@ -2,26 +2,28 @@
 /**
  * Delete an item
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Dynamic Data module
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * delete an item (the whole item or the dynamic data fields of it)
  *
  * @author the DynamicData module development team
- * @param $args['itemid'] item id of the original item
- * @param $args['module_id'] module id for the original item
- * @param $args['itemtype'] item type of the original item
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['itemid'] item id of the original item<br/>
+ *        integer  $args['module_id'] module id for the original item<br/>
+ *        string   $args['itemtype'] item type of the original item
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_delete($args)
+function dynamicdata_adminapi_delete(Array $args=array())
 {
     extract($args);
 
@@ -42,15 +44,12 @@ function dynamicdata_adminapi_delete($args)
         $itemtype = 0;
     }
 
-    // Security check - important to do this as early on as possible to
-    // avoid potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',"$module_id:$itemtype:$itemid")) return;
-
     $myobject = DataObjectMaster::getObject(array('moduleid' => $module_id,
                                          'itemtype' => $itemtype,
-                                         'itemid'   => $itemid,
-                                         'extend' => false));
+                                         'itemid'   => $itemid));
     if (empty($myobject)) return;
+    if (!$myobject->checkAccess('delete'))
+        return;
 
     $myobject->getItem();
     $itemid = $myobject->deleteItem();

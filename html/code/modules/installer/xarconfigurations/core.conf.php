@@ -2,12 +2,13 @@
 /**
  * Core configuration
  *
- * @package Installer
+ * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Installer
  * @link http://xaraya.com/index.php/release/200.html
  */
 /*
@@ -44,7 +45,7 @@ function installer_core_privilegeoptions()
  * @access public
  * @return boolean
  */
-function installer_core_configuration_load($args)
+function installer_core_configuration_load(Array $args=array())
 {
 // load the privileges chosen
 
@@ -88,13 +89,13 @@ function installer_core_readnoncore()
 {
     xarRegisterPrivilege('ReadNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
     xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All','ACCESS_NONE','Deny access to the Privileges module');
-    xarRegisterPrivilege('DenyBlocks','All','blocks','All','All','ACCESS_NONE','Deny access to the Blocks module');
+//    xarRegisterPrivilege('DenyBlocks','All','blocks','All','All','ACCESS_NONE','Deny access to the Blocks module');
     xarRegisterPrivilege('DenyMail','All','mail','All','All','ACCESS_NONE','Deny access to the Mail module');
     xarRegisterPrivilege('DenyModules','All','modules','All','All','ACCESS_NONE','Deny access to the Modules module');
     xarRegisterPrivilege('DenyThemes','All','themes','All','All','ACCESS_NONE','Deny access to the Themes module');
     xarMakePrivilegeMember('ReadAccess','ReadNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
-    xarMakePrivilegeMember('DenyBlocks','ReadNonCore');
+//    xarMakePrivilegeMember('DenyBlocks','ReadNonCore');
     xarMakePrivilegeMember('DenyMail','ReadNonCore');
     xarMakePrivilegeMember('DenyModules','ReadNonCore');
     xarMakePrivilegeMember('DenyThemes','ReadNonCore');

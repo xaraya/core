@@ -2,12 +2,14 @@
 /**
  * Skin Selection via block
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
+ * @link http://xaraya.com/index.php/release/70.html
  */
 
 /*
@@ -17,7 +19,7 @@
  */
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class SkinBlock extends BasicBlock implements iBlock
+class Themes_SkinBlock extends BasicBlock implements iBlock
 {
     public $nocache             = 1;
 
@@ -36,7 +38,7 @@ class SkinBlock extends BasicBlock implements iBlock
         $data = parent::display($data);
         if (empty($data)) return;
 
-        $current_theme_name = xarModVars::get('themes', 'default');
+        $current_theme_name = xarModVars::get('themes', 'default_theme');
         $site_themes = xarMod::apiFunc('themes', 'admin','getthemelist');
         asort($site_themes);
 

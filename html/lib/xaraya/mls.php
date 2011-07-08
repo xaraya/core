@@ -3,11 +3,13 @@
  * Multi Language System
  *
  * @package core
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage multilanguage
  * @author Marco Canini <marco@xaraya.com>
  * @author Roger Raymond <roger@asphyxia.com>
  * @author Marcel van der Boom <mrb@hsdev.com>
@@ -39,9 +41,9 @@ sys::import('xaraya.mlsbackends.reference');
 /**
  * Initializes the Multi Language System
  *
- * @access protected
+ * 
  * @throws Exception
- * @return bool true
+ * @return boolean true
  */
 function xarMLS_init(&$args)
 {
@@ -84,9 +86,13 @@ function xarMLS_init(&$args)
 
     // Register MLS events
     // These should be done before the xarMLS_setCurrentLocale function
-    xarEvents::register('MLSMissingTranslationString');
-    xarEvents::register('MLSMissingTranslationKey');
-    xarEvents::register('MLSMissingTranslationDomain');
+    // These are now registered during base module init
+    // @CHECKME: <chris> grep -R xarEvents::trigger . finds no results
+    // It appears these events are never raised ?
+    // In addition, these seem more like exceptions than 'events' ?
+    //xarEvents::register('MLSMissingTranslationString');
+    //xarEvents::register('MLSMissingTranslationKey');
+    //xarEvents::register('MLSMissingTranslationDomain');
 
     // FIXME: this was previously conditional on User subsystem initialisation,
     // but in the 2.x flow we need it earlier apparently, so made this unconditional
@@ -99,7 +105,7 @@ function xarMLS_init(&$args)
 /**
  * Gets the current MLS mode
  *
- * @access public
+ * @author Marco Canini <marco@xaraya.com>
  * @return integer MLS Mode
  */
 function xarMLSGetMode()
@@ -111,18 +117,16 @@ function xarMLSGetMode()
  * Returns the site locale if running in SINGLE mode,
  * returns the site default locale if running in BOXED or UNBOXED mode
  *
- * @access public
+ * @author Marco Canini <marco@xaraya.com>
  * @return string the site locale
- * @todo   check
  */
 function xarMLSGetSiteLocale() { return $GLOBALS['xarMLS_defaultLocale']; }
 
 /**
  * Returns an array of locales available in the site
  *
- * @access public
+ * @author Marco Canini <marco@xaraya.com>
  * @return array of locales
- * @todo   check
  */
 function xarMLSListSiteLocales()
 {
@@ -137,7 +141,7 @@ function xarMLSListSiteLocales()
 /**
  * Gets the current locale
  *
- * @access public
+ * @author Marco Canini <marco@xaraya.com>
  * @return string current locale
  */
 function xarMLSGetCurrentLocale() { return $GLOBALS['xarMLS_currentLocale']; }
@@ -145,7 +149,7 @@ function xarMLSGetCurrentLocale() { return $GLOBALS['xarMLS_currentLocale']; }
 /**
  * Gets the charset component from a locale
  *
- * @access public
+ * @author Marco Canini <marco@xaraya.com>
  * @return string the charset name
  * @throws BAD_PARAM
  */
@@ -160,7 +164,7 @@ function xarMLSGetCharsetFromLocale($locale)
 /**
  * Translates a string
  *
- * @access public
+ * @author Marco Canini <marco@xaraya.com>
  * @return string the translated string, or the original string if no translation is available
  */
 function xarML($rawstring/*, ...*/)
@@ -205,7 +209,7 @@ function xarML($rawstring/*, ...*/)
 /**
  * Return the translation associated to passed key
  *
- * @access public
+ * @author Marco Canini <marco@xaraya.com>
  * @throws BadParameterException
  * @return string the translation string, or the key if no translation is available
  */
@@ -241,7 +245,7 @@ function xarMLByKey($key/*, ...*/)
  * Gets the locale info for the specified locale string.
  * Info is an array composed by the 'lang', 'country', 'specializer' and 'charset' items.
  *
- * @access public
+ * @author Marco Canini <marco@xaraya.com>
  * @return array locale info
  */
 function xarLocaleGetInfo($locale) { return xarMLS__parseLocaleString($locale); }
@@ -250,7 +254,7 @@ function xarLocaleGetInfo($locale) { return xarMLS__parseLocaleString($locale); 
  * Gets the locale string for the specified locale info.
  * Info is an array composed by the 'lang', 'country', 'specializer' and 'charset' items.
  *
- * @access public
+ * @author Marco Canini <marco@xaraya.com>
  * @throws BadParameterException
  * @return string locale string
  */
@@ -286,7 +290,7 @@ function xarLocaleGetString($localeInfo)
  * Filter criteria are set as item of $filter parameter, they can be one or more of the following:
  * lang, country, specializer, charset.
  *
- * @access public
+ * @author Marco Canini <marco@xaraya.com>
  * @return array locale list
  */
 function xarLocaleGetList($filter=array())
@@ -309,7 +313,7 @@ function xarLocaleGetList($filter=array())
  *  make adjustments for timezone and should be used in gmstrftime
  *  or gmdate functions only.
  *
- *  @access protected
+ *  @author Roger Raymond <roger@asphyxia.com>
  *  @return int unix timestamp.
  */
 function xarMLS_userTime($time=null,$flag=1)
@@ -326,7 +330,7 @@ function xarMLS_userTime($time=null,$flag=1)
 /**
  *  Returns the user's current tz offset (+ daylight saving) in hours
  *
- *  @access protected
+ *  @author Roger Raymond <roger@asphyxia.com>
  *  @param int $timestamp optional unix timestamp that we want to get the offset for
  *  @return float tz offset + possible daylight saving adjustment
  */
@@ -338,7 +342,7 @@ function xarMLS_userOffset($timestamp = null)
     if (xarUserIsLoggedIn()) {
         $usertz = xarModItemVars::get('roles','usertimezone',xarSession::getVar('role_id'));
     } else {
-        $usertz = xarModVars::get('roles','usertimezone');
+        $usertz = xarConfigVars::get(null, 'Site.Core.TimeZone');
     }
     $useroffset = $datetime->getTZOffset($usertz);
 
@@ -350,7 +354,7 @@ function xarMLS_userOffset($timestamp = null)
 /**
  * Sets current locale
  *
- * @access protected
+ * @author Marco Canini <marco@xaraya.com>
  * @param locale site locale
  */
 function xarMLS_setCurrentLocale($locale)
@@ -431,8 +435,8 @@ function xarMLS_setCurrentLocale($locale)
 /**
  * Loads translations for the specified context
  *
- * @access protected
- * @return bool
+ * @author Marco Canini <marco@xaraya.com>
+ * @return boolean
  */
 function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
 {
@@ -486,7 +490,8 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
 /**
  * Load relevant translations for a specified relatvive path (be it file or directory)
  *
- * @return bool true on success, false on failure
+ * @author Marcel van der Boom <mrb@hsdev.com>
+ * @return boolean true on success, false on failure
  * @todo slowly add more intelligence for more scopes. (core, version, init?)
  * @todo static hash on path to prevent double loading?
  * @todo is directory support needed? i.e. modules/base/ load all for base module? or how does this work?
@@ -511,7 +516,7 @@ function xarMLSLoadTranslations($path)
 
     // Determine dnType
     // Lets get core files out of the way
-    if($pathElements[0] == 'includes') return xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
+    if($pathElements[0] == 'lib') return xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
 
     // modules have a fixed place, so if it's not 'modules/blah/blah' it's themes, period.
     // NOTE: $pathElements changes here!
@@ -598,6 +603,7 @@ function xarMLS__bindVariables($string, $args)
  * Gets a list of alternatives for a certain locale.
  * The first alternative is the locale itself
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @return array alternative locales
  */
 function xarMLS__getLocaleAlternatives($locale)
@@ -616,6 +622,7 @@ function xarMLS__getLocaleAlternatives($locale)
  * Parses a locale string into an associative array composed of
  * lang, country, specializer and charset keys
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @return array parsed locale
  */
 function xarMLS__parseLocaleString($locale)
@@ -639,6 +646,7 @@ function xarMLS__parseLocaleString($locale)
  * Gets the single byte charset most typically used in the Web for the
  * requested language
  *
+ * @author Marco Canini <marco@xaraya.com>
  * @return string the charset
  * @todo   Dont hardcode this
  */
@@ -666,13 +674,11 @@ function xarMLS__getSingleByteCharset($langISO2Code)
 }
 
 
-
-
 /**
  * Create directories tree
  *
- * @access protected
- * @return bool true
+ * @author Volodymyr Metenchuk <voll@xaraya.com>
+ * @return boolean true
  */
 function xarMLS__mkdirr($path)
 {
@@ -700,6 +706,7 @@ function xarMLS__mkdirr($path)
 /**
  * Check directory writability and create directory if it doesn't exist
  *
+ * @author Volodymyr Metenchuk <voll@xaraya.com>
  * @access protected
  * @return bool true
  */

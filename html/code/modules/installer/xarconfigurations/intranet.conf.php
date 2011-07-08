@@ -2,12 +2,13 @@
 /**
  * Intranet configuration
  *
- * @package Installer
+ * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Installer
  * @link http://xaraya.com/index.php/release/200.html
  */
 /*
@@ -55,7 +56,7 @@ function installer_intranet_privilegeoptions()
  * @access public
  * @return boolean
  */
-function installer_intranet_configuration_load($args)
+function installer_intranet_configuration_load(Array $args=array())
 {
 // load the privileges chosen
 
@@ -99,18 +100,18 @@ function installer_intranet_oversightrole()
                     'itemid' => 0,  // make this explicit, because we are going to reuse the roles we define
                     'users' => 0,
                     'regdate' => time(),
-                    'state' => ROLES_STATE_ACTIVE,
+                    'state' => xarRoles::ROLES_STATE_ACTIVE,
                     'valcode' => 'createdbysystem',
                     'authmodule' => xarMod::getID('roles'),
     );
     $group = DataObjectMaster::getObject(array('name' => 'roles_groups'));
-    $rolefields['role_type'] = ROLES_GROUPTYPE;
+    $rolefields['role_type'] = xarRoles::ROLES_GROUPTYPE;
     $rolefields['name'] = 'Oversight';
     $rolefields['uname'] = 'oversight';
     $group->createItem($rolefields);
 
     $user = DataObjectMaster::getObject(array('name' => 'roles_users'));
-    $rolefields['role_type'] = ROLES_USERTYPE;
+    $rolefields['role_type'] = xarRoles::ROLES_USERTYPE;
     $rolefields['name'] = 'Overseer';
     $rolefields['uname'] = 'overseer';
     $rolefields['password'] = MD5('password');
@@ -141,13 +142,13 @@ function installer_intranet_readnoncore()
     xarRegisterPrivilege('ReadNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
 //    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
     xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All','ACCESS_NONE','Deny access to the Privileges module');
-    xarRegisterPrivilege('DenyBlocks','All','blocks','All','All','ACCESS_NONE','Deny access to the Blocks module');
+//    xarRegisterPrivilege('DenyBlocks','All','blocks','All','All','ACCESS_NONE','Deny access to the Blocks module');
     xarRegisterPrivilege('DenyMail','All','mail','All','All','ACCESS_NONE','Deny access to the Mail module');
     xarRegisterPrivilege('DenyModules','All','modules','All','All','ACCESS_NONE','Deny access to the Modules module');
     xarRegisterPrivilege('DenyThemes','All','themes','All','All','ACCESS_NONE','Deny access to the Themes module');
     xarMakePrivilegeMember('ReadAccess','ReadNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
-    xarMakePrivilegeMember('DenyBlocks','ReadNonCore');
+//    xarMakePrivilegeMember('DenyBlocks','ReadNonCore');
     xarMakePrivilegeMember('DenyMail','ReadNonCore');
     xarMakePrivilegeMember('DenyModules','ReadNonCore');
     xarMakePrivilegeMember('DenyThemes','ReadNonCore');

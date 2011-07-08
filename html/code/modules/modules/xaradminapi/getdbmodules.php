@@ -1,21 +1,23 @@
 <?php
 /**
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage modules
+ * @link http://xaraya.com/index.php/release/1.html
  */
 
 /**
  * Get all modules in the database
  *
- * @param $args['regid'] - optional regid to retrieve
- * @returns array
- * @return array of modules in the database
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] - optional regid to retrieve
+ * @return array modules in the database
  */
-function modules_adminapi_getdbmodules($args)
+function modules_adminapi_getdbmodules(Array $args=array())
 {
     // Get arguments
     extract($args);

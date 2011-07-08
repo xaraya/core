@@ -2,11 +2,12 @@
 /**
  * Test the email settings
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 
@@ -16,12 +17,13 @@
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  true on success or void on failure
- * @throws  no exceptions
- * @todo    nothing
+ * @return  boolean true on success or void on failure
 */
 function mail_admin_sendtest()
 {
+    // Security
+    if (!xarSecurityCheck('ManageMail')) return;
+
     // Get parameters from whatever input we need
     if (!xarVarFetch('message', 'str:1:', $message)) return;
     if (!xarVarFetch('subject', 'str:1', $subject)) return;
@@ -36,9 +38,6 @@ function mail_admin_sendtest()
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
-    // Security check
-    if (!xarSecurityCheck('AdminMail')) return;
-
     if (empty($email)) {
         $email = xarModVars::get('mail', 'adminmail');
     }
@@ -72,8 +71,7 @@ function mail_admin_sendtest()
                 'when' => $when))) return;
 
     // lets update status and display updated configuration
-    xarResponse::redirect(xarModURL('mail', 'admin', 'compose'));
-    // Return
+    xarController::redirect(xarModURL('mail', 'admin', 'compose'));
     return true;
 }
 ?>

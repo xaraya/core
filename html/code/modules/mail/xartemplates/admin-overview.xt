@@ -6,7 +6,8 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
-        <img src="#xarTplGetImage('mail.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon"/>
+        <xar:var name="label">official icon</xar:var>
+        <img src="#xarTplGetImage('mail.png','base')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
 
         <h3>What is it?</h3>
@@ -111,13 +112,14 @@
         <p>Further information on the Mail module can be found at</p>
         <ul>
             <li>Mail Module Extension page at 
-            <a title="#xarML('Mail Module - Xaraya Extension 771')#"
+            <xar:var name="label">Mail Module - Xaraya Extension 771</xar:var>
+            <a title="#$label#"
             href="http://www.xaraya.com/index.php/release/771.html">Xaraya Extension and
             Releases</a>. Click on Version History tab at the bottom to get the latest release
             information.</li>
             <li>Related tutorials and documentation on Mail module found at 
-            <a href="http://www.xaraya.com/index.php/keywords/mail/"
-            title="#xarML('Related documentation on Mail')#">Xaraya Documentation.</a></li>
+            <xar:var name="label">Related documentation on Mail</xar:var>
+            <a href="http://www.xaraya.com/index.php/keywords/mail/" title="#$label#">Xaraya Documentation.</a></li>
         </ul>
         <p class="xar-sub">
         <strong>&#160;Mail Module - Overview</strong>

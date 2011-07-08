@@ -3,17 +3,18 @@
  * Waiting content block management
  *
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 
     sys::import('xaraya.structures.containers.blocks.basicblock');
 
-    class WaitingContentBlock extends BasicBlock implements iBlock
+    class Base_WaitingContentBlock extends BasicBlock implements iBlock
     {
         public $nocache             = 1;
 
@@ -27,15 +28,17 @@
         {
             $data = parent::display($data);
             if (empty($data)) return;
-
+            /*
             // Hooks (we specify that we want the ones for adminpanels here)
             $output = array();
             $output = xarModCallHooks('item', 'waitingcontent', '');
-
+            
             $data['content'] = array(
                 'output'   => $output,
             );
+            */
 
+            $data['content'] = xarMod::apiFunc('base', 'admin', 'waitingcontent');
             return $data;
         }
     }

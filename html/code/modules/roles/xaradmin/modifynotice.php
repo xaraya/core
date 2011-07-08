@@ -3,20 +3,23 @@
  * Modify configuration
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * modify configuration
+ * @return array data for the template display
  */
 function roles_admin_modifynotice()
 {
-    // Security Check
-    if (!xarSecurityCheck('AdminRole')) return;
+    // Security
+    if (!xarSecurityCheck('AdminRoles')) return;
+    
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
     $hooks = array();
     switch (strtolower($phase)) {
@@ -53,7 +56,7 @@ function roles_admin_modifynotice()
             xarModCallHooks('module', 'updateconfig', 'roles',
                 array('module' => 'roles'));
 
-            xarResponse::redirect(xarModURL('roles', 'admin', 'modifynotice'));
+            xarController::redirect(xarModURL('roles', 'admin', 'modifynotice'));
             // Return
             return true;
 

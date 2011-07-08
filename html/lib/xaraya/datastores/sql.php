@@ -2,21 +2,25 @@
 /**
  * Base class for SQL Data Stores
  *
- * @package dynamicdata
+ * @package core
  * @subpackage datastores
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
 **/
 
 /**
  * Base class for SQL Data Stores
  *
- * @package dynamicdata
 **/
 sys::import('modules.dynamicdata.class.datastores.base');
 
 class SQLDataStore extends OrderedDataStore implements ISQLDataStore
 {
     protected $db     = null;
-    protected $tables = null;
+    //protected $tables = null;
 
     public $where  = array();
     public $groupby= array();
@@ -25,8 +29,9 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     function __construct($name=null)
     {
         parent::__construct($name);
-        $this->db     = xarDB::getConn();
-        $this->tables = xarDB::getTables(); // Is this scopy enough? i.e. would all tables be there already?
+        // lazy connection
+        //$this->db     = xarDB::getConn();
+        //$this->tables = xarDB::getTables(); // Is this scopy enough? i.e. would all tables be there already?
     }
 
     /**
@@ -103,6 +108,48 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     function cleanJoin()
     {
         $this->join = array();
+    }
+
+    /**
+     * Database functions for lazy connection
+     */
+    function connect()
+    {
+        // Note: the only reason we keep this variable is for getLastId()
+        if (empty($this->db)) {
+            $this->db = xarDB::getConn();
+        }
+    }
+
+    function getTable($name)
+    {
+        $tables = xarDB::getTables();
+        if (!empty($tables[$name])) {
+            return $tables[$name];
+        }
+    }
+
+    function getType()
+    {
+        return xarDB::getType();
+    }
+
+    function prepareStatement($sql)
+    {
+        $this->connect();
+        return $this->db->prepareStatement($sql);
+    }
+
+    function getLastId($table)
+    {
+        $this->connect();
+        return $this->db->getLastId($table);
+    }
+
+    function getDatabaseInfo()
+    {
+        $this->connect();
+        return $this->db->getDatabaseInfo();
     }
 }
 

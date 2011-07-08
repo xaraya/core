@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage themes
  * @link http://xaraya.com/index.php/release/70.html
  */
 
@@ -15,7 +16,7 @@ sys::import('xaraya.tableddl');
 /**
  * Initialise the themes module
  * @author Marty Vance
- * @return bool
+ * @return boolean
  * @throws DATABASE_ERROR
  */
 function themes_init()
@@ -59,7 +60,7 @@ function themes_init()
     $query = xarDBCreateTable($tables['themes'], $fields);
     $result =& $dbconn->Execute($query);
 
-    xarModVars::set('themes', 'default', 'default');
+    xarModVars::set('themes', 'default_theme', 'default');
     xarModVars::set('themes', 'selsort', 'nameasc');
 
     // Make sure we dont miss empty variables (which were not passed thru)
@@ -80,7 +81,7 @@ function themes_init()
     xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright 2003 ');
     xarModVars::set('themes', 'SiteTitleSeparator', ' :: ');
     xarModVars::set('themes', 'SiteTitleOrder', 'default');
-    xarModVars::set('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder"/></a>');
+    xarModVars::set('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="' . sys::code() . 'modules/base/xarimages/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder"/></a>');
     xarModVars::set('themes', 'ShowPHPCommentBlockInTemplates', false);
     xarModVars::set('themes', 'ShowTemplates', false);
     xarModVars::set('themes', 'variable_dump', false);
@@ -92,7 +93,8 @@ function themes_init()
 
     xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditThemes','All','themes','All','All','ACCESS_EDIT');
-    xarRegisterMask('AdminTheme','All','themes','All','All','ACCESS_ADMIN');
+    xarRegisterMask('ManageThemes','All','themes','All','All','ACCESS_DELETE');
+    xarRegisterMask('AdminThemes','All','themes','All','All','ACCESS_ADMIN');
 
     if (!xarMod::apiFunc('blocks', 'admin', 'register_block_type',
         array('modName' => 'themes', 'blockType' => 'meta'))) return;
@@ -106,6 +108,7 @@ function themes_init()
 
     xarModVars::set('themes', 'selclass', 'all');
     xarModVars::set('themes', 'useicons', false);
+    xarModVars::set('themes','flushcaches', '');
 
     // Installation complete; check for upgrades
     return themes_upgrade('2.0.0');
@@ -115,13 +118,13 @@ function themes_init()
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function themes_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0.0':
+        default:
       break;
     }
     return true;
@@ -130,7 +133,7 @@ function themes_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return bool
+ * @return boolean
  */
 function themes_delete()
 {

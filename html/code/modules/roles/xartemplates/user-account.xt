@@ -4,15 +4,15 @@
     <xar:template file="user-menu"/>
     <xar:if condition="(empty($tab) or $tab == 'profile') and empty($moduleload)">
         <!-- display this users account data - see roles/xartemplates/objects/showdisplay-account.xt -->
-        <xar:data-display object="$object"/>
+        <xar:data-display object="$object" fieldlist="name,uname,state,regdate"/>
     <xar:else />
         <xar:if condition="$object:label">
             <xar:set name="enc_type">'multipart/form-data'</xar:set>
-            <xar:else />
+        <xar:else />
             <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
         </xar:if>
         <form method="post" action="#$formaction#" enctype="#$enc_type#">
-            <xar:data-form object="$object" formdata="$formdata"/>
+            <xar:data-form object="$object" formdata="$formdata" fieldlist="name,uname,state,regdate" />
             <fieldset>
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="id" id="id" value="#$id#"/>

@@ -3,11 +3,12 @@
  * Get a specific user by any of his attributes
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -15,17 +16,21 @@
  * uname, id and email are guaranteed to be unique,
  * otherwise the first hit will be returned
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['id'] id of user to get
- * @param $args['uname'] user name of user to get
- * @param $args['name'] name of user to get
- * @param $args['email'] email of user to get
- * @returns array
- * @return user array, or false on failure
+ *        array    $args array of optional parameters<br/>
+ *        string   $args['id'] id of user to get<br/>
+ *        string   $args['uname'] user name of user to get<br/>
+ *        string   $args['name'] name of user to get<br/>
+ *        string   $args['email'] email of user to get
+ * @return mixed user array, or false on failure
  */
-function roles_userapi_get($args)
+function roles_userapi_get(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);
+    // LEGACY
+    if ((empty($id) && !empty($uid))) {
+        $id = $uid;
+    }
     if (empty($id) && empty($name) && empty($uname) && empty($email)) {
         throw new EmptyParameterException('id or name or uname or email');
     } elseif (!empty($id) && !is_numeric($id)) {
@@ -39,6 +44,9 @@ function roles_userapi_get($args)
     $xartable = xarDB::getTables();
     $rolestable = $xartable['roles'];
 
+    sys::import('modules.dynamicdata.class.properties.master');
+    $property = DataPropertyMaster::getProperty(array('name' => 'name'));
+    
     // Get user
     $query = "SELECT id, uname, name, itemtype, email, pass, date_reg, valcode, state FROM $rolestable";
     $bindvars = array();
@@ -59,7 +67,8 @@ function roles_userapi_get($args)
             $queryWhere .= " name = ?"; 
         }
         $cnt++;
-        $bindvars[] = $name;
+        $property->setValue($name);
+        $bindvars[] = $property->value;
     }
     if (!empty($uname)) {       
         if($cnt >= 1){
@@ -81,7 +90,7 @@ function roles_userapi_get($args)
         $cnt++;
         $bindvars[] = $email;
     }
-    if (!empty($state) && $state == ROLES_STATE_CURRENT) {
+    if (!empty($state) && $state == xarRoles::ROLES_STATE_CURRENT) {
         if($cnt >= 1){
             $queryWhere .= " AND state != ? ";
         }
@@ -89,9 +98,9 @@ function roles_userapi_get($args)
             $queryWhere .= " state != ?";
         }
         $cnt++;
-        $bindvars[] = ROLES_STATE_DELETED;
+        $bindvars[] = xarRoles::ROLES_STATE_DELETED;
     }
-    elseif (!empty($state) && $state != ROLES_STATE_ALL) {
+    elseif (!empty($state) && $state != xarRoles::ROLES_STATE_ALL) {
         if($cnt >= 1){
             $queryWhere .= " AND state = ? ";
         }
@@ -126,6 +135,8 @@ function roles_userapi_get($args)
     // id is a reserved/key words in Oracle et al.
     $user['id'] = $user['id'];
     $user['itemtype'] = $user['itemtype'];
+    $property->value = $user['name'];
+    $user['name'] = $property->getValue($user['name']);
     return $user;
 }
 

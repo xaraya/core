@@ -1,25 +1,28 @@
 <?php
 /**
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 
 /**
  * Get block information
  *
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  * @access public
- * @param see blocks/userapi/getinfo
+ * @param array    $args array of optional parameters<br/>
+ *                 see blocks/userapi/getinfo
  * @return see blocks/userapi/getinfo
  * @deprec Jan 2004
  * @throws DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
  */
-function blocks_adminapi_getinfo($args)
+function blocks_adminapi_getinfo(Array $args=array())
 {
     return xarMod::apiFunc('blocks', 'user', 'getinfo', $args);
 }

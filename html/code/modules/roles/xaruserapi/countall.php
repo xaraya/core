@@ -3,25 +3,26 @@
  * Count all users
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * count all users
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @returns integer
- * @return number of users matching the selection criteria (cfr. getall)
+ * @param array    $args array of optional parameters<br/>
+ * @return integer the number of users matching the selection criteria (cfr. getall)
  */
-function roles_userapi_countall($args)
+function roles_userapi_countall(Array $args=array())
 {
     extract($args);
 
     // Security check
-    if(!xarSecurityCheck('ReadRole')) return;
+    if(!xarSecurityCheck('ReadRoles')) return;
 
     // Get database setup
     $dbconn = xarDB::getConn();
@@ -30,18 +31,18 @@ function roles_userapi_countall($args)
     $rolestable = $xartable['roles'];
 
     $bindvars = array();
-    if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
+    if (!empty($state) && is_numeric($state) && $state != xarRoles::ROLES_STATE_CURRENT) {
         $query = "SELECT COUNT(id) FROM $rolestable WHERE state = ?";
         $bindvars[] = (int) $state;
     } else {
         $query = "SELECT COUNT(id) FROM $rolestable WHERE state != ?";
-        $bindvars[] = ROLES_STATE_DELETED;
+        $bindvars[] = xarRoles::ROLES_STATE_DELETED;
     }
 
     //suppress display of pending users to non-admins
     if (!xarSecurityCheck("AdminRole",0)) {
         $query .= " AND state != ?";
-        $bindvars[] = ROLES_STATE_PENDING;
+        $bindvars[] = xarRoles::ROLES_STATE_PENDING;
     }
 
     if (isset($selection)) $query .= $selection;
@@ -56,7 +57,7 @@ function roles_userapi_countall($args)
     }
 
     $query .= " AND itemtype = ?";
-    $bindvars[] = ROLES_USERTYPE;
+    $bindvars[] = xarRoles::ROLES_USERTYPE;
     $bindvars[] = 0;
 // cfr. xarcachemanager - this approach might change later
     $expire = xarModVars::get('roles','cache.userapi.countall');

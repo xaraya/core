@@ -3,53 +3,61 @@
  * Get message
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['template'] name of the email type which has apair of -subject and -message files
- * @param $args['module'] module directory in var/messaging
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['template'] name of the email type which has apair of -subject and -message files<br/>
+ *        string   $args['module'] module directory in var/messaging
  * @return array of strings of file contents read
  */
-function roles_adminapi_getmessagestrings($args)
+function roles_adminapi_getmessagestrings(Array $args=array())
 {
     extract($args);
     if (!isset($template)) throw new EmptyParameterException('template');
 
-    //FIXME: the default is always roles
     if(!isset($module)){
-        list($module) = xarRequest::getInfo();
+        list($module) = xarController::$request->getInfo();
     }
 
-    $messaginghome = sys::varpath() . "/messaging/" . $module;
-    $subjtemplate = $messaginghome . "/" . $template . "-subject.xt";
-    if (!file_exists($subjtemplate)) throw new FileNotFoundException($subjtemplate);
+	if (!isset($tpl_path)) {
+		$tpl_path = sys::varpath() . "/messaging/" . $module;
+	}
 
-    $string = '';
-    $fd = fopen($subjtemplate, 'r');
-    while(!feof($fd)) {
-        $line = fgets($fd, 1024);
-        $string .= $line;
-    }
-    $subject = $string;
-    fclose($fd);
-
-    $msgtemplate = $messaginghome . "/" . $template . "-message.xt";
-    if (!file_exists($msgtemplate)) throw new FileNotFoundException($msgtemplate);
-
-    $string = '';
-    $fd = fopen($msgtemplate, 'r');
-    while(!feof($fd)) {
-        $line = fgets($fd, 1024);
-        $string .= $line;
-    }
-    $message = $string;
-    fclose($fd);
+    $subjtemplate = $tpl_path . "/" . $template . "-subject.xt";
+	if (file_exists($subjtemplate)) {		
+		$string = '';
+		$fd = fopen($subjtemplate, 'r');
+		while(!feof($fd)) {
+			$line = fgets($fd, 1024);
+			$string .= $line;
+		}
+		$subject = $string;
+		fclose($fd);
+	} else {
+		$subject = '';
+	}
+	
+    $msgtemplate = $tpl_path . "/" . $template . "-message.xt";
+	if (file_exists($msgtemplate)) {
+		$string = '';
+		$fd = fopen($msgtemplate, 'r');
+		while(!feof($fd)) {
+			$line = fgets($fd, 1024);
+			$string .= $line;
+		}
+		$message = $string;
+		fclose($fd);
+	} else {
+		$message = '';
+	}
 
     return array('subject' => $subject, 'message' => $message);
 }

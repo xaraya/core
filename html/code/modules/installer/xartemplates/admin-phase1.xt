@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <link rel='icon' href="favicon.ico"/>
     <xar:set name="active_step">1</xar:set>
     <div id="main_right">
         <xar:template file="status"/>
@@ -19,7 +20,7 @@
                         </xar:if>
                     </xar:foreach>
                 </select>
-                <input type="hidden" name="install_phase" id="install_phase" value="2"/>
+                <input type="hidden" name="install_phase" id="install_phase" value="2"/>&#160;
                 <input type="submit" value="Continue"/>
             </p>
         </form>

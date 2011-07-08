@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -14,8 +16,9 @@
  *
  * This is a standard function that is called whenever an administrator
  * wishes to create a new module item
+ * @return string output display string
  */
-function dynamicdata_admin_new($args)
+function dynamicdata_admin_new(Array $args=array())
 {
     extract($args);
 
@@ -31,8 +34,6 @@ function dynamicdata_admin_new($args)
     if(!xarVarFetch('notfresh', 'isset', $notfresh,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule','str',   $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
 
-    if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$module_id:$itemtype:All")) return;
-
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
     $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
@@ -45,6 +46,10 @@ function dynamicdata_admin_new($args)
                                          'tplmodule' => $tplmodule,
                                          'template'  => $template,
                                          ));
+    // Security
+    if (empty($myobject)) return xarResponse::NotFound();
+    if (!$myobject->checkAccess('create'))
+        return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
 
     $args = $myobject->toArray();
     $data['object'] =& $myobject;

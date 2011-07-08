@@ -3,11 +3,11 @@
  * List modules and current settings
  *
  * @package modules
+ * @subpackage modules module
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage Module System
  * @link http://xaraya.com/index.php/release/1.html
  */
 /**
@@ -15,10 +15,11 @@
  * @author Xaraya Development Team
  * @param several params from the associated form in template
  * @todo  finish cleanup, styles, filters and sort orders
+ * @return array data for the template display
  */
 function modules_admin_list()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminModules')) return;
 
     // form parameters
@@ -82,7 +83,7 @@ function modules_admin_list()
     $img_none           = xarTplGetImage('icons/none.png', 'base');
     $img_activate       = xarTplGetImage('icons/activate.png', 'base');
     $img_deactivate     = xarTplGetImage('icons/deactivate.png', 'base');
-    $img_upgrade        = xarTplGetImage('icons/upgrade.png', 'base');
+    $img_upgrade        = xarTplGetImage('icons/software-upgrade.png', 'base');
     $img_initialise     = xarTplGetImage('icons/initialize.png', 'base');
     $img_remove         = xarTplGetImage('icons/remove.png', 'base');
 

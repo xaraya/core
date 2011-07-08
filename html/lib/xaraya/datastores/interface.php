@@ -1,9 +1,15 @@
 <?php
 /**
+ * @package core
+ * @subpackage datastores
  * Interface declarations for the datastores hierarchy
  *
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
 
@@ -84,6 +90,13 @@ interface ISQLDataStore
     function cleanWhere();
     function cleanGroupBy();
     function cleanJoin();
+
+    // @note database functions for lazy connection
+    function getTable($name);
+    function getType();
+    function prepareStatement($sql);
+    function getLastId($table);
+    function getDatabaseInfo();
 }
 
 /*
@@ -91,6 +104,6 @@ interface ISQLDataStore
         function getNext($args = array())
 
     Introduced by VariableTable datastore:
-        function getNextId($args)
+        function getNextId(Array $args=array())
 */
 ?>

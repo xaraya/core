@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
@@ -17,10 +18,11 @@
  */
 function base_admin_sysinfo()
 {
+    // Security
+    if(!xarSecurityCheck('AdminBase')) return;
+
     xarVarFetch('what','int:-1:127',$what,INFO_GENERAL, XARVAR_NOT_REQUIRED);
     $data['what'] = $what;
-    // Security Check
-    if(!xarSecurityCheck('AdminBase')) return;
     // FIXME: dirty dirty
     ob_start();
     // FIXME: can we split this up in more manageable parts?

@@ -2,9 +2,14 @@
 /**
  * Template caching abstraction
  *
- * @package blocklayout
+ * @package core
+ * @subpackage caching
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ *
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
 sys::import('xaraya.exceptions');
@@ -29,7 +34,6 @@ interface IxarTemplateCache
 /**
  * Class to model the xar compiled template cache
  *
- * @package blocklayout
  * @todo bring this into the cache hierarchy in general so it can inherit from xarCache or something like that.
  * @todo this is still poorly abstracted, i would like to make a difference between the cache and its entries
  * @todo yes, i know this is similar to caching/storage/filesystem, but that one isnt ready yet :-) getting to that later.
@@ -83,7 +87,7 @@ class xarTemplateCache extends Object implements ixarTemplateCache
      * Save the cache key for a sourcefile
      *
      * @param  string $sourceFileName  For which file are we entering the key?
-     * @return bool true on success, false on failure
+     * @return boolean true on success, false on failure
      * @todo   exceptions?
      * @todo   typically writing of these keys occurs in bursts, can we leave file open until we're done?
      * @todo   hmm, write the key when inactive too? feels like not, to keep it minimal
@@ -114,7 +118,7 @@ class xarTemplateCache extends Object implements ixarTemplateCache
      *
      * @param  string $fileName  for which source file?
      * @param  string $data      what to save
-     * @return bool   true on success, false on failure
+     * @return boolean   true on success, false on failure
      * @todo   doesnt belong here
     **/
     public static function saveEntry($fileName, $data)
@@ -132,7 +136,7 @@ class xarTemplateCache extends Object implements ixarTemplateCache
      * Determine if a cache entry is dirty, i.e. needs recompilation.
      *
      * @param  string $fileName source file
-     * @return bool  true when cache entry is dirty, false otherwise
+     * @return boolean  true when cache entry is dirty, false otherwise
     **/
     public static function isDirty($fileName)
     {
@@ -148,9 +152,6 @@ class xarTemplateCache extends Object implements ixarTemplateCache
         if ( file_exists($cacheFile) &&
              ( !file_exists($fileName) ||
                ( filemtime($fileName) < filemtime($cacheFile)
-                // TODO: this is obviously just to make my life easier during xslt compiler development
-                // it needs to be moved somewhere else (for one, because it is going to be configurable)
-                && filemtime(sys::lib() . 'blocklayout/xslt/xar2php.xsl') < filemtime($cacheFile)
                ) ) ) return false; // not dirty
 
         return true; // either cache not active of entry needs recompilation

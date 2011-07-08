@@ -3,20 +3,22 @@
  * View users in group
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * getUsers - view users in group
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['id'] group id
- * @return $users array containing uname, id
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['id'] group id
+ * @return array array containing uname, id of the users
  */
-function roles_userapi_getUsers($args)
+function roles_userapi_getUsers(Array $args=array())
 {
     extract($args);
 
@@ -24,7 +26,7 @@ function roles_userapi_getUsers($args)
 
 
 // Security Check
-    if(!xarSecurityCheck('ReadRole')) return;
+    if(!xarSecurityCheck('ReadRoles')) return;
 
     $role = xarRoles::get($id);
 

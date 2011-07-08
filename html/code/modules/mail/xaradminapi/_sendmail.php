@@ -2,11 +2,12 @@
 /**
  * Send mail
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 
@@ -15,31 +16,35 @@
  * It is used by public functions sendmail() and sendhtmlmail()
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @param  $ 'info' is the email address we are sending (required)
- * @param  $ 'name' is the name of the email receipitent (optional)
- * @param  $ 'recipients' is an array of recipients (required) // NOTE: $info or $recipients is required, not both
- * @param  $ 'ccinfo' is the email address we are sending (optional)
- * @param  $ 'ccname' is the name of the email recipient (optional)
- * @param  $ 'ccrecipients' is an array of cc recipients (optional)
- * @param  $ 'bccinfo' is the email address we are sending (required)
- * @param  $ 'bccname' is the name of the email recipient (optional)
- * @param  $ 'bccrecipients' is an array of bcc recipients (optional)
- * @param  $ 'subject' is the subject of the email (required)
- * @param  $ 'message' is the body of the email (required)
- * @param  $ 'htmlmessage' is the html body of the email
- * @param  $ 'priority' is the priority of the message
- * @param  $ 'encoding' is the encoding of the message
- * @param  $ 'wordwrap' is the column width of the message
- * @param  $ 'from' is who the email is from
- * @param  $ 'fromname' is the name of the person the email is from
- * @param  $ 'attachName' is the name of an attachment to a message
- * @param  $ 'attachPath' is the path of the attachment
- * @param  $ 'htmlmail' is set to true for an html email
- * @param  $ 'usetemplates' set to true to use templates in xartemplates
- * @param  $ 'when' timestamp specifying that this mail should be sent 'no earlier than' (default is now)
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['info'] is the email address we are sending (required)<br/>
+ *        string   $args['name'] is the name of the email receipitent (optional)<br/>
+ *        array    $args['recipients'] is an array of recipients (required) // NOTE: $info or $recipients is required, not both<br/>
+ *        string   $args['ccinfo'] is the email address we are sending (optional)<br/>
+ *        string   $args['ccname'] is the name of the email recipient (optional)<br/>
+ *        array    $args['ccrecipients'] is an array of cc recipients (optional)<br/>
+ *        string   $args['bccinfo'] is the email address we are sending (required)<br/>
+ *        string   $args['bccname'] is the name of the email recipient (optional)<br/>
+ *        array    $args['bccrecipients'] is an array of bcc recipients (optional)<br/>
+ *        string   $args['subject'] is the subject of the email (required)<br/>
+ *        string   $args['message'] is the body of the email (required)<br/>
+ *        string   $args['htmlmessage'] is the html body of the email<br/>
+ *        string   $args['priority'] is the priority of the message<br/>
+ *        string   $args['encoding'] is the encoding of the message<br/>
+ *        string   $args['wordwrap'] is the column width of the message<br/>
+ *        string   $args['from'] is who the email is from<br/>
+ *        string   $args['fromname'] is the name of the person the email is from<br/>
+ *        string   $args['attachName'] is the name of an attachment to a message<br/>
+ *        string   $args['attachPath'] is the path of the attachment<br/>
+ *        string   $args['htmlmail'] is set to true for an html email<br/>
+ *        string   $args['usetemplates'] set to true to use templates in xartemplates<br/>
+ *        string   $args['when' timestamp specifying that this mail should be sent 'no earlier than' (default is now)
  *                  This requires installation and configuration of the scheduler module
+ * @param  $args['redirectsending' set this to redirect email.(optional)
+ * @param  $args['redirectaddress' is the email address we are redirecting mails.(optional)
+ * 
  */
-function mail_adminapi__sendmail($args)
+function mail_adminapi__sendmail(Array $args=array())
 {
     if (xarModVars::get('mail', 'suppresssending')) return true;
 // Get arguments from argument array
@@ -78,13 +83,13 @@ function mail_adminapi__sendmail($args)
     sys::import('modules.mail.class.phpmailer');
 
     $mail = new phpmailer();
-    $mail->PluginDir = 'modules/mail/class/';
+    $mail->PluginDir = sys::code() . 'modules/mail/class/';
     $mail->ClearAllRecipients();
 
     // Set default language path to English.  This is necessary as
     // phpmailer will set an invalid path to the language directory
     // and throw an error.
-    $mail->SetLanguage("en", "modules/mail/class/language/");
+    $mail->SetLanguage("en", sys::code() . "modules/mail/class/language/");
 
     // Get type of mail server
     $serverType = xarModVars::get('mail', 'server');
@@ -136,10 +141,19 @@ function mail_adminapi__sendmail($args)
     // $subject = The subject of the mail
     // $message = The body of the email
     // $name = name of person receiving email (not required)
+    if (!isset($redirectsending)){
+        $redirectsending = '';
+    }
+    if(!isset($redirectaddress)) {
+        $redirectaddress = '';
+    }
     if (xarModVars::get('mail','redirectsending')) {
+        $redirectsending = xarModVars::get('mail','redirectsending');
+        $redirectaddress = xarModVars::get('mail','redirectaddress');        
+    }
+    if ($redirectsending) {
         $mail->ClearAddresses();
         $recipients = array();
-        $redirectaddress = xarModVars::get('mail','redirectaddress');
         if (!empty($redirectaddress)) {
             $info = $redirectaddress;
             $name = xarML('Xaraya Mail Debugging');
@@ -147,6 +161,11 @@ function mail_adminapi__sendmail($args)
             return true;
         }
     }
+
+    if($message_envelope) {
+        $mail->Sender = $message_envelope;
+    }
+
     if (!empty($recipients)) {
         foreach($recipients as $k=>$v) {
             if (!is_numeric($k) && !is_numeric($v)) {
@@ -171,7 +190,7 @@ function mail_adminapi__sendmail($args)
     }// if
 
     // Add a "CC" address
-    if (xarModVars::get('mail','redirectsending')) {
+    if ($redirectsending) {
         $mail->ClearCCs();
         $ccrecipients = array();
     }
@@ -199,7 +218,7 @@ function mail_adminapi__sendmail($args)
     }// if
 
     // Add a "BCC" address
-    if (xarModVars::get('mail','redirectsending')) {
+    if ($redirectsending) {
         $mail->ClearBCCs();
         $bccrecipients = array();
     }
@@ -273,6 +292,44 @@ function mail_adminapi__sendmail($args)
         } else {
             $mail->Body = $htmlmessage;
         }
+        //TODO:Handle the code for embedding images in the mail.
+        //Parse a html body for getting the no of images used in the body.
+        $html_images = array();
+        $image_types = array(
+                    'gif'  => 'image/gif',
+                    'jpg'  => 'image/jpeg',
+                    'jpeg'  => 'image/jpeg',
+                    'jpe'  => 'image/jpeg',
+                    'bmp'  => 'image/bmp',
+                    'png'  => 'image/png',
+                    'tif'  => 'image/tiff',
+                    'tiff'  => 'image/tiff',
+                    'swf'  => 'application/x-shockwave-flash'
+                    );
+ 
+        while(list($key,) = each($image_types)){
+            $extensions[] = $key;
+        }
+        preg_match_all('/"([^"]+\.('.implode('|', $extensions).'))"/Ui', $mail->Body, $images);
+
+        for($i = 0; $i < count($images[1]); $i++) {
+            if(@is_file($images[1][$i]) && @fopen($images[1][$i], "rb"))
+            {
+                $html_images[] = $images[1][$i];
+                $mail->Body = str_replace($images[1][$i], basename($images[1][$i]), $mail->Body);
+            }
+        }
+        if(!empty($html_images)){
+            $html_images = array_unique($html_images);
+            sort($html_images);
+            for($i = 0; $i < count($html_images); $i++){
+                $cid = md5(uniqid(time()));
+                //It will only work with the local path of images.
+                $path = sys::root() . "./html/" . $html_images[$i];
+                $mail->AddEmbeddedImage($path, $cid, basename($path));
+                $mail->Body = str_replace(basename($path), "cid:$cid", $mail->Body);
+            }
+        }
     } else {
         if ($usetemplates) {
             $mail->Body = xarTplModule('mail',
@@ -299,9 +356,15 @@ function mail_adminapi__sendmail($args)
             $mail->AddAttachment($attachPath);
         }
     }
-
+    
+    if(isset($custom_header) && !empty($custom_header)) {
+        foreach ($custom_header as $key => $value)
+        $mail->AddCustomHeader($value);
+    }
+    
     // Send the mail, or send an exception.
     $result = true;
+
     // CHECKME: does this hurt when a batch of emails is going out?
     try {
         $result = $mail->Send();

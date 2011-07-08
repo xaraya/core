@@ -1,20 +1,26 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 
 /**
  * View items
+ * @return string output display string
  */
-function dynamicdata_admin_view($args)
+function dynamicdata_admin_view(Array $args=array())
 {
+    // Security
+    if(!xarSecurityCheck('EditDynamicData')) return;
+
     if(!xarVarFetch('itemid',   'int',   $itemid,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('startnum', 'int',   $startnum,  NULL, XARVAR_DONT_SET)) {return;}
@@ -29,8 +35,6 @@ function dynamicdata_admin_view($args)
 
     // Override if needed from argument array
     extract($args);
-
-    if(!xarSecurityCheck('EditDynamicData')) return;
 
     // Default number of items per page in user view
     if (empty($numitems)) {
@@ -55,6 +59,9 @@ function dynamicdata_admin_view($args)
     if (!isset($object)) {
         return;
     }
+    if (!$object->checkAccess('view'))
+        return xarResponse::Forbidden(xarML('View #(1) is forbidden', $object->label));
+
     // Pass back the relevant variables to the template if necessary
     $data = $object->toArray();
 

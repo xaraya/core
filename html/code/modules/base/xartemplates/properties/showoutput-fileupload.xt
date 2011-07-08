@@ -3,7 +3,8 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="!empty($basedir)">
         <!-- TODO: convert basedir to base URL when necessary ? -->
-        <a href="#$basedir#/#$value#" title="#xarML('Download')#">#$value#</a>
+        <xar:var name="label">Download</xar:var>
+        <a href="#$basedir#/#$value#" title="#$label#">#$value#</a>
     <xar:else/> 
         <!-- something went wrong here - the file doesn't exist -->
         <xar:var name="value"/>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div class="xar-form-input-wrapper" style="padding-bottom: 10px;">
+        <xar:set name="value">
+            implode(',',unserialize(xarModVars::get('dynamicdata', 'administrators')))
+        </xar:set>
+        Enter a list of user names separated by commas. Incorrect user names  will be ignored.<br />
+        <xar:var name="label">These users have full access to the dynamicdata module</xar:var>
+        <label for="administrators" title="#$label#" class="xar-form-label">
+            List of Administrators:
+        </label>
+        <xar:data-input type="textarea" name="administrators" value="$value"/>
+    </div>
+</xar:template>

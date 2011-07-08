@@ -1,6 +1,15 @@
 <?php
 /**
- * Interfaces for dataobjects:
+ * Interfaces for dataobjects
+ *
+ * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/182.html
  */
 
 interface iDataObject
@@ -31,7 +40,7 @@ interface iDataObjectList
     public function showView(Array $data = array());
     public function getViewOptions($itemid = null);
     public function &getViewValues(Array $data = array());
-    public function getSortURL($data = null);
+    public function getSortURL($currenturl=null);
     public function getNext(Array $data = array());
 }
 ?>

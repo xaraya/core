@@ -1,10 +1,14 @@
 <?php
 /**
  *
- * @package security
+ * @package core
+ * @subpackage security
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Jim McDonald
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @author  Richard Cave <rcave@xaraya.com>
@@ -21,17 +25,6 @@
  *  GID 0 corresponds to unregistered users
  *
  */
-define('ROLES_STATE_DELETED',0);
-define('ROLES_STATE_INACTIVE',1);
-define('ROLES_STATE_NOTVALIDATED',2);
-define('ROLES_STATE_ACTIVE',3);
-define('ROLES_STATE_PENDING',4);
-define('ROLES_STATE_CURRENT',98);
-define('ROLES_STATE_ALL',99);
-
-define('ROLES_ROLETYPE',1);
-define('ROLES_USERTYPE',2);
-define('ROLES_GROUPTYPE',3);
 
 // @todo Maybe changing this touch to a centralized API would be a good idea?
 //Even if in the end it would use touched files too...
@@ -49,7 +42,7 @@ sys::import('modules.roles.class.roles');
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   string name
  * @return  bool
  */
@@ -60,9 +53,9 @@ function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname
  *
  * This is a wrapper function
  *
- * @access public
+ * 
  * @param  string name
- * @return bool
+ * @return boolean
  */
 function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state=3,$authModule= 0)
 {
@@ -74,10 +67,10 @@ function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state
  *
  * This is a wrapper function
  *
- * @access public
+ * 
  * @param  string child name
  * @param  string parent name
- * @return bool
+ * @return boolean
  */
 function xarMakeRoleMemberByName($childName, $parentName)
 {
@@ -89,10 +82,10 @@ function xarMakeRoleMemberByName($childName, $parentName)
  *
  * This is a wrapper function
  *
- * @access public
+ * 
  * @param  string child uname
  * @param  string parent uname
- * @return bool
+ * @return boolean
  */
 function xarMakeRoleMemberByUname($childName, $parentName)
 {
@@ -107,10 +100,10 @@ function xarMakeRoleMemberByUname($childName, $parentName)
  *
  * This is a wrapper function
  *
- * @access public
+ * 
  * @param  string child ID
  * @param  string parent ID
- * @return bool
+ * @return boolean
  */
 function xarMakeRoleMemberByID($childId, $parentId)
 {
@@ -125,10 +118,10 @@ function xarMakeRoleMemberByID($childId, $parentId)
  *
  * This is a wrapper function
  *
- * @access public
+ * 
  * @param  string child ID
  * @param  string parent ID
- * @return bool
+ * @return boolean
  */
 function xarRemoveRoleMemberByID($childId, $parentId)
 {
@@ -143,7 +136,7 @@ function xarRemoveRoleMemberByID($childId, $parentId)
  *
  * This is a wrapper function
  *
- * @access public
+ * 
  * @param  string name
  * @param  integer realm
  * @param  string module
@@ -151,7 +144,7 @@ function xarRemoveRoleMemberByID($childId, $parentId)
  * @param  string instance
  * @param  integer level
  * @param  string description
- * @return bool
+ * @return boolean
  */
 function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='')
 {
@@ -168,10 +161,10 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
  *
  * This is a wrapper function
  *
- * @access public
+ * 
  * @param  string childName
  * @param  string  parentName
- * @return bool
+ * @return boolean
  */
 function xarMakePrivilegeMember($childName, $parentName)
 {
@@ -183,10 +176,10 @@ function xarMakePrivilegeMember($childName, $parentName)
  *
  * This is a wrapper function
  *
- * @access public
+ * 
  * @param  string  privilege name
  * @param  string role name
- * @return bool
+ * @return boolean
  */
 function xarAssignPrivilege($privilege,$role)
 {
@@ -198,7 +191,7 @@ function xarAssignPrivilege($privilege,$role)
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   string module
  * @return  bool
  */
@@ -216,7 +209,7 @@ function xarRemovePrivileges($module)
  *
  * This is a wrapper function
  *
- * @access public
+ * 
  * @param  string module
  * @param  string type
  * @param  string query
@@ -225,7 +218,7 @@ function xarRemovePrivileges($module)
  * @param  integer childId
  * @param  integer parentId
  * @param  string description
- * @return bool
+ * @return boolean
  */
 function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId='',$parentId='',$description='')
 {
@@ -237,7 +230,7 @@ function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   string module
  * @return  bool
  */
@@ -251,7 +244,7 @@ function xarRemoveInstances($module)
  *
  * This is a wrapper function
  *
- * @access public
+ * 
  * @return array of strings
  */
 function xarGetGroups() { return xarRoles::getgroups(); }
@@ -261,7 +254,7 @@ function xarGetGroups() { return xarRoles::getgroups(); }
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   string name
  * @return  object role
  */
@@ -298,7 +291,7 @@ function xarIsAncestor($name1, $name2)
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   string name
  * @return  object role
  * @todo    what is this doing here?
@@ -316,7 +309,7 @@ function xarTree()
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   integer pid,level
  * @param   strings pid,name,realm,module,component
  * @param   array instance
@@ -339,7 +332,7 @@ function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$leve
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   integer levelname
  * @return  security level
  */
@@ -352,7 +345,7 @@ function xarSecurityLevel($levelname)
  * xarPrivExists: checks whether a privilege exists.
  *
  *
- * @access  public
+ * 
  * @param   string name of privilege
  * @return  boolean
  */
@@ -367,7 +360,7 @@ function xarPrivExists($name)
  * xarMaskExists: checks whether a mask exists.
  *
  *
- * @access  public
+ * 
  * @param   string name of mask
  * @param   string module of mask
  * @return  bool
@@ -375,24 +368,9 @@ function xarPrivExists($name)
 function xarMaskExists($name,$module="All",$component="All")
 {
     if ($mask == "All") $mask = 0;
-    $mask = xarMasks::getMask($name,$module,$component,true);
+    $mask = xarSecurity::getMask($name,$module,$component,true);
     if ($mask) return true;
     else return false;
-}
-
-/**
- * xarQueryMask: returns a mask suitable for inclusion in a structured query
- *
- *
- * @access  public
- * @param   string name of mask
- * @param   string module of mask
- * @return  bool
- */
-function xarQueryMask($mask, $showException=1, $component='', $instance='', $module='', $role='')
-{
-    if ($mask == "All") $mask = 0;
-    return xarMasks::querymask($mask, $component, $instance, $module, $role,$pnrealm,$pnlevel);
 }
 
 /**
@@ -401,14 +379,14 @@ function xarQueryMask($mask, $showException=1, $component='', $instance='', $mod
  * Checks the current group or user's privileges against a component
  * This function should be invoked every time a security check needs to be done
  *
- * @access public
+ * 
  * @param  string  $mask
  * @param  integer $showException
  * @param  string  $component
  * @param  string  $instance
  * @param  string  $module
  * @param  string  $role
- * @return bool
+ * @return boolean
  */
 function xarSecurityCheck($mask, $showException=1, $component='', $instance='', $module='', $role='',$pnrealm=0,$pnlevel=0)
 {
@@ -417,15 +395,15 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
        return true;
     }
     else {
-        sys::import('modules.privileges.class.masks');
-       return xarMasks::xarSecurityCheck($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
+        sys::import('modules.privileges.class.security');
+       return xarSecurity::check($mask, $showException, $component, $instance, $module, $role,$pnrealm,$pnlevel);
     }
 }
 
 /**
  * xarRegisterMask: wrapper function for registering a mask
  *
- * @access public
+ * 
  * @param  string  $name
  * @param  integer $realm
  * @param  string  $module
@@ -433,7 +411,7 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
  * @param  string  $instance
  * @param  integer $level
  * @param  string  $description
- * @return bool
+ * @return boolean
  */
 function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
 {
@@ -443,9 +421,9 @@ function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$descr
 /**
  * xarUnregisterMask: wrapper function for unregistering a mask
  *
- * @access public
+ * 
  * @param  string name
- * @return bool
+ * @return boolean
  */
 function xarUnregisterMask($name)
 {
@@ -457,14 +435,14 @@ function xarUnregisterMask($name)
  *
  * This is a wrapper function
  *
- * @access  public
+ * 
  * @param   string module
  * @return  bool
  */
 function xarRemoveMasks($module)
 {
     if ($module == "All") {
-        $modid = xarMasks::PRIVILEGES_ALL;
+        $modid = xarSecurity::PRIVILEGES_ALL;
     } elseif ($module == null) {
         $modid = null;
     } else {
@@ -484,7 +462,7 @@ function xarRemoveMasks($module)
  * xarSecConfirmAuthKey() to ensure that the operation has
  * indeed been manually requested by the user and that the key is valid
  *
- * @access public
+ * 
  * @param string modName the module this authorisation key is for (optional)
  * @return string an encrypted key for use in authorisation of operations
  * @todo bring back possibility of extra security by using date (See code)
@@ -492,7 +470,7 @@ function xarRemoveMasks($module)
 function xarSecGenAuthKey($modName = NULL)
 {
     if (empty($modName)) {
-        list($modName) = xarRequest::getInfo();
+        list($modName) = xarController::$request->getInfo();
     }
 
     // Date gives extra security but leave it out for now
@@ -515,16 +493,16 @@ function xarSecGenAuthKey($modName = NULL)
  * See description of xarSecGenAuthKey for information on
  * this function
  *
- * @access public
+ * 
  * @param string authIdVarName
- * @return bool true if the key is valid, false if it is not
+ * @return boolean true if the key is valid, false if it is not
  * @throws ForbiddenOperationException
  * @todo bring back possibility of time authorized keys
  */
 function xarSecConfirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=false)
 {
-    if(!isset($modName)) list($modName) = xarRequest::getInfo();
-    $authid = xarRequest::getVar($authIdVarName);
+    if(!isset($modName)) list($modName) = xarController::$request->getInfo();
+    $authid = xarController::getVar($authIdVarName);
 
     // Regenerate static part of key
     $partkey = xarSessionGetVar('rand') . strtolower($modName);

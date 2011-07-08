@@ -2,52 +2,44 @@
 /**
  * Update attributes of a Block
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
- * update attributes of a block group
+ * update ordering of a block group
  *
- * @author Jim McDonald, Paul Rosania
- * @param $args['id'] the ID of the group to update (deprec)
- * @param $args['id'] the ID of the group to update
- * @param $args['name'] the new name of the group
- * @param $args['template'] the new default template of the group
- * @param $args['instance_order'] the new instance sequence (array of bid)
- * @returns bool
- * @return true on success, false on failure
+ * @TODO: This function is used solely by the blockgroup block
+ * consider moving it to that blocks updateorder() method
+ *
+ * @author Jim McDonald
+ * @author Paul Rosania
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['id'] the ID of the group to update<br/>
+ *        array    $args['instance_order'] the new instance sequence (array of bid)
+ * @return boolean true on success, false on failure
  */
-function blocks_adminapi_update_group($args)
+function blocks_adminapi_update_group(Array $args=array())
 {
     // Get arguments from argument array
     $template = null;
     extract($args);
 
-    if (!empty($id)) {
+    if (!empty($gid)) {
         // Legacy.
-        $id = $id;
+        $id = $gid;
     }
-
-    // Security.
-    // FIXME: this doesn't seem right - it is a block group, not a block instance here.
-    if (!xarSecurityCheck('EditBlock', 1, 'Block', "$name::$id")) {return;}
 
     if (!is_numeric($id)) {return;}
 
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
 
-    $block_groups_table =& $xartable['block_groups'];
     $block_group_instances_table =& $xartable['block_group_instances'];
-
-    $query = "UPDATE $block_groups_table
-              SET name = ?, template = ?
-              WHERE id = ?";
-    $dbconn->Execute($query, array($name, $template, $id));
 
     if (!empty($instance_order)) {
         $position = 1;

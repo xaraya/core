@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:set name="steptext[1]">'Prepare for Upgrade'</xar:set>
-    <xar:set name="steptext[2]">'Upgrade Database'</xar:set>
-    <xar:set name="steptext[3]">'Upgrade Miscellaneous'</xar:set>
-    <xar:set name="steptext[4]">'Finalize Upgrade'</xar:set>
+    <style>
+        .complete {
+            background-image: url(#sys::code()#modules/base/xarimages/icons/activate.png);
+            color: ##568A00;
+        }
+
+        .active {
+            background-image: url(#sys::code()#modules/base/xarimages/icons/initialize.png);
+        }
+
+        .greyed {
+            background-image: url(#sys::code()#modules/base/xarimages/icons/none.png);
+            color: ##999999;
+        }
+    </style>
+    <xar:var name="steptext[1]">Log in</xar:var>
+    <xar:var name="steptext[2]">Prepare for the Upgrade</xar:var>
+    <xar:var name="steptext[3]">Running the Upgrade</xar:var>
+    <xar:var name="steptext[4]">Database Checks</xar:var>
+    <xar:var name="steptext[5]">Notes on this Version</xar:var>
     <div id="status">
         <div id="status_body">
             <div class="xar-align-center">
-                <img src="#sys::code()#modules/installer/xarimages/upgrader.png" alt="#xarML('Upgrade icon')#"/>
+                <xar:var name="label">Upgrade icon</xar:var>
+                <img src="#sys::code()#modules/installer/xarimages/installer.png" alt="#$label#"/>
             </div>
             <ul>
                 <xar:for start="$phase = 1" test="$phase lt $active_step" iter="$phase++">
@@ -18,7 +35,7 @@
                 <li class="active">
                     #$steptext[$active_step]# 
                 </li>
-                <xar:for start="$phase = $active_step + 1" test="$phase le 4" iter="$phase++">
+                <xar:for start="$phase = $active_step + 1" test="$phase le 5" iter="$phase++">
                     <li class="greyed">
                         #$steptext[$phase]# 
                     </li>

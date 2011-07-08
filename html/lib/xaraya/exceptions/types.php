@@ -2,10 +2,14 @@
 /**
  * Exception types
  *
- * @package exceptions
+ * @package core
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ *
  * @author Marco Canini <marco@xaraya.com>
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
@@ -145,7 +149,7 @@ class IDNotFoundException extends NotFoundExceptions
 // Files
 class FileNotFoundException extends NotFoundExceptions
 { 
-    protected $message = 'The file "#(1) could not be found.';
+    protected $message = 'The file "#(1)" could not be found.';
 }
 // Directories
 class DirectoryNotFoundException extends NotFoundExceptions

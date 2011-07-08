@@ -9,7 +9,7 @@
         <h3>
             <xar:var scope="session" name="$themes_statusmsg"/>
         </h3>
-        <form action="&xar-modurl-themes-admin-update;" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarModURL('themes','admin','update')#" method="post" enctype="application/x-www-form-urlencoded">
             <xar:if condition="count($themevars) gt 0">
                 <xar:loop name="$themevars">
                     <fieldset>
@@ -43,15 +43,18 @@
             <fieldset>
                 <legend>Add New Theme Variable</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="newvarname" title="#xarML('Name of the new variable')#" class="xar-form-label">Name:</label>
+                    <xar:var name="label">Name of the new variable</xar:var>
+                    <label for="newvarname" title="#$label#" class="xar-form-label">Name:</label>
                     <input type="text" name="newvarname" id="newvarname" value="" maxlength="64" class="xar-form-textlong"/>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="newvarvalue" title="#xarML('Value of the new variable')#" class="xar-form-label">Name:</label>
+                    <xar:var name="label">Value of the new variable</xar:var>
+                    <label for="newvarvalue" title="#$label#" class="xar-form-label">Name:</label>
                     <input type="text" name="newvarvalue" id="newvarvalue" value="" maxlength="64" class="xar-form-textlong"/>
                 </div>
                 <div class="xar-form-input-wrapper">
-                    <label for="newvardescription" title="#xarML('Description of the new variable')#" class="xar-form-label">
+                    <xar:var name="label">Description of the new variable</xar:var>
+                    <label for="newvardescription" title="#$label#" class="xar-form-label">
                         Description:
                     </label>
                     <input type="text" name="newvardescription" id="newvardescription" value="" maxlength="64" class="xar-form-textxlong"/>
@@ -59,14 +62,16 @@
             </fieldset>
             <div class="xar-form-input-wrapper-after">
                 <input type="checkbox" name="return" id="return" checked="1"/>
-                <label for="return" title="#xarML('TITLE')#">
+                <xar:var name="label">Update</xar:var>
+                <label for="return" title="#$label#">
                     Update and return to this screen
                 </label>
             </div>
             <div class="xar-align-center">
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="id" id="id" value="#$id#"/>
-                <input type="submit" value="#xarML('Save')#"/>
+                <xar:var name="label">Save</xar:var>
+                <input type="submit" value="#$label#"/>
             </div>
         </form>
         <h2>Credits</h2>

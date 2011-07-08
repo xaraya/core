@@ -3,11 +3,12 @@
  * Assign a privilege to role
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -19,8 +20,10 @@
 function roles_admin_addprivilege()
 {
     // get parameters
-    if (!xarVarFetch('privid', 'int:1:', $privid)) return;
-    if (!xarVarFetch('roleid', 'int:1:', $roleid)) return;
+    if (!xarVarFetch('privid', 'int:1:', $privid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('roleid', 'int:1:', $roleid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($privid)) return xarResponse::notFound();
+    if (empty($roleid)) return xarResponse::notFound();
 
     // Check for authorization code
     if (!xarSecConfirmAuthKey()) {
@@ -34,8 +37,8 @@ function roles_admin_addprivilege()
     sys::import('modules.privileges.class.privileges');
     $priv = xarPrivileges::getPrivilege($privid);
 
-    //Security Check
-    if (!xarSecurityCheck('AssignPrivilege',0,'Privileges',$priv->getName())) return;
+    // Security
+    if (!xarSecurityCheck('ManagePrivileges',0,'Privileges',$priv->getName())) return;
 
     // If this privilege is already assigned do nothing
     // Try to assign the privilege and bail if an error was thrown
@@ -63,6 +66,7 @@ function roles_admin_addprivilege()
     }
 
     // redirect to the next page
-    xarResponse::redirect($return_url);
+    xarController::redirect($return_url);
+    return true;
 }
 ?>

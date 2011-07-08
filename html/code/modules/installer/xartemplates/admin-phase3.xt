@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <link rel='icon' href="favicon.ico"/>
     <style>
         ul li.success {
             list-style-image:  url(#sys::code()#modules/base/xarimages/icons/activate.png) !important;
@@ -92,13 +93,21 @@
             information to the configuration file #$systemConfigFile#. If your settings are not
             correct, this script will not be able to do so.</p>
             <ul>
+                <xar:if condition="$systemConfigDistIsReadable">
+                    <li class="success">SUCCESS: The installer can read the default configuration
+                    file included in the distribution.</li>
+                 <xar:else />
+                    <li class="failure">ERROR: The installer cannot read the default distribution configuration
+                    file or the file is missing. Please verify that your webserver has read
+                    access to the file #$systemConfigDistFile# and that it exists.</li>
+                </xar:if>
                 <xar:if condition="$systemConfigIsWritable">
                     <li class="success">SUCCESS: The installer can write to your configuration
                     file.</li>
                  <xar:else />
                     <li class="failure">ERROR: The installer cannot write to the configuration
-                    file or the file is missing. Please verify that your webserver has write
-                    access to the file #$systemConfigFile# and that it exists.</li>
+                    file or the file is missing, or could not be created. Please verify that your webserver has write
+                    access to the file #$systemConfigFile# if you placed it manually, or else that the webserver has write access to the var directory your default configuration file is in (#$systemConfigDistFile#), and read access to the file itself.</li>
                 </xar:if>
                 <xar:if condition="$cacheIsWritable">
                     <li class="success">SUCCESS: The installer can write to the directory
@@ -208,7 +217,8 @@
             </ul>
         <form action="install.php" method="post">
             <div class="xar-align-center">
-                <xar:if condition="$systemConfigIsWritable 
+                <xar:if condition="$systemConfigDistIsReadable 
+                                   AND $systemConfigIsWritable 
                                    AND $cacheTemplatesIsWritable 
                                    AND $cacheIsWritable 
                                    AND $rssTemplatesIsWritable 

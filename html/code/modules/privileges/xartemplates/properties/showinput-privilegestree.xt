@@ -32,27 +32,33 @@
                     <xar:set name="level">$node-&gt;getLevel()</xar:set>
                     <li class="leaf">
                         <div class="leaf-actions">
+                            <xar:var name="label1">Delete</xar:var>
                             <xar:sec mask="DeletePrivilege" catch="false" component="Privileges" instance="#$name#">
                                 <xar:set name="dellink">xarModUrl('privileges','admin','deleteprivilege',array('id'=&gt; $id))</xar:set>
-                                <a href="#$dellink#" title="#xarML('Delete this privilege')#">
-                                    <img src="#$deleteicon#" alt="#xarML('Delete')#"/>
+                                <xar:var name="label">Delete this privilege</xar:var>
+                                <a href="#$dellink#" title="#$label#">
+                                    <img src="#$deleteicon#" alt="#$label1#"/>
                                 </a>
                             <xar:else />
-                                <img src="#$blankicon#" alt="#xarML('Delete')#"/>
+                                <img src="#$blankicon#" alt="#$label1#"/>
                             </xar:sec>
                             &#160;
                             <xar:set name="userslink">xarModUrl('privileges','admin','viewroles',array('id'=&gt; $id))</xar:set>
-                            <a href="#$userslink#" title="#xarML('Show the Groups/Users this Privilege is assigned to')#">
-                                <img src="#$groupsicon#" alt="xarML('Groups')#"/>
+                            <xar:var name="label">Show the Groups/Users this Privilege is assigned to</xar:var>
+                            <a href="#$userslink#" title="#$label#">
+                                <xar:var name="label1">Groups</xar:var>
+                                <img src="#$groupsicon#" alt="#$label1#"/>
                             </a>
                             &#160;
+                            <xar:var name="label1">Remove</xar:var>
                             <xar:if condition="$parentid ne 0">
                                 <xar:set name="removelink">xarModUrl('privileges','admin','removebranch',array('id'=&gt; $id))</xar:set>
-                                <a href="#$removelink#" title="#xarML('Remove this privilege from its parent')#">
-                                    <img src="#$removeicon#" alt="#xarML('Remove')#"/>
+                                <xar:var name="label">Remove this privilege from its parent</xar:var>
+                                <a href="#$removelink#" title="#$label#">
+                                    <img src="#$removeicon#" alt="#$label1#"/>
                                 </a>
                             <xar:else />
-                                <img src="#$blankicon#" alt="#xarML('Remove')#"/>
+                                <img src="#$blankicon#" alt="#$label1#"/>
                             </xar:if>
                         </div>
                         <xar:set name="indent">$level * 1.5</xar:set>

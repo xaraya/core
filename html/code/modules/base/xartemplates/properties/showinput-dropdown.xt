@@ -11,22 +11,49 @@
     <xar:if condition="!isset($style)">
         <xar:set name="style">''</xar:set>
     </xar:if>
-    <input type="hidden" name="#$name#_previous_value" value="#$value#"/>
-    <select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
-        <xar:foreach in="$options" value="$option">
-            <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
-                <xar:if condition="$option['id'] eq $value">
-                    <option value="#$option['id']#" selected="selected">#$option['name']#</option>
-                <xar:else />
-                    <option value="#$option['id']#">#$option['name']#</option>
+
+    <xar:if condition="!isset($size)">
+        <xar:set name="size">1</xar:set>
+    </xar:if>
+
+    <xar:if condition="!empty($previousvalue)">
+        <input type="hidden" name="#$name#_previous_value" value="#$value#"/>
+    </xar:if>
+    
+    <xar:if condition="empty($rows) OR (!empty($rows) AND (count($options) le $rows))">
+        <select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$evt_change#" size="#$size#" style="#$style#">
+            <xar:foreach in="$options" value="$option">
+                <xar:if condition="isset($option['id'])">
+                    <xar:if condition="$option['id'] eq $value">
+                        <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                    <xar:else/>
+                        <option value="#$option['id']#">#$option['name']#</option>
+                    </xar:if>
+                <xar:else/>
+                    <xar:if condition="$option['name'] eq $value">
+                        <option selected="selected">#$option['name']#</option>
+                    <xar:else/>
+                        <option>#$option['name']#</option>
+                    </xar:if>
                 </xar:if>
-            <xar:elseif condition="$option['id'] eq $value"/>
-                <option selected="selected">#$option['name']#</option>
-            <xar:else />
-                <option>#$option['name']#</option>
-            </xar:if>
-        </xar:foreach>
-    </select>
+                <!-- this doesn't work if eg id=1, name=1st
+                <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
+                    <xar:if condition="$option['id'] eq $value">
+                        <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                    <xar:else />
+                        <option value="#$option['id']#">#$option['name']#</option>
+                    </xar:if>
+                <xar:elseif condition="$option['id'] eq $value"/>
+                    <option selected="selected">#$option['name']#</option>
+                <xar:else />
+                    <option>#$option['id']# #$option['name']#</option>
+                </xar:if>
+                -->
+            </xar:foreach>
+        </select>
+    <xar:else />
+        <xar:data-input type="textbox" name="$name" value="$value" tabindex="$tabindex" style="$style" />
+    </xar:if>
     
     <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

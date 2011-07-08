@@ -1,33 +1,31 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 
 /**
  * Display an item in a template
  *
+ * @param array    $args array of optional parameters<br/>
  * @param $args array containing the item or fields to show
- * @returns string
- * @return string containing the HTML (or other) text to output in the BL template
+ * @return string output display string
  */
-function dynamicdata_userapi_showdisplay($args)
+function dynamicdata_userapi_showdisplay(Array $args=array())
 {
     extract($args);
 
     $args['fallbackmodule'] = 'current';
     $descriptor = new DataObjectDescriptor($args);
     $args = $descriptor->getArgs();
-
-    // TODO: what kind of security checks do we want/need here ?
-    if(!xarSecurityCheck('ReadDynamicDataItem',1,'Item',$args['moduleid'].":".$args['itemtype'].":".$itemid)) return;
-
 
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {
@@ -50,6 +48,8 @@ function dynamicdata_userapi_showdisplay($args)
     }
 
     $object = & DataObjectMaster::getObject($args);
+    if (!$object->checkAccess('display'))
+        return xarML('Display #(1) is forbidden', $object->label);
     // we're dealing with a real item, so retrieve the property values
     if (!empty($itemid)) {
         $object->getItem();

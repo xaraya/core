@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="!empty($relations)">
-        <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
+        <form method="post" action="#xarModURL('dynamicdata','util','relations')#">
             <fieldset>
             <legend>Links for #$table#</legend>
             <table>
@@ -23,7 +23,7 @@
                         </td>
                         <xar:if condition="$link['link_type'] eq 'parents'">
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$where#">
+                                <a href="#xarModURL('dynamicdata','util','relations',array('table'=>$where))#">
                             #$wherename#</a>
                             <br />#$link['to_prop']#</td>
                             <td>&#160;</td>
@@ -36,7 +36,7 @@
                             <td>#$link['from_prop']#</td>
                             <td class="xar-nowrap">&#160;</td>
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$where#">
+                                <a href="#xarModURL('dynamicdata','util','relations',array('table'=>$where))#">
                             #$wherename#</a>
                             <br />#$link['to_prop']#</td>
                         <xar:elseif condition="$link['link_type'] eq 'linkedto' or $link['link_type'] eq 'extensions'"/>
@@ -44,14 +44,14 @@
                             <td>&#160;</td>
                             <td>#$link['from_prop']#</td>
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$where#">
+                                <a href="#xarModURL('dynamicdata','util','relations',array('table'=>$where))#">
                             #$wherename#</a>
                             <br />#$link['to_prop']#</td>
                             <td class="xar-nowrap">&#160;</td>
                         <xar:elseif condition="$link['link_type'] eq 'linkedfrom' or $link['link_type'] eq 'extended'"/>
                             <td>&#160;</td>
                             <td>
-                                <a href="&xar-modurl-dynamicdata-util-relations;&amp;table=#$where#">
+                                <a href="#xarModURL('dynamicdata','util','relations',array('table'=>$where))#">
                             #$wherename#</a>
                             <br />#$link['to_prop']#</td>
                             <td>#$link['from_prop']#</td>
@@ -66,12 +66,13 @@
                 <input type="hidden" name="objectid" value="#$objectid#"/>
                 <input type="hidden" name="table" value="#$table#"/>
                 <input type="hidden" name="authid" value="#$authid#"/>
-                <input type="submit" name="delete" id="delete" value="#xarML('Delete')#"/>
+                <xar:var name="label">Delete</xar:var>
+                <input type="submit" name="delete" id="delete" value="#$label#"/>
             </div>
             </fieldset>
         </form>
     </xar:if>
-    <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
+    <form method="post" action="#xarModURL('dynamicdata','util','relations')#">
         <fieldset>
         <legend>Add Link for #$table#</legend>
         <div class="xar-form-input-wrapper">
@@ -103,7 +104,8 @@
             </select>
         </div>
         <div class="xar-form-input-wrapper-after">
-            <input type="submit" name="add" id="add" value="#xarML('Add Relation')#"/>
+            <xar:var name="label">Add Relation</xar:var>
+            <input type="submit" name="add" id="add" value="#$label#"/>
         </div>
         <xar:if condition="!empty($withtable)">
             <div class="xar-floatleft xar-thirdwidth">
@@ -162,7 +164,8 @@
                 </div>
             </div>
             <div class="xar-form-input-wrapper-after">
-                <input type="submit" name="confirm" value="#xarML('Confirm')#"/>
+                <xar:var name="label">Confirm</xar:var>
+                <input type="submit" name="confirm" value="#$label#"/>
             </div>
         </xar:if>
         </fieldset>

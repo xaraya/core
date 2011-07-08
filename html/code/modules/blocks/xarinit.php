@@ -3,17 +3,19 @@
  * Initialise the blocks module
  *
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage blocks
  * @link http://xaraya.com/index.php/release/13.html
  */
 
 /**
  * initialise the blocks module
- * @author Jim McDonald, Paul Rosania
+ * @author Jim McDonald
+ * @author Paul Rosania
  */
 function blocks_init()
 {
@@ -26,27 +28,10 @@ function blocks_init()
     try {
         $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         $dbconn->begin();
-        
-        // prototypes
+
         $id_type       = array('type'=>'integer', 'unsigned'=>true, 'null'=>false, 'increment'=>true, 'primary_key'=>true);
         $idref_type    = array('type'=>'integer', 'unsigned'=>true, 'null'=>false);
         $template_type = array('type'=>'varchar', 'size'=>254, 'null'=>true, 'default'=>null, 'charset' => $charset);
-        
-        // *_block_groups
-        $query = xarDBCreateTable($prefix . '_block_groups',
-                                  array('id'          => $id_type,
-                                        'name'        => array('type'        => 'varchar',
-                                                                   'size'        => 64,
-                                                                   'null'        => false,
-                                                                   'charset' => $charset),
-                                        'template'    => $template_type));
-        $dbconn->Execute($query);
-
-        $query = xarDBCreateIndex($prefix . '_block_groups',
-                                  array('name'   => $prefix . '_block_groups_name',
-                                        'fields' => array('name'),
-                                        'unique' => 'true'));
-        $dbconn->Execute($query);
 
         // *_block_instances
         $query = xarDBCreateTable($prefix . '_block_instances',
@@ -63,7 +48,7 @@ function blocks_init()
                                                                    'default'     => NULL,
                                                                    'charset' => $charset),
                                         'content'     => array('type'        => 'text',
-                                                                   'null'        => false,
+                                                                   'null'        => true,
                                                                    'charset' => $charset),
                                         'template'    => $template_type,
                                         'state'       => array('type'        => 'integer',
@@ -220,6 +205,7 @@ function blocks_init()
 
     // Initialisation successful
     xarModVars::set('blocks', 'selstyle', 'plain');
+    xarModVars::set('blocks', 'noexceptions', 1);
 
     /* There are old block instances defined previously in privs xarsetup.php file and used in the Block module.
        From this version we are adding management of security for blocks to Blocks module
@@ -236,31 +222,15 @@ function blocks_init()
     $blockTypesTable     = $prefix . '_block_types';
     $blockInstancesTable = $prefix . '_block_instances';
 
-    //Set up the block group instances for this module - these are the same as previously defined and retained
-    $query1 = "SELECT DISTINCT name FROM $blockGroupsTable";
-    $query2 = "SELECT DISTINCT id FROM $blockGroupsTable";
-    $instances = array(array('header'  => 'Group Name:',
-                         'query'   => $query1,
-                         'limit'   => 20),
-                   array('header'  => 'Group ID:',
-                         'query'   => $query2,
-                         'limit'   => 20));
-
-    xarDefineInstance('blocks','BlockGroup',$instances);
-
     //The block instances differ and now defined on name (not title)
     //These need to be upgraded
-    $query1 = "SELECT DISTINCT modid FROM $blockTypesTable ";
-    $query2 = "SELECT type FROM $blockTypesTable ";
-    $query3 = "SELECT DISTINCT instances.name FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id";
+    $query1 = "SELECT DISTINCT module_id FROM $blockTypesTable ";
+    $query2 = "SELECT DISTINCT instances.name FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id";
     $instances = array(array('header' => 'Module Name:',
                              'query' => $query1,
                              'limit' => 20),
-                       array('header' => 'Block Type:',
-                             'query' => $query2,
-                             'limit' => 20),
                        array('header' => 'Block Name:',
-                             'query' => $query3,
+                             'query' => $query2,
                              'limit' => 20));
     xarDefineInstance('blocks','Block',$instances);
 
@@ -276,25 +246,10 @@ function blocks_init()
                              'limit' => 20));
     xarDefineInstance('blocks','BlockItem',$instances);
 
-    //Set up the security masks
-     xarRemoveMasks('blocks');
-     /* remove and redefine new ones. The old ones do not seem to be working in any case in installs */
-
-    //Unsure if this  Comment is used at all but left for compatiblity with prior setup
-    xarRegisterMask('CommentBlock','All','blocks','All','All','ACCESS_EDIT');
-
-    // Blockgroups - in case people can edit block group
-    xarRegisterMask('EditBlockGroup',  'All', 'blocks', 'Blockgroup', 'All', 'ACCESS_EDIT');
-    //Blocks block? could be a use ...
-    xarRegisterMask('ReadBlocksBlock', 'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_OVERVIEW');
-    //And standard masks for the rest - keep names the same as any prior so minimal sec checks in templates still work
-    xarRegisterMask('ViewBlock',    'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_OVERVIEW');
-    xarRegisterMask('ReadBlock',    'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_READ');
-    xarRegisterMask('ModerateBlock','All', 'blocks', 'Block', 'All:All:All', 'ACCESS_MODERATE');
-    xarRegisterMask('EditBlock',    'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_EDIT');
-    xarRegisterMask('AddBlock',     'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_ADD');
-    xarRegisterMask('DeleteBlock',  'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_DELETE');
-    xarRegisterMask('AdminBlock',   'All', 'blocks', 'Block', 'All:All:All', 'ACCESS_ADMIN');
+    xarRegisterMask('EditBlocks','All','blocks','All','All','ACCESS_EDIT');
+    xarRegisterMask('AddBlocks','All','blocks','All','All','ACCESS_ADD');
+    xarRegisterMask('ManageBlocks','All','blocks','All','All','ACCESS_DELETE');
+    xarRegisterMask('AdminBlocks','All','blocks','All','All','ACCESS_ADMIN');
 
     // Installation complete; check for upgrades
     return blocks_upgrade('2.0.0');
@@ -304,13 +259,13 @@ function blocks_init()
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function blocks_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0.0':
+      default:
       break;
     }
     return true;
@@ -319,7 +274,7 @@ function blocks_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return bool
+ * @return boolean
  */
 function blocks_delete()
 {

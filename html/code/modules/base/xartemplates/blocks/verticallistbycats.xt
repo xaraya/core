@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-        <xar:if condition="$showhelp eq '1'">
+    <!-- <chris> skipping this for now, since it isn't an option in the menu config
+    <xar:if condition="$showhelp eq '1'">
         <ul class="xar-menu-section">
             <li class="xar-menu-section">
                 <h4>Help System</h4>
                 <ul class="xar-menu-item">
                     <li class="xar-menu-item">
-                        <a title="#xarML('System help')#" href="#$overviewlink#">Help</a>
+                        <xar:var name="label">System help</xar:var>
+                        <a title="#$label#" href="#$overviewlink#">Help</a>
                     </li>
                 </ul>
             </li>
         </ul>
-        </xar:if>
+    </xar:if>
+    -->
     <xar:foreach in="$catmods" key="$catname" value="$cats">
         <!--
             we dont really want to display a category if there are no modules that belong to it,
@@ -22,103 +25,24 @@
             <ul class="xar-menu-section">
                 <li class="xar-menu-section">
                     <h4>#$catname#</h4>
-                    <ul class="xar-menu-item">
-                        <!--
-                              here we are dealing with 3 main conditions:
-                                    - if module is active and main/overview function is loaded, we display item as having *-current state
-                                    - if module is active and main/overview function is not loaded, we allow user to click the item to load main/overview
-                                    - if module is not active, user can activate item by clicking its link, upon which s/he loads main/overview function
-                                (some redundancy in template allows to easily port it for drop-down lists implementations in the future)
-                         -->
-                        <xar:foreach in="$cats" value="$mod" key="$modname">
-                            <xar:if condition="empty($mod['features'])">
-                                <xar:continue />
-                            <xar:elseif condition="$mod['features']['modactive'] and !$mod['features']['overview']"/>
-                                <li class="xar-menu-item-current">
-                                    <a name="activeitem" title="#$mod['features']['label']#">
-                                        #$mod['features']['label']#
-                                    </a>
-                                    <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
-                                        <ul class="xar-menu-subitem">
-                                            <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
-                                                <!-- determine and indicate current states of module functions display -->
-                                                <xar:if condition="$sublinks['funcactive']">
-                                                    <li class="xar-menu-subitem-current">
-                                                        <a name="activesubitem" title="#$sublinks['adminlabel']#">
-                                                            #$sublinks['adminlabel']#
-                                                        </a>
-                                                    </li>
-                                                <xar:else />
-                                                    <li class="xar-menu-subitem">
-                                                        <a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">
-                                                            #$sublinks['adminlabel']#
-                                                        </a>
-                                                    </li>
-                                                </xar:if>
-                                            </xar:foreach>
-                                        </ul>
-                                    </xar:if>
-                                </li>
-                            <xar:elseif condition="$mod['features']['modactive'] and $mod['features']['overview']"/>
-                                <li class="xar-menu-item-current">
-                                    <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">
-                                        #$mod['features']['label']#
-                                    </a>
-                                    <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
-
-                                        <ul class="xar-menu-subitem">
-                                            <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
-                                                <!-- determine and indicate current states of module functions display -->
-                                                <xar:if condition="$sublinks['funcactive']">
-                                                    <li class="xar-menu-subitem-current">
-                                                        <a name="activesubitem" title="#$sublinks['adminlabel']#">
-                                                            #$sublinks['adminlabel']#
-                                                        </a>
-                                                    </li>
-                                                <xar:else />
-                                                    <li class="xar-menu-subitem">
-                                                        <a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">
-                                                            #$sublinks['adminlabel']#
-                                                        </a>
-                                                    </li>
-                                                </xar:if>
-                                            </xar:foreach>
-                                        </ul>
-                                    </xar:if>
-                                </li>
-                            <xar:else />
-                                <li class="xar-menu-item">
-                                    <a href="#$mod['features']['link']#" title="#$mod['features']['maintitle']#">
-                                        #$mod['features']['label']#
-                                    </a>
-                                    <xar:if condition="isset($mod['indlinks']) and count($mod['indlinks']) gt 0">
-                                        <ul class="xar-menu-subitem">
-                                            <xar:foreach in="$mod['indlinks']" value="$sublinks" key="$sublink">
-                                                <!-- determine and indicate current states of module functions display -->
-                                                <xar:if condition="$sublinks['funcactive']">
-                                                    <li class="xar-menu-subitem-current">
-                                                        <a name="activesubitem" title="#$sublinks['adminlabel']#">
-                                                            #$sublinks['adminlabel']#
-                                                        </a>
-                                                    </li>
-                                                <xar:else />
-                                                    <li class="xar-menu-subitem">
-                                                        <a href="#$sublinks['adminlink']#" title="#$sublinks['admintitle']#">
-                                                            #$sublinks['adminlabel']#
-                                                        </a>
-                                                    </li>
-                                                </xar:if>
-                                            </xar:foreach>
-                                        </ul>
-                                    </xar:if>
-                                </li>
-                            </xar:if>
-                        </xar:foreach>
-                    </ul>
+                    <!-- hand the links off to the common blocks-menu-menulinks include template
+                         the template recursively includes itself to add sublinks to any number
+                         of nested levels, and also ensures menus are consistent  :)
+                         You can of course over-ride this block template, or the include itself
+                         to provide unique styling for individual menus
+                    -->
+                    <xar:set name="subdata">array(
+                        'menulinks' => $cats,               // pass the menulinks
+                        'menuid' => 'adminmenu' . $blockid, // pass a unique menuid
+                        'marker' => $marker,                // pass through the marker
+                        'maxlevels' => 2,                   // specify max levels
+                    )</xar:set>
+                    <xar:template type="module" module="base" file="blocks-menu-menulinks" subdata="$subdata"/>
                 </li>
             </ul>
         </xar:if>
     </xar:foreach>
+
     <!--
         the modvar to display/hide admin logout link should be available starting from version 1.2.3 of adminpanels : upgrade transparently via modules module
     -->
@@ -129,14 +53,16 @@
                 <ul class="xar-menu-item">
                 <xar:if condition="$showfront">
                     <li class="xar-menu-item">
-                        <a title="#xarML('View the site front end')#" href="#xarServer::getBaseURL()#">
+                        <xar:var name="label">View the site front end</xar:var>
+                        <a title="#$label#" href="#xarServer::getBaseURL()#">
                             View Front End
                         </a>
                     </li>
                 </xar:if>
                 <xar:if condition="$showlogout">
                    <li class="xar-menu-item">
-                        <a title="#xarML('Logout as administrator')#" href="&xar-modurl-base-admin-confirmlogout;">
+                        <xar:var name="label">Logout as administrator</xar:var>
+                        <a title="#$label#" href="#xarModURL('base','admin','confirmlogout')#">
                             Logout
                         </a>
                     </li>

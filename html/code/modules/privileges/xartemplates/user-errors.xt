@@ -5,7 +5,8 @@
     <div class="xar-mod-body">
         <fieldset>
             <legend>Privileges Problem</legend>
-            <img src="#xarTplGetImage('user-error.png','base')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon"/>
+            <xar:var name="label">System Message</xar:var>
+            <img src="#xarTplGetImage('user-error.png','base')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
             <xar:if condition="!isset($layout)">
                 <div style="margin-top: 20px; margin-left: 20px">
                     No error message is available.
@@ -19,6 +20,15 @@
             <xar:elseif condition="$layout eq 'no_privileges'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     You don't have the correct privileges for this operation
+                    <br />
+                    Contact the system administrator if you think this is an error.
+                </div>
+                <xar:if condition="isset($redirecturl)">
+                    <input type="hidden" name="redirecturl" id="returnurl" value="#$redirecturl#"/>
+                </xar:if>
+            <xar:elseif condition="$layout eq 'no_block_privileges'" />
+                <div style="margin-top: 20px; margin-left: 20px">
+                    You don't have the correct privileges to view this block
                     <br />
                     Contact the system administrator if you think this is an error.
                 </div>

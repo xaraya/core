@@ -1,12 +1,13 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
- * @link http://xaraya.com/index.php/release/27.html
+ * @link http://xaraya.com/index.php/release/182.html
  */
 
 sys::import('modules.dynamicdata.class.objects.master');
@@ -20,9 +21,6 @@ sys::import('modules.dynamicdata.class.objects.interfaces');
  */
 class DataObject extends DataObjectMaster implements iDataObject
 {
-
-    protected $descriptor  = null;    // descriptor object of this class
-
     public $itemid         = 0;
     public $missingfields  = array(); // reference to fields not found by checkInput
 
@@ -44,7 +42,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         if (!empty($args['config'])) {
             try {
                 $configargs = unserialize($args['config']);
-                foreach ($configargs as $key => $value) $this->{$key} = $value;
+                foreach ($configargs as $key => $value) if (!empty($key)) $this->{$key} = $value;
                 $this->configuration = $configargs;
             } catch (Exception $e) {}
         }
@@ -97,7 +95,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview'])) $this->checkInput();
-        return $this->itemid;
+        return $itemid;
     }
 
     public function getInvalids(Array $args = array())
@@ -158,7 +156,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         foreach($fields as $name) {
             // Ignore disabled or ignored properties
             if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
-            || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_IGNORED))
+            || ($this->properties[$name]->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_IGNORED))
                 continue;
 
             // Give the property this object's reference so it can send back info on missing fields
@@ -214,7 +212,8 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function showForm(Array $args = array())
     {
-        $args = $this->toArray($args);
+        $args = $args + $this->getPublicProperties();
+        $this->setFieldPrefix($args['fieldprefix']);
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview'])) $this->checkInput();
@@ -274,6 +273,9 @@ class DataObject extends DataObjectMaster implements iDataObject
             $args['fieldlist'] = explode(',',$args['fieldlist']);
             if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
         }
+
+        // If a different itemid was passed, get that item before we display
+        if (isset($args['itemid']) && ($args['itemid'] != $this->properties[$this->primary]->value)) $this->getItem(array('itemid' => $args['itemid']));
 
 // CHECKME: do we always transform here if we're primary ?
 
@@ -356,6 +358,15 @@ class DataObject extends DataObjectMaster implements iDataObject
         } else {
             foreach ($args as $key => $value)
                 if (isset($this->properties[$key]))  $this->properties[$key]->setValue($value);
+        }
+        return true;
+    }
+
+    public function clearFieldValues(Array $args = array())
+    {
+        $properties = $this->getProperties($args);
+        foreach ($properties as $property) {
+            $fields[$property->name] = $property->clearValue();
         }
         return true;
     }

@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 /* Include the base class */
@@ -27,7 +28,7 @@ class UserListProperty extends SelectProperty
     public $orderlist = array();
     public $showglue = '; ';
 
-    public $initialization_user_state = ROLES_STATE_ALL;
+    public $initialization_user_state = xarRoles::ROLES_STATE_ALL;
     public $initialization_group_list = '';
     public $initialization_userlist = '';
     public $initialization_orderlist = '';
@@ -60,7 +61,7 @@ class UserListProperty extends SelectProperty
 
         if (count($this->options) == 0) {
             $select_options = array();
-            if (($this->initialization_user_state <> ROLES_STATE_ALL)) $select_options['state'] = $this->initialization_user_state;
+            if (($this->initialization_user_state <> xarRoles::ROLES_STATE_ALL)) $select_options['state'] = $this->initialization_user_state;
             if (!empty($this->initialization_orderlist)) $select_options['order'] = implode(',', $this->initialization_orderlist);
             if (!empty($this->initialization_group_list)) $select_options['group'] = implode(',', $this->initialization_group_list);
 //            $users = xarMod::apiFunc('roles', 'user', 'getall', $select_options);

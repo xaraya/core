@@ -16,7 +16,8 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
+                                <xar:var name="label">Show this group</xar:var>
+                                <a href="#xarModURL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
                                     #$parents[$i] ['parentname']#
                                 </a>
                             </li>
@@ -32,26 +33,26 @@
                 <xar:var name="label">Action</xar:var>
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-admin-display;&amp;id=#$roleid#" class="xar-norm xar-norm-outline">Display</a>
+                    <a href="#xarModURL('roles','admin','display',array('id'=>$roleid))#" class="xar-norm xar-norm-outline">Display</a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-admin-modify;&amp;id=#$roleid#" class="xar-norm xar-norm-outline">Modify</a>
+                    <a href="#xarModURL('roles','admin','modify',array('id'=>$roleid))#" class="xar-norm xar-norm-outline">Modify</a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-admin-delete;&amp;id=#$roleid#" class="xar-norm xar-norm-outline">Delete</a>
+                    <a href="#xarModURL('roles','admin','delete',array('id'=>$roleid))#" class="xar-norm xar-norm-outline">Delete</a>
                 </li>
                 <li class="xar-tab-active">
-                    <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$roleid#" class="xar-accent xar-accent-outline">
+                    <a href="#xarModURL('roles','admin','showprivileges',array('id'=>$roleid))#" class="xar-accent xar-accent-outline">
                     Privileges</a>
                 </li>
-                <xar:if condition="$ptype eq ROLES_GROUPTYPE">
+                <xar:if condition="$ptype eq xarRoles::ROLES_GROUPTYPE">
                     <li class="xar-tab">
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$roleid#" class="xar-norm xar-norm-outline">Users</a>
+                        <a href="#xarModURL('roles','admin','showusers',array('id'=>$roleid))#" class="xar-norm xar-norm-outline">Users</a>
                     </li>
                 </xar:if>
             </ul>
         </div>
-        <form method="post" action="&xar-modurl-roles-admin-removeprivilege;" enctype="application/x-www-form-urlencoded">
+        <form method="post" action="#xarModURL('roles','admin','removeprivileges')#" enctype="application/x-www-form-urlencoded">
             <div>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="roleid" id="roleid" value="#$roleid#"/>
@@ -59,14 +60,14 @@
                 <input type="hidden" name="confirmation" id="confirmation" value="1"/>
                 <p>
                     <span class="xar-title">Confirm the removal of '#$privname#' from&#160; 
-                    <xar:if condition="$ptype eq 1">Group 
-                    <xar:else />User</xar:if>'#$rolename#'</span>
+                    <xar:if condition="$ptype eq xarRoles::ROLES_GROUPTYPE">Group 
+                    <xar:else />User</xar:if>&#160;'#$rolename#'</span>
                 </p>
                 <p>
                     <input type="submit" value="#$removelabel#" tabindex="1"/>
                     <br />
                     <br />
-                    <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$roleid#">Cancel
+                    <a href="#xarModURL('roles','admin','showprivileges',array('id'=>$roleid))#">Cancel
                     Removal</a>
                 </p>
             </div>

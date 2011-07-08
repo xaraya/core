@@ -61,7 +61,7 @@
     and then correct for the elements which cause us trouble. In theory
     there shouldnt be any, but alas.
   -->
-  <xsl:strip-space elements="*"/>
+  <xsl:compresswhitespace />
 
   <!--
     Start of the transform usually starts with matching the root, so do we
@@ -87,6 +87,11 @@
   -->
   <xsl:includeclienttags />
   
+  <!--
+    Include any legacy tag defintions
+  -->
+  <xsl:includelegacytags />
+
 <!--
     Utility template for resolving text nodes. It recursively resolves
     #-pairs from left to right. Pre- and Post- hash content are treated
@@ -106,6 +111,14 @@
       select="string-length($expr) - string-length(translate($expr, '#', ''))"/>
 
   <xsl:choose>
+    <!-- Ignore empty strings -->
+    <xsl:when test="string-length(translate($expr, '&#x20;&#x9;&#xD;&#xA;', '')) = 0">
+      <xsl:value-of select="$expr"/>
+    </xsl:when>
+    <!-- Ignore numbers -->
+    <xsl:when test="string(number($expr))!='NaN'">
+      <xsl:value-of select="$expr"/>
+    </xsl:when>
     <!-- If we have zero or one hash, just output the text node -->
     <xsl:when test="$nrOfHashes &lt; 2">
       <xsl:text>'</xsl:text>
@@ -148,7 +161,7 @@
           <xsl:with-param name="expr" select="substring-before($expr-after,'#')"/>
       </xsl:call-template>
 
-      <xsl:if test="string-length(substring-after($expr-after,'#')) &gt; 0">
+      <xsl:if test="string-length(translate(substring-after($expr-after,'#'), '&#x20;&#x9;&#xD;&#xA;', '')) &gt; 0">
         <xsl:text>.</xsl:text>
         <!-- ....#....#[....#....#....etc.] -->
         <xsl:call-template name="resolveText">
@@ -171,6 +184,11 @@
 <xsl:template name="translateText">
   <xsl:param name="expr"/>
   <xsl:choose>
+<!-- Ignore empty strings -->
+    <xsl:when test="string-length(translate($expr, '&#x20;&#x9;&#xD;&#xA;', '')) = 0">
+      <xsl:value-of select="$expr"/>
+    </xsl:when>
+<!-- Ignore numbers -->
     <xsl:when test="string(number($expr))!='NaN'">
       <xsl:value-of select="$expr"/>
     </xsl:when>

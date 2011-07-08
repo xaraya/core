@@ -1,24 +1,27 @@
 <?php
 /**
- * Installer Initialization file
+ * Configuration information for the Installer module
  *
- * @package Installer
+ * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Installer
  * @link http://xaraya.com/index.php/release/200.html
  */
+ 
 /* WARNING
  * Modification of this file is not supported.
  * Any modification is at your own risk and
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
+ 
 $modversion['name']               = 'Xaraya Installer';
 $modversion['id']                 = '200';
-$modversion['version']            = '2.0.0';
+$modversion['version']            = '2.2.0';
 $modversion['displayname']        = xarML('Installer');
 $modversion['description']        = 'Install and customize Xaraya.';
 $modversion['displaydescription'] = xarML('Install and customize Xaraya.');

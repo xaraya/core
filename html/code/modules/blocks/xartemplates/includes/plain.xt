@@ -3,87 +3,84 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="icon_delete">xarTplGetImage('icons/delete.png','base')</xar:set>
     <xar:set name="icon_modify">xarTplGetImage('icons/modify.png','base')</xar:set>
-    <xar:if condition="$total gt $itemsperpage">
-        <div>
-            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
-        </div>
-    </xar:if>
-    <table class="xar-fullwidth">
-        <tr>
-            <th>Name</th>
-            <th>Groups</th>
-            <th>Module</th>
-            <th>Type</th>
-            <th>Template</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-        <xar:loop name="$blocks">
+    <div>
+        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+    </div>
+        <table class="xar-fullwidth">
             <tr>
-                <td>
-                    <xar:if condition="empty($loop:item['title'])">
-                        #$loop:item['name']#
-                    <xar:else />
-                        <span title="#xarVarPrepfordisplay($loop:item['title'])#">
-                            #$loop:item['name']#
-                        </span>
-                    </xar:if>
-                </td>
-                <td>
-                    <xar:if condition="!empty($loop:item.groups)">
-                        <xar:loop name="$loop:item.groups" id="groups">
-                                <a href="#xarModURL('blocks','admin','modify_group')#&amp;id=#$loop:groups:item.id#">
-                            #$loop:groups:item.name#</a>
-                        </xar:loop>
-                    <xar:else />
-                        [ none ]
-                    </xar:if>
-                </td>
-                <td>#$loop:item['module']#</td>
-                <td>
-                    <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
-                        #$loop:item['type']#
-                    </a>
-                </td>
-                <td>
-                    <xar:if condition="$loop:item['template'] ne NULL">
-                        #$loop:item['template']#
-                        &#160;
-                    <xar:else />
-                        <xar:if condition="empty($loop:item['group_template'])">
-                            [ default ]
-                        <xar:else />
-                            #$loop:item['group_template']# &#160;
-                        </xar:if>
-                    </xar:if>
-                </td>
-                <td class="xar-align-center">#$state_desc[$loop:item['state']]#</td>
-                <xar:if condition="xarModVars::get('blocks','use_icons')">
-                    <td class="xar-item-actions">
-                        <a href="#xarModURL('blocks','admin','modify_instance',array('bid' =&gt; $loop:item.bid))#" title="#xarML('Modify')#">
-                            <img src="#$icon_modify#" alt="#xarML('Modify')#" />
-                        </a>
-                        &#160;
-                        <a href="#$loop:item.deleteurl#" onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item.deleteconfirm)#')" title="#xarML('Delete')#">
-                            <img src="#$icon_delete#" alt="#xarML('Delete')#" />
-                        </a>
-                    </td>
-                <xar:else/>
-                    <td class="xar-align-center">
-                        <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
-                            Edit
-                        </a>|
-                        <a href="#$loop:item['deleteurl']#" vonclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
-                            Delete
-                        </a>
-                    </td>
-                </xar:if>
+                    <th>Name</th>
+                    <th>Groups</th>
+                    <th>Module</th>
+                    <th>Type</th>
+                    <th>Template</th>
+                    <th>Status</th>
+                    <th class="xar-align-right">Actions</th>
             </tr>
-        </xar:loop>
-    </table>
-    <xar:if condition="$total gt $itemsperpage">
-        <div>
-            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
-        </div>
-    </xar:if>
+            <xar:loop name="$blocks">
+                <tr>
+                    <td>
+                            <xar:if condition="empty($loop:item['title'])">
+                                #$loop:item['name']#
+                            <xar:else />
+                                <span title="#xarVarPrepfordisplay($loop:item['title'])#">
+                                #$loop:item['name']#
+                            </span>
+                        </xar:if>
+                    </td>
+                    <td>
+                        <xar:if condition="!empty($loop:item.groups)">
+                            <xar:loop name="$loop:item.groups" id="groups">
+                                    <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:groups:item.id#">
+                                #$loop:groups:item.name#</a>
+                            </xar:loop>
+                        <xar:else />
+                            [ none ]
+                        </xar:if>
+                    </td>
+                        <td>#$loop:item['module']#</td>
+                    <td>
+                        <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
+                            #$loop:item['type']#
+                        </a>
+                    </td>
+                    <td>
+                        <xar:if condition="$loop:item['template'] ne NULL">
+                            #$loop:item['template']# &#160;
+                            <xar:else />
+                                <xar:if condition="empty($loop:item['group_template'])">
+                                    [ default ]
+                                <xar:else />
+                                    #$loop:item['group_template']# &#160;
+                                </xar:if>
+                            </xar:if>
+                    </td>
+                        <td class="xar-align-center">#$state_desc[$loop:item['state']]#</td>
+                        <xar:if condition="xarModVars::get('blocks','use_module_icons')">
+                            <td class="xar-align-right xar-item-actions">
+                                <a href="#$loop:item.modifyurl#" title="#xarML('Modify')#" class="xar-icon">
+                                    <img src="#$icon_modify#" alt="#xarML('Modify')#" class="xar-icon"/>
+                                </a>
+                                &#160;
+                                <a href="#$loop:item.deleteurl#" title="#xarML('Delete')#" class="xar-icon">
+                                    <img src="#$icon_delete#" alt="#xarML('Delete')#" class="xar-icon"/>
+                                </a>
+                            </td>
+                        <xar:else/>
+                            <td class="xar-align-right">
+                                <a href="#$loop:item.modifyurl#" title="#xarML('Modify')#">
+                                    Edit
+                                </a>|
+                                &#160;
+                                <a href="#$loop:item['deleteurl']#">
+                                    Delete
+                                </a>
+                            </td>
+                        </xar:if>
+                </tr>
+            </xar:loop>
+        </table>
+    <div>
+        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+    </div>
+
 </xar:template>

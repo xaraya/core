@@ -1,20 +1,22 @@
 <?php
 /**
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * Modify the  email for users
+ * @return array data for the template display
  */
-function roles_admin_modifyemail($args)
+function roles_admin_modifyemail(Array $args=array())
 {
-    // Security Check
-    if (!xarSecurityCheck('EditRole')) return;
+    // Security
+    if (!xarSecurityCheck('EditRoles')) return;
 
     extract($args);
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
@@ -98,7 +100,7 @@ function roles_admin_modifyemail($args)
                 $msg = 'The messaging template "#(1)" is not writable or it is not allowed to delete files from #(2)';
                 throw new ConfigurationException(array($filename,$messaginghome),$msg);
             }
-            xarResponse::redirect(xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => $data['mailtype'])));
+            xarController::redirect(xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => $data['mailtype'])));
             return true;
             break;
     }

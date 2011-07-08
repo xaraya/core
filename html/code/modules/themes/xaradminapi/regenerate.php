@@ -1,29 +1,31 @@
 <?php
 /**
  * Regenerate theme list
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
+ * @link http://xaraya.com/index.php/release/70.html
  */
 /**
  * Regenerate theme list
  *
  * @author Marty Vance
- * @param none
- * @returns bool
- * @return true on success, false on failure
+ * @return boolean true on success, false on failure
  * @throws NO_PERMISSION
  */
 function themes_adminapi_regenerate()
 {
 // Security Check
-    if(!xarSecurityCheck('AdminTheme')) return;
+    if(!xarSecurityCheck('AdminThemes')) return;
 
     //Finds and updates missing modules
-    if (!xarMod::apiFunc('themes','admin','checkmissing')) {return;}
+    sys::import('modules.modules.class.installer');
+    $installer = Installer::getInstance('themes');  
+    if (!$installer->checkformissing()) {return;}
 
     //Get all themes in the filesystem
     $fileThemes = xarMod::apiFunc('themes','admin','getfilethemes');

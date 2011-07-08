@@ -1,8 +1,16 @@
 <?php
 /**
+ * @package core
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+/**
  * Mozilla js console logger
  *
- * @package logging
  * @copyright see the html/credits.html file in this release
 */
 
@@ -17,7 +25,6 @@ sys::import('xaraya.log.loggers.xarLogger');
  *
  * Uses Mozillas Javascript Console to log messages
  *
- * @package logging
  */
 class xarLogger_mozilla extends xarLogger
 {
@@ -30,7 +37,7 @@ class xarLogger_mozilla extends xarLogger
 
     /**
     * Write out the buffer if it is possible (the template system is already loaded)
-    * @access public
+    * 
     */
     function writeOut()
     {
@@ -42,10 +49,10 @@ class xarLogger_mozilla extends xarLogger
     /**
      * Sets up the configuration specific parameters for each driver
      * @param array     $conf               Configuration options for the specific driver.
-     * @access public
+     * 
      * @return boolean
      */
-    function setConfig(&$conf)
+    function setConfig(Array &$conf)
     {
         parent::setConfig($conf);
         $this->_buffer = $this->getCommonCode();
@@ -84,7 +91,7 @@ function mozConsole(msg, level)
     * @param string $message Log message
     * @param int $level Level of priority of the message
     * @return boolean  True on success or false on failure.
-    * @access public
+    * 
     */
     function notify($message, $level)
     {

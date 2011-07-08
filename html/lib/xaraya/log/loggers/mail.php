@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package core
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
 
 // Modified by Xaraya Team
 
@@ -17,7 +26,6 @@
  * @author  Ronnie Garcia <ronnie@mk2.net>
  * @author  Jon Parise <jon@php.net>
  * @version $Revision: 1.8 $
- * @package logging
  */
  
 /**
@@ -29,7 +37,6 @@ sys::import('xaraya.log.loggers.xarLogger');
 /**
  * Mail logger
  *
- * @package logging
  */
 class xarLogger_mail extends xarLogger 
 {
@@ -76,9 +83,9 @@ class xarLogger_mail extends xarLogger
      *   $conf['from']      : the mail's "From" header line,
      *   $conf['subject']   : the mail's "Subject" line.
      * 
-     * @access public
+     * 
      */
-    function setConfig(&$conf)
+    function setConfig(Array &$conf)
     {
         parent::setConfig($conf);
 
@@ -102,7 +109,7 @@ class xarLogger_mail extends xarLogger
     * Destructor. This will write out any lines to the logfile, UNLESS the dontLog()
     * method has been called, in which case it won't.
     *
-    * @access private
+    * 
     */
     function _destructor()
     {
@@ -113,7 +120,7 @@ class xarLogger_mail extends xarLogger
      * Starts a new mail message.
      * This is implicitly called by log(), if necessary.
      * 
-     * @access public
+     * 
      */
     function open()
     {
@@ -127,7 +134,7 @@ class xarLogger_mail extends xarLogger
      * Closes the message, if it is open, and sends the mail.
      * This is implicitly called by the destructor, if necessary.
      * 
-     * @access public
+     * 
      */
     function close()
     {
@@ -155,7 +162,7 @@ class xarLogger_mail extends xarLogger
      * Calls open(), if necessary.
      * 
      * @return boolean  True on success or false on failure.
-     * @access public
+     * 
      */
     function notify($message, $level)
     {

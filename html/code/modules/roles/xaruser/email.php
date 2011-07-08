@@ -3,11 +3,12 @@
  * Send email to a user
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -16,11 +17,11 @@
  * @author  John Cox
  * @access  public
  * @param   id is the id of the user being sent
- * @return  true on success or void on falure
+ * @return mixed data array for the template display or output display string if invalid data submitted
  * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
  * @todo    handle empty subject and/or message?
  */
-function roles_user_email($args)
+function roles_user_email(Array $args=array())
 {
     // we can only send emails to other members if we are logged in
     if(!xarUserIsLoggedIn())
@@ -30,7 +31,9 @@ function roles_user_email($args)
 
     extract($args);
 
-    if (!xarVarFetch('id',   'id', $id)) return;
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($id)) return xarResponse::notFound();
+
     if (!xarVarFetch('phase', 'enum:modify:confirm', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
 
     // If this validation fails, then do NOT send an e-mail, but
@@ -50,7 +53,7 @@ function roles_user_email($args)
     }
 
     // Security Check
-    if (!xarSecurityCheck('ReadRole')) return;
+    if (!xarSecurityCheck('ReadRoles')) return;
 
     switch(strtolower($phase)) {
         case 'modify':
@@ -84,7 +87,7 @@ function roles_user_email($args)
             }        
 
             // Security Check
-            if (!xarSecurityCheck('ReadRole')) return;
+            if (!xarSecurityCheck('ReadRoles')) return;
 
             // If the sender details have not been passed in to $args, then
             // fetch them from the current user now.
@@ -114,7 +117,7 @@ function roles_user_email($args)
             )) return;
 
             // lets update status and display updated configuration
-            xarResponse::redirect(xarModURL('roles', 'user', 'viewlist'));
+            xarController::redirect(xarModURL('roles', 'user', 'viewlist'));
 
             break;
     }

@@ -3,11 +3,12 @@
  * Purge users by status
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -15,11 +16,12 @@
  * @param 'status' the status we are purging
  * @param 'confirmation' confirmation that this item can be purge
  * @todo kinda long, no?
+ * @return array data for the template display
  */
-function roles_admin_purge($args)
+function roles_admin_purge(Array $args=array())
 {
-    // Security Check
-    if(!xarSecurityCheck('DeleteRole')) return;
+    // Security
+    if(!xarSecurityCheck('ManageRoles')) return;
 
     // Get parameters from whatever input we need
     if (!xarVarFetch('operation',    'str', $data['operation'], 'recall', XARVAR_NOT_REQUIRED)) return;
@@ -49,11 +51,11 @@ function roles_admin_purge($args)
         if ($confirmation == xarML("Recall"))
         {
  // --- recall users and groups
-            if(!xarSecurityCheck('DeleteRole')) return;
+            if(!xarSecurityCheck('ManageRoles')) return;
             if ($data['groupid'] != 0) $parentgroup = xarRoles::get($data['groupid']);
             foreach ($recallids as $id => $val) {
                 $role = xarRoles::get($id);
-                $state = $role->getType() ? ROLES_STATE_ACTIVE : $data['recallstate'];
+                $state = $role->getType() ? xarRoles::ROLES_STATE_ACTIVE : $data['recallstate'];
                 $recalled = xarMod::apiFunc('roles','admin','recall',
                     array('id' => $id,
                           'state' => $state));
@@ -63,7 +65,7 @@ function roles_admin_purge($args)
 // --- display roles that can be recalled
         //Create the selection
         $query = "SELECT id, uname, name, email, itemtype, date_reg FROM $rolestable WHERE state = ? AND date_reg != ?" ;
-        $bindvars[] = ROLES_STATE_DELETED;
+        $bindvars[] = xarRoles::ROLES_STATE_DELETED;
         $bindvars[] = 0;
 
         if (!empty($data['recallsearch'])) {
@@ -102,12 +104,12 @@ function roles_admin_purge($args)
                 $msg = xarML('Execution halted: the role with id #(1) has an empty name. This needs to be corrected manually in the database.', $role['id']);
                 throw new Exception($msg);
             }
-            if (xarSecurityCheck('ReadRole', 0, 'All', $role['uname'] . ":All:" . $role['id'])) {
+            if (xarSecurityCheck('ReadRoles', 0, 'All', $role['uname'] . ":All:" . $role['id'])) {
                 $skip = 0;
                 $unique = 1;
                 $thisrole = xarRoles::get($role['id']);
-                $existinguser = xarMod::apiFunc('roles','user','get',array('uname' => $role['uname'], 'state' => ROLES_STATE_CURRENT));
-                if ($thisrole->getType() != ROLES_USERTYPE) {
+                $existinguser = xarMod::apiFunc('roles','user','get',array('uname' => $role['uname'], 'state' => xarRoles::ROLES_STATE_CURRENT));
+                if ($thisrole->getType() != xarRoles::ROLES_USERTYPE) {
                     if (is_array($existinguser)) $unique = 0;
                     $role['uname'] = "";
                 } else {
@@ -121,7 +123,7 @@ function roles_admin_purge($args)
                     $role['uname'] = $uname1[0];
 // now check that email is unique if this has to be checked (fix for nonexisting Bug)
                     if (xarModVars::get('roles', 'uniqueemail')) {
-                        $existinguser = xarMod::apiFunc('roles','user','get',array('email' => $email[0], 'state' => ROLES_STATE_CURRENT));
+                        $existinguser = xarMod::apiFunc('roles','user','get',array('email' => $email[0], 'state' => xarRoles::ROLES_STATE_CURRENT));
                         if (is_array($existinguser)) $unique = 0;
                     }
                }
@@ -159,7 +161,7 @@ function roles_admin_purge($args)
         if ($confirmation == xarML("Purge"))
         {
 // --- purge users
-            if(!xarSecurityCheck('AdminRole')) return;
+            if(!xarSecurityCheck('AdminRoles')) return;
             foreach ($purgeids as $id => $val) {
 // --- skip if we are trying to remove the designated site admin.
 // TODO: insert error feedabck here somehow
@@ -176,7 +178,7 @@ function roles_admin_purge($args)
                 $bindvars[] = '';
                 $bindvars[] = '';
                 $bindvars[] = 0;
-                $bindvars[] = ROLES_STATE_DELETED;
+                $bindvars[] = xarRoles::ROLES_STATE_DELETED;
                 $bindvars[] = $id;
                 $dbconn = xarDB::getConn();
                 $result = $dbconn->Execute($query,$bindvars);
@@ -197,19 +199,19 @@ function roles_admin_purge($args)
             $selection .= " AND state = ? ";
             $bindvars[] = $data['purgestate'];
             switch ($data['purgestate']):
-                case ROLES_STATE_DELETED :
+                case xarRoles::ROLES_STATE_DELETED :
                     $data['purgestatetext'] = 'deleted';
                     break ;
-                case ROLES_STATE_INACTIVE :
+                case xarRoles::ROLES_STATE_INACTIVE :
                     $data['purgestatetext'] = 'inactive';
                     break ;
-                case ROLES_STATE_NOTVALIDATED :
+                case xarRoles::ROLES_STATE_NOTVALIDATED :
                     $data['purgestatetext'] = 'not validated';
                     break ;
-                case ROLES_STATE_ACTIVE :
+                case xarRoles::ROLES_STATE_ACTIVE :
                     $data['purgestatetext'] = 'active';
                     break ;
-                case ROLES_STATE_PENDING :
+                case xarRoles::ROLES_STATE_PENDING :
                     $data['purgestatetext'] = 'pending';
                     break ;
             endswitch ;
@@ -265,19 +267,19 @@ function roles_admin_purge($args)
                 throw new Exception($msg);
             }
             switch ($state):
-                case ROLES_STATE_DELETED :
+                case xarRoles::ROLES_STATE_DELETED :
                     $state = 'deleted';
                     break ;
-                case ROLES_STATE_INACTIVE :
+                case xarRoles::ROLES_STATE_INACTIVE :
                     $state = 'inactive';
                     break ;
-                case ROLES_STATE_NOTVALIDATED :
+                case xarRoles::ROLES_STATE_NOTVALIDATED :
                     $state = 'not validated';
                     break ;
-                case ROLES_STATE_ACTIVE :
+                case xarRoles::ROLES_STATE_ACTIVE :
                     $state = 'active';
                     break ;
-                case ROLES_STATE_PENDING :
+                case xarRoles::ROLES_STATE_PENDING :
                     $state = 'pending';
                     break ;
             endswitch ;

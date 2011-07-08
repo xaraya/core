@@ -25,6 +25,17 @@
             <title>View recent released extensions</title>
             <label>Latest Releases</label>
         </menuitem>
+        <!--
+        <menuitem>
+            <mask>AdminBase</mask>
+            <includes>
+                <includeitem>upgrade</includeitem>
+            </includes>
+            <target>upgrade</target>
+            <title>Upgrade your installation</title>
+            <label>Upgrade</label>
+        </menuitem>
+        -->
         <menuitem>
             <mask>AdminBase</mask>
             <includes>

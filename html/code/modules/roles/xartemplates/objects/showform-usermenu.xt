@@ -52,7 +52,8 @@
             <xar:if condition="(bool)xarModVars::get('roles', 'allowemail') == true">
             <div class="xar-form-input-wrapper-after">
                 <xar:data-input property="$properties['allowemail']"/>
-                <label for="#$properties['allowemail']->id#" title="#xarML('Allow users to send you emails?')#">
+                <xar:var name="label">Allow users to send you emails?</xar:var>
+                <label for="#$properties['allowemail']->id#" title="#$label#">
                     Allow other users to send you an email via a form?
                 </label>
             </div>

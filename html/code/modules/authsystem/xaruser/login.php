@@ -1,13 +1,14 @@
 <?php
 /**
- * Log user in to system
+ * Log a user in to the system
  *
  * @package modules
+ * @subpackage authsystem module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Authsystem module
  * @link http://xaraya.com/index.php/release/42.html
  */
 /**
@@ -73,7 +74,7 @@ function authsystem_user_login()
                 // then a corresponding entry will be created in the
                 // roles table.  So set the user state to allow for
                 // login.
-                $state =ROLES_STATE_ACTIVE;
+                $state = xarRoles::ROLES_STATE_ACTIVE;
                 $extAuthentication = true;
                 break;
 
@@ -85,7 +86,7 @@ function authsystem_user_login()
                 // the user's credentials), just as authldap
                 // delegates to an LDAP server. Behavior same as
                 // described in authldap case.
-                $state = ROLES_STATE_ACTIVE;
+                $state = xarRoles::ROLES_STATE_ACTIVE;
                 $extAuthentication = true;
                 break;
 
@@ -102,7 +103,7 @@ function authsystem_user_login()
                     if (is_array($secret)) {
                         if ($secret['name'] == MD5($uname) && $secret['password'] == MD5($pass)) {
                             $lastresort=true;
-                            $state = ROLES_STATE_ACTIVE;
+                            $state = xarRoles::ROLES_STATE_ACTIVE;
                             break; //let's go straight to login api
                         }
                     }
@@ -145,7 +146,7 @@ function authsystem_user_login()
                 // then a corresponding entry will be created in the
                 // roles table.  So set the user state to allow for
                 // login.
-                $state = ROLES_STATE_ACTIVE;
+                $state = xarRoles::ROLES_STATE_ACTIVE;
                 $extAuthentication = true;
                 break;
         }
@@ -153,25 +154,25 @@ function authsystem_user_login()
 
     switch(strtolower($state)) {
 
-        case ROLES_STATE_DELETED:
+        case xarRoles::ROLES_STATE_DELETED:
 
             // User is deleted by all means.  Return a message that says the same.
             return xarTplModule('authsystem','user','errors',array('layout' => 'account_deleted'));
             break;
 
-        case ROLES_STATE_INACTIVE:
+        case xarRoles::ROLES_STATE_INACTIVE:
 
             // User is inactive.  Return message stating.
             return xarTplModule('authsystem','user','errors',array('layout' => 'account_inactive'));
             break;
 
-        case ROLES_STATE_NOTVALIDATED:
+        case xarRoles::ROLES_STATE_NOTVALIDATED:
             //User still must validate
-            xarResponse::redirect(xarModURL('roles', 'user', 'getvalidation'));
+            xarController::redirect(xarModURL('roles', 'user', 'getvalidation'));
 
             break;
 
-        case ROLES_STATE_ACTIVE:
+        case xarRoles::ROLES_STATE_ACTIVE:
         default:
 
             // User is active.
@@ -274,14 +275,14 @@ function authsystem_user_login()
                    $data['title'] = xarML('Home Page');
                    return xarTplModule('roles','user','homedisplay', $data);
                  */
-                 xarResponse::redirect($redirecturl);
+                 xarController::redirect($redirecturl);
             }else {
-                xarResponse::redirect($redirecturl);
+                xarController::redirect($redirecturl);
             }
 
             return true;
             break;
-        case ROLES_STATE_PENDING:
+        case xarRoles::ROLES_STATE_PENDING:
 
             // User is pending activation
                 return xarTplModule('authsystem','user','errors',array('layout' => 'account_pending'));

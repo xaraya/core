@@ -2,11 +2,12 @@
 /**
  * Hook function called to send mail
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 
@@ -14,10 +15,11 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * This is a hook function that is called to send mail when an item changes
  *
- * @param  $ 'modid' is the module that is sending mail.
- * @param  $ 'objectid' is the item changed.
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['modid'] is the module that is sending mail.<br/>
+ *        integer  $args['objectid'] is the item changed.
  */
-function mail_adminapi_hookmailchange($args)
+function mail_adminapi_hookmailchange(Array $args=array())
 {
     extract($args);
 
@@ -53,7 +55,6 @@ function mail_adminapi_hookmailchange($args)
     // Security Check
     //TODO: if we add to the hook to allow sending of mail to OTHER recipients than the admin
     // we will have to include the following security check and make sure the appropriate privileges are assigned
-//    if (!xarSecurityCheck('ChangeMail', 0, 'All', "$modname::$objectid", 'mail')) return;
 
     // Set up variables
     $wordwrap = xarModVars::get('mail', 'wordwrap');
@@ -79,6 +80,7 @@ function mail_adminapi_hookmailchange($args)
     $message  = xarTplCompileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$message.'</xar:template>');
 
     // Define the variables automatically available to all templates
+    // LEGACY
     $data = array(
         'sitename'   => xarModVars::get('themes', 'SiteName'),
         'siteslogan' => xarModVars::get('themes', 'SiteSlogan'),

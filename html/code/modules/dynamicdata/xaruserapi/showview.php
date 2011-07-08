@@ -1,11 +1,11 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -13,11 +13,11 @@
 // TODO: move this to some common place in Xaraya (base module ?)
  * list some items in a template
  *
- * @param $args array containing the items or fields to show
- * @return string containing the HTML (or other) text to output in the BL template
+ * @param array    $args array of optional parameters<br/>
+ * @return string output display string
  */
 
-function dynamicdata_userapi_showview($args)
+function dynamicdata_userapi_showview(Array $args=array())
 {
     extract($args);
 
@@ -35,9 +35,6 @@ function dynamicdata_userapi_showview($args)
                             $args,
                             $template);
     }
-
-    // TODO: what kind of security checks do we want/need here ?
-    if(!xarSecurityCheck('ViewDynamicDataItems',1,'Item',"$args ['moduleid']:$args ['itemtype']:All")) return;
 
 // Note: fetching input variables doesn't normally belong in APIs, but this is
 //       used by the xar:data-view tag when no object or items are specified !
@@ -97,9 +94,10 @@ function dynamicdata_userapi_showview($args)
                                            'fieldlist' => $myfieldlist,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
-                                           'status' => $status,
-                                           'extend' => !empty($extend)));
+                                           'status' => $status));
     if (!isset($object)) return;
+    if (!$object->checkAccess('view'))
+        return xarML('View #(1) is forbidden', $object->label);
     // Count before numitems!
     $numthings = 0;
     if($args['count']) {

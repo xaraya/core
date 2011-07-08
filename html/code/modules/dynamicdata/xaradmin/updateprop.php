@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -16,15 +18,15 @@
  * @param int module_id
  * @param int itemtype
  * @throws BAD_PARAM
- * @return bool true on success and redirect to modifyprop
+ * @return boolean true on success and redirect to modifyprop
  */
 function dynamicdata_admin_updateprop()
 {
     if(!xarVarFetch('objectid',          'isset', $objectid,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('module_id',         'isset', $module_id,         NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype',          'int:1:', $itemtype,         0, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('itemtype',          'int:1:', $itemtype,         0,    XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('table',             'isset', $table,             NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_name',           'isset', $dd_name,          NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_name',           'isset', $dd_name,           NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_label',          'isset', $dd_label,          NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_type',           'isset', $dd_type,           NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_default',        'isset', $dd_defaultvalue,   NULL, XARVAR_DONT_SET)) {return;}
@@ -32,7 +34,10 @@ function dynamicdata_admin_updateprop()
     if(!xarVarFetch('dd_source',         'isset', $dd_source,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('display_dd_status', 'isset', $display_dd_status, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('input_dd_status',   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_configuration',     'isset', $dd_configuration,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_configuration',  'isset', $dd_configuration,  NULL, XARVAR_DONT_SET)) {return;}
+
+    // Security
+    if(!xarSecurityCheck('AdminDynamicData')) return;
 
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
@@ -55,8 +60,9 @@ function dynamicdata_admin_updateprop()
             if (!empty($itemtype)) {
                 $name .= '_' . $itemtype;
             }
-            $objectid = xarMod::apiFunc('dynamicdata','admin','createobject',
-                                      array('moduleid' => $module_id,
+            sys::import('modules.dynamicdata.class.objects.master');
+            $objectid = DataObjectMaster::createObject(
+                                      array('moduleid' => $modid,
                                             'itemtype' => $itemtype,
                                             'name' => $name,
                                             'label' => ucfirst($name)));
@@ -160,8 +166,8 @@ function dynamicdata_admin_updateprop()
                                 array('name' => $name,
                                       'label' => $dd_label[0],
                                       'objectid' => $objectid,
-                                      'moduleid' => $module_id,
-                                      'itemtype' => $itemtype,
+//                                      'moduleid' => $module_id,
+//                                      'itemtype' => $itemtype,
                                       'type' => $dd_type[0],
                                       'defaultvalue' => $dd_defaultvalue[0],
                                       'source' => $dd_source[0],
@@ -181,7 +187,7 @@ function dynamicdata_admin_updateprop()
                               'itemtype' => $itemtype));
     }
 
-    xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
+    xarController::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
                         array('itemid'    => $objectid,
                               'table'    => $table)));
 }

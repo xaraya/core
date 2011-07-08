@@ -1,27 +1,29 @@
 <?php
 /**
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage themes
+ * @link http://xaraya.com/index.php/release/70.html
  */
 
 /**
  * Remove a theme
  *
  * @author Marty Vance
- * @param $args['regid'] the id of the theme
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the id of the theme
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function themes_adminapi_remove($args)
+function themes_adminapi_remove(Array $args=array())
 {
     extract($args);
 
-    if(!xarSecurityCheck('AdminTheme')) return;
+    if(!xarSecurityCheck('AdminThemes')) return;
 
     // Remove variables and theme
     $dbconn = xarDB::getConn();
@@ -29,7 +31,7 @@ function themes_adminapi_remove($args)
 
     // Get theme information
     $themeInfo = xarThemeGetInfo($regid);
-    $defaultTheme = xarModVars::get('themes','default');
+    $defaultTheme = xarModVars::get('themes','default_theme');
 
     // Bail out if we're trying to remove the default theme
     if ($defaultTheme == $themeInfo['name'] ) {
@@ -39,7 +41,7 @@ function themes_adminapi_remove($args)
 
     // Bail out if we're trying to remove while one of our users
     // has it set to their default theme
-    $mvid = xarModVars::getId('themes','default');
+    $mvid = xarModVars::getId('themes','default_theme');
     $sql = "SELECT COUNT(*) FROM $tables[module_itemvars] WHERE module_var_id =? AND value = ?";
     $result =& $dbconn->Execute($sql, array($mvid,$defaultTheme));
 

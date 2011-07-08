@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -22,7 +23,6 @@ sys::import('modules.dynamicdata.class.objects.base');
 class Role extends DataObject
 {
     public $parentlevel;  //we use this just to store transient information
-    public $basetype;     //the base itemtype. we add this so it can be passed rather than calculated here
 
     public $dbconn;
     public $rolestable;
@@ -64,7 +64,6 @@ class Role extends DataObject
         $this->modulestable = $xartable['modules'];
 
         $this->parentlevel = 0;
-        $this->basetype = $this->getType();
     }
 
     /**
@@ -73,7 +72,7 @@ class Role extends DataObject
      * Creates an entry in the repository for a role object that has been created
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return bool
+     * @return boolean
      */
     public function createItem(Array $data = array())
     {
@@ -84,7 +83,7 @@ class Role extends DataObject
         $bindvars = array();
         $query = "SELECT name, uname
                   FROM $dynamicobjects ";
-        if ($this->basetype == ROLES_GROUPTYPE) {
+        if ($this->itemtype == xarRoles::ROLES_GROUPTYPE) {
             if (empty($data['name'])) $data['name'] = $this->getName();
             $query .= " WHERE name = ? ";
             $bindvars[] = $data['name'];
@@ -98,7 +97,7 @@ class Role extends DataObject
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
         if ($result->getRow() > 0) {
             $result = $query->row();
-            throw new DuplicateException(array('role',($this->basetype == ROLES_GROUPTYPE) ? $result['name'] :$result['uname'] ));
+            throw new DuplicateException(array('role',($this->itemtype == xarRoles::ROLES_GROUPTYPE) ? $result['name'] :$result['uname'] ));
         }
 
         $result->close();
@@ -128,8 +127,8 @@ class Role extends DataObject
         $item['module'] = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid'] = $id;
+        $item['exclude_module'] = array('dynamicdata');
         xarModCallHooks('item', 'create', $id, $item);
-
         return $id;
     }
 
@@ -143,6 +142,7 @@ class Role extends DataObject
         $item['module'] = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid'] = $id;
+        $item['exclude_module'] = array('dynamicdata');
         xarModCallHooks('item', 'update', $id, $item);
         return $id;
     }
@@ -155,7 +155,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $member
-     * @return bool
+     * @return boolean
      */
     public function addMember($member)
     {
@@ -171,26 +171,10 @@ class Role extends DataObject
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-
-         if ($member->isUser()) {
-            // get the current count
-            $query = "SELECT users FROM $this->rolestable
-                      WHERE id = ?";
-            $bindvars[] = $this->getID();
-
-            $stmt = $dbconn->prepareStatement($query);
-            if (!$stmt) return;
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-            while($result->next()) $row = $result->fields;
-            $users = $row['users'] + 1;
-            $query = "UPDATE $this->rolestable SET users =" . $users . " WHERE id = ?";
-            $bindvars[] = $this->getID();
-
-            // add 1 and update.
-            $stmt = $dbconn->prepareStatement($query);
-            if (!$stmt) return;
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-         }
+        
+        // If the relation already exists we are done
+        while($result->next()) $row = $result->fields;
+        if (!empty($row)) return true;
 
         $query = "INSERT INTO $this->rolememberstable (role_id, parent_id)
                     values (".$member->getID().", ". $this->getID().")";
@@ -208,7 +192,6 @@ class Role extends DataObject
                         FROM $this->rolestable";
             $query .= " WHERE id = ?";
             $bindvars[] =  $this->getID();
-            $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
             if (!$result) return;
@@ -224,6 +207,7 @@ class Role extends DataObject
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
 
         }
+
         $item['module']   = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid']   = $this->getID();
@@ -241,7 +225,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $member
-     * @return bool
+     * @return boolean
      * @todo add transaction around the delete and the update
      */
     public function removeMember($member)
@@ -290,7 +274,7 @@ class Role extends DataObject
      * deleteItem: make a role deleted
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return bool
+     * @return boolean
      * @todo flag illegal deletes
      */
     public function deleteItem(Array $data = array())
@@ -329,7 +313,7 @@ class Role extends DataObject
             'itemid' => $this->getID(),
             'user' => "[" . $deleted . "]" . time(),
             'email' => "[" . $deleted . "]" . time(),
-            'state' => ROLES_STATE_DELETED,
+            'state' => xarRoles::ROLES_STATE_DELETED,
         );
         if (isset($data['authmodule'])) $args['authmodule'] = $data['authmodule'];
         $this->updateItem($args);
@@ -345,6 +329,7 @@ class Role extends DataObject
         $item['module'] = 'roles';
         $item['itemid'] = $this->getID();
         $item['method'] = 'delete';
+        $item['exclude_module'] = array('dynamicdata');
         xarModCallHooks('item', 'delete', $this->getID(), $item);
 
         // CHECKME: re-assign all privileges to the child roles ? (probably not)
@@ -356,13 +341,13 @@ class Role extends DataObject
      * purge: make a role purged
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return bool
+     * @return boolean
      */
     public function purge()
     {
         // no checks here. just do it
         $this->deleteItem();
-        $state = ROLES_STATE_DELETED;
+        $state = xarRoles::ROLES_STATE_DELETED;
         $uname = xarML('deleted') . microtime(TRUE) .'.'. $this->properties['id']->value;
         $name = '';
         $pass = '';
@@ -470,7 +455,7 @@ class Role extends DataObject
      * Checks whether this role has a specific privilege assigned or inherited.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return bool
+     * @return boolean
      */
     public function hasPrivilege($privname)
     {
@@ -488,7 +473,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $privilege
-     * @return bool
+     * @return boolean
      */
     public function assignPrivilege($privilege)
     {
@@ -507,7 +492,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $privilege
-     * @return bool
+     * @return boolean
      */
     public function removePrivilege($privilege)
     {
@@ -533,26 +518,26 @@ class Role extends DataObject
      * @param string selection get users within this selection criteria
      * @return array
      */
-    public function getUsers($state = ROLES_STATE_CURRENT, $startnum = 0, $numitems = 0, $order = 'name', $selection = NULL)
+    public function getUsers($state = xarRoles::ROLES_STATE_CURRENT, $startnum = 0, $numitems = 0, $order = 'name', $selection = NULL)
     {
         $query = "SELECT r.id, r.name, r.itemtype, r.uname,
                          r.email, r.pass, r.date_reg,
                          r.valcode, r.state,r.auth_module_id
                   FROM $this->rolestable r, $this->rolememberstable rm ";
         // set up the query and get the data
-        if ($state == ROLES_STATE_CURRENT) {
+        if ($state == xarRoles::ROLES_STATE_CURRENT) {
             $where = "WHERE r.id = rm.role_id AND
                         r.itemtype = ? AND
                         r.state != ? AND
                         rm.parent_id = ?";
-             $bindvars = array(ROLES_USERTYPE,ROLES_STATE_DELETED,$this->getID());
-        } elseif ($state == ROLES_STATE_ALL) {
+             $bindvars = array(xarRoles::ROLES_USERTYPE,xarRoles::ROLES_STATE_DELETED,$this->getID());
+        } elseif ($state == xarRoles::ROLES_STATE_ALL) {
             $where = "WHERE r.id = rm.role_id AND
                         r.itemtype = ? AND
                         rm.parent_id = ?";
-             $bindvars = array(ROLES_USERTYPE,$this->getID());
+             $bindvars = array(xarRoles::ROLES_USERTYPE,$this->getID());
         } else {
-             $bindvars = array(ROLES_USERTYPE, $state, $this->properties['id']->value);
+             $bindvars = array(xarRoles::ROLES_USERTYPE, $state, $this->properties['id']->value);
             $where = "WHERE r.id = rm.role_id AND
                         r.itemtype = ? AND
                         r.state = ? AND
@@ -592,9 +577,9 @@ class Role extends DataObject
      * @param integer state count user in this state
      * @param string selection count user within this selection criteria
      * @param integer itemtype group or user
-     * @return int
+     * @return integer
      */
-    public function countChildren($state = ROLES_STATE_CURRENT, $selection = NULL, $itemtype = NULL)
+    public function countChildren($state = xarRoles::ROLES_STATE_CURRENT, $selection = NULL, $itemtype = NULL)
     {
         $xartable = xarDB::getTables();
         $rolesmemobjects = $this->rolememberstable;
@@ -605,9 +590,9 @@ class Role extends DataObject
 
         $query .= " WHERE rm.parent_id = ? ";
         $bindvars[] = $this->properties['id']->value;
-        if ($state == ROLES_STATE_CURRENT) {
+        if ($state == xarRoles::ROLES_STATE_CURRENT) {
             $query .= " AND r.state != ? ";
-            $bindvars[] = ROLES_STATE_DELETED;
+            $bindvars[] = xarRoles::ROLES_STATE_DELETED;
         } else {
             $query .= " AND r.state = ? ";
             $bindvars[] = $state;
@@ -636,9 +621,9 @@ class Role extends DataObject
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param int    $state count user in this state
      * @param string $selection count user within this selection criteria
-     * @return int
+     * @return integer
      */
-    public function countUsers($state = ROLES_STATE_CURRENT, $selection = NULL)
+    public function countUsers($state = xarRoles::ROLES_STATE_CURRENT, $selection = NULL)
     {
         return $this->countChildren(0, $state, $selection);
     }
@@ -736,7 +721,7 @@ class Role extends DataObject
      * @return array list of users
      * @todo evaluate performance of this (3 loops, of which 2 nested)
      */
-    public function getDescendants($state = ROLES_STATE_CURRENT, $grpflag=0)
+    public function getDescendants($state = xarRoles::ROLES_STATE_CURRENT, $grpflag=0)
     {
         $users = $this->getUsers($state);
 
@@ -768,7 +753,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $role
-     * @return bool
+     * @return boolean
      * @todo replace this with the hash object equality check?
      */
     public function isEqual($role)
@@ -779,15 +764,15 @@ class Role extends DataObject
     /**
      * isUser: checks whether this role is a user
      *
-     * Users have itemtype = 2.
-     * Groups have itemtype = 3.
+     * Users have itemtype = 1.
+     * Groups have itemtype = 2.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return bool
+     * @return boolean
      */
     public function isUser()
     {
-        return $this->getType() == ROLES_USERTYPE;
+        return $this->getType() == xarRoles::ROLES_USERTYPE;
     }
 
     /**
@@ -795,7 +780,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $role
-     * @return bool
+     * @return boolean
      */
     public function isParent($role)
     {
@@ -811,7 +796,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $role
-     * @return bool
+     * @return boolean
      */
     public function isAncestor($role)
     {
@@ -827,7 +812,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param int $adjust
-     * @return bool
+     * @return boolean
      */
     public function adjustParentUsers($adjust)
     {
@@ -874,7 +859,7 @@ class Role extends DataObject
      * @todo since there are so many a generalized getter (magic __get() ) might be more pleasurable
      */
     function getID() { return $this->properties['id']->value; }
-    function getName() { return $this->properties['name']->value; }
+    function getName() { return $this->properties['name']->getValue(); }
     function getUname() { return $this->properties['uname']->value; }
     function getType() { return $this->properties['role_type']->value; }
     function getUser() { return $this->properties['uname']->value; }
@@ -892,13 +877,13 @@ class Role extends DataObject
     function setID($var) { $this->properties['id']->setValue($var); }
     function setName($var) { $this->properties['name']->setValue($var); }
     function setUname($var) { $this->properties['uname']->setValue($var); }
-    function setType($var) { $this->properties['itemtype']->setValue($var); }
+    function setType($var) { $this->properties['role_type']->setValue($var); }
     function setParent($var) { $this->properties['parentid']->setValue($var); }
     function setUser($var) { $this->properties['uname']->setValue($var); }
     function setEmail($var) { $this->properties['email']->setValue($var); }
     function setPass($var) { $this->properties['password']->setValue($var); }
     function setState($var) { $this->properties['state']->setValue($var); }
-    function setDateReg($var) { $this->properties['datereg']->setValue($var); }
+    function setDateReg($var) { $this->properties['regdate']->setValue($var); }
     function setValCode($var) { $this->properties['valcode']->setValue($var); }
     function setAuthModule($var) { $this->properties['authmodule']->setValue($var); }
     function setLevel($var)

@@ -1,30 +1,33 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * update a property field
  *
  * @author the DynamicData module development team
- * @param $args['id'] property id of the item field to update
- * @param $args['name'] name of the field to update (optional)
- * @param $args['label'] label of the field to update
- * @param $args['type'] type of the field to update
- * @param $args['defaultvalue'] default of the field to update (optional)
- * @param $args['source'] data source of the field to update (optional)
- * @param $args['status'] status of the field to update (optional)
- * @param $args['configuration'] configuration of the field to update (optional)
- * @return bool
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['id'] property id of the item field to update<br/>
+ *        string   $args['name'] name of the field to update (optional)<br/>
+ *        string   $args['label'] label of the field to update<br/>
+ *        string   $args['type'] type of the field to update<br/>
+ *        string   $args['defaultvalue'] default of the field to update (optional)<br/>
+ *        string   $args['source'] data source of the field to update (optional)<br/>
+ *        integer  $args['status'] status of the field to update (optional)<br/>
+ *        string   $args['configuration'] configuration of the field to update (optional)
+ * @return boolean
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_updateprop($args)
+function dynamicdata_adminapi_updateprop(Array $args=array())
 {
     extract($args);
 
@@ -45,13 +48,7 @@ function dynamicdata_adminapi_updateprop($args)
         throw new BadParameterException($vars, $msg);
     }
 
-    // Security check - important to do this as early on as possible to
-    // avoid potential security holes or just too much wasted processing
-    if (isset($name) && is_string($name)) {
-    if(!xarSecurityCheck('EditDynamicDataField',1,'Field',"$name:$type:$id")) return;
-    } else {
-    if(!xarSecurityCheck('EditDynamicDataField',1,'Field',"All:$type:$id")) return;
-    }
+    // TODO: security check on object level
 
     // Get database setup - note that xarDB::getConn()
     // returns an array but we handle it differently.

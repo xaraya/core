@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 
@@ -39,10 +41,10 @@ class ConfigurationProperty extends TextBoxProperty
     public function checkInput($name = '', $value = null)
     {
         // set property type from object reference (= dynamic configuration) if possible
-        if (empty($this->proptype) && !empty($this->objectref) && !empty($this->objectref->properties['property_id'])) {
+        if (!empty($this->objectref) && !empty($this->objectref->properties['property_id'])) {
             $this->proptype = $this->objectref->properties['property_id']->value;
-            $data['type'] = $this->proptype;
         }
+        $data['type'] = $this->proptype;
 
 // TODO: support nested configurations (e.g. for array of properties) ?
 //       Problem is setting the proptype of the child config in the parent config
@@ -66,18 +68,20 @@ class ConfigurationProperty extends TextBoxProperty
     public function showInput(Array $data = array())
     {
         //$data['type'] = $data['value']['initialization_prop_type']; only shows once
-        // set property type from input
+
+        // set property type from object reference (= dynamic configuration) if possible
+        if (!empty($this->objectref) && !empty($this->objectref->properties['property_id'])) {
+            $this->proptype = $this->objectref->properties['property_id']->value;
+            $data['type'] = $this->proptype;
+        }
+
+        // Override from input
         if (!empty($data['type'])) {
             $this->proptype = $data['type'];
         } else {
             $data['type'] = $this->proptype;
         }
-        // set property type from object reference (= dynamic configuration) if possible
-        if (empty($this->proptype) && !empty($this->objectref) && !empty($this->objectref->properties['property_id'])) {
-            $this->proptype = $this->objectref->properties['property_id']->value;
-            $data['type'] = $this->proptype;
-        }
-
+        
         $property =& DataPropertyMaster::getProperty($data);
         $property->id = $this->id;
         $property->parseConfiguration($this->value);
@@ -98,8 +102,5 @@ class ConfigurationProperty extends TextBoxProperty
 
         return $value;
     }
-
-
-
 }
 ?>

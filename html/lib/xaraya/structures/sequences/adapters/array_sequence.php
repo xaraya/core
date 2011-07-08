@@ -1,5 +1,14 @@
 <?php
 /**
+ * @package core
+ * @subpackage structures
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+/**
  * Sequence implemented as an array
  *
  * If the abstraction is proper, every method should have some
@@ -21,7 +30,7 @@ class ArraySequence extends Object implements iSequence, iSequenceAdapter
         return $item;
     }
     // Insert an item on the specified position
-    public function insert(&$item, $position)
+    public function insert($item, $position)
     {
         if($position > $this->tail) return false;
         switch($position) {

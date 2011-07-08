@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
 */
 sys::import('modules.base.xarproperties.dropdown');
@@ -97,15 +99,15 @@ class FieldStatusProperty extends SelectProperty
     function getOptions()
     {
         $options['display'] = array(
-                             array('id' => DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE, 'name' => xarML('Active')),
-                             array('id' => DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY, 'name' => xarML('View only')),
+                             array('id' => DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE, 'name' => xarML('All Views')),
+                             array('id' => DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY, 'name' => xarML('List only')),
                              array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY, 'name' => xarML('Display only')),
                              array('id' => DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN, 'name' => xarML('Hidden')),
-                             array('id' => DataPropertyMaster::DD_DISPLAYSTATE_IGNORED, 'name' => xarML('Ignored')),
                              array('id' => DataPropertyMaster::DD_DISPLAYSTATE_DISABLED, 'name' => xarML('Disabled')),
                          );
         $options['input'] = array(
-                             array('id' => DataPropertyMaster::DD_INPUTSTATE_NOINPUT, 'name' => xarML('No input allowed')),
+                             array('id' => DataPropertyMaster::DD_INPUTSTATE_IGNORED, 'name' => xarML('Ignored for input')),
+                             array('id' => DataPropertyMaster::DD_INPUTSTATE_NOINPUT, 'name' => xarML('No manual input')),
                              array('id' => DataPropertyMaster::DD_INPUTSTATE_ADD, 'name' => xarML('Can be added')),
                              array('id' => DataPropertyMaster::DD_INPUTSTATE_MODIFY, 'name' => xarML('Can be changed')),
                              array('id' => DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY, 'name' => xarML('Can be added/changed')),

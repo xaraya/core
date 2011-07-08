@@ -31,7 +31,7 @@
     <name>initialization_other_rule</name>
     <description>Any other rule for this field</description>
     <property_id>2</property_id>
-    <label>Other Rule</label>
+    <label>Generic Rule</label>
     <ignore_empty>1</ignore_empty>
     <configuration>a:0:{}</configuration>
   </configurations>
@@ -541,10 +541,10 @@
   </configurations>
   <configurations itemid="61">
     <id>61</id>
-    <name>initialization_rows</name>
-    <description>Allow adding of rows</description>
+    <name>initialization_addremove</name>
+    <description>Allow adding of items</description>
     <property_id>6</property_id>
-    <label>Add/Delete Rows</label>
+    <label>Add/Delete Items</label>
     <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:70:"0,No Addition/Deletion,display only;1,Only Add Rows;2,Add/Delete Rows;";}</configuration>
   </configurations>
@@ -568,7 +568,7 @@
   </configurations>
   <configurations itemid="64">
     <id>64</id>
-    <name>initialization_associative_array</name>
+    <name>validation_associative_array</name>
     <description>Allow saving as associative array</description>
     <property_id>14</property_id>
     <label>Associative Array Storage</label>
@@ -629,4 +629,84 @@
     <ignore_empty>0</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
-</items>
+  <configurations itemid="71">
+    <id>71</id>
+    <name>validation_email_confirm</name>
+    <description>Show a second email field to be filled in</description>
+    <property_id>14</property_id>
+    <label>Confirm Email</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="72">
+    <id>72</id>
+    <name>display_show_salutation</name>
+    <description>Display the salutation part of a name</description>
+    <property_id>14</property_id>
+    <label>Display Salutation</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="73">
+    <id>73</id>
+    <name>display_show_firstname</name>
+    <description>Display the first name part of a name</description>
+    <property_id>14</property_id>
+    <label>Display First Name</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="74">
+    <id>74</id>
+    <name>display_show_middlename</name>
+    <description>Display the middle name part of a name</description>
+    <property_id>14</property_id>
+    <label>Display Middle Name</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="75">
+    <id>75</id>
+    <name>initialization_encrypt</name>
+    <description>Encrypt this value</description>
+    <property_id>14</property_id>
+    <label>Encryption</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="76">
+    <id>76</id>
+    <name>initialization_hash_type</name>
+    <label>Hash Type</label>
+    <description>The hash algorithm used for encrypting passwords</description>
+    <property_id>2</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="77">
+    <id>77</id>
+    <name>display_column_definition</name>
+    <description>Changing definition of row</description>
+    <property_id>999</property_id>
+    <label>Column Definition</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:8:{s:15:"display_columns";s:2:"30";s:21:"display_columns_count";s:1:"1";s:12:"display_rows";s:1:"4";s:25:"display_column_definition";a:2:{s:13:"configuration";a:3:{s:25:"display_column_definition";a:2:{i:0;a:4:{i:0;s:5:"Title";i:1;s:4:"Type";i:2;s:13:"Default Value";i:3;s:13:"Configuration";}i:1;a:4:{i:0;s:7:"textbox";i:1;s:9:"fieldtype";i:2;s:7:"textbox";i:3;s:8:"textarea";}}s:12:"display_rows";i:4;s:14:"display_layout";s:13:"configuration";}s:8:"recursed";i:1;}s:14:"display_layout";s:7:"default";s:32:"initialization_associative_array";s:1:"1";s:24:"initialization_prop_type";s:9:"fieldtype";s:26:"initialization_prop_config";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="78">
+    <id>78</id>
+    <name>display_minimum_rows</name>
+    <label>Minimum Rows</label>
+    <description>The minimum number of rows of this property displayed</description>
+    <property_id>15</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:3:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="79">
+    <id>79</id>
+    <name>display_maximum_rows</name>
+    <label>Maximum Rows</label>
+    <description>The maximum number of rows of this property displayed</description>
+    <property_id>15</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations></items>

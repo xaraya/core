@@ -1,5 +1,14 @@
 <?php
 /**
+ * @package core
+ * @subpackage structures
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+/**
  * Sequence adapter
  * 
  * A class which helps others classes to implement
@@ -71,7 +80,7 @@ class SequenceAdapter extends Object implements iAdapter, iSequenceAdapter
         $item = $this->implementor->get($position); 
         return $item;
     }
-    protected function insert(&$item, $position) 
+    protected function insert($item, $position) 
     { 
         return $this->implementor->insert($item, $position);
     }

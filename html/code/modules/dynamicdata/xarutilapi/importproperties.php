@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Dynamic Data module
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -17,10 +19,10 @@
  * @param int $args['itemtype'] item type of the table to import
  * @param string $args['table'] name of the table you want to import
  * @param id $args['objectid'] object id to assign these properties to
- * @return bool true on success, false on failure
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_utilapi_importproperties($args)
+function dynamicdata_utilapi_importproperties(Array $args=array())
 {
     extract($args);
 
@@ -34,7 +36,7 @@ function dynamicdata_utilapi_importproperties($args)
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('AddDynamicDataField')) return;
+    if(!xarSecurityCheck('AdminDynamicData')) return;
 
     if (empty($itemtype)) {
         $itemtype = 0;

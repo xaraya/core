@@ -3,11 +3,12 @@
  *  View recent extension releases
  *
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
@@ -15,14 +16,13 @@
  *
  * @author John Cox
  * @access public
- * @param none
- * @return array Information of recent releases from http://www.xaraya.com/
+ * @return array data for the template display
  * @todo change feed url once release module is moved
  */
 function base_admin_release()
 {
-    // Security Check
-    if(!xarSecurityCheck('EditModules')) return;
+    // Security
+    if(!xarSecurityCheck('ManageBase')) return;
 
     //number of releases to show
     $releasenumber = (int)xarModVars::get('base','releasenumber');

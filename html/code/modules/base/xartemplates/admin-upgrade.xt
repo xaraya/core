@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Base Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <h2>Upgrading your system</h2>
+        <fieldset>
+            <legend>Version Information</legend>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>Your Files</th>
+                    <th>Your Database</th>
+                </tr>
+                <tr>
+                    <td>
+                        <xar:var name="label">Current Core Version</xar:var>
+                        <label title="#$label#" class="xar-form-label">                            
+                            Xaraya Core:                            
+                        </label>
+                    </td>
+                    <td>
+                        #xarCore::VERSION_ID# version #XARCORE_VERSION_NUM# (#xarCore::VERSION_SUB#)
+                    </td>
+                    <td>
+                        <xar:var scope="config" name="System.Core.VersionId"/> version
+                        <xar:var scope="config" name="System.Core.VersionNum"/>
+                        (<xar:var scope="config" name="System.Core.VersionSub"/>)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <xar:var name="label">Current Build</xar:var>
+                        <label title="#$label#" class="xar-form-label">                            
+                            Build:                            
+                        </label>
+                    </td>
+                    <td>
+                        #xarCore::VERSION_REV#
+                    </td>
+                    <td>
+                        <xar:var scope="config" name="System.Core.VersionRev"/>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <fieldset>
+            Status:
+            <xar:set name="idsequal">xarCore::VERSION_ID == xarConfigVars::get(null, 'System.Core.VersionId')</xar:set>
+            <xar:if condition="$idsequal">
+                <xar:if condition="$versioncompare eq 0">
+                    Your installation is current.
+                <xar:elseif condition="$versioncompare eq 1"/>
+                    The file version of Xarayais greater than the database version. You should upgrade your database now.
+                <xar:else/>
+                    The database version is higher than the file version. You need to install 
+                </xar:if>
+            <xar:else/>
+                The file and database versions of Xaraya are not compatible.
+            </xar:if>
+        </fieldset>
+    </div>
+</xar:template>

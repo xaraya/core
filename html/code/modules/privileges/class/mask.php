@@ -1,13 +1,21 @@
 <?php
 
 /**
+ * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/1098.html
+ *
  * xarMask: class for the mask object
  *
  * Represents a single security mask
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @throws  none
 */
 class xarMask extends Object
 {
@@ -40,9 +48,7 @@ class xarMask extends Object
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   array of values
-     * @return  mask
-     * @throws  none
-     * @todo    none
+     * @return  void
     */
     function __construct($pargs=array())
     {
@@ -94,8 +100,6 @@ class xarMask extends Object
      * @access  public
      * @param   integer   adds  Number of additional instance parts to add to the array
      * @return  array of strings
-     * @throws  none
-     * @todo    none
     */
     function normalize($adds=0)
     {
@@ -156,8 +160,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  array 2 normalized masks
-     * @throws  none
-     * @todo    none
     */
     function canonical($mask)
     {
@@ -177,7 +179,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  boolean
-     * @throws  none
     */
     function matches($mask)
     {
@@ -202,7 +203,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  boolean
-     * @throws  none
     */
     function matchesexactly($mask)
     {
@@ -220,7 +220,6 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  boolean
-     * @throws  none
     */
     function includes($mask)
     {
@@ -246,7 +245,7 @@ class xarMask extends Object
         if (($p1[1] != 'all') && ($fails)) return false;
 
         // match module and component. bail if no match.
-        if (($p1[2] == null) || (($p1[2] != xarMasks::PRIVILEGES_ALL) && ($p1[2]!=$p2[2]))) {
+        if (($p1[2] == null) || (($p1[2] != xarSecurity::PRIVILEGES_ALL) && ($p1[2]!=$p2[2]))) {
             return false;
         }
         if (($p1[3] != 'all') && ($p1[3]!=$p2[3])) {
@@ -287,11 +286,10 @@ class xarMask extends Object
      * @access  public
      * @param   mask object
      * @return  boolean
-     * @throws  none
     */
     function implies($mask)
     {
-        $match = xarMasks::includes($this->normalform,$mask->normalform);
+        $match = xarSecurity::includes($this->normalform,$mask->normalform);
         return $match && ($this->getLevel() >= $mask->getLevel()) && ($mask->getLevel() > 0);
     }
 
@@ -310,7 +308,7 @@ class xarMask extends Object
     function setModule($var)         { $this->module = $var; }
     function setModuleID($var)
     {
-        if (strtolower($var) == 'all') $this->module_id = xarMasks::PRIVILEGES_ALL;
+        if (strtolower($var) == 'all') $this->module_id = xarSecurity::PRIVILEGES_ALL;
         elseif (($var === null) || (strtolower($var) == 'empty')) $this->module_id = null;
         else $this->module_id = xarMod::getID($var);
     }

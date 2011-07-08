@@ -3,11 +3,12 @@
  * Create a new password for the user
  *
  * @package modules
+ * @subpackage authsystem module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Authsystem module
  * @link http://xaraya.com/index.php/release/42.html
  */
 /**
@@ -15,8 +16,9 @@
  */
 function authsystem_admin_createpassword()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('EditAuthsystem')) return;
+    
     // Get parameters
     if(!xarVarFetch('state', 'isset', $state, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('groupid', 'int:0:', $groupid, 0, XARVAR_NOT_REQUIRED)) return;
@@ -37,14 +39,14 @@ function authsystem_admin_createpassword()
         return;
      }
      if (!xarModVars::get('roles', 'askpasswordemail')) {
-        xarResponse::redirect(xarModURL('roles', 'admin', 'showusers',
+        xarController::redirect(xarModURL('roles', 'admin', 'showusers',
                       array('id' => $data['groupid'], 'state' => $data['state'])));
         return true;
     }
     else {
 
         xarSession::setVar('tmppass',$pass);
-        xarResponse::redirect(xarModURL('roles', 'admin', 'asknotification',
+        xarController::redirect(xarModURL('roles', 'admin', 'asknotification',
         array('id' => array($id => '1'), 'mailtype' => 'password', 'groupid' => $groupid, 'state' => $state)));
     }
 }

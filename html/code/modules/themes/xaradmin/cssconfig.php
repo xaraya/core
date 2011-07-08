@@ -3,26 +3,27 @@
  * Review and configure Xaraya CSS
  *
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
 * Module admin function to review and configure Xaraya CSS
 *
 * @author AndyV_at_Xaraya_dot_Com
-* @returns array
+ * @return array data for the template display
 */
 function themes_admin_cssconfig()
 {
-    // Security Check
-    if (!xarSecurityCheck('AdminTheme',0)) return;
+    // Security
+    if (!xarSecurityCheck('AdminThemes',0)) return;
+    
     // Generate security key
     $data['authid'] = xarSecGenAuthKey();
-
 
     // where are we?
     if (!xarVarFetch('component', 'str::', $component, '', XARVAR_NOT_REQUIRED)) return;
@@ -41,7 +42,7 @@ function themes_admin_cssconfig()
         case "common":
             // get and verify modvars and files - all reporting inline in the form
             $data['csslinkoption'] = xarModVars::get('themes', 'csslinkoption');
-            $cssfilepath = 'modules/themes/xarstyles/';
+            $cssfilepath = sys::code() . 'modules/themes/xarstyles/';
             $filemissing = xarML('none (missing)');
             $notlinked = xarML('none - use for template debugging only!!');
             if($data['csslinkoption'] == '') {

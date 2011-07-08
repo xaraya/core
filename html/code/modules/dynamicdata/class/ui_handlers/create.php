@@ -2,12 +2,14 @@
 /**
  * Dynamic Object User Interface Handler
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 
@@ -15,7 +17,7 @@ sys::import('modules.dynamicdata.class.ui_handlers.default');
 /**
  * Dynamic Object User Interface Handler
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @subpackage dynamicdata
  */
 class DataObjectCreateHandler extends DataObjectDefaultHandler
@@ -40,6 +42,8 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
             return;
         if(!xarVarFetch('values', 'isset', $args['values'], NULL, XARVAR_DONT_SET)) 
             return;
+        if(!xarVarFetch('return_url', 'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
+            return;
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
@@ -48,7 +52,7 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
         {
             $this->object =& DataObjectMaster::getObject($this->args);
             if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
 
             if(empty($this->tplmodule)) 
             {
@@ -56,8 +60,8 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
                 $this->tplmodule = $modname;
             }
         }
-        if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',$this->object->moduleid.':'.$this->object->itemtype.':All'))
-            return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $this->object->label));
+        if (!$this->object->checkAccess('create'))
+            return xarController::$response->Forbidden(xarML('Create #(1) is forbidden', $this->object->label));
 
         // there's no item to get here yet
         //$this->object->getItem();
@@ -84,13 +88,10 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
                 if(empty($itemid)) 
                     return; // throw back
 
-                if(!xarVarFetch('return_url',  'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
-                    return;
-
                 if(empty($args['return_url'])) 
                     $args['return_url'] = $this->getReturnURL();
 
-                xarResponse::redirect($args['return_url']);
+                xarController::redirect($args['return_url']);
                 // Return
                 return true;
             }
@@ -108,7 +109,9 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
             array('object'  => $this->object,
                   'preview' => $args['preview'],
                   'authid'  => xarSecGenAuthKey(),
-                  'hooks'   => $this->object->hookoutput)
+                  'hooks'   => $this->object->hookoutput,
+                  'tpltitle' => $this->tpltitle,
+                  'return_url' => $args['return_url'])
         );
     }
 }

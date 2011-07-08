@@ -1,13 +1,15 @@
 <?php
 /**
  *
- * @package core modules
+ * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Privileges module
  * @link http://xaraya.com/index.php/release/1098.html
+ *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
@@ -16,9 +18,14 @@
  */
 function privileges_admin_removerole()
 {
+    // Security
+    if(!xarSecurityCheck('EditPrivileges')) return;
+
     if (!xarVarFetch('id',          'isset', $id,          NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('roleid',       'isset', $roleid,       NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('confirmation', 'isset', $confirmation, NULL, XARVAR_DONT_SET)) {return;}
+    if (empty($id)) return xarResponse::notFound();
+    if (empty($roleid)) return xarResponse::notFound();
 
 //Call the Roles class and get the role to be removed
     $role = xarRoles::get($roleid);
@@ -38,9 +45,6 @@ function privileges_admin_removerole()
 
 // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
-
-// Security Check
-    if(!xarSecurityCheck('EditPrivilege')) return;
 
 // get the names of the role and privilege for display purposes
     $rolename = $role->getName();
@@ -72,10 +76,11 @@ function privileges_admin_removerole()
                         'privileges'));
 
 // redirect to the next page
-        xarResponse::redirect(xarModURL('privileges',
+        xarController::redirect(xarModURL('privileges',
                                  'admin',
                                  'viewroles',
                                  array('id'=>$id)));
+        return true;
     }
 
 }

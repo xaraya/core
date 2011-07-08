@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 
@@ -21,9 +23,9 @@
  * @param string table
  * @param string template
  * @param string tplmodule
- * @return bool
+ * @return boolean
  */
-function dynamicdata_admin_create($args)
+function dynamicdata_admin_create(Array $args=array())
 {
     extract($args);
 
@@ -47,6 +49,11 @@ function dynamicdata_admin_create($args)
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid));
+
+    // Security (Bug: 
+    if (!$myobject->checkAccess('create'))
+        return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
+
     $isvalid = $myobject->checkInput();
 
     // recover any session var information
@@ -84,14 +91,14 @@ function dynamicdata_admin_create($args)
     if (empty($itemid)) return; // throw back
 
     if (!empty($return_url)) {
-        xarResponse::redirect($return_url);
+        xarController::redirect($return_url);
     } elseif (!empty($table)) {
-        xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array('table' => $table)));
     } else {
-        xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array(
-                                      'itemid' => $myobject->objectid,
+                                      'itemid' => $objectid,
                                       'tplmodule' => $tplmodule
                                       )));
     }

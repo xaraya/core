@@ -2,26 +2,28 @@
 /**
  * Get all roles
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
+ * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * get all roles
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['order'] comma-separated list of order items; default 'name'
- * @param $args['selection'] extra coonditions passed into the where-clause
- * @param $args['include'] comma-separated list of role names
- * @param $args['exclude'] comma-separated list of role names
- * @returns array
- * @return array of roles, or false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['order'] comma-separated list of order items; default 'name'<br/>
+ *        string   $args['selection'] extra coonditions passed into the where-clause<br/>
+ *        string   $args['include'] comma-separated list of role names<br/>
+ *        string   $args['exclude'] comma-separated list of role names
+ * @return mixed array of roles, or false on failure
  */
-function roles_userapi_getallroles($args)
+function roles_userapi_getallroles(Array $args=array())
 {
-    if(!xarSecurityCheck('ReadRole')) {return;}
+    if(!xarSecurityCheck('ReadRoles')) {return;}
     extract($args);
 
     // Optional arguments.
@@ -54,10 +56,10 @@ function roles_userapi_getallroles($args)
     }
 
     // State
-    if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
+    if (!empty($state) && is_numeric($state) && $state != xarRoles::ROLES_STATE_CURRENT) {
         $q->eq('r.state',$state);
     } else {
-        $q->ne('r.state',ROLES_STATE_DELETED);
+        $q->ne('r.state',xarRoles::ROLES_STATE_DELETED);
     }
 
     $q->addfield('r.id AS id');
@@ -76,9 +78,9 @@ function roles_userapi_getallroles($args)
     $includedgroups = array();
     if (isset($include)) {
         foreach (explode(',', $include) as $include_field) {
-            if ($itemtype == ROLES_USERTYPE) {
+            if ($itemtype == xarRoles::ROLES_USERTYPE) {
                 $q->ne('uname',xarMod::apiFunc('roles', 'user', 'get', array('uname' => $include_field)));
-            } elseif ($itemtype == ROLES_GROUPTYPE) {
+            } elseif ($itemtype == xarRoles::ROLES_GROUPTYPE) {
                 $q->ne('name',xarMod::apiFunc('roles', 'user', 'get', array('name' => $include_field)));
                 $includedgroups[] = $include_field;
             }
@@ -89,9 +91,9 @@ function roles_userapi_getallroles($args)
     $excludedgroups = array();
     if (isset($exclude)) {
         foreach (explode(',', $exclude) as $exclude_field) {
-            if ($itemtype == ROLES_USERTYPE) {
+            if ($itemtype == xarRoles::ROLES_USERTYPE) {
                 $q->ne('uname',xarMod::apiFunc('roles', 'user', 'get', array('uname' => $exclude_field)));
-            } elseif ($itemtype == ROLES_GROUPTYPE) {
+            } elseif ($itemtype == xarRoles::ROLES_GROUPTYPE) {
                 $q->ne('name',xarMod::apiFunc('roles', 'user', 'get', array('name' => $exclude_field)));
                 $excludedgroups[] = $exclude_field;
             }

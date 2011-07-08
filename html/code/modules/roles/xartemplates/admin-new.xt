@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:set name="id">$object-&gt;getID()</xar:set>
-    <xar:set name="itemtype">$object-&gt;getType()</xar:set>
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-mod-head">
         <span class="xar-mod-title">Roles Administration</span>
@@ -12,30 +11,44 @@
         <p>
             All fields are required to create a new role on the system.
         </p>
-        <form id="newrole" action="&xar-modurl-dynamicdata-admin-create;" method="post" enctype="application/x-www-form-urlencoded">
+        <xar:set name="itemtype">$object->properties['role_type']->value</xar:set>
+        <xar:if condition="!empty($object->withupload)">
+            <xar:set name="enctype">'multipart/form-data'</xar:set>
+        <xar:else />
+            <xar:set name="enctype">'application/x-www-form-urlencoded'</xar:set>
+        </xar:if>
+        <form id="newrole" action="#xarServer::getCurrentURL()#" method="post" enctype="#$enctype#">
             <fieldset>
                 <legend>
                   #$object:label# Details
                 </legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="ptype" title="#xarML('Type of Role')#" class="xar-form-label">
+                    <xar:var name="label">Type of Role</xar:var>
+                    <label for="ptype" title="#$label#" class="xar-form-label">
                         Type:
                     </label>
-                    <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() ."';this.form.submit();"</xar:set>
+                    <xar:set name="onchange">"this.form.action='" . xarServer::getCurrentURL() . "';this.form.submit();"</xar:set>
                     <xar:data-input type="itemtype" name="itemtype" value="$itemtype" module="roles" onchange="$onchange" mode="1"/>
                 </div>
                 <xar:data-form object="$object"/>
                 <div class="xar-form-input-wrapper">
-                    <label for="parentid" title="#xarML('Initial Group membership')#" class="xar-form-label">Member Of:</label>
+                    <xar:var name="label">Initial Group membership</xar:var>
+                    <label for="parentid" title="#$label#" class="xar-form-label">Member Of:</label>
+                    <xar:if condition="empty($parentid)">
+                        <xar:set name="parentid">
+                            xarModVars::get('roles','defaultgroup')
+                        </xar:set>
+                    </xar:if>
                     <xar:data-input type="grouplist" name="parentid" value="$parentid"/>
                 </div>
                 <xar:set name="settings">
                     explode(',',xarModVars::get('roles','duvsettings'))
                 </xar:set>
-                <xar:if condition="ROLES_USERTYPE eq $basetype">
+                <xar:if condition="xarRoles::ROLES_USERTYPE eq $itemtype">
                     <xar:if condition="in_array('useremailformat',$settings)">
                         <div class="xar-form-input-wrapper">
-                            <label for="duvs_useremailformat" title="#xarML('Email Format')#" class="xar-form-label">Email Format:</label>
+                            <xar:var name="label">Email Format</xar:var>
+                            <label for="duvs_useremailformat" title="#$label#" class="xar-form-label">Email Format:</label>
                             <xar:set name="value">
                                 xarModUserVars::get('roles','useremailformat',$id)
                             </xar:set>
@@ -62,7 +75,8 @@
                 </xar:if>
                 <xar:if condition="in_array('userhome',$settings)">
                     <div class="xar-form-input-wrapper">
-                        <label for="duvs_userhome" title="#xarML('Home URL')#" class="xar-form-label">
+                        <xar:var name="label">Home URL</xar:var>
+                        <label for="duvs_userhome" title="#$label#" class="xar-form-label">
                             Home:
                         </label>
                         <input type="text" name="duvs[userhome]" id="duvs_userhome" value="#xarModUserVars::get('roles','userhome',$id)#" size="40" maxlength="100" tabindex="7"/>
@@ -74,9 +88,9 @@
                 <div class="xar-form-input-wrapper-after">
                 <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
                     <input type="hidden" name="tplmodule" id="tplmodule" value="roles"/>
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#"/>
-                    <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
-                    <input type="submit" value="#xarML('Add')#"/>
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <xar:var name="label">Add</xar:var>
+                    <input type="submit" name="confirm" value="#$label#"/>
                 </div>
             </fieldset>
         </form>

@@ -2,12 +2,14 @@
 /**
  * Modify configuration for a module
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Dynamic Data module
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -15,11 +17,14 @@
  *
  * @param int $args['objectid'] ID of the object
  * @param array $args['extrainfo'] extra information
- * @return bool true on success, false on failure
+ * @return string output display string
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
-function dynamicdata_admin_modifyconfighook($args)
+function dynamicdata_admin_modifyconfighook(Array $args=array())
 {
+    // Security
+    if(!xarSecurityCheck('AdminDynamicData')) return;
+
     extract($args);
 
     if (!isset($extrainfo)) throw new EmptyParameterException('extrainfo');
@@ -81,8 +86,7 @@ function dynamicdata_admin_modifyconfighook($args)
     $data['fieldtypeprop'] = & DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
 
     $object = & DataObjectMaster::getObject(array('moduleid' => $module_id,
-                                                  'itemtype' => $itemtype,
-                                                  'extend' => false));
+                                                  'itemtype' => $itemtype));
     if (!empty($object)) {
         if (!empty($object->template)) {
             $template = $object->template;

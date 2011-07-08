@@ -1,28 +1,30 @@
 <?php
 /**
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
  * update attributes of a block instance
  *
- * @author Jim McDonald, Paul Rosania
- * @param $args['bid'] the ID of the block to update
- * @param $args['title'] the new title of the block
- * @param $args['group_id'] the new position of the block (deprecated)
- * @param $args['groups'] optional array of group memberships
- * @param $args['template'] the template of the block instance
- * @param $args['content'] the new content of the block
- * @param $args['refresh'] the new refresh rate of the block
- * @returns bool
- * @return true on success, false on failure
+ * @author Jim McDonald
+ * @author Paul Rosania
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['bid'] the ID of the block to update<br/>
+ *        string   $args['title'] the new title of the block<br/>
+ *        string   $args['group_id'] the new position of the block (deprecated)<br/>
+ *        string   $args['groups'] optional array of group memberships<br/>
+ *        string   $args['template'] the template of the block instance<br/>
+ *        string   $args['content'] the new content of the block<br/>
+ *        integer  $args['refresh'] the new refresh rate of the block<br/>
+ * @return boolean true on success, false on failure
  */
-function blocks_adminapi_update_instance($args)
+function blocks_adminapi_update_instance(Array $args=array())
 {
     // Get arguments from argument array
     $template = null;
@@ -30,13 +32,13 @@ function blocks_adminapi_update_instance($args)
 
     // Optional arguments
     if (!isset($content)) {
-        $content = '';
+        $content = array();
     }
 
     // The content no longer needs to be serialized before it gets here.
     // Lets keep the serialization close to where it is stored (since
     // storage is the only reason we do it).
-    if (!is_string($content)) {
+    if (is_array($content)) {
         $content = serialize($content);
     }
 
@@ -62,12 +64,11 @@ function blocks_adminapi_update_instance($args)
 
     // Security
     // TODO: add security on the name as well as (eventually instead of) the title.
-    if(!xarSecurityCheck('EditBlock', 1, 'Block', "$title::$bid")) {return;}
+    if(!xarSecurityCheck('EditBlocks', 1, 'Block', "$title::$bid")) {return;}
 
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
     $block_instances_table = $xartable['block_instances'];
-    $block_group_instances_table = $xartable['block_group_instances'];
 
     try {
         $dbconn->begin();
@@ -81,8 +82,8 @@ function blocks_adminapi_update_instance($args)
         // Update the group instances.
         if (isset($groups) && is_array($groups)) {
             // Pass the group updated to the API if required.
-            // TODO: error handling.
-            $result = xarMod::apiFunc('blocks', 'admin', 'update_instance_groups',array('bid' => $bid, 'groups' => $groups));
+            if (!xarMod::apiFunc('blocks', 'admin', 'update_instance_groups',
+                array('bid' => $bid, 'groups' => $groups))) return;
         }
 
         $args['module'] = 'blocks';

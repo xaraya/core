@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -18,11 +20,8 @@
  * @param $args['entry'] optional array of external references.
  * @return array object id on success, null on failure
  */
-function dynamicdata_utilapi_import($args)
+function dynamicdata_utilapi_import(Array $args=array())
 {
-    if(!xarSecurityCheck('AdminDynamicData')) return;
-
-
     extract($args);
 
     if (!isset($prefix)) $prefix = xarDB::getPrefix();
@@ -32,7 +31,15 @@ function dynamicdata_utilapi_import($args)
     if (empty($xml) && empty($file)) {
         throw new EmptyParameterException('xml or file');
     } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/',$file)) ) {
-        throw new BadParameterException($file,'Invalid importfile "#(1)"');
+        // check if we tried to load a file using an old path
+        if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true && strpos($file, 'modules/') === 0) {
+            $file = sys::code() . $file;
+            if (!file_exists($file)) {
+                throw new BadParameterException($file,'Invalid importfile "#(1)"');
+            }
+        } else {
+            throw new BadParameterException($file,'Invalid importfile "#(1)"');
+        }
     }
 
     $objectcache = array();
@@ -123,12 +130,14 @@ function dynamicdata_utilapi_import($args)
             $args['itemtype'] = $info['itemtype'];
             $objectid = $object->updateItem($args);
             // remove the properties, as they will be replaced
-            $dupobject = DataObjectMaster::getObject(array('name' => $info['name'], 'extend' => false));
-            $existingproperties = $dupobject->getProperties();
-            foreach ($existingproperties as $propertyitem)
+            $duplicateobject = DataObjectMaster::getObject(array('name' => $info['name']));
+            $oldproperties = $duplicateobject->properties;
+            foreach ($oldproperties as $propertyitem)
                 $dataproperty->deleteItem(array('itemid' => $propertyitem->id));
         } else {
-            $objectid = $object->createItem($args);
+            // Load the object properties directly with the values to bypass their setValue methods
+            $object->setFieldValues($args,1);
+            $objectid = $object->createItem();
         }
 
         // Now do the item's properties
@@ -190,6 +199,32 @@ function dynamicdata_utilapi_import($args)
             // Create the property
             $id = $dataproperty->createItem($propertyargs);
         }
+
+        if (!empty($xmlobject->links)) {
+            // make sure that object links are initialized
+            sys::import('modules.dynamicdata.class.objects.links');
+            $linklist = DataObjectLinks::initLinks();
+            if (empty($linklist)) {
+                // no object links initialized, bail out
+                return $objectid;
+            }
+            $linkshead = $xmlobject->links;
+            $linkprops = array('source','from_prop','target','to_prop','link_type','direction');
+            foreach ($linkshead->children() as $link) {
+                $info = array();
+                foreach ($linkprops as $prop) {
+                    if (!isset($link->{$prop}[0])) {
+                         unset($info);
+                         break;
+                    }
+                    $info[$prop] = (string)$link->{$prop}[0];
+                }
+                if (!empty($info)) {
+                    // add this link and its reverse if it doesn't exist yet
+                    DataObjectLinks::addLink($info['source'],$info['from_prop'],$info['target'],$info['to_prop'],$info['link_type'],$info['direction']);
+                }
+            }
+        }
     } elseif ($roottag == 'items') {
 
         $currentobject = "";
@@ -206,15 +241,14 @@ function dynamicdata_utilapi_import($args)
             elseif ($index == $count) $args['position'] = 'last';
             else $args['position'] = '';
 
-            $item = array();
-            $item['name'] = $child->getName();
-            $item['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
+            $thisname = $child->getName();
+            $args['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
 
             // set up the object the first time around in this loop
-            if ($item['name'] != $currentobject) {
+            if ($thisname != $currentobject) {
                 if (!empty($currentobject))
                     throw new Exception("The items imported must all belong to the same object");
-                $currentobject = $item['name'];
+                $currentobject = $thisname;
 
                 /*
                 // Check that this is a real object
@@ -224,7 +258,7 @@ function dynamicdata_utilapi_import($args)
                         $objectname2objectid[$currentobject] = $$currentobject;
                     } else {
                         $msg = 'Unknown #(1) "#(2)"';
-                        $vars = array('object',xarVarPrepForDisplay($item['name']));
+                        $vars = array('object',xarVarPrepForDisplay($thisname));
                         throw new BadParameterException($vars,$msg);
                     }
                 }
@@ -235,12 +269,6 @@ function dynamicdata_utilapi_import($args)
                 }
                 $object =& $objectcache[$currentobject];
                 $objectid = $objectcache[$currentobject]->objectid;
-                /*
-                if (!isset($objectcache[$object->baseancestor])) {
-                    $objectcache[$object->baseancestor] = DataObjectMaster::getObject(array('objectid' => $object->baseancestor));
-                }
-                $primaryobject =& $objectcache[$object->baseancestor];
-                */
                 // Get the properties for this object
                 $objectproperties = $object->properties;
             }
@@ -258,36 +286,22 @@ function dynamicdata_utilapi_import($args)
                             $integer->validate($value, array());
                         } catch (Exception $e) {}
                     }
-                    $item[$propertyname] = $value;
+                    $object->properties[$propertyname]->value = $value;
                 }
             }
             if (empty($keepitemid)) {
                 // for dynamic objects, set the primary field to 0 too
                 if (isset($object->primary)) {
                     $primary = $object->primary;
-                    if (!empty($item[$primary])) {
-                        $item[$primary] = 0;
+                    if (!empty($object->properties[$primary]->value)) {
+                        $object->properties[$primary]->value = 0;
                     }
                 }
             }
-            $args = array_merge($args,$item);
 
-            /* for the moment we only allow creates
-            if (!empty($item['itemid'])) {
-                // check if the item already exists
-                $olditemid = $object->getItem(array('itemid' => $item['itemid']));
-                if (!empty($olditemid) && $olditemid == $item['itemid']) {
-                    // update the item
-                    $itemid = $object->updateItem($args);
-                } else {
-                    // create the item
-                    $itemid = $object->createItem($args);
-                }
-            } else {
-            */
-                // create the item
-                $itemid = $object->createItem($args);
-//            }
+            // for the moment we only allow creates
+            // create the item
+            $itemid = $object->createItem($args);
             if (empty($itemid)) return;
 
             // keep track of the highest item id

@@ -424,8 +424,8 @@ ALTER TABLE `xar_roles`
   CHANGE COLUMN `xar_type` `type` INTEGER NOT NULL default '0',
   CHANGE COLUMN `xar_users` `users` INTEGER NOT NULL default '0',
   CHANGE COLUMN `xar_uname` `uname` varchar(255) NOT NULL default '',
-  CHANGE COLUMN `xar_email` `email` varchar(255) default NULL;
-  CHANGE COLUMN `xar_pass` `pass` varchar(100) default NULL;
+  CHANGE COLUMN `xar_email` `email` varchar(255) default NULL,
+  CHANGE COLUMN `xar_pass` `pass` varchar(100) default NULL,
   CHANGE COLUMN `xar_date_reg` `date_reg` varchar(100) NOT NULL default '0000-00-00 00:00:00',
   CHANGE COLUMN `xar_valcode` `valcode` varchar(35) NOT NULL default '',
   CHANGE COLUMN `xar_state` `state` INTEGER NOT NULL default '3',

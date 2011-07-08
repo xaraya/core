@@ -3,28 +3,29 @@
  * Delete users based on status
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * delete users based on status
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['state'] state that we are deleting.
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['state'] state that we are deleting.
+ * @return boolean true on success, false on failure
  */
-function roles_adminapi_purge($args)
+function roles_adminapi_purge(Array $args=array())
 {
     // Get arguments
     extract($args);
 
 
-    if ($state == ROLES_STATE_ACTIVE)
+    if ($state == xarRoles::ROLES_STATE_ACTIVE)
         return xarTplModule('roles','user','errors',array('layout' => 'purge_active_user'));
 
     $items = xarMod::apiFunc('roles',
@@ -41,7 +42,7 @@ function roles_adminapi_purge($args)
                 array('id' => $item['id']));
 
         // Security check
-        if (!xarSecurityCheck('DeleteRole',0,'Item',"$item[name]::$item[id]")) return;
+        if (!xarSecurityCheck('ManageRoles',0,'Item',"$item[name]::$item[id]")) return;
 
         // Call the Roles class
         $role = xarRoles::get($item['id']);

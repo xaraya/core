@@ -1,5 +1,14 @@
 <?php
 /**
+ * @package core
+ * @subpackage structures
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+/**
  * Interfaces for sequences:
  *
  * Sequence : linear list, insert/delete can happen at any index
@@ -32,7 +41,7 @@ interface iSequence
     // r (int)  size   : number of elements in the sequence
     // r (bool) empty  : is the sequence empty
     /* (mixed) item */public function &get($position);
-    /* (bool)  ok   */public function insert(&$item, $position);
+    /* (bool)  ok   */public function insert($item, $position);
     /* (bool)  ok   */public function delete($position);
     /* (bool)  ok   */public function clear();
 }
@@ -104,7 +113,7 @@ interface iDeque
 {
     // r (int)   size : number of elements in the deque
     // r (bool)  empty: is the deque empty
-    /*   (bool)  ok   */public function push(&$item, $whichEnd);
+    /*   (bool)  ok   */public function push($item, $whichEnd);
     /*   (mixed) item */public function &pop($whichEnd);
     /*   (bool)  ok   */public function clear();
 }

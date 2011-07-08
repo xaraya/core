@@ -1,6 +1,13 @@
 <?php
-// $Id: syslog.php,v 1.12 2003/04/08 05:55:05 jon Exp $
-// $Horde: horde/lib/Log/syslog.php,v 1.6 2000/06/28 21:36:13 jon Exp $
+/**
+ * @package core
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
 
 /**
 * The Log_file class is a concrete implementation of the Log::
@@ -9,7 +16,6 @@
 *
 * @author  Richard Heyes <richard@php.net>
 * @author  Nuncanada <nuncanada@ig.com.br>
-* @package logging
 */
 
 /**
@@ -26,7 +32,6 @@ sys::import('xaraya.log.loggers.xarLogger');
  * @author  Chuck Hagenbuch <chuck@horde.org>
  * @version $Revision: 1.12 $
  * @since   Horde 1.3
- * @package logging
  */
 class xarLogger_syslog extends xarLogger 
 {
@@ -55,7 +60,7 @@ class xarLogger_syslog extends xarLogger
      *
      * @param array     $conf               Configuration options for the specific driver.
      *
-     * @access public
+     * 
      * @return boolean
      */
     function setConfig(array &$conf) 
@@ -80,7 +85,7 @@ class xarLogger_syslog extends xarLogger
     * Destructor. This will write out any lines to the logfile, UNLESS the dontLog()
     * method has been called, in which case it won't.
     *
-    * @access private
+    * 
     */
     function _destructor()
     {
@@ -90,7 +95,7 @@ class xarLogger_syslog extends xarLogger
     /**
      * Opens a connection to the system logger, if it has not already
      * been opened.  This is implicitly called by log(), if necessary.
-     * @access public
+     * 
      */
     function open()
     {
@@ -102,7 +107,7 @@ class xarLogger_syslog extends xarLogger
 
     /**
      * Closes the connection to the system logger, if it is open.
-     * @access public     
+     *      
      */
     function close()
     {
@@ -124,7 +129,7 @@ class xarLogger_syslog extends xarLogger
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.
      *                  The default is PEAR_LOG_INFO.
      * @return boolean  True on success or false on failure.
-     * @access public     
+     *      
      */
     function notify($message, $level)
     {
@@ -153,7 +158,7 @@ class xarLogger_syslog extends xarLogger
      *
      * @return  The LOG_* representation of $priority.
      *
-     * @access private
+     * 
      */
     function _toSyslog($level)
     {

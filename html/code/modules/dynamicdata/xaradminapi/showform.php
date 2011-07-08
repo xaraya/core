@@ -1,21 +1,24 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
  * Show an input form in a template
  *
+ * @param array    $args array of optional parameters<br/>
  * @param array containing the item or fields to show
- * @return string containing the HTML (or other) text to output in the BL template
+ * @return string output display string
  */
-function dynamicdata_adminapi_showform($args)
+function dynamicdata_adminapi_showform(Array $args=array())
 {
     extract($args);
     $args['fallbackmodule'] = 'current';
@@ -58,14 +61,15 @@ function dynamicdata_adminapi_showform($args)
         $args['fieldlist'] = null;
     }
 
-    // throw an exception if you can't edit this
+    $object = & DataObjectMaster::getObject($args);
     if (empty($itemid)) {
-        if(!xarSecurityCheck('AddDynamicDataItem',1,'Item',"$args[moduleid]:$args[itemtype]:All")) return;
+        if (!$object->checkAccess('create'))
+            return xarML('Create #(1) is forbidden', $object->label);
     } else {
-        if(!xarSecurityCheck('EditDynamicDataItem',1,'Item',"$args[moduleid]:$args[itemtype]:$itemid")) return;
+        if (!$object->checkAccess('update'))
+            return xarML('Update #(1) is forbidden', $object->label);
     }
 
-    $object = & DataObjectMaster::getObject($args);
     if (!empty($itemid)) {
         $object->getItem();
     }

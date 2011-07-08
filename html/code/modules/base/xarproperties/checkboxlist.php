@@ -1,12 +1,14 @@
 <?php
 /**
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /* include the base class */
@@ -40,34 +42,44 @@ class CheckboxListProperty extends SelectProperty
         return $this->validateValue($value);
     }
 
-
     public function validateValue($value = null)
     {
-        if (!isset($value)) $this->value = '';
-        elseif ( is_array($value) ) $this->value = implode ( ',', $value);
-        else $this->value = $value;
+        if (!isset($value)) $value = '';
+        $this->setValue($value);
         return true;
     }
 
     public function showInput(Array $data = array())
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
-        else $this->value = $data['value'];
-
-        if (!isset($data['rows_cols'])) $data['rows_cols'] = $this->display_columns;
-        if (empty($data['value'])) {
-            $data['value'] = array();
-        } elseif (!is_array($data['value']) && is_string($data['value'])) {
-            $data['value'] = explode(',', $data['value']);
+        if (isset($data['value'])) {
+            if (is_array($data['value'])) {
+                $this->value = implode(',',$data['value']);
+            } else {
+                $this->value = $data['value'];
+            }
         }
+        $data['value'] = $this->getValue();
+        if (!isset($data['rows_cols'])) $data['rows_cols'] = $this->display_columns;
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
-        if (is_array($data['value']) ) $data['value'] = implode(',',$data['value']);
+        if (!isset($data['value'])) $data['value'] = $this->getValue();
         return parent::showOutput($data);
+    }
+
+    public function getValue()
+    {
+        if (!is_array($this->value) && is_string($this->value) && !empty($this->value)) 
+            return explode(',', $this->value);
+        else return array();
+    }
+
+    public function setValue($value=null)
+    {
+        if ( is_array($value) ) $this->value = implode ( ',', $value);
+        else $this->value = $value;
     }
 }
 

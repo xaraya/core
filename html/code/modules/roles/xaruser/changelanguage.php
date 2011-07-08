@@ -2,11 +2,12 @@
 /**
  * Changes the navigation language
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -17,7 +18,7 @@
  */
 function roles_user_changelanguage()
 {
-    if (!xarVarFetch('locale',     'str:1:', $locale,     NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('locale',     'str:1:', $locale,     xarMLSGetCurrentLocale(), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('return_url', 'str:1:', $return_url, xarServer::getVar('HTTP_REFERER'), XARVAR_NOT_REQUIRED)) return;
 
     $locales = xarMLSListSiteLocales();
@@ -32,7 +33,8 @@ function roles_user_changelanguage()
         // <paul> throw an exception. trap it later if we want it to look nice,
         // that's the whole point of exceptions.
     }
-    xarResponse::redirect($return_url);
+    xarController::redirect($return_url);
+    return true;
 }
 
 ?>

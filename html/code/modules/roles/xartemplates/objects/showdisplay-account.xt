@@ -7,7 +7,7 @@
     <xar:set name="currentid">xarUserGetVar('id')</xar:set>
     <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
     <xar:if condition="$layout eq 'default'">
-        <h2>Profile for #xarVarPrepForDisplay(xarUserGetVar('name', $userid))#</h2>
+        <h2>Profile for <xar:data-output property="$properties['name']"/></h2>
         <fieldset>
         <xar:foreach in="$properties" key="$name" value="$property">
             <div class="xar-form-input-wrapper">
@@ -33,7 +33,7 @@
                 <label class="xar-form-label">
                     Email
                 </label>
-                <a href="&xar-modurl-roles-user-email;&amp;id=#$userid#">
+                <a href="#xarModURL('roles','user','email',array('id'=>$userid))#">
                     Send an Email to #xarVarPrepForDisplay(xarUserGetVar('name', $userid))#
                 </a>
             </div>
@@ -44,7 +44,9 @@
                 <label class="xar-form-label">
                     Home Page
                 </label>
-                <!-- <a href="#$homelink#" title="#xarML('Home Page')#">#$homelink#</a> -->
+                <!-- 
+                <xar:var name="label">Home Page</xar:var>
+                <a href="#$homelink#" title="#$label#">#$homelink#</a> -->
             </div>
         </xar:if>
         <!-- Revisit in php5.3.0

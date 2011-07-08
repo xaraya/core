@@ -3,11 +3,12 @@
  * xarRoles class
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -29,9 +30,8 @@ class xarRoles extends Object
     const ROLES_STATE_CURRENT = 98;
     const ROLES_STATE_ALL = 99;
 
-    const ROLES_ROLETYPE = 1;
-    const ROLES_USERTYPE = 2;
-    const ROLES_GROUPTYPE = 3;
+    const ROLES_USERTYPE = 1;
+    const ROLES_GROUPTYPE = 2;
 
     protected static $dbconn;
     protected static $rolestable;
@@ -68,8 +68,8 @@ class xarRoles extends Object
             $query = "SELECT r.id AS id, r.name AS name, r.users AS users, rm.parent_id AS parentid 
                       FROM " . self::$rolestable . " r LEFT JOIN " . self::$rolememberstable . " rm ON r.id = rm.role_id 
                       WHERE r.itemtype = ? AND r.state = ? ORDER BY r.name";
-            $bindvars[] = ROLES_GROUPTYPE;
-            $bindvars[] = ROLES_STATE_ACTIVE;
+            $bindvars[] = self::ROLES_GROUPTYPE;
+            $bindvars[] = self::ROLES_STATE_ACTIVE;
             $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
@@ -96,8 +96,8 @@ class xarRoles extends Object
                   FROM " . self::$rolestable . " r LEFT JOIN " . self::$rolememberstable . " rm ON r.id = rm.role_id 
                   WHERE role_id = ? AND r.itemtype = ? AND r.state = ? ORDER BY r.name";
         $bindvars[] = $id;
-        $bindvars[] = ROLES_GROUPTYPE;
-        $bindvars[] = ROLES_STATE_ACTIVE;
+        $bindvars[] = self::ROLES_GROUPTYPE;
+        $bindvars[] = self::ROLES_STATE_ACTIVE;
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
@@ -167,9 +167,9 @@ class xarRoles extends Object
      * @return object role
      * @todo cache this too?
      */
-    public static function findRole($name)
+    public static function findRole($name,$itemtype=self::ROLES_USERTYPE)
     {
-        return self::_lookuprole('name',$name,$state=ROLES_STATE_ACTIVE);
+        return self::_lookuprole('name',$name,$itemtype,$state=self::ROLES_STATE_ACTIVE);
     }
 
     /**
@@ -179,9 +179,9 @@ class xarRoles extends Object
      * @return object role
      * @todo cache this too?
      */
-    public static function ufindRole($uname)
+    public static function ufindRole($uname,$itemtype=self::ROLES_USERTYPE)
     {
-        return self::_lookuprole('uname',$uname,$state=ROLES_STATE_ACTIVE);
+        return self::_lookuprole('uname',$uname,$itemtype,$state=self::ROLES_STATE_ACTIVE);
     }
 
     /**
@@ -193,7 +193,7 @@ class xarRoles extends Object
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param string $childname
      * @param string $parentname
-     * @return bool
+     * @return boolean
      * @todo create exceptions for bad input
      * @todo seems we could do this in one query instead of two?
      */
@@ -240,16 +240,16 @@ class xarRoles extends Object
      * @param int    $state
      * @return object a role
      */
-    private static function _lookuprole($field,$value,$itemtype=ROLES_USERTYPE,$state=ROLES_STATE_ALL)
+    private static function _lookuprole($field,$value,$itemtype=self::ROLES_USERTYPE,$state=self::ROLES_STATE_ALL)
     {
         // retrieve the object's data from the repository
         // set up and execute the query
         self::initialize();
         $query = "SELECT * FROM " . self::$rolestable . " WHERE $field = " . self::$dbconn->qstr($value) ;
-        if ($state == ROLES_STATE_CURRENT) {
-            $query .= " state != " . ROLES_STATE_DELETED;
-        } elseif ($state != ROLES_STATE_ALL) {
-            $query .= " state = " . $state;
+        if ($state == self::ROLES_STATE_CURRENT) {
+            $query .= " AND state != " . self::ROLES_STATE_DELETED;
+        } elseif ($state != self::ROLES_STATE_ALL) {
+            $query .= " AND state = " . $state;
         }
         $stmt = self::$dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(), ResultSet::FETCHMODE_ASSOC);
@@ -257,15 +257,12 @@ class xarRoles extends Object
         if($result->next()) $row = $result->fields;
         if (empty($row)) return;
 
-        $duvarray = array('userhome','primaryparent','passwordupdate','userlastlogin','usertimezone');
-        $duvs = array();
-        foreach ($duvarray as $key) {
-            $duv = xarModUserVars::Get('roles',$key,$row['id']);
-            if (!empty($duv)) $duvs[$key] = $duv;
-        }
         // create and return the role object
-        sys::import('modules.roles.class.role');
-        $role = DataObjectMaster::getObject(array('class' => 'Role', 'module' => 'roles', 'itemtype' => $row['itemtype']));
+        sys::import('modules.dynamicdata.class.objects.master');
+        if ($row['itemtype'] == self::ROLES_USERTYPE) $name = 'roles_users';
+        elseif ($row['itemtype'] == self::ROLES_GROUPTYPE) $name = 'roles_groups';
+        else throw new Exception(xarML('Unknown role type'));
+        $role = DataObjectMaster::getObject(array('name' => $name));
         $role->getItem(array('itemid' => $row['id']));
         return $role;
     }

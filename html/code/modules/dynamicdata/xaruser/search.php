@@ -2,12 +2,14 @@
 /**
  * Search dynamic data
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/182.htm
  *
- * @subpackage Dynamic Data module
- * @link http://xaraya.com/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -19,7 +21,7 @@
  * @param int numitems The number of items to get
  * @return array output of the items found
  */
-function dynamicdata_user_search($args)
+function dynamicdata_user_search(Array $args=array())
 {
 // Security Check
     if(!xarSecurityCheck('ViewDynamicData')) return;
@@ -32,6 +34,13 @@ function dynamicdata_user_search($args)
     if (!xarVarFetch('numitems', 'int:0', $numitems,  NULL, XARVAR_NOT_REQUIRED)) {return;}
     if (empty($dd_check)) {
         $dd_check = array();
+    }
+    // TODO: move this to the varFetch?
+    if (!isset($startnum)) {
+        $startnum = 1;
+    }
+    if (!isset($numitems)) {
+        $numitems = 20;
     }
 
     // see if we're coming from the search hook or not
@@ -54,13 +63,7 @@ function dynamicdata_user_search($args)
         if (empty($itemtype)) {
             $itemtype = 0;
         }
-    }
-    // TODO: move this to the varFetch?
-    if (!isset($startnum)) {
-        $startnum = 1;
-    }
-    if (!isset($numitems)) {
-        $numitems = 20;
+        $data['numitems'] = $numitems;
     }
 
     $label = xarML('Dynamic Data');
@@ -76,7 +79,7 @@ function dynamicdata_user_search($args)
         }
     } else {
         // get items from the objects table
-        $objects = xarMod::apiFunc('dynamicdata','user','getobjects');
+        $objects = DataObjectMaster::getObjects();
     }
 
     if (empty($data['ishooked'])) {
@@ -89,6 +92,11 @@ function dynamicdata_user_search($args)
         $myfunc = 'view';
     } else {
         $myfunc = 'search';
+    }
+    if (!empty($q)) {
+        $quoted = str_replace("'","\\'",$q);
+        $quoted = str_replace("%","\\%",$quoted);
+        $quoted = str_replace("_","\\_",$quoted);
     }
     foreach ($objects as $itemid => $object) {
         // skip the internal objects
@@ -108,27 +116,42 @@ function dynamicdata_user_search($args)
             if (!empty($dd_check[$field['id']])) {
                 $fields[$name]['checked'] = 1;
                 if (!empty($q)) {
-                    $wherelist[] = $name . " LIKE '%" . $q . "%'";
+                    $wherelist[$name] = " LIKE '%" . $quoted . "%'";
                 }
             }
         }
         if (!empty($q) && count($wherelist) > 0) {
-            $where = join(' or ',$wherelist);
+            //$where = join(' or ',$wherelist);
             $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
             $pagerurl = xarModURL('dynamicdata','user','search',
                                   array('module_id' => ($module_id == $mymodid) ? null : $module_id,
                                         'itemtype' => empty($itemtype) ? null : $itemtype,
                                         'q' => $q,
                                         'dd_check' => $dd_check));
-            $result = xarMod::apiFunc('dynamicdata','user','showview',
+            // get the object
+            $object = xarMod::apiFunc('dynamicdata','user','getobjectlist',
                                     array('module_id' => $module_id,
                                           'itemtype' => $itemtype,
-                                          'where' => $where,
+                                          //'where' => $where,
                                           'startnum' => $startnum,
                                           'numitems' => $numitems,
-                                          'pagerurl' => $pagerurl,
+                                          //'pagerurl' => $pagerurl,
                                           'layout' => 'list',
                                           'status' => $status));
+            if (!$object->checkAccess('view'))
+                continue;
+            // add the where clauses directly here to avoid quoting issues
+            $join = '';
+            foreach ($wherelist as $name => $clause) {
+                $object->addWhere($name, $clause, $join);
+                $join = 'or';
+            }
+            // count the items
+            $object->countItems();
+            // get the items
+            $object->getItems();
+            // show the items
+            $result = $object->showView();
         } else {
             $result = null;
         }

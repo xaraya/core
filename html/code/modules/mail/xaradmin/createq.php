@@ -1,9 +1,20 @@
 <?php
+/**
+ * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/771.html
+ */
 
-function mail_admin_createq($args)
+function mail_admin_createqArray(Array $args=array())
 {
-    // Are we allowed to be here?
+    // Security
     if (!xarSecurityCheck('AdminMail')) return;
+    
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
@@ -14,7 +25,7 @@ function mail_admin_createq($args)
     // Do we have the master ?
     if(!$qdefInfo = xarMod::apiFunc('mail','admin','getqdef')) {
         // Redirect to the view page, which offers to create one
-        xarResponse::redirect(xarModUrl('mail','admin','view'));
+        xarController::redirect(xarModUrl('mail','admin','view'));
         return true;
     }
 
@@ -23,7 +34,7 @@ function mail_admin_createq($args)
     if(!$qData) return; // exception
     
     // Show the status screen again, 
-    xarResponse::redirect(xarModUrl('mail','admin','qstatus'));
+    xarController::redirect(xarModUrl('mail','admin','qstatus'));
     return true;
 }
 ?>

@@ -137,6 +137,9 @@
         <h3>Available Dataproperties</h3>
         <ul>
             <li>
+                <strong>Access</strong>:&#160;accepts as input or displays the settings for an (extended) security check.
+            </li>
+            <li>
                 <strong>Privilegestree</strong>:&#160;displays a tree of privileges.
             </li>
         </ul>
@@ -149,16 +152,16 @@
         <p>Further information on the Privileges module can be found at:</p>
         <ul>
             <li>Privileges Module Extension page at 
-            <a title="#xarML('Privileges Module - Xaraya Extension 1098')#"
-            href="http://www.xaraya.com/index.php/release/1098.html">Xaraya Extension and
+            <xar:var name="label">Privileges Module - Xaraya Extension 1098</xar:var>
+            <a title="#$label#" href="http://www.xaraya.com/index.php/release/1098.html">Xaraya Extension and
             Releases</a>. Click on Version History tab at the bottom to get the latest release
             information.</li>
             <li>Related tutorials and documentation on Privileges module at 
-            <a href="http://www.xaraya.com/index.php/keywords/privileges/"
-            title="#xarML('Related documentation on Privileges')#">Xaraya Documentation.</a></li>
+            <xar:var name="label">Related documentation on Privileges</xar:var>
+            <a href="http://www.xaraya.com/index.php/keywords/privileges/" title="#$label#">Xaraya Documentation.</a></li>
             <li>Extended information for Developers at 
-            <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html"
-            title="#xarML('RFC 30')#">Xaraya RFC-30</a></li>
+            <xar:var name="label">RFC 30</xar:var>
+            <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html" title="#$label#">Xaraya RFC-30</a></li>
         </ul>
         <p class="xar-sub">
         <strong>&#160;Privileges Module Overview</strong>

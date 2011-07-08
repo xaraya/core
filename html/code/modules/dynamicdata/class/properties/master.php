@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  */
 
@@ -23,12 +24,12 @@ class DataPropertyMaster extends Object
     const DD_DISPLAYSTATE_DISPLAYONLY = 2;
     const DD_DISPLAYSTATE_HIDDEN = 3;
     const DD_DISPLAYSTATE_VIEWONLY = 4;
-    const DD_DISPLAYSTATE_IGNORED = 5;
 
     const DD_INPUTSTATE_ADDMODIFY = 32;
     const DD_INPUTSTATE_NOINPUT = 64;
     const DD_INPUTSTATE_ADD = 96;
     const DD_INPUTSTATE_MODIFY = 128;
+    const DD_INPUTSTATE_IGNORED = 160;
 
     const DD_DISPLAYMASK = 31;
 
@@ -41,7 +42,7 @@ class DataPropertyMaster extends Object
      * @param $args['objectref'] a reference to the object to add those properties to (optional)
      * @param $args['allprops'] skip disabled properties by default
      */
-    static function getProperties(Array $args)
+    static function getProperties(Array $args=array())
     {
         // we can't use our own classes here, because we'd have an endless loop :-)
 
@@ -80,29 +81,27 @@ class DataPropertyMaster extends Object
                 $name, $label, $type, $id, $defaultvalue, $source, $status,
                 $seq, $configuration, $_objectid
                 ) = $result->fields;
-//            if (xarSecurityCheck('ReadDynamicDataField',0,'Field',"$name:$type:$id")) {
-                $property = array(
-                    'name'          => $name,
-                    'label'         => $label,
-                    'type'          => $type,
-                    'id'            => $id,
-                    'defaultvalue'  => $defaultvalue,
-                    'source'        => $source,
-                    'status'        => $status,
-                    'seq'           => $seq,
-                    'configuration' => $configuration,
-                    // some internal variables
-                    '_objectid'     => $_objectid,
-                    'anonymous'     => $anonymous,
-                    'class'         => ''
-                );
-                if(isset($args['objectref'])) {
-                    self::addProperty($property,$args['objectref']);
-                }
-                else {
-                    $properties[$name] = $property;
-                }
-//            }
+            $property = array(
+                'name'          => $name,
+                'label'         => $label,
+                'type'          => $type,
+                'id'            => $id,
+                'defaultvalue'  => $defaultvalue,
+                'source'        => $source,
+                'status'        => $status,
+                'seq'           => $seq,
+                'configuration' => $configuration,
+                // some internal variables
+                '_objectid'     => $_objectid,
+                'anonymous'     => $anonymous,
+                'class'         => ''
+            );
+            if(isset($args['objectref'])) {
+                self::addProperty($property,$args['objectref']);
+            }
+            else {
+                $properties[$name] = $property;
+            }
         }
         return $properties;
     }
@@ -162,7 +161,7 @@ class DataPropertyMaster extends Object
     /**
      * Class method to get a new dynamic property of the right type
      */
-    static function &getProperty(Array $args)
+    static function &getProperty(Array $args=array())
     {
         if(!isset($args['name']) && !isset($args['type'])) {
             throw new BadParameterException(null,xarML('The getProperty method needs either a name or type parameter.'));
@@ -204,7 +203,7 @@ class DataPropertyMaster extends Object
                 {
                     // @todo: The preg determines the module name (in a sloppy way, FIX this)
                     // @todo: do we still do properties from includes/properties?
-                    xarMLSLoadTranslations($propertyInfo['filepath']);
+                    xarMLSLoadTranslations(sys::code() . $propertyInfo['filepath']);
                 }
                 else
                     xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
@@ -237,7 +236,7 @@ class DataPropertyMaster extends Object
         return $property;
     }
 
-    static function createProperty(Array $args)
+    static function createProperty(Array $args=array())
     {
         $descriptor = new DataObjectDescriptor(array('name' => 'properties')); // the Dynamic Properties = 2
         if (!class_exists('DataObject')) {
@@ -249,12 +248,12 @@ class DataPropertyMaster extends Object
         return $objectid;
     }
 
-    static function updateProperty(Array $args)
+    static function updateProperty(Array $args=array())
     {
         // TODO: what if the property type changes to something incompatible ?
     }
 
-    static function deleteProperty(Array $args)
+    static function deleteProperty(Array $args=array())
     {
         if(empty($args['itemid']))
             return;

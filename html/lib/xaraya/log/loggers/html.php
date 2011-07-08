@@ -1,8 +1,16 @@
 <?php
 /**
+ * @package core
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+/**
  * The HTML logger
  *
- * @package logging
  * @copyright see the html/credits.html file in this release
  * 
 */
@@ -18,7 +26,6 @@ sys::import('xaraya.log.loggers.simple');
  *
  * Implements a logger to a HTML file
  *
- * @package logging
  */
 class xarLogger_html extends xarLogger_simple
 {
@@ -30,9 +37,9 @@ class xarLogger_html extends xarLogger_simple
       *               'maxLevel'     => int         Maximum level at which to log.
       *               'mode'         => string      File mode of te log file (optional)
       *               'timeFormat'   => string      Time format to be used in the file (optional)
-      * @access public
+      * 
      **/
-     function setConfig (array $conf) 
+     function setConfig (Array &$conf) 
      {
          parent::setConfig($conf);
          $this->_fileheader = '<?xml version="1.0" encoding="utf-8"?>
@@ -55,7 +62,7 @@ class xarLogger_html extends xarLogger_simple
      *
      * @param  string  $message   The line to write
      * @param  integer $level     The level of priority of this line/msg
-     * @access private
+     * 
     **/
     function _formatMessage($message, $level)
     {

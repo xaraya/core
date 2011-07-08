@@ -9,10 +9,13 @@
             <label>Overview</label>
         </menuitem>
         <menuitem>
-            <mask>AdminDynamicData</mask>
+            <mask>EditDynamicData</mask>
             <type>admin</type>
             <includes>
                 <includeitem>view</includeitem>
+                <includeitem>modify</includeitem>
+                <includeitem>modifyprop</includeitem>
+                <includeitem>access</includeitem>
             </includes>
             <target>view</target>
             <title>Manage dataobjects using dynamicdata</title>
@@ -22,9 +25,9 @@
             <mask>AdminDynamicData</mask>
             <type>admin</type>
             <includes>
-                <includeitem>modifyconfig</includeitem>
+                <includeitem>view_propertydefs</includeitem>
             </includes>
-            <target>modifyconfig</target>
+            <target>view_propertydefs</target>
             <title>Configure the default data proerty types</title>
             <label>Manage Property Types</label>
         </menuitem>
@@ -33,6 +36,11 @@
             <type>admin</type>
             <includes>
                 <includeitem>utilities</includeitem>
+				<includeitem>import</includeitem>
+				<includeitem>export</includeitem>
+				<includeitem>view_static</includeitem>
+				<includeitem>meta</includeitem>
+				<includeitem>relations</includeitem>
             </includes>
             <target>utilities</target>
             <title>Import/export and other utilities</title>
@@ -42,9 +50,9 @@
             <mask>AdminDynamicData</mask>
             <type>admin</type>
             <includes>
-                <includeitem>modifymoduleconfig</includeitem>
+                <includeitem>modifyconfig</includeitem>
             </includes>
-            <target>modifymoduleconfig</target>
+            <target>modifyconfig</target>
             <title>Modify the configuration of this module</title>
             <label>Modify Configuration</label>
         </menuitem>

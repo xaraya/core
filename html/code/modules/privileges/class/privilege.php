@@ -1,5 +1,14 @@
 <?php
 /**
+ * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/1098.html
+ *
  * xarPrivilege: class for the privileges object
  *
  * Represents a single privileges object
@@ -93,6 +102,7 @@ class xarPrivilege extends xarMask
         //Execute the query, bail if an exception was thrown
         $this->dbconn->Execute($query,$bindvars);
         // Refresh the privileges cached for the current sessions
+        sys::import('modules.privileges.class.security');
         xarMasks::clearCache();
         return true;
     }
@@ -123,6 +133,7 @@ class xarPrivilege extends xarMask
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
         if (!$result) return;
         // Refresh the privileges cached for the current sessions
+        sys::import('modules.privileges.class.security');
         xarMasks::clearCache();
         return true;
     }
@@ -157,6 +168,7 @@ class xarPrivilege extends xarMask
         $this->dbconn->Execute($query,$bindvars);
 
         // Refresh the privileges cached for the current sessions
+        sys::import('modules.privileges.class.security');
         xarMasks::clearCache();
         return true;
     }

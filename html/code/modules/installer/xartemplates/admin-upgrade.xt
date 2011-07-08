@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <link rel='icon' href="favicon.ico"/>
+    <div id="main_right">
+        <xar:template file="upstatus"/>
+    </div>
+    <div id="main_left">
+        <xar:if condition="$phase eq 1">
+            <h1>Please log in</h1>
+        <xar:elseif condition="$phase eq 2"/>
+            <h1>Welcome to the Xaraya Upgrader</h1>
+        <xar:elseif condition="$phase eq 3"/>
+            <h1>Running the Upgrade</h1>
+        <xar:elseif condition="$phase eq 4"/>
+            <h1>Database Checks</h1>
+        <xar:elseif condition="$phase eq 5"/>
+            <h1>Notes on this Version</h1>
+        </xar:if>
+
+        <xar:if condition="$phase ne 1">
+            <h2>Version Status</h2>
+            <h3>Version Information</h3>
+            <table style="width: 90%; min-width: 900p">
+                <tr>
+                    <th></th>
+                    <th>Your Files</th>
+                    <th>Your Database</th>
+                </tr>
+                <tr>
+                    <td>
+                        <xar:var name="label">Current Core Version</xar:var>
+                        <label title="#$label#">                            
+                            Xaraya Core:                            
+                        </label>
+                    </td>
+                    <td>
+                        #xarCore::VERSION_ID# version #XARCORE_VERSION_NUM# (#xarCore::VERSION_SUB#)
+                    </td>
+                    <td>
+                        <xar:var scope="config" name="System.Core.VersionId"/> version
+                        <xar:if condition="isset($oldversionnum)">
+                            2.0.0
+                        <xar:else/>
+                            <xar:var scope="config" name="System.Core.VersionNum"/>
+                        </xar:if>
+                        (<xar:var scope="config" name="System.Core.VersionSub"/>)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <xar:var name="label">Current Build</xar:var>
+                        <label title="#$label#">                            
+                            Build:                            
+                        </label>
+                    </td>
+                    <td>
+                        #xarCore::VERSION_REV#
+                    </td>
+                    <td>
+                        <xar:if condition="isset($oldversionnum)">
+                            #$oldversionnum#
+                        <xar:else />
+                            <xar:var scope="config" name="System.Core.VersionRev"/>                    
+                        </xar:if>
+                    </td>
+                </tr>
+            </table>
+        </xar:if>
+        
+        <xar:if condition="$phase eq 1">
+            <form action="upgrade.php" method="post">
+                <p class="center">
+                    Enter the password of the designated site administrator
+                </p>
+                <p class="center">
+                    <input type="password" name="pass"/>
+                    &#160;
+                    <input type="hidden" name="phase" id="phase" value="2"/>
+                    <xar:var name="label">Submit</xar:var>
+                    <xar:button type="submit" label="$label"/>
+                </p>
+                <p class="center" style="color: red; font-weight: bold">
+                    <xar:if condition="!empty($error)">
+                        The password entered is not correct
+                    </xar:if>
+                </p>
+            </form>
+        <xar:elseif condition="$phase eq 2"/>
+            <h3>
+                Status:
+                <xar:set name="idsequal">xarCore::VERSION_ID == xarConfigVars::get(null, 'System.Core.VersionId')</xar:set>
+                <xar:if condition="$idsequal">
+                    <xar:if condition="$versioncompare eq 0">
+                        Your installation is current.
+                    <xar:elseif condition="$versioncompare eq 1"/>
+                        The file version of Xaraya is greater than the database version. You should upgrade your database now.
+                    <xar:else/>
+                        The database version is higher than the file version. You need to install 
+                    </xar:if>
+                <xar:else/>
+                    The file and database versions of Xaraya are not compatible.
+                </xar:if>
+            </h3>
+
+            <xar:if condition="$versioncompare eq 0">
+                You have already upgraded to version #xarCore::VERSION_NUM#. The upgrade script only needs to run once and therefore stops here.
+                <h2>Checking your system</h2>
+                You can run checks to verify that your installed database is correct: 
+                <form action="upgrade.php" method="post">
+                    <input type="hidden" name="password" value="#$password#"/>
+                    <input type="hidden" name="phase" id="phase" value="3"/>
+                    <p class="center">
+                        <xar:var name="label">Run checks</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </p>
+                </form>
+            <xar:elseif condition="$versioncompare eq 1"/>
+                <xar:if condition="!$upgradable">
+                    You must have at least version 2.0.0 in order to run the upgrader.
+                <xar:else/>
+                    Now preparing to run an upgrade from prior version <strong><xar:var scope="config" name="System.Core.VersionNum"/></strong> to version <strong>#XARCORE_VERSION_NUM#</strong>. 
+                    <form action="upgrade.php" method="post">
+                        <input type="hidden" name="password" value="#$password#"/>
+                        <p class="center">
+                            <input type="hidden" name="phase" id="phase" value="3"/>
+                            <xar:var name="label">Continue</xar:var>
+                            <xar:button type="submit" label="$label"/>
+                        </p>
+                    </form>
+                </xar:if>
+            </xar:if>
+        <xar:elseif condition="$phase eq 3"/>
+            <form action="upgrade.php" method="post">            
+                <input type="hidden" name="password" value="#$password#"/>
+                <input type="hidden" name="phase" id="phase" value="4"/>
+                <xar:foreach in="$upgrades" key="$version" value="$upgrade">
+                    <table style="margin-top:10px; width:100%">
+                        <tr>
+                            <th style="border-bottom: dotted 1px; text-align: left">Task</th>
+                            <th style="border-bottom: dotted 1px; width:10%; text-align: left">Result</th>
+                            <th style="border-bottom: dotted 1px; width:10%; text-align: left">Reference</th>
+                        </tr>
+                        <xar:if condition="empty($upgrade['tasks'])">
+                            <tr>
+                                <td colspan="3" style="text-align: center">
+                                    No tasks completed
+                                </td>
+                            </tr>
+                        <xar:else/>
+                            <xar:foreach in="$upgrade['tasks']" value="$task">
+                                <tr>
+                                    <td>#$task['description']#</td>
+                                    <xar:if condition="$task['success']">
+                                        <xar:set name="reply_color">'green'</xar:set>
+                                    <xar:else/>
+                                        <xar:set name="reply_color">'red'</xar:set>
+                                    </xar:if>
+                                    <td style="color: #$reply_color#">#$task['reply']#</td>
+                                    <td>#$task['reference']#</td>
+                                </tr>
+                            </xar:foreach>
+                        </xar:if>
+                    </table>
+                    <xar:if condition="!empty($upgrade['message']) AND empty($upgrade['errormessage'])">
+                        <h3>#$upgrade['message']#</h3>
+                    <xar:else/>
+                        <h3>#$upgrade['errormessage']#</h3>
+                    </xar:if>
+                </xar:foreach>
+                Note: Some of these database changes cannot be repeated. Please do not try to use the back button on your browser to go back to the previous page or refresh this page.
+                <br/>
+                <h4>The next page will check the database for correct structure and consistency.</h4>
+                <p class="center">
+                    <!--
+                    <xar:var name="label">Back</xar:var>
+                    <xar:button type="cancel" label="$label"/>&#160;
+                    -->
+                    <!--
+                    <xar:if condition="empty($upgrade['errormessage'])">
+                        <xar:var name="label">Continue</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </xar:if>
+                    -->
+                    <xar:var name="label">Continue</xar:var>
+                    <xar:button type="submit" label="$label"/>
+                </p>
+            </form>
+        <xar:elseif condition="$phase eq 4"/>
+            <form action="upgrade.php" method="post">
+                <input type="hidden" name="password" value="#$password#"/>
+                <input type="hidden" name="phase" id="phase" value="5"/>
+                <xar:foreach in="$checks" key="$version" value="$check">
+                    <table style="margin-top:10px; width:100%">
+                        <tr>
+                            <th style="border-bottom: dotted 1px; text-align: left">Task</th>
+                            <th style="border-bottom: dotted 1px; width:10%; text-align: left">Result</th>
+                            <th style="border-bottom: dotted 1px; width:10%; text-align: left">Reference</th>
+                        </tr>
+                        <xar:if condition="empty($check['tasks'])">
+                            <tr>
+                                <td colspan="3" style="text-align: center">
+                                    No checks available/required
+                                </td>
+                            </tr>
+                        <xar:else/>
+                            <xar:foreach in="$check['tasks']" value="$task">
+                                <tr>
+                                    <td>#$task['description']#</td>
+                                    <xar:if condition="$task['success']">
+                                        <xar:set name="reply_color">'green'</xar:set>
+                                    <xar:else/>
+                                        <xar:set name="reply_color">'red'</xar:set>
+                                    </xar:if>
+                                    <td style="color: #$reply_color#">#$task['reply']#</td>
+                                    <td>#$task['reference']#</td>
+                                </tr>
+                            </xar:foreach>
+                        </xar:if>
+                    </table>
+                    <xar:if condition="!empty($check['message']) AND empty($check['errormessage'])">
+                        <h3>#$check['message']#</h3>
+                    <xar:else/>
+                        <h3>#$check['errormessage']#</h3>
+                    </xar:if>
+                </xar:foreach>
+                <p class="center">
+                    <xar:var name="label">Back</xar:var>
+                    <xar:button type="cancel" label="$label"/>&#160;
+                    <!--
+                    <xar:if condition="empty($check['errormessage'])">
+                        <xar:var name="label">Continue</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </xar:if>
+                    -->
+                    <xar:var name="label">Continue</xar:var>
+                    <xar:button type="submit" label="$label"/>
+                </p>
+            </form>
+        <xar:elseif condition="$phase eq 5"/>
+            <h3>Your upgrade is complete</h3>
+            <h2>Next Steps:</h2>
+            <p>
+                You can now customize your installation to match your needs. Manage sitewide settings with the configuration options of the <strong>Base module</strong>. Use the <strong>Modules administration</strong> to install any additional features, or use the <strong>Blocks administration</strong> to adjust the look of your sidebars or add blocks to your site. You can do either of these at any time via the Admin menu.
+            </p>
+            <div style="clear: both; float: left; width: 25%">
+                <h3><a href="index.php?module=base&amp;type=admin&amp;func=modifyconfig">I want to configure the site</a></h3>
+            </div>
+            <div style="float: left; width: 25%">
+                <h3><a href="index.php?module=modules&amp;type=admin&amp;func=list">I want to add modules</a></h3>
+            </div>
+            <div style="float: left; width: 25%">
+                <h3><a href="index.php?module=blocks&amp;type=admin&amp;func=view_instances">I want to manage blocks</a></h3>
+            </div>
+            <div style="float: left; width: 25%">
+                <h3><a href="index.php">Just launch the site!</a></h3>
+            </div>
+            <br />
+            <br />
+            <h2>Thank you for using Xaraya.</h2>
+            <h2>Notes for Version #XARCORE_VERSION_NUM#</h2>
+            <xar:if condition="XARCORE_VERSION_NUM eq '2.1.0'">
+                <xar:template file="notes-210"/>
+            <xar:elseif condition="XARCORE_VERSION_NUM eq '2.2.0'"/>
+                <xar:template file="notes-220"/>
+            </xar:if>
+        </xar:if>
+        <xar:if condition="!empty($upgrade['errormessage'])">
+            <p class="warning">#$upgrade['errormessage']#</p>
+        </xar:if>
+    </div>
+</xar:template>

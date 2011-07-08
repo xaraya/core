@@ -1,22 +1,30 @@
 <?php
 /**
- * Modify configuration of this module
- * @package core modules
+ * Modify the configuration settings of this module
+ *
+ * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Privileges module
  * @link http://xaraya.com/index.php/release/1098.html
+ *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
- * modify configuration
+ * Modify the configuration settings of this module
+ *
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ *
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
 function privileges_admin_modifyconfig()
 {
-    // Security Check
-    if (!xarSecurityCheck('AdminPrivilege')) return;
+    // Security
+    if (!xarSecurityCheck('AdminPrivileges')) return;
+    
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('testergroup', 'int', $testergroup, xarModVars::get('privileges', 'testergroup'), XARVAR_NOT_REQUIRED)) return;
@@ -147,7 +155,7 @@ function privileges_admin_modifyconfig()
                     if (strcmp($password, $password2) != 0) {
                         $msg = xarML('Last Resort Admin Creation failed! <br />The two password entries are not the same, please try again.');
                         xarSession::setVar('statusmsg', $msg);
-                       xarResponse::redirect(xarModURL('privileges', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
+                       xarController::redirect(xarModURL('privileges', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
                     }
                     $secret = array(
                                 'name' => MD5($name),

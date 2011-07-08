@@ -10,137 +10,89 @@
         </p>
     </xar:sec>
      -->
-    <xar:if condition="!empty($usercontent)">
+    <xar:if condition="!empty($userlinks)">
         <ul class="xar-menu-section">
             <li class="xar-menu-section">
                 <ul class="xar-menu-item">
-                    <xar:foreach in="$usercontent" value="$item">
-                        <xar:if condition="empty($item['url'])">
-                            <li class="xar-menu-item">
-                                #$item['title']#
-                            </li>
-                            <xar:elseif condition="!empty($item['child']) and ($item['here'])"/>
-                            <li class="xar-menu-item-current">
-                                <ul class="xar-menu-subitem">
-                                    <li class="xar-menu-subitem-current">
-                                        <a href="#$item['url']#" title="#$item['comment']#">
-                                            #$item['title']#
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <xar:elseif condition="($item['here']) and empty($item['child'])"/>
-                            <li class="xar-menu-item-current">
-                                <a name="activeitem" href="#$item['url']#" title="#$item['comment']#">
-                                    #$item['title']#
-                                </a>
-                            </li>
-                            <xar:elseif condition="!empty($item['child'])"/>
-                            <li class="xar-menu-item">
-                                <ul class="xar-menu-subitem">
-                                    <li class="xar-menu-subitem">
-                                        <a href="#$item['url']#" title="#$item['comment']#">
-                                            #$item['title']#
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <xar:else />
-                            <li class="xar-menu-item">
-                                <a href="#$item['url']#" title="#$item['comment']#">
-                                    #$item['title']#
-                                </a>
-                            </li>
-                        </xar:if>
-                    </xar:foreach>
+                    <!-- hand the links off to the common blocks-menu-menulinks include template
+                         the template recursively includes itself to add sublinks to any number
+                         of nested levels, and also ensures menus are consistent  :)
+                         You can of course over-ride this block template, or the include itself
+                         to provide unique styling for individual menus
+                    -->
+                    <xar:set name="subdata">array(
+                        'menulinks' => $userlinks,      // pass the menulinks
+                        'menuid' => 'menu' . $blockid,  // pass a unique menuid
+                        'marker' => $marker,            // pass through the marker
+                        'maxlevels' => 2                // specify max levels
+                    )</xar:set>
+                    <xar:template type="module" module="base" file="blocks-menu-menulinks" subdata="$subdata"/>
                 </ul>
             </li>
         </ul>
     </xar:if>
-    <xar:if condition="!empty($usermods)">
+
+    <xar:if condition="!empty($modlinks)">
         <ul class="xar-menu-section">
             <li class="xar-menu-section">
                 <h4>Modules</h4>
                 <ul class="xar-menu-item">
-                    <xar:foreach in="$usermods" value="$mod" key="$modname">
-                        <xar:if condition="$mod['modactive']">
-                            <li class="xar-menu-item-current">
-                                <a name="activeitem" title="#$mod['desc']#">
-                                    #$mod['label']#
-                                </a>
-                                <xar:if condition="$indlinks ne ''">
-                                    <ul class="xar-menu-subitem">
-                                        <xar:foreach in="$indlinks" value="$sublinks" key="$sublink">
-                                            <!--
-                                                determine and indicate current states of module functions display
-                                            -->
-                                            <xar:if condition="$sublinks['funcactive']">
-                                                <li class="xar-menu-subitem-current">
-                                                    <a name="activesubitem" title="#$sublinks['usertitle']#">
-                                                        #$sublinks['userlabel']# #$marker#
-                                                    </a>
-                                                </li>
-                                                <xar:else />
-                                                <li class="xar-menu-subitem">
-                                                    <a href="#$sublinks['userlink']#" title="#$sublinks['usertitle']#">
-                                                        #$sublinks['userlabel']#
-                                                    </a>
-                                                </li>
-                                            </xar:if>
-                                        </xar:foreach>
-                                    </ul>
-                                </xar:if>
-                            </li>
-                            <xar:elseif condition="$mod['modactive'] and !$mod['link']"/>
-                                <li class="xar-menu-section">
-                                    #$mod['label']#
-                                </li>
-                            <xar:else />
-                                <li class="xar-menu-item">
-                                    <a href="#$mod['link']#" title="#$mod['desc']#">
-                                        #$mod['label']#
-                                    </a>
-                                </li>
-                        </xar:if>
-                    </xar:foreach>
+                    <!-- hand the links off to the common blocks-menu-menulinks include template
+                         the template recursively includes itself to add sublinks to any number
+                         of nested levels, and also ensures menus are consistent  :)
+                         You can of course over-ride this block template, or the include itself
+                         to provide unique styling for individual menus
+                    -->
+                    <xar:set name="subdata">array(
+                        'menulinks' => $modlinks,       // pass the menulinks
+                        'menuid' => 'menu' . $blockid,  // pass a unique menuid
+                        'marker' => $marker,            // pass through the marker
+                        'maxlevels' => 2                // specify max levels
+                    )</xar:set>
+                    <xar:template type="module" module="base" file="blocks-menu-menulinks" subdata="$subdata"/>
                 </ul>
             </li>
         </ul>
     </xar:if>
-    <xar:if condition="!empty($showlogout) or !empty($displayprint) or !empty($displayrss) or !empty($showback)">
+
+    <xar:if condition="!empty($showlogout) OR !empty($displayprint) OR !empty($displayrss) OR !empty($showback)">
         <ul class="xar-menu-section">
             <li class="xar-menu-section">
                 <h4>Controls</h4>
                 <ul class="xar-menu-item">
                 <xar:if condition="$showback">
                     <!-- Optionally show admins a link to the back end -->
-                    <xar:sec mask="AdminBase" catch="false">
-                    <li class="xar-menu-item">
-                        <a title="#xarML('View the site back end interface')#" href="#xarModURL($module,'admin','main')#">
-                            View Back End
-                        </a>
-                    </li>
+                    <xar:sec mask="ManageBase" catch="false">
+                        <li class="xar-menu-item">
+                            <xar:var name="label">View the site back end interface</xar:var>
+                            <a title="#$label#" href="#xarModURL($thismodname,'admin','main')#">
+                                #$backlabel#
+                            </a>
+                        </li>
                     </xar:sec>
                 </xar:if>
                 <xar:if condition="$showlogout">
                    <li class="xar-menu-item">
-                        <a title="#xarML('Logout')#" href="#$logouturl#">
+                        <a title="#$logouttitle#" href="#$logouturl#">
                             #$logoutlabel#
                         </a>
                     </li>
                 </xar:if>
-                <xar:if condition="(xarThemeIsAvailable('print')) and !empty($displayprint)">
+                <!-- the block checks if the theme is available, no need to check here -->
+                <xar:if condition="!empty($displayprint)">
+                   <!-- pointless having the block get the url, just get it here if needed -->
                    <li class="xar-menu-item">
-                        <a title="#xarML('Print View')#" href="#$printurl#">
-                            Print View
+                        <a title="#$printtitle#" href="#xarServer::getCurrentURL(array('theme' => 'print'))#">
+                            #$printlabel#
                         </a>
                     </li>
                 </xar:if>
                 <!-- TODO check whether a modules supports syndication, do not hardcode in here -->
-                <xar:if condition="(xarThemeIsAvailable('rss')) and !empty($displayrss) and ($where eq 'articles')">
+                <!-- FIXME deprecate this and remove the articles dependency -->
+                <xar:if condition="!empty($displayrss) and ($thismodname eq 'articles')">
                    <li class="xar-menu-item">
-                        <a title="#xarML('Syndication')#" href="#$rssurl#">
-                            Syndication
+                        <a title="#$rsstitle#" href="#xarServer::getCurrentURL(array('theme' => 'rss'))#">
+                            #$rsslabel#
                         </a>
                     </li>
                 </xar:if>

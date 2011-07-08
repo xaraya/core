@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Module System
  * @link http://xaraya.com/index.php/release/1.html
  */
 /**
@@ -16,7 +17,7 @@
  */
 function modules_admin_settings()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminModules')) return;
 
     if (!xarVarFetch('hidecore', 'str:1:', $hidecore, '0', XARVAR_NOT_REQUIRED)) return; 
@@ -30,7 +31,8 @@ function modules_admin_settings()
     xarModUserVars::set('modules', 'selfilter', $selfilter);
     xarModUserVars::set('modules', 'selsort', $selsort);
     
-    xarResponse::redirect(xarModURL('modules', 'admin', 'list', array('regen' => $regen)));
+    xarController::redirect(xarModURL('modules', 'admin', 'list', array('regen' => $regen)));
+    return true;
 }
 
 ?>

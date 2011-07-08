@@ -134,13 +134,15 @@
         <p>Further information on the Modules module can be found at</p>
         <ul>
             <li>Modules Module Extension page at 
-            <a title="#xarML('Modules Module - Xaraya Extension 36')#"
+            <xar:var name="label">Modules Module - Xaraya Extension 36</xar:var>
+            <a title="#$label#"
             href="http://www.xaraya.com/index.php/release/1.html">Xaraya Extension and
             Releases</a>. Click on Version History tab at the bottom to get the latest release
             information.</li>
             <li>Related tutorials and documentation on Modules module found at 
+            <xar:var name="label">Related documentation on Modules</xar:var>
             <a href="http://www.xaraya.com/index.php/keywords/modules/"
-            title="#xarML('Related documentation on Modules')#">Xaraya Documentation.</a></li>
+            title="#$label#">Xaraya Documentation.</a></li>
         </ul>
         <p class="xar-sub">
         <strong>&#160;Modules Module Overview</strong>

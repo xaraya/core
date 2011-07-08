@@ -9,13 +9,13 @@
             <label>Overview</label>
         </menuitem>
         <menuitem>
-            <mask>AdminMail</mask>
+            <mask>ManageMail</mask>
             <includes>
                 <includeitem>compose</includeitem>
             </includes>
             <target>compose</target>
-            <title>Test your email configuration</title>
-            <label>Test Configuration</label>
+            <title>Send an email message</title>
+            <label>Compose Message</label>
         </menuitem>
         
         <!-- Hide for now

@@ -6,7 +6,12 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
-        <h2>Manage #$itemtypename# '#$name#':</h2>
+        <xar:if condition="$itemtype eq xarRoles::ROLES_USERTYPE">
+            <xar:set name="thisname">$object->properties['uname']->getValue()</xar:set>
+        <xar:else />
+            <xar:set name="thisname">$object->properties['name']->getValue()</xar:set>
+        </xar:if>
+        <h2>Manage #$itemtypename# '#$thisname#':</h2>
         <xar:if condition="count($parents) gt 0">
             <div>
                 <ul class="xar-tabs xar-alt xar-norm-outline">
@@ -17,8 +22,8 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#"
-                                title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">
+                                <xar:var name="label">Show this group</xar:var>
+                                <a href="#xarModURL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
                                 #xarVarPrepForDisplay($parents[$i]['parentname'])#</a>
                             </li>
                         </xar:if>
@@ -34,28 +39,28 @@
                 <xar:var name="label">Actions</xar:var>
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-admin-display;&amp;id=#$id#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('roles','admin','display',array('id'=>$id))#" class="xar-norm xar-norm-outline">
                         Display
                     </a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-admin-modify;&amp;id=#$id#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('roles','admin','modify',array('id'=>$id))#" class="xar-norm xar-norm-outline">
                         Modify
                     </a>
                 </li>
                 <li class="xar-tab-active">
-                    <a href="&xar-modurl-roles-admin-delete;&amp;id=#$id#" class="xar-accent xar-accent-outline">
+                    <a href="#xarModURL('roles','admin','delete',array('id'=>$id))#" class="xar-accent xar-accent-outline">
                         Delete
                     </a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-roles-admin-showprivileges;&amp;id=#$id#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('roles','admin','showprivileges',array('id'=>$id))#" class="xar-norm xar-norm-outline">
                         Privileges
                     </a>
                 </li>
                 <xar:if condition="$ptype eq 1">
                     <li class="xar-tab">
-                        <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$id#" class="xar-norm xar-norm-outline">
+                        <a href="#xarModURL('roles','admin','showusers',array('id'=>$id))#" class="xar-norm xar-norm-outline">
                             Users
                         </a>
                     </li>
@@ -65,15 +70,17 @@
         <xar:if condition="$frozen">
             <p>You do not have the privileges to delete #$itemtypename# #$name#</p>
         <xar:else />
-            <form method="post" action="&xar-modurl-roles-admin-delete;" enctype="application/x-www-form-urlencoded">
+            <form method="post" action="#xarModURL('roles','admin','delete')#" enctype="application/x-www-form-urlencoded">
                 <h3 class="xar-align-center">Confirm the deletion of #$itemtypename# #$name#</h3>
                 <div class="xar-align-center">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="id" id="id" value="#$id#"/>
                     <input type="hidden" name="confirmation" id="confirmation" value="1"/>
                     <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#"/>
-                    <input type="submit" value="#xarML('Delete')#" class="xar-margin-thickright"/>
-                    <input type="button" value="#xarML('Cancel')#" onclick="document.location='&xar-modurl-roles-admin-display;&amp;id=#$id#';" class="xar-margin-thickleft"/>
+                    <xar:var name="label">Delete</xar:var>
+                    <input type="submit" value="#$label#" class="xar-margin-thickright"/>
+                    <xar:var name="label">Cancel</xar:var>
+                    <input type="button" value="#$label#" onclick="document.location='&xar-modurl-roles-admin-display;&amp;id=#$id#';" class="xar-margin-thickleft"/>
                 </div>
             </form>
         </xar:if>

@@ -1,10 +1,22 @@
 <?php
 /**
+ * @package core
+ * @subpackage caching
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+
+/**
  * Cache data using APC [http://pecl.php.net/apc/]
  */
-class xarCache_APC_Storage extends xarCache_Storage
+
+sys::import('xaraya.caching.storage');
+class xarCache_APC_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    public function __construct(array $args = array())
+    public function __construct(Array $args = array())
     {
         parent::__construct($args);
         $this->storage = 'apc';

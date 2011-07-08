@@ -1,21 +1,24 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  * @todo move the xml generate code to a template based system.
  */
 /**
  * Export an object definition or an object item to XML
  */
-function dynamicdata_util_export($args)
+function dynamicdata_util_export(Array $args=array())
 {
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    // Security
+    if (!xarSecurityCheck('AdminDynamicData')) return;
 
     extract($args);
 
@@ -42,6 +45,10 @@ function dynamicdata_util_export($args)
         $data['xml'] = '';
         return $data;
     }
+    // check security of the object
+    if (!$myobject->checkAccess('config'))
+        return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $myobject->label));
+
     $data['objectid'] = $myobject->objectid;
 
     $proptypes = DataPropertyMaster::getPropertyTypes();
@@ -107,7 +114,7 @@ function dynamicdata_util_export($args)
                         if ($name == 'configuration') {
                         // don't replace anything in the serialized value
                             $xml .= "    <$name>" . $item[$name];
-                        }else {
+                        } else {
                             $xml .= "    <$name>" . xarVarPrepForDisplay($item[$name]);
                         }
                     } else {

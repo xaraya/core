@@ -3,26 +3,31 @@
  * Get all users
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * get all users
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['order'] comma-separated list of order items; default 'name'
- * @param $args['selection'] extra coonditions passed into the where-clause
- * @param $args['group'] comma-separated list of group names or IDs, or
- * @param $args['idlist'] array of user ids
- * @returns array
- * @return array of users, or false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['order'] comma-separated list of order items; default 'name'<br/>
+ *        string   $args['selection'] extra coonditions passed into the where-clause<br/>
+ *        string   $args['group'] comma-separated list of group names or IDs, or<br/>
+ *        array    $args['idlist'] array of user ids
+ * @return mixed array of users, or false on failure
  */
-function roles_userapi_getall($args)
+function roles_userapi_getall(Array $args=array())
 {
     extract($args);
+    // LEGACY
+    if ((empty($idlist) && !empty($uidlist))) {
+        $idlist = $uidlist;
+    }
 
     // Optional arguments.
     if (!isset($startnum)) $startnum = 1;
@@ -63,7 +68,7 @@ function roles_userapi_getall($args)
                 'roles', 'user', 'get',
                 array(
                     (is_numeric($group) ? 'id' : 'name') => $group,
-                    'itemtype' => ROLES_GROUPTYPE
+                    'itemtype' => xarRoles::ROLES_GROUPTYPE
                 )
             );
             if (isset($group['id']) && is_numeric($group['id'])) {
@@ -75,12 +80,12 @@ function roles_userapi_getall($args)
 
     $where_clause = array();
     $bindvars = array();
-    if (!empty($state) && is_numeric($state) && $state != ROLES_STATE_CURRENT) {
+    if (!empty($state) && is_numeric($state) && $state != xarRoles::ROLES_STATE_CURRENT) {
         $where_clause[] = 'roletab.state = ?';
         $bindvars[] = (int) $state;
     } else {
         $where_clause[] = 'roletab.state <> ?';
-        $bindvars[] = (int) ROLES_STATE_DELETED;
+        $bindvars[] = (int) xarRoles::ROLES_STATE_DELETED;
     }
 
     if (empty($group_list)) {
@@ -118,9 +123,9 @@ function roles_userapi_getall($args)
     }
 
     // Hide pending users from non-admins
-    if (!xarSecurityCheck('AdminRole', 0)) {
+    if (!xarSecurityCheck('AdminRoles', 0)) {
         $where_clause[] = 'roletab.state <> ?';
-        $bindvars[] = (int) ROLES_STATE_PENDING;
+        $bindvars[] = (int) xarRoles::ROLES_STATE_PENDING;
     }
 
     // If we aren't including anonymous in the query,
@@ -133,7 +138,7 @@ function roles_userapi_getall($args)
     }
 
     // Return only users (not groups).
-    $where_clause[] = 'roletab.itemtype = ' . ROLES_USERTYPE;
+    $where_clause[] = 'roletab.itemtype = ' . xarRoles::ROLES_USERTYPE;
 
     // Add the where-clause to the query.
     $query .= ' WHERE ' . implode(' AND ', $where_clause);
@@ -166,10 +171,17 @@ function roles_userapi_getall($args)
     $result = $stmt->executeQuery($bindvars);
 
     // Put users into result array
+    sys::import('modules.dynamicdata.class.properties.master');
+    $nameproperty = DataPropertyMaster::getProperty(array('name' => 'name'));
+    
     $roles = array();
     while($result->next()) {
         list($id, $uname, $name, $email, $pass, $state, $date_reg) = $result->fields;
-        if (xarSecurityCheck('ReadRole', 0, 'Roles', "$uname")) {
+        if (xarSecurityCheck('ReadRoles', 0, 'Roles', "$uname")) {
+
+            $nameproperty->value = $name;
+            $name = $nameproperty->getValue();
+            
             if (!empty($idlist)) {
                 $roles[$id] = array(
                     'id'       => (int) $id,

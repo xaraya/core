@@ -1,48 +1,35 @@
 <?php
 /**
- * Update the configuration parameters
+ * Modify the configuration settings of this module
  *
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 
 /**
- * Update the configuration parameters of the module based on data from the modification form
+ * Modify the configuration settings of this module
+ *
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
  * @param   no parameters
- * @return  true on success or void on failure
- * @throws  no exceptions
- * @todo    nothing
+ * @return mixed data array for the template display or output display string if invalid data submitted
 */
 function mail_admin_modifyconfig()
 {
-    // Security Check
+    // Security
     if (!xarSecurityCheck('AdminMail')) return;
 
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab','str:1', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
     
-    // Quick Check for E_ALL
-    $searchstrings = xarModVars::get('mail', 'searchstrings');
-    $replacestrings = xarModVars::get('mail', 'replacestrings');
-    if (empty($searchstrings)){
-        $searchstrings = serialize('%%Search%%');
-        xarModVars::set('mail', 'searchstrings', $searchstrings);
-    }
-    if (empty($replacestrings)){
-        $replacestrings = serialize('Replace %%Search%% with this text');
-        xarModVars::set('mail', 'replacestrings', $replacestrings);
-    }
-    $data['searchstrings'] = unserialize(xarModVars::get('mail', 'searchstrings'));
-    $data['replacestrings'] = unserialize(xarModVars::get('mail', 'replacestrings'));
-
     // Get encoding
     $data['encoding'] = xarModVars::get('mail', 'encoding');
 
@@ -162,10 +149,8 @@ function mail_admin_modifyconfig()
                     if (!empty($smtpPassword)) xarModVars::set('mail', 'smtpPassword', $smtpPassword);
 
                     xarModVars::set('mail', 'sendmailpath', $sendmailpath);
-                    $searchstrings = serialize($searchstrings);
-                    xarModVars::set('mail', 'searchstrings', $searchstrings);
-                    $replacestrings = serialize($replacestrings);
-                    xarModVars::set('mail', 'replacestrings', $replacestrings);
+                    xarModVars::set('mail', 'searchstrings', serialize($searchstrings));
+                    xarModVars::set('mail', 'replacestrings', serialize($replacestrings));
                     xarModVars::set('mail', 'suppresssending', $suppresssending);
                     xarModVars::set('mail', 'redirectsending', $redirectsending);
                     xarModVars::set('mail', 'redirectaddress', $redirectaddress);

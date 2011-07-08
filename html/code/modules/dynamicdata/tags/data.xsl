@@ -270,7 +270,7 @@
     <xsl:choose>
       <xsl:when test="not(@property)">
         <!-- No property, gotta make one -->
-        <xsl:text>sys::import('modules.dynamicdata.class.properties');</xsl:text>
+        <xsl:text>try{sys::import('modules.dynamicdata.class.properties');</xsl:text>
         <xsl:text>$property =&amp; DataPropertyMaster::getProperty(</xsl:text>
         <xsl:call-template name="atts2args">
           <xsl:with-param name="nodeset" select="@*[name() != 'hidden' and name() != 'preset']"/>
@@ -297,7 +297,7 @@
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>);</xsl:text>
+        <xsl:text>);}catch(Exception $e){if(xarModVars::get('dynamicdata','debugmode')&amp;&amp;in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))echo "&lt;pre&gt;".$e->getMessage()."&lt;/pre&gt;";}</xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <!-- We do have a property in the attribute -->
@@ -338,7 +338,7 @@
     <xsl:choose>
         <xsl:when test="not(@property)">
           <!-- No prop, get one (the right one, preferably) -->
-          <xsl:text>sys::import('modules.dynamicdata.class.properties');</xsl:text>
+          <xsl:text>try{sys::import('modules.dynamicdata.class.properties');</xsl:text>
           <xsl:text>$property =&amp; DataPropertyMaster::getProperty(</xsl:text>
           <xsl:call-template name="atts2args">
             <xsl:with-param name="nodeset" select="@*"/>
@@ -356,7 +356,7 @@
               <xsl:value-of select="@field"/>
             </xsl:otherwise>
           </xsl:choose>
-          <xsl:text>);</xsl:text>
+          <xsl:text>);}catch(Exception $e){}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
           <!-- We already had a property object, run its output method -->

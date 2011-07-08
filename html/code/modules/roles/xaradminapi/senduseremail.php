@@ -3,11 +3,12 @@
  * Send emails to users
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -17,17 +18,17 @@
  * Ex: Lost Password, Confirmation
  * @todo FIXME: change name of id parameter to something that implies plurality, review why we need k => v array
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['id'] array of id of the user(s) array($id => '1')
- * @param $args['mailtype'] type of the message to send (confirmation, deactivation, ...)
- * @param $args['message'] the message of the mail (optionnal)
- * @param $args['subject'] the subject of the mail (optionnal)
- * @param $args['pass'] new password of the user (optionnal)
- * @param $args['ip'] ip adress of the user (optionnal)
- * @returns bool
- * @return true on success, false on failures
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['id'] array of id of the user(s) array($id => '1')<br/>
+ *        string   $args['mailtype'] type of the message to send (confirmation, deactivation, ...)<br/>
+ *        string   $args['message'] the message of the mail (optionnal)<br/>
+ *        string   $args['subject'] the subject of the mail (optionnal)<br/>
+ *        string   $args['pass'] new password of the user (optionnal)<br/>
+ *        string   $args['ip'] ip adress of the user (optionnal)
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function roles_adminapi_senduseremail($args)
+function roles_adminapi_senduseremail(Array $args=array())
 {
     // Send Email
     extract($args);
@@ -39,16 +40,22 @@ function roles_adminapi_senduseremail($args)
 
     if (!isset($subject)) $subject = xarTplCompileString($strings['subject']);
     if (!isset($message)) $message = xarTplCompileString($strings['message']);
-
     //Get the common search and replace values
     //if (is_array($id)) {
         foreach ($id as $userid => $val) {
             ///get the user info
-            $user = xarMod::apiFunc('roles','user','get', array('id' => $userid, 'itemtype' => ROLES_USERTYPE));
+            $user = xarMod::apiFunc('roles','user','get', array('id' => $userid, 'itemtype' => xarRoles::ROLES_USERTYPE));
             if (!isset($pass)) $pass = '';
             if (!isset($ip)) $ip = '';
-            if (isset($user['valcode'])) $validationlink = xarServer::getBaseURL() . "val.php?v=".$user['valcode']."&u=".$userid;
-            else $validationlink = '';
+            
+            $validationlink = isset($user['valcode']) ?
+                xarModURL('roles', 'user', 'getvalidation',
+                    array(
+                        'uname' => $user['uname'],
+                        'phase' => 'getvalidate',
+                        'valcode' => $user['valcode'],
+                    ))
+                : '';            
 
             //user specific data
             $data = array('myname' => $user['name'],
@@ -72,14 +79,11 @@ function roles_adminapi_senduseremail($args)
             // retrieve the dynamic properties (if any) for use in the e-mail too
 
             // get the DataObject defined for this module and item id
-            $object = xarMod::apiFunc('dynamicdata','user','getobject',
-                                         array('module' => 'roles',
-                                               // we know the item id now...
-                                               'itemid' => $userid,
-                                               'itemtype' => ROLES_USERTYPE));
+            sys::import('modules.dynamicdata.class.objects.master');
+            $object = DataObjectMaster::getObject(array('name' => 'roles_users'));
             if (isset($object) && !empty($object->objectid)) {
                 // retrieve the item itself
-                $itemid = $object->getItem();
+                $itemid = $object->getItem(array('itemid' => $userid));
                 if (!empty($itemid) && $itemid == $userid) {
                     // get the Dynamic Properties of this object
                     $properties =& $object->getProperties();

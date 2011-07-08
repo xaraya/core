@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <link rel='icon' href="favicon.ico"/>
     <xar:set name="active_step">8</xar:set>
     <div id="main_right">
         <xar:template file="status"/>
@@ -11,14 +12,16 @@
         <form action="#xarModURL('installer','admin','confirm_configuration')#" method="post">
                 <xar:loop name="$options1">
                     <p>
-                        <xar:if condition="$loop:item['option'] eq ''">#$loop:item['comment']# 
-                            <xar:else />
+                        <xar:if condition="$loop:item['option'] eq ''">
+                            #$loop:item['comment']# 
+                        <xar:else />
                             <xar:if condition="$loop:item['option'] == 'true'">
                                 <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" checked="checked"/>
-                                <xar:else />
-                            <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" checked="checked"/>
+                            <xar:else />
+                                <input type="checkbox" name="chosen[]" id="chosen1_#$loop:index#" value="#$loop:item['item']#" checked="checked"/>
+                            </xar:if>&#160;
+                            <label for="chosen1_#$loop:index#">#$loop:item['comment']#</label>
                         </xar:if>
-                        <label for="chosen1_#$loop:index#">#$loop:item['comment']#</label></xar:if>
                     </p>
                 </xar:loop>
                 <p>

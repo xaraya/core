@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -15,6 +16,7 @@
  * Currently does not work, due to design
  * of menu not in place, and DD not in place.
  * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @return array data for the template display
  * @todo   Finish this function.
  */
 function roles_user_account()
@@ -31,7 +33,7 @@ function roles_user_account()
     if (!xarUserIsLoggedIn()){
         // bring the user back here after login :)
         $redirecturl = xarModURL('roles', 'user', 'account');
-        xarResponse::redirect(xarModURL($defaultloginmodname,'user','showloginform', array('redirecturl' => urlencode($redirecturl))));
+        xarController::redirect(xarModURL($defaultloginmodname,'user','showloginform', array('redirecturl' => urlencode($redirecturl))));
     }
 
     $id = xarUserGetVar('id');
@@ -125,9 +127,6 @@ function roles_user_account()
             $object->tplmodule = 'roles';   // roles/xartemplates/objects/
             $object->template = 'account';  // showdisplay- || showform- account.xt
             if (empty($tab) || $tab == 'profile') {
-                // set up the roles_user object for display
-                $fieldlist = 'name,uname,state,regdate';
-                $object->setFieldList($fieldlist);
             } elseif ($tab == 'basic') {
                 // set up the roles_user object for edit
                 if (xarModVars::get('roles','setuserlastlogin')) {
@@ -135,7 +134,7 @@ function roles_user_account()
                     if (xarUserIsLoggedIn() && xarUserGetVar('id')==$id) { //they should be but ..
                         $userlastlogin = xarSession::getVar('roles_thislastlogin');
                         $usercurrentlogin = xarModUserVars::get('roles','userlastlogin',$id);
-                    }elseif (xarSecurityCheck('AdminRole',0,'Roles',$name) && xarModUserVars::get('roles','userlastlogin',$id)){
+                    }elseif (xarSecurityCheck('AdminRoles',0,'Roles',$name) && xarModUserVars::get('roles','userlastlogin',$id)){
                         $usercurrentlogin = '';
                         $userlastlogin = xarModUserVars::get('roles','userlastlogin',$id);
                     }else{
@@ -153,7 +152,7 @@ function roles_user_account()
                 //$utimezone = $usertimezonedata['timezone'];
                 $utimezone = xarModUserVars::get('roles','usertimezone');
                 $item['module'] = 'roles';
-                $item['itemtype'] = ROLES_USERTYPE;
+                $item['itemtype'] = xarRoles::ROLES_USERTYPE;
 
                 $hooks = xarModCallHooks('item','modify',$id,$item);
                 if (isset($hooks['dynamicdata'])) {
@@ -173,7 +172,9 @@ function roles_user_account()
                 $data['formdata'] = $formdata;
             }
             $object->getItem(array('itemid' => $id));
-            $data['object'] = $object;
+            $data['object'] = $object;   
+            // Bug 6566: name property only applies to roles_users object  
+            $data['object']->properties['name']->display_layout = 'single';
         }
         // set some sensible defaults for common stuff
         if (empty($data['formaction'])) {
@@ -192,7 +193,7 @@ function roles_user_account()
             $data['authid'] = xarSecGenAuthKey('roles');
         }
         $data['menutabs'] = $menutabs;
-
+        
     }
     $data['id']          = xarUserGetVar('id');
     $data['name']         = xarUserGetVar('name');

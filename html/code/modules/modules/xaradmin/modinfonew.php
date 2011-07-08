@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Module System
  * @link http://xaraya.com/index.php/release/1.html
  */
 /**
@@ -14,12 +15,14 @@
  * opens in new window when browser is javascript enabled
  * @author Xaraya Development Team
  * @access public
- * @param none
- * @returns array
+ * @return array data for the template display
  * @todo some facelift
  */
 function modules_admin_modinfonew()
 {
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+    
     $data = array();
     
     if (!xarVarFetch('id', 'notempty', $id)) {return;}
@@ -59,6 +62,16 @@ function modules_admin_modinfonew()
         $data['moddependencies']             = xarML('None');
     }
     
+    $modname = $modinfo['name'];
+    $subjects = array();
+    $observers = xarEvents::getObserverModules();
+    $hookobservers = xarHooks::getObserverModules($modname);
+    //$hooksubjects = xarHooks::getSubjectModules();
+    
+    if (!empty($hookobservers[$modname]['hooks'])) {
+        $data['hookobservers'] = $hookobservers[$modname]['hooks'];
+    }
+        
     return $data;
 }
 

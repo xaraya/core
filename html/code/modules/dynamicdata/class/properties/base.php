@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  */
 
@@ -15,7 +16,6 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
 /**
  * Base Class for Dynamic Properties
  *
- * @todo is this abstract?
  * @todo the visibility of most of the attributes can probably be protected
  */
 class DataProperty extends Object implements iDataProperty
@@ -31,7 +31,7 @@ class DataProperty extends Object implements iDataProperty
     public $status         = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     public $seq            = 0;
     public $format         = '0'; //<-- eh?
-    public $filepath       = 'modules/dynamicdata/xarproperties';
+    public $filepath       = 'auto';
     public $class          = '';         // this property's class
 
     // Attributes for runtime
@@ -44,9 +44,12 @@ class DataProperty extends Object implements iDataProperty
     public $anonymous = 0;        // if true the name, rather than the dd_xx designation is used in displaying the property
 
     public $datastore = '';    // name of the data store where this property comes from
+    public $operation = null;  // some operation or function to apply for this property (COUNT, SUM, ...)
+    public $aliasname = null;  // the aliasname used with the operation or function on this property
 
     public $value = null;      // value of this property for a particular DataObject
     public $invalid = '';      // result of the checkInput/validateValue methods
+    public $fieldname = null;  // fieldname used by checkInput() for configurations who need them (e.g. file uploads)
 
     public $include_reference = 0; // tells the object this property belongs to whether to add a reference of itself to me
     public $objectref = null;  // object this property belongs to
@@ -189,6 +192,11 @@ class DataProperty extends Object implements iDataProperty
         $this->value = $value;
     }
 
+    public function clearValue()
+    {
+        $this->value = null;
+    }
+
     /**
      * Fetch the input value of this property
      *
@@ -240,15 +248,27 @@ class DataProperty extends Object implements iDataProperty
         else $this->setValue($value);
 
         if (isset($this->validation_notequals)  && $value == $this->validation_notequals) {
-            $this->invalid = xarML('#(1) cannot have the value #(2)', $this->name,$this->validation_notequals );
+            if (!empty($this->validation_notequals_invalid)) {
+                $this->invalid = xarML($this->validation_notequals_invalid);
+            } else {
+                $this->invalid = xarML('#(1) cannot have the value #(2)', $this->name,$this->validation_notequals );
+            }
             $this->value = null;
             return false;
         } elseif (isset($this->validation_equals)  && $value != $this->validation_equals) {
-            $this->invalid = xarML('#(1) must have the value #(2)', $this->name,$this->validation_notequals );
+            if (!empty($this->validation_equals_invalid)) {
+                $this->invalid = xarML($this->validation_equals_invalid);
+            } else {
+                $this->invalid = xarML('#(1) must have the value #(2)', $this->name,$this->validation_notequals );
+            }
             $this->value = null;
             return false;
         } elseif (isset($this->validation_allowempty) && !$this->validation_allowempty && empty($value)) {
-            $this->invalid = xarML('#(1) cannot be empty', $this->name);
+            if (!empty($this->validation_allowempty_invalid)) {
+                $this->invalid = xarML($this->validation_allowempty_invalid);
+            } else {
+                $this->invalid = xarML('#(1) cannot be empty', $this->name);
+            }
             $this->value = null;
             return false;
         }
@@ -278,7 +298,8 @@ class DataProperty extends Object implements iDataProperty
      */
     function setItemValue($itemid, $value)
     {
-        $this->_items[$itemid][$this->name] = $value;
+        $this->value = $value;
+        $this->_items[$itemid][$this->name] = $this->value;
     }
 
     /**
@@ -364,11 +385,12 @@ class DataProperty extends Object implements iDataProperty
             $data['invalid']  = '';
         }
 
-        // Add the configuration options if they have not been overridden
+        // Add the configuration options defined via UI
         if(isset($data['configuration'])) {
             $this->parseConfiguration($data['configuration']);
             unset($data['configuration']);
         }
+        // Now check for overrides from the template
         foreach ($this->configurationtypes as $configtype) {
             $properties = $this->getConfigProperties($configtype,1);
             foreach ($properties as $name => $configarg) {
@@ -404,12 +426,25 @@ class DataProperty extends Object implements iDataProperty
         $data['name'] = $this->name;
         if (empty($data['_itemid'])) $data['_itemid'] = 0;
 
-        if(!isset($data['value'])) $data['value'] = $this->getValue();
+        if(!isset($data['value']))    $data['value']    = $this->value;
         // TODO: does this hurt when it is an array?
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
 
+        // Add the configuration options defined via UI
+        if(isset($data['configuration'])) {
+            $this->parseConfiguration($data['configuration']);
+            unset($data['configuration']);
+        }
+        // Now check for overrides from the template
+        foreach ($this->configurationtypes as $configtype) {
+            $properties = $this->getConfigProperties($configtype,1);
+            foreach ($properties as $name => $configarg) {
+                if (!isset($data[$configarg['shortname']]))
+                    $data[$configarg['shortname']] = $this->{$configarg['fullname']};
+            }
+        }
         return xarTplProperty($data['tplmodule'], $data['template'], 'showoutput', $data);
     }
 
@@ -475,8 +510,18 @@ class DataProperty extends Object implements iDataProperty
         if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
         if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
 
-        $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->getValue());
-        $data['invalid']  = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['value']    = isset($data['value']) ? $data['value'] : $this->getValue();
+        
+        // The value might be an array
+        if (is_array($data['value'])){
+            $temp = array();
+            foreach ($data['value'] as $key => $tmp) $temp[$key] = xarVarPrepForDisplay($tmp);
+            $data['value'] = $temp;
+        } else {
+            $data['value'] = xarVarPrepForDisplay($data['value']);
+        }
+
+        $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : $this->invalid;
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
@@ -491,7 +536,7 @@ class DataProperty extends Object implements iDataProperty
      * Note: don't use this if you already check the input for the whole object or in the code
      * See also preview="yes", which can be used on the object level to preview the whole object
      *
-     * @access private (= do not sub-class)
+     * @access private
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
      * @param $args['value'] value of the field (default is the current value)
      * @param $args['id'] id of the field
@@ -612,7 +657,7 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
      * @param $args['configuration'] configuration rule (default is the current configuration)
      * @param $args['id'] id of the field
-     * @return bool true if the configuration rule could be processed, false otherwise
+     * @return boolean true if the configuration rule could be processed, false otherwise
      */
     public function updateConfiguration(Array $data = array())
     {
@@ -700,20 +745,19 @@ class DataProperty extends Object implements iDataProperty
         $configproperties = array();
         $properties = $this->getPublicProperties();
         foreach ($properties as $name => $arg) {
-            if (!isset($allconfigproperties[$name])) continue;
+            // Ignore properties that are not defined as configs in the configurations table
+            // and also those that are flagged as not to be active for this property object
+            $flagname = $name . "_ignore";
+            if (!isset($allconfigproperties[$name]) || !empty($this->$flagname)) continue;
+            // Ignore properties that are not of the config $type passed
             $pos = strpos($name, "_");
             if (!$pos || (substr($name,0,$pos) != $type)) continue;
-            if ($fullname) {
-                $configproperties[$name] = $allconfigproperties[$name];
-                $configproperties[$name]['value'] = $arg;
-                $configproperties[$name]['shortname'] = substr($name,$pos+1);
-                $configproperties[$name]['fullname'] = $name;
-            } else {
-                $configproperties[substr($name,$pos+1)] = $allconfigproperties[$name];
-                $configproperties[substr($name,$pos+1)]['value'] = $arg;
-                $configproperties[substr($name,$pos+1)]['shortname'] = substr($name,$pos+1);
-                $configproperties[substr($name,$pos+1)]['fullname'] = $name;
-            }
+            // This one is good. Make an entry for it
+            $key = $fullname ? $name : substr($name,$pos+1);
+            $configproperties[$name] = $allconfigproperties[$name];
+            $configproperties[$key]['value'] = $arg;
+            $configproperties[$key]['shortname'] = substr($name,$pos+1);
+            $configproperties[$key]['fullname'] = $name;
         }
         return $configproperties;
     }

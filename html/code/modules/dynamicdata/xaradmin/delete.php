@@ -2,12 +2,14 @@
 /**
  * Delete an item
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Dynamic Data module
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -15,13 +17,14 @@
  * @param 'itemid' the id of the item to be deleted
  * @param 'confirm' confirm that this item can be deleted
  */
-function dynamicdata_admin_delete($args)
+function dynamicdata_admin_delete(Array $args=array())
 {
    extract($args);
 
     if(!xarVarFetch('objectid',   'isset', $objectid,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',       'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemid',     'id',    $itemid                          )) {return;}
+    if(!xarVarFetch('itemid',     'int:1:',    $itemid, 0, XARVAR_NOT_REQUIRED)) {return;}
+    if (empty($itemid)) return xarResponse::notFound();
     if(!xarVarFetch('confirm',    'isset', $confirm,    NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('noconfirm',  'isset', $noconfirm,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('join',       'isset', $join,       NULL, XARVAR_DONT_SET)) {return;}
@@ -38,10 +41,12 @@ function dynamicdata_admin_delete($args)
                                          'tplmodule'  => $tplmodule,
                                          'template'   => $template));
     if (empty($myobject)) return;
-    $data = $myobject->toArray();
+    
+    // Security
+    if (!$myobject->checkAccess('delete'))
+        return xarResponse::Forbidden(xarML('Delete #(1) is forbidden', $myobject->label));
 
-    // Security check
-    if(!xarSecurityCheck('DeleteDynamicDataItem',1,'Item',$data['moduleid'].":".$data['itemtype'].":".$data['itemid'])) return;
+    $data = $myobject->toArray();
 
     // recover any session var information and remove it from the var
     $data = array_merge($data,xarMod::apiFunc('dynamicdata','user','getcontext',array('module' => $tplmodule)));
@@ -50,15 +55,15 @@ function dynamicdata_admin_delete($args)
 
     if (!empty($noconfirm)) {
         if (!empty($return_url)) {
-            xarResponse::redirect($return_url);
+            xarController::redirect($return_url);
         } elseif (!empty($table)) {
-            xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'view',
+            xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
                                           array(
                                             'table'     => $table,
                                             'tplmodule' => $data['tplmodule'],
                                           )));
         } else {
-            xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'view',
+            xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
                                           array(
                                             'itemid'    => $data['objectid'],
                                             'tplmodule' => $data['tplmodule'],
@@ -70,26 +75,40 @@ function dynamicdata_admin_delete($args)
     $myobject->getItem();
 
     if (empty($confirm)) {
+        // handle special cases
+        if ($myobject->objectid == 1) {
+            // check security of the parent object
+            $tmpobject = DataObjectMaster::getObject(array('objectid' => $myobject->itemid));
+            if (!$tmpobject->checkAccess('config'))
+                return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+
+            // if we're editing a dynamic object, check its own visibility
+            if ($myobject->itemid > 3) {
+                // CHECKME: do we always need to load the object class to get its visibility ?
+                // override the default visibility and moduleid
+                $myobject->visibility = $tmpobject->visibility;
+                $myobject->moduleid = $tmpobject->moduleid;
+            }
+            unset($tmpobject);
+
+        } elseif ($myobject->objectid == 2) {
+            // check security of the parent object
+            $tmpobject = DataObjectMaster::getObject(array('objectid' => $myobject->properties['objectid']->value));
+            if (!$tmpobject->checkAccess('config'))
+                return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+            unset($tmpobject);
+        }
+
         // TODO: is this needed?
         $data = array_merge($data,xarMod::apiFunc('dynamicdata','admin','menu'));
-        $data['object'] = & $myobject;
+        $data['object'] = $myobject;
         if ($data['objectid'] == 1) {
-            $mylist = & DataObjectMaster::getObjectList(array('objectid' => $data['itemid'], 'extend' => false));
+            $mylist = DataObjectMaster::getObjectList(array('objectid' => $data['itemid']));
             if (count($mylist->properties) > 0) {
                 $data['related'] = xarML('Warning : there are #(1) properties and #(2) items associated with this object !', count($mylist->properties), $mylist->countItems());
             }
         }
         $data['authid'] = xarSecGenAuthKey();
-
-        // if we're editing a dynamic object, check its own visibility
-        if ($myobject->objectid == 1 && $myobject->itemid > 3) {
-            // CHECKME: do we always need to load the object class to get its visibility ?
-            $tmpobject = DataObjectMaster::getObject(array('objectid' => $myobject->itemid));
-            // override the default visibility and moduleid
-            $myobject->visibility = $tmpobject->visibility;
-            $myobject->moduleid = $tmpobject->moduleid;
-            unset($tmpobject);
-        }
 
         xarTplSetPageTitle(xarML('Delete Item #(1) in #(2)', $data['itemid'], $myobject->label));
 
@@ -110,7 +129,7 @@ function dynamicdata_admin_delete($args)
     // special case for a dynamic object : delete its properties too // TODO: and items
 // TODO: extend to any parent-child relation ?
     if ($data['objectid'] == 1) {
-        $mylist = & DataObjectMaster::getObjectList(array('objectid' => $data['itemid'], 'extend' => false));
+        $mylist = & DataObjectMaster::getObjectList(array('objectid' => $data['itemid']));
         foreach (array_keys($mylist->properties) as $name) {
             $propid = $mylist->properties[$name]->id;
             $propid = DataPropertyMaster::deleteProperty(array('itemid' => $propid));
@@ -119,15 +138,15 @@ function dynamicdata_admin_delete($args)
 
     $itemid = $myobject->deleteItem();
     if (!empty($return_url)) {
-        xarResponse::redirect($return_url);
+        xarController::redirect($return_url);
     } elseif (!empty($table)) {
-        xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array(
                                       'table'     => $table,
                                       'tplmodule' => $tplmodule,
                                       )));
     } else {
-        xarResponse::redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
                                       array(
                                       'name' => $myobject->name,
                                       'tplmodule' => $tplmodule,

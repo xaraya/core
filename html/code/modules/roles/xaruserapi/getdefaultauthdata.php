@@ -3,11 +3,12 @@
  * Get the default authentication module and related data
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -15,6 +16,7 @@
  * The login and logout may not be supplied by the authentication module and so could be different
  *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
+ * @param array    $args array of optional parameters<br/>
  * @return array defaultauthmodulename, defaultlogoutmodname, defaultloginmodname
  */
 function roles_userapi_getdefaultauthdata()

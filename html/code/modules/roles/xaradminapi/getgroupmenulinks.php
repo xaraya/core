@@ -3,25 +3,25 @@
  * Utility function pass individual menu items to the main menu
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * utility function pass individual menu items to the main menu
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @returns array
- * @return array containing the menulinks for the main menu items.
+ * @return array the menulinks for the main menu items.
  */
 function roles_adminapi_getgroupmenulinks()
 {
 
 // Security Check
-    if (xarSecurityCheck('AddRole',0)) {
+    if (xarSecurityCheck('AddRoles',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                    'admin',
@@ -31,7 +31,7 @@ function roles_adminapi_getgroupmenulinks()
     }
 
 // Security Check
-    if (xarSecurityCheck('EditRole',0)) {
+    if (xarSecurityCheck('EditRoles',0)) {
 
         $menulinks[] = Array('url'   => xarModURL('roles',
                                                    'admin',

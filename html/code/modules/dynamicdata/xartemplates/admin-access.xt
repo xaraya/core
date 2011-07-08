@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">Dynamic Data Administration</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-menu"/>
+        <h2>
+            Manage Access to #$object:properties.label:value#
+            <xar:set name="tab">'access'</xar:set>
+            <xar:template type="module" file="object_menu"/>
+        </h2>
+        <form method="post" action="#xarModURL('dynamicdata','admin','access')#">
+            <xar:template type="module" file="object_access"/>
+        </form>
+    </div>
+</xar:template>

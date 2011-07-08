@@ -3,23 +3,24 @@
  * Count all active users
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * Count all active users
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param bool $include_anonymous whether or not to include anonymous user
- * @param string $filter
- * @returns integer
- * @return number of users
+ * @param array    $args array of optional parameters<br/>
+ *        boolean  $args['include_anonymous'] whether or not to include anonymous user<br/>
+ *        string   $args['filter']
+ * @return integer the number of users
  */
-function roles_userapi_countallactive($args)
+function roles_userapi_countallactive(Array $args=array())
 {
     extract($args);
 
@@ -35,7 +36,7 @@ function roles_userapi_countallactive($args)
     }
 
     // Security Check
-    if(!xarSecurityCheck('ReadRole')) return;
+    if(!xarSecurityCheck('ReadRoles')) return;
 
     // Get database setup
     $dbconn = xarDB::getConn();
@@ -64,7 +65,7 @@ function roles_userapi_countallactive($args)
         $bindvars[] = (int) $anon['id'];
     }
     $query .= " AND itemtype = ?";
-    $bindvars[] = ROLES_USERTYPE;
+    $bindvars[] = xarRoles::ROLES_USERTYPE;
 
 // cfr. xarcachemanager - this approach might change later
     $expire = xarModVars::get('roles','cache.userapi.countallactive');

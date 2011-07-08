@@ -9,7 +9,7 @@
             <label>Overview</label>
         </menuitem>
         <menuitem>
-            <mask>AdminTheme</mask>
+            <mask>AdminThemes</mask>
             <includes>
                 <includeitem>list</includeitem>
             </includes>
@@ -18,7 +18,7 @@
             <label>View Themes</label>
         </menuitem>
         <menuitem>
-            <mask>AdminTheme</mask>
+            <mask>AdminThemes</mask>
             <includes>
                 <includeitem>modifyconfig</includeitem>
             </includes>

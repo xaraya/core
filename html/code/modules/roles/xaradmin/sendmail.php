@@ -3,19 +3,23 @@
  * Send mail
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 
 function roles_admin_sendmail()
 {
+    // Security
+    if (!xarSecurityCheck('MailRoles')) return;
+    
     // Get parameters from whatever input we need
     if (!xarVarFetch('id',     'int:0:', $id, 0)) return;
-    if (!xarVarFetch('state',   'int:0:', $state, ROLES_STATE_CURRENT)) return;
+    if (!xarVarFetch('state',   'int:0:', $state, xarRoles::ROLES_STATE_CURRENT)) return;
     if (!xarVarFetch('message', 'str:1:', $message,'')) return;
     if (!xarVarFetch('subject', 'str:1',  $subject, '')) return;
     if (!xarVarFetch('includesubgroups','int:0:',$includesubgroups,0,XARVAR_NOT_REQUIRED));
@@ -24,8 +28,6 @@ function roles_admin_sendmail()
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
-    // Security check
-    if (!xarSecurityCheck('MailRoles')) return;
     // Get user information
     // Get the current query
     sys::import('xaraya.structures.query');
@@ -73,6 +75,7 @@ function roles_admin_sendmail()
     $message  = xarTplCompileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$message.'</xar:template>');
 
     // Define the variables automatically available to all templates
+    // LEGACY
     $data = array(
         'sitename'   => xarModVars::get('themes', 'SiteName'),
         'siteslogan' => xarModVars::get('themes', 'SiteSlogan'),
@@ -105,7 +108,7 @@ function roles_admin_sendmail()
     // If it was on, turn it back on
     xarModVars::set('themes','ShowTemplates',$themecomments);
 
-    xarResponse::redirect(xarModURL('roles', 'admin', 'createmail'));
+    xarController::redirect(xarModURL('roles', 'admin', 'createmail'));
     return true;
 }
 ?>

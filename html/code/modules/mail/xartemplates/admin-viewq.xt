@@ -64,10 +64,11 @@
                         </tr>
                     </table>
                 </xar:if>
-                <form method="POST" action="&xar-modurl-mail-admin-viewq;">
+                <form method="post" action="#xarModURL('mail','admin','viewq')#">
                     <input type="hidden" name="authid" value="#$authid#"/>
                     <input type="hidden" name="action" value="process"/>
-                    <input type="submit" value="#xarML('Process Queue')#"/>
+                    <xar:var name="label">Process Queue</xar:var>
+                    <input type="submit" value="#$label#"/>
                 </form>
                 <table width="100%" border="0" cellspacing="0" cellpadding="2">
                     <tr>

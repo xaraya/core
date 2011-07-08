@@ -3,11 +3,12 @@
  * Test a user or group's privileges against a mask
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -19,27 +20,26 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @param none $
- * @return none
- * @throws none
- * @todo none
+ * @return array data for the template display
  */
 function roles_admin_testprivileges()
 {
+    // Security
+    if (!xarSecurityCheck('EditRoles')) return;
+
     // Get Parameters
-    if (!xarVarFetch('id', 'int:1:', $id)) return;
-    if (!xarVarFetch('pmodule', 'int', $module, xarMasks::PRIVILEGES_ALL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($id)) return xarResponse::notFound();
+    if (!xarVarFetch('pmodule', 'int', $modRegId, xarSecurity::PRIVILEGES_ALL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('name', 'str:1', $name, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('test', 'str:1:35:', $test, '', XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-
-    // Security Check
-    if (!xarSecurityCheck('EditRole')) return;
 
     // Call the Roles class and get the role
     $role = xarRoles::get($id);
 
     $types = xarMod::apiFunc('roles','user','getitemtypes');
-    $data['itemtypename'] = $types[$role->getType()]['label'];
+    $thistype = $role->getType();
+    $data['itemtypename'] = $types[$thistype]['label'];
     // get the array of parents of this role
     // need to display this in the template
     $parents = array();
@@ -52,10 +52,10 @@ function roles_admin_testprivileges()
     // we want to do test
     if (!empty($test)) {
         // get the mask to test against
-        $mask = xarMasks::getMask($name);
+        $mask = xarSecurity::getMask($name);
         $component = $mask->getComponent();
         // test the mask against the role
-        $testresult = xarMasks::xarSecurityCheck($name, 0, $component, 'All', $mask->getModule(), $role->getName());
+        $testresult = xarSecurity::check($name, 0, $component, 'All', $mask->getModule(), $role->getName());
         // test failed
         if (!$testresult) {
             $resultdisplay = xarML('Privilege: none found');
@@ -69,7 +69,7 @@ function roles_admin_testprivileges()
             $data['rmodule'] = $thisprivilege->getModule();
             $data['rcomponent'] = $thisprivilege->getComponent();
             $data['rinstance'] = $thisprivilege->getInstance();
-            $data['rlevel'] = xarMasks::$levels[$thisprivilege->getLevel()];
+            $data['rlevel'] = xarSecurity::$levels[$thisprivilege->getLevel()];
         }
         // rest of the data for template display
         $data['testresult'] = $testresult;
@@ -82,29 +82,34 @@ function roles_admin_testprivileges()
                 'smodule' => $testmask->getModule(),
                 'scomponent' => $testmask->getComponent(),
                 'sinstance' => $testmask->getInstance(),
-                'slevel' => xarMasks::$levels[$testmask->getLevel()]
+                'slevel' => xarSecurity::$levels[$testmask->getLevel()]
                 );
             $testmaskarray[] = $thismask;
         }
         $data['testmasks'] = $testmaskarray;
-        $modid = $mask->getModuleID();
+        $modName = $mask->getModule();
+        $modRegId = xarMod::getRegId($modName);
     }
     // no test yet
     // Load Template
+    $data['object'] = $role;
     $data['test'] = $test;
     $data['pname'] = $role->getName();
     $data['itemtype'] = $role->getType();
-    $data['basetype'] = $data['itemtype'];
     $types = xarMod::apiFunc('roles','user','getitemtypes');
-    $data['itemtypename'] = $types[$data['itemtype']]['label'];
-    $data['pmodule'] = $module;
+    $data['itemtypename'] = $types[$thistype]['label'];
+    $data['pmodule'] = $modRegId;
     $data['id'] = $id;
     $data['testlabel'] = xarML('Test');
-    $data['masks'] = xarMasks::getmasks($module);
+    if (!empty($modRegId) && $modRegId != xarSecurity::PRIVILEGES_ALL) {
+        // Note: xarMasks::getmasks() expects the internal system modid, not the registered modid
+        $modInfo = xarMod::getInfo($modRegId);
+        $data['masks'] = xarMasks::getmasks($modInfo['systemid']);
+    } else {
+        $data['masks'] = xarMasks::getmasks(xarSecurity::PRIVILEGES_ALL);
+    }
     $data['authid'] = xarSecGenAuthKey();
     return $data;
-    // redirect to the next page
-    xarResponse::redirect(xarModURL('roles', 'admin', 'new'));
 }
 
 ?>

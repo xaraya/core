@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">#$tpltitle#</span>
+    </div>
+    <div class="xar-mod-body">
+        <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
+        <xar:set name="statslink">xarObject::getActionURL($object, 'stats')</xar:set>
+        <xar:set name="reportlink">xarObject::getActionURL($object, 'report')</xar:set>
+        <h2>
+            Statistics for #$object:label#&#160;
+            <a href="#$viewlink#" title="View #$object:label#">
+                <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+            </a>&#160;
+            <a href="#$statslink#" title="Reset Statistics">
+                <img src="#xarTplGetImage('icons/view-refresh.png', 'base')#" width="16" height="16" alt="reset"/>
+            </a>&#160;
+            <a href="#$reportlink#" title="View Reports">
+                <img src="#xarTplGetImage('icons/accessories-calculator.png', 'base')#" width="16" height="16" alt="report"/>
+            </a>
+        </h2>
+        <!-- TODO: distinguish between 'protected' and 'private' ? -->
+        <form method="post" action="#$statslink#">
+            <fieldset>
+                <!-- if we use the current URL, the object is already specified -->
+                <xar:if condition="$object:linktype ne 'current'">
+                    <input type="hidden" name="object" id="object" value="#$object:name#"/>
+                </xar:if>
+                <input type="hidden" name="method" id="method" value="stats"/>
+                <xar:if condition="!empty($object:join)">
+                    <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                </xar:if>
+                <xar:if condition="!empty($object:table)">
+                    <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                </xar:if>
+                <xar:if condition="!empty($return_url)">
+                    <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                </xar:if>
+                <legend>Selection Criteria</legend>
+                <div class="xar-form-input-wrapper">
+                    <label class="xar-form-label-short" for="group_0" title="Select the properties you want to group the items by">Group By</label>
+                    <xar:for start="$i = 0" test="$i le 2" iter="$i++">
+                        &#160;
+                        <select name="group[#$i#]" id="group_#$i#">
+                            <option value=""></option>
+                            <xar:foreach in="$stats.grouplist" key="$value" value="$label">
+                                <xar:if condition="!empty($stats['group'][$i]) and $stats['group'][$i] eq $value">
+                                    <option value="#$value#" selected="selected">#$label#</option>
+                                <xar:else/>
+                                    <option value="#$value#">#$label#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                    </xar:for>
+                </div>
+<!--
+                <div class="xar-form-input-wrapper">
+                    Operation
+                    <xar:comment>only show properties with status ACTIVE, DISPLAYONLY and VIEWONLY</xar:comment>
+                    <xar:set name="filterstatus">array(1, 2, 4)</xar:set>
+                    <xar:set name="show_props">array()</xar:set>
+                    <xar:foreach in="$object:properties" key="$name" value="$property">
+                        <xar:set name="displaystatus">$property->getDisplayStatus()</xar:set>
+                        <xar:if condition="!in_array($displaystatus, $filterstatus)">
+                            <xar:continue/>
+                        </xar:if>
+                        <xar:set name="dummy">array_push($show_props, $name)</xar:set>
+                    </xar:foreach>
+                    <xar:comment>show properties in three columns to save screen space</xar:comment>
+                    <xar:set name="size">floor((count($show_props) - 0.5) / 3) + 1</xar:set>
+                    <xar:set name="columns">array_chunk($show_props,$size)</xar:set>
+                    <table>
+                        <tr>
+                        <xar:foreach in="$columns" value="$proplist">
+                            <td valign="top">
+                            <xar:foreach in="$proplist" value="$name">
+                                <xar:set name="property">#$object:properties.$name#</xar:set>
+                                <label for="field_#$name#">#$property:label#</label><br/>
+                            </xar:foreach>
+                            </td>
+                            <td valign="top">
+                            <xar:foreach in="$proplist" value="$name">
+                                <xar:set name="property">#$object:properties.$name#</xar:set>
+                                <xar:comment>CHECKME: could the dummy datastore actually do something here ?</xar:comment>
+                                <xar:if condition="$property:datastore eq '_dummy_'">
+                                    N/A
+                                   <xar:continue/>
+                                </xar:if>
+                                <select name="field[#$name#]" id="field_#$name#">
+                                    <xar:foreach in="$stats.options" key="$value" value="$label">
+                                        <xar:if condition="($value eq 'sum' or $value eq 'avg') and !is_a($property, 'NumberBoxProperty')">
+                                            <option value="#$value#" disabled="disabled">#$label#</option>
+                                        <xar:elseif condition="!empty($stats['field'][$name]) and $stats['field'][$name] eq $value"/>
+                                            <option value="#$value#" selected="selected">#$label#</option>
+                                        <xar:else/>
+                                            <option value="#$value#">#$label#</option>
+                                        </xar:if>
+                                    </xar:foreach>
+                                </select><br/>
+                            </xar:foreach>
+                            </td>
+                        </xar:foreach>
+                        </tr>
+                    </table>
+                </div>
+-->
+                <div class="xar-form-input-wrapper">
+                    <label class="xar-form-label-short" for="field" title="Select the operation you want to apply to each property">Operation</label>
+                </div>
+                <xar:comment>only show properties with status ACTIVE, DISPLAYONLY and VIEWONLY</xar:comment>
+                <xar:set name="filterstatus">array(1, 2, 4)</xar:set>
+                <xar:foreach in="$object:properties" key="$name" value="$property">
+                    <xar:set name="displaystatus">$property->getDisplayStatus()</xar:set>
+                    <xar:if condition="!in_array($displaystatus, $filterstatus)">
+                        <xar:continue/>
+                    </xar:if>
+                    <div class="xar-form-input-wrapper">
+                        <label class="xar-form-label" for="field_#$name#">#$property:label#</label>
+                        <xar:comment>CHECKME: could the dummy datastore actually do something here ?</xar:comment>
+                        <xar:if condition="$property:datastore eq '_dummy_'">
+                            N/A
+                            <xar:continue/>
+                        </xar:if>
+                        <select name="field[#$name#]" id="field_#$name#">
+                            <xar:foreach in="$stats.options" key="$value" value="$label">
+                                <xar:if condition="($value eq 'sum' or $value eq 'avg') and !is_a($property, 'NumberBoxProperty')">
+                                    <option value="#$value#" disabled="disabled">#$label#</option>
+                                <xar:elseif condition="!empty($stats['field'][$name]) and $stats['field'][$name] eq $value"/>
+                                    <option value="#$value#" selected="selected">#$label#</option>
+                                <xar:else/>
+                                    <option value="#$value#">#$label#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                    </div>
+                </xar:foreach>
+                <div class="xar-form-input-wrapper-after">
+                    <xar:var name="label">Show Statistics</xar:var>
+                    <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
+                </div>
+            </fieldset>
+            <xar:if condition="$object:checkAccess('config')">
+                <fieldset>
+                    <div class="xar-form-input-wrapper">
+                        <label class="xar-form-label" for="report" title="Specify a name for this report if you want to save it">Save Report As</label>
+                        <input type="text" name="report" id="report" value="#$stats['report']#"/>
+                        <xar:var name="label">Save Report</xar:var>
+                        <input type="submit" name="save" value="#$label#" class="xar-margin-thickleft"/>
+                    </div>
+                </fieldset>
+            </xar:if>
+        </form>
+        <xar:if condition="!empty($result)">
+            <!-- don't show a newlink here -->
+            <xar:data-view object="$object" tplmodule="dynamicdata" layout="stats" newlink=""/>
+        <xar:elseif condition="!empty($object->itemcount)"/>
+            <p>There are #$object:itemcount# items in #$object:label#</p>
+        </xar:if>
+    </div>
+</xar:template>

@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 
@@ -27,6 +28,7 @@ function roles_admin_delete()
     sys::import('modules.roles.class.roles');
     // get the role to be deleted
     $role = xarRoles::get($id);
+    if (empty($role)) return xarResponse::NotFound();
     $itemtype = $role->getType();
 
     // get the array of parents of this role
@@ -38,10 +40,13 @@ function roles_admin_delete()
     }
     $data['parents'] = $parents;
 
+    $data['object'] = $role;
     $name = $role->getName();
 
-    if (!xarSecurityCheck('DeleteRole',1,'Roles',$name)) return;
-    $data['frozen'] = !xarSecurityCheck('DeleteRole',0,'Roles',$name);
+    // Security
+    if (!xarSecurityCheck('ManageRoles',1,'Roles',$name)) return;
+    
+    $data['frozen'] = !xarSecurityCheck('ManageRoles',0,'Roles',$name);
 
     // Prohibit removal of any groups that have children
     if($role->countChildren()) {
@@ -49,7 +54,7 @@ function roles_admin_delete()
     }
     // Prohibit removal of any groups or users the system needs
     if($id == (int)xarModVars::get('roles','admin')) {
-        return xarTplModule('roles','user','errors',array('layout' => 'remove_siteadmin', 'user' => $role->getName()));
+        return xarTplModule('roles','user','errors',array('layout' => 'remove_siteadmin', 'user' => $role->getUName()));
     }
     if($id == (int)xarModVars::get('roles','defaultgroup')) {
         return xarTplModule('roles','user','errors',array('layout' => 'default_usergroup', 'group' => $role->getName()));
@@ -60,9 +65,8 @@ function roles_admin_delete()
 
     if (empty($confirmation)) {
         // Load Template
-        $data['basetype'] = $itemtype;
+        $data['itemtype'] = $itemtype;
         $types = xarMod::apiFunc('roles','user','getitemtypes');
-        $data['itemtypename'] = $types[$itemtype]['label'];
         $data['authid'] = xarSecGenAuthKey();
         $data['id'] = $id;
         $data['ptype'] = $role->getType();
@@ -86,6 +90,7 @@ function roles_admin_delete()
 
             // call item delete hooks (for DD etc.)
             // TODO: move to remove() function
+            $pargs['exclude_module'] = array('dynamicdata');
             $pargs['module'] = 'roles';
             $pargs['itemtype'] = $itemtype;
             $pargs['itemid'] = $id;
@@ -95,10 +100,11 @@ function roles_admin_delete()
         }
         // redirect to the next page
         if (empty($returnurl)) {
-            xarResponse::redirect(xarModURL('roles', 'admin', 'showusers'));
+            xarController::redirect(xarModURL('roles', 'admin', 'showusers'));
         } else {
-            xarResponse::redirect($returnurl);
+            xarController::redirect($returnurl);
         }
+        return true;
     }
 }
 ?>

@@ -1,5 +1,14 @@
 <?php
 /**
+ * @package core
+ * @subpackage validation
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+/**
  * Title: Pre-process values.
  * Desc: Allows a value to be pre-processed before (optionally)
  * passing on to another validation method. Each option is processed
@@ -38,8 +47,7 @@
  *    field 'Item Name':
  *    'pre:lower:ftoken:field:Item Name:val:notempty'
  *
- * @package validation
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @copyright see the html/credits.html file in this release
  * @throws VariableValidationException
 **/
 

@@ -2,11 +2,12 @@
 /**
  * View complete module information/details
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Module System
  * @link http://xaraya.com/index.php/release/1.html
  */
 /**
@@ -15,23 +16,24 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @param none
- * @returns array
+ * @return array data for the template display
  * @todo some facelift
  */
 function modules_admin_modinfo()
 {
-    
-    // Security check - not needed here, imo 
-    // we just show some info here, not changing anything
+    // Security
+    if (!xarSecurityCheck('AdminModules')) return; 
+        
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     $data = array();
     
-    if (!xarVarFetch('id', 'int:1:', $id)) return; 
-    // obtain maximum information about module
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return; 
+    if (empty($id)) return xarResponse::notFound();
+
+    // obtain maximum information about a module
     $modinfo = xarMod::getInfo($id);
     
     // data vars for template

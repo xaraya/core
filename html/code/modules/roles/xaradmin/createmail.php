@@ -3,17 +3,21 @@
  * Create email
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
+/**
+ * @return array data for the template display
+  */
 function roles_admin_createmail()
 {
     // TODO allow selection by group or user or all users.
-    // Security check
+    // Security
     if (!xarSecurityCheck('MailRoles')) return;
 
     if (!xarVarFetch('id',       'int:0:', $id,        -1, XARVAR_NOT_REQUIRED)) return;
@@ -94,7 +98,7 @@ function roles_admin_createmail()
             $state = xarRoles::ROLES_STATE_ALL;
         }
 
-        if ($id != -1) {
+        if ($id != -1 && $id != 0) {
             if ($role->getType() == xarRoles::ROLES_GROUPTYPE) {
                 // If a group was chosen, get only the users of that group
                 $q->addtable($xartable['rolemembers'],'rm');
@@ -118,7 +122,7 @@ function roles_admin_createmail()
                           'email'    => $role['email'],
                           'status'   => $role['state'],
                           'date_reg' => $role['date_reg'],
-                          'frozen'   => !xarSecurityCheck('EditRole',0,'Roles',$role['name'])
+                          'frozen'   => !xarSecurityCheck('EditRoles',0,'Roles',$role['name'])
                          );
         }
 
@@ -129,7 +133,7 @@ function roles_admin_createmail()
             $descendants = $parentgroup->getDescendants($state);
 
             while (list($key, $user) = each($descendants)) {
-                if (xarSecurityCheck('EditRole',0,'Roles',$user->getName())) {
+                if (xarSecurityCheck('EditRoles',0,'Roles',$user->getName())) {
                     if (in_array($state, array($user->getState(),xarRoles::ROLES_STATE_ALL))) {
                         $data['users'][$user->getID()] =
                             array('id'      => $user->getID(),

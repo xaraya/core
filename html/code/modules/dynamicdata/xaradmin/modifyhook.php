@@ -2,12 +2,14 @@
 /**
  * Modify Dynamic data for an Item
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Dynamic Data module
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -15,12 +17,14 @@
  *
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
+ * @return string output display string
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
-function dynamicdata_admin_modifyhook($args)
+function dynamicdata_admin_modifyhook(Array $args=array())
 {
+    // Security
+    if(!xarSecurityCheck('EditDynamicData')) return;
+
     extract($args);
 
     if (!isset($extrainfo)) throw new EmptyParameterException('extrainfo');
@@ -61,8 +65,7 @@ function dynamicdata_admin_modifyhook($args)
 
     $object = & DataObjectMaster::getObject(array('moduleid' => $module_id,
                                        'itemtype' => $itemtype,
-                                       'itemid'   => $itemid,
-                                       'extend'   => false));
+                                       'itemid'   => $itemid));
     if (!isset($object)) return;
 
     $object->getItem();

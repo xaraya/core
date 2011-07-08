@@ -30,7 +30,7 @@
 <xsl:template name="block_code">
   <xsl:choose>
     <xsl:when test="@instance or (@module and @type)">
-      <xsl:text> xarBlock_renderBlock(array(&nl;</xsl:text>
+      <xsl:text> xarBlock::renderBlock(array(&nl;</xsl:text>
       <xsl:text>'instance' =&gt; "</xsl:text><xsl:value-of select="@instance"/><xsl:text>",&nl;</xsl:text>
       <xsl:text>'module'   =&gt; "</xsl:text><xsl:value-of select="@module"/><xsl:text>",&nl;</xsl:text>
       <xsl:text>'type'     =&gt; "</xsl:text><xsl:value-of select="@type"/><xsl:text>",&nl;</xsl:text>
@@ -38,7 +38,7 @@
       <xsl:text>'title'    =&gt; "</xsl:text><xsl:value-of select="@title"/><xsl:text>",&nl;</xsl:text>
       <xsl:text>'template' =&gt; "</xsl:text><xsl:value-of select="@template"/><xsl:text>",&nl;</xsl:text>
       <xsl:text>'state'    =&gt; "</xsl:text><xsl:value-of select="@state"/><xsl:text>",&nl;</xsl:text>
-      <!-- If ancestrial blockgroup tags set a template attribute, use that here -->
+      <!-- If ancestral blockgroup tags set a template attribute, use that here -->
       <xsl:text>'box_template' =&gt; ('</xsl:text>
       <xsl:value-of select="ancestor::xar:blockgroup[@template]"/>
       <xsl:text>'),</xsl:text>

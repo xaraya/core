@@ -1,22 +1,23 @@
 <?php
 /**
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
  * List themes and current settings
  * @author Marty Vance
- * @param none
+ * @return array data for the template display
  */
 function themes_admin_list()
 {
-    // Security Check
-    if(!xarSecurityCheck('AdminTheme')) return;
+    // Security
+    if(!xarSecurityCheck('AdminThemes')) return;
 
     // form parameters
     if (!xarVarFetch('startnum', 'isset', $startnum,    NULL,  XARVAR_DONT_SET)) return;
@@ -61,7 +62,7 @@ function themes_admin_list()
     $data['filter'][XARTHEME_STATE_MISSING_FROM_ACTIVE]         = xarML('Missing (Active)');
     $data['filter'][XARTHEME_STATE_MISSING_FROM_UPGRADED]       = xarML('Missing (Upgraded)');
 
-    $data['default']                           = xarModVars::get('themes', 'default', 1);
+    $data['default']                           = xarModVars::get('themes', 'default_theme', 1);
 
     // obtain list of modules based on filtering criteria
 /*     if($regen){ */

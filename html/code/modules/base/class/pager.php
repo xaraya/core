@@ -1,4 +1,15 @@
 <?php
+/**
+ * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/68.html
+ */
+
 class xarTplPager Extends Object
 {
 /**
@@ -195,6 +206,7 @@ class xarTplPager Extends Object
  * @param integer $blockOptions number of pages to display at once (default=10) or array of advanced options
  * @param integer $template     alternative template name within $tplmodule/user (default 'pager')
  * @param string  $tplmodule    alternative module to look for templates in (default 'base')
+ * @return string output display string
  *
  */
     public static function getPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $blockOptions = array(), $template = 'default', $tplmodule = 'base')
@@ -250,17 +262,4 @@ class xarTplPager Extends Object
         return $urltemplate;
     }
 }
-
-/**
- * @CHECKME: support 1x function calls?
-**/
-function xarTplPagerInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions = 10)
-{
-    return xarTplPager::getInfo($currentItem, $total, $itemsPerPage, $blockOptions);
-}
-function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $blockOptions = array(), $template = 'default', $tplmodule = 'base')
-{
-    return xarTplPager::getPager($startNum, $total, $urltemplate, $itemsPerPage, $blockOptions, $template, $tplmodule);
-}
-
 ?>

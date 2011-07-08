@@ -28,10 +28,10 @@
                         <xar:else />
                             M
                         </xar:if>|
-                        <a href="#xarMOdURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
+                        <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                             E
                         </a>|
-                        <a href="#$loop:item['deleteurl']#" onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
+                        <a href="#$loop:item['deleteurl']#">
                             R
                         </a>]
                     </div>
@@ -69,10 +69,10 @@
                         <xar:else />
                             M
                         </xar:if>|
-                        <a href="#xarMOdURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
+                        <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                             E
                         </a>|
-                        <a href="#$loop:item['deleteurl']#" onclick="return xar_base_confirmLink(this, '#xarVarPrepForDisplay($loop:item['deleteconfirm'])#')">
+                        <a href="#$loop:item['deleteurl']#">
                             R
                         </a>]
                     </div>
@@ -86,9 +86,7 @@
             </xar:if>
         </xar:loop>
     </div>
-    <xar:if condition="$total gt $itemsperpage">
-        <div>
-            <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
-        </div>
-    </xar:if>
+    <div>
+        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+    </div>
 </xar:template>

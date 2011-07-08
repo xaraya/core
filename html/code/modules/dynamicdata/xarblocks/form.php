@@ -2,12 +2,14 @@
 /**
  * Initialisation and display of the form block
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Dynamic Data module
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -15,7 +17,7 @@
  */
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class FormBlock extends BasicBlock implements iBlock
+class Dynamicdata_FormBlock extends BasicBlock implements iBlock
 {
     public $nocache             = 1;
 
@@ -43,48 +45,14 @@ class FormBlock extends BasicBlock implements iBlock
 
         // Populate block info and pass to theme
         if (!empty($vars['objectid'])) {
-            $objectinfo = DataObjectMaster::getObjectInfo($vars);
-            if (!empty($objectinfo)) {
-                if (!xarSecurityCheck('AddDynamicDataItem',0,'Item',"$objectinfo[moduleid]:$objectinfo[itemtype]:All")) return;
-                $data['content'] = $objectinfo;
+            $object = DataObjectMaster::getObject($vars);
+            if (!empty($object) && $object->checkAccess('create')) {
+                $data['content'] = array('moduleid' => $object->moduleid,
+                                         'itemtype' => $object->itemtype,
+                                         'object'   => $object);
                 return $data;
             }
         }
     }
-
-/**
- * Modify Function to the Blocks Admin
- * @param $data array containing title,content
- */
-    public function modify(Array $data=array())
-    {
-        $data = parent::modify($data);
-
-        // Defaults
-        if (!isset($data['objectid'])) {
-            $data['objectid'] = 0;
-        }
-
-        $data['blockid'] = $data['bid'];
-
-        // Return output
-        return $data;
-
-    }
-
-/**
- * Updates the Block config from the Blocks Admin
- * @param $data array containing title,content
- */
-    public function update(Array $data=array())
-    {
-        $data = parent::update($data);
-        if (!xarVarFetch('objectid', 'id', $vars['objectid'], 0, XARVAR_NOT_REQUIRED)) {return;}
-
-        $data['content'] = $vars;
-
-        return $data;
-    }
-
 }
 ?>

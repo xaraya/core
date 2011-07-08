@@ -3,12 +3,14 @@
  * Base Module Initialisation
  *
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage base
  * @link http://xaraya.com/index.php/release/68.html
+ *
  * @author Marcel van der Boom
  */
 
@@ -19,8 +21,7 @@ sys::import('xaraya.tableddl');
 /**
  * Initialise the base module
  *
- * @return bool
- * @throws DATABASE_ERROR
+ * @return boolean
  */
 function base_init()
 {
@@ -125,6 +126,7 @@ function base_init()
 
         // Let's commit this, since we're gonna do some other stuff
         $dbconn->commit();
+
     } catch (Exception $e) {
         $dbconn->rollback();
         throw $e;
@@ -148,6 +150,7 @@ function base_init()
     xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
     xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);
     xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
+    xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
     $allowedAPITypes = array();
     /*****************************************************************
      * Set site configuration variables
@@ -158,6 +161,7 @@ function base_init()
     xarConfigVars::set(null, 'Site.Core.FixHTMLEntities',true);
     xarConfigVars::set(null, 'Site.Core.TimeZone', 'Etc/UTC');
     xarConfigVars::set(null, 'Site.Core.EnableShortURLsSupport', false);
+    
     // when installing via https, we assume that we want to support that :)
     $HTTPS = xarServer::getVar('HTTPS');
     /* jojodee - monitor this fix.
@@ -172,6 +176,7 @@ function base_init()
     } else {
         xarConfigVars::set(null, 'Site.Core.EnableSecureServer', false);
     }
+    xarConfigVars::set(null, 'Site.Core.SecureServerPort', "i:443;");
 
     xarConfigVars::set(null, 'Site.Core.LoadLegacy', false);
     xarConfigVars::set(null, 'Site.Session.SecurityLevel', 'Medium');
@@ -202,7 +207,7 @@ function base_init()
     $systemArgs = array('enableShortURLsSupport' => false,
                         'generateXMLURLs' => false);
     xarMod::init($systemArgs);
-
+    
     // Installation complete; check for upgrades
     return base_upgrade('2.0.0');
 }
@@ -211,14 +216,14 @@ function base_init()
  * Upgrade this module from an old version
  *
  * @param oldVersion
- * @returns bool
+ * @return boolean true on success, false on failure
  */
 function base_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.0.0':
-      break;
+        default:
+        break;
     }
     return true;
 }
@@ -226,7 +231,7 @@ function base_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return bool
+ * @return boolean
  */
 function base_delete()
 {

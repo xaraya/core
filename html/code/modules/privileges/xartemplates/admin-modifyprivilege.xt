@@ -39,7 +39,7 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$parents.$i.parentid#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">
+                                <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$parents[$i]['parentid']))#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">
                                     #$parents[$i]['parentname']#
                                 </a>
                             </li>
@@ -55,28 +55,28 @@
                 <xar:var name="label">Manage privilege</xar:var>
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-privileges-admin-displayprivilege;&amp;id=#$ppid#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('privileges','admin','displayprivilege',array('id'=>$ppid))#" class="xar-norm xar-norm-outline">
                         Display
                     </a>
                 </li>
                 <li class="xar-tab-active">
-                    <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$ppid#" class="xar-accent xar-accent-outline">
+                    <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$ppid))#" class="xar-accent xar-accent-outline">
                         Modify
                      </a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-privileges-admin-deleteprivilege;&amp;id=#$ppid#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('privileges','admin','deleteprivilege',array('id'=>$ppid))#" class="xar-norm xar-norm-outline">
                         Delete
                     </a>
                 </li>
                 <li class="xar-tab">
-                    <a href="&xar-modurl-privileges-admin-viewroles;&amp;id=#$ppid#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('privileges','admin','viewroles',array('id'=>$ppid))#" class="xar-norm xar-norm-outline">
                         Groups/Users
                     </a>
                 </li>
             </ul>
         </div>
-      <form name="privilegeform" id="privilegeform" action="&xar-modurl-privileges-admin-updateprivilege;" method="post" enctype="application/x-www-form-urlencoded">
+      <form name="privilegeform" id="privilegeform" action="#xarModURL('privileges','admin','updateprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Privilege properties</legend>
                 <xar:if condition="$frozen">
@@ -251,12 +251,12 @@
                 <xar:loop name="$parents">
                     <div class="xar-form-input-wrapper">
                         <span class="xar-form-label">
-                            <a href="&xar-modurl-privileges-admin-modifyprivilege;&amp;id=#$loop:item['parentid']#">
+                            <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$loop->item['parentid']))#">
                                 #$loop:item['parentname']#
                             </a>
                         </span>
-                        <a href="&xar-modurl-privileges-admin-removemember;&amp;childid=#$ppid#&amp;parentid=#$loop:item['parentid']#&amp;authid=#$authid#">
-                            <img src="modules/privileges/xarimages/remove.gif" alt="#xarML('Remove')#" title="Remove #$pname# from #$loop:item['parentname']#"/>
+                        <a href="#xarModURL('privileges','admin','removemember',array('childid'=>$ppid,'parentid'=>$loop->item['parentid'],'authid'=>$authid))#">
+                            <img src="#sys::code()#modules/privileges/xarimages/remove.gif" alt="#xarML('Remove')#" title="Remove #$pname# from #$loop:item['parentname']#"/>
                         </a>
                     </div>
                 </xar:loop>

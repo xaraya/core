@@ -2,48 +2,50 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div class="xar-form-input-wrapper">
-        <label for="metadescription#$blockid#" title="#xarML('Add the meta description.')#" class="xar-form-label">
+        <xar:var name="label">Add the meta description.</xar:var>
+        <label for="metadescription#$blockid#" title="#$label#" class="xar-form-label">
             Meta Description:
         </label>
         <div class="xar-form-container-after">
-            <textarea name="metadescription" id="metadescription#$blockid#" class="xar-form-textarealarge">
-                #$metadescription#
-            </textarea>
+            <textarea name="metadescription" id="metadescription#$blockid#" class="xar-form-textarealarge">#$metadescription#</textarea>
         </div>
     </div>
     <div class="xar-form-input-wrapper">
-        <label for="metakeywords#$blockid#" title="#xarML('Add the meta keywords.')#" class="xar-form-label">
+        <xar:var name="label">Add the meta keywords.</xar:var>
+        <label for="metakeywords#$blockid#" title="#$label#" class="xar-form-label">
             Meta Keywords:
         </label>
         <div class="xar-form-container-after">
-            <textarea name="metakeywords" id="metakeywords#$blockid#" class="xar-form-textarealarge">
-                #$metakeywords#
-            </textarea>
+            <textarea name="metakeywords" id="metakeywords#$blockid#" class="xar-form-textarealarge">#$metakeywords#</textarea>
         </div>
     </div>
     <div class="xar-form-input-wrapper-after">
         <xar:data-input type="checkbox" name="usegeo" id="usegeo#$blockid#" checked="$usegeo" tabindex="1"/>
-        <label for="usegeo#$blockid#" title="#xarML('GeoUrl allows you to locate websites that are geographically close to yours.')#">
+        <xar:var name="label">GeoUrl allows you to locate websites that are geographically close to yours.</xar:var>
+        <label for="usegeo#$blockid#" title="#$label#">
             Use GeoURL
         </label>
         (<a href="http://geourl.org/" target="_blank">About GeoURL</a>)
     </div>
     <xar:if condition="!empty($usegeo)">
         <div class="xar-form-input-wrapper">
-            <label for="longitude#$blockid#" title="#xarML('Enter your longitude.')#" class="xar-form-label">
+            <xar:var name="label">Enter your longitude.</xar:var>
+            <label for="longitude#$blockid#" title="#$label#" class="xar-form-label">
                 Your Longitude:
             </label>
             <input type="text" name="longitude" id="longitude#$blockid#" value="#$longitude#" maxlength="100" class="xar-form-textmedium"/>
         </div>
         <div class="xar-form-input-wrapper">
-            <label for="latitude#$blockid#" title="#xarML('Enter your latitude')#" class="xar-form-label">
+            <xar:var name="label">Enter your latitude</xar:var>
+            <label for="latitude#$blockid#" title="#$label#" class="xar-form-label">
                 Your Latitude:
             </label>
             <input type="text" name="latitude" id="latitude#$blockid#" value="#$latitude#" maxlength="100" class="xar-form-textmedium"/>
         </div>
     </xar:if>
     <div class="xar-form-input-wrapper">
-        <label title="#xarML('Xaraya can dynamically generate your meta keywords based on the words used in your Articles or in your Keywords.')#"
+        <xar:var name="label">Xaraya can dynamically generate your meta keywords based on the words used in your Articles or in your Keywords.</xar:var>
+        <label title="#$label#"
         class="xar-form-label">
             Use Dynamic Keywords From:
         </label>
@@ -61,22 +63,33 @@
             </div>
         </div>
     </div>
+
     <div class="xar-form-input-wrapper">
-        <label for="copyrightpage#$blockid#" title="#xarML('Xaraya can generate the proper links for your copyright page as used by Mozilla and other popular browsers.')#" class="xar-form-label">
+        <xar:var name="label">Xaraya can generate the proper links for your author (about) page as used by Mozilla and other popular browsers.</xar:var>
+        <label for="authorpage#$blockid#" title="#$label#" class="xar-form-label">
+            Author (about) Page:
+        </label>
+        <input type="text" name="authorpage" id="authorpage#$blockid#" value="#$authorpage#" maxlength="100" class="xar-form-textxxlong"/>
+    </div>
+    <div class="xar-form-input-wrapper">
+        <xar:var name="label">Xaraya can generate the proper links for your copyright page as used by Mozilla and other popular browsers.</xar:var>
+        <label for="copyrightpage#$blockid#" title="#$label#" class="xar-form-label">
             Copyright Page:
         </label>
-        <input type="text" name="copyrightpage" id="copyrightpage#$blockid#" value="#$copyrightpage#" maxlength="100" class="xar-form-textlong"/>
+        <input type="text" name="copyrightpage" id="copyrightpage#$blockid#" value="#$copyrightpage#" maxlength="100" class="xar-form-textxxlong"/>
     </div>
     <div class="xar-form-input-wrapper">
-        <label for="helppage#$blockid#" title="#xarML('Xaraya can generate the proper links for your help page as used by Mozilla and other popular browsers.')#" class="xar-form-label">
+        <xar:var name="label">Xaraya can generate the proper links for your help page as used by Mozilla and other popular browsers.</xar:var>
+        <label for="helppage#$blockid#" title="#$label#" class="xar-form-label">
             Help Page:
         </label>
-        <input type="text" name="helppage" id="helppage#$blockid#" value="#$helppage#" maxlength="100" class="xar-form-textlong"/>
+        <input type="text" name="helppage" id="helppage#$blockid#" value="#$helppage#" maxlength="100" class="xar-form-textxxlong"/>
     </div>
     <div class="xar-form-input-wrapper">
-        <label for="glossary#$blockid#" title="#xarML('Xaraya can generate the proper links for your glossary page as used by Mozilla and other popular browsers.')#" class="xar-form-label">
+        <xar:var name="label">Xaraya can generate the proper links for your glossary page as used by Mozilla and other popular browsers.</xar:var>
+        <label for="glossary#$blockid#" title="#$label#" class="xar-form-label">
             Glossary:
         </label>
-        <input type="text" name="glossary" id="glossary#$blockid#" value="#$glossary#" maxlength="100" class="xar-form-textlong"/>
+        <input type="text" name="glossary" id="glossary#$blockid#" value="#$glossary#" maxlength="100" class="xar-form-textxxlong"/>
     </div>
 </xar:template>

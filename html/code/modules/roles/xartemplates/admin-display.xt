@@ -6,7 +6,12 @@
     </div>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
-        <h2>Manage #$object:label# '#$name#':</h2>
+        <xar:if condition="$itemtype eq xarRoles::ROLES_USERTYPE">
+            <xar:set name="thisname">$object->properties['uname']->getValue()</xar:set>
+        <xar:else />
+            <xar:set name="thisname">$object->properties['name']->getValue()</xar:set>
+        </xar:if>
+        <h2>Manage #$object:label# '#$thisname#':</h2>
         <xar:if condition="count($parents) ne 0">
             <div>
                 <ul class="xar-tabs xar-alt xar-norm-outline">
@@ -17,8 +22,8 @@
                     <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
-                                <a href="&xar-modurl-roles-admin-showusers;&amp;id=#$parents.$i.parentid#"
-                                title="#xarML('Show this group')#" class="xar-norm xar-norm-outline">#$parents[$i]['parentname']#</a>
+                                <xar:var name="label">Show this group</xar:var>
+                                <a href="#xarModURL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">#$parents[$i]['parentname']#</a>
                             </li>
                         </xar:if>
                         <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
@@ -33,7 +38,7 @@
             <legend>Role properties</legend>
             <xar:set name="fields">array('id','name','uname','email','state','regdate')</xar:set>
             <xar:data-display object="$object" fieldlist="$fields"/>
-            <xar:if condition="$basetype eq ROLES_USERTYPE">
+            <xar:if condition="$itemtype eq xarRoles::ROLES_USERTYPE">
                 <xar:set name="settings">
                     explode(',',xarModVars::get('roles','duvsettings'))
                 </xar:set>
@@ -58,7 +63,8 @@
                         </div>
                     </xar:if>
                     <div class="xar-form-input-wrapper">
-                        <label for="duvs_primaryparent" title="#xarML('Primary parent group')#" class="xar-form-label">
+                        <xar:var name="label">Primary parent group</xar:var>
+                        <label for="duvs_primaryparent" title="#$label#" class="xar-form-label">
                             Primary Parent Group:
                         </label>
                         <xar:set name="value">

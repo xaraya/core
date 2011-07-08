@@ -1,24 +1,28 @@
 <?php
-/** 
+/**
  * Retrieve a block instance raw data.
  *
  * @package modules
+ * @subpackage blocks module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Blocks module
  * @link http://xaraya.com/index.php/release/13.html
- * @author Jim McDonald, Paul Rosania
+ *
+ * @author Jim McDonald
+ * @author Paul Rosania
+ * @param array    $args array of optional parameters<br/>
 */
 
-function blocks_userapi_get($args)
+function blocks_userapi_get(Array $args=array())
 {
     extract($args);
-    
+
     if (!xarVarValidate('int:1', $bid, true)) {$bid = 0;}
     if (!xarVarValidate('str:1', $name, true)) {$name = '';}
-    
+
     if (empty($bid) && empty($name)) {
         // No identifier provided.
         throw new EmptyParameterException('name or bid');
@@ -29,7 +33,7 @@ function blocks_userapi_get($args)
       // CHECKME: & removed below
         $instances = xarMod::apiFunc('blocks', 'user', 'getall', array('bid' => $bid));
     } else {
-        // CHECKME: & removed below 
+        // CHECKME: & removed below
         $instances = xarMod::apiFunc('blocks', 'user', 'getall', array('name' => $name));
     }
 

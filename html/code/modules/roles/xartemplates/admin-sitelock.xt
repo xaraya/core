@@ -7,11 +7,12 @@
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-menu"/>
         <h2>Site Lock</h2>
-        <form action="&xar-modurl-roles-admin-sitelock;" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarModURL('roles','admin','sitelock')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Status</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="FOR" title="#xarML('TITLE')#" class="xar-form-label">
+                    <xar:var name="label">Status</xar:var>
+                    <label for="FOR" title="#$label#" class="xar-form-label">
                         #$statusmessage#
                     </label>
                     <input type="button" value="#$togglelabel#" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=toggle';this.form.submit();"/>
@@ -43,11 +44,13 @@
                         </div>
                     </xar:loop>
                     <div class="xar-form-input-wrapper">
-                        <label for="newname" title="#xarML('Add a Group to the lock notification list')#" class="xar-form-label">
+                        <xar:var name="label">Add a Group to the lock notification list</xar:var>
+                        <label for="newname" title="#$label#" class="xar-form-label">
                             Add Group:
                         </label>
                         <input type="text" name="newname" id="newname" value="" class="xar-form-textlong xar-margin-thickright"/>
-                        <input type="button" value="#xarML('Add')#" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=add';this.form.submit();" class="xar-margin-thickleft"/>
+                        <xar:var name="label">Add</xar:var>
+                        <input type="button" value="#$label#" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=add';this.form.submit();" class="xar-margin-thickleft"/>
                     </div>
             </fieldset>
             <p>
@@ -57,13 +60,12 @@
             <fieldset>
                 <legend>Email</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="notifymsg" title="#xarML('Message sent when site lock status changes')#" class="xar-form-label">
+                    <xar:var name="label">Message sent when site lock status changes</xar:var>
+                    <label for="notifymsg" title="#$label#" class="xar-form-label">
                         Site Lock Email:
                     </label>
                     <div class="xar-form-container-after">
-                        <textarea name="notifymsg" id="notifymsg" class="xar-form-textarealarge">
-#$notifymsg#
-                        </textarea>
+                        <textarea name="notifymsg" id="notifymsg" class="xar-form-textarealarge">#$notifymsg#</textarea>
                     </div>
                 </div>
             </fieldset>
@@ -73,13 +75,12 @@
             <fieldset>
                 <legend>Message</legend>
                 <div class="xar-form-input-wrapper">
-                    <label for="notifymsg" title="#xarML('Text shown to users attempting to log in to a locked site')#" class="xar-form-label">
+                    <xar:var name="label">Text shown to users attempting to log in to a locked site</xar:var>
+                    <label for="notifymsg" title="#$label#" class="xar-form-label">
                         Site Lock Message:
                     </label>
                     <div class="xar-form-container-after">
-                        <textarea name="lockedoutmsg" id="lockedoutmsg" class="xar-form-textarealarge">
-#$lockedoutmsg#
-                        </textarea>
+                        <textarea name="lockedoutmsg" id="lockedoutmsg" class="xar-form-textarealarge">#$lockedoutmsg#</textarea>
                     </div>
                 </div>
             </fieldset>
@@ -87,7 +88,8 @@
                 <div class="xar-form-input-wrapper-after">
                     <input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#"/>
                     <input type="hidden" name="toggle" id="toggle" value="#$toggle#"/>
-                    <input type="button" value="#xarML('Save Site Lock Settings')#" tabindex="2" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=save';this.form.submit();"/>
+                    <xar:var name="label">Save Site Lock Settings</xar:var>
+                    <input type="button" value="#$label#" tabindex="2" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=save';this.form.submit();"/>
                 </div>
             </fieldset>
         </form>

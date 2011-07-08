@@ -2,12 +2,14 @@
 /**
  * Create a flat table corresponding to some dynamic object definition
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
@@ -28,9 +30,9 @@
  * 6. (for extension objects) skip the extra itemid property in display / input templates
  * 7. in case of problems, report to http://bugs.xaraya.com/
  *
- * @return bool true on succes
+ * @return boolean true on succes
  */
-function dynamicdata_utilapi_maketable($args)
+function dynamicdata_utilapi_maketable(Array $args=array())
 {
     // restricted to DD Admins
     if(!xarSecurityCheck('AdminDynamicData')) return;
@@ -165,6 +167,17 @@ function dynamicdata_utilapi_maketable($args)
     $query = xarDBCreateTable($table,$fields);
     if (empty($query)) return; // throw back
     $dbconn->Execute($query);
+
+    sys::import('xaraya.structures.query');
+    $objectlist = DataObjectMaster::getObjectList(array('name' => $myobject->name));
+    $items = $objectlist->getItems();
+    $q = new Query('INSERT', $table);
+    foreach ($items as $row) {
+        foreach ($row as $key => $value) {
+            $q->addfield($key, $value);
+        }
+        if (!$q->run()) return;
+    }
 
     return true;
 }

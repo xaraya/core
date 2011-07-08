@@ -2,11 +2,12 @@
 /**
  * View complete theme information/details
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
@@ -15,16 +16,20 @@
  *
  * @author Marty Vance
  * @access public
- * @param none
- * @returns array
+ * @return array data for the template display
  * @todo some facelift
  */
 function themes_admin_themesinfo()
 {
+    // Security
+    if (!xarSecurityCheck('EditThemes')) return; 
+    
     $data = array();
     
-    if (!xarVarFetch('id', 'int:1:', $id)) return; 
-    // obtain maximum information about module
+    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return; 
+    if (empty($id)) return xarResponse::notFound();
+
+    // obtain maximum information about a theme
     $info = xarThemeGetInfo($id);
     // data vars for template
     $data['themeid']              = xarVarPrepForDisplay($id);

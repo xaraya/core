@@ -1,12 +1,14 @@
 <?php
 /**
- * @package core modules
+ * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Privileges module
  * @link http://xaraya.com/index.php/release/1098.html
+ *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
 /**
@@ -14,6 +16,9 @@
  */
 function privileges_admin_updateprivilege()
 {
+    // Security
+    if (!xarSecurityCheck('EditPrivileges')) return; 
+    
 // Clear Session Vars
     xarSessionDelVar('privileges_statusmsg');
 
@@ -22,7 +27,7 @@ function privileges_admin_updateprivilege()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    if(!xarVarFetch('id',        'isset', $id,        NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('id',         'isset', $id,        NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('pname',      'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('prealm',     'isset', $realm,     'All', XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('pmodule',    'isset', $pmodule,    'All',    XARVAR_NOT_REQUIRED)) {return;}
@@ -45,7 +50,7 @@ function privileges_admin_updateprivilege()
     }
 
 // Security Check
-    if(!xarSecurityCheck('EditPrivilege',0,'Privileges',$name)) return;
+    if(!xarSecurityCheck('EditPrivileges',0,'Privileges',$name)) return;
 
 // call the Privileges class and update the values
 
@@ -78,7 +83,8 @@ function privileges_admin_updateprivilege()
                     'privileges'));
 
 // redirect to the next page
-    xarResponse::redirect(xarModURL('privileges', 'admin', 'modifyprivilege', array('id' => $id)));
+    xarController::redirect(xarModURL('privileges', 'admin', 'modifyprivilege', array('id' => $id)));
+    return true;
 }
 
 ?>

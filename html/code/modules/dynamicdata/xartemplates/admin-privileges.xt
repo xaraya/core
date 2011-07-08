@@ -9,65 +9,14 @@
             for Privilege '#$extname#' 
             <xar:else />Select Items for Privilege '#$extname#'</xar:if>
         </h2>
-        <form method="post" action="&xar-modurl-dynamicdata-admin-privileges;">
+        <form method="post" action="#xarModURL('dynamicdata','admin','privileges')#">
             <input type="hidden" name="extpid" id="extpid" value="#$extpid#"/>
             <input type="hidden" name="extname" id="extname" value="#$extname#"/>
             <input type="hidden" name="extrealm" id="extrealm" value="#$extrealm#"/>
             <input type="hidden" name="extmodule" id="extmodule" value="#$extmodule#"/>
             <input type="hidden" name="extcomponent" id="extcomponent" value="#$extcomponent#"/>
             <table border="1" cellpadding="8" cellspacing="0">
-                <xar:if condition="!empty($extcomponent) and $extcomponent eq 'Field'">
-                    <tr>
-                        <th class="xar-align-right xar-valign-top">Name</th>
-                        <td>
-                            <select name="propname" onchange="submit()">
-                                <option value="0">All</option>
-                                <xar:foreach in="$propnames" key="$name">
-                                    <xar:if condition="!empty($propname) and $propname eq $name">
-                                        <option value="#$name#" selected="selected">
-                                        #$name#</option>
-                                        <xar:else />
-                                        <option value="#$name#">#$name#</option>
-                                    </xar:if>
-                                </xar:foreach>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="xar-align-right xar-valign-top">Type</th>
-                        <td>
-                            <select name="proptype" onchange="submit()">
-                                <option value="0">All</option>
-                                <xar:foreach in="$proptypes" key="$type" value="$info">
-                                    <xar:if condition="!empty($proptype) and $proptype eq $type">
-                                        <option value="#$type#" selected="selected">
-                                        #$info['label']#</option>
-                                        <xar:else />
-                                        <option value="#$type#">#$info['label']#</option>
-                                    </xar:if>
-                                </xar:foreach>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="xar-align-right xar-valign-top">Property</th>
-                        <td>
-                            <select name="propid" onchange="submit()">
-                                <option value="0">All</option>
-                                <xar:foreach in="$propids" key="$object" value="$properties">
-                                    <xar:foreach in="$properties" key="$id" value="$name">
-                                        <xar:if condition="!empty($propid) and $propid eq $id">
-                                            <option value="#$id#" selected="selected">[#$object#]
-                                            #$name#</option>
-                                            <xar:else />
-                                            <option value="#$id#">[#$object#] #$name#</option>
-                                        </xar:if>
-                                    </xar:foreach>
-                                </xar:foreach>
-                            </select>
-                        </td>
-                    </tr>
-                    <xar:else />
+                <xar:if condition="!empty($extcomponent) and $extcomponent eq 'Item'">
                     <tr>
                         <th class="xar-align-right xar-valign-top">Module</th>
                         <td>
@@ -85,11 +34,25 @@
                         </td>
                     </tr>
                     <tr>
-                        <th class="xar-align-right xar-valign-top">Item Type</th>
+                        <th class="xar-align-right xar-valign-top">Object Item Type</th>
                         <td>
-                            <input type="text" name="itemtype" id="itemtype" value="#$itemtype#"
-                            size="10" onchange="submit()"/>
-                            <!-- TODO: show dropdown box for all relevant item types -->
+                            <xar:if condition="empty($moduleid)">
+                                <input type="text" name="itemtype" id="itemtype" value="#$itemtype#"
+                                size="10" onchange="submit()"/>
+                            <xar:else/>
+                                <select name="itemtype" onchange="submit()">
+                                    <option value="0">All</option>
+                                    <xar:foreach in="$objectlist" value="$objectinfo">
+                                        <xar:if condition="$moduleid ne $objectinfo.moduleid">
+                                        <xar:elseif condition="!empty($itemtype) and $itemtype eq $objectinfo.itemtype"/>
+                                            <option value="#$objectinfo.itemtype#" selected="selected">
+                                            #$objectinfo.label#</option>
+                                        <xar:else />
+                                            <option value="#$objectinfo.itemtype#">#$objectinfo.label#</option>
+                                        </xar:if>
+                                    </xar:foreach>
+                                </select>
+                            </xar:if>
                         </td>
                     </tr>
                     <tr>

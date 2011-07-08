@@ -1,20 +1,28 @@
 <?php
 /**
+ * Modify the configuration settings of this module
+ *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage roles
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
- * modify configuration
+ * Modify the configuration settings of this module
+ *
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ *
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
 function roles_admin_modifyconfig()
 {
-    // Security Check
-    if (!xarSecurityCheck('AdminRole')) return;
+    // Security
+    if (!xarSecurityCheck('AdminRoles')) return;
+    
     if (!xarVarFetch('phase', 'str:1:100', $phase,       'modify',  XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab',   'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
 
@@ -79,16 +87,24 @@ function roles_admin_modifyconfig()
     switch ($data['tab']) {
 
         case 'hooks':
-            // Item type 0 is the default itemtype for 'user' roles.
+            $item = array('module' => 'roles', 'itemtype' => xarRoles::ROLES_USERTYPE);
+            $hooks = xarHooks::notify('ModuleModifyconfig', $item);
+            /* 
+            // Item type 1 is the default itemtype for 'user' roles.
             $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
                                      array('module' => 'roles',
-                                           'itemtype' => ROLES_USERTYPE));
+                                           'itemtype' => xarRoles::ROLES_USERTYPE));
+            */            
             break;
         case 'grouphooks':
-            // Item type 1 is the (current) itemtype for 'group' roles.
+            $item = array('module' => 'roles', 'itemtype' => xarRoles::ROLES_GROUPTYPE);
+            $hooks = xarHooks::notify('ModuleModifyconfig', $item);
+            /*
+            // Item type 2 is the itemtype for 'group' roles.
             $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
                                      array('module' => 'roles',
-                                           'itemtype' => ROLES_GROUPTYPE));
+                                           'itemtype' => xarRoles::ROLES_GROUPTYPE));
+            */            
             break;
         case 'duvs':
             $data['user_settings'] = xarMod::apiFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => 0));
@@ -102,7 +118,7 @@ function roles_admin_modifyconfig()
             $data['user_settings'] = xarMod::apiFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => 0));
             $settings = explode(',',xarModVars::get('roles', 'duvsettings'));
             $required = array('usereditaccount', 'allowemail', 'requirevalidation', 'displayrolelist', 'searchbyemail');
-            $skiplist = array('userhome', 'primaryparent', 'passwordupdate', 'duvsettings', 'userlastlogin', 'emailformat');
+            $skiplist = array('userhome', 'primaryparent', 'passwordupdate', 'duvsettings', 'userlastlogin', 'emailformat', 'usertimezone');
             $homelist = array('allowuserhomeedit', 'allowexternalurl', 'loginredirect');
             if (!in_array('userhome', $settings)) {
                 $skiplist = array_merge($skiplist, $homelist);
@@ -164,13 +180,13 @@ function roles_admin_modifyconfig()
                     // Role type 'user' (itemtype 1).
                     xarModCallHooks('module', 'updateconfig', 'roles',
                                     array('module' => 'roles',
-                                          'itemtype' => ROLES_USERTYPE));
+                                          'itemtype' => xarRoles::ROLES_USERTYPE));
                     break;
                 case 'grouphooks':
                     // Role type 'group' (itemtype 2).
                     xarModCallHooks('module', 'updateconfig', 'roles',
                                     array('module' => 'roles',
-                                          'itemtype' => ROLES_GROUPTYPE));
+                                          'itemtype' => xarRoles::ROLES_GROUPTYPE));
                     break;
                 case 'memberlist':
                 case 'duvs':
@@ -181,10 +197,24 @@ function roles_admin_modifyconfig()
                         $itemid = $data['user_settings']->updateItem();
                     }
                     break;
+                case 'debugging':
+                    if (!xarVarFetch('debugadmins', 'str', $candidates, '', XARVAR_NOT_REQUIRED)) return;
+
+                    // Get the users to be shown the debug messages
+                    if (empty($candidates)) {
+                        $candidates = array();
+                    } else {
+                        $candidates = explode(',',$candidates);
+                    }
+                    $debugadmins = array();
+                    foreach ($candidates as $candidate) {
+                        $admin = xarMod::apiFunc('roles','user','get',array('uname' => trim($candidate)));
+                        if(!empty($admin)) $debugadmins[] = $admin['uname'];
+                    }
+                    xarConfigVars::set(null, 'Site.User.DebugAdmins', $debugadmins);
+                break;
             }
-//            if (!xarVarFetch('allowinvisible', 'checkbox', $allowinvisible, false, XARVAR_NOT_REQUIRED)) return;
-            // Update module variables
-//            xarModVars::set('roles', 'allowinvisible', $allowinvisible);
+            xarController::redirect(xarModURL('roles','admin','modifyconfig',array('tab' => $data['tab'])));
             break;
     }
     return $data;

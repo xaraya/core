@@ -1,21 +1,24 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
+ * @link http://xaraya.com/index.php/release/70.html
  */
 /**
  * Set the state of a theme
  *
  * @author Marty Vance
- * @param $args['regid'] the theme id
- * @param $args['state'] the state
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['regid'] the theme id<br/>
+ *        integer  $args['state'] the state
  * @throws BAD_PARAM,NO_PERMISSION
  */
-function themes_adminapi_setstate($args)
+function themes_adminapi_setstate(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);
@@ -25,7 +28,7 @@ function themes_adminapi_setstate($args)
     if (!isset($state)) throw new EmptyParameterException('state');
 
     // Security Check
-    if(!xarSecurityCheck('AdminTheme')) return;
+    if(!xarSecurityCheck('AdminThemes')) return;
 
     // Clear cache to make sure we get newest values
     if (xarVarIsCached('Theme.Infos', $regid)) {

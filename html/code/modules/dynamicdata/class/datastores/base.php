@@ -2,9 +2,15 @@
 /**
  * Base class for Dynamic Data Stores
  *
- * @package Xaraya eXtensible Management System
+ * @package modules
  * @subpackage dynamicdata module
-**/
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/182.html
+*/
 sys::import('modules.dynamicdata.class.datastores.master');
 sys::import('xaraya.datastores.interface');
 
@@ -94,8 +100,8 @@ class BasicDataStore extends DDObject implements IBasicDataStore
 /**
  * Base class for Dynamic Data Stores with a concept of ordering
  *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata module
+ * @package modules
+ * @subpackage dynamicdata
 **/
 
 class OrderedDataStore extends BasicDataStore implements IOrderedDataStore

@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package core
+ * @subpackage structures
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
 sys::import('xaraya.structures.sequences.interfaces');
 sys::import('xaraya.structures.sequences.adapters.sequence_adapter');
 
@@ -26,6 +35,15 @@ class Stack extends SequenceAdapter implements iStack
     public function clear()
     {
         parent::clear();
+    }
+
+    public function peek()
+    {
+        $item = null;
+        if($this->empty) return $item;
+        $item = $this->pop();
+        $this->push($item);
+        return $item;
     }
 }
 ?>

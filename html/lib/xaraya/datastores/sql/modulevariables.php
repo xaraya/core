@@ -2,14 +2,18 @@
 /**
  * Data Store is the module variables // TODO: integrate module variable handling with DD
  *
- * @package dynamicdata
+ * @package core
  * @subpackage datastores
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
  */
 
 /**
  * Class to handle module variables datastores
  *
- * @package dynamicdata
  */
 sys::import('xaraya.datastores.sql.flattable');
 
@@ -65,9 +69,8 @@ class ModuleVariablesDataStore extends FlatTableDataStore
     {
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
         $fieldlist = array_keys($this->fields);
-        if (count($fieldlist) < 1) {
-            return 0;
-        }
+        if (count($fieldlist) < 1) return 0;
+
         foreach ($fieldlist as $field) {
             // get the value from the corresponding property
             $value = $this->fields[$field]->value;
@@ -86,7 +89,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
     {
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
         $fieldlist = array_keys($this->fields);
-        if (count($fieldlist) < 1) return;
+        if (count($fieldlist) < 1) return 0;
 
         foreach ($fieldlist as $field) {
             xarModItemVars::delete($this->modulename,$field,$itemid);
@@ -128,8 +131,8 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 //                    var_dump(array_keys($this->fields));
 //                    var_dump($this->groupby);exit;
 
-        $modvars = $this->tables['module_vars'];
-        $moditemvars = $this->tables['module_itemvars'];
+        $modvars = $this->getTable('module_vars');
+        $moditemvars = $this->getTable('module_itemvars');
 
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
@@ -167,7 +170,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                     $query .= " AND mi.item_id = ?";
                     $bindvars[] = (int)$itemids[0];
                 }
-                $stmt = $this->db->prepareStatement($query);
+                $stmt = $this->prepareStatement($query);
                 $result = $stmt->executeQuery($bindvars);
 
                 $itemidlist = array();
@@ -274,7 +277,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             if ($numitems > 0) {
                 // <mrb> Why is this only here?
                 $query .= ' ORDER BY itemid, propid';
-                $stmt = $this->db->prepareStatement($query);
+                $stmt = $this->prepareStatement($query);
 
                 // Note : this assumes that every property of the items is stored in the table
                 $numrows = $numitems * count($propids);
@@ -286,7 +289,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                 $stmt->setLimit($numrows);
                 $stmt->setOffset($startrow-1);
             } else {
-                $stmt = $this->db->prepareStatement($query);
+                $stmt = $this->prepareStatement($query);
             }
             // All prepared, lets go
             $result = $stmt->executeQuery();
@@ -318,7 +321,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         // more difficult case where we need to create a pivot table, basically
         } elseif ($numitems > 0 || count($this->sort) > 0 || count($this->where) > 0 || count($this->groupby) > 0) {
 
-            $dbtype = xarDB::getType();
+            $dbtype = $this->getType();
             if (substr($dbtype,0,4) == 'oci8') {
                 $propval = 'TO_CHAR(mi.value)';
             } elseif (substr($dbtype,0,5) == 'mssql') {
@@ -383,7 +386,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             }
 
             // we got the query
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
 
             if ($numitems > 0) {
                 $stmt->setLimit($numitems);
@@ -543,7 +546,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                             FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
                            WHERE m.name IN ($bindmarkers) AND m.module_id = $modid";
 
-                $stmt = $this->db->prepareStatement($query);
+                $stmt = $this->prepareStatement($query);
                 $result = $stmt->executeQuery($values);
 
                 $itemidlist = array();
@@ -577,15 +580,15 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             $this->cache = $args['cache'];
         }
 
-        $modvars = $this->tables['module_vars'];
-        $moditemvars = $this->tables['module_itemvars'];
+        $modvars = $this->getTable('module_vars');
+        $moditemvars = $this->getTable('module_itemvars');
 
         $fields = array_keys($this->fields);
 
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
             $bindmarkers = '?' . str_repeat(',?',count($fields)-1);
-            if($this->db->databaseType == 'sqlite') {
+            if($this->getType() == 'sqlite') {
                 $query = "SELECT COUNT(*)
                           FROM (SELECT DISTINCT mi.item_id
                                 FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
@@ -609,9 +612,9 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             }
 
             // Balance parentheses.
-            if($this->db->databaseType == 'sqlite') $query .= ")";
+            if($this->getType() == 'sqlite') $query .= ")";
 
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars);
 
             if ($result->first()) return;
@@ -624,7 +627,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         } elseif (count($this->where) > 0) {
             // more difficult case where we need to create a pivot table, basically
             // TODO: this only works for OR conditions !!!
-            if($this->db->databaseType == 'sqlite') {
+            if($this->getType() == 'sqlite') {
                 $query = "SELECT COUNT(*)
                           FROM ( SELECT DISTINCT mi.item_id FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
                           WHERE "; // WATCH OUT, STILL UNBALANCED
@@ -640,9 +643,9 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             }
 
             // Balance parentheses.
-            if($this->db->databaseType == 'sqlite') $query .= ")";
+            if($this->getType() == 'sqlite') $query .= ")";
 
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery();
             if (!$result->first()) return;
 
@@ -665,7 +668,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                 if (count($values)<1) continue;
                 $modid = xarMod::getID($key);
                 $bindmarkers = '?' . str_repeat(',?',count($values)-1);
-                if($this->db->databaseType == 'sqlite' ) {
+                if($this->getType() == 'sqlite' ) {
                     $query = "SELECT COUNT(*)
                               FROM (SELECT DISTINCT mi.item_id FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
                               WHERE m.name IN ($bindmarkers)) AND m.module_id = $modid";
@@ -675,7 +678,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                               WHERE m.name IN ($bindmarkers) AND m.module_id = $modid";
                 }
 
-                $stmt = $this->db->prepareStatement($query);
+                $stmt = $this->prepareStatement($query);
                 $result = $stmt->executeQuery($values);
                 if (!$result->first()) return;
 

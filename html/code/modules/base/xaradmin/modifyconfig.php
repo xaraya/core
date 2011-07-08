@@ -1,24 +1,30 @@
 <?php
 /**
- * Modify site configuration
+ * Modify the configuration settings of this module
+ *
  * @package modules
+ * @subpackage base module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Base module
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
- * Modify site configuration
+ * Modify the configuration settings of this module
+ *
+ * Standard GUI function to display and update the configuration settings of the module based on input data.
+ *
  * @author John Robeson
  * @author Greg Allan
- * @return array of template values
+ * @return mixed data array for the template display or output display string if invalid data submitted
  */
 function base_admin_modifyconfig()
 {
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminBase')) return;
+    
     if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'display', XARVAR_NOT_REQUIRED)) return;
 
@@ -43,30 +49,62 @@ function base_admin_modifyconfig()
     $tzobject = new DateTimeZone(xarConfigVars::get(null, 'Site.Core.TimeZone'));
     $data['sitedatetime']->setTimezone($tzobject);
 
+    /*
     $data['editor'] = xarModVars::get('base','editor');
     $data['editors'] = array(array('displayname' => xarML('none')));
     if(xarModIsAvailable('htmlarea')) $data['editors'][] = array('displayname' => 'htmlarea');
     if(xarModIsAvailable('fckeditor')) $data['editors'][] = array('displayname' => 'fckeditor');
     if(xarModIsAvailable('tinymce')) $data['editors'][] = array('displayname' => 'tinymce');
-    $allowedlocales = xarConfigVars::get(null, 'Site.MLS.AllowedLocales');
+    */
+    
+    $data['allowedlocales'] = xarConfigVars::get(null, 'Site.MLS.AllowedLocales');
     foreach($locales as $locale) {
-        if (in_array($locale, $allowedlocales)) $active = true;
+        if (in_array($locale, $data['allowedlocales'])) $active = true;
         else $active = false;
-        $data['locales'][] = array('name' => $locale, 'active' => $active);
+        $data['locales'][] = array('id' => $locale, 'name' => $locale, 'active' => $active);
     }
+   
     $data['releasenumber'] = xarModVars::get('base','releasenumber');
 
     // TODO: delete after new backend testing
     // $data['translationsBackend'] = xarConfigVars::get(null, 'Site.MLS.TranslationsBackend');
     $data['authid'] = xarSecGenAuthKey();
     $data['updatelabel'] = xarML('Update Base Configuration');
-    $data['XARCORE_VERSION_NUM'] = xarCore::VERSION_NUM;
-    $data['XARCORE_VERSION_ID'] =  xarCore::VERSION_ID;
-    $data['XARCORE_VERSION_SUB'] = xarCore::VERSION_SUB;
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'base'));
     $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, user_menu_link');
     $data['module_settings']->getItem();
+
+    if (extension_loaded('mcrypt')) {
+        include_once(sys::lib()."xaraya/encryption.php");
+        $data['encryption'] = $encryption;
+
+        $ciphers = array();
+        $ciphermenu = mcrypt_list_algorithms();
+        sort($ciphermenu);
+        foreach ($ciphermenu as $item)
+            $ciphers[] = array('id' => $item, 'name' => $item);
+        $data['ciphers'] = $ciphers;
+
+        $modes = array();
+        $modemenu = mcrypt_list_modes();
+        sort($modemenu);
+        foreach ($modemenu as $item)
+            $modes[] = array('id' => $item, 'name' => $item);
+        $data['modes'] = $modes;
+    }
+
+    sys::import('modules.dynamicdata.class.properties.master');
+    $combobox = DataPropertyMaster::getProperty(array('name' => 'combobox'));
+    $combobox->checkInput('logfilename');
+    $data['logfilename'] = !empty($combobox->value) ? $combobox->value : xarSystemVars::get(sys::CONFIG, 'Log.Filename');
+
+    $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
+    $picker->initialization_basedirectory = sys::varpath() . "/logs/";
+    $picker->setExtensions('txt,html');
+    $picker->display_fullname = true;
+    $data['logfiles'] = $picker->getOptions();
+
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -74,8 +112,12 @@ function base_admin_modifyconfig()
                 xarSession::setVar('statusmsg', '');
             }
             $data['inheritdeny'] = xarModVars::get('privileges', 'inheritdeny');
-            break;
 
+            switch ($data['tab']) {
+                case 'security':
+                break;
+            }
+            break;
         case 'update':
             switch ($data['tab']) {
                 case 'display':
@@ -108,7 +150,6 @@ function base_admin_modifyconfig()
                     xarConfigVars::set(null, 'Site.Core.FixHTMLEntities', $FixHTMLEntities);
                     break;
                 case 'security':
-                    if (!xarVarFetch('secureserver','checkbox',$secureServer,true,XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('securitylevel','str:1:',$securityLevel)) return;
                     if (!xarVarFetch('sessionduration','int:1:',$sessionDuration,30,XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('sessiontimeout','int:1:',$sessionTimeout,10,XARVAR_NOT_REQUIRED)) return;
@@ -117,6 +158,8 @@ function base_admin_modifyconfig()
                     if (!xarVarFetch('cookiepath','str:1:',$cookiePath,'',XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('cookiedomain','str:1:',$cookieDomain,'',XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('referercheck','str:1:',$refererCheck,'',XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('secureserver','checkbox',$secureServer,true,XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('sslport','int',$sslport,443,XARVAR_NOT_REQUIRED)) return;
 
                     sys::import('modules.dynamicdata.class.properties.master');
                     $orderselect = DataPropertyMaster::getProperty(array('name' => 'orderselect'));
@@ -124,7 +167,6 @@ function base_admin_modifyconfig()
 
                     //Filtering Options
                     // Security Levels
-                    xarConfigVars::set(null, 'Site.Core.EnableSecureServer', $secureServer);
                     xarConfigVars::set(null, 'Site.Session.SecurityLevel', $securityLevel);
                     xarConfigVars::set(null, 'Site.Session.Duration', $sessionDuration);
                     xarConfigVars::set(null, 'Site.Session.InactivityTimeout', $sessionTimeout);
@@ -132,22 +174,47 @@ function base_admin_modifyconfig()
                     xarConfigVars::set(null, 'Site.Session.CookiePath', $cookiePath);
                     xarConfigVars::set(null, 'Site.Session.CookieDomain', $cookieDomain);
                     xarConfigVars::set(null, 'Site.Session.RefererCheck', $refererCheck);
+                    xarConfigVars::set(null, 'Site.Core.EnableSecureServer', $secureServer);
+                    xarConfigVars::set(null, 'Site.Core.SecureServerPort', $sslport);
 
                     // Authentication modules
                     if (!empty($orderselect->order)) {
                         xarConfigVars::set(null, 'Site.User.AuthenticationModules', $orderselect->order);
                     }
+                    
+                    // Encryption
+                    if (!xarVarFetch('cipher','str:1',$cipher,'blowfish',XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('mode','str:1',$mode,'cbc',XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('key','str:1',$key,'jamaica',XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('initvector','str:1',$initvector,'xaraya2x',XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('hint','str:1',$hint,'',XARVAR_NOT_REQUIRED)) return;
+
+                    if (!xarVarFetch('key','str:1',$key,'jamaica',XARVAR_NOT_REQUIRED)) return;
+                    $keyholder = DataPropertyMaster::getProperty(array('type' => 'password'));
+                    $keyholder->checkInput('key',$key);
+                    $key = $keyholder->value;
+
+                    $args['filepath'] = sys::lib()."xaraya/encryption.php";
+                    $args['variables'] = array(
+                        'cipher' => $cipher,
+                        'mode' => $mode,
+                        'key' => $key,
+                        'hint' => $hint,
+                        'initvector' => $initvector,
+                    );
+                    xarMod::apiFunc('installer','admin','modifysystemvars', $args);
+                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security')));
                     break;
                 case 'locales':
                     if (!xarVarFetch('defaultlocale','str:1:',$defaultLocale)) return;
-                    if (!xarVarFetch('active','array',$active, array(), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('mlsmode','str:1:',$MLSMode,'SINGLE', XARVAR_NOT_REQUIRED)) return;
 
-                    $localesList = array();
-                    foreach($active as $activelocale) $localesList[] = $activelocale;
+                    sys::import('modules.dynamicdata.class.properties.master');
+                    $locales = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
+                    $locales->checkInput('active');
+                    $localesList = $locales->getValue();
                     if (!in_array($defaultLocale,$localesList)) $localesList[] = $defaultLocale;
                     sort($localesList);
-
                     if ($MLSMode == 'UNBOXED') {
                         if (xarMLSGetCharsetFromLocale($defaultLocale) != 'utf-8') {
                             throw new ConfigurationException(null,'You should select utf-8 locale as default before selecting UNBOXED mode');
@@ -159,32 +226,35 @@ function base_admin_modifyconfig()
                     xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $defaultLocale);
                     xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $localesList);
 
+                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
+                    break;
+                case 'logging':                    
+                    if (!xarVarFetch('logenabled','int',$logenabled,0,XARVAR_NOT_REQUIRED)) return;
+                    $variables = array('Log.Enabled' => $logenabled, 'Log.Filename' => $data['logfilename']);
+                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
+                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'logging')));
                     break;
                 case 'other':
                     if (!xarVarFetch('loadlegacy',   'checkbox', $loadLegacy,    xarConfigVars::get(null, 'Site.Core.LoadLegacy'), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('proxyhost',    'str:1:',   $proxyhost,     xarModVars::get('base', 'proxyhost'), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('proxyport',    'int:1:',   $proxyport,     xarModVars::get('base', 'proxyport'), XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('editor',       'str:1:',   $editor,        xarModVars::get('base', 'editor'), XARVAR_NOT_REQUIRED)) return;
+//                    if (!xarVarFetch('editor',       'str:1:',   $editor,        xarModVars::get('base', 'editor'), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('releasenumber','int:1:',   $releasenumber, xarModVars::get('base','releasenumber'),XARVAR_NOT_REQUIRED)) return;
                     // Save these in normal module variables for now
                     xarModVars::set('base','proxyhost',$proxyhost);
                     xarModVars::set('base','proxyport',$proxyport);
                     xarModVars::set('base','releasenumber', $releasenumber);
                     xarConfigVars::set(null, 'Site.Core.LoadLegacy', $loadLegacy);
-                    xarModVars::set('base','editor',$editor);
+//                    xarModVars::set('base','editor',$editor);
 
                     // Timezone, offset and DST
                     if (!xarVarFetch('hosttimezone','str:1:',$hosttimezone,'UTC',XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('sitetimezone','str:1:',$sitetimezone,'UTC',XARVAR_NOT_REQUIRED)) return;
 
                     $tzobject = new DateTimezone($hosttimezone);
-                    if (!empty($tzobject)) {
-                        xarMod::apiFUnc('installer','admin','modifysystemvar', array('name'=> 'SystemTimeZone',
-                                                                                     'value' => $hosttimezone));
-                    } else {
-                        xarMod::apiFUnc('installer','admin','modifysystemvar', array('name'=> 'SystemTimeZone',
-                                                                                     'value' => 'UTC'));
-                    }
+                    $variables = array('SystemTimeZone' => !empty($tzobject) ? $hosttimezone : 'UTC');
+                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
+                    
                     $tzobject = new DateTimezone($sitetimezone);
                     if (!empty($tzobject)) {
                         $datetime = new DateTime();
@@ -194,7 +264,8 @@ function base_admin_modifyconfig()
                         xarConfigVars::set(null, 'Site.Core.TimeZone', "UTC");
                         xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', 0);
                     }
-
+                    xarModVars::set('roles', 'usertimezone', xarConfigVars::get(null, 'Site.Core.TimeZone'));
+                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other')));
                     break;
             }
 

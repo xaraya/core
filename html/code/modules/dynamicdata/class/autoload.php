@@ -2,20 +2,19 @@
 /**
  * Dynamic Data Autoload
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
+ *
  * @author mikespub <mikespub@xaraya.com>
  */
 
 /**
  * Dynamic Data Autoload - moved this from xarAutoload::autoload_todo because it has lots :-)
- *
- * @package Xaraya eXtensible Management System
- * @subpackage dynamicdata
  */
 function dynamicdata_autoload($class)
 {

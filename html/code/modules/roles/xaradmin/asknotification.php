@@ -3,27 +3,29 @@
  * Update users from roles_admin_showusers
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /*
  * Update users from roles_admin_showusers
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  */
-function roles_admin_asknotification($args)
+function roles_admin_asknotification(Array $args=array())
 {
-    // Security Check
-    if (!xarSecurityCheck('EditRole')) return;
+    // Security
+    if (!xarSecurityCheck('EditRoles')) return;
+    
     // Get parameters
     if (!xarVarFetch('phase',    'str:0:', $data['phase'],    'display', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('mailtype', 'str:0:', $data['mailtype'], 'blank', XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('id',       'isset',  $id,              NULL,    XARVAR_NOT_REQUIRED)) return;
     //Maybe some kind of return url will make this function available for other modules
-    if (!xarVarFetch('state',    'int:0:', $data['state'],  ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('state',    'int:0:', $data['state'],  xarRoles::ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('groupid',  'int:0:', $data['groupid'], 0,    XARVAR_NOT_REQUIRED)) return;
     //optional value
     if (!xarVarFetch('pass',     'str:0:', $data['pass'],     NULL, XARVAR_NOT_REQUIRED)) return;
@@ -73,28 +75,18 @@ function roles_admin_asknotification($args)
             $data['message'] = preg_replace( "/%%(.+)%%/","#$\\1#", $data['message'] );
             $data['subject'] = preg_replace( "/%%(.+)%%/","#$\\1#", $data['subject'] );
 
-            // Preserve whitespace by encoding to html (block layout compiler seems to eat whitespace for lunch)
-            $data['message'] = nl2br($data['message']);
-            $data['message'] = str_replace(" ","&#160;", $data['message']);
-
-            // Get System/Site vars
-            $vars  = xarMod::apiFunc('roles','admin','getmessageincludestring', array('template' => 'message-vars'));
-
             // Compile Template before sending it to senduseremail()
-            $data['message'] = xarTplCompileString($vars . $data['message']);
-            $data['subject'] = xarTplCompileString($vars . $data['subject']);
-
-            // Restore whitespace
-            $data['message'] = str_replace('&#160;',' ', $data['message']);
-            $data['message'] = str_replace('<br />',' ', $data['message']);
+            $data['message'] = xarTplCompileString($data['message']);
+            $data['subject'] = xarTplCompileString($data['subject']);
 
             //Send notification
             $id = unserialize(base64_decode($id));
             if (!xarMod::apiFunc('roles','admin','senduseremail', array( 'id' => $id, 'mailtype' => $data['mailtype'], 'subject' => $data['subject'], 'message' => $data['message'], 'pass' => $data['pass'], 'ip' => $data['ip']))) {
-                return;
+                return xarTplModule('roles','user','errors',array('layout'=> 'mail_failed')); 
             }
-            xarResponse::redirect(xarModURL('roles', 'admin', 'showusers',
+            xarController::redirect(xarModURL('roles', 'admin', 'showusers',
                               array('id' => $data['groupid'], 'state' => $data['state'])));
+            return true;
            break;
     }
 }

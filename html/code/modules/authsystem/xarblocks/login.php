@@ -1,13 +1,14 @@
 <?php
 /**
- * Login via a block.
+ * Login Block user interface
  *
  * @package modules
+ * @subpackage authsystem module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Authsystem module
  * @link http://xaraya.com/index.php/release/42.html
  */
 
@@ -19,7 +20,7 @@
  */
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class LoginBlock extends BasicBlock implements iBlock
+class Authsystem_LoginBlock extends BasicBlock implements iBlock
 {
     public $nocache             = 1;
 
@@ -36,9 +37,9 @@ class LoginBlock extends BasicBlock implements iBlock
  * Display func.
  * @param $data array containing title,content
  */
-    function display(Array $data=array())
+    function display(Array $args=array())
     {
-        $data = parent::display($data);
+        $data = parent::display($args);
         if (empty($data)) return;
 
         $vars = $data;
@@ -63,47 +64,16 @@ class LoginBlock extends BasicBlock implements iBlock
             }
         } elseif (xarServer::getVar('REQUEST_METHOD') == 'GET') {
             // URL of this page
-            $args['return_url'] = xarServer::getCurrentURL();
+            xarVarFetch('redirecturl',   'isset', $args['return_url']   , xarServer::getCurrentURL(array(),false), XARVAR_NOT_REQUIRED);
         } else {
             // Base URL of the site
-            $args['return_url'] = xarServer::getBaseURL();
+            xarVarFetch('redirecturl',   'isset', $args['return_url']   , xarServer::getBaseURL(), XARVAR_NOT_REQUIRED);
         }
 
         // Used in the templates.
         $args['blockid'] = $data['bid'];
 
         $data['content'] = $args;
-        return $data;
-    }
-
-/**
- * Modify Function to the Blocks Admin
- * @param $data array containing title,content
- */
-    public function modify(Array $data=array())
-    {
-        $data = parent::modify($data);
-
-        if (!isset($data['showlogout'])) $data['showlogout'] = $this->showlogout;
-        if (!isset($data['logouttitle'])) $data['logouttitle'] = $this->logouttitle;
-
-        $data['blockid'] = $data['bid'];
-        return $data;
-
-    }
-
-/**
- * Updates the Block config from the Blocks Admin
- * @param $data array containing title,content
- */
-    public function update(Array $data=array())
-    {
-        $data = parent::update($data);
-        if (!xarVarFetch('showlogout', 'checkbox', $vars['showlogout'], $this->showlogout, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('logouttitle', 'str', $vars['logouttitle'], $this->logouttitle, XARVAR_NOT_REQUIRED)) return;
-
-        $data['content'] = $vars;
-
         return $data;
     }
 }

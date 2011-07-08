@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Module System
  * @link http://xaraya.com/index.php/release/1.html
  */
 /**
@@ -18,15 +19,16 @@
  * @author Xaraya Development Team
  * @param id registered module id
  * @param return_url optional return URL after setting the hooks
- * @returns array
- * @return an array of variables to pass to the template
+ * @return array data for the template display
  */
-function modules_admin_modifyproperties($args)
+function modules_admin_modifyproperties(Array $args=array())
 {
     extract($args);
 
     // xarVarFetch does validation if not explicitly set to be not required
-    xarVarFetch('id','id',$id);
+    if (!xarVarFetch('id', 'int', $id, 0, XARVAR_NOT_REQUIRED)) return; 
+    if (empty($id)) return xarResponse::notFound();
+
     xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET);
     xarVarFetch('phase', 'pre:trim:str:1', $phase, 'form', XARVAR_NOT_REQUIRED);
 
@@ -35,7 +37,7 @@ function modules_admin_modifyproperties($args)
 
     $modName     = $modInfo['name'];
 
-    // Security Check
+    // Security
     if(!xarSecurityCheck('AdminModules',0,'All',"$modName::$id")) return;
 
     $object = xarMod::apiFunc('base', 'admin', 'getmodulesettings', array('module' => $modName));
@@ -63,7 +65,7 @@ function modules_admin_modifyproperties($args)
                 if (empty($return_url)) {
                     $return_url = xarModURL('modules', 'admin', 'modifyproperties', array('id' => $id));
                 }
-                xarResponse::redirect($return_url);
+                xarController::redirect($return_url);
             }
         }
     }

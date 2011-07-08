@@ -1,11 +1,13 @@
 <?php
 /**
- * @package Xaraya eXtensible Management System
+ * @package modules
+ * @subpackage modules module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Modules module
+ * @link http://xaraya.com/index.php/release/1.html
  */
 /**
  * define a module name as an alias for some other module
@@ -13,13 +15,13 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @param modName name of the 'real' module you want to assign it to
- * @param aliasModName name of the 'fake' module you want to define
- * @returns bool
- * @return true on success, false on failure
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['modName'] name of the 'real' module you want to assign it to<br/>
+ *        string   $args['aliasModName'] name of the 'fake' module you want to define
+ * @return boolean true on success, false on failure
  * @throws BAD_PARAM
  */
-function modules_adminapi_add_module_alias($args)
+function modules_adminapi_add_module_alias(Array $args=array())
 {
     extract($args);
 

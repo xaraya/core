@@ -16,10 +16,10 @@
                         </li>
                     </xar:foreach>
                 </ul>
-                <xar:else />
+            <xar:else />
                 <xar:foreach in="$items" value="$item">
                     <h2>Search #$item['label']#</h2>
-                    <form method="get" action="index.php">
+                    <form method="post" action="#xarServer::getCurrentURL()#">
                         <div>
                             <table border="0" cellpadding="2" cellspacing="0">
                                 <tr>
@@ -65,6 +65,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2">
+                                        <input type="hidden" name="numitems" value="#$numitems#"/>
                                         <xar:set name="search">'Search'</xar:set>
                                         <input type="submit" value="#$search#"/>
                                     </td>
@@ -76,7 +77,7 @@
                 </xar:foreach>
             </xar:if>
         </div>
-        <xar:else />
+    <xar:else />
         <xar:foreach in="$items" value="$item">
             <h2>Search #$item['label']#</h2>
             <p></p>

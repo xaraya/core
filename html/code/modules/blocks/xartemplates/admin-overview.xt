@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <![CDATA[
-    <script type="text/javascript">
-        function showtab (selectedindex, items)
-        {
-            for (i=1;i<=items;i++) {
-                document.getElementById('page-' + i).style.display = "none";
-                document.getElementById('tab-' + i).className = "xar-tab";
-                document.getElementById('href-' + i).className = "xar-norm xar-norm-outline";
-            }
-            document.getElementById('page-' + selectedindex).style.display = "block";
-            document.getElementById('tab-' + selectedindex).className = "xar-tab-active";
-            document.getElementById('href-' + selectedindex).className = "xar-accent xar-accent-outline";
-        }
-    </script>
-    ]]>
-
     <div class="xar-mod-head">
         <span class="xar-mod-title">Blocks Administration</span>
     </div>
@@ -24,20 +8,59 @@
         <xar:template type="module" file="admin-menu"/>
         <img src="#xarTplGetImage('blocks.png','base')#" alt="#xarML('official icon')#" width="96" height="96" class="xar-module-icon"/>
         <h2>Overview</h2>
+        <xar:style scope="module" module="base" file="navtabs"/>
+        <br class="xar-clearall"/>
+        <div>
+            <ul class="xar-tabs xar-alt xar-norm-outline">
+                <li class="xar-tabs-label help" title="#xarML('Choose an action to perform')#">Overview:</li>
+                <xar:set name="activetab">'xar-tab-active'</xar:set>
+                <xar:set name="activelink">'xar-accent xar-accent-outline'</xar:set>
+                <xar:set name="inactivetab">'xar-tab'</xar:set>
+                <xar:set name="inactivelink">'xar-norm xar-norm-outline'</xar:set>
 
-        <ul class="xar-tabs xar-alt xar-norm-outline" style="clear:both">
-            <li class="xar-tab-active" id="tab-1">
-                <a id="href-1" href="javascript:showtab(1,2)" class="xar-accent xar-accent-outline">
-                    Overview
-                </a>
-            </li>
-            <li class="xar-tab" id="tab-2">
-                <a id="href-2" href="javascript:showtab(2,2)" class="xar-norm xar-norm-outline">
-                    How To
-                </a>
-            </li>
-        </ul>
-        <div id="page-1">
+                <xar:set name="tabclass">empty($tab)?$activetab:$inactivetab</xar:set>
+                <xar:set name="linkclass">empty($tab)?$activelink:$inactivelink</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarServer::getCurrentUrl(array('tab' => null))#" title="#xarML('About')#" class="#$linkclass#">
+                    About</a>
+                </li>
+                <xar:set name="tabclass">$tab=='admin'?$activetab:$inactivetab</xar:set>
+                <xar:set name="linkclass">$tab=='admin'?$activelink:$inactivelink</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarServer::getCurrentUrl(array('tab' => 'admin'))#" title="#xarML('Admin')#" class="#$linkclass#">
+                    Admin</a>
+                </li>
+                <xar:set name="tabclass">$tab=='config'?$activetab:$inactivetab</xar:set>
+                <xar:set name="linkclass">$tab=='config'?$activelink:$inactivelink</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarServer::getCurrentUrl(array('tab' => 'config'))#" title="#xarML('Config')#" class="#$linkclass#">
+                    Config</a>
+                </li>
+                <xar:set name="tabclass">$tab=='caching'?$activetab:$inactivetab</xar:set>
+                <xar:set name="linkclass">$tab=='caching'?$activelink:$inactivelink</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarServer::getCurrentUrl(array('tab' => 'caching'))#" title="#xarML('Caching')#" class="#$linkclass#">
+                    Caching</a>
+                </li>
+                <xar:set name="tabclass">$tab=='access'?$activetab:$inactivetab</xar:set>
+                <xar:set name="linkclass">$tab=='access'?$activelink:$inactivelink</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarServer::getCurrentUrl(array('tab' => 'access'))#" title="#xarML('Access')#" class="#$linkclass#">
+                    Access</a>
+                </li>
+                <xar:set name="tabclass">$tab=='howto'?$activetab:$inactivetab</xar:set>
+                <xar:set name="linkclass">$tab=='howto'?$activelink:$inactivelink</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarServer::getCurrentUrl(array('tab' => 'howto'))#" title="#xarML('How To')#" class="#$linkclass#">
+                    How To</a>
+                </li>
+                <!-- add tabs as required here, then add a condition for them below -->
+            </ul>
+        </div>
+
+        <!-- About, basic module overview info and concept -->
+        <xar:if condition="empty($tab)">
+
             <h3>What is it?</h3>
             <p>
                 The Blocks module lets site administrator(s) create and manage the configuration, display position and grouping of 'blocks' of content or functionality on a Xaraya site. The Blocks module is a core module within
@@ -50,58 +73,26 @@
             <h3>Concepts</h3>
             <h4>Block Types</h4>
             <p>
-                A block type defines a specific display of content or functionality that you can place on your site. Xaraya modules can provide their own block types. For example the Roles module provides a 'language' block type to create blocks that let the user choose the site's langauge. The Base module provides a 'menu' block type for displaying menus, and so on.
+                A block type defines a specific display of content or functionality that you can place on your site. Xaraya modules can provide their own block types. For example the Blocks module provides a 'blockgroup' block type to create blocks that are used to display and manage blockgroups. The Base module provides a 'menu' block type for displaying menus, and so on.
             </p>
             <p>
-                A module's block types are available when the module is installed, and removed when it is uninstalled. Block types are managed through the <strong>Block Types</strong>&#160;page, which lists all the block types available in your Xaraya installation and the modules they belong to. 
+                A module's block types are available when the module is installed, and removed when it is uninstalled. Block types are managed through the <strong>Block Types</strong> page, which lists all the block types available in your Xaraya installation and the modules they belong to.
             </p>
 
             <h4>Blocks</h4>
             <p>
-                A block is an instance of a block type. You can create as many blocks from a given block type as required, each with its own behavior and content (several menu block on the same page, for instance). In general blocks are displayed on a site's pages by assigning them to one or more block group, but a block can also be displayed anywhere on a page by using a block tag (see <a href="http://xaraya.com/documentation/rfcs/rfc0010.html" target="_blank">RFC0010</a>for details about using block and block group tags).
-            </p>
-
-            <h4>Block Groups</h4>
-            <p>
-                Block groups are clusters of blocks on your site's pages. The blocks assigned to a given group are all displayed in the area of a page that group occupies. Xaraya comes pre-configured with block groups created at installation time that include <em>right</em>, <em>left</em>, <em>center</em>, <em>topnav</em>and <em>header</em> block groups. Block group tags are used in theme pages to postion and display each group and its blocks (the name of a group is of no importance and can be changed). A block can be assigned to more than one group and is displayed in each group it is assigned to.
-            </p>
-
-            <h3>The Admin interface</h3>
-            <p>
-                As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Blocks &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
-            </p>
-            <p>
-                Clicking on the <strong>View Blocks</strong>link in the Admin menu displays all the current blocks that are available for use in your Xaraya site and lets you modify or delete them. The page also has a link to the <strong>New Block</strong>&#160;page. You can go to a block's configuration page by clicking on its Edit link in the <strong>View Blocks</strong>&#160;page. You can then:
-                <ul>
-                    <li>
-                        Change the block's name (used by Xaraya to identify it) and its title (the title in the block's display).
-                    </li>
-                    <li>
-                        Set the block to be displayed or hidden on template pages.
-                    </li>
-                    <li>
-                        Assign the block to be displayed in one or more block groups.
-                    </li>
-                    <li>
-                        Specify whether special templates should be used to display the block. You can override the standard templates by defining an "inner" template for the block and an "outer" template for its group (see Templating Blocks and Block Groups in the How To section of this page)
-                    </li>
-                    <li>
-                        Set any block-specific configuration options. Most blocks will have special settings pertinent to their functionality that can be modified according to your needs.
-                    </li>
-                </ul>
-            </p>
-            <p>
-                Clicking on the <strong>New Block</strong>link in the Admin menu lets you create and make available a new block of a given block type, and optionally assign it to a block group (see below).
-            </p>
-            <p>
-                Clicking on the <strong>Block Types</strong>link in the Admin menu displays all the defined Block Types on your site with a link to a detail display of each Block Type's configuration. The page also contains a link to the <strong>New Block Type</strong> page, which can scan a module for its block types and lets you add any that are not yet available. Xaraya does not actually allow you to create new block types. Rather, this option is used in the (exceptional) case when a block type was not properly installed in the course of a normal module release or upgrade.
-            </p>
-            <p>
-                Clicking on the <strong>Block Groups</strong>link in the Admin menu displays all the defined block groups on your site with links to Edit or Delete options. The page also has a link to the <strong>New Block Group</strong>&#160;page, which presents a simple input screen through which you can add a new block group to your site.
+                A block is an instance of a block type. You can create as many blocks from a given block type as required, each with its own behavior and content (several menu block on the same page, for instance). In general blocks are displayed on a site's pages by assigning them to one or more block group, but a block can also be displayed anywhere on a page by using a block tag (see <a href="http://xaraya.com/documentation/rfcs/rfc0010.html" target="_blank">RFC0010</a> for details about using block and block group tags).
             </p>
 
             <h3>Available Blocks</h3>
-            <p>The Blocks Module has no blocks</p>
+            <p>The Blocks Module has the following blocks</p>
+            <ul>
+                <li><strong>Blockgroup Block</strong> - Responsible for displaying and managing blockgroups
+                    <p>
+                        Block groups are clusters of blocks on your site's pages. The blocks assigned to a given group are all displayed in the area of a page that group occupies. Xaraya comes pre-configured with block groups created at installation time that include <em>right</em>, <em>left</em>, <em>center</em>, <em>topnav</em> and <em>header</em> block groups. Block group tags are used in theme pages to postion and display each group and its blocks (the name of a group can be changed but must be unique). A block can be assigned to more than one group and is displayed in each group it is assigned to.
+                    </p>
+                </li>
+            </ul>
 
             <h3>Available Dataproperties</h3>
             <p>The Blocks module has no dataproperties</p>
@@ -117,20 +108,47 @@
             <xar:var name="moduledocurltext">Blocks Module - Xaraya Extension 13</xar:var>
             <p>Further information on the Blocks module can be found at</p>
             <ul>
-                <li>Blocks Module Extension page at 
+                <li>Blocks Module Extension page at
                 <a href="#$moduledocurl#" title="#$moduledocurltext#">Xaraya Extension and
                 Releases</a>. Click on Version History tab at the bottom to get the latest release
                 information.</li>
-                <li>Related tutorials and documentation on Blocks found at 
+                <li>Related tutorials and documentation on Blocks found at
                 <a href="#$relateddocurl#" title="#$relateddocurltext#">Xaraya Documentation.</a></li>
             </ul>
             <p class="xar-sub">
             <strong>&#160;Blocks Module Overview</strong>
             <br />&#160;Version 1.1.1&#160; 2006-07-20</p>
             -->
-        </div>
-        
-        <div id="page-2" style="display: none">
+        <!-- Admin Interface -->
+        <xar:elseif condition="$tab eq 'admin'"/>
+
+            <h3>The Admin interface</h3>
+
+            <h4>View Blocks</h4>
+            <p>
+                Clicking on the <strong>View Blocks</strong> link in the Admin menu displays all the current blocks that are available for use in your Xaraya site and lets you modify or delete them. The page also has a link to the <strong>New Block</strong>&#160;page. You can go to a block's configuration page by clicking on its Edit link in the list of blocks displayed. See <a href="#xarServer::getCurrentUrl(array('tab' => 'config'))#">Block Configuration</a> for details.
+            </p>
+
+            <h4>New Block</h4>
+            <p>
+                Clicking on the <strong>New Block</strong> link in the Admin menu lets you create and make available a new block of a given block type, and optionally assign it to a block group. See <a href="#xarServer::getCurrentUrl(array('tab' => 'howto'))#">How To</a> for details.
+            </p>
+
+            <h4>Block Types</h4>
+            <p>
+                Clicking on the <strong>Block Types</strong> link in the Admin menu displays all the defined Block Types on your site with a link to a detail display of each Block Type's configuration. The page also contains a link to the <strong>New Block Type</strong> page, which can scan a module for its block types and lets you add any that are not yet available. Xaraya does not actually allow you to create new block types. Rather, this option is used in the (exceptional) case when a block type was not properly installed in the course of a normal module release or upgrade.
+            </p>
+
+            <h4>Modify Configuration</h4>
+            <p>
+                As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Blocks &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
+            </p>
+
+        <!-- basic module how to's -->
+        <!-- @TODO: change this to an faq style -->
+        <xar:elseif condition="$tab eq 'faq'"/>
+        <xar:elseif condition="$tab eq 'howto'"/>
+
             <h3>Creating a Block</h3>
             <p>
                 There are a number of steps required to create a new block of content or functionality
@@ -146,11 +164,11 @@
                         If you need a new block group for displaying the block, create one and then assign the block to it
                     </li>
                     <li>
-                        Add a <strong>blockgroup tag</strong>in your theme template so Xaraya knows where to display
+                        Add a <strong>blockgroup tag</strong> in your theme template so Xaraya knows where to display
                         your blocks. e.g. <pre>&lt;xar:blockgroup name="right" id="right" /&gt;</pre>.
                     </li>
                 </ol>
-                Note: you do not have to allocated a block instance to a block group. You can place the block directly into your theme templates by using a <strong>block</strong>tag (see <a href="http://xaraya.com/documentation/rfcs/rfc0010.html" target="_blank">RFC0010</a>for details).
+                Note: you do not have to allocated a block instance to a block group. You can place the block directly into your theme templates by using a <strong>block</strong> tag (see <a href="http://xaraya.com/documentation/rfcs/rfc0010.html" target="_blank">RFC0010</a> for details).
             </p>
 
             <h3>Templating Blocks and Block Groups</h3>
@@ -159,50 +177,153 @@
             </p>
             <ol>
                 <li>
-                    <strong>Inner template</strong>&#160;is used for display of the content in a block, and is supplied by the module that provides the block type. It can be overridden like any other Xaraya template. Overrides for block inner templates should be be placed in 
+                    <strong>Inner template</strong>&#160;is used for display of the content in a block, and is supplied by the module that provides the block type. It can be overridden like any other Xaraya template. Overrides for block inner templates should be be placed in
                     <pre>themes/[yourtheme]/modules/[themodule]/blocks</pre>
-                    where [themodule] is the module providing the block type. The general name for the template is 
+                    where [themodule] is the module providing the block type. The general name for the template is
                     <pre>blocktype-innertemplatename.xt</pre>
                 </li>
                 <li>
-                    <strong>Outer template</strong>&#160;is the name given to the template used for the block's block group. Some 'outer' templates are installed by default with Xaraya, but you can also create your own 'outer' templates. The outer templates are stored in your 
+                    <strong>Outer template</strong>&#160;is the name given to the template used for the block's block group. Some 'outer' templates are installed by default with Xaraya, but you can also create your own 'outer' templates. The outer templates are stored in your
                     <pre>theme/[yourtheme]/blocks</pre>
                     directory. If there is no specific block group template the block group will use the preinstalled 'default' block group template.
                 </li>
             </ol>
-            
             <h3>How to tell Xaraya which inner and outer templates to use</h3>
             <p>
                 You can tell Xaraya which inner and outer templates to use when you create a new block instance or modify an existing one. Using the Blocks module, there are two places you can set either the inner template, the outer template or both.
                 <ul>
-                    <li>The field labelled 
-                    <strong>Instance Template (optional):</strong>sets the default inner and outer template
+                    <li>The field labelled
+                    <strong>Instance Template (optional):</strong> sets the default inner and outer template
                     used for the block instance and any block group. You can specify inner, outer, both
-                    inner and outer or none. You use the following format: 
-                    <pre>[outer-template][semi-colon][inner-template]</pre>. Both are specified without
-                    the file extension.</li>
-                    <li>If you add a block instance to a block group, another input field will appear,
-                    labelled with the name of the block group. You can also add a specific inner, outer or
-                    both inner and outer template in this field using the same syntax. Specifying an inner
-                    or outer template in this block group template field will override any other
+                    inner and outer or none (leave empty) in the Inner and Outer fields respectively. Both are specified without the file extension.</li>
+                    <li>If you add a block instance to a block group, another field will appear,
+                    labelled with the name of the block group. You can add a specific inner, outer or
+                    both inner and outer template in the Inner and Outer fields provided. Specifying an inner
+                    or outer template in the block group template fields will override any other
                     templates.</li>
                 </ul>
                 <strong>An example:</strong>if you create a roles user block (which displays the current user's profile information) and you are using the default theme:
             </p>
             <ul>
                 <li>By default, this block will use the roles module's inner template called
-
-                <pre>user.xd</pre>located in modules/roles/xartemplates/blocks</li>
-                <li>
-                If you have allocated the user block to a block group called 'right' it will use, by default, the outer template located at <pre>themes/default/blocks/right.xt</pre>. If the 'right' outer template does not exist it will use one called 'default.xt' in that same directory.
+                <pre><strong>user</strong>.xt</pre>located in <pre>modules/roles/xartemplates/blocks</pre>
                 </li>
                 <li>
-                If you wish to override both outer and inner templates for the user block then the syntax example of:<strong>left;userprofile</strong>would mean the outer template is one created and called 
-                <pre> <strong>left</strong>.xt</pre>in the <pre>themes/default/blocks</pre>directory. The roles module's user block will be displayed using the <pre>themes/default/modules/roles/blocks/user-<strong>userprofile</strong>.xt</pre>template. You could just specify outer or inner template if required by adding <pre>left;</pre>or <pre>;userprofile</pre>to specify outer and inner respectively.</li>
+                If you have allocated the user block to a block group called 'right' it will use, by default,
+                the outer template located at <pre>themes/default/blocks/<strong>right</strong>.xt</pre>
+                If the 'right' outer template does not exist it will use one called 'default.xt' in that same directory.
+                </li>
+                <li>
+                If you wish to override both outer and inner templates for the user block then you would specify,
+                for example, left in the Outer field and userprofile in the Inner field.
+                This would mean the outer template is one created and called
+                <pre><strong>left</strong>.xt</pre> located in the directory <pre>themes/default/blocks</pre>
+                The roles module's user block will be displayed using the template
+                <pre>themes/default/modules/roles/blocks/user-<strong>userprofile</strong>.xt</pre>
+                You could just specify outer or inner template if required by adding <pre>left</pre>
+                to the Outer field or <pre>userprofile</pre>to the Inner field.
+                </li>
             </ul>
-        </div>
+
+        <!-- Block Configuration -->
+        <xar:elseif condition="$tab eq 'config'"/>
+            <h3>Block Configuration</h3>
+            <p>Administrators can configure the following options per block instance from the Config tab available when editing a block.</p>
+            <h4>Block Properties</h4>
+            <ul>
+                <li><strong>Name</strong> - String, name of the block (required), must be unique, lowercased and cannot contain spaces, maximum length 100 characters</li>
+                <li><strong>Title</strong> - String, title of the block (optional), maximum length 255 characters</li>
+                <li><strong>Default State</strong> - Int, state of module (required), options are
+                <ul>
+                    <li><strong>Hidden</strong> #xarBlock::BLOCK_STATE_HIDDEN#, the block display function will be executed but the block will not be displayed.</li>
+                    <!--
+                    <li><strong>Inactive</strong> #xarBlock::BLOCK_STATE_INACTIVE#, the block is disabled.</li>
+                    -->
+                    <li><strong>Visible</strong> #xarBlock::BLOCK_STATE_VISIBLE#, the block will be displayed.</li>
+                </ul>
+                </li>
+                <li><strong>Block Expiration</strong> string, set a time when block should stop being displayed (optional). Expects a string indicating the length of time to display the block for (from now) in the format <code>ddd:hh:mm:ss</code>. Once set the display shows the length of time left before the block expires, or a message that the block has expired. Setting to 0 means the block never expires (default).</li>
+            </ul>
+            <h4>Block Type Properties</h4>
+            <p>Block type properties are supplied by the block being modified.</p>
+            <h4>Block Groups and Group Templates</h4>
+            <ul>
+                <li><strong>Add to Group</strong> - Add this block to a blockgroup block.</li>
+                <li><strong>groupName Group Template</strong> - group specific outer and inner templates for this block when displayed in this blockgroup.</li>
+                <li><strong>Instance Template</strong> - Specify default outer and inner templates to use. Will be used when not over-ridden by a group template, falling back to default.xt.</li>
+            </ul>
+            <h4>See also...</h4>
+            <ul>
+                <li><a href="#xarServer::getCurrentUrl(array('tab' => 'caching'))#">Block Caching Configuration</a></li>
+                <li><a href="#xarServer::getCurrentUrl(array('tab' => 'access'))#">Block Access Configuration</a></li>
+            </ul>
+        <!-- Caching configuration -->
+        <xar:elseif condition="$tab eq 'caching'"/>
+
+            <h3>Block Caching Configuration</h3>
+            <p>Administrators can configure caching per block instance from the Caching tab available when editing a block.</p>
+            <p>The following caching options are available</p>
+            <ul>
+                <li><strong>Disable Caching</strong> - When checked the block will not be cached.</li>
+                <li><strong>Page Sharing</strong> - Optionally share the block across pages. If unchecked cache will take the request uri and request vars into account when caching blocks.</li>
+                <li><strong>User Sharing</strong> - Optionally share the block between users. Options are
+                    <ul>
+                        <li><strong>No Sharing</strong> - Caches block per user. All users see a distinct cached copy.</li>
+                        <li><strong>Group Members</strong> - Caches block per user group. All users in the same group see the same cached copy.</li>
+                        <li><strong>All Users</strong> - Caches one copy for all users.</li>
+                    </ul>
+                </li>
+                <li><strong>Expiration Time</strong> - The length of time before a cached block becomes stale. Expects a string indicating the length of time to cache the block in the format <pre>dd:hh:mm:ss</pre>
+                A value of 0 means the cache only expires if the block changes as a result of updating the block.
+                </li>
+            </ul>
+            <h4>See also...</h4>
+            <ul>
+                <li><a href="#xarServer::getCurrentUrl(array('tab' => 'config'))#">Block Configuration</a></li>
+                <li><a href="#xarServer::getCurrentUrl(array('tab' => 'access'))#">Block Access Configuration</a></li>
+            </ul>
+        <!-- Access configuration -->
+        <xar:elseif condition="$tab eq 'access'"/>
+            <h3>Block Access Configuration</h3>
+            <p>Administrators can configure access options for blocks and block types.</p>
+
+            <p>The common access options you can set per access level are as follows</p>
+            <h4>Access Property</h4>
+            <ul>
+                <li><strong>Required Group Membership</strong> - allows access based on current role membership (optional)
+                    <ul>
+                        <li><strong>No Requirement</strong> - all users</li>
+                        <li><strong>Users not logged in</strong> - all anonymous users</li>
+                        <li><strong>Users logged in</strong> - all logged in users, all groups</li>
+                        <li><strong>groupName</strong> - all users in a group</li>
+                    </ul>
+                </li>
+                <li><strong>Required Access Level</strong> - used when Group Membership has No Requirement, allow access to users with this level or greater access.</li>
+                <li><strong>Behaviour on Failure</strong> - either show a privilege error for failed access, or fail silently.</li>
+            </ul>
+
+            <h4>Block Access</h4>
+            <p>Administrators can configure the following options per block instance from the Access tab available when editing a block.</p>
+            <ul>
+                <li><strong>Display Access</strong> - controls who the block will be displayed to.</li>
+                <li><strong>Modify Access</strong> - controls who can modify the block type properties.</li>
+                <li><strong>Delete Access</strong> - controls who can delete the block.</li>
+            </ul>
+
+            <h4>Block Type Access</h4>
+            <p>Administrators can configure the following options per block type when editing a block type.</p>
+            <ul>
+                <li><strong>Add Access</strong> - controls who can add blocks of this type.</li>
+            </ul>
+
+            <h4>See also...</h4>
+            <ul>
+                <li><a href="#xarServer::getCurrentUrl(array('tab' => 'config'))#">Block Configuration</a></li>
+                <li><a href="#xarServer::getCurrentUrl(array('tab' => 'caching'))#">Block Caching Configuration</a></li>
+            </ul>
+        <!-- Create more tabs as required here -->
+        <xar:else/>
+
+        </xar:if>
     </div>
-    <script type="text/javascript">
-        showtab (1,2)
-    </script>
 </xar:template>

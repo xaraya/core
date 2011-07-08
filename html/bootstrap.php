@@ -17,6 +17,7 @@
  * of what you want to do here.
  *
  * @package core
+ * @subpackage core
  * @copyright (C) copyright-placeholder
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -302,6 +303,7 @@ final class sys extends Object
      * Syntax examples:
      *    sys::import('blocklayout.compiler')              -> lib/blocklayout/compiler.php
      *    sys::import('modules.mymodule.xarincludes.test') -> html/code/modules/mymodule/xarincludes/test.php
+     *    sys::import('properties.myproperty.main')        -> html/code/properties/myproperty/main.php
      *
      * The beginning of the dot path is scanned for 'modules.'
      * if found it assumes a module import
@@ -309,19 +311,18 @@ final class sys extends Object
      *
      * @see    sys::once()
      * @todo   do we want to support sys::import('blocklayout.*') ?
-     * @todo   we should probably change our directory structure so we dont have to do specials for modules.
     **/
     public static function import($dp)
     {
-        if((0===strpos($dp,'modules.'))) {
+        if((0===strpos($dp,'modules.')) || (0===strpos($dp,'properties.'))) {
             return self::once(self::shortpath($GLOBALS['systemConfiguration']['codeDir'] . $dp), false);
         }
         return self::once($GLOBALS['systemConfiguration']['libDir'] . $dp);
     }
 
     /**
-     * Returns the absolute path of the xaraya system root, NOT the web root
-     * Note that there WILL ba a slash at the end of the return path.
+     * Returns the path of the xaraya system root, NOT the web root
+     * Note that there WILL be a slash at the end of the return path, unless it's empty ("flat install")
      *
      * @return string
     **/
@@ -334,8 +335,8 @@ final class sys extends Object
     }
 
     /**
-     * Returns the absolute path of the lib directory.
-     * Note that there WILL ba a slash at the end of the return path.
+     * Returns the path of the lib directory.
+     * Note that there WILL be a slash at the end of the return path.
      *
      * @return string
     **/
@@ -348,8 +349,8 @@ final class sys extends Object
     }
 
     /**
-     * Returns the absolute path of the code directory.
-     * Note that there WILL ba a slash at the end of the return path.
+     * Returns the path of the code directory.
+     * Note that there WILL be a slash at the end of the return path.
      *
      * @return string
     **/
@@ -363,7 +364,7 @@ final class sys extends Object
 
     /**
      * Returns the a path relative to the doc root directory if the path is below that directory
-     * Note that there WILL ba a slash at the end of the return path.
+     * Note that there WILL be a slash at the end of the return path.
      *
      * @return string
     **/
@@ -392,9 +393,8 @@ final class sys extends Object
     public static function varpath()
     {
         if (isset(self::$var)) return self::$var;
-        if (file_exists('./var/.key.php')) { // I/O (prolly cheap, but we could eliminate this one with a try/catch)
-            include './var/.key.php';        // I/O (doesnt use include_path, only looks in ./var/ so not that expensive either)
-            self::$var = $protectedVarPath;
+        if (isset($GLOBALS['systemConfiguration']['varDir'])) {
+            self::$var = $GLOBALS['systemConfiguration']['varDir'];
         } else {
             self::$var = './var';
         }

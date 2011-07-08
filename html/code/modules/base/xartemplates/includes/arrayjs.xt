@@ -1,59 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<![CDATA[ 
     <script type="text/javascript">
-        function #$id#_addRow(removeflag)
-        {           
-            //get the div in which the rows are displayed            
-            var itemdiv = document.getElementById('#$id#_rows');
+        
+        // set min / max rows 
+        var #$id#_min_rows = #$minimum_rows#;
+        var #$id#_max_rows = #$maximum_rows#;
+        
+        function #$id#_addTableRow(removeflag)
+        {
+            //get the element in which the rows are displayed            
+            var rowsel = document.getElementById('#$id#_rows');
+            if (rowsel == null) { return; }
+            
+            // count the rows
+            var numrows = #$id#_countRows();
+            // make sure we're not at the row limit
+            if (numrows >= #$id#_max_rows) {
+                //alert('Only ' + #$id#_max_rows + ' rows allowed');
+                return;
+            }
+            
             // Get value for the next row and increment the last row ID
             var lastrowfield = document.getElementById('#$id#_lastrow');
-            var lastrow = lastrowfield.value;
+            var lastrow = parseInt(lastrowfield.value);
             lastrow++;
             lastrowfield.value = lastrow;
             
-            // Add the next row number to the list of rows
-            var rowsdisplayedfield = document.getElementById('#$id#_rowsdisplayed');            
-            var rowsdisplayed = rowsdisplayedfield.value;            
-            rowsdisplayed = rowsdisplayed + ',' + lastrow;
-            rowsdisplayedfield.value = rowsdisplayed;
-            
-            //create a new div for the new rows with proper name
-            var divIdName = "#$id#_" + lastrow +  "";            
-            var newdiv = document.createElement('div');
-            newdiv.setAttribute("id",divIdName);
-            newdiv.setAttribute("class","xar-form-input-wrapper");            
-                            
-            // Replace the placeholder text with the new row
-            var rowtemplate = document.getElementById('#$id#_rowtemplate');            
-            var rowhtml = rowtemplate.innerHTML;
-            //check for the remove button to be added or not                                                            
-            if(removeflag) {
-                var removetemplate = document.getElementById('#$id#_removetemplate');
-                var removehtml = removetemplate.innerHTML;                     
-                newdiv.innerHTML = rowhtml + removehtml;
-            } else {
-                newdiv.innerHTML = rowhtml;
+            // Clone the new row template
+            var rowelement = document.getElementById('#$id#_rowtemplate');
+            var rowtemplate = rowelement.cloneNode(true);
+            var rowid = "#$id#_" + lastrow;
+            // set the row template id attribute to the next id            
+            rowtemplate.setAttribute("id",rowid);
+            // make sure the new element display is not hidden
+            rowtemplate.style.display = '';
+                        
+            // Find the delete button in the template
+            var imgels = rowtemplate.getElementsByTagName('img');
+            for (var i=0; i < imgels.length; i++) {
+                var imgel = imgels[i];
+                if (imgel.id != '#$id#_delbutton') { continue; }
+                // set attributes                
+                imgel.setAttribute("id", rowid + '_delbutton');
+                imgel.setAttribute("onclick", "javascript:#$id#_delTableRow('" + rowid + "')");
+                imgel.setAttribute("class","xar-icon");
+                imgel.style.display = '';
+                break;
             }
-            //to have proper name for the div to be added replace the two dummy names
-            // Create the HTML for the new row,remove button and insert the new row and button 
-            var regex = new RegExp ('dummyid', 'gi') ;
-            newdiv.innerHTML = newdiv.innerHTML.replace(regex,'#$id#');                         
-            var regex = new RegExp ('dummy', 'gi') ;
-            newdiv.innerHTML = newdiv.innerHTML.replace(regex,lastrow);                                                                     
-            itemdiv.appendChild(newdiv);            
+            
+            if (removeflag) {
+                // remove an element before appending the new row
+                var removetemplate = document.getElementById(removeflag);
+                rowsel.removeChild(removetemplate);
+                // append the row
+                rowsel.appendChild(rowtemplate);
+                // then append what we removed
+                rowsel.appendChild(removetemplate);
+            } else {
+                // just append the row
+                rowsel.appendChild(rowtemplate);
+            }
+            // one row added, increment the counter
+            numrows++;            
+               
+            // hide the add row button if we're at the maximum rows...
+            if (numrows >= #$id#_max_rows) {
+                var addelement = document.getElementById('#$id#_addrow');
+                addelement.style.display = 'none';
+            }
+            // enable the delete buttons if we're above the minimum rows
+            if (numrows > #$id#_min_rows) {
+                #$id#_delButtons('');
+            } else {
+                #$id#_delButtons('disabled');
+            }
         }
 
-        function #$id#_removeRow(Id, row)
-        {           
-            var d = document.getElementById('#$id#_rows');
-            var olddiv = document.getElementById(Id + "_" + row + "");            
-            d.removeChild(olddiv);
-            
-            //Update the "rowsdisplayed" value after removing the row
-            var rowsdisplayedfield = document.getElementById('#$id#_rowsdisplayed');
-            var rowsdisplayed = rowsdisplayedfield.value;                        
-            rowsdisplayed = rowsdisplayed.replace(',' + row, '');            
-            rowsdisplayedfield.value = rowsdisplayed;    
+        function #$id#_countRows()
+        {
+            var rows = 0;            
+            //get the div in which the rows are displayed            
+            var rowsel = document.getElementById('#$id#_rows');
+            // get the row elements
+            var rowels = rowsel.getElementsByTagName('tr');
+               //iterate over elements:
+               for (var r=0; r<rowels.length; r++) {
+                   //get pointer to current row
+                   var rowel=rowels[r];
+                   var rowid=rowel.id;
+                   // don't count rowtemplate or addrow 
+                   if (rowid == '#$id#_rowtemplate' || 
+                       rowid == null ||
+                       rowid == '#$id#_addrow') { continue; }
+                   rows++
+               }
+               return rows;
         }
+        
+        function #$id#_delButtons(action)
+        {
+            //get the div in which the rows are displayed            
+            var itemdiv = document.getElementById('#$id#_rows');
+            // get the row elements
+            var rowels = itemdiv.getElementsByTagName('tr');
+               //iterate over elements:
+               for (var r=0; r<rowels.length; r++) {
+                   //get pointer to current row
+                   var rowel=rowels[r];
+                   var rowid=rowel.id;
+                // Find the delete button in the row
+                var imgels = rowel.getElementsByTagName('img');
+                for (var i=0; i < imgels.length; i++) {
+                    var imgel = imgels[i];
+                    if (imgel.id != rowid + '_delbutton') { continue; }
+                    if (action == 'disabled') {
+                        // set attributes                
+                        imgel.setAttribute("onclick", "");
+                        imgel.setAttribute("class","xar-icon-disabled");
+                        imgel.style.cursor = 'not-allowed';
+                        //imgel.style.display = 'none';                    
+                    } else {
+                        // set attributes                
+                        imgel.setAttribute("onclick", "javascript:#$id#_delTableRow('"+rowid+"')");
+                        imgel.setAttribute("class","xar-icon");
+                        imgel.style.cursor = 'pointer';
+                        //imgel.style.display = '';
+                    }
+                }
+            }
+           }
+        
+        function #$id#_delTableRow(rowid)
+        {
+            var d = document.getElementById('#$id#_rows');
+            var olddiv = document.getElementById(rowid);     
+            d.removeChild(olddiv);
+
+            var numrows = #$id#_countRows();
+
+            // show the add row button if we're below the maximum rows...
+            if (numrows < #$id#_max_rows) {
+                var addelement = document.getElementById('#$id#_addrow');
+                addelement.style.display = '';
+            }
+            // disabled the delete buttons if we're at the minimum rows
+            if (numrows <= #$id#_min_rows) {
+                #$id#_delButtons('disabled');
+            } else {
+                #$id#_delButtons('');
+            }     
+        }        
+        
     </script>
+]]>
 </xar:template>

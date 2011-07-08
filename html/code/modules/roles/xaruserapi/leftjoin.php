@@ -3,11 +3,12 @@
  *  Return the field names and correct values for joining on users table
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
@@ -21,16 +22,16 @@
  *               AND $where
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['ids'] optional array of ids that we are selecting on
- * @returns array
- * @return array('table' => 'xar_roles',
+ * @param array    $args array of optional parameters<br/>
+ *        array    $args['ids'] optional array of ids that we are selecting on
+ * @return array array('table' => 'xar_roles',
  *               'field' => 'xar_roles.id',
  *               'where' => 'xar_roles.id IN (...)',
  *               'name'  => 'xar_roles.name',
  *               ...
  *               'email'  => 'xar_roles.email')
  */
-function roles_userapi_leftjoin($args)
+function roles_userapi_leftjoin(Array $args=array())
 {
     // Get arguments from argument array
     extract($args);
@@ -45,7 +46,7 @@ function roles_userapi_leftjoin($args)
 
 // TODO: check this !
     foreach ($ids as $id) {
-        if (!xarSecurityCheck('ReadRole',0,'All',"All:All:$id")) return;
+        if (!xarSecurityCheck('ReadRoles',0,'All',"All:All:$id")) return;
     }
 
     // Table definition

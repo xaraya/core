@@ -2,29 +2,31 @@
 /**
  *
  * @package modules
+ * @subpackage roles module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Roles module
  * @link http://xaraya.com/index.php/release/27.html
  */
 /**
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * view users
+ * @return string output display string
  */
-function roles_user_view($args)
+function roles_user_view(Array $args=array())
 {
     if (!xarSecurityCheck('ViewRoles')) return;
 
     // members list disabled? only show to roles admins
     if ((bool)xarModVars::get('roles', 'displayrolelist') == false && !xarSecurityCheck('AdminRoles', 0)) {
-        xarResponse::redirect(xarModURL('roles', 'user', 'main'));
+        xarController::redirect(xarModURL('roles', 'user', 'main'));
     }
 //    extract($args);
 
     if(!xarVarFetch('startnum', 'int:1', $args['startnum'], NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('itemtype', 'int', $args['itemtype'], ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('itemtype', 'int', $args['itemtype'], xarRoles::ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('search', 'str:1:100', $args['search'], NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('order', 'str', $args['order'], NULL, XARVAR_NOT_REQUIRED)) {return;}
     if(!xarVarFetch('include', 'str', $args['include'], NULL, XARVAR_NOT_REQUIRED)) {return;}
@@ -47,7 +49,6 @@ function roles_user_view($args)
 
     $data['total'] = count($items);
     $data['itemtype'] = $args['itemtype'];
-    $data['basetype'] = $data['itemtype'];
     $types = xarMod::apiFunc('roles','user','getitemtypes');
     $data['itemtypename'] = $types[$data['itemtype']]['label'];
     $data['items'] = $items;

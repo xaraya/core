@@ -1,4 +1,15 @@
 <?php
+/**
+ * @package modules
+ * @subpackage privileges module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/1098.html
+ */
+
     /**
      * getcomponents: returns all the current components of a module.
      *
@@ -9,16 +20,15 @@
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   string with module name
+ * @param array    $args array of optional parameters<br/>
+ *        string   $args['module']  module name
      * @return  array of component ids and names
-     * @throws  none
     */
 
-    function privileges_adminapi_getcomponents($args)
+    function privileges_adminapi_getcomponents(Array $args=array())
     {
         extract($args);
         
-//        if (is_null($modid)) return array();
         if (empty($modid)){
             $components[] = array('id' => -2,
                                'name' => 'All');

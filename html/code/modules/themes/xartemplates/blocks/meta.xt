@@ -11,6 +11,7 @@
     <meta name="Generator" content="#$generator#"/>
     <meta name="Keywords" content="#$keywords#"/>
     <meta name="Description" content="#$description#"/>
+    <meta name="author" content="#xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY)#"/>
     <meta name="rating" content="General"/>
     <xar:if condition="(!empty($refreshurl)) and (!empty($refreshtime))">
         <meta http-equiv="refresh" content="#$refreshtime#;URL=#$refreshurl#"/>
@@ -36,12 +37,12 @@
         The XMLRPC-server module takes case of filling the RSD information 
     -->
     <xar:if condition="xarModIsAvailable('xmlrpcserver')">
-        <link rel="EditURI" type="application/rsd+xml" title="RSD" href="&xar-modurl-xmlrpcserver-user-main;"/>
+        <link rel="EditURI" type="application/rsd+xml" title="RSD" href="#xarModURL('xmlrpcserver','user','main')#"/>
     </xar:if>
-    <link rel="pingback" href="&xar-baseurl;ws.php"/>
+    <link rel="pingback" href="#$baseurl#ws.php"/>
     <link rel="Top" type="text/html" href="#$baseurl#"/>
     <link rel="Parent" type="text/html" href="#$baseurl#"/>
-    <link rel="author" href="#$sitename#"/>
+    <link rel="author" href="#$authorpage#" title="#$sitename#"/>
     <xar:if condition="!empty($copyrightpage)">
         <link rel="copyright" type="text/html" href="#$copyrightpage#"/>
     </xar:if>
@@ -58,9 +59,9 @@
         <link rel="last" type="text/html" href="#$last#"/>
     </xar:if>
     <xar:if condition="xarModIsAvailable('articles')">
-        <link rel="contents" type="text/html" href="&xar-modurl-articles-user-viewmap;"/>
+        <link rel="contents" type="text/html" href="#xarModURL('articles','user','viewmap')#"/>
     </xar:if>
     <xar:if condition="xarModIsAvailable('search')">
-        <link rel="search" type="text/html" href="&xar-modurl-search-user-main;"/>
+        <link rel="search" type="text/html" href="#xarModURL('search','user','main')#"/>
     </xar:if>
 </xar:template>

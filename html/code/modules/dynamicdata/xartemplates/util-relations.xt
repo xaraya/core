@@ -19,8 +19,11 @@
 
         <xar:set name="authid">#xarSecGenAuthKey()#</xar:set>
 
-        <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
+        <form method="get" action="&xar-baseurl;index.php">
             <fieldset>
+                <input type="hidden" name="module" value="dynamicdata"/>
+                <input type="hidden" name="type" value="util"/>
+                <input type="hidden" name="func" value="relations"/>
                 <legend>Links between Objects</legend>
                 <div class="xar-form-input-wrapper">
                     <label for="objectid" class="xar-form-label">Object:</label>
@@ -35,7 +38,7 @@
                             </xar:if>
                         </xar:foreach>
                     </select>
-                    &#160;<input type="submit" name="select" id="select" value="Select"/>
+                    &#160;<input type="submit" value="Select"/>
                 </div>
             </fieldset>
         </form>
@@ -44,8 +47,11 @@
             <xar:template type="module" file="link-objects"/>
         </xar:if>
 
-        <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
+        <form method="get" action="&xar-baseurl;index.php">
             <fieldset>
+                <input type="hidden" name="module" value="dynamicdata"/>
+                <input type="hidden" name="type" value="util"/>
+                <input type="hidden" name="func" value="relations"/>
                 <legend>Links between Tables</legend>
                 <div class="xar-form-input-wrapper">
                     <label for="table" class="xar-form-label">Table:</label>
@@ -60,7 +66,7 @@
                             </xar:if>
                         </xar:foreach>
                     </select>
-                    &#160;<input type="submit" name="select" id="select" value="Select"/>
+                    &#160;<input type="submit" value="Select"/>
                 </div>
             </fieldset>
         </form>
@@ -75,15 +81,18 @@
             <xar:template type="module" file="link-mapping"/>
         </xar:if>
 
-<!-- TODO: re-examine module links -->
+<!-- TODO: re-examine module links
 
-        <form method="post" action="&xar-modurl-dynamicdata-util-relations;">
+        <form method="get" action="&xar-baseurl;index.php">
             <fieldset>
+                <input type="hidden" name="module" value="dynamicdata"/>
+                <input type="hidden" name="type" value="util"/>
+                <input type="hidden" name="func" value="relations"/>
                 <legend>Links between Modules</legend>
                 <div class="xar-form-input-wrapper">
                     <label for="module_id" class="xar-form-label">Module:</label>
                     <xar:data-input type="module" name="module_id" value="$module_id" firstline=" " onchange="javascript:submit();"/>
-                    &#160;<input type="submit" name="select" id="select" value="#xarML('Select')#"/>
+                    &#160;<input type="submit" value="Select"/>
                 </div>
             </fieldset>
         </form>
@@ -91,6 +100,8 @@
         <xar:if condition="!empty($module_id)">
             <xar:template type="module" file="link-modules"/>
         </xar:if>
+
+-->
 
     </div>
 </xar:template>

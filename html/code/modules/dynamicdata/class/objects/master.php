@@ -1,11 +1,12 @@
 <?php
 /**
  * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage dynamicdata
  * @link http://xaraya.com/index.php/release/182.html
  */
 
@@ -37,10 +38,11 @@ class DataObjectMaster extends Object
     public $maxid       = 0;
     public $config      = 'a:0:{}';       // the configuration parameters for this DD object
     public $configuration;                // the exploded configuration parameters for this DD object
+    public $access      = 'a:0:{}';       // the access parameters for this DD object
+    public $access_rules;                 // the exploded access parameters for this DD object
     public $isalias     = 0;
     public $join        = '';
     public $table       = '';
-    public $extend      = true;
 
     public $class       = 'DataObject'; // the class name of this DD object
     public $filepath    = 'auto';       // the path to the class of this DD object (can be empty or 'auto' for DataObject)
@@ -79,7 +81,7 @@ class DataObjectMaster extends Object
 
     public $links         = null;       // links between objects
 
-// TODO: relink objects, properties and datastores in __wakeup() methods after unserialize()
+    public $isgrouped     = 0;          // indicates that we have operations (COUNT, SUM, etc.) on properties
 
     /**
      * Default constructor to set the object variables, retrieve the dynamic properties
@@ -100,6 +102,7 @@ class DataObjectMaster extends Object
     function toArray(Array $args=array())
     {
         $properties = $this->getPublicProperties();
+    // CHECKME: this also copies the properties, items etc. to $args - is that what we really want here ?
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
         // object property is called module_id now instead of moduleid for whatever reason !?
         if (empty($args['moduleid']) && !empty($args['module_id'])) {
@@ -193,6 +196,15 @@ class DataObjectMaster extends Object
         // build the list of relevant data stores where we'll get/set our data
         if(count($this->datastores) == 0 && count($this->properties) > 0)
            $this->getDataStores();
+           
+        // Explode the configuration
+        try{
+            $this->configuration = unserialize($this->config);
+        } catch (Exception $e) {}
+        // Explode the access rules
+        try{
+            $this->access_rules = unserialize($this->access);
+        } catch (Exception $e) {}
     }
 
     public function setFieldList($fieldlist=array(),$status=array())
@@ -290,6 +302,7 @@ class DataObjectMaster extends Object
 //                    if(isset($this->properties[$name]))
                         $cleanlist[] = $name;
                 } elseif (preg_match('/^(.+)\((.+)\)/',$name,$matches)) {
+    // FIXME: support more complex operations like COUNT(DISTINCT ...) and calendar year/month/day
                     $operation = $matches[1];
                     $field = $matches[2];
                     if(isset($this->properties[$field]))
@@ -419,7 +432,7 @@ class DataObjectMaster extends Object
      * @todo why not keep the scope here and do this:
      *       $this->properties[$args['id']] = new Property($args); (with a reference probably)
     **/
-    function addProperty($args)
+    function addProperty(Array $args=array())
     {
         // TODO: find some way to have unique IDs across all objects if necessary
         if(!isset($args['id']))
@@ -595,6 +608,17 @@ class DataObjectMaster extends Object
     **/
     static function &getObject(Array $args=array())
     {
+        /* with autoload and variable caching activated */
+        // Identify the variable by its arguments here
+        $hash = md5(serialize($args));
+        // Get a cache key for this variable if it's suitable for variable caching
+        $cacheKey = xarCache::getVariableKey('DataObject', $hash);
+        // Check if the variable is cached
+        if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
+            // Return the cached variable
+            $object = xarVariableCache::getCached($cacheKey);
+            return $object;
+        }
         if(!isset($args['itemid'])) $args['itemid'] = null;
 
 // FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
@@ -628,6 +652,11 @@ class DataObjectMaster extends Object
         // serialize is better here - shallow cloning is not enough for array of properties, datastores etc. and with deep cloning internal references are lost
 //        xarCoreCache::setCached('DDObject', $args['objectid'], serialize($object));
 
+        /* with autoload and variable caching activated */
+        // Set the variable in cache
+        if (!empty($cacheKey)) {
+            xarVariableCache::setCached($cacheKey, $object);
+        }
         return $object;
     }
 
@@ -646,6 +675,17 @@ class DataObjectMaster extends Object
     **/
     static function &getObjectList(Array $args=array())
     {
+        /* with autoload and variable caching activated */
+        // Identify the variable by its arguments here
+        $hash = md5(serialize($args));
+        // Get a cache key for this variable if it's suitable for variable caching
+        $cacheKey = xarCache::getVariableKey('DataObjectList', $hash);
+        // Check if the variable is cached
+        if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
+            // Return the cached variable
+            $object = xarVariableCache::getCached($cacheKey);
+            return $object;
+        }
 // FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
         // Complete the info if this is a known object
         $info = self::getObjectInfo($args);
@@ -661,7 +701,7 @@ class DataObjectMaster extends Object
                 // this is a generic classname for the object, list and interface
                 $class = $args['class'] . 'List';
             }
-            elseif(class_exists($args['class']))
+            elseif(class_exists($data['class']) && method_exists($data['class'],'getItems'))
             {
                 // this is a specific classname for the list
                 $class = $args['class'];
@@ -671,6 +711,12 @@ class DataObjectMaster extends Object
 
         // here we can use our own classes to retrieve this
         $object = new $class($descriptor);
+
+        /* with autoload and variable caching activated */
+        // Set the variable in cache
+        if (!empty($cacheKey)) {
+            xarVariableCache::setCached($cacheKey, $object);
+        }
         return $object;
     }
 
@@ -687,7 +733,7 @@ class DataObjectMaster extends Object
      * @todo  get rid of the classname munging
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
-    static function &getObjectInterface($args)
+    static function &getObjectInterface(Array $args=array())
     {
         sys::import('modules.dynamicdata.class.userinterface');
 
@@ -730,7 +776,7 @@ class DataObjectMaster extends Object
      * @param $args['class'] optional classname (e.g. <module>_DataObject)
      * @return integer object id of the created item
     **/
-    static function createObject(Array $args)
+    static function createObject(Array $args=array())
     {
         // TODO: if we extend dobject classes then probably we need to put the class name here
         $object = self::getObject(array('name' => 'objects'));
@@ -744,7 +790,7 @@ class DataObjectMaster extends Object
         return $objectid;
     }
 
-    static function updateObject(Array $args)
+    static function updateObject(Array $args=array())
     {
         $object = self::getObject(array('name' => 'objects'));
 
@@ -756,7 +802,7 @@ class DataObjectMaster extends Object
         return $itemid;
     }
 
-    static function deleteObject($args)
+    static function deleteObject(Array $args=array())
     {
         $descriptor = new DataObjectDescriptor($args);
         $args = $descriptor->getArgs();
@@ -769,10 +815,9 @@ class DataObjectMaster extends Object
         }
 
         // Get an object list for the object itself, so we can delete its items
-        $mylist =& self::getObjectList(
+        $mylist = self::getObjectList(
             array(
                 'objectid' => $args['objectid'],
-                'extend' => false
             )
         );
         if(empty($mylist))
@@ -814,7 +859,7 @@ class DataObjectMaster extends Object
      * @param $args['sort'] optional sort order in that table (TODO)
      *
     **/
-    function joinTable($args)
+    function joinTable(Array $args=array())
     {
         if(empty($args['table']))
             return;
@@ -917,7 +962,7 @@ class DataObjectMaster extends Object
      * @todo pick moduleid or module
      * @todo move this into a utils class?
      */
-    static function getModuleItemTypes(Array $args)
+    static function getModuleItemTypes(Array $args=array())
     {
         extract($args);
         // Argument checks
@@ -990,7 +1035,7 @@ class DataObjectMaster extends Object
     public function getActionURL($action = '', $itemid = null, $extra = array())
     {
         // if we have a cached URL already, use that
-        if (!empty($itemid) && !empty($this->cached_urls[$action])) {
+        if (!empty($itemid) && empty($extra) && !empty($this->cached_urls[$action])) {
             $url = str_replace('=<itemid>', '='.$itemid, $this->cached_urls[$action]);
             return $url;
         }
@@ -999,7 +1044,7 @@ class DataObjectMaster extends Object
         $url = xarObject::getActionURL($this, $action, $itemid, $extra);
 
         // cache the URL if the itemid is in there
-        if (!empty($itemid) && strpos($url, $this->urlparam . '=' . $itemid) !== false) {
+        if (!empty($itemid) && empty($extra) && strpos($url, $this->urlparam . '=' . $itemid) !== false) {
             $this->cached_urls[$action] = str_replace($this->urlparam . '=' . $itemid, $this->urlparam . '=<itemid>', $url);
         }
 
@@ -1033,8 +1078,60 @@ class DataObjectMaster extends Object
         // CHECKME: prevent recursive hook calls in general
         xarCoreCache::setCached('DynamicData','HookAction',$action);
 
+        // <chris> moved this from xarObjectHooks::initHookSubject()
+        // This is the correct place to handle it, hooks system doesn't need to know
+        // initialize hookvalues
+        $this->hookvalues = array();
+    
+        // Note: you can preset the list of properties to be transformed via $this->hooktransform
+        
+        // add property values to hookvalues
+        if ($action == 'transform') {
+            if (!empty($this->hooktransform)) {
+                $fields = $this->hooktransform;
+            } else {
+                $fields = array_keys($this->properties);
+            }
+            $this->hookvalues['transform'] = array();
+
+            foreach($fields as $name) {
+            // TODO: this is exactly the same as in the dataobject display function, consolidate it ?
+                if(!isset($this->properties[$name])) continue;
+
+                if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)) continue;
+
+                // *never* transform an ID
+                // TODO: there is probably lots more to skip here.
+                if ($this->properties[$name]->type != 21) {
+                    $this->hookvalues['transform'][] = $name;
+                }
+                $this->hookvalues[$name] = $this->properties[$name]->value;
+            }
+            $this->hooktransform = $this->hookvalues['transform'];
+        } else {
+            foreach(array_keys($this->properties) as $name)
+                $this->hookvalues[$name] = $this->properties[$name]->value;
+            $this->hooktransform = array();
+        }
+
+        // add extra info for traditional hook modules
+        $this->hookvalues['module'] = xarMod::getName($this->moduleid);
+        $this->hookvalues['itemtype'] = $this->itemtype;
+        $this->hookvalues['itemid'] = $this->itemid;
+        // CHECKME: is this sufficient in most cases, or do we need an explicit xarModURL() ?
+        $this->hookvalues['returnurl'] = xarServer::getCurrentURL();
+
+        // Use the standard method to call hooks 
+        $hooks = xarModCallHooks('item', $action, $this->itemid, $this->hookvalues);
+        // FIXME: we don't need two distinct properties to store gui and api hook responses
+        // A response is a response, it's up to the caller to decide if it's appropriate
+        // For now we'll populate both with the same data
+        $this->hookvalues = $this->hookoutput = $hooks;       
+        
         // let xarObjectHooks worry about calling the different hooks
-        xarObjectHooks::callHooks($this, $action);
+        //xarObjectHooks::callHooks($this, $action);
 
         // the result of API actions will be in $this->hookvalues
         // the result of GUI actions will be in $this->hookoutput
@@ -1055,5 +1152,147 @@ class DataObjectMaster extends Object
         // we'll skip the 'info' here, unless explicitly asked for 'all'
         return DataObjectLinks::getLinkedObjects($this, $linktype, $itemid);
     }
+
+    /**
+     * Check access for a specific action on an object // CHECKME: how about checking *before* the object is loaded ?
+     *
+     * @access public
+     * @param action string the action we want to take on this object (= method or func)
+     * @param itemid mixed the specific item id or null
+     * @param roleid mixed override the current user or null // CHECKME: do we want this ?
+     * @return boolean true if access
+     */
+    public function checkAccess($action, $itemid = null, $roleid = null)
+    {
+        if (empty($action)) throw new EmptyParameterException('Access method');
+
+        // only allow direct access to tables for administrators
+        if (!empty($this->table)) {
+            $action = 'admin';
+        }
+
+        // default actions supported by dynamic objects
+        switch($action)
+        {
+            case 'admin':
+                // require admin access to the module here
+                return xarSecurityCheck('AdminDynamicData',0);
+
+            case 'config':
+            case 'access':
+            case 'settings':
+                $level = 'config';
+                $mask = 'AdminDynamicDataItem';
+                $itemid = 'All';
+                break;
+
+            case 'delete':
+            case 'remove':
+                $level = 'delete';
+                $mask = 'DeleteDynamicDataItem';
+                break;
+
+            case 'create':
+            case 'new':
+                $level = 'create';
+                $mask = 'AddDynamicDataItem';
+                break;
+
+            case 'update':
+            case 'modify':
+                $level = 'update';
+                $mask = 'EditDynamicDataItem';
+                break;
+
+            case 'display':
+            case 'show':
+                $level = 'display';
+                $mask = 'ReadDynamicDataItem';
+                break;
+
+            case 'view':
+            case 'list':
+            case 'search':
+            case 'query':
+            case 'stats':
+            case 'report':
+            default:
+                $level = 'display'; // CHECKME: no difference in access level between view and display !?
+                $mask = 'ViewDynamicDataItems';
+                break;
+        }
+
+        // CHECKME: use access checks similar to blocks here someday ?
+
+        // unserialize access levels if necessary
+        if (!empty($this->access_rules) && is_string($this->access_rules)) {
+            try {
+                $this->access_rules = unserialize($this->access_rules);
+            } catch (Exception $e) {
+                $this->access_rules = array();
+            }
+        }
+
+        // check if we have specific access rules for this level
+        if (!empty($this->access_rules) && is_array($this->access_rules) && !empty($this->access_rules[$level])) {
+            if (empty($roleid) && xarUserIsLoggedIn()) {
+                // get the direct parents of the current user (no ancestors)
+                $grouplist = xarCache::getParents();
+            } elseif (!empty($roleid) && $roleid != _XAR_ID_UNREGISTERED) {
+                // get the direct parents of the specified user (no ancestors)
+                $grouplist = xarCache::getParents($roleid);
+            } else {
+                // check anonymous visitors by themselves
+                $grouplist = array(_XAR_ID_UNREGISTERED);
+            }
+            foreach ($grouplist as $groupid) {
+                // list of groups that have access at this level
+                if (in_array($groupid, $this->access_rules[$level])) {
+                    // one group having access is enough here !
+                    return true;
+                }
+            }
+            // none of the groups have access at this level
+            return false;
+        }
+
+        // Fall back to normal security checks
+
+        // check if we're dealing with a specific item here
+        if (empty($itemid)) {
+            if (!empty($this->itemid)) {
+                $itemid = $this->itemid;
+            } else {
+                $itemid = 'All';
+            }
+        }
+
+        if (!empty($roleid)) {
+            $role = xarRoles::get($roleid);
+            $rolename = $role->getName();
+            return xarSecurity::check($mask,0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid,'',$rolename);
+        } else {
+            return xarSecurity::check($mask,0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid);
+        }
+/*
+        $access_method = $action . '_access';
+        $access = isset($this->$access_method) ? $this->$access_method :
+            array('group' => 0, 'level' => 100, 'failure' => 0);
+        // Decide whether this block is displayed to the current user
+        $args = array(
+            'module' => $this->module,
+            'component' => 'Block',
+            'instance' => $this->type . ":" . $this->name . ":" . $this->bid,
+            'group' => $access['group'],
+            'level' => $access['level'],
+        );
+        if (!isset(self::$access_property)) {
+            sys::import('modules.dynamicdata.class.properties.master');
+            self::$access_property = DataPropertyMaster::getProperty(array('name' => 'access'));
+        }
+        return self::$access_property->check($args);
+*/
+    }
+
 }
 ?>

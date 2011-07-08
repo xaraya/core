@@ -3,11 +3,12 @@
  * Hook called to send mail on deletion of an item
  *
  * @package modules
+ * @subpackage mail module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Mail System
  * @link http://xaraya.com/index.php/release/771.html
  */
 
@@ -15,10 +16,11 @@
  * This is a hook function that is called to send mail on deletion of an item
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @param  $ 'modid' is the module that is sending mail.
- * @param  $ 'objectid' is the item deleted.
+ * @param array    $args array of optional parameters<br/>
+ *        integer  $args['modid'] is the module that is sending mail.<br/>
+ *        integer  $args['objectid'] is the item deleted.
  */
-function mail_adminapi_hookmaildelete($args)
+function mail_adminapi_hookmaildelete(Array $args=array())
 {
     extract($args);
 
@@ -53,7 +55,7 @@ function mail_adminapi_hookmaildelete($args)
     // Security Check
     //TODO: if we add to the hook to allow sending of mail to OTHER recipients than the admin
     // we will have to include the following security check and make sure the appropriate privileges are assigned
-//    if (!xarSecurityCheck('DeleteMail', 0, 'All', "$modname::$objectid", 'mail')) return;
+//    if (!xarSecurityCheck('ManageMail', 0, 'All', "$modname::$objectid", 'mail')) return;
 
     // Set up variables
     $wordwrap = xarModVars::get('mail', 'wordwrap');
@@ -79,6 +81,7 @@ function mail_adminapi_hookmaildelete($args)
     $message  = xarTplCompileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$message.'</xar:template>');
 
     // Define the variables automatically available to all templates
+    // LEGACY
     $data = array(
         'sitename'   => xarModVars::get('themes', 'SiteName'),
         'siteslogan' => xarModVars::get('themes', 'SiteSlogan'),

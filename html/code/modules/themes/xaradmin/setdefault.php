@@ -2,11 +2,12 @@
 /**
  * Default theme for site
  * @package modules
+ * @subpackage themes module
+ * @category Xaraya Web Applications Framework
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage Themes module
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
@@ -16,19 +17,23 @@
  *
  * @author Marty Vance
  * @param id the theme id to set
- * @returns
- * @return
+ * @return boolean true on success, false on failure
  */
 function themes_admin_setdefault()
 {
+    // Security
+    if (!xarSecurityCheck('AdminThemes')) return;
+    
     // Security and sanity checks
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
-    if (!xarSecurityCheck('AdminTheme')) return;
-    if (!xarVarFetch('id', 'int:1:', $defaulttheme)) return;
+    }
+    
+    if (!xarVarFetch('id', 'int:1:', $defaulttheme, 0, XARVAR_NOT_REQUIRED)) return;
+    if (empty($defaulttheme)) return xarResponse::notFound();
 
-    $whatwasbefore = xarModVars::get('themes', 'default');
+
+    $whatwasbefore = xarModVars::get('themes', 'default_theme');
 
     if (!isset($defaulttheme)) {
         $defaulttheme = $whatwasbefore;
@@ -37,25 +42,25 @@ function themes_admin_setdefault()
     $themeInfo = xarThemeGetInfo($defaulttheme);
 
     if ($themeInfo['class'] != 2) {
-        xarResponse::redirect(xarModURL('themes', 'admin', 'modifyconfig'));
+        xarController::redirect(xarModURL('themes', 'admin', 'modifyconfig'));
     }
 
-    if (xarVarIsCached('Mod.Variables.themes', 'default')) {
-        xarVarDelCached('Mod.Variables.themes', 'default');
+    if (xarVarIsCached('Mod.Variables.themes', 'default_theme')) {
+        xarVarDelCached('Mod.Variables.themes', 'default_theme');
     }
 
     //update the database - activate the theme
     if (!xarMod::apiFunc('themes','admin','install',array('regid'=>$defaulttheme))) {
-        xarResponse::redirect(xarModURL('themes', 'admin', 'modifyconfig'));
+        xarController::redirect(xarModURL('themes', 'admin', 'modifyconfig'));
     }
 
     // update the data
     xarTplSetThemeDir($themeInfo['directory']);
-    xarModVars::set('themes', 'default', $themeInfo['directory']);
+    xarModVars::set('themes', 'default_theme', $themeInfo['directory']);
 
     // set the target location (anchor) to go to within the page
     $target = $themeInfo['name'];
-    xarResponse::redirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
+    xarController::redirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
     return true;
 }
 ?>

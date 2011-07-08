@@ -27,13 +27,15 @@
         <p>
             Total listed:  <xar:set name="modscount">count($listrowsitems)</xar:set>#$modscount#
         </p>
-        <form method="post" action="&xar-modurl-modules-admin-settings;">
+        <form method="post" action="#xarModURL('modules','admin','settings')#">
             <!-- Module List Sort and Filter Controls table -->
             <table class="xar-fullwidth">
                 <tr>
+                <!--
                     <th>
                         <label class="xar-mod-title" for="filter">Style</label>
                     </th>
+                -->
                     <th>
                         <label class="xar-mod-title" for="filter">View</label>
                     </th>
@@ -48,7 +50,8 @@
                     </th>
                 </tr>
                 <tr>
-                    <td class="xar-align-center">
+                <!--
+                    <td class="xar-align-left">
                         <select name="selstyle" id="selstyle" onchange="this.form.submit()">
                             <xar:foreach in="$style" key="$key" value="$value">
                                 <xar:if condition="$key eq $selstyle">
@@ -59,7 +62,8 @@
                             </xar:foreach>
                         </select>
                     </td>
-                    <td class="xar-align-center">
+                -->
+                    <td class="xar-align-left">
                         <select name="selfilter" id="selfilter" onchange="this.form.submit()">
                             <xar:foreach in="$filter" key="$key" value="$value">
                                 <xar:if condition="$key eq $selfilter">
@@ -70,7 +74,7 @@
                             </xar:foreach>
                         </select>
                     </td>
-                    <td class="xar-align-center">
+                    <td class="xar-align-left">
                         <select name="selsort" id="selsort" onchange="this.form.submit()">
                             <xar:foreach in="$sort" key="$key" value="$value">
                                 <xar:if condition="$key eq $selsort">
@@ -81,9 +85,10 @@
                             </xar:foreach>
                         </select>
                     </td>
-                    <td class="xar-nowrap xar-align-center">
+                    <td class="xar-nowrap xar-align-left">
                         <xar:set name="checked">$hidecore</xar:set>
                         <xar:data-input type="checkbox" name="hidecore" id="hidecore" checked="$checked"/>
+                        &#160;
                         <label for="hidecore">Core Modules</label>
                     </td>
                     <td class="xar-align-center">
@@ -134,7 +139,7 @@
                                 <td class="xar-align-center">
                                     <xar:if condition="$selstyle eq 'pro'">
                                         <input type="submit" name="info" id="info" value="#$infolabel#"/>
-                                    <xar:elseif condition="$selstyle eq 'icons'"/>
+                                    <xar:elseif condition="xarModVars::get('modules','use_module_icons')"/>
                                         <a href="#$modinfo['infourlnew']#">
                                             <img src="#$icon_info#" alt="#$infolabel#"/>
                                         </a>
@@ -179,7 +184,7 @@
                                                 <input type="submit" name="ok" id="ok" value="OK"/>
                                             </noscript>
                                         </xar:if>
-                                    <xar:elseif condition="$selstyle eq 'icons'"/>
+                                    <xar:elseif condition="xarModVars::get('modules','use_module_icons')"/>
                                         <xar:if condition="$modinfo['actionurl'] eq ''">
                                             <img src="#$modinfo['actionimg1']#" alt="#$modinfo['actionlabel']#"/>
                                         <xar:else />
@@ -219,7 +224,7 @@
                                     <xar:if condition="$modinfo['modid'] ne 1 and ($modinfo['state'] eq XARMOD_STATE_INACTIVE or $modinfo['state'] eq XARMOD_STATE_ACTIVE)">
                                         <xar:if condition="$selstyle eq 'pro'">
                                             <input type="submit" name="prop" id="prop" value="Set"/>
-                                        <xar:elseif condition="$selstyle eq 'icons'"/>
+                                        <xar:elseif condition="xarModVars::get('modules','use_module_icons')"/>
                                             <a href="#$modinfo['propurl']#">
                                                 <img src="#$icon_modify#" alt="#$modinfo['prop']#"/>
                                             </a>
@@ -234,7 +239,7 @@
                                     <xar:if condition="xarModIsAvailable($modinfo['name'])">
                                         <xar:if condition="$selstyle eq 'pro'">
                                             <input type="submit" name="edit" id="edit" value="Edit"/>
-                                        <xar:elseif condition="$selstyle eq 'icons'"/>
+                                        <xar:elseif condition="xarModVars::get('modules','use_module_icons')"/>
                                             <a href="#$modinfo['editurl']#">
                                                 <img src="#$icon_hooks#" alt="#$modinfo['edit']#"/>
                                             </a>
@@ -249,7 +254,7 @@
             </xar:if>
         </form>
     </div>
-    <xar:if condition="$selstyle eq 'icons'">
+    <xar:if condition="xarModVars::get('modules','use_module_icons')">
         <div class="xar-mod-foot xar-align-center">
             <div class="xar-accent-outline xar-margin-thick xar-padding-thick">
             <img src="#xarTplGetImage('icons/disabled.png', 'base')#" alt="disabled" hspace="5"/>Disabled 
