@@ -9,15 +9,6 @@
             <label>Overview</label>
         </menuitem>
         <menuitem>
-            <mask>ManageModules</mask>
-            <includes>
-                <includeitem>hooks</includeitem>
-            </includes>
-            <target>hooks</target>
-            <title>Extend the functionality of your modules via hooks</title>
-            <label>Configure Hooks</label>
-        </menuitem>
-        <menuitem>
             <mask>AdminModules</mask>
             <includes>
                 <includeitem>list</includeitem>
@@ -25,6 +16,15 @@
             <target>list</target>
             <title>View list of all installed modules on the system</title>
             <label>View Modules</label>
+        </menuitem>
+        <menuitem>
+            <mask>ManageModules</mask>
+            <includes>
+                <includeitem>hooks</includeitem>
+            </includes>
+            <target>hooks</target>
+            <title>Extend the functionality of your modules via hooks</title>
+            <label>Configure Hooks</label>
         </menuitem>
         <menuitem>
             <mask>AdminModules</mask>

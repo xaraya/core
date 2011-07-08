@@ -268,7 +268,7 @@ class xarController extends Object
                 $modType = $entrypoint['action'];
                 $entrypoint = $entrypoint['entry'];
             }
-            self::$emtryPoint = $entrypoint;
+            self::$entryPoint = $entrypoint;
         }
 
         // Create a new request and make its route the current route
@@ -277,6 +277,21 @@ class xarController extends Object
         $args['func'] = $funcName;
         sys::import('xaraya.mapper.request');
         $request = new xarRequest($args);
+        // <chris/> wrt to the problem of xaraya not obeying a particular route
+        // when the main entry point, sans params, is accessed...
+        // Here's an example using the shorturls setting in base module
+        // It's hardly a leap to imagine storing the name of the route to use in a 
+        // similar config var and being able to set that in base module instead (IMO)
+        // assuming multiple routes aren't in use, of course, although we could perhaps
+        // deprecate the per module shorturl setting in favour of a dropdown of routes too :-?
+        /*
+        if (xarMod::$genShortUrls) {
+            $request->setRoute('short');
+        } else {
+            $router = self::getRouter();
+            $request->setRoute($router->getRoute());
+        } 
+        */       
         $router = self::getRouter();
         $request->setRoute($router->getRoute());
 
