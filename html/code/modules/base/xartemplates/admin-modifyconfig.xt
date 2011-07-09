@@ -207,6 +207,7 @@
                <fieldset>
                     <legend>General Display Options</legend>
                     <div class="xar-form-input-wrapper">
+                    <!--
                         <xar:var name="label">Enable short url support throughout Xaraya.</xar:var>
                         <label for="shorturl" title="#$label#" class="xar-form-label">
                             Enable Short URL Support
@@ -215,6 +216,26 @@
                             <xar:var scope="config" name="Site.Core.EnableShortURLsSupport"/>
                         </xar:set>
                         <xar:data-input type="checkbox" name="shorturl" id="shorturl" checked="$checked"/>
+                    -->
+                        <xar:var name="label">Enable short url support throughout Xaraya.</xar:var>
+                        <label for="shorturl" title="#$label#" class="xar-form-label">
+                            Default Route
+                        </label>
+                        <xar:set name="value">
+                            <xar:var scope="config" name="Site.Core.EnableShortURLsSupport"/>
+                        </xar:set>
+                        <xar:var name="firstline">Automatic</xar:var>
+                        <xar:set name="firstline">"'',$firstline"</xar:set>
+                        <xar:set name="options">
+                            array(
+                                array('id' => '', 'name' => xarML('Automatic')),
+                                array('id' => 'default', 'name' => xarML('Xaraya URLs')),
+                                array('id' => 'short', 'name' => xarML('Short URLs')),
+                            )
+                        </xar:set>
+                        <xar:data-input type="dropdown" name="shorturl" id="shorturl" value="$value" options="$options"/>
+                        &#160;
+                        <a href="#xarModURL('base','admin','htaccess')#">Edit the htaccess file</a>
                     </div>
                     <div class="xar-form-input-wrapper">
                         <xar:var name="label">Change HTML Entities to readible entities.</xar:var>

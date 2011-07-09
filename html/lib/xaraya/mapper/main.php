@@ -277,8 +277,15 @@ class xarController extends Object
         $args['func'] = $funcName;
         sys::import('xaraya.mapper.request');
         $request = new xarRequest($args);
-        $router = self::getRouter();
-        $request->setRoute($router->getRoute());
+
+        // Define the default route
+        $route = xarConfigVars::get(null,'Site.Core.EnableShortURLsSupport');
+        if (!empty($route)) {
+            $request->setRoute($route);
+        } else {
+            $router = self::getRouter();
+            $request->setRoute($router->getRoute());
+        } 
 
         // Get the appropriate action controller for this request
         $dispatcher = self::getDispatcher();
