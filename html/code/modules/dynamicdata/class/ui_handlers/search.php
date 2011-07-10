@@ -35,7 +35,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
      * @param $args['q'] optional query string for the search
      * @param $args['field'] optional field selection for the search
      * @param $args['match'] optional match type for the search
-     * @return string output of xarTplObject() using 'ui_search'
+     * @return string output of xarTpl::object() using 'ui_search'
      */
     function run(array $args = array())
     {
@@ -120,7 +120,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             }
         }
         $title = xarML('Search #(1)', $this->object->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
 
         if (!$this->object->checkAccess('view'))
             return xarResponse::Forbidden(xarML('Search #(1) is forbidden', $this->object->label));
@@ -189,7 +189,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
                                    'lt'    => 'less than',
                                    'ne'    => 'not equal to');
 
-        return xarTplObject(
+        return xarTpl::object(
             $this->tplmodule, $this->object->template, 'ui_search',
             array('object' => $this->object,
                   'search' => $search,
@@ -233,7 +233,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             }
         }
         $title = xarML('Query #(1)', $this->object->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
 
         if (!$this->object->checkAccess('view'))
             return xarResponse::Forbidden(xarML('Query #(1) is forbidden', $this->object->label));
@@ -323,7 +323,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         // get the property types in case we want to do more than check the parent class
         $query['proptypes'] = DataPropertyMaster::getPropertyTypes();
 
-        return xarTplObject(
+        return xarTpl::object(
             $this->tplmodule, $this->object->template, 'ui_query',
             array('object' => $this->object,
                   'query'  => $query,

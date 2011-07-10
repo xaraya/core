@@ -160,7 +160,7 @@ function dynamicdata_admin_export(Array $args=array())
 
     $data['xml'] = xarVarPrepForDisplay($xml);
 
-    xarTplSetPageTemplateName('admin');
+    xarTpl::setPageTemplateName('admin');
 
     return $data;
 }

@@ -33,7 +33,7 @@ function blocks_admin_create_instance()
 
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }
 
     // Check if block name has already been used.

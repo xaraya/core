@@ -216,7 +216,7 @@
                 </xar:if>
             </ul>
         <form action="install.php" method="post">
-            <div class="xar-align-center">
+            <div class="xar-form-actions">
                 <xar:if condition="$systemConfigDistIsReadable 
                                    AND $systemConfigIsWritable 
                                    AND $cacheTemplatesIsWritable 
@@ -228,14 +228,16 @@
                                    AND $metRequiredPHPVersion
                                    ">
                     <input type="hidden" name="install_phase" id="install_phase" value="4"/>
-                    <input type="submit" value="Continue"/>
+                    <xar:var name="label">Continue</xar:var>
+                    <xar:button type="submit" label="$label"/>
                 <xar:else />
                     <input type="hidden" name="install_phase" id="install_phase" value="3"/>
                     <input type="hidden" name="agree" id="agree" value="agree"/>
                     <p class="warning">
                         Some requirements for installation were not met. Please check the list above and make the appropriate adjustments.
                     </p>
-                    <input type="submit" value="Check Again"/>
+                    <xar:var name="label">Check Again</xar:var>
+                    <xar:button type="submit" label="$label"/>
                 </xar:if>
             </div>
         </form>

@@ -93,13 +93,13 @@ function dynamicdata_admin_view(Array $args=array())
         }
     }
 
-    xarTplSetPageTitle(xarML('Manage - View #(1)', $data['label']));
+    xarTpl::setPageTitle(xarML('Manage - View #(1)', $data['label']));
 
     if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-view.xt') ||
         file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-view-' . $data['template'] . '.xt')) {
-        return xarTplModule($data['tplmodule'],'admin','view',$data,$data['template']);
+        return xarTpl::module($data['tplmodule'],'admin','view',$data,$data['template']);
     } else {
-        return xarTplModule('dynamicdata','admin','view',$data);
+        return xarTpl::module('dynamicdata','admin','view',$data);
     }
 }
 

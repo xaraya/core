@@ -49,7 +49,7 @@ function dynamicdata_admin_import(Array $args=array())
 
     if (empty($refresh) && (!empty($import) || !empty($xml))) {
         if (!xarSecConfirmAuthKey()) {
-            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
 
         if (empty($keepitemid)) {
@@ -94,7 +94,7 @@ function dynamicdata_admin_import(Array $args=array())
                                     'name' => $file);
     }
 
-    xarTplSetPageTemplateName('admin');
+    xarTpl::setPageTemplateName('admin');
 
     return $data;
 }

@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Privileges Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <xar:template type="module" file="admin-realms"/>
         <form id="privilegeform" action="#xarModURL('privileges','admin','modifyrealm')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Modify Realm</legend>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Name of the realm</xar:var>
-                    <label for="newname" title="#$label#" class="xar-form-label">Name:</label>
-                    <input type="text" name="newname" id="newname" value="#$name#" size="20" maxlength="20" tabindex="1" class="xar-form-textmedium"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Name of the realm</xar:var>
+                        <label for="newname" title="#$label#" class="xar-form-label">Name:</label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" name="newname" id="newname" value="#$name#" size="20" maxlength="20" tabindex="1" class="xar-form-textmedium"/>
+                    </div>
                 </div>
             </fieldset>
-            <fieldset>
-                <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="id" id="id" value="#$id#"/>
-                    <input type="hidden" name="name" id="name" value="#$name#"/>
-                    <input type="hidden" name="confirmed" id="confirmed" value="true"/>
-                    <xar:var name="value">Save</xar:var>
-                    <input type="submit" value="#$value#" tabindex="2"/>
-                </div>
+            <fieldset class="xar-form-actions">
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="id" id="id" value="#$id#"/>
+                <input type="hidden" name="name" id="name" value="#$name#"/>
+                <input type="hidden" name="confirmed" id="confirmed" value="true"/>
+                <xar:var name="value">Save</xar:var>
+                <xar:button type="submit" label="$label" tabindex="2"/>
             </fieldset>
         </form>
     </div>

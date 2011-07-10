@@ -37,7 +37,7 @@ function dynamicdata_adminapi_showform(Array $args=array())
 
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {
-        return xarTplModule('dynamicdata','admin','showform',
+        return xarTpl::module('dynamicdata','admin','showform',
                             array('fields' => $fields,
                                   'layout' => $layout),
                             $template);

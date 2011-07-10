@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Modules Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Module Deactivation with dependents still active</h2>
         <h3>Dependents still Active</h3>
@@ -15,14 +13,14 @@
             </ul>
         </xar:if>
         <form action="#xarModURL('modules','admin','deactivate')#" method="post" enctype="application/x-www-form-urlencoded">
-            <div class="xar-align-center">
+            <div class="xar-form-actions">
                 <input type="hidden" name="id" id="id" value="#$id#"/>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 
                 <xar:var name="label">Deactivate All</xar:var>
-                <input type="submit" name="command" id="command" value="#$label#" class="xar-margin-thickright"/>
+                <xar:button type="submit" label="$label" name="command" id="command"/>
                 <xar:var name="label">Go back to the modules list</xar:var>
-                <input type="button" name="return" id="return" onclick="document.location='#xarModURL('modules','admin','list')#';" value="#$label#" class="xar-margin-thickleft"/>
+                <xar:button type="cancel" label="$label" name="return" id="return"/>
             </div>
         </form>
     </div>

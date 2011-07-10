@@ -44,7 +44,7 @@ function roles_admin_removeprivilege()
         (($roleid == 2) && ($privid == 6)) ||
         (($roleid == 4) && ($privid == 2)))
         {
-            return xarTplModule('roles','user','errors',array('layout' => 'remove_privilege'));
+            return xarTpl::module('roles','user','errors',array('layout' => 'remove_privilege'));
         }
 
     // some info for the template display
@@ -64,7 +64,7 @@ function roles_admin_removeprivilege()
     } else {
         // Check for authorization code
         if (!xarSecConfirmAuthKey()) {
-            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
         // Try to remove the privilege and bail if an error was thrown
         if (!$role->removePrivilege($priv)) return;

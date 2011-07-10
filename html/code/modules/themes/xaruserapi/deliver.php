@@ -1,6 +1,6 @@
 <?php
 /**
- * Handle css tag
+ * Handle place-css tag
  * @package modules
  * @subpackage themes module
  * @category Xaraya Web Applications Framework
@@ -11,18 +11,21 @@
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
- * Handle css tag
+ * Handle place-css tag
  *
  * @author andyv <andyv@xaraya.com>
- * @param array    $args array of optional parameters<br/>
- * @return string output display string
- */
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access public
+ * @params array   $args array of optional paramaters<br/>
+ *         boolean $args[comments] show comments, optional, default false
+ * @todo option to turn on/off style comments in UI, cfr template comments
+ * @return string templated output of css to render
+ * @throws none
+**/
 function themes_userapi_deliver(Array $args=array())
 {
     sys::import('modules.themes.class.xarcss');
-    $obj = new xarCSS($args);
-    $styles = $obj->run_output();
-    return xarTplModule('themes','user','additionalstyles',$styles);
+    $css = xarCSS::getInstance();
+    return $css->render($args);
 }
-
 ?>

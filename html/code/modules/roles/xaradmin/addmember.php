@@ -37,20 +37,20 @@ function roles_admin_addmember()
 
     // Check for authorization code
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     // check that this assignment hasn't already been made
     if ($member->isEqual($role))
-        return xarTplModule('roles','user','errors',array('layout' => 'self_assignment'));
+        return xarTpl::module('roles','user','errors',array('layout' => 'self_assignment'));
 
     // check that this assignment hasn't already been made
     if ($member->isParent($role))
-        return xarTplModule('roles','user','errors',array('layout' => 'duplicate_assignment'));
+        return xarTpl::module('roles','user','errors',array('layout' => 'duplicate_assignment'));
 
     // check that the parent is not already a child of the child
     if ($role->isAncestor($member))
-        return xarTplModule('roles','user','errors',array('layout' => 'circular_assignment'));
+        return xarTpl::module('roles','user','errors',array('layout' => 'circular_assignment'));
 
     // assign the child to the parent and bail if an error was thrown
     if (!xarMod::apiFunc('roles','user','addmember', array('id' => $id, 'gid' => $roleid))) return;

@@ -31,7 +31,7 @@
                     <textarea name="message" id="message" rows="20" cols="60">#xarVarPrepForDisplay($message)#</textarea>
                 </div>
                 <xar:var name="label">Send</xar:var>
-                <input name="submit" type="submit" value="#$label#"/>
+                <xar:button type="submit" label="$label" name="submit"/>
             </div>
         </form>
     </div>

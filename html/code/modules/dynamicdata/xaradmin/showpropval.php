@@ -96,7 +96,7 @@ function dynamicdata_admin_showpropval(Array $args=array())
                 // store the updated configuration rule back in the value
                 $myobject->properties['configuration']->value = $property->configuration;
                 if (!xarSecConfirmAuthKey()) {
-                    return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                    return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
                 }
 
                 $newid = $myobject->updateItem();
@@ -138,7 +138,7 @@ function dynamicdata_admin_showpropval(Array $args=array())
     $data['itemid'] = $itemid;
     $data['object'] =& $myobject;
 
-    xarTplSetPageTitle(xarML('Configuration for DataProperty #(1)', $itemid));
+    xarTpl::setPageTitle(xarML('Configuration for DataProperty #(1)', $itemid));
 
     // Return the template variables defined in this function
     return $data;
@@ -152,7 +152,7 @@ function dynamicdata_config_propval($proptype)
 {
     $data = array();
     if (empty($proptype)) {
-        xarTplSetPageTitle(xarML('Sample Configuration for DataProperty Types'));
+        xarTpl::setPageTitle(xarML('Sample Configuration for DataProperty Types'));
         return $data;
     }
 
@@ -161,7 +161,7 @@ function dynamicdata_config_propval($proptype)
     $data['name'] = 'dd_' . $proptype;
     $property =& DataPropertyMaster::getProperty($data);
     if (empty($property)) {
-        xarTplSetPageTitle(xarML('Sample Configuration for DataProperty Types'));
+        xarTpl::setPageTitle(xarML('Sample Configuration for DataProperty Types'));
         return $data;
     }
 
@@ -182,7 +182,7 @@ function dynamicdata_config_propval($proptype)
 //          also CHECKME in class/properties/master.php DataPropertyMaster::getProperty()
             if (!empty($confirm)) {
                 if (!xarSecConfirmAuthKey()) {
-                    return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                    return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
                 }
 // TODO: we need some method in PropertyRegistration to update a property type ;-)
 
@@ -215,7 +215,7 @@ function dynamicdata_config_propval($proptype)
     $object = & DataPropertyMaster::getProperty(array('type' => $proptype));
     $data['propertytype'] = $object;
 
-    xarTplSetPageTitle(xarML('Sample Configuration for DataProperty Type #(1)', $proptype));
+    xarTpl::setPageTitle(xarML('Sample Configuration for DataProperty Type #(1)', $proptype));
 
     return $data;
 }

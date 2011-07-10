@@ -32,7 +32,7 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
      * @param $args['cancel'] true if the user cancels
      * @param $args['confirm'] true if the user confirms
      * @param $args['return_url'] the url to return to when finished (defaults to the object view / module)
-     * @return string output of xarTplObject() using 'ui_delete'
+     * @return string output of xarTpl::object() using 'ui_delete'
      */
     function run(array $args = array())
     {
@@ -77,7 +77,7 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
         if(!empty($args['confirm'])) 
         {
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
 
             $itemid = $this->object->deleteItem();
@@ -94,9 +94,9 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
         }
 
         $title = xarML('Delete #(1)', $this->object->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
 
-        return xarTplObject(
+        return xarTpl::object(
             $this->tplmodule, $this->object->template, 'ui_delete',
             array('object' => $this->object,
                   'authid' => xarSecGenAuthKey(),

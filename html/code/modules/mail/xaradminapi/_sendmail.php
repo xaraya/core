@@ -273,7 +273,7 @@ function mail_adminapi__sendmail(Array $args=array())
         // capability such as mutt. Clients that can read HTML will view the normal Body.
         /*if (!empty($message)) {
             if ($usetemplates) {
-                $mail->AltBody = xarTplModule('mail',
+                $mail->AltBody = xarTpl::module('mail',
                                               'admin',
                                               'sendmail',
                                               array('message'=>$message),
@@ -284,7 +284,7 @@ function mail_adminapi__sendmail(Array $args=array())
         }*/
         // HTML message body
         if ($usetemplates) {
-            $mail->Body = xarTplModule('mail',
+            $mail->Body = xarTpl::module('mail',
                                        'admin',
                                        'sendmail',
                                        array('htmlmessage'=>$htmlmessage),
@@ -332,7 +332,7 @@ function mail_adminapi__sendmail(Array $args=array())
         }
     } else {
         if ($usetemplates) {
-            $mail->Body = xarTplModule('mail',
+            $mail->Body = xarTpl::module('mail',
                                        'admin',
                                        'sendmail',
                                        array('message'=>$message),

@@ -71,7 +71,7 @@ function modules_admin_viewerror()
     }
 
     // Return the template variables to BL
-    return xarTplModule('modules', 'admin', $template, $data);
+    return xarTpl::module('modules', 'admin', $template, $data);
 }
 
 ?>

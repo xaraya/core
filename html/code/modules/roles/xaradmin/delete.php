@@ -50,14 +50,14 @@ function roles_admin_delete()
 
     // Prohibit removal of any groups that have children
     if($role->countChildren()) {
-        return xarTplModule('roles','user','errors',array('layout' => 'remove_nonempty_group', 'user' => $role->getName()));
+        return xarTpl::module('roles','user','errors',array('layout' => 'remove_nonempty_group', 'user' => $role->getName()));
     }
     // Prohibit removal of any groups or users the system needs
     if($id == (int)xarModVars::get('roles','admin')) {
-        return xarTplModule('roles','user','errors',array('layout' => 'remove_siteadmin', 'user' => $role->getUName()));
+        return xarTpl::module('roles','user','errors',array('layout' => 'remove_siteadmin', 'user' => $role->getUName()));
     }
     if($id == (int)xarModVars::get('roles','defaultgroup')) {
-        return xarTplModule('roles','user','errors',array('layout' => 'default_usergroup', 'group' => $role->getName()));
+        return xarTpl::module('roles','user','errors',array('layout' => 'default_usergroup', 'group' => $role->getName()));
     }
 
     $types = xarMod::apiFunc('roles','user','getitemtypes');
@@ -76,7 +76,7 @@ function roles_admin_delete()
         return $data;
     } else {
         if (!xarSecConfirmAuthKey()) {
-            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
         // Check to make sure the user is not active on the site.
         $check = xarMod::apiFunc('roles',
@@ -96,7 +96,7 @@ function roles_admin_delete()
             $pargs['itemid'] = $id;
             xarModCallHooks('item', 'delete', $id, $pargs);
         } else {
-            return xarTplModule('roles','user','errors',array('layout' => 'remove_active_session', 'user' => $role->getName()));
+            return xarTpl::module('roles','user','errors',array('layout' => 'remove_active_session', 'user' => $role->getName()));
         }
         // redirect to the next page
         if (empty($returnurl)) {

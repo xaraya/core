@@ -64,13 +64,13 @@ function dynamicdata_admin_new(Array $args=array())
     $myobject->callHooks('new');
     $data['hooks'] = $myobject->hookoutput;
 
-    xarTplSetPageTitle(xarML('Manage - Create New Item in #(1)', $myobject->label));
+    xarTpl::setPageTitle(xarML('Manage - Create New Item in #(1)', $myobject->label));
 
     if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-new.xt') ||
         file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-new-' . $args['template'] . '.xt')) {
-        return xarTplModule($args['tplmodule'],'admin','new',$data,$args['template']);
+        return xarTpl::module($args['tplmodule'],'admin','new',$data,$args['template']);
     } else {
-        return xarTplModule('dynamicdata','admin','new',$data,$args['template']);
+        return xarTpl::module('dynamicdata','admin','new',$data,$args['template']);
     }
 }
 ?>

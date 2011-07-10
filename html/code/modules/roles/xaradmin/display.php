@@ -60,7 +60,7 @@ function roles_admin_display()
     $hooks = xarModCallHooks('item', 'display', $id, $item);
     $data['hooks'] = $hooks;
     $data['object'] = $role;
-    xarTplSetPageTitle(xarVarPrepForDisplay($data['name']));
+    xarTpl::setPageTitle(xarVarPrepForDisplay($data['name']));
     return $data;
 }
 ?>

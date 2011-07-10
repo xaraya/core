@@ -29,7 +29,7 @@ function privileges_admin_newrealm()
 
     if ($confirmed) {
         if (!xarSecConfirmAuthKey()) {
-            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
 
         $dbconn = xarDB::getConn();

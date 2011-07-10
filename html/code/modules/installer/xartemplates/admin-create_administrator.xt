@@ -17,30 +17,45 @@
             </p>
 
             <h2>Administrator Information</h2>
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label" for="install_admin_name">
-                    Display Name
-                </label>
-                <xar:data-input property="$properties['name']"/>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label" for="install_admin_name">
+                        Display Name
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties['name']"/>
+                </div>
             </div>
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label" for="install_admin_username">
-                    Username&#160;(Used for logon)
-                </label>
-                <xar:data-input property="$properties['uname']"/>
-                
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label" for="install_admin_username">
+                        Username&#160;(Used for logon)
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties['uname']"/>                    
+                </div>
             </div>
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label" for="install_admin_password">
-                    Password
-                </label>
-                <xar:data-input property="$properties['password']"/>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label" for="install_admin_password">
+                        Password
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties['password']"/>
+                </div>
             </div>
-            <div class="xar-form-input-wrapper">
-                <label class="xar-form-label" for="install_admin_email">
-                    Email
-                </label>
-                <xar:data-input property="$properties['email']"/>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label" for="install_admin_email">
+                        Email
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties['email']"/>
+                </div>
             </div>
 
             <p>
@@ -49,9 +64,9 @@
                 thumb, it should not contain any words, and should contain a mix of upper and lower
                 case letters, numbers and punctuation.
             </p>
-            <div class="xar-align-center" style="margin: 2em 0;">
+            <div class="xar-form-actions" style="margin: 2em 0;">
                 <xar:var name="label">Continue</xar:var>
-                <input type="submit" name="create" id="create" value="#$label#"/>
+                <xar:button type="submit" label="$label" name="create" id="create"/>
                 <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
                 <xar:data-input property="$properties['id']" hidden="hidden"/>
                 <xar:data-input property="$properties['role_type']" hidden="hidden"/>

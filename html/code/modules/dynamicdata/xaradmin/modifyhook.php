@@ -83,7 +83,7 @@ function dynamicdata_admin_modifyhook(Array $args=array())
     }
 
     $properties = $object->getProperties();
-    return xarTplModule('dynamicdata','admin','modifyhook',
+    return xarTpl::module('dynamicdata','admin','modifyhook',
                         array('properties' => $properties),
                         $template);
 }

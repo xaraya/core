@@ -57,7 +57,7 @@ function xarInstallFunc($funcName = 'main', $args = array())
         $templateName = $tplData['_bl_template'];
     }
 
-    return xarTplModule($modName, $modType, $funcName, $tplData, $templateName);
+    return xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
 }
 
 function xarInstallAPIFunc($funcName = 'main', $args = array())

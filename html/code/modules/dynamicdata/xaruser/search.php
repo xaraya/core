@@ -83,7 +83,7 @@ function dynamicdata_user_search(Array $args=array())
     }
 
     if (empty($data['ishooked'])) {
-        xarTplSetPageTitle(xarML('Search #(1)', $label));
+        xarTpl::setPageTitle(xarML('Search #(1)', $label));
     }
 
     $data['items'] = array();

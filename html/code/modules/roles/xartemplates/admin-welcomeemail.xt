@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Roles Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Welcome Email</h2>
         <p>This email will be sent to users to welcome them.</p>
@@ -24,7 +22,7 @@
                 <textarea name="welcomeemail" id="welcomeemail" rows="20" cols="80" tabindex="1">#$welcomeemail#</textarea>
                 <br />
                 <br />
-                <input type="submit" value="#$submitlabel#" tabindex="2"/>
+                <xar:button type="submit" label="$submitlabel" tabindex="2"/>
             </div>
         </form>
         <p>The following variables will be replaced in the text with specific information:</p>

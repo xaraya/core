@@ -29,7 +29,7 @@ function dynamicdata_userapi_showdisplay(Array $args=array())
 
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {
-        return xarTplModule('dynamicdata','user','showdisplay',
+        return xarTpl::module('dynamicdata','user','showdisplay',
                             $args,
                             $template);
     }

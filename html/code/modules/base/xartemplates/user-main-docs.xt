@@ -16,9 +16,7 @@
         }
     </script>
     ]]>
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Base Module</span>
-    </div>
+    <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
 
         <h2>Welcome to Xaraya Documentation</h2>

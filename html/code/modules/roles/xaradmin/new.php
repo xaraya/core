@@ -45,7 +45,7 @@ function roles_admin_new()
 
         if (!$isvalid) {
             // Bad data: redisplay the form with error messages
-            return xarTplModule('roles','admin','new', $data);        
+            return xarTpl::module('roles','admin','new', $data);        
         } else {
             // Good data: create the item
             $itemid = $data['object']->createItem();

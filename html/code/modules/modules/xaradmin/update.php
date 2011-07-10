@@ -24,7 +24,7 @@ function modules_admin_update()
     if (!xarSecurityCheck('EditModules')) return; 
     
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     // Get parameters
@@ -33,7 +33,7 @@ function modules_admin_update()
     xarVarFetch('newdisplayname','str::',$newDisplayName); 
 
     if (!xarSecConfirmAuthKey()) {
-        //return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        //return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     // update hooks...

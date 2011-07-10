@@ -12,7 +12,7 @@
             <li class="xar-tabs-label" title="#$title#">#$label#</li>
             <!--
             <xar:sec mask="EditDynamicData" catch="false">
-                <xar:set name="dummy">$activetab=='query'?xarTplSetPageTitle('Query'):''</xar:set>
+                <xar:set name="dummy">$activetab=='query'?xarTpl::setPageTitle('Query'):''</xar:set>
                 <xar:set name="tabclass">$activetab=='query'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='query'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
@@ -21,7 +21,7 @@
             </xar:sec>
             -->
             <xar:sec mask="EditDynamicData" catch="false">
-                <xar:set name="dummy">$activetab=='import'?xarTplSetPageTitle('Import Object'):''</xar:set>
+                <xar:set name="dummy">$activetab=='import'?xarTpl::setPageTitle('Import Object'):''</xar:set>
                 <xar:set name="tabclass">$activetab=='import'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='import'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
@@ -29,7 +29,7 @@
                 </li>
             </xar:sec>
             <xar:sec mask="EditDynamicData" catch="false">
-                <xar:set name="dummy">$activetab=='export'?xarTplSetPageTitle('Export Object'):''</xar:set>
+                <xar:set name="dummy">$activetab=='export'?xarTpl::setPageTitle('Export Object'):''</xar:set>
                 <xar:set name="tabclass">$activetab=='export'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='export'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
@@ -37,7 +37,7 @@
                 </li>
             </xar:sec>
             <xar:sec mask="EditDynamicData" catch="false">
-                <xar:set name="dummy">$activetab=='view_static'?xarTplSetPageTitle('Manage Tables'):''</xar:set>
+                <xar:set name="dummy">$activetab=='view_static'?xarTpl::setPageTitle('Manage Tables'):''</xar:set>
                 <xar:set name="tabclass">$activetab=='view_static'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='view_static'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
@@ -45,7 +45,7 @@
                 </li>
             </xar:sec>
             <xar:sec mask="AdminDynamicData" catch="false">
-                <xar:set name="dummy">$activetab=='meta'?xarTplSetPageTitle('Table Browser'):''</xar:set>
+                <xar:set name="dummy">$activetab=='meta'?xarTpl::setPageTitle('Table Browser'):''</xar:set>
                 <xar:set name="tabclass">$activetab=='meta'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='meta'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
@@ -53,7 +53,7 @@
                 </li>
             </xar:sec>
             <xar:sec mask="AdminDynamicData" catch="false">
-                <xar:set name="dummy">$activetab=='relations'?xarTplSetPageTitle('Object Mapping'):''</xar:set>
+                <xar:set name="dummy">$activetab=='relations'?xarTpl::setPageTitle('Object Mapping'):''</xar:set>
                 <xar:set name="tabclass">$activetab=='relations'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='relations'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">
@@ -62,7 +62,7 @@
             </xar:sec>
             <!--
             <xar:sec mask="AdminDynamicData" catch="false">
-                <xar:set name="dummy">$activetab=='migrate'?xarTplSetPageTitle('Migrate'):''</xar:set>
+                <xar:set name="dummy">$activetab=='migrate'?xarTpl::setPageTitle('Migrate'):''</xar:set>
                 <xar:set name="tabclass">$activetab=='migrate'?'xar-tab-active':'xar-tab'</xar:set>
                 <xar:set name="linkclass">$activetab=='migrate'?'xar-accent xar-accent-outline':'xar-norm xar-norm-outline'</xar:set>
                 <li class="#$tabclass#">

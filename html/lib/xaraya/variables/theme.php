@@ -13,10 +13,13 @@
  * Interface declaration for theme vars
  *
  */
-sys::import('xaraya.variables');
-sys::import('xaraya.variables.moditem');
+interface IxarThemeVars
+{
+    static function get   ($scope, $name);
+}
 
-class xarThemeVars extends xarModItemVars implements IxarModItemVars
+
+class xarThemeVars extends Object implements IxarThemeVars
 {
     /**
      * get a theme variable
@@ -30,56 +33,13 @@ class xarThemeVars extends xarModItemVars implements IxarModItemVars
      */
     public static function get($scope, $name, $itemid = null)
     {
-        if (empty($scope)) throw new EmptyParameterException('themename');
-
-        $itemid = xarThemeGetIDFromName($scope,'systemid');
-        return parent::get('themes', $name, $itemid);
-    }
-
-    /**
-     * set a theme variable
-     *
-     * Note that this method is incompatible with 1.x even if wrapped.
-     * the prime/description parameters were dropped from the signature.
-     *
-     * 
-     * @param themeName The name of the theme
-     * @param name The name of the variable
-     * @param value The value of the variable
-     * @return boolean true on success
-     * @throws EmptyParameterException
-     *
-     */
-    public static function set($scope, $name, $value, $itemid = null)
-    {
-        if (empty($scope)) throw new EmptyParameterException('themename');
-
-        $itemid = xarThemeGetIDFromName($scope,'systemid');
-        $varname = $scope . '_' . $name; // bah
-        // Make sure we set it as modvar first
-        // TODO: this sucks
-        if(!xarModVars::get('themes',$varname)) {
-            xarModVars::set('themes',$varname,$value);
+        try {
+            $themeBaseInfo = xarMod::getBaseInfo($scope, 'theme');
+            $varvalue = $themeBaseInfo['configuration'][$name];
+            return $varvalue;
+        } catch (Exception $e) {
+            return null;
         }
-        return parent::set('themes', $varname, $value, $itemid);
-    }
-
-    /**
-     * delete a theme variable
-     *
-     * 
-     * @param themeName The name of the theme
-     * @param name The name of the variable
-     * @return boolean true on success
-     * @throws EmptyParameterException
-     */
-    public static function delete($scope, $name, $itemid = null)
-    {
-        if (empty($scope)) throw new EmptyParameterException('themename');
-
-        $itemid = xarThemeGetIDFromName($scope,'systemid');
-        $varname = $scope . '_' . $name;
-        return parent::delete($scope, $varname, $itemid);
     }
 }
 ?>

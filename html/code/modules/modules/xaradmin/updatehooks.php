@@ -21,7 +21,7 @@ function modules_admin_updatehooks()
     if(!xarSecurityCheck('ManageModules')) {return;}
 
     if (!xarSecConfirmAuthKey()) {
-        //return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        //return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
     // Curhook contains module name
     if (!xarVarFetch('curhook', 'str:1:', $curhook)) {return;}

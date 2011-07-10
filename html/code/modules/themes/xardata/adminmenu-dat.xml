@@ -20,6 +20,15 @@
         <menuitem>
             <mask>AdminThemes</mask>
             <includes>
+                <includeitem>view_configs</includeitem>
+            </includes>
+            <target>view_configs</target>
+            <title>Manage theme configuration options</title>
+            <label>Theme Configs</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminThemes</mask>
+            <includes>
                 <includeitem>modifyconfig</includeitem>
             </includes>
             <target>modifyconfig</target>

@@ -88,7 +88,7 @@ class xarBlockCache extends Object
         // set the cacheCode for the current cacheKey
 
         // the output depends on the current host, theme and locale
-        $factors = xarServer::getVar('HTTP_HOST') . xarTplGetThemeDir() .
+        $factors = xarServer::getVar('HTTP_HOST') . xarTpl::getThemeDir() .
                    xarUserGetNavigationLocale();
 
         // add page identifier if needed

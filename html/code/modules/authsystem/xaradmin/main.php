@@ -31,7 +31,7 @@ function authsystem_admin_main()
     $samemodule = $info[0] == $refererinfo[0];
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTplModule('authsystem','admin','overview');
+        return xarTpl::module('authsystem','admin','overview');
     } else {
         xarController::redirect(xarModURL('authsystem', 'admin', 'modifyconfig'));
         return true;

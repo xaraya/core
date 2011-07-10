@@ -41,7 +41,8 @@ class xarLogger_javascript extends xarLogger
     */
     function writeOut()
     {
-        xarTplAddJavaScript('head', 'code', $this->_buffer);
+        xarMod::apiFunc('themes', 'user', 'registerjs',
+            array('position' => 'head', 'type' => 'code', 'code' => $this->_buffer));
         $this->_buffer = '';
         return true;
     }

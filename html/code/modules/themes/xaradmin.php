@@ -13,12 +13,6 @@
  * @author Marty Vance
 */
 
-// Tags
-class TagRegistrationException extends RegistrationExceptions
-{ 
-    protected $message = 'The tag "#(1)" is not properly registered';
-}
-
 // Themes
 class ThemeNotFoundException extends NotFoundExceptions
 { 

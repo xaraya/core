@@ -77,8 +77,8 @@ function mail_adminapi_hookmaildelete(Array $args=array())
     $message = $strings['message'];
 
     // Add root tage and compile the subject and message
-    $subject  = xarTplCompileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$subject.'</xar:template>');
-    $message  = xarTplCompileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$message.'</xar:template>');
+    $subject  = xarTpl::compileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$subject.'</xar:template>');
+    $message  = xarTpl::compileString('<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">'.$message.'</xar:template>');
 
     // Define the variables automatically available to all templates
     // LEGACY
@@ -97,8 +97,8 @@ function mail_adminapi_hookmaildelete(Array $args=array())
     $data = array_merge($data,$extrainfo);
     $data['modulename'] = $modname;
     $data['objectid'] = $objectid;
-    $subject = xarTplString($subject, $data);
-    $message = xarTplString($message, $data);
+    $subject = xarTpl::string($subject, $data);
+    $message = xarTpl::string($message, $data);
 
     // TODO How to do this with BL? Create yet another template? Don't think so.
 // Send a formatted html message to the mail module for use if the admin has the html turned on.

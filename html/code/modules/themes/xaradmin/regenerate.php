@@ -29,7 +29,7 @@ function themes_admin_regenerate()
     
     // Security check
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
     // Regenerate themes
     $regenerated = xarMod::apiFunc('themes', 'admin', 'regenerate');

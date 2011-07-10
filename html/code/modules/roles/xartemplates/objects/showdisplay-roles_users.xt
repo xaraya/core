@@ -4,14 +4,18 @@
     <table class="xar-fullwidth">
         <xar:foreach in="$properties" key="$name" value="$property">
             <tr><td>
-            <div class="xar-form-input-wrapper">
-                <xar:data-label property="$properties[$name]" for="id"/>
-                <xar:if condition="$name eq 'name'">
-                    <xar:data-output property="$properties[$name]" layout="single"/>
-                <xar:else/>
-                    <xar:data-output property="$properties[$name]"/>
-                </xar:if>
-            </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:data-label property="$properties[$name]" for="id"/>
+                    </div>
+                    <div class="xar-col">
+                        <xar:if condition="$name eq 'name'">
+                            <xar:data-output property="$properties[$name]" layout="single"/>
+                        <xar:else/>
+                            <xar:data-output property="$properties[$name]"/>
+                        </xar:if>
+                    </div>
+                </div>
             </td></tr>
         </xar:foreach>
     </table>

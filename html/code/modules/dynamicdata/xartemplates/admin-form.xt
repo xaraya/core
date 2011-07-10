@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Dynamic Data Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Preview Input Form for #$object:label#</h2>
         <xar:set name="objectid">#$object:objectid#</xar:set>
         <form method="post" action="#xarModURL('dynamicdata','admin','form')#">
-            <div class="xar-align-center">
+            <div class="xar-form-actions">
                 <input type="hidden" name="objectid" value="#$objectid#"/>
                 <input type="hidden" name="theme" value="print"/>
                 <xar:var name="label">Refresh</xar:var>
-                <input type="submit" value="#$label#"/>
+                <xar:button type="submit" label="$label"/>
             </div>
         </form>
         <form>
             <div>
-                <table class="xar-fullwidth">
+                <table class="xar-options">
                     <xar:data-form object="$object"/>
                 </table>
             </div>

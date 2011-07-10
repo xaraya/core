@@ -131,7 +131,7 @@ class DataObjectDefaultHandler extends Object
      * @param $args['method'] the ui method we are handling here
      * @param $args['itemid'] item id of the object to call the method for, if the method needs it
      * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList()
-     * @return string output of xarTplObject() using 'ui_default'
+     * @return string output of xarTpl::object() using 'ui_default'
      */
     function run(array $args = array())
     {
@@ -180,14 +180,14 @@ class DataObjectDefaultHandler extends Object
         }
 
         $title = $this->object->label;
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
 
         // Here we try to run the requested method directly
         $output = $this->object->{$this->method}($this->args);
 
        // CHECKME: do we redirect to return_url or nextmethod in some cases here too ?
 
-        return xarTplObject(
+        return xarTpl::object(
             $this->tplmodule, $this->object->template, 'ui_default',
             array('object'   => $this->object,
                   'output'   => $output,

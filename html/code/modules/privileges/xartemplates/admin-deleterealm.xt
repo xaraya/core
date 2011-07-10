@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Privileges Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <xar:template type="module" file="admin-realms"/>
         <form action="#xarModURL('privileges','admin','deleteealm')#" method="post" enctype="application/x-www-form-urlencoded">
-            <div style="text-align: center">
+            <div class="xar-form-actions">
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="id" id="id" value="#$id#"/>
                 <input type="hidden" name="confirmed" id="confirmed" value="1"/>
@@ -18,7 +15,7 @@
                 </p>
                 <br />
                 <xar:var name="label">Confirm</xar:var>
-                <input type="submit" value="#$label#" tabindex="1"/>
+                <xar:button type="submit" label="$label" tabindex="1"/>
                 <br />
                 <p>
                     <a href="#xarModURL('privileges','admin','viewrealms')#">Cancel the deletion</a>

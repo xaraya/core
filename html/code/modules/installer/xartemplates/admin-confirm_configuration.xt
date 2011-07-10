@@ -77,8 +77,9 @@
                 All of the above modules can be installed or removed at any later time in the Modules module.
                 </p>
             -->
-            <div class="xar-align-center" style="margin: 2em 0;">
-                <input type="submit" name="create" id="create" value="Continue"/>
+            <div class="xar-form-actions" style="margin: 2em 0;">
+                <xar:var name="label">Continue</xar:var>
+                <xar:button type="submit" label="$label" name="create" id="create"/>
                 <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
                 <input type="hidden" name="configuration" id="configuration" value="#$configuration#"/>
                 <input type="hidden" name="confirmed" id="confirmed" value="true"/>

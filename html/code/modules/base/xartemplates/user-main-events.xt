@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:style scope="module" module="base" file="navtabs"/>
+    <xar:style scope="theme" file="navtabs"/>
     <xar:set name="dummy">xarVarFetch('tab', 'pre:trim:lower:str:1:', $tab, '', XARVAR_NOT_REQUIRED)</xar:set>
     <xar:set name="activetab">'xar-tab-active'</xar:set>
     <xar:set name="activelink">'xar-accent xar-accent-outline'</xar:set>
     <xar:set name="inactivetab">'xar-tab'</xar:set>
     <xar:set name="inactivelink">'xar-norm xar-norm-outline'</xar:set>
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Base Module</span>
-    </div>
+    <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
         <h2>EventSystem Scenario</h2>
         <p>The event system is used by packages of Xaraya to trigger certain events in the system. These events are dispatched to the active modules which may define special functions that can act on those events.</p>

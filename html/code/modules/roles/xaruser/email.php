@@ -72,7 +72,7 @@ function roles_user_email(Array $args=array())
 
             $data['authid'] = xarSecGenAuthKey();
 
-            xarTplSetPageTitle(xarML('Mail User'));
+            xarTpl::setPageTitle(xarML('Mail User'));
             break;
 
         case 'confirm':
@@ -83,7 +83,7 @@ function roles_user_email(Array $args=array())
 
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
 
             // Security Check

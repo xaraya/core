@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Blocks Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <h2>Delete Instance</h2>
         <form method="post" action="#xarModURL('blocks', 'admin', 'delete_instance')#">
             <fieldset>
@@ -26,17 +23,14 @@
                 #xarVarPrepForDisplay($instance['type'])#
                 </p>
             </fieldset>
-            <fieldset>
-                <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="confirm" id="confirm" value="true"/>
-                    <input type="hidden" name="bid" id="bid" value="#$instance['bid']#"/>
-                    <input type="submit" value="#xarML('Delete Block')#" class="xar-margin-thick"/>
-                    <xar:set name="returnurl">
-                        #xarModURL('blocks', 'admin', 'view_instances')#
-                    </xar:set>
-                    <input type="button" value="#xarML('Cancel')#" class="xar-margin-thick" onclick="window.location='#$returnurl#';"/>
-                </div>
+            <fieldset class="xar-form-actions">
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="confirm" id="confirm" value="true"/>
+                <input type="hidden" name="bid" id="bid" value="#$instance['bid']#"/>
+                <xar:var name="label">Delete Block</xar:var>
+                <xar:button type="submit" label="$label"/>
+                <xar:var name="label">Cancel</xar:var>
+                <xar:button type="cancel" label="$label"/>
             </fieldset>
         </form>
     </div>

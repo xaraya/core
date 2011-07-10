@@ -31,7 +31,7 @@ function roles_user_lostpassword()
        return true;
     }
 
-    xarTplSetPageTitle(xarVarPrepForDisplay(xarML('Lost Password')));
+    xarTpl::setPageTitle(xarVarPrepForDisplay(xarML('Lost Password')));
 
     if (!xarVarFetch('phase','str:1:100',$phase,'request',XARVAR_NOT_REQUIRED)) return;
 
@@ -40,7 +40,7 @@ function roles_user_lostpassword()
         case 'request':
         default:
             $authid = xarSecGenAuthKey();
-            $data = xarTplModule('roles','user', 'requestpw', array('authid'    => $authid,
+            $data = xarTpl::module('roles','user', 'requestpw', array('authid'    => $authid,
                                                                     'emaillabel' => xarML('E-Mail New Password')));
 
             break;
@@ -52,7 +52,7 @@ function roles_user_lostpassword()
 
             // Confirm authorisation code.
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
 
             if ((empty($uname)) && (empty($email))) {
@@ -89,7 +89,7 @@ function roles_user_lostpassword()
             if (!xarMod::apiFunc('roles', 'admin','senduseremail', array('id' => array($user['id'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;
 
             // Let user know that they have an email on the way.
-            $data = xarTplModule('roles','user','requestpwconfirm');
+            $data = xarTpl::module('roles','user','requestpwconfirm');
           break;
     }
     return $data;

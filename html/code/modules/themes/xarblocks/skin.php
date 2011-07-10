@@ -37,44 +37,32 @@ class Themes_SkinBlock extends BasicBlock implements iBlock
     {
         $data = parent::display($data);
         if (empty($data)) return;
+        
+        if (!xarUserIsLoggedIn() ||
+            (bool) xarModVars::get('themes', 'enable_user_menu') == false) return;
+        
+        $content = !empty($data['content']) ? $data['content'] : array();
+        $content['user_themes'] = xarMod::apiFunc('themes', 'user', 'dropdownlist');
+        if ($content['user_themes'] <= 1) return;
+        $content['default_theme'] = xarModUserVars::get('themes', 'default_theme');
+        $content['return_url'] = (xarServer::getVar('REQUEST_METHOD') == 'GET') ?
+            xarServer::getCurrentURL() : xarServer::getBaseURL();
 
-        $current_theme_name = xarModVars::get('themes', 'default_theme');
-        $site_themes = xarMod::apiFunc('themes', 'admin','getthemelist');
-        asort($site_themes);
-
-        if (count($site_themes) <= 1) {
-            return;
-        }
-
-        foreach ($site_themes as $theme) {
-            $selected = ($current_theme_name == $theme['name']);
-
-            $themes[] = array(
-                'id'   => $theme['name'],
-                'name'     => $theme['name'],
-                'selected' => $selected
-            );
-        }
-
-
-        $tplData['form_action'] = xarModURL('themes', 'user', 'changetheme');
-        $tplData['form_picker_name'] = 'theme';
-        $tplData['themes'] = $themes;
-        $tplData['blockid'] = $data['bid'];
-        $tplData['authid'] = xarSecGenAuthKey();
-
-        if (xarServer::getVar('REQUEST_METHOD') == 'GET') {
-            // URL of this page
-            $tplData['return_url'] = xarServer::getCurrentURL();
-        } else {
-            // Base URL of the site
-            $tplData['return_url'] = xarServer::getBaseURL();
-        }
-
-        $data['content'] = $tplData;
+        $data['content'] = $content;
 
         return $data;
 
+    }
+
+/**
+ * Modify Function to the Blocks Admin
+ * @param $data array containing title,content
+ */
+    public function modify(Array $data=array())
+    {
+        $data = parent::modify($data);
+        $data['enable_user_menu'] = xarModVars::get('themes', 'enable_user_menu');
+        return $data;
     }
 
 }

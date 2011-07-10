@@ -78,7 +78,7 @@ function mail_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             switch ($data['tab']) {
                 case 'general':
@@ -91,7 +91,7 @@ function mail_admin_modifyconfig()
                     
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
-                        return xarTplModule('mail','admin','modifyconfig', $data);        
+                        return xarTpl::module('mail','admin','modifyconfig', $data);        
                     } else {
                         $itemid = $data['module_settings']->updateItem();
                     }

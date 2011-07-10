@@ -2,8 +2,10 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:foreach in="$properties" key="$name" value="$property">
-        <div class="xar-form-input-wrapper">
+        <div class="xar-row">
             <xar:data-label property="$properties[$name]" for="id"/>
+        </div>
+        <div class="xar-col">
             <xar:data-input property="$properties[$name]"/>
         </div>
     </xar:foreach>

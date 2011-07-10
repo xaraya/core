@@ -55,7 +55,7 @@ function dynamicdata_admin_form(Array $args=array())
     $data['object'] =& $myobject;
 
     $template = $myobject->name;
-    return xarTplModule('dynamicdata','admin','form',$data,$template);
+    return xarTpl::module('dynamicdata','admin','form',$data,$template);
 }
 
 ?>

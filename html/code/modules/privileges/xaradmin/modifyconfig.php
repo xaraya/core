@@ -111,7 +111,7 @@ function privileges_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             switch ($data['tab']) {
                 case 'general':
@@ -121,7 +121,7 @@ function privileges_admin_modifyconfig()
 
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
-                        return xarTplModule('privileges','admin','modifyconfig', $data);        
+                        return xarTpl::module('privileges','admin','modifyconfig', $data);        
                     } else {
                         $itemid = $data['module_settings']->updateItem();
                     }
