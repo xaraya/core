@@ -263,6 +263,8 @@
                 <xar:template file="notes-210"/>
             <xar:elseif condition="XARCORE_VERSION_NUM eq '2.2.0'"/>
                 <xar:template file="notes-220"/>
+            <xar:elseif condition="XARCORE_VERSION_NUM eq '2.3.0'"/>
+                <xar:template file="notes-230"/>
             </xar:if>
         </xar:if>
         <xar:if condition="!empty($upgrade['errormessage'])">
