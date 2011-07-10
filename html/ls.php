@@ -1,17 +1,21 @@
 <?php
 /**
- * Xaraya Local Services Interface
+ * Xaraya Local Services Interface 
  *
+ * @package core
+ * @subpackage entrypoint
+ * @category Xaraya Web Applications Framework
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @package entrypoint
  * @author Marcel van der Boom
+ *
  * @todo move this into /bin
  * @todo add site instance parameter
  * @todo centralize user/password entry in here and outside the xarcliapi
  */
- 
+
 /**
  * Load the layout file so we know where to find the Xaraya directories
  */

@@ -3,7 +3,7 @@
  * @package core
  * @subpackage structures
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -112,9 +112,11 @@ abstract class xarVariableObject extends Object
  * @return void
 **/        
     public function __destruct()
+
     {
         // save the object 
         $this->save();
+
     }
 /**
  * Save object
@@ -166,9 +168,11 @@ abstract class xarVariableObject extends Object
  * @return void
 **/
     public function __wakeup()
+
     {
         // perform any actions required after unserialize here...
     }
+
 
 /** 
  * Object sleep (serialize)
@@ -184,10 +188,12 @@ abstract class xarVariableObject extends Object
  * @return array names of properties to store when object is serialized
 **/
     public function __sleep()
+
     {
         // perform any actions before serialize (save) here...
         // return an array of property names to save
         return array_keys($this->getPublicProperties());
+
     }
 
 /**
@@ -225,10 +231,12 @@ Class testClass extends xarVariableObject
     }
 
     public function __sleep()
+
     {
         // set last run time
         $this->lastrun = time();
         return parent::__sleep();
+
     }
 }
 
