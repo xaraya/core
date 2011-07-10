@@ -66,7 +66,7 @@ function privileges_admin_removerole()
 
 // Check for authorization code
         if (!xarSecConfirmAuthKey()) {
-            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
 
         //Try to remove the privilege and bail if an error was thrown

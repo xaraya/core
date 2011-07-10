@@ -49,7 +49,7 @@ function dynamicdata_admin_orderprops()
     }
 
     if (!xarSecConfirmAuthKey()) {
-        //return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        //return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }
 
     $objectinfo = DataObjectMaster::getObjectInfo(

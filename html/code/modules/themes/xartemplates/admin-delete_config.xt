@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>
+            <xar:ml>
+                <xar:mlstring>Delete Item #(1) in #(2)</xar:mlstring>
+                <xar:mlvar>#$object:itemid#</xar:mlvar>
+                <xar:mlvar>#$object:label#</xar:mlvar>
+            </xar:ml>
+        </h2>
+        <h3 class="xar-align-center">
+            Confirm Deleting This Configuration?
+        </h3>
+
+        <xar:data-display object="$object"/>
+
+        <form method="post" action="#xarModURL('themes','admin','delete_config')#">
+            <div class="xar-form-actions">
+                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+                <input type="hidden" name="confirm" id="confirm" value="1"/>
+                <xar:var name="label">Delete</xar:var>
+                <xar:button type="submit" label="$label" id="confirm"/>
+                <xar:var name="label">Cancel</xar:var>
+                <xar:button type="cancel" label="$label"/>
+            </div>
+        </form>
+    </div>
+</xar:template>

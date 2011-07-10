@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Dynamic Data Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>
             <xar:if condition="!empty($extcomponent) and $extcomponent eq 'Field'">Select Fields
@@ -58,8 +56,7 @@
                     <tr>
                         <th class="xar-align-right xar-valign-top">Item ID</th>
                         <td>
-                            <input type="text" name="itemid" id="itemid" value="#$itemid#"
-                            size="10" onchange="submit()"/>
+                            <input type="text" name="itemid" id="itemid" value="#$itemid#" size="10" onchange="submit()"/>
                             <!-- TODO: show dropdown box for all relevant item ids (if not too many) -->
                         </td>
                     </tr>
@@ -107,14 +104,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="xar-align-center">
-                        <input type="submit" value="#$refreshlabel#"/>
+                    <td colspan="2" class="xar-form-actions">
+                        <xar:button type="submit" label="$refreshlabel"/>
                     </td>
                 </tr>
             </table>
             <p>There are #$numitems# entries matching these selection criteria at the moment 
             <hr />(Instance Definition #$extinstance#)</p>
-            <input type="submit" name="apply" value="#$applylabel#"/>
+            <xar:button type="submit" label="$applylabel" name="apply"/>
         </form>
     </div>
 </xar:template>

@@ -58,7 +58,7 @@ function mail_adminapi_getsourcefilename(Array $args=array())
         throw new FileNotFoundException(xarML('No template was found corresponding to #(1) #(2)',$templateName,$messagepart));
     }
     $sourceFileName = str_replace('//','/',$sourceFileName);
-    // assert('isset($sourceFileName); /* The source file for the template has no value in xarTplModule */');
+    // assert('isset($sourceFileName); /* The source file for the template has no value in xarTpl::module */');
     return $sourceFileName;
 }
 

@@ -1,0 +1,62 @@
+/* [Xaraya common tabs css] - html/themes/common/style/tabs.css
+    <xar:style scope="theme" file="tabs"/>
+    Place common tabs css for all themes here
+        Over-ride per theme by copying file to html/themes/themename/style/tabs.css
+ ----[/comment]  */
+/* tabs */
+ul.xar-tabs {
+    list-style: none !important;
+    border-width: 0 0 1px 0 !important;
+    border-style: solid;
+    padding: 0 .5em !important;
+    margin: 1em 0 !important;
+    zoom: 1;                    /* fix for IE */
+}
+ul.xar-tabs li.xar-tabs-label {
+    list-style: none !important;
+    float: left;
+    white-space: nowrap;
+    border: 0;
+    margin: .2em 1em .1em .5em !important;
+    padding: 0 !important;
+}
+ul.xar-tabs li.xar-tab {
+    list-style: none !important;
+    float: left;
+    margin: 0 1px 0 1px !important;
+    padding: 0 !important;
+}
+ul.xar-tabs li.xar-tab-active {
+    list-style: none !important;
+    float: left;
+    margin: 0 1px 0 1px !important;
+    padding: 0 !important;
+}
+ul.xar-tabs li.xar-tab a {
+    white-space: nowrap !important;
+    float: left;
+    border-width: 1px 1px 0 1px !important;
+    border-style: solid;
+    padding: .1em .75em .4em .75em !important;
+}
+ul.xar-tabs li.xar-tab-active a {
+    white-space: nowrap !important;
+    float: left;
+    border-width: 1px 1px 0 1px !important;
+    border-style: solid;
+    padding: .1em .75em .69em .75em !important; /* .69 bottom not subject to rounding errors
+                                                   causing active tab to wrap badly at .70 */
+    position: relative;
+    margin: -.3em 0 0 0 !important;
+}
+
+/* required for broken box models */
+ul.xar-tabs:after {
+    content: ".";
+    display: block;
+    clear: both;
+    height: 0;
+    font-size: 0;
+    overflow: hidden;
+    visibility: hidden;
+}

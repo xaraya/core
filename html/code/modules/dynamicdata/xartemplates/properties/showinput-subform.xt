@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript position="head" module="dynamicdata" filename="subform.js"/>
+    <xar:javascript position="head" scope="module" module="dynamicdata" filename="subform.js"/>
     <input type="hidden" id="fieldprefix" value="#$fieldprefix#"/>
     <xar:if condition="empty($style) or $style eq 'serialized'">
         <xar:if condition="!empty($object)">
@@ -15,7 +15,7 @@
             -->
                 <xar:if condition="is_array($object)">
                     <xar:if condition="!empty($layout) and $layout eq 'table'">
-                        <table class="xar-fullwidth">
+                        <table class="xar-items">
                         <xar:set name="i">0</xar:set>
                         <xar:foreach in="$object" key="$key" value="$item">
                             <xar:if condition="empty($i)">
@@ -91,7 +91,7 @@
                             <xar:data-form object="$item" layout="prefix" fieldprefix="$prefix"
                             fieldlist="$fieldlist"/>
                             <xar:if condition="$i gt 1">
-                                <div class="xar-form-input-wrapper-after">
+                                <div class="xar-col dummy">
                                     <input type="button" title="Remove" value="Remove"
                                     style="height: 23px; font-size: small;"
                                     onclick="javascript:removeItem('#$prefix#')"/>
@@ -100,7 +100,7 @@
                         </div>
                     </xar:foreach>
                 </div>
-                <div class="xar-form-input-wrapper-after">
+                <div class="xar-col dummy">
                     <xar:var name="label">Add Item</xar:var>
                     <xar:var name="label1">Add</xar:var>
                     <input type="button" title="#$label#" value="#$label1#" onclick="addItem();" style="height: 23px; font-size: small;"/>

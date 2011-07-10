@@ -31,7 +31,7 @@ function mail_admin_viewq(Array $args=array())
     if (!empty($action)) {
         // Confirm authorisation code
         if (!xarSecConfirmAuthKey()) {
-            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
 
         switch ($action)

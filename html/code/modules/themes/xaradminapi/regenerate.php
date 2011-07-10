@@ -103,6 +103,10 @@ function themes_adminapi_regenerate()
                 }
         }
     }
+    // Reinit the theme configurations
+    sys::import('modules.themes.class.initialization');
+    ThemeInitialization::importConfigurations();
+
     return true;
 }
 ?>

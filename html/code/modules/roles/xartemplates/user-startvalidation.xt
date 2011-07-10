@@ -25,45 +25,58 @@
             <form action="#xarModURL('roles','user','getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Start Validation</legend>
-                    <div class="xar-form-input-wrapper">
-                        <p>Please enter your username and validation code below:</p>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <p>Please enter your username and validation code below:</p>
+                        </div>
                     </div>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Please enter your user name</xar:var>
-                        <label for="uname" class="xar-form-label" title="#$label#">
-                            Username
-                        </label>
-                        <input type="text" name="uname" id="uname" value="#xarVarPrepForDisplay($uname)#"/>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Please enter your user name</xar:var>
+                            <label for="uname" class="xar-form-label" title="#$label#">
+                                Username
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <input type="text" name="uname" id="uname" value="#xarVarPrepForDisplay($uname)#"/>
+                        </div>
                     </div>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Please enter your validation code</xar:var>
-                        <label for="valcode" class="xar-form-label" title="#$label#">
-                            Validation Code:
-                        </label>
-                        <input type="text" name="valcode" id="valcode" value=""/>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Please enter your validation code</xar:var>
+                            <label for="valcode" class="xar-form-label" title="#$label#">
+                                Validation Code:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <input type="text" name="valcode" id="valcode" value=""/>
+                        </div>
                     </div>
-                    <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="phase" id="phase" value="getvalidate"/>
-                        <input type="submit" value="#xarVarPrepForDisplay($validatelabel)#"/>
-                    </div>
+                </fieldset>
+                <fieldset class="xar-form-actions">
+                    <input type="hidden" name="phase" id="phase" value="getvalidate"/>
+                    <xar:button type="submit" label="$validatelabel"/>
                 </fieldset>
             </form>
             <p>If you did not receive your validation code, we will try to resend it now.</p>
             <form action="#xarModURL('roles','user','getvalidation')#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Resend Validation</legend>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Please enter your username</xar:var>
-                        <label for="unameresend" class="xar-form-label" title="#$label#">
-                            Username:
-                        </label>
-                        &#160; 
-                        <input type="text" name="uname" id="unameresend" value="#$uname#"/>
-                   </div>
-                    <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="phase" id="phase" value="resend"/>
-                        <input type="submit" value="#$resendlabel#"/>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Please enter your username</xar:var>
+                            <label for="unameresend" class="xar-form-label" title="#$label#">
+                                Username:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <input type="text" name="uname" id="unameresend" value="#$uname#"/>
+                       </div>
                     </div>
+                </fieldset>
+                <fieldset class="xar-form-actions">
+                    <input type="hidden" name="phase" id="phase" value="resend"/>
+                    <xar:button type="submit" label="$resendlabel"/>
                 </fieldset>
             </form>
         </xar:if>

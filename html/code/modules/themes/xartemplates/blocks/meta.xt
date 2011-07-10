@@ -1,37 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <!-- 
-        The equiv meta tag now sets text/html as content, but this is 
-        determined by the page template, in our current setup compiled to 
-        late to pull it in here, this is addressed in the tpl_order 
-        scenario, no choice but to leave or delete, leaving it for now 
-    -->
-    <meta http-equiv="Content-Type" content="text/html; charset=#$charset#"/>
-    <meta name="Generator" content="#$generator#"/>
-    <meta name="Keywords" content="#$keywords#"/>
-    <meta name="Description" content="#$description#"/>
-    <meta name="author" content="#xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY)#"/>
-    <meta name="rating" content="General"/>
-    <xar:if condition="(!empty($refreshurl)) and (!empty($refreshtime))">
-        <meta http-equiv="refresh" content="#$refreshtime#;URL=#$refreshurl#"/>
+    <!-- meta data tags set in the meta block are rendered via the xar:place-meta tag
+         this also renders any meta tags added dynamically by the xar:meta tag --> 
+    <xar:place-meta/>
+
+    <!-- render link tags from meta block for Mozilla and related browsers -->
+    <xar:if condition="!empty($linktags)">
+        <xar:foreach in="$linktags" value="$linktag">
+            <link rel="#$linktag.rel#" href="#$linktag.url#" title="#$linktag.title#" type="#$linktag.type#"/>
+        </xar:foreach>
     </xar:if>
-    <xar:set name="sitename">
-        <xar:var scope="module" module="themes" name="SiteName"/>
-    </xar:set>
-    <xar:if condition="!empty($latitude)">
-        <meta name="ICBM" content="#$latitude#, #$longitude#"/>
-        <meta name="DC.title" content="#$sitename#"/>
+
+    <!-- render additional link tags --> 
+    <!-- first and last come from the pager, if it's active -->
+    <xar:if condition="!empty($first)">
+        <link rel="first" type="text/html" href="#$first#"/>
     </xar:if>
-    <!-- Linking for Mozilla and related browser site tab -->
-    <xar:if condition="xarThemeIsAvailable('rss')">
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="#$activepagerss#"/>
-    </xar:if>
-    <xar:if condition="xarThemeIsAvailable('atom')">
-        <link rel="service.feed" type="application/atom+xml" title="Atom-feed" href="#$activepageatom#"/>
-    </xar:if>
-    <xar:if condition="xarThemeIsAvailable('print')">
-        <link rel="alternate" type="text/html" title="Print" href="#$activepageprint#"/>
+    <xar:if condition="!empty($last)">
+        <link rel="last" type="text/html" href="#$last#"/>
     </xar:if>
     <!--
         The XMLRPC-server module takes case of filling the RSD information 
@@ -39,29 +26,5 @@
     <xar:if condition="xarModIsAvailable('xmlrpcserver')">
         <link rel="EditURI" type="application/rsd+xml" title="RSD" href="#xarModURL('xmlrpcserver','user','main')#"/>
     </xar:if>
-    <link rel="pingback" href="#$baseurl#ws.php"/>
-    <link rel="Top" type="text/html" href="#$baseurl#"/>
-    <link rel="Parent" type="text/html" href="#$baseurl#"/>
-    <link rel="author" href="#$authorpage#" title="#$sitename#"/>
-    <xar:if condition="!empty($copyrightpage)">
-        <link rel="copyright" type="text/html" href="#$copyrightpage#"/>
-    </xar:if>
-    <xar:if condition="!empty($helppage)">
-        <link rel="help" type="text/html" href="#$helppage#"/>
-    </xar:if>
-    <xar:if condition="!empty($glossary)">
-        <link rel="glossary" type="text/html" href="#$glossary#"/>
-    </xar:if>
-    <xar:if condition="!empty($first)">
-        <link rel="first" type="text/html" href="#$first#"/>
-    </xar:if>
-    <xar:if condition="!empty($last)">
-        <link rel="last" type="text/html" href="#$last#"/>
-    </xar:if>
-    <xar:if condition="xarModIsAvailable('articles')">
-        <link rel="contents" type="text/html" href="#xarModURL('articles','user','viewmap')#"/>
-    </xar:if>
-    <xar:if condition="xarModIsAvailable('search')">
-        <link rel="search" type="text/html" href="#xarModURL('search','user','main')#"/>
-    </xar:if>
+    
 </xar:template>

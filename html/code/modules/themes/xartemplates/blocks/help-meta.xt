@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <h3 id="metablockhelp">Meta Block Help Information</h3>
+    <p>The meta block is responsible for supplying metadata about your site.</p>
+    <h4>Meta Tags</h4>
+    <p>Meta tags are a way you can supply meta data about your site to browsers and to things like search engines.</p>
+    <p>The meta block comes with a limited set of meta tags enabled by default and allows you to add, change or remove them at any time, without ever having to edit your templates. It supports the following parameters.</p>
+    <ul>
+        <li><strong>type</strong> the type of tag, one of <strong>name</strong> or <strong>http-equiv</strong>, required</li>
+        <li><strong>value</strong> the value for this type of tag, eg author, description, generator, etc.., required</li>
+        <li><strong>content</strong> the meta data content for this meta type, required</li>
+        <li><strong>lang</strong> the language code for the content, optional</li>
+        <li><strong>dir</strong> the text direction of the content, ltr or rtl, optional</li>
+        <li><strong>scheme</strong> the scheme used to interpret the content, optional</li>
+    </ul>
+    <p>NOTE: if the content is empty, the tag will not be rendered.</p> 
+    <h4>The xar:meta tag</h4>
+    <p>Xaraya supplies the xar:meta tag, which allows you to add content dynamically from within modules, for instance to supply a description and keywords based on the current content being displayed.</p> 
+    <p>It accepts the same parameters as the tags in the meta block itself.</p>
+    <p>It also accepts an additional <strong>append</strong> parameter, which when present will append content to an existing tag if the tag already exists. This allows you to, for example, supply a standard set of keywords in the meta block, and then add keywords based on the current content.</p>
+    <h4>The xar:place-meta tag</h4>
+    <p>The xar:place-meta tag is responsible for rendering any tags supplied by the meta block, plus any tags supplied by xar:meta tags in templates.</p> 
+</xar:template>

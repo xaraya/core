@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Base Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
+    <div class="xar-mod-page-head">
         <h2>System Information</h2>
         <ul class="xar-tabs xar-alt xar-norm-outline">
             <xar:var name="title">Click on a tab to display specific information from your server php installation</xar:var>
@@ -52,6 +50,8 @@
                 <a href="#xarModURL('base','admin','sysinfo',array('what'=>-1))#" class="#$linkclass#">All</a>
             </li>
         </ul>
+     </div>
+     <div class="xar-mod-page-body">
         <!--
         the standard phpinfo layout is table based and uses its own embedded styling,
         lets see if we can restore the look and feel of it with the help of our own wrapper and a simple embedded css call
@@ -83,7 +83,10 @@ div.xar-base-phpinfo-wrapper i {color: #666666; background-color: #cccccc;}
 div.xar-base-phpinfo-wrapper img {float: right; border: 0px;}
 div.xar-base-phpinfo-wrapper hr {width: 90%; background-color: #cccccc; border: 0px; height: 1px; color: #000000;}
 //-->'</xar:set>
+        <!--
         <xar:style method="embed" source="'.$localstyles.'"/>
+        -->
         <div class="xar-base-phpinfo-wrapper">#$phpinfo#</div>
+    </div>
     </div>
 </xar:template>

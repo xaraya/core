@@ -73,7 +73,7 @@ function dynamicdata_admin_view_static(Array $args=array())
     $data['itemtype'] = $itemtype;
     $data['authid'] = xarSecGenAuthKey();
 
-    xarTplSetPageTemplateName('admin');
+    xarTpl::setPageTemplateName('admin');
 
     return $data;
 }

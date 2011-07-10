@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">#$tpltitle#</span>
-    </div>
+    <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
         <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
         <xar:set name="displaylink">xarObject::getActionURL($object, 'display', $object->itemid)</xar:set>
         <h2>
             Delete Item #$object:itemid# in #$object:label#&#160;
             <a href="#$viewlink#" title="View #$object:label#">
-                <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                <xar:img scope="theme" file="icons/item-list.png" class="xar-icon" alt="view"/>
             </a>&#160;
             <a href="#$displaylink#" title="Display #$object:label#">
-                <img src="#xarTplGetImage('icons/display.png', 'base')#" width="16" height="16" alt="display"/>
+                <xar:img scope="theme" file="icons/display.png" class="xar-icon" alt="display"/>
             </a>
         </h2>
         <h3 class="xar-align-center">Confirm Deleting This Item?</h3>
@@ -29,26 +27,24 @@
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
         <xar:set name="postlink">xarObject::getActionURL($object, 'delete')</xar:set>
         <form method="post" action="#$postlink#">
-            <fieldset>
-                <div class="xar-align-center">
-                    <!-- if we use the current URL, the object is already specified -->
-                    <xar:if condition="$object:linktype ne 'current'">
-                        <input type="hidden" name="object" id="object" value="#$object:name#"/>
-                    </xar:if>
-                    <input type="hidden" name="method" id="method" value="delete"/>
-                    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="join" id="join" value="#$object:join#"/>
-                    <input type="hidden" name="table" id="table" value="#$object:table#"/>
-                    <input type="hidden" name="notfresh" id="notfresh" value="true"/>
-                    <xar:if condition="!empty($return_url)">
-                        <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
-                    </xar:if>
-                    <xar:var name="label">Cancel</xar:var>
-                    <input type="submit" name="cancel" id="cancel" value="#$label#" class="xar-margin-thickright"/>
-                    <xar:var name="label">Delete</xar:var>
-                    <input type="submit" name="confirm" id="confirm" value="#$label#" class="xar-margin-thickleft"/>
-                </div>
+            <fieldset class="xar-form-actions">
+                <!-- if we use the current URL, the object is already specified -->
+                <xar:if condition="$object:linktype ne 'current'">
+                    <input type="hidden" name="object" id="object" value="#$object:name#"/>
+                </xar:if>
+                <input type="hidden" name="method" id="method" value="delete"/>
+                <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                <input type="hidden" name="notfresh" id="notfresh" value="true"/>
+                <xar:if condition="!empty($return_url)">
+                    <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                </xar:if>
+                <xar:var name="label">Cancel</xar:var>
+                <xar:button type="submit" label="$label" name="cancel" id="cancel"/>
+                <xar:var name="label">Delete</xar:var>
+                <xar:button type="submit" label="$label" name="confirm" id="confirm"/>
             </fieldset>
         </form>
     </div>

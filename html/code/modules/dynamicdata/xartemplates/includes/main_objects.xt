@@ -40,7 +40,8 @@
             </xar:foreach>
         </ul>
         <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
-        <input type="submit" value=" Update List "/>
+        <xar:var name="label">Update List</xar:var>
+        <xar:button type="submit" label="$label"/>
         </form>
 
     <!-- show the list of main objects -->

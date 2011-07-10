@@ -2,11 +2,8 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:style scope="module" file="privtree"/>
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Privileges Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <h2>Delete Privilege: #$pname#</h2>
         <xar:if condition="count($parents) ne 0">
             <div>
@@ -65,9 +62,9 @@
                 <input type="hidden" name="confirm" id="confirm" value="1"/>
                 <input type="hidden" name="confirmation" id="confirmation" value="1"/>
                 <xar:var name="label">Delete Privilege</xar:var>
-                <xar:button type="submit" label="$label" class="xar-margin-thickright"/>
+                <xar:button type="submit" label="$label"/>
                 <xar:var name="label">Cancel</xar:var>
-                <xar:button type="cancel" label="$label" class="xar-margin-thickleft"/>
+                <xar:button type="cancel" label="$label"/>
             </div>
         </form>
     </div>

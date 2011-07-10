@@ -32,7 +32,7 @@ function dynamicdata_admin_importprops()
     // proceed no further as it is possible that this is an attempt at sending
     // in false data to the system
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     if (!xarMod::apiFunc('dynamicdata','util','importproperties',

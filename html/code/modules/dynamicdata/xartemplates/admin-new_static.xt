@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">
-            <xar:if condition="xarModVars::get('dynamicdata','use_module_alias')">
-                <xar:var scope="module" module="dynamicdata" name="module_alias_name"/>
-            <xar:else />
-                 Dynamic Data Administration
-            </xar:if>
-        </span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Create new field in table #$table#</h2>
 
@@ -18,14 +10,12 @@
             <legend>Item details</legend>
             <xar:data-form object="$object"/>
           </fieldset>
-          <fieldset>
-            <div class="xar-align-center">
+          <fieldset class="xar-form-actions">
               <input type="hidden" name="authid" id="authid" value="#$authid#"/>
               <input type="hidden" name="table" id="table" value="#$table#"/>
               <input type="hidden" name="confirm" id="confirm" value="true"/>
               <xar:var name="label">Create</xar:var>
-              <input type="submit" value="#$label#" class="xar-margin-thickleft"/>
-            </div>
+              <xar:button type="submit" label="$label"/>
           </fieldset>
         </form>
     </div>

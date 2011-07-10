@@ -345,7 +345,7 @@ function dynamicdata_admin_migrate(Array $args=array())
     // migrate item(s)
     if ((!empty($test) || !empty($confirm)) && !empty($data['check'])) {
         if (!xarSecConfirmAuthKey()) {
-            return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
 
         if (!empty($test)) {

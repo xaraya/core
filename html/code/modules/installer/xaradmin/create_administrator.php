@@ -35,7 +35,7 @@ function installer_admin_create_administrator()
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     xarVarSetCached('installer','installing', true);
-    xarTplSetThemeName('installer');
+    xarTpl::setThemeName('installer');
 
     $data['language'] = $install_language;
     $data['phase'] = 6;
@@ -65,7 +65,7 @@ function installer_admin_create_administrator()
 
     $isvalid = $data['admin']->checkInput();
     if (!$isvalid) {
-        return xarTplModule('installer','admin','create_administrator',$data);
+        return xarTpl::module('installer','admin','create_administrator',$data);
     }
 
     xarModVars::set('mail', 'adminname', $data['admin']->properties['name']->getValue());

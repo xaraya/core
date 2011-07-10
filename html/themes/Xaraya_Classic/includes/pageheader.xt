@@ -13,7 +13,7 @@
         </xar:if>
         <!-- Logo and bevel are combined and positioned with css -->
         <h1>
-            <a href="&xar-baseurl;" title="#$sitename#">
+            <a href="#xarServer::getBaseURL()#" title="#$sitename#">
                 <span>#$sitename#</span>
             </a>
         </h1>

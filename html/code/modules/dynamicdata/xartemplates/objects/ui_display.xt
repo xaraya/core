@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">#$tpltitle#</span>
-    </div>
+    <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object)">
             <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
@@ -13,11 +11,11 @@
             <h2>
                 #$object:label#&#160;
                 <a href="#$viewlink#" title="View #$object:label#">
-                    <img src="#xarTplGetImage('icons/item-list.png', 'base')#" width="16" height="16" alt="view"/>
+                    <xar:img scope="theme" file="icons/item-list.png" class="xar-icon" alt="view"/>
                 </a>
                 <xar:if condition="!empty($modifylink)">
                     &#160;<a href="#$modifylink#" title="Edit #$object:label#">
-                        <img src="#xarTplGetImage('icons/modify.png', 'base')#" width="16" height="16" alt="modify"/>
+                        <xar:img scope="theme" file="icons/modify.png" class="xar-icon" alt="modify"/>
                     </a>
                 </xar:if>
             </h2>

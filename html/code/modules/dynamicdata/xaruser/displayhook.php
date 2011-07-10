@@ -74,7 +74,7 @@ function dynamicdata_user_displayhook(Array $args=array())
     } else {
         $template = $object->name;
     }
-    return xarTplModule('dynamicdata','user','displayhook',
+    return xarTpl::module('dynamicdata','user','displayhook',
                         array('properties' => & $object->properties),
                         $template);
 }

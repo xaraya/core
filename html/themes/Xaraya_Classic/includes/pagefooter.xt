@@ -24,7 +24,7 @@
                 <img src="#$classicthemedir#/images/xhtml10.gif" alt="#$validatexhtml#"/>
             </a>
             <a class="xc-badge-cssvalidate"
-            href="http://jigsaw.w3.org/css-validator/validator?uri=&xar-baseurl;index.php"
+            href="http://jigsaw.w3.org/css-validator/validator?uri=#xarServer::getBaseURL()#"
             title="#$validatecss#">
                 <img src="#$classicthemedir#/images/css.gif" alt="#$validatecss#"/>
             </a>
