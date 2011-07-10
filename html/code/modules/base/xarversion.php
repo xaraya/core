@@ -25,7 +25,7 @@
 $modversion['name']               = 'Base';
 $modversion['id']                 = '68';
 $modversion['displayname']        = xarML('Base');
-$modversion['version']            = '2.2.0';
+$modversion['version']            = '2.3.0';
 $modversion['description']        = 'Home Page';
 $modversion['displaydescription'] = xarML('Home Page');
 $modversion['credits']            = 'xardocs/credits.txt';

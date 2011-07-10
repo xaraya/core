@@ -28,7 +28,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
     public $module              = 'base';
     public $text_type           = 'Menu';
     public $text_type_long      = 'Generic menu';
-    public $xarversion          = '2.2.0';
+    public $xarversion          = '2.3.0';
     public $allow_multiple      = true;
     public $show_preview        = true;
     public $nocache             = 1;

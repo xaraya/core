@@ -39,7 +39,7 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
     public $menumodtype         = 'admin';
     public $menumodtypes        = array('admin', 'util');
 
-    public $xarversion          = '2.2.0';
+    public $xarversion          = '2.3.0';
 
     public function __construct(Array $data=array())
     {

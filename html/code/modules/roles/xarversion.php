@@ -25,7 +25,7 @@
  
 $modversion['name']               = 'Roles';
 $modversion['id']                 = '27';
-$modversion['version']            = '2.2.0';
+$modversion['version']            = '2.3.0';
 $modversion['displayname']        = xarML('Roles');
 $modversion['description']        = 'User and Group management';
 $modversion['displaydescription'] = xarML('User and Group management');

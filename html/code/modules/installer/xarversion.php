@@ -21,7 +21,7 @@
  
 $modversion['name']               = 'Xaraya Installer';
 $modversion['id']                 = '200';
-$modversion['version']            = '2.2.0';
+$modversion['version']            = '2.3.0';
 $modversion['displayname']        = xarML('Installer');
 $modversion['description']        = 'Install and customize Xaraya.';
 $modversion['displaydescription'] = xarML('Install and customize Xaraya.');
