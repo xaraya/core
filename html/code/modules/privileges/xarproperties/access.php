@@ -61,7 +61,11 @@ class AccessProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
-        if (isset($data['value'])) $this->setValue($data['value']);
+        if (isset($data['value'])) {
+            $this->setValue($data['value']);
+        } else {
+            $this->setValue();
+        }
         $value = $this->getValue();
         if (!isset($data['level'])) $data['level'] = $value['level'];
         if (!isset($data['group'])) $data['group'] = $value['group'];
@@ -80,7 +84,11 @@ class AccessProperty extends DataProperty
 
     public function showOutput(Array $data = array())
     {
-        if (isset($data['value'])) $this->setValue($data['value']);
+        if (isset($data['value'])) {
+            $this->setValue($data['value']);
+        } else {
+            $this->setValue();
+        }
         $value = $this->getValue();
         if (!isset($data['level'])) $data['level'] = $value['level'];
         if (!isset($data['group'])) $data['group'] = $value['group'];
