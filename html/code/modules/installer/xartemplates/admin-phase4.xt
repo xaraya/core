@@ -135,7 +135,7 @@
             process to create an empty database for you rather than just populating an existing
             one. If you cannot create databases through phpMyAdmin because of virtual hosting or
             MySQL security settings, the installer will 
-            <strong>not</strong>be able to create the database for you. It will be able to populate
+            <strong>not</strong> be able to create the database for you. It will be able to populate
             an already existing database.
             </p>
             <div class="xar-form-actions" style="margin: 2em 0;">
