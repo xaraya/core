@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage mail module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -58,7 +58,7 @@ function mail_adminapi_getsourcefilename(Array $args=array())
         throw new FileNotFoundException(xarML('No template was found corresponding to #(1) #(2)',$templateName,$messagepart));
     }
     $sourceFileName = str_replace('//','/',$sourceFileName);
-    // assert('isset($sourceFileName); /* The source file for the template has no value in xarTplModule */');
+    // assert('isset($sourceFileName); /* The source file for the template has no value in xarTpl::module */');
     return $sourceFileName;
 }
 

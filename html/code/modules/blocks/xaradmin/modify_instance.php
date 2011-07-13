@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage blocks module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -65,7 +65,7 @@ function blocks_admin_modify_instance()
         // render privilege error if we're showing modify access failure
         if (isset($block->modify_access) && $block->modify_access['failure']) {
             // @TODO: render to an error/exception block?
-            $block_modify = xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
+            $block_modify = xarTpl::module('privileges','user','errors',array('layout' => 'no_block_privileges'));
         }
         $instance['allowaccess'] = false;
     } else {
@@ -102,7 +102,7 @@ function blocks_admin_modify_instance()
                 // Render the extra settings if necessary.
                 // Again we check for an exception, this time in the template rendering
                 try {
-                    $block_modify = xarTplBlock($instance['module'], 'modify-' . $instance['type'], $blockinfo);
+                    $block_modify = xarTpl::block($instance['module'], 'modify-' . $instance['type'], $blockinfo);
                 } catch (Exception $e) {
                     // @TODO: global flag to raise exceptions or not
                     if ((bool)xarModVars::get('blocks', 'noexceptions')) {
@@ -213,7 +213,7 @@ function blocks_admin_modify_instance()
         case 'caching':
             // @CHECKME: gotta be an admin to access caching options?
             if (!$adminaccess)
-                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'no_privileges'));
 
             // get cache settings
             $cached = xarMod::apiFunc('blocks', 'user', 'getcacheblock', array('bid' => $bid));
@@ -254,7 +254,7 @@ function blocks_admin_modify_instance()
         case 'access':
             // gotta be an admin to access block access settings
             if (!$adminaccess)
-                return xarTplModule('privileges','user','errors',array('layout' => 'no_privileges'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'no_privileges'));
 
             $instance['display_access'] = $block->display_access;
             $instance['modify_access'] = $block->modify_access;
@@ -274,7 +274,7 @@ function blocks_admin_modify_instance()
                             // Render the extra settings if necessary.
                             // Again we check for an exception, this time in the template rendering
                             try {
-                                $block_modify = xarTplBlock($blockinfo['module'], 'help-' . $blockinfo['type'], $blockhelp);
+                                $block_modify = xarTpl::block($blockinfo['module'], 'help-' . $blockinfo['type'], $blockhelp);
                             } catch (Exception $e) {
                                 // @TODO: global flag to raise exceptions or not
                                 if ((bool)xarModVars::get('blocks', 'noexceptions')) {
@@ -341,6 +341,14 @@ function blocks_admin_modify_instance()
                     'active' => $tab == 'access',
                 );
         }
+    }
+    if ($block->show_preview == true) {
+        $blocktabs['preview'] = array(
+            'url' => xarServer::getCurrentURL(array('tab' => 'preview')),
+            'title' => xarML('Preview Block Display'),
+            'label' => xarML('Preview'),
+            'active' => $tab == 'preview',
+        );
     }
     // show a help tab if the block has a help method
     if (method_exists($block, 'help')) {

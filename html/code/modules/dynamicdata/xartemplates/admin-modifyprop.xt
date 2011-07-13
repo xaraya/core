@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="base" filename="toggle.js"/>
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Dynamic Data Administration</span>
-    </div>
+    <xar:javascript scope="theme" filename="toggle.js"/>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <xar:if condition="!empty($objectid)">
             <h2>
                 Modify DataProperties #$label#
@@ -24,7 +21,7 @@
                     }
                     </script>
                     &#160;<a href="javascript:xar_dynamicdata_formpreview();" title="Preview Input Form #$label#">
-                        <img src="#xarTplGetImage('icons/document-properties.png', 'base')#" width="16" height="16" alt="preview"/>
+                        <xar:img scope="theme" file="icons/document-properties.png" class="xar-icon" alt="preview"/>
                     </a>
                 </xar:if>
             </h2>
@@ -51,7 +48,7 @@
         <p>[ 
             <xar:if condition="empty($details)">
                 <xar:if condition="!empty($objectid)">
-                    <a href="#xarModURL('dynamicdata','util','relations',array('objectid' => $objectid))#">Show Object Links</a>
+                    <a href="#xarModURL('dynamicdata','admin','relations',array('objectid' => $objectid))#">Show Object Links</a>
                 <xar:else />
                     <a href="#$detailslink#">Show Static Properties and Relations</a>
                 </xar:if>
@@ -89,14 +86,14 @@
                 <!-- xar:data-view module="dynamicdata" itemtype="1" where="$where" param="itemid" layout="cells" / -->
                 <xar:if condition="count($tables) gt 0">
                     <xar:foreach in="$tables" value="$table">
-                        <form method="post" action="#xarModURL('dynamicdata','util','importprops')#">
-                            <div class="xar-align-center">
+                        <form method="post" action="#xarModURL('dynamicdata','admin','importprops')#">
+                            <div class="xar-form-actions">
                                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                                 <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>
                                 <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
                                 <input type="hidden" name="table" id="table" value="#$table#"/>
                                 <xar:var name="label">Import table</xar:var>
-                                <input type="submit" value="#$label# #$table#"/>
+                                <xar:button type="submit" label="$label"/>
                             </div>
                         </form>
                     </xar:foreach>

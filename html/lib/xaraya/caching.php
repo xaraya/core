@@ -5,7 +5,7 @@
  * @package core
  * @subpackage caching
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -172,7 +172,7 @@ class xarCache extends Object
     }
 
     /**
-     * Keep track of some page title for caching - see xarTplSetPageTitle()
+     * Keep track of some page title for caching - see xarTpl::setPageTitle()
      */
     public static function setPageTitle($title = NULL, $module = NULL)
     {
@@ -210,9 +210,9 @@ class xarCache extends Object
     }
 
     /**
-     * Keep track of some javascript for caching - see xarTplAddJavaScript()
+     * Keep track of some javascript for caching - xarMod::apiFunc('themes','user','registerjs')
      */
-    public static function addJavaScript($position, $type, $data, $index = '')
+    public static function addJavaScript(Array $args=array())
     {
         if (!xarCache::$outputCacheIsEnabled) {
             return;

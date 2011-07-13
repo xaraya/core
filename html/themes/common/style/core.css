@@ -1,0 +1,8 @@
+/* [Xaraya common core css] - html/themes/common/style/core.css
+    <xar:style scope="common"/>
+    Place common core css for all themes here
+        Over-ride per theme by copying file to html/themes/themename/style/core.css
+ ----[/comment]  */
+/* - Default core css files to import - */
+@import url(xarcore-xhtml1-strict.css);
+@import url(tabs.css);

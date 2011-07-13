@@ -4,7 +4,7 @@
  * @package modules
  * @subpackage mail module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -273,7 +273,7 @@ function mail_adminapi__sendmail(Array $args=array())
         // capability such as mutt. Clients that can read HTML will view the normal Body.
         /*if (!empty($message)) {
             if ($usetemplates) {
-                $mail->AltBody = xarTplModule('mail',
+                $mail->AltBody = xarTpl::module('mail',
                                               'admin',
                                               'sendmail',
                                               array('message'=>$message),
@@ -284,7 +284,7 @@ function mail_adminapi__sendmail(Array $args=array())
         }*/
         // HTML message body
         if ($usetemplates) {
-            $mail->Body = xarTplModule('mail',
+            $mail->Body = xarTpl::module('mail',
                                        'admin',
                                        'sendmail',
                                        array('htmlmessage'=>$htmlmessage),
@@ -332,7 +332,7 @@ function mail_adminapi__sendmail(Array $args=array())
         }
     } else {
         if ($usetemplates) {
-            $mail->Body = xarTplModule('mail',
+            $mail->Body = xarTpl::module('mail',
                                        'admin',
                                        'sendmail',
                                        array('message'=>$message),

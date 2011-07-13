@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage installer module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -57,7 +57,7 @@ function xarInstallFunc($funcName = 'main', $args = array())
         $templateName = $tplData['_bl_template'];
     }
 
-    return xarTplModule($modName, $modType, $funcName, $tplData, $templateName);
+    return xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
 }
 
 function xarInstallAPIFunc($funcName = 'main', $args = array())

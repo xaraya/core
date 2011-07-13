@@ -30,8 +30,9 @@
                 well as create an initial configuration of the security system. On the next page
                 you can change some of the options of your chosen configuration.
             </p>
-            <div class="xar-align-center" style="margin: 2em 0;">
-                <input type="submit" name="create" id="create" value="Continue"/>
+            <div class="xar-form-actions" style="margin: 2em 0;">
+                <xar:var name="label">Continue</xar:var>
+                <xar:button type="submit" label="$label" name="create" id="create"/>
                 <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
             </div>
         </form>

@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage themes module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -30,23 +30,9 @@ function themes_adminapi_initialise(Array $args=array())
     if (!isset($themeInfo)) {
         throw new ThemeNotFoundException($regid,'Theme (regid: #(1) does not exist.');
     }
+    $themename = $themeInfo['name'];
+    $themeInfo = xarMod::getBaseInfo($themename, 'theme');
 
-    $xarinitfilename = xarConfigVars::get(null,'Site.BL.ThemesDirectory') . '/'. $themeInfo['directory']  . '/xartheme.php';
-    if (!file_exists($xarinitfilename)) {
-        throw new FileNotFounException($xarinitfilename);
-    }
-    include $xarinitfilename;
-
-    if (!empty($themevars)) {
-        foreach($themevars as $var => $value){
-            $value['prime'] = 1;
-            if(!isset($value['name']) || !isset($value['value'])){
-                $msg = xarML('Malformed Theme Variable (#(1)).', $var);
-                throw new Exception($msg);
-            }
-            xarThemeSetVar($themeInfo['name'], $value['name'], $value['prime'], $value['value'], $value['description']);
-        }
-    }
     // Update state of theme
     $set = xarMod::apiFunc('themes', 'admin', 'setstate',
                         array('regid' => $regid,

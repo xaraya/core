@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage blocks module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -107,6 +107,14 @@ function blocks_admin_view_types()
                 // return classname not found (this is always class [$type]Block)
                 throw new ClassNotFoundException($className);
             }
+            if ($block->show_preview == true) {
+                $blocktabs['preview'] = array(
+                    'url' => xarServer::getCurrentURL(array('tab' => 'preview')),
+                    'title' => xarML('Preview Block Display'),
+                    'label' => xarML('Preview'),
+                    'active' => $tab == 'preview',
+                );
+            }            
             if (method_exists($block, 'help')) {
                 $blocktabs['help'] = array(
                     'url' => xarServer::getCurrentURL(array('tab' => 'help')),
@@ -124,7 +132,7 @@ function blocks_admin_view_types()
                                 // Render the extra settings if necessary.
                                 // Again we check for an exception, this time in the template rendering
                                 try {
-                                    $block_help = xarTplBlock($detail['module'], 'help-' . $detail['type'], $blockhelp);
+                                    $block_help = xarTpl::block($detail['module'], 'help-' . $detail['type'], $blockhelp);
                                 } catch (Exception $e) {
                                     // @TODO: global flag to raise exceptions or not
                                     if ((bool)xarModVars::get('blocks', 'noexceptions')) {

@@ -7,11 +7,8 @@
             When this template is not included somewhere else, build some header
             stuff
         -->
-        <div class="xar-mod-head">
-            <span class="xar-mod-title">Modules Administration</span>
-        </div>
+        <xar:template file="admin-mod-head"/>
         <div class="xar-mod-body">
-            <xar:template type="module" file="admin-menu"/>
             <h2>Configure Hooks</h2>
             <p>Extend the functionality of your modules via one of the following available
             hooks.</p>

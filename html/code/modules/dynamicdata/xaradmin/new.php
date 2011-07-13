@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -64,13 +64,13 @@ function dynamicdata_admin_new(Array $args=array())
     $myobject->callHooks('new');
     $data['hooks'] = $myobject->hookoutput;
 
-    xarTplSetPageTitle(xarML('Manage - Create New Item in #(1)', $myobject->label));
+    xarTpl::setPageTitle(xarML('Manage - Create New Item in #(1)', $myobject->label));
 
     if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-new.xt') ||
         file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-new-' . $args['template'] . '.xt')) {
-        return xarTplModule($args['tplmodule'],'admin','new',$data,$args['template']);
+        return xarTpl::module($args['tplmodule'],'admin','new',$data,$args['template']);
     } else {
-        return xarTplModule('dynamicdata','admin','new',$data,$args['template']);
+        return xarTpl::module('dynamicdata','admin','new',$data,$args['template']);
     }
 }
 ?>

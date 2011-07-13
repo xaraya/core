@@ -8,11 +8,15 @@
 
     <xar:if condition="$layout eq 'default'">
         <xar:foreach in="$properties" key="$name" value="$property">
-            <div class="xar-form-input-wrapper">
-                <xar:if condition="$name ne 'configuration'">
-                    <xar:data-label property="$properties[$name]" for="id"/>
-                </xar:if>
-                <xar:data-input property="$properties[$name]"/>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:if condition="$name ne 'configuration'">
+                        <xar:data-label property="$properties[$name]" for="id"/>
+                    </xar:if>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties[$name]"/>
+                </div>
             </div>
         </xar:foreach>
     <xar:else />

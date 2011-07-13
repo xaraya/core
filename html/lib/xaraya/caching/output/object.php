@@ -5,7 +5,7 @@
  * @package core
  * @subpackage caching
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -106,7 +106,7 @@ class xarObjectCache extends Object
         // set the cacheCode for the current cacheKey
 
         // the output depends on the current host, theme and locale
-        $factors = xarServer::getVar('HTTP_HOST') . xarTplGetThemeDir() .
+        $factors = xarServer::getVar('HTTP_HOST') . xarTpl::getThemeDir() .
                    xarUserGetNavigationLocale();
 
         // add group or user identifier if needed
@@ -250,7 +250,7 @@ class xarObjectCache extends Object
 
         $content = unserialize($value);
         if (!empty($content['title']) && is_array($content['title'])) {
-            xarTplSetPageTitle($content['title'][0], $content['title'][1]);
+            xarTpl::setPageTitle($content['title'][0], $content['title'][1]);
         }
         if (!empty($content['styles']) && is_array($content['styles'])) {
             foreach ($content['styles'] as $info) {
@@ -259,7 +259,7 @@ class xarObjectCache extends Object
         }
         if (!empty($content['script']) && is_array($content['script'])) {
             foreach ($content['script'] as $info) {
-                xarTplAddJavaScript($info[0], $info[1], $info[2], $info[2]);
+                xarMod::apiFunc('themes','user','registerjs',$info);
             }
         }
         return $content['output'];
@@ -292,7 +292,7 @@ class xarObjectCache extends Object
             !(self::$cacheStorage->sizeLimitReached()) ) {
 
             // CHECKME: add cacheKey cacheCode in comments if template filenames are already added
-            if (xarTpl_outputTemplateFilenames()) {
+            if (xarTpl::outputTemplateFilenames()) {
                 // separate with space here - we must avoid issues with double -- !?
                 $value = "<!-- start cache: object/" . $cacheKey . ' ' . self::$cacheCode . " -->\n"
                          . $value
@@ -328,7 +328,7 @@ class xarObjectCache extends Object
     }
 
     /**
-     * Keep track of some page title for caching - see xarTplSetPageTitle()
+     * Keep track of some page title for caching - see xarTpl::setPageTitle()
      * @return void
      */
     public static function setPageTitle($title = NULL, $module = NULL)
@@ -348,13 +348,13 @@ class xarObjectCache extends Object
     }
 
     /**
-     * Keep track of some javascript for caching - see xarTplAddJavaScript()
-     * @return void
+     * Keep track of some javascript for caching - see xarMod::apiFunc('themes','user','registerjs')
+     * @return void    
      */
-    public static function addJavaScript($position, $type, $data, $index = '')
+    public static function addJavaScript(Array $args = array())
     {
         if (empty(self::$cacheKey)) return;
-        self::$scriptList[] = array($position, $type, $data, $index = '');
+        self::$scriptList[] = $args;
     }
 }
 ?>

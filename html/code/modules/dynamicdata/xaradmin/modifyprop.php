@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -91,7 +91,7 @@ function dynamicdata_admin_modifyprop()
         }
     }
     $data['itemid'] = $data['objectid'];
-    xarTplSetPageTitle(xarML('Modify DataProperties #(1)', $data['label']));
+    xarTpl::setPageTitle(xarML('Modify DataProperties #(1)', $data['label']));
 
     $data['fields'] = xarMod::apiFunc('dynamicdata','user','getprop',
                                    array('objectid' => $objectid,

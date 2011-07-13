@@ -6,7 +6,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:var name="label">Error Icon</xar:var>
-        <img src="#xarTplGetImage('user-error.png', 'base')#" alt="#$label#" class="xar-module-icon"/>
+        <xar:img scope="theme" file="user-error.png" alt="$label" class="xar-module-icon"/>
         <xar:if condition="!empty($msg)">
             <h2><xar:var name="msg"/></h2>
         </xar:if>

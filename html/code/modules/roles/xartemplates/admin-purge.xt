@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="base" filename="checkall.js" position="head"/>
+    <xar:javascript scope="theme" filename="checkall.js" position="head"/>
     <xar:style scope="module" file="privileges"/>
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Roles Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <h2>Recall / Purge</h2>
         <div>
             <ul class="xar-tabs xar-alt xar-norm-outline">
@@ -68,7 +65,7 @@
                         <td class="xar-align-center">
                             <input type="text" name="recallsearch" id="recallsearch" value="#$recallsearch#" maxlength="255" class="xar-form-textmedium xar-margin-thickright"/>
                             <xar:var name="label">Search</xar:var>
-                            <input type="submit" name="search" id="search" value="#$label#" class="xar-margin-thickleft"/>
+                            <xar:button type="submit" label="$label" name="search" id="search"/>
                         </td>
                         <td class="xar-align-center">
                             <select name="groupid" id="groupid">
@@ -133,7 +130,7 @@
                             <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                             <input type="hidden" name="operation" id="operation" value="recall"/>
                             <xar:var name="label">Recall</xar:var>
-                            <input name="confirmation" type="submit" value="#$label#"/>
+                            <xar:button type="submit" label="$label" name="confirmation"/>
                         </div>
                         <!-- if there is a pager show it in the last row -->
                         <div class="xar-align-center">
@@ -170,7 +167,7 @@
                         <td class="xar-align-center">
                             <input type="text" name="purgesearch" id="purgesearch" value="#$purgesearch#" maxlength="255" class="xar-form-textmedium xar-margin-thickright"/>
                             <xar:var name="label">Search</xar:var>
-                            <input type="submit" name="search" id="search_user" value="#$label#" class="xar-margin-thickleft"/>
+                            <xar:button type="submit" label="$label" name="search" id="search_user"/>
                         </td>
                         <td class="xar-align-center">
                             <xar:set name="options">
@@ -185,7 +182,7 @@
                             </xar:set>
                             <xar:data-input type="dropdown" name="purgestate" options="$options" value="$purgestate"/>
                             <xar:var name="label">Search</xar:var>
-                            <input type="submit" name="search" id="search_state" value="#$label#" class="xar-margin-thickright"/>
+                            <xar:button type="submit" label="$label" name="search" id="search_state"/>
                         </td>
                     </tr>
                 </table>
@@ -237,7 +234,7 @@
                     </div>
                     <div class="xar-align-center">
                         <xar:var name="label">Purge</xar:var>
-                        <input name="confirmation" type="submit" value="#$label#"/>
+                        <xar:button type="submit" label="$label" name="confirmation"/>
                     </div>
                     <div class="xar-align-center">
                         <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>

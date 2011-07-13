@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage themes module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -40,7 +40,7 @@ function themes_admin_list()
     $data['selstyle']                               = xarModUserVars::get('themes', 'selstyle');
     $data['selfilter']                              = xarModUserVars::get('themes', 'selfilter');
     $data['selclass']                               = xarModUserVars::get('themes', 'selclass');
-    $data['useicons']                               = xarModUserVars::get('themes', 'useicons');
+    $data['useicons']                               = xarModVars::get('themes', 'use_module_icons');
 
     // select vars for drop-down menus
     $data['style']['plain']                         = xarML('Plain');
@@ -90,11 +90,11 @@ function themes_admin_list()
     if ($sort == 'desc') {
         $themelist = array_reverse($themelist);
         $newsort = 'asc';
-        $sortimage = xarTplGetImage('arrow_up.gif', 'base');
+        $sortimage = xarTpl::getImage('arrow_up.gif', 'module', 'base');
         $sortlabel = xarML('Sort Ascending');
     } else {
         $newsort = 'desc';
-        $sortimage = xarTplGetImage('arrow_down.gif', 'base');
+        $sortimage = xarTpl::getImage('arrow_down.gif', 'module', 'base');
         $sortlabel = xarML('Sort Descending');
     }
     $data['sorturl'] = xarServer::getCurrentURL(array('sort' => $newsort));
@@ -102,17 +102,17 @@ function themes_admin_list()
     $data['sortlabel'] = $sortlabel;
 
     // get action icons/images
-    $img_disabled       = xarTplGetImage('icons/disabled.png','base');
-    $img_none           = xarTplGetImage('icons/none.png','base');
-    $img_activate       = xarTplGetImage('icons/activate.png','base');
-    $img_deactivate     = xarTplGetImage('icons/deactivate.png','base');
-    $img_upgrade        = xarTplGetImage('icons/software-upgrade.png','base');
-    $img_initialise     = xarTplGetImage('icons/initialize.png','base');
-    $img_remove         = xarTplGetImage('icons/remove.png','base');
+    $img_disabled       = xarTpl::getImage('icons/disabled.png','theme');
+    $img_none           = xarTpl::getImage('icons/none.png','theme');
+    $img_activate       = xarTpl::getImage('icons/activate.png','theme');
+    $img_deactivate     = xarTpl::getImage('icons/deactivate.png','theme');
+    $img_upgrade        = xarTpl::getImage('icons/software-upgrade.png','theme');
+    $img_initialise     = xarTpl::getImage('icons/initialize.png','theme');
+    $img_remove         = xarTpl::getImage('icons/remove.png','theme');
 
     // get other images
-    $data['infoimg']    = xarTplGetImage('icons/info.png','base');
-    $data['editimg']    = xarTplGetImage('icons/hooks.png','base');
+    $data['infoimg']    = xarTpl::getImage('icons/info.png','theme');
+    $data['editimg']    = xarTpl::getImage('icons/hooks.png','theme');
 
     $data['listrowsitems'] = array();
     $listrows = array();
@@ -168,6 +168,7 @@ function themes_admin_list()
 
         // common listitems
         $listrows[$i]['coretheme']      = $coretheme;
+        $listrows[$i]['id']             = $theme['systemid'];
         $listrows[$i]['displayname']    = $theme['name'];
         $listrows[$i]['description']    = $theme['description'];
         $listrows[$i]['version']        = $theme['version'];
@@ -277,6 +278,7 @@ function themes_admin_list()
         $listrows[$i]['regid']          = $thisthemeid;
 
         // preview images
+        //$previewpath = xarTpl::getImage('preview.jpg', 'theme', $theme['directory']);
         $previewpath = "themes/$theme[directory]/images/preview.jpg";
         $listrows[$i]['preview'] = file_exists($previewpath) ? $previewpath : '';
 
@@ -285,8 +287,11 @@ function themes_admin_list()
     }
 
     // detailed info image url
-    $data['infoimage'] = xarTplGetImage('help.gif');
+    $data['infoimage'] = xarTpl::getImage('icons/help-browser.png', 'theme');
 
+    sys::import('modules.dynamicdata.class.objects.master');
+    $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_configurations'));
+    
     // Send to template
     return $data;
 }

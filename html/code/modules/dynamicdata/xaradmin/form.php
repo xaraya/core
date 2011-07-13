@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -55,7 +55,7 @@ function dynamicdata_admin_form(Array $args=array())
     $data['object'] =& $myobject;
 
     $template = $myobject->name;
-    return xarTplModule('dynamicdata','admin','form',$data,$template);
+    return xarTpl::module('dynamicdata','admin','form',$data,$template);
 }
 
 ?>

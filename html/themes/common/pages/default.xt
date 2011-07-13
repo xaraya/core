@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xar type="page" ?>
+<!DOCTYPE blocklayout PUBLIC "-//XAR//DTD BL 2.0 Strict//EN" "http://xaraya.com/bl2/DTD/bl2-strict.dtd">
+<xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+        <head>
+            <xar:blockgroup name="header" id="header"/>
+            <title>
+                <xar:var name="tpl:pageTitle"/>
+            </title>
+            <base href="#xarServer::getBaseURL()#index.php"/>
+            <link rel='icon' href="favicon.ico"/>
+            <xar:style scope="common"/>
+            <xar:style scope="theme" file="style" title="Kingston Default Stylesheet"/>
+            <xar:place-css />
+            <xar:place-javascript position="head"/>
+        </head>
+
+<body>
+
+<img id="bg" src="/themes/kingston/images/frontend/elements/pageback.png" />
+
+<!-- !PAGE -->
+<div id="page-wrapper">
+<div id="page" class="">
+<div id="page-enclosure" class="clearfix">
+
+	<!-- !HEADER -->
+    <div id="header">
+    <div id="header-enclosure">
+        <h1 id="sitename"><xar:var name="SiteName" scope="module" module="themes"/></h1>
+        <div id="siteslogan"><xar:var name="SiteSlogan" scope="module" module="themes"/></div>
+    </div><!--/header-enclosure-->
+    </div><!--/header-->
+    
+    <xar:blockgroup name="topnav" id="topnav"/>
+
+    <!-- !MAIN WRAPPER -->
+    <div id="main">
+    
+    	<!-- !PRIMARY CONTENT -->
+	    <div id="primary-wrapper">
+	    <div id="primary">
+	    <div id="primary-enclosure">
+	        <xar:module id="modulespace"/>
+	        <xar:blockgroup name="center" id="center"/>
+	    </div><!--/primary-enclosure-->
+	    </div><!--/primary-->
+		</div><!--/primary-wrapper-->
+		
+	    <!-- !SECONDARY CONTENT -->
+	    <div id="secondary-wrapper">
+	    <div id="secondary">
+	    <div id="secondary-enclosure">
+	        <xar:blockgroup name="left" id="left"/>
+	    </div><!--/secondary-enclosure-->
+	    </div><!--/secondary-->
+	    </div><!--/secondary-wrapper-->
+	    
+	    <!-- !TERTIARY CONTENT -->
+	    <div id="tertiary-wrapper">
+	    <div id="tertiary">
+	    <div id="tertiary-enclosure">
+	        <xar:blockgroup name="right" id="right"/>
+	    </div><!--/tertiary-enclosure-->
+	    </div><!--/tertiary-->
+	    </div><!--/tertiary-wrapper-->
+	    	
+	</div><!--/main-->
+	
+	<!-- !FOOTER -->
+    <div id="footer">
+    <div id="footer-enclosure">
+        <xar:blockgroup name="right" id="right"/>
+    </div><!--/footer-enclosure-->
+    </div><!--/footer-->
+
+</div><!--/page-enclosure-->
+</div><!--/page-->
+</div><!--/page-wrapper-->
+
+<xar:place-javascript position="body"/> 
+
+</body>
+</html>
+
+</xar:blocklayout>

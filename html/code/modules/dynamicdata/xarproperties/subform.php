@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -542,7 +542,7 @@ class SubFormProperty extends DataProperty
         $module    = empty($module)   ? $this->getModule()   : $module;
         $template  = empty($template) ? $this->getTemplate() : $template;
 
-        return xarTplProperty($module, $template, 'showoutput', $data);
+        return xarTpl::property($module, $template, 'showoutput', $data);
     }
 
     function &getObject($value)
@@ -780,7 +780,7 @@ class SubFormProperty extends DataProperty
         $module    = empty($module)   ? $this->getModule()   : $module;
         $template  = empty($template) ? $this->getTemplate() : $template;
 
-        return xarTplProperty($module, $template, 'configuration', $data);
+        return xarTpl::property($module, $template, 'configuration', $data);
     }
 
     /**

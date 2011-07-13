@@ -25,12 +25,12 @@
     |--- Parent Link
     etc...
     </pre>
-    <xar:set name="visibleicon">#xarTplGetImage('icons/enabled.png', 'base')#</xar:set>
-    <xar:set name="invisibleicon">#xarTplGetImage('icons/disabled.png', 'base')#</xar:set>
+    <xar:set name="visibleicon">#xarTpl::getImage('icons/enabled.png', 'theme')#</xar:set>
+    <xar:set name="invisibleicon">#xarTpl::getImage('icons/disabled.png', 'theme')#</xar:set>
     <xar:var name="visibletitle">Link is visible in the menu</xar:var>
     <xar:var name="invisibletitle">Link is not visible in the menu</xar:var>
-    <xar:set name="wwwicon">#xarTplGetImage('icons/www-url.png', 'base')#</xar:set>
-    <xar:var name="wwwcheck">Check the URL for this link</xar:var>
+    <xar:set name="wwwicon">#xarTpl::getImage('icons/www-url.png', 'theme')#</xar:set>
+    <xar:var name="wwwcheck">Check the URL of this link</xar:var>
     <h4 id="editlinks">Editing links</h4>
     <p>The Menu Links listing displays information about all links added to the block. You can edit their values at any time.</p>
     <ul>

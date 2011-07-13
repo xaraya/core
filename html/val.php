@@ -2,12 +2,15 @@
 /**
  * Redirect for validating users
  *
- * @package entrypoint
+ * @package core
+ * @subpackage entrypoint
+ * @category Xaraya Web Applications Framework
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
  * @author John Cox
+ *
  * @TODO jojodee - rethink dependencies between roles, authentication(authsystem) and
  *                 registration in relation to validation
  */

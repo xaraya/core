@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:set name="dummy">xarTplSetPageTemplateName('header')</xar:set>
+    <xar:set name="dummy">xarTpl::setPageTemplateName('header')</xar:set>
     <xar:if condition="!empty($object)">
         <xar:set name="objname">#$object:name#</xar:set>
         <xar:set name="dummy">xarVarSetCached('XML','itemname',$objname)</xar:set>

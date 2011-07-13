@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Modules Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Preferences</h2>Modules List 
         <br />Style: 
@@ -15,8 +13,11 @@
         see the same startup page as a new admin.. 
         <br />
         <form method="post" action="xar-modurl-modules-admin-pref;">
-            <div>
-        <input type="submit" name="restore" value="Restore"/>Status: your current preferences are
-        the same as defaults</div>
-    </form></div>
+            <div class="xar-form-actions">
+                <xar:var name="label">Restore</xar:var>
+                <xar:button type="submit" label="$label" name="restore"/>
+                Status: your current preferences are the same as defaults
+            </div>
+        </form>
+    </div>
 </xar:template>

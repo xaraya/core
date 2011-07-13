@@ -7,7 +7,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -568,7 +568,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Show a view of an object
      *
-     * @return xarTplObject
+     * @return xarTpl::object
      */
     public function showView(Array $args = array())
     {
@@ -731,7 +731,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if (!isset($this->startnum)) $this->startnum = 1;
 
         $args['object'] = $this;
-        return xarTplObject($args['tplmodule'],$args['template'],'showview',$args);
+        return xarTpl::object($args['tplmodule'],$args['template'],'showview',$args);
     }
 
     public function getSortURL($currenturl=null)

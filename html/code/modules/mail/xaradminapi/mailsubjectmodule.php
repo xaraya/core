@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage mail module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -20,7 +20,7 @@
  *        string   $args['templateName'] string the specific template to call<br/>
  *        string   $args['tplData']     arguments for the template<br/>
  *        string   $args['mailtype']     The type of mail html|text
- * @return string xarTpl__executeFromFile($sourceFileName, $tplData) 
+ * @return string xarTpl::file($sourceFileName, $tplData) 
  */
 function mail_adminapi_mailsubjectmodule(Array $args=array())
 {
@@ -32,7 +32,7 @@ function mail_adminapi_mailsubjectmodule(Array $args=array())
                     'mailType' => $mailType,
                     'messagepart' => 'subject');
     $sourceFileName = xarMod::apiFunc('mail', 'admin', 'getsourcefilename', $params);     
-    return xarTpl__executeFromFile($sourceFileName, $tplData);  
+    return xarTpl::file($sourceFileName, $tplData);  
 }
 
 ?>

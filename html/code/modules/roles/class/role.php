@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage roles module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -282,7 +282,7 @@ class Role extends DataObject
         if (!empty($data['itemid'])) $this->setID($data['itemid']);
 
         if($this->getID() == (int)xarModVars::get('roles','defaultgroup'))
-            return xarTplModule('roles','user','errors',array('layout' => 'remove_defaultusergroup', 'group' => $this->getID()));
+            return xarTpl::module('roles','user','errors',array('layout' => 'remove_defaultusergroup', 'group' => $this->getID()));
 
         // get a list of all relevant entries in the rolemembers table
         // where this role is the child
@@ -292,7 +292,7 @@ class Role extends DataObject
         $result = $stmt->executeQuery(array($this->getID()));
 
         if(count($result->fields) == 1)
-            return xarTplModule('roles','user','errors',array('layout' => 'remove_sole_parent'));
+            return xarTpl::module('roles','user','errors',array('layout' => 'remove_sole_parent'));
 
         sys::import('modules.roles.class.roles');
         // go through the list, retrieving the roles and detaching each one

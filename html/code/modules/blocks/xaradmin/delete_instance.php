@@ -4,7 +4,7 @@
  * @package modules
  * @subpackage blocks module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -51,7 +51,7 @@ function blocks_admin_delete_instance()
     }
 
     if (!$block->checkAccess('delete')) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'no_block_privileges'));
     }
 
     // Check for confirmation
@@ -67,7 +67,7 @@ function blocks_admin_delete_instance()
 
     // Confirm Auth Key
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }
 
     // call the blocks own delete method first

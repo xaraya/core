@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage roles module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -66,7 +66,7 @@ function roles_admin_asknotification(Array $args=array())
         case 'notify' :
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             if (!xarVarFetch('subject', 'str:1:', $data['subject'], NULL, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('message', 'str:1:', $data['message'], NULL, XARVAR_NOT_REQUIRED)) return;
@@ -76,13 +76,13 @@ function roles_admin_asknotification(Array $args=array())
             $data['subject'] = preg_replace( "/%%(.+)%%/","#$\\1#", $data['subject'] );
 
             // Compile Template before sending it to senduseremail()
-            $data['message'] = xarTplCompileString($data['message']);
-            $data['subject'] = xarTplCompileString($data['subject']);
+            $data['message'] = xarTpl::compileString($data['message']);
+            $data['subject'] = xarTpl::compileString($data['subject']);
 
             //Send notification
             $id = unserialize(base64_decode($id));
             if (!xarMod::apiFunc('roles','admin','senduseremail', array( 'id' => $id, 'mailtype' => $data['mailtype'], 'subject' => $data['subject'], 'message' => $data['message'], 'pass' => $data['pass'], 'ip' => $data['ip']))) {
-                return xarTplModule('roles','user','errors',array('layout'=> 'mail_failed')); 
+                return xarTpl::module('roles','user','errors',array('layout'=> 'mail_failed')); 
             }
             xarController::redirect(xarModURL('roles', 'admin', 'showusers',
                               array('id' => $data['groupid'], 'state' => $data['state'])));

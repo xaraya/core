@@ -5,7 +5,7 @@
  * @package core
  * @subpackage caching
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -109,7 +109,7 @@ class xarPageCache extends Object
         // set the cacheCode for the current cacheKey
 
         // the output depends on the current host, theme and locale
-        $factors = xarServer::getVar('HTTP_HOST') . xarTplGetThemeDir() .
+        $factors = xarServer::getVar('HTTP_HOST') . xarTpl::getThemeDir() .
                 xarUserGetNavigationLocale();
 
         // add user groups as a factor if necessary
@@ -162,7 +162,7 @@ class xarPageCache extends Object
             // define the cacheKey
             $cacheKey = "$modName-$modType-$funcName";
             // get the current themeDir
-            $themeDir = xarTplGetThemeDir();
+            $themeDir = xarTpl::getThemeDir();
 
         } else {
             $params = parse_url($url);

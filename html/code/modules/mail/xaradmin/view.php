@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage mail module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -38,6 +38,6 @@ function OfferCreate($qDef = null)
     $data['qdef_method'] = 1;
     $data['qdef_create'] = array(array('id' => 1,'name' => xarML('Create new object with name')));
     $data['qdef_choose'] = array(array('id' => 2,'name' => xarML('Use an existing object')));
-    return xarTplModule('mail','admin','queue-newdef',$data);
+    return xarTpl::module('mail','admin','queue-newdef',$data);
 }
 ?>

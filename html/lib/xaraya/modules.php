@@ -11,7 +11,7 @@
  * @package core
  * @subpackage modules
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -574,10 +574,17 @@ class xarMod extends Object implements IxarMod
         // theme+s or module+s
         $table = $tables[$type.'s'];
 
-        $query = "SELECT items.regid, items.directory,
-                     items.id, items.state, items.name
-              FROM   $table items
-              WHERE  items.name = ? OR items.directory = ?";
+        if ($type == 'theme') {
+            $query = "SELECT items.regid, items.directory,
+                         items.id, items.state, items.name, items.configuration
+                  FROM   $table items
+                  WHERE  items.name = ? OR items.directory = ?";
+        } else {
+            $query = "SELECT items.regid, items.directory,
+                         items.id, items.state, items.name
+                  FROM   $table items
+                  WHERE  items.name = ? OR items.directory = ?";
+        }
         $bindvars = array($modName, $modName);
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
@@ -588,7 +595,11 @@ class xarMod extends Object implements IxarMod
         }
 
         $modBaseInfo = array();
-        list($regid,  $directory, $systemid, $state, $name) = $result->getRow();
+        if ($type == 'theme') {
+            list($regid,  $directory, $systemid, $state, $name, $configuration) = $result->getRow();
+        } else {
+            list($regid,  $directory, $systemid, $state, $name) = $result->getRow();
+        }
         $result->Close();
 
         $modBaseInfo['regid'] = (int) $regid;
@@ -602,6 +613,13 @@ class xarMod extends Object implements IxarMod
         // Shortcut for os prepared directory
         // TODO: <marco> get rid of it since useless
         $modBaseInfo['osdirectory'] = xarVarPrepForOS($directory);
+        if ($type == 'theme') {
+            try {
+                $modBaseInfo['configuration'] = unserialize($configuration);
+            } catch (Exception $e) {
+                $modBaseInfo['configuration'] = array();
+            }
+        }
 
         // This needed?
         if (empty($modBaseInfo['state'])) {
@@ -797,7 +815,7 @@ class xarMod extends Object implements IxarMod
         if (isset($tplData['_bl_template'])) $templateName = $tplData['_bl_template'];
 
         // Create the output.
-        $tplOutput = xarTplModule($modName, $modType, $funcName, $tplData, $templateName);
+        $tplOutput = xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
 
         // Set the output of the module function in cache
         if (!empty($cacheKey)) {

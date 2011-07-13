@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage authsystem module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -24,7 +24,7 @@
 $modversion['name']               = 'authsystem';
 $modversion['displayname']        = xarML('Authsystem');
 $modversion['id']                 = '42';
-$modversion['version']            = '2.2.0';
+$modversion['version']            = '2.3.0';
 $modversion['description']        = 'Xaraya default authentication module';
 $modversion['displaydescription'] = xarML('Xaraya default authentication module');
 $modversion['credits']            = 'xardocs/credits.txt';

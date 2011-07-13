@@ -11,260 +11,517 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/70.html
 **/
-
+/**
+ * Base CSS class
+**/
+class xarCSS extends Object
+{
 /**
  * Defines for this library
  *
  * @author Andy Varganov <andyv@xaraya.com>
+ * @author Chris Powis   <crisp@xaraya.com>
+ * @todo evaluate if these are really necessary
 **/
+    const CSSRELSTYLESHEET         = "stylesheet";
+    const CSSRELALTSTYLESHEET      = "alternate";
+    const CSSTYPETEXT              = "text/css";
+    const CSSMEDIA                 = "media";
+    const CSSMEDIATV               = "tv";
+    const CSSMEDIATTY              = "tty";
+    const CSSMEDIAALL              = "all";
+    const CSSMEDIAPRINT            = "print";
+    const CSSMEDIAAURAL            = "aural";
+    const CSSMEDIASCREEN           = "screen";
+    const CSSMEDIABRAILLE          = "braille";
+    const CSSMEDIAHANDHELD         = "handheld";
+    const CSSMEDIAPROJECTION       = "projection";
+    const CSSCOMMONBASE            = "style";
+    const CSSCOMMONFILE            = "style";
+    const CSSCOMMONFILEEXT         = "css";
+    //const CSSCOMMONCORE            = "xarcore-xhtml1-strict";
+    const CSSCOMMONCORE            = "core";
 
-define("CSSRELSTYLESHEET", "stylesheet");
-define("CSSRELALTSTYLESHEET", "alternate stylesheet");
-define("CSSTYPETEXT", "text/css");
-define("CSSMEDIA", "media");
-define("CSSMEDIATV", "tv");
-define("CSSMEDIATTY", "tty");
-define("CSSMEDIAALL", "all");
-define("CSSMEDIAPRINT", "print");
-define("CSSMEDIAAURAL", "aural");
-define("CSSMEDIASCREEN", "screen");
-define("CSSMEDIABRAILLE", "braille");
-define("CSSMEDIAHANDHELD", "handheld");
-define("CSSMEDIAPROJECTION", "projection");
-define("CSSCOMMONSOURCE", "xarcore-xhtml1-strict");
-define("CSSCOMMONBASE", "base");
+    private static $instance;
+    private static $css;
+    
+    // experimental combine/compress options
+    private $cacheDir   = 'cache/css';
+    private $combined   = true;
+    private $compressed = true;
+        
+    // prevent direct creation of this object
+    private function __construct()
+    {
+        $this->combined   = xarModVars::get('themes', 'css.combined');
+        $this->compressed = xarModVars::get('themes', 'css.compressed');
+    }   
 
 /**
- * Base CSS class
+ * Get instance function
  *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access public
+ * @params none
+ * @return Object current instance
+ * @throws none
  *
 **/
-class xarCSS extends Object
-{
-    // class vars and their defaults
-    public $language   = 'html';       // only (x)html compliant css inclusion is supported out of the box
-
-    public $method       = 'link';      // supported are 'link', 'import', 'embed'
-
-    // SUPPORTED SCOPES ARE MODULE, THEME, PROPERTY, COMMON
-    public $scope      = 'theme';      // component type - 'module, 'theme' or 'common'
-    public $compcssdir = 'xarstyles';  // component css directory name (e.g. 'xarstyles')
-
-    public $base       = 'theme';      // component name (e.g. module's name 'base')
-    public $filename   = 'style';      // default css file name (without extension)
-    public $fileext    = 'css';        // default css file extension
-    public $commonbase = CSSCOMMONBASE;// base dirctory for common css
-    public $commonsource = CSSCOMMONSOURCE;  // filename for common css
-
-    public $source     = null;         // empty source should not be included (ideally)
-
-    public $condition  = null;         // encase in a conditions comment (think ie-win)
-
-    public $dynfile; // not implemented yet
-
-    // TYPICAL REQUIRED ATTRIBUTES FOR WELL-FORMED CSS REFERENCE TAGS (xhtml-wise)
-    public $rel        = CSSRELSTYLESHEET;
-    public $type       = CSSTYPETEXT;
-    public $media      = CSSMEDIASCREEN;
-    public $title      = '';           // empty string title attribute will not be included
-    public $id         = '';           // may be supported in the future (TODO?)
-
-    // BASIC OVERRIDES SETTINGS (still TODO)
-    public $overridden = false;        // true == stylesheet has been overridden in theme or elsewhere
-    public $alternatedir     = '';     // alternative directory for overridden css file
-
-    // SUPPORT FOR DYNAMIC CSS SERVING AND ADMIN GUI (TODO)
-    public $cssdecl;                   // TODO: associative array containing css declarations
-                                    // $this->componentCSS["body"]["background-color"]
-    public $cssconf    = false;        // Use runtime configuration parameters (with db backend)
-    public $suppresstype;              // true == tags of this type are suppressed
-    public $suppressscope;             // true == tags of this scope are suppressed
-    public $sort       = true;         // true == tags will be sorted
-    public $comments   = true;         // true == comments will be shown in the templates
-    public $debug      = false;        // true == debug mode enabled
-    public $parse      = false;        // true == parse mode enabled
-    public $suppress   = false;        // true == this css is suppressed
-
-    // constructor
-    function __construct(Array $args=array())
+    public static function getInstance()
+    {
+        if (!isset(self::$instance)) {
+            $c = __CLASS__;
+            self::$instance = new $c;
+        }
+        return self::$instance;
+    }
+ 
+/**
+ * Register function
+ *
+ * Register css in queue for later rendering
+ *
+ * @author Andy Varganov <andyv@xaraya.com>
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access public
+ * @params array  $args array of optional parameters<br/>
+ *         string $args[scope] scope of style, one of common!theme(default)|module|block|property<br/>
+ *         string $args[method] style method, one of link(default)|import|embed<br/>
+ *         string $args[alternatedir] alternative base folder to look in, falling back to...<br/>
+ *         string $args[base] base folder to look in, optional, default "style"<br/>
+ *         string $args[file] name of file required for link or embed methods, optional, default "style"<br/>
+ *         string $args[filext] extension to use for file(s), optional, default "css"<br/>
+ *         string $args[source] source code, required for embed method, default ""<br/>
+ *         string $args[alternate] switch to set rel="alternate stylesheet", optional true|false(default)<br/>
+ *         string $args[rel] rel attribute, optional, default "stylesheet"<br/>
+ *         string $args[type] link/style type attribute, optional, default "text/css"<br/>
+ *         string $args[media] media attribute, optional, default "screen"<br/>
+ *         string $args[title] title attribute, optional, default ""<br/>
+ *         string $args[condition] conditionals for ie browser, optional, default ""<br/>
+ *         string $args[theme] theme name, optional first theme to look for in theme scope
+ *         string $args[module] module for module|block scope, optional, default current module<br/>
+ *         string $args[property] standalone property name, required for property scope
+ * @todo: support other W3C standard attributes of link and style tags? 
+ * @return boolean true on success
+ * @throws none
+ *
+**/
+    public function register($args)
     {
         extract($args);
-        if (isset($method)) $this->method               = $method;
-        if (isset($scope)) $this->scope                 = $scope;
-        if ($this->scope == 'common') {
-            $this->base = $this->commonbase;
-            $this->filename = $this->commonsource;
-        } elseif ($this->scope == 'module') {
-            $this->base = xarMod::getName();
-        } elseif ($this->scope == 'property') {
-            $this->base = isset($property) ? $property : '';
-        } elseif ($this->scope == 'block') {
-            // we basically need to find out which module this block belongs to 
-            // and then procede as with module scope
-            $this->base = xarVarGetCached('Security.Variables', 'currentmodule');
-        }
-        if (isset($media)) $this->media                 = $media;
-        if (isset($module)) $this->base                 = $module;
-        if (isset($file)) $this->filename               = $file;
-        if (isset($title)) $this->title                 = $title;
-        if (isset($fileext)) $this->fileext             = $fileext;
-        if (isset($alternate) && $alternate == 'true') {
-            $this->rel = 'alternate stylesheet';
-        }
-        if($this->method == 'import' && isset($media)) {
-            $this->media = str_replace(' ', ', ', $media);
-        }
-
-        if (isset($source)) $this->source               = $source;
-        if (isset($condition)) $this->condition         = $condition;
-
-        $this->tagdata = array(
-                            'scope'            => $this->scope,
-                            'method'           => $this->method,
-                            'base'             => $this->base,
-                            'file'             => $this->filename,
-                            'fileext'          => $this->fileext,
-                            'source'           => $this->source,
-                            'rel'              => $this->rel,
-                            'type'             => $this->type,
-                            'media'            => $this->media,
-                            'title'            => $this->title,
-                            'condition'        => $this->condition );
-    }
-
-    // The main method for generating tag output
-    // stick tag data into the tag queue or get it
-    function run_output()
-    {
-        if (!isset($tagqueue)) $tagqueue = new tagqueue();
-        switch($this->method) {
-            case 'render':
-                $data['styles'] = $tagqueue->deliver($this->sort);
-                break;
-            default:
-                $this->tagdata['url'] = $this->geturl();
-                $tagqueue->register($this->tagdata);
-                return true;
-        }
-
-        $data['comments']                   = $this->comments;
-        return $data;
-    }
-
-    // returns xaraya url for the file
-    function geturl($dir = null)
-    {
-        // it's static var already in core
-        $url = xarServer::getBaseURL();
-
-        if(isset($dir)){
-            $fullurl = $url.$dir;
-        } else {
-            $fullurl = $url.$this->getrelativeurl();
-        }
-
-        return $fullurl;
-    }
-
-    function getrelativeurl()
-    {
-        // if requested method is 'embed', we dont really need any file checks, urls, scope etc., 
-        // all we care about is the css source string as provided by the tag
-        if ($this->method == "embed") {
-            // could add a TODO to check validity of the actual source string, either here or earlier
-            return $this->source;
-        }
         
-        $msg = xarML("#(1) css stylesheet file cannot be found at this location: ", $this->scope);
+        // set some defaults
+        if (!isset($method)) // link|import|embed
+            $method = 'link';
+        
+        // if method is embed we need a source
+        if ($method == 'embed' && empty($source)) return;
 
-        // <mrb> why is this?
-        // <andyv> scope common is just a special case of a module based stylesheet ATM - matter of implementation
-        // the original idea was to be able to provide common css out of various sources, like db or even inline
-        if ($this->scope == 'common') $this->scope = 'module';
+        if (!isset($scope)) // common|theme|module|block|property
+            $scope = 'theme';
+        
+        // if scope is property we need a property name
+        if ($scope == 'property' && empty($property)) return;
+        
+        // init tag from args / defaults
+        $tag = array(
+            'method'     => $method,
+            'scope'      => $scope,
+            'base'       => !empty($base)      ? xarVarPrepForOS($base) : xarCSS::CSSCOMMONBASE,
+            'file'       => !empty($file)      ? $file      : xarCSS::CSSCOMMONFILE,
+            'fileext'    => !empty($fileext)   ? $fileext   : xarCSS::CSSCOMMONFILEEXT,
+            'type'       => !empty($type)      ? $type      : xarCSS::CSSTYPETEXT,
+            'media'      => !empty($media)     ? $media     : xarCSS::CSSMEDIASCREEN,
+            'rel'        => !empty($rel)       ? $rel       : xarCSS::CSSRELSTYLESHEET,
+            'source'     => !empty($source)    ? $source    : '',
+            'title'      => !empty($title)     ? $title     : '',
+            'condition'  => !empty($condition) ? $condition : '',
+            'theme'      => '',
+            'module'     => '',
+            'property'   => '',
+            'url'        => '',
+            'alternatedir' => !empty($alternatedir) ? xarVarPrepForOS($alternatedir) : '',
+        );       
 
-        if ($this->scope == 'theme') {
-            // pretty straightforward
-            $themestylesheet =  xarTplGetThemeDir() . "/style/" . $this->filename . "." . $this->fileext;
-            if(!file_exists($themestylesheet)) throw new FileNotFoundException($themestylesheet);
-            return $themestylesheet;
-        } elseif ($this->scope == 'module' || $this->scope == 'block') {            
-            
-            $original = sys::code() . "modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
-            // we do not want to supply path for a non-existent original css file or override a bogus file
-            // so lets check starting from original then fallback if there arent overriden versions
-            // how about the overridden one?
-            // Look for theme-based stylesheet whether the module contains one or not.
-            if($this->alternatedir != '') {
-                $overridden = xarTplGetThemeDir() . "/" . $this->alternatedir . "/" . $this->filename . "." . $this->fileext;
-            } else {
-                $overridden = xarTplGetThemeDir() . "/modules/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
-            }
-            if(file_exists($overridden)) {
-                // prolly need to check if it's not a directory too (?)
-                return $overridden;
-            } else {
-                // no problem
-                return $original;
-            }
-
-        } elseif ($this->scope == 'property') {            
-            $propertystylesheet = sys::code() . "properties/" . strtolower($this->base) . "/xarstyles/" . $this->filename . "." . $this->fileext;
-            if(!file_exists($propertystylesheet)) throw new FileNotFoundException($propertystylesheet);
-            return $propertystylesheet;
-        } else {
-            // no scope, somebody overrode defaults and hasn't assign anything sensible? naughty - lets complain
-            $msg = xarML("#(1) (no valid scope attribute could be deduced from this xar:style tag)",$this->scope);
-            throw new Exception($msg);
+        // set additional params based on method
+        switch ($method) {
+            case 'embed':
+                // embed method, we're done, queue the source and bail
+                return $this->queue($method, $scope, $tag['source'], $tag); 
+                break;            
+            case 'import':                
+                $tag['media'] = str_replace(' ', ', ', $tag['media']);
+                break;
+            case 'link':
+                if (isset($alternate) && $alternate == 'true') {
+                    if (empty($rel)) // 'alternate stylesheet'
+                        $tag['rel'] = xarCSS::CSSRELALTSTYLESHEET;
+                }
+                break;
         }
+
+        if ($scope == 'common' && empty($file))
+            $tag['file'] = xarCSS::CSSCOMMONCORE;
+
+        // set common paths to look in
+        $fileName = $tag['file'] . '.' . $tag['fileext'];
+        $themeDir = xarTpl::getThemeDir();
+        $commonDir = xarTpl::getThemeDir('common');
+        $codeDir = sys::code();
+
+        $paths = array();
+        // if an alternatedir was supplied, look there first
+        if (!empty($alternatedir)) {
+            // themes/theme/alternate
+            $paths[] = $themeDir . '/' . $alternatedir . '/' . $fileName;
+            // themes/common/alternate
+            $paths[] = $commonDir . '/' . $alternatedir . '/' . $fileName;
+        }
+        switch ($scope) {
+            case 'common':
+            case 'theme':
+                if (!empty($theme)) {
+                    // themes/theme/style
+                    $paths[] = xarTpl::getThemeDir($theme) . '/' . $tag['base'] . '/' . $fileName;
+                    $tag['theme'] = $theme;
+                }
+                // themes/theme/style
+                $paths[] = $themeDir . '/' . $tag['base'] . '/' . $fileName;
+                // themes/common/style
+                $paths[] = $commonDir . '/' . $tag['base'] . '/' . $fileName;
+                break;
+            case 'module':
+                if (empty($module))
+                    $module = xarMod::getName();
+            case 'block':
+                if (empty($module))
+                    $module = xarVarGetCached('Security.Variables', 'currentmodule');
+                $modInfo = xarMod::getBaseInfo($module);
+                if (!isset($modInfo)) return;
+                $tag['module'] = $module;
+                $modOsDir = $modInfo['osdirectory'];
+                // handle legacy calls to styles in base module now located in common/style
+                if ($module == 'base') {
+                    // themes/theme/style
+                    $paths[] = $themeDir . '/' . $tag['base'] . '/' . $fileName;
+                    // themes/common/style
+                    $paths[] = $commonDir . '/' . $tag['base'] . '/' . $fileName;
+                }
+                // themes/theme/modules/module/style
+                $paths[] = $themeDir . '/modules/' . $modOsDir . '/' . $tag['base'] . '/' . $fileName;
+                // themes/theme/modules/module/styles (legacy)
+                $paths[] = $themeDir . '/modules/' . $modOsDir . '/styles/' . $fileName;
+                // themes/common/modules/module/style
+                $paths[] = $commonDir . '/modules/' . $modOsDir . '/' . $tag['base'] . '/' . $fileName;
+                // code/modules/module/xarstyles (legacy)
+                $paths[] = $codeDir . 'modules/' . $modOsDir . '/xarstyles/' . $fileName;
+                // code/modules/module/xartemplates/style
+                $paths[] = $codeDir . 'modules/' . $modOsDir . '/xartemplates/' . $tag['base'] . '/' . $fileName;
+                break;
+            case 'property':
+                $tag['property'] = $property;
+                $property = xarVarPrepForOS($property);
+                // themes/theme/properties/property/style
+                $paths[] = $themeDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
+                // themes/common/properties/property/style
+                $paths[] = $commonDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
+                // code/properties/property/xartemplates/style
+                $paths[] = $codeDir . 'properties/' . $property . '/xartemplates/' . $tag['base'] . '/' . $fileName;
+                break;
+        }
+        if (empty($paths)) return;
+        
+        foreach ($paths as $path) {
+            if (!file_exists($path)) continue;
+            $filePath = $path;
+            break;
+        }
+        if (empty($filePath)) return;
+        
+        $tag['url'] = $filePath; //xarServer::getBaseURL() . $filePath;
+        
+        return $this->queue($method, $scope, $tag['url'], $tag);
+        
     }
-}
 
 /**
- * Queue class. Holds the tag data until it is sent to the template
+ * Render function
+ * 
+ * Render queued css
  *
- *
- */
-
-class tagqueue extends Object
-{
-    function __construct()
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access public
+ * @params array   $args array of optional parameters<br/>
+ *         boolean $args[comments] show comments, optional, default false
+ * @todo option to turn on/off style comments in UI, cfr template comments
+ * @return string templated output of css to render
+ * @throws none
+**/
+    public function render($args)
     {
+        if (empty(self::$css)) return;
+        extract($args);
+        if ($this->combined) {
+            $this->combine();
+        }
+        $args['styles'] = self::$css;
+        $args['comments'] = !empty($comments);
+        
+        return xarTpl::module('themes', 'css', 'render', $args);
     }
 
-    // FIXME: $args is used as boolean OR an array depending on the call,
-    // someone is bound to trip over that hack at some point
-    function queue($op='register', $args)
+/**
+ * Queue function
+ *
+ * Add css to queue
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access public
+ * @param string  $scope the scope of the file (common, theme, module, block, property)
+ * @param string  $method the method to use (link, import, embed)
+ * @param string  $url source, either code to embed or url of file to link or import  
+ * @param array   $data tag data to cache
+ * @return boolean true on success
+ * @todo make private once xarTpl functions are deprecated
+**/
+    public function queue($method, $scope, $url, $data)
     {
-        static $queue;
+        if (empty($scope) || empty($method) || empty($url) || empty($data)) return;
+        
+        // keep track of style when we're caching
+        xarCache::addStyle($data);
+        
+        // init the queue 
+        if (!isset(self::$css)) {
+            // scope rendering order...           
+            $scopes = array(
+                'common'   => array(), 
+                'theme'    => array(), 
+                'module'   => array(), 
+                'block'    => array(), 
+                'property' => array(),
+            );
+            // method rendering order...
+            self::$css = array(
+                'import' => $scopes,
+                'link'   => $scopes,
+                'embed'  => $scopes,
+            );
+            unset($scopes);
+        }
+        // skip unknown scopes/methods (for now)
+        if (!isset(self::$css[$method][$scope])) return;
+        
+        // hash the url to prevent the same source code 
+        // or file name being included more than once
+        $index=md5($url);        
+        
+        // queue the style
+        self::$css[$method][$scope][$index] = $data;
 
-        switch($op) {
-            case 'register':
-                // Put it in the queue
-                $queue[$args['scope']][$args['method']][$args['url']] = $args;
-                return true;
-            case 'deliver':
-                $styles = $queue;
-                if($args) {
-                    if (is_array($styles)){
-                        krsort($styles);
-                        reset($styles);
+        return true;
+    }   
+
+/**
+ * Combine CSS
+ *
+ * Takes the content of queued css files and embedded source code, 
+ * or @imported styles contained within other stylesheets and combines 
+ * them into a single stylesheet
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access private
+ * @params none
+ * @throws none
+ * @return bool true on success
+ * @todo implement proper caching using xarCache
+**/
+    private function combine()
+    {
+        if (empty(self::$css) || !$this->combined) return;
+        $content = '';
+        foreach (self::$css as $method => $scopes) {
+            if (empty($scopes)) continue;
+            foreach ($scopes as $scope => $styles) {
+                if (empty($styles)) continue;
+                foreach ($styles as $index => $style) {
+                    if (empty($style)) continue;
+                    if (($style['media'] != 'all' && $style['media'] != 'screen') ||
+                        !empty($style['condition'])) continue;
+                    if ($style['method'] != 'embed') {
+                        $string = @file_get_contents($style['url']);
+                        if (empty($string)) continue;
+                        if ($this->compressed) {
+                            $string = $this->compress($string, $style['url']);
+                        } else {
+                            $string = $this->fixurlpaths($string, $style['url']);
+                            $string = $this->combineimports($string, $style['url']);
+                        }
+                        //if (empty($string)) continue;
+                        $content .= "/* Combined CSS from file $style[url] */\n\n";                        
+                        $content .= $string;
+                    } else {
+                        if ($this->compressed) {
+                            $string = $this->compress($style['source']);
+                        } else {
+                            $string = $style['source'];
+                        }
+                        //if (empty($string)) continue;
+                        $content .= "/* Combined embedded CSS */\n\n";
+                        $content .= $string;
+                    }
+                    $content .= "\n\n";
+                    // remove combined css from queue
+                    // @todo: this should be queued and only removed when the file is written
+                    unset(self::$css[$method][$scope][$index]);
+                }
+            }
+        }                                    
+        if (empty($content)) return;
+        // @todo: implement proper caching
+        $cacheKey = md5($content);
+        $filePath = sys::varpath() . '/' . $this->cacheDir . '/' . $cacheKey . '.css';
+        if (!file_exists($filePath)) {
+            $fp = @fopen($filePath,'wb');
+            if (!$fp) return;
+            $size = fwrite($fp, $content);
+            if (!$size || $size < strlen($content)) return;
+            fclose($fp);
+        }
+        // Queue the combined stylesheet
+        $index = md5($cacheKey . '.css');
+        self::$css['link']['theme'][$index] = array(
+            'method' => 'link',
+            'scope' => 'theme',
+            'rel' => 'stylesheet',
+            'title' => 'Combined Styles',
+            'url' => $filePath,
+            'type' => 'text/css',
+            'media' => 'all',
+            'condition' => '',
+        );
+        return true;
+    }
+
+/**
+ * Compress CSS
+ *
+ * Compress CSS (when combining and caching) 
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access private
+ * @param  string css to compress
+ * @throws none
+ * return  string compressed css
+**/
+    private function compress($string='', $fileName='')
+    {
+        if (empty($string)) return '';
+        // remove comments 
+        $string = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $string);
+        // remove tabs, spaces, newlines, etc. 
+        $string = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $string);
+        if (!empty($fileName)) {
+            // replace relative paths like url(../images/somefile.png)   
+            $string = $this->fixurlpaths($string, $fileName);
+            // combine any @imports from this file 
+            $string = $this->combineimports($string, $fileName);
+        }
+        return $string;
+    }
+
+/**
+ * Fix url paths
+ *
+ * transform paths relative to current file into paths relative to web root
+ * eg, url(../images/myfile.png) in file /themes/common/style/style.css
+ * will be transformed into url(/themes/common/images/myfile.png);
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access private
+ * @param  string $string the string to look in for replacements
+ * @param  string $fileName the name of the file the string belongs to
+ * @throws none
+ * return  string the string with urls replaced
+**/     
+    private function fixurlpaths($string, $fileName)
+    {
+        // remove the domain name from path (if any)
+        $base = xarServer::getBaseURL();
+        if (strpos($fileName, $base) === 0) {
+            $fileName = str_replace($base, '', $fileName);
+        }
+        // add leading slash if required so url is relative to web root
+        if (strpos($fileName, '/') !== 0) {
+            $fileName = '/'.$fileName;
+        }
+        // get the directory the file declaring the url lives in
+        $filePath = dirname($fileName);
+        // find all url() declarations
+        preg_match_all('!url\([\'|"]?([^\'|"|\)]*)[\'|"]?\)!', $string, $matches);
+        if (!empty($matches)) {
+            foreach ($matches[1] as $i => $match) {
+                // skip replacements on paths already relative to web root
+                if (strpos($match, '/') === 0) continue;
+                $curPath = $filePath;
+                // see if the declaration is relative to current file directory                
+                $count = substr_count($match,'../');
+                if (!empty($count)) {
+                    while ($count > 0) {
+                        // move up the path once for each occurence of ../
+                        $curPath = dirname($curPath);
+                        $count--;
                     }
                 }
-                $queue = array();
-                return $styles;
-            default:
-                return false;
+                // replace all occurences of ../ in the url
+                $match = str_replace('../', '', $match);
+                // replace the url with the full path relative to web root
+                $string = str_replace($matches[0][$i], "url($curPath/$match)", $string);
+            }
         }
-    }
+        return $string;
+    }    
 
-    function register(Array $args=array())
+/**
+ * Combine imports
+ *
+ * embeds css from @import url() into combined stylesheet
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access private
+ * @param  string $string the string to look in for replacements
+ * @param  string $fileName the name of the file the string belongs to
+ * @throws none
+ * return  string the string with @imports replaced with content
+**/  
+    private function combineimports($string, $fileName)
     {
-        return $this->queue('register',$args);
+        if (preg_match_all('!@import\s*url\([\'|"]?([^\'|"|\)]*)[\'|"]?\);!', $string, $matches)) {
+            foreach ($matches[1] as $i => $match) {
+                if (strpos($match, '/') === 0) {
+                    $match = substr($match, 1, strlen($match));
+                }
+                $ifile = @file_get_contents($match);
+                if (empty($ifile)) continue;
+                if ($this->compressed) {
+                    $ifile = $this->compress($ifile, $match);
+                } else {
+                    $ifile = $this->fixurlpaths($ifile, $match);
+                    $ifile = $this->combineimports($ifile, $match);
+                }
+                $content = "/* Replaced @import url($match) in file $fileName */\n\n";
+                $content .= $ifile;
+                $content .= "\n\n";
+                $string = str_replace($matches[0][$i], $content, $string);
+            }
+        }
+        return $string;     
     }
-
-    function deliver($sort=true)
+    
+    // prevent cloning of singleton instance
+    public function __clone()
     {
-        return $this->queue('deliver',$sort);
+        throw new ForbiddenException();
     }
 }
 ?>

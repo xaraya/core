@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:style scope="module" module="base" file="tree"/>
-    <xar:javascript module="privileges" filename="xarTree.js"/>
+    <xar:style scope="theme" file="tree"/>
+    <xar:javascript scope="module" module="privileges" filename="xarTree.js"/>
     <script type="text/javascript">
         <!--
         var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
@@ -17,10 +17,10 @@
     // -->
     </script>
     <xar:if condition="!empty($trees)">
-        <xar:set name="deleteicon">xarTplGetImage('icons/delete.png','base')</xar:set>
-        <xar:set name="groupsicon">xarTplGetImage('icons/system-user-groups.png','base')</xar:set>
-        <xar:set name="removeicon">xarTplGetImage('icons/remove.png','base')</xar:set>
-        <xar:set name="blankicon">xarTplGetImage('icons/blank.png','base')</xar:set>
+        <xar:set name="deleteicon"><xar:img scope="theme" file="icons/delete.png" render="false"/></xar:set>
+        <xar:set name="groupsicon"><xar:img scope="theme" file="icons/system-user-groups.png" render="false"/></xar:set>
+        <xar:set name="removeicon"><xar:img scope="theme" file="icons/remove.png" render="false"/></xar:set>
+        <xar:set name="blankicon"><xar:img scope="theme" file="icons/blank.png" render="false"/></xar:set>
         
         <xar:foreach in="$trees" value="$tree">
             <ul class="xar-tree">

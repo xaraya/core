@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage authsystem module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -31,7 +31,7 @@ function authsystem_admin_main()
     $samemodule = $info[0] == $refererinfo[0];
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTplModule('authsystem','admin','overview');
+        return xarTpl::module('authsystem','admin','overview');
     } else {
         xarController::redirect(xarModURL('authsystem', 'admin', 'modifyconfig'));
         return true;

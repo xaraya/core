@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage themes module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -53,10 +53,11 @@
 function themes_adminapi_dropdownlist(Array $args=array())
 {
 
-    $themelist = xarMod::apiFunc('themes', 'admin', 'getlist', $args);
+    $themelist = xarMod::apiFunc('themes', 'admin', 'getthemelist', $args);
     $options = array();
     if (!empty($themelist)) {
         foreach ($themelist as $theme) {
+            if (isset($args['Class']) && $theme['class'] != $args['Class']) continue;
             $options[] = array('id' =>  $theme['name'], 'name' => $theme['displayname']);
         }
     }

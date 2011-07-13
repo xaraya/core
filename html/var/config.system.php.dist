@@ -1,5 +1,16 @@
 <?php
-// Database Configuration
+/**
+ * Database Configuration File 
+ *
+ * @package core
+ * @subpackage core
+ * @category Xaraya Web Applications Framework
+ * @version 2.3.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
+
 // Database Username: the username that will be used to connect to the database.
 $systemConfiguration['DB.UserName'] = '';
 // Database Password: the password that will be used to connect to the database.

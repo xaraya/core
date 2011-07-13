@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -239,7 +239,7 @@ class xarTplPager Extends Object
             xarCore::setCached('Pager.last', 'rightarrow', $data['lasturl']);
         }
 
-        return trim(xarTplModule($tplmodule, 'pager', $template, $data));
+        return trim(xarTpl::module($tplmodule, 'pager', $template, $data));
     }
 /**
  * Return a properly formatted pager url (startnum=%%) for use in getPager() method

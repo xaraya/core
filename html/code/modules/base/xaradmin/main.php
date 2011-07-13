@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -36,7 +36,7 @@ function base_admin_main()
     $samemodule = $module == $refererinfo[0];
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTplModule('base','admin','overview');
+        return xarTpl::module('base','admin','overview');
     } else {
         xarController::redirect(xarModURL('base', 'admin', 'modifyconfig'));
         return true;

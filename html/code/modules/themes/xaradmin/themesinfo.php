@@ -4,7 +4,7 @@
  * @package modules
  * @subpackage themes module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -26,13 +26,48 @@ function themes_admin_themesinfo()
     
     $data = array();
     
-    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return; 
-    if (empty($id)) return xarResponse::notFound();
+    if (!xarVarFetch('id', 'int:1:', $themeid, 0, XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVarFetch('exit', 'isset', $exit, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVarFetch('confirm', 'isset', $confirm, NULL, XARVAR_DONT_SET)) {return;}
+    if (empty($themeid)) return xarResponse::notFound();
 
     // obtain maximum information about a theme
-    $info = xarThemeGetInfo($id);
-    // data vars for template
-    $data['themeid']              = xarVarPrepForDisplay($id);
+    $info = xarThemeGetInfo($themeid);
+
+    // get the theme object corresponding to this theme
+    sys::import('modules.dynamicdata.class.objects.master');
+    $theme = & DataObjectMaster::getObject(array('name'   => 'themes'));
+    $id = $theme->getItem(array('itemid' => $info['systemid']));
+    if (empty($theme)) return;
+
+    $data['theme'] = $theme;
+    $data['themeid'] = $themeid;
+    $data['properties'] = $theme->properties;
+
+    if ($confirm || $exit) {
+    
+        // Check for a valid confirmation key
+        if(!xarSecConfirmAuthKey()) return;
+
+        // Get the data from the form
+        $isvalid = $data['theme']->properties['configuration']->checkInput();
+        if (!$isvalid) {
+            // Bad data: redisplay the form with error messages
+            return xarTpl::module('themes','admin','themesinfo', $data);        
+        } else {
+            // Good data: create the item
+            $itemid = $data['theme']->updateItem(array('itemid' => $info['systemid']));
+            
+            // Jump to the next page
+            if ($exit) {
+                xarController::redirect(xarModURL('themes','admin','list'));
+            } else {
+                xarController::redirect(xarModURL('themes','admin','themesinfo',array('id' => $themeid)));
+            }
+            return true;
+        }
+    }
+
     $data['themename']            = xarVarPrepForDisplay($info['name']);
     $data['themedescr']           = xarVarPrepForDisplay($info['description']);
     //$data['themedispname']        = xarVarPrepForDisplay($themeinfo['displayname']);
@@ -50,7 +85,6 @@ function themes_admin_themesinfo()
     }
     $data['themedependency']      = xarVarPrepForDisplay($dependency);
     
-    // Redirect
     return $data;
 }
 ?>

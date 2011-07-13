@@ -5,7 +5,7 @@
  * @package core
  * @subpackage blocks
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -117,7 +117,7 @@ Class xarBlock extends Object implements IxarBlock
             }
             if (isset($block->display_access) && $block->display_access['failure']) {
                 // @TODO: render to an error/exception block?
-                return xarTplModule('privileges','user','errors',array('layout' => 'no_block_privileges'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'no_block_privileges'));
             } else {
                 return '';
             }
@@ -176,7 +176,7 @@ Class xarBlock extends Object implements IxarBlock
 
             // Attempt to render this block template data.
             try {
-                $blockinfo['content'] = xarTplBlock(
+                $blockinfo['content'] = xarTpl::block(
                     $data['module'], $data['type'], $blockinfo['content'],
                     !empty($blockinfo['_bl_block_template']) ? $blockinfo['_bl_block_template'] : NULL,
                     !empty($blockinfo['_bl_template_base']) ? $blockinfo['_bl_template_base'] : NULL
@@ -210,7 +210,7 @@ Class xarBlock extends Object implements IxarBlock
             // $blockinfo itself is passed to the outer template
             // Attempt to render this block template data.
             try {
-                $boxOutput = xarTpl_renderBlockBox($blockinfo, $data['_bl_box_template']);
+                $boxOutput = xarTpl::renderBlockBox($blockinfo, $data['_bl_box_template']);
             } catch (Exception $e) {
                 // Set the output of the block in cache
                 if (!empty($cacheKey)) {

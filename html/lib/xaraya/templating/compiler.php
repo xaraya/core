@@ -3,7 +3,7 @@
  * @package core
  * @subpackage templating
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -59,8 +59,21 @@ class XarayaCompiler extends xarBLCompiler
             $baseURI = 'file://' . $baseDir;
         }
         $xslFiles = $this->getTagPaths($baseDir, $baseURI);
+        
+        // Get any custom tags in themes/common/tags
+        $baseDir = 'themes/common/tags';
+        $baseDir = realpath($baseDir);
+        if (strpos($baseDir, '\\') != false) {
+            // On Windows, drive letters are preceeded by an extra / [file:///C:/...]
+            $baseURI = 'file:///' . str_replace('\\','/',$baseDir);
+        } else {
+            $baseURI = 'file://' . $baseDir;
+        }
+        $xslFiles = array_merge($xslFiles,$this->getTagPaths($baseDir, $baseURI));
+        
         // Add the custom tags from modules
         $xslFiles = array_merge($xslFiles,$this->getModuleTagPaths());
+
         return $xslFiles;
     }
 

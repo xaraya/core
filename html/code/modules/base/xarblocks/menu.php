@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -28,7 +28,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
     public $module              = 'base';
     public $text_type           = 'Menu';
     public $text_type_long      = 'Generic menu';
-    public $xarversion          = '2.2.0';
+    public $xarversion          = '2.3.0';
     public $allow_multiple      = true;
     public $show_preview        = true;
     public $nocache             = 1;
@@ -57,7 +57,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                                         'url' => '[base]&page=docs',
                                         'label'=> 'Documentation',
                                         'title' => 'General Documentation',
-                                        'visible' => 1,
+                                        'visible' => 0,
                                         'menulinks' => array(),
                                     ),
                                     array(
@@ -66,7 +66,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                                         'url' => '[base]page=events',
                                         'label'=> 'Event System',
                                         'title' => 'Event Messaging System Overview',
-                                        'visible' => 1,
+                                        'visible' => 0,
                                         'menulinks' => array(),
                                     ),
                                   );
@@ -159,6 +159,12 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 
         switch ($oldversion) {
             case '0.0.0': // upgrade menu blocks to version 2.2.0
+                // fix for blocks coming from a 1x install
+                // @todo: this shouldn't happen, need to figure out why it does
+                if (!is_array($this->content)) {
+                    $content = @unserialize($this->content);
+                    $this->content = !empty($content) && is_array($content) ? $content : array();
+                }
                 // convert the old modulelist string to an array
                 if (!empty($this->modulelist) && !is_array($this->modulelist)) {
                     $oldlist = @explode(',', $this->modulelist);

@@ -2,7 +2,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:set name="request">xarController::$request->getInfo()</xar:set>
     <xar:set name="activetab">#$request.2#</xar:set>
-    <div>
         <ul class="xar-tabs xar-alt xar-norm-outline">
             <xar:var name="label">Choose an action to perform on the selected user</xar:var>
             <li class="xar-tabs-label" title="#$label#">Manage role:</li>
@@ -45,5 +44,4 @@
                 <a href="#xarModURL('roles','admin','testprivileges',array('id' =&gt; $id))#" class="#$linkclass#">Test privileges</a>
             </li>
         </ul>
-    </div>
 </xar:template>

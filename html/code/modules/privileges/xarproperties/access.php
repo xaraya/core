@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage privileges module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -61,7 +61,11 @@ class AccessProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
-        if (isset($data['value'])) $this->setValue($data['value']);
+        if (isset($data['value'])) {
+            $this->setValue($data['value']);
+        } else {
+            $this->setValue();
+        }
         $value = $this->getValue();
         if (!isset($data['level'])) $data['level'] = $value['level'];
         if (!isset($data['group'])) $data['group'] = $value['group'];
@@ -80,7 +84,11 @@ class AccessProperty extends DataProperty
 
     public function showOutput(Array $data = array())
     {
-        if (isset($data['value'])) $this->setValue($data['value']);
+        if (isset($data['value'])) {
+            $this->setValue($data['value']);
+        } else {
+            $this->setValue();
+        }
         $value = $this->getValue();
         if (!isset($data['level'])) $data['level'] = $value['level'];
         if (!isset($data['group'])) $data['group'] = $value['group'];

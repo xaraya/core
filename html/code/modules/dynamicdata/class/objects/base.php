@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -257,7 +257,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
-        return xarTplObject($args['tplmodule'],$args['template'],'showform',$args);
+        return xarTpl::object($args['tplmodule'],$args['template'],'showform',$args);
     }
 
     /**
@@ -328,7 +328,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
-        return xarTplObject($args['tplmodule'],$args['template'],'showdisplay',$args);
+        return xarTpl::object($args['tplmodule'],$args['template'],'showdisplay',$args);
     }
 
     /**

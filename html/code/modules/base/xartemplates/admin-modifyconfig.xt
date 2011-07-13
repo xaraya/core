@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- TODO: split this file up in parts -->
-    <xar:javascript module="base" filename="formcheck.js"/>
+    <xar:javascript scope="theme" filename="formcheck.js"/>
     <script type="text/javascript">
     <xar:comment>
         // Enter name of mandatory fields
@@ -11,180 +11,216 @@
         var base_fieldDescription = Array("Default Module Function");
     //</xar:comment>
     </script>
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Base Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
-        <h2>Modify System Configuration</h2>
-        <ul class="xar-tabs xar-alt xar-norm-outline">
+    <div class="xar-mod-page-head">
+        <h2 class="xar-mod-pagetitle">Modify System Configuration</h2>
+        <ul class="xar-tabs">
             <xar:var name="title">Choose a set of configuration options to modify</xar:var>
             <xar:var name="label">Modify</xar:var>
             <li class="xar-tabs-label" title="#$title#">#$label#</li>
             <xar:if condition="$tab eq 'display'">
                 <li class="xar-tab-active">
-                    <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Site Display</a>
+                    <a href="#xarServer::getCurrentURL()#">Site Display</a>
                 </li>
             <xar:else />
                 <li class="xar-tab">
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'display'))#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'display'))#">
                     Site Display</a>
                 </li>
             </xar:if>
             <xar:if condition="$tab eq 'security'">
                 <li class="xar-tab-active">
-                    <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Sessions/Security</a>
+                    <a href="#xarServer::getCurrentURL()#">Sessions/Security</a>
                 </li>
             <xar:else />
                 <li class="xar-tab">
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'security'))#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'security'))#">
                     Sessions and Security</a>
                 </li>
             </xar:if>
             <xar:if condition="$tab eq 'locales'">
                 <li class="xar-tab-active">
-                    <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Languages and Locales</a>
+                    <a href="#xarServer::getCurrentURL()#">Languages and Locales</a>
                 </li>
             <xar:else />
                 <li class="xar-tab">
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'locales'))#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'locales'))#">
                     Languages and Locales</a>
                 </li>
             </xar:if>
             <xar:if condition="$tab eq 'logging'">
                 <li class="xar-tab-active">
-                    <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Logging</a>
+                    <a href="#xarServer::getCurrentURL()#">Logging</a>
                 </li>
             <xar:else />
                 <li class="xar-tab">
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'logging'))#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'logging'))#">
                     Logging</a>
                 </li>
             </xar:if>
             <xar:if condition="$tab eq 'other'">
                 <li class="xar-tab-active">
-                    <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">Other</a>
+                    <a href="#xarServer::getCurrentURL()#">Other</a>
                 </li>
             <xar:else />
                 <li class="xar-tab">
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'other'))#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'other'))#">
                     Other</a>
                 </li>
             </xar:if>
         </ul>
+        </div><!--/xar-mod-page-head-->
+        <div class="xar-mod-page-body">
         <!-- Begin Site Display Options -->
         <xar:if condition="$tab eq 'display'">
             <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Version Information</legend>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Current Version</xar:var>
-                        <label title="#$label#" class="xar-form-label">                            
-                            Xaraya Core:                            
-                        </label>
-                        #xarCore::VERSION_ID# version #XARCORE_VERSION_NUM# (#xarCore::VERSION_SUB#)
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Current Version</xar:var>
+                            <label title="#$label#" class="xar-form-label">                            
+                                Xaraya Core:                            
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            #xarCore::VERSION_ID# version #XARCORE_VERSION_NUM# (#xarCore::VERSION_SUB#)
+                        </div>
                     </div>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Current Build</xar:var>
-                        <label title="#$label#" class="xar-form-label">                            
-                            Build:                            
-                        </label>
-                        #xarCore::VERSION_REV#
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Current Build</xar:var>
+                            <label title="#$label#" class="xar-form-label">                            
+                                Build:                            
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            #xarCore::VERSION_REV#
+                        </div>
                     </div>
                 </fieldset>
                 <fieldset>
                     <legend>                        
                         Database Information                        
                     </legend>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Host</xar:var>
-                        <label title="#$label#" class="xar-form-label">                            
-                            Host:                            
-                        </label>
-                        #xarSystemVars::get(sys::CONFIG, 'DB.Host')#
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Host</xar:var>
+                            <label title="#$label#" class="xar-form-label">                            
+                                Host:                            
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            #xarSystemVars::get(sys::CONFIG, 'DB.Host')#
+                        </div>
                     </div>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Database Type</xar:var>
-                        <label title="#$label#" class="xar-form-label">                            
-                            Database Type:                            
-                        </label>
-                        #xarSystemVars::get(sys::CONFIG, 'DB.Type')#
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Database Type</xar:var>
+                            <label title="#$label#" class="xar-form-label">                            
+                                Database Type:                            
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            #xarSystemVars::get(sys::CONFIG, 'DB.Type')#
+                        </div>
                     </div>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Current Database</xar:var>
-                        <label title="#$label#" class="xar-form-label">                            
-                            Current Database:                            
-                        </label>
-                        #xarSystemVars::get(sys::CONFIG, 'DB.Name')#
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Current Database</xar:var>
+                            <label title="#$label#" class="xar-form-label">                            
+                                Current Database:                            
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            #xarSystemVars::get(sys::CONFIG, 'DB.Name')#
+                        </div>
                     </div>
                 </fieldset>
                 <fieldset>
                     <legend>Site Default Front Page Settings</legend>
-                    <p class="xar-form-input-wrapper-after">The Default Module supplies the main
-                    entry (front) page to your site. The Default Module Function below provides the
-                    template for this frontpage. You can customize and override this template in
-                    your theme.</p>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">The default module to be loaded on your base url.</xar:var>
-                        <label for="defaultmodule"
-                        title="#$label#"
-                        class="xar-form-label">Default Module:</label>
-                        <xar:if condition="xarModVars::get('modules', 'defaultmoduletype') == 'admin'">
-
-                            <xar:set name="filter">array('AdminCapable' =&gt; 1)</xar:set>
-                        <xar:else />
-                            <xar:set name="filter">array('UserCapable' =&gt; 1)</xar:set>
-                        </xar:if>
-                        <xar:set name="value">
-                            <xar:var scope="module" module="modules" name="defaultmodule"/>
-                        </xar:set>
-                        <xar:data-input type="module" name="defaultmodule" id="defaultmodule" filter="$filter" value="$value" store_prop="name"/>
+                    <p class="xar-note">
+                        The Default Module supplies the main entry (front) page to your site. The Default Module Function below provides the template for this frontpage. You can customize and override this template in your theme.</p>
+                    <div class="xar-row">
+                    	<div class="xar-col">
+	                        <xar:var name="label">The default module to be loaded on your base url.</xar:var>
+	                        <label for="defaultmodule" title="#$label#" class="xar-form-label">Default Module:</label>
+                        </div>
+                        <div class="xar-col">
+	                        <xar:if condition="xarModVars::get('modules', 'defaultmoduletype') == 'admin'">
+	
+	                            <xar:set name="filter">array('AdminCapable' =&gt; 1)</xar:set>
+	                        <xar:else />
+	                            <xar:set name="filter">array('UserCapable' =&gt; 1)</xar:set>
+	                        </xar:if>
+	                        <xar:set name="value">
+	                            <xar:var scope="module" module="modules" name="defaultmodule"/>
+	                        </xar:set>
+	                        <xar:data-input type="module" name="defaultmodule" id="defaultmodule" filter="$filter" value="$value" store_prop="name"/>
+                    	</div>
                     </div>
                     <xar:if condition="(int)xarModVars::get('modules', 'defaultmodule') eq (int)xarMod::getID('base')">
 
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Use an alternate default page template.</xar:var>
-                            <label for="alternatepagetemplate" title="#$label#" class="xar-form-label">
-                                Use Alternate Page Template
-                            </label>
-                            <xar:set name="checked">
-                                <xar:var scope="module" module="base" name="UseAlternatePageTemplate"/>
-                            </xar:set>
-                            <xar:data-input type="checkbox" name="alternatepagetemplate" id="alternatepagetemplate" checked="$checked"/>
+                        <div class="xar-row">
+                        	<div class="xar-col">
+	                            <xar:var name="label">Use an alternate default page template.</xar:var>
+	                            <label for="alternatepagetemplate" title="#$label#" class="xar-form-label">
+	                                Use Alternate Page Template
+	                            </label>
+                            </div>
+                            <div class="xar-col">
+	                            <xar:set name="checked">
+	                                <xar:var scope="module" module="base" name="UseAlternatePageTemplate"/>
+	                            </xar:set>
+	                            <xar:data-input type="checkbox" name="alternatepagetemplate" id="alternatepagetemplate" checked="$checked"/>
+                            </div>
                         </div>
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">The name of the alternate page template to use.</xar:var>
-                            <label for="alternatepagetemplatename" title="#$label#" class="xar-form-label">
-                                Alt. Page Template Name:
-                            </label>
-                            <xar:set name="value">
-                                <xar:var scope="module" module="base" name="AlternatePageTemplateName"/>
-                            </xar:set>
-                            <input type="text" id="alternatepagetemplatename" name="alternatepagetemplatename" value="#$value#" class="xar-form-textlong"/>
+                        <div class="xar-row">
+                        	<div class="xar-col">
+	                            <xar:var name="label">The name of the alternate page template to use.</xar:var>
+	                            <label for="alternatepagetemplatename" title="#$label#" class="xar-form-label">
+	                                Alt. Page Template Name:
+	                            </label>
+	                        </div>
+                            <div class="xar-col">
+	                            <xar:set name="value">
+	                                <xar:var scope="module" module="base" name="AlternatePageTemplateName"/>
+	                            </xar:set>
+	                            <input type="text" id="alternatepagetemplatename" name="alternatepagetemplatename" value="#$value#" class="xar-form-textlong"/>
+                        	</div>
                         </div>
                     </xar:if>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">The default type of module to be loaded.</xar:var>
-                        <label for="defaulttype" title="#$label#" class="xar-form-label">
-                            Default Module Type:
-                        </label>
-                        <xar:set name="options">
-                            array( array('id' =&gt; 'admin', 'name' =&gt; 'Admin'), array('id' =&gt; 'user', 'name' =&gt; 'User'), )
-                        </xar:set>
-                        <xar:set name="value">
-                            <xar:var scope="module" module="modules" name="defaultmoduletype"/>
-                        </xar:set>
-                        <xar:data-input type="dropdown" name="defaulttype" id="defaulttype" options="$options" value="$value"/>
+                    <div class="xar-row">
+                    	<div class="xar-col">
+	                        <xar:var name="label">The default type of module to be loaded.</xar:var>
+	                        <label for="defaulttype" title="#$label#" class="xar-form-label">
+	                            Default Module Type:
+	                        </label>
+                       </div>
+                       <div class="xar-col">
+	                        <xar:set name="options">
+	                            array( array('id' =&gt; 'admin', 'name' =&gt; 'Admin'), array('id' =&gt; 'user', 'name' =&gt; 'User'), )
+	                        </xar:set>
+	                        <xar:set name="value">
+	                            <xar:var scope="module" module="modules" name="defaultmoduletype"/>
+	                        </xar:set>
+	                        <xar:data-input type="dropdown" name="defaulttype" id="defaulttype" options="$options" value="$value"/>
+                        </div>
                     </div>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">The default function of module to be loaded.</xar:var>
-                        <label for="defaultfunction" title="#$label#" class="xar-form-label">
-                            Default Module Function:
-                        </label>
-                        <xar:set name="value">
-                            <xar:var scope="module" module="modules" name="defaultmodulefunction"/>
-                        </xar:set>
-                        <input type="text" id="defaultfunction" name="defaultfunction" value="#$value#" maxlength="100" class="xar-form-textlong"/>
+                    <div class="xar-row">
+                        <div class="xar-col">
+	                        <xar:var name="label">The default function of module to be loaded.</xar:var>
+	                        <label for="defaultfunction" title="#$label#" class="xar-form-label">
+	                            Default Module Function:
+	                        </label>
+                        </div>
+                        <div class="xar-col">
+	                        <xar:set name="value">
+	                            <xar:var scope="module" module="modules" name="defaultmodulefunction"/>
+	                        </xar:set>
+	                        <input type="text" id="defaultfunction" name="defaultfunction" value="#$value#" maxlength="100" class="xar-form-textlong"/>
+                    	</div>
                     </div>
                 </fieldset>
                 <!-- General place to put extra module data and code. Hide it for now as it's not used
@@ -192,50 +228,60 @@
                     <legend>
                         Module Data Path
                     </legend>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">The path to the library where the module's data is held.</xar:var>
-                        <label for="defaultdatapath" title="#$label#" class="xar-form-label">
-                            Path to Module Data:
-                        </label>
-                        <xar:set name="value">
-                            <xar:var scope="module" module="modules" name="defaultdatapath"/>
-                        </xar:set>
-                        <input type="text" id="defaultdatapath" name="defaultdatapath" value="#$value#" maxlength="100" class="xar-form-textlong"/>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">The path to the library where the module's data is held.</xar:var>
+                            <label for="defaultdatapath" title="#$label#" class="xar-form-label">
+                                Path to Module Data:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="value">
+                                <xar:var scope="module" module="modules" name="defaultdatapath"/>
+                            </xar:set>
+                            <input type="text" id="defaultdatapath" name="defaultdatapath" value="#$value#" maxlength="100" class="xar-form-textlong"/>
+                        </div>
                     </div>
                </fieldset>
                -->
                <fieldset>
                     <legend>General Display Options</legend>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Enable short url support throughout Xaraya.</xar:var>
-                        <label for="shorturl" title="#$label#" class="xar-form-label">
-                            Enable Short URL Support
-                        </label>
-                        <xar:set name="checked">
-                            <xar:var scope="config" name="Site.Core.EnableShortURLsSupport"/>
-                        </xar:set>
-                        <xar:data-input type="checkbox" name="shorturl" id="shorturl" checked="$checked"/>
+                    <div class="xar-row">
+                    	<div class="xar-col">
+	                        <xar:var name="label">Enable short url support throughout Xaraya.</xar:var>
+	                        <label for="shorturl" title="#$label#" class="xar-form-label">
+	                            Short URLs
+	                        </label>
+                        </div>
+                    	<div class="xar-col">
+	                        <xar:set name="checked">
+	                            <xar:var scope="config" name="Site.Core.EnableShortURLsSupport"/>
+	                        </xar:set>
+	                        <xar:data-input type="checkbox" name="shorturl" id="shorturl" checked="$checked"/> Enable Short URL Support
+                        </div>
                     </div>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Change HTML Entities to readible entities.</xar:var>
-                        <label for="htmlenitites" title="#$label#" class="xar-form-label">
-                            Fix HTML Entities
-                        </label>
-                        <xar:set name="checked">
-                            <xar:var scope="config" name="Site.Core.FixHTMLEntities"/>
-                        </xar:set>
-                        <xar:data-input type="checkbox" name="htmlenitites" id="htmlenitites" checked="$checked"/>
+                    <div class="xar-row">
+                    	<div class="xar-col">
+	                        <xar:var name="label">Change HTML Entities to readible entities.</xar:var>
+	                        <label for="htmlenitites" title="#$label#" class="xar-form-label">
+	                            HTML Entities
+	                        </label>
+                        </div>
+                    	<div class="xar-col">
+	                        <xar:set name="checked">
+	                            <xar:var scope="config" name="Site.Core.FixHTMLEntities"/>
+	                        </xar:set>
+	                        <xar:data-input type="checkbox" name="htmlenitites" id="htmlenitites" checked="$checked"/> Fix HTML Entities
+                        </div>
                     </div>
                 </fieldset>
                 <xar:data-form object="$module_settings"/>
-                <fieldset>
-                    <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                        <input type="hidden" name="phase" id="phase" value="update"/>
-                        <xar:var name="label">Update</xar:var>
-                        <xar:button type="submit" label="$label"/>
-                    </div>
+                <fieldset class="xar-form-actions">
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <xar:var name="label">Update</xar:var>
+                    <xar:button type="submit" label="$label"/>
                 </fieldset>
             </form>
             <!-- Begin Security Options -->
@@ -243,173 +289,245 @@
                 <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                     <fieldset>
                         <legend>Sessions and Security</legend>
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Security options for sessions</xar:var>
-                            <label for="securitylevel" title="#$label#" class="xar-form-label">
-                                Security Level:
-                            </label>
-                            <xar:set name="options">
-                                array(
-                                    array('id' => 'High', 'name' => xarML('High')),
-                                    array('id' => 'Medium', 'name' => xarML('Medium')),
-                                    array('id' => 'Low', 'name' => xarML('Low')),
-                                )
-                            </xar:set>
-                            <xar:set name="value">
-                                xarConfigVars::get(null,'Site.Session.SecurityLevel')
-                            </xar:set>
-                            <xar:data-input type="dropdown" name="securitylevel" options="$options" value="$value"/>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Security options for sessions</xar:var>
+                                <label for="securitylevel" title="#$label#" class="xar-form-label">
+                                    Security Level:
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="options">
+                                    array(
+                                        array('id' => 'High', 'name' => xarML('High')),
+                                        array('id' => 'Medium', 'name' => xarML('Medium')),
+                                        array('id' => 'Low', 'name' => xarML('Low')),
+                                    )
+                                </xar:set>
+                                <xar:set name="value">
+                                    xarConfigVars::get(null,'Site.Session.SecurityLevel')
+                                </xar:set>
+                                <xar:data-input type="dropdown" name="securitylevel" options="$options" value="$value"/>
+                            </div>
                         </div>
                         <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Medium'">
     
-                            <div class="xar-form-input-wrapper">
-                                <xar:var name="label">How long to allow the session to last in days</xar:var>
-                                <label for="sessionduration" title="#$label#" class="xar-form-label">Session Duration (In Days):</label>
-                                <xar:set name="value">
-                                    <xar:var scope="config" name="Site.Session.Duration"/>
-                                </xar:set>
-                                <input type="text" id="sessionduration" name="sessionduration" value="#$value#" maxlength="3" class="xar-form-textshort"/>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <xar:var name="label">How long to allow the session to last in days</xar:var>
+                                    <label for="sessionduration" title="#$label#" class="xar-form-label">Session Duration (In Days):</label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:set name="value">
+                                        <xar:var scope="config" name="Site.Session.Duration"/>
+                                    </xar:set>
+                                    <input type="text" id="sessionduration" name="sessionduration" value="#$value#" maxlength="3" class="xar-form-textshort"/>
+                                </div>
                             </div>
                         </xar:if>
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Session times out in minutes</xar:var>
-                            <label for="sessiontimeout" title="#$label#" class="xar-form-label">Session Inactivity Time Out:</label>
-                                <xar:set name="value">
-                                    <xar:var scope="config" name="Site.Session.InactivityTimeout"/>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Session times out in minutes</xar:var>
+                                <label for="sessiontimeout" title="#$label#" class="xar-form-label">Session Inactivity Time Out:</label>
+                                    <xar:set name="value">
+                                        <xar:var scope="config" name="Site.Session.InactivityTimeout"/>
+                                    </xar:set>
+                            </div>
+                            <div class="xar-col">
+                                <input type="text" id="sessiontimeout" name="sessiontimeout" value="#$value#" maxlength="3" class="xar-form-textshort"/>
+                            </div>
+                        </div>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:set name="authmodules">
+                                    <xar:var scope="config" name="Site.User.AuthenticationModules"/>
                                 </xar:set>
-                            <input type="text" id="sessiontimeout" name="sessiontimeout" value="#$value#" maxlength="3" class="xar-form-textshort"/>
+                                <xar:var name="label">Change the order of authentication</xar:var>
+                                <label for="authmodules" title="#$label#" class="xar-form-label">Authentication Modules:</label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
+                                    <xar:set name="size">count($authmodules)</xar:set>
+                                    <xar:data-input type="orderselect" name="authmodules" order="$authmodules" size="$size"/>
+                                <xar:else />
+                                    #$authmodules[0]#
+                                </xar:if>
+                            </div>
                         </div>
-                        <div class="xar-form-input-wrapper">
-                            <xar:set name="authmodules">
-                                <xar:var scope="config" name="Site.User.AuthenticationModules"/>
-                            </xar:set>
-                            <xar:var name="label">Change the order of authentication</xar:var>
-                            <label for="authmodules" title="#$label#" class="xar-form-label">Authentication Modules:</label>
-                            <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
-                                <xar:set name="size">count($authmodules)</xar:set>
-                                <xar:data-input type="orderselect" name="authmodules" order="$authmodules" size="$size"/>
-                            <xar:else />
-                                #$authmodules[0]#
-                            </xar:if>
-                        </div>
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Override the default cookie name</xar:var>
-                            <label for="cookiename" title="#$label##" class="xar-form-label">
-                                Cookie Name:
-                            </label>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Override the default cookie name</xar:var>
+                                <label for="cookiename" title="#$label##" class="xar-form-label">
+                                    Cookie Name:
+                                </label>
+                            </div>
+                            <div class="xar-col">
                                 <xar:set name="value">
                                     <xar:var scope="config" name="Site.Session.CookieName"/>
                                 </xar:set>
-                            <input type="text" id="cookiename" name="cookiename" value="#$value#" maxlength="20" class="xar-form-textmedium"/>
-                            &#160;Default: XARAYASID
+                                <input type="text" id="cookiename" name="cookiename" value="#$value#" maxlength="20" class="xar-form-textmedium"/>
+                                &#160;Default: XARAYASID
+                            </div>
                         </div>
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Override the default cookie path</xar:var>
-                            <label for="cookiepath" title="#$label#" class="xar-form-label">
-                                Cookie Path:
-                            </label>
-                            <xar:set name="value">
-                                <xar:var scope="config" name="Site.Session.CookiePath"/>
-                            </xar:set>
-                            <input type="text" id="cookiepath" name="cookiepath" value="#$value#" maxlength="20" class="xar-form-textmedium"/>
-                            <span>
-                                &#160;Default: #xarServer::getBaseURI()# (limited to the Xaraya directory)
-                            </span>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Override the default cookie path</xar:var>
+                                <label for="cookiepath" title="#$label#" class="xar-form-label">
+                                    Cookie Path:
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="value">
+                                    <xar:var scope="config" name="Site.Session.CookiePath"/>
+                                </xar:set>
+                                <input type="text" id="cookiepath" name="cookiepath" value="#$value#" maxlength="20" class="xar-form-textmedium"/>
+                                <span>
+                                    &#160;Default: #xarServer::getBaseURI()# (limited to the Xaraya directory)
+                                </span>
+                            </div>
                         </div>
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Override the default cookie domain</xar:var>
-                            <label for="cookiedomain" title="#$label#" class="xar-form-label">
-                                Cookie Domain:
-                            </label>
-                            <xar:set name="value">
-                                <xar:var scope="config" name="Site.Session.CookieDomain"/>
-                            </xar:set>
-                            <input type="text" id="cookiedomain" name="cookiedomain" value="#$value#" maxlength="20" class="xar-form-textmedium"/>
-                            &#160;Default: none (not shared across hosts)
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Override the default cookie domain</xar:var>
+                                <label for="cookiedomain" title="#$label#" class="xar-form-label">
+                                    Cookie Domain:
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="value">
+                                    <xar:var scope="config" name="Site.Session.CookieDomain"/>
+                                </xar:set>
+                                <input type="text" id="cookiedomain" name="cookiedomain" value="#$value#" maxlength="20" class="xar-form-textmedium"/>
+                                &#160;Default: none (not shared across hosts)
+                            </div>
                         </div>
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Override the default referer check</xar:var>
-                            <label for="referercheck" title="#$label#" class="xar-form-label">
-                                Referer Check:
-                            </label>
-                            <xar:set name="value">
-                                <xar:var scope="config" name="Site.Session.RefererCheck"/>
-                            </xar:set>
-                            <input type="text" id="referercheck" name="referercheck" value="#$value#" maxlength="40" class="xar-form-textmedium"/>
-                            <span>
-                                &#160;Default: #xarServer::getVar('HTTP_HOST')# for security level 'High'
-                            </span>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Override the default referer check</xar:var>
+                                <label for="referercheck" title="#$label#" class="xar-form-label">
+                                    Referer Check:
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="value">
+                                    <xar:var scope="config" name="Site.Session.RefererCheck"/>
+                                </xar:set>
+                                <input type="text" id="referercheck" name="referercheck" value="#$value#" maxlength="40" class="xar-form-textmedium"/>
+                                <span>
+                                    &#160;Default: #xarServer::getVar('HTTP_HOST')# for security level 'High'
+                                </span>
+                            </div>
                         </div>
                     </fieldset>
                     <fieldset>
                         <legend>SSL Support</legend>
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">Configure to run on a secure server.</xar:var>
-                            <label for="secureserver" title="#$label#" class="xar-form-label">
-                                Configure for secure server
-                            </label>
-                            <xar:set name="checked">
-                                <xar:var scope="config" name="Site.Core.EnableSecureServer"/>
-                            </xar:set>
-                            <xar:data-input type="checkbox" name="secureserver" id="secureserver" checked="$checked"/>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Configure to run on a secure server.</xar:var>
+                                <label for="secureserver" title="#$label#" class="xar-form-label">
+                                    Configure for secure server
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="checked">
+                                    <xar:var scope="config" name="Site.Core.EnableSecureServer"/>
+                                </xar:set>
+                                <xar:data-input type="checkbox" name="secureserver" id="secureserver" checked="$checked"/>
+                            </div>
                         </div>
-                        <div class="xar-form-input-wrapper">
-                            <xar:var name="label">SSL port</xar:var>
-                            <label for="sslport" title="#$label#" class="xar-form-label">SSL port</label>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">SSL port</xar:var>
+                                <label for="sslport" title="#$label#" class="xar-form-label">SSL port</label>
+                            </div>
+                            <div class="xar-col">
                                 <xar:set name="value">
                                     <xar:var scope="config" name="Site.Core.SecureServerPort"/>
                                 </xar:set>
-                            <input type="text" id="sslport" name="sslport" value="#$value#" class="xar-form-textshort"/>
+                                <input type="text" id="sslport" name="sslport" value="#$value#" class="xar-form-textshort"/>
+                            </div>
                         </div>
                     </fieldset>
                     <fieldset>
                         <legend>Encryption</legend>
                         <xar:if condition="extension_loaded('mcrypt')">
-                            <div class="xar-form-input-wrapper">
-                                <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
-                                    Cipher Employed:                                
-                                </label>
-                                <xar:data-input type="dropdown" name="cipher" options="$ciphers" value="$encryption['cipher']"/>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                                        Cipher Employed:                                
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:data-input type="dropdown" name="cipher" options="$ciphers" value="$encryption['cipher']"/>
+                                </div>
                             </div>
-                            <div class="xar-form-input-wrapper">
-                                <label for="bar" title="#xarML('The cipher mode we are using')#" class="xar-form-label">                                
-                                    Cipher Mode:                                
-                                </label>
-                                <xar:data-input type="dropdown" name="mode" options="$modes" value="$encryption['mode']"/>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="bar" title="#xarML('The cipher mode we are using')#" class="xar-form-label">                                
+                                        Cipher Mode:                                
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:data-input type="dropdown" name="mode" options="$modes" value="$encryption['mode']"/>
+                                </div>
                             </div>
-                            <div class="xar-form-input-wrapper">
-                                <label for="bar" title="#xarML('The key used in encryption and decryption')#" class="xar-form-label">                                
-                                    Key:                                
-                                </label>
-                                <xar:data-input type="password" name="key" value="$encryption['key']"/>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="bar" title="#xarML('The key used in encryption and decryption')#" class="xar-form-label">                                
+                                        Key:                                
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:data-input type="password" name="key" value="$encryption['key']"/>
+                                </div>
                             </div>
-                            <div class="xar-form-input-wrapper">
-                                <label for="bar" title="#xarML('A hint for remembering the key used in encryption and decryption')#" class="xar-form-label">                                
-                                    Hint:                                
-                                </label>
-                                <xar:data-input type="textbox" name="hint" value="$encryption['hint']" size="80"/>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="bar" title="#xarML('A hint for remembering the key used in encryption and decryption')#" class="xar-form-label">                                
+                                        Hint:                                
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:data-input type="textbox" name="hint" value="$encryption['hint']" size="80"/>
+                                </div>
                             </div>
                             <!--
-                            <div class="xar-form-input-wrapper">
-                                <label for="bar" title="#xarML('The initialization vector used in encryption and decryption')#" class="xar-form-label">
-                                    Initialization Vector:
-                                </label>
-                                <xar:data-input type="textbox" name="initvector" value="$encryption['initvector']" size="10" maxlength="8"/>&#160;
-                                must be exactly 8 characters long
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="bar" title="#xarML('The initialization vector used in encryption and decryption')#" class="xar-form-label">
+                                        Initialization Vector:
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:data-input type="textbox" name="initvector" value="$encryption['initvector']" size="10" maxlength="8"/>&#160;
+                                    must be exactly 8 characters long
+                                </div>
                             </div>
                             -->
                         <xar:else/>
                             You need to install the PHP mcrypt extension to access encryption functionality
                         </xar:if>
                     </fieldset>
-                    <fieldset>
-                        <div class="xar-form-input-wrapper-after">
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                            <input type="hidden" name="phase" id="phase" value="update"/>
-                            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                            <xar:var name="label">Update</xar:var>
-                            <xar:button type="submit" label="$label"/>
-                        </div>
+                    <fieldset class="xar-form-actions">
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="phase" id="phase" value="update"/>
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </fieldset>
+                </form>
+            <!-- Begin Locale Options -->
+            <xar:elseif condition="$tab eq 'locales'"/>
+                <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
+                    <xar:template file="modifyconfig-locales" module="base" type="module"/>
+                    <fieldset class="xar-form-input-hidden">
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="phase" id="phase" value="update"/>
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    </fieldset>
+                    <fieldset class="xar-form-actions">
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label"/>
                     </fieldset>
                 </form>
             <!-- Begin Logging Options -->
@@ -418,91 +536,89 @@
                 <xar:if condition="$writable">
                     <fieldset>
                         <legend>Basic Logging</legend>
-                            Logging is currently not available. <br/>To enable it please change the permissions on the directory var/logs and its contents so that they are writable for your web server.
+                        Logging is currently not available. <br/>To enable it please change the permissions on the directory var/logs and its contents so that they are writable for your web server.
                     </fieldset>
                 <xar:else/>
                     <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                        <!-- <xar:template file="modifyconfig-logging" module="base" type="module"/> -->
                         <fieldset>
                             <legend>Basic Logging</legend>
-                            <div class="xar-form-input-wrapper">
-                                <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
-                                    Enable logging:                                
-                                </label>
-                                <xar:set name="options">
-                                    array(
-                                        array('id' => 0, 'name' => xarML('No')),
-                                        array('id' => 1, 'name' => xarML('Yes')),
-                                    )
-                                </xar:set>
-                                <xar:set name="checked">xarSystemVars::get(sys::CONFIG, 'Log.Enabled')</xar:set>
-                                <xar:data-input type="radio" name="logenabled" value="$checked" options="$options"/>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                                        Enable logging:                                
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:set name="options">
+                                        array(
+                                            array('id' => 0, 'name' => xarML('No')),
+                                            array('id' => 1, 'name' => xarML('Yes')),
+                                        )
+                                    </xar:set>
+                                    <xar:set name="checked">xarSystemVars::get(sys::CONFIG, 'Log.Enabled')</xar:set>
+                                    <xar:data-input type="radio" name="logenabled" value="$checked" options="$options"/>
+                                </div>
                             </div>
-                            <div class="xar-form-input-wrapper">
-                                <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
-                                    Log file name:                                
-                                </label>
-                                <xar:var name="firstline">Choose a file</xar:var>
-                                <xar:set name="firstline">",$firstline"</xar:set>
-                                <xar:data-input type="combobox" name="logfilename" value="$logfilename" options="$logfiles" layout="horizontal" firstline="$firstline"/>
-                                Allowed extensions are txt and html
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                                        Log file name:                                
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:var name="firstline">Choose a file</xar:var>
+                                    <xar:set name="firstline">",$firstline"</xar:set>
+                                    <xar:data-input type="combobox" name="logfilename" value="$logfilename" options="$logfiles" layout="horizontal" firstline="$firstline"/>
+                                    <br/>Allowed extensions are txt and html
+                                </div>
                             </div>
-                            <div class="xar-form-input-wrapper">
-                                <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
-                                    The current log file is:                                
-                                </label>
-                                #xarSystemVars::get(sys::CONFIG, 'Log.Filename')#
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                                        The current log file is:                                
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    #xarSystemVars::get(sys::CONFIG, 'Log.Filename')#
+                                </div>
                             </div>
                         </fieldset>
-                        <fieldset>
-                            <div class="xar-form-input-wrapper-after">
-                                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                                <input type="hidden" name="phase" id="phase" value="update"/>
-                                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                                <xar:var name="label">Update</xar:var>
-                                <xar:button type="submit" label="$label"/>
-                            </div>
-                        </fieldset>
-                    </form>
-                </xar:if>
-            <!-- Begin Locale Options -->
-            <xar:elseif condition="$tab eq 'locales'"/>
-                <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
-                    <xar:template file="modifyconfig-locales" module="base" type="module"/>
-                    <fieldset>
-                        <div class="xar-form-input-wrapper-after">
+                        <fieldset class="xar-form-actions">
                             <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                             <input type="hidden" name="phase" id="phase" value="update"/>
                             <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                             <xar:var name="label">Update</xar:var>
                             <xar:button type="submit" label="$label"/>
-                        </div>
-                    </fieldset>
-                </form>
+                        </fieldset>
+                    </form>
+                </xar:if>
             <!-- Begin Other Options -->
             <xar:elseif condition="$tab eq 'other'"/>
             <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Legacy Support</legend>
                     <!--
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">WYSIWYG Editors</xar:var>
-                        <label for="editor" title="#$label##"
-                        class="xar-form-label">WYSIWYG Editors:</label>
-                        <select name="editor" id="editor" size="1">
-                            <xar:loop name="$editors">
-                                <xar:if condition="$editor eq $loop:item['displayname']">
-                                    <option value="#$loop:item['displayname']#"
-                                    selected="selected">#$loop:item['displayname']#</option>
-                                    <xar:else />
-                                    <option value="#$loop:item['displayname']#">
-                                    #$loop:item['displayname']#</option>
-                                </xar:if>
-                            </xar:loop>
-                        </select>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">WYSIWYG Editors</xar:var>
+                            <label for="editor" title="#$label##"
+                            class="xar-form-label">WYSIWYG Editors:</label>
+                            <select name="editor" id="editor" size="1">
+                                <xar:loop name="$editors">
+                                    <xar:if condition="$editor eq $loop:item['displayname']">
+                                        <option value="#$loop:item['displayname']#"
+                                        selected="selected">#$loop:item['displayname']#</option>
+                                        <xar:else />
+                                        <option value="#$loop:item['displayname']#">
+                                        #$loop:item['displayname']#</option>
+                                    </xar:if>
+                                </xar:loop>
+                            </select>
+                        </div>
                     </div>
                     -->
-                    <div class="xar-form-input-wrapper-after xar-padding-topthick">
+                    <div class="xar-col dummy xar-padding-topthick">
                         <xar:set name="checked">
                             <xar:var scope="config" name="Site.Core.LoadLegacy"/>
                         </xar:set>
@@ -518,68 +634,87 @@
                     <p>
                         If your webserver only allows outgoing network connections (for retrieving headlines, checking links etc.) via a proxy server, specify its hostname and port number here.
                     </p>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Proxy server hostname to use</xar:var>
-                        <label for="proxyhost" title="#$label#" class="xar-form-label">
-                            Proxy Server:
-                        </label>
-                        <xar:set name="value">
-                            <xar:var scope="module" module="base" name="proxyhost"/>
-                        </xar:set>
-                        <input type="text" id="proxyhost" name="proxyhost" value="#$value#" maxlength="100" class="xar-form-inputlong"/>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Proxy server hostname to use</xar:var>
+                            <label for="proxyhost" title="#$label#" class="xar-form-label">
+                                Proxy Server:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="value">
+                                <xar:var scope="module" module="base" name="proxyhost"/>
+                            </xar:set>
+                            <input type="text" id="proxyhost" name="proxyhost" value="#$value#" maxlength="100" class="xar-form-inputlong"/>
+                        </div>
                     </div>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Proxy server port to use</xar:var>
-                        <label for="proxyport" title="#$label#" class="xar-form-label">
-                            Proxy Port:
-                        </label>
-                        <xar:set name="value">
-                            <xar:var scope="module" module="base" name="proxyport"/>
-                        </xar:set>
-                        <input type="text" id="proxyport" name="proxyport" value="#$value#" maxlength="10" class="xar-form-textshort"/>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Proxy server port to use</xar:var>
+                            <label for="proxyport" title="#$label#" class="xar-form-label">
+                                Proxy Port:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="value">
+                                <xar:var scope="module" module="base" name="proxyport"/>
+                            </xar:set>
+                            <input type="text" id="proxyport" name="proxyport" value="#$value#" maxlength="10" class="xar-form-textshort"/>
+                        </div>
                     </div>
                 </fieldset>
                 <fieldset>
                     <legend>Timezone Configuration</legend>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">This is the timezone your operating system is set to.</xar:var>
-                        <label for="mytimezone" title="#$label#" class="xar-form-label">Host Timezone:</label>
-                        <xar:set name="hosttimezone">
-                            xarSystemVars::get(sys::CONFIG, 'SystemTimeZone')
-                        </xar:set>
-                        <xar:data-input type="timezone" name="hosttimezone" id="hosttimezone" value="$hosttimezone"/>
-                        &#160;The time is #$hostdatetime->format(DATE_RSS)#
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">This is the timezone your operating system is set to.</xar:var>
+                            <label for="mytimezone" title="#$label#" class="xar-form-label">Host Timezone:</label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="hosttimezone">
+                                xarSystemVars::get(sys::CONFIG, 'SystemTimeZone')
+                            </xar:set>
+                            <xar:data-input type="timezone" name="hosttimezone" id="hosttimezone" value="$hosttimezone"/>
+                            &#160;The time is #$hostdatetime->format(DATE_RSS)#
+                        </div>
                     </div>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">This is the timezone the server/site is based in.</xar:var>
-                        <label for="sitetimezone" title="#$label##" class="xar-form-label">Site Timezone:</label>
-                        <xar:set name="sitetimezone">
-                            <xar:var scope="config" name="Site.Core.TimeZone"/>
-                        </xar:set>
-                        <xar:data-input type="timezone" name="sitetimezone" id="sitetimezone" value="$sitetimezone"/>
-                        &#160;The time is #$sitedatetime->format(DATE_RSS)#
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">This is the timezone the server/site is based in.</xar:var>
+                            <label for="sitetimezone" title="#$label##" class="xar-form-label">Site Timezone:</label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="sitetimezone">
+                                <xar:var scope="config" name="Site.Core.TimeZone"/>
+                            </xar:set>
+                            <xar:data-input type="timezone" name="sitetimezone" id="sitetimezone" value="$sitetimezone"/>
+                            &#160;The time is #$sitedatetime->format(DATE_RSS)#
+                        </div>
                     </div>
                 </fieldset>
                 <fieldset>
                     <legend>Extension Release Feeds</legend>
-                    <div class="xar-form-input-wrapper">
-                        <xar:var name="label">Number of feeds for Xaraya release to display.</xar:var>
-                        <label for="releasenumber" title="#$label#" class="xar-form-label">
-                            Number of releases to display:
-                        </label>
-                        <input type="text" id="releasenumber" name="releasenumber" value="#$releasenumber#" maxlength="4" class="xar-form-textshort"/>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Number of feeds for Xaraya release to display.</xar:var>
+                            <label for="releasenumber" title="#$label#" class="xar-form-label">
+                                Number of releases to display:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <input type="text" id="releasenumber" name="releasenumber" value="#$releasenumber#" maxlength="4" class="xar-form-textshort"/>
+                        </div>
                     </div>
                 </fieldset>
-                <fieldset>
-                    <div class="xar-form-input-wrapper-after">
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                        <input type="hidden" name="phase" id="phase" value="update"/>
-                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                        <xar:var name="label">Update</xar:var>
-                        <xar:button type="submit" label="$label"/>
-                    </div>
+                <fieldset class="xar-form-actions">
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <xar:var name="label">Update</xar:var>
+                    <xar:button type="submit" label="$label"/>
                 </fieldset>
             </form>
         </xar:if>
-    </div>
+    </div><!--/xar-mod-page-body-->
+    </div><!--/xar-mod-body-->
 </xar:template>

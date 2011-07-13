@@ -14,7 +14,7 @@
     </div>
     <div class="xar-mod-body">
         <xar:var name="label">Exception Icon</xar:var>
-        <img src="#xarTplGetImage('exception.png', 'base')#" alt="#$label#" class="xar-module-icon"/>
+        <xar:img scope="theme" file="exception.png" alt="$label" class="xar-module-icon"/>
         <h2>#$type#</h2>
         <h3>#$title#</h3>
         <p>#$short#</p>

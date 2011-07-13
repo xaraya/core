@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -113,24 +113,24 @@ function dynamicdata_admin_modify(Array $args=array())
 
             if ($object->objectid == 1) {
                 $data['label'] = $object->properties['label']->value;
-                xarTplSetPageTitle(xarML('Modify DataObject #(1)', $data['label']));
+                xarTpl::setPageTitle(xarML('Modify DataObject #(1)', $data['label']));
             } else {
                 $data['label'] = $object->label;
-                xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
+                xarTpl::setPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
             }
 
         break;
 
         case 'clone':
-            // user needs admin access to changethe access rules
+            // user needs admin access to change the access rules
             $data['adminaccess'] = xarSecurityCheck('',0,'All',$object->objectid . ":" . $name . ":" . "$itemid",0,'',0,800);
             $data['name'] = $object->properties['name']->value;
             if ($object->objectid == 1) {
                 $data['label'] = $object->properties['label']->value;
-                xarTplSetPageTitle(xarML('Clone DataObject #(1)', $data['label']));
+                xarTpl::setPageTitle(xarML('Clone DataObject #(1)', $data['label']));
             } else {
                 $data['label'] = $object->label;
-                xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
+                xarTpl::setPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
             }
         break;
     }
@@ -141,9 +141,9 @@ function dynamicdata_admin_modify(Array $args=array())
             
     if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xt') ||
         file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xt')) {
-        return xarTplModule($args['tplmodule'],'admin','modify',$data,$args['template']);
+        return xarTpl::module($args['tplmodule'],'admin','modify',$data,$args['template']);
     } else {
-        return xarTplModule('dynamicdata','admin','modify',$data,$args['template']);
+        return xarTpl::module('dynamicdata','admin','modify',$data,$args['template']);
     }
 }
 

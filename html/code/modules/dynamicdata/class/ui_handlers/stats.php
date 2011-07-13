@@ -4,7 +4,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -32,7 +32,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
      * @param $args['sort'] optional sort for the view
      * @param $args['where'] optional where clause(s) for the view
      * @param $args['startnum'] optional start number for the view
-     * @return string output of xarTplObject() using 'ui_stats'
+     * @return string output of xarTpl::object() using 'ui_stats'
      */
     function run(array $args = array())
     {
@@ -136,14 +136,14 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             }
         }
         $title = xarML('Statistics for #(1)', $this->object->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
 /*
         // Set page template
-        if (xarTplGetPageTemplateName() == 'default') {
+        if (xarTpl::getPageTemplateName() == 'default') {
              // Use the admin-$modName.xt page if available when $modType is admin
             // falling back on admin.xt if the former isn't available
-            if (!xarTplSetPageTemplateName('admin-'.$this->tplmodule)) {
-                xarTplSetPageTemplateName('admin');
+            if (!xarTpl::setPageTemplateName('admin-'.$this->tplmodule)) {
+                xarTpl::setPageTemplateName('admin');
             }
         }
 */
@@ -286,7 +286,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
                                   'sum'      => 'Sum',
                                   'avg'      => 'Average');
 
-        $output = xarTplObject(
+        $output = xarTpl::object(
             $this->tplmodule, $this->object->template, 'ui_stats',
             array('object' => $this->object,
                   'stats'  => $stats,
@@ -330,7 +330,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             }
         }
         $title = xarML('Report for #(1)', $this->object->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
 
         if (!$this->object->checkAccess('view'))
             return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));
@@ -352,7 +352,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             $result = 1;
         }
 
-        $output = xarTplObject(
+        $output = xarTpl::object(
             $this->tplmodule, $this->object->template, 'ui_report',
             array('object' => $this->object,
                   'report' => $report,

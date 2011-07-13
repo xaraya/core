@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -29,7 +29,7 @@ function dynamicdata_userapi_showdisplay(Array $args=array())
 
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {
-        return xarTplModule('dynamicdata','user','showdisplay',
+        return xarTpl::module('dynamicdata','user','showdisplay',
                             $args,
                             $template);
     }

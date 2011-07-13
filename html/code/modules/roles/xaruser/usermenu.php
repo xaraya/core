@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage roles module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -90,7 +90,7 @@ function roles_user_usermenu(Array $args=array())
 
             if ($isvalid) {
                 if (!xarSecConfirmAuthKey('roles')) {
-                    return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                    return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
                 }
 
                 $newpass = $object->properties['password']->getValue();
@@ -139,7 +139,7 @@ function roles_user_usermenu(Array $args=array())
 
                         //Step 5
                         //Show a nice message for the person about email validation
-                        $data = xarTplModule('roles','user', 'waitingconfirm');
+                        $data = xarTpl::module('roles','user', 'waitingconfirm');
                         return $data;
                     }
                 }
@@ -257,7 +257,7 @@ function roles_user_usermenu(Array $args=array())
                     $returnurl = xarModURL('roles', 'user', 'account', array('tab' => 'basic'));
                 $data['returnurl'] = $returnurl;
                 $data['submitlabel'] = xarML('Update Settings');
-                return xarTplModule('roles','user','account', $data);
+                return xarTpl::module('roles','user','account', $data);
             }
         break;
 
@@ -274,7 +274,7 @@ function roles_user_usermenu(Array $args=array())
                     xarMod::apiFunc($moduleload, 'user', 'usermenu', array('phase' => 'updateitem', 'object' => $object));
                 } catch (Exception $e) {
                     if (!xarSecConfirmAuthKey($moduleload)) {
-                        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
                     }
                     $object->updateItem();
                 }
@@ -376,7 +376,7 @@ function roles_user_usermenu(Array $args=array())
             $data['moduleload'] = $moduleload;
             $data['tab'] = '';
             if (empty($message)) $data['message'] = '';
-            return xarTPLModule('roles', 'user', 'account', $data);
+            return xarTpl::module('roles', 'user', 'account', $data);
         break;
 
     }

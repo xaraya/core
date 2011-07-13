@@ -7,11 +7,8 @@
     <xar:set name="messagetitle">
         xarML('Write this string in the message body or subject to display the corresponding information')
     </xar:set>
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Mail Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
         <h2>Configure Notification Template</h2>
         <xar:if condition="!empty($settings)">
             <p>
@@ -35,19 +32,23 @@
         </xar:if>
         <form method="post" action="#xarModURL('mail','admin','template')#">
             <fieldset>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Select the template to edit</xar:var>
-                    <label for="mailtype" title="#$label#" class="xar-form-label">Name:</label>
-                    <select name="mailtype" id="mailtype" onchange="this.form.submit()">
-                        <xar:loop name="$templates">
-                            <xar:if condition="$mailtype eq $loop:item['key']">
-                                <option value="#$loop:item['key']#" selected="selected">
-                                #$loop:item['value']#</option>
-                            <xar:else />
-                                <option value="#$loop:item['key']#">#$loop:item['value']#</option>
-                            </xar:if>
-                        </xar:loop>
-                    </select>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Select the template to edit</xar:var>
+                        <label for="mailtype" title="#$label#" class="xar-form-label">Name:</label>
+                    </div>
+                    <div class="xar-col">
+                        <select name="mailtype" id="mailtype" onchange="this.form.submit()">
+                            <xar:loop name="$templates">
+                                <xar:if condition="$mailtype eq $loop:item['key']">
+                                    <option value="#$loop:item['key']#" selected="selected">
+                                    #$loop:item['value']#</option>
+                                <xar:else />
+                                    <option value="#$loop:item['key']#">#$loop:item['value']#</option>
+                                </xar:if>
+                            </xar:loop>
+                        </select>
+                    </div>
                 </div>
                 <p>
                     <xar:if condition="$mailtype eq 'createhook'">
@@ -75,15 +76,21 @@
         <form action="#xarModURL('mail','admin','template')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Template Details</legend>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Title of the notification</xar:var>
-                    <label for="subject" title="#$label#" class="xar-form-label">Subject:</label>
-                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Title of the notification</xar:var>
+                        <label for="subject" title="#$label#" class="xar-form-label">Subject:</label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                    </div>
                 </div>
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Body of the notification</xar:var>
-                    <label for="message" title="#$label#" class="xar-form-label">Message:</label>
-                    <div class="xar-form-container-after">
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Body of the notification</xar:var>
+                        <label for="message" title="#$label#" class="xar-form-label">Message:</label>
+                    </div>
+                    <div class="xar-col">
                         <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
                     </div>
                 </div>
@@ -115,14 +122,12 @@
                 Note: other variables may be available depending on the module
                 </p>
             </fieldset>
-            <fieldset>
-                <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="phase" id="phase" value="update"/>
-                    <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>
-                    <xar:var name="label">Update</xar:var>
-                    <input type="submit" value="#$label#" class="xar-margin-thickright"/>
-                </div>
+            <fieldset class="xar-form-actions">
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="phase" id="phase" value="update"/>
+                <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>
+                <xar:var name="label">Update</xar:var>
+                <xar:button type="submit" label="$label"/>
             </fieldset>
         </form>
     </div>

@@ -10,14 +10,14 @@
                         </xar:set>
                         <xar:var name="label">Delete this privilege</xar:var>
                         <a href="#$dellink#" title="#$label#">
-                            <img src="#xarTplGetImage('delete.gif')#"/>
+                            <xar:img scope="module" module="privileges" file="delete.gif"/>
                         </a>
                     </xar:sec>
                     <xar:set name="userslink">
                         xarModUrl('privileges','admin','viewroles',array('id'=> $node['parent']['id']))
                     </xar:set>
                     <a href="#$userslink#" title="xarML('Show the Groups/Users this Privilege is assigned to')#">
-                        <img src="#xarTplGetImage('usersgroups.gif')#"/>
+                        <xar:img scope="module" module="privileges" file="usersgroups.gif"/>
                     </a>
                     <xar:if condition="$node.parent.parentid ne 0">
                         <xar:set name="removelink">
@@ -25,7 +25,7 @@
                         </xar:set>
                         <xar:var name="label">Remove this privilege from its parent</xar:var>
                         <a href="#$removelink#" title="#$label#">
-                            <img src="#xarTplGetImage('remove.gif')#"/>
+                            <xar:img scope="module" module="privileges" file="remove.gif"/>
                         </a>
                     </xar:if>
                 </div>

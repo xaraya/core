@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -33,7 +33,7 @@ function dynamicdata_admin_main()
     $samemodule = $info[0] == $refererinfo[0];
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTplModule('dynamicdata','admin','overview');
+        return xarTpl::module('dynamicdata','admin','overview');
     } else {
         xarController::redirect(xarModURL('dynamicdata', 'admin', 'view'));
         return true;

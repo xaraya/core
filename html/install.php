@@ -2,12 +2,14 @@
 /**
  * Xaraya Installer
  *
- * @package installer
+ * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
- * @subpackage installer
  * @author Johnny Robeson
  * @author Paul Rosania
  * @author Marc Lutolf
@@ -125,11 +127,14 @@ xarController::init($systemArgs);
 // Start BlockLayout Template Engine
 // This is probably the trickiest part, but we want the installer
 // templateable too obviously
+// @checkme <chris/> themesBaseDirectory is not accounted for in xarTpl::init()
+// the value comes from Site.BL.ThemesDirectory and falls back to 'themes'
+// any reason we need to define it here?
 $systemArgs = array('enableTemplatesCaching' => false,
                     'themesBaseDirectory'    => 'themes',
                     'defaultThemeDir'        => 'installer',
                     'generateXMLURLs'        => false);
-xarTpl_init($systemArgs);
+xarTpl::init($systemArgs);
 
 
 // Get the install language everytime we request install.php
@@ -185,8 +190,8 @@ function xarInstallMain()
     xarVarSetCached('installer','installing',1);
 
     // Make sure we can render a page
-    xarTplSetPageTitle(xarML('Xaraya installer'));
-    if(!xarTplSetThemeName('installer'))
+    xarTpl::setPageTitle(xarML('Xaraya installer'));
+    if(!xarTpl::setThemeName('installer'))
         throw new Exception('You need the installer theme if you want to install Xaraya.');
 
     // Handle installation phase designation
@@ -201,7 +206,7 @@ function xarInstallMain()
     }
 
     // Set the default page title before calling the module function
-    xarTplSetPageTitle(xarML("Installing Xaraya"));
+    xarTpl::setPageTitle(xarML("Installing Xaraya"));
 
     // Run installer function
     $mainModuleOutput = xarInstallFunc($funcName);
@@ -220,8 +225,8 @@ function xarInstallMain()
         ob_end_clean();
     }
 
-    // Render page using the installer.xt page template
-    $pageOutput = xarTpl_renderPage($mainModuleOutput,'default');
+    // Render page using the installer theme default.xt page template
+    $pageOutput = xarTpl::renderPage($mainModuleOutput,'default');
 
     echo $pageOutput;
     return true;

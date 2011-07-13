@@ -4,7 +4,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -33,7 +33,7 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
      * @param $args['values'] array of predefined field values to use = ui-specific preview using arguments in your call
      * @param $args['confirm'] true if the user confirms
      * @param $args['return_url'] the url to return to when finished (defaults to the object view / module)
-     * @return string output of xarTplObject() using 'ui_update'
+     * @return string output of xarTpl::object() using 'ui_update'
      */
     function run(array $args = array())
     {
@@ -78,7 +78,7 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
         if(!empty($args['preview']) || !empty($args['confirm'])) 
         {
             if (!empty($args['confirm']) && !xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }
 
             $isvalid = $this->object->checkInput();
@@ -101,12 +101,12 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
         }
 
         $title = xarML('Modify #(1)', $this->object->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
 
         // call item modify hooks for this item
         $this->object->callHooks('modify');
 
-        return xarTplObject(
+        return xarTpl::object(
             $this->tplmodule, $this->object->template, 'ui_update',
             array('object'  => $this->object,
                   'preview' => $args['preview'],

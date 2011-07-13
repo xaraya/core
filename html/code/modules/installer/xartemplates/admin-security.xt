@@ -14,31 +14,40 @@
             <p>
                 The install script that runs the installer is a security risk to your site. We suggest you let the installer rename or remove the install script so that the installer cannot be used by unauthorized persons.  If you choose neither of the options below you (the site administrator) will be reminded to remove the install script via the site's reminder block for a period of 3 days. After that, you're on your own.
             </p>
-            <div class="xar-form-input-wrapper">
-                <p>
-                    Removing the install script will make a reinstalltion impossible unless you manually add a copy of the script to your site's root directory.
-                </p>
-                <label class="xar-form-label" for="remove">
-                    Remove the install script
-                </label>
-                <xar:data-input type="checkbox" id="remove" name="remove"/>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <p>
+                        Removing the install script will make a reinstalltion impossible unless you manually add a copy of the script to your site's root directory.
+                    </p>
+                    <label class="xar-form-label" for="remove">
+                        Remove the install script
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input type="checkbox" id="remove" name="remove"/>
+                </div>
             </div>
-            <div class="xar-form-input-wrapper">
-                <p>
-                    Renaming the install script will let you run it under its new name. This is less secure,
-                </p>
-                <label class="xar-form-label" for="rename">
-                    Rename the install script
-                </label>
-                <xar:data-input type="checkbox" name="rename" id="rename"/>
-                &#160;&#160;
-                <label for="newname">
-                    New name for the script
-                </label>&#160;
-                <xar:data-input type="textbox" name="newname" id="newname" size="30"/>.php                
+            <div class="xar-row">
+                <div class="xar-col">
+                    <p>
+                        Renaming the install script will let you run it under its new name. This is less secure,
+                    </p>
+                    <label class="xar-form-label" for="rename">
+                        Rename the install script
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input type="checkbox" name="rename" id="rename"/>
+                    &#160;&#160;
+                    <label for="newname">
+                        New name for the script
+                    </label>&#160;
+                    <xar:data-input type="textbox" name="newname" id="newname" size="30"/>.php                
+                </div>
             </div>
-            <div class="xar-align-center" style="margin: 2em 0;">
-                <input type="submit" name="create" id="create" value="Continue"/>
+            <div class="xar-form-actions" style="margin: 2em 0;">
+                <xar:var name="label">Continue</xar:var>
+                <xar:button type="submit" label="$label" name="create" id="create"/>
                 <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
                 <input type="hidden" name="confirmed" id="confirmed" value="true"/>
             </div>

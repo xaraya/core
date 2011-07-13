@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -50,7 +50,7 @@ class URLIconProperty extends URLProperty
                                           array('url' => $data['value']));
             if (empty($data['icon'])) {
                 /* we'll have to use the default system icon */
-                $data['icon'] = xarTplGetImage('icons/go-home.png','base');
+                $data['icon'] = xarTpl::getImage('icons/go-home.png','theme');
             }
         }
         return parent::showOutput($data);
