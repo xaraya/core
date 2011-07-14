@@ -6,3 +6,34 @@
 /* - Default core css files to import - */
 @import url(xarcore-xhtml1-strict.css);
 @import url(tabs.css);
+
+/*
+form related styling
+-------------------------------------------------------------------------[comment] */
+.xar-row {
+    display: block;
+    }
+.xar-col {
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+    }
+.xar-row .xar-col:first-child {
+    width: 35%;
+    }
+.xar-row .xar-col:last-child {
+    width: 65%;
+    }
+/*
+text related styling
+-------------------------------------------------------------------------[comment] */
+.xar-note {
+	color: #60802d;
+	}
+.xar-alert {
+	color: #e10505;
+	}
+.xar-success {
+	color: #5f9013;
+	}
+.xar-active {}
