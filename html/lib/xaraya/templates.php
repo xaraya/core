@@ -1210,7 +1210,7 @@ function xarTplGetThemeDir($theme=null)
 
 function xarTplGetPageTemplateName()
 {
-    return xarTplGetPageTemplateName();
+    return xarTpl::getPageTemplateName();
 }
 
 function xarTplSetPageTemplateName($templateName)
