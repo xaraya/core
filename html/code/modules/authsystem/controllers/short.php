@@ -77,15 +77,8 @@ class AuthsystemShortController extends ShortActionController
             case 'login':
                 $path[] = 'auth';
                 break;
-            case 'logout':
-                $path[] = 'logout';
-                break;
-
-            case 'password':
-                $path[] = 'password';
-                break;
-
             default:
+                $path[] = $request->getFunction();
                 break;
         }
         
