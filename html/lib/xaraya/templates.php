@@ -834,21 +834,16 @@ class xarTpl extends Object
         // property include in property       
         $sourceFileName = sys::code() . "properties/$propertyName/templates/includes/$templateName.xt";
         if (file_exists($sourceFileName)) return self::executeFromFile($sourceFileName, $tplData);
-        // @checkme: is this debug code? commenting out for now, put back if required
-        // echo $sourceFileName;exit;
-        // Not found: raise an exception
-        throw new FileNotFoundException($templateName, 'Could not find include template #(1).xt');
-    }
 
-    // Check for a property template as a fallback
-    $sourceFileName = xarTplGetThemeDir() . "properties/$propertyName/templates/includes/$templateName.xt";
-    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
-    $sourceFileName = sys::code() . "properties/$propertyName/xartemplates/includes/$templateName.xt";
-    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
-    
-    // Not found: raise an exception
-    throw new Exception("Could not find include template $templateName.xt");
-}
+        // Check for a property template as a fallback
+        $sourceFileName = xarTpl::getThemeDir() . "properties/$propertyName/templates/includes/$templateName.xt";
+        if (file_exists($sourceFileName)) return xarTpl::executeFromFile($sourceFileName, $tplData);
+        $sourceFileName = sys::code() . "properties/$propertyName/xartemplates/includes/$templateName.xt";
+        if (file_exists($sourceFileName)) return xarTpl::executeFromFile($sourceFileName, $tplData);
+        
+        // Not found: raise an exception
+        throw new Exception("Could not find include template $templateName.xt");
+    }
 
 /**
  * Execute template from file
