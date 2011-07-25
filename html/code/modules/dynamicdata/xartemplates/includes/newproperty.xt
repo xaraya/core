@@ -2,19 +2,11 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <fieldset>
         <legend>New Property</legend>
-        <div class="xar-row">
-            <div class="xar-col">
-                <label for="dd_source_0" class="xar-form-label">
-                    #$propertyfields['source']['label']#:
-                </label>
-            </div>
-            <div class="xar-col">
-                <select class="dd-norm" name="dd_source[0]" id="dd_source_0">
-                    <xar:foreach in="$sources" value="$mysource">
-                        <option>#$mysource#</option>
-                    </xar:foreach>
-                </select>
-            </div>
+        <div class="xar-form-input-wrapper">
+            <label for="dd_source_0" class="xar-form-label">
+                #$propertyfields['source']['label']#:
+            </label>
+        <xar:data-input type="dropdown" class="dd-norm" name="dd_source[0]" options="$sources" />
         </div>
         <div class="xar-row">
             <div class="xar-col">

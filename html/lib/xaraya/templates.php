@@ -840,7 +840,15 @@ class xarTpl extends Object
         throw new FileNotFoundException($templateName, 'Could not find include template #(1).xt');
     }
 
-/* PRIVATE FUNCTIONS */
+    // Check for a property template as a fallback
+    $sourceFileName = xarTplGetThemeDir() . "properties/$propertyName/templates/includes/$templateName.xt";
+    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
+    $sourceFileName = sys::code() . "properties/$propertyName/xartemplates/includes/$templateName.xt";
+    if (file_exists($sourceFileName)) return xarTpl__executeFromFile($sourceFileName, $tplData);
+    
+    // Not found: raise an exception
+    throw new Exception("Could not find include template $templateName.xt");
+}
 
 /**
  * Execute template from file

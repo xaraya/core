@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <h2>Modify field #$oldname# in table #$table#</h2>
+        <h2>Modify Item #$object:itemid# in #$object:label#</h2>
 
         <xar:if condition="isset($preview)">
             <fieldset>
