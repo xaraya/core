@@ -80,7 +80,7 @@ class DataProperty extends Object implements iDataProperty
 
         $descriptor->refresh($this);
         // load the configuration, if one exists
-        if (!empty($this->configuration)) {
+        if (!empty($this->configuration) && ($this->configuration != 'a:0:{}')) {
             $this->parseConfiguration($this->configuration);
         }
 
