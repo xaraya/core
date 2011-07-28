@@ -146,6 +146,8 @@ class DataObjectMaster extends Object
         if ($descriptor->exists('datastore')) {
             $this->datastore = $descriptor->get('datastore');
             if ($this->datastore == 'relational') {
+                // We start from scratch
+                $this->dataquery->cleartables();
                 $this->assembleQuery($this);
             }
         } else {
@@ -1067,9 +1069,6 @@ class DataObjectMaster extends Object
 
     private function assembleQuery($object, $prefix=false, $type="SELECT")
     {
-        // We start from scratch
-        $this->dataquery->cleartables();
-
         $descriptor = $object->descriptor;
         // Set up the db tables
         if ($descriptor->exists('sources')) {
@@ -1185,6 +1184,7 @@ class DataObjectMaster extends Object
                 else echo 'The object relation cannot be read (badly formed)';
             }
         }
+
         foreach ($object->properties as $name => $property) {
             if ($object->properties[$name]->type == 30069 &&
                 $object->properties[$name]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED                
