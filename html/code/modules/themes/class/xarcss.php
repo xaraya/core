@@ -222,9 +222,12 @@ class xarCSS extends Object
                 $tag['property'] = $property;
                 $property = xarVarPrepForOS($property);
                 // themes/theme/properties/property/style
+                
                 $paths[] = $themeDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
                 // themes/common/properties/property/style
                 $paths[] = $commonDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
+                // code/properties/property/xarstyles
+                $paths[] = $codeDir . 'properties/' . $property . '/xarstyles/' . $fileName;
                 // code/properties/property/xartemplates/style
                 $paths[] = $codeDir . 'properties/' . $property . '/xartemplates/' . $tag['base'] . '/' . $fileName;
                 break;
