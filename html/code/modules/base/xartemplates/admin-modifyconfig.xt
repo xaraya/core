@@ -262,6 +262,8 @@
                             <label for="shorturl" title="#$label#" class="xar-form-label">
                                 Default Route
                             </label>
+                        </div>
+                    	<div class="xar-col">
                             <xar:set name="value">
                                 <xar:var scope="config" name="Site.Core.EnableShortURLsSupport"/>
                             </xar:set>
