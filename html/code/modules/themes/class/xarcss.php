@@ -118,7 +118,7 @@ class xarCSS extends Object
         if ($method == 'embed' && empty($source)) return;
 
         if (!isset($scope)) // common|theme|module|block|property
-            $scope = 'theme';
+            $scope = 'module';
         
         // if scope is property we need a property name
         if ($scope == 'property' && empty($property)) return;
