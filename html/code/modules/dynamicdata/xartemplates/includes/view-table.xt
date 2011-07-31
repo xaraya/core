@@ -37,7 +37,23 @@
                     </td>
                 </xar:foreach>
                 <xar:if condition="empty($linkfield)">
-                    <th class="xar-form-textlong">&#160;</th>
+                    <td class="xar-align-center">
+                        <xar:if condition="!empty($links[$itemid]) and count($links[$itemid]) gt 0">
+                            <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
+                                <xar:if condition="!empty($option['olink'])">
+                                    <xar:if condition="!empty($option['oicon'])">
+                                        <xar:set name="imgfile">'icons/'.$option['oicon']</xar:set>
+                                        <a href="#$option['olink']#" title="#$option['otitle']#"><xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$otype"/></a>&#160;
+                                    <xar:else/>
+                                        #$option['ojoin']# 
+                                        <a href="#$option['olink']#">#$option['otitle']#</a>
+                                    </xar:if>
+                                <xar:else />
+                                    #$option['ojoin']# #$option['otitle']#
+                                </xar:if>
+                            </xar:foreach>
+                        <xar:else />&#160;</xar:if>
+                    </td>
                 </xar:if>
             </tr>
         </xar:foreach>
