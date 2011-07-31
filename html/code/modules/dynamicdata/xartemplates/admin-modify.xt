@@ -74,9 +74,10 @@
                         <xar:if condition="!empty($return_url)">
                             <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                         </xar:if>
+                        <input type="hidden" name="notfresh" id="notfresh" value="true"/>
                         <xar:var name="label">Preview</xar:var>
                         <xar:button type="submit" label="$label" name="preview"/>
-                        <input type="hidden" name="notfresh" id="notfresh" value="true"/>
+                        &#160;
                         <xar:var name="label">Update</xar:var>
                         <xar:button type="submit" label="$label"/>
                     </div>
