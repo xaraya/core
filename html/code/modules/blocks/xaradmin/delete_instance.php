@@ -64,32 +64,45 @@ function blocks_admin_delete_instance()
             return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
         
         // delete instance from db
-        if (!xarMod::apiFunc('blocks', 'instances', 'deleteitem',
-            array('block_id' => $instance['block_id']))) return;
+        try {
+            if (!xarMod::apiFunc('blocks', 'instances', 'deleteitem',
+                array('block_id' => $instance['block_id']))) return;
+        } catch (IdNotFoundException $e) {
+            // ok, it's already gone
+        } catch (Exception $e) {
+            // oops, throw back
+            throw $e;
+        }
             
         $return_url = xarModURL('blocks', 'admin', 'view_instances');
         xarController::redirect($return_url);
     }
     
     $data = array();
-
-    $instance['method'] = 'delete';
-    $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $instance);
-
     $data['instance'] = $instance;
-    // if block group, get instances attached to it    
-    if ($instance['type_category'] == 'group') {
-        $instance_ids = $block->getInstances();
-        if (!empty($instance_ids))
-            $data['group_instances'] = xarMod::apiFunc('blocks', 'instances', 'getitems',
-                array('block_id' => $instance_ids));
-    } 
-    // else, get groups instance is attached to    
-    else {
-        $group_ids = array_keys($block->getGroups());
-        if (!empty($group_ids))
-            $data['instance_groups'] = xarMod::apiFunc('blocks', 'instances', 'getitems',
-                array('type_category' => 'group', 'block_id' => $group_ids));
+    try {
+        $instance['method'] = 'delete';
+        $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $instance);
+
+        if ($instance['type_category'] == 'group') {
+            $instance_ids = $block->getInstances();
+        } else {
+            $group_ids = $block->getGroups();
+        }
+    } catch (Exception $e) {
+        // this is ok, since the files could be missing 
+        if ($instance['type_category'] == 'group') {
+            $instance_ids = $instance['content']['group_instances'];
+        } else {
+            $group_ids = $instance['content']['instance_groups'];
+        }
+    }
+    if (!empty($instance_ids) && is_array($instance_ids)) {
+        $data['group_instances'] = xarMod::apiFunc('blocks', 'instances', 'getitems',
+            array('block_id' => $instance_ids));
+    } elseif (!empty($group_ids) && is_array($group_ids)) {
+        $data['instance_groups'] = xarMod::apiFunc('blocks', 'instances', 'getitems',
+            array('type_category' => 'group', 'block_id' => array_keys($group_ids)));
     }
         
     return $data;

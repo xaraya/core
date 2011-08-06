@@ -35,9 +35,18 @@ function blocks_typesapi_deleteitem(Array $args=array())
         array('type' => $type['type'], 'module' => $type['module']));
     
     if (!empty($type_instances)) {
-        foreach (array_keys($type_instances) as $block_id) 
-            if (!xarMod::apiFunc('types', 'instances', 'deleteitem',
-                array('block_id' => $block_id))) return;
+        foreach (array_keys($type_instances) as $block_id) {
+            try {
+                if (!xarMod::apiFunc('types', 'instances', 'deleteitem',
+                    array('block_id' => $block_id))) return;
+            } catch (IdNotFoundException $e) {
+                // this is ok, it may already have been deleted
+                continue;
+            } catch (Exception $e) {
+                // oops, throw back
+                throw $e;
+            }
+        }
     }
     unset($type, $type_instances);
     

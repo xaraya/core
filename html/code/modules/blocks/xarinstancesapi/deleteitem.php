@@ -30,51 +30,60 @@ function blocks_instancesapi_deleteitem(Array $args=array())
         $vars = array($args['block_id']);
         throw new IdNotFoundException($vars, $msg);
     }
-    $instance['method'] = 'delete';
-    $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $instance);
     
-    if ($instance['type_category'] == 'group') {
-        $instance_ids = $block->getInstances();
-        if (!empty($instance_ids)) {
-            $group_instances = xarMod::apiFunc('blocks', 'instances', 'getitems', 
-                array('block_id' => $instance_ids));
-            foreach ($instance_ids as $block_id) {
-                if (!isset($group_instances[$block_id])) continue;
-                $i_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $group_instances[$block_id]);
-                $i_block->detachGroup($args['block_id']);
-                if (!xarMod::apiFunc('blocks', 'instances', 'updateitem',
-                    array(
-                        'block_id' > $block_id,
-                        'content' => $i_block->storeContent(),
-                    ))) return;
-                unset($i_block);
-            }
+    try {
+        $instance['method'] = 'delete';
+        $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $instance);
+    
+        if ($instance['type_category'] == 'group') {
+            $instance_ids = $block->getInstances();   
+        } else {
+            $group_ids = $block->getGroups();
         }
-        unset($instance_ids, $group_instances);   
-    } else {
-        $group_ids = array_keys($block->getGroups());
-        if (!empty($group_ids)) {
-            $instance_groups = xarMod::apiFunc('blocks', 'instances', 'getitems',
-                array('block_id' => $group_ids));
-            foreach ($group_ids as $block_id) {
-                if (!isset($instance_groups[$block_id])) continue;
-                $g_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $instance_groups[$block_id]);
-                $g_block->detachInstance($args['block_id']);
-                if (!xarMod::apiFunc('blocks', 'instances', 'updateitem',
-                    array(
-                        'block_id' > $block_id,
-                        'content' => $g_block->storeContent(),
-                    ))) return;
-                unset($g_block);
-            }
+    
+        // call block delete method if it has one
+        $result = xarBlock::hasMethod($block, 'delete', true) ? $block->delete() : true;
+        if (!$result) return;   
+    } catch (Exception $e) {
+        // this is ok, since we might need to remove instances when the type files are already gone
+        if ($instance['type_category'] == 'group') {
+            $instance_ids = $instance['content']['group_instances'];
+        } else {
+            $group_ids = $instance['content']['instance_groups'];
         }
-        unset($group_ids, $instance_groups);
     }
     
-    // call block delete method if it has one
-    $result = xarBlock::hasMethod($block, 'delete', true) ? $block->delete() : true;
-    if (!$result) return;   
-    
+    if (!empty($group_ids) && is_array($group_ids)) {
+        $instance_groups = xarMod::apiFunc('blocks', 'instances', 'getitems',
+            array('block_id' => array_keys($group_ids)));
+        foreach ($group_ids as $block_id) {
+            if (!isset($instance_groups[$block_id])) continue;
+            $g_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $instance_groups[$block_id]);
+            $g_block->detachInstance($args['block_id']);
+            if (!xarMod::apiFunc('blocks', 'instances', 'updateitem',
+                array(
+                    'block_id' > $block_id,
+                    'content' => $g_block->storeContent(),
+                ))) return;
+            unset($g_block);
+        }
+        unset($group_ids, $instance_groups); 
+    } elseif (!empty($instance_ids) && is_array($instance_ids)) {
+        $group_instances = xarMod::apiFunc('blocks', 'instances', 'getitems', 
+            array('block_id' => $instance_ids));
+        foreach ($instance_ids as $block_id) {
+            if (!isset($group_instances[$block_id])) continue;
+            $i_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $group_instances[$block_id]);
+            $i_block->detachGroup($args['block_id']);
+            if (!xarMod::apiFunc('blocks', 'instances', 'updateitem',
+                array(
+                    'block_id' > $block_id,
+                    'content' => $i_block->storeContent(),
+                ))) return;
+            unset($i_block);
+        }
+        unset($instance_ids, $group_instances);   
+    }
     unset($instance, $block);
 
     $dbconn = xarDB::getConn();
