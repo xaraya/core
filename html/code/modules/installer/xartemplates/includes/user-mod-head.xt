@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <div class="xar-mod-head">
-        <span class="xar-mod-title">
-            <xar:if condition="xarModVars::get('installer','use_module_alias')">
-                <xar:var scope="module" module="installer" name="module_alias_name"/>
-            <xar:else />
-                Xaraya Installer
-            </xar:if>
-        </span>
+        <span class="xar-mod-title">Xaraya Installer</span>
     </div>
 </xar:template>
