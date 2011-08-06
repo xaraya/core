@@ -832,7 +832,7 @@ class xarTpl extends Object
         $sourceFileName = "$commonDir/properties/$propertyName/templates/includes/$templateName.xt";
         if (file_exists($sourceFileName)) return self::executeFromFile($sourceFileName, $tplData); 
         // property include in property       
-        $sourceFileName = sys::code() . "properties/$propertyName/templates/includes/$templateName.xt";
+        $sourceFileName = sys::code() . "properties/$propertyName/xartemplates/includes/$templateName.xt";
         if (file_exists($sourceFileName)) return self::executeFromFile($sourceFileName, $tplData);
         // @checkme: is this debug code? commenting out for now, put back if required
         // echo $sourceFileName;exit;
@@ -986,7 +986,7 @@ class xarTpl extends Object
             file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt")){
         // TPL 3: (property)
         } elseif(!empty($templateName) &&
-            file_exists($sourceFileName = sys::code() . "properties/$templateName/templates/$tplBase.xt")) {
+            file_exists($sourceFileName = sys::code() . "properties/$templateName/xartemplates/$tplBase.xt")) {
         // TPL 4: Current theme (module)
         } elseif(
             file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt")) {

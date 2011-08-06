@@ -61,6 +61,7 @@
                     </xar:if>
                     <xar:var name="label">Preview</xar:var>
                     <xar:button type="submit" label="$label" name="preview"/>
+                    &#160;
                     <xar:var name="label">Create</xar:var>
                     <xar:button type="submit" label="$label"/>
                 </div>

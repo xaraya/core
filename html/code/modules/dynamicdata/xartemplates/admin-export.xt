@@ -9,11 +9,15 @@
         <form method="post" action="#xarModURL('dynamicdata','admin','export')#">
             <fieldset class="xar-form-actions">
                 <legend>Select Object</legend>
-                <label for="xml" class="xar-form-label">Object :</label>
-                <div class="xar-form-container-after">
-                    <xar:data-input type="object" name="objectid" value="$objectid" display_prop="name" store_prop="objectid" onchange="submit()"/>
-                    <xar:var name="label">Refresh</xar:var>
-                    <xar:button type="submit" label="$label"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="xml" class="xar-form-label">Object :</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input type="object" name="objectid" value="$objectid" display_prop="name" store_prop="objectid" onchange="submit()"/>
+                        <xar:var name="label">Refresh</xar:var>&#160;
+                        <xar:button type="submit" label="$label"/>
+                    </div>
                 </div>
             </fieldset>
         </form>
@@ -25,9 +29,7 @@
                         <label for="xml" class="xar-form-label">Definition :</label>
                     </div>
                     <div class="xar-col">
-                        <div class="xar-form-container-after">
-                            <textarea name="xml" id="xml" class="xar-form-textarealarge">#$xml#</textarea>
-                        </div>
+                        <textarea name="xml" id="xml" class="xar-form-textarealarge">#$xml#</textarea>
                     </div>
                 </div>
             </fieldset>

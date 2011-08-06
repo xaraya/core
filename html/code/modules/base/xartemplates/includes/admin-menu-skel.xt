@@ -16,10 +16,10 @@
                     <xar:foreach in="$tabs['menulinks']" value="$tab">
                         <xar:if condition="!empty($tab['isactive'])">
                             <xar:set name="tabclass">'xar-tab-active'</xar:set>
-                            <xar:set name="linkclass">''</xar:set>
+                            <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
                         <xar:else />
                             <xar:set name="tabclass">'xar-tab'</xar:set>
-                            <xar:set name="linkclass">''</xar:set>
+                            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
                         </xar:if>
                         <li class="#$tabclass#">
                             <xar:if condition="!empty($tab['url'])">
