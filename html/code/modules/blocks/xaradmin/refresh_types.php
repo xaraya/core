@@ -52,7 +52,7 @@ function blocks_admin_refresh_types(Array $args=array())
                     $missing[$type_id] = $type;
                 break;
                 case xarBlock::TYPE_STATE_MOD_UNAVAILABLE:
-                    $inavailable[$type_id] = $type;
+                    $unavailable[$type_id] = $type;
                 break;
             }
         }
