@@ -19,12 +19,11 @@
     class Base_FincludeBlock extends BasicBlock implements iBlock
     {
 
-        public $name                = 'HTMLBlock';
-        public $module              = 'base';
-        public $text_type           = 'finclude';
-        public $text_type_long      = 'Simple File Include';
-        public $allow_multiple      = true;
-        public $show_preview        = true;
+        protected $type                = 'finclude';
+        protected $module              = 'base';
+        protected $text_type           = 'finclude';
+        protected $text_type_long      = 'Simple File Include';
+        protected $show_preview        = true;
 
         public $url                 = 'http://www.xaraya.com/';
 
@@ -54,16 +53,15 @@
  */
         public function modify(Array $data=array())
         {
-            $data = parent::modify($data);
+            $data = $this->getContent();
 
             if (!empty($data['url'])) {
                 $args['url'] = $data['url'];
             } else {
                 $args['url'] = '';
             }
-            $args['blockid'] = $data['bid'];
-
-            return $args;
+            $data['url'] = $args['url'];
+            return $data;
         }
 
 /**

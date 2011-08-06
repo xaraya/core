@@ -12,32 +12,56 @@
 
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class Blocks_BlockgroupBlock extends BasicBlock implements iBlock
+class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
 {
-    public $name                = 'BlockgroupBlock';
-    public $module              = 'blocks';
-    public $text_type           = 'Blockgroup';
-    public $text_type_long      = 'Blockgroup';
-    public $allow_multiple      = true;
-    public $show_preview        = true;
-    public $nocache             = 0;
-    public $pageshared          = 1;
-    public $usershared          = 1;
+    
+    protected $type                = 'blockgroup';
+    protected $module              = 'blocks';
+    protected $text_type           = 'Blockgroup';
+    protected $text_type_long      = 'Blockgroup';
+    
+    // let the blocks subsystem know we implement the iBlockGroup interface
+    protected $type_category       = 'group';
 
-    public function __construct(Array $data=array())
-    {
-        parent::__construct($data);
-    }
+    protected $allow_multiple      = true;
+    protected $show_preview        = true;
+    
+    public $group_instances     = array();
 
 /**
  * Display func.
- * @param $data array containing title,content
+ * @param none
  */
     function display(Array $data=array())
     {
         $data = parent::display($data);
         if (empty($data)) return;
 
+        if (empty($this->group_instances)) return;
+        
+        $instances = xarMod::apiFunc('blocks', 'instances', 'getitems', 
+            array('block_id' => $this->group_instances));
+        
+        if (empty($instances)) return;
+        
+        $output = '';
+        foreach ($this->group_instances as $id) {
+            if (!isset($instances[$id])) continue;
+            $block_info = $instances[$id];
+            $block_info['group_id'] = $this->block_id;
+            $block_info['group'] = $this->name;
+            // @todo: fix template cascade ...
+            $block_info['content']['box_template'] = $this->box_template;
+            $output .= xarBlock::render($block_info);
+        }
+        if (empty($output)) return;
+        $data['group'] = $this->name;
+        $data['groupid'] = $this->block_id;
+
+        $data['content']['blocks'] = $output;
+        return $data;
+                
+        
         // blockgroup name (if any)
         $data['group'] = $data['name'];
         $data['groupid'] = $data['bid'];
@@ -110,42 +134,43 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlock
  */
     public function modify(Array $data=array())
     {
-        $data = parent::modify($data);
-        if (empty($data)) return;
+        if (!empty($this->group_instances))         
+            $group_instances = xarMod::apiFunc('blocks', 'instances', 'getitems', 
+                array('block_id' => $this->group_instances));
 
-        $instances = xarMod::apiFunc('blocks', 'user', 'getall',
-            array('order' => 'group','gid' => $data['bid']));
-
-        $authid = xarSecGenAuthKey();
-        $i = 1;
-        $numitems = count($instances);
-        foreach ($instances as $id => $instance) {
-            $instances[$id]['modifyurl'] = xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $instance['bid']));
-            // add in links to re-order blocks
-            if ($i < $numitems) {
-                $instances[$id]['downurl'] = xarModURL('blocks', 'admin', 'update_instance',
-                    array('tab' => 'order', 'bid' => $data['bid'], 'move' => $instance['bid'], 'direction' => 'down', 'authid' => $authid));
+        $instances = array();
+        
+        if (!empty($group_instances)) {
+            $authid = xarSecGenAuthKey();
+            $i = 1;
+            $numitems = count($group_instances);
+            foreach ($this->group_instances as $id) {
+                if (!isset($group_instances[$id])) continue;
+                $instances[$id] = $group_instances[$id];
+                $instances[$id]['modifyurl'] = xarServer::getCurrentURL( array('block_id' => $id));
+                // add in links to re-order blocks
+                if ($i < $numitems) {
+                    $instances[$id]['downurl'] = xarServer::getCurrentURL(
+                        array('block_id' => $this->block_id,   'method' => 'modify', 'tab' => 'order', 'move' => $id, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
+                }
+                if ($i > 1) {
+                    $instances[$id]['upurl'] = xarServer::getCurrentURL(
+                        array('block_id' => $this->block_id,  'method' => 'modify', 'tab' => 'order', 'move' => $id, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
+                }
+                $i++;
             }
-            if ($i > 1) {
-                $instances[$id]['upurl'] = xarModURL('blocks', 'admin', 'update_instance',
-                    array('tab' => 'order', 'bid' => $data['bid'], 'move' => $instance['bid'], 'direction' => 'up', 'authid' => $authid));
-            }
-            $i++;
         }
-
-        $data['group'] = $instances;
+        $data['instances'] = $instances;
         // State descriptions.
-        $data['state_desc'][0] = xarML('Hidden');
-        $data['state_desc'][1] = xarML('Inactive');
-        $data['state_desc'][2] = xarML('Visible');
+        $data['state_desc'] = xarMod::apiFunc('blocks', 'instances', 'getstates');
 
-        $blocks = xarMod::apiFunc('blocks', 'user', 'getall');
+        $blocks = xarMod::apiFunc('blocks', 'instances', 'getitems', array('type_category' => 'block'));
         $block_options = array();
         $block_options[] = array('id' => '', 'name' => xarML('-- no new block --'));
         foreach ($blocks as $id => $block) {
-            if ($block['bid'] == $data['bid'] || isset($instances[$block['bid']])) continue;
+            if ($block['block_id'] == $this->block_id || isset($instances[$block['block_id']])) continue;
             $block_options[] = array(
-                'id' => $block['bid'],
+                'id' => $block['block_id'],
                 'name' => xarVarPrepForDisplay($block['name']),
             );
         }
@@ -166,32 +191,34 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlock
         // remove block(s) from this block group
         if (!xarVarFetch('remove_block', 'array', $remove_block, NULL, XARVAR_DONT_SET)) return;
         if (!empty($remove_block)) {
-            foreach ($remove_block as $bid => $block) {
-                $instance = xarMod::apiFunc('blocks', 'user', 'get', array('bid' => $bid));
-                $groups = $instance['groups'];
-                $newgroups = array();
-                foreach ($groups as $group) {
-                    if ($group['id'] == $data['bid']) continue;
-                    $newgroups[] = $group;
+            $removes = xarMod::apiFunc('blocks', 'instances', 'getitems',
+                array('block_id' => array_keys($remove_block)));
+            if (!empty($removes)) {
+                foreach ($removes as $id => $remove) {
+                    $this->detachInstance($remove['block_id']);
+                    $r_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $remove);
+                    $r_block->detachGroup($this->block_id);
+                    $remove['content'] = $r_block->storeContent();
+                    if (!xarMod::apiFunc('blocks', 'instances', 'updateitem', $remove)) return;
+                    unset($r_block);
                 }
-                $instance['groups'] = $newgroups;
-                if (!xarMod::apiFunc('blocks', 'admin', 'update_instance', $instance)) return;
             }
         }
 
         // add a block to this block group
         if (!xarVarFetch('add_block', 'int:1:', $add_block, NULL, XARVAR_DONT_SET)) return;
         if (!empty($add_block)) {
-            $instance = xarMod::apiFunc('blocks', 'user', 'get', array('bid' => $add_block));
-            if (!empty($instance)) {
-                $groups = $instance['groups'];
-                $groups[] = array('id' => $data['bid'], 'template' => null);
-                $instance['groups'] = $groups;
-                if (!xarMod::apiFunc('blocks', 'admin', 'update_instance', $instance)) return;
-            }
+            $add = xarMod::apiFunc('blocks', 'instances', 'getitem', 
+                array('block_id' => $add_block));
+            $this->attachInstance($add['block_id']);
+            $a_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $add);
+            $a_block->attachGroup($this->block_id);
+            $add['content'] = $a_block->storeContent();
+            if (!xarMod::apiFunc('blocks', 'instances', 'updateitem', $add)) return;
+            unset($a_block);            
         }
-        // Resequence blocks within groups.
-        if (!xarMod::apiFunc('blocks', 'admin', 'resequence')) {return;}
+        
+        $data['content'] = $this->getContent();
         return $data;
     }
 /**
@@ -200,26 +227,7 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlock
  */
     public function delete(Array $data=array())
     {
-        $data = parent::delete($data);
-
-        // get block instances for this blockgroup
-        $instances = xarMod::apiFunc('blocks', 'user', 'getall',
-            array('order' => 'group','gid' => $data['bid']));
-
-        // remove this group from all block group instances
-        foreach (array_keys($instances) as $bid) {
-            $instance = xarMod::apiFunc('blocks', 'user', 'get', array('bid' => $bid));
-            $groups = $instance['groups'];
-            $newgroups = array();
-            foreach ($groups as $group) {
-                if ($group['id'] == $data['bid']) continue;
-                $newgroups[] = $group;
-            }
-            $instance['groups'] = $newgroups;
-            if (!xarMod::apiFunc('blocks', 'admin', 'update_instance', $instance)) return;
-        }
-
-        return $data;
+        return true;
     }
 
     // custom update method to handle block ordering
@@ -229,53 +237,60 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlock
         // re-order block instances
         if (!xarVarFetch('move', 'int:1:', $move, NULL, XARVAR_DONT_SET)) return;
         if (!xarVarFetch('direction', 'pre:trim:lower:enum:up:down', $direction, NULL, XARVAR_DONT_SET)) return;
-        if (!empty($move) && !empty($direction)) {
-
-            // get block instances for this blockgroup
-            $instances = xarMod::apiFunc('blocks', 'user', 'getall',
-                array('order' => 'group','gid' => $data['bid']));
-
-            $seeninst = array();
-            if (!empty($instances)) {
-                $i = 0;
-                foreach ($instances as $inst) {
-                    if ($move == $inst['bid']) $currentpos = $i;
-                    $seeninst[] = $inst['bid'];
-                    $i++;
-                }
-            }
-
-            if (!empty($seeninst) && !empty($move) && in_array($move, $seeninst) && !empty($direction)) {
-                $i = 0;
-                foreach ($instances as $inst) {
-                    if ($i == $currentpos && $direction == 'up' && isset($seeninst[$i-1])) {
-                        $temp = $seeninst[$i-1];
-                        $seeninst[$i-1] = $inst['bid'];
-                        $seeninst[$i] = $temp;
-                        break;
-                    } elseif ($i == $currentpos && $direction == 'down' && isset($seeninst[$i+1])) {
-                        $temp = $seeninst[$i+1];
-                        $seeninst[$i+1] = $inst['bid'];
-                        $seeninst[$i] = $temp;
-                        break;
-                    }
-                    $i++;
-                }
-                $group_instance_order = $seeninst;
-                // Pass to API
-                // CHECKME: Do we need this api func now? Only ever called here
-                // we could probably move the function to here and lose the file :)
-                if (!xarModAPIFunc('blocks', 'admin', 'update_group',
-                    array(
-                        'id' => $data['bid'],
-                        'instance_order' => $group_instance_order)
-                    )
-                ) return;
-            }
-
-        }
-        $data['return_url'] = xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $data['bid']), null, 'group_members');
-        return $data;
+        if (!empty($move) && !empty($direction)) 
+            $this->orderInstance($move, $direction);
+        
+        $data['content'] = $this->getContent();
+        $data['return_url'] = xarModURL('blocks', 'admin', 'modify_instance', 
+            array('tab' => 'config', 'block_id' => $this->block_id), null, 'group_members');
+        return $data;      
     }
+/**
+ * Implement required methods of the iBlockGroup interface
+**/
+    public function attachInstance($block_id)
+    {
+        if (in_array($block_id, $this->group_instances)) return true;
+        $this->group_instances[] = $block_id;
+        return true;      
+    }
+
+    public function detachInstance($block_id)
+    {
+        if (!in_array($block_id, $this->group_instances)) return true;
+        $instances = array();
+        foreach ($this->group_instances as $id) {
+            if ($id == $block_id) continue; 
+            $instances[] = $id;
+        }
+        $this->group_instances = $instances;
+        return true;
+    }
+
+    public function orderInstance($block_id, $direction)
+    {
+        foreach ($this->group_instances as $i => $id) {
+            if ($id != $block_id) continue;
+            $position = $direction == 'up' ? $i-1 : $i+1;
+            if (isset($this->group_instances[$position])) {
+                $temp = $this->group_instances[$position];
+                $this->group_instances[$position] = $block_id;
+                $this->group_instances[$i] = $temp;
+            }
+            break;
+        }
+        return true;
+    }
+
+    public function getInstances()
+    {
+        $instances = array();
+        foreach ($this->group_instances as $id) 
+            $instances[] = $id;
+        return $this->group_instances = $instances;
+    }
+        
+
+
 }
 ?>

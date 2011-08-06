@@ -23,12 +23,16 @@ sys::import('xaraya.structures.containers.blocks.menublock');
 
 class Base_AdminmenuBlock extends MenuBlock implements iBlock
 {
-    public $name                = 'AdminMenuBlock';
-    public $module              = 'base';
-    public $text_type           = 'Admin Menu';
-    public $text_type_long      = 'Displays Admin Menu';
-    public $allow_multiple      = true;
-    public $nocache             = 1;
+    protected $type                = 'adminmenu';
+    protected $module              = 'base';
+    protected $text_type           = 'Admin Menu';
+    protected $text_type_long      = 'Displays Admin Menu';
+    protected $xarversion          = '2.3.0';
+    protected $show_preview        = true;
+    protected $show_help           = true;
+    
+    protected $menumodtype         = 'admin';
+    protected $menumodtypes        = array('admin', 'util');
 
     public $showlogout          = 1;
     public $menustyle           = 'bycat';
@@ -36,28 +40,11 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
     public $showfront           = 1;
     public $marker              = '';
 
-    public $menumodtype         = 'admin';
-    public $menumodtypes        = array('admin', 'util');
-
-    public $xarversion          = '2.3.0';
-
-    public function __construct(Array $data=array())
-    {
-        parent::__construct($data);
-
-        if (empty($this->modulelist)) {
-            // if the modulelist is empty, admin deselected all modules, put back the modules module
-            // @CHECKME: put back the blocks module too so we can edit this?
-            $this->modulelist = array('modules' => array('visible' => 1));
-        }
-        // make sure we keep the content array in sync
-        $this->content['modulelist'] = $this->modulelist;
-
-    }
 /**
  * This method is called by the BasicBlock class constructor
 **/
-    public function upgrade($oldversion) {
+    public function upgrade($oldversion) 
+    {
 
         switch ($oldversion) {
             case '0.0.0': // upgrade menu blocks to version 2.2.0
@@ -69,6 +56,21 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
             break;
         }
         return true;
+    }
+
+/**
+ * This method is called by the BasicBlock class constructor
+**/    
+    public function init()
+    {
+        parent::init();
+        if (empty($this->modulelist)) {
+            // if the modulelist is empty, admin deselected all modules, put back the modules module
+            // @CHECKME: put back the blocks module too so we can edit this?
+            $this->modulelist = array('modules' => array('visible' => 1));
+        }
+        // make sure we keep the content array in sync
+        $this->content['modulelist'] = $this->modulelist;
     }
 
 /**
@@ -140,9 +142,16 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
         // Set template base.
         // FIXME: not allowed to set private variables of BL directly
         $data['_bl_template_base'] = $template;
+        $this->setTemplateBase($template);
         $data['content'] = $vars;
 
         return $data;
     }
+
+    public function help()
+    {
+        return $this->getInfo();
+    }
+    
 }
 ?>

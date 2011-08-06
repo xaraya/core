@@ -27,8 +27,7 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
  */
     public function modify(Array $data=array())
     {
-        $data = parent::modify($data);
-        $data['blockid'] = $data['bid'];
+        $data = $this->getContent();
 
         // populate meta tag dropdowns (new format)
         $data['metatypes'] = xarMeta::getTypes();
@@ -110,11 +109,6 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
         $data['content'] = $vars;
 
         return $data;
-    }
-
-    public function help()
-    {
-        return $this->getInfo();
     }
 
 }

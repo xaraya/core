@@ -3,34 +3,70 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <h2>Delete Instance</h2>
+        <h2>Delete Block Instance</h2>
         <form method="post" action="#xarModURL('blocks', 'admin', 'delete_instance')#">
             <fieldset>
-                <legend>Confirm deleting this block?</legend>
-                <p>Name: #xarVarPrepForDisplay($instance['name'])#</p>
-                <xar:if condition="!empty($instance['title'])">
-                    <p>Title: #xarVarPrepForDisplay($instance['title'])#</p>
+                <legend>Confirm deleting this block instance</legend>
+                <div class="xar-row">
+                    <div class="xar-col">Block ID:</div>
+                    <div class="xar-col">#$instance['block_id']#</div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">Block Type:</div>
+                    <div class="xar-col">#$instance['type']#</div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">Parent Module:</div>
+                    <div class="xar-col">
+                        <xar:if condition="!empty($instance['module'])">
+                            #$instance['module']#
+                        <xar:else/>
+                            [ none ]
+                        </xar:if>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">Name:</div>
+                    <div class="xar-col">#$instance['name']#</div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">Title:</div>
+                    <div class="xar-col">#$instance['title']#</div>
+                </div>
+                <xar:if condition="!empty($block_groups)">
+                    <div class="xar-row">
+                        <div class="xar-col">Block Groups:</div>
+                        <div class="xar-col">
+                            <p class="xar-note">This instance belongs to the following block groups</p>
+                            <xar:loop name="$block_groups">
+                                <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <xar:if condition="$loop:index lt count($block_groups)">,&#160;</xar:if>
+                            </xar:loop>
+                        </div>
+                    </div>
+                <xar:elseif condition="!empty($block_instances)"/>
+                    <div class="xar-row">
+                        <div class="xar-col">Group Instances:</div>
+                        <div class="xar-col">
+                            <p class="xar-note">The following instances belong to this block group</p>
+                            <xar:loop name="$block_instances">
+                                <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <xar:if condition="$loop:index lt count($block_instances)">,&#160;</xar:if>
+                            </xar:loop>
+                        </div>
+                    </div>
                 </xar:if>
-                <p>Groups: 
-                    <xar:if condition="!empty($instance['groups'])">
-                        <xar:loop name="$instance['groups']">
-                        #xarVarPrepForDisplay($loop:item.name)#</xar:loop>
-                    <xar:else />
-                        [ none ]
-                    </xar:if>
-                </p>
-                <p>Type: #xarVarPrepForDisplay($instance['module'])# /
-                #xarVarPrepForDisplay($instance['type'])#
-                </p>
             </fieldset>
-            <fieldset class="xar-form-actions">
-                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+            <fieldset>
+                <div class="xar-form-actions xar-align-center">
+                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                 <input type="hidden" name="confirm" id="confirm" value="true"/>
-                <input type="hidden" name="bid" id="bid" value="#$instance['bid']#"/>
+                <input type="hidden" name="block_id" id="block_id" value="#$instance['block_id']#"/>
                 <xar:var name="label">Delete Block</xar:var>
                 <xar:button type="submit" label="$label"/>
                 <xar:var name="label">Cancel</xar:var>
                 <xar:button type="cancel" label="$label"/>
+                </div>
             </fieldset>
         </form>
     </div>

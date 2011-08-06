@@ -23,6 +23,7 @@
  */
 function blocks_adminapi_unregister_block_type(Array $args=array())
 {
+    return true;
     $res = xarMod::apiFunc('blocks','admin','block_type_exists',$args);
     if (!isset($res)) return; // throw back
     if (!$res) return true; // Already unregistered

@@ -26,12 +26,7 @@
     {
         function modify(Array $data=array())
         {
-            $data = parent::modify($data);
-            if (!isset($data['showusers']))     $data['showusers'] = true;
-            if (!isset($data['showusertotal'])) $data['showusertotal'] = false;
-            if (!isset($data['showanontotal'])) $data['showanontotal'] = false;
-            if (!isset($data['showlastuser']))  $data['showlastuser'] = false;
-            return $data;
+            return $this->getContent();
         }
 
         public function update(Array $data=array())
