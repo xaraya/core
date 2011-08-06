@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:if condition="$type['type_state'] ne xarBlock::TYPE_STATE_MISSING and $type['type_state'] ne xarBlock::TYPE_STATE_MOD_UNAVAILABLE">
+        <xar:if condition="$type['type_state'] eq xarBlock::TYPE_STATE_MISSING or $type['type_state'] eq xarBlock::TYPE_STATE_MOD_UNAVAILABLE">
             <h2>Delete Block Type</h2>
             <form method="post" action="#xarModURL('blocks', 'admin', 'delete_type')#">
                 <fieldset>
