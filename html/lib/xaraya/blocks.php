@@ -5,23 +5,38 @@
  * @package core
  * @subpackage blocks
  * @category Xaraya Web Applications Framework
- * @version 2.3.0
+ * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  *
  * @author Paul Rosania
- * @TODO:
- * - system-level flag to switch between reporting or ignoring errors
- * - implement inactive block state when the parent module is inactive
+ * @author Chris Powis
  */
-Class xarBlock extends Object implements IxarBlock
+interface ixarBlock
 {
+    const TYPE_STATE_ACTIVE = 1; 
+    const TYPE_STATE_MISSING = 2;
+    const TYPE_STATE_ERROR = 3;    
+    const TYPE_STATE_MOD_UNAVAILABLE = 4; 
 
     const BLOCK_STATE_HIDDEN = 0;   // Hidden blocks still execute, they just don't render
     const BLOCK_STATE_INACTIVE = 1; // Inactive blocks don't execute, don't render
     const BLOCK_STATE_VISIBLE = 2;
 
+    public static function render(Array $data=array());
+    public static function renderBlock(Array $args=array());
+    public static function renderGroup($groupname, $template=null);
+    public static function hasMethod(iBlock $block, $method, $strict=false);
+    public static function guiMethod(iBlock $block, $method);
+    public static function checkAccess(iBlock $block, $action, $roleid=null);
+
+}
+class xarBlock extends Object implements ixarBlock
+{
+    
+    private function __construct()
+    {}
 /**
  * Initialize blocks subsystem
  *
@@ -33,14 +48,10 @@ Class xarBlock extends Object implements IxarBlock
     public static function init(&$args)
     {
         // Blocks Support Tables
-        $prefix = xarDB::getPrefix();
-        $tables = array(
-            'block_instances'       => $prefix . '_block_instances',
-            'block_group_instances' => $prefix . '_block_group_instances',
-            'block_types'           => $prefix . '_block_types'
-        );
+        sys::import('modules.blocks.xartables');
+        $tables = blocks_xartables();
         xarDB::importTables($tables);
-        return true;
+        return true;    
     }
 
 /**
@@ -48,189 +59,160 @@ Class xarBlock extends Object implements IxarBlock
  *
  * @author Paul Rosania
  * @author Marco Canini <marco@xaraya.com>
+ * @author Chris Powis 
  * 
  * @param  array data block information parameters
  * @return string output the block to show
  * @throws  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  * @todo   this function calls a module function, keep an eye on it.
+ * @todo   caching is currently borked
  */
-    public static function render(Array $data=array())
+    public static function render(Array $blockinfo=array())
     {
-        // Skip executing inactive blocks
-        if ($data['state'] == xarBlock::BLOCK_STATE_INACTIVE) {
-            // @TODO: global flag to raise exceptions
-            // if ((bool)xarModVars::get('blocks', 'noexceptions')) return '';
-            return '';
-        }
-        // Get a cache key for this block if it's suitable for block caching
-        $cacheKey = xarCache::getBlockKey($data);
-
-        // Check if the block is cached
-        if (!empty($cacheKey) && xarBlockCache::isCached($cacheKey)) {
-            // Return the cached block output
-            return xarBlockCache::getCached($cacheKey);
-        }
-
-        xarLogMessage("xarBlock::render: begin $data[module]:$data[type]:$data[name]");
-
-        // This lets the security system know what module we're in
-        // no need to update / select in database for each block here
-        // TODO: this looks weird
-        xarCoreCache::setCached('Security.Variables', 'currentmodule', $data['module']);
-
-        // Attempt to load the block file
         try {
-            xarMod::apiFunc('blocks', 'admin', 'load',
-                array('module' => $data['module'], 'type' => $data['type'], 'func' => 'display'));
+
+            // get the block instance 
+            $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $blockinfo);
+
+            // check if block expired already
+            $now = time();
+            if (isset($block->expire) && $now > $block->expire && $block->expire != 0) {
+                if (!empty($cacheKey))
+                    xarBlockCache::setCached($cacheKey, '');
+                return '';
+            }
+            // checkAccess for display method
+            if (!$block->checkAccess('display')) {
+                if (!empty($cacheKey)) 
+                    xarBlockCache::setCached($cacheKey, '');
+                if (isset($block->display_access) && $block->display_access['failure']) {
+                    // @TODO: render to an error/exception block?
+                    return xarTplModule('privileges','user','errors',
+                        array('layout' => 'no_block_privileges'));
+                }
+                return '';
+            }
+            // don't render hidden blocks
+            if ($block->state == xarBlock::BLOCK_STATE_HIDDEN) {
+                // just execute the display method and return an empty string
+                $block->display();
+                if (!empty($cacheKey)) 
+                    xarBlockCache::setCached($cacheKey, '');
+                return '';
+            }
+            // render the block 
+            $blockinfo['content'] = self::guiMethod($block, 'display');
+            // no content, ok, nothing to display 
+            if (empty($blockinfo['content'])) {
+                if (!empty($cacheKey)) 
+                    xarBlockCache::setCached($cacheKey, '');
+                return '';
+            }
+            // render to box template if necessary 
+            if ($block->type_category == 'group') {
+                $boxOutput = $blockinfo['content'];
+            } else {
+                $boxOutput = xarTpl::renderBlockBox($blockinfo, $block->box_template);
+            }                      
+
+            // Set the output of the block in cache
+            if (!empty($cacheKey)) 
+                xarBlockCache::setCached($cacheKey, $boxOutput);
+
+            return $boxOutput;
+            
         } catch (Exception $e) {
-            // Set the output of the block in cache
-            if (!empty($cacheKey)) {
-                xarBlockCache::setCached($cacheKey, '');
-            }
-            if ((bool)xarModVars::get('blocks', 'noexceptions') || !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
+            if ((bool) xarModVars::get('blocks', 'noexceptions') || 
+                !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
+                if (!empty($cacheKey))
+                    xarBlockCache::setCached($cacheKey, '');
                 return '';
             } else {
-                throw($e);
+                throw($e); 
             }
         }
 
-        // @FIXME: class name should be unique
-        $className = ucfirst($data['module']) . '_' . ucfirst($data['type']) . 'Block';
-        // if we're here, we can safely instantiate the block instance
-        $block = new $className($data);
+    }
+/**
+ * Helper function used by block subsystem to call a block method suitabled for rendering
+ *
+ * @author Chris Powis 
+ * 
+ * @param  object $block the block instance supplying the method
+ * @param  string $method, name of the method to call
+ * @return string output the block to show
+ * @throws  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ */        
+    public static function guiMethod(iBlock $block, $method)
+    {
 
-        // check if block expired already
-        $now = time();
-        if (isset($block->expire) && $now > $block->expire && $block->expire != 0) {
-            // Set the output of the block in cache
-            if (!empty($cacheKey)) {
-                xarBlockCache::setCached($cacheKey, '');
-            }
-            return '';
-        }
+        if (!method_exists($block, $method)) 
+            throw new FunctionNotFoundException($method);
+        
+        $tplData = $block->$method();
+        if (empty($tplData)) return '';
+        if ($method == 'display' && isset($tplData['content']))
+            $tplData = $tplData['content'];       
+        if (is_array($tplData)) {
+            // inject blocklayout info 
+            $tplData['_bl_block_id']       = $block->block_id;
+            $tplData['_bl_block_name']     = $block->name;
+            $tplData['_bl_block_type']     = $block->type;
+            $tplData['_bl_block_type_id']  = $block->type_id;
+            $tplData['_bl_block_group']    = $block->group;
+            $tplData['_bl_block_group_id'] = $block->group_id;
 
-        // checkAccess for display method
-        if (!$block->checkAccess('display')) {
-            // Set the output of the block in cache
-            if (!empty($cacheKey)) {
-                xarBlockCache::setCached($cacheKey, '');
-            }
-            if (isset($block->display_access) && $block->display_access['failure']) {
-                // @TODO: render to an error/exception block?
-                return xarTpl::module('privileges','user','errors',array('layout' => 'no_block_privileges'));
-            } else {
-                return '';
-            }
-        }
-
-        // now we're safe to call the blocks display method
-        try {
-            $blockinfo = $block->display();
-        } catch (Exception $e) {
-            // Set the output of the block in cache
-            if (!empty($cacheKey)) {
-                xarBlockCache::setCached($cacheKey, '');
-            }
-            if ((bool)xarModVars::get('blocks', 'noexceptions') || !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
-                return '';
-            } else {
-                throw ($e);
-            }
-        }
-
-        // A block is permitted to return empty, signifying it has nothing to display
-        // if it's empty, we have nothing to display either
-        if (empty($blockinfo) || !is_array($blockinfo)) {
-            // Set the output of the block in cache
-            if (!empty($cacheKey)) {
-                xarBlockCache::setCached($cacheKey, '');
-            }
-            return '';
-        }
-
-        // Render block if it has content and isn't hidden
-        if (is_array($blockinfo['content']) && $data['state'] != xarBlock::BLOCK_STATE_HIDDEN) {
-            // Here $blockinfo['content'] is the array of template data
-            // which will be passed to the inner block template
-            // $blockinfo itself is passed to the outer template
-            // Set some additional details that could be useful in the block content.
-            // prefix these extra variables (_bl_) to indicate they are supplied by the core.
-            $blockinfo['content']['_bl_block_id'] = $blockinfo['bid'];
-            $blockinfo['content']['_bl_block_name'] = $blockinfo['name'];
-            $blockinfo['content']['_bl_block_type'] = $blockinfo['type'];
-            if (isset($blockinfo['groupid'])) {
-                // The block may not be rendered as part of a group.
-                $blockinfo['content']['_bl_block_groupid'] = $blockinfo['groupid'];
-                $blockinfo['content']['_bl_block_group'] = $blockinfo['group'];
-            }
             // Legacy (deprecated)
             // @TODO: remove these once all block templates are using the _bl_ variables
-            $blockinfo['content']['blockid'] = $blockinfo['bid'];
-            $blockinfo['content']['blockname'] = $blockinfo['name'];
-            $blockinfo['content']['blocktypename'] = $blockinfo['type'];
-            if (isset($blockinfo['groupid'])) {
-                // The block may not be rendered as part of a group.
-                $blockinfo['content']['blockgid'] = $blockinfo['groupid'];
-                $blockinfo['content']['blockgroupname'] = $blockinfo['group'];
+            $tplData['blockid'] = $tplData['bid'] = $block->bid;
+            $tplData['blockname'] = $block->name;
+            $tplData['blocktypename'] = $block->type;
+            // The block may not be rendered as part of a group.
+            $tplData['blockgid'] = $block->groupid;
+            $tplData['blockgroupname'] = $tplData['group'] = $block->group;
+           
+            if ($method != 'display') {
+                $block->setTemplateBase($method . '-' . $block->type);
+                $block->setBlockTemplate(null);
             }
-
-            // Attempt to render this block template data.
-            try {
-                $blockinfo['content'] = xarTpl::block(
-                    $data['module'], $data['type'], $blockinfo['content'],
-                    !empty($blockinfo['_bl_block_template']) ? $blockinfo['_bl_block_template'] : NULL,
-                    !empty($blockinfo['_bl_template_base']) ? $blockinfo['_bl_template_base'] : NULL
-                );
-            } catch (Exception $e) {
-                // Set the output of the block in cache
-                if (!empty($cacheKey)) {
-                    xarBlockCache::setCached($cacheKey, '');
-                }
-                if ((bool)xarModVars::get('blocks', 'noexceptions') || !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
-                    return '';
-                } else {
-                    throw ($e);
-                }
-            }
+            return xarTpl::block(
+                $block->module, $block->type, $tplData, $block->block_template, $block->template_base);
+        } elseif (is_string($tplData)) {
+            return $tplData;
         } else {
-            // hidden block, or no content to display
-            // Set the output of the block in cache
-            if (!empty($cacheKey)) {
-                xarBlockCache::setCached($cacheKey, '');
-            }
-            return "";
+            return '';
         }
         
-        if ($blockinfo['type'] == 'blockgroup') {
-            // Blockgroups don't have an outer template
-            $boxOutput = $blockinfo['content'];
+    }
+/**
+ * Helper function used by block subsystem to check if a block explicitly declared a method
+ *
+ * @author Chris Powis 
+ * 
+ * @param  object $block the block instance supplying the method
+ * @param  string $method, name of the method to check
+ * @param  bool $strict, flag to indicate if the block must have declared the method
+ * @return bool
+ * @throws none
+ */ 
+    public static function hasMethod(iBlock $block, $method, $strict=false)
+    {
+        $hasMethod = method_exists($block, $method);
+        // if not strict or method not exist, return
+        if (!$strict || !$hasMethod) 
+            return $hasMethod;
+
+        // strict checks that this class and not one of its parents declared it 
+        $refObject  = new ReflectionClass($block);
+        if ($refObject->hasMethod($method)) {
+            $methodObject = $refObject->getMethod($method);
+            $hasMethod = $methodObject->class === $refObject->getName();
         } else {
-            // Now wrap the block up in a box.
-            // TODO: pass the group name into this function (param 2?) for the template path.
-            // $blockinfo itself is passed to the outer template
-            // Attempt to render this block template data.
-            try {
-                $boxOutput = xarTpl::renderBlockBox($blockinfo, $data['_bl_box_template']);
-            } catch (Exception $e) {
-                // Set the output of the block in cache
-                if (!empty($cacheKey)) {
-                    xarBlockCache::setCached($cacheKey, '');
-                }
-                if ((bool)xarModVars::get('blocks', 'noexceptions') || !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
-                    return '';
-                } else {
-                    throw ($e);
-                }
-            }
+            $hasMethod = false;
         }
-        xarLogMessage("xarBlock::render: end $data[module]:$data[type]:$data[name]");
+        unset($refObject, $methodObject);     
 
-        // Set the output of the block in cache
-        if (!empty($cacheKey)) {
-            xarBlockCache::setCached($cacheKey, $boxOutput);
-        }
-
-        return $boxOutput;
+        return $hasMethod;        
     }
 /**
  * Renders a single block
@@ -247,11 +229,11 @@ Class xarBlock extends Object implements IxarBlock
     {
         // All the hard work is done in this function.
         // It keeps the core code lighter when standalone blocks are not used.
-        // @TODO: review getinfo and move it here
-        $blockinfo = xarMod::apiFunc('blocks', 'user', 'getinfo', $args);
-        // No blockinfo means the block instance specified doesn't exist
-        // @CHECKME: optionally raise exception here?
-        if (empty($blockinfo)) return '';
+        if (isset($args['instance']))  // valid block instance states
+            $args['state'] = array(xarBlock::BLOCK_STATE_VISIBLE, xarBlock::BLOCK_STATE_HIDDEN);
+        $args['type_state'] = array(xarBlock::TYPE_STATE_ACTIVE); // valid block type states 
+        // get block info            
+        $blockinfo = xarMod::apiFunc('blocks', 'blocks', 'getinfo', $args);
         return self::render($blockinfo);
     }
 /**
@@ -279,18 +261,10 @@ Class xarBlock extends Object implements IxarBlock
      * @param roleid mixed override the current user or null
      * @return boolean true if access
      */
-    static function checkAccess($block, $action, $roleid = null)
+    static function checkAccess(iBlock $block, $action, $roleid = null)
     {
         // TODO: support $roleid there someday ?
         return $block->checkAccess($action);
     }
 }
-
-Interface IxarBlock
-{
-    public static function render(Array $data=array());
-    public static function renderBlock(Array $args=array());
-    public static function renderGroup($groupname, $template=null);
-}
-
 ?>

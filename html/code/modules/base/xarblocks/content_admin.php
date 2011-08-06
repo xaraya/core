@@ -26,7 +26,7 @@
  */
         public function modify(Array $data=array())
         {
-            $data = parent::modify($data);
+            $data = $this->getContent();
 
             // Drop-down list defining content type.
             $content_types = array();

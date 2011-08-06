@@ -619,7 +619,7 @@ class xarTpl extends Object
         if (isset($filePath) && self::$generateXMLURLs) {
             $filePath = htmlspecialchars($filePath);
         }
-        return $filePath;
+        return '/'.$filePath;
     }
 
 /**

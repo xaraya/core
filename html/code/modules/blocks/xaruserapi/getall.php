@@ -147,7 +147,7 @@ function blocks_userapi_getall(Array $args=array())
     // Prepare it
     $stmt = $dbconn->prepareStatement($query);
 
-    // Return if no details retrieved.
+    // Return if no details retrieved
     if (!empty($startnum) && !empty($numitems)) {
         $stmt->setLimit($numitems);
         $stmt->setOffset($startnum - 1);

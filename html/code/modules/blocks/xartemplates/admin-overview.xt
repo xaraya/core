@@ -57,7 +57,7 @@
         <div class="xar-mod-page-body">
             <!-- About, basic module overview info and concept -->
             <xar:if condition="empty($tab)">
-    
+
                 <h3>What is it?</h3>
                 <p>
                     The Blocks module lets site administrator(s) create and manage the configuration, display position and grouping of 'blocks' of content or functionality on a Xaraya site. The Blocks module is a core module within
@@ -66,7 +66,7 @@
                 <p>
                     Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('blocks')))#">here</a>.
                 </p>
-    
+
                 <h3>Concepts</h3>
                 <h4>Block Types</h4>
                 <p>
@@ -75,12 +75,12 @@
                 <p>
                     A module's block types are available when the module is installed, and removed when it is uninstalled. Block types are managed through the <strong>Block Types</strong> page, which lists all the block types available in your Xaraya installation and the modules they belong to.
                 </p>
-    
+
                 <h4>Blocks</h4>
                 <p>
                     A block is an instance of a block type. You can create as many blocks from a given block type as required, each with its own behavior and content (several menu block on the same page, for instance). In general blocks are displayed on a site's pages by assigning them to one or more block group, but a block can also be displayed anywhere on a page by using a block tag (see <a href="http://xaraya.com/documentation/rfcs/rfc0010.html" target="_blank">RFC0010</a> for details about using block and block group tags).
                 </p>
-    
+
                 <h3>Available Blocks</h3>
                 <p>The Blocks Module has the following blocks</p>
                 <ul>
@@ -90,13 +90,13 @@
                         </p>
                     </li>
                 </ul>
-    
+
                 <h3>Available Dataproperties</h3>
                 <p>The Blocks module has no dataproperties</p>
-    
+
                 <h3>Available Hooks</h3>
                 <p>The Blocks module has no hooks</p>
-    
+
                 <!--
                 <h3>Further Information</h3>
                 <xar:set name="relateddocurl">'http://www.xaraya.com/index.php/keywords/blocks/'</xar:set>
@@ -118,34 +118,34 @@
                 -->
             <!-- Admin Interface -->
             <xar:elseif condition="$tab eq 'admin'"/>
-    
+
                 <h3>The Admin interface</h3>
-    
+
                 <h4>View Blocks</h4>
                 <p>
                     Clicking on the <strong>View Blocks</strong> link in the Admin menu displays all the current blocks that are available for use in your Xaraya site and lets you modify or delete them. The page also has a link to the <strong>New Block</strong>&#160;page. You can go to a block's configuration page by clicking on its Edit link in the list of blocks displayed. See <a href="#xarServer::getCurrentUrl(array('tab' => 'config'))#">Block Configuration</a> for details.
                 </p>
-    
+
                 <h4>New Block</h4>
                 <p>
                     Clicking on the <strong>New Block</strong> link in the Admin menu lets you create and make available a new block of a given block type, and optionally assign it to a block group. See <a href="#xarServer::getCurrentUrl(array('tab' => 'howto'))#">How To</a> for details.
                 </p>
-    
+
                 <h4>Block Types</h4>
                 <p>
                     Clicking on the <strong>Block Types</strong> link in the Admin menu displays all the defined Block Types on your site with a link to a detail display of each Block Type's configuration. The page also contains a link to the <strong>New Block Type</strong> page, which can scan a module for its block types and lets you add any that are not yet available. Xaraya does not actually allow you to create new block types. Rather, this option is used in the (exceptional) case when a block type was not properly installed in the course of a normal module release or upgrade.
                 </p>
-    
+
                 <h4>Modify Configuration</h4>
                 <p>
                     As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Blocks &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
                 </p>
-    
+
             <!-- basic module how to's -->
             <!-- @TODO: change this to an faq style -->
             <xar:elseif condition="$tab eq 'faq'"/>
             <xar:elseif condition="$tab eq 'howto'"/>
-    
+
                 <h3>Creating a Block</h3>
                 <p>
                     There are a number of steps required to create a new block of content or functionality
@@ -167,7 +167,7 @@
                     </ol>
                     Note: you do not have to allocated a block instance to a block group. You can place the block directly into your theme templates by using a <strong>block</strong> tag (see <a href="http://xaraya.com/documentation/rfcs/rfc0010.html" target="_blank">RFC0010</a> for details).
                 </p>
-    
+
                 <h3>Templating Blocks and Block Groups</h3>
                 <p>
                     As with other Xaraya content, you can provide your own override templates for blocks and the block groups they are assigned to.
@@ -221,7 +221,7 @@
                     to the Outer field or <pre>userprofile</pre>to the Inner field.
                     </li>
                 </ul>
-    
+
             <!-- Block Configuration -->
             <xar:elseif condition="$tab eq 'config'"/>
                 <h3>Block Configuration</h3>
@@ -256,7 +256,7 @@
                 </ul>
             <!-- Caching configuration -->
             <xar:elseif condition="$tab eq 'caching'"/>
-    
+
                 <h3>Block Caching Configuration</h3>
                 <p>Administrators can configure caching per block instance from the Caching tab available when editing a block.</p>
                 <p>The following caching options are available</p>
@@ -283,7 +283,7 @@
             <xar:elseif condition="$tab eq 'access'"/>
                 <h3>Block Access Configuration</h3>
                 <p>Administrators can configure access options for blocks and block types.</p>
-    
+
                 <p>The common access options you can set per access level are as follows</p>
                 <h4>Access Property</h4>
                 <ul>
@@ -298,7 +298,7 @@
                     <li><strong>Required Access Level</strong> - used when Group Membership has No Requirement, allow access to users with this level or greater access.</li>
                     <li><strong>Behaviour on Failure</strong> - either show a privilege error for failed access, or fail silently.</li>
                 </ul>
-    
+
                 <h4>Block Access</h4>
                 <p>Administrators can configure the following options per block instance from the Access tab available when editing a block.</p>
                 <ul>
@@ -306,13 +306,13 @@
                     <li><strong>Modify Access</strong> - controls who can modify the block type properties.</li>
                     <li><strong>Delete Access</strong> - controls who can delete the block.</li>
                 </ul>
-    
+
                 <h4>Block Type Access</h4>
                 <p>Administrators can configure the following options per block type when editing a block type.</p>
                 <ul>
                     <li><strong>Add Access</strong> - controls who can add blocks of this type.</li>
                 </ul>
-    
+
                 <h4>See also...</h4>
                 <ul>
                     <li><a href="#xarServer::getCurrentUrl(array('tab' => 'config'))#">Block Configuration</a></li>
@@ -320,7 +320,7 @@
                 </ul>
             <!-- Create more tabs as required here -->
             <xar:else/>
-    
+
             </xar:if>
         </div>
     </div>

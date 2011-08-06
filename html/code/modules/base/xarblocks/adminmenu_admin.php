@@ -28,7 +28,7 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
  */
     public function modify(Array $data=array())
     {
-        $data = parent::modify($data);
+        $data = $this->getContent();
 
         // Admin Capable Modules
         $data['modules'] = $this->xarmodules;
@@ -84,11 +84,5 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
         $data['content'] = $vars;
         return $data;
     }
-
-    public function help()
-    {
-        return $this->getInfo();
-    }
-
 }
 ?>

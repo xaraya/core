@@ -108,6 +108,7 @@ function blocks_userapi_getinfo(Array $args=array())
 
     // Do standard overrides.
     if (!empty($title)) {$blockinfo['title'] = $title;}
+    // checkme: over-ride state from tag? really?
     if (!empty($state)) {$blockinfo['state'] = $state;}
 
     // Now do the custom overrides.

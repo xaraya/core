@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:if condition="!empty($group)">
+    <xar:if condition="!empty($instances)">
         <xar:set name="imgup">#xarTpl::getImage('icons/go-up.png', 'theme')#</xar:set>
         <xar:set name="imgdown">#xarTpl::getImage('icons/go-down.png', 'theme')#</xar:set>
         <xar:var name="imgupalt">Up</xar:var>
@@ -17,16 +17,19 @@
                 <tr>
                     <th>Name</th>
                     <th>Type</th>
+                    <!--
                     <th>Template</th>
+                    -->
                     <th>State</th>
                     <th class="xar-align-right">Actions</th>
                 </tr>
             </thead>
             <tbody>
-            <xar:foreach in="$group" value="$instance">
+            <xar:foreach in="$instances" value="$instance">
                 <tr>
                     <td>#$instance.name#</td>
                     <td>#$instance.type#</td>
+                    <!--
                     <td>
                         <xar:if condition="$instance['template'] ne NULL">
                             #$instance.template#
@@ -38,7 +41,8 @@
                             </xar:if>
                         </xar:if>
                     </td>
-                    <td>#$state_desc[$instance['state']]#</td>
+                    -->
+                    <td>#$state_desc[$instance['state']]['name']#</td>
                     <td class="xar-align-right">
                         <a href="#$instance['modifyurl']#" title="#$imgmodifytitle#" class="xar-icon">
                             <img src="#$imgmodify#" alt="#$imgmodifyalt#" class="xar-icon"/>
@@ -57,8 +61,8 @@
                         <xar:else/>
                             <img src="#$imgdown#" alt="#$imgdownalt#" class="xar-icon-disabled"/>
                         </xar:if>
-                        <xar:set name="removename">'remove_block['.$instance['bid'].']'</xar:set>
-                        <xar:set name="removeid">'remove_block_'.$instance['bid']</xar:set>
+                        <xar:set name="removename">'remove_block['.$instance['block_id'].']'</xar:set>
+                        <xar:set name="removeid">'remove_block_'.$instance['block_id']</xar:set>
                         <xar:var name="removetitle">Remove the block from this blockgroup</xar:var>
                         &#160;<label for="#$removeid#" title="#$removetitle#">Remove</label>&#160;
                         <xar:data-input type="checkbox" name="$removename" id="$removeid"/>
