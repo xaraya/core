@@ -58,73 +58,39 @@ function blocks_admin_delete_instance()
 
     if (!xarVarFetch('confirm', 'checkbox', 
         $confirmed, false, XARVAR_NOT_REQUIRED)) return;
-
-    $instance['method'] = 'delete';
-    $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $instance);
-
-    // if block group, get instances attached to it    
-    if ($instance['type_category'] == 'group') {
-        $group_instances = $block->getInstances();
-        if (!empty($group_instances))
-            $block_instances = xarMod::apiFunc('blocks', 'instances', 'getitems',
-                array('block_id' => $group_instances));
-    } 
-    // else, get groups instance is attached to    
-    else {
-        $instance_groups = $block->getGroups();
-        if (!empty($instance_groups))
-            $block_groups = xarMod::apiFunc('blocks', 'instances', 'getitems',
-                array('type_category' => 'group', 'block_id' => array_keys($instance_groups)));
-    }
     
     if ($confirmed) {
-        // call block delete method if it has one
-        $result = xarBlock::hasMethod($block, 'delete', true) ? $block->delete() : true;
-        if (!$result) return;
+        if (!xarSecConfirmAuthKey())
+            return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
         
         // delete instance from db
         if (!xarMod::apiFunc('blocks', 'instances', 'deleteitem',
             array('block_id' => $instance['block_id']))) return;
-
-        // detach instance from groups if it's in any 
-        if (!empty($instance_groups)) {
-            foreach (array_keys($instance_groups) as $group_id) {
-                if (!isset($block_groups[$group_id])) continue;
-                $group_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $block_groups[$group_id]);
-                $group_block->detachInstance($instance['block_id']);
-                $group_update = array(
-                    'block_id' => $group_id,
-                    'content' => $group_block->storeContent(),
-                );
-                if (!xarMod::apiFunc('blocks', 'instances', 'updateitem', $group_update)) return;
-                unset($group_block, $group_update);
-            }
-        }
-        // else detach group from instances if it has any
-        elseif (!empty($group_instances)) {
-            foreach ($group_instances as $instance_id) {
-                if (!isset($block_instances[$instance_id])) continue;
-                $instance_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $block_instances[$instance_id]);
-                $instance_block->detachGroup($instance['block_id']);
-                $instance_update = array(
-                    'block_id' => $instance_id,
-                    'content' => $instance_block->storeContent(),
-                );
-                if (!xarMod::apiFunc('blocks', 'instances', 'updateitem', $instance_update)) return;
-                unset($instance_block, $instance_update);
-            }
-        }
+            
         $return_url = xarModURL('blocks', 'admin', 'view_instances');
         xarController::redirect($return_url);
     }
     
     $data = array();
-    
+
+    $instance['method'] = 'delete';
+    $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $instance);
+
     $data['instance'] = $instance;
-    if (!empty($block_instances))
-        $data['block_instances'] = $block_instances;
-    if (!empty($block_groups))
-        $data['block_groups'] = $block_groups;
+    // if block group, get instances attached to it    
+    if ($instance['type_category'] == 'group') {
+        $instance_ids = $block->getInstances();
+        if (!empty($instance_ids))
+            $data['group_instances'] = xarMod::apiFunc('blocks', 'instances', 'getitems',
+                array('block_id' => $instance_ids));
+    } 
+    // else, get groups instance is attached to    
+    else {
+        $group_ids = array_keys($block->getGroups());
+        if (!empty($group_ids))
+            $data['instance_groups'] = xarMod::apiFunc('blocks', 'instances', 'getitems',
+                array('type_category' => 'group', 'block_id' => $group_ids));
+    }
         
     return $data;
 }

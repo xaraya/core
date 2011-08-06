@@ -18,9 +18,64 @@ function blocks_instancesapi_deleteitem(Array $args=array())
 {
     if (empty($args['block_id']) || !is_numeric($args['block_id'])) {
         $msg = 'Missing #(1) for #(2) module #(3) function #(4)()';
-        $vars = array('block_id', 'blocks', 'instances', 'deleteitem');
+        $vars = array('block_id', 'blocks', 'instancesapi', 'deleteitem');
         throw new EmptyParameterException($vars, $msg);
     }
+
+    $instance = xarMod::apiFunc('blocks', 'instances', 'getitem',
+        array('block_id' => $args['block_id']));
+    
+    if (!$instance) {
+        $msg = 'Block instance id "#(1)" does not exist';
+        $vars = array($args['block_id']);
+        throw new IdNotFoundException($vars, $msg);
+    }
+    $instance['method'] = 'delete';
+    $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $instance);
+    
+    if ($instance['type_category'] == 'group') {
+        $instance_ids = $block->getInstances();
+        if (!empty($instance_ids)) {
+            $group_instances = xarMod::apiFunc('blocks', 'instances', 'getitems', 
+                array('block_id' => $instance_ids));
+            foreach ($instance_ids as $block_id) {
+                if (!isset($group_instances[$block_id])) continue;
+                $i_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $group_instances[$block_id]);
+                $i_block->detachGroup($args['block_id']);
+                if (!xarMod::apiFunc('blocks', 'instances', 'updateitem',
+                    array(
+                        'block_id' > $block_id,
+                        'content' => $i_block->storeContent(),
+                    ))) return;
+                unset($i_block);
+            }
+        }
+        unset($instance_ids, $group_instances);   
+    } else {
+        $group_ids = array_keys($block->getGroups());
+        if (!empty($group_ids)) {
+            $instance_groups = xarMod::apiFunc('blocks', 'instances', 'getitems',
+                array('block_id' => $group_ids));
+            foreach ($group_ids as $block_id) {
+                if (!isset($instance_groups[$block_id])) continue;
+                $g_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $instance_groups[$block_id]);
+                $g_block->detachInstance($args['block_id']);
+                if (!xarMod::apiFunc('blocks', 'instances', 'updateitem',
+                    array(
+                        'block_id' > $block_id,
+                        'content' => $g_block->storeContent(),
+                    ))) return;
+                unset($g_block);
+            }
+        }
+        unset($group_ids, $instance_groups);
+    }
+    
+    // call block delete method if it has one
+    $result = xarBlock::hasMethod($block, 'delete', true) ? $block->delete() : true;
+    if (!$result) return;   
+    
+    unset($instance, $block);
 
     $dbconn = xarDB::getConn();
     $tables = xarDB::getTables();
@@ -32,20 +87,16 @@ function blocks_instancesapi_deleteitem(Array $args=array())
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bindvars);
     if (!$result) return;
-    return true;
 
-    // @todo: block hooks 
+    // @todo: block scope hooks
+    /*
     $item = array(
         'module' => 'blocks', 
         'itemid' => $args['block_id'],
         'itemtype' => 3,
     );
     xarHooks::notify('BlockDelete', $item);
-    $args['module'] = 'blocks';
-    $args['itemtype'] = 3; // block instance
-    $args['itemid'] = $bid;
-    xarModCallHooks('item', 'delete', $bid, $args);
-
+    */
     return true;
         
 }

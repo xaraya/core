@@ -205,7 +205,9 @@
                     This usually happens when the files were moved or deleted, or file
                     permissions were changed preventing server access to them.
                 </p>
+
                 <h4>Recovery</h4>
+                <xar:sec mask="AdminBlocks" catch="false">
                 <p>
                     If the file(s) were removed, or permissions changed in error, first replace them,
                     then <a href="#xarModURL('blocks', 'admin', 'refresh_types')#">click here to reactivate the block type</a>.
@@ -214,6 +216,9 @@
                     If the files were removed because you are no longer using this block type,
                     <a href="#xarModURL('blocks', 'admin', 'remove_type', array('type_id' => $type['type_id']))#">click here to remove the type from the database</a>.
                 </p>
+                <xar:else/>
+                    <p>Please notify the site administrator</p>
+                </xar:sec>
 
             <xar:elseif condition="$type['type_state'] eq xarBlock::TYPE_STATE_ERROR"/>
                 <h3>Block Type Error</h3>
@@ -225,12 +230,17 @@
                     This error indicates there is a problem with this block types code preventing
                     it being instantiated by the blocks subsystem.
                 </p>
+
                 <h4>Recovery</h4>
+                <xar:sec mask="AdminBlocks" catch="false">
                 <p>
                     Let the block developer know by filing a bug report at <a href="http://bugs.xaraya.com/">Xaraya Bugzilla</a>.
                     <br/>
                     (If you are the block developer, well, you know what to do...)
                 </p>
+                <xar:else/>
+                    <p>Please notify the site administrator</p>
+                </xar:sec>
             <xar:elseif condition="$type['type_state'] eq xarBlock::TYPE_STATE_MOD_UNAVAILABLE"/>
                 <h3>Block Type Unavailable</h3>
                 <p class="xar-error">
@@ -240,14 +250,19 @@
                 <p>
                     This error indicates that the module this block type belongs to is unavailable.
                 </p>
+
                 <h4>Recovery</h4>
+                <xar:sec mask="AdminBlocks" catch="false">
                 <p>
                     Activate the module this block type belongs to.
                 </p>
                 <p>
                     If the module was removed because you are no longer using it,
-                    <a href="#xarModURL('blocks', 'admin', 'remove_type', array('type_id' => $type['type_id']))#">click here to remove the type from the database</a>.
+                    <a href="#xarModURL('blocks', 'admin', 'delete_type', array('type_id' => $type['type_id']))#">click here to remove the type from the database</a>.
                 </p>
+                <xar:else/>
+                    <p>Please notify the site administrator</p>
+                </xar:sec>
             <xar:else/>
                 <h3>Block Type Active</h3>
                 <p class="xar-note">No Problems!</p>

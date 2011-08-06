@@ -33,25 +33,25 @@
                     <div class="xar-col">Title:</div>
                     <div class="xar-col">#$instance['title']#</div>
                 </div>
-                <xar:if condition="!empty($block_groups)">
+                <xar:if condition="!empty($instance_groups)">
                     <div class="xar-row">
                         <div class="xar-col">Block Groups:</div>
                         <div class="xar-col">
                             <p class="xar-note">This instance belongs to the following block groups</p>
-                            <xar:loop name="$block_groups">
+                            <xar:loop name="$instance_groups">
                                 <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
-                                <xar:if condition="$loop:index lt count($block_groups)">,&#160;</xar:if>
+                                <xar:if condition="$loop:index lt count($instance_groups)">,&#160;</xar:if>
                             </xar:loop>
                         </div>
                     </div>
-                <xar:elseif condition="!empty($block_instances)"/>
+                <xar:elseif condition="!empty($group_instances)"/>
                     <div class="xar-row">
                         <div class="xar-col">Group Instances:</div>
                         <div class="xar-col">
                             <p class="xar-note">The following instances belong to this block group</p>
-                            <xar:loop name="$block_instances">
+                            <xar:loop name="$group_instances">
                                 <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
-                                <xar:if condition="$loop:index lt count($block_instances)">,&#160;</xar:if>
+                                <xar:if condition="$loop:index lt count($group_instances)">,&#160;</xar:if>
                             </xar:loop>
                         </div>
                     </div>
