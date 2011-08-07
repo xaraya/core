@@ -214,7 +214,7 @@
                 </p>
                 <p>
                     If the files were removed because you are no longer using this block type,
-                    <a href="#xarModURL('blocks', 'admin', 'remove_type', array('type_id' => $type['type_id']))#">click here to remove the type from the database</a>.
+                    <a href="#xarModURL('blocks', 'admin', 'delete_type', array('type_id' => $type['type_id']))#">click here to remove the type from the database</a>.
                 </p>
                 <xar:else/>
                     <p>Please notify the site administrator</p>
