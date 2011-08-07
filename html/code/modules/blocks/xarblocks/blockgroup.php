@@ -56,7 +56,7 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
                 $block_template = $block_info['content']['instance_groups'][$this->block_id]['block_template'];
             }
             // fall back to instance defaults
-            // checkme: shoule we honour template settings in pairs ?
+            // checkme: should we honour template settings in pairs ?
             if (empty($box_template))
                 $box_template = $block_info['content']['box_template'];            
             if (empty($block_template))

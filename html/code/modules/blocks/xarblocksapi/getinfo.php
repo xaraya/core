@@ -113,16 +113,22 @@ function blocks_blocksapi_getinfo(Array $args=array())
         if (isset($args['cacheexpire']))
             $content['cacheexpire'] = $args['cacheexpire'];
         
-        // template over-rides
+        // template over-rides from block tag 
         if (isset($args['template'])) {
             if (strpos($args['template'], ';') !== false) {
                 list($box_template, $block_template) = explode(';', $args['template']);
             } else {
                 $box_template = $args['template'];
             }
-        } elseif (isset($args['box_template'])) {
+        } 
+        // template over-ride from blockgroup tag        
+        elseif (isset($args['box_template'])) {
             $box_template = $args['box_template'];
         }
+        if (!empty($box_template))
+            $content['box_template'] = $box_template;
+        if (!empty($block_template))
+            $content['block_template'] = $block_template;
 
         
         // content over-rides (block type specific params) 
