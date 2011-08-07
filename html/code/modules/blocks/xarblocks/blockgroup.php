@@ -40,7 +40,11 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
         if (empty($this->group_instances)) return;
         
         $instances = xarMod::apiFunc('blocks', 'instances', 'getitems', 
-            array('block_id' => $this->group_instances));
+            array(
+                'block_id' => $this->group_instances, 
+                'type_state' => xarBlock::TYPE_STATE_ACTIVE,
+                'state' => array(xarBlock::BLOCK_STATE_VISIBLE, xarBlock::BLOCK_STATE_HIDDEN),
+            ));
         
         if (empty($instances)) return;
         
