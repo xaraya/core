@@ -143,8 +143,10 @@
                 </xar:if>
 
                 <fieldset class="xar-form-actions">
+                    <div class="xar-align-center">
                     <xar:var name="submitLabel">Create Instance</xar:var>
                     <input type="submit" value="#$submitLabel#"/>
+                    </div>
                 </fieldset>
             </xar:if>
         </form>

@@ -43,7 +43,7 @@
                         <xar:if condition="!empty($item['module'])">
                             #$item['module']#
                         <xar:else/>
-                            [none]
+                            [ none ]
                         </xar:if>
                         </td>
                         <td>

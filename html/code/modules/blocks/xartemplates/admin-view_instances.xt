@@ -65,7 +65,11 @@
                                     </xar:if>
                                 </td>
                                 <td>
+                                <xar:if condition="!empty($item['module'])">
                                     #$item['module']#
+                                <xar:else/>
+                                    [ none ]
+                                </xar:if>
                                 </td>
                                 <td>
                                     <xar:if condition="!empty($item['groups'])">
