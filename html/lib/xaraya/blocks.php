@@ -69,8 +69,17 @@ class xarBlock extends Object implements ixarBlock
  */
     public static function render(Array $blockinfo=array())
     {
-        try {
+        // Get a cache key for this block if it's suitable for block caching
+        $cacheKey = xarCache::getBlockKey($blockinfo);
 
+        // Check if the block is cached
+        if (!empty($cacheKey) && xarBlockCache::isCached($cacheKey)) {
+            // Return the cached block output
+            return xarBlockCache::getCached($cacheKey);
+        } 
+        
+        try {
+    
             // get the block instance 
             $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $blockinfo);
 
