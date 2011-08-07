@@ -22,10 +22,7 @@ interface iBlock extends iBlockType
     public function getInfo();
     public function getInit();
     public function upgrade($oldversion);
-    public function display(Array $args=array());
-    public function modify(Array $args=array());
-    public function update(Array $args=array());
-    public function delete(Array $args=array());
+    public function display();
 }
 
 interface iBlockGroup extends iBlock
@@ -35,6 +32,19 @@ interface iBlockGroup extends iBlock
     function detachInstance($block_id);
     function orderInstance($block_id, $direction);
     function getInstances();
+}
+interface iBlockModify extends iBlock
+{
+    // required
+    function modify();
+    function update();
+    // optional
+    // function checkmodify();
+}
+interface iBlockDelete extends iBlock
+{
+    // required
+    public function delete();
 }
 abstract class BasicBlock extends BlockType implements iBlock
 {
