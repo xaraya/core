@@ -30,6 +30,21 @@
             </xar:if>
 
             <xar:if condition="empty($tab) or $tab eq 'list'">
+                <form method="get" action="#xarServer::getCurrentURL()">
+                    <input type="hidden" name="module" id="module" value="blocks"/>
+                    <input type="hidden" name="type" id="type" value="admin"/>
+                    <input type="hidden" name="func" id="func" value="view_instances"/>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="filter">Filter by name:</label>
+                        </div>
+                        <div class="xar-col">
+                            <input type="text" name="filter" id="filter" value="#$filter#"/>&#160;
+                            <xar:var name="submitLabel">Apply filter</xar:var>
+                            <input type="submit" value="#$submitLabel#"/>
+                        </div>
+                    </div>                
+                </form>
                 <xar:set name="icon_info">xarTpl::getImage('icons/info.png','theme')</xar:set>
                 <xar:set name="icon_modify">xarTpl::getImage('icons/modify-config.png','theme')</xar:set>
                 <xar:set name="icon_help">xarTpl::getImage('icons/help-browser.png','theme')</xar:set>

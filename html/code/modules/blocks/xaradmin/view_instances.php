@@ -28,9 +28,11 @@ function blocks_admin_view_instances()
         
     switch ($data['tab']) {
         case 'list':
+            if (!xarVarFetch('filter', 'pre:trim:str:1:',
+                $filter, null, XARVAR_NOT_REQUIRED)) return;
             $list = xarMod::apiFunc('blocks', 'instances', 'getitems',
                 array(
-        
+                    'filter' => $filter,
                 ));
             
             foreach ($list as $block_id => $item) {
@@ -109,6 +111,7 @@ function blocks_admin_view_instances()
             }
             
             $data['list'] = $list;
+            $data['filter'] = $filter;
             
         break;
         case 'bygroup':

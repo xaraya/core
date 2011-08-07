@@ -65,6 +65,8 @@ function blocks_instancesapi_getitems(Array $args=array())
                     break;
                 }
             }
+        } else {
+            $invalid[] = 'type_state';
         }
     }
         
@@ -73,6 +75,25 @@ function blocks_instancesapi_getitems(Array $args=array())
     
     if (isset($type_category) && !is_string($type_category))
         $invalid[] = 'type_category';
+
+    if (isset($filter) && !is_string($filter))
+        $invalid[] = 'filter';
+    
+    if (isset($filter_fields) && !empty($filter_fields)) {
+        if (is_string($filter_fields))
+            $filter_fields = array($filter_fields);
+        if (is_array($filter_fields)) {
+            $allowed = array('name', 'type', 'module');
+            foreach ($filter_fields as $dt) {
+                if (!in_array($dt, $allowed) || !is_string($dt)) {
+                    $invalid[] = 'filter_fields';
+                    break;
+                }
+            }
+        } else {
+            $invalid[] = 'filter_fields';
+        }
+    }
 
     if (!empty($invalid)) {
         $msg = 'Invalid #(1) for #(2) module #(3) function #(4)()';
@@ -147,6 +168,17 @@ function blocks_instancesapi_getitems(Array $args=array())
         $bindvars = array_merge($bindvars, $type_state);
     }    
 
+    if (!empty($filter)) {
+        if (empty($filter_fields))
+            $filter_fields = array('name');
+        $likes = array();
+        foreach ($filter_fields as $field) {
+            $likes[] = $select[$field] . " LIKE ?";
+            $bindvars[] = "$filter%";
+        }
+        $where[] = '(' . join(' OR ', $likes) . ')';
+    }
+    
     if (empty($orderby)) {
         $orderby[] = 'blocks.name ASC';
         $orderby[] = 'mods.name ASC';
