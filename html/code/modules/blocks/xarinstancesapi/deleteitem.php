@@ -56,13 +56,13 @@ function blocks_instancesapi_deleteitem(Array $args=array())
     if (!empty($group_ids) && is_array($group_ids)) {
         $instance_groups = xarMod::apiFunc('blocks', 'instances', 'getitems',
             array('block_id' => array_keys($group_ids)));
-        foreach ($group_ids as $block_id) {
+        foreach (array_keys($group_ids) as $block_id) {
             if (!isset($instance_groups[$block_id])) continue;
             $g_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $instance_groups[$block_id]);
             $g_block->detachInstance($args['block_id']);
             if (!xarMod::apiFunc('blocks', 'instances', 'updateitem',
                 array(
-                    'block_id' > $block_id,
+                    'block_id' => $block_id,
                     'content' => $g_block->storeContent(),
                 ))) return;
             unset($g_block);
@@ -77,7 +77,7 @@ function blocks_instancesapi_deleteitem(Array $args=array())
             $i_block->detachGroup($args['block_id']);
             if (!xarMod::apiFunc('blocks', 'instances', 'updateitem',
                 array(
-                    'block_id' > $block_id,
+                    'block_id' => $block_id,
                     'content' => $i_block->storeContent(),
                 ))) return;
             unset($i_block);
