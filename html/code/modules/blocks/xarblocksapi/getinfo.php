@@ -128,8 +128,35 @@ function blocks_blocksapi_getinfo(Array $args=array())
         if (!empty($block_template))
             $content['block_template'] = $block_template;
 
-        
-        // content over-rides (block type specific params)        
+        // content over-rides (block type specific params)
+        // these are already accounted for, disallow them       
+        $to_skip = array(
+            'text_type', 'text_type_long', 'xarversion', 'author', 'contact', 'credits', 'license',
+            'type_category', 'nocache', 'pageshared', 'usershared', 'cacheexpire',
+            'add_access', 'modify_access', 'delete_access', 'display_access', 'expire', 
+            'box_template', 'block_template', 'instance_groups', 'show_preview', 'show_help',
+        );                
+        foreach ($content as $k => $v) {
+            if (in_array($k, $to_skip) || !isset($args[$k])) continue;        
+            $datatype = gettype($v);
+            switch ($datatype) {
+                case 'string':
+                case 'float':
+                case 'double':
+                case 'integer':
+                case 'boolean':
+                    $comparetype = gettype($args[$k]);
+                    if ($comparetype !== $datatype)
+                        continue 2;
+                case 'NULL':
+                    $content[$k] = $args[$k];
+                break;
+                default:
+                    continue 2;
+                break;
+            }
+        }         
+
         $blockinfo['content'] = $content;
 
         return $blockinfo;

@@ -199,7 +199,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
         $allowed = array(
             'nocache', 'pageshared', 'usershared', 'cacheexpire', 
             'add_access', 'modify_access', 'delete_access', 'display_access',
-            'expire', 'box_template', 'block_template', 'instance_groups', 'group_instances',
+            'expire', 'box_template', 'block_template', 'instance_groups',
             'show_preview', 'show_help',
         );
         $info = array();
