@@ -105,9 +105,8 @@ function blocks_admin_modify_instance()
         }
 
         // get the block instance
-        try {
         $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $filter);
-        } catch (Exception $e) { print_r($filter['method']); }
+
         $instance_states = xarMod::apiFunc('blocks', 'instances', 'getstates');
         $block_groups = xarMod::apiFunc('blocks', 'instances', 'getitems',
             array('type_category' => 'group',));

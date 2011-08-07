@@ -132,7 +132,7 @@ function blocks_admin_new_instance()
                         $group = $block_groups[$group_id];
                         $block_group = xarMod::apiFunc('blocks', 'blocks', 'getobject', $group);
                         if (!$block_group) continue;
-                        $result = $block_group->addInstance($block_id);
+                        $result = $block_group->attachInstance($block_id);
                         if (!$result) continue;
                         $update = array(
                             'block_id' => $group_id,

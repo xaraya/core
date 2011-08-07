@@ -19,10 +19,10 @@ function blocks_typesapi_refresh(Array $args=array())
     // only need to run this once 
     static $runonce = false;
     if ($runonce) return true;
-    
+   
     // first get a list of block type files for all available modules 
     $files = xarMod::apiFunc('blocks', 'types', 'getfiles');
-    
+
     foreach ($files as $file) {
         // nothing fancy here, if a type file exists, see if we have an entry for it in the db
         if (!xarMod::apiFunc('blocks', 'types', 'getitem',
@@ -38,7 +38,7 @@ function blocks_typesapi_refresh(Array $args=array())
                 ))) return;
         }
     }
-    
+
     // now get the list of all block types in the db
     $types = xarMod::apiFunc('blocks', 'types', 'getitems');    
 
@@ -48,31 +48,33 @@ function blocks_typesapi_refresh(Array $args=array())
         if (!empty($type['module']) && !xarMod::isAvailable($type['module'])) {
             $state = xarBlock::TYPE_STATE_MOD_UNAVAILABLE;
         } else {
-            try {
+            try { 
                 // check the block can be instantiated
                 $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $type);
                 $state = xarBlock::TYPE_STATE_ACTIVE;
                 if ($block->type_category != $type['type_category']) {
                     $update['type_category'] = $block->type_category;
                 }
+                       
             } catch (FileNotFoundException $e) {
                 $state = xarBlock::TYPE_STATE_MISSING;
             } catch (Exception $e) {
-                $state = xarBlock::TYPE_STATE_ERROR;
+                $state = xarBlock::TYPE_STATE_ERROR;     
             }
-        }
 
+        }
         if ($state != $type['type_state'])
             $update['type_state'] = $state;
             
         if (!empty($update)) {
             $update['type_id'] = $type['type_id'];
             if (!xarMod::apiFunc('blocks', 'types', 'updateitem', $update)) return;
-        }
+        }       
         unset($block, $state, $update);
+
     }
     unset($files, $types);
-
-    return $runonce = true;
+    $runonce = true;
+    return true;
 }
 ?>
