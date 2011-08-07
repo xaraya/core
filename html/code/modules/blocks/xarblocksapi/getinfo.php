@@ -24,7 +24,9 @@ function blocks_blocksapi_getinfo(Array $args=array())
         }
         
         $filter = array();
-        if (isset($args['instance'])) {
+        // fixme: the block tag passes empty parameters always, 
+        // testing for empty here is wrong, this shouldn't be set
+        if (!empty($args['instance'])) {
             // filter by instance (solo, or module)
             $apitype = 'instances';
             // can be either block instance id or name
@@ -50,7 +52,7 @@ function blocks_blocksapi_getinfo(Array $args=array())
             $apitype = 'types';
             if (is_string($args['type'])) {
                 $filter['type'] = $args['type'];
-                if (isset($args['module'])) {
+                if (!empty($args['module'])) {
                     if (is_string($args['module'])) {
                         $filter['module'] = $args['module'];
                     } else {
@@ -97,11 +99,7 @@ function blocks_blocksapi_getinfo(Array $args=array())
         if (!empty($args['title']))
             $blockinfo['title'] = $args['title'];
         
-        if (!isset($args['instance'])) {
-            $content = $blockinfo['type_info'];
-        } else {
-            $content = $blockinfo['content'];
-        }
+        $content = $blockinfo['content'];
 
         // caching over-rides
         if (isset($args['nocache']))
@@ -114,7 +112,7 @@ function blocks_blocksapi_getinfo(Array $args=array())
             $content['cacheexpire'] = $args['cacheexpire'];
         
         // template over-rides from block tag 
-        if (isset($args['template'])) {
+        if (!empty($args['template'])) {
             if (strpos($args['template'], ';') !== false) {
                 list($box_template, $block_template) = explode(';', $args['template']);
             } else {
@@ -131,11 +129,9 @@ function blocks_blocksapi_getinfo(Array $args=array())
             $content['block_template'] = $block_template;
 
         
-        // content over-rides (block type specific params) 
-        
-        
+        // content over-rides (block type specific params)        
         $blockinfo['content'] = $content;
-        
+
         return $blockinfo;
 }
 ?>

@@ -19,7 +19,7 @@ function blocks_instancesapi_getitem(Array $args=array())
     if (empty($args)) {
         $msg = 'Missing arguments for #(1) module #(2) function #(3)()';
         $vars = array('blocks', 'instancesapi', 'getitem');
-        throw new MissingParameterException($vars, $msg);
+        throw new EmptyParameterException($vars, $msg);
     }
     
     $types = xarMod::apiFunc('blocks', 'instances', 'getitems', $args);
@@ -29,7 +29,7 @@ function blocks_instancesapi_getitem(Array $args=array())
     } elseif (count($types) > 1) {
         $msg = 'Missing arguments for #(1) module #(2) function #(3)()';
         $vars = array('blocks', 'instancesapi', 'getitem');
-        throw new MissingParameterException($vars, $msg);
+        throw new EmptyParameterException($vars, $msg);
     } else {
         return reset($types);
     }

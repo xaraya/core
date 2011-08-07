@@ -112,6 +112,8 @@ class xarBlock extends Object implements ixarBlock
             if ($block->type_category == 'group') {
                 $boxOutput = $blockinfo['content'];
             } else {
+                $blockinfo['group'] = $block->group;
+                $blockinfo['group_id'] = $block->group_id;
                 $boxOutput = xarTpl::renderBlockBox($blockinfo, $block->box_template);
             }                      
 

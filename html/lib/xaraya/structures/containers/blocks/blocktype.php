@@ -44,7 +44,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     // Block instance information, supplied by blocks subsystem (dbinfo)
     protected $block_id;
     protected $name;
-    protected $state;
+    protected $state = xarBlock::BLOCK_STATE_VISIBLE;
     // Block instance information, supplied by blocks subsystem (dbinfo, or over-ridden by blocktag)
     protected $title;
 

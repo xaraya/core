@@ -116,6 +116,7 @@ function blocks_typesapi_getitems(Array $args=array())
                     // normalize content
                     $val = @unserialize($val);
                     $item[$field] = $val;
+                    $item['content'] = $val;
                 break;
                 case 'module':
                     $item[$field] = !empty($val) ? $val : '';
