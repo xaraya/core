@@ -332,6 +332,7 @@
                             </table>
                         </fieldset>
                     </xar:if>
+                    <xar:var name="submitLabel">Update Config</xar:var>
 
                 <xar:elseif condition="$tab eq 'caching'"/>
                     <div class="xar-row">
