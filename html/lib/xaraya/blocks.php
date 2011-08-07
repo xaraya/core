@@ -206,9 +206,13 @@ class xarBlock extends Object implements ixarBlock
 
         // strict checks that this class and not one of its parents declared it 
         $refObject  = new ReflectionClass($block);
+        $baseClass = !empty($block->module) ?
+                     ucfirst($block->module).'_'.ucfirst($block->type).'Block' :
+                     ucfirst($block->type).'Block';
         if ($refObject->hasMethod($method)) {
             $methodObject = $refObject->getMethod($method);
-            $hasMethod = $methodObject->class === $refObject->getName();
+            $hasMethod = ( ($methodObject->class === $refObject->getName()) ||
+                           (stripos($methodObject->class, $baseClass) === 0) );
         } else {
             $hasMethod = false;
         }
