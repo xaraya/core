@@ -50,8 +50,24 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
             $block_info = $instances[$id];
             $block_info['group_id'] = $this->block_id;
             $block_info['group'] = $this->name;
-            // @todo: fix template cascade ...
-            $block_info['content']['box_template'] = $this->box_template;
+            // try for instance templates for this group
+            if (isset($block_info['content']['instance_groups'][$this->block_id])) {
+                $box_template = $block_info['content']['instance_groups'][$this->block_id]['box_template'];
+                $block_template = $block_info['content']['instance_groups'][$this->block_id]['block_template'];
+            }
+            // fall back to instance defaults
+            // checkme: shoule we honour template settings in pairs ?
+            if (empty($box_template))
+                $box_template = $block_info['content']['box_template'];            
+            if (empty($block_template))
+                $block_template = $block_info['content']['block_template'];
+            
+            // fall back to blockgroup
+            if (empty($box_template))
+                $box_template = $this->box_template;            
+            $block_info['content']['box_template'] = $box_template;            
+            $block_info['content']['block_template'] = $block_template;
+
             $output .= xarBlock::render($block_info);
         }
         if (empty($output)) return;
