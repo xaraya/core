@@ -454,27 +454,15 @@ class xarTpl extends Object
 
         switch ($scope) {
             case 'module':
-                $basepaths = array(
-                    "$themePath/modules/$package/",
-                    "$commonPath/modules/$package/",
-                    "{$codePath}modules/$package/xartemplates",
-                );            
+                $packages = 'modules';           
             break;
             case 'block':
                 // standalone blocks
-                $basepaths = array(
-                    "$themePath/blocks/$package/",
-                    "$commonPath/blocks/$package/",
-                    "{$codePath}blocks/$package/xartemplates/",
-                );
+                $packages = 'blocks';
             break;
             case 'property':
-                // standalone properties 
-                $basepaths = array(
-                    "$themePath/properties/$package/",
-                    "$commonPath/properties/$package/",
-                    "{$codePath}properties/$package/xartemplates/",
-                );            
+                // standalone properties           
+                $packages = 'properties';
             break;
             default:
                 $vars = array($scope);
@@ -482,14 +470,17 @@ class xarTpl extends Object
                 throw new BadParameterException($vars, $msg);
             break;
         }
-
+        $basepaths = array(
+            "$themePath/$packages/$package/",
+            "$commonPath/$packages/$package/",
+            "{$codePath}{$packages}/$package/xartemplates/",
+        ); 
         $paths = array();
         foreach ($basepaths as $basepath) {
             $paths[] = "$basepath/$tplPart/$tplBase-$tplName.xt";
             $paths[] = "$basepath/$tplPart/$tplBase.xt";
-            if ($canonical) {
+            if ($canonical) 
                 $paths[] = "$basepath/$tplPart/$canTemplateName.xt";
-            }
         }
 
         $sourceFileName = '';
