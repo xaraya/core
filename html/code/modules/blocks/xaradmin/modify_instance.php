@@ -68,6 +68,8 @@ function blocks_admin_modify_instance()
         );
         $canmodify = $accessproperty->check($args);
     }
+
+    $instance_states = xarMod::apiFunc('blocks', 'instances', 'getstates');
     
     // only get the block instance if the type is active 
     if ($data['tab'] != 'status') {
@@ -107,7 +109,6 @@ function blocks_admin_modify_instance()
         // get the block instance
         $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $filter);
 
-        $instance_states = xarMod::apiFunc('blocks', 'instances', 'getstates');
         $block_groups = xarMod::apiFunc('blocks', 'instances', 'getitems',
             array('type_category' => 'group',));
 
