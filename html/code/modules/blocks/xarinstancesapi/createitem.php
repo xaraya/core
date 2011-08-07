@@ -21,7 +21,7 @@ function blocks_instancesapi_createitem(Array $args=array())
     if (empty($type_id) || !is_numeric($type_id))
         $invalid[] = 'type_id';
     
-    if (empty($name) || !is_string($name) || strlen($name) > 64)
+    if (empty($name) || !is_string($name) || strlen($name) > 64 || !preg_match('!^([a-z0-9_])*$!', $name))
         $invalid[] = 'name';
 
     if (!isset($title))

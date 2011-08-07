@@ -112,18 +112,22 @@ function blocks_admin_new_instance()
             // the createitem function handles validation for everything else,
             // we just need to catch any exceptions
             try {
-                // get default content from block type
-                $type_info = $block_type->storeContent();
-                $type_info['groups'] = $data['groups'];
-                $type_info['box_template'] = $data['box_template'];
-                $type_info['block_template'] = $data['block_template'];
+                // add groups
+                if (!empty($data['groups'])) {
+                    foreach ($data['groups'] as $group_id) 
+                        $block_type->attachGroup($group_id);
+                }
+                // set templates
+                $block_type->setBoxTemplate($data['box_template']);
+                $block_type->setBlockTemplate($data['block_template']);
+                // create item 
                 $block_id = xarMod::apiFunc('blocks', 'instances', 'createitem',
                     array(
                         'type_id' => $data['type_id'],
                         'name' => $data['name'],
                         'title' => $data['title'],
                         'state' => $data['state'],
-                        'content' => $type_info,
+                        'content' => $block_type->storeContent(),
                     ));
                 // add instance to selected groups 
                 if (!empty($data['groups'])) {
@@ -144,9 +148,11 @@ function blocks_admin_new_instance()
             } catch (BadParameterException $e) {
                 // something wrong with args, see what it was                    
                 // block name, required, can't be empty
-                if (empty($data['name'])) {
-                    $invalid['name'] = xarML('You must provide a name for this block instance');
-                }        
+                if (empty($data['name']) || strlen($data['name']) > 64) {
+                    $invalid['name'] = xarML('Name must be a string between 1 and 64 characters long');
+                } elseif (!preg_match('!^([a-z0-9_])*$!', $data['name'])) {
+                    $invalid['name'] = xarML('Name can only contain the characters [a-z0-9_]');
+                }   
                 // state, required, must be a known state
                 if (!isset($data['state']) || !isset($instance_states[$data['state']])) {
                     $invalid['state'] = xarML('Unknown block state selected');
