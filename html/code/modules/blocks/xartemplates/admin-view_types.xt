@@ -10,6 +10,7 @@
                 <xar:set name="icon_help">xarTpl::getImage('icons/help-browser.png','theme')</xar:set>
                 <xar:set name="icon_preview">xarTpl::getImage('icons/display.png','theme')</xar:set>
                 <xar:set name="icon_delete">xarTpl::getImage('icons/delete.png','theme')</xar:set>
+                <xar:set name="icon_add">xarTpl::getImage('icons/add.png','theme')</xar:set>
             <table class="xar-fullwidth">
                 <caption class="xar-align-left xar-margin-nonebottom">
                     Block Types
@@ -78,6 +79,11 @@
                                         <a href="#$item['help_link']['url']#" class="xar-icon" title="#$item['help_link']['title']#"><img src="#$icon_help#" class="xar-icon" alt="#$item['help_link']['label']#"/></a>
                                     <xar:else/>
                                         <img src="#$icon_help#" class="xar-icon-disabled" alt="#$item['help_link']['label']#" title="#$item['help_link']['title']#"/>
+                                    </xar:if>&#160;
+                                    <xar:if condition="!empty($item['add_link']['url'])">
+                                        <a href="#$item['add_link']['url']#" class="xar-icon" title="#$item['add_link']['title']#"><img src="#$icon_add#" class="xar-icon" alt="#$item['add_link']['label']#"/></a>
+                                    <xar:else/>
+                                        <img src="#$icon_add#" class="xar-icon-disabled" alt="#$item['add_link']['label']#" title="#$item['add_link']['title']#"/>
                                     </xar:if>
                         </td>
                     </tr>

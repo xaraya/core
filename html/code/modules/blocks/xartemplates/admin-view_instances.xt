@@ -268,7 +268,7 @@
                 <xar:set name="icon_help">xarTpl::getImage('icons/help-browser.png','theme')</xar:set>
                 <xar:set name="icon_preview">xarTpl::getImage('icons/display.png','theme')</xar:set>
                 <xar:set name="icon_delete">xarTpl::getImage('icons/delete.png','theme')</xar:set>
-
+                <xar:set name="icon_add">xarTpl::getImage('icons/add.png','theme')</xar:set>
                 <xar:foreach in="$list" key="$type_id" value="$type">
                     <table class="xar-fullwidth xar-items xar-margin-nonetop">
                         <thead>
@@ -301,7 +301,12 @@
                                         <a href="#$type['help_link']['url']#" class="xar-icon" title="#$type['help_link']['title']#"><img src="#$icon_help#" class="xar-icon" alt="#$type['help_link']['label']#"/></a>
                                     <xar:else/>
                                         <img src="#$icon_help#" class="xar-icon-disabled" alt="#$type['help_link']['label']#" title="#$type['help_link']['title']#"/>
-                                    </xar:if>
+                                    </xar:if>&#160;
+                                    <xar:if condition="!empty($type['add_link']['url'])">
+                                        <a href="#$type['add_link']['url']#" class="xar-icon" title="#$type['add_link']['title']#"><img src="#$icon_add#" class="xar-icon" alt="#$type['add_link']['label']#"/></a>
+                                    <xar:else/>
+                                        <img src="#$icon_add#" class="xar-icon-disabled" alt="#$type['add_link']['label']#" title="#$type['add_link']['title']#"/>
+                                    </xar:if>                                    
                                 </th>
                             </tr>
                         </thead>

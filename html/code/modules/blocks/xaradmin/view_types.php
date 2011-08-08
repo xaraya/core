@@ -35,6 +35,8 @@ function blocks_admin_view_types()
             'numitems' => $data['items_per_page'],
         ));
     $data['total'] = xarMod::apiFunc('blocks', 'types', 'countitems');    
+
+    $access_property = DataPropertyMaster::getProperty(array('name' => 'access'));
     
     foreach ($items as $type_id => $item) {
         $item['info_link'] = array(
@@ -63,7 +65,22 @@ function blocks_admin_view_types()
             'url' => empty($item['type_info']['show_help']) ? '' :
                 xarModURL('blocks', 'admin', 'modify_type', 
                     array('type_id' => $type_id, 'tab' => 'help')),
-        );     
+        );
+        // check new instance access        
+        $access = array(
+            'module' => $item['module'],
+            'component' => 'Block',
+            'instance' => $item['type'] . ":All:All",
+            'group' => $item['type_info']['add_access']['group'],
+            'level' => $item['type_info']['add_access']['level'],
+        );
+        $item['add_link'] = array(
+            'label' => xarML('Add'),
+            'title' => xarML('Create a new instance of this block type'),
+            'url' => (!$access_property->check($access) || $type['type_state'] != xarBlock::TYPE_STATE_ACTIVE) ?  '' :
+                xarModURL('blocks', 'admin', 'new_instance',
+                    array('type_id' => $type_id, 'phase' => 'form')),
+        );
         $items[$type_id] = $item;
     }
     $data['types'] = $items;    
