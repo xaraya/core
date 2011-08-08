@@ -120,7 +120,7 @@
                 </div>
             </div>
             <div class="xar-row">
-                <div class="xar-form-input-wrappe">
+                <div class="xar-col">
                     <label class="xar-form-label" for="install_create_database">
                         Create the database
                     </label>
@@ -139,9 +139,14 @@
             an already existing database.
             </p>
             <div class="xar-form-actions" style="margin: 2em 0;">
-                <input type="hidden" name="install_phase" id="install_phase" value="5"/>
-                <xar:var name="label">Continue</xar:var>
-                <xar:button type="submit" label="$label"/>
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="install_phase" id="install_phase" value="5"/>
+                        <xar:var name="label">Continue</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
