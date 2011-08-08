@@ -70,8 +70,17 @@ function blocks_instancesapi_getitems(Array $args=array())
         }
     }
         
-    if (isset($module) && !is_string($module))
-        $invalid[] = 'module';
+
+    if (isset($module)) {
+        if (empty($module)) {
+            $module_id = 0;
+        } elseif (!is_string($module) || !xarMod::isAvailable($module)) {
+            $invalid[] = 'module';
+        } else {
+            $modinfo = xarMod::getBaseInfo($module);
+            $module_id = $modinfo['systemid'];
+        }
+    }
     
     if (isset($type_category) && !is_string($type_category))
         $invalid[] = 'type_category';

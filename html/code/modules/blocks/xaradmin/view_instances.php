@@ -28,11 +28,21 @@ function blocks_admin_view_instances()
         
     switch ($data['tab']) {
         case 'list':
+            if (!xarVarFetch('startnum', 'int:1',
+                $data['startnum'], 1, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('filter', 'pre:trim:str:1:',
-                $filter, null, XARVAR_NOT_REQUIRED)) return;
+                $data['filter'], null, XARVAR_NOT_REQUIRED)) return;
+            $data['items_per_page'] = xarModVars::get('blocks', 'items_per_page');
+
+            $data['total'] = xarMod::apiFunc('blocks', 'instances', 'countitems',
+                array(
+                    'filter' => $data['filter'],
+                ));
             $list = xarMod::apiFunc('blocks', 'instances', 'getitems',
                 array(
-                    'filter' => $filter,
+                    'filter' => $data['filter'],
+                    'startnum' => $data['startnum'],
+                    'numitems' => $data['items_per_page'],
                 ));
             
             foreach ($list as $block_id => $item) {
@@ -111,7 +121,6 @@ function blocks_admin_view_instances()
             }
             
             $data['list'] = $list;
-            $data['filter'] = $filter;
             
         break;
         case 'bygroup':

@@ -134,6 +134,7 @@
                         </xar:foreach>
                     </tbody>
                 </table>
+                <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>
 
             <xar:elseif condition="$tab eq 'bygroup'"/>
 

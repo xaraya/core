@@ -23,9 +23,18 @@ function blocks_admin_view_types()
 
     // refresh block types
     if (!xarMod::apiFunc('blocks', 'types', 'refresh')) return;
-
+    
+    $data = array();
+    if (!xarVarFetch('startnum', 'int:1',
+        $data['startnum'], 1, XARVAR_NOT_REQUIRED)) return;
+    $data['items_per_page'] = xarModVars::get('blocks', 'items_per_page');
     // get types from db 
-    $items = xarMod::apiFunc('blocks', 'types', 'getitems');
+    $items = xarMod::apiFunc('blocks', 'types', 'getitems',
+        array(
+            'startnum' => $data['startnum'],
+            'numitems' => $data['items_per_page'],
+        ));
+    $data['total'] = xarMod::apiFunc('blocks', 'types', 'countitems');    
     
     foreach ($items as $type_id => $item) {
         $item['info_link'] = array(

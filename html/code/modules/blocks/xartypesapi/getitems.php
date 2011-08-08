@@ -24,6 +24,24 @@ function blocks_typesapi_getitems(Array $args=array())
     if (!empty($type) && !is_string($type))
         $invalid[] = 'type';
 
+    if (isset($type_category) && !is_string($type_category))
+        $invalid[] = 'type_category';
+
+    if (isset($type_state)) {
+        if (is_numeric($type_state)) {
+            $type_state = array($type_state);
+        } elseif (is_array($type_state)) {
+            foreach ($type_state as $dt) {
+                if (!is_numeric($dt)) {
+                    $invalid[] = 'type_state';
+                    break;
+                }
+            }
+        } else {
+            $invalid[] = 'type_state';
+        }
+    }
+
     if (isset($module)) {
         if (empty($module)) {
             $module_id = 0;
@@ -82,6 +100,15 @@ function blocks_typesapi_getitems(Array $args=array())
     if (isset($module_id)) {
         $where[] = 'types.module_id = ?';
         $bindvars[] = $module_id;
+    }
+
+    if (!empty($type_category)) {
+        $where[] = 'types.category = ?';
+        $bindvars[] = $type_category;
+    }
+    if (!empty($type_state)) {
+        $where[] = 'types.state IN (' . implode(',', array_fill(0, count($type_state), '?')) . ')';
+        $bindvars = array_merge($bindvars, $type_state);
     }
     
     if (!empty($where))
