@@ -1,109 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript scope="theme" filename="formcheck.js"/>
-    <script type="text/javascript">
-    <!--
-        // Enter name of mandatory fields
-        var blocks_fieldRequired = Array("block_name");
-        // Enter field description to appear in the dialog box
-        var blocks_fieldDescription = Array("Name");
-    //-->
-    </script>
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <h2>New Block</h2>
-        <form action="#xarModURL('blocks', 'admin', 'create_instance')#" method="post" onsubmit="return xar_base_formCheck(this, blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
-            <fieldset>
-                <legend>Block Properties</legend>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <label for="block_type" title="#xarML('The type of block that you wish to add.')#" class="xar-form-label">
-                            Parent Module / Type:
-                        </label>
+        <h2>New Block Instance</h2>
+        <form action="#xarModURL('blocks', 'admin', 'new_instance')#" method="post">
+            <xar:if condition="empty($phase) or $phase eq 'options'">
+                <input type="hidden" name="phase" id="phase" value="form"/>
+                <fieldset>
+                    <legend>Select Block Type</legend>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="type_id">Block Type (module)</label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:var name="firstline">-- choose type --</xar:var>
+                            <xar:data-input type="dropdown" name="type_id" id="type_id" firstline="$firstline" options="$type_options" onchange="this.form.submit();return false;"/>
+                            <xar:if condition="!empty($invalid['type_id'])">
+                                <p class="xar-error">Error: #$invalid['type_id']#</p>
+                            </xar:if>
+                        </div>
                     </div>
-                    <div class="xar-col">
-                        <select name="block_type" id="block_type">
-                            <xar:loop name="$block_types">
-                                <option value="#$loop:item['tid']#">
-                                    #xarVarPrepForDisplay($loop:item['module'])# / #xarVarPrepForDisplay($loop:item['type'])#
-                                </option>
-                            </xar:loop>
-                        </select>
-                    </div>
-                </div>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <label for="block_name" title="#xarML('Every block instance requires a unique name')#" class="xar-form-label">
-                            Name:
-                        </label>
-                    </div>
-                    <div class="xar-col">
-                        <input type="text" name="block_name" id="block_name" value="" maxlength="100" class="xar-form-textmedium"/>
-                    </div>
-                </div>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <label for="block_title" title="#xarML('The title of the block as you want it to appear on your website')#" class="xar-form-label">
-                            Title:
-                        </label>
-                    </div>
-                    <div class="xar-col">
-                        <input type="text" name="block_title" id="block_title" value="" maxlength="255" class="xar-form-textmedium"/>
-                    </div>
-                </div>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <label for="block_state"
-                        title="#xarML('This field is used to determine whether the block is shown (maximized) or hidden.')#" class="xar-form-label">
-                            Default State:
-                        </label>
-                    </div>
-                    <div class="xar-col">
-                        <xar:data-input type="dropdown" name="block_state" id="block_state" value="2" options="$state_options"/>
-                    </div>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend>Block Groups and Group Templates</legend>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <label for="block_groups" title="#xarML('Initial block group to place this block into (optional)')#" class="xar-form-label">
-                            Block Group (optional):
-                        </label>
-                    </div>
-                    <div class="xar-col">
-                        <select name="block_groups[][id]" id="block_groups">
-                            <option value="">-- no group --</option>
-                            <xar:loop name="$block_groups">
-                                <option value="#$loop:item['bid']#">
-                                    #xarVarPrepForDisplay($loop:item['name'])#
-                                </option>
-                            </xar:loop>
-                        </select>
-                    </div>
-                </div>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <label title="#xarML('Instance templates that you want to use for this block instance.')#" class="xar-form-label">
-                            Instance Template (optional):
-                        </label>
-                    </div>
-                    <div class="xar-col">
-                        <label for="block_template_outer">Outer:</label>&#160;
-                        <input type="text" name="block_template_outer" id="block_template_outer" value="" maxlength="127" class="xar-form-textmedium"/>&#160;
-                        <br/><label for="block_template_inner">Inner:</label>&#160;
-                        <input type="text" name="block_template_inner" id="block_template_inner" value="" maxlength="127" class="xar-form-textmedium"/>
-                    </div>
-                </div>
-            </fieldset>
-
-            <fieldset class="xar-form-actions">
+                </fieldset>
+                <noscript>
+                    <fieldset>
+                        <div class="xar-row">
+                            <xar:var name="submitLabel">Create instance</xar:var>
+                            <input type="submit" value="$submitLabel"/>
+                        </div>
+                    </fieldset>
+                </noscript>
+            <xar:elseif condition="$phase eq 'form'"/>
+                <input type="hidden" name="type_id" id="type_id" value="#$type['type_id']#"/>
+                <input type="hidden" name="phase" id="phase" value="update"/>
                 <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                <xar:var name="label">Create</xar:var>
-                <xar:button type="submit" label="$label"/>
-            </fieldset>
+                <fieldset>
+                    <legend>Create Instance</legend>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="type_id">Block Type:</label>
+                        </div>
+                        <div class="xar-col">
+                            #$type['type']#
+                            <xar:if condition="!empty($type['module'])">
+                                (#$type['module']#)
+                            </xar:if>
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="labelTitle">Every block instance requires a unique name</xar:var>
+                            <label for="name" title="#$labelTitle#" class="xar-form-label">
+                                Instance Name:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <input type="text" name="name" id="name" value="#$name#" maxlength="64" class="xar-form-textlong"/>
+                            <xar:if condition="!empty($invalid['name'])">
+                                <p class="xar-error">Error: #$invalid['name']#</p>
+                            </xar:if>
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="title" title="#xarML('The title of the block as you want it to appear on your website')#" class="xar-form-label">
+                                Instance Title:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <input type="text" name="title" id="title" value="#$title#" maxlength="255" class="xar-form-textxlong"/>
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="state"
+                            title="#xarML('This field is used to determine whether the block is shown (maximized) or hidden.')#" class="xar-form-label">
+                                Instance State:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:data-input type="dropdown" name="state" id="state" value="$state" options="$instance_states"/>
+                            <xar:if condition="!empty($invalid['state'])">
+                                <p class="xar-error">Error: #$invalid['state']#</p>
+                            </xar:if>
+                        </div>
+                    </div>
+                </fieldset>
+                <xar:if condition="$type['type_category'] eq 'group'">
+                    <!-- Blockgroup type blocks only have an outer template which,
+                             counter-intuitively is not applied to the blockgroup itself,
+                             rather it is applied to all instances in the group -->
+                    <fieldset>
+                        <legend>Group Instances Template</legend>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <label for="type_box_template">
+                                        Instances Outer Template:</label>
+                            </div>
+                            <div class="xar-col">
+                                <input type="text" name="box_template" id="box_template" value="#$box_template#"/>
+                                <xar:if condition="!empty($invalid['templates'])">
+                                     <p class="xar-error">Error: #$invalid['templates']#</p>
+                                </xar:if>
+                            </div>
+                        </div>
+                    </fieldset>
+                <xar:else/>
+                    <fieldset>
+                        <legend>Templates and groups</legend>
+                        <table class="xar-fullwidth xar-margin-thickends">
+                            <thead>
+                                <tr>
+                                    <th>Instance Group</th>
+                                    <th>Outer</th>
+                                    <th>Inner</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Any (default)</td>
+                                    <td><input type="text" name="box_template" id="box_template" value="#$box_template#"/></td>
+                                    <td><input type="text" name="block_template" id="block_template" value="#$block_template#"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="labelTitle">Optionally add this instance to selected block groups        </xar:var>
+                                <label for="groups" title="#$labelTitle#" class="xar-form-label">
+                                Instance Groups:
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:data-input type="multiselect" name="groups" id="groups" options="$group_options" value="$groups"/>
+                                <xar:if condition="!empty($invalid['groups'])">
+                                    <p class="xar-error">Error: #$invalid['groups']#        </p>
+                                </xar:if>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                </xar:if>
+
+                <fieldset class="xar-form-actions">
+                    <div class="xar-align-center">
+                    <xar:var name="submitLabel">Create Instance</xar:var>
+                    <input type="submit" value="#$submitLabel#"/>
+                    </div>
+                </fieldset>
+            </xar:if>
         </form>
     </div>
 </xar:template>

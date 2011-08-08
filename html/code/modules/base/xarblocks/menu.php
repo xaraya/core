@@ -24,16 +24,15 @@ sys::import('xaraya.structures.containers.blocks.menublock');
 
 class Base_MenuBlock extends MenuBlock implements iBlock
 {
-    public $name                = 'MenuBlock';
-    public $module              = 'base';
-    public $text_type           = 'Menu';
-    public $text_type_long      = 'Generic menu';
-    public $xarversion          = '2.3.0';
-    public $allow_multiple      = true;
-    public $show_preview        = true;
-    public $nocache             = 1;
-    public $pageshared          = 0;
-    public $usershared          = 1;
+    protected $type                = 'menu';
+    protected $module              = 'base';
+    protected $text_type           = 'Menu';
+    protected $text_type_long      = 'Generic menu';
+    protected $xarversion          = '2.3.0';
+    protected $show_preview        = true;
+    protected $show_help           = true;
+
+    protected $menumodtype         = 'user';
 
     public $marker              = '[x]';
     public $showlogout          = true;
@@ -71,19 +70,17 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                                     ),
                                   );
 
-    public $menumodtype         = 'user';
 
-    public function __construct(Array $data=array())
+    
+    public function init()
     {
-        // upgrades are now in the upgrade() method below (called in parent constructor :) )
-        parent::__construct($data);
+        parent::init();
         // make sure we keep the content array in sync
         $this->content['modulelist'] = $this->modulelist;
         // load the default link if userlinks are empty
         if (empty($this->userlinks))
             $this->userlinks = $this->content['userlinks'] = $this->links_default;
     }
-
 /**
  * Display func.
  * @param $data array containing title,content

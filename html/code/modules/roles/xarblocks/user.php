@@ -21,14 +21,11 @@ sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class Roles_UserBlock extends BasicBlock
 {
-    public $name                = 'UserBlock';
-    public $module              = 'roles';
-    public $text_type           = 'User';
-    public $text_type_long      = 'User\'s Custom Box';
-    public $show_preview        = true;
-
-    public $nocache             = 1;
-    public $usershared          = 0;
+    protected $type                = 'user';
+    protected $module              = 'roles';
+    protected $text_type           = 'User';
+    protected $text_type_long      = 'User\'s Custom Box';
+    protected $show_preview        = true;
 
     function display(Array $data=array())
     {

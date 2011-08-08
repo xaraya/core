@@ -25,15 +25,12 @@ class Dynamicdata_FormBlockAdmin extends Dynamicdata_FormBlock implements iBlock
  */
     public function modify(Array $data=array())
     {
-        $data = parent::modify($data);
+        $data = $this->getContent();
 
         // Defaults
         if (!isset($data['objectid'])) {
             $data['objectid'] = 0;
         }
-
-        $data['blockid'] = $data['bid'];
-
         // Return output
         return $data;
 

@@ -24,12 +24,16 @@
 
     class Roles_OnlineBlock extends BasicBlock
     {
-        public $name                = 'OnlineBlock';
-        public $module              = 'roles';
-        public $text_type           = 'Online';
-        public $text_type_long      = 'Display who is online';
-        public $allow_multiple      = true;
-        public $show_preview        = true;
+        protected $type                = 'online';
+        protected $module              = 'roles';
+        protected $text_type           = 'Online';
+        protected $text_type_long      = 'Display who is online';
+        protected $show_preview        = true;
+        
+        public $showusers = true;
+        public $showusertotal = false;
+        public $showanontotal = false;
+        public $showlastuser = false;
 
         function display(Array $data=array())
         {

@@ -20,6 +20,7 @@
  */
 function themes_xartables()
 {
+
     $prefix = xarDB::getPrefix();
     $tables['themes'] = $prefix . '_themes';
     $tables['themes_configurations'] = $prefix . '_themes_configurations';

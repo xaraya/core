@@ -21,13 +21,11 @@ sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class Themes_SkinBlock extends BasicBlock implements iBlock
 {
-    public $nocache             = 1;
-
-    public $name                = 'SkinBlock';
-    public $module              = 'themes';
-    public $text_type           = 'Skin';
-    public $text_type_long      = 'Skin Selection';
-    public $pageshared          = 1;
+    protected $type                = 'skin';
+    protected $module              = 'themes';
+    protected $text_type           = 'Theme Switcher';
+    protected $text_type_long      = 'User Theme Switcher Selection';
+    protected $pageshared          = 1;
 
 /**
  * Display func.
@@ -60,7 +58,7 @@ class Themes_SkinBlock extends BasicBlock implements iBlock
  */
     public function modify(Array $data=array())
     {
-        $data = parent::modify($data);
+        $data = $this->getContent();
         $data['enable_user_menu'] = xarModVars::get('themes', 'enable_user_menu');
         return $data;
     }

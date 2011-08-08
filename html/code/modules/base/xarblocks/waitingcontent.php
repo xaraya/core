@@ -37,7 +37,6 @@
                 'output'   => $output,
             );
             */
-
             $data['content'] = xarMod::apiFunc('base', 'admin', 'waitingcontent');
             return $data;
         }

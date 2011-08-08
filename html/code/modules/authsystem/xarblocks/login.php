@@ -22,13 +22,10 @@ sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class Authsystem_LoginBlock extends BasicBlock implements iBlock
 {
-    public $nocache             = 1;
-
-    public $name                = 'LoginBlock';
-    public $module              = 'authsystem';
-    public $text_type           = 'Login';
-    public $text_type_long      = 'User Login';
-    public $pageshared          = 1;
+    protected $type                = 'login';
+    protected $module              = 'authsystem';
+    protected $text_type           = 'Login';
+    protected $text_type_long      = 'User Login';
 
     public $showlogout          = 0;
     public $logouttitle         = '';
@@ -69,9 +66,6 @@ class Authsystem_LoginBlock extends BasicBlock implements iBlock
             // Base URL of the site
             xarVarFetch('redirecturl',   'isset', $args['return_url']   , xarServer::getBaseURL(), XARVAR_NOT_REQUIRED);
         }
-
-        // Used in the templates.
-        $args['blockid'] = $data['bid'];
 
         $data['content'] = $args;
         return $data;
