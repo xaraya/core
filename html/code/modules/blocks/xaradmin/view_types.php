@@ -77,7 +77,7 @@ function blocks_admin_view_types()
         $item['add_link'] = array(
             'label' => xarML('Add'),
             'title' => xarML('Create a new instance of this block type'),
-            'url' => (!$access_property->check($access) || $type['type_state'] != xarBlock::TYPE_STATE_ACTIVE) ?  '' :
+            'url' => (!$access_property->check($access) || $item['type_state'] != xarBlock::TYPE_STATE_ACTIVE) ?  '' :
                 xarModURL('blocks', 'admin', 'new_instance',
                     array('type_id' => $type_id, 'phase' => 'form')),
         );
