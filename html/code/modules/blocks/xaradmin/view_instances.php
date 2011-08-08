@@ -205,22 +205,22 @@ function blocks_admin_view_instances()
                             'title' => xarML('View detail information about this block type'),
                             'url' => xarModURL('blocks', 'admin', 'modify_type', array('type_id' => $block['type_id'])),
                         );
-                // check modify access        
-                $args = array(
-                    'module' => $block['module'],
-                    'component' => 'Block',
-                    'instance' => $block['type'] . ":" . $block['name'] . ":" . $block['block_id'],
-                    'group' => $block['content']['modify_access']['group'],
-                    'level' => $block['content']['modify_access']['level'],
-                );
-                $modify_link = (!$access_property->check($args)) ?  '' :
-                    xarModURL('blocks', 'admin', 'modify_instance', 
-                        array('block_id' => $block_id, 'tab' => 'config'));
-                $block['modify_link'] = array(
-                    'label' => xarML('Config'),
-                    'title' => xarML('View or modify configuration of this block instance'),
-                    'url' => $modify_link,
-                );
+                        // check modify access        
+                        $args = array(
+                            'module' => $block['module'],
+                            'component' => 'Block',
+                            'instance' => $block['type'] . ":" . $block['name'] . ":" . $block['block_id'],
+                            'group' => $block['content']['modify_access']['group'],
+                            'level' => $block['content']['modify_access']['level'],
+                        );
+                        $modify_link = (!$access_property->check($args)) ?  '' :
+                            xarModURL('blocks', 'admin', 'modify_instance', 
+                                array('block_id' => $block_id, 'tab' => 'config'));
+                        $block['modify_link'] = array(
+                            'label' => xarML('Config'),
+                            'title' => xarML('View or modify configuration of this block instance'),
+                            'url' => $modify_link,
+                        );
                         // check if this block type supports previews
                         $preview_link = (empty($block['type_info']['show_preview'])) ? '' :
                             xarModURL('blocks', 'admin', 'modify_instance', 
