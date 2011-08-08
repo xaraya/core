@@ -115,6 +115,152 @@ function blocks_admin_view_instances()
             
         break;
         case 'bygroup':
+            $groups = xarMod::apiFunc('blocks', 'instances', 'getitems',
+                array(
+                    'type_category' => 'group',
+                ));
+            $blocks = xarMod::apiFunc('blocks', 'instances', 'getitems',
+                array(
+                    'type_category' => 'block',
+                ));
+            $list = array();
+            foreach ($groups as $group_id => $group) {
+
+                // all managers can view info about instances 
+                $group['info_link'] = array(
+                    'label' => xarML('Info'),
+                    'title' => xarML('View detail information about this block instance'),
+                    'url' => xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $group_id)),
+                );
+                // all managers can view info about types
+                $group['type_link'] = array(
+                    'label' => xarML('Type Info'),
+                    'title' => xarML('View detail information about this block type'),
+                    'url' => xarModURL('blocks', 'admin', 'modify_type', array('type_id' => $group['type_id'])),
+                );
+                // check modify access        
+                $args = array(
+                    'module' => $group['module'],
+                    'component' => 'Block',
+                    'instance' => $group['type'] . ":" . $group['name'] . ":" . $group['block_id'],
+                    'group' => $group['content']['modify_access']['group'],
+                    'level' => $group['content']['modify_access']['level'],
+                );
+                $modify_link = (!$access_property->check($args)) ?  '' :
+                    xarModURL('blocks', 'admin', 'modify_instance', 
+                        array('block_id' => $group_id, 'tab' => 'config'));
+                $group['modify_link'] = array(
+                    'label' => xarML('Config'),
+                    'title' => xarML('View or modify configuration of this block instance'),
+                    'url' => $modify_link,
+                );
+                // check if this block type supports previews
+                $preview_link = (empty($group['type_info']['show_preview'])) ? '' :
+                    xarModURL('blocks', 'admin', 'modify_instance', 
+                        array('block_id' => $group_id, 'tab' => 'preview'));              
+                $group['preview_link'] = array(
+                    'label' => xarML('Preview'),
+                    'title' => xarML('Display preview of this block instance'),
+                    'url' => $preview_link,
+                );
+                // check if this block type supplies help
+                $help_link = (empty($group['type_info']['show_help'])) ? '' :
+                    xarModURL('blocks', 'admin', 'modify_instance', 
+                        array('block_id' => $group_id, 'tab' => 'help'));              
+                $group['help_link'] = array(
+                    'label' => xarML('Help'),
+                    'title' => xarML('Display help information about this block type'),
+                    'url' => $help_link,
+                );
+                // check delete access        
+                $args = array(
+                    'module' => $group['module'],
+                    'component' => 'Block',
+                    'instance' => $group['type'] . ":" . $group['name'] . ":" . $group['block_id'],
+                    'group' => $group['content']['delete_access']['group'],
+                    'level' => $group['content']['delete_access']['level'],
+                );
+                $delete_link = (!$access_property->check($args)) ?  '' :
+                    xarModURL('blocks', 'admin', 'delete_instance', 
+                        array('block_id' => $group_id));
+                $group['delete_link'] = array(
+                    'label' => xarML('Delete'),
+                    'title' => xarML('Delete this block instance'),
+                    'url' => $delete_link,
+                );
+
+                if (!empty($group['content']['group_instances'])) {
+                    foreach ($group['content']['group_instances'] as $block_id) {
+                        if (!isset($blocks[$block_id])) continue;
+                        $block = $blocks[$block_id];
+                        // all managers can view info about instances 
+                        $block['info_link'] = array(
+                            'label' => xarML('Info'),
+                            'title' => xarML('View detail information about this block instance'),
+                            'url' => xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $block_id)),
+                        );
+                        // all managers can view info about types
+                        $block['type_link'] = array(
+                            'label' => xarML('Type Info'),
+                            'title' => xarML('View detail information about this block type'),
+                            'url' => xarModURL('blocks', 'admin', 'modify_type', array('type_id' => $block['type_id'])),
+                        );
+                // check modify access        
+                $args = array(
+                    'module' => $block['module'],
+                    'component' => 'Block',
+                    'instance' => $block['type'] . ":" . $block['name'] . ":" . $block['block_id'],
+                    'group' => $block['content']['modify_access']['group'],
+                    'level' => $block['content']['modify_access']['level'],
+                );
+                $modify_link = (!$access_property->check($args)) ?  '' :
+                    xarModURL('blocks', 'admin', 'modify_instance', 
+                        array('block_id' => $block_id, 'tab' => 'config'));
+                $block['modify_link'] = array(
+                    'label' => xarML('Config'),
+                    'title' => xarML('View or modify configuration of this block instance'),
+                    'url' => $modify_link,
+                );
+                        // check if this block type supports previews
+                        $preview_link = (empty($block['type_info']['show_preview'])) ? '' :
+                            xarModURL('blocks', 'admin', 'modify_instance', 
+                                array('block_id' => $block_id, 'tab' => 'preview'));              
+                        $block['preview_link'] = array(
+                            'label' => xarML('Preview'),
+                            'title' => xarML('Display preview of this block instance'),
+                            'url' => $preview_link,
+                        );
+                        // check if this block type supplies help
+                        $help_link = (empty($block['type_info']['show_help'])) ? '' :
+                            xarModURL('blocks', 'admin', 'modify_instance', 
+                                array('block_id' => $block_id, 'tab' => 'help'));              
+                        $block['help_link'] = array(
+                            'label' => xarML('Help'),
+                            'title' => xarML('Display help information about this block type'),
+                            'url' => $help_link,
+                        );
+                        // check delete access        
+                        $args = array(
+                            'module' => $block['module'],
+                            'component' => 'Block',
+                            'instance' => $block['type'] . ":" . $block['name'] . ":" . $block['block_id'],
+                            'group' => $block['content']['delete_access']['group'],
+                            'level' => $block['content']['delete_access']['level'],
+                        );
+                        $delete_link = (!$access_property->check($args)) ?  '' :
+                            xarModURL('blocks', 'admin', 'delete_instance', 
+                                array('block_id' => $block_id));
+                        $block['delete_link'] = array(
+                            'label' => xarML('Delete'),
+                            'title' => xarML('Delete this block instance'),
+                            'url' => $delete_link,
+                        );
+                        $group['instances'][$block_id] = $block;                       
+                    }
+                }
+                $list[$group_id] = $group;
+            }
+            $data['list'] = $list;           
             
         break;
         case 'bytype':
