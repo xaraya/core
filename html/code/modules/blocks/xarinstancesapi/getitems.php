@@ -192,6 +192,8 @@ function blocks_instancesapi_getitems(Array $args=array())
         $query .= ' WHERE ' . join(' AND ', $where);    
     if (!empty($orderby))
         $query .= ' ORDER BY ' . join(',', $orderby);
+    if (!empty($groupby))
+        $query .= ' GROUP BY ' . join(',', $groupby);
 
     $stmt = $dbconn->prepareStatement($query);
     if (!empty($numitems)) {
