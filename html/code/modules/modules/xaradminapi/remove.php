@@ -44,10 +44,10 @@ function modules_adminapi_remove(Array $args=array())
             $modinfo['state'] == XARMOD_STATE_MISSING_FROM_ACTIVE ||
             $modinfo['state'] == XARMOD_STATE_MISSING_FROM_UPGRADED ) {
 
-            // Delete any module variables that the module cleanup function might
-            // have missed.
-            // This needs to be done before the module entry is removed.
-            xarModVars::delete_all($modinfo['name']);
+            // All cleanup needs to happen before a module entry is removed
+            xarEvents::notify('ModRemove', $modinfo['name']);
+            // this is now handled by the modules module ModRemove event observer
+            //xarModVars::delete_all($modinfo['name']);
 
             // Remove the module itself
             $query = "DELETE FROM $tables[modules] WHERE regid = ?";
@@ -57,10 +57,10 @@ function modules_adminapi_remove(Array $args=array())
             xarMod::apiFunc('modules', 'admin', 'executeinitfunction',
                           array('regid' => $regid, 'function' => 'delete'));
 
-            // Delete any module variables that the module cleanup function might have missed.
-            // This needs to be done before the module entry is removed.
-            // <mikespub> But *after* the delete() function of the module !
-            xarModVars::delete_all($modinfo['name']);
+            // All cleanup needs to happen before a module entry is removed
+            xarEvents::notify('ModRemove', $modinfo['name']);
+            // this is now handled by the modules module ModRemove event observer
+            //xarModVars::delete_all($modinfo['name']);
 
             // Update state of module
             xarMod::apiFunc('modules', 'admin', 'setstate',
@@ -68,17 +68,17 @@ function modules_adminapi_remove(Array $args=array())
         }
 
         // Delete any masks still around
-        xarRemoveMasks($modinfo['name']);
-        // Call any 'category' delete hooks assigned for that module
-        // (notice we're using the module name as object id, and adding an
-        // extra parameter telling xarModCallHooks for *which* module we're
-        // calling hooks here)
-        xarModCallHooks('module','remove',$modinfo['name'],'',$modinfo['name']);
+        // this is now handled by the modules module ModRemove event observer
+        // xarRemoveMasks($modinfo['name']);
+        // this is now handled by the modules module ModRemove event observer
+        // xarModCallHooks('module','remove',$modinfo['name'],'',$modinfo['name']);
 
         //
         // Delete block details for this module.
         //
         // Get block types.
+        // this is now handled by the modules module ModRemove event observer
+        /*
         $blocktypes = xarMod::apiFunc('blocks', 'user', 'getallblocktypes',
                                     array('module' => $modinfo['name']));
 
@@ -88,12 +88,14 @@ function modules_adminapi_remove(Array $args=array())
                 xarMod::apiFunc('blocks', 'admin', 'delete_type', $blocktype);
             }
         }
-
-        // Check whether the module was the default module
+        */
+        // this is now handled by the modules module ModRemove event observer
+        /*
         $defaultmod = xarModVars::get('modules', 'defaultmodule');
         if ($modinfo['name'] == $defaultmod) {
             xarModVars::set('modules', 'defaultmodule','base');
         }
+        */
         $dbconn->commit();
     } catch (Exception $e) {
         $dbconn->rollback();

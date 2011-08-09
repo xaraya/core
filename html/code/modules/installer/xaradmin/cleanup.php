@@ -59,7 +59,7 @@ function installer_admin_cleanup()
  * The following code takes care of setting up groups and block instances
 **/
     // refresh block types (auto registers available solo/module block types) 
-    if (!xarMod::apiFunc('blocks', 'types', 'refresh')) return;
+    if (!xarMod::apiFunc('blocks', 'types', 'refresh', array('refresh' => true))) return;
 
     // get the default blockgroup block type info
     $group_type = xarMod::apiFunc('blocks', 'types', 'getitem', 

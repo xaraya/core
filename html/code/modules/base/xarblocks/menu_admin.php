@@ -290,6 +290,8 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
         $vars['printlabel'] = $printlabel;
         $vars['printtitle'] = $printtitle;
 
+        $this->setContent($vars);
+        return true;
         $data['content'] = $vars;
 
         return $data;
@@ -297,7 +299,7 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
 
     public function help()
     {
-        return $this->getInfo();
+        return $this->getContent();
     }
 
 /**

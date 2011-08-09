@@ -29,15 +29,14 @@
             return $this->getContent();
         }
 
-        public function update(Array $data=array())
+        public function update()
         {
-            $data = parent::update($data);
             if (!xarVarFetch('showusers',     'checkbox', $args['showusers'], false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('showusertotal', 'checkbox', $args['showusertotal'], false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('showanontotal', 'checkbox', $args['showanontotal'], false, XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('showlastuser',  'checkbox', $args['showlastuser'], false, XARVAR_NOT_REQUIRED)) return;
-            $data['content'] = $args;
-            return $data;
+            $this->setContent($args);
+            return true;
         }
     }
 

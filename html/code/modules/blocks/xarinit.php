@@ -211,22 +211,10 @@ function blocks_init()
     xarRegisterMask('AdminBlocks','All','blocks','All','All','ACCESS_ADMIN');
 
     // Installation complete; check for upgrades
-    // <chris/> is this even relevent? upgrades on core modules are handled by installer
-    return blocks_upgrade('2.0.0');
+    return blocks_upgrade('2.2.0');
 
 }
 
-
-/**
- * Activate this module
- * This function is called during install *after* all other core modules
-**/
-function blocks_activate()
-{
-    // @checkme: scan filesystem, register unknown block types here ?
-    // return xarMod::apiFunc('blocks', 'types', 'refresh');
-    return true;
-}
 /**
  * Upgrade this module from an old version
  *
@@ -237,6 +225,11 @@ function blocks_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
+        case '2.2.0':
+            // Register blocks module event observers 
+            xarEvents::registerObserver('ModRemove', 'blocks');  
+            xarEvents::registerObserver('ModActivate', 'blocks');
+            xarEvents::registerObserver('ModDeactivate', 'blocks');         
       default:
       break;
     }

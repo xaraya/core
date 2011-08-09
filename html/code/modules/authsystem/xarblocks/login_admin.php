@@ -27,15 +27,16 @@ class Authsystem_LoginBlockAdmin extends Authsystem_LoginBlock implements iBlock
  * Updates the Block config from the Blocks Admin
  * @param $data array containing title,content
  */
-    public function update(Array $data=array())
+    public function update()
     {
-        $data = parent::update($data);
-        if (!xarVarFetch('showlogout', 'checkbox', $vars['showlogout'], $this->showlogout, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('logouttitle', 'str', $vars['logouttitle'], $this->logouttitle, XARVAR_NOT_REQUIRED)) return;
-
-        $data['content'] = $vars;
-
-        return $data;
+        if (!xarVarFetch('showlogout', 'checkbox',
+            $showlogout, false, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('logouttitle', 'pre:trim:str:1:254',
+            $logouttitle, '', XARVAR_NOT_REQUIRED)) return;
+        
+        $this->showlogout = $showlogout;        
+        $this->logouttitle = $logouttitle;
+        return true;
     }
 }
 ?>

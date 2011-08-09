@@ -419,6 +419,20 @@ function modules_upgrade($oldversion)
             // NOTE: ItemSearch is registered by search module 
             // @TODO: Roles module to register User* and Group* event subjects            
         case '2.2.0':
+            // Register modules module event subjects
+            xarEvents::registerSubject('ModInitialise', 'module', 'modules');
+            xarEvents::registerSubject('ModActivate', 'module', 'modules');
+            xarEvents::registerSubject('ModDeactivate', 'module', 'modules');
+            xarEvents::registerSubject('ModRemove', 'module', 'modules');
+
+            // Register modules module event observers
+            xarEvents::registerObserver('ModInitialise', 'modules');
+            xarEvents::registerObserver('ModActivate', 'modules');
+            xarEvents::registerObserver('ModDeactivate', 'modules');
+            xarEvents::registerObserver('ModRemove', 'modules');
+
+        case '2.3.0':
+        
             break;
     }
     return true;

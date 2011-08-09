@@ -61,7 +61,9 @@ function modules_adminapi_initialise(Array $args=array())
         $msg = xarML('Module state change failed');
         throw new Exception($msg);
     }
-
+    // notify any observers that this module was initialised 
+    // NOTE: the ModInitialise event observer notifies ModuleInit hooks 
+    xarEvents::notify('ModInitialise', $modInfo['name']);
     // Success
     return true;
 }

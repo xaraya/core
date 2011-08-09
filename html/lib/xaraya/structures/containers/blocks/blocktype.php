@@ -133,8 +133,6 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
         return $info; 
     }
     
-
-
     final public function getFileInfo()
     {
         $allowed = array('text_type', 'text_type_long', 'xarversion',
@@ -145,11 +143,6 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
         return $fileinfo; 
     }
 
-    final public function getBlockInfo()
-    {
-        return $this->storeContent(); // deprecated 
-    }
-        
     final public function getTypeInfo()
     {
         $allowed = array(

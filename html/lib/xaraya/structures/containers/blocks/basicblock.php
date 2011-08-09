@@ -77,28 +77,28 @@ abstract class BasicBlock extends BlockType implements iBlock
     }
 
     // this method is called by xarBlock::render();
-    public function display(Array $args=array())
+    public function display()
     {
         $data = $this->getInfo();
         return $data;
     }
 
     // this method is called by blocks_admin_modify()
-    public function modify(Array $args=array())
+    public function modify()
     {
-        $data = $this->getInfo();
+        $data = $this->getContent();
         return $data;
     }
 
     // this method is called by blocks_admin_update()
-    public function update(Array $args=array())
+    public function update()
     {
         $data = $this->getInfo();
         return $data;
     }
 
     // this method is called by blocks_admin_delete()
-    public function delete(Array $args=array())
+    public function delete()
     {
         $data = $this->getInfo();
         return $data;

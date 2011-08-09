@@ -29,9 +29,9 @@ class Roles_UserBlock extends BasicBlock
 
     function display(Array $data=array())
     {
-        $data = parent::display($data);
-        if (empty($data)) return;
-        if (xarUserIsLoggedIn()) return $data;
+        if (!xarUserIsLoggedIn()) return;
+        $data['name'] = xarUserGetVar('name');
+        return $data;
     }
 }
 ?>

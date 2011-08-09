@@ -16,29 +16,15 @@
 
     class Base_WaitingContentBlock extends BasicBlock implements iBlock
     {
-        public $nocache             = 1;
 
-        public $name                = 'WaitingContentBlock';
+        public $type                = 'waitingcontent';
         public $module              = 'base';
         public $text_type           = 'Waiting Content';
         public $text_type_long      = 'Displays Waiting Content for All Modules';
-        public $show_preview        = true;
 
         function display(Array $data=array())
         {
-            $data = parent::display($data);
-            if (empty($data)) return;
-            /*
-            // Hooks (we specify that we want the ones for adminpanels here)
-            $output = array();
-            $output = xarModCallHooks('item', 'waitingcontent', '');
-            
-            $data['content'] = array(
-                'output'   => $output,
-            );
-            */
-            $data['content'] = xarMod::apiFunc('base', 'admin', 'waitingcontent');
-            return $data;
+            return $data['output'] = xarMod::apiFunc('base', 'admin', 'waitingcontent');
         }
     }
 ?>

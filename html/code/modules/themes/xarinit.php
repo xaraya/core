@@ -112,9 +112,6 @@ function themes_init()
     xarRegisterMask('ManageThemes','All','themes','All','All','ACCESS_DELETE');
     xarRegisterMask('AdminThemes','All','themes','All','All','ACCESS_ADMIN');
 
-    if (!xarMod::apiFunc('blocks', 'admin', 'register_block_type',
-        array('modName' => 'themes', 'blockType' => 'meta'))) return;
-
     xarModVars::set('themes', 'selclass', 'all');
     xarModVars::set('themes', 'useicons', false);
     xarModVars::set('themes','flushcaches', '');

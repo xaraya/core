@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <div class="xar-block xar-block-#$name#">
+    <!-- the following _bl_ variables are available in this template
+        $_bl_block_id       : the id of the block instance (empty in standalone blocks)
+        $_bl_block_name     : the name of the block instance (empty in standalone blocks)
+        $_bl_block_group    : the name of the current block group (empty in standalone blocks)
+        $_bl_block_group_id : the id of the current block group (empty in standalone blocks)
+        $_bl_block_type     : the name of this block type
+        $_bl_block_type_id  : the id of this block type
+    -->       
+    <div class="xar-block xar-block-#$_bl_block_name#">
         <xar:if condition="!empty($title)">
             <div class="xar-block-head">
                 <div class="xar-block-title">
                     <xar:var name="title" prep="false"/>
                     <xar:sec mask="AdminBase" catch="false">
-                        <a class="xar-icon" href="#xarModURL('blocks','admin','modify_instance',array('bid' => $bid))#" title="Edit this block" style="float: right">
-                            <xar:img scope="theme" class="xar-icon" file="icons/modify.png"/>
+                        <a class="xar-icon" href="#xarModURL('blocks','admin','modify_instance',array('block_id' => $_bl_block_id))#" title="Edit this block" style="float: right">
+                            <xar:img scope="theme" class="xar-icon" file="icons/config.png"/>
                         </a>
                     </xar:sec>
                 </div>

@@ -78,15 +78,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
                 $this->modulelist[$modname]['displaydescription'] = $mod['displaydescription'];
             }
         }
-        $this->content['modulelist'] = $this->modulelist;
-    
-    }
-
-    public function display(Array $args=array())
-    {
         self::setRequestInfo();
-        $data = parent::display($args);
-        return $data;
     }
 
     public function setRequestInfo()

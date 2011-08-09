@@ -1,91 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="icon_info">xarTpl::getImage('icons/info.png','theme')</xar:set>
+    <xar:set name="icon_modify">xarTpl::getImage('icons/modify-config.png','theme')</xar:set>
+    <xar:set name="icon_help">xarTpl::getImage('icons/help-browser.png','theme')</xar:set>
+    <xar:set name="icon_preview">xarTpl::getImage('icons/display.png','theme')</xar:set>
     <xar:set name="icon_delete">xarTpl::getImage('icons/delete.png','theme')</xar:set>
-    <xar:set name="icon_modify">xarTpl::getImage('icons/modify.png','theme')</xar:set>
-    <div>
-        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
-    </div>
-    <table class="xar-fullwidth">
-        <tr>
-            <th>Name</th>
-            <th>Groups</th>
-            <th>Module</th>
-            <th>Template</th>
-            <th>Status</th>
-            <th class="xar-align-right">Actions</th>
-        </tr>
-        <xar:set name="currenttype">'__nothing'</xar:set>
-        <xar:loop name="$blocks">
-            <xar:set name="thistype">$loop->item['type']</xar:set>
-            <xar:if condition="$thistype ne $currenttype">
+    <xar:set name="icon_add">xarTpl::getImage('icons/add.png','theme')</xar:set>
+    <xar:foreach in="$list" key="$type_id" value="$type">
+        <table class="xar-fullwidth xar-items xar-margin-nonetop">
+            <thead>
                 <tr>
-                    <th class="xar-subhead xar-item-linked" colspan="6">
-                        <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
-                            #$loop:item['type']#
-                        </a>
+                    <th colspan="5">
+                        <xar:if condition="!empty($type['info_link']['url'])">
+                            <a href="#$type['info_link']['url']#" title="#$type['info_link']['title']#">#$type['type']#</a>
+                        <xar:else/>
+                            #$type['type']#
+                        </xar:if>
+                            Block Type Instances
+                    </th>
+                    <th class="xar-align-right">
+                        <xar:if condition="!empty($type['info_link']['url'])">
+                            <a href="#$type['info_link']['url']#" class="xar-icon" title="#$type['info_link']['title']#"><img src="#$icon_info#" class="xar-icon" alt="#$type['info_link']['label']#"/></a>
+                        <xar:else/>
+                            <img src="#$icon_info#" class="xar-icon-disabled" alt="#$type['info_link']['label']#" title="#$type['info_link']['title']#"/>
+                        </xar:if>&#160;
+                        <xar:if condition="!empty($type['modify_link']['url'])">
+                            <a href="#$type['modify_link']['url']#" class="xar-icon" title="#$type['modify_link']['title']#"><img src="#$icon_modify#" class="xar-icon" alt="#$type['modify_link']['label']#"/></a>
+                        <xar:else/>
+                            <img src="#$icon_modify#" class="xar-icon-disabled" alt="#$type['modify_link']['label']#" title="#$type['modify_link']['title']#"/>
+                        </xar:if>&#160;
+                        <xar:if condition="!empty($type['preview_link']['url'])">
+                            <a href="#$type['preview_link']['url']#" class="xar-icon" title="#$type['preview_link']['title']#"><img src="#$icon_preview#" class="xar-icon" alt="#$type['preview_link']['label']#"/></a>
+                        <xar:else/>
+                            <img src="#$icon_preview#" class="xar-icon-disabled" alt="#$type['preview_link']['label']#" title="#$type['preview_link']['title']#"/>
+                        </xar:if>&#160;
+                        <xar:if condition="!empty($type['help_link']['url'])">
+                            <a href="#$type['help_link']['url']#" class="xar-icon" title="#$type['help_link']['title']#"><img src="#$icon_help#" class="xar-icon" alt="#$type['help_link']['label']#"/></a>
+                        <xar:else/>
+                            <img src="#$icon_help#" class="xar-icon-disabled" alt="#$type['help_link']['label']#" title="#$type['help_link']['title']#"/>
+                        </xar:if>&#160;
+                        <xar:if condition="!empty($type['add_link']['url'])">
+                            <a href="#$type['add_link']['url']#" class="xar-icon" title="#$type['add_link']['title']#"><img src="#$icon_add#" class="xar-icon" alt="#$type['add_link']['label']#"/></a>
+                        <xar:else/>
+                            <img src="#$icon_add#" class="xar-icon-disabled" alt="#$type['add_link']['label']#" title="#$type['add_link']['title']#"/>
+                        </xar:if>                                    
                     </th>
                 </tr>
-                <xar:set name="currenttype">$thistype</xar:set>
-            </xar:if>
+            </thead>
+            <tbody>
+                <xar:if condition="!empty($type['instances'])">
             <tr>
-                <td>
-                    <xar:if condition="empty($loop:item['title'])">
-                        #$loop:item['name']#
-                    <xar:else />
-                        <span title="#xarVarPrepfordisplay($loop:item['title'])#">
-                            #$loop:item['name']#
-                        </span>
-                    </xar:if>
-                </td>
-                <td>
-                    <xar:if condition="!empty($loop:item.groups)">
-                        <xar:loop name="$loop:item.groups" id="groups">
-                                <a href="#xarModURL('blocks','admin','modify_group')#&amp;id=#$loop:groups:item.id#">
-                            #$loop:groups:item.name#</a>
-                        </xar:loop>
-                    <xar:else />
+                <th>Name</th>
+                <th>Type</th>
+                <th>Module</th>
+                <th>Groups</th>
+                <th>Status</th>
+                <th class="xar-align-right">Actions</th>
+            </tr>
+                    <xar:foreach in="$type['instances']" key="$block_id" value="$item">
+
+                <tr>
+                    <td>
+                        <xar:if condition="!empty($item['info_link']['url'])">
+                            <a href="#$item['info_link']['url']#" title="#$item['info_link']['title']#">#$item['name']#</a>
+                        <xar:else/>
+                            #$item['name']#
+                        </xar:if>
+                    </td>
+                    <td>
+                        <xar:if condition="!empty($item['type_link']['url'])">
+                            <a href="#$item['type_link']['url']#" title="#$item['type_link']['title']#">#$item['type']#</a>
+                        <xar:else/>
+                            #$item['type']#
+                        </xar:if>
+                    </td>
+                    <td>
+                    <xar:if condition="!empty($item['module'])">
+                        #$item['module']#
+                    <xar:else/>
                         [ none ]
                     </xar:if>
-                </td>
-                <td>#$loop:item['module']#</td>
-                <td>
-                    <xar:if condition="$loop:item['template'] ne NULL">
-                        #$loop:item['template']#
-                        &#160;
-                    <xar:else />
-                        <xar:if condition="empty($loop:item['group_template'])">
-                            [ default ]
-                        <xar:else />
-                            #$loop:item['group_template']# &#160;
+                    </td>
+                    <td>
+                        <xar:if condition="!empty($item['groups'])">
+                            <xar:loop name="$item['groups']">
+                                <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <xar:if condition="$loop:index lt count($item['groups'])">,&#160;</xar:if>
+                            </xar:loop>
+                        <xar:else/>
+                            [ none ]
                         </xar:if>
-                    </xar:if>
-                </td>
-                <td class="xar-align-center">#$state_desc[$loop:item['state']]#</td>
-                <xar:if condition="xarModVars::get('blocks','use_module_icons')">
-                    <td class="xar-item-actions xar-align-right">
-                        <a href="#xarModURL('blocks','admin','modify_instance',array('bid' =&gt; $loop:item.bid))#" title="#xarML('Modify')#">
-                            <img src="#$icon_modify#" alt="#xarML('Modify')#" />
-                        </a>
-                        &#160;
-                        <a href="#$loop:item.deleteurl#" title="#xarML('Delete')#">
-                            <img src="#$icon_delete#" alt="#xarML('Delete')#" />
-                        </a>
                     </td>
-                <xar:else/>
+                    <td>
+                        <xar:if condition="$item['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
+                            <a href="xarModURL('blocks', 'admin', 'modify_instance', array('tab' => 'state', 'block_id' => $block_id))#">Type #$type_states[$item['type_state']]['name']#</a>
+                        <xar:else/>
+                            #$instance_states[$item['state']]['name']#
+                        </xar:if>
+                    </td>
                     <td class="xar-align-right">
-                        <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
-                            Edit
-                        </a>|
-                        <a href="#$loop:item['deleteurl']#">
-                            Delete
-                        </a>
+                        <xar:if condition="!empty($item['info_link']['url'])">
+                            <a href="#$item['info_link']['url']#" class="xar-icon" title="#$item['info_link']['title']#"><img src="#$icon_info#" class="xar-icon" alt="#$item['info_link']['label']#"/></a>
+                        <xar:else/>
+                            <img src="#$icon_info#" class="xar-icon-disabled" alt="#$item['info_link']['label']#" title="#$item['info_link']['title']#"/>
+                        </xar:if>&#160;
+                        <xar:if condition="!empty($item['modify_link']['url'])">
+                            <a href="#$item['modify_link']['url']#" class="xar-icon" title="#$item['modify_link']['title']#"><img src="#$icon_modify#" class="xar-icon" alt="#$item['modify_link']['label']#"/></a>
+                        <xar:else/>
+                            <img src="#$icon_modify#" class="xar-icon-disabled" alt="#$item['modify_link']['label']#" title="#$item['modify_link']['title']#"/>
+                        </xar:if>&#160;
+                        <xar:if condition="!empty($item['preview_link']['url'])">
+                            <a href="#$item['preview_link']['url']#" class="xar-icon" title="#$item['preview_link']['title']#"><img src="#$icon_preview#" class="xar-icon" alt="#$item['preview_link']['label']#"/></a>
+                        <xar:else/>
+                            <img src="#$icon_preview#" class="xar-icon-disabled" alt="#$item['preview_link']['label']#" title="#$item['preview_link']['title']#"/>
+                        </xar:if>&#160;
+                        <xar:if condition="!empty($item['help_link']['url'])">
+                            <a href="#$item['help_link']['url']#" class="xar-icon" title="#$item['help_link']['title']#"><img src="#$icon_help#" class="xar-icon" alt="#$item['help_link']['label']#"/></a>
+                        <xar:else/>
+                            <img src="#$icon_help#" class="xar-icon-disabled" alt="#$item['help_link']['label']#" title="#$item['help_link']['title']#"/>
+                        </xar:if>&#160;
+                        <xar:if condition="!empty($item['delete_link']['url'])">
+                            <a href="#$item['delete_link']['url']#" class="xar-icon" title="#$item['delete_link']['title']#"><img src="#$icon_delete#" class="xar-icon" alt="#$item['delete_link']['label']#"/></a>
+                        <xar:else/>
+                            <img src="#$icon_delete#" class="xar-icon-disabled" alt="#$item['delete_link']['label']#" title="#$item['delete_link']['title']#"/>
+                        </xar:if>
                     </td>
+                </tr>
+                    </xar:foreach>
+                <xar:else/>
+                    <tr><td colspan="6">No type instances</td></tr>
                 </xar:if>
-            </tr>
-        </xar:loop>
-    </table>
-    <div>
-        <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
-    </div>
+            </tbody>
+        </table>
+    </xar:foreach>    
 </xar:template>

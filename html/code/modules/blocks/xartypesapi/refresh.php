@@ -18,12 +18,13 @@ function blocks_typesapi_refresh(Array $args=array())
 {
     // only need to run this once 
     static $runonce = false;
-    if ($runonce) return true;
-   
+    if ($runonce && empty($args['refresh'])) return true;
+    
     // first get a list of block type files for all available modules 
     $files = xarMod::apiFunc('blocks', 'types', 'getfiles');
 
     foreach ($files as $file) {
+        if (isset($args['module']) && $file['module'] != $args['module']) continue;
         // nothing fancy here, if a type file exists, see if we have an entry for it in the db
         if (!xarMod::apiFunc('blocks', 'types', 'getitem',
             array(
@@ -43,6 +44,7 @@ function blocks_typesapi_refresh(Array $args=array())
     $types = xarMod::apiFunc('blocks', 'types', 'getitems');    
 
     foreach ($types as $type) {
+        if (isset($args['module']) && $type['module'] != $args['module']) continue;
         $update = array();
         // if the block belongs to a module, check the module is active 
         if (!empty($type['module']) && !xarMod::isAvailable($type['module'])) {

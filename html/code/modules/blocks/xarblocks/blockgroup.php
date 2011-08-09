@@ -34,11 +34,10 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
  */
     function display(Array $data=array())
     {
-        $data = parent::display($data);
-        if (empty($data)) return;
+
+        $data = $this->getContent();
 
         if (empty($this->group_instances)) return;
-        
         $instances = xarMod::apiFunc('blocks', 'instances', 'getitems', 
             array(
                 'block_id' => $this->group_instances, 
@@ -75,76 +74,8 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
             $output .= xarBlock::render($block_info);
         }
         if (empty($output)) return;
-        $data['group'] = $this->name;
-        $data['groupid'] = $this->block_id;
-
-        $data['content']['blocks'] = $output;
-        return $data;
-                
+        $data['blocks'] = $output;
         
-        // blockgroup name (if any)
-        $data['group'] = $data['name'];
-        $data['groupid'] = $data['bid'];
-
-        // get block instances for this blockgroup
-        $instances = xarMod::apiFunc('blocks', 'user', 'getall',
-            array('order' => 'group','gid' => $data['bid']));
-
-        // output is concatenated string of template data for each block
-        // rendered by the core xarBlock class render() method,
-        // (the same method rendering this blockgroup itself :) )
-        // this is the same behaviour as the old core xarBlock_renderGroup() function
-        $output = '';
-        if (!empty($instances)) {
-            foreach ($instances as $info) {
-                // Get the overriding template name.
-                // Levels, in order (most significant first): group instance, instance, group
-                $group_inst_template = explode(';',$info['group_inst_template'],3);
-                $inst_template = explode(';',$info['template'],3);
-                $group_template = explode(';',$info['group_template'],3);
-                // groups have no outer template, we just want the inner setting
-                if (empty($group_template[1])) {
-                    // Default the box template to the group name.
-                    $group_template[1] = $data['group'];
-                }
-                /*
-                if (empty($group_template[1])) {
-                    // Default the block template to the instance name.
-                    $group_template[1] = $info['name'];
-                }
-                */
-
-                // Cascade level over-rides for the box template.
-                $info['_bl_box_template'] = !empty($group_inst_template[0]) ? $group_inst_template[0]
-                    : (!empty($inst_template[0]) ? $inst_template[0] : $group_template[1]);
-
-                // Global override of box template - usually comes from the 'template'
-                // attribute of the xar:blockgroup tag.
-                if (!empty($data['box_template'])) {
-                    $info['_bl_box_template'] = $data['box_template'];
-                }
-
-                // Cascade level over-rides for the block template.
-                $info['_bl_block_template'] = !empty($group_inst_template[1]) ? $group_inst_template[1]
-                    : (!empty($inst_template[1]) ? $inst_template[1] : $info['name']);
-
-                $info['_bl_template_base'] = $info['type'];
-
-                // add blockgroup details to info
-                $info['groupid'] = $data['groupid'];
-                $info['group'] = $data['group'];
-
-                // render the block
-                $output .= xarBlock::render($info);
-            }
-        }
-
-        // no output, nothing for the block to render
-        if (empty($output)) return '';
-
-        // add the rendered block output for the blockgroup
-        $data['content']['blocks'] = $output;
-        // and pass back for rendering
         return $data;
     }
 
@@ -205,8 +136,6 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
  */
     public function update(Array $data=array())
     {
-        $data = parent::update($data);
-        if (empty($data)) return;
 
         // remove block(s) from this block group
         if (!xarVarFetch('remove_block', 'array', $remove_block, NULL, XARVAR_DONT_SET)) return;
@@ -236,10 +165,8 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
             $add['content'] = $a_block->storeContent();
             if (!xarMod::apiFunc('blocks', 'instances', 'updateitem', $add)) return;
             unset($a_block);            
-        }
-        
-        $data['content'] = $this->getContent();
-        return $data;
+        }        
+        return true;
     }
 /**
  * Deletes the block from the Blocks Admin
