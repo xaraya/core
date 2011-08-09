@@ -21,13 +21,10 @@ sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class Roles_LanguageBlock extends BasicBlock
 {
-    public $name                = 'LanguageBlock';
-    public $module              = 'roles';
-    public $text_type           = 'Language';
-    public $text_type_long      = 'Language selection';
-
-    public $nocache             = 1;
-    public $usershared          = 0;
+    protected $type                = 'language';
+    protected $module              = 'roles';
+    protected $text_type           = 'Language';
+    protected $text_type_long      = 'Language selection';
 
     function display(Array $data=array())
     {
@@ -56,7 +53,6 @@ class Roles_LanguageBlock extends BasicBlock
                 'selected' => $selected
             );
         }
-
 
         $args['form_action'] = xarModURL('roles', 'user', 'changelanguage');
         $args['form_picker_name'] = 'locale';

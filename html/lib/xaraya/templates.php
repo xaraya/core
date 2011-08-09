@@ -414,7 +414,22 @@ class xarTpl extends Object
         if (!empty($tplName)) {
             $tplName = xarVarPrepForOS($tplName);
         }
-
+        // use name of blocktype as base unless over-ridden
+        $tplBase = xarVarPrepForOS(empty($tplBase) ? $blockType : $tplBase);
+        if (!empty($modName)) {
+            // get module block template
+            $sourceFileName = self::getScopeFileName('module', $modName, $tplBase, $tplName, 'blocks');
+        } else {
+            // get standalone block template
+            $sourceFileName = self::getScopeFileName('block', $blockType, $tplBase, $tplName);
+        }
+        if (empty($sourceFileName)) {
+            $msg = "Block: [#(1)],[#(2)],[#(3)]";
+            $vars = array($modName, $tplBase, $tplName);
+            throw new FileNotFoundException($vars, $msg);
+        }
+        return self::executeFromFile($sourceFileName, $tplData);
+        /*
         // Basename of block can be overridden
         $templateBase   = xarVarPrepForOS(empty($tplBase) ? $blockType : $tplBase);
 
@@ -424,6 +439,182 @@ class xarTpl extends Object
             throw new FileNotFoundException("Block: [$modName],[$templateBase],[$tplName]");
         }
         return self::executeFromFile($sourceFileName, $tplData);
+        */
+    }
+
+    public static function getScopeFileName($scope, $package, $tplBase, $tplName=null, $tplPart='')
+    {
+
+        $themePath = self::getThemeDir();
+        $commonPath = self::getThemeDir('common');
+        $codePath = sys::code();
+        $package = xarVarPrepForOS($package);
+        $canTemplateName = strtr($tplName, "-", "/");
+        $canonical = ($canTemplateName == $tplName) ? false : true;
+
+        switch ($scope) {
+            case 'module':
+                $packages = 'modules';           
+            break;
+            case 'block':
+                // standalone blocks
+                $packages = 'blocks';
+            break;
+            case 'property':
+                // standalone properties           
+                $packages = 'properties';
+            break;
+            default:
+                $vars = array($scope);
+                $msg = 'Invalid scope "#(1)" for core function xarTpl::getScopeFileName()';
+                throw new BadParameterException($vars, $msg);
+            break;
+        }
+        $basepaths = array(
+            "$themePath/$packages/$package/",
+            "$commonPath/$packages/$package/",
+            "{$codePath}{$packages}/$package/xartemplates/",
+        ); 
+        $paths = array();
+        foreach ($basepaths as $basepath) {
+            $paths[] = "$basepath/$tplPart/$tplBase-$tplName.xt";
+            $paths[] = "$basepath/$tplPart/$tplBase.xt";
+            if ($canonical) 
+                $paths[] = "$basepath/$tplPart/$canTemplateName.xt";
+        }
+
+        $sourceFileName = '';
+        if (!empty($paths)) {
+            foreach ($paths as $file) {
+                if (!file_exists($file)) continue;
+                $sourceFileName = $file;
+                break;
+            }
+        }
+        // $tplPart may have been empty,
+        $sourceFileName = str_replace('//','/',$sourceFileName);
+
+        return $sourceFileName;
+       
+    }
+
+/**
+ * Determine the template sourcefile to use
+ *
+ * Based on the module, the basename for the template
+ * a possible overribe and a subpart and the active
+ * theme, determine the template source we should use and loads
+ * the appropriate translations based on the outcome.
+ *
+ * @access private
+ * @param  string $modName      Module name doing the request
+ * @param  string $tplBase      The base name for the template
+ * @param  string $templateName The name for the template to use if any
+ * @param  string $tplSubPart   A subpart ('' or 'blocks' or 'properties')
+ * @return string the path [including sys::code()] to an existing template sourcefile, or empty
+ *
+ * @todo do we need to load the translations here or a bit later? (here:easy, later: better abstraction)
+ * @todo implement common templates in cascade 
+ */
+    private static function getSourceFileName($modName,$tplBase, $templateName = NULL, $tplSubPart = '')
+    {
+        if(method_exists('xarMod','getBaseInfo')) {
+            if(!($modBaseInfo = xarMod::getBaseInfo($modName))) return;
+            $modOsDir = $modBaseInfo['osdirectory'];
+        } elseif(!empty($modName)) {
+            $modOsDir = $modName;
+        }
+
+        // For modules: {tplBase} = {modType}-{funcName}
+        // For blocks : {tplBase} = {blockType} or overridden value
+        // For props  : {tplBase} = {propertyName} or overridden value
+
+        // Template search order:
+        // 1. {theme}/modules/{module}/{tplBase}-{templateName}.xt
+        // 2. common/modules/{module}/{tplBase}-{templateName}.xt
+        // 3. modules/{module}/xartemplates/{tplBase}-{templateName}.xt
+        // 4. {theme}/modules/{module}/{tplBase}.xt
+        // 5. common/modules/{module}/{tplBase}.xt
+        // 6. modules/{module}/xartemplates/{tplBase}.xt
+        // 7. {theme}/modules/{module}/{templateName}.xt (-syntax)
+        // 8. common/modules/{module}/{$templateName}.xt (-syntax)
+        // 9. modules/{module}/xartemplates/{templateName}.xt (-syntax)
+        // 10. complain (later on)
+
+        $tplThemesDir = self::getThemeDir();
+        $tplCommonDir = self::getThemeDir('common');
+        $tplBaseDir   = sys::code() . "modules/$modOsDir";
+
+        $canTemplateName = strtr($templateName, "-", "/");
+        $canonical = ($canTemplateName == $templateName) ? false : true;
+
+        if (!empty($templateName)) {
+            xarLogMessage("TPL: 1. $tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt");
+            xarLogMessage("TPL: 2. $tplCommonDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt");
+            xarLogMessage("TPL: 3. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt");
+        }
+        xarLogMessage("TPL: 4. $tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt");
+        xarLogMessage("TPL: 5. $tplCommonDir/modules/$modOsDir/$tplSubPart/$tplBase.xt");
+        xarLogMessage("TPL: 6. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xt");
+        if ($canonical) {
+            xarLogMessage("TPL: 7. $tplThemesDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt");
+            xarLogMessage("TPL: 8. $tplCommonDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt");
+            xarLogMessage("TPL: 9. $tplBaseDir/xartemplates/$tplSubPart/$canTemplateName.xt");
+        }
+        
+        // TPL 1: Current theme (module)
+        if (!empty($templateName) &&
+            file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt")) {
+        // TPL 1: Current theme (property) 
+        // @FIXME this path is all wrong
+        } elseif (!empty($templateName) &&
+            file_exists($sourceFileName = "$tplThemesDir/properties/$templateName/templates/$tplBase.xt")){
+        // TPL 2: common (module)
+        } elseif (!empty($templateName) &&
+            file_exists($sourceFileName = "$tplCommonDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt")) {
+        // TPL 2: common (property) 
+        // @FIXME this path is all wrong
+        } elseif (!empty($templateName) &&
+            file_exists($sourceFileName = "$tplCommonDir/properties/$templateName/templates/$tplBase.xt")){
+        // TPL 3: (module)
+        } elseif(!empty($templateName) &&
+            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt")){
+        // TPL 3: (property)
+        } elseif(!empty($templateName) &&
+            file_exists($sourceFileName = sys::code() . "properties/$templateName/xartemplates/$tplBase.xt")) {
+        // TPL 4: Current theme (module)
+        } elseif(
+            file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt")) {
+        // TPL 5: common (module)
+        } elseif(
+            file_exists($sourceFileName = "$tplCommonDir/modules/$modOsDir/$tplSubPart/$tplBase.xt")) {
+        // TPL 6: (module)
+        } elseif(
+            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xt")) {
+        // TPL 7: Current theme (module)
+        } elseif($canonical &&
+            file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt")) {
+        // TPL 8: common (module)
+        } elseif($canonical &&
+            file_exists($sourceFileName = "$tplCommonDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt")) {
+        // TPL 9: (module)        
+        } elseif($canonical &&
+            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$canTemplateName.xt")) {
+        // Legacy
+        } elseif (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
+            try {
+                sys::import('xaraya.legacy.templates');
+                $sourceFileName = loadsourcefilename($tplBaseDir,$tplSubPart,$tplBase,$templateName,$canTemplateName,$canonical);
+            } catch (Exception $e) {$sourceFileName = '';}
+        } else {
+            // let functions higher up worry about what to do, e.g. DD object of property fallback template
+            $sourceFileName = '';
+        }        
+
+        // Subpart may have been empty,
+        $sourceFileName = str_replace('//','/',$sourceFileName);
+
+        return $sourceFileName;
     }
 
 /**
@@ -619,7 +810,7 @@ class xarTpl extends Object
         if (isset($filePath) && self::$generateXMLURLs) {
             $filePath = htmlspecialchars($filePath);
         }
-        return $filePath;
+        return '/'.$filePath;
     }
 
 /**
@@ -903,124 +1094,7 @@ class xarTpl extends Object
         return $output;
     }
 
-/**
- * Determine the template sourcefile to use
- *
- * Based on the module, the basename for the template
- * a possible overribe and a subpart and the active
- * theme, determine the template source we should use and loads
- * the appropriate translations based on the outcome.
- *
- * @access private
- * @param  string $modName      Module name doing the request
- * @param  string $tplBase      The base name for the template
- * @param  string $templateName The name for the template to use if any
- * @param  string $tplSubPart   A subpart ('' or 'blocks' or 'properties')
- * @return string the path [including sys::code()] to an existing template sourcefile, or empty
- *
- * @todo do we need to load the translations here or a bit later? (here:easy, later: better abstraction)
- * @todo implement common templates in cascade 
- */
-    private static function getSourceFileName($modName,$tplBase, $templateName = NULL, $tplSubPart = '')
-    {
-        if(method_exists('xarMod','getBaseInfo')) {
-            if(!($modBaseInfo = xarMod::getBaseInfo($modName))) return;
-            $modOsDir = $modBaseInfo['osdirectory'];
-        } elseif(!empty($modName)) {
-            $modOsDir = $modName;
-        }
 
-        // For modules: {tplBase} = {modType}-{funcName}
-        // For blocks : {tplBase} = {blockType} or overridden value
-        // For props  : {tplBase} = {propertyName} or overridden value
-
-        // Template search order:
-        // 1. {theme}/modules/{module}/{tplBase}-{templateName}.xt
-        // 2. common/modules/{module}/{tplBase}-{templateName}.xt
-        // 3. modules/{module}/xartemplates/{tplBase}-{templateName}.xt
-        // 4. {theme}/modules/{module}/{tplBase}.xt
-        // 5. common/modules/{module}/{tplBase}.xt
-        // 6. modules/{module}/xartemplates/{tplBase}.xt
-        // 7. {theme}/modules/{module}/{templateName}.xt (-syntax)
-        // 8. common/modules/{module}/{$templateName}.xt (-syntax)
-        // 9. modules/{module}/xartemplates/{templateName}.xt (-syntax)
-        // 10. complain (later on)
-
-        $tplThemesDir = self::getThemeDir();
-        $tplCommonDir = self::getThemeDir('common');
-        $tplBaseDir   = sys::code() . "modules/$modOsDir";
-
-        $canTemplateName = strtr($templateName, "-", "/");
-        $canonical = ($canTemplateName == $templateName) ? false : true;
-
-        if (!empty($templateName)) {
-            xarLogMessage("TPL: 1. $tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt");
-            xarLogMessage("TPL: 2. $tplCommonDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt");
-            xarLogMessage("TPL: 3. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt");
-        }
-        xarLogMessage("TPL: 4. $tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt");
-        xarLogMessage("TPL: 5. $tplCommonDir/modules/$modOsDir/$tplSubPart/$tplBase.xt");
-        xarLogMessage("TPL: 6. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xt");
-        if ($canonical) {
-            xarLogMessage("TPL: 7. $tplThemesDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt");
-            xarLogMessage("TPL: 8. $tplCommonDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt");
-            xarLogMessage("TPL: 9. $tplBaseDir/xartemplates/$tplSubPart/$canTemplateName.xt");
-        }
-        
-        // TPL 1: Current theme (module)
-        if (!empty($templateName) &&
-            file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt")) {
-        // TPL 1: Current theme (property) 
-        // @FIXME this path is all wrong
-        } elseif (!empty($templateName) &&
-            file_exists($sourceFileName = "$tplThemesDir/properties/$templateName/templates/$tplBase.xt")){
-        // TPL 2: common (module)
-        } elseif (!empty($templateName) &&
-            file_exists($sourceFileName = "$tplCommonDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt")) {
-        // TPL 2: common (property) 
-        // @FIXME this path is all wrong
-        } elseif (!empty($templateName) &&
-            file_exists($sourceFileName = "$tplCommonDir/properties/$templateName/templates/$tplBase.xt")){
-        // TPL 3: (module)
-        } elseif(!empty($templateName) &&
-            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt")){
-        // TPL 3: (property)
-        } elseif(!empty($templateName) &&
-            file_exists($sourceFileName = sys::code() . "properties/$templateName/xartemplates/$tplBase.xt")) {
-        // TPL 4: Current theme (module)
-        } elseif(
-            file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt")) {
-        // TPL 5: common (module)
-        } elseif(
-            file_exists($sourceFileName = "$tplCommonDir/modules/$modOsDir/$tplSubPart/$tplBase.xt")) {
-        // TPL 6: (module)
-        } elseif(
-            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase.xt")) {
-        // TPL 7: Current theme (module)
-        } elseif($canonical &&
-            file_exists($sourceFileName = "$tplThemesDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt")) {
-        // TPL 8: common (module)
-        } elseif($canonical &&
-            file_exists($sourceFileName = "$tplCommonDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt")) {
-        // TPL 9: (module)        
-        } elseif($canonical &&
-            file_exists($sourceFileName = "$tplBaseDir/xartemplates/$canTemplateName.xt")) {
-        // Legacy
-        } elseif (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
-            try {
-                sys::import('xaraya.legacy.templates');
-                $sourceFileName = loadsourcefilename($tplBaseDir,$tplSubPart,$tplBase,$templateName,$canTemplateName,$canonical);
-            } catch (Exception $e) {$sourceFileName = '';}
-        } else {
-            // let functions higher up worry about what to do, e.g. DD object of property fallback template
-            $sourceFileName = '';
-        }        
-
-        // Subpart may have been empty,
-        $sourceFileName = str_replace('//','/',$sourceFileName);
-
-        return $sourceFileName;
-    }
 
 /* END PRIVATE FUNCTIONS */
 

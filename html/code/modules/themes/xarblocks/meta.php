@@ -22,29 +22,27 @@ sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class Themes_MetaBlock extends BasicBlock
 {
-    public $name                = 'MetaBlock';
-    public $module              = 'themes';
-    public $text_type           = 'Meta';
-    public $text_type_long      = 'Meta Keywords';
-    public $xarversion          = '2.2.1';
-    public $show_preview        = true;
-    public $usershared          = true;
-    public $pageshared          = false;
-    
+    protected $type                = 'meta';
+    protected $module              = 'themes';
+    protected $text_type           = 'Meta';
+    protected $text_type_long      = 'Meta Keywords';
+    protected $xarversion          = '2.2.1';
+    protected $show_preview        = false;
+    protected $show_help           = true;
+        
     // meta data now stored as array as of 2.2.0
     public $metatags            = array();
     // link data now stored as array as of 2.2.1
     public $linktags            = array();
-
-    public function __construct(Array $data=array())
+    
+    public function init() 
     {
+        parent::init();
         if (empty($this->metatags))
             $this->metatags = $this->default_metatags();
         if (empty($this->linktags))
             $this->linktags = $this->default_linktags();
-        parent::__construct($data);
     }
-
 /**
  * Display func.
  * @param $data array containing title,content
@@ -102,7 +100,7 @@ class Themes_MetaBlock extends BasicBlock
         }
 
         if (!empty($this->linktags))
-            $meta['linktags'] = $this->parseLinkTags();    
+            $meta['linktags'] = $this->parseLinkTags();
 
          //Pager Buttons
         $meta['first']          = xarVarGetCached('Pager.first','leftarrow');
@@ -368,6 +366,11 @@ class Themes_MetaBlock extends BasicBlock
             array('rel' => 'alternate', 'href' => '[currenturl]theme=print', 'title' => 'Print', 'type' => 'text/html'),
         );
         return $linktags;   
+    }
+
+    public function help()
+    {
+        return $this->getInfo();
     }
 }
 ?>
