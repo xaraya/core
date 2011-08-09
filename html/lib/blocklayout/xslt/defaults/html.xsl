@@ -30,9 +30,9 @@
 
       - empty div elements bork everything, so first, leave their spacing alone
       which doesnt influence correctness, but saves a whole lot of trouble.
-      - empty script element work in safari, but not in FF
+      - empty script element works in safari, but not in FF
   -->
-  <xsl:template match="div|script">
+  <xsl:template match="div|script|iframe">
     <xsl:copy>
       <xsl:apply-templates select="@*|node()"/>
       <xsl:if test="not(node()[not(self::comment())])">

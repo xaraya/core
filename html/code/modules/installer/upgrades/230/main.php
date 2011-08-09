@@ -20,6 +20,7 @@ function main_upgrade_230()
                         'sql_230_02', // Add a configuration field to the themes table
                         'sql_230_03', // Create the themes configurations table
                         'sql_230_04', // Import the themes configurations object
+                        'sql_230_05', // register Mod* event subjects and observers
                     );
     foreach ($upgrades as $upgrade) {
         if (!Upgrader::loadFile('upgrades/230/database/' . $upgrade . '.php')) {

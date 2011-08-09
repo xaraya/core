@@ -8,12 +8,17 @@
         <p>Click Flush Property Cache to clear the DynamicData Property Definitions cache and to
         reload the properties definitions from the file system.</p>
         <form method="post" action="#xarModURL('dynamicdata','admin','update_propertydefs')#">
-            <fieldset class="xar-form-actions">
-                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                <input type="hidden" name="flushPropertyCache" value="true"/>
-                <xar:var name="label">Flush Property Cache</xar:var>
-                <xar:button type="submit" label="$label"/>
-            </fieldset>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <input type="hidden" name="flushPropertyCache" value="true"/>
+                        <xar:var name="label">Flush Property Cache</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
+            </div>
         </form>
         </div><!--xar-mod-page-head-->
         <div class="xar-mod-page-body">
@@ -89,11 +94,16 @@
             </table>
             <p class="xar-alert">Note: any changes you make here will be lost whenever the property cache gets
             flushed.</p>
-            <fieldset class="xar-form-actions">
-	            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-	            <xar:var name="label">Update Property Types</xar:var>
-	            <xar:button type="submit" label="$label"/>
-            </fieldset>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <xar:var name="label">Update Property Types</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
+            </div>
         </form>
     </div><!--/xar-mod-page-body-->
     </div><!--/xar-mod-body-->
