@@ -239,7 +239,8 @@ function blocks_upgrade($oldversion)
         case '2.3.0':
             // Register blocks module event observers 
             xarEvents::registerObserver('ModRemove', 'blocks');  
-            xarEvents::registerObserver('ModActivate', 'blocks');           
+            xarEvents::registerObserver('ModActivate', 'blocks');
+            xarEvents::registerObserver('ModDeactivate', 'blocks');         
       default:
       break;
     }
