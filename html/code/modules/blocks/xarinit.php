@@ -215,17 +215,6 @@ function blocks_init()
 
 }
 
-
-/**
- * Activate this module
- * This function is called during install *after* all other core modules
-**/
-function blocks_activate()
-{
-    // @checkme: scan filesystem, register unknown block types here ?
-    // return xarMod::apiFunc('blocks', 'types', 'refresh');
-    return true;
-}
 /**
  * Upgrade this module from an old version
  *
