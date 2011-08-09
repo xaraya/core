@@ -211,7 +211,7 @@ function blocks_init()
     xarRegisterMask('AdminBlocks','All','blocks','All','All','ACCESS_ADMIN');
 
     // Installation complete; check for upgrades
-    return blocks_upgrade('2.3.0');
+    return blocks_upgrade('2.2.0');
 
 }
 
@@ -225,7 +225,7 @@ function blocks_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.3.0':
+        case '2.2.0':
             // Register blocks module event observers 
             xarEvents::registerObserver('ModRemove', 'blocks');  
             xarEvents::registerObserver('ModActivate', 'blocks');
