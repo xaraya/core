@@ -26,11 +26,8 @@ class Roles_LanguageBlock extends BasicBlock
     protected $text_type           = 'Language';
     protected $text_type_long      = 'Language selection';
 
-    function display(Array $data=array())
+    function display()
     {
-        $data = parent::display($data);
-        if (empty($data)) return;
-
         // if (xarMLSGetMode() != XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
         if (xarMLSGetMode() == XARMLS_SINGLE_LANGUAGE_MODE) return;
 
@@ -54,20 +51,18 @@ class Roles_LanguageBlock extends BasicBlock
             );
         }
 
-        $args['form_action'] = xarModURL('roles', 'user', 'changelanguage');
-        $args['form_picker_name'] = 'locale';
-        $args['locales'] = $locales;
-        $args['blockid'] = $data['bid'];
+        $data['form_action'] = xarModURL('roles', 'user', 'changelanguage');
+        $data['form_picker_name'] = 'locale';
+        $data['locales'] = $locales;
 
         if (xarServer::getVar('REQUEST_METHOD') == 'GET') {
             // URL of this page
-            $args['return_url'] = xarServer::getCurrentURL();
+            $data['return_url'] = xarServer::getCurrentURL();
         } else {
             // Base URL of the site
-            $args['return_url'] = xarServer::getBaseURL();
+            $data['return_url'] = xarServer::getBaseURL();
         }
-
-        $data['content'] = $args;
+        
         return $data;
     }
 }

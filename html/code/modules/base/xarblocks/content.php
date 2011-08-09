@@ -43,37 +43,36 @@
  * @return array $blockinfo
  */
 
-        function display(Array $data=array())
+        function display()
         {
-            $data = parent::display($data);
-            $vars = $data['content'];
+            $data = $this->getContent();
 
             // Check if the block is within its start/end period
             $now = time();
             if (
-                (!empty($vars['start_date']) && $vars['start_date'] > $now)
-                || (!empty($vars['end_date']) && $vars['end_date'] < $now)
+                (!empty($data['start_date']) && $data['start_date'] > $now)
+                || (!empty($data['end_date']) && $data['end_date'] < $now)
             ) {
                 // Not yet started.
                 return;
             }
 
             // Special preparation for each content type.
-            if ($vars['content_type'] == 'text') {
+            if ($data['content_type'] == 'text') {
             // Nothing special
 
-            } elseif ($vars['content_type'] == 'php' || $vars['content_type'] == 'data') {
+            } elseif ($data['content_type'] == 'php' || $data['content_type'] == 'data') {
                 // Execute the PHP code.
                 ob_start();
-                if (!empty($vars['hide_errors'])) {
-                    $result = @eval($vars['content_text']);
+                if (!empty($data['hide_errors'])) {
+                    $result = @eval($data['content_text']);
                 } else {
-                    $result = eval($vars['content_text']);
+                    $result = eval($data['content_text']);
                 }
-                $vars['content_text'] = ob_get_contents();
+                $data['content_text'] = ob_get_contents();
                 ob_end_clean();
 
-                if ($result === false && !empty($vars['hide_errors'])) {
+                if ($result === false && !empty($data['hide_errors'])) {
                     // If the PHP code returns a boolean 'false', then the block
                     // will not be displayed. This allows the code in a PHP block
                     // to suppress its own output completely.
@@ -84,10 +83,10 @@
 
                 // If the format is 'data' then an array can be returned, that
                 // gets merged with the content for the output template.
-                if ($vars['content_type'] == 'data') {
+                if ($data['content_type'] == 'data') {
                     if (is_array($result)) {
-                        $vars = array_merge($result, $vars);
-                        $vars = $vars;
+                        $data = array_merge($result, $data);
+                        $data = $data;
                     } else {
                         // Structured data not returned.
                         return;
@@ -97,20 +96,19 @@
                 if (isset($title) && is_string($title)) {
                     // The PHP code can set the title of the block (my treat).
                     // Just include $title='whatever';  in the block code.
-                    $vars['title'] = $title;
+                    $this->setTitle($title);
                 }
             }
 
-            if ($vars['content_type'] != 'data' && !empty($vars['hide_empty']) && trim($vars['content_text']) == '') {
+            if ($data['content_type'] != 'data' && !empty($data['hide_empty']) && trim($data['content_text']) == '') {
                 // Block is empty - hide it (but not 'data' type, as no output
                 // is required for that type).
                 return;
             }
 
             // Split the text into lines, to help rendering.
-            $vars['content_lines'] = explode("\n", $vars['content_text']);
+            $data['content_lines'] = explode("\n", $data['content_text']);
             
-            $data['content'] = $vars;
             return $data;
         }
     }

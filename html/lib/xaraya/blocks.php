@@ -123,7 +123,11 @@ class xarBlock extends Object implements ixarBlock
             } else {
                 // title may have been over-ridden by the block setTitle() method 
                 $blockinfo['title'] = $block->title;
-                $blockinfo['_bl_block_group'] = $block->group;
+                $blockinfo['_bl_block_id']       = $block->block_id;
+                $blockinfo['_bl_block_name']     = $block->name;
+                $blockinfo['_bl_block_type']     = $block->type;
+                $blockinfo['_bl_block_type_id']  = $block->type_id;
+                $blockinfo['_bl_block_group']    = $block->group;
                 $blockinfo['_bl_block_group_id'] = $block->group_id;
                 // @todo: deprecate use of these 
                 $blockinfo['group'] = $block->group;
@@ -167,6 +171,8 @@ class xarBlock extends Object implements ixarBlock
         
         $tplData = $block->$method();
         if (empty($tplData)) return '';
+        // handler for legacy block display methods return tpl date as in content
+        // @todo remove when all module blocks are updated
         if ($method == 'display' && isset($tplData['content']))
             $tplData = $tplData['content'];       
         if (is_array($tplData)) {

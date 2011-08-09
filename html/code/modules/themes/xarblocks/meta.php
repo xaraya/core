@@ -48,12 +48,9 @@ class Themes_MetaBlock extends BasicBlock
  * @param $data array containing title,content
  * @todo: add the same functionality for links we now use for metatags
  */
-    function display(Array $data=array())
+    function display()
     {
-        $data = parent::display($data);
-        if (empty($data)) return;
-
-        $meta = !empty($data['content']) ? $data['content'] : array();
+        $meta = $this->getContent();
         /** support for dynamic description and dynamic keywords is now
          *  supplied by the xar:meta tag, and not hardcoded here. It is no longer
          *  limited to use by the keywords and articles module, and can be utilised
@@ -106,8 +103,7 @@ class Themes_MetaBlock extends BasicBlock
         $meta['first']          = xarVarGetCached('Pager.first','leftarrow');
         $meta['last']           = xarVarGetCached('Pager.last','rightarrow');
 
-        $data['content'] = $meta;
-        return $data;
+        return $meta;
 
     }
     

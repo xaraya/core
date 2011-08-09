@@ -24,7 +24,7 @@
  * @author Jason Judge
  * @param $blockinfo array containing title,content
  */
-        public function modify(Array $data=array())
+        public function modify()
         {
             $data = $this->getContent();
 
@@ -45,8 +45,6 @@
  */
         public function update(Array $data=array())
         {
-            $data = parent::update($data);
-
             if (xarVarFetch('content_type', 'pre:lower:passthru:enum:text:html:php:custom:data', $content_type, 'text', XARVAR_NOT_REQUIRED)) {
                 $args['content_type'] = $content_type;
             }
@@ -87,9 +85,8 @@
                     $args['end_date'] = '';
                 }
             }
-
-            $data['content'] = $args;
-            return $data;
+            $this->setContent($args);
+            return true;
         }
 
     }
