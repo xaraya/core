@@ -95,12 +95,17 @@
                     </div>
                 </div>
             </fieldset>
-            <fieldset class="xar-form-actions">
-                <input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#"/>
-                <input type="hidden" name="toggle" id="toggle" value="#$toggle#"/>
-                <xar:var name="label">Save Site Lock Settings</xar:var>
-                <input type="button" value="#$label#" tabindex="2" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=save';this.form.submit();"/>
-            </fieldset>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#"/>
+                        <input type="hidden" name="toggle" id="toggle" value="#$toggle#"/>
+                        <xar:var name="label">Save Site Lock Settings</xar:var>
+                        <input type="button" value="#$label#" tabindex="2" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=save';this.form.submit();"/>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </xar:template>

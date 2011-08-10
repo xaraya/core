@@ -285,13 +285,18 @@
                         </div>
                     </div>
 	            </fieldset>
-                <fieldset class="xar-form-actions">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="poldcomponent" id="poldcomponent" value="#$oldcomponent#"/>
-                    <input type="hidden" name="id" id="id" value="#$ppid#"/>
-                    <xar:var name="value">Add</xar:var>
-                    <input type="button" value="#$value#" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-addmember;&amp;ppid=#$ppid#&amp;authid=#$authid#';this.form.submit();"/>
-	            </fieldset>
+                <div class="xar-form-actions">
+                    <div class="xar-row">
+                        <div class="xar-col"></div>
+                        <div class="xar-col">
+                            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                            <input type="hidden" name="poldcomponent" id="poldcomponent" value="#$oldcomponent#"/>
+                            <input type="hidden" name="id" id="id" value="#$ppid#"/>
+                            <xar:var name="value">Add</xar:var>
+                            <input type="button" value="#$value#" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-addmember;&amp;ppid=#$ppid#&amp;authid=#$authid#';this.form.submit();"/>
+                        </div>
+                    </div>
+	            </div>
 	        </form>
 	        <fieldset>
 	            <legend>'#$pname#' Component Memberships</legend>
