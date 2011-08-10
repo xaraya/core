@@ -30,6 +30,8 @@ interface iBlockType
 sys::import('xaraya.structures.descriptor');
 abstract class BlockType extends ObjectDescriptor implements iBlockType
 {
+    // keep an internal count of all blocks instantiated 
+    private static $_count = 0;
     // All properties here have protected visibility to prevent anything
     // other than the blocks subsystem from setting them directly. 
     protected $blockinfo; // args passed to constructor 
@@ -40,6 +42,8 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     protected $type_id;
     protected $type_state;
     protected $type_version;
+    
+    protected $block_index; // (self::$_count);
 
     // Block instance information, supplied by blocks subsystem (dbinfo)
     protected $block_id;
@@ -88,6 +92,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     // todo: make this final
     final public function __construct(Array $blockinfo=array())
     {
+        $this->index = self::$_count++;
         // normalize blockinfo 
         // store the original arguments 
         $this->blockinfo = $blockinfo;
@@ -99,9 +104,30 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
         $this->setConfiguration();
         // set content
         $this->setContent();
+        
+        $this->runUpgrade();
 
         // run any additional initialisation supplied by this block type
         $this->init();
+    }
+
+    final protected function runUpgrade()
+    {
+        if ($this->xarversion != $this->type_version && xarBlock::hasMethod($this, 'upgrade', true)) {
+            if (!empty($this->type_version)) {
+                sys::import('xaraya.version');
+                if (xarVersion::compare($this->type_version, $this->xarversion, 3) >= 0) {
+                    // 1st version is bigger, can't downgrade blocks
+                    throw new Exception();
+                }
+            }
+            if (!$this->upgrade($this->type_version)) {
+                // upgrade failed
+                throw new Exception();
+            }
+        } 
+        $this->type_version = $this->xarversion;
+        return true;        
     }
 
     final public function __get($p)
@@ -114,6 +140,19 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
         if (!isset($this->$p))
             return $nullreturn;
         return $this->$p;
+    }
+
+    public function uniqueId()
+    {
+        $id = $this->type;
+        if (!empty($this->module))
+            $id = "{$this->module}_{$id}";
+        if (!empty($this->group))
+            $id .= "_{$this->group}";
+        if (!empty($this->name))
+            $id .= "_{$this->name}";
+        $id .= "_{$this->block_index}";
+        return $id;
     }
     
     public function init()
@@ -146,7 +185,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     final public function getTypeInfo()
     {
         $allowed = array(
-            'type', 'module', 'tid', 'type_id', 'type_state', 'type_version',
+            'type', 'module', 'tid', 'type_id', 'type_state',
         );
         $info = array();
         foreach ($allowed as $p)
@@ -193,7 +232,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
             'nocache', 'pageshared', 'usershared', 'cacheexpire', 
             'add_access', 'modify_access', 'delete_access', 'display_access',
             'expire', 'box_template', 'block_template', 'instance_groups',
-            'show_preview', 'show_help',
+            'show_preview', 'show_help', 'type_version'
         );
         $info = array();
         foreach ($allowed as $p)

@@ -49,10 +49,10 @@
             <div class="xar-row">
                 <div class="xar-col">Version</div>
                 <div class="xar-col">
-                <xar:if condition="!empty($type['xarversion'])">
-                    #$type['xarversion']#
+                <xar:if condition="!empty($type['type_info']['xarversion']) and $type['type_info']['xarversion'] ne '0.0.0'">
+                    #$type['type_info']['xarversion']#
                 <xar:else/>
-                    [unknown]
+                    [ unknown ]
                 </xar:if>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                     <xar:if condition="!empty($type['type_info']['author'])">
                         #$type['type_info']['author']#
                      <xar:else/>
-                        [unknown]
+                        [ unknown ]
                      </xar:if>
                      </div>
                 </div>
@@ -96,7 +96,7 @@
                     <xar:if condition="!empty($type['type_info']['contact'])">
                         #$type['type_info']['contact']#
                      <xar:else/>
-                        [unknown]
+                        [ unknown ]
                      </xar:if>
                      </div>
                 </div>
@@ -106,7 +106,7 @@
                     <xar:if condition="!empty($type['type_info']['credits'])">
                         #$type['type_info']['credits']#
                      <xar:else/>
-                        [unknown]
+                        [ unknown ]
                      </xar:if>
                      </div>
                 </div>
@@ -116,7 +116,7 @@
                     <xar:if condition="!empty($type['type_info']['license'])">
                         #$type['type_info']['license']#
                      <xar:else/>
-                        [unknown]
+                        [ unknown ]
                      </xar:if>
                      </div>
                 </div>
