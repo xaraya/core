@@ -23,15 +23,20 @@
                 #xarVarPrepForDisplay($instance['type'])#
                 </p>
             </fieldset>
-            <fieldset class="xar-form-actions">
-                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                <input type="hidden" name="confirm" id="confirm" value="true"/>
-                <input type="hidden" name="bid" id="bid" value="#$instance['bid']#"/>
-                <xar:var name="label">Delete Block</xar:var>
-                <xar:button type="submit" label="$label"/>
-                <xar:var name="label">Cancel</xar:var>
-                <xar:button type="cancel" label="$label"/>
-            </fieldset>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <input type="hidden" name="confirm" id="confirm" value="true"/>
+                        <input type="hidden" name="bid" id="bid" value="#$instance['bid']#"/>
+                        <xar:var name="label">Cancel</xar:var>
+                        <xar:button type="cancel" label="$label"/>&#160;
+                        <xar:var name="label">Delete Block</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </xar:template>

@@ -122,13 +122,18 @@
                 Note: other variables may be available depending on the module
                 </p>
             </fieldset>
-            <fieldset class="xar-form-actions">
-                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                <input type="hidden" name="phase" id="phase" value="update"/>
-                <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>
-                <xar:var name="label">Update</xar:var>
-                <xar:button type="submit" label="$label"/>
-            </fieldset>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <input type="hidden" name="phase" id="phase" value="update"/>
+                        <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </xar:template>

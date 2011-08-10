@@ -404,13 +404,18 @@
 	            </xar:if>
 	
 	            <xar:if condition="($adminaccess OR !empty($instance['allowaccess'])) and $tab ne 'help'">
-                    <fieldset class="xar-form-actions">
-                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                        <input type="hidden" name="bid" id="bid" value="#$bid#"/>
-                        <xar:var name="label">Update</xar:var>
-                        <xar:button type="submit" label="$label"/>
-	                </fieldset>
+                    <div class="xar-form-actions">
+                        <div class="xar-row">
+                            <div class="xar-col"></div>
+                            <div class="xar-col">
+                                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                                <input type="hidden" name="bid" id="bid" value="#$bid#"/>
+                                <xar:var name="label">Update</xar:var>
+                                <xar:button type="submit" label="$label"/>
+                            </div>
+                        </div>
+	                </div>
 	            </xar:if>
         </div>
         </form>

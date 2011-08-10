@@ -30,9 +30,14 @@
                 </div>                    
             </xar:if>                
         </fieldset>
-        <fieldset class="xar-form-actions">
-            <xar:var name="label">Go back</xar:var>
-            <xar:button type="cancel" label="$label"/>
-        </fieldset>
+        <div class="xar-form-actions">
+            <div class="xar-row">
+                <div class="xar-col"></div>
+                <div class="xar-col">
+                    <xar:var name="label">Go back</xar:var>
+                    <xar:button type="cancel" label="$label"/>
+                </div>
+            </div>
+        </div>
     </div>
 </xar:template>
