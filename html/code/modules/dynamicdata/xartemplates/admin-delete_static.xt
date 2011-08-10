@@ -16,12 +16,17 @@
 
         <form method="post" action="#xarServer::getCurrentURL()#">
             <div class="xar-form-actions">
-                <input type="hidden" name="table" id="table" value="#$table#"/>
-                <input type="hidden" name="confirm" id="confirm" value="true"/>
-                <xar:var name="label">Delete</xar:var>
-                <xar:button type="submit" label="$label"/>
-                <xar:var name="label">Cancel</xar:var>
-                <xar:button type="cancel" label="$label" name="noconfirm" id="noconfirm"/>
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="table" id="table" value="#$table#"/>
+                        <input type="hidden" name="confirm" id="confirm" value="true"/>
+                        <xar:var name="label">Cancel</xar:var>
+                        <xar:button type="cancel" label="$label" name="noconfirm" id="noconfirm"/>&#160;
+                        <xar:var name="label">Delete</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
             </div>
         </form>
     </div>

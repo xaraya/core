@@ -18,12 +18,17 @@
             </fieldset>
             <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
             <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>#$showval# 
-            <fieldset class="xar-form-actions">
-                <xar:var name="label">Update</xar:var>
-                <xar:button type="submit" label="$label" name="confirm"/>&#160;
-                <xar:var name="label">Update and Exit</xar:var>
-                <xar:button type="submit" label="$label" name="exit"/>
-            </fieldset>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label" name="confirm"/>&#160;
+                        <xar:var name="label">Update and Exit</xar:var>
+                        <xar:button type="submit" label="$label" name="exit"/>
+                    </div>
+                </div>
+            </div>
         </form>
 
     <xar:elseif condition="!empty($proptype)"/>

@@ -61,12 +61,17 @@
                     </legend>
                     <xar:template file="config_display"/>
                 </fieldset>
-                <fieldset class="xar-form-actions">
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                    <input type="hidden" name="phase" id="phase" value="update"/>
-                    <xar:var name="label">Update</xar:var>
-                    <xar:button type="submit" label="$label"/>
-                </fieldset>
+                <div class="xar-form-actions">
+                    <div class="xar-row">
+                        <div class="xar-col"></div>
+                        <div class="xar-col">
+                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                            <input type="hidden" name="phase" id="phase" value="update"/>
+                            <xar:var name="label">Update</xar:var>
+                            <xar:button type="submit" label="$label"/>
+                        </div>
+                    </div>
+                </div>
             </form>
             <xar:elseif condition="$tab eq 'managehooks'"/>
             <!-- Hooks tab -->

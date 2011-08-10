@@ -57,17 +57,20 @@
                     </div>
                 </xar:if>
             </fieldset>
-            <fieldset>
-                <div class="xar-form-actions xar-align-center">
-                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                <input type="hidden" name="confirm" id="confirm" value="true"/>
-                <input type="hidden" name="block_id" id="block_id" value="#$instance['block_id']#"/>
-                <xar:var name="label">Delete Block</xar:var>
-                <xar:button type="submit" label="$label"/>
-                <xar:var name="label">Cancel</xar:var>
-                <xar:button type="cancel" label="$label"/>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="confirm" id="confirm" value="true"/>
+                        <input type="hidden" name="block_id" id="block_id" value="#$instance['block_id']#"/>
+                        <xar:var name="label">Cancel</xar:var>
+                        <xar:button type="cancel" label="$label"/>&#160;
+                        <xar:var name="label">Delete Block</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
                 </div>
-            </fieldset>
+            </div>
         </form>
     </div>
 </xar:template>
