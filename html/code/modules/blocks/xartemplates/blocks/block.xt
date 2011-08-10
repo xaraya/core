@@ -15,7 +15,7 @@
                     <xar:var name="title" prep="false"/>
                     <xar:sec mask="AdminBase" catch="false">
                         <a class="xar-icon" href="#xarModURL('blocks','admin','modify_instance',array('block_id' => $_bl_block_id))#" title="Edit this block" style="float: right">
-                            <xar:img scope="theme" class="xar-icon" file="icons/config.png"/>
+                            <xar:img scope="theme" class="xar-icon" file="icons/modify-config.png"/>
                         </a>
                     </xar:sec>
                 </div>

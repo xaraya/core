@@ -8,7 +8,7 @@
                     <xar:sec mask="AdminBase" catch="false">
                         <a href="#xarModURL('blocks','admin','modify_instance',array('block_id' => $_bl_block_id, 'tab' => 'config'))#" title="Edit this block" style="float: right">
                             <xar:var name="alttext">Modify</xar:var>
-                            <xar:img scope="theme" file="icons/config.png" class="xar-icon" alt="$alttext"/>
+                            <xar:img scope="theme" file="icons/modify-config.png" class="xar-icon" alt="$alttext"/>
                         </a>
                     </xar:sec>
                 </xar:if>
