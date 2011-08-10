@@ -140,13 +140,18 @@
                     <xar:set name="propname">$detail['type'] . '_new'</xar:set>
                     <xar:data-input type="access" name="$propname" value="$info['new_access']" />
                 </fieldset>
-                <fieldset class="xar-form-actions">
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-                    <input type="hidden" name="tid" id="tid" value="#$tid#" />
-                    <input type="hidden" name="confirm" id="confirm" value="1" />
-                    <xar:var name="label">Update</xar:var>
-                    <xar:button type="submit" label="$label"/>
-                </fieldset>
+                <div class="xar-form-actions">
+                    <div class="xar-row">
+                        <div class="xar-col"></div>
+                        <div class="xar-col">
+                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+                            <input type="hidden" name="tid" id="tid" value="#$tid#" />
+                            <input type="hidden" name="confirm" id="confirm" value="1" />
+                            <xar:var name="label">Update</xar:var>
+                            <xar:button type="submit" label="$label"/>
+                        </div>
+                    </div>
+                </div>
             </form>
             <xar:elseif condition="$tab eq 'preview'"/>
                 <xar:set name="blockmodule">$detail['module']</xar:set>

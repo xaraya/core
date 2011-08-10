@@ -47,25 +47,28 @@
                 </xar:if>
             <!-- -->
             </fieldset>
-            <fieldset>
-                <div class="xar-form-actions">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
-                    <input type="hidden" name="join" id="join" value="#$object:join#"/>
-                    <input type="hidden" name="table" id="table" value="#$object:table#"/>
-                    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
-                    <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
-                    <input type="hidden" name="notfresh" id="notfresh" value="true"/>
-                    <xar:if condition="!empty($return_url)">
-                        <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
-                    </xar:if>
-                    <xar:var name="label">Preview</xar:var>
-                    <xar:button type="submit" label="$label" name="preview"/>
-                    &#160;
-                    <xar:var name="label">Create</xar:var>
-                    <xar:button type="submit" label="$label"/>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
+                        <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                        <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                        <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+                        <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
+                        <input type="hidden" name="notfresh" id="notfresh" value="true"/>
+                        <xar:if condition="!empty($return_url)">
+                            <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                        </xar:if>
+                        <xar:var name="label">Preview</xar:var>
+                        <xar:button type="submit" label="$label" name="preview"/>
+                        &#160;
+                        <xar:var name="label">Create</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
                 </div>
-            </fieldset>
+            </div>
         </form>
     </div>
 </xar:template>

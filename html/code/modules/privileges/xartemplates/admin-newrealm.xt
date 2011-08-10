@@ -19,12 +19,17 @@
                     </div>
                 </div>
             </fieldset>
-            <fieldset class="xar-form-actions">
-                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                <input type="hidden" name="confirmed" id="confirmed" value="true"/>
-                <xar:var name="value">Add</xar:var>
-                <xar:button type="submit" label="$label" tabindex="2"/>
-            </fieldset>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <input type="hidden" name="confirmed" id="confirmed" value="true"/>
+                        <xar:var name="value">Add</xar:var>
+                        <xar:button type="submit" label="$label" tabindex="2"/>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </xar:template>

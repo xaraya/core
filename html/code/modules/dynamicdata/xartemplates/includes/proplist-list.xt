@@ -149,19 +149,24 @@
     <xar:if condition="!empty($hooks)">
         <xar:foreach in="$hooks" key="$module" value="$output">#$output#</xar:foreach>
     </xar:if>
-    <fieldset class="xar-form-actions">
-        <!--
-        Optional extra table for data sources - use a text box if you want to make this configurable
-        <input type="text" name="table" id="table" value="#$table#"/>
-        -->
-        <xar:if condition="!empty($table)">
-            <input type="hidden" name="table" id="table" value="#$table#"/>
-        </xar:if>
-        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-        <input type="hidden" name="objectid" id="objectid" value="#$objectid#"/>
-        <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>
-        <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
-        <xar:var name="label">Update Properties</xar:var>
-        <xar:button type="submit" label="$label"/>
-    </fieldset>
+    <div class="xar-form-actions">
+        <div class="xar-row">
+            <div class="xar-col"></div>
+            <div class="xar-col">
+                <!--
+                Optional extra table for data sources - use a text box if you want to make this configurable
+                <input type="text" name="table" id="table" value="#$table#"/>
+                -->
+                <xar:if condition="!empty($table)">
+                    <input type="hidden" name="table" id="table" value="#$table#"/>
+                </xar:if>
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="objectid" id="objectid" value="#$objectid#"/>
+                <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>
+                <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
+                <xar:var name="label">Update Properties</xar:var>
+                <xar:button type="submit" label="$label"/>
+            </div>
+        </div>
+    </div>
 </xar:template>
