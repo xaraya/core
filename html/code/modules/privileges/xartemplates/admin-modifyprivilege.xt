@@ -258,10 +258,15 @@
 	                    </xar:if>
 	                </xar:if>
 	                <xar:if condition="!$frozen">
-	                    <div class="xar-col dummy">
-                            <xar:var name="label">Update</xar:var>
-                            <xar:button type="submit" label="$label"/>
-	                    </div>
+	                    <div class="xar-forms-actions">
+                            <div class="xar-row">
+                                <div class="xar-col"></div>
+                                <div class="xar-col">
+                                    <xar:var name="label">Update</xar:var>
+                                    <xar:button type="submit" label="$label"/>
+                                </div>
+                            </div>
+                        </div>
 	                </xar:if>
 	            </fieldset>
 	            <fieldset>
