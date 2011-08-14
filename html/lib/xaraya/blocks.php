@@ -65,7 +65,6 @@ class xarBlock extends Object implements ixarBlock
  * @return string output the block to show
  * @throws  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  * @todo   this function calls a module function, keep an eye on it.
- * @todo   caching is currently borked
  */
     public static function render(Array $blockinfo=array())
     {
@@ -79,7 +78,7 @@ class xarBlock extends Object implements ixarBlock
         } 
         
         try {
-    
+            $blockinfo['method'] = 'display';
             // get the block instance 
             $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $blockinfo);
 
@@ -170,12 +169,11 @@ class xarBlock extends Object implements ixarBlock
             throw new FunctionNotFoundException($method);
         
         $tplData = $block->$method();
-        if (empty($tplData)) return '';
-        // handler for legacy block display methods return tpl date as in content
-        // @todo remove when all module blocks are updated
-        if ($method == 'display' && isset($tplData['content']))
-            $tplData = $tplData['content'];       
         if (is_array($tplData)) {
+            // handler for legacy block display methods returning tpl data in $content
+            // @todo remove when all module blocks are updated
+            if ($method == 'display' && isset($tplData['content']))
+                $tplData = $tplData['content']; 
             // inject blocklayout info 
             $tplData['_bl_block_id']       = $block->block_id;
             $tplData['_bl_block_name']     = $block->name;
@@ -186,11 +184,11 @@ class xarBlock extends Object implements ixarBlock
 
             // Legacy (deprecated)
             // @TODO: remove these once all block templates are using the _bl_ variables
-            $tplData['blockid'] = $tplData['bid'] = $block->bid;
+            $tplData['blockid'] = $tplData['bid'] = $block->block_id;
             $tplData['blockname'] = $block->name;
             $tplData['blocktypename'] = $block->type;
             // The block may not be rendered as part of a group.
-            $tplData['blockgid'] = $block->groupid;
+            $tplData['blockgid'] = $block->group_id;
             $tplData['blockgroupname'] = $tplData['group'] = $block->group;
            
             if ($method != 'display') {
@@ -199,7 +197,7 @@ class xarBlock extends Object implements ixarBlock
             }
             return xarTpl::block(
                 $block->module, $block->type, $tplData, $block->block_template, $block->template_base);
-        } elseif (is_string($tplData)) {
+        } elseif (!empty($tplData) && is_string($tplData)) {
             return $tplData;
         } else {
             return '';
@@ -257,7 +255,7 @@ class xarBlock extends Object implements ixarBlock
         // It keeps the core code lighter when standalone blocks are not used.
         if (isset($args['instance']))  // valid block instance states
             $args['state'] = array(xarBlock::BLOCK_STATE_VISIBLE, xarBlock::BLOCK_STATE_HIDDEN);
-        $args['type_state'] = array(xarBlock::TYPE_STATE_ACTIVE); // valid block type states 
+        $args['type_state'] = array(xarBlock::TYPE_STATE_ACTIVE); // valid block type states
         // get block info            
         $blockinfo = xarMod::apiFunc('blocks', 'blocks', 'getinfo', $args);
         return self::render($blockinfo);

@@ -107,11 +107,11 @@ function blocks_admin_modify_type(Array $args=array())
                     if (!$result) return;
                     if (isset($result['content']))
                         $block->setContent($result['content']);
-                    $type_info = $block->storeContent();
-                    $type_info['block_template'] = $block_template;
-                    $type_info['box_template'] = $box_template;
 
-                    $update['type_info'] = $type_info;        
+                    $block->setBlockTemplate($block_template);
+                    $block->setBoxTemplate($box_template);
+
+                    $update['type_info'] = $block->storeContent();       
                 }                       
             break;
             
@@ -130,14 +130,13 @@ function blocks_admin_modify_type(Array $args=array())
                 if (!empty($cacheexpire)) 
                     $cacheexpire = xarMod::apiFunc('blocks', 'user', 'convertseconds', 
                         array('direction' => 'to', 'starttime' => $cacheexpire));                
+
+                $block->setNoCache($nocache);
+                $block->setPageShared($pageshared);
+                $block->setUserShared($usershared);
+                $block->setCacheExpire($cacheexpire);
                 
-                $type_info = $block->storeContent();
-                $type_info['nocache'] = $nocache;
-                $type_info['pageshared'] = $pageshared;
-                $type_info['usershared'] = $usershared;
-                $type_info['cacheexpire'] = $cacheexpire;
-                
-                $update['type_info'] = $type_info;        
+                $update['type_info'] = $block->storeContent();       
             
             break;
             
@@ -212,7 +211,7 @@ function blocks_admin_modify_type(Array $args=array())
                             $value = $v;
                         break;
                         case 'boolean':
-                            $value = $v ? 'true' : 'false';
+                            $value = $v ? '1' : '0';
                         break;
                         default:
                             continue 2;
