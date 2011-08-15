@@ -61,15 +61,26 @@
                         <xar:set name="prop_id">"{$col_id}"</xar:set>
                         <!-- property[row][column] -->
                         <!-- we need to instantiate the property this way so we can insert a default value -->
-                        <xar:set name="property">DataPropertyMaster::getProperty(array('type'=>$column_types[$k],'defaultvalue'=>$column_defaults[$k]))</xar:set>
-
+                        <xar:if condition="isset($column_defaults[$k])">
+                            <xar:set name="property">DataPropertyMaster::getProperty(array('type'=>$column_types[$k],'defaultvalue'=>$column_defaults[$k]))</xar:set>
+                        <xar:else/>
+                            <xar:set name="property">DataPropertyMaster::getProperty(array('type'=>$column_types[$k]))</xar:set>
+                        </xar:if>
                         <td>
                             <!-- row #$i# column #$k# -->
                             <span style="display: #$index_display#">#$prop_name#</span>
                             <xar:if condition="isset($value[$k][$i])">
-                                <xar:data-input property="$property" name="$prop_name" id="$prop_id" value="$value[$k][$i]" configuration="$column_configurations[$k]"/>
+                                <xar:if condition="isset($column_configurations[$k])">
+                                    <xar:data-input property="$property" name="$prop_name" id="$prop_id" value="$value[$k][$i]" configuration="$column_configurations[$k]"/>
+                                <xar:else/>
+                                    <xar:data-input property="$property" name="$prop_name" id="$prop_id" value="$value[$k][$i]"/>
+                                </xar:if>
                             <xar:else/>
-                                <xar:data-input property="$property" name="$prop_name" id="$prop_id" configuration="$column_configurations[$k]"/>
+                                <xar:if condition="isset($column_configurations[$k])">
+                                    <xar:data-input property="$property" name="$prop_name" id="$prop_id" configuration="$column_configurations[$k]"/>
+                                <xar:else/>
+                                    <xar:data-input property="$property" name="$prop_name" id="$prop_id"/>
+                                </xar:if>
                             </xar:if>
                         </td>
                     </xar:for>
