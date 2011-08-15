@@ -7,16 +7,21 @@
         <xar:if condition="!empty($object)">
             <form action="#xarModURL('modules','admin','modifyproperties')#" method="post" enctype="application/x-www-form-urlencoded">
                 <xar:data-form object="$object"/>
-                <fieldset class="xar-form-actions">
-                    <xar:if condition="!empty($return_url)">
-                        <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
-                    </xar:if>
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="id" id="id" value="#$id#"/>
-                    <input type="hidden" name="phase" id="phase" value="update"/>
-                    <xar:var name="label">Save Changes</xar:var>
-                    <xar:button type="submit" label="$label"/>
-                </fieldset>
+                <div class="xar-form-actions">
+                    <div class="xar-row">
+                        <div class="xar-col"></div>
+                        <div class="xar-col">
+                            <xar:if condition="!empty($return_url)">
+                                <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                            </xar:if>
+                            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                            <input type="hidden" name="id" id="id" value="#$id#"/>
+                            <input type="hidden" name="phase" id="phase" value="update"/>
+                            <xar:var name="label">Save Changes</xar:var>
+                            <xar:button type="submit" label="$label"/>
+                        </div>
+                    </div>
+                </div>
             </form>
         <xar:else />
             No Properties Available For #$displayname#

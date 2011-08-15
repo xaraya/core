@@ -258,10 +258,15 @@
 	                    </xar:if>
 	                </xar:if>
 	                <xar:if condition="!$frozen">
-	                    <div class="xar-col dummy">
-                            <xar:var name="label">Update</xar:var>
-                            <xar:button type="submit" label="$label"/>
-	                    </div>
+	                    <div class="xar-forms-actions">
+                            <div class="xar-row">
+                                <div class="xar-col"></div>
+                                <div class="xar-col">
+                                    <xar:var name="label">Update</xar:var>
+                                    <xar:button type="submit" label="$label"/>
+                                </div>
+                            </div>
+                        </div>
 	                </xar:if>
 	            </fieldset>
 	            <fieldset>
@@ -285,13 +290,18 @@
                         </div>
                     </div>
 	            </fieldset>
-                <fieldset class="xar-form-actions">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="poldcomponent" id="poldcomponent" value="#$oldcomponent#"/>
-                    <input type="hidden" name="id" id="id" value="#$ppid#"/>
-                    <xar:var name="value">Add</xar:var>
-                    <input type="button" value="#$value#" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-addmember;&amp;ppid=#$ppid#&amp;authid=#$authid#';this.form.submit();"/>
-	            </fieldset>
+                <div class="xar-form-actions">
+                    <div class="xar-row">
+                        <div class="xar-col"></div>
+                        <div class="xar-col">
+                            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                            <input type="hidden" name="poldcomponent" id="poldcomponent" value="#$oldcomponent#"/>
+                            <input type="hidden" name="id" id="id" value="#$ppid#"/>
+                            <xar:var name="value">Add</xar:var>
+                            <input type="button" value="#$value#" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-addmember;&amp;ppid=#$ppid#&amp;authid=#$authid#';this.form.submit();"/>
+                        </div>
+                    </div>
+	            </div>
 	        </form>
 	        <fieldset>
 	            <legend>'#$pname#' Component Memberships</legend>

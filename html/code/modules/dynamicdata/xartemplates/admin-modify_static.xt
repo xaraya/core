@@ -17,15 +17,20 @@
             <legend>Modify item details</legend>
             <xar:data-form object="$object"/>
           </fieldset>
-          <fieldset class="xar-form-actions">
-            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-            <input type="hidden" name="table" id="table" value="#$table#"/>
-            <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
-            <input type="hidden" name="oldname" id="oldname" value="#$oldname#"/>
-            <input type="hidden" name="confirm" id="confirm" value="true"/>
-            <xar:var name="label">Update</xar:var>
-            <xar:button type="submit" label="$label"/>
-          </fieldset>
+          <div class="xar-form-actions">
+            <div class="xar-row">
+                <div class="xar-col"></div>
+                <div class="xar-col">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="table" id="table" value="#$table#"/>
+                    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+                    <input type="hidden" name="oldname" id="oldname" value="#$oldname#"/>
+                    <input type="hidden" name="confirm" id="confirm" value="true"/>
+                    <xar:var name="label">Update</xar:var>
+                    <xar:button type="submit" label="$label"/>
+                </div>
+            </div>
+          </div>
         </form>
     </div>
 </xar:template>

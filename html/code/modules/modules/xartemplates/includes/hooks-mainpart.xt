@@ -255,13 +255,18 @@
                     </xar:foreach>
                     <!-- End module category -->
                 </xar:foreach>
-                <fieldset class="xar-form-actions">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="curhook" id="curhook" value="#$curhook#"/>
-                    <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
-                    <xar:var name="label">Save Changes</xar:var>
-                    <xar:button type="submit" label="$label"/>
-                </fieldset>
+                <div class="xar-form-actions">
+                    <div class="xar-row">
+                        <div class="xar-col"></div>
+                        <div class="xar-col">
+                            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                            <input type="hidden" name="curhook" id="curhook" value="#$curhook#"/>
+                            <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                            <xar:var name="label">Save Changes</xar:var>
+                            <xar:button type="submit" label="$label"/>
+                        </div>
+                    </div>
+                </div>
         </div>
     </form>
     </xar:if>

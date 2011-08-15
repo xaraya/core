@@ -53,10 +53,15 @@
                     </div>
                 </div>
             </fieldset>
-            <fieldset class="xar-form-actions">
-                <xar:var name="label">Add Block Type</xar:var>
-                <xar:button type="submit" label="$label"/>
-            </fieldset>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <xar:var name="label">Add Block Type</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </xar:template>

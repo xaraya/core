@@ -16,12 +16,17 @@
                     </div>
                 </div>
             </fieldset>
-            <fieldset class="xar-form-actions">
-                <input type="hidden" name="phase" id="phase" value="update"/>
-                <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
-                <xar:var name="submitLabel">Change Theme</xar:var>
-                <xar:button type="submit" label="$submitLabel"/>
-            </fieldset>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="phase" id="phase" value="update"/>
+                        <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                        <xar:var name="submitLabel">Change Theme</xar:var>
+                        <xar:button type="submit" label="$submitLabel"/>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </xar:template>
