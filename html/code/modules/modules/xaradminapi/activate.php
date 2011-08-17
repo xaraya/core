@@ -48,7 +48,9 @@ function modules_adminapi_activate(Array $args=array())
         xarOutputFlushCached('modules');
         xarOutputFlushCached('base-block');
     }
-
+    // notify any observers that this module was activated 
+    // NOTE: the ModActivate event observer notifies ModuleActivate hooks 
+    xarEvents::notify('ModActivate', $modInfo['name']);
     return true;
 }
 ?>

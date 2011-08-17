@@ -56,7 +56,9 @@ function modules_adminapi_deactivate(Array $args=array())
         xarOutputFlushCached('modules');
         xarOutputFlushCached('base-block');
     }
-
+    // notify any observers that this module was deactivated 
+    // NOTE: the ModDeactivate event observer notifies ModuleDeactivate hooks 
+    xarEvents::notify('ModDeactivate', $modInfo['name']);
     return true;
 }
 ?>
