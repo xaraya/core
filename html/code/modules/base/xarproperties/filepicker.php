@@ -47,6 +47,9 @@ class FilePickerProperty extends SelectProperty
     public function showInput(Array $data = array())
     {
         if (isset($data['basedir'])) $this->initialization_basedirectory = $data['basedir'];
+        // Replace {theme} with the current theme directory
+        $this->initialization_basedirectory = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->initialization_basedirectory);
+
         if (isset($data['matches'])) $this->validation_matches = $data['matches'];
         if (isset($data['extensions'])) $this->setExtensions($data['extensions']);
         if (isset($data['display_fullname'])) $this->display_fullname = $data['display_fullname'];
