@@ -1,6 +1,6 @@
 <?php
 /**
- * Data Store is a dummy (for in-memory data storage, perhaps)
+ * Data Store is a virtual (for in-memory data storage, perhaps)
  *
  * @package core
  * @subpackage datastores
@@ -34,7 +34,8 @@ class DummyDataStore extends BasicDataStore
     {
         if (empty($args['itemid']))
             throw new BadParameterException(xarML('Cannot get itemid 0'));
-        $itemid = $args['itemid'];
+        // Get the itemid from the params or from the object definition
+        $itemid = isset($args['itemid']) ? $args['itemid'] : $this->object->itemid;
         foreach (array_keys($this->fields) as $field) {
             $this->fields[$field]->setValue($itemid);
         }
@@ -58,7 +59,8 @@ class DummyDataStore extends BasicDataStore
 
     function createItem(Array $args = array())
     {
-        $itemid = $args['itemid'];
+        // Get the itemid from the params or from the object definition
+        $itemid = isset($args['itemid']) ? $args['itemid'] : $this->object->itemid;
         foreach (array_keys($this->fields) as $field) {
             if (method_exists($this->fields[$field],'createvalue')) {
                 $this->fields[$field]->createValue($itemid);
@@ -71,7 +73,8 @@ class DummyDataStore extends BasicDataStore
     {
         if (empty($args['itemid']))
             throw new BadParameterException(xarML('Cannot update itemid 0'));
-        $itemid = $args['itemid'];
+        // Get the itemid from the params or from the object definition
+        $itemid = isset($args['itemid']) ? $args['itemid'] : $this->object->itemid;
         foreach (array_keys($this->fields) as $field) {
             if (method_exists($this->fields[$field],'updatevalue')) {
                 $this->fields[$field]->updateValue($itemid);
@@ -82,7 +85,8 @@ class DummyDataStore extends BasicDataStore
 
     function deleteItem(Array $args = array())
     {
-        $itemid = $args['itemid'];
+        // Get the itemid from the params or from the object definition
+        $itemid = isset($args['itemid']) ? $args['itemid'] : $this->object->itemid;
         foreach (array_keys($this->fields) as $field) {
             if (method_exists($this->fields[$field],'deletevalue')) {
                 $this->fields[$field]->deleteValue($itemid);

@@ -3,9 +3,205 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
+    
+    <xar:set name="XX">var_dump(unserialize('a:0:{}'))</xar:set>
+    
+    Unserialized source
+    <xar:set name="XX">var_dump(
+    array(
+        array('payments','xar_ledgerap_payment','internal'),
+        array('vendors','xar_ledgerap_vendor','internal'),
+        array('companies','xar_companies_companies','internal'),
+    ))</xar:set>
+    Serialized source
+    <xar:set name="XX">var_dump(serialize(
+    array(
+        array('payments','xar_ledgerap_payment','internal'),
+        array('vendors','xar_ledgerap_vendor','internal'),
+        array('companies','xar_companies_companies','internal'),
+    )))</xar:set>
+    Unserialized other
+    <xar:set name="XX">var_dump(
+    array(
+        array('users.id','list_user.user_id'),
+    ))</xar:set>
+    Serialized other
+    <xar:set name="XX">var_dump(serialize(
+    array(
+        array('users.id','list_user.user_id'),
+    )))</xar:set>
         <p>
             This template <strong>modules/base/xartemplates/user-main<em>-test</em>.xt</strong> can be reached by adding <strong><a href="#xarServer::getModuleURL('base','user','main',array('page' => 'test'))#">page=<em>test</em></a></strong> to the base module URL.
             You can experiment with various blocklayout features and template tags here if you want...
         </p>
+
+        <h3>XML to SQL Proof of Concept</h3>
+        
+        <h4>First create the roles object</h4>
+<pre>
+&lt;xar:set name="dummy">1;
+    sys::import('modules.dynamicdata.class.objects.master');
+    $roles = DataObjectMaster::getObjectList(array('name'=>'roles_users'));
+&lt;/xar:set>
+</pre>
+
+        <!-- Here we create the object -->
+        <xar:set name="dummy">1;
+            sys::import('modules.dynamicdata.class.objects.master');
+            $roles = DataObjectMaster::getObjectList(array('name'=>'roles_users'));
+            $roles->dataquery->eq('name','Administrator');
+        </xar:set>
+
+
+        <h4>1. A simple example</h4>
+<pre>
+&lt;xar:data-getitems properties="$properties" values="$items" object="$roles">
+</pre>
+        <xar:data-getitems properties="$properties" values="$items" object="$roles">
+        <!--
+            Add SELECT with WHERE clauses here
+        -->
+        </xar:data-getitems>
+        
+        <table>
+            <xar:foreach in="$items" key="$key" value="$value">
+                <tr><td>#$key#</td><td>#$value['uname']#</td><td>#$value['name']#</td></tr>
+            </xar:foreach>
+        </table>
+        
+        <h4>2. A more elaborate example</h4>
+<pre>
+&lt;xar:data-view object="$roles" tplmodule="dynamicdata" 
+    fieldlist="id,uname,name,email,state">
+</pre>
+        <xar:data-view object="$roles" tplmodule="dynamicdata" fieldlist="id,uname,name,email,state">
+        <!--
+            Add SELECT with WHERE clauses here
+        -->
+        </xar:data-view>
+        <xar:set name="foo">$roles->dataquery->qecho()</xar:set>
+
+        <hr/><h4>3. The xar:select tag</h4>
+        <h4>3.1. Markup</h4>
+<pre>
+&lt;xar:select objectname="modules" items="$items" name="myquery">
+    &lt;xar:orconditions>
+        &lt;xar:andconditions>
+        &lt;xar:condition operator="eq" property="regid">8&lt;/xar:condition>
+            &lt;xar:orconditions>
+                &lt;xar:andconditions>
+                    &lt;xar:orconditions>
+                        &lt;xar:condition operator="eq" property="name">'base'&lt;/xar:condition>
+                        &lt;xar:condition operator="eq" property="name">'roles'&lt;/xar:condition>
+                    &lt;/xar:orconditions>
+                    &lt;xar:condition operator="gt" property="id">1&lt;/xar:condition>
+                    &lt;xar:condition operator="lt" property="id">5&lt;/xar:condition>
+                &lt;/xar:andconditions>
+                &lt;xar:condition operator="ne" property="regid">27&lt;/xar:condition>
+            &lt;/xar:orconditions>
+        &lt;/xar:andconditions>
+        &lt;xar:condition operator="in" property="regid">array(2,3,4,5,6,7,8,9,10)&lt;/xar:condition>
+        &lt;xar:condition operator="like" property="name">'themes'&lt;/xar:condition>
+    &lt;/xar:orconditions>
+&lt;/xar:select>
+</pre>
+        <xar:select objectname="modules" items="$items" name="myquery">
+            <xar:orconditions>
+                <xar:andconditions>
+                <xar:condition operator="eq" property="regid">8</xar:condition>
+                    <xar:orconditions>
+                        <xar:andconditions>
+                            <xar:orconditions>
+                                <xar:condition operator="eq" property="name">'base'</xar:condition>
+                                <xar:condition operator="eq" property="name">'roles'</xar:condition>
+                            </xar:orconditions>
+                            <xar:condition operator="gt" property="id">1</xar:condition>
+                            <xar:condition operator="lt" property="id">5</xar:condition>
+                        </xar:andconditions>
+                        <xar:condition operator="ne" property="regid">27</xar:condition>
+                    </xar:orconditions>
+                </xar:andconditions>
+                <xar:condition operator="in" property="regid">array(2,3,4,5,6,7,8,9,10)</xar:condition>
+                <xar:condition operator="like" property="name">'themes'</xar:condition>
+            </xar:orconditions>
+        </xar:select>
+        <br /><br />
+        <h4>3.2. Resulting query string</h4>
+        <xar:set name="foo">$myquery->qecho()</xar:set>
+        <br /><br />
+        <h4>3.3. Result of running the query</h4>
+        <xar:set name="foo">var_dump($items)</xar:set>
+    
     </div>
+    <!--
+    <xar:data-output type="mindmap"/>
+    -->
+
+        <h3>The Calculation Tag</h3>
+
+    <xar:calculation>
+        <xar:set name="qty">'qty_item_'</xar:set>
+        <xar:set name="price">'price_item_'</xar:set>
+        <xar:set name="total">'total_item_'</xar:set>
+        <xar:calc formula="qty * price" target="total_item" select="name">
+            <xar:calcvar name="qty" select="name" field="$qty"/>
+            <xar:calcvar name="price" select="name" field="$price"/>
+            <xar:calcvar name="total_item" select="name" field="$total"/>
+            <xar:calcbinding select="name" field="$qty" event="keyup"/>
+        </xar:calc>
+    </xar:calculation>
+			<table width="500">
+				<col style="width: 50px;" />
+				<col />
+				<col style="width: 60px;" />
+				<col style="width: 110px;" />
+
+				<tr>
+					<th>
+						Qty
+					</th>
+					<th align="left">
+						Product
+					</th>
+					<th>
+						Price
+					</th>
+
+					<th>
+						Total
+					</th>
+				</tr>
+				<tr>
+					<td align="center">
+						<input type="text" name="qty_item_1" id="qty_item_1" value="1" size="2" />
+					</td>
+					<td>
+
+						<a href="http://www.packtpub.com/jQuery/book">Learning jQuery</a>
+					</td>
+					<td align="center" id="">
+						<input type="text" name="price_item_1" id="price_item_1" value="39.99" size="2" />
+					</td>
+					<td align="center" id="">
+						<input type="text" name="total_item_1" id="total_item_1" value="" size="2" />
+					</td>
+				</tr>
+
+				<tr>
+					<td align="center">
+						<input type="text" name="qty_item_2" id="qty_item_2" value="1" size="2" />
+					</td>
+					<td>
+						<a href="http://jquery.com/">jQuery Donation</a>
+					</td>
+					<td align="center" id="">
+						<input type="text" name="price_item_2" id="price_item_2" value="14.99" size="2" />
+					</td>
+					<td align="center" id="">
+						<input type="text" name="total_item_2" id="total_item_2" value="" size="2" />
+					</td>
+				</tr>
+			</table>
+    <xar:data-output type="urlexport" source="test_export"/>
+
 </xar:template>

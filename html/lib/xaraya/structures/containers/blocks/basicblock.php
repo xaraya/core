@@ -92,17 +92,29 @@ class BasicBlock extends ObjectDescriptor implements iBlock
         // @TODO: validate $data
         // set arguments from $data
         parent::__construct($data);
+        
+        // temporary hack until soloblocks
+        $module = $this->module;
+        $type = $this->type;
+        
         // merge content
         if (!empty($data['content']) && is_array($data['content']))
             parent::setArgs($data['content']);
         // update properties from content args
         parent::refresh($this);
+        
+        // temporary hack until soloblocks
+        if (!empty($this->module)) $module = $this->module;
+        if (!empty($this->type)) $type = $this->type;
+        
          // populate content on first run
         if (empty($this->content)) $this->content = $this->getInfo();
         // set a sensible default for blocks not yet using xarversion
         $oldver = is_array($this->content) && !empty($this->content['xarversion']) ? $this->content['xarversion'] : '0.0.0';
         // compare versions if we have a new version that is different to the old version,
-        if (!empty($newver) && $newver != $oldver) {
+        // FIXME: this is a hack to avoid breakage with older versions of blocks
+        if (0 &&!empty($newver) && $newver != $oldver) {
+//        if (!empty($newver) && $newver != $oldver) {
             sys::import('xaraya.version');
             $vercompare = xarVersion::compare($newver, $oldver, 3);
             // compare new block with old block,
@@ -111,7 +123,7 @@ class BasicBlock extends ObjectDescriptor implements iBlock
                 // the upgrade method for this block if it has one (and not defer to its parent)
                 // To do this we use reflection...
                 // First we need the Class Name of the block,
-                $refName = ucfirst($this->module) . '_' . ucfirst($this->type) . 'Block';
+                $refName = ucfirst($module) . '_' . ucfirst($type) . 'Block';
                 // create a reflection object from the class
                 $refObject  = new ReflectionClass($refName);
                 // find all public and protected methods in ParentClass
@@ -137,7 +149,7 @@ class BasicBlock extends ObjectDescriptor implements iBlock
                     // pass the old version to the upgrade method
                     if (!$this->upgrade($oldver)) {
                         // if upgrade method didn't return true, upgrade failed
-                        throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to upgrade #(1) module block #(2) from version #(3) to version #(4)');
+                        throw new RegistrationException(array($module, $this->text_type, $oldver, $newver), 'Unable to upgrade #(1) module block #(2) from version #(3) to version #(4)');
 
                     }
                 }
@@ -145,7 +157,7 @@ class BasicBlock extends ObjectDescriptor implements iBlock
                 $this->content['xarversion'] = $newver;                
             } elseif ($vercompare < 0) {
                 // can't downgrade blocks
-                throw new RegistrationException(array($this->module, $this->text_type, $oldver, $newver), 'Unable to downgrade #(1) module block #(2) from version #(3) to version #(4)');
+                throw new RegistrationException(array($module, $this->text_type, $oldver, $newver), 'Unable to downgrade #(1) module block #(2) from version #(3) to version #(4)');
             }
         }
 
