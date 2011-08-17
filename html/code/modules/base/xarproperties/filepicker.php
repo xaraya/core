@@ -41,6 +41,8 @@ class FilePickerProperty extends SelectProperty
                 $this->initialization_basedirectory = $temp;
             }
         }
+        // Replace {theme} with the current theme directory
+        $this->initialization_basedirectory = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->initialization_basedirectory);
         $this->setExtensions();
     }
 
