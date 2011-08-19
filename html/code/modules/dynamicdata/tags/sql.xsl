@@ -8,9 +8,19 @@
   xmlns:php="http://php.net/xsl"
   exclude-result-prefixes="php xar">
 
+<!--
   <xsl:template match="xar:select">
     <xsl:text>sys::import('xaraya.structures.query')</xsl:text>
     <xsl:text>=new Query()</xsl:text>
+  </xsl:template>
+-->
+
+  <xsl:template match="xar:data-getitems/xar:select">
+    <!-- Get the object dataquery -->
+    <xsl:text>$__q=$__object->dataquery;</xsl:text>
+
+    <!-- Process anything below -->
+    <xsl:apply-templates />
   </xsl:template>
 
   <xsl:template match="xar:select">
