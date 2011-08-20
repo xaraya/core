@@ -56,7 +56,7 @@ class GroupListProperty extends SelectProperty
         $this->fieldname = $name;
         
         // Get the previous group from the form
-        if (!xarVarFetch($name . '_previous_value', 'int', $previous_value, 0, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('previous_value_' . $name, 'int', $previous_value, 0, XARVAR_NOT_REQUIRED)) return;
         $this->previous_groupid = $previous_value;
 
         return parent::checkInput();
