@@ -113,6 +113,7 @@ class UserListProperty extends SelectProperty
     public function showInput(Array $data = array())
     {
         if (isset($data['group_list'])) $this->validation_group_list = $data['group_list'];
+        if (isset($data['state'])) $this->initialization_user_state = $data['state'];
 
         return parent::showInput($data);
     }
@@ -157,6 +158,8 @@ class UserListProperty extends SelectProperty
         if (!empty($this->validation_group_list)) {
             $select_options['group'] = $this->validation_group_list;
         }
+        $select_options['state'] = $this->initialization_user_state;
+
         $options = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
         return $options;
     }
