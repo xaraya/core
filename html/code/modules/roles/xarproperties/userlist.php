@@ -161,7 +161,8 @@ class UserListProperty extends SelectProperty
         }
         $select_options['state'] = $this->initialization_user_state;
 
-        $options = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
+        $options = $this->getFirstline();
+        $options = array_merge($options,xarMod::apiFunc('roles', 'user', 'getall', $select_options));
         return $options;
     }
 }
