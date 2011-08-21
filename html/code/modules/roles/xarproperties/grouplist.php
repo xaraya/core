@@ -206,7 +206,7 @@ class GroupListProperty extends SelectProperty
         // TODO: handle large # of groups too (optional - less urgent than for users)
         $options = $this->getFirstline();
         $options = array_merge($options,xarMod::apiFunc('roles', 'user', 'getallgroups', $select_options));
-        return $option;
+        return $options;
     }
 
 }
