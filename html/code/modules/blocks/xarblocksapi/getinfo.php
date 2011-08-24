@@ -16,7 +16,18 @@
 **/
 function blocks_blocksapi_getinfo(Array $args=array())
 {
-        // must have at least type or instance 
+    // must have at least type or instance 
+    if (empty($args['instance']) && empty($args['type'])) {
+        // if they're empty, see if we were given a block_id, name or type_id
+        if (!empty($args['block_id']) && is_numeric($args['block_id'])) {
+            $args['instance'] = $args['block_id'];
+        } elseif (!empty($args['name']) && is_string($args['name'])) {
+            $args['instance'] = $args['name'];
+        } elseif (!empty($args['type_id']) && is_numeric($args['type_id'])) {
+            $args['type'] = $args['type_id'];
+        }
+    }
+        // no luck, throw back
         if (empty($args['instance']) && empty($args['type'])) {
             $msg = 'Missing #(1) for #(2) module #(3) function #(4)()';
             $vars = array('type or instance','blocks', 'blocksapi', 'getinfo');
@@ -50,7 +61,10 @@ function blocks_blocksapi_getinfo(Array $args=array())
         } else {
             // filter by type (standalone block - solo, or module)
             $apitype = 'types';
-            if (is_string($args['type'])) {
+            // can be either type id or type name 
+            if (is_numeric($args['type'])) {
+                $filter['type_id'] = $args['type'];
+            } elseif (is_string($args['type'])) {
                 $filter['type'] = $args['type'];
                 if (!empty($args['module'])) {
                     if (is_string($args['module'])) {
@@ -59,6 +73,8 @@ function blocks_blocksapi_getinfo(Array $args=array())
                         $invalid[] = 'module';
                     }
                 }
+            } else {
+                $invalid[] = 'type';
             }
         }
         // optionally filter on type state

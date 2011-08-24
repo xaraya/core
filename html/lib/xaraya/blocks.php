@@ -78,9 +78,8 @@ class xarBlock extends Object implements ixarBlock
         } 
         
         try {
-            $blockinfo['method'] = 'display';
-            // get the block instance 
-            $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $blockinfo);
+            // get the block instance
+            $block = self::getObject($blockinfo, 'display');
 
             // check if block expired already
             $now = time();
@@ -95,7 +94,7 @@ class xarBlock extends Object implements ixarBlock
                     xarBlockCache::setCached($cacheKey, '');
                 if (isset($block->display_access) && $block->display_access['failure']) {
                     // @TODO: render to an error/exception block?
-                    return xarTplModule('privileges','user','errors',
+                    return xarTpl::module('privileges','user','errors',
                         array('layout' => 'no_block_privileges'));
                 }
                 return '';
@@ -151,6 +150,86 @@ class xarBlock extends Object implements ixarBlock
             }
         }
 
+    }
+
+    public static function getObject(Array $blockinfo=array(), $interface=null, $method=null)
+    {
+        $invalid = array();
+        if (empty($blockinfo['type']) || !is_string($blockinfo['type']))
+            $invalid[] = 'type';
+        if (!empty($blockinfo['module']) && !is_string($blockinfo['module']))
+            $invalid[] = 'module';
+        if (isset($interface) && !is_string($interface))
+            $invalid[] = 'interface';
+        if (isset($method) && !is_string($method))
+            $invalid[] = 'method';
+        if (!empty($invalid)) {
+            $msg = 'Invalid #(1) for #(2) subsystem #(3) class method #(4)()';
+            $vars = array(join(', ', $invalid), 'blocks', 'xarBlock', 'getObject');
+            throw new BadParameterException($vars, $msg);        
+        }
+        
+        if (empty($blockinfo['module'])) {
+            $baseclass = ucfirst($blockinfo['type']).'Block';
+            $basedp = "blocks";
+            $basepath = sys::code().'blocks';   
+        } else {
+            $baseclass = ucfirst($blockinfo['module']).'_'.ucfirst($blockinfo['type']).'Block';
+            $basedp = "modules.{$blockinfo['module']}.xarblocks";
+            $basepath = sys::code()."modules/{$blockinfo['module']}/xarblocks";
+        }
+
+        $cls = array();
+        $dps = array();
+        $paths = array();
+        if (!empty($interface)) {
+            $cls[] = $baseclass . ucfirst($interface);
+            $paths[] = "{$basepath}/{$blockinfo['type']}/{$interface}.php";
+            $dps[] = "{$basedp}.{$blockinfo['type']}.{$interface}";
+            $cls[] = $baseclass . ucfirst($interface);
+            $paths[] = "{$basepath}/{$blockinfo['type']}_{$interface}.php";            
+            $dps[] = "{$basedp}.{$blockinfo['type']}_{$interface}"; 
+            if ($interface != 'display' && $interface != 'admin') {
+                $cls[] = $baseclass . 'Admin';
+                $paths[] = "{$basepath}/{$blockinfo['type']}/admin.php";
+                $dps[] = "{$basedp}.{$blockinfo['type']}.admin";
+                $cls[] = $baseclass . 'Admin';
+                $paths[] = "{$basepath}/{$blockinfo['type']}_admin.php";
+                $dps[] = "{$basedp}.{$blockinfo['type']}_admin";         
+            }
+        }
+        $cls[] = $baseclass;
+        $paths[] = "{$basepath}/{$blockinfo['type']}/{$blockinfo['type']}.php";
+        $dps[] = "{$basedp}.{$blockinfo['type']}.{$blockinfo['type']}";
+        $cls[] = $baseclass;
+        $paths[] = "{$basepath}/{$blockinfo['type']}.php";
+        $dps[] = "{$basedp}.{$blockinfo['type']}";
+
+        foreach ($paths as $i => $filepath) {
+            if (!file_exists($filepath)) continue;
+            sys::import($dps[$i]);
+            $classname = $cls[$i];
+            break;
+        }
+        
+        if (empty($classname))
+            throw new FileNotFoundException($filepath);
+        
+        if (!class_exists($classname))
+            throw new ClassNotFoundException($classname);
+        
+        if (!empty($method) && !method_exists($classname, $method))
+            throw new FunctionNotFoundException($classname.'::'.$method);
+        
+        // Load the block language files        
+        // What to do here? return doesnt seem right
+        if (!xarMLSLoadTranslations($filepath))
+            return;
+        
+        $object = new $classname($blockinfo);
+        
+        return $object;
+        
     }
 /**
  * Helper function used by block subsystem to call a block method suitabled for rendering
