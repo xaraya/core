@@ -35,88 +35,118 @@ function blocks_admin_modify_type(Array $args=array())
         $vars = array($type_id);
         throw new IdNotFoundException($vars, $msg);
     }
-
+    
     $data = array();
-
-    if (!xarVarFetch('tab', 'pre:trim:lower:str:1:',
-        $data['tab'], 'info', XARVAR_NOT_REQUIRED)) return;
+    
+    // determine the interface, method and phase 
+    if (!xarVarFetch('interface', 'pre:trim:lower:str:1:',
+        $interface, 'display', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('method', 'pre:trim:lower:str:1:',
+        $method, null, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('phase', 'pre:trim:lower:str:1:',
-        $phase, 'form', XARVAR_NOT_REQUIRED)) return;
+        $phase, 'display', XARVAR_NOT_REQUIRED)) return;
 
     // show the status warning if the type isn't active
     if ($type['type_state'] != xarBlock::TYPE_STATE_ACTIVE) {
-        $data['tab'] = 'status';
-        $phase = 'form';
+        $interface = 'display';
+        $method = 'status';
+        $phase = 'display';
+    } else {
+        // admins only beyond the display interface methods 
+        if ($interface != 'display')
+            if (!xarSecurityCheck('AdminBlocks')) return;    
+        // get the block object and load the interface
+        $block = xarBlock::getObject($type, $interface);
     }
-
-    // only get the block instance if the type is active 
-    if ($data['tab'] != 'status') {
-        $filter = $type;
-        switch ($data['tab']) {
-            case 'info':
-                // managers can see info
-                $filter['method'] = 'modify';
-            break;
-            case 'preview':
-                // managers can see preview
-                $filter['method'] = 'display';
-            break;
-            case 'access':
-            case 'caching':
-            case 'config':
-                // admins only here
-                if (!xarSecurityCheck('AdminBlocks')) return;
-                $filter['method'] = 'modify';
-            break;
-            default:
-                // admins only here
-                if (!xarSecurityCheck('AdminBlocks')) return;
-                $filter['method'] = $data['tab'];
-            break;
-        }
     
-        $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $filter);
-    }
-
-    
-    // update phase
+    // handle update phase
     if ($phase == 'update') {
-
-        if (!xarSecConfirmAuthKey())
-            return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
-        
-        $update = array();   
-
-        switch ($data['tab']) {
-            case 'info':
-            case 'preview':
-            case 'status':
-            case 'help':
+        $invalid = array();
+        switch ($interface) {
+            case 'display':
+                $invalid['phase'] = xarML('Update phase not supported in display interface');
+                // fall through to display phase 
+                $phase = 'display';
             break;
-            
             case 'config':
-
-                if (!xarVarFetch('type_block_template', 'pre:trim:str:1:127',
-                    $block_template, null, XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('type_box_template', 'pre:trim:str:1:127',
-                    $box_template, null, XARVAR_NOT_REQUIRED)) return;
-
-                $isvalid = xarBlock::hasMethod($block, 'checkmodify', true) ? $block->checkmodify() : true;
-                if ($isvalid) {
-                    $result = $block->update();
-                    if (!$result) return;
-                    if (isset($result['content']))
-                        $block->setContent($result['content']);
-
-                    $block->setBlockTemplate($block_template);
-                    $block->setBoxTemplate($box_template);
-
-                    $update['type_info'] = $block->storeContent();       
-                }                       
-            break;
+                if (empty($method))
+                    $method = 'config';
+                switch ($method) {
+                    case 'config':
+                        // if the block type supplied a validation method, use it                         
+                        if (xarBlock::hasMethod($block, 'configcheck', true)) {
+                            $isvalid = $block->configcheck();
+                        } elseif (xarBlock::hasMethod($block, 'checkmodify', true)) {
+                            $isvalid = $block->checkmodify();
+                        } else {
+                            $isvalid = true;
+                        }
+                        // attempt to update the block type configuration 
+                        if ($isvalid) {
+                            if (xarBlock::hasMethod($block, 'configupdate', true)) {
+                                $result = $block->configupdate();
+                            } elseif (xarBlock::hasMethod($block, 'update', true)) {
+                                $result = $block->update();
+                            }
+                            if (isset($result) && $result == false)
+                                $invalid['update'] = xarML('Failed updating block type configuration');
+                        } else {
+                            $invalid['check'] = xarML('Failed validating block type form input');
+                        }
+                        // fetch block subsystem configuration 
+                        if (!xarVarFetch('type_block_template', 'pre:trim:str:1:127',
+                            $block_template, null, XARVAR_NOT_REQUIRED)) return;
+                        if (!xarVarFetch('type_box_template', 'pre:trim:str:1:127',
+                            $box_template, null, XARVAR_NOT_REQUIRED)) return;
+                        // update block configuration 
+                        if (empty($invalid)) {
+                            if (!xarSecConfirmAuthKey())
+                                return xarTpl::module('privileges', 'user', 'errors', 
+                                    array('layout' => 'bad_author'));
+                            if (isset($result) && is_array($result)) {
+                                if (!empty($result['content']))
+                                    $block->setContent($result['content']);
+                                if (!empty($result['return_url']))
+                                    $return_url = $result['return_url'];
+                            }
+                            $block->setBlockTemplate($block_template);
+                            $block->setBoxTemplate($box_template);
+                        }                           
+                        // fall through                  
+                    break;
+                    default:
+                        // block type supplied a custom config interface method 
+                        $check_method = $method.'check';
+                        $isvalid = xarBlock::hasMethod($block, $check_method, true) 
+                            ? $block->$check_method() : true;
+                        if ($isvalid) {
+                            $update_method = $method.'update';
+                            if (xarBlock::hasMethod($block, $update_method, true)) {
+                                $result = $block->$update_method();
+                                if (empty($result))
+                                    $invalid['update'] = xarML('Failed updating block type configuration');
+                            }
+                        } else {
+                            $invalid['check'] = xarML('Failed validating block type form input');
+                        }
+                        // update block configuration 
+                        if (empty($invalid)) {
+                            if (!xarSecConfirmAuthKey())
+                                return xarTpl::module('privileges', 'user', 'errors', 
+                                    array('layout' => 'bad_author'));
+                            if (!empty($result) && is_array($result)) {
+                                if (!empty($result['content']))
+                                    $block->setContent($result['content']);
+                                if (!empty($result['return_url']))
+                                    $return_url = $result['return_url'];
+                            }
+                        } 
+                        // fall through  
+                    break;
+                }
             
+            break;
             case 'caching':
-
                 if (!xarVarFetch('type_nocache', 'checkbox',
                     $nocache, false, XARVAR_NOT_REQUIRED)) return;
                 if (!xarVarFetch('type_pageshared', 'checkbox',
@@ -129,50 +159,107 @@ function blocks_admin_modify_type(Array $args=array())
                 // convert cacheexpire from hh:mm:ss format to an integer
                 if (!empty($cacheexpire)) 
                     $cacheexpire = xarMod::apiFunc('blocks', 'user', 'convertseconds', 
-                        array('direction' => 'to', 'starttime' => $cacheexpire));                
-
-                $block->setNoCache($nocache);
-                $block->setPageShared($pageshared);
-                $block->setUserShared($usershared);
-                $block->setCacheExpire($cacheexpire);
+                        array('direction' => 'to', 'starttime' => $cacheexpire));
                 
-                $update['type_info'] = $block->storeContent();       
-            
-            break;
-            
-            case 'access':
-                
-                $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
-                $isvalid = $accessproperty->checkInput('type_add_access');
-                $type_info = $block->storeContent();
-                $type_info['add_access'] = $accessproperty->value;
-                
-                $update['type_info'] = $type_info;        
-
-            break;
-            
-            default:
-                $checkmethod = 'check' . $data['tab'];
-                $isvalid = xarBlock::hasMethod($block, $checkmethod, true) ? $block->$checkmethod() : true;
-                $updatemethod = 'update' . $data['tab'];
-                if ($isvalid && xarBlock::hasMethod($block, $updatemethod, true)) {
-                    $result = $block->$updatemethod();
-                    if (!$result) return;
-                    if (isset($result['content']))
-                        $block->setContent($result['content']);
-                    $type_info = $block->storeContent();
-                    
-                    $update['type_info'] = $type_info;        
-
-                    if (!empty($result['return_url']))
-                        $return_url = $result['return_url'];         
+                // block type may supply additional caching configuration
+                $check_method = 'cachingcheck';
+                $isvalid = xarBlock::hasMethod($block, $check_method, true) ? $block->$check_method() : true;
+                if ($isvalid) {
+                    $update_method = 'cachingupdate';
+                    if (xarBlock::hasMethod($block, $update_method, true)) {
+                        $result = $block->$update_method();
+                        if (empty($result))
+                            $invalid['update'] = xarML('Failed updating block type caching configuration');
+                    }
+                } else {
+                    $invalid['check'] = xarML('Failed validating block type caching form input');
                 }
-            break;                
+                
+                // update block configuration 
+                if (empty($invalid)) {
+                    if (!xarSecConfirmAuthKey())
+                        return xarTpl::module('privileges', 'user', 'errors', 
+                            array('layout' => 'bad_author'));
+                    if (!empty($result) && is_array($result)) {
+                        if (!empty($result['content']))
+                            $block->setContent($result['content']);
+                        if (!empty($result['return_url']))
+                            $return_url = $result['return_url'];
+                    }
+                    $block->setNoCache($nocache);
+                    $block->setPageShared($pageshared);
+                    $block->setUserShared($usershared);
+                    $block->setCacheExpire($cacheexpire);
+                }
+            
+            break;
+            case 'access':
+                // block type may supply additional access configuration
+                $check_method = 'accesscheck';
+                $isvalid = xarBlock::hasMethod($block, $check_method, true) ? $block->$check_method() : true;
+                if ($isvalid) {
+                    $update_method = 'accessupdate';
+                    if (xarBlock::hasMethod($block, $update_method, true)) {
+                        $result = $block->$update_method();
+                        if (empty($result))
+                            $invalid['update'] = xarML('Failed updating block type caching configuration');
+                    }
+                } else {
+                    $invalid['check'] = xarML('Failed validating block type caching form input');
+                }            
+
+                // update block configuration 
+                if (empty($invalid)) {
+                    if (!xarSecConfirmAuthKey())
+                        return xarTpl::module('privileges', 'user', 'errors', 
+                            array('layout' => 'bad_author'));
+                    if (!empty($result) && is_array($result)) {
+                        if (!empty($result['content']))
+                            $block->setContent($result['content']);
+                        if (!empty($result['return_url']))
+                            $return_url = $result['return_url'];
+                    }
+                    $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+                    $isvalid = $accessproperty->checkInput('type_add_access');
+                    $block->setAccess('add', $accessproperty->value);
+                }
+            break;
+            default:
+                if (empty($method))
+                    $method = $interface;
+                // block type may supply additional interfaces and methods
+                $check_method = $method.'check';
+                $isvalid = xarBlock::hasMethod($block, $check_method, true) ? $block->$check_method() : true;
+                if ($isvalid) {
+                    $update_method = $method.'update';
+                    if (xarBlock::hasMethod($block, $update_method, true)) {
+                        $result = $block->$update_method();
+                        if (empty($result))
+                            $invalid['update'] = xarML('Failed updating block type caching configuration');
+                    }
+                } else {
+                    $invalid['check'] = xarML('Failed validating block type caching form input');
+                }            
+                // update block configuration 
+                if (empty($invalid)) {
+                    if (!xarSecConfirmAuthKey())
+                        return xarTpl::module('privileges', 'user', 'errors', 
+                            array('layout' => 'bad_author'));
+                    if (!empty($result) && is_array($result)) {
+                        if (!empty($result['content']))
+                            $block->setContent($result['content']);
+                        if (!empty($result['return_url']))
+                            $return_url = $result['return_url'];
+                    }
+                }                    
+            
+            break;
         }
+        $type['type_info'] = $block->storeContent();
+        // valid input, go ahead and update the block type info 
+        if (empty($invalid)) {
         
-        if (!empty($update)) {
-            $update['type_id'] = $type['type_id'];
-            if (!xarMod::apiFunc('blocks', 'types', 'updateitem', $update)) return;
+            if (!xarMod::apiFunc('blocks', 'types', 'updateitem', $type)) return;
             
             if (!xarVarFetch('return_url', 'pre:trim:str:1:',
                 $return_url, '', XARVAR_NOT_REQUIRED)) return;
@@ -180,70 +267,115 @@ function blocks_admin_modify_type(Array $args=array())
                 $return_url = xarModURL('blocks', 'admin', 'modify_type',
                     array(
                         'type_id' => $type['type_id'],
-                        'tab' => $data['tab'],
+                        'interface' => $interface,
+                        'method' => $method,
                     ));
             xarController::redirect($return_url);
         }
-        // fall through to display phase...   
+        $data['invalid'] = $invalid;
+          
     }
 
-    // display phase    
-    switch ($data['tab']) {
-        
-        case 'info':
-            // $type already gives us most of what we need 
-            // get params that can be set in block tag attributes 
-            // @todo: this should be a method of the basicblock/blocktype class
-            // @todo: have the method return better definitions (data type hint, validation)
-            $type_params = array();
-            $content = $block->getContent();
-            if (!empty($content)) {
-                foreach ($content as $k => $v) {
-                    $datatype = gettype($v);
-                    switch ($datatype) {
-                        case 'string':
-                            $value = '"'.$v.'"';
-                        break;
-                        case 'float':
-                        case 'double':
-                        case 'integer':
-                        case 'NULL':
-                            $value = $v;
-                        break;
-                        case 'boolean':
-                            $value = $v ? '1' : '0';
-                        break;
-                        default:
-                            continue 2;
-                        break;
+
+    // handle display phase
+    switch ($interface) {
+        case 'display':
+            if (empty($method))
+                $method = 'info';
+            switch ($method) {
+                case 'info':
+                    // $type already gives us most of what we need 
+                    // get params that can be set in block tag attributes 
+                    // @todo: this should be a method of the basicblock/blocktype class
+                    // @todo: have the method return better definitions (data type hint, validation)
+                    $type_params = array();
+                    $content = $block->getContent();
+                    if (!empty($content)) {
+                        foreach ($content as $k => $v) {
+                            $datatype = gettype($v);
+                            switch ($datatype) {
+                                case 'string':
+                                    $value = '"'.$v.'"';
+                                break;
+                                case 'float':
+                                case 'double':
+                                case 'integer':
+                                case 'NULL':
+                                    $value = $v;
+                                break;
+                                case 'boolean':
+                                    $value = $v ? '1' : '0';
+                                break;
+                                default:
+                                    continue 2;
+                                break;
+                            }
+                            $type_params[$k] = array(
+                                'attribute' => $k,
+                                'datatype' => $datatype,
+                                'default' => $value,
+                            );
+                        }
+                    }    
+                    $data['type_params'] = $type_params;
+                    
+                    // show additional info if supplied by block type
+                    if (xarBlock::hasMethod($block, 'info', true))
+                        $data['type_output'] = xarBlock::guiMethod($block, 'info');
+                    
+                break;
+                case 'preview':
+                    // show using preview method if supplied by block type... 
+                    if (xarBlock::hasMethod($block, 'preview', true)) {
+                        $data['type_output'] = xarBlock::guiMethod($block, 'preview');
+                    } 
+                    // or using display method otherwise...                    
+                    else {
+                        $data['type_output'] = xarBlock::guiMethod($block, 'display');
                     }
-                    $type_params[$k] = array(
-                        'attribute' => $k,
-                        'datatype' => $datatype,
-                        'default' => $value,
-                    );
-                }
+                
+                break;
+                case 'help':
+                    // show help info if supplied by block type
+                    if (xarBlock::hasMethod($block, 'help', true))
+                        $data['type_output'] = xarBlock::guiMethod($block, 'help');
+                break;
+                case 'status':
+                
+                break;
+                default:
+                    // show custom info if supplied by block type
+                    if (xarBlock::hasMethod($block, $method, true))
+                        $data['type_output'] = xarBlock::guiMethod($block, $method);
+                break;
             }
-
-            $data['type_params'] = $type_params;
         break;
-        
         case 'config':
-            try {
-                $data['type_output'] = xarBlock::guiMethod($block, 'modify');
-            } catch (FileNotFoundException $e) {
-                // must be missing the template (we already got the class file) 
-                // if the block class didn't declare a modify method, that's ok
-                if (!xarBlock::hasMethod($block, 'modify', true)) {
-                    $data['type_output'] = '';
-                } else {
-                    throw $e;
-                }
-            } catch (Exception $e) {
-                throw $e;
-            }
+            if (empty($method))
+                $method = 'config';
+            switch ($method) {
+                case 'config':
+                    try {
+                        $data['type_output'] = xarBlock::guiMethod($block, 'configmodify');
+                    } catch (FunctionNotFoundException $e) {
+                        try {
+                            $data['type_output'] = xarBlock::guiMethod($block, 'modify');
+                        } catch (FunctionNotFoundException $f) {
+                            $data['type_output'] = '';
+                        } catch (Exception $f) {
+                            throw $f;
+                        }
+                    } catch (Exception $e) {
+                        throw $e;
+                    }
+                break;
+                default:
+                    // show custom configuration supplied by block type
+                    $modify_method = $method.'modify';
+                    $data['type_output'] = xarBlock::guiMethod($block, $modify_method);
+                break;
+            }           
         break;
-
         case 'caching':
             // convert expire time to hh:mm:ss format for display
             if (!empty($type['type_info']['cacheexpire'])) 
@@ -255,81 +387,76 @@ function blocks_admin_modify_type(Array $args=array())
                 array('id' => 1, 'name' => xarML('Group Members')),
                 array('id' => 2, 'name' => xarML('All Users')),
             );
-        break;
+            // show additional caching info if supplied by block type
+            if (xarBlock::hasMethod($block, 'cachingmodify', true))
+                $data['type_output'] = xarBlock::guiMethod($block, 'cachingmodify');
         
+        break;
         case 'access':
-        
+            // show additional access info if supplied by block type
+            if (xarBlock::hasMethod($block, 'accessmodify', true))
+                $data['type_output'] = xarBlock::guiMethod($block, 'accessmodify');        
         break;
-        
-        case 'preview':
-            if (!empty($type['type_info']['show_preview']))
-                $data['type_output'] = xarBlock::guiMethod($block, 'display');
-        break;
-        
-        case 'help':
-            if (!empty($type['type_info']['show_help']))
-                $data['type_output'] = xarBlock::guiMethod($block, 'help');
-
-        case 'status':
-        
-        break;
-                
         default:
-            if (xarBlock::hasMethod($block, $data['tab'], true))
-                $data['type_output'] = xarBlock::guiMethod($block, $data['tab']);
+            // block type may supply a custom interface and methods 
+            if (empty($method))
+                $method = $interface;
+            $modify_method = $method.'modify';
+            $data['type_output'] = xarBlock::guiMethod($block, $modify_method);
         break;
-
     }
 
     $data['type'] = $type;
+    $data['interface'] = $interface;
+    $data['method'] = $method;
     $data['type_states'] = xarMod::apiFunc('blocks', 'types', 'getstates');
-    $data['blocktabs'] = array(
-        'info' => array(
-            'url' => xarServer::getCurrentURL(array('tab' => 'info')),
-            'label' => xarML('Info'),
-            'title' => xarML('View block type information'),
-        ));
-    if ($data['tab'] != 'status') {
-        if (xarSecurityCheck('AdminBlocks', 0)) {   
-            $data['blocktabs'] += array(
-                'config' => array(
-                    'url' => xarServer::getCurrentURL(array('tab' => 'config')),
-                    'label' => xarML('Config'),
-                    'title' => xarML('Modify default configuration for this block type'),
-                ),
-                'caching' => array(
-                    'url' => xarServer::getCurrentURL(array('tab' => 'caching')),
-                    'label' => xarML('Caching'),
+    $interfaces = array();
+    $interfaces[] = array(
+        'url' => xarServer::getCurrentURL(array('interface' => 'display', 'method' => null)),
+        'label' => xarML('Info'),
+        'title' => xarML('Display information about this block type'),
+        'active' => ($interface == 'display' && $method == 'info'),
+    );
+    if ($interface != 'display' || $method != 'status') {
+        if (xarSecurityCheck('AdminBlocks', 0)) {
+            $interfaces[] = array(
+                'url' => xarServer::getCurrentURL(array('interface' => 'config', 'method' => null)),
+                'label' => xarML('Config'),
+                'title' => xarML('Modify default configuration for this block type'),
+                'active' => ($interface == 'config'),
+            ); 
+            $interfaces[] = array(
+                'url' => xarServer::getCurrentURL(array('interface' => 'caching', 'method' => null)),
+                'label' => xarML('Caching'),
                 'title' => xarML('Modify default caching configuration for this block type'),
-                ),
-                'access' => array(
-                    'url' => xarServer::getCurrentURL(array('tab' => 'access')),
-                    'label' => xarML('Access'),
-                    'title' => xarML('Modify default access configuration for this block type'),
-                ),        
+                'active' => ($interface == 'caching'),
+            ); 
+            $interfaces[] = array(
+                'url' => xarServer::getCurrentURL(array('interface' => 'access', 'method' => null)),
+                'label' => xarML('Access'),
+                'title' => xarML('Modify default access configuration for this block type'),
+                'active' => ($interface == 'access'),
             );
         }
-
-        if (!empty($type['type_info']['show_preview'])) {
-            $data['blocktabs'] += array(
-                'preview' => array(
-                    'url' => xarServer::getCurrentURL(array('tab' => 'preview')),
-                    'label' => xarML('Preview'),
-                    'title' => xarML('Show a preview of this block type'),
-                ),
+        if ($block->show_preview) {
+            $interfaces[] = array(
+                'url' => xarServer::getCurrentURL(array('interface' => 'display', 'method' => 'preview')),
+                'label' => xarML('Preview'),
+                'title' => xarML('Show a preview of this block type'),
+                'active' => ($interface == 'display' && $method == 'preview'),
             );
         }        
-
-        if (!empty($type['type_info']['show_help'])) {
-            $data['blocktabs']['help'] = array(
-                'url' => xarServer::getCurrentURL(array('tab' => 'help')),
+        if ($block->show_help) {
+            $interfaces[] = array(
+                'url' => xarServer::getCurrentURL(array('interface' => 'display', 'method' => 'help')),
                 'label' => xarML('Help'),
                 'title' => xarML('View block type help information'),
+                'active' => ($interface == 'display' && $method == 'help'),
             );
-        }    
+        }
     }
-    
+    $data['interfaces'] = $interfaces;
+
     return $data;
-        
 }
 ?>

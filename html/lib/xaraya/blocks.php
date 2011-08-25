@@ -183,27 +183,39 @@ class xarBlock extends Object implements ixarBlock
         $dps = array();
         $paths = array();
         if (!empty($interface)) {
+            // blocks/type/interface.php | modules/module/xarblocks/type/interface.php
             $cls[] = $baseclass . ucfirst($interface);
             $paths[] = "{$basepath}/{$blockinfo['type']}/{$interface}.php";
             $dps[] = "{$basedp}.{$blockinfo['type']}.{$interface}";
-            $cls[] = $baseclass . ucfirst($interface);
-            $paths[] = "{$basepath}/{$blockinfo['type']}_{$interface}.php";            
-            $dps[] = "{$basedp}.{$blockinfo['type']}_{$interface}"; 
+            if (!empty($blockinfo['module'])) {
+                // modules/module/xarblocks/type_interface.php
+                $cls[] = $baseclass . ucfirst($interface);
+                $paths[] = "{$basepath}/{$blockinfo['type']}_{$interface}.php";            
+                $dps[] = "{$basedp}.{$blockinfo['type']}_{$interface}";
+            }
             if ($interface != 'display' && $interface != 'admin') {
+                // blocks/type/admin.php | modules/module/xarblocks/type/admin.php
                 $cls[] = $baseclass . 'Admin';
                 $paths[] = "{$basepath}/{$blockinfo['type']}/admin.php";
                 $dps[] = "{$basedp}.{$blockinfo['type']}.admin";
-                $cls[] = $baseclass . 'Admin';
-                $paths[] = "{$basepath}/{$blockinfo['type']}_admin.php";
-                $dps[] = "{$basedp}.{$blockinfo['type']}_admin";         
+                if (!empty($blockinfo['module'])) {
+                    // modules/module/xarblocks/type_admin.php
+                    $cls[] = $baseclass . 'Admin';
+                    $paths[] = "{$basepath}/{$blockinfo['type']}_admin.php";
+                    $dps[] = "{$basedp}.{$blockinfo['type']}_admin";
+                }    
             }
         }
+        // blocks/type/type.php | modules/module/xarblocks/type/type.php
         $cls[] = $baseclass;
         $paths[] = "{$basepath}/{$blockinfo['type']}/{$blockinfo['type']}.php";
         $dps[] = "{$basedp}.{$blockinfo['type']}.{$blockinfo['type']}";
-        $cls[] = $baseclass;
-        $paths[] = "{$basepath}/{$blockinfo['type']}.php";
-        $dps[] = "{$basedp}.{$blockinfo['type']}";
+        if (!empty($blockinfo['module'])) {
+            // modules/module/xarblocks/type.php
+            $cls[] = $baseclass;
+            $paths[] = "{$basepath}/{$blockinfo['type']}.php";
+            $dps[] = "{$basedp}.{$blockinfo['type']}";
+        }
 
         foreach ($paths as $i => $filepath) {
             if (!file_exists($filepath)) continue;

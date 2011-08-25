@@ -102,11 +102,11 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
                 // add in links to re-order blocks
                 if ($i < $numitems) {
                     $instances[$id]['downurl'] = xarServer::getCurrentURL(
-                        array('block_id' => $this->block_id,   'method' => 'modify', 'tab' => 'order', 'move' => $id, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
+                        array('block_id' => $this->block_id, 'interface' => 'config', 'method' => 'order', 'move' => $id, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
                 }
                 if ($i > 1) {
                     $instances[$id]['upurl'] = xarServer::getCurrentURL(
-                        array('block_id' => $this->block_id,  'method' => 'modify', 'tab' => 'order', 'move' => $id, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
+                        array('block_id' => $this->block_id, 'interface' => 'config', 'method' => 'order', 'move' => $id, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
                 }
                 $i++;
             }
@@ -178,7 +178,7 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
     }
 
     // custom update method to handle block ordering
-    public function updateorder()
+    public function orderupdate()
     {
         $data = $this->getInfo();
         // re-order block instances
@@ -189,7 +189,7 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
         
         $data['content'] = $this->getContent();
         $data['return_url'] = xarModURL('blocks', 'admin', 'modify_instance', 
-            array('tab' => 'config', 'block_id' => $this->block_id), null, 'group_members');
+            array('interface' => 'config', 'block_id' => $this->block_id), null, 'group_members');
         return $data;      
     }
 /**

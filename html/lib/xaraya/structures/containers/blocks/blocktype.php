@@ -301,6 +301,13 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
         return true;
     }
 
+    final public function setAccess($interface, $access)
+    {
+        $property = $interface . '_access';
+        $this->$property = $access;
+        return true;
+    }
+
     // @param access (display|modify|delete)
     // this method is called by blocks_admin_modify|update|delete functions
     // and by xarBlock::render() method to determine access for current user
