@@ -1,0 +1,58 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+        <fieldset>
+            <legend>Block Tag Parameters</legend>
+            <!-- Permitted xar:block tag parameters for this block type -->
+            <table class="xar-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Default Value</th>
+                        <th>Data Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Standard xar:block tag attributes -->
+                    <tr>
+                        <td>title</td>
+                        <td>""</td>
+                        <td>string</td>
+                    </tr>
+                    <tr>
+                        <td>template</td>
+                        <td>""</td>
+                        <td>string</td>
+                    </tr>
+                    <tr>
+                        <td>nocache</td>
+                        <td>#$block['type_info']['nocache']#</td>
+                        <td>boolean</td>
+                    </tr>
+                    <tr>
+                        <td>usershared</td>
+                        <td>#$block['type_info']['usershared']#</td>
+                        <td>integer</td>
+                    </tr>
+                    <tr>
+                        <td>pageshared</td>
+                        <td>#$block['type_info']['pageshared']#</td>
+                        <td>boolean</td>
+                    </tr>
+                    <tr>
+                        <td>cacheexpire</td>
+                        <td>#$block['type_info']['cacheexpire']#</td>
+                        <td>integer</td>
+                    </tr>
+                    <!-- Block type specific xar:block tag attributes -->
+                    <xar:if condition="!empty($block_params)">
+                        <xar:foreach in="$block_params" value="$param">
+                            <tr>
+                                <td>#$param['attribute']#</td>
+                                <td>#$param['default']#</td>
+                                <td>#$param['datatype']#</td>
+                            </tr>
+                        </xar:foreach>
+                    </xar:if>
+                </tbody>
+            </table>
+        </fieldset>
+</xar:template>
