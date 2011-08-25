@@ -183,6 +183,10 @@ class xarBlock extends Object implements ixarBlock
         $dps = array();
         $paths = array();
         if (!empty($interface)) {
+            // blocks/type/type_interface.php | modules/module/xarblocks/type/type_interface.php
+            $cls[] = $baseclass . ucfirst($interface);
+            $paths[] = "{$basepath}/{$blockinfo['type']}/{$blockinfo['type']}_{$interface}.php";
+            $dps[] = "{$basedp}.{$blockinfo['type']}.{$blockinfo['type']}_{$interface}";
             // blocks/type/interface.php | modules/module/xarblocks/type/interface.php
             $cls[] = $baseclass . ucfirst($interface);
             $paths[] = "{$basepath}/{$blockinfo['type']}/{$interface}.php";
@@ -194,6 +198,10 @@ class xarBlock extends Object implements ixarBlock
                 $dps[] = "{$basedp}.{$blockinfo['type']}_{$interface}";
             }
             if ($interface != 'display' && $interface != 'admin') {
+                // blocks/type/type_admin.php | modules/module/xarblocks/type/type_admin.php
+                $cls[] = $baseclass . 'Admin';
+                $paths[] = "{$basepath}/{$blockinfo['type']}/{$blockinfo['type']}_admin.php";
+                $dps[] = "{$basedp}.{$blockinfo['type']}.{$blockinfo['type']}.admin";
                 // blocks/type/admin.php | modules/module/xarblocks/type/admin.php
                 $cls[] = $baseclass . 'Admin';
                 $paths[] = "{$basepath}/{$blockinfo['type']}/admin.php";
