@@ -22,18 +22,6 @@
         <menuitem>
             <mask>ManageBlocks</mask>
             <includes>
-                <includeitem>view_instances_new</includeitem>
-                <includeitem>modify_instance_new</includeitem>
-                <includeitem>delete_instance_new</includeitem>
-            </includes>
-            <target>view_instances_new</target>
-            <title>View or edit all block instances</title>
-            <label>View Blocks New</label>
-        </menuitem>
-
-        <menuitem>
-            <mask>ManageBlocks</mask>
-            <includes>
                 <includeitem>new_instance</includeitem>
             </includes>
             <target>new_instance</target>
