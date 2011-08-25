@@ -7,7 +7,8 @@
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>35</maxid>
-  <config>a:1:{s:10:"visibility";s:9:"protected";}</config>
+  <access>a:1:{s:10:"visibility";s:9:"protected";}</access>
+  <config>a:0:{}</config>
   <isalias>false</isalias>
   <properties>
     <property name="id">
