@@ -1,5 +1,5 @@
 <adminmenu>
-    <menuitems> 
+    <menuitems>
         <menuitem>
             <includes>
                 <includeitem>main</includeitem>
@@ -9,7 +9,7 @@
             <label>Overview</label>
         </menuitem>
         <menuitem>
-            <mask>EditBlocks</mask>
+            <mask>ManageBlocks</mask>
             <includes>
                 <includeitem>view_instances</includeitem>
                 <includeitem>modify_instance</includeitem>
@@ -20,7 +20,19 @@
             <label>View Blocks</label>
         </menuitem>
         <menuitem>
-            <mask>AddBlocks</mask>
+            <mask>ManageBlocks</mask>
+            <includes>
+                <includeitem>view_instances_new</includeitem>
+                <includeitem>modify_instance_new</includeitem>
+                <includeitem>delete_instance_new</includeitem>
+            </includes>
+            <target>view_instances_new</target>
+            <title>View or edit all block instances</title>
+            <label>View Blocks New</label>
+        </menuitem>
+
+        <menuitem>
+            <mask>ManageBlocks</mask>
             <includes>
                 <includeitem>new_instance</includeitem>
             </includes>
@@ -29,13 +41,15 @@
             <label>New Block</label>
         </menuitem>
         <menuitem>
-            <mask>AdminBlocks</mask>
+            <mask>ManageBlocks</mask>
             <includes>
                 <includeitem>view_types</includeitem>
+                <includeitem>modify_type</includeitem>
+                <includeitem>refresh_types</includeitem>
             </includes>
             <target>view_types</target>
             <title>View Block Types</title>
-            <label>Block Types</label>
+            <label>View Types</label>
         </menuitem>
         <menuitem>
             <mask>AdminBlocks</mask>

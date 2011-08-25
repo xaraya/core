@@ -24,16 +24,15 @@ sys::import('xaraya.structures.containers.blocks.menublock');
 
 class Base_MenuBlock extends MenuBlock implements iBlock
 {
-    public $name                = 'MenuBlock';
-    public $module              = 'base';
-    public $text_type           = 'Menu';
-    public $text_type_long      = 'Generic menu';
-    public $xarversion          = '2.3.0';
-    public $allow_multiple      = true;
-    public $show_preview        = true;
-    public $nocache             = 1;
-    public $pageshared          = 0;
-    public $usershared          = 1;
+    protected $type                = 'menu';
+    protected $module              = 'base';
+    protected $text_type           = 'Menu';
+    protected $text_type_long      = 'Generic menu';
+    protected $xarversion          = '2.3.0';
+    protected $show_preview        = true;
+    protected $show_help           = true;
+
+    protected $menumodtype         = 'user';
 
     public $marker              = '[x]';
     public $showlogout          = true;
@@ -71,50 +70,43 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                                     ),
                                   );
 
-    public $menumodtype         = 'user';
 
-    public function __construct(Array $data=array())
+    
+    public function init()
     {
-        // upgrades are now in the upgrade() method below (called in parent constructor :) )
-        parent::__construct($data);
-        // make sure we keep the content array in sync
-        $this->content['modulelist'] = $this->modulelist;
+        parent::init();
         // load the default link if userlinks are empty
         if (empty($this->userlinks))
-            $this->userlinks = $this->content['userlinks'] = $this->links_default;
+            $this->userlinks = $this->links_default;
     }
-
 /**
  * Display func.
  * @param $data array containing title,content
  */
     function display(Array $data=array())
     {
-        $data = parent::display($data);
-        if (empty($data)) return;
-
-        $vars = !empty($data['content']) ? $data['content'] : array();
+        $data = $this->getContent();
 
         if (xarUserIsLoggedIn()) {
-            if (!empty($vars['showlogout'])) {
+            if (!empty($data['showlogout'])) {
                 $authmoduledata = xarMod::apiFunc('roles','user','getdefaultauthdata');
                 $authmodlogout = $authmoduledata['defaultloginmodname'];
                 if (xarSecurityCheck('AdminBase',0)) {
-                    $vars['logouturl'] = xarModURL('base', 'admin', 'confirmlogout');
+                    $data['logouturl'] = xarModURL('base', 'admin', 'confirmlogout');
                 } else {
-                    $vars['logouturl'] = xarModURL($authmodlogout,'user', 'logout', array());
-                    $vars['showback'] = 0;
+                    $data['logouturl'] = xarModURL($authmodlogout,'user', 'logout', array());
+                    $data['showback'] = 0;
                 }
             }
-            $vars['loggedin'] = 1;
+            $data['loggedin'] = 1;
         } else {
-            $vars['showlogout'] = 0;
-            $vars['showback'] = 0;
-            $vars['loggedin'] = 0;
+            $data['showlogout'] = 0;
+            $data['showback'] = 0;
+            $data['loggedin'] = 0;
         }
 
         // get userlinks using dedicated method
-        $vars['userlinks'] = self::getUserLinks();
+        $data['userlinks'] = self::getUserLinks();
 
         // Handle modulelist
         $modlinks = array();
@@ -127,27 +119,25 @@ class Base_MenuBlock extends MenuBlock implements iBlock
             if (!$link) continue;
             $modlinks[$modname] = $link;
         }
-        $vars['modlinks'] = $modlinks;
+        $data['modlinks'] = $modlinks;
 
         // no links, nothing to display
         if (
-            empty($vars['modlinks']) &&
-            empty($vars['userlinks']) &&
-            empty($vars['showlogout']) &&
-            empty($vars['showback']) &&
-            empty($vars['displayprint']) &&
-            empty($vars['displayrss'])
+            empty($data['modlinks']) &&
+            empty($data['userlinks']) &&
+            empty($data['showlogout']) &&
+            empty($data['showback']) &&
+            empty($data['displayprint']) &&
+            empty($data['displayrss'])
         ) return;
 
         // pass through the current request info
-        $vars['thismodname'] = self::$thismodname;
-        $vars['thismodtype'] = self::$thismodtype;
-        $vars['thisfuncname'] = self::$thisfuncname;
+        $data['thismodname'] = self::$thismodname;
+        $data['thismodtype'] = self::$thismodtype;
+        $data['thisfuncname'] = self::$thisfuncname;
 
-        if (!empty($vars['displayrss']) && !xarThemeIsAvailable('rss')) $vars['displayrss'] = 0;
-        if (!empty($vars['displayprint']) && !xarThemeIsAvailable('print')) $vars['displayprint'] = 0;
-
-        $data['content'] = $vars;
+        if (!empty($data['displayrss']) && !xarThemeIsAvailable('rss')) $data['displayrss'] = 0;
+        if (!empty($data['displayprint']) && !xarThemeIsAvailable('print')) $data['displayprint'] = 0;
 
         return $data;
     }

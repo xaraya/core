@@ -23,28 +23,29 @@ sys::import('xaraya.structures.containers.blocks.menublock');
 
 class Base_AdminmenuBlock extends MenuBlock implements iBlock
 {
-    public $name                = 'AdminMenuBlock';
-    public $module              = 'base';
-    public $text_type           = 'Admin Menu';
-    public $text_type_long      = 'Displays Admin Menu';
-    public $allow_multiple      = true;
-    public $nocache             = 1;
+    protected $type                = 'adminmenu';
+    protected $module              = 'base';
+    protected $text_type           = 'Admin Menu';
+    protected $text_type_long      = 'Displays Admin Menu';
+    protected $xarversion          = '2.3.0';
+    protected $show_preview        = true;
+    protected $show_help           = true;
+    
+    protected $menumodtype         = 'admin';
+    protected $menumodtypes        = array('admin', 'util');
 
     public $showlogout          = 1;
     public $menustyle           = 'bycat';
-    //public $showhelp            = 0; <chris> remove this unused property for now
     public $showfront           = 1;
     public $marker              = '';
 
-    public $menumodtype         = 'admin';
-    public $menumodtypes        = array('admin', 'util');
 
-    public $xarversion          = '2.3.0';
-
-    public function __construct(Array $data=array())
+/**
+ * This method is called by the BasicBlock class constructor
+**/    
+    public function init()
     {
-        parent::__construct($data);
-
+        parent::init();
         if (empty($this->modulelist)) {
             // if the modulelist is empty, admin deselected all modules, put back the modules module
             // @CHECKME: put back the blocks module too so we can edit this?
@@ -52,35 +53,16 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
         }
         // make sure we keep the content array in sync
         $this->content['modulelist'] = $this->modulelist;
-
-    }
-/**
- * This method is called by the BasicBlock class constructor
-**/
-    public function upgrade($oldversion) {
-
-        switch ($oldversion) {
-            case '0.0.0': // upgrade menu blocks to version 2.2.0
-            if (!isset($this->content['marker']))
-                $this->content['marker'] = $this->marker;
-            // fall through to next version
-            case '2.2.0':
-
-            break;
-        }
-        return true;
     }
 
 /**
  * Display func.
  * @param $data array containing title,content
  */
-    function display(Array $data=array())
+    function display()
     {
-        $data = parent::display($data);
-        if (empty($data)) return;
 
-        $vars = isset($data['content']) ? $data['content'] : array();
+        $data = $this->getContent();
 
         foreach ($this->xarmodules as $mod) {
             $modname = $mod['name'];
@@ -90,7 +72,7 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
             $link = self::getModuleLink($link);
             if (!$link) continue;
             $link['title'] = xarML('Show administration options for module #(1)', $link['label']);
-            switch ($vars['menustyle']) {
+            switch ($data['menustyle']) {
                 case 'bycat':
                 default:
                     // determine category
@@ -108,14 +90,14 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
             }
         }
 
-        switch ($vars['menustyle']) {
+        switch ($data['menustyle']) {
             case 'byname':
-                $vars['adminmods'] = $adminmods;
+                $data['adminmods'] = $adminmods;
                 $template = 'verticallistbyname';
             break;
             case 'bycat':
                 ksort($categories);
-                $vars['catmods'] = $categories;
+                $data['catmods'] = $categories;
                 $template = 'verticallistbycats';
             break;
         }
@@ -134,15 +116,19 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
         } else { //no overview exists;
             $overviewlink = xarModURL('base','admin','overview',array('template'=>'nooverview'));
         }
-        $vars['overviewlink']=$overviewlink;
+        $data['overviewlink']=$overviewlink;
         */
 
         // Set template base.
-        // FIXME: not allowed to set private variables of BL directly
-        $data['_bl_template_base'] = $template;
-        $data['content'] = $vars;
+        $this->setTemplateBase($template);
 
         return $data;
     }
+
+    public function help()
+    {
+        return $this->getContent();
+    }
+    
 }
 ?>

@@ -19,14 +19,11 @@
 
     class Base_ContentBlock extends BasicBlock implements iBlock
     {
-        public $name                = 'ContentBlock';
-        public $module              = 'base';
-        public $text_type           = 'Content';
-        public $text_type_long      = 'Generic Content Block';
-        public $allow_multiple      = true;
-
-        public $nocache             = 1;
-        public $expire              = 0;
+        protected $type                = 'content';
+        protected $module              = 'base';
+        protected $text_type           = 'Content';
+        protected $text_type_long      = 'Generic Content Block';
+        protected $show_preview        = true;
 
         public $html_content        = '';
         public $content_text        = '';
@@ -46,16 +43,15 @@
  * @return array $blockinfo
  */
 
-        function display(Array $data=array())
+        function display()
         {
-            $data = parent::display($data);
-            if (empty($data)) return;
+            $data = $this->getContent();
 
             // Check if the block is within its start/end period
             $now = time();
             if (
-                (!empty($vars['start_date']) && $vars['start_date'] > $now)
-                || (!empty($vars['end_date']) && $vars['end_date'] < $now)
+                (!empty($data['start_date']) && $data['start_date'] > $now)
+                || (!empty($data['end_date']) && $data['end_date'] < $now)
             ) {
                 // Not yet started.
                 return;
@@ -89,8 +85,8 @@
                 // gets merged with the content for the output template.
                 if ($data['content_type'] == 'data') {
                     if (is_array($result)) {
-                        $data = array_merge($result, $vars);
-                        $vars = $data;
+                        $data = array_merge($result, $data);
+                        $data = $data;
                     } else {
                         // Structured data not returned.
                         return;
@@ -100,7 +96,7 @@
                 if (isset($title) && is_string($title)) {
                     // The PHP code can set the title of the block (my treat).
                     // Just include $title='whatever';  in the block code.
-                    $data['title'] = $title;
+                    $this->setTitle($title);
                 }
             }
 
@@ -111,8 +107,8 @@
             }
 
             // Split the text into lines, to help rendering.
-            $data['content']['content_lines'] = explode("\n", $data['content_text']);
-
+            $data['content_lines'] = explode("\n", $data['content_text']);
+            
             return $data;
         }
     }

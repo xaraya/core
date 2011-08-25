@@ -24,26 +24,32 @@
 
     class Roles_OnlineBlock extends BasicBlock
     {
-        public $name                = 'OnlineBlock';
-        public $module              = 'roles';
-        public $text_type           = 'Online';
-        public $text_type_long      = 'Display who is online';
-        public $allow_multiple      = true;
-        public $show_preview        = true;
+        protected $type                = 'online';
+        protected $module              = 'roles';
+        protected $text_type           = 'Online';
+        protected $text_type_long      = 'Display who is online';
+        protected $show_preview        = true;
+        
+        public $showusers = true;
+        public $showusertotal = false;
+        public $showanontotal = false;
+        public $showlastuser = false;
 
-        function display(Array $data=array())
+/**
+ * Display method
+ * @FIXME: this method inefficiently runs db queries, whether required for display or not
+**/
+        function display()
         {
-            $data = parent::display($data);
-            if (empty($data)) return;
-            $args = $data['content'];
+            $data = $this->getContent();
             
-            if (!isset($args['showusers']))     $args['showusers'] = true;
-            if (!isset($args['showusertotal'])) $args['showusertotal'] = false;
-            if (!isset($args['showanontotal'])) $args['showanontotal'] = false;
-            if (!isset($args['showlastuser']))  $args['showlastuser'] = false;
+            if (!isset($data['showusers']))     $data['showusers'] = true;
+            if (!isset($data['showusertotal'])) $data['showusertotal'] = false;
+            if (!isset($data['showanontotal'])) $data['showanontotal'] = false;
+            if (!isset($data['showlastuser']))  $data['showlastuser'] = false;
 
             // Bail if there is nothing to show
-            if (!$args['showusers'] && !$args['showusertotal'] && !$args['showanontotal'] && !$args['showlastuser']) return array('content' => '');
+            if (!$data['showusers'] && !$data['showusertotal'] && !$data['showanontotal'] && !$data['showlastuser']) return array('content' => '');
 
             // Database setup
             // TODO: do we need this query? I'd have thought userapi/getallactive gives
@@ -63,11 +69,11 @@
             }
             try {
                 $result = $dbconn->Execute($sql, array($activetime,2));
-                list($args['numusers']) = $result->fields;
+                list($data['numusers']) = $result->fields;
                 $result->Close();
-                if (empty($args['numusers'])) $args['numusers'] = 0;
+                if (empty($data['numusers'])) $data['numusers'] = 0;
             } catch (Exception $e) {
-                $args['numusers'] = 0;
+                $data['numusers'] = 0;
             }
 
             // FIXME: there could be many active users, but we only want a handful of them.
@@ -81,7 +87,7 @@
             );
 
             foreach ($activeusers as $key => $thisuser) {
-                $args['activeusers'][$key] = array(
+                $data['activeusers'][$key] = array(
                     'name' => $thisuser['name'],
                     'userurl' => xarModURL(
                         'roles', 'user', 'display',
@@ -94,17 +100,17 @@
 
                 if ($thisuser['name'] == xarUserGetVar('name')) {
                     if (xarModIsAvailable('messages')) {
-                        $args['activeusers'][$key]['total'] = xarMod::apiFunc(
+                        $data['activeusers'][$key]['total'] = xarMod::apiFunc(
                             'messages', 'user', 'count_total',
                             array('id'=>$thisuser['id'])
                         );
 
-                        $args['activeusers'][$key]['unread'] = xarMod::apiFunc(
+                        $data['activeusers'][$key]['unread'] = xarMod::apiFunc(
                             'messages', 'user', 'count_unread',
                             array('id'=>$thisuser['id'])
                         );
 
-                        $args['activeusers'][$key]['messagesurl'] =xarModURL(
+                        $data['activeusers'][$key]['messagesurl'] =xarModURL(
                             'messages', 'user', 'display',
                             array('id'=>$thisuser['id'])
                         );
@@ -124,24 +130,24 @@
             }
             try {
                 $result2 = $dbconn->Execute($query2, array($activetime,2));
-                list($args['numguests']) = $result2->fields;
+                list($data['numguests']) = $result2->fields;
                 $result2->Close();
-                if (empty($args['numguests'])) $args['numguests'] = 0;
+                if (empty($data['numguests'])) $data['numguests'] = 0;
             } catch (Exception $e) {
-                $args['numguests'] = 0;
+                $data['numguests'] = 0;
             }
 
             // Pluralise
-            if ($args['numguests'] == 1) {
-                 $args['guests'] = xarML('guest');
+            if ($data['numguests'] == 1) {
+                 $data['guests'] = xarML('guest');
             } else {
-                 $args['guests'] = xarML('guests');
+                 $data['guests'] = xarML('guests');
             }
 
-            if ($args['numusers'] == 1) {
-                 $args['users'] = xarML('user');
+            if ($data['numusers'] == 1) {
+                 $data['users'] = xarML('user');
             } else {
-                 $args['users'] = xarML('users');
+                 $data['users'] = xarML('users');
             }
 
             $id = xarModVars::get('roles', 'lastuser');
@@ -163,11 +169,10 @@
 
                 }
                  // Check return
-                 if ($status) {$args['lastuser'] = $status;}
+                 if ($status) {$data['lastuser'] = $status;}
             }
 
-            $args['blockid'] = $data['bid'];
-            $data['content'] = $args;
+
             return $data;
         }
     }

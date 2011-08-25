@@ -51,94 +51,219 @@ function installer_admin_cleanup()
         }
     }
 
-    // Install script is still there. Create a reminder block
-    if (file_exists('install.php')) {
 
-        // get the left blockgroup block id
-        $leftBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'left'));
-        if ($leftBlockgroup == false) {
-            $msg = xarML("Blockgroup 'left' not found.");
-            throw new Exception($msg);
+/**
+ * SoloBlocks Scenario
+ *
+ * Blocks module now registers block types automatically
+ * The following code takes care of setting up groups and block instances
+**/
+    // refresh block types (auto registers available solo/module block types) 
+    if (!xarMod::apiFunc('blocks', 'types', 'refresh', array('refresh' => true))) return;
+
+    // get the default blockgroup block type info
+    $group_type = xarMod::apiFunc('blocks', 'types', 'getitem', 
+        array('type' => 'blockgroup', 'module' => 'blocks'));
+
+    // register groups (instances of blockgroup type - groupname => box_template )
+    $groups = array (
+        'left'   => null,                          
+        'right'  => 'right',
+        'header' => 'header',
+        'admin'  => null,
+        'center' => 'center',
+        'topnav' => 'topnav'
+    );
+    
+    foreach ($groups as $name => $template) {
+        if (!xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => $name))) {
+            $content = $group_type['type_info'];
+            $content['box_template'] = $template;
+            if (!xarMod::apiFunc('blocks', 'instances', 'createitem',
+                array(
+                    'type_id' => $group_type['type_id'],
+                    'name' => $name,
+                    'title' => '',
+                    'state' => xarBlock::BLOCK_STATE_VISIBLE,
+                    'content' => $content,
+                ))) return;
         }
-        $leftBlockgroupID = $leftBlockgroup['bid'];
-        assert('is_numeric($leftBlockgroupID);');
+    }             
+    
+    // get info for left group instance 
+    $left_group = xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => 'left'));
 
-        $menuBlockType = xarMod::apiFunc('blocks', 'user', 'getblocktype',
-                                     array('module'  => 'base',
-                                           'type'=> 'menu'));
-
-        $menuBlockTypeId = $menuBlockType['tid'];
-
-        $content['marker'] = '[x]';                                           // create the user menu
-        $content['displaymodules'] = 'All';
-        $content['modulelist'] = '';
-        $content['content'] = '';
-
-        if (!xarMod::apiFunc('blocks', 'user', 'get', array('name'  => 'mainmenu'))) {
-            if (!xarMod::apiFunc('blocks', 'admin', 'create_instance',
-                          array('title' => 'Main Menu',
-                                'name'  => 'mainmenu',
-                                'type'  => $menuBlockTypeId,
-                                'groups' => array(array('id' => $leftBlockgroupID,)),
-                                'content' => $content,
-                                'state' => 2))) {
-                return;
-            }
-        }
-
-        // get the admin blockgroup block id
-        $adminBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'admin'));
-        if ($adminBlockgroup == false) {
-            $msg = xarML("Blockgroup 'admin' not found.");
-            throw new Exception($msg);
-        }
-        $adminBlockgroupID = $adminBlockgroup['bid'];
-        assert('is_numeric($adminBlockgroupID);');
-
-        $now = time();
-
-        $reminder = array(
-            'content_text' => 'Please delete install.php from your webroot.',
-            'expire' => $now + 259200,
-        );
-
-        $htmlBlockType = xarMod::apiFunc('blocks', 'user', 'getblocktype',
-                                     array('module'  => 'base',
-                                           'type'    => 'content'));
-
-        $htmlBlockTypeId = $htmlBlockType['tid'];
-
-        if (!xarMod::apiFunc('blocks', 'user', 'get', array('name'  => 'reminder'))) {
-            if (!xarMod::apiFunc('blocks', 'admin', 'create_instance',
-                               array('title'    => 'Reminder',
-                                     'name'     => 'reminder',
-                                     'content'  => $reminder,
-                                     'type'     => $htmlBlockTypeId,
-                                     'groups'   => array(array('id'      => $adminBlockgroupID,)),
-                                     'state'    => 2))) {
-                return;
-            }
-        }
-
-        // get block instances for the admin blockgroup
-        $instances = xarMod::apiFunc('blocks', 'user', 'getall',
-            array('order' => 'group','gid' => $adminBlockgroupID));
-        $group_instance_order = array();
-        $reminderBlock = xarMod::apiFunc('blocks', 'user', 'get', array('name'  => 'reminder'));
-        // put the reminder at the top of the group
-        $group_instance_order[] = $reminderBlock['bid'];
-        foreach ($instances as $inst) {
-            if ($inst['bid'] == $reminderBlock['bid']) continue;
-            $group_instance_order[] = $inst['bid'];
-        }
-        if (!xarModAPIFunc('blocks', 'admin', 'update_group',
+    // see if we have a menu instance
+    if (!xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => 'mainmenu'))) {
+        // get the default menu block type info
+        $menu_type = xarMod::apiFunc('blocks', 'types', 'getitem', 
+            array('type' => 'menu', 'module' => 'base'));
+        // get an instance of the menu block type
+        $menu_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $menu_type);
+        // attach the left group to the menu instance
+        $menu_block->attachGroup($left_group['block_id']);
+        // create menu instance
+        if (!$menu_id =xarMod::apiFunc('blocks', 'instances', 'createitem',
             array(
-                'id' => $adminBlockgroupID,
-                'instance_order' => $group_instance_order)
-            )
-        ) return;
-
+                'type_id' => $menu_type['type_id'],
+                'name' => 'mainmenu',
+                'title' => 'Main Menu',
+                'state' => xarBlock::BLOCK_STATE_VISIBLE,
+                'content' => $menu_block->storeContent(),
+            ))) return;
     }
+    // add menu instance to left block
+    if (!empty($menu_id)) {
+        // get an instance of the left group 
+        $left_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $left_group);
+        // attach menu block to left group instance
+        $left_block->attachInstance($menu_id);
+        // update left block instance
+        if (!xarMod::apiFunc('blocks', 'instances', 'updateitem',
+            array(
+                'block_id' => $left_group['block_id'],
+                'content' => $left_block->storeContent(),
+            ))) return;
+    }
+
+    // get info for right group instance 
+    $right_group = xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => 'right'));
+
+    // see if we have a login instance
+    if (!xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => 'login'))) {
+        // get the default login block type info
+        $login_type = xarMod::apiFunc('blocks', 'types', 'getitem', 
+            array('type' => 'login', 'module' => 'authsystem'));
+        // get an instance of the login block type
+        $login_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $login_type);
+        // attach the right group to the login instance
+        $login_block->attachGroup($right_group['block_id']);
+        // create login instance
+        if (!$login_id =xarMod::apiFunc('blocks', 'instances', 'createitem',
+            array(
+                'type_id' => $login_type['type_id'],
+                'name' => 'login',
+                'title' => 'Login',
+                'state' => xarBlock::BLOCK_STATE_VISIBLE,
+                'content' => $login_block->storeContent(),
+            ))) return;
+    }
+    // add login instance to right block
+    if (!empty($login_id)) {
+        // get an instance of the right group 
+        $right_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $right_group);
+        // attach login block to right group instance
+        $right_block->attachInstance($login_id);
+        // update right block instance
+        if (!xarMod::apiFunc('blocks', 'instances', 'updateitem',
+            array(
+                'block_id' => $right_group['block_id'],
+                'content' => $right_block->storeContent(),
+            ))) return;
+    }
+
+    // get info for header group instance 
+    $header_group = xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => 'header'));
+
+    // see if we have a meta instance
+    if (!xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => 'meta'))) {
+        // get the default meta block type info
+        $meta_type = xarMod::apiFunc('blocks', 'types', 'getitem', 
+            array('type' => 'meta', 'module' => 'themes'));
+        // get an instance of the meta block type
+        $meta_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $meta_type);
+        // attach the header group to the meta instance
+        $meta_block->attachGroup($header_group['block_id']);
+        // create meta instance
+        if (!$meta_id =xarMod::apiFunc('blocks', 'instances', 'createitem',
+            array(
+                'type_id' => $meta_type['type_id'],
+                'name' => 'meta',
+                'state' => xarBlock::BLOCK_STATE_VISIBLE,
+                'content' => $meta_block->storeContent(),
+            ))) return;
+    }
+    // add meta instance to header block
+    if (!empty($meta_id)) {
+        // get an instance of the header group 
+        $header_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $header_group);
+        // attach meta block to header group instance
+        $header_block->attachInstance($meta_id);
+        // update header block instance
+        if (!xarMod::apiFunc('blocks', 'instances', 'updateitem',
+            array(
+                'block_id' => $header_group['block_id'],
+                'content' => $header_block->storeContent(),
+            ))) return;
+    }
+
+    // get info for admin group instance 
+    $admin_group = xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => 'admin'));
+
+    // see if we have an adminmenu instance
+    if (!xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => 'adminpanel'))) {
+        // get the default adminmenu block type info
+        $adminmenu_type = xarMod::apiFunc('blocks', 'types', 'getitem', 
+            array('type' => 'adminmenu', 'module' => 'base'));
+        // get an instance of the adminmenu block type
+        $adminmenu_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $adminmenu_type);
+        // attach the admin group to the adminmenu instance
+        $adminmenu_block->attachGroup($admin_group['block_id']);
+        // create adminmenu instance
+        if (!$adminmenu_id =xarMod::apiFunc('blocks', 'instances', 'createitem',
+            array(
+                'type_id' => $adminmenu_type['type_id'],
+                'name' => 'adminpanel',
+                'title' => 'Admin',
+                'state' => xarBlock::BLOCK_STATE_VISIBLE,
+                'content' => $adminmenu_block->storeContent(),
+            ))) return;
+    }
+
+    // if install.php still exists, set a reminder instance
+    if (!xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => 'reminder')) && file_exists('install.php')) {
+        // get the default reminder block type info
+        $reminder_type = xarMod::apiFunc('blocks', 'types', 'getitem', 
+            array('type' => 'content', 'module' => 'base'));
+        // get an instance of the reminder block type
+        $reminder_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $reminder_type);
+        // attach the admin group to the reminder instance
+        $reminder_block->attachGroup($admin_group['block_id']);
+        // set content
+        $reminder_content = $reminder_block->storeContent();
+        $reminder_content['content_text'] = 'Please delete install.php from your webroot.';
+        $reminder_content['expire'] = time() + 259200;
+        // create reminder instance
+        if (!$reminder_id =xarMod::apiFunc('blocks', 'instances', 'createitem',
+            array(
+                'type_id' => $reminder_type['type_id'],
+                'name' => 'reminder',
+                'title' => 'Reminder',
+                'state' => xarBlock::BLOCK_STATE_VISIBLE,
+                'content' => $reminder_content,
+            ))) return;
+    }
+
+    // add adminmenu and/or reminder instance to admin block
+    if (!empty($adminmenu_id) || !empty($reminder_id)) {
+        // get an instance of the admin group 
+        $admin_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $admin_group);
+        // attach reminder block to admin group instance
+        if (!empty($reminder_id))
+            $admin_block->attachInstance($reminder_id);
+        // attach adminmenu block to admin group instance
+        if (!empty($adminmenu_id)) 
+            $admin_block->attachInstance($adminmenu_id);
+        // update admin block instance
+        if (!xarMod::apiFunc('blocks', 'instances', 'updateitem',
+            array(
+                'block_id' => $admin_group['block_id'],
+                'content' => $admin_block->storeContent(),
+            ))) return;
+    }
+/**
+ * End SoloBlocks
+**/
 
     xarUserLogOut();
     // log in admin user
@@ -152,61 +277,6 @@ function installer_admin_cleanup()
 
 
     xarModVars::delete('roles','adminpass');
-
-    // get the right blockgroup block id
-    $rightBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'right'));
-    if ($rightBlockgroup == false) {
-        $msg = xarML("Blockgroup 'right' not found.");
-        throw new Exception($msg);
-    }
-    $rightBlockgroupID = $rightBlockgroup['bid'];
-    assert('is_numeric($rightBlockgroupID);');
-
-    $loginBlockTypeId = xarMod::apiFunc('blocks','admin','register_block_type',
-                    array('modName' => 'authsystem', 'blockType' => 'login'));
-    if (empty($loginBlockTypeId)) {
-        // FIXME: shouldn't we raise an exception here?
-        return;
-    }
-
-    if (!xarMod::apiFunc('blocks', 'user', 'get', array('name'  => 'login'))) {
-        if (xarMod::apiFunc('blocks', 'admin', 'create_instance',
-                           array('title'    => 'Login',
-                                 'name'     => 'login',
-                                 'type'     => $loginBlockTypeId,
-                                 'groups'    => array(array('id'     => $rightBlockgroupID)),
-                                 'state'    => 2))) {
-        } else {
-            throw new Exception('Could not create login block');
-        }
-    }
-
-    // get the header blockgroup block id
-    $headerBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'header'));
-    if ($headerBlockgroup == false) {
-        $msg = xarML("Blockgroup 'header' not found.");
-        throw new Exception($msg);
-    }
-    $headerBlockgroupID = $headerBlockgroup['bid'];
-    assert('is_numeric($headerBlockgroupID);');
-
-    $metaBlockType = xarMod::apiFunc('blocks', 'user', 'getblocktype',
-                                   array('module' => 'themes',
-                                         'type'   => 'meta'));
-
-    $metaBlockTypeId = $metaBlockType['tid'];
-
-    if (!xarMod::apiFunc('blocks', 'user', 'get', array('name'  => 'meta'))) {
-        if (xarMod::apiFunc('blocks', 'admin', 'create_instance',
-                           array('title'    => 'Meta',
-                                 'name'     => 'meta',
-                                 'type'     => $metaBlockTypeId,
-                                 'groups'    => array(array('id'      => $headerBlockgroupID)),
-                                 'state'    => 2))) {
-        } else {
-            throw new Exception('Could not create meta block');
-        }
-    }
 
     xarMod::apiFunc('dynamicdata','admin','importpropertytypes', array('flush' => true));
 

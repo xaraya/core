@@ -22,13 +22,10 @@ sys::import('xaraya.structures.containers.blocks.basicblock');
 
 class Authsystem_LoginBlock extends BasicBlock implements iBlock
 {
-    public $nocache             = 1;
-
-    public $name                = 'LoginBlock';
-    public $module              = 'authsystem';
-    public $text_type           = 'Login';
-    public $text_type_long      = 'User Login';
-    public $pageshared          = 1;
+    protected $type                = 'login';
+    protected $module              = 'authsystem';
+    protected $text_type           = 'Login';
+    protected $text_type_long      = 'User Login';
 
     public $showlogout          = 0;
     public $logouttitle         = '';
@@ -37,43 +34,25 @@ class Authsystem_LoginBlock extends BasicBlock implements iBlock
  * Display func.
  * @param $data array containing title,content
  */
-    function display(Array $args=array())
+    function display()
     {
-        $data = parent::display($args);
-        if (empty($data)) return;
-
-        $vars = $data;
-        if (!isset($vars['showlogout'])) $vars['showlogout'] = $this->showlogout;
-        if (!isset($vars['logouttitle'])) $vars['logouttitle'] = $this->logouttitle;
-
-        // Display logout block if user is already logged in
-        // e.g. when the login/logout block also contains a search box
-        if (xarUserIsLoggedIn()) {
-            if (!empty($vars['showlogout'])) {
-                $args['name'] = xarUserGetVar('name');
-
-                // Since we are logged in, set the template base to 'logout'.
-                // FIXME: not allowed to set BL variables directly
-                $data['_bl_template_base'] = 'logout';
-
-                if (!empty($vars['logouttitle'])) {
-                    $data['title'] = $vars['logouttitle'];
-                }
+        $data = $this->getContent();
+        if (xarUserIsLoggedIn()) {    
+            if (!empty($this->showlogout)) {
+                $data['name'] = xarUserGetVar('name');
+                $this->setTemplateBase('logout');
+                if (!empty($this->logouttitle))
+                    $this->setTitle($this->logouttitle);
             } else {
                 return;
             }
         } elseif (xarServer::getVar('REQUEST_METHOD') == 'GET') {
-            // URL of this page
-            xarVarFetch('redirecturl',   'isset', $args['return_url']   , xarServer::getCurrentURL(array(),false), XARVAR_NOT_REQUIRED);
+            xarVarFetch('redirecturl',   'pre:trim:str:1:', 
+                $data['return_url']   , xarServer::getCurrentURL(array(),false), XARVAR_NOT_REQUIRED);
         } else {
-            // Base URL of the site
-            xarVarFetch('redirecturl',   'isset', $args['return_url']   , xarServer::getBaseURL(), XARVAR_NOT_REQUIRED);
+            xarVarFetch('redirecturl',   'pre:trim:str:1', 
+                $data['return_url']   , xarServer::getBaseURL(), XARVAR_NOT_REQUIRED);
         }
-
-        // Used in the templates.
-        $args['blockid'] = $data['bid'];
-
-        $data['content'] = $args;
         return $data;
     }
 }

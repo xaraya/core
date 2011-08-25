@@ -29,7 +29,7 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
  */
     public function modify(Array $data=array())
     {
-        $data = parent::modify($data);
+        $data = $this->getContent();
 
         $data['modules'] = $this->xarmodules;
         $data['userlinks'] = self::getUserLinks();
@@ -290,6 +290,8 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
         $vars['printlabel'] = $printlabel;
         $vars['printtitle'] = $printtitle;
 
+        $this->setContent($vars);
+        return true;
         $data['content'] = $vars;
 
         return $data;
@@ -297,7 +299,7 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
 
     public function help()
     {
-        return $this->getInfo();
+        return $this->getContent();
     }
 
 /**
@@ -322,12 +324,12 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
                 $link['url'] = $link['encodedurl'];
                 // Add order links to parent menu items
                 if ($i < $numlinks) {
-                    $link['downurl'] = xarModURL('blocks', 'admin', 'update_instance',
-                        array('tab' => 'linkorder', 'bid' => $this->bid, 'linkid' => $linkid, 'direction' => 'down', 'authid' => $authid));
+                    $link['downurl'] = xarModURL('blocks', 'admin', 'modify_instance',
+                        array('tab' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'direction' => 'down', 'authid' => $authid, 'method' => 'modify', 'phase' => 'update'));
                 }
                 if ($i > 1) {
-                    $link['upurl'] = xarModURL('blocks', 'admin', 'update_instance',
-                        array('tab' => 'linkorder', 'bid' => $this->bid, 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid));
+                    $link['upurl'] = xarModURL('blocks', 'admin', 'modify_instance',
+                        array('tab' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid, 'method' => 'modify', 'phase' => 'update'));
                 }
                 if (!empty($link['menulinks'])) {
                     $sublinks = array();
@@ -345,12 +347,12 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
 
                         // Add order links to child menu items
                         if ($j < $numsublinks) {
-                            $sublink['downurl'] = xarModURL('blocks', 'admin', 'update_instance',
-                                array('tab' => 'linkorder', 'bid' => $this->bid, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid));
+                            $sublink['downurl'] = xarModURL('blocks', 'admin', 'modify_instance',
+                                array('tab' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid, 'method' => 'modify', 'phase' => 'update'));
                         }
                         if ($j > 1) {
-                            $sublink['upurl'] = xarModURL('blocks', 'admin', 'update_instance',
-                                array('tab' => 'linkorder', 'bid' => $this->bid, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid));
+                            $sublink['upurl'] = xarModURL('blocks', 'admin', 'modify_instance',
+                                array('tab' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid, 'method' => 'modify', 'phase' => 'update'));
                         }
                         $sublinks[$sublinkid] = $sublink;
                         $j++;
@@ -412,7 +414,7 @@ class Base_MenuBlockAdmin extends Base_MenuBlock implements iBlock
         }
         $data['content']['userlinks'] = $this->userlinks;
         $data['return_url'] = xarModURL('blocks', 'admin', 'modify_instance',
-            array('bid' => $this->bid), null, 'menulinks_'.$this->bid);
+            array('block_id' => $this->block_id, 'tab' => 'config'), null, 'menulinks_'.$this->block_id);
         return $data;
     }
 

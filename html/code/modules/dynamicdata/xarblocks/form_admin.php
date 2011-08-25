@@ -23,34 +23,20 @@ class Dynamicdata_FormBlockAdmin extends Dynamicdata_FormBlock implements iBlock
  * Modify Function to the Blocks Admin
  * @param $data array containing title,content
  */
-    public function modify(Array $data=array())
+    public function modify()
     {
-        $data = parent::modify($data);
-
-        // Defaults
-        if (!isset($data['objectid'])) {
-            $data['objectid'] = 0;
-        }
-
-        $data['blockid'] = $data['bid'];
-
-        // Return output
-        return $data;
-
+        return $this->getContent();
     }
 
 /**
  * Updates the Block config from the Blocks Admin
  * @param $data array containing title,content
  */
-    public function update(Array $data=array())
+    public function update()
     {
-        $data = parent::update($data);
-        if (!xarVarFetch('objectid', 'id', $vars['objectid'], 0, XARVAR_NOT_REQUIRED)) {return;}
-
-        $data['content'] = $vars;
-
-        return $data;
+        if (!xarVarFetch('objectid', 'id', $objectid, 0, XARVAR_NOT_REQUIRED)) {return;}
+        $this->objectid = $objectid;
+        return true;
     }
 
 }

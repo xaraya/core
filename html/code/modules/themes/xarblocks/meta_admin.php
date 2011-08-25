@@ -25,10 +25,9 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
  * Modify Function to the Blocks Admin
  * @param $data array containing title,content
  */
-    public function modify(Array $data=array())
+    public function modify()
     {
-        $data = parent::modify($data);
-        $data['blockid'] = $data['bid'];
+        $data = $this->getContent();
 
         // populate meta tag dropdowns (new format)
         $data['metatypes'] = xarMeta::getTypes();
@@ -41,10 +40,8 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
  * Updates the Block config from the Blocks Admin
  * @param $data array containing title,content
  */
-    public function update(Array $data=array())
+    public function update()
     {
-        $data = parent::update($data);
-
         // FIXME: use better validation on these parameters.
         $vars = array();
 
@@ -105,16 +102,8 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
         }
         $vars['linktags'] = $newlinks;
         
-        // make sure we merge the rest of the content we haven't updated
-        $vars += $data['content'];
-        $data['content'] = $vars;
-
-        return $data;
-    }
-
-    public function help()
-    {
-        return $this->getInfo();
+        $this->setContent($vars);
+        return true;
     }
 
 }

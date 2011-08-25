@@ -20,7 +20,7 @@
  */
 sys::import('modules.base.xarblocks.adminmenu');
 
-class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
+class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlockModify
 {
 /**
  * Modify Function to the Blocks Admin
@@ -28,7 +28,7 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
  */
     public function modify(Array $data=array())
     {
-        $data = parent::modify($data);
+        $data = $this->getContent();
 
         // Admin Capable Modules
         $data['modules'] = $this->xarmodules;
@@ -52,7 +52,6 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
 
         if (!xarVarFetch('showlogout', 'int:0:1', $showlogout, 0, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('menustyle' , 'pre:trim:lower:enum:byname:bycat' , $menustyle , 'bycat', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('showhelp', 'int:0:1', $showhelp, 0, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('showfront', 'int:0:1', $showfront, 0, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('marker',      'str:0',    $marker, '', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('modulelist', 'array', $modulelist, array(), XARVAR_NOT_REQUIRED)) return;
@@ -73,22 +72,12 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlock
             $i++;
         }
 
-        $vars = $data['content'];
-        $vars['showlogout'] = $showlogout;
-        $vars['menustyle']  = $menustyle;
-        $vars['showhelp']   = $showhelp;
-        $vars['showfront']  = $showfront;
-        $vars['modulelist'] = $modulelist;
-        $vars['marker']     = $marker;
-
-        $data['content'] = $vars;
-        return $data;
+        $this->showlogout = $showlogout;
+        $this->menustyle = $menustyle;
+        $this->showfront = $showfront;
+        $this->modulelist = $modulelist;
+        $this->marker = $marker;
+        return true;
     }
-
-    public function help()
-    {
-        return $this->getInfo();
-    }
-
 }
 ?>

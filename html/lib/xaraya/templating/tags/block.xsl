@@ -29,7 +29,10 @@
 
 <xsl:template name="block_code">
   <xsl:choose>
-    <xsl:when test="@instance or (@module and @type)">
+    <xsl:when test="@instance or (@type)">
+      <!-- fixme: this causes all parameters to be passed to the function,
+          regardless of if they were passed to the tag, 
+          thus negating the possibility to test isset() -->
       <xsl:text> xarBlock::renderBlock(array(&nl;</xsl:text>
       <xsl:text>'instance' =&gt; "</xsl:text><xsl:value-of select="@instance"/><xsl:text>",&nl;</xsl:text>
       <xsl:text>'module'   =&gt; "</xsl:text><xsl:value-of select="@module"/><xsl:text>",&nl;</xsl:text>

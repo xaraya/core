@@ -17,213 +17,171 @@
  * @author Jim McDonald
  * @author Paul Rosania
  */
+sys::import('xaraya.tableddl');
 function blocks_init()
 {
+
     // Get database information
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $tables =& xarDB::getTables();
     $prefix = xarDB::getPrefix();
+    $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+    
+    $types_table = $tables['block_types'];
+    $instances_table = $tables['block_instances'];    
 
-    // Create tables inside a transaction
     try {
-        $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         $dbconn->begin();
-
-        $id_type       = array('type'=>'integer', 'unsigned'=>true, 'null'=>false, 'increment'=>true, 'primary_key'=>true);
-        $idref_type    = array('type'=>'integer', 'unsigned'=>true, 'null'=>false);
-        $template_type = array('type'=>'varchar', 'size'=>254, 'null'=>true, 'default'=>null, 'charset' => $charset);
-
-        // *_block_instances
-        $query = xarDBCreateTable($prefix . '_block_instances',
-                                  array('id'          => $id_type,
-                                        'type_id'     => $idref_type,
-                                        'name'       => array('type'        => 'varchar',
-                                                                  'size'        => 64,
-                                                                  'null'        => false,
-                                                                  'default'     => NULL,
-                                                                  'charset' => $charset),
-                                        'title'       => array('type'        => 'varchar',
-                                                                   'size'        => 254,
-                                                                   'null'        => true,
-                                                                   'default'     => NULL,
-                                                                   'charset' => $charset),
-                                        'content'     => array('type'        => 'text',
-                                                                   'null'        => true,
-                                                                   'charset' => $charset),
-                                        'template'    => $template_type,
-                                        'state'       => array('type'        => 'integer',
-                                                                   'size'        => 'tiny',
-                                                                   'unsigned'    => true,
-                                                                   'null'        => false,
-                                                                   'default'     => '2'),
-                                        'refresh'     => array('type'        => 'boolean',
-                                                                   'default'     => false),
-                                        'last_update' => array('type'        => 'integer',
-                                                                   'unsigned'    => true,
-                                                                   'null'        => false,
-                                                                   'default'     => '0')));
-
+        
+        // block types
+        
+        $fields = array(
+            'id' => array(
+                'type' => 'integer', 
+                'unsigned' => true, 
+                'null' => false, 
+                'increment' => true,
+                'primary_key' => true,
+            ),        
+            'module_id' => array(
+                'type' => 'integer',
+                'unsigned' => true,
+                'null' => true,
+            ),
+            'state' => array(
+                'type' => 'integer',
+                'size' => 'tiny',
+                'unsigned' => true,
+                'null' => false,
+                'default' => 1,  //xarBlock::TYPE_UNINITIALISED,
+            ),
+            'type' => array(
+                'type' => 'varchar',
+                'size' => 64,
+                'null' => false,
+                'default' => null,
+                'charset' => $charset,
+            ),
+            'category' => array(
+                'type' => 'varchar',
+                'size' => 64,
+                'null' => false,
+                'default' => null,
+                'charset' => $charset,
+            ),
+            'info' => array(
+                'type' => 'text',
+                'null' => true,
+                'charset' => $charset,
+            ),
+        );
+        $query = xarDBCreateTable($types_table, $fields); 
         $dbconn->Execute($query);
 
-        $query = xarDBCreateIndex($prefix . '_block_instances',
-                                  array('name'   => $prefix . '_block_instances_type_id',
-                                        'fields' => array('type_id'),
-                                        'unique' => false));
+        $index = array(
+            'name' => 'i_' . $types_table . '_types',
+            'fields' => array('type', 'module_id', 'state'),
+            'unique' => true,
+        );
+        $query = xarDBCreateIndex($types_table, $index);
         $dbconn->Execute($query);
 
-        $query = xarDBCreateIndex($prefix . '_block_instances',
-                                  array('name'   => $prefix . '_block_instances_u2',
-                                        'fields' => array('name'),
-                                        'unique' => true));
+        $index = array(
+            'name' => 'i_' . $types_table . '_category',
+            'fields' => array('category'),
+            'unique' => false,
+        );
+        $query = xarDBCreateIndex($types_table, $index);
+        $dbconn->Execute($query);
+        
+        // block instances
+
+        $fields = array(
+            'id' => array(
+                'type' => 'integer', 
+                'unsigned' => true, 
+                'null' => false, 
+                'increment' => true,
+                'primary_key' => true,
+            ),
+            'type_id' => array(
+                'type' => 'integer',
+                'unsigned' => true,
+                'null' => false,
+            ),
+            'state' => array(
+                'type' => 'integer',
+                'size' => 'tiny',
+                'unsigned' => true,
+                'null' => false,
+                'default' => xarBlock::BLOCK_STATE_VISIBLE,
+            ),
+            'name' => array(
+                'type' => 'varchar',
+                'size' => 64,
+                'null' => false,
+                'default' => null,
+                'charset' => $charset,
+            ),
+            'title' => array(
+                'type' => 'varchar',
+                'size' => 254,
+                'null' => true,
+                'default' => null,
+                'charset' => $charset,
+            ),
+            'content' => array(
+                'type' => 'text',
+                'null' => true,
+                'charset' => $charset,
+            ),
+        );
+        $query = xarDBCreateTable($instances_table, $fields); 
+        $dbconn->Execute($query);
+        
+        $index = array(
+            'name' => 'i_' . $instances_table . '_instances',
+            'fields' => array('name', 'state'),
+            'unique' => true,
+        );
+        $query = xarDBCreateIndex($instances_table, $index);
         $dbconn->Execute($query);
 
-        // *_block_types
-        $query = xarDBCreateTable($prefix . '_block_types',
-                                  array(
-                                        'id' => $id_type,
-                                        'name' => array(
-                                                            'type'          => 'varchar',
-                                                            'size'          => 64,
-                                                            'null'          => false,
-                                                            'charset'       => $charset),
-                                        'module_id' => $idref_type,
-                                        'info' => array(
-                                                            'type'          => 'text',
-                                                            'null'          => true,
-                                                            'charset'       => $charset
-                                                            )
-                                        )
-                                  );
-
+        $index = array(
+            'name' => 'i_' . $instances_table . '_type_id',
+            'fields' => array('type_id'),
+            'unique' => false,
+        );
+        $query = xarDBCreateIndex($instances_table, $index);
         $dbconn->Execute($query);
+        
+        // block cache (todo)
 
-        $query = xarDBCreateIndex($prefix . '_block_types',
-                                  array('name'   => $prefix . '_block_types2',
-                                        'fields' => array('module_id', 'name'),
-                                        'unique' => 'false'));
-        $dbconn->Execute($query);
-        /*
-         TODO: Find a fix for this - Postgres will not allow partial indexes
-         $query = xarDBCreateIndex($prefix . '_block_types',
-         array('name'   => $prefix . '_block_types_2',
-         'fields' => array('name(50)', 'module_id(50)'),
-         'unique' => true));
-         $result =& $dbconn->Execute($query);
-        */
-        // *_block_group_instances
-        $query = xarDBCreateTable($prefix . '_block_group_instances',
-                                  array('id'          => $id_type,
-                                        'group_id'    => $idref_type,
-                                        'instance_id' => $idref_type,
-                                        'template'    => $template_type,
-                                        'position'    => array('type'            => 'integer',
-                                                                   'size'        => 'tiny',
-                                                                   'unsigned'    => true,
-                                                                   'null'        => false)));
-
-        $dbconn->Execute($query);
-
-        $query = xarDBCreateIndex($prefix . '_block_group_instances',
-                                  array('name' => $prefix . '_block_group_instances_group_id',
-                                        'fields' => array('group_id'),
-                                        'unique' => false));
-        $dbconn->Execute($query);
-
-        $query = xarDBCreateIndex($prefix . '_block_group_instances',
-                                  array('name' => $prefix . '_block_group_instances_instance_id',
-                                        'fields' => array('instance_id'),
-                                        'unique' => false));
-        $dbconn->Execute($query);
-
-        // Cache blocks table is not in xartables
-        $cacheblockstable =  $prefix . '_cache_blocks';
-
-        $query = xarDBCreateTable($prefix . '_cache_blocks',
-                                  array('blockinstance_id'  => array('type'        => 'integer',
-                                                                     'unsigned'    => true,
-                                                                     'null'        => false,
-                                                                     'primary_key' => true),
-                                        'nocache'           => array('type'        => 'boolean',
-                                                                     'default'     => false),
-                                        'page'              => array('type'        => 'boolean',
-                                                                     'default'     => false),
-                                        'theuser'           => array('type'        => 'integer',
-                                                                     'unsigned'    => true,
-                                                                     'null'        => false),
-                                        'expire'            => array('type'        => 'integer',
-                                                                     'unsigned'    => true,
-                                                                     'default'     => '0')));
-        $dbconn->Execute($query);
-
-        // *_userblocks
-        /* Removed Collapsing blocks to see if there is a better solution.
-         $query = xarDBCreateTable($prefix . '_userblocks',
-         array('id'         => array('type'    => 'integer',
-         'null'    => false,
-         'default' => '0'),
-         'bid'         => array('type'    => 'varchar',
-         'size'    => 32,
-         'null'    => false,
-         'default' => '0'),
-         'active'      => array('type'    => 'integer',
-         'size'    => 'tiny',
-         'null'    => false,
-         'default' => '1'),
-         'last_update' => array('type'    => 'timestamp',
-         'null'    => false)));
-
-         $result = $dbconn->Execute($query);
-
-         $query = xarDBCreateIndex($prefix . '_userblocks',
-         array('name'   => $prefix . '_userblocks',
-         'fields' => array('id', 'bid'),
-         'unique' => true));
-         $result = $dbconn->Execute($query);
-
-
-
-         // Register BL tags
-         sys::import('blocklayout.template.tags');
-         xarTplRegisterTag('blocks', 'blocks-stateicon',
-         array(new xarTemplateAttribute('bid', XAR_TPL_STRING|XAR_TPL_REQUIRED)),
-         'blocks_userapi_handleStateIconTag');
-        */
-        /* these can't be set because they are part of the core
-         and when the core is installed, blocks is installed
-         before the modules module is so, the module_vars table
-         isn't even created at this point.
-
-         xarModVars::set('blocks','collapseable',1);
-         xarModVars::set('blocks','blocksuparrow','upb.gif');
-         xarModVars::set('blocks','blocksdownarrow','downb.gif');
-        */
-        $dbconn->commit();
+        $dbconn->commit();        
     } catch (Exception $e) {
         $dbconn->rollback();
         throw $e;
     }
 
-    // Initialisation successful
     xarModVars::set('blocks', 'selstyle', 'plain');
     xarModVars::set('blocks', 'noexceptions', 1);
 
+    // checkme: <chris/> The following note seems like a 1x thing
     /* There are old block instances defined previously in privs xarsetup.php file and used in the Block module.
        From this version we are adding management of security for blocks to Blocks module
        Old functionality in modules still exists.
        Note that the old instances and masks and code in the files was not 'matched' so don't think they worked properly in any case.
     */
-    xarRemoveInstances('blocks');
-    //setup the new ones
-    $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
-    $prefix = xarDB::getPrefix();
-
-    $blockGroupsTable    = $prefix . '_block_groups';
+    // checkme: <chris/> at install, surely we have nothing to remove?
+    //xarRemoveInstances('blocks');
+    //$blockGroupsTable    = $prefix . '_block_groups';
     $blockTypesTable     = $prefix . '_block_types';
     $blockInstancesTable = $prefix . '_block_instances';
 
+    // checkme: are these necessary now we have anon privs per block instance?
+    // todo: if we do keep them the query definitions need to be assessed 
     //The block instances differ and now defined on name (not title)
-    //These need to be upgraded
+    //These need to be upgraded <chris/> is this upgrade a 1x thing?
     $query1 = "SELECT DISTINCT module_id FROM $blockTypesTable ";
     $query2 = "SELECT DISTINCT instances.name FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id";
     $instances = array(array('header' => 'Module Name:',
@@ -235,6 +193,7 @@ function blocks_init()
     xarDefineInstance('blocks','Block',$instances);
 
     //Define an instance that refers to items that a block contains
+    // checkme: items that a block contains? what does that mean? 
     $query1 = "SELECT DISTINCT instances.name FROM $blockInstancesTable as instances LEFT JOIN $blockTypesTable as btypes ON btypes.id = instances.type_id";
     $modulesTable = $prefix . '_modules';
     $query2 = "SELECT DISTINCT name FROM $modulesTable ";
@@ -252,7 +211,8 @@ function blocks_init()
     xarRegisterMask('AdminBlocks','All','blocks','All','All','ACCESS_ADMIN');
 
     // Installation complete; check for upgrades
-    return blocks_upgrade('2.3.0');
+    return blocks_upgrade('2.2.0');
+
 }
 
 /**
@@ -265,9 +225,11 @@ function blocks_upgrade($oldversion)
 {
     // Upgrade dependent on old version number
     switch ($oldversion) {
-        case '2.3.0':
+        case '2.2.0':
             // Register blocks module event observers 
-            xarEvents::registerObserver('ModRemove', 'blocks');            
+            xarEvents::registerObserver('ModRemove', 'blocks');  
+            xarEvents::registerObserver('ModActivate', 'blocks');
+            xarEvents::registerObserver('ModDeactivate', 'blocks');         
       default:
       break;
     }
