@@ -1,6 +1,6 @@
 <?php
 /**
- * Waiting content block management
+ * Waitingcontent Block
  *
  * @package modules
  * @subpackage base module
@@ -11,20 +11,17 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
+sys::import('xaraya.structures.containers.blocks.basicblock');
+class Base_WaitingContentBlock extends BasicBlock implements iBlock
+{
+    public $type                = 'waitingcontent';
+    public $module              = 'base';
+    public $text_type           = 'Waiting Content';
+    public $text_type_long      = 'Displays Waiting Content for All Modules';
 
-    sys::import('xaraya.structures.containers.blocks.basicblock');
-
-    class Base_WaitingContentBlock extends BasicBlock implements iBlock
+    function display()
     {
-
-        public $type                = 'waitingcontent';
-        public $module              = 'base';
-        public $text_type           = 'Waiting Content';
-        public $text_type_long      = 'Displays Waiting Content for All Modules';
-
-        function display(Array $data=array())
-        {
-            return $data['output'] = xarMod::apiFunc('base', 'admin', 'waitingcontent');
-        }
+        return $data['output'] = xarMod::apiFunc('base', 'admin', 'waitingcontent');
     }
+}
 ?>

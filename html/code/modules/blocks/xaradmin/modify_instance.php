@@ -535,11 +535,13 @@ function blocks_admin_modify_instance()
             switch ($method) {
                 case 'config':
                     try {
-                        $data['block_output'] = xarBlock::guiMethod($block, 'configmodify');
+                        $data['block_output'] = xarBlock::guiMethod($block, 'configmodify', 'config-'.$block->type);
                     } catch (FunctionNotFoundException $e) {
                         try {
                             $data['block_output'] = xarBlock::guiMethod($block, 'modify');
                         } catch (FunctionNotFoundException $f) {
+                            $data['block_output'] = '';
+                        } catch (FileNotFoundException $f) {
                             $data['block_output'] = '';
                         } catch (Exception $f) {
                             throw $f;
@@ -589,7 +591,7 @@ function blocks_admin_modify_instance()
                 default:
                     // show custom configuration supplied by block type
                     $modify_method = $method.'modify';
-                    $data['block_output'] = xarBlock::guiMethod($block, $modify_method);
+                    $data['block_output'] = xarBlock::guiMethod($block, $modify_method, $method.'-'.$block->type);
                 break;
             }
         break;
@@ -612,7 +614,7 @@ function blocks_admin_modify_instance()
                 $method = $interface;
             // show custom configuration supplied by block type
             $modify_method = $method.'modify';
-            $data['block_output'] = xarBlock::guiMethod($block, $modify_method);            
+            $data['block_output'] = xarBlock::guiMethod($block, $modify_method, $method.'-'.$block->type);
         
         break;
     }

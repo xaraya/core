@@ -356,11 +356,13 @@ function blocks_admin_modify_type(Array $args=array())
             switch ($method) {
                 case 'config':
                     try {
-                        $data['type_output'] = xarBlock::guiMethod($block, 'configmodify');
+                        $data['type_output'] = xarBlock::guiMethod($block, 'configmodify', 'config-'. $block->type);
                     } catch (FunctionNotFoundException $e) {
                         try {
                             $data['type_output'] = xarBlock::guiMethod($block, 'modify');
                         } catch (FunctionNotFoundException $f) {
+                            $data['type_output'] = '';
+                        } catch (FileNotFoundException $f) {
                             $data['type_output'] = '';
                         } catch (Exception $f) {
                             throw $f;
@@ -372,7 +374,7 @@ function blocks_admin_modify_type(Array $args=array())
                 default:
                     // show custom configuration supplied by block type
                     $modify_method = $method.'modify';
-                    $data['type_output'] = xarBlock::guiMethod($block, $modify_method);
+                    $data['type_output'] = xarBlock::guiMethod($block, $modify_method, $method.'-'.$block->type);
                 break;
             }           
         break;
@@ -389,20 +391,20 @@ function blocks_admin_modify_type(Array $args=array())
             );
             // show additional caching info if supplied by block type
             if (xarBlock::hasMethod($block, 'cachingmodify', true))
-                $data['type_output'] = xarBlock::guiMethod($block, 'cachingmodify');
+                $data['type_output'] = xarBlock::guiMethod($block, 'cachingmodify', 'caching-'.$block->type);
         
         break;
         case 'access':
             // show additional access info if supplied by block type
             if (xarBlock::hasMethod($block, 'accessmodify', true))
-                $data['type_output'] = xarBlock::guiMethod($block, 'accessmodify');        
+                $data['type_output'] = xarBlock::guiMethod($block, 'accessmodify', 'access-'.$block->type);        
         break;
         default:
             // block type may supply a custom interface and methods 
             if (empty($method))
                 $method = $interface;
             $modify_method = $method.'modify';
-            $data['type_output'] = xarBlock::guiMethod($block, $modify_method);
+            $data['type_output'] = xarBlock::guiMethod($block, $modify_method, $method.'-'.$block->type);
         break;
     }
 

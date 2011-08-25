@@ -1,6 +1,6 @@
 <?php
 /**
- * Base block management
+ * Adminmenu Block configuration interface
  *
  * @package modules
  * @subpackage base module
@@ -13,20 +13,28 @@
  */
 
 /**
- * Manage block
+ * Manage block config
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
  */
 sys::import('modules.base.xarblocks.adminmenu');
 
-class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlockModify
+class Base_AdminmenuBlockConfig extends Base_AdminmenuBlock implements iBlockModify
 {
+
+/**
+ * This method is called by the BasicBlock class constructor
+**/    
+    public function init()
+    {
+        parent::init();
+    }
 /**
  * Modify Function to the Blocks Admin
  * @param $data array containing title,content
  */
-    public function modify(Array $data=array())
+    public function configmodify(Array $data=array())
     {
         $data = $this->getContent();
 
@@ -46,7 +54,7 @@ class Base_AdminmenuBlockAdmin extends Base_AdminmenuBlock implements iBlockModi
  * Updates the Block config from the Blocks Admin
  * @param $data array containing title,content
  */
-    public function update(Array $data=array())
+    public function configupdate(Array $data=array())
     {
         $data = parent::update($data);
 

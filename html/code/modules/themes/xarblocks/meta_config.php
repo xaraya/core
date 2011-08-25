@@ -1,6 +1,7 @@
 <?php
 /**
- *  Initialise meta block
+ * Meta Block configuration interface
+ *
  * @package modules
  * @subpackage themes module
  * @category Xaraya Web Applications Framework
@@ -11,7 +12,8 @@
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
- * initialise block
+ * Manage block config
+ *
  * @author  John Cox
  * @author  Carl Corliss
  * @access  public
@@ -19,13 +21,17 @@
 */
 sys::import('modules.themes.xarblocks.meta');
 sys::import('modules.themes.class.xarmeta');
-class Themes_MetaBlockAdmin extends Themes_MetaBlock
+class Themes_MetaBlockConfig extends Themes_MetaBlock
 {
+    public function init() 
+    {
+        parent::init();
+    }
 /**
  * Modify Function to the Blocks Admin
  * @param $data array containing title,content
  */
-    public function modify()
+    public function configmodify()
     {
         $data = $this->getContent();
 
@@ -40,7 +46,7 @@ class Themes_MetaBlockAdmin extends Themes_MetaBlock
  * Updates the Block config from the Blocks Admin
  * @param $data array containing title,content
  */
-    public function update()
+    public function configupdate()
     {
         // FIXME: use better validation on these parameters.
         $vars = array();

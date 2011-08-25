@@ -253,7 +253,7 @@ class xarBlock extends Object implements ixarBlock
  * @return string output the block to show
  * @throws  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */        
-    public static function guiMethod(iBlock $block, $method)
+    public static function guiMethod(iBlock $block, $method, $block_tpl=null)
     {
 
         if (!method_exists($block, $method)) 
@@ -283,7 +283,9 @@ class xarBlock extends Object implements ixarBlock
             $tplData['blockgroupname'] = $tplData['group'] = $block->group;
            
             if ($method != 'display') {
-                $block->setTemplateBase($method . '-' . $block->type);
+                if (empty($block_tpl))
+                    $block_tpl = $method . '-' . $block->type;
+                $block->setTemplateBase($block_tpl);
                 $block->setBlockTemplate(null);
             }
             return xarTpl::block(

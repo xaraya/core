@@ -1,5 +1,7 @@
 <?php
 /**
+ * Form Block
+ *
  * Initialisation and display of the form block
  * @package modules
  * @subpackage dynamicdata module
@@ -13,7 +15,7 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * initialise block
+ * Initialise block info
  */
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
@@ -27,25 +29,5 @@ class Dynamicdata_FormBlock extends BasicBlock implements iBlock
     protected $show_preview        = true;
 
     public $objectid            = 0;
-
-/**
- * Display func.
- * @param $data array containing title,content
- */
-    function display()
-    {
-        $data = $this->getContent();
-        
-        if (!empty($data['objectid'])) {
-            $object = DataObjectMaster::getObject($data);
-            if (!empty($object) && $object->checkAccess('create')) {
-                $data['moduleid'] = $object->moduleid;
-                $data['itemtype'] = $object->itemtype;
-                $data['object'] = $object;
-                return $data;
-            }
-        }
-        return;
-    }
 }
 ?>

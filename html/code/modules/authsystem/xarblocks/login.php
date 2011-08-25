@@ -1,6 +1,6 @@
 <?php
 /**
- * Login Block user interface
+ * Login Block
  *
  * @package modules
  * @subpackage authsystem module
@@ -13,13 +13,12 @@
  */
 
 /**
- * Login via a block: initialise block
+ * Initialise block info
  *
  * @author Jim McDonald
  * @return array
  */
 sys::import('xaraya.structures.containers.blocks.basicblock');
-
 class Authsystem_LoginBlock extends BasicBlock implements iBlock
 {
     protected $type                = 'login';
@@ -29,31 +28,6 @@ class Authsystem_LoginBlock extends BasicBlock implements iBlock
 
     public $showlogout          = 0;
     public $logouttitle         = '';
-
-/**
- * Display func.
- * @param $data array containing title,content
- */
-    function display()
-    {
-        $data = $this->getContent();
-        if (xarUserIsLoggedIn()) {    
-            if (!empty($this->showlogout)) {
-                $data['name'] = xarUserGetVar('name');
-                $this->setTemplateBase('logout');
-                if (!empty($this->logouttitle))
-                    $this->setTitle($this->logouttitle);
-            } else {
-                return;
-            }
-        } elseif (xarServer::getVar('REQUEST_METHOD') == 'GET') {
-            xarVarFetch('redirecturl',   'pre:trim:str:1:', 
-                $data['return_url']   , xarServer::getCurrentURL(array(),false), XARVAR_NOT_REQUIRED);
-        } else {
-            xarVarFetch('redirecturl',   'pre:trim:str:1', 
-                $data['return_url']   , xarServer::getBaseURL(), XARVAR_NOT_REQUIRED);
-        }
-        return $data;
-    }
+    
 }
 ?>
