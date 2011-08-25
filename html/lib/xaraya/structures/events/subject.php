@@ -50,7 +50,6 @@ abstract class EventSubject extends Object implements ixarEventSubject
             try {
                 $obs->notify($this);
             } catch (Exception $e) {
-                if (xarEvents::$debug) throw $e;
                 // events should never fail, ever!                
                 continue;
             }

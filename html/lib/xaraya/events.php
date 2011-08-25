@@ -46,8 +46,6 @@ class xarEvents extends Object implements ixarEvents
     // @TODO: evaluate caching
     protected static $subjects;
     protected static $observers;
-    
-    protected static $debug = false;
 
     public static function init(&$args)
     {
@@ -122,7 +120,6 @@ class xarEvents extends Object implements ixarEvents
                                 } 
                             } catch (Exception $e) {
                                 // Event system never fails, ever!
-                                if (self::$debug) throw $e;
                                 continue;
                             }
                         }
@@ -143,7 +140,6 @@ class xarEvents extends Object implements ixarEvents
         } catch (Exception $e) {
             // Events never fail, ever!
             xarLogMessage("xarEvents::notify: failed notifying $event subject observers");
-            if (self::$debug) throw $e;
             $response = false;
         }
         
