@@ -1,6 +1,6 @@
 <?php
 /**
- * Login Block admin interface
+ * Login Block configuration interface
  *
  * @package modules
  * @subpackage authsystem module
@@ -13,21 +13,26 @@
  */
 
 /**
- * Login via a block: manage block
+ * Manage block config
  *
  * @author Jim McDonald
  * @return array
  */
 sys::import('modules.authsystem.xarblocks.login');
-
-class Authsystem_LoginBlockAdmin extends Authsystem_LoginBlock implements iBlock
+class Authsystem_LoginBlockConfig extends Authsystem_LoginBlock implements iBlock
 {
+
+    public function configmodify()
+    {
+        $data = $this->getContent();
+        return $data;
+    }
 
 /**
  * Updates the Block config from the Blocks Admin
  * @param $data array containing title,content
  */
-    public function update()
+    public function configupdate()
     {
         if (!xarVarFetch('showlogout', 'checkbox',
             $showlogout, false, XARVAR_NOT_REQUIRED)) return;

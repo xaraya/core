@@ -50,21 +50,21 @@ function blocks_admin_view_types()
             'title' => xarML('View or modify default configuration for this block type'),
             'url' => !xarSecurityCheck('AdminBlocks', 0) ? '' :
                 xarModURL('blocks', 'admin', 'modify_type', 
-                    array('type_id' => $type_id, 'tab' => 'config')),
+                    array('type_id' => $type_id, 'interface' => 'config')),
         );                     
         $item['preview_link'] = array(
             'label' => xarML('Preview'),
             'title' => xarML('View a preview of this block type'),
             'url' => empty($item['type_info']['show_preview']) ? '' :
                 xarModURL('blocks', 'admin', 'modify_type', 
-                    array('type_id' => $type_id, 'tab' => 'preview')),
+                    array('type_id' => $type_id, 'interface' => 'display', 'method' => 'preview')),
         );  
         $item['help_link'] = array(
             'label' => xarML('Help'),
             'title' => xarML('View help information about this block type'),
             'url' => empty($item['type_info']['show_help']) ? '' :
                 xarModURL('blocks', 'admin', 'modify_type', 
-                    array('type_id' => $type_id, 'tab' => 'help')),
+                    array('type_id' => $type_id, 'interface' => 'display', 'method' => 'help')),
         );
         // check new instance access        
         $access = array(

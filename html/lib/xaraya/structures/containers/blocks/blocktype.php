@@ -89,10 +89,9 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     // blocks inheriting from this class must define their own public properties
     // the values of which will be stored in $content
 
-    // todo: make this final
     final public function __construct(Array $blockinfo=array())
     {
-        $this->index = self::$_count++;
+        $this->block_index = self::$_count++;
         // normalize blockinfo 
         // store the original arguments 
         $this->blockinfo = $blockinfo;
@@ -104,12 +103,24 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
         $this->setConfiguration();
         // set content
         $this->setContent();
-        
+        // check for upgrade and run if necessary
         $this->runUpgrade();
-
         // run any additional initialisation supplied by this block type
-        $this->init();
+        if (xarBlock::hasMethod($this, 'init', true))
+            $this->init();
     }
+/**
+ * init
+ * @params none
+ * @return void
+**/
+    // NOTE: since the constructor cannot be overloaded, this method
+    // is called by the constructor to run any additional functions
+    // specific to this type immediately after the object is initialised     
+    public function init()
+    {
+    }
+
 
     final protected function runUpgrade()
     {
@@ -154,11 +165,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
         $id .= "_{$this->block_index}";
         return $id;
     }
-    
-    public function init()
-    {
-        return true;
-    }
+
 
 /**
  * Store content
@@ -291,6 +298,13 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
             }
         }
         $this->content = $this->getContent();
+        return true;
+    }
+
+    final public function setAccess($interface, $access)
+    {
+        $property = $interface . '_access';
+        $this->$property = $access;
         return true;
     }
 

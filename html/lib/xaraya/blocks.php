@@ -65,7 +65,6 @@ class xarBlock extends Object implements ixarBlock
  * @return string output the block to show
  * @throws  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  * @todo   this function calls a module function, keep an eye on it.
- * @todo   caching is currently borked
  */
     public static function render(Array $blockinfo=array())
     {
@@ -79,9 +78,8 @@ class xarBlock extends Object implements ixarBlock
         } 
         
         try {
-    
-            // get the block instance 
-            $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $blockinfo);
+            // get the block instance
+            $block = self::getObject($blockinfo, 'display');
 
             // check if block expired already
             $now = time();
@@ -96,7 +94,7 @@ class xarBlock extends Object implements ixarBlock
                     xarBlockCache::setCached($cacheKey, '');
                 if (isset($block->display_access) && $block->display_access['failure']) {
                     // @TODO: render to an error/exception block?
-                    return xarTplModule('privileges','user','errors',
+                    return xarTpl::module('privileges','user','errors',
                         array('layout' => 'no_block_privileges'));
                 }
                 return '';
@@ -153,6 +151,106 @@ class xarBlock extends Object implements ixarBlock
         }
 
     }
+
+    public static function getObject(Array $blockinfo=array(), $interface=null, $method=null)
+    {
+        $invalid = array();
+        if (empty($blockinfo['type']) || !is_string($blockinfo['type']))
+            $invalid[] = 'type';
+        if (!empty($blockinfo['module']) && !is_string($blockinfo['module']))
+            $invalid[] = 'module';
+        if (isset($interface) && !is_string($interface))
+            $invalid[] = 'interface';
+        if (isset($method) && !is_string($method))
+            $invalid[] = 'method';
+        if (!empty($invalid)) {
+            $msg = 'Invalid #(1) for #(2) subsystem #(3) class method #(4)()';
+            $vars = array(join(', ', $invalid), 'blocks', 'xarBlock', 'getObject');
+            throw new BadParameterException($vars, $msg);        
+        }
+        
+        if (empty($blockinfo['module'])) {
+            $baseclass = ucfirst($blockinfo['type']).'Block';
+            $basedp = "blocks";
+            $basepath = sys::code().'blocks';   
+        } else {
+            $baseclass = ucfirst($blockinfo['module']).'_'.ucfirst($blockinfo['type']).'Block';
+            $basedp = "modules.{$blockinfo['module']}.xarblocks";
+            $basepath = sys::code()."modules/{$blockinfo['module']}/xarblocks";
+        }
+
+        $cls = array();
+        $dps = array();
+        $paths = array();
+        if (!empty($interface)) {
+            // blocks/type/type_interface.php | modules/module/xarblocks/type/type_interface.php
+            $cls[] = $baseclass . ucfirst($interface);
+            $paths[] = "{$basepath}/{$blockinfo['type']}/{$blockinfo['type']}_{$interface}.php";
+            $dps[] = "{$basedp}.{$blockinfo['type']}.{$blockinfo['type']}_{$interface}";
+            // blocks/type/interface.php | modules/module/xarblocks/type/interface.php
+            $cls[] = $baseclass . ucfirst($interface);
+            $paths[] = "{$basepath}/{$blockinfo['type']}/{$interface}.php";
+            $dps[] = "{$basedp}.{$blockinfo['type']}.{$interface}";
+            if (!empty($blockinfo['module'])) {
+                // modules/module/xarblocks/type_interface.php
+                $cls[] = $baseclass . ucfirst($interface);
+                $paths[] = "{$basepath}/{$blockinfo['type']}_{$interface}.php";            
+                $dps[] = "{$basedp}.{$blockinfo['type']}_{$interface}";
+            }
+            if ($interface != 'display' && $interface != 'admin') {
+                // blocks/type/type_admin.php | modules/module/xarblocks/type/type_admin.php
+                $cls[] = $baseclass . 'Admin';
+                $paths[] = "{$basepath}/{$blockinfo['type']}/{$blockinfo['type']}_admin.php";
+                $dps[] = "{$basedp}.{$blockinfo['type']}.{$blockinfo['type']}.admin";
+                // blocks/type/admin.php | modules/module/xarblocks/type/admin.php
+                $cls[] = $baseclass . 'Admin';
+                $paths[] = "{$basepath}/{$blockinfo['type']}/admin.php";
+                $dps[] = "{$basedp}.{$blockinfo['type']}.admin";
+                if (!empty($blockinfo['module'])) {
+                    // modules/module/xarblocks/type_admin.php
+                    $cls[] = $baseclass . 'Admin';
+                    $paths[] = "{$basepath}/{$blockinfo['type']}_admin.php";
+                    $dps[] = "{$basedp}.{$blockinfo['type']}_admin";
+                }    
+            }
+        }
+        // blocks/type/type.php | modules/module/xarblocks/type/type.php
+        $cls[] = $baseclass;
+        $paths[] = "{$basepath}/{$blockinfo['type']}/{$blockinfo['type']}.php";
+        $dps[] = "{$basedp}.{$blockinfo['type']}.{$blockinfo['type']}";
+        if (!empty($blockinfo['module'])) {
+            // modules/module/xarblocks/type.php
+            $cls[] = $baseclass;
+            $paths[] = "{$basepath}/{$blockinfo['type']}.php";
+            $dps[] = "{$basedp}.{$blockinfo['type']}";
+        }
+
+        foreach ($paths as $i => $filepath) {
+            if (!file_exists($filepath)) continue;
+            sys::import($dps[$i]);
+            $classname = $cls[$i];
+            break;
+        }
+        
+        if (empty($classname))
+            throw new FileNotFoundException($filepath);
+        
+        if (!class_exists($classname))
+            throw new ClassNotFoundException($classname);
+        
+        if (!empty($method) && !method_exists($classname, $method))
+            throw new FunctionNotFoundException($classname.'::'.$method);
+        
+        // Load the block language files        
+        // What to do here? return doesnt seem right
+        if (!xarMLSLoadTranslations($filepath))
+            return;
+        
+        $object = new $classname($blockinfo);
+        
+        return $object;
+        
+    }
 /**
  * Helper function used by block subsystem to call a block method suitabled for rendering
  *
@@ -163,19 +261,18 @@ class xarBlock extends Object implements ixarBlock
  * @return string output the block to show
  * @throws  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */        
-    public static function guiMethod(iBlock $block, $method)
+    public static function guiMethod(iBlock $block, $method, $block_tpl=null)
     {
 
         if (!method_exists($block, $method)) 
             throw new FunctionNotFoundException($method);
         
         $tplData = $block->$method();
-        if (empty($tplData)) return '';
-        // handler for legacy block display methods return tpl date as in content
-        // @todo remove when all module blocks are updated
-        if ($method == 'display' && isset($tplData['content']))
-            $tplData = $tplData['content'];       
         if (is_array($tplData)) {
+            // handler for legacy block display methods returning tpl data in $content
+            // @todo remove when all module blocks are updated
+            if ($method == 'display' && isset($tplData['content']))
+                $tplData = $tplData['content']; 
             // inject blocklayout info 
             $tplData['_bl_block_id']       = $block->block_id;
             $tplData['_bl_block_name']     = $block->name;
@@ -186,20 +283,22 @@ class xarBlock extends Object implements ixarBlock
 
             // Legacy (deprecated)
             // @TODO: remove these once all block templates are using the _bl_ variables
-            $tplData['blockid'] = $tplData['bid'] = $block->bid;
+            $tplData['blockid'] = $tplData['bid'] = $block->block_id;
             $tplData['blockname'] = $block->name;
             $tplData['blocktypename'] = $block->type;
             // The block may not be rendered as part of a group.
-            $tplData['blockgid'] = $block->groupid;
+            $tplData['blockgid'] = $block->group_id;
             $tplData['blockgroupname'] = $tplData['group'] = $block->group;
            
             if ($method != 'display') {
-                $block->setTemplateBase($method . '-' . $block->type);
+                if (empty($block_tpl))
+                    $block_tpl = $method . '-' . $block->type;
+                $block->setTemplateBase($block_tpl);
                 $block->setBlockTemplate(null);
             }
             return xarTpl::block(
                 $block->module, $block->type, $tplData, $block->block_template, $block->template_base);
-        } elseif (is_string($tplData)) {
+        } elseif (!empty($tplData) && is_string($tplData)) {
             return $tplData;
         } else {
             return '';
@@ -257,7 +356,7 @@ class xarBlock extends Object implements ixarBlock
         // It keeps the core code lighter when standalone blocks are not used.
         if (isset($args['instance']))  // valid block instance states
             $args['state'] = array(xarBlock::BLOCK_STATE_VISIBLE, xarBlock::BLOCK_STATE_HIDDEN);
-        $args['type_state'] = array(xarBlock::TYPE_STATE_ACTIVE); // valid block type states 
+        $args['type_state'] = array(xarBlock::TYPE_STATE_ACTIVE); // valid block type states
         // get block info            
         $blockinfo = xarMod::apiFunc('blocks', 'blocks', 'getinfo', $args);
         return self::render($blockinfo);

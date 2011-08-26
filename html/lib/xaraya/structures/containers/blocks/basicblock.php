@@ -62,7 +62,8 @@ abstract class BasicBlock extends BlockType implements iBlock
     protected $license = '';
     
     // blocks subsystem flags
-    protected $show_preview = true;  // let the subsystem know if it's ok to show a preview 
+    protected $show_preview = true;  // let the subsystem know if it's ok to show a preview
+    // @todo: drop the show_help flag, and go back to checking if help method is declared 
     protected $show_help    = false; // let the subsystem know if this block type has a help() method
 
     // blocks inheriting from this class must define their own public properties
@@ -71,6 +72,7 @@ abstract class BasicBlock extends BlockType implements iBlock
 /**
  * Methods called by the blocks subsystem
 **/
+    // this method is called by BlockType::__construct()
     public function init()
     {
     
@@ -83,36 +85,33 @@ abstract class BasicBlock extends BlockType implements iBlock
         return $data;
     }
 
-    // this method is called by blocks_admin_modify()
+    // this method is called by blocks_admin_modify_instance()
     public function modify()
     {
         $data = $this->getContent();
         return $data;
     }
 
-    // this method is called by blocks_admin_update()
+    // this method is called by blocks_admin_modify_instance()
     public function update()
     {
         $data = $this->getInfo();
         return $data;
     }
 
-    // this method is called by blocks_admin_delete()
+    // this method is called by blocks_admin_delete_instance()
     public function delete()
     {
         $data = $this->getInfo();
         return $data;
     }
 
-    // this method is called by the constructor to run upgrades from older block versions
-    // this method should be placed in the Module_BlockNameBlock class,
-    // eg in Base_MenuBlock not in Base_MenuBlockAdmin
+    // this method is called by BlockType::__construct() to run upgrades from older block versions
     public function upgrade($oldversion)
     {
         // use it much as you would the xarinit upgrade function in modules
         switch ($oldversion) {
             case '0.0.0': // if no version was previously set, the default is 0.0.0
-            default:
                 // upgrades from 0.0.0 go here
             // fall through to subsequent upgrades
             case '0.0.1':
@@ -129,10 +128,14 @@ abstract class BasicBlock extends BlockType implements iBlock
         return $this->storeContent();
     }
     
+    // @todo: this is here to support legacy blocks
+    // deprecate once all blocks are using $this->getContent() instead
     public function getInfo()
     {
         $info = $this->getTypeInfo();
         $info += $this->getInstanceInfo();
+        $info += $this->getConfiguration();
+        $info += $this->getContent();
         $info['content'] = $this->storeContent();
         return $info;
     }

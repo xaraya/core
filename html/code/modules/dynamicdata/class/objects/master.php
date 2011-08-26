@@ -847,6 +847,81 @@ class DataObjectMaster extends Object
     }
 
     /**
+     * Get the names and values of
+     */
+    public function getFieldValues(Array $args = array(), $bypass = 0)
+    {
+        $fields = array();
+        $properties = $this->getProperties($args);
+        if ($bypass) {
+            foreach ($properties as $property) {
+                $fields[$property->name] = $property->value;
+            }
+        } else {
+            foreach ($properties as $property) {
+                $fields[$property->name] = $property->getValue();
+            }
+        }
+        return $fields;
+    }
+
+    public function setFieldValues(Array $args = array(), $bypass = 0)
+    {
+        if ($bypass) {
+            foreach ($args as $key => $value)
+                if (isset($this->properties[$key])) $this->properties[$key]->value = $value;
+        } else {
+            foreach ($args as $key => $value)
+                if (isset($this->properties[$key]))  $this->properties[$key]->setValue($value);
+        }
+        return true;
+    }
+
+    public function clearFieldValues(Array $args = array())
+    {
+        $properties = $this->getProperties($args);
+        foreach ($properties as $property) {
+            $fields[$property->name] = $property->clearValue();
+        }
+        return true;
+    }
+
+    /**
+     * Get the labels and values to include in some output display for this item
+     */
+    public function getDisplayValues(Array $args = array())
+    {
+        $displayvalues = array();
+        $properties = $this->getProperties($args);
+        foreach($properties as $property) {
+            $label = xarVarPrepForDisplay($property->label);
+            $displayvalues[$label] = $property->showOutput();
+        }
+        return $displayvalues;
+
+        /* FIXME: the status value isn't being used correctly I think
+        if(count($args['fieldlist']) > 0 || !empty($this->status))
+        {
+            foreach($args['fieldlist'] as $name)
+                if(isset($this->properties[$name]))
+                {
+                    $label = xarVarPrepForDisplay($this->properties[$name]->label);
+                    $displayvalues[$label] = $this->properties[$name]->showOutput();
+                }
+        }
+        else
+        {
+            foreach(array_keys($this->properties) as $name)
+            {
+                $label = xarVarPrepForDisplay($this->properties[$name]->label);
+                $displayvalues[$label] = $this->properties[$name]->showOutput();
+            }
+        }
+        return $displayvalues;
+        */
+    }
+
+    /**
      * Join another database table to this object (unfinished)
      * The difference with the 'join' argument above is that we don't create a new datastore for it here,
      * and the join is handled directly in the original datastore, i.e. more efficient querying...

@@ -1,6 +1,6 @@
 <?php
 /**
- * Skin Selection via block
+ * Skin Block
  *
  * @package modules
  * @subpackage themes module
@@ -13,6 +13,8 @@
  */
 
 /*
+ * Initialise block info
+ *
  * Skin Selection via block
  * @author Marco Canini
  * initialise block
@@ -25,38 +27,6 @@ class Themes_SkinBlock extends BasicBlock implements iBlock
     protected $module              = 'themes';
     protected $text_type           = 'Theme Switcher';
     protected $text_type_long      = 'User Theme Switcher Selection';
-
-/**
- * Display func.
- * @param $data array containing title,content
- */
-    function display(Array $data=array())
-    {
-        
-        if (!xarUserIsLoggedIn() ||
-            (bool) xarModVars::get('themes', 'enable_user_menu') == false) return;
-        
-        $data = $this->getContent();
-        $data['user_themes'] = xarMod::apiFunc('themes', 'user', 'dropdownlist');
-        if ($data['user_themes'] <= 1) return;
-        $data['default_theme'] = xarModUserVars::get('themes', 'default_theme');
-        $data['return_url'] = (xarServer::getVar('REQUEST_METHOD') == 'GET') ?
-            xarServer::getCurrentURL() : xarServer::getBaseURL();
-
-        return $data;
-
-    }
-
-/**
- * Modify Function to the Blocks Admin
- * @param $data array containing title,content
- */
-    public function modify(Array $data=array())
-    {
-        $data = $this->getContent();
-        $data['enable_user_menu'] = xarModVars::get('themes', 'enable_user_menu');
-        return $data;
-    }
 
 }
 ?>

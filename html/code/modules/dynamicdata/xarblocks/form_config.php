@@ -1,5 +1,7 @@
 <?php
 /**
+ * Form Block configuration interface
+ *
  * Initialisation and display of the form block
  * @package modules
  * @subpackage dynamicdata module
@@ -13,17 +15,16 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * Manage block
+ * Manage block config
  */
-    sys::import('modules.dynamicdata.xarblocks.form');
-
-class Dynamicdata_FormBlockAdmin extends Dynamicdata_FormBlock implements iBlock
+sys::import('modules.dynamicdata.xarblocks.form');
+class Dynamicdata_FormBlockConfig extends Dynamicdata_FormBlock implements iBlock
 {
 /**
  * Modify Function to the Blocks Admin
  * @param $data array containing title,content
  */
-    public function modify()
+    public function configmodify()
     {
         return $this->getContent();
     }
@@ -32,7 +33,7 @@ class Dynamicdata_FormBlockAdmin extends Dynamicdata_FormBlock implements iBlock
  * Updates the Block config from the Blocks Admin
  * @param $data array containing title,content
  */
-    public function update()
+    public function configupdate()
     {
         if (!xarVarFetch('objectid', 'id', $objectid, 0, XARVAR_NOT_REQUIRED)) {return;}
         $this->objectid = $objectid;
