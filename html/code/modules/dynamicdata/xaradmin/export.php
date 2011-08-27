@@ -24,9 +24,9 @@ function dynamicdata_admin_export(Array $args=array())
 
     extract($args);
 
-    if(!xarVarFetch('objectid', 'isset', $objectid, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('objectid', 'isset', $objectid, 1, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('name',     'isset', $name    , NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id',    'isset', $moduleid, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('module_id','isset', $moduleid, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemtype', 'isset', $itemtype, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('itemid',   'isset', $itemid,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tofile',   'isset', $tofile,   NULL, XARVAR_DONT_SET)) {return;}
@@ -37,8 +37,6 @@ function dynamicdata_admin_export(Array $args=array())
 
     $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name'     => $name,
-                                         'moduleid' => $moduleid,
-                                         'itemtype' => $itemtype,
                                          'itemid'   => $itemid,
                                          'allprops' => true));
 
@@ -51,7 +49,6 @@ function dynamicdata_admin_export(Array $args=array())
     if (!$myobject->checkAccess('config'))
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $myobject->label));
 
-    $data['objectid'] = $myobject->objectid;
 
     $proptypes = DataPropertyMaster::getPropertyTypes();
 
@@ -105,7 +102,7 @@ function dynamicdata_admin_export(Array $args=array())
         $mylist = DataObjectMaster::getObjectList(array('objectid' => $objectid,
                                                 'moduleid' => $moduleid,
                                                 'itemtype' => $itemtype));
-        $mylist->getItems();
+        $mylist->getItems(array('getvirtuals' => 1));
 
         if (empty($tofile)) {
             $xml .= "<items>\n";
@@ -158,6 +155,7 @@ function dynamicdata_admin_export(Array $args=array())
         $xml = '';
     }
 
+    $data['objectid'] = $objectid;
     $data['xml'] = xarVarPrepForDisplay($xml);
 
     xarTpl::setPageTemplateName('admin');
