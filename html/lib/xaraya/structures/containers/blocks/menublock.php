@@ -16,16 +16,16 @@
 **/
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
-class MenuBlock extends BasicBlock implements iBlock
+abstract class MenuBlock extends BasicBlock implements iBlock
 {
-    public $module          = 'BlockModule';  // Module your child class belongs to
-    public $text_type       = 'Menu Block';  // Block name
-    public $text_type_long  = 'Parent class for menu blocks'; // Block description
 
-    public $menumodtype     = 'user';       // type of module links we're dealing with
-    public $menumodtypes    = array();      // optional array of valid modtypes
-    public $xarmodules      = array();      // list of $menumodtype capable modules
-    public $modulelist      = array();      // settings for $xarmodules list
+    protected $module          = '';  // Module your child class belongs to
+    protected $text_type       = 'Menu Block';  // Block name
+    protected $text_type_long  = 'Parent class for menu blocks'; // Block description
+
+    protected $menumodtype     = 'user';       // type of module links we're dealing with
+    protected $menumodtypes    = array();      // optional array of valid modtypes
+    protected $xarmodules      = array();      // list of $menumodtype capable modules
 
     // store current request info as static properties
     public static $thismodname;
@@ -33,11 +33,11 @@ class MenuBlock extends BasicBlock implements iBlock
     public static $thisfuncname;
     public static $currenturl;
     public static $truecurrenturl;
+    
+    public $modulelist      = array();      // settings for $xarmodules list
 
-    public function __construct(Array $args=array())
+    public function init()
     {
-        parent::__construct($args);
-
         $typeCapable = ucfirst($this->menumodtype) . 'Capable';
         // get the list of modules for this menu modtype
         $this->xarmodules = xarMod::apiFunc('modules','admin','getlist',
@@ -78,14 +78,7 @@ class MenuBlock extends BasicBlock implements iBlock
                 $this->modulelist[$modname]['displaydescription'] = $mod['displaydescription'];
             }
         }
-        $this->content['modulelist'] = $this->modulelist;
-    }
-
-    public function display(Array $args=array())
-    {
         self::setRequestInfo();
-        $data = parent::display($args);
-        return $data;
     }
 
     public function setRequestInfo()

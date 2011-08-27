@@ -314,7 +314,7 @@ final class sys extends Object
     **/
     public static function import($dp)
     {
-        if((0===strpos($dp,'modules.')) || (0===strpos($dp,'properties.'))) {
+        if((0===strpos($dp,'modules.')) || (0===strpos($dp,'properties.')) || (0===strpos($dp,'blocks.'))) {
             return self::once(self::shortpath($GLOBALS['systemConfiguration']['codeDir'] . $dp), false);
         }
         return self::once($GLOBALS['systemConfiguration']['libDir'] . $dp);

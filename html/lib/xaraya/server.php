@@ -373,7 +373,8 @@ class xarServer extends Object
                         } else {
                             $request = str_replace("&$find",'',$request);
                         }
-                    } elseif (!empty($v)) {
+                    // <chris/> !empty is too greedy here, $v=0, $v='', et-al are valid 
+                    } elseif (!is_null($v)) {
                         $request .= "$k=$v&";
                     }
                 }
