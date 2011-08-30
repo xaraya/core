@@ -454,7 +454,7 @@ function xarModCallHooks($hookScope, $hookAction, $hookId, $extraInfo = NULL, $c
     if (empty($extraInfo))
         $extraInfo = array();
     if (!isset($extraInfo['itemid']))
-        $extrainfo['itemid'] = $hookId;
+        $extraInfo['itemid'] = $hookId;
     if (isset($callerModName) && !isset($extraInfo['module']))
         $extraInfo['module'] = $callerModName;
     if (isset($callerItemType) && !isset($extraInfo['itemtype']))
