@@ -4,13 +4,13 @@
     <link rel='icon' href="favicon.ico"/>
     <style>
         ul li.success {
-            list-style-image:  url(#sys::code()#modules/base/xarimages/icons/activate.png) !important;
+            list-style-image:  url(themes/common/images/icons/activate.png) !important;
         }
         ul li.failure {
-            list-style-image:  url(#sys::code()#modules/base/xarimages/icons/dialog-error.png) !important;
+            list-style-image:  url(themes/common/images/icons/dialog-error.png) !important;
         }
         ul li.warning {
-            list-style-image:  url(#sys::code()#modules/base/xarimages/icons/dialog-warning.png) !important;
+            list-style-image:  url(themes/common/images/icons/dialog-warning.png) !important;
         }
     </style>
     <xar:set name="active_step">3</xar:set>
