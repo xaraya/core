@@ -452,10 +452,6 @@ function dynamicdata_init()
     xarModVars::set('dynamicdata', 'administrators', serialize(array()));
     xarModVars::set('dynamicdata', 'getlinkedobjects', 0);
 
-    /**
-     * Register blocks
-     */
-    xarMod::apiFunc('blocks','admin','register_block_type', array('modName'=>'dynamicdata','blockType'=>'form'));
 
     /**
      * Register hooks

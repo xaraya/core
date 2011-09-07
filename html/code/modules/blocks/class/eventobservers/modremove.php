@@ -15,13 +15,13 @@ class BlocksModRemoveObserver extends EventObserver implements ixarEventObserver
         // Delete block details for this module.
         //
         // Get block types.
-        $blocktypes = xarMod::apiFunc('blocks', 'user', 'getallblocktypes',
+        $blocktypes = xarMod::apiFunc('blocks', 'types', 'getitems',
                                     array('module' => $modName));
 
         // Delete block types.
         if (is_array($blocktypes) && !empty($blocktypes)) {
             foreach($blocktypes as $blocktype) {
-                xarMod::apiFunc('blocks', 'admin', 'delete_type', $blocktype);
+                xarMod::apiFunc('blocks', 'types', 'deleteitem', $blocktype);
             }
         }
 
