@@ -18,7 +18,7 @@ class xarMeta extends Object
 {
     private static $instance;
     private static $meta;
-    
+
     // prevent direct creation of this object
     private function __construct()
     {
@@ -31,7 +31,7 @@ class xarMeta extends Object
                 $this->register($tag);
             }
         }
-    }   
+    }
 
 /**
  * Get instance function
@@ -68,24 +68,24 @@ class xarMeta extends Object
  *         string $args[scheme] the scheme used to interpret the content, optional
  * @throws none
  * @return bool true on success
-**/ 
+**/
     public function register(Array $args=array())
     {
         extract($args);
-        
+
         // check for required parameters with valid data types
-        if ((empty($content) || !is_string($content)) || 
+        if ((empty($content) || !is_string($content)) ||
             (empty($type) || !is_string($type)) ||
             (empty($value) || !is_string($value))) return;
-        
+
         $type = strtolower($type);
         $value = strtolower($value);
-        $content = strip_tags($content);       
-        
+        $content = strip_tags($content);
+
         // make sure we have a valid type
         $metatypes = $this->getTypes();
         if (!isset($metatypes[$type])) return;
-        
+
         // make sure we have a valid language
         $metalangs = $this->getLanguages();
         if (empty($lang) || !is_string($lang) || !isset($metalangs[$lang]))
@@ -95,26 +95,26 @@ class xarMeta extends Object
         $metadirs = $this->getDirs();
         if (empty($dir) || !is_string($dir) || !isset($metadirs[$dir]))
             $dir = '';
-        
+
         // make sure we have a valid data type for scheme
         if (empty($scheme) || !is_string($scheme))
             $scheme = '';
-        
+
         // flag to optionally append content to an existing tag
         // tag must have name or http-equiv attribute
-        if (empty($append)) 
+        if (empty($append))
             $append = false;
-  
-        // build the tag    
+
+        // build the tag
         $tag = array(
             'type'        => $type,    // name|http-equiv
-            'value'       => $value,   // type value 
+            'value'       => $value,   // type value
             'content'     => $content, // meta content
             'lang'        => $lang,    // ISO 639-1 language code for content
             'dir'         => $dir,     // text direction of content (rtl, ltr)
             'scheme'      => $scheme,  // optional scheme used to interpret content
         );
-        
+
         return $this->queue($type, $value, $tag, $append);
     }
 /**
@@ -127,14 +127,14 @@ class xarMeta extends Object
  * @param array   $args array of optional parameters (todo)
  * @return string templated output of meta tags to render
  * @throws none
-**/     
+**/
     public function render(Array $args=array())
     {
         if (empty(self::$meta)) return;
         $args['meta'] = self::$meta;
         return xarTpl::module('themes', 'meta', 'render', $args);
     }
-    
+
 /**
  * Queue meta data for later rendering
  *
@@ -149,7 +149,7 @@ class xarMeta extends Object
     public function queue($type, $value, $tag, $append=false)
     {
         if (empty($type) || empty($value) || empty($tag)) return;
-        
+
         // init the queue
         if (!isset(self::$meta)) {
             self::$meta = array(
@@ -157,14 +157,14 @@ class xarMeta extends Object
                 'name' => array(),
             );
         }
-        
+
         // don't queue tags with invalid type attributes
         if (!isset(self::$meta[$type])) return;
-        
-        // set unique index for this tag based on type, value and language 
+
+        // set unique index for this tag based on type, value and language
         $index = "$tag[type]:$tag[value]:$tag[lang]";
-        
-        // see if we're appending and we have a tag with the same language        
+
+        // see if we're appending and we have a tag with the same language
         if ($append && isset(self::$meta[$type][$value][$index])) {
             // get the queued tag
             $q = self::$meta[$type][$value][$index];
@@ -182,7 +182,7 @@ class xarMeta extends Object
         // queue the tag
         self::$meta[$type][$value][$index] = $tag;
 
-        return true;       
+        return true;
     }
 
 /* Static helper methods */
@@ -196,12 +196,12 @@ class xarMeta extends Object
  * @params none
  * @return array list of types
  * @throws none
-**/  
+**/
     public static function getTypes()
     {
         $types = array(
             'name' => array('id' => 'name', 'name' => 'name'),
-            'http-equiv' => array('id' => 'http-equiv', 'name' => 'http-equiv'),            
+            'http-equiv' => array('id' => 'http-equiv', 'name' => 'http-equiv'),
         );
         return $types;
     }
@@ -215,7 +215,7 @@ class xarMeta extends Object
  * @params none
  * @return array list of directions
  * @throws none
-**/     
+**/
     public static function getDirs()
     {
         $dirs = array(
@@ -223,7 +223,7 @@ class xarMeta extends Object
             'rtl' => array('id' => 'rtl', 'name' => 'rtl'),
         );
         return $dirs;
-    }    
+    }
 
 /**
  * Get Languages
@@ -234,7 +234,7 @@ class xarMeta extends Object
  * @param  bool $short optionally return the short description as name default true
  * @return array list of language codes
  * @throws none
-**/     
+**/
     public static function getLanguages($short=true)
     {
         $codes = array(

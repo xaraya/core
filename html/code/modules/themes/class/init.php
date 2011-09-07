@@ -26,7 +26,7 @@ class ThemeInit implements iThemeInit
         }
         return true;
     }
-    
+
 }
 
 ?>

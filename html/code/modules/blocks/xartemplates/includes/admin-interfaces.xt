@@ -1,0 +1,28 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="!empty($interfaces)">
+    <xar:if condition="empty($tab_title)">
+        <xar:var name="tab_title">Choose an action to perform'</xar:var>
+    </xar:if>
+    <xar:if condition="empty($tab_label)">
+        <xar:var name="tab_label">Block</xar:var>
+    </xar:if>
+    <div>
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <li class="xar-tabs-label help" title="#$tab_title#">#$tab_label#:</li>
+            <xar:foreach in="$interfaces" value="$tab">
+                <xar:if condition="!empty($tab['active'])">
+                    <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                    <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                <xar:else/>
+                    <xar:set name="tabclass">'xar-tab'</xar:set>
+                    <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                </xar:if>
+                <li class="#$tabclass#">
+                    <a href="#$tab.url#" title="#$tab.title#" class="#$linkclass#">
+                    #$tab.label#</a>
+                </li>
+            </xar:foreach>
+        </ul>
+    </div>
+    </xar:if>
+</xar:template>

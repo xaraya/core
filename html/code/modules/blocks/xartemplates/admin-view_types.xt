@@ -3,205 +3,94 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:if condition="!empty($tid)">
-            <h2>View Block Type</h2>
-            <h4>
-                <a href="#xarModURL('blocks','admin','new_type')#">New Block Type</a>
-            </h4>
-            <!-- block tabs -->
-            <xar:if condition="!empty($blocktabs)">
-                <xar:style scope="theme" file="navtabs"/>
-                <div>
-                    <ul class="xar-tabs xar-alt xar-norm-outline">
-                        <li class="xar-tabs-label help" title="#xarML('Choose an action to perform')#">View:</li>
-                        <xar:foreach in="$blocktabs" key="$tabname" value="$tablink">
-                            <xar:if condition="($tab eq $tabname) or (empty($tab) and $tabname eq 'detail')">
-                                <xar:set name="tabclass">'xar-tab-active'</xar:set>
-                                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
-                            <xar:else/>
-                                <xar:set name="tabclass">'xar-tab'</xar:set>
-                                <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
-                            </xar:if>
-                            <li class="#$tabclass#">
-                                <a href="#$tablink.url#" title="#$tablink.title#" class="#$linkclass#">
-                                #$tablink.label#</a>
-                            </li>
-                        </xar:foreach>
-                    </ul>
-                </div>
-            </xar:if>
-            <xar:if condition="empty($tab) or $tab == 'detail'">
-            <fieldset>
-                <legend>Selected Block Type Properties</legend>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <label class="xar-form-label">Module:</label>
-                    </div>
-                    <div class="xar-col">
-                        #xarVarPrepForDisplay($detail['module'])#
-                    </div>
-                </div>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <label class="xar-form-label">Block Type:</label>
-                    </div>
-                    <div class="xar-col">
-                        #xarVarPrepForDisplay($detail['type'])#
-                    </div>
-                </div>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <label class="xar-form-label">Block Version:</label>
-                    </div>
-                    <div class="xar-col">
-                        <xar:if condition="empty($info['xarversion']) or $info['xarversion'] eq '0.0.0'">
-                            Unknown
-                        <xar:else/>
-                            #xarVarPrepForDisplay($info['xarversion'])#
-                        </xar:if>
-                    </div>
-                </div>
-                <xar:if condition="!empty($info['text_type'])">
-                    <div class="xar-row">
-                        <div class="xar-col">
-                            <label class="xar-form-label">Short Title:</label>
-                        </div>
-                        <div class="xar-col">
-                            #xarVarPrepForDisplay($info['text_type'])#
-                        </div>
-                    </div>
-                </xar:if>
-                <xar:if condition="!empty($info['text_type_long'])">
-                    <div class="xar-row">
-                        <div class="xar-col">
-                            <label class="xar-form-label">Long Title:</label>
-                        </div>
-                        <div class="xar-col">
-                            #xarVarPrepForDisplay($info['text_type_long'])#
-                        </div>
-                    </div>
-                </xar:if>
-                <xar:if condition="isset($info['allow_multiple'])">
-                    <div class="xar-row">
-                        <div class="xar-col">
-                            <label class="xar-form-label">Allow Multiple:</label>
-                        </div>
-                        <div class="xar-col">
-                            <xar:if condition="!empty($info['allow_multiple'])">True
-                            <xar:else />False</xar:if>
-                        </div>
-                    </div>
-                </xar:if>
-                <xar:if condition="!empty($info['notes'])">
-                    <div class="xar-row">
-                        <div class="xar-col">
-                            <label class="xar-form-label">Notes:</label>
-                        </div>
-                        <div class="xar-col">
-                            #xarVarPrepForDisplay($info['notes'])#
-                        </div>
-                    </div>
-                </xar:if>
-            </fieldset>
-            <!-- Table of overrideable parameters (see xar:block tag) -->
-            <xar:if condition="!empty($params)">
-                <fieldset>
-                    <legend>Block Properties Customisable Through &lt;xar:block&gt; Tag</legend>
-                    <table>
-                        <tr>
-                            <th>Name</th>
-                            <th>Default</th>
-                            <th>Datatype</th>
-                            <th>Properties</th>
-                        </tr>
-                        <xar:loop name="$params">
-                            <tr>
-                                <td>#xarVarPrepForDisplay($loop:item.name)#</td>
-                                <td>
-                                    <xar:if condition="$loop:item.overrideable">
-                                    #xarVarPrepForDisplay($loop:item.value)#
-                                    <xar:else />n/a</xar:if>
-                                </td>
-                                <td>#xarVarPrepForDisplay($loop:item.type)#</td>
-                                <td>
-                                    <xar:if condition="$loop:item.overrideable">customisable
-                                    <xar:else />not_customisable</xar:if>
-                                </td>
-                            </tr>
-                        </xar:loop>
-                    </table>
-                </fieldset>
-            </xar:if>
-            <form action="#xarServer::getCurrentURL()#" method="post">
-                <fieldset>
-                    <legend>
-                        Block Add Access
-                    </legend>
-                    <xar:set name="propname">$detail['type'] . '_new'</xar:set>
-                    <xar:data-input type="access" name="$propname" value="$info['new_access']" />
-                </fieldset>
-                <div class="xar-form-actions">
-                    <div class="xar-row">
-                        <div class="xar-col"></div>
-                        <div class="xar-col">
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
-                            <input type="hidden" name="tid" id="tid" value="#$tid#" />
-                            <input type="hidden" name="confirm" id="confirm" value="1" />
-                            <xar:var name="label">Update</xar:var>
-                            <xar:button type="submit" label="$label"/>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <xar:elseif condition="$tab eq 'preview'"/>
-                <xar:set name="blockmodule">$detail['module']</xar:set>
-                <xar:set name="blocktype">$detail['type']</xar:set>
-                <xar:block module="$blockmodule" type="$blocktype"/>
-            <xar:elseif condition="$tab eq 'help'"/>
-                <xar:if condition="!empty($block_help)">
-                    #$block_help#
-                <xar:else/>
-                    <p>
-                        No help available for this block type.
-                    </p>
-                </xar:if>
-            </xar:if>
-        <xar:else />
-            <h2>View Block Types</h2>
-            <h4>
-                <a href="#xarModURL('blocks','admin','new_type')#">New Block Type</a>
-            </h4>
-            <table class="xar-items">
-                <tr>
-                    <th title="#xarML('The module listed is the module from which this block originates')#">
-                    Module</th>
-                    <th title="#xarML('The block type indicates the type of block that can be selected.')#">
-                    Type</th>
-                    <th title="#xarML('A short description of what the block does.')#">
-                    Description</th>
-                    <th>Actions</th>
-                </tr>
-                <xar:loop name="$block_types" id="foo2">
+        <h2>View Block Types</h2>
+        <xar:if condition="!empty($types)">
+                <xar:set name="icon_info">xarTpl::getImage('icons/info.png','theme')</xar:set>
+                <xar:set name="icon_modify">xarTpl::getImage('icons/modify-config.png','theme')</xar:set>
+                <xar:set name="icon_help">xarTpl::getImage('icons/help-browser.png','theme')</xar:set>
+                <xar:set name="icon_preview">xarTpl::getImage('icons/display.png','theme')</xar:set>
+                <xar:set name="icon_delete">xarTpl::getImage('icons/delete.png','theme')</xar:set>
+                <xar:set name="icon_add">xarTpl::getImage('icons/add.png','theme')</xar:set>
+            <table class="xar-fullwidth">
+                <caption class="xar-align-left xar-margin-nonebottom">
+                    Block Types
+                </caption>
+                <thead>
+                    <tr>
+                        <th>
+                            Type
+                        </th>
+                        <th>
+                            Module
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            State
+                        </th>
+                        <th class="xar-align-right">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                <xar:foreach in="$types" value="$item">
                     <tr>
                         <td>
-                            #$loop:item['module']#
+                            #$item['type']#
                         </td>
                         <td>
-                            <a href="#$loop:item['detailurl']#"
-                            title="#xarML('Display further details')#">#$loop:item['type']#</a>
+                        <xar:if condition="!empty($item['module'])">
+                            #$item['module']#
+                        <xar:else/>
+                            [ none ]
+                        </xar:if>
                         </td>
                         <td>
-                            <xar:if condition="!empty($loop:item['info']['text_type_long'])">
-                                #xarVarPrepForDisplay($loop:item['info']['text_type_long'])#
+                        <xar:if condition="!empty($item['type_info']['text_type_long'])">
+                            #$item['type_info']['text_type_long']#
+                        </xar:if>
+                        </td>
+                        <td>
+                            <xar:if condition="$item['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
+                                <a href="#xarModURL('blocks', 'admin', 'modify_type',array('type_id' => $item['type_id'], 'tab' => 'status'))#">#$type_states[$item['type_state']]['name']#</a>
+                            <xar:else/>
+                                #$type_states[$item['type_state']]['name']#
                             </xar:if>
                         </td>
-                        <td class="xar-align-center">
-                            <xar:var name="label">Refresh block details</xar:var>
-                            <a href="#$loop:item['refreshurl']#" title="#$label#">Refresh</a>
+                        <td class="xar-align-right">
+                                    <xar:if condition="!empty($item['info_link']['url'])">
+                                        <a href="#$item['info_link']['url']#" class="xar-icon" title="#$item['info_link']['title']#"><img src="#$icon_info#" class="xar-icon" alt="#$item['info_link']['label']#"/></a>
+                                    <xar:else/>
+                                        <img src="#$icon_info#" class="xar-icon-disabled" alt="#$item['info_link']['label']#" title="#$item['info_link']['title']#"/>
+                                    </xar:if>&#160;
+                                    <xar:if condition="!empty($item['modify_link']['url'])">
+                                        <a href="#$item['modify_link']['url']#" class="xar-icon" title="#$item['modify_link']['title']#"><img src="#$icon_modify#" class="xar-icon" alt="#$item['modify_link']['label']#"/></a>
+                                    <xar:else/>
+                                        <img src="#$icon_modify#" class="xar-icon-disabled" alt="#$item['modify_link']['label']#" title="#$item['modify_link']['title']#"/>
+                                    </xar:if>&#160;
+                                    <xar:if condition="!empty($item['preview_link']['url'])">
+                                        <a href="#$item['preview_link']['url']#" class="xar-icon" title="#$item['preview_link']['title']#"><img src="#$icon_preview#" class="xar-icon" alt="#$item['preview_link']['label']#"/></a>
+                                    <xar:else/>
+                                        <img src="#$icon_preview#" class="xar-icon-disabled" alt="#$item['preview_link']['label']#" title="#$item['preview_link']['title']#"/>
+                                    </xar:if>&#160;
+                                    <xar:if condition="!empty($item['help_link']['url'])">
+                                        <a href="#$item['help_link']['url']#" class="xar-icon" title="#$item['help_link']['title']#"><img src="#$icon_help#" class="xar-icon" alt="#$item['help_link']['label']#"/></a>
+                                    <xar:else/>
+                                        <img src="#$icon_help#" class="xar-icon-disabled" alt="#$item['help_link']['label']#" title="#$item['help_link']['title']#"/>
+                                    </xar:if>&#160;
+                                    <xar:if condition="!empty($item['add_link']['url'])">
+                                        <a href="#$item['add_link']['url']#" class="xar-icon" title="#$item['add_link']['title']#"><img src="#$icon_add#" class="xar-icon" alt="#$item['add_link']['label']#"/></a>
+                                    <xar:else/>
+                                        <img src="#$icon_add#" class="xar-icon-disabled" alt="#$item['add_link']['label']#" title="#$item['add_link']['title']#"/>
+                                    </xar:if>
                         </td>
                     </tr>
-                </xar:loop>
+                </xar:foreach>
+                </tbody>
             </table>
+            <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>
         </xar:if>
     </div>
 </xar:template>

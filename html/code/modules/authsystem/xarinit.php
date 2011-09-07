@@ -39,14 +39,7 @@ function authsystem_init()
              WHERE regid = ?";
     $bindvars = array('Authentication',true,$modid);
     $result = $dbconn->Execute($query,$bindvars);
-
-    // Create the login block
     if (!$result) return;
-    //create the blocktype
-    $bid = xarMod::apiFunc('blocks','admin','register_block_type',
-           array('modName' => 'authsystem',
-                 'blockType' => 'login'));
-    if (!$bid) return;
 
     // Installation complete; check for upgrades
     return authsystem_upgrade('2.0.0');

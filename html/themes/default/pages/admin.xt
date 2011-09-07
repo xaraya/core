@@ -4,6 +4,8 @@
 "http://xaraya.com/bl2/DTD/bl2-strict.dtd">
 <xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
     <html xml:lang="en" lang="en">
+        <!-- Call blocks early so any css and js is included -->
+        <xar:set name="admingroup"><xar:blockgroup name="admin" id="admin"/></xar:set>
         <head>
             <xar:blockgroup name="header" id="header"/>
             <title>
@@ -66,7 +68,7 @@
                         [ Front end ]
                     </a>
                     -->
-                    <xar:blockgroup name="admin" id="admin"/>
+                    #$admingroup#
                 </div>
                 <xar:place-javascript position="body"/>
             </div>

@@ -31,34 +31,34 @@ class xarJS extends Object
     // the file names for plugins and lib xml files
     const LIB_XML                  = 'xarlib.xml';
     const LIB_PLUGIN_XML           = 'xarplugin.xml';
-    
+
     // private properties - these are discarded when the object goes out of scope
     // this singleton instance
     private static $instance;
     // the queue of js
-    private static $js;
+    public static $js;
 
-    // public properties - these are stored when the property goes out of scope 
+    // public properties - these are stored when the property goes out of scope
     // array of lib objects
     public $libs            = array();
     // default lib to load...
     public $default_lib     = '';
-    
-    // array of script srcs found by scope ... 
+
+    // array of script srcs found by scope ...
     public $scripts = array();
-    
-    // optionally cache results for $refresh seconds 
+
+    // optionally cache results for $refresh seconds
     public $refresh = 0;
     // keep track of last run for caching
     public $last_run = 0;
 
-/** 
+/**
  * Magic methods to make this object persistent
 **/
 
 /**
  * object constructor
- * 
+ *
  * Unless the modvar is deleted outside this object
  * this function will only ever been run once (first run)
  * so we use it to populate the initial defaults
@@ -79,7 +79,7 @@ class xarJS extends Object
  * Object wakeup
  *
  * This is called immediately after the object is unserialized
- * this function is only ever run once per page request 
+ * this function is only ever run once per page request
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
@@ -98,7 +98,7 @@ class xarJS extends Object
  * This is called whenever the object is serialized
  * this function is only ever run once per page request
  * Use it to perform operations immediately before the object goes out of scope
- * 
+ *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
  * @params none
@@ -106,7 +106,7 @@ class xarJS extends Object
  * @returns array public object properties to store values for
 **/
     public function __sleep()
-    {  
+    {
         // set the last run time before we exit
         $this->last_run = time();
         // return the array of public property names to store
@@ -116,17 +116,17 @@ class xarJS extends Object
 /**
  * Object destructor
  *
- * This method is called when the object goes out of scope, 
+ * This method is called when the object goes out of scope,
  * typically this will be when xaraya exits
  * but can be forced at any time by unsetting this object
  *
  * At this point we want to store the current object, serialized
  * To the modvar specified by the module and modvar constants
-**/        
+**/
     public function __destruct()
     {
         // basically, we serialize and set this object as a modvar
-        // xarModVars::set can be a little flaky, 
+        // xarModVars::set can be a little flaky,
         // this workaround seems to do the trick
         // NOTE: when we call serialize here, the __sleep() magic method is called
         try {
@@ -139,8 +139,8 @@ class xarJS extends Object
 
 /**
  * Prevent cloning singleton instance
- * We only ever want there to be one instance of this object 
-**/    
+ * We only ever want there to be one instance of this object
+**/
     public function __clone()
     {
         throw new ForbiddenOperationException('__clone', 'Not allowed to #(1) this singleton');
@@ -165,9 +165,9 @@ class xarJS extends Object
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
-            // try unserializing the stored modvar            
+            // try unserializing the stored modvar
             self::$instance = @unserialize(xarModVars::get(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE));
-            // fall back to new instance (first run) 
+            // fall back to new instance (first run)
             if (empty(self::$instance)) {
                 $c = __CLASS__;
                 // this is the one and only time the __construct() method will be run
@@ -175,7 +175,7 @@ class xarJS extends Object
             }
         }
         return self::$instance;
-    } 
+    }
 
     public function refresh()
     {
@@ -195,7 +195,7 @@ class xarJS extends Object
         $codeDir     = sys::code();
         $libBase     = xarJS::LIB_BASE;
         $libXml      = xarJS::LIB_XML;
-        $pluginXml   = xarJS::LIB_PLUGIN_XML; 
+        $pluginXml   = xarJS::LIB_PLUGIN_XML;
 
         $paths = array();
         // search common too
@@ -225,7 +225,7 @@ class xarJS extends Object
             $folders = $this->getFolders($path, 1);
             if (empty($folders)) continue;
             foreach (array_keys($folders) as $lib) {
-                // keep track of found libs                
+                // keep track of found libs
                 $libs[$lib] = 1;
                 // init lib if necessary
                 if (!isset($this->libs[$lib]))
@@ -239,13 +239,13 @@ class xarJS extends Object
             if (!isset($libs[$compare]))
                 unset($this->$libs[$compare]);
         }
-               
+
     }
 
-    public static function getFolders($path, $levels=0) 
+    public static function getFolders($path, $levels=0)
     {
         $folders = array();
-        try { 
+        try {
             foreach (new DirectoryIterator($path) as $item) {
                 if ($item->isDir() && !$item->isDot() &&
                     (string) $item->current() != '_MTN') {
@@ -258,7 +258,7 @@ class xarJS extends Object
         } catch (Exception $e) { }
         return $folders;
    }
-   
+
    public static function getFiles($path, $levels=0, $rel=false)
    {
        $rel=false;
@@ -274,9 +274,9 @@ class xarJS extends Object
            $parent = $base;
        }
        $exts = array('js', 'css', 'xml', 'xt');
-       try { 
+       try {
             foreach (new DirectoryIterator($path) as $item) {
-                if ($item->isFile() && !$item->isDot() && 
+                if ($item->isFile() && !$item->isDot() &&
                     in_array(pathinfo($item, PATHINFO_EXTENSION), $exts)) {
                     $fileName = (string) $item->current();
                     $files[$base][$fileName] = $item->getPathName();
@@ -287,7 +287,7 @@ class xarJS extends Object
             }
         } catch (Exception $e) { }
         return $files;
-    }          
+    }
 /**
  * Methods of this object instance
 **/
@@ -304,9 +304,9 @@ class xarJS extends Object
  *         string  $args[type] type of js to include, either src or code, optional, default src<br/>
  *         string  $args[scope] the scope in which to look for src files
  *         string  $args[code] code to include if type is code<br/>
- *         mixed   $args[filename] deprecated use $args[src] instead<br/> 
+ *         mixed   $args[filename] deprecated use $args[src] instead<br/>
  *         mixed   $args[src] array containing filename(s) or string comma delimited list<br/>
- *                 name of file(s) to include, required if type is src, or<br/> 
+ *                 name of file(s) to include, required if type is src, or<br/>
  *                 file(s) to get contents from if type is code and code isn't supplied<br/>
  *         string  $args[lib] name of js lib to load, optional
  *         string  $args[version] version of js lib to load, optional
@@ -323,7 +323,7 @@ class xarJS extends Object
 **/
 /**
  * Catch the following xar:javascript declarations
- * load some javascript source file 
+ * load some javascript source file
  * <xar:javascript [position="head"] [type="src"] src="some.js"/>
  * embed javascript using code supplied or contents of filename supplied
  * <xar:javascript [position="head"] type="code" [src="somesrc.js"|code="somecode();"] />
@@ -337,7 +337,7 @@ class xarJS extends Object
     public function register($args)
     {
         extract($args);
-        
+
         $tag = array();
         $tag['position'] = !empty($position) ? $position : 'head';
         // support deprecated use of filename parameter (for now)
@@ -346,7 +346,9 @@ class xarJS extends Object
         // try to determin scope if none supplied
         if (empty($scope)) {
             // scope can be implied by attributes
-            if (!empty($module)) {
+            if (!empty($block)) {
+                $scope = 'block';
+            } elseif (!empty($module)) {
                 // have module, presume module scope
                 $scope = 'module';
             } elseif (!empty($property)) {
@@ -364,12 +366,18 @@ class xarJS extends Object
                 $package = null;
             break;
             case 'block':
+                // catch solo block
+                if (!empty($block)) {
+                    $package = $block;
+                    $tag['block'] = $block;
+                    break;
+                }
                 // fall back to current block module calling the tag
                 if (empty($module))
                     $module = xarVarGetCached('Security.Variables', 'currentmodule');
-                // block scope falls through to module validation 
+                // block scope falls through to module validation
             case 'module':
-                // fall back to current module calling the tag 
+                // fall back to current module calling the tag
                 if (empty($module))
                     $module = xarMod::getName();
                 // got to have a module
@@ -378,22 +386,22 @@ class xarJS extends Object
                 $package = $module;
             break;
             case 'property':
-                // got to have a property in property scope 
+                // got to have a property in property scope
                 if (empty($property)) return;
                 $tag['property'] = $property;
                 $package = $property;
             break;
        }
        $tag['scope'] = $scope;
-       
-       // try to determine type param if none supplied... 
+
+       // try to determine type param if none supplied...
        if (empty($type)) {
             // type can be implied by attributes
             if (!empty($plugin)) {
                 $type = 'plugin';
             } elseif (!empty($event)) {
                 $type = 'event';
-            } elseif (!empty($lib)) {                
+            } elseif (!empty($lib)) {
                 $type = 'lib';
             } elseif (!empty($code)) {
                 $type = 'code';
@@ -454,7 +462,7 @@ class xarJS extends Object
                 $tag['base'] = !empty($base) ? $base : xarJS::SCRIPTS_BASE;
                 $tag['src'] = $src;
             break;
-            // lib            
+            // lib
             case 'lib':
                 // must have specified lib
                 if (empty($lib)) return;
@@ -481,7 +489,7 @@ class xarJS extends Object
                     return $this->queue($tag['position'], $tag['type'], $tag['scope'], $tag['code'], $tag);
                 }
                 // if code wasn't supplied fall through to src validation
-            // src 
+            // src
             case 'src':
                 // must have specified a filename as source
                 if (empty($src)) return;
@@ -493,17 +501,17 @@ class xarJS extends Object
         $tag['type'] = $type;
 
         // from here on we have source(s) to fetch
-        $files = !is_array($src) ? explode(',', $src) : $src;        
+        $files = !is_array($src) ? explode(',', $src) : $src;
 
         foreach ($files as $file) {
             // check if file is local...
             $server = xarServer::getHost();
-            if (!preg_match("!^https?://!",$file) || 
+            if (!preg_match("!^https?://!",$file) ||
                 preg_match("!://($server|localhost|127\.0\.0\.1)(:\d+|)/!",$file)) {
-                // break off any params 
-                if (strpos($file, '?') !== false) 
+                // break off any params
+                if (strpos($file, '?') !== false)
                     list($file, $params) = explode('?', $file, 2);
-                // get path relative to web root            
+                // get path relative to web root
                 $relPath = $this->findFile($scope, trim($file), $tag['base'], $package, true);
                 if (empty($relPath)) continue;
                 // if type is code or event, we want the file contents
@@ -531,7 +539,7 @@ class xarJS extends Object
             $this->queue($position, $type, $scope, $tag['url'], $tag);
         }
 
-    }    
+    }
 
 /**
  * Queue function
@@ -553,11 +561,11 @@ class xarJS extends Object
     {
         //if (empty($scope) || empty($position) || empty($type) || empty($data) || empty($tag)) return;
         if (empty($position) || empty($type) || empty($scope) || empty($data) || empty($tag)) return;
-        
+
         // keep track of javascript when we're caching
         xarCache::addJavascript($tag);
-        
-        // init the queue 
+
+        // init the queue
         if (!isset(self::$js)) {
             // scope rendering order
             $scopes = array(
@@ -575,19 +583,19 @@ class xarJS extends Object
                 'event' => $scopes,
             );
 
-            // positions                        
+            // positions
             self::$js = array(
                 'head' => $types,
                 'body' => $types,
             );
             unset($scopes); unset($types);
-        }        
+        }
         // skip unknown position/type/scope (for now)
         if (!isset(self::$js[$position][$type][$scope])) return;
-        
+
         if (empty($index))
             $index = md5($data);
-        
+
         self::$js[$position][$type][$scope][$index] = $tag;
         return true;
     }
@@ -610,10 +618,10 @@ class xarJS extends Object
     {
         extract($args);
         $javascript = array();
-        if (!empty($position) && !empty($type) && !empty($scope) && 
+        if (!empty($position) && !empty($type) && !empty($scope) &&
             isset(self::$js[$position][$type][$scope])) {
             $javascript[$position][$type][$scope] = self::$js[$position][$type][$scope];
-        } elseif (!empty($position) && !empty($type) && 
+        } elseif (!empty($position) && !empty($type) &&
             isset(self::$js[$position][$type])) {
             $javascript[$position][$type] = self::$js[$position][$type];
         } elseif (!empty($position) &&
@@ -640,11 +648,12 @@ class xarJS extends Object
  *        string  $args[type] type to render, optional
  * @return string templated output of js to render
  * @throws none
-**/    
+**/
     public function render($args)
     {
+
         $javascript = $this->getQueued($args);
-        if (empty($javascript)) return;  
+        if (empty($javascript)) return;
         $args['javascript'] = $javascript;
         $args['comments'] = !empty($args['comments']);
         return xarTpl::module('themes', 'javascript', 'render', $args);
@@ -670,12 +679,12 @@ class xarJS extends Object
     private function findFile($scope, $file, $base, $package='')
     {
         if (empty($scope) || empty($file) || empty($base)) return;
-        
+
         $themeDir = xarTpl::getThemeDir();
         $commonDir = xarTpl::getThemeDir('common');
         $codeDir = sys::code();
 
-        $paths = array();        
+        $paths = array();
         switch ($scope) {
             case 'theme':
                 // themes/theme/scripts
@@ -683,6 +692,13 @@ class xarJS extends Object
                 // themes/common/scripts
                 $paths[] = $commonDir . '/' . $base . '/' . $file;
                 break;
+            case 'block':
+                // soloblocks
+                if (empty($package)) return;
+                $paths[] = "$themeDir/blocks/$package/$base/$file";
+                $paths[] = "$commonDir/blocks/$package/$base/$file";
+                $paths[] = "{$codeDir}blocks/$package/xartemplates/$base/$file";
+            break;
             case 'module':
                 if (empty($package))
                     $package = xarMod::getName();
@@ -720,22 +736,22 @@ class xarJS extends Object
                 break;
          }
          if (empty($paths)) return;
-         
+
          foreach ($paths as $path) {
              if (!file_exists($path)) continue;
              $filePath = $path;
              break;
          }
          if (empty($filePath)) return;
-         
+
          return $filePath;
     }
-    
+
 }
 
 /**
  * Base JS Lib Class
- * 
+ *
  * This object models a JS Library
 **/
 class xarJSLib extends Object
@@ -745,7 +761,7 @@ class xarJSLib extends Object
     public $displayname;
     public $description;
     public $osdirectory;
-    
+
     // All the optional meta data for this library
     public $script        = array(); // default script
     public $style         = array(); // default style
@@ -755,13 +771,13 @@ class xarJSLib extends Object
     public $versions      = array(); // array of known versions
     public $dependencies  = array(); // array of lib dependencies
     public $events        = array(); // array of events supplied by lib
-             
+
     // Library files
-    public $scripts       = array(); // all scripts      
+    public $scripts       = array(); // all scripts
     public $styles        = array(); // all styles
     public $plugins       = array(); // all plugins
     public $templates     = array(); // all templates
-        
+
     public function __construct($name)
     {
         if (empty($name))
@@ -778,14 +794,14 @@ class xarJSLib extends Object
 **/
     private function rebuild()
     {
-             
-        
+
+
     }
 /**
  * Find library files
  * The intent here is to scan the entire filesystem looking for files
  * and folders belonging to this library
-**/  
+**/
     public function findFiles()
     {
         // we want to look in all active themes
@@ -803,7 +819,7 @@ class xarJSLib extends Object
         $codeDir     = sys::code();
         $libBase     = xarJS::LIB_BASE;
         $libXml      = xarJS::LIB_XML;
-        $pluginXml   = xarJS::LIB_PLUGIN_XML; 
+        $pluginXml   = xarJS::LIB_PLUGIN_XML;
 
         $paths = array();
         $themes[] = array('osdirectory' => 'common');
@@ -824,7 +840,7 @@ class xarJSLib extends Object
             $modOSDir = $mod['osdirectory'];
             // look in code/modules/<module>/xartemplates/lib/libname/*
             $paths['modules'][$modOSDir] = "{$codeDir}modules/{$modOSDir}/xartemplates/{$libBase}/{$libName}";
-        }    
+        }
         // find files in all lib folders, all themes, all modules, all properties
         $this->scripts = array();
         foreach ($paths as $scope => $packages) {
@@ -835,7 +851,7 @@ class xarJSLib extends Object
                 foreach ($files as $folder => $items) {
                     foreach ($items as $file => $filepath) {
                         // store script as scope - package - libbase/libname - file
-                        // eg, scripts[theme][common][lib/jquery][jquery-1.4.4.min.js] = 
+                        // eg, scripts[theme][common][lib/jquery][jquery-1.4.4.min.js] =
                         // /themes/common/lib/jquery/jquery-1.4.4.min.js
                         // init the actual tag info used to init this lib
                         $tag = array(
@@ -858,7 +874,7 @@ class xarJSLib extends Object
                         }
                         $ext = pathinfo($file, PATHINFO_EXTENSION);
                         switch ($ext) {
-                            case 'js':        
+                            case 'js':
                                 $tag['src'] = $file;
                                 $base = "{$libBase}/{$libName}";
                                 // remove the filename from the path
@@ -866,7 +882,7 @@ class xarJSLib extends Object
                                 // remove anything before the base
                                 $basepath = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
                                 // if this isn't base, keep everything after base
-                                if ($basepath != $base) 
+                                if ($basepath != $base)
                                     $base = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
                                 $tag['base'] = $base;
                                 $this->scripts[$scope][$package][$base][$file] = $tag;
@@ -885,15 +901,15 @@ class xarJSLib extends Object
                                     $this->readLibXml($filepath);
                                     //$this->xml[$scope][$package][$base][$file] = $tag;
                                 } elseif ($file == xarJS::LIB_PLUGIN_XML) {
-                                
+
                                 }
                             break;
                         }
                     }
                 }
             }
-        }        
-    }    
+        }
+    }
 
 /**
  * Read Lib XML
@@ -933,18 +949,18 @@ class xarJSLib extends Object
         $xml = simplexml_load_string($string);
         if (!$xml) return;
         return $xml;
-    }        
+    }
 
     public function getInfo()
     {
         return $this->getPublicProperties();
     }
-    
+
     private function init()
     {
-    
+
     }
-    
+
 }
 
 ?>
