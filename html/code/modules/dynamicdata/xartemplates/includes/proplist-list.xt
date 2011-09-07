@@ -147,7 +147,8 @@
                         </xar:if>
                     </select>
                     &#160;&#160;Status:&#160;
-                    <xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" id="dd_status_'.$field['id'].'" size="15" value="$field['status']"/>
+                    <xar:set name="name">'dd_status['.$field['id'].']'</xar:set>
+                    <xar:data-input property="$fieldstatusprop" name="$name" id="dd_status_'.$field['id'].'" size="15" value="$field['status']"/>
                 </td>
                 <td class="#$displayclass#">
                     &#160;
