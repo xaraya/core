@@ -38,7 +38,8 @@ function themes_adminapi_getdbthemes()
         $dbThemes[$name] = array('name'    => $name,
                                   'regid'   => $themeRegId,
                                   'version' => $themeInfo['version'],
-                                  'state'   => $themeInfo['state']);
+                                  'state'   => $themeInfo['state'],
+                                  'class'   => $themeInfo['class']);
     }
     $result->close();
 

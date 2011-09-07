@@ -74,6 +74,14 @@ function xarMain()
             xarTpl::setThemeName($themeName);
             xarVarSetCached('Themes.name','CurrentTheme', $themeName);
         }
+    // admin theme 
+    } elseif (xarUserIsLoggedIn() && $request->getType() == 'admin') {
+        $themeName = xarModVars::get('themes', 'admin_theme');
+        if (!empty($themeName) && xarThemeIsAvailable($themeName)) {
+            $themeName = xarVarPrepForOS($themeName);
+            xarTpl::setThemeName(strtolower($themeName));
+            xarVarSetCached('Themes.name','CurrentTheme', $themeName);
+        }            
     // User Override (configured in themes admin modifyconfig)
     } elseif ((bool) xarModVars::get('themes', 'enable_user_menu') == true) {
         // users are allowed to set theme in profile, get user setting...

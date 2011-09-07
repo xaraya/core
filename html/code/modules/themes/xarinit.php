@@ -42,7 +42,7 @@ function themes_init()
      *   regid int(10) INTEGER unsigned NOT NULL,
      *   directory varchar(64) NOT NULL,
      *   version varchar(10) NOT NULL,
-     *   class int(10) INTEGER NOT NULL default '0',
+     *   class tinyint INTEGER NOT NULL default '0',
      *   state tinyint(3) not null default '1'
      *   PRIMARY KEY  (id)
      * )
@@ -55,7 +55,8 @@ function themes_init()
         'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
         'version' => array('type' => 'varchar', 'size' => 10, 'null' => false, 'charset' => $charset),
         'configuration' => array('type' => 'text', 'size' => 'medium', 'null' => false, 'charset' => $charset),
-        'state' => array('type' => 'integer', 'size' => 'tiny', 'unsigned'=> true, 'null' => false, 'default' => '1')
+        'state' => array('type' => 'integer', 'size' => 'tiny', 'unsigned'=> true, 'null' => false, 'default' => '1'),
+        'class' => array('type' => 'integer', 'size' => 'tiny', 'unsigned'=> true, 'null' => false, 'default' => '0')
         );
 
     $query = xarDBCreateTable($tables['themes'], $fields);
