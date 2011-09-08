@@ -10,7 +10,7 @@
  * @link http://xaraya.com/index.php/release/200.html
  */
 
-function sql_230_02()
+function sql_230_06()
 {
     // Define parameters
     $table = xarDB::getPrefix() . '_themes';
