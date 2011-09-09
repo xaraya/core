@@ -28,6 +28,8 @@ if (!empty($systemConfiguration['rootDir'])) {
 
 set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 include 'bootstrap.php';
+sys::import('xaraya.caching');
+xarCache::init();
 sys::import('xaraya.core');
 xarCoreInit(XARCORE_SYSTEM_ALL);
 xarWebservicesMain();

@@ -32,6 +32,8 @@ if (!empty($systemConfiguration['rootDir'])) {
 
 set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 include 'bootstrap.php';
+sys::import('xaraya.caching');
+xarCache::init();
 sys::import('xaraya.core');
 
 // We need a (fake) ip address to run xar.
@@ -47,9 +49,9 @@ exit(xarLocalServicesMain($argc, $argv));
 /**
  * Entry point for local services
  *
- * Also know as the command line entry point
+ * Also known as the command line entry point
  *
- * call sign: php ./ws.php <type> [args]
+ * call sign: php ./ls.php <type> [args]
  *
  * @todo use cli/argument parsing library (perhaps getOpt from PEAR)
 **/
