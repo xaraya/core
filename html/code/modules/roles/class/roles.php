@@ -167,9 +167,9 @@ class xarRoles extends Object
      * @return object role
      * @todo cache this too?
      */
-    public static function findRole($name,$itemtype=self::ROLES_USERTYPE)
+    public static function findRole($name,$itemtype=self::ROLES_USERTYPE,$state=self::ROLES_STATE_ACTIVE)
     {
-        return self::_lookuprole('name',$name,$itemtype,$state=self::ROLES_STATE_ACTIVE);
+        return self::_lookuprole('name',$name,$itemtype,$state);
     }
 
     /**
@@ -179,9 +179,9 @@ class xarRoles extends Object
      * @return object role
      * @todo cache this too?
      */
-    public static function ufindRole($uname,$itemtype=self::ROLES_USERTYPE)
+    public static function ufindRole($uname,$itemtype=self::ROLES_USERTYPE,$state=self::ROLES_STATE_ACTIVE)
     {
-        return self::_lookuprole('uname',$uname,$itemtype,$state=self::ROLES_STATE_ACTIVE);
+        return self::_lookuprole('uname',$uname,$itemtype,$state);
     }
 
     /**
