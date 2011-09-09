@@ -87,7 +87,8 @@ function themes_adminapi_getthemelist(Array $args=array())
     $query = "SELECT themes.regid,
                      themes.name,
                      themes.directory,
-                     themes.state
+                     themes.state,
+                     themes.class
               FROM $themestable AS themes $whereClause ORDER BY $orderByClause";
 
     $stmt = $dbconn->prepareStatement($query);
@@ -114,6 +115,8 @@ function themes_adminapi_getthemelist(Array $args=array())
             xarVarSetCached('Theme.BaseInfos', $themeInfo['name'], $themeInfo);
 
             $themeFileInfo = xarTheme_getFileInfo($themeInfo['osdirectory']);
+            // @checkme: does getFileInfo ever return null or void for this to be true?
+            // @fixme: in any case, the empty fileinfo check below renders this pointless 
             if (!isset($themeFileInfo)) {
                 // Following changes were applied by <andyv> on 21st May 2003
                 // as per the patch by Garrett Hunter

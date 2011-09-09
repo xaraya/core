@@ -54,7 +54,9 @@
                     <input type="text" name="dd_label[#$field['id']#]" id="dd_label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium"/>
                 </td>
                 <td class="#$displayclass#">
-                    <xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="old_dd_type_'.$field['id'].'" value="$field['type']"/>
+                    <xar:set name="name">'dd_type['.$field['id'].']'</xar:set>
+                    <xar:set name="id">'old_dd_type_'.$field['id']</xar:set>
+                    <xar:data-input property="$fieldtypeprop" name="$name" id="$id" value="$field['type']"/>
                 </td>
                 <td class="#$displayclass#">
                     <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVarPrepForDisplay($field['defaultvalue'])#" class="xar-form-textmedium"/>
@@ -147,7 +149,9 @@
                         </xar:if>
                     </select>
                     &#160;&#160;Status:&#160;
-                    <xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" id="dd_status_'.$field['id'].'" size="15" value="$field['status']"/>
+                    <xar:set name="name">'dd_status['.$field['id'].']'</xar:set>
+                    <xar:set name="id">'dd_status_'.$field['id']</xar:set>
+                    <xar:data-input property="$fieldstatusprop" name="$name" id="$id" size="15" value="$field['status']"/>
                 </td>
                 <td class="#$displayclass#">
                     &#160;

@@ -28,12 +28,28 @@ form related styling
 text related styling
 -------------------------------------------------------------------------[comment] */
 .xar-note {
-	color: #60802d;
-	}
+    color: #60802d;
+    }
 .xar-alert {
-	color: #e10505;
-	}
+    color: #e10505;
+    }
 .xar-success {
-	color: #5f9013;
-	}
+    color: #5f9013;
+    }
 .xar-active {}
+
+/*
+legend related styling
+-------------------------------------------------------------------------[comment] */
+dl.xar-legend {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+dl.xar-legend dd, dl.xar-legend dt {
+    display: inline;
+    white-space: nowrap;
+    margin:0;
+    padding: 0 1em;
+}

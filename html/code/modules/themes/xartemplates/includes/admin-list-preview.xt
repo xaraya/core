@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<xar:if condition="!empty($themes)">
+    <form method="post" action="#xarModURL('themes', 'admin', 'list')#">
+        <xar:foreach in="$themes" value="$theme">
+            <div id="#$theme['name']#" class="xar-alt-outline" style="min-height:200px;clear:both;margin:1em 0;">
+                <div class="xar-accent" style="width: 250px;vertical-align:top;float:left;">
+                    <xar:set name="preview_img">xarTpl::getImage('preview.jpg', 'theme', $theme['directory'])</xar:set>
+                    <xar:if condition="!empty($preview_img)">
+                        <xar:template type="module" module="themes" file="showimg"/>
+                    <xar:else/>
+                        <div style="height:187px;line-height:187px;vertical-align:middle;text-align:center;">
+                            <p class="xar-info">Preview unavailable</p>                        
+                        </div>
+                    </xar:if>
+                </div>
+                <div style="margin-left:260px;">
+                    <div class="xar-row xar-alt xar-padding-thick">
+                        <div class="xar-col">
+                            Theme Name
+                        </div>
+                        <div class="xar-col">
+                            #$theme['name']#
+                        </div>                    
+                    </div>                
+                    <div class="xar-row xar-norm xar-padding-thick">
+                        <div class="xar-col">
+                            Description
+                        </div>
+                        <div class="xar-col">
+                            #$theme['description']#
+                        </div>                    
+                    </div>
+                    <div class="xar-row xar-alt xar-padding-thick">
+                        <div class="xar-col">
+                            Class
+                        </div>
+                        <div class="xar-col">
+                            #$classes[$theme['class']]['name']#
+                        </div>                    
+                    </div>
+                    <div class="xar-row xar-norm xar-padding-thick">
+                        <div class="xar-col">
+                            State
+                        </div>
+                        <div class="xar-col">
+                            #$states[$theme['state']]['name']#
+                        </div>                    
+                    </div>
+                    <xar:if condition="$theme['class'] eq 2 and $theme['state'] eq XARTHEME_STATE_ACTIVE">
+                        <div class="xar-row xar-alt xar-padding-thick">
+                            <div class="xar-col">
+                                User Default
+                            </div>
+                            <div class="xar-col">
+                                <xar:if condition="$theme['name'] eq $user_theme">
+                                    <input type="radio" name="user_theme" id="user_theme" value="#$theme['name']#" checked="checked"/>
+                                <xar:else/>
+                                    <input type="radio" name="user_theme" id="user_theme" value="#$theme['name']#"/>
+                                </xar:if>                                 
+                            </div>                    
+                        </div>
+                        <div class="xar-row xar-norm xar-padding-thick">
+                            <div class="xar-col">
+                                Admin Default
+                            </div>
+                            <div class="xar-col">
+                                <xar:if condition="$theme['name'] eq $admin_theme">
+                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$theme['name']#" checked="checked"/>
+                                <xar:elseif condition="empty($admin_theme) and $theme['name'] eq $user_theme"/>
+                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$theme['name']#" checked="checked"/>
+                                <xar:else/>
+                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$theme['name']#"/>
+                                </xar:if>                                
+                            </div>                    
+                        </div>
+                    <xar:else/>
+                        <div class="xar-row xar-alt xar-padding-thick">
+                            <div class="xar-col">
+                                User Default
+                            </div>
+                            <div class="xar-col">
+                                <input type="radio" name="user_theme" id="user_theme" disabled="disabled"/>
+                            </div>                    
+                        </div>
+                        <div class="xar-row xar-norm xar-padding-thick">
+                            <div class="xar-col">
+                                Admin Default
+                            </div>
+                            <div class="xar-col">
+                                <input type="radio" name="admin_theme" id="admin_theme" disabled="disabled"/>
+                            </div>                    
+                        </div>                    
+                    </xar:if>
+                    <div class="xar-row xar-alt xar-padding-thick">
+                        <div class="xar-col">
+                            Actions
+                        </div>
+                        <div class="xar-col">
+                            <xar:if condition="empty($useicons)">
+                                <a href="#$theme['info_url']#" title="#$infotitle#">#$infolabel#</a>&#160;
+                                <xar:if condition="!empty($theme['init_url'])">
+                                    <a href="#$theme['init_url']#" title="#$inittitle#"><img src="#$initicon#" class="xar-icon" alt="#$initlabel#"/></a>
+                                <xar:elseif condition="!empty($theme['activate_url'])"/>
+                                    <a href="#$theme['activate_url']#" title="#$activatetitle#">#$activatelabel#</a> 
+                                <xar:elseif condition="!empty($theme['deactivate_url'])"/>
+                                    <a href="#$theme['deactivate_url']#" title="#$deactivatetitle#">#$deactivatelabel#</a>
+                                <xar:elseif condition="!empty($theme['upgrade_url'])"/>
+                                    <a href="#$theme['upgrade_url']#" title="#$upgradetitle#">#$upgradelabel#</a>
+                                <xar:elseif condition="$theme['state'] eq XARTHEME_STATE_ACTIVE"/>
+                                    #$nonelabel#
+                                <xar:elseif condition="$theme['class'] eq 4"/>
+                                    #$nonelabel#
+                                <xar:else/>
+                                    #$errorlabel#
+                                </xar:if>&#160;
+                                <xar:if condition="!empty($theme['remove_url'])">
+                                    <a href="#$theme['remove_url']#" class="xar-icon" title="#$removetitle#"><img src="#$removeicon#" class="xar-icon" alt="#$removelabel#"/></a> 
+                                <xar:elseif condition="$theme['state'] eq XARTHEME_STATE_ACTIVE"/>
+                                    <img src="#$removeicon#" class="xar-icon-disabled" alt="#$removelabel#"/>
+                                <xar:else/>
+                                    <img src="#$noneicon#" class="xar-icon" alt="#$nonelabel#" title="#$nonetitle#"/>
+                                </xar:if>      
+                            <xar:else/>
+                                <a href="#$theme['info_url']#" title="#$infotitle#"><img src="#$infoicon#" class="xar-icon" alt="#$infolabel#"/></a>&#160;
+                                <xar:if condition="!empty($theme['init_url'])">
+                                    <a href="#$theme['init_url']#" class="xar-icon" title="#$inittitle#"><img src="#$initicon#" class="xar-icon" alt="#$initlabel#"/></a>
+                                <xar:elseif condition="!empty($theme['activate_url'])"/>
+                                    <a href="#$theme['activate_url']#" class="xar-icon" title="#$activatetitle#"><img src="#$activateicon#" class="xar-icon" alt="#$activatelabel#"/></a> 
+                                <xar:elseif condition="!empty($theme['deactivate_url'])"/>
+                                    <a href="#$theme['deactivate_url']#" class="xar-icon" title="#$deactivatetitle#"><img src="#$deactivateicon#" class="xar-icon" alt="#$deactivatelabel#"/></a>
+                                <xar:elseif condition="!empty($theme['upgrade_url'])"/>
+                                    <a href="#$theme['upgrade_url']#" class="xar-icon" title="#$upgradetitle#"><img src="#$upgradeicon#" class="xar-icon" alt="#$upgradelabel#"/></a>
+                                <xar:elseif condition="$theme['state'] eq XARTHEME_STATE_ACTIVE"/>
+                                    <img src="#$deactivateicon#" class="xar-icon-disabled" alt="#$deactivatelabel#" title="#$deactivatetitle#"/>
+                                <xar:elseif condition="$theme['class'] eq 4"/>
+                                    <img src="#$noneicon#" class="xar-icon" alt="#$nonelabel#" title="#$nonetitle#"/>
+                                <xar:else/>
+                                    <img src="#$erroricon#" class="xar-icon" alt="#$errorlabel#" title="#$errortitle#"/>
+                                </xar:if>&#160;
+                                <xar:if condition="!empty($theme['remove_url'])">
+                                    <a href="#$theme['remove_url']#" class="xar-icon" title="#$removetitle#"><img src="#$removeicon#" class="xar-icon" alt="#$removelabel#"/></a> 
+                                <xar:elseif condition="$theme['state'] eq XARTHEME_STATE_ACTIVE"/>
+                                    <img src="#$removeicon#" class="xar-icon-disabled" alt="#$removelabel#" title="#$removetitle#"/>
+                                <xar:else/>
+                                    <img src="#$noneicon#" class="xar-icon" alt="#$nonelabel#" title="#$nonetitle#"/>
+                                </xar:if>                            
+                            </xar:if>                            
+                        </div>                    
+                    </div>
+                </div>
+            </div>                
+        </xar:foreach>
+        <xar:if condition="$class gt 1">
+            <xar:var name="submitLabel">Update Themes</xar:var>
+        </xar:if>
+        <xar:if condition="!empty($submitLabel)">
+        <fieldset>
+            <div class="xar-align-center">
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="phase" id="phase" value="update"/>
+                <input type="submit" value="#$submitLabel#"/>
+            </div>
+        </fieldset>
+        </xar:if>
+    </form>
+<xar:else/>
+    <p class="xar-info">No themes found matching selection</p> 
+</xar:if>
+</xar:template>

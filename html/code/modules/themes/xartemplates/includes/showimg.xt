@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:image-resize src="$modinfo[preview]" label="xarML('Preview image for this theme')" width="250px" height="187px" constrain="true" class="xar-alt-outline"/>
+<xar:if condition="!empty($preview_img)">
+    <xar:var name="img_alt">Preview image for this theme</xar:var>
+    <xar:if condition="xarModIsAvailable('images')">
+        <xar:image-resize src="$preview_img" label="$img_alt" width="250px" height="187px" constrain="true" class="xar-alt-outline"/>
+    <xar:else/>
+        <img src="#$preview_img#" title="#$img_alt#" width="250px" height="187px"/>
+    </xar:if>
+<xar:else/>
+    No preview available
+</xar:if> 
 </xar:template>

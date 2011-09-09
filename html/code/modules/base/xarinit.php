@@ -176,7 +176,7 @@ function base_init()
     } else {
         xarConfigVars::set(null, 'Site.Core.EnableSecureServer', false);
     }
-    xarConfigVars::set(null, 'Site.Core.SecureServerPort', "i:443;");
+    xarConfigVars::set(null, 'Site.Core.SecureServerPort', "443");
 
     xarConfigVars::set(null, 'Site.Core.LoadLegacy', false);
     xarConfigVars::set(null, 'Site.Session.SecurityLevel', 'Medium');
