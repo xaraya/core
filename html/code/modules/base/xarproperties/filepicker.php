@@ -27,6 +27,9 @@ class FilePickerProperty extends SelectProperty
     public $validation_file_extensions   = '';
     public $validation_matches           = '';
     public $display_fullname             = false;
+    
+    public $file_extension_list         = array();
+    public $file_extension_regex        = '';
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -139,6 +142,7 @@ class FilePickerProperty extends SelectProperty
 
     /**
      * Validate the given filename against the list/regex of allowed file extensions
+     * This method can take an extension or a full file name
      */
     public function validateExtension($filename = '')
     {
