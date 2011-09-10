@@ -444,8 +444,6 @@ function dynamicdata_init()
 # Set up modvars
 #
     xarModVars::set('dynamicdata', 'items_per_page', 20);
-// CHECKME: syntax error for short urls ?
-    xarModVars::set('dynamicdata', 'shorturla', 0);
     xarModVars::set('dynamicdata', 'use_module_alias',0);
     xarModVars::set('dynamicdata', 'module_alias_name','Query');
     xarModVars::set('dynamicdata', 'debugmode', 0);
