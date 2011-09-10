@@ -5,31 +5,52 @@
     <div class="xar-mod-body">
     <div class="xar-mod-page-head">
         <xar:if condition="!empty($object) and $object:objectid eq 1">
-            <xar:set name="label">'DataObjects'</xar:set>
+            <xar:var name="label">DataObjects</xar:var>
         </xar:if>
         <xar:if condition="!empty($object) and !empty($object:objectid)">
             <xar:set name="newlink">xarModURL('dynamicdata','admin','new',array('objectid' => $object->objectid))</xar:set>
         <xar:else/>
             <xar:set name="newlink">xarModURL('dynamicdata','admin','new',array('table' => $table))</xar:set>
         </xar:if>
-            <h2>View #$label#&#160;</h2>
-            <ul class="xar-mod-actions">
+        <h2>View #$label#&#160;</h2>
+
+        <dl class="xar-legend" style="text-align: left">
             <xar:if condition="$object:checkAccess('config')">
-                <li>
-	                <xar:set name="proplink">xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $object->objectid))</xar:set>
-	                <a class="xar-icon xar-icon-modify-config" href="#$proplink#" title="Configure #$label#">
-	                    Configure #$label#
-	                </a>
-               	</li>
+                <dd>
+                    <xar:set name="proplink">xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $object->objectid))</xar:set>
+                    <a class="xar-icon xar-icon-modify-config" href="#$proplink#" title="Configure #$label#">
+                        <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
+                            <img src="#xarTpl::getImage('icons/modify-config.png','base')#" class="xar-icon" alt="Configure #$label#"/>
+                        <xar:else/>
+                            Configure #$label#
+                        </xar:if>
+                    </a>
+                </dd>
             </xar:if>
             <xar:if condition="$object:checkAccess('create')">
-                <li>
-	                <a class="xar-icon xar-icon-add" href="#$newlink#" title="Create New Item in #$label#">
-	                    Create New Item in #$label#
-	                </a>
-                </li>
+                <dd>
+                    <a class="xar-icon xar-icon-add" href="#$newlink#" title="Create New Item in #$label#">
+                        <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
+                            <img src="#xarTpl::getImage('icons/document-new.png','base')#" class="xar-icon" alt="Create New Item in #$label#"/>
+                        <xar:else/>
+                            Create New Item in #$label#
+                        </xar:if>
+                    </a>
+                </dd>
             </xar:if>
-            </ul><!--/xar-mod-actions-->
+            <xar:if condition="!empty($querylink)">
+                <dd>
+                    <a href="#$querylink#">
+                        <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
+                            <img src="#xarTpl::getImage('icons/info.png','base')#" class="xar-icon" alt="Query #$label#"/>
+                        <xar:else/>
+                            Query #$label#
+                        </xar:if>
+                    </a>
+                </dd>
+            </xar:if>
+        </dl>
+
         </div><!--/xar-mod-page-head-->
         <!--
             this does all the hard work
@@ -47,13 +68,6 @@
             <xar:data-view layout="$layout" object="$object" param="$urlparam" newlink=""/>
         <xar:else />
             <xar:data-view layout="$layout" module="$module_id" itemtype="$itemtype" join="$join" table="$table" param="$urlparam" numitems="$numitems" startnum="$startnum" catid="$catid" sort="$sort"/>
-        </xar:if>
-        <xar:if condition="!empty($querylink)">
-            <div class="xar-mod-foot">
-	            <ul class="xar-mod-actions">
-	                <li><a href="#$querylink#">Query #$label#</a></li>
-	            </ul>
-            </div><!--/xar-mod-foot-->
         </xar:if>
     </div>
 </xar:template>
