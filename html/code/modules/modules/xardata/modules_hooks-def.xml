@@ -7,16 +7,20 @@
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
+  <datastore>relational</datastore>
   <access>a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:5:{i:0;i:5;i:1;i:2;i:2;i:1;i:3;i:3;i:4;i:4;}s:6:"update";a:1:{i:0;i:2;}s:6:"create";a:1:{i:0;i:2;}s:6:"delete";a:1:{i:0;i:2;}s:6:"config";a:1:{i:0;i:2;}}";}</access>
   <config>a:0:{}</config>
   <isalias>true</isalias>
+  <sources>a:1:{s:5:&quot;hooks&quot;;s:9:&quot;xar_hooks&quot;;}</sources>
+  <relations>a:0:{}</relations>
+  <objects>a:0:{}</objects>
   <properties>
     <property name="id">
       <id>142</id>
       <label>ID</label>
       <type>itemid</type>
       <defaultvalue></defaultvalue>
-      <source>xar_hooks.id</source>
+      <source>hooks.id</source>
       <status>67</status>
       <seq>1</seq>
       <configuration></configuration>
@@ -26,7 +30,7 @@
       <label>Object</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_hooks.object</source>
+      <source>hooks.object</source>
       <status>65</status>
       <seq>2</seq>
       <configuration></configuration>
@@ -46,7 +50,7 @@
       <label>Action</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_hooks.action</source>
+      <source>hooks.action</source>
       <status>65</status>
       <seq>4</seq>
       <configuration></configuration>
@@ -56,7 +60,7 @@
       <label>Subject Module</label>
       <type>module</type>
       <defaultvalue></defaultvalue>
-      <source>xar_hooks.s_module_id</source>
+      <source>hooks.s_module_id</source>
       <status>65</status>
       <seq>5</seq>
       <configuration></configuration>
@@ -66,7 +70,7 @@
       <label>Subject Type</label>
       <type>integerbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_hooks.s_type</source>
+      <source>hooks.s_type</source>
       <status>65</status>
       <seq>6</seq>
       <configuration></configuration>
@@ -76,7 +80,7 @@
       <label>Observer Module</label>
       <type>module</type>
       <defaultvalue></defaultvalue>
-      <source>xar_hooks.t_module_id</source>
+      <source>hooks.t_module_id</source>
       <status>65</status>
       <seq>7</seq>
       <configuration></configuration>
@@ -86,7 +90,7 @@
       <label>Observer Type</label>
       <type>integerbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_hooks.t_type</source>
+      <source>hooks.t_type</source>
       <status>65</status>
       <seq>8</seq>
       <configuration></configuration>
@@ -96,7 +100,7 @@
       <label>Observer Function</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_hooks.t_func</source>
+      <source>hooks.t_func</source>
       <status>65</status>
       <seq>9</seq>
       <configuration></configuration>
