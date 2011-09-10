@@ -60,7 +60,7 @@
                         </span>#$resettagsurlstatus#
                     </div>
                 </div>
-                <div class="xar-form-actions"">
+                <div class="xar-form-actions">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <xar:var name="label">Submit</xar:var>
                     <xar:button type="submit" label="$label"/>
