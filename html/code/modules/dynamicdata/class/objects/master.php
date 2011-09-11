@@ -1188,6 +1188,8 @@ class DataObjectMaster extends Object
             try {
                 $relationargs = unserialize($descriptor->get('relations'));
                 foreach ($relationargs as $key => $value) {
+                    $join = "";
+                    
                     // Support simple array form
 //                    if (is_array($value)) $value = current($value);
                     // Remove any spaces and similar chars
@@ -1220,6 +1222,9 @@ class DataObjectMaster extends Object
                             $join = 'leftjoin';
                         }                        
                     }
+                    
+                    // If no join was defined, then this is a bad realtion: ignore
+                    if (empty($join)) continue;
                     
                     // Add this relation's join to the object's dataquery
                     if ($prefix) $this->dataquery->{$join}($object->name . "_" . $left,$object->name . "_" . $right);
