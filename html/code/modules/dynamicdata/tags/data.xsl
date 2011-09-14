@@ -243,7 +243,7 @@
                 </xsl:call-template>
                 <xsl:text>);</xsl:text>
                 <xsl:if test="@values">
-                  <xsl:value-of select="@values"/><xsl:text>=$__items</xsl:text>
+                  <xsl:value-of select="@values"/><xsl:text>=$__items;</xsl:text>
                 </xsl:if>
                 
                 <xsl:if test="@properties">
@@ -269,7 +269,7 @@
                 </xsl:call-template>
                 <xsl:text>);</xsl:text>
                 <xsl:if test="@values">
-                  <xsl:value-of select="@values"/><xsl:text>=$__items</xsl:text>
+                  <xsl:value-of select="@values"/><xsl:text>=$__items;</xsl:text>
                 </xsl:if>
 
                 <xsl:if test="@properties">
