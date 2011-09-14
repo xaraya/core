@@ -229,14 +229,19 @@
             <xsl:choose>
               <xsl:when test="substring(@object,1,1) = '$'">
                 <!-- This a variable. we assume it's an object -->
-                <xsl:value-of select="@values"/><xsl:text>=</xsl:text>
-                <xsl:value-of select="@object"/><xsl:text>-&gt;getItems(</xsl:text>
-                <xsl:call-template name="atts2args">
-                  <xsl:with-param name="nodeset" select="@*[name() != 'properties' and name()!='values' and name()!='object']"/>
-                </xsl:call-template>
-                <xsl:text>);</xsl:text>
-                <xsl:value-of select="@properties"/><xsl:text>=</xsl:text>
-                <xsl:value-of select="@object"/><xsl:text>->getProperties();</xsl:text>
+                <xsl:if select="@values">
+                  <xsl:value-of select="@values"/><xsl:text>=</xsl:text>
+                  <xsl:value-of select="@object"/><xsl:text>-&gt;getItems(</xsl:text>
+                  <xsl:call-template name="atts2args">
+                    <xsl:with-param name="nodeset" select="@*[name() != 'properties' and name()!='values' and name()!='object']"/>
+                  </xsl:call-template>
+                  <xsl:text>);</xsl:text>
+                </xsl:if>
+                
+                <xsl:if select="@properties">
+                  <xsl:value-of select="@properties"/><xsl:text>=</xsl:text>
+                  <xsl:value-of select="@object"/><xsl:text>->getProperties();</xsl:text>
+                </xsl:if>
               </xsl:when>
               <xsl:otherwise>
                 <!-- This a string. we assume it's an object name -->
@@ -246,18 +251,22 @@
                 <xsl:text>=DataObjectMaster::getObjectList(array('name'=>'</xsl:text>
                 <xsl:value-of select="@objectname"/>
                 <xsl:text>'));</xsl:text>
-                <xsl:value-of select="@values"/><xsl:text>=</xsl:text>
-                <xsl:text>$__</xsl:text>
-                <xsl:value-of select="@objectname"/>
-                <xsl:text>-&gt;getItems(</xsl:text>
-                <xsl:call-template name="atts2args">
-                  <xsl:with-param name="nodeset" select="@*[name() != 'properties' and name()!='values' and name()!='objectname']"/>
-                </xsl:call-template>
-                <xsl:text>);</xsl:text>
-                <xsl:value-of select="@properties"/><xsl:text>=</xsl:text>
-                <xsl:text>$__</xsl:text>
-                <xsl:value-of select="@objectname"/>
-                <xsl:text>->getProperties();</xsl:text>
+                
+                <xsl:if select="@values">
+                  <xsl:value-of select="@values"/><xsl:text>=</xsl:text>
+                  <xsl:text>$__object</xsl:text>
+                  <xsl:text>-&gt;getItems(</xsl:text>
+                  <xsl:call-template name="atts2args">
+                    <xsl:with-param name="nodeset" select="@*[name() != 'properties' and name()!='values' and name()!='objectname']"/>
+                  </xsl:call-template>
+                  <xsl:text>);</xsl:text>
+                </xsl:if>
+
+                <xsl:if select="@properties">
+                  <xsl:value-of select="@properties"/><xsl:text>=</xsl:text>
+                  <xsl:text>$__object</xsl:text>
+                  <xsl:text>->getProperties();</xsl:text>
+                </xsl:if>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:otherwise>
