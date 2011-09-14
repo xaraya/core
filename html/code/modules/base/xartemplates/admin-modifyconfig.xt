@@ -551,11 +551,9 @@
             <xar:elseif condition="$tab eq 'locales'"/>
                 <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                     <xar:template file="modifyconfig-locales" module="base" type="module"/>
-                    <fieldset class="xar-form-input-hidden">
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                        <input type="hidden" name="phase" id="phase" value="update"/>
-                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                    </fieldset>
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                     <div class="xar-form-actions">
                         <div class="xar-row">
                             <div class="xar-col"></div>
@@ -659,15 +657,19 @@
                         </div>
                     </div>
                     -->
-                    <div class="xar-col dummy xar-padding-topthick">
-                        <xar:set name="checked">
-                            <xar:var scope="config" name="Site.Core.LoadLegacy"/>
-                        </xar:set>
-                        <xar:data-input type="checkbox" name="loadlegacy" id="loadlegacy" checked="$checked"/>
-                        <xar:var name="label">Load Legacy Support for Xaraya1x/BlockLayout1 functions</xar:var>
-                        <label for="loadlegacy" title="#$label#">
-                            Enable Legacy Support
-                        </label>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Load Legacy Support for Xaraya1x/BlockLayout1 functions</xar:var>
+                            <label for="loadlegacy" title="#$label#">
+                                Enable Legacy Support
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="checked">
+                                <xar:var scope="config" name="Site.Core.LoadLegacy"/>
+                            </xar:set>
+                            <xar:data-input type="checkbox" name="loadlegacy" id="loadlegacy" checked="$checked"/>
+                        </div>
                     </div>
                 </fieldset>
                 <fieldset>
