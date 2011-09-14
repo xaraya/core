@@ -24,9 +24,12 @@ class FilePickerProperty extends SelectProperty
     public $desc       = 'File Picker';
 
     public $initialization_basedirectory;
-    public $validation_file_extensions   = '';
+    public $validation_file_extensions   = '';          // holds a string of comma delimited extensions
     public $validation_matches           = '';
     public $display_fullname             = false;
+    
+    public $file_extension_list         = array();      // holds an array of filename extensions
+    public $file_extension_regex        = '';           // holds a string of type 'jpg|gif|png'
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -139,6 +142,7 @@ class FilePickerProperty extends SelectProperty
 
     /**
      * Validate the given filename against the list/regex of allowed file extensions
+     * This method can take an extension or a full file name
      */
     public function validateExtension($filename = '')
     {
