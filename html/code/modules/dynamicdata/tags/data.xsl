@@ -229,7 +229,7 @@
             <xsl:choose>
               <xsl:when test="substring(@object,1,1) = '$'">
                 <!-- This a variable. we assume it's an object -->
-                <xsl:if select="@values">
+                <xsl:if test="@values">
                   <xsl:value-of select="@values"/><xsl:text>=</xsl:text>
                   <xsl:value-of select="@object"/><xsl:text>-&gt;getItems(</xsl:text>
                   <xsl:call-template name="atts2args">
@@ -238,7 +238,7 @@
                   <xsl:text>);</xsl:text>
                 </xsl:if>
                 
-                <xsl:if select="@properties">
+                <xsl:if test="@properties">
                   <xsl:value-of select="@properties"/><xsl:text>=</xsl:text>
                   <xsl:value-of select="@object"/><xsl:text>->getProperties();</xsl:text>
                 </xsl:if>
@@ -252,7 +252,7 @@
                 <xsl:value-of select="@objectname"/>
                 <xsl:text>'));</xsl:text>
                 
-                <xsl:if select="@values">
+                <xsl:if test="@values">
                   <xsl:value-of select="@values"/><xsl:text>=</xsl:text>
                   <xsl:text>$__object</xsl:text>
                   <xsl:text>-&gt;getItems(</xsl:text>
@@ -262,7 +262,7 @@
                   <xsl:text>);</xsl:text>
                 </xsl:if>
 
-                <xsl:if select="@properties">
+                <xsl:if test="@properties">
                   <xsl:value-of select="@properties"/><xsl:text>=</xsl:text>
                   <xsl:text>$__object</xsl:text>
                   <xsl:text>->getProperties();</xsl:text>
