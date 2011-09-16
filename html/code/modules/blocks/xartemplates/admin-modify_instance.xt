@@ -228,17 +228,16 @@
                                         <div class="xar-row">
                                             <div class="xar-col">
                                                 <label for="group_templates_#$loop:item.id#" class="xar-form-label" title="#xarML('Group specific outer and inner templates for this block')#">
-                                                    <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['bid']))#" title="#xarML('Modify this group')#">#xarVarPrepForDisplay($loop:item['name'])#</a> Group:
+                                                    Group:&#160;<a href="#xarModURL('blocks', 'admin', 'modify_instance', array('bid' => $loop:item['bid']))#" title="#xarML('Modify this group')#">#xarVarPrepForDisplay($loop:item['name'])#</a>
                                                 </label>
-                                                <div class="xar-form-container-after">
                                                 <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
-                                                <!-- don't allow outer templates in blockgroups -->
-                                                <xar:if condition="$instance['type'] ne 'blockgroup'">
-                                                    <label for="block_template_outer">Outer:</label>&#160;
-                                                    <input type="text" name="group_templates[#$loop:item.id#][outer]" id="group_templates_#$loop:item.id#_outer" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($loop:item.template_outer)#"/>&#160;
-                                                <xar:else/>
-                                                <input type="hidden" name="group_templates[#$loop:item.id#][outer]" id="group_templates_#$loop:item.id#_outer" value=""/>
-                                                </xar:if>
+                                                    <!-- don't allow outer templates in blockgroups -->
+                                                    <xar:if condition="$instance['type'] ne 'blockgroup'">
+                                                        <label for="block_template_outer">Outer:</label>&#160;
+                                                        <input type="text" name="group_templates[#$loop:item.id#][outer]" id="group_templates_#$loop:item.id#_outer" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($loop:item.template_outer)#"/>&#160;
+                                                    <xar:else/>
+                                                        <input type="hidden" name="group_templates[#$loop:item.id#][outer]" id="group_templates_#$loop:item.id#_outer" value=""/>
+                                                    </xar:if>
                                                     <label for="block_template_inner">Inner:</label>&#160;
                                                     <input type="text" name="group_templates[#$loop:item.id#][inner]" id="group_templates_#$loop:item.id#_inner" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($loop:item.template_inner)#"/>&#160;
                                                     <xar:if condition="$group_method eq 'min'">
@@ -260,50 +259,45 @@
                                                         </label>
                                                     </xar:if>
                                                 </xar:if>
-                                                </div>
                                             </div>
 	                                    </div>
 	                                </xar:if>
 	                            </xar:loop>
-	                            </xar:if>
-	                            <xar:if condition="$group_method eq 'min'">
-	                            <!-- Provide a 'new group' drop-down list.-->
-                                    <div class="xar-row">
-                                        <div class="xar-col">
-                                            <label for="block_new_group" title="#xarML('Add this block instance to the selected block group.')#" class="xar-form-label">
-                                                Add To Group:
-                                            </label>
-                                        </div>
-                                        <div class="xar-col">
-                                            <select name="block_new_group" id="block_new_group">
-                                                <option value="" selected="selected">
-                                                        -- no new group --
-                                                </option>
-                                                <xar:loop name="$block_groups">
-                                                    <xar:if condition="empty($loop:item['selected']) and $loop:item['name'] ne $instance['name']">
-                                                        <option value="#$loop:item['id']#">
-                                                            #xarVarPrepForDisplay($loop:item['name'])#
-                                                        </option>
-                                                    </xar:if>
-                                                </xar:loop>
-                                            </select>
-                                        </div>
-	                            <div class="xar-col">
-	                                <label for="block_template" title="#xarML('Block specific outer and inner templates')#" class="xar-form-label">
-	                                    Instance Template (optional):
-	                                </label>
-	                                <div class="xar-form-container-after">
-                                    <!-- don't allow outer templates in blockgroups -->
-                                    <xar:if condition="$instance['type'] ne 'blockgroup'">
-	                                    <label for="block_template_outer">Outer:</label>&#160;
-	                                    <input type="text" name="block_template_outer" id="block_template_outer" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($instance['template_outer'])#"/>&#160;
-                                    <xar:else/>
-                                    <input type="hidden" name="block_template_outer" id="block_template_outer" value=""/>
-                                    </xar:if>
-	                                    <label for="block_template_inner">Inner:</label>&#160;
-	                                    <input type="text" name="block_template_inner" id="block_template_inner" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($instance['template_inner'])#"/>
-	                                </div>
-	                            </div>
+	                        </xar:if>
+                            <xar:if condition="$group_method eq 'min'">
+                            <!-- Provide a 'new group' drop-down list.-->
+                                <div class="xar-row">
+                                    <div class="xar-col">
+                                        <label for="block_new_group" title="#xarML('Add this block instance to the selected block group.')#" class="xar-form-label">
+                                            Add To Group:
+                                        </label>
+                                        <select name="block_new_group" id="block_new_group">
+                                            <option value="" selected="selected">
+                                                -- no new group --
+                                            </option>
+                                            <xar:loop name="$block_groups">
+                                                <xar:if condition="empty($loop:item['selected']) and $loop:item['name'] ne $instance['name']">
+                                                    <option value="#$loop:item['id']#">
+                                                        #xarVarPrepForDisplay($loop:item['name'])#
+                                                    </option>
+                                                </xar:if>
+                                            </xar:loop>
+                                        </select>
+                                    </div>
+                                    <div class="xar-col">
+                                        <label for="block_template" title="#xarML('Block specific outer and inner templates')#">
+                                            Instance Template (optional):
+                                        </label>&#160;
+                                        <!-- don't allow outer templates in blockgroups -->
+                                        <xar:if condition="$instance['type'] ne 'blockgroup'">
+                                            <label for="block_template_outer">Outer:</label>&#160;
+                                            <input type="text" name="block_template_outer" id="block_template_outer" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($instance['template_outer'])#"/>&#160;
+                                        <xar:else/>
+                                            <input type="hidden" name="block_template_outer" id="block_template_outer" value=""/>
+                                        </xar:if>
+                                        <label for="block_template_inner">Inner:</label>&#160;
+                                        <input type="text" name="block_template_inner" id="block_template_inner" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($instance['template_inner'])#"/>
+                                    </div>
 	                            </div>
 	                        </xar:if>
 	
