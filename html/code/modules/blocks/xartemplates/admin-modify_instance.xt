@@ -7,30 +7,30 @@
 	        <h2>Modify Block</h2>
 	    </div>
         <form action="#xarModURL('blocks', 'admin', 'update_instance')#" method="post" enctype="application/x-www-form-urlencoded">
-	            <!-- block tabs -->
-	            <xar:if condition="!empty($blocktabs)">
-	                <xar:style scope="theme" file="navtabs"/>
-	                <div>
-	                    <ul class="xar-tabs xar-alt xar-norm-outline">
-	                        <li class="xar-tabs-label help" title="#xarML('Choose an action to perform')#">Actions:</li>
-	                        <xar:foreach in="$blocktabs" key="$tabname" value="$tablink">
-	                            <xar:if condition="($tab eq $tabname) or (empty($tab) and $tabname eq 'config')">
-	                                <xar:set name="tabclass">'xar-tab-active'</xar:set>
-	                                <xar:set name="linkclass">''</xar:set>
-	                            <xar:else/>
-	                                <xar:set name="tabclass">'xar-tab'</xar:set>
-	                                <xar:set name="linkclass">''</xar:set>
-	                            </xar:if>
-	                            <li class="#$tabclass#">
-	                                <a href="#$tablink.url#" title="#$tablink.title#" class="#$linkclass#">
-	                                #$tablink.label#</a>
-	                            </li>
-	                        </xar:foreach>
-	                    </ul>
-	                </div>
-	            </xar:if>
-	            
-	            <div class="xar-mod-page-body">
+            <!-- block tabs -->
+            <xar:if condition="!empty($blocktabs)">
+                <xar:style scope="theme" file="navtabs"/>
+                <div>
+                    <ul class="xar-tabs xar-alt xar-norm-outline">
+                        <li class="xar-tabs-label help" title="#xarML('Choose an action to perform')#">Actions:</li>
+                        <xar:foreach in="$blocktabs" key="$tabname" value="$tablink">
+                            <xar:if condition="($tab eq $tabname) or (empty($tab) and $tabname eq 'config')">
+                                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                                <xar:set name="linkclass">''</xar:set>
+                            <xar:else/>
+                                <xar:set name="tabclass">'xar-tab'</xar:set>
+                                <xar:set name="linkclass">''</xar:set>
+                            </xar:if>
+                            <li class="#$tabclass#">
+                                <a href="#$tablink.url#" title="#$tablink.title#" class="#$linkclass#">
+                                #$tablink.label#</a>
+                            </li>
+                        </xar:foreach>
+                    </ul>
+                </div>
+            </xar:if>
+            
+            <div class="xar-mod-page-body">
 	            <h3>Block Configuration</h3>
 	
 	            <!-- show block properties when not in the config tab -->
@@ -223,26 +223,6 @@
 	                            Block Groups and Group Templates
 	                        </legend>
 	                        <xar:if condition="!empty($block_groups)">
-	                            <xar:if condition="$group_method eq 'min'">
-	                            <!-- Provide a 'new group' drop-down list.-->
-	                                <div class="xar-col">
-	                                    <label for="block_new_group" title="#xarML('Add this block instance to the selected block group.')#" class="xar-form-label">
-	                                        Add To Group:
-	                                    </label>
-	                                    <select name="block_new_group" id="block_new_group">
-	                                        <option value="" selected="selected">
-	                                                -- no new group --
-	                                        </option>
-	                                        <xar:loop name="$block_groups">
-	                                            <xar:if condition="empty($loop:item['selected']) and $loop:item['name'] ne $instance['name']">
-	                                                <option value="#$loop:item['id']#">
-	                                                    #xarVarPrepForDisplay($loop:item['name'])#
-	                                                </option>
-	                                            </xar:if>
-	                                        </xar:loop>
-	                                    </select>
-	                                </div>
-	                            </xar:if>
 	                            <xar:loop name="$block_groups">
 	                                <xar:if condition="$group_method eq 'max' or !empty($loop:item['selected'])">
                                         <div class="xar-row">
@@ -285,6 +265,29 @@
 	                                    </div>
 	                                </xar:if>
 	                            </xar:loop>
+	                            </xar:if>
+	                            <xar:if condition="$group_method eq 'min'">
+	                            <!-- Provide a 'new group' drop-down list.-->
+                                    <div class="xar-row">
+                                        <div class="xar-col">
+                                            <label for="block_new_group" title="#xarML('Add this block instance to the selected block group.')#" class="xar-form-label">
+                                                Add To Group:
+                                            </label>
+                                        </div>
+                                        <div class="xar-col">
+                                            <select name="block_new_group" id="block_new_group">
+                                                <option value="" selected="selected">
+                                                        -- no new group --
+                                                </option>
+                                                <xar:loop name="$block_groups">
+                                                    <xar:if condition="empty($loop:item['selected']) and $loop:item['name'] ne $instance['name']">
+                                                        <option value="#$loop:item['id']#">
+                                                            #xarVarPrepForDisplay($loop:item['name'])#
+                                                        </option>
+                                                    </xar:if>
+                                                </xar:loop>
+                                            </select>
+                                        </div>
 	                            <div class="xar-col">
 	                                <label for="block_template" title="#xarML('Block specific outer and inner templates')#" class="xar-form-label">
 	                                    Instance Template (optional):
@@ -300,6 +303,7 @@
 	                                    <label for="block_template_inner">Inner:</label>&#160;
 	                                    <input type="text" name="block_template_inner" id="block_template_inner" maxlength="127" class="xar-form-text-medium" value="#xarVarPrepForDisplay($instance['template_inner'])#"/>
 	                                </div>
+	                            </div>
 	                            </div>
 	                        </xar:if>
 	
@@ -417,7 +421,7 @@
                         </div>
 	                </div>
 	            </xar:if>
-        </div>
+            </div>
         </form>
     </div>
 </xar:template>
