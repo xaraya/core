@@ -173,7 +173,7 @@ class DataObjectMaster extends Object
         
         // Explode the access rules
         try{
-            $this->access_rules = unserialize($this->access);
+            $this->access_rules = unserialize($this->access);            
         } catch (Exception $e) {}
     }
 
@@ -1343,19 +1343,16 @@ class DataObjectMaster extends Object
                 break;
         }
 
-        // CHECKME: use access checks similar to blocks here someday ?
-
         // unserialize access levels if necessary
-        if (!empty($this->access_rules) && is_string($this->access_rules)) {
-            try {
-                $this->access_rules = unserialize($this->access_rules);
-            } catch (Exception $e) {
-                $this->access_rules = array();
-            }
+        try {
+            $access_rules = unserialize($this->access_rules['access']);
+        } catch (Exception $e) {
+            $access_rules = array();
         }
 
+        // DD specific access scheme 
         // check if we have specific access rules for this level
-        if (!empty($this->access_rules) && is_array($this->access_rules) && !empty($this->access_rules[$level])) {
+        if (!empty($access_rules) && is_array($access_rules) && !empty($access_rules[$level])) {
             if (empty($roleid) && xarUserIsLoggedIn()) {
                 // get the direct parents of the current user (no ancestors)
                 $grouplist = xarCache::getParents();
@@ -1368,7 +1365,7 @@ class DataObjectMaster extends Object
             }
             foreach ($grouplist as $groupid) {
                 // list of groups that have access at this level
-                if (in_array($groupid, $this->access_rules[$level])) {
+                if (in_array($groupid, $access_rules[$level])) {
                     // one group having access is enough here !
                     return true;
                 }
@@ -1414,6 +1411,5 @@ class DataObjectMaster extends Object
         return self::$access_property->check($args);
 */
     }
-
 }
 ?>

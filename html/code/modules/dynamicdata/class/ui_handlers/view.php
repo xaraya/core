@@ -82,7 +82,7 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
 
         $this->object->getItems();
 
-$this->object->callHooks('view');
+        $this->object->callHooks('view');
 
         $output = xarTpl::object(
             $this->tplmodule, $this->object->template, 'ui_view',

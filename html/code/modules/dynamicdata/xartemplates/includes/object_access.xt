@@ -2,30 +2,6 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-<!--
-    <fieldset>
-        <legend>
-            DataObject Display Access
-        </legend>
-        <xar:set name="propname">$object->name . '_display'</xar:set>
-        <xar:data-input type="access" name="$propname" value="$display_access"/>
-    </fieldset>
-    <fieldset>
-        <legend>
-            DataObject Modify Access
-        </legend>
-        <xar:set name="propname">$object->name . '_modify'</xar:set>
-        <xar:data-input type="access" name="$propname" value="$modify_access"/>
-    </fieldset>
-    <fieldset>
-        <legend>
-            DataObject Delete Access
-        </legend>
-        <xar:set name="propname">$object->name . '_delete'</xar:set>
-        <xar:data-input type="access" name="$propname" value="$delete_access"/>
-    </fieldset>
--->
-
     <![CDATA[
     <script type="text/javascript">
         function dd_toggle_checkboxes(pattern)
