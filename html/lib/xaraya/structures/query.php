@@ -799,8 +799,8 @@ class Query
             }
         }
         $this->cstring = trim($this->cstring);
-        if (substr($this->cstring,0,1) == '(') 
-            $this->cstring = substr($this->cstring,1,strlen($this->cstring)-2);
+//        if (substr($this->cstring,0,1) == '(') 
+//            $this->cstring = substr($this->cstring,1,strlen($this->cstring)-2);
         return $this->cstring;
     }
 
@@ -1934,6 +1934,52 @@ class Query
             array_shift($links);            
         }
         return $tables;
+    }
+    
+    public function suppressTable($thistable) 
+    {
+        // Remove this table from the list of tables
+        foreach ($this->tables as $key => $table) {
+            if ($table['name'] == $thistable) {
+                $thistable = $table['alias'];
+                unset($this->tables[$key]);
+                break;
+            } elseif ($table['alias'] == $thistable) {
+                unset($this->tables[$key]);
+                break;
+            }
+        }
+        
+        // Remove links with this table
+        foreach ($this->tablelinks as $key => $link) {
+            $field1 = $this->_deconstructfield($link['field1']);
+            $field2 = $this->_deconstructfield($link['field2']);
+
+            if (($field1['table'] == $thistable) || ($field2['table'] == $thistable)) {
+                unset($this->tablelinks[$key]);
+            }
+        }
+        
+        // Remove fields that reference this table
+        foreach ($this->fields as $key => $field) {
+            if ($field['table'] == $thistable) unset($this->fields[$key]);
+        }
+
+        // Remove conditions that reference this table
+        foreach ($this->conditions as $key => $condition) {
+            try {
+                $field = $this->_deconstructfield($condition['field1']);
+                if ($field['table'] == $thistable) unset($this->conditions[$key]);
+                break;
+            } catch (Exception $e) {}
+            try {
+                $field = $this->_deconstructfield($condition['field2']);
+                if ($field['table'] == $thistable) unset($this->conditions[$key]);
+                break;
+            } catch (Exception $e) {}
+        }
+
+        return true;
     }
 }
 ?>
