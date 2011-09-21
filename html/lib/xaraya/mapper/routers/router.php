@@ -21,8 +21,7 @@ class xarRouter extends Object
     
     public function addRoute($name, xarRoute $route) 
     {
-        $this->routes[$name] = $route;
-        
+        $this->routes[$name] = $route;        
         return true;
     }
 

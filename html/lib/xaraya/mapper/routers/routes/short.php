@@ -19,10 +19,6 @@ class ShortRoute extends xarRoute
 {
     protected $validModule  = false;
 
-    protected $moduleKey    = 'module';
-    protected $typeKey      = 'type';
-    protected $funcKey      = 'func';
-
     public function __construct(Array $defaults=array(), xarDispatcher $dispatcher=null)
     {
         if (isset($dispatcher)) $this->dispatcher = $dispatcher;
