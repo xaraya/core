@@ -1295,7 +1295,7 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
 
 function xarTpl_includeThemeTemplate($templateName, $tplData)
 {
-    return xarTpl::includeThemeTemplate($templateName,$tpleData);
+    return xarTpl::includeThemeTemplate($templateName,$tplData);
 }
 
 function xarTpl_includeModuleTemplate($modName, $templateName, $tplData, $propertyName='')
