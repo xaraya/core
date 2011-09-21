@@ -13,6 +13,20 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
+/**
+ * This route assumes a URL of the form
+ *
+ * [protocol][host][entrypoint] /part1/part2... ? [param1]=[value1]&[param2]=[value2]...
+ *
+ * 1. Well formed protocol, host and entry point are required
+ * 2. The entry point is folowed by one or more parts separated by slashes ("/")
+ * 3. The first part encountered is considered to indicate the module and is validated as such
+ * 4. The second part encountered is considered to indicate the function
+ * 5. Subsequent parts are added in pairs, where the first is assumed to be a key and the second a value
+ * 6. The type is ignored. If "admin" is present as the function then the encode/decode methods will treat this as a backend URL
+ * 7. Further key/value pairs can be added after the "?"
+**/
+
 sys::import('xaraya.mapper.routers.routes.base');
 
 class ShortRoute extends xarRoute
@@ -27,12 +41,16 @@ class ShortRoute extends xarRoute
 
     public function match(xarRequest $request, $partial=false)
     {
+        // Set the keys for module/type/func as per the current request, and the default values in xarController
         $this->setRequestKeys();
 
-        $parts = array();
-        $params = array();
-        
+        // Get the request's URL string
         $path = $request->getURL();
+
+        $params = array();
+        $parts = array();
+        
+        // Get everything between the entry point and the beginning of the query part of the URL
         if ($pos = strpos($path, '?')) $path = substr($path, 0, $pos);
         $path = substr($path, strlen(xarServer::getBaseURL() . $request->entryPoint));
         if (empty($path)) return false;
@@ -43,6 +61,7 @@ class ShortRoute extends xarRoute
             $matchedPath = $path;
         }
 
+        // Get the module part and validate it. Can be an alias; the dispatcher should know
         $path = explode($this->delimiter, $path);
         if ($this->dispatcher && $this->dispatcher->isValidModule($path[0])) {
             $request->setModule(array_shift($path));
@@ -50,11 +69,13 @@ class ShortRoute extends xarRoute
             $this->validModule = true;
         }
 
+        // Get the function part
         if (count($path) && !empty($path[0])) {
             $request->setFunction(array_shift($path));
             $parts[$this->funcKey] = $request->getFunction();
         }
 
+        // Get any more parts as key/value pairs separated by "/"
         if ($numSegs = count($path)) {
             for ($i = 0; $i < $numSegs; $i = $i + 2) {
                 $key = urldecode($path[$i]);
@@ -64,7 +85,11 @@ class ShortRoute extends xarRoute
         }
         
         if ($partial) $this->setMatchedPath($matchedPath);
+        
+        // Add all the parts together
         $this->parts = $parts + $params;
+        
+        // Add in any missing parts as defaults
         return $this->parts + $this->defaults;
     }
 }

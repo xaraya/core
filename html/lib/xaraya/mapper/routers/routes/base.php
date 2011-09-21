@@ -45,8 +45,8 @@ class xarRoute extends Object implements iRoute
     {
         if (null !== $this->request) {
             if ($this->request->moduleKey) $this->moduleKey   = $this->request->moduleKey;
-            if ($this->request->typeKey) $this->typeKey     = $this->request->typeKey;
-            if ($this->request->funcKey) $this->funcKey     = $this->request->funcKey;
+            if ($this->request->typeKey) $this->typeKey       = $this->request->typeKey;
+            if ($this->request->funcKey) $this->funcKey       = $this->request->funcKey;
         }
 
         $this->defaults += array(

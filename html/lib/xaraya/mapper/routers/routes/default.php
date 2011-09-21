@@ -13,6 +13,17 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
+/**
+ * This route assumes a URL of the form
+ *
+ * [protocol][anything] ? module=[value1]&type=[value2]&funk=[value3]...
+ *
+ * 1. If the stuff after ? is empty, then the default values shown below are used
+ * 2. If the stuff after ? is not empty, a module param must be supplied
+ * 3. If type or func params are missing in the URL, they are given the default values below
+ * 4. The order of the params is irrelvant
+**/
+
 sys::import('xaraya.mapper.routers.routes.base');
 
 class DefaultRoute extends xarRoute
@@ -29,11 +40,16 @@ class DefaultRoute extends xarRoute
 
     public function match(xarRequest $request, $partial=false)
     {
+        // Set the keys for module/type/func as per the current request, and the default values in xarController
         $this->setRequestKeys();
 
+        // Get the request's URL string
         $path = $request->getURL();
-        $urlparts = parse_url($path);
+        
         $params = array();
+        
+        // Parse the query part of the URL
+        $urlparts = parse_url($path);
         if (empty($urlparts['query'])) return false;
         //Note that the explode depends on  &amp;
         $pairs = explode('&amp;', $urlparts['query']);
@@ -43,16 +59,24 @@ class DefaultRoute extends xarRoute
             if (empty($parts[1])) return false;
             $params[$parts[0]] = urldecode($parts[1]);
         }
-        if (empty($params['module'])) return false;
+                
+        // If we don't have a module param, bail
+        if (empty($params[$this->moduleKey])) return false;
         
-        $this->parts['module'] = $params['module'];
-        unset($params['module']);
-        if (empty($params['type'])) $params['type'] = 'user';
-        $this->parts['type'] = $params['type'];
-        unset($params['type']);
-        if (empty($params['func'])) $params['func'] = 'main';
-        $this->parts['func'] = $params['func'];
-        unset($params['func']);
+        // Get the module
+        $this->parts[$this->moduleKey] = $params[$this->moduleKey];
+        unset($params[$this->moduleKey]);
+        
+        // Get the type; assign the default if not given
+        if (empty($params[$this->typeKey])) $params[$this->typeKey] = $this->defaults[$this->typeKey];
+        $this->parts[$this->typeKey] = $params[$this->typeKey];
+        unset($params[$this->typeKey]);
+        
+        // Get the func; assign the default if not given
+        if (empty($params[$this->funcKey])) $params[$this->funcKey] = $this->defaults[$this->funcKey];
+        $this->parts[$this->funcKey] = $params[$this->funcKey];
+        unset($params[$this->funcKey]);
+        
         $this->parts['params'] = $params;
         
         $request->setRoute('default');
