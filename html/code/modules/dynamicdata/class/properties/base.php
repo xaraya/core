@@ -38,18 +38,18 @@ class DataProperty extends Object implements iDataProperty
     public $template = '';
     public $layout = '';
     public $tplmodule = 'dynamicdata';
-    public $configuration = '';
-    public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
-    public $args         = array(); //args that hold alias info
-    public $anonymous = 0;        // if true the name, rather than the dd_xx designation is used in displaying the property
+    public $configuration = 'a:0:{}';
+    public $dependancies = '';           // semi-colon seperated list of files that must be present for this property to be available (optional)
+    public $args         = array();      //args that hold alias info
+    public $anonymous = 0;               // if true the name, rather than the dd_xx designation is used in displaying the property
 
-    public $datastore = '';    // name of the data store where this property comes from
-    public $operation = null;  // some operation or function to apply for this property (COUNT, SUM, ...)
-    public $aliasname = null;  // the aliasname used with the operation or function on this property
+    public $datastore = '';              // name of the data store where this property comes from
 
-    public $value = null;      // value of this property for a particular DataObject
-    public $invalid = '';      // result of the checkInput/validateValue methods
-    public $fieldname = null;  // fieldname used by checkInput() for configurations who need them (e.g. file uploads)
+    public $value          = null;       // value of this property for a particular DataObject
+    public $previous_value = null;       // previous value of this property (if supported)
+    public $filter         = 'nofilter'; // value of the filter of this property (if it is part of a filter layout)
+    public $invalid        = '';         // result of the checkInput/validateValue methods
+    public $basetype       = 'string';   // the primitive data type of this property
 
     public $include_reference = 0; // tells the object this property belongs to whether to add a reference of itself to me
     public $objectref = null;  // object this property belongs to
@@ -80,7 +80,7 @@ class DataProperty extends Object implements iDataProperty
 
         $descriptor->refresh($this);
         // load the configuration, if one exists
-        if (!empty($this->configuration)) {
+        if (!empty($this->configuration) && ($this->configuration != 'a:0:{}')) {
             $this->parseConfiguration($this->configuration);
         }
 
@@ -148,10 +148,10 @@ class DataProperty extends Object implements iDataProperty
                 $storename = $modvarmodule . '__' . $this->name;
                 $storetype = 'modulevars';
                 break;
-            case 'dummy':
+            case 'none':
                 // no data storage
-                $storename = '_dummy_';
-                $storetype = 'dummy';
+                $storename = '_none_';
+                $storetype = 'none';
                 break;
             default:
                 // Nothing specific, perhaps a table?
@@ -234,7 +234,16 @@ class DataProperty extends Object implements iDataProperty
                 return null;
             }
         }
-       return $this->validateValue($value);
+
+        // Check for a filter option if found save it
+//        list($found,$filter) = $this->fetchValue($name. '_filteroption');
+//        if ($found) $this->filter = $filter;
+
+        // Check for a previous if found save it
+        list($found,$previous_value) = $this->fetchValue('previous_value_' . $name);
+        if ($found) $this->previous_value = $previous_value;
+
+        return $this->validateValue($value);
     }
 
     /**
@@ -295,11 +304,25 @@ class DataProperty extends Object implements iDataProperty
      *
      * @param int $itemid
      * @param mixed value
+     * @param integer fordisplay
      */
-    function setItemValue($itemid, $value)
+    function setItemValue($itemid, $value, $fordisplay=0)
     {
         $this->value = $value;
-        $this->_items[$itemid][$this->name] = $this->value;
+        switch ($fordisplay) {
+            case 0:
+                $this->_items[$itemid][$this->name] = $this->value;
+            break;
+            case 1:
+                $this->_items[$itemid][$this->name] = $this->getValue();
+            break;
+            case 2:
+                $this->_items[$itemid][$this->label] = $this->value;
+            break;
+            case 3:
+                $this->_items[$itemid][$this->label] = $this->getValue();
+            break;
+        }
     }
 
     /**
@@ -476,7 +499,7 @@ class DataProperty extends Object implements iDataProperty
         
         $data['label'] = isset($data['label']) ? xarVarPrepForDisplay($data['label']) : xarVarPrepForDisplay($this->label);
         // Allow 0 as a fieldprefix
-        if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0)  $data['fieldprefix'] = $this->_fieldprefix;
+        if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0)  $data['fieldprefix'] = $this->_fieldprefix;
         // A field prefix added here can override the previous one
         if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
         if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
@@ -486,6 +509,57 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
         if(!isset($data['title']))   $data['title']   = $this->display_tooltip;
         return xarTpl::property($data['tplmodule'], $data['template'], 'label', $data);
+    }
+
+    /**
+     * Show the filter options for this property
+     *
+     * @param $data['filters'] an array of filter options for the property 
+     * @param $data['for'] label id to use for this property (id, name or nothing)
+     * @return string containing the HTML (or other) text to output in the BL template
+     */
+    function showFilter(Array $data=array())
+    {
+        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) return "";
+        
+        $data['id']    = $this->id;
+        $data['name']  = $this->name;
+        
+        // This is the array of all possible filter options
+        $filteroptions = array(
+                            '=' => array('id' => '=', 'name' => xarML('equals')),
+                            '!=' => array('id' => '!=', 'name' => xarML('not equals')),
+                            '>' => array('id' => '>', 'name' => xarML('greater than')),
+                            '>=' => array('id' => '>=', 'name' => xarML('greater than or equal')),
+                            '<' => array('id' => '<', 'name' => xarML('less than')),
+                            '<=' => array('id' => '<=', 'name' => xarML('less than or equal')),
+                            'like' => array('id' => 'like', 'name' => xarML('like')),
+                            'notlike' => array('id' => 'notlike', 'name' => xarML('not like')),
+                            'null' => array('id' => 'null', 'name' => xarML('is null')),
+                            'notnull' => array('id' => 'notnull', 'name' => xarML('is not null')),
+                            'regex' => array('id' => 'regex', 'name' => xarML('regular expression')),
+                        );
+
+        $data['filters'] = isset($data['filters']) ? $data['filters'] : array();
+        
+        // Explicitly cater to the most common basetypes so as to avoid duplication in the extensions
+        if ($this->basetype == 'number') $data['filters'] = array('=','!=','>','>=','<','<=','like','notlike','null','notnull');
+        elseif ($this->basetype == 'string') $data['filters'] = array('=','!=','like','notlike','null','notnull','regex');
+        
+        // Now create the filter options for the dropdown
+        $data['options'] = array();
+        foreach ($data['filters'] as $filter) $data['options'][] = $filteroptions[$filter];
+        
+        $data['value'] = isset($data['filter']) ? $data['filter'] : $this->filter;
+        if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0)  $prefix = $this->_fieldprefix . '_';
+        // A field prefix added here can override the previous one
+        if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
+        if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
+        if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
+        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
+        if(!isset($data['template'])) $data['template'] = $this->template;
+        if(!isset($data['layout']))   $data['layout']   = $this->layout;
+        return xarTplProperty($data['tplmodule'], $data['template'], 'filter', $data);
     }
 
     /**
@@ -504,7 +578,7 @@ class DataProperty extends Object implements iDataProperty
         // Add the object's field prefix if there is one
         $prefix = '';
         // Allow 0 as a fieldprefix
-        if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0)  $prefix = $this->_fieldprefix . '_';
+        if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0)  $prefix = $this->_fieldprefix . '_';
         // A field prefix added here can override the previous one
         if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
         if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
@@ -811,6 +885,15 @@ class DataProperty extends Object implements iDataProperty
         // A field prefix added here can override the previous one
         if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
         return $prefix;
+    }
+
+    public function addToObject($data=array())
+    {
+        return true;
+    }
+    public function removeFromObject($data=array())
+    {
+        return true;
     }
 
     public static function getRegistrationInfo()
