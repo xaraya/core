@@ -100,7 +100,7 @@
                             <xar:if condition="empty($useicons)">
                                 <a href="#$theme['info_url']#" title="#$infotitle#">#$infolabel#</a>&#160;
                                 <xar:if condition="!empty($theme['init_url'])">
-                                    <a href="#$theme['init_url']#" title="#$inittitle#"><img src="#$initicon#" class="xar-icon" alt="#$initlabel#"/></a>
+                                    <a href="#$theme['init_url']#" title="#$inittitle#">#$initlabel#</a>
                                 <xar:elseif condition="!empty($theme['activate_url'])"/>
                                     <a href="#$theme['activate_url']#" title="#$activatetitle#">#$activatelabel#</a> 
                                 <xar:elseif condition="!empty($theme['deactivate_url'])"/>
@@ -115,11 +115,11 @@
                                     #$errorlabel#
                                 </xar:if>&#160;
                                 <xar:if condition="!empty($theme['remove_url'])">
-                                    <a href="#$theme['remove_url']#" class="xar-icon" title="#$removetitle#"><img src="#$removeicon#" class="xar-icon" alt="#$removelabel#"/></a> 
+                                    <a href="#$theme['remove_url']#" class="xar-icon" title="#$removetitle#">#$removelabel#</a> 
                                 <xar:elseif condition="$theme['state'] eq XARTHEME_STATE_ACTIVE"/>
-                                    <img src="#$removeicon#" class="xar-icon-disabled" alt="#$removelabel#"/>
+                                    #$nonelabel#
                                 <xar:else/>
-                                    <img src="#$noneicon#" class="xar-icon" alt="#$nonelabel#" title="#$nonetitle#"/>
+                                    #$nonelabel#
                                 </xar:if>      
                             <xar:else/>
                                 <a href="#$theme['info_url']#" title="#$infotitle#"><img src="#$infoicon#" class="xar-icon" alt="#$infolabel#"/></a>&#160;
