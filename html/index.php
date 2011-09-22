@@ -58,7 +58,7 @@ function xarMain()
     // Load the core with all optional systems loaded
     xarCoreInit(XARCORE_SYSTEM_ALL);
 
-    // Get the object that models this request
+    // Create the object that models this request
     $request = xarController::getRequest();
     xarController::normalizeRequest();
 
