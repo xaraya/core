@@ -616,26 +616,6 @@
             <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Legacy Support</legend>
-                    <!--
-                    <div class="xar-row">
-                        <div class="xar-col">
-                            <xar:var name="label">WYSIWYG Editors</xar:var>
-                            <label for="editor" title="#$label##"
-                            class="xar-form-label">WYSIWYG Editors:</label>
-                            <select name="editor" id="editor" size="1">
-                                <xar:loop name="$editors">
-                                    <xar:if condition="$editor eq $loop:item['displayname']">
-                                        <option value="#$loop:item['displayname']#"
-                                        selected="selected">#$loop:item['displayname']#</option>
-                                        <xar:else />
-                                        <option value="#$loop:item['displayname']#">
-                                        #$loop:item['displayname']#</option>
-                                    </xar:if>
-                                </xar:loop>
-                            </select>
-                        </div>
-                    </div>
-                    -->
                     <div class="xar-row">
                         <div class="xar-col">
                             <xar:var name="label">Load Legacy Support for Xaraya1x/BlockLayout1 functions</xar:var>
