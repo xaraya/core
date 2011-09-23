@@ -247,28 +247,26 @@ function authsystem_user_login()
             xarModUserVars::set('roles','userlastlogin',time()); //this is what everyone else will see
 
             $externalurl=false; //used as a flag for userhome external url
-            if ((bool)xarModVars::get('roles', 'loginredirect')) { //only redirect to home page if this option is set
-                $settings = explode(',',xarModVars::get('roles', 'duvsettings'));
-                if (in_array('userhome', $settings)) {
-                    $truecurrenturl = xarServer::getCurrentURL(array(), false);
-                    $url = xarMod::apiFunc('roles','user','getuserhome',array('itemid' => $user['id']));
-                    if (empty($url)) {
-                        $urldata['redirecturl'] = xarModURL(xarModVars::get('modules','defaultmodule'),xarModVars::get('modules','defaulttypename'),xarModVars::get('modules','defaultfuncname'));
-                        $urldata['externalurl'] = false;
-                    } else {
-                        /* move the half page of code out to a Roles function. No need to repeat everytime it's used*/
-                        $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
-                    }
-                    $data = array();
-                    if (!is_array($urldata) || !$urldata) {
-                        $externalurl = false;
-                        $redirecturl = xarServer::getBaseURL();
-                    } else{
-                        $externalurl = $urldata['externalurl'];
-                        $redirecturl = $urldata['redirecturl'];
-                    }
+            if ((bool)xarModVars::get('roles', 'loginredirect')) {
+                $truecurrenturl = xarServer::getCurrentURL(array(), false);
+                $url = xarMod::apiFunc('roles','user','getuserhome',array('itemid' => $user['id']));
+                if (empty($url)) {
+                    $urldata['redirecturl'] = xarModURL(xarModVars::get('modules','defaultmodule'),xarModVars::get('modules','defaulttypename'),xarModVars::get('modules','defaultfuncname'));
+                    $urldata['externalurl'] = false;
+                } else {
+                    /* move the half page of code out to a Roles function. No need to repeat everytime it's used*/
+                    $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
                 }
-            } //end get homepage redirect data
+                $data = array();
+                if (!is_array($urldata) || !$urldata) {
+                    $externalurl = false;
+                    $redirecturl = xarServer::getBaseURL();
+                } else{
+                    $externalurl = $urldata['externalurl'];
+                    $redirecturl = $urldata['redirecturl'];
+                }
+            }
+            
             if ($externalurl) {
                 /* Open in IFrame - works if you need it */
                 /* $data['page'] = $redirecturl;

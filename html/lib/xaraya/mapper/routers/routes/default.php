@@ -55,9 +55,9 @@ class DefaultRoute extends xarRoute
         $pairs = explode('&amp;', $urlparts['query']);
         foreach($pairs as $pair) {
             if (trim($pair) == '') continue;
-            $parts = explode('=', $pair);
-            if (empty($parts[1])) return false;
-            $params[$parts[0]] = urldecode($parts[1]);
+            $pairparts = explode('=', $pair);
+            if (empty($pairparts[1])) return false;
+            $params[$pairparts[0]] = urldecode($pairparts[1]);
         }
                 
         // If we don't have a module param, bail

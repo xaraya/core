@@ -30,18 +30,20 @@ function roles_userapi_getuserhome(Array $args=array())
     $userhome = !empty($lastresort) ? '[base]' : xarModUserVars::get('roles','userhome',$itemid);
 
     // otherwise look for the role's userhome
-    $notdone = true;
-    if (!isset($userhome) || empty($userhome) || ($userhome == 'undefined')) {
+    if (empty($userhome) || ($userhome == 'undefined')) {
+        $notdone = true;
         $userhome = "";
-        $settings = explode(',',xarModVars::get('roles', 'duvsettings'));
-        if (in_array('primaryparent', $settings)) {
-            // go for the primary parent's userhome
-            $parentid = xarModItemVars::get('roles','primaryparent',$itemid);
-            if (!empty($parentid)) {
-               return xarMod::apiFunc('roles','user','getuserhome',array('itemid' => $parentid));
+        try {
+            $settings = explode(',',xarModVars::get('roles', 'duvsettings'));
+            if (in_array('primaryparent', $settings)) {
+                // go for the primary parent's userhome
+                $parentid = xarModItemVars::get('roles','primaryparent',$itemid);
+                if (!empty($parentid)) {
+                   return xarMod::apiFunc('roles','user','getuserhome',array('itemid' => $parentid));
+                }
             }
-    }
-    if ($notdone) {
+        } catch (Exception $e) {}
+        if ($notdone) {
            // take the first userhome url encountered.
            // TODO: what would be a more logical choice?
             $role = xarRoles::get($itemid);
