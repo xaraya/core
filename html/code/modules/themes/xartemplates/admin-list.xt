@@ -97,7 +97,7 @@
             <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>        
         </div>
     </div>
-    <xar:if condition="$useicons eq true">
+    <xar:if condition="!empty($useicons)">
         <div class="xar-mod-foot">
         	<dl class="xar-legend">
         		<dt>Legend</dt>
