@@ -142,6 +142,7 @@ function roles_init()
     xarModVars::set('roles', 'allowuserhomeedit', false);
     xarModVars::set('roles', 'loginredirect', true);
     xarModVars::set('roles', 'allowexternalurl', false);
+    xarModVars::set('roles', 'searchbyemail', false);
     xarModVars::set('roles', 'allowemail', false);
     xarModVars::set('roles', 'requirevalidation', true);
     

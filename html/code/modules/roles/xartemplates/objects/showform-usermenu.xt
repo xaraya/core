@@ -51,7 +51,6 @@
                 <p class="xar-form-container-after">You will be redirected to your homepage whenever you log in</p>
                 </xar:if>
             </xar:if>
-            <!-- revisit in php5.3.0
             <xar:if condition="in_array('usertimezone',$settings)">
                 <div class="xar-row">
                     <div class="xar-col">
@@ -62,7 +61,6 @@
                     </div>
                 </div>
             </xar:if>
-            -->
             <xar:if condition="(bool)xarModVars::get('roles', 'allowemail') == true">
             <div class="xar-row">
                 <div class="xar-col">
@@ -112,7 +110,7 @@
         -->
         <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
         <fieldset>
-        <legend>Member Options</legend>
+            <legend>Member Options</legend>
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:data-label property="$properties['usereditaccount']" for="id"/>
@@ -126,11 +124,10 @@
                     <xar:data-label property="$properties['allowemail']" for="id"/>
                 </div>
                 <div class="xar-col">
-                    <xar:data-input property="$properties['allowemail']"/>
+                    <xar:data-input property="$properties['allowemail']"/>&#160;
+                    Allows members to send emails via a form to other users. Users must switch this option on in their own account.
                 </div>
             </div>
-            <p class="xar-form-container-after">Allows members to send an email via a form
-            to other users. Users must switch this option on in their own account.</p>
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:data-label property="$properties['requirevalidation']" for="id"/>
@@ -138,18 +135,17 @@
                 <div class="xar-col">
                     <xar:data-input property="$properties['requirevalidation']"/>
                 </div>
-            </div>
-
+            </div>    
         </fieldset>
         <fieldset>
-        <legend>Members List Options</legend>
+            <legend>Members List Options</legend>
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:data-label property="$properties['displayrolelist']" for="id"/>
                 </div>
                 <div class="xar-col">
-                    <xar:data-input property="$properties['displayrolelist']"/>
-                    <p class="xar-form-container-after">Note: This enables access to the members list for everyone. Roles administrators can always access this list.</p>
+                    <xar:data-input property="$properties['displayrolelist']"/>&#160;
+                    This enables access to the members list for everyone. Roles administrators can always access this list.
                 </div>
             </div>
             <div class="xar-row">
@@ -157,45 +153,50 @@
                     <xar:data-label property="$properties['searchbyemail']" for="id"/>
                 </div>
                 <div class="xar-col">
-                    <xar:data-input property="$properties['searchbyemail']"/>
-                    <p class="xar-form-container-after">CAUTION: this may reveal enough information to compromise a user's login.</p>
+                    <xar:data-input property="$properties['searchbyemail']"/>&#160;
+                    Caution: this may reveal enough information to compromise a user's login.
                 </div>
             </div>
         </fieldset>
         <fieldset>
-        <legend>Homepage Options</legend>
-        <xar:if condition="in_array('userhome', $settings)">
-            <div class="xar-row">
-                <div class="xar-col">
-                    <xar:data-label property="$properties['allowuserhomeedit']" for="id"/>
-                    <xar:data-input property="$properties['allowuserhomeedit']"/>
-                    <p class="xar-form-container-after">Allow users to set their homepage in their user settings.</p>
+            <legend>User Home Page Options</legend>
+            <xar:if condition="in_array('userhome', $settings)">
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:data-label property="$properties['allowuserhomeedit']" for="id"/>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input property="$properties['allowuserhomeedit']"/>&#160;
+                        Allow users to set their homepage in their user settings.
+                    </div>
                 </div>
-            </div>
-            <div class="xar-row">
-                <div class="xar-col">
-                    <xar:data-label property="$properties['allowexternalurl']" for="id"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:data-label property="$properties['allowexternalurl']" for="id"/>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input property="$properties['allowexternalurl']"/>&#160;
+                        Allow users to set their homepage to an external url.
+                    </div>
                 </div>
-                <div class="xar-col">
-                    <xar:data-input property="$properties['allowexternalurl']"/>
-                    <p class="xar-form-container-after">Allow users to set their homepage to an external url.</p>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:data-label property="$properties['loginredirect']" for="id"/>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input property="$properties['loginredirect']"/>&#160;
+                        Automatically redirect users to their home page when they log in.
+                    </div>
                 </div>
-            </div>
-            <div class="xar-row">
-                <div class="xar-col">
-                    <xar:data-label property="$properties['loginredirect']" for="id"/>
+            <xar:else />
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Allow users to set a home page in their user settings.
+                        <br />
+                        To activate click on the User Home Page checkbox <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'duvs'))#">here</a>
+                    </div>
                 </div>
-                <div class="xar-col">
-                    <xar:data-input property="$properties['loginredirect']"/>
-                    <p class="xar-form-container-after">Automatically redirect users to their home page when they log in.</p>
-                </div>
-            </div>
-        <xar:else />
-            <p class="xar-form-container-after">
-            Allow users to set Home Page in their user settings.
-            <br />(options for Home Page are only available if the dynamic roles user
-            variable 'userhome' is activated)</p>
-        </xar:if>
+            </xar:if>
         </fieldset>
 
     <xar:else />

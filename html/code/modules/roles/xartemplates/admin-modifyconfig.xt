@@ -307,23 +307,21 @@
                         <xar:module main="false" module="modules" type="admin" func="hooks" curhook="roles" return_url="$url"/>
                     </fieldset>
                 <!--
-                    - - - - - - - - - - - - - - - - - Begin Member List Options - - - - - - - - - - - - - - - - - - -
+                    - - - - - - - - - - - - - - - - - Begin Member Options - - - - - - - - - - - - - - - - - - -
                 -->
                 <xar:elseif condition="$tab eq 'memberlist'"/>
                 <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
-                    <fieldset>
-                        <!-- display the default settings properties -->
-                        <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="admin"/>
-                        <!-- if you add more roles_user_settings properties you can display them
-                            using the $user_settings object and specifying the fieldlist of
-                            your properties, see example below
-                        -->
-                        <!--
-                            <xar:set name="mylist">array('foo','bar')</xar:set>
-                            <h4>More Settings</h4>
-                            <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="default" fieldlist="$mylist"/>
-                        -->
-                    </fieldset>
+                    <!-- display the default settings properties -->
+                    <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="admin"/>
+                    <!-- if you add more roles_user_settings properties you can display them
+                        using the $user_settings object and specifying the fieldlist of
+                        your properties, see example below
+                    -->
+                    <!--
+                        <xar:set name="mylist">array('foo','bar')</xar:set>
+                        <h4>More Settings</h4>
+                        <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="default" fieldlist="$mylist"/>
+                    -->
                     <div class="xar-form-actions">
                         <div class="xar-row">
                             <div class="xar-col"></div>
@@ -338,7 +336,7 @@
                     </div>
                 </form>
                 <!--
-                    - - - - - - - - - - - - - - - - - Begin Member List Options - - - - - - - - - - - - - - - - - - -
+                    - - - - - - - - - - - - - - - - - Begin Debugging Options - - - - - - - - - - - - - - - - - - -
                 -->
                 <xar:elseif condition="$tab eq 'debugging'"/>
                 <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
@@ -353,6 +351,10 @@
                             <div class="xar-col" style="padding-bottom: 10px;">
                                 Debug administrtors will see exceptions and error messages when debug mode in a given module is activated.<br/>
                                 Enter a list of user names separated by commas. Incorrect user names  will be ignored.<br />
+                            </div>
+                        </div>
+                        <div class="xar-row">
+                            <div class="xar-col" style="padding-bottom: 10px;">
                                 <xar:var name="label">These users can see the Query debug messages</xar:var>
                                 <label for="debugadmins" title="#$label#" class="xar-form-label">
                                     Debug Mode Admins:
