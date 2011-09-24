@@ -148,8 +148,10 @@ class DataObject extends DataObjectMaster implements iDataObject
         $isvalid = true;
         if (!empty($args['fields'])) {
             $fields = $args['fields'];
+        } elseif (!empty($args['fieldlist'])) {
+            $fields = $args['fieldlist'];
         } else {
-            $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+            $fields = !empty($this->fieldlist) ? $this->fieldlist : $this->getFieldList();
         }
 
         $this->missingfields = array();
@@ -462,11 +464,13 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         $args = $this->getFieldValues();
         $args['itemid'] = $this->itemid;
+        $fieldlist = $this->getFieldList();
         foreach(array_keys($this->datastores) as $store)
         {
             // Execute any property-specific code first
             if ($store != '_dummy_') {
-                foreach ($this->datastores[$store]->fields as $property) {
+                foreach ($this->datastores[$store]->fields as $key => $property) {
+                    if (!in_array($key, $fieldlist)) continue;
                     if (method_exists($property,'updatevalue')) {
                         $property->updateValue($this->itemid);
                     }
