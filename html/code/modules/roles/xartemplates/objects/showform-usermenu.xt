@@ -34,24 +34,29 @@
         <!--
             This is the layout used to display the form that users see for the roles_user_settings object
         -->
+        <h2>Edit Settings</h2>
         <xar:set name="settings">explode(',',xarModVars::get('roles', 'duvsettings'))</xar:set>
-        <xar:set name="id">xarUserGetVar('id')</xar:set>
         <fieldset>
             <legend>#$object->label#</legend>
+            <xar:set name="optionsactive">false</xar:set>
+            
             <xar:if condition="in_array('userhome',$settings) and (bool)xarModVars::get('roles','allowuserhomeedit') eq true">
+                <xar:set name="optionsactive">true</xar:set>
                 <div class="xar-row">
                     <div class="xar-col">
                         <xar:data-label property="$properties['userhome']" for="id"/>
                     </div>
                     <div class="xar-col">
                         <xar:data-input property="$properties['userhome']"/>
+                        <xar:if condition="(bool)xarModVars::get('roles', 'loginredirect')">&#160;
+                            You will be redirected to your homepage whenever you log in
+                        </xar:if>
                     </div>
-                </div>
-                <xar:if condition="(bool)xarModVars::get('roles', 'loginredirect')">
-                <p class="xar-form-container-after">You will be redirected to your homepage whenever you log in</p>
-                </xar:if>
+               </div>
             </xar:if>
+            
             <xar:if condition="in_array('usertimezone',$settings)">
+                <xar:set name="optionsactive">true</xar:set>
                 <div class="xar-row">
                     <div class="xar-col">
                         <xar:data-label property="$properties['usertimezone']" for="id"/>
@@ -61,45 +66,41 @@
                     </div>
                 </div>
             </xar:if>
+            
             <xar:if condition="(bool)xarModVars::get('roles', 'allowemail') == true">
-            <div class="xar-row">
-                <div class="xar-col">
-                    <xar:var name="label">Allow users to send you emails?</xar:var>
-                    <label for="#$properties['allowemail']->id#" title="#$label#">
-                        Allow other users to send you an email via a form?
-                    </label>
-                </div>
-                <div class="xar-col">
-                    <xar:data-input property="$properties['allowemail']"/>
-                </div>
-            </div>
-            <p class="xar-col dummy">
-                Note your email address is never disclosed or displayed in this process.
-            </p>
-            </xar:if>
-            <xar:if condition="in_array('passwordupdate',$settings)">
+                <xar:set name="optionsactive">true</xar:set>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label class="xar-form-label">
-                            Password last updated:
+                        <xar:var name="label">Allow users to send you emails?</xar:var>
+                        <label for="#$properties['allowemail']->id#" title="#$label#">
+                            Allow other users to send you an email via a form?
                         </label>
                     </div>
                     <div class="xar-col">
-                        #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))#
-                        #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
+                        <xar:data-input property="$properties['allowemail']"/>
+                    </div>
+                </div>
+                <p class="xar-col dummy">
+                    Note your email address is never disclosed or displayed in this process.
+                </p>
+            </xar:if>
+            
+            <xar:if condition="in_array('useremailformat',$settings)">
+                <xar:set name="optionsactive">true</xar:set>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:data-label property="$properties['useremailformat']" for="id"/>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input property="$properties['useremailformat']"/>
                     </div>
                 </div>
             </xar:if>
-            <xar:if condition="in_array('userlastlogin',$settings)">
+
+            <xar:if condition="!$optionsactive">
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label class="xar-form-label">
-                            Last login time:
-                        </label>
-                    </div>
-                    <div class="xar-col">
-                        #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#
-                        #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
+                        No user options are active
                     </div>
                 </div>
             </xar:if>
@@ -194,6 +195,28 @@
                         Allow users to set a home page in their user settings.
                         <br />
                         To activate click on the User Home Page checkbox <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'duvs'))#">here</a>
+                    </div>
+                </div>
+            </xar:if>
+        </fieldset>
+        <fieldset>
+            <legend>Primary Parent Option</legend>
+            <xar:if condition="in_array('primaryparent', $settings)">
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:data-label property="$properties['primaryparent']" for="id"/>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input property="$properties['primaryparent']"/>
+                    </div>
+                </div>
+                If this group is a parent of the current user, then it takes precedence when inheriting. This is used mainly for determining the user's home page.
+            <xar:else />
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Defines a parent group for the current uswer that takes precedence over other groups.
+                        <br />
+                        To activate click on the Primary Parent checkbox <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'duvs'))#">here</a>
                     </div>
                 </div>
             </xar:if>

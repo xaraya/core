@@ -57,18 +57,16 @@ function roles_userapi_usermenu(Array $args=array())
     if ((bool)xarModVars::get('roles', 'allowemail')) {
         $fieldlist[] = 'allowemail';
     }
-    /* revisit in php5.3.0
     if (in_array('usertimezone', $settings)) {
         $fieldlist[] = 'usertimezone';
     }
-    */
     if (in_array('userhome', $settings) && (bool)xarModVars::get('roles', 'allowuserhomeedit')) {
         $fieldlist[] = 'userhome';
     }
     if (in_array('useremailformat', $settings)) {
         $fieldlist[] = 'useremailformat';
     }
-    $object->setFieldList(join(',',$fieldlist));
+    $object->setFieldList($fieldlist);
     switch (strtolower($phase)) {
 
         /**
@@ -126,7 +124,7 @@ function roles_userapi_usermenu(Array $args=array())
                         if ((preg_match("%^http://%", $home, $matches)) &&
                         ($url_parts['host'] != $_SERVER["SERVER_NAME"]) &&
                         ($url_parts['host'] != $_SERVER["HTTP_HOST"])) {
-                            $msg  = xarML('External URLs such as #(1) are not permitted as your home page.', $home);
+                            $msg  = xarML('<span class="xar-alert">&#160;External URLs such as #(1) are not permitted as your home page.</span>', $home);
                             $object->properties['userhome']->invalid .= $msg;
                             $isvalid = false;
                         }

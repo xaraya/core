@@ -34,9 +34,7 @@
                     </div>
                 </div>
             </xar:foreach>
-            <!--
-            <xar:data-form object="$object" fieldlist="name,uname,email,password,regdate"/>
-            -->
+
             <xar:data-input property="$object->properties['id']" hidden="hidden"/>
             <xar:data-input property="$object->properties['state']" hidden="hidden"/>
             <xar:data-input property="$object->properties['valcode']" hidden="hidden"/>
@@ -45,19 +43,21 @@
 
             <xar:if condition="in_array('passwordupdate', $settings)">
                 <xar:set name="passwordupdate">xarModUserVars::get('roles', 'passwordupdate')</xar:set>
-                <xar:if condition="!empty($passwordupdate)">
                     <div class="xar-row">
                         <div class="xar-col">
                             <label for="passwordupdate" class="xar-form-label">
                                 Password last updated:
                             </label>
-                    </div>
-                    <div class="xar-col">
-                            #xarLocaleGetFormattedDate('medium', $passwordupdate)#
-                            #xarLocaleGetFormattedTime('medium', $passwordupdate)#
+                        </div>
+                        <div class="xar-col">
+                            <xar:if condition="!empty($passwordupdate)">
+                                #xarLocaleGetFormattedDate('medium', $passwordupdate)#
+                                #xarLocaleGetFormattedTime('medium', $passwordupdate)#
+                            <xar:else/>
+                                Never
+                            </xar:if>
                         </div>
                     </div>
-                </xar:if>
             </xar:if>
 
             <xar:if condition="in_array('userlastlogin', $settings)">

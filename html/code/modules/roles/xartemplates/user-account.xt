@@ -19,7 +19,7 @@
                     <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
                 </xar:if>
                 <form method="post" action="#$formaction#" enctype="#$enc_type#">
-                    <xar:data-form object="$object" formdata="$formdata" fieldlist="name,uname,state,regdate" />
+                    <xar:data-form object="$object" formdata="$formdata"/>
                     <div class="xar-form-actions">
                         <div class="xar-row">
                             <div class="xar-col"></div>

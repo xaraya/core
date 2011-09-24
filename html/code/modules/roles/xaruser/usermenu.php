@@ -263,7 +263,15 @@ function roles_user_usermenu(Array $args=array())
 
         case 'updatesettings':
             $object = xarMod::apiFunc('base', 'admin', 'getusersettings', array('module' => $moduleload, 'itemid' => $id));
-
+            
+            // Disable any fields that aren't set by the users
+            $skipped = array('primaryparent');
+            $fieldlist = array();
+            foreach ($object->properties as $key => $value) {
+                if (in_array($key,$skipped)) continue;
+                $fieldlist[] = $key;
+            }
+            $object->setFieldList($fieldlist);
             try {
                 $isvalid = xarMod::apiFunc($moduleload, 'user', 'usermenu', array('phase' => 'checkinput', 'object' => $object));
             } catch (Exception $e) {

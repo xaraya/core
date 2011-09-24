@@ -59,13 +59,14 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    <!-- 
-                    <xar:var name="label">Home Page</xar:var>
-                    <a href="#$homelink#" title="#$label#">#$homelink#</a> -->
+                    <xar:set name="url">
+                        xarMod::apiFunc('roles','user','parseuserhome',array('url'=>$homelink, 'truecurrenturl' => xarServer::getCurrentURL(array(), false)));
+                    </xar:set>
+                    <xar:var name="label">My Home Page</xar:var>
+                    <a href="#$url['redirecturl']#" title="#$label#" target="_blank">#$label#</a>
                 </div>
             </div>
         </xar:if>
-        <!-- Revisit in php5.3.0
         <xar:if condition="in_array('usertimezone',$settings)">
             <div class="xar-row">
                 <div class="xar-col">
@@ -75,13 +76,27 @@
                 </div>
                 <div class="xar-col">
                     <xar:set name="value">
-                        xarModUserVars::get('roles','usertimezone',$id)
+                        xarModUserVars::get('roles','usertimezone')
                     </xar:set>
                     <xar:data-output type="timezone" value="$value"/>
                 </div>
             </div>
         </xar:if>
-        -->
+        <xar:if condition="in_array('useremailformat',$settings)">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label">
+                        User Emailformat:
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:set name="value">
+                        xarModUserVars::get('roles','useremailformat')
+                    </xar:set>
+                    <xar:data-output type="textbox" value="$value"/>
+                </div>
+            </div>
+        </xar:if>
         </fieldset>
     <xar:else />
         <!-- You can include your own layout here or specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->
