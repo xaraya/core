@@ -23,7 +23,7 @@ function roles_userapi_parseuserhome(Array $args=array())
 {
     extract($args);
     if(!isset($url) || !isset($truecurrenturl)) {
-        throw new BadParameterException(null,'Wrong arguments to roles_userapi_userhome.');
+        throw new BadParameterException(null,'Wrong arguments to roles_userapi_parseuserhome.');
     }
 
     $data=array();
