@@ -195,12 +195,12 @@ function roles_user_account()
         $data['menutabs'] = $menutabs;
         
     }
-    $data['id']          = xarUserGetVar('id');
+    $data['id']           = xarUserGetVar('id');
     $data['name']         = xarUserGetVar('name');
     $data['logoutmodule'] = $defaultlogoutmodname;
     $data['loginmodule']  = $defaultloginmodname;
     $data['authmodule']   = $defaultauthmodname;
-    $data['moduleload'] = $moduleload;
+    $data['moduleload']   = $moduleload;
     $data['tab'] = $tab;
     if (empty($message)) $data['message'] = '';
 

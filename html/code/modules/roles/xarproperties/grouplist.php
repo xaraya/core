@@ -69,7 +69,7 @@ class GroupListProperty extends SelectProperty
             // check if this is a valid group id
             $group = xarMod::apiFunc('roles','user','get',
                                    array('id' => $value,
-                                         'itemtype' => 3)); // we're looking for a group here
+                                         'itemtype' => 2)); // we're looking for a group here
             if (!empty($group)) {
                 $this->current_groupid = $value;
                 return true;
@@ -77,7 +77,7 @@ class GroupListProperty extends SelectProperty
         } elseif (empty($value)) {
             return true;
         }
-        $this->invalid = xarML('selection: #(1)', $this->name);
+        $this->invalid = xarML('Bad selection: #(1)', $this->name);
         $this->value = null;
         return false;
     }
