@@ -229,7 +229,8 @@
             <xsl:choose>
               <xsl:when test="substring(@object,1,1) = '$'">
                 <!-- This a variable. we assume it's an object -->
-                <xsl:value-of select="$__items=@object"/><xsl:text>-&gt;getItems(</xsl:text>
+                <xsl:text>$__items=</xsl:text>
+                <xsl:value-of select="@object"/><xsl:text>-&gt;getItems(</xsl:text>
                 <xsl:call-template name="atts2args">
                   <xsl:with-param name="nodeset" select="@*[name() != 'properties' and name()!='values' and name()!='object']"/>
                 </xsl:call-template>
