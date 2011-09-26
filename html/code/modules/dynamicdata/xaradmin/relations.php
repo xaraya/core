@@ -192,7 +192,29 @@ function dynamicdata_admin_relations(Array $args=array())
         // CHECKME: what if var/processes is not under the web root anymore ?
                 $filepath = sys::varpath() . '/processes/yuml-' . $yuml_hash . '.png';
                 if (!file_exists($filepath)) {
-                    $image = file_get_contents('http://yuml.me/diagram/class/' . rawurlencode($yuml_spec));
+                    $yuml_url = 'http://yuml.me/diagram/class/' . rawurlencode($yuml_spec);
+                    // chris: file_get_contents requires allow_url_fopen=1 in php.ini
+                    // added support for retrieval using curl when available 
+                    try {
+                        sys::import('modules.base.class.xarCurl');
+                        $curl = new xarCurl(array('url' => $yuml_url));
+                        if ($curl->errno <> 0) {
+                            throw new BadParameterException(array($yuml_url, $curl->error),
+                                'cURL could not retrieve the file at #(1). Failed with error #(2)');
+                        } else {
+                            $curl->seturl($yuml_url);
+                            $image = $curl->exec();
+                        }
+                    } catch (Exception $e) {
+                        // check for allow url fopen if curl returned an error
+                        if (!xarFuncIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
+                        if (!ini_get('allow_url_fopen')) {
+                            throw new ConfigurationException(array('allow_url_fopen', 'cURL'),
+                                'PHP is not currently configured to allow URL retrieval of remote files. You must either enable #(1) in php.ini (not recommended) or install the #(2) module for your server, if available.');
+                        } else {
+                            $image = file_get_contents($yuml_url);
+                        }                          
+                    }
                     if (!empty($image)) {
                         file_put_contents($filepath, $image);
                         $data['yumlpath'] = $filepath;
