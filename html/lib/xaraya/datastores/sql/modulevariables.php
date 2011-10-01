@@ -50,7 +50,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
     {
         $this->setModvarName($this->name);
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
-        $fieldlist = $this->object->getFieldList();
+        $fieldlist = array_keys($this->fields);
         if (count($fieldlist) < 1) return;
         foreach ($fieldlist as $field) {
             $value = xarModItemVars::get($this->modulename,$field,$itemid);
@@ -68,7 +68,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
     function updateItem(Array $args = array())
     {
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
-        $fieldlist = $this->object->getFieldList();
+        $fieldlist = array_keys($this->fields);
         if (count($fieldlist) < 1) return 0;
 
         foreach ($fieldlist as $field) {
@@ -88,7 +88,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
     function deleteItem(Array $args = array())
     {
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
-        $fieldlist = $this->object->getFieldList();
+        $fieldlist = array_keys($this->fields);
         if (count($fieldlist) < 1) return 0;
 
         foreach ($fieldlist as $field) {
