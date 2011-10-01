@@ -45,5 +45,25 @@ class ObjectDescriptor extends DataContainer
         if (empty($this->args)) $this->args = $args;
         else foreach($args as $key => $value) if (isset($value)) $this->args[$key] = $value;
     }
+
+    public function exists($arg=null)
+    {
+        if (empty($arg)) return false;
+        return isset($this->args[$arg]);
+    }
+    
+    public function get($arg=null)
+    {
+        if (empty($arg)) return null;
+        if ($this->exists($arg)) return $this->args[$arg];
+        return null;
+    }
+
+    public function set($arg=null, $value=null)
+    {
+        if (empty($arg)) return true;
+        if ($this->exists($arg)) $this->args[$arg] = $value;
+        return true;
+    }
 }
 ?>

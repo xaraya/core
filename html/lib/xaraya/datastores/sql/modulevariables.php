@@ -15,9 +15,9 @@
  * Class to handle module variables datastores
  *
  */
-sys::import('xaraya.datastores.sql.flattable');
+sys::import('xaraya.datastores.sql.relational');
 
-class ModuleVariablesDataStore extends FlatTableDataStore
+class ModuleVariablesDataStore extends RelationalDataStore
 {
     public $modulename;
     public $variablename;
@@ -28,17 +28,15 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         $this->setModvarName($name);
     }
 
+    function __toString()
+    {
+        return "module_variables";
+    }
+
     private function setModvarName($name="")
     {
         if (empty($name)) throw new Exception('Bad modvar name');
-        $namepart = explode('__',$name);
-        if (empty($namepart[1])) {
-            $this->modulename = 'dynamicdata';
-            $this->variablename = $namepart[0];
-        } else {
-            $this->modulename = $namepart[0];
-            $this->variablename = $namepart[1];
-        }
+        $this->modulename = $name;
     }
 
     function getFieldName(DataProperty &$property)
@@ -55,7 +53,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         foreach ($fieldlist as $field) {
             $value = xarModItemVars::get($this->modulename,$field,$itemid);
             // set the value for this property
-            $this->fields[$field]->value = $value;
+            $this->object->properties[$field]->value = $value;
         }
         return $itemid;
     }
@@ -73,7 +71,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 
         foreach ($fieldlist as $field) {
             // get the value from the corresponding property
-            $value = $this->fields[$field]->value;
+            $value = $this->object->properties[$field]->value;
             // skip fields where values aren't set
             if (!isset($value)) continue;
             if (empty($itemid)) {
@@ -124,8 +122,8 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             $this->cache = $args['cache'];
         }
 
-        $fields = array_keys($this->fields);
-        if (count($fields) < 1) {
+        $properties = $this->object->getProperties();
+        if (count($properties) < 1) {
             return;
         }
 //                    var_dump(array_keys($this->fields));
@@ -349,9 +347,9 @@ class ModuleVariablesDataStore extends FlatTableDataStore
             }
         */
 
-            foreach ($fields as $field) {
-                $this->setModvarName($field);
-                $modulefields[$this->modulename][] = $field;
+            foreach ($properties as $field) {
+                $this->setModvarName($field->name);
+                $modulefields[$this->modulename][] = $field->name;
             }
 
             foreach ($modulefields as $key => $fieldvalues) {
@@ -421,7 +419,7 @@ class ModuleVariablesDataStore extends FlatTableDataStore
                 $values = $result->getRow();
                 $itemid = array_shift($values);
                 // oops, something went seriously wrong here...
-                if (empty($itemid) || count($values) != count($fields)) {
+                if (empty($itemid) || count($values) != count($properties)) {
                     continue;
                 }
                 if (!$isgrouped) {
@@ -531,15 +529,16 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         // here we grab everyting
         } else {
             // split the fields to be gotten up by module
-            $modulefields['dynamicdata'] = array();
-            foreach ($fields as $field) {
-                $modulefields[$this->modulename][] = $field;
+            foreach ($properties as $field) {
+                $this->setModvarName($field->name);
+                $modulefields[$this->modulename]['name'] = $field->name;
+                $modulefields[$this->modulename]['source'] = $field->source;
             }
 
             foreach ($modulefields as $key => $values) {
                 if (count($values)<1) continue;
-                $modid = xarMod::getID($key);
-                $bindmarkers = '?' . str_repeat(',?',count($values)-1);
+                $modid = xarMod::getID(substr(trim($values['source']),17));
+                $bindmarkers = '?' . str_repeat(',?',count($values['name'])-1);
                 $query = "SELECT DISTINCT m.name,
                                  mi.item_id,
                                  mi.value
@@ -582,8 +581,6 @@ class ModuleVariablesDataStore extends FlatTableDataStore
 
         $modvars = $this->getTable('module_vars');
         $moditemvars = $this->getTable('module_itemvars');
-
-        $fields = array_keys($this->fields);
 
         // easy case where we already know the items we want
         if (count($itemids) > 0) {
@@ -657,17 +654,19 @@ class ModuleVariablesDataStore extends FlatTableDataStore
         // here we grab everyting
         } else {
 
+            $properties = $this->object->getProperties();
+
             // split the fields to be gotten up by module
-            $modulefields['dynamicdata'] = array();
-            foreach ($fields as $field) {
-                $this->setModvarName($field);
-                $modulefields[$this->modulename][] = $field;
+            foreach ($properties as $field) {
+                $this->setModvarName($field->name);
+                $modulefields[$this->modulename]['name'] = $field->name;
+                $modulefields[$this->modulename]['source'] = $field->source;
             }
             $numitems = 0;
-            foreach ($modulefields as $key => $values) {
+            foreach ($modulefields as $key => $values) {//var_dump($modulefields);exit;
                 if (count($values)<1) continue;
-                $modid = xarMod::getID($key);
-                $bindmarkers = '?' . str_repeat(',?',count($values)-1);
+                $modid = xarMod::getID(substr(trim($values['source']),17));
+                $bindmarkers = '?' . str_repeat(',?',count($values['name'])-1);
                 if($this->getType() == 'sqlite' ) {
                     $query = "SELECT COUNT(*)
                               FROM (SELECT DISTINCT mi.item_id FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id

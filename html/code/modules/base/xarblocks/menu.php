@@ -156,7 +156,6 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 **/
     public function upgrade($oldversion) 
     {
-
         switch ($oldversion) {
             case '0.0.0': // upgrade menu blocks to version 2.2.0
                 // fix for blocks coming from a 1x install
@@ -194,9 +193,10 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                 if (!empty($this->content['lines'])) {
                     $userlinks = array();
                     foreach ($this->content['lines'] as $id => $line) {
+                        if (!isset($line['label'])) $line['label'] = $line['url'];
                         $userlinks[] = array(
                             'id' => $id,
-                            'name' => $line['label'],
+                            'name' => $line['name'],
                             'label' => $line['label'],
                             'title' => $line['description'],
                             'url' => $line['url'],
