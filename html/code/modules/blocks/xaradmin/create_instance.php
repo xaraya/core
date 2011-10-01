@@ -28,6 +28,8 @@ function blocks_admin_create_instance()
     if (!xarVarFetch('block_template_inner', 'str:1:', $template_inner, NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('block_template_outer', 'str:1:', $template_outer, NULL, XARVAR_NOT_REQUIRED)) return;
 
+    if (empty($name)) return xarTplModule('blocks','user','errors',array('layout' => 'missing_name'));
+    
     // Security
     if(!xarSecurityCheck('AddBlocks', 0, 'Instance')) {return;}
 
