@@ -50,7 +50,7 @@
                 </xar:if>
             </ul>
         </div>
-        <form method="post" action="#xarModURL('roles','admin','removeprivileges')#" enctype="application/x-www-form-urlencoded">
+        <form method="post" action="#xarModURL('roles','admin','removeprivilege')#" enctype="application/x-www-form-urlencoded">
             <div class="xar-form-actions">
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="roleid" id="roleid" value="#$roleid#"/>
