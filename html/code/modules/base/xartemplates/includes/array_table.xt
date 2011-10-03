@@ -145,7 +145,6 @@
                             <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$col_default" configuration="$col_config"/>
                         </td>
                     </xar:for>
-                        <xar:comment> xxx </xar:comment>
                     <td class="xar-align-right">
                         <!-- If js is available this will be replaced by a delete icon -->
                         <!-- name[row][delete] -->
