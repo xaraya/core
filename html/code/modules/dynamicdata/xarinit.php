@@ -73,11 +73,11 @@ function dynamicdata_init()
             /* the optional item type within this module */
             'itemtype' => array(
                 'type'        => 'integer',
-                'unsigned'     => true,
+                'unsigned'    => true,
                 'null'        => false,
                 'default'     => '0'
             ),
-            /* the class this object belongs to*/
+            /* the class this object belongs to */
             'class'     => array(
                 'type'        => 'varchar',
                 'size'        => 254,
@@ -85,7 +85,7 @@ function dynamicdata_init()
                 'default'     => 'DataObject',
                 'charset'     => $charset,
             ),
-            /* the location where the class file lives*/
+            /* the location where the class file lives */
             'filepath'     => array(
                 'type'        => 'varchar',
                 'size'        => 254,
@@ -108,6 +108,14 @@ function dynamicdata_init()
                 'null'        => false,
                 'default'     => '0'
             ),
+            /* the data store this object uses */
+            'datastore'   => array(
+                'type'        => 'varchar',
+                'size'        => 60,
+                'null'        => false,
+                'default'     => 'dynamicdata',
+                'charset'     => $charset,
+            ),
             /* access settings for this object */
             'access'   => array(
                 'type'=>'text',
@@ -115,8 +123,20 @@ function dynamicdata_init()
             ),
             /* any configuration settings for this object */
             'config'   => array(
-                'type'=>'text',
+                'type'        =>'text',
                 'charset'     => $charset,
+            ),
+            /* the data sources this object uses */
+            'sources'   => array(
+                'type'        =>'text'
+            ),
+            /* the data source relations this object uses */
+            'relations' => array(
+                'type'        =>'text'
+            ),
+            /* the data source relations this object uses */
+            'objects'   => array(
+                'type'        =>'text'
             ),
             /* use the name of this object as alias for short URLs */
             'isalias'  => array(
@@ -162,13 +182,49 @@ function dynamicdata_init()
         $sql = "INSERT INTO $dynamic_objects (
                 name, label,
                 module_id, itemtype, class, filepath, urlparam,
-                maxid, access, config, isalias)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                maxid, datastore, access, config, sources, relations, objects,isalias)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
         $objects = array(
-            array('objects'   ,'Dynamic Objects'   ,$module_id,0,'DataObject','auto', 'itemid',0,'a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:2:{i:0;i:2;i:1;i:3;}s:6:"update";a:2:{i:0;i:2;i:1;i:3;}s:6:"create";a:2:{i:0;i:2;i:1;i:3;}s:6:"delete";a:2:{i:0;i:2;i:1;i:3;}s:6:"config";a:1:{i:0;i:2;}}";}' , 'a:0:{}', false),
-            array('properties','Dynamic Properties',$module_id,1,'DataObject','auto', 'itemid',0,'a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:2:{i:0;i:2;i:1;i:3;}s:6:"update";a:2:{i:0;i:2;i:1;i:3;}s:6:"create";a:2:{i:0;i:2;i:1;i:3;}s:6:"delete";a:2:{i:0;i:2;i:1;i:3;}s:6:"config";a:1:{i:0;i:2;}}";}' , 'a:0:{}', false),
+            array(
+                'objects',
+                'Dynamic Objects',
+                $module_id,
+                0,
+                'DataObject',
+                'auto', 
+                'itemid',
+                0,
+                'relational',
+                'a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:5:{i:0;i:5;i:1;i:2;i:2;i:1;i:3;i:3;i:4;i:4;}s:6:"update";a:1:{i:0;i:2;}s:6:"create";a:1:{i:0;i:2;}s:6:"delete";a:1:{i:0;i:2;}s:6:"config";a:1:{i:0;i:2;}}";}',
+                'a:0:{}',
+                serialize(array(
+                    'dynamic_objects' => array($prefix . '_dynamic_objects', 'internal')
+                )),
+                'a:0:{}',
+                'a:0:{}',
+                false
+                ),
+            array(
+                'properties',
+                'Dynamic Properties',
+                $module_id,
+                1,
+                'DataObject',
+                'auto',
+                'itemid',
+                0,
+                'relational',
+                'a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:5:{i:0;i:5;i:1;i:2;i:2;i:1;i:3;i:3;i:4;i:4;}s:6:"update";a:1:{i:0;i:2;}s:6:"create";a:1:{i:0;i:2;}s:6:"delete";a:1:{i:0;i:2;}s:6:"config";a:1:{i:0;i:2;}}";}',
+                'a:0:{}',
+                serialize(array(
+                    'dynamic_properties' => array($prefix . '_dynamic_properties', 'internal')
+                )),
+                'a:0:{}',
+                'a:0:{}',
+                false
+                ),
         );
 
         $objectid = array();
@@ -286,30 +342,34 @@ function dynamicdata_init()
         sys::import('modules.dynamicdata.class.properties');
         $properties = array(
             // Properties for the Objects DD object
-            array('objectid'  ,'Id'                 ,$objectid[1],21,''            ,$dynamic_objects.'.id'         ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,1 ,''),
-            array('name'      ,'Name'               ,$objectid[1],2 ,''            ,$dynamic_objects.'.name'       ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,''),
-            array('label'     ,'Label'              ,$objectid[1],2 ,''            ,$dynamic_objects.'.label'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,''),
-            array('module_id' ,'Module'             ,$objectid[1],19,'182'         ,$dynamic_objects.'.module_id'  ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,4 ,'a:4:{s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:7:"modules";s:25:"initialization_store_prop";s:2:"id";s:27:"initialization_display_prop";s:4:"name";}'),
-            array('itemtype'  ,'Item Type'          ,$objectid[1],20,''            ,$dynamic_objects.'.itemtype'   ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,5 ,'a:5:{s:18:"display_combo_mode";s:1:"2";s:14:"display_layout";s:7:"default";s:19:"validation_override";s:1:"1";s:21:"initialization_module";s:3:"182";s:23:"initialization_itemtype";s:1:"0";}'),
-            array('class'     ,'Class'              ,$objectid[1],2 ,'DataObject'  ,$dynamic_objects.'.class'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,6 ,''),
-            array('filepath'  ,'Location'           ,$objectid[1],2 ,'auto'        ,$dynamic_objects.'.filepath'   ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,''),
-            array('urlparam'  ,'URL Param'          ,$objectid[1],2 ,'itemid'      ,$dynamic_objects.'.urlparam'   ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,''),
-            array('maxid'     ,'Max Id'             ,$objectid[1],15,'0'           ,$dynamic_objects.'.maxid'      ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,9 ,''),
-            array('access'    ,'Access'             ,$objectid[1],2,''             ,$dynamic_objects.'.access'     ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,10 ,      'a:6:{s:20:"display_minimum_rows";s:1:"1";s:20:"display_maximum_rows";s:2:"10";s:25:"display_column_definition";a:1:{s:5:"value";a:4:{i:0;a:2:{i:0;s:3:"Key";i:1;s:5:"Value";}i:1;a:2:{i:0;s:1:"2";i:1;s:1:"2";}i:2;a:2:{i:0;s:0:"";i:1;s:0:"";}i:3;a:2:{i:0;s:0:"";i:1;s:0:"";}}}s:14:"display_layout";s:7:"default";s:28:"validation_associative_array";s:1:"1";s:24:"initialization_addremove";s:1:"2";}'),
-            array('config'    ,'Configuration'      ,$objectid[1],999 ,'a:0:{}'    ,$dynamic_objects.'.config'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11 ,'a:6:{s:20:"display_minimum_rows";s:1:"1";s:20:"display_maximum_rows";s:2:"10";s:25:"display_column_definition";a:1:{s:5:"value";a:4:{i:0;a:2:{i:0;s:3:"Key";i:1;s:5:"Value";}i:1;a:2:{i:0;s:1:"2";i:1;s:1:"2";}i:2;a:2:{i:0;s:0:"";i:1;s:0:"";}i:3;a:2:{i:0;s:0:"";i:1;s:0:"";}}}s:14:"display_layout";s:7:"default";s:28:"validation_associative_array";s:1:"1";s:24:"initialization_addremove";s:1:"2";}'),
-            array('isalias'   ,'Alias in short URLs',$objectid[1],14,true          ,$dynamic_objects.'.isalias'    ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12 ,''),
+            array('objectid'  ,'Id'                 ,$objectid[1],21,''            ,'dynamic_objects.id'         ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,1 ,''),
+            array('name'      ,'Name'               ,$objectid[1],2 ,''            ,'dynamic_objects.name'       ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,''),
+            array('label'     ,'Label'              ,$objectid[1],2 ,''            ,'dynamic_objects.label'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,''),
+            array('module_id' ,'Module'             ,$objectid[1],19,'182'         ,'dynamic_objects.module_id'  ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,5 ,'a:4:{s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:7:"modules";s:25:"initialization_store_prop";s:2:"id";s:27:"initialization_display_prop";s:4:"name";}'), // FIXME: change this validation when we move from regid to systemid
+            array('itemtype'  ,'Item Type'          ,$objectid[1],20,"xarMod::apiFunc('dynamicdata','admin','getnextitemtype')"           ,'dynamic_objects.itemtype'   ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,6 ,'a:10:{s:18:"display_combo_mode";s:1:"2";s:14:"display_layout";s:7:"default";s:19:"validation_override";s:1:"1";s:21:"initialization_module";s:1:"3";s:23:"initialization_itemtype";s:1:"0";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}'),
+            array('class'     ,'Class'              ,$objectid[1],2 ,'DataObject'  ,'dynamic_objects.class'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,''),
+            array('filepath'  ,'Location'           ,$objectid[1],2 ,'auto'        ,'dynamic_objects.filepath'   ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,''),
+            array('urlparam'  ,'URL Param'          ,$objectid[1],2 ,'itemid'      ,'dynamic_objects.urlparam'   ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,9 ,''),
+            array('maxid'     ,'Max Id'             ,$objectid[1],15,'0'           ,'dynamic_objects.maxid'      ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10 ,''),
+            array('isalias'   ,'Alias in short URLs',$objectid[1],14,'1'           ,'dynamic_objects.isalias'    ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11 ,''),
+            array('datastore' ,'Datastore'          ,$objectid[1],6,'dynamicdata'  ,'dynamic_objects.datastore'  ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12 ,'a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:80:"relational,relational;module_variables,module_variables;dynamicdata,dynamicdata;";}'),
+            array('access'    ,'Access'             ,$objectid[1],2,'a:0:{}'       ,'dynamic_objects.access'     ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,10 ,      'a:6:{s:20:"display_minimum_rows";s:1:"1";s:20:"display_maximum_rows";s:2:"10";s:25:"display_column_definition";a:1:{s:5:"value";a:4:{i:0;a:2:{i:0;s:3:"Key";i:1;s:5:"Value";}i:1;a:2:{i:0;s:1:"2";i:1;s:1:"2";}i:2;a:2:{i:0;s:0:"";i:1;s:0:"";}i:3;a:2:{i:0;s:0:"";i:1;s:0:"";}}}s:14:"display_layout";s:7:"default";s:28:"validation_associative_array";s:1:"1";s:24:"initialization_addremove";s:1:"2";}'),
+            array('config'    ,'Configuration'      ,$objectid[1],999 ,'a:0:{}'    ,'dynamic_objects.config'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12 ,'a:6:{s:20:"display_minimum_rows";s:1:"1";s:20:"display_maximum_rows";s:2:"10";s:25:"display_column_definition";a:1:{s:5:"value";a:4:{i:0;a:2:{i:0;s:3:"Key";i:1;s:5:"Value";}i:1;a:2:{i:0;s:1:"2";i:1;s:1:"2";}i:2;a:2:{i:0;s:0:"";i:1;s:0:"";}i:3;a:2:{i:0;s:0:"";i:1;s:0:"";}}}s:14:"display_layout";s:7:"default";s:28:"validation_associative_array";s:1:"1";s:24:"initialization_addremove";s:1:"2";}'),
+            array('sources'   ,'Sources'            ,$objectid[1],999 ,'a:0:{}'    ,'dynamic_objects.sources'    ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,13 ,'a:6:{s:20:"display_minimum_rows";s:1:"1";s:20:"display_maximum_rows";s:2:"10";s:25:"display_column_definition";a:1:{s:5:"value";a:4:{i:0;a:3:{i:0;s:5:"Alias";i:1;s:5:"Table";i:2;s:4:"Type";}i:1;a:3:{i:0;s:1:"2";i:1;s:1:"2";i:2;s:1:"6";}i:2;a:3:{i:0;s:0:"";i:1;s:0:"";i:2;s:8:"internal";}i:3;a:3:{i:0;s:0:"";i:1;s:0:"";i:2;s:142:"a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:34:"internal,internal;foreign,foreign;";}";}}}s:14:"display_layout";s:7:"default";s:28:"validation_associative_array";s:1:"1";s:24:"initialization_addremove";s:1:"2";}'),
+            array('relations' ,'Relations'          ,$objectid[1],999 ,'a:0:{}'    ,'dynamic_objects.relations'  ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,14 ,'a:5:{s:20:"display_minimum_rows";s:1:"1";s:20:"display_maximum_rows";s:2:"10";s:25:"display_column_definition";a:1:{s:5:"value";a:4:{i:0;a:2:{i:0;s:9:"Link From";i:1;s:7:"Link To";}i:1;a:2:{i:0;s:1:"2";i:1;s:1:"2";}i:2;a:2:{i:0;s:0:"";i:1;s:0:"";}i:3;a:2:{i:0;s:0:"";i:1;s:0:"";}}}s:14:"display_layout";s:7:"default";s:24:"initialization_addremove";s:1:"2";}'),
+            array('objects'   ,'Objects'            ,$objectid[1],999 ,'a:0:{}'    ,'dynamic_objects.objects'    ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,15 ,'a:5:{s:20:"display_minimum_rows";s:1:"1";s:20:"display_maximum_rows";s:2:"10";s:25:"display_column_definition";a:1:{s:5:"value";a:4:{i:0;a:2:{i:0;s:11:"Parent Link";i:1;s:10:"Child Link";}i:1;a:2:{i:0;s:1:"2";i:1;s:1:"2";}i:2;a:2:{i:0;s:0:"";i:1;s:0:"";}i:3;a:2:{i:0;s:0:"";i:1;s:0:"";}}}s:14:"display_layout";s:7:"default";s:24:"initialization_addremove";s:1:"2";}'),
 
             // Properties for the Properties DD object
-            array('id'        ,'Id'                 ,$objectid[2],21,''            ,$dynamic_properties.'.id'        ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,1 ,''),
-            array('name'      ,'Name'               ,$objectid[2],2 ,''            ,$dynamic_properties.'.name'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,''),
-            array('label'     ,'Label'              ,$objectid[2],2 ,''            ,$dynamic_properties.'.label'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,''),
-            array('objectid'  ,'Object'             ,$objectid[2],24,''            ,$dynamic_properties.'.object_id' ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,''),
-            array('type'      ,'Property Type'      ,$objectid[2],22,''            ,$dynamic_properties.'.type'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,''),
-            array('defaultvalue' ,'Default Value'   ,$objectid[2],3 ,''            ,$dynamic_properties.'.defaultvalue'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,''),
-            array('source'    ,'Source'             ,$objectid[2],23,'dynamic_data',$dynamic_properties.'.source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,''),
-            array('status'    ,'Status'             ,$objectid[2],25,'1'           ,$dynamic_properties.'.status'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,''),
-            array('seq'       ,'Order'              ,$objectid[2],15,'0'           ,$dynamic_properties.'.seq'       ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11,''),
-            array('configuration','Configuration'   ,$objectid[2],3 ,''            ,$dynamic_properties.'.configuration',DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12,''),
+            array('id'        ,'Id'                 ,$objectid[2],21,''            ,'dynamic_properties.id'        ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,1 ,''),
+            array('name'      ,'Name'               ,$objectid[2],2 ,''            ,'dynamic_properties.name'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,''),
+            array('label'     ,'Label'              ,$objectid[2],2 ,''            ,'dynamic_properties.label'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,''),
+            array('objectid'  ,'Object'             ,$objectid[2],24,''            ,'dynamic_properties.object_id' ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,''),
+            array('type'      ,'Property Type'      ,$objectid[2],22,''            ,'dynamic_properties.type'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,''),
+            array('defaultvalue' ,'Default Value'   ,$objectid[2],3 ,''            ,'dynamic_properties.defaultvalue'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (254)'),
+            array('source'    ,'Source'             ,$objectid[2],23,'dynamic_data','dynamic_properties.source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,''),
+            array('status'    ,'Status'             ,$objectid[2],25,'1'           ,'dynamic_properties.status'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,''),
+            array('seq'       ,'Order'              ,$objectid[2],15,'0'           ,'dynamic_properties.seq'       ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11,''),
+            array('configuration','Configuration'   ,$objectid[2],3 ,'a:0:{}'      ,'dynamic_properties.configuration',DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12,''),
         );
 
         $propid = array();
@@ -459,34 +519,7 @@ function dynamicdata_init()
      * Register hooks
      */
 
-    // allow searching of content
     xarModRegisterHook('item', 'search', 'GUI', 'dynamicdata', 'user', 'search');
-    // when a new module item is being specified
-    xarModRegisterHook('item', 'new', 'GUI', 'dynamicdata', 'admin', 'newhook');
-    // when a module item is created (uses 'dd_*')
-    xarModRegisterHook('item', 'create', 'API', 'dynamicdata', 'admin', 'createhook');
-    // when a module item is being modified (uses 'dd_*')
-    xarModRegisterHook('item', 'modify', 'GUI', 'dynamicdata', 'admin', 'modifyhook');
-    // when a module item is updated (uses 'dd_*')
-    xarModRegisterHook('item', 'update', 'API', 'dynamicdata', 'admin', 'updatehook');
-    // when a module item is deleted
-    xarModRegisterHook('item', 'delete', 'API', 'dynamicdata', 'admin', 'deletehook');
-    // when a module configuration is being modified (uses 'dd_*')
-    xarModRegisterHook('module', 'modifyconfig', 'GUI', 'dynamicdata', 'admin', 'modifyconfighook');
-    // when a module configuration is updated (uses 'dd_*')
-    xarModRegisterHook('module', 'updateconfig', 'API', 'dynamicdata', 'admin', 'updateconfighook');
-    // when a whole module is removed, e.g. via the modules admin screen
-    // (set object ID to the module name !)
-    xarModRegisterHook('module', 'remove', 'API', 'dynamicdata', 'admin', 'removehook');
-
-    //  Ideally, people should be able to use the dynamic fields in their
-    //  module templates as if they were 'normal' fields -> this means
-    //  adapting the get() function in the user API of the module, and/or
-    //  using some common data retrieval function (DD) in the future...
-
-    /*  display hook is now disabled by default - use the BL tags or APIs instead
-        xarModRegisterHook('item', 'display', 'GUI', 'dynamicdata', 'user', 'displayhook');
-    */
 
     /*********************************************************************
      * Register the module components that are privileges objects
