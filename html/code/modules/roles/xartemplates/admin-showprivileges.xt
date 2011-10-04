@@ -61,7 +61,7 @@
                         <xar:loop name="$inherited">
                             <tr>
                                 <td>
-                                    <a href="#xarModURL('roles','admin','modifyprivilege',array('id'=>$loop->item['privid']))#">
+                                    <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$loop->item['privid']))#">
                                         <xar:var name="loop:item.name"/>
                                     </a>
                                 </td>
@@ -112,7 +112,7 @@
                     <xar:loop name="$privileges">
                         <tr>
                             <td>
-                                <a href="#xarModURL('roles','admin','modifyprivilege',array('id'=>$loop->item['privid']))#">
+                                <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$loop->item['privid']))#">
                                     <xar:var name="loop:item.name"/>
                                 </a>
                             </td>
