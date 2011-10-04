@@ -67,9 +67,20 @@
                 if (!(empty($role_id) || empty($privilege_id))) {
                     $dbconn = xarDB::getConn();
                     $xartable = xarDB::getTables();
-                    $query = "INSERT INTO " . $xartable['security_acl'] . " VALUES (?,?)";
-                    $bindvars = array($role_id,$privilege_id);
-                    if (!$dbconn->Execute($query,$bindvars)) return;
+                    $query = "SELECT role_id FROM " . $xartable['security_acl'] . " WHERE role_id = ? AND privilege_id = ?";
+                    $bindvars = array((int)$role_id,(int)$privilege_id);
+                    $result =& $dbconn->Execute($query,$bindvars);
+                    if (!$result) return;
+
+                    $found = false;
+                    while (!$result->EOF) {
+                        $found = true;
+                        break;
+                    }
+                    if (!$found) {
+                        $query = "INSERT INTO " . $xartable['security_acl'] . " VALUES (?,?)";
+                        if (!$dbconn->Execute($query,$bindvars)) return;
+                    }
                 }
 
                 xarController::redirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
