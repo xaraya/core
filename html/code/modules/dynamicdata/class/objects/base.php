@@ -274,6 +274,9 @@ class DataObject extends DataObjectMaster implements iDataObject
         if (!empty($args['fieldlist']) && !is_array($args['fieldlist'])) {
             $args['fieldlist'] = explode(',',$args['fieldlist']);
             if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
+            $this->fieldlist = $args['fieldlist'];
+        } elseif (empty($args['fieldlist'])) {
+            $this->setFieldList();
         }
 
         // If a different itemid was passed, get that item before we display
@@ -287,13 +290,8 @@ class DataObject extends DataObjectMaster implements iDataObject
         $this->callHooks('transform');
 
         $args['properties'] = array();
-        if(count($args['fieldlist']) > 0) {
-            $fields = $args['fieldlist'];
-        } else {
-            $fields = array_keys($this->properties);
-        }
 
-        foreach($fields as $name) {
+        foreach($this->fieldlist as $name) {
             if(!isset($this->properties[$name])) continue;
 
             if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
@@ -303,8 +301,6 @@ class DataObject extends DataObjectMaster implements iDataObject
             if ($this->properties[$name]->type == 21 || !isset($this->hookvalues[$name])) {
                 $args['properties'][$name] = $this->properties[$name];
             } else {
-                // sigh, 5 letters, but so many hours to discover them
-                // anyways, clone the property, so we can safely change it, PHP 5 specific!!
                 $args['properties'][$name] = clone $this->properties[$name];
                 $args['properties'][$name]->value = $this->hookvalues[$name];
             }
@@ -312,7 +308,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         // clean up hookvalues
         $this->hookvalues = array();
 
-        // Order the fields if this is an extended object
+/*        // Order the fields if this is an extended object
         if (!empty($this->fieldorder)) {
             $tempprops = array();
             foreach ($this->fieldorder as $field)
@@ -320,6 +316,7 @@ class DataObject extends DataObjectMaster implements iDataObject
                     $tempprops[$field] = $args['properties'][$field];
             $args['properties'] = $tempprops;
         }
+*/
 
 // CHECKME: we won't call display hooks for this item here (yet) - to be investigated
 //        $this->callHooks('display');
