@@ -36,7 +36,31 @@ text related styling
 .xar-success {
     color: #5f9013;
     }
+.xar-error: {
+    color: #ff0000;
+}
 .xar-active {}
+
+/*
+icon related styling
+-------------------------------------------------------------------------[comment] */
+.xar-module-icon {
+    float: right;
+}
+a.xar-icon {
+    text-decoration: none;
+}
+a.xar-icon img{
+    vertical-align: middle;
+}
+img.xar-icon {
+    vertical-align: middle;
+}
+img.xar-icon-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    vertical-align: text-top;
+}
 
 /*
 legend related styling
