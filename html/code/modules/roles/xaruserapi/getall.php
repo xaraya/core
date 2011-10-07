@@ -25,6 +25,9 @@ function roles_userapi_getall(Array $args=array())
 {
     extract($args);
 
+    // the property uses grouplist rather than group
+    if (isset($grouplist)) $group = $grouplist;
+
     // Optional arguments.
     if (!isset($startnum)) $startnum = 1;
     if (!isset($numitems)) $numitems = -1;
@@ -62,12 +65,13 @@ function roles_userapi_getall(Array $args=array())
     #
     # Filter by state
     #
-    if (!empty($state) && is_numeric($state) && $state != xarRoles::ROLES_STATE_CURRENT) {
-        $where_clause[] = 'roletab.state = ?';
-        $bindvars[] = (int) $state;
-    } else {
+    if (!empty($state) && is_numeric($state) && $state == xarRoles::ROLES_STATE_CURRENT) {
         $where_clause[] = 'roletab.state <> ?';
         $bindvars[] = (int) xarRoles::ROLES_STATE_DELETED;
+    } elseif (!empty($state) && is_numeric($state) && $state == xarRoles::ROLES_STATE_ALL) {
+    } else {
+        $where_clause[] = 'roletab.state = ?';
+        $bindvars[] = (int) $state;
     }
 
     # --------------------------------------------------------
