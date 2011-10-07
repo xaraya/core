@@ -97,8 +97,13 @@ function mail_admin_modifyconfig()
                     }
 
                     if(isset($admin_outgoing)) xarModVars::set('mail','admin_outgoing',$admin_outgoing);
+                    // set the modvars used by sendmail as default from name, address 
+                    $adminname = xarUserGetVar('name', $admin_outgoing);
+                    $adminmail = xarUserGetVar('email', $admin_outgoing);
+                    xarModVars::set('mail', 'adminname', $adminname);
+                    xarModVars::set('mail', 'adminmail', $adminmail);
+                    
                     xarModVars::set('mail', 'ShowTemplates', $showtemplates);
-                    if(isset($adminname)) xarModVars::set('mail', 'adminname', $adminname);
                     xarModVars::set('mail', 'replyto', $replyto);
                     xarModVars::set('mail', 'replytoname', $replytoname);
                     xarModVars::set('mail', 'replytoemail', $replytoemail);
