@@ -148,7 +148,6 @@ class Base_MenuBlock extends MenuBlock implements iBlock
         if (!empty($vars['displayprint']) && !xarThemeIsAvailable('print')) $vars['displayprint'] = 0;
 
         $data['content'] = $vars;
-
         return $data;
     }
 /**
