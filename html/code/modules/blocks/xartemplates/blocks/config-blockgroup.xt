@@ -74,13 +74,11 @@
     </xar:if>
     <div class="xar-row">
         <div class="xar-col">
-            <xar:var name="addtitle">Add a block to this blockgroup</xar:var>
-            <label for="add_block" title="#$addtitle#" class="xar-form-label">Add block to blockgroup</label>
+            <xar:var name="addtitle">Add a block instance to this blockgroup</xar:var>
+            <label for="add_block" title="#$addtitle#" class="xar-form-label">Add a block to this group:</label>
         </div>
         <div class="xar-col">
-            <div class="xar-form-container-after">
-                <xar:data-input type="dropdown" name="add_block" id="add_block" options="$block_options"/>
-            </div>
+            <xar:data-input type="dropdown" name="add_block" id="add_block" options="$block_options"/>
         </div>
     </div>
 </xar:template>

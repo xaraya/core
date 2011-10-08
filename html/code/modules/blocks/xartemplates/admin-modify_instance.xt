@@ -208,27 +208,6 @@
                                     <div class="xar-col">
                                         <label for="attachgroup">Add this block instance to a group:</label>
                                     </div>
-	                        </xar:if>
-                            <xar:if condition="$group_method eq 'min'">
-                            <!-- Provide a 'new group' drop-down list.-->
-                                <div class="xar-row">
-                                    <div class="xar-col">
-                                        <label for="block_new_group" title="#xarML('Add this block instance to the selected block group.')#" class="xar-form-label">
-                                            Add To Group:
-                                        </label>
-                                        <select name="block_new_group" id="block_new_group">
-                                            <option value="" selected="selected">
-                                                -- no new group --
-                                            </option>
-                                            <xar:loop name="$block_groups">
-                                                <xar:if condition="empty($loop:item['selected']) and $loop:item['name'] ne $instance['name']">
-                                                    <option value="#$loop:item['id']#">
-                                                        #xarVarPrepForDisplay($loop:item['name'])#
-                                                    </option>
-                                                </xar:if>
-                                            </xar:loop>
-                                        </select>
-                                    </div>
                                     <div class="xar-col">
                                         <xar:data-input type="dropdown" name="instance_attachgroup" id="instance_attachgroup" firstline="-- no new group --" options="$group_options" value="$block['attachgroup']"/>
                                         <xar:if condition="!empty($invalid['attachgroup'])">
