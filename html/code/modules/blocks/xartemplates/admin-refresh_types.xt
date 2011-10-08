@@ -1,0 +1,169 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>Refresh Block Types</h2>
+        <p class="xar-note">Block Types Refreshed</p>
+        <xar:if condition="!empty($unchanged)">
+            <h3>Unchanged</h3>
+            <p>The following block types were not changed</p>
+            <table class="xar-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Module</th>
+                        <th>Description</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <xar:foreach in="$unchanged" value="$type">
+                    <tr>
+                        <td>#$type['type']#</td>
+                        <td>#$type['module']#</td>
+                        <td>#$type['type_info']['text_type_long']#</td>
+                        <td>#$type_states[$type['type_state']]['name']#</td>
+                    </tr>
+                    </xar:foreach>
+                </tbody>
+            </table>
+        </xar:if>
+
+        <xar:if condition="!empty($new)">
+            <h3>New Block Types</h3>
+            <p>The following block types were added to the system</p>
+            <table class="xar-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Module</th>
+                        <th>Description</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <xar:foreach in="$new" value="$type">
+                    <tr>
+                        <td>#$type['type']#</td>
+                        <td>#$type['module']#</td>
+                        <td>#$type['type_info']['text_type_long']#</td>
+                        <td>#$type_states[$type['type_state']]['name']#</td>
+                    </tr>
+                    </xar:foreach>
+                </tbody>
+            </table>
+        </xar:if>
+
+
+        <xar:if condition="!empty($new)">
+            <h3>Activated Block Types</h3>
+            <p>The following block types were reactivated</p>
+            <table class="xar-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Module</th>
+                        <th>Description</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <xar:foreach in="$new" value="$type">
+                    <tr>
+                        <td>#$type['type']#</td>
+                        <td>#$type['module']#</td>
+                        <td>#$type['type_info']['text_type_long']#</td>
+                        <td>#$type_states[$type['type_state']]['name']#</td>
+                    </tr>
+                    </xar:foreach>
+                </tbody>
+            </table>
+        </xar:if>
+
+        <xar:if condition="!empty($error)">
+            <h3>Block Types in Error</h3>
+            <p>The following block types were found to be in error state</p>
+            <table class="xar-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Module</th>
+                        <th>Description</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <xar:foreach in="$error" value="$type">
+                    <tr>
+                        <td>#$type['type']#</td>
+                        <td>#$type['module']#</td>
+                        <td>#$type['type_info']['text_type_long']#</td>
+                        <td>#$type_states[$type['type_state']]['name']#</td>
+                    </tr>
+                    </xar:foreach>
+                </tbody>
+            </table>
+        </xar:if>
+
+        <xar:if condition="!empty($missing)">
+            <h3>Missing Block Types</h3>
+            <p>The following block types were found to be missing</p>
+            <table class="xar-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Module</th>
+                        <th>Description</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <xar:foreach in="$missing" value="$type">
+                    <tr>
+                        <td>#$type['type']#</td>
+                        <td>#$type['module']#</td>
+                        <td>#$type['type_info']['text_type_long']#</td>
+                        <td>#$type_states[$type['type_state']]['name']#</td>
+                    </tr>
+                    </xar:foreach>
+                </tbody>
+            </table>
+        </xar:if>
+ 
+        <xar:if condition="!empty($unavailable)">
+            <h3>Unavailable Block Types</h3>
+            <p>The following block types were found to belong to modules which are not active</p>
+            <table class="xar-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Module</th>
+                        <th>Description</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <xar:foreach in="$unavailable" value="$type">
+                    <tr>
+                        <td>#$type['type']#</td>
+                        <td>#$type['module']#</td>
+                        <td>#$type['type_info']['text_type_long']#</td>
+                        <td>#$type_states[$type['type_state']]['name']#</td>
+                    </tr>
+                    </xar:foreach>
+                </tbody>
+            </table>
+        </xar:if>
+        <fieldset>
+            <div class="xar-align-center">
+                <form method="get" action="#xarServer::getCurrentURL()#">
+                    <input type="hidden" name="module" id="module" value="blocks"/>
+                    <input type="hidden" name="type" id="type" value="admin"/>
+                    <input type="hidden" name="func" id="func" value="refresh_types"/>
+                    <xar:var name="submitLabel">Refresh Again</xar:var>
+                    <input type="submit" value="#$submitLabel#"/>
+                </form>
+            </div>
+        </fieldset>
+    </div>
+</xar:template>          

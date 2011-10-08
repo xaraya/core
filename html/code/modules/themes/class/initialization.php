@@ -70,7 +70,7 @@ class ThemeInitialization extends Object
             foreach($themeDirs as $dir) {
                 // Run the initialization routine
                 self::inittheme($dir);
-            } 
+            }
             $dbconn->commit();
         } catch(Exception $e) {
             // TODO: catch more specific exceptions than all?
@@ -78,14 +78,14 @@ class ThemeInitialization extends Object
             throw $e;
         }
 
-                
+
         // Clear the property types from cached memory
 //        xarCoreCache::delCached('DynamicData','PropertyTypes');
-        
+
         return true;
     }
-    
-    static public function inittheme($dir) 
+
+    static public function inittheme($dir)
     {
         sys::import('modules.dynamicdata.class.objects.descriptor');
         $class = UCFirst($dir) . 'Init';

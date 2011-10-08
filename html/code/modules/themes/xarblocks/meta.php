@@ -1,6 +1,7 @@
 <?php
 /**
- *  Initialise meta block
+ * Meta Block
+ *
  * @package modules
  * @subpackage themes module
  * @category Xaraya Web Applications Framework
@@ -11,107 +12,38 @@
  * @link http://xaraya.com/index.php/release/70.html
  */
 /**
- * initialise block
+ * Initialise block info
+ *
  * @author  John Cox
  * @author  Carl Corliss
  * @access  public
  * @return  void
 */
-
 sys::import('xaraya.structures.containers.blocks.basicblock');
-
 class Themes_MetaBlock extends BasicBlock
 {
-    public $name                = 'MetaBlock';
-    public $module              = 'themes';
-    public $text_type           = 'Meta';
-    public $text_type_long      = 'Meta Keywords';
-    public $xarversion          = '2.2.1';
-    public $show_preview        = true;
-    public $usershared          = true;
-    public $pageshared          = false;
-    
+    protected $type                = 'meta';
+    protected $module              = 'themes';
+    protected $text_type           = 'Meta';
+    protected $text_type_long      = 'Meta Keywords';
+    protected $xarversion          = '2.2.1';
+    protected $show_preview        = false;
+    protected $show_help           = true;
+        
     // meta data now stored as array as of 2.2.0
     public $metatags            = array();
     // link data now stored as array as of 2.2.1
     public $linktags            = array();
-
-    public function __construct(Array $data=array())
+    
+    public function init() 
     {
+        parent::init();
         if (empty($this->metatags))
             $this->metatags = $this->default_metatags();
         if (empty($this->linktags))
             $this->linktags = $this->default_linktags();
-        parent::__construct($data);
     }
 
-/**
- * Display func.
- * @param $data array containing title,content
- * @todo: add the same functionality for links we now use for metatags
- */
-    function display(Array $data=array())
-    {
-        $data = parent::display($data);
-        if (empty($data)) return;
-
-        $meta = !empty($data['content']) ? $data['content'] : array();
-        /** support for dynamic description and dynamic keywords is now
-         *  supplied by the xar:meta tag, and not hardcoded here. It is no longer
-         *  limited to use by the keywords and articles module, and can be utilised
-         *  by content authors directly within templates.
-         *
-         *  To add a description, overwriting any existing one, use
-         *  <xar:meta type="name" value="description" content="my description"/>
-         *  To append a description, eg adding to the default set in the meta block...
-         *  <xar:meta type="name" value="description" content="my description to append" append="true"/>
-         *  To add keywords, overwriting any existing ones
-         *  <xar:meta type="name" value="keywords" content="my, keywords, to, use"/>
-         *  To append keywords, eg adding to those already set in the meta block...
-         *  <xar:meta type="name" value="keywords" content="my, keywords, to, append" append="true"/>
-        **/
-
-        // By the time we get here, the stored metatags will already be queued
-        // So we just need to add any tags with dynamic values, in this case
-        // the equiv meta tag now sets text/html as content, but this is 
-        // determined by the page template, in our current setup compiled too 
-        // late to pull it in here, this is addressed in the tpl_order 
-        // scenario, no choice but to leave or delete, leaving it for now 
-        sys::import('modules.themes.class.xarmeta');
-        $xarmeta = xarMeta::getInstance();
-        $xarmeta->register(array(
-            'type' => 'http-equiv',
-            'value' => 'Content-Type',
-            'content' => 'text/html; charset=' . xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale()),
-            'lang' => '',
-            'dir' => '',
-            'scheme' => '',
-        ));
-        // while we're here, handle modules setting meta refresh via the cache
-        // NOTE: this functionality is deprecated, instead use the xar:meta tag, eg...
-        // <xar:meta type="http-equiv" value="refresh" content="3; URL=http://www.example.com"/>
-        if (xarVarIsCached('Meta.refresh','url') && xarVarIsCached('Meta.refresh','time')) {
-            $xarmeta->register(array(
-                'type' => 'http-equiv',
-                'value' => 'Refresh',
-                'content' => xarVarGetCached('Meta.refresh','time').'; URL='.xarVarGetCached('Meta.refresh','url'),
-                'lang' => '',
-                'dir' => '',
-                'scheme' => '',
-            ));
-        }
-
-        if (!empty($this->linktags))
-            $meta['linktags'] = $this->parseLinkTags();    
-
-         //Pager Buttons
-        $meta['first']          = xarVarGetCached('Pager.first','leftarrow');
-        $meta['last']           = xarVarGetCached('Pager.last','rightarrow');
-
-        $data['content'] = $meta;
-        return $data;
-
-    }
     
     public function upgrade($oldversion)
     {
@@ -369,5 +301,6 @@ class Themes_MetaBlock extends BasicBlock
         );
         return $linktags;   
     }
+
 }
 ?>

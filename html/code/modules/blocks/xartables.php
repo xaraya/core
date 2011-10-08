@@ -19,9 +19,12 @@
 function blocks_xartables()
 {
     $prefix = xarDB::getPrefix();
-    $tables['userblocks']   = $prefix . '_userblocks';
-    $tables['block_types']  = $prefix . '_block_types';
-    $tables['cache_blocks'] = $prefix . '_cache_blocks';
+    //$tables['userblocks']         = $prefix . '_userblocks';
+    $tables['block_instances']        = $prefix . '_block_instances';
+    //$tables['block_group_instances']  = $prefix . '_block_group_instances';
+    $tables['block_types']            = $prefix . '_block_types';
+    //$tables['cache_blocks']           = $prefix . '_cache_blocks';
+    
     return $tables;
 }
 ?>

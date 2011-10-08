@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template type="module" module="blocks" file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>#$type['type_info']['text_type']# Block Type</h2>
+        <xar:template type="module" module="blocks" file="admin-interfaces"/>
+        <!-- Basic type information (from db), displayed in every interface -->
+        <fieldset>
+            <legend>Block Type</legend>
+            <div class="xar-row">
+                <div class="xar-col">Type ID</div>
+                <div class="xar-col">#$type['type_id']#</div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">Type</div>
+                <div class="xar-col">#$type['type']#</div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">Module</div>
+                <div class="xar-col">
+                <xar:if condition="!empty($type['module'])">
+                    #$type['module']#
+                 <xar:else/>
+                    [ none ]
+                 </xar:if>
+                 </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">Version</div>
+                <div class="xar-col">
+                <xar:if condition="!empty($type['type_info']['xarversion']) and $type['type_info']['xarversion'] ne '0.0.0'">
+                    #$type['type_info']['xarversion']#
+                <xar:else/>
+                    [ unknown ]
+                </xar:if>
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">Status</div>
+                <div class="xar-col">
+                    <xar:if condition="$type['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
+                        <a href="#xarServer::getCurrentURL(array('tab' => 'status'))#">#$type_states[$type['type_state']]['name']#</a>
+                    <xar:else/>
+                        #$type_states[$type['type_state']]['name']#
+                    </xar:if>
+                </div>
+            </div>
+        </fieldset>
+        <xar:if condition="$interface eq 'display'">
+            <!-- display interface methods -->
+            <xar:if condition="$method eq 'info'">
+                <!-- Detail information for this block type -->
+                <fieldset>
+                    <legend>Block Type Information</legend>
+                    <div class="xar-row">
+                        <div class="xar-col">Name</div>
+                        <div class="xar-col">#$type['type_info']['text_type']#</div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">Description</div>
+                        <div class="xar-col">#$type['type_info']['text_type_long']#</div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">Author</div>
+                        <div class="xar-col">
+                        <xar:if condition="!empty($type['type_info']['author'])">
+                            #$type['type_info']['author']#
+                         <xar:else/>
+                            [ unknown ]
+                         </xar:if>
+                         </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">Contact</div>
+                        <div class="xar-col">
+                        <xar:if condition="!empty($type['type_info']['contact'])">
+                            #$type['type_info']['contact']#
+                         <xar:else/>
+                            [ unknown ]
+                         </xar:if>
+                         </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">Credits</div>
+                        <div class="xar-col">
+                        <xar:if condition="!empty($type['type_info']['credits'])">
+                            #$type['type_info']['credits']#
+                         <xar:else/>
+                            [ unknown ]
+                         </xar:if>
+                         </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">License</div>
+                        <div class="xar-col">
+                        <xar:if condition="!empty($type['type_info']['license'])">
+                            #$type['type_info']['license']#
+                         <xar:else/>
+                            [ unknown ]
+                         </xar:if>
+                         </div>
+                    </div>
+                    <xar:if condition="!empty($type_output)">
+                        <xar:var name="type_output" prep="false"/>
+                    </xar:if>   
+                </fieldset>
+                <fieldset>
+                    <legend>Block Type Tag Parameters</legend>                
+            <!-- Permitted xar:block tag parameters for this block type -->
+            <table class="xar-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Default Value</th>
+                        <th>Data Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Standard xar:block tag attributes -->
+                    <tr>
+                        <td>title</td>
+                        <td>""</td>
+                        <td>string</td>
+                    </tr>
+                    <tr>
+                        <td>template</td>
+                        <td>""</td>
+                        <td>string</td>
+                    </tr>
+                    <tr>
+                        <td>nocache</td>
+                        <td>#$type['type_info']['nocache']#</td>
+                        <td>boolean</td>
+                    </tr>
+                    <tr>
+                        <td>usershared</td>
+                        <td>#$type['type_info']['usershared']#</td>
+                        <td>integer</td>
+                    </tr>
+                    <tr>
+                        <td>pageshared</td>
+                        <td>#$type['type_info']['pageshared']#</td>
+                        <td>boolean</td>
+                    </tr>
+                    <tr>
+                        <td>cacheexpire</td>
+                        <td>#$type['type_info']['cacheexpire']#</td>
+                        <td>integer</td>
+                    </tr>
+                    <!-- Block type specific xar:block tag attributes -->
+                    <xar:if condition="!empty($type_params)">
+                        <xar:foreach in="$type_params" value="$param">
+                            <tr>
+                                <td>#$param['attribute']#</td>
+                                <td>#$param['default']#</td>
+                                <td>#$param['datatype']#</td>
+                            </tr>
+                        </xar:foreach>
+                    </xar:if>
+                </tbody>
+            </table>
+                </fieldset>
+
+
+         
+            <xar:elseif condition="$method eq 'preview'"/>
+                <xar:if condition="!empty($type_output)">
+                    <xar:var name="type_output" prep="false"/>
+                <xar:else/>
+                    <p class="xar-note">No preview available for this block type</p>
+                </xar:if>              
+            <xar:elseif condition="$method eq 'help'"/>
+                <xar:if condition="!empty($type_output)">
+                    <xar:var name="type_output" prep="false"/>
+                <xar:else/>
+                    <p class="xar-note">No help available for this block type</p>
+                </xar:if>
+            <xar:elseif condition="$method eq 'status'"/>
+            <xar:if condition="$type['type_state'] eq xarBlock::TYPE_STATE_MISSING">
+                <h3>Block Type Missing</h3>
+                <p class="xar-error">
+                    Block type file(s) not found or could not be loaded.
+                </p>
+                <h4>Cause</h4>
+                <p>
+                    This usually happens when the files were moved or deleted, or file
+                    permissions were changed preventing server access to them.
+                </p>
+
+                <h4>Recovery</h4>
+                <xar:sec mask="AdminBlocks" catch="false">
+                <p>
+                    If the file(s) were removed, or permissions changed in error, first replace them,
+                    then <a href="#xarModURL('blocks', 'admin', 'refresh_types')#">click here to reactivate the block type</a>.
+                </p>
+                <p>
+                    If the files were removed because you are no longer using this block type,
+                    <a href="#xarModURL('blocks', 'admin', 'delete_type', array('type_id' => $type['type_id']))#">click here to remove the type from the database</a>.
+                </p>
+                <xar:else/>
+                    <p>Please notify the site administrator</p>
+                </xar:sec>
+
+            <xar:elseif condition="$type['type_state'] eq xarBlock::TYPE_STATE_ERROR"/>
+                <h3>Block Type Error</h3>
+                <p class="xar-error">
+                    Block type could not be instantiated.
+                </p>
+                <h4>Cause</h4>
+                <p>
+                    This error indicates there is a problem with this block types code preventing
+                    it being instantiated by the blocks subsystem.
+                </p>
+
+                <h4>Recovery</h4>
+                <xar:sec mask="AdminBlocks" catch="false">
+                <p>
+                    Let the block developer know by filing a bug report at <a href="http://bugs.xaraya.com/">Xaraya Bugzilla</a>.
+                    <br/>
+                    (If you are the block developer, well, you know what to do...)
+                </p>
+                <xar:else/>
+                    <p>Please notify the site administrator</p>
+                </xar:sec>
+            <xar:elseif condition="$type['type_state'] eq xarBlock::TYPE_STATE_MOD_UNAVAILABLE"/>
+                <h3>Block Type Unavailable</h3>
+                <p class="xar-error">
+                    Block type module unavailable.
+                </p>
+                <h4>Cause</h4>
+                <p>
+                    This error indicates that the module this block type belongs to is unavailable.
+                </p>
+
+                <h4>Recovery</h4>
+                <xar:sec mask="AdminBlocks" catch="false">
+                <p>
+                    Activate the module this block type belongs to.
+                </p>
+                <p>
+                    If the module was removed because you are no longer using it,
+                    <a href="#xarModURL('blocks', 'admin', 'delete_type', array('type_id' => $type['type_id']))#">click here to remove the type from the database</a>.
+                </p>
+                <xar:else/>
+                    <p>Please notify the site administrator</p>
+                </xar:sec>
+            <xar:else/>
+                <h3>Block Type Active</h3>
+                <p class="xar-note">No Problems!</p>
+            </xar:if>                        
+            <xar:else/>
+                <xar:if condition="!empty($type_output)">
+                    <xar:var name="type_output" prep="false"/>
+                </xar:if>              
+            </xar:if>
+        
+        <xar:else/>
+            <!-- form interfaces -->
+            <form action="#xarModURL('blocks', 'admin', 'modify_type')#" method="post">
+                <xar:if condition="$interface eq 'config'">
+                    <div class="xar-row">
+                        <p class="xar-note">
+                            This configuration will be used as default when creating new
+                            instances of this block type or when called as a standalone
+                            instance using the xar:block tag.
+                        </p>
+                    </div>
+                    <xar:if condition="$method eq 'config'">
+                        <fieldset>
+                            <legend>Default Configuration</legend>
+                            <xar:if condition="!empty($type_output)">
+                                #$type_output#
+                                <xar:var name="submitLabel">Update Config</xar:var>
+                            <xar:else/>
+                                <p class="xar-note">
+                                    No additional configuration supplied by this block type.
+                                </p>
+                            </xar:if>
+                        </fieldset>
+                        <xar:if condition="$type['type_category'] eq 'group'">
+                            <!-- Blockgroup type blocks only have an outer template which,
+                                 counter-intuitively is not applied to the blockgroup itself,
+                                 rather it is applied to all instances in the group -->
+                            <fieldset>
+                                <legend>Group Instances Template</legend>
+                                <div class="xar-row">
+                                    <div class="xar-col">
+                                        <label for="type_box_template">
+                                            Instances Outer Template:</label>
+                                    </div>
+                                    <div class="xar-col">
+                                        <input type="text" name="type_box_template" id="type_box_template" value="#$type['type_info']['box_template']#"/>
+                                        <xar:if condition="!empty($invalid['templates'])">
+                                            <p class="xar-error">Error: #$invalid['templates']#</p>
+                                        </xar:if>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        <xar:else/>
+                            <fieldset>
+                                <legend>Templates and groups</legend>
+                                <table class="xar-fullwidth xar-margin-thickends">
+                                    <thead>
+                                        <tr>
+                                            <th>Instance Group</th>
+                                            <th>Outer</th>
+                                            <th>Inner</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Any (default)</td>
+                                            <td><input type="text" name="type_box_template" id="type   _box_template" value="#$type['type_info']['box_template']#"/></td>
+                                            <td><input type="text" name="type_block_template" id="type   _block_template" value="#$type['type_info']['block_template']#"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </fieldset>
+                        </xar:if>
+                        <xar:var name="submitLabel">Update Config</xar:var>
+                    
+                    <xar:else/>
+                        <fieldset>
+                            <legend>Default #$method# configuration</legend>
+                            <xar:if condition="!empty($type_output)">
+                                #$type_output#
+                                <xar:var name="submitLabel">Update Config</xar:var>
+                            <xar:else/>
+                                <p class="xar-note">
+                                    No additional configuration supplied by this block type.
+                                </p>
+                            </xar:if>
+                        </fieldset>                    
+                    </xar:if>
+                
+                <xar:elseif condition="$interface eq 'caching'"/>
+                    <div class="xar-row">
+                        <p class="xar-note">
+                            This configuration will be used as default when creating new
+                            instances of this block type or when called as a standalone
+                            instance using the xar:block tag.
+                        </p>
+                    </div>
+                    <fieldset>
+                        <legend>Default Caching Configuration</legend>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="type_nocache" class="xar-form-label">Disable Caching?</label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:data-input type="checkbox" name="type_nocache" id="type_nocache" value="$type['type_info']['nocache']"/>
+                                </div>
+                            </div>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="type_pageshared" class="xar-form-label">Page Sharing</label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:data-input type="checkbox" name="type_pageshared" id="type_pageshared" value="$type['type_info']['pageshared']"/>
+                                </div>
+                            </div>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="type_usershared" class="xar-form-label">User Sharing</label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:data-input type="dropdown" name="type_usershared" id="type_usershared" value="$type['type_info']['usershared']" options="$usershared_options"/>
+                                </div>
+                            </div>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="type_cacheexpire" class="xar-form-label">Expiration Time</label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:data-input type="textbox" name="type_cacheexpire" id="type_cacheexpire" value="$type['type_info']['cacheexpire']" class="xar-form-textshort"/>
+                                    (format hh:mm:ss) 0 = never expires
+                                </div>
+                            </div>
+                    </fieldset>
+                    <xar:if condition="!empty($type_output)">
+                        <fieldset>
+                            <legend>Block type caching configuration</legend>
+                            <xar:var name="type_output" prep="false"/>
+                        </fieldset>
+                    </xar:if>  
+                    <xar:var name="submitLabel">Update Caching</xar:var>                
+                <xar:elseif condition="$interface eq 'access'"/>
+                    <fieldset>
+                        <legend>Default Access Configuration</legend>
+                        <div class="xar-row">
+                            <label for="type_add_access">Add Instance Access</label>
+                            <p class="xar-note">
+                                Only users with permissions defined here can add new instances of
+                                this block type.
+                            </p>
+                            <xar:set name="propname">'type_add_access'</xar:set>
+                            <xar:data-input type="access" name="$propname" value="$type['type_info']['add_access']"/>
+                        </div>
+                    </fieldset>
+                    <xar:if condition="!empty($type_output)">
+                        <fieldset>
+                            <legend>Block Type Specific Configuration</legend>
+                            <xar:var name="type_output" prep="false"/>
+                        </fieldset>
+                    </xar:if>  
+                    <xar:var name="submitLabel">Update Access</xar:var>               
+                <xar:else/>
+                    <fieldset>
+                        <legend>Block Type Configuration</legend>
+                        <xar:if condition="!empty($type_output)">
+                            #$type_output#
+                            <xar:var name="submitLabel">Update</xar:var>
+                        <xar:else/>
+                            <p class="xar-note">
+                                No additional configuration supplied by this block type.
+                            </p>
+                        </xar:if>
+                    </fieldset>                 
+                </xar:if>
+                <xar:if condition="!empty($submitLabel)">
+                    <fieldset>
+                        <div class="xar-form-action xar-align-center">
+                            <input type="hidden" name="phase" id="phase" value="update"/>
+                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                            <input type="hidden" name="type_id" id="type_id" value="#$type['type_id']#"/>
+                            <input type="hidden" name="interface" id="interface" value="#$interface#"/>
+                            <input type="hidden" name="method" id="method" value="#$method#"/>
+                            <input type="submit" value="#$submitLabel#"/>
+                        </div>
+                    </fieldset>
+                </xar:if>
+            </form>      
+        </xar:if>           
+    </div>
+</xar:template>
