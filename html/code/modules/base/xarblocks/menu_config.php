@@ -22,6 +22,11 @@
 sys::import('modules.base.xarblocks.menu');
 class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 {
+    public function init()
+    {
+        parent::init();
+    }
+
 /**
  * Modify Function to the Blocks Admin
  * @param $data array containing title,content
