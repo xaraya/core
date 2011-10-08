@@ -69,6 +69,13 @@ class ShortRoute extends xarRoute
             $this->validModule = true;
         }
 
+        // if the next part is admin, set type
+        // <chris/> this is a temp fix, to be addressed in mapper2 
+        if (count($path) && !empty($path[0]) && $path[0] == 'admin') {
+            $request->setType(array_shift($path));
+            $parts[$this->typeKey] = $request->getType();
+        }
+        
         // Get the function part
         if (count($path) && !empty($path[0])) {
             $request->setFunction(array_shift($path));
