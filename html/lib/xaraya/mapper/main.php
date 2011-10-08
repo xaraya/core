@@ -189,7 +189,7 @@ class xarController extends Object
      * 
      * @param redirectURL string the URL to redirect to
      */
-    static function redirect($url)
+    static function redirect($url, $httpResponse=NULL)
     {
         xarCache::noCache();
         $redirectURL = urldecode($url); // this is safe if called multiple times.
@@ -214,8 +214,13 @@ class xarController extends Object
             $header = "Location: $redirectURL";
         }// if
 
+        // default response is temp redirect
+        if (!preg_match('/^301|302|303|307/', $httpResponse)) {
+            $httpResponse = 302;
+        }
+
         // Start all over again
-        header($header);
+        header($header, TRUE, $httpResponse);
 
         // NOTE: we *could* return for pure '1 exit point' but then we'd have to keep track of more,
         // so for now, we exit here explicitly. Besides the end of index.php this should be the only
