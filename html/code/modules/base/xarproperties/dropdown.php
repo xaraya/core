@@ -304,7 +304,11 @@ class SelectProperty extends DataProperty
         }
 
         // we're interested in one of the known options (= default behaviour)
-        $options = $this->getOptions();
+        if (count($this->options) > 0) {
+            $options = $this->options;
+        } else {
+            $options = $this->getOptions();
+        }
         foreach ($options as $option) {
             if ($option['id'] == $this->value) {
                 if ($check) return true;
