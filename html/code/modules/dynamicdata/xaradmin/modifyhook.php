@@ -63,12 +63,12 @@ function dynamicdata_admin_modifyhook(Array $args=array())
         $itemid = $objectid;
     }
 
-    $object = & DataObjectMaster::getObject(array('moduleid' => $module_id,
-                                       'itemtype' => $itemtype,
-                                       'itemid'   => $itemid));
+    $descriptorargs = DataObjectDescriptor::getObjectID(array('moduleid'  => $module_id,
+                                       'itemtype'  => $itemtype));
+    sys::import('modules.dynamicdata.class.objects.master');
+    $object = DataObjectMaster::getObject(array('name' => $descriptorargs['name']));
     if (!isset($object)) return;
-
-    $object->getItem();
+    $object->getItem(array('itemid' => $itemid));
 
     // if we are in preview mode, we need to check for any preview values
     if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
