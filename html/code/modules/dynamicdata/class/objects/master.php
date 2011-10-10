@@ -726,7 +726,7 @@ class DataObjectMaster extends Object
                 // this is a generic classname for the object, list and interface
                 $class = $data['class'] . 'List';
             }
-            elseif(class_exists($args['class']) && method_exists($args['class'],'getItems'))
+            elseif(class_exists($data['class']) && method_exists($data['class'],'getItems'))
             {
                 // this is a specific classname for the list
                 $class = $data['class'];
