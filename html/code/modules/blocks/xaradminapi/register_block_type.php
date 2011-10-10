@@ -25,9 +25,13 @@
  * @return true on success, false on failure
  * @throws DATABASE_ERROR, BAD_PARAM
  */
+/**
+ * IMPORTANT: this function is marked for deprecation
+ * The blocks subsystem now automatically creates block types
+ * when modules are activated
+**/
 function blocks_adminapi_register_block_type(Array $args=array())
 {
-    return xarMod::apiFunc('blocks', 'admin', 'create_type', $args);
+    return true;
 }
-
 ?>

@@ -246,7 +246,7 @@ function installer_admin_phase5()
                               $modversion['category'],
                               isset($modversion['admin']) ? $modversion['admin']:false,
                               isset($modversion['user'])  ? $modversion['user']:false,
-                              3);
+                              3); // chris: shouldn't this be a class constant?
             $result = $newStmt->executeUpdate($bindvars);
             $newModId = $dbconn->getLastId($tables['modules']);
         }
@@ -270,7 +270,10 @@ function installer_admin_phase5()
     if (!xarInstallAPIFunc('initialise', array('directory'=>'authsystem', 'initfunc'=>'activate'))) return;
     if (!xarInstallAPIFunc('initialise', array('directory'=>'privileges', 'initfunc'=>'activate'))) return;
     if (!xarInstallAPIFunc('initialise', array('directory'=>'mail', 'initfunc'=>'activate'))) return;
-
+    // todo: activate blocks here *after* all other core modules
+    // block activation takes care of registering all block types for core modules
+    //if (!xarInstallAPIFunc('initialise', array('directory'=>'blocks', 'initfunc'=>'activate'))) return;
+    
     // create the default masks and privilege instances
     sys::import('modules.privileges.xarsetup');
     initializeSetup();

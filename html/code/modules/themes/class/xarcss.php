@@ -44,18 +44,18 @@ class xarCSS extends Object
 
     private static $instance;
     private static $css;
-    
+
     // experimental combine/compress options
     private $cacheDir   = 'cache/css';
     private $combined   = true;
     private $compressed = true;
-        
+
     // prevent direct creation of this object
     private function __construct()
     {
         $this->combined   = xarModVars::get('themes', 'css.combined');
         $this->compressed = xarModVars::get('themes', 'css.compressed');
-    }   
+    }
 
 /**
  * Get instance function
@@ -75,7 +75,7 @@ class xarCSS extends Object
         }
         return self::$instance;
     }
- 
+
 /**
  * Register function
  *
@@ -101,7 +101,8 @@ class xarCSS extends Object
  *         string $args[theme] theme name, optional first theme to look for in theme scope
  *         string $args[module] module for module|block scope, optional, default current module<br/>
  *         string $args[property] standalone property name, required for property scope
- * @todo: support other W3C standard attributes of link and style tags? 
+ *         string $args[block] standalone block name, required for block scope
+ * @todo: support other W3C standard attributes of link and style tags?
  * @return boolean true on success
  * @throws none
  *
@@ -109,20 +110,20 @@ class xarCSS extends Object
     public function register($args)
     {
         extract($args);
-        
+
         // set some defaults
         if (!isset($method)) // link|import|embed
             $method = 'link';
-        
+
         // if method is embed we need a source
         if ($method == 'embed' && empty($source)) return;
 
         if (!isset($scope)) // common|theme|module|block|property
             $scope = 'module';
-        
+
         // if scope is property we need a property name
         if ($scope == 'property' && empty($property)) return;
-        
+
         // init tag from args / defaults
         $tag = array(
             'method'     => $method,
@@ -139,17 +140,18 @@ class xarCSS extends Object
             'theme'      => '',
             'module'     => '',
             'property'   => '',
+            'block'      => '',
             'url'        => '',
             'alternatedir' => !empty($alternatedir) ? xarVarPrepForOS($alternatedir) : '',
-        );       
+        );
 
         // set additional params based on method
         switch ($method) {
             case 'embed':
                 // embed method, we're done, queue the source and bail
-                return $this->queue($method, $scope, $tag['source'], $tag); 
-                break;            
-            case 'import':                
+                return $this->queue($method, $scope, $tag['source'], $tag);
+                break;
+            case 'import':
                 $tag['media'] = str_replace(' ', ', ', $tag['media']);
                 break;
             case 'link':
@@ -190,12 +192,23 @@ class xarCSS extends Object
                 // themes/common/style
                 $paths[] = $commonDir . '/' . $tag['base'] . '/' . $fileName;
                 break;
+            case 'block':
+                if (!empty($block)) {
+                    $tag['block'] = $block;
+                    $block = xarVarPrepForOS($block);
+                    // themes/theme/blocks/block/style
+                    $paths[] = $themeDir . '/blocks/' . $block . '/' . $tag['base'] . '/' . $fileName;
+                    // themes/common/blocks/block/style
+                    $paths[] = $commonDir . '/blocks/' . $block . '/' . $tag['base'] . '/' . $fileName;
+                    // code/blocks/block/xartemplates/style
+                    $paths[] = $codeDir . 'blocks/' . $block . '/xartemplates/' . $tag['base'] . '/' . $fileName;
+                    break;
+                }
+                if (empty($module))
+                    $module = xarVarGetCached('Security.Variables', 'currentmodule');
             case 'module':
                 if (empty($module))
                     $module = xarMod::getName();
-            case 'block':
-                if (empty($module))
-                    $module = xarVarGetCached('Security.Variables', 'currentmodule');
                 $modInfo = xarMod::getBaseInfo($module);
                 if (!isset($modInfo)) return;
                 $tag['module'] = $module;
@@ -232,23 +245,23 @@ class xarCSS extends Object
                 break;
         }
         if (empty($paths)) return;
-        
+
         foreach ($paths as $path) {
             if (!file_exists($path)) continue;
             $filePath = $path;
             break;
         }
         if (empty($filePath)) return;
-        
+
         $tag['url'] = $filePath; //xarServer::getBaseURL() . $filePath;
-        
+
         return $this->queue($method, $scope, $tag['url'], $tag);
-        
+
     }
 
 /**
  * Render function
- * 
+ *
  * Render queued css
  *
  * @author Chris Powis <crisp@xaraya.com>
@@ -261,6 +274,7 @@ class xarCSS extends Object
 **/
     public function render($args)
     {
+        //print_r(self::$css);
         if (empty(self::$css)) return;
         extract($args);
         if ($this->combined) {
@@ -268,7 +282,7 @@ class xarCSS extends Object
         }
         $args['styles'] = self::$css;
         $args['comments'] = !empty($comments);
-        
+
         return xarTpl::module('themes', 'css', 'render', $args);
     }
 
@@ -281,7 +295,7 @@ class xarCSS extends Object
  * @access public
  * @param string  $scope the scope of the file (common, theme, module, block, property)
  * @param string  $method the method to use (link, import, embed)
- * @param string  $url source, either code to embed or url of file to link or import  
+ * @param string  $url source, either code to embed or url of file to link or import
  * @param array   $data tag data to cache
  * @return boolean true on success
  * @todo make private once xarTpl functions are deprecated
@@ -289,18 +303,18 @@ class xarCSS extends Object
     public function queue($method, $scope, $url, $data)
     {
         if (empty($scope) || empty($method) || empty($url) || empty($data)) return;
-        
+
         // keep track of style when we're caching
         xarCache::addStyle($data);
-        
-        // init the queue 
+
+        // init the queue
         if (!isset(self::$css)) {
-            // scope rendering order...           
+            // scope rendering order...
             $scopes = array(
-                'common'   => array(), 
-                'theme'    => array(), 
-                'module'   => array(), 
-                'block'    => array(), 
+                'common'   => array(),
+                'theme'    => array(),
+                'module'   => array(),
+                'block'    => array(),
                 'property' => array(),
             );
             // method rendering order...
@@ -313,22 +327,22 @@ class xarCSS extends Object
         }
         // skip unknown scopes/methods (for now)
         if (!isset(self::$css[$method][$scope])) return;
-        
-        // hash the url to prevent the same source code 
+
+        // hash the url to prevent the same source code
         // or file name being included more than once
-        $index=md5($url);        
-        
+        $index=md5($url);
+
         // queue the style
         self::$css[$method][$scope][$index] = $data;
 
         return true;
-    }   
+    }
 
 /**
  * Combine CSS
  *
- * Takes the content of queued css files and embedded source code, 
- * or @imported styles contained within other stylesheets and combines 
+ * Takes the content of queued css files and embedded source code,
+ * or @imported styles contained within other stylesheets and combines
  * them into a single stylesheet
  *
  * @author Chris Powis <crisp@xaraya.com>
@@ -360,7 +374,7 @@ class xarCSS extends Object
                             $string = $this->combineimports($string, $style['url']);
                         }
                         //if (empty($string)) continue;
-                        $content .= "/* Combined CSS from file $style[url] */\n\n";                        
+                        $content .= "/* Combined CSS from file $style[url] */\n\n";
                         $content .= $string;
                     } else {
                         if ($this->compressed) {
@@ -378,7 +392,7 @@ class xarCSS extends Object
                     unset(self::$css[$method][$scope][$index]);
                 }
             }
-        }                                    
+        }
         if (empty($content)) return;
         // @todo: implement proper caching
         $cacheKey = md5($content);
@@ -408,7 +422,7 @@ class xarCSS extends Object
 /**
  * Compress CSS
  *
- * Compress CSS (when combining and caching) 
+ * Compress CSS (when combining and caching)
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access private
@@ -419,14 +433,14 @@ class xarCSS extends Object
     private function compress($string='', $fileName='')
     {
         if (empty($string)) return '';
-        // remove comments 
+        // remove comments
         $string = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $string);
-        // remove tabs, spaces, newlines, etc. 
+        // remove tabs, spaces, newlines, etc.
         $string = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $string);
         if (!empty($fileName)) {
-            // replace relative paths like url(../images/somefile.png)   
+            // replace relative paths like url(../images/somefile.png)
             $string = $this->fixurlpaths($string, $fileName);
-            // combine any @imports from this file 
+            // combine any @imports from this file
             $string = $this->combineimports($string, $fileName);
         }
         return $string;
@@ -445,7 +459,7 @@ class xarCSS extends Object
  * @param  string $fileName the name of the file the string belongs to
  * @throws none
  * return  string the string with urls replaced
-**/     
+**/
     private function fixurlpaths($string, $fileName)
     {
         // remove the domain name from path (if any)
@@ -466,7 +480,7 @@ class xarCSS extends Object
                 // skip replacements on paths already relative to web root
                 if (strpos($match, '/') === 0) continue;
                 $curPath = $filePath;
-                // see if the declaration is relative to current file directory                
+                // see if the declaration is relative to current file directory
                 $count = substr_count($match,'../');
                 if (!empty($count)) {
                     while ($count > 0) {
@@ -482,7 +496,7 @@ class xarCSS extends Object
             }
         }
         return $string;
-    }    
+    }
 
 /**
  * Combine imports
@@ -495,7 +509,7 @@ class xarCSS extends Object
  * @param  string $fileName the name of the file the string belongs to
  * @throws none
  * return  string the string with @imports replaced with content
-**/  
+**/
     private function combineimports($string, $fileName)
     {
         if (preg_match_all('!@import\s*url\([\'|"]?([^\'|"|\)]*)[\'|"]?\);!', $string, $matches)) {
@@ -517,9 +531,9 @@ class xarCSS extends Object
                 $string = str_replace($matches[0][$i], $content, $string);
             }
         }
-        return $string;     
+        return $string;
     }
-    
+
     // prevent cloning of singleton instance
     public function __clone()
     {

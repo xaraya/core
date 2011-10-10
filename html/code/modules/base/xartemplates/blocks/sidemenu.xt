@@ -15,7 +15,7 @@
                         -->
                         <xar:set name="subdata">array(
                             'menulinks' => $adminmods,       // pass the menulinks
-                            'menuid' => 'menu' . $blockid,  // pass a unique menuid
+                            'menuid' => 'menu' . $_bl_block_id,  // pass a unique menuid
                             'marker' => $marker,            // pass through the marker
                             'maxlevels' => 2                // specify max levels
                         )</xar:set>
@@ -37,7 +37,7 @@
                             -->
                             <xar:set name="subdata">array(
                                 'menulinks' => $menulinks,          // pass the menulinks
-                                'menuid' => 'adminmenu' . $blockid, // pass a unique menuid
+                                'menuid' => 'adminmenu' . $_bl_block_id, // pass a unique menuid
                                 'marker' => $marker,            // pass through the marker
                                 'maxlevels' => 2,                   // specify max levels
                             )</xar:set>

@@ -23,7 +23,7 @@ class Configurations extends Object
     {
         $this->reader = new XMLReader();
     }
-    
+
     function getConfigurations()
     {
         return $this->configurations;
@@ -46,9 +46,9 @@ class Configurations extends Object
         }
         $this->reader->close();
         $this->files = $checked_files;
-        return true; 
+        return true;
     }
-    
+
     function get_theme_files($directory, $filter=FALSE)
     {
         $directory_tree = array();
@@ -81,7 +81,7 @@ class Configurations extends Object
                          if(is_dir($path)) {
                              // add the directory details to the file list
                              $dirs = $this->get_theme_files($path, $filter);
-                             $directory_tree = array_merge($directory_tree, $dirs);  
+                             $directory_tree = array_merge($directory_tree, $dirs);
 
                          // if the new path is a file
                          } elseif(is_file($path)) {
@@ -99,17 +99,17 @@ class Configurations extends Object
                  }
              }
              // close the directory
-             closedir($directory_list); 
+             closedir($directory_list);
 
              // return file list
              return $directory_tree;
 
          // if the path is not readable ...
          } else {
-             return array();    
+             return array();
          }
     }
-    
+
     function parse_theme_template($filename,$pattern="")
     {
         if (!file_exists($filename)) return false;
@@ -125,11 +125,11 @@ class Configurations extends Object
         $this->reader->xml($filestring);
         $nodes = array();
         $i = 0;
-        
+
         while ($this->reader->read()) {
             $i++;
             if ($this->reader->name != 'xar:comment' &&
-                $this->reader->nodeType == XMLReader::TEXT &&            
+                $this->reader->nodeType == XMLReader::TEXT &&
                 $this->reader->hasValue) {
                 $string = $this->reader->value;
                 preg_match_all($pattern, $string, $matches);
@@ -137,7 +137,7 @@ class Configurations extends Object
                     foreach ($matches[1] as $match) {
                         $this->configurations[$match][] = array('line' => $i, 'file' => $this->filename);
                     }
-                }                    
+                }
             }
         }
         $this->reader->close();
