@@ -31,8 +31,10 @@ function sql_230_06()
         $dbconn->begin();
         $query = "ALTER TABLE $table ADD COLUMN class TINYINT";              
         $dbconn->Execute($query);
+        $dbconn->commit();     
 
         // get themes from db 
+        $dbconn->begin();
         $query = "SELECT themes.regid,
                          themes.directory
                   FROM $table AS themes";
@@ -50,9 +52,9 @@ function sql_230_06()
             $stmt->executeQuery($bindvars);
         }
         $result->close();
-        
         $dbconn->commit();     
-    } catch (Exception $e) { throw($e);
+        
+    } catch (Exception $e) {
         // Damn
         $dbconn->rollback();
         $data['success'] = false;
