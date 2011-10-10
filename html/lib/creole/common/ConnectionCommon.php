@@ -322,13 +322,21 @@ abstract class ConnectionCommon {
         $stmt = $this->prepareStatement($sql);
         if($stmt) {
             if($this->isSelect($sql)) {
-                $res = $stmt->executeQuery($bindvars,$fetchmode);
+                try {
+                    $res = $stmt->executeQuery($bindvars,$fetchmode);
+                } catch (Exception $e) {
+                    throw new SQLException("CREOLE: query $sql failed to execute");
+                }
                 if($res) {
                     // ADODB used to set the resultset on the first, doh!
                     $res->first();
                 }
             } else {
-                $res = $stmt->executeUpdate($bindvars);
+                try {
+                    $res = $stmt->executeUpdate($bindvars);
+                } catch (Exception $e) {
+                    throw new SQLException("CREOLE: SELECT query $sql failed to execute");
+                }
                 // Save it, for adodb compat for the the method Affected_Rows
                 $this->affected_rows = $res;
                 if($res == 0 ) $res=true;
