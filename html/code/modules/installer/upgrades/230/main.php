@@ -22,6 +22,7 @@ function main_upgrade_230()
                         'sql_230_04', // Import the themes configurations object
                         'sql_230_05', // register Mod* event subjects and observers
                         'sql_230_06', // Add a class column to the themes table
+                        'sql_230_07', // soloblocks refactor 
                     );
     foreach ($upgrades as $upgrade) {
         if (!Upgrader::loadFile('upgrades/230/database/' . $upgrade . '.php')) {
