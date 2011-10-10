@@ -131,9 +131,9 @@ class ObjectRefProperty extends SelectProperty
         // Make sure the display and store fields are valid properties of this object
         $fields = array_keys($object->getProperties());
         if (!in_array($this->initialization_display_prop,$fields))
-            throw new EmptyParameterException($object->name . '.' .$this->initialization_display_prop);
+            throw new EmptyParameterException('display_prop: ' . $object->name . '.' .$this->initialization_display_prop);
         if (!in_array($this->initialization_store_prop,$fields))
-            throw new EmptyParameterException($object->name . '.' .$this->initialization_store_prop);
+            throw new EmptyParameterException('store_prop: ' . $object->name . '.' .$this->initialization_store_prop);
 
         // Check if the store_prop is the itemid
         if ($object->properties[$this->initialization_store_prop]->type == 21) { // itemid
