@@ -45,7 +45,10 @@ function blocks_typesapi_getitems(Array $args=array())
     if (isset($module)) {
         if (empty($module)) {
             $module_id = 0;
-        } elseif (!is_string($module) || !xarMod::isAvailable($module)) {
+        } elseif (!is_string($module) || 
+            (!xarMod::isAvailable($module) && 
+                (!xarVarIsCached('Blocks.event', 'modremove') || xarVarGetCached('Blocks.event',  'modremove') != $module))
+            ) {
             $invalid[] = 'module';
         } else {
             $modinfo = xarMod::getBaseInfo($module);
