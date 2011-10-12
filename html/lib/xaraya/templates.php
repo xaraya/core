@@ -36,9 +36,6 @@ sys::import('xaraya.variables.config');
 class xarTpl extends Object
 {
     // statics to replace $GLOBALS[xarTpl_*]
-    // @todo: implement common templates in cascade    
-    //protected static $commonThemeName  = 'common';
-    //protected static $commonThemeDir   = 'themes/common';
     protected static $themeName;
     protected static $themeDir;
     
@@ -356,17 +353,11 @@ class xarTpl extends Object
  */
     public static function module($modName, $modType, $funcName, $tplData = array(), $templateName = NULL)
     {
-        if (!empty($templateName)) {
-            $templateName = xarVarPrepForOS($templateName);
-        }
-
         // Basename of module template is apitype-functioname
         $tplBase        = "$modType-$funcName";
 
-        // Get the right source filename
-        $sourceFileName = self::getSourceFileName($modName, $tplBase, $templateName);
-
-        //assert('!empty($sourceFileName); /* The source file for the template is empty in xarTpl::module */');
+        // Get the right source filename (current > common > module)
+        $sourceFileName = self::getScopeFileName('module', $modName, $tplBase, $templateName);
 
         // Common data for BL
         $tplData['_bl_module_name'] = $modName;
@@ -377,17 +368,17 @@ class xarTpl extends Object
         $tplData['tpl'] = $tpl;
 
 
-    // TODO: make this work different, for example:
-    // 1. Only create a link somewhere on the page, when clicked opens a page with the variables on that page
-    // 2. Create a page in the themes module with an interface
-    // 3. Use 1. to link to 2.
-    // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
-    if (method_exists('xarModVars','Get') && function_exists('xarUserGetVar')){
-        $variable_dump = xarModVars::get('themes', 'variable_dump') && (in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')));
-        if ($variable_dump == true){
-            echo '<pre>',var_dump($tplData),'</pre>';
-        }
-    }
+        // TODO: make this work different, for example:
+        // 1. Only create a link somewhere on the page, 
+        //    when clicked opens a page with the variables on that page
+        // 2. Create a page in the themes module with an interface
+        // 3. Use 1. to link to 2.
+        if (method_exists('xarModVars','Get') && function_exists('xarUserGetVar')) {
+            if (xarModVars::get('themes', 'variable_dump') &&
+                in_array(xarUserGetVar('uname'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+                echo '<pre>',var_dump($tplData),'</pre>';
+            }
+        } 
 
         if (empty($sourceFileName)) {
             throw new FileNotFoundException("Module: [$modName],[$tplBase],[$templateName]");
@@ -411,16 +402,13 @@ class xarTpl extends Object
  */
     public static function block($modName, $blockType, $tplData = array(), $tplName = NULL, $tplBase = NULL)
     {
-        if (!empty($tplName)) {
-            $tplName = xarVarPrepForOS($tplName);
-        }
         // use name of blocktype as base unless over-ridden
-        $tplBase = xarVarPrepForOS(empty($tplBase) ? $blockType : $tplBase);
+        $tplBase = empty($tplBase) ? $blockType : $tplBase;
         if (!empty($modName)) {
-            // get module block template
+            // get module block template (current > common > module)
             $sourceFileName = self::getScopeFileName('module', $modName, $tplBase, $tplName, 'blocks');
         } else {
-            // get standalone block template
+            // get standalone block template (current > common > block)
             $sourceFileName = self::getScopeFileName('block', $blockType, $tplBase, $tplName);
         }
         if (empty($sourceFileName)) {
@@ -429,52 +417,78 @@ class xarTpl extends Object
             throw new FileNotFoundException($vars, $msg);
         }
         return self::executeFromFile($sourceFileName, $tplData);
-        /*
-        // Basename of block can be overridden
-        $templateBase   = xarVarPrepForOS(empty($tplBase) ? $blockType : $tplBase);
 
-        // Get the right source filename
-        $sourceFileName = self::getSourceFileName($modName, $templateBase, $tplName, 'blocks');
-        if (empty($sourceFileName)) {
-            throw new FileNotFoundException("Block: [$modName],[$templateBase],[$tplName]");
-        }
-        return self::executeFromFile($sourceFileName, $tplData);
-        */
     }
+
+/**
+ * Determine the template sourcefile to use
+ *
+ * Based on the scope, the module|property|block|theme name, the basename for the template
+ * a possible override and a subpart and the active
+ * theme, determine the template source we should use and loads
+ * the appropriate translations based on the outcome (see todo).
+ *
+ * @access private
+ * @param  string $scope        scope in which to look for templates [theme|module|block|property]
+ * @param  string $package      name of the theme|module|block|property supplying the template
+ * @param  string $tplBase      The base name for the template
+ * @param  string $tplName      The name of the template to use, if any
+ * @param  string $tplPart      Optional sub path to look for templates in, default ''
+ * @return string the path [including sys::code()] to an existing template sourcefile, or empty
+ *
+ * @todo do we need to load the translations here or a bit later? (here:easy, later: better abstraction) 
+ */
 
     public static function getScopeFileName($scope, $package, $tplBase, $tplName=null, $tplPart='')
     {
-
+        // prep input
+        $package = xarVarPrepForOS($package);
+        $tplBase = xarVarPrepForOS($tplBase);
+        if (!empty($tplName))
+            $tplName = xarVarPrepForOS($tplName);
+        if (!empty($tplPart))
+            $tplPart = xarVarPrepForOS($tplPart);
+        $canTemplateName = strtr($tplName, "-", "/");
+        $canonical = ($canTemplateName == $tplName) ? false : true;
+        
+        // default paths 
         $themePath = self::getThemeDir();
         $commonPath = self::getThemeDir('common');
         $codePath = sys::code();
-        $package = xarVarPrepForOS($package);
-        $canTemplateName = strtr($tplName, "-", "/");
-        $canonical = ($canTemplateName == $tplName) ? false : true;
-
-        switch ($scope) {
-            case 'module':
-                $packages = 'modules';           
-            break;
-            case 'block':
-                // standalone blocks
-                $packages = 'blocks';
-            break;
-            case 'property':
-                // standalone properties           
-                $packages = 'properties';
-            break;
-            default:
-                $vars = array($scope);
-                $msg = 'Invalid scope "#(1)" for core function xarTpl::getScopeFileName()';
-                throw new BadParameterException($vars, $msg);
-            break;
-        }
-        $basepaths = array(
-            "$themePath/$packages/$package/",
-            "$commonPath/$packages/$package/",
-            "{$codePath}{$packages}/$package/xartemplates/",
-        ); 
+    
+        $basepaths = array();
+        if ($scope == 'theme') {
+            // theme scope
+            // if package isn't current theme or common theme, look there first
+            if ($package != self::getThemeName() && $package != 'common')
+                $basepaths[] = self::getThemeDir($package);
+            $basepaths[] = $themePath;
+            $basepaths[] = $commonPath;
+        } else {
+            switch ($scope) {
+                case 'module':
+                    $packages = 'modules';           
+                break;
+                case 'block':
+                    // standalone blocks
+                    $packages = 'blocks';
+                break;
+                case 'property':
+                    // standalone properties           
+                    $packages = 'properties';
+                break;
+                default:
+                    $vars = array($scope);
+                    $msg = 'Invalid scope "#(1)" for core function xarTpl::getScopeFileName()';
+                    throw new BadParameterException($vars, $msg);
+                break;
+            }
+            $basepaths = array(
+                "$themePath/$packages/$package/",
+                "$commonPath/$packages/$package/",
+                "{$codePath}{$packages}/$package/xartemplates/",
+            );
+        } 
         $paths = array();
         foreach ($basepaths as $basepath) {
             $paths[] = "$basepath/$tplPart/$tplBase-$tplName.xt";
@@ -662,6 +676,7 @@ class xarTpl extends Object
 
         } else {
             $tplType = xarVarPrepForOS($tplType);
+            // @todo: figure out correct cascade here 
 
             // Template type for the property can be overridden too (currently unused)
             $templateBase   = xarVarPrepForOS(empty($tplBase) ? $tplType : $tplBase);
@@ -886,11 +901,8 @@ class xarTpl extends Object
     {
         if (empty($pageTemplate)) $pageTemplate = self::getPageTemplateName();
 
-        // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
-        $pageTemplate = xarVarPrepForOS($pageTemplate);        
-        $sourceFileName = self::getThemeDir() . "/pages/$pageTemplate.xt";
-        if (!file_exists($sourceFileName))
-            $sourceFileName = self::getThemeDir('common') . "/pages/$pageTemplate.xt";
+        // get page template source (current > common)
+        $sourceFileName = self::getScopeFileName('theme', self::getThemeName(), $pageTemplate, null, 'pages');
 
         $tpl = (object) null; // Create an object to hold the 'specials'
         $tpl->pageTitle = self::getPageTitle();
@@ -916,34 +928,20 @@ class xarTpl extends Object
  */
     public static function renderBlockBox($blockInfo, $templateName = NULL)
     {
-        // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
-        $templateName = xarVarPrepForOS($templateName);
-        $themeDir = self::getThemeDir();
-        $commonDir = self::getThemeDir('common');
-       
-        if (!empty($templateName) && file_exists("$themeDir/blocks/$templateName.xt")) {
-            // specific template in current theme
-            $sourceFileName = "$themeDir/blocks/$templateName.xt";
-        } elseif (!empty($templateName) && file_exists("$commonDir/blocks/$templateName.xt")) {
-            // specific template in common
-            $sourceFileName = "$commonDir/blocks/$templateName.xt";
-        } elseif (file_exists("$themeDir/blocks/default.xt")) {
-            // default template in current theme
-            $sourceFileName = "$themeDir/blocks/default.xt";
-        } elseif (file_exists("$commonDir/blocks/default.xt")) {
-            // default template in common
-            $sourceFileName = "$commonDir/blocks/default.xt";
-        } elseif (file_exists("$themeDir/modules/blocks/blocks/block.xt")) {
-            // blocks module default in current theme
-            $sourceFileName = "$themeDir/modules/blocks/blocks/block.xt";
-        } elseif (file_exists("$commonDir/modules/blocks/blocks/block.xt")) {
-            // blocks module default in common
-            $sourceFileName = "$commonDir/modules/blocks/blocks/block.xt"; 
-        } else {
-            // fall back to blocks module default
-            $sourceFileName = sys::code() . "modules/blocks/xartemplates/blocks/block.xt";
-        }
-        return self::executeFromFile($sourceFileName, $blockInfo);
+        // look for specific templateName.xt (current > common)
+        if (!empty($templateName))
+            $sourceFileName = self::getScopeFileName('theme', self::getThemeName(), $templateName, null, 'blocks');
+        // no specific template, fallback to default.xt (current > common)
+        if (empty($sourceFileName))
+            $sourceFileName = self::getScopeFileName('theme', self::getThemeName(), 'default', null, 'blocks');
+        // no default, fallback to blocks module block.xt (current > common > module)
+        if (empty($sourceFileName))
+            $sourceFileName = self::getScopeFileName('module', 'blocks', 'block', null, 'blocks');
+        // sanity check: shouldn't happen since block.xt is a core module template, but just in case
+        if (empty($sourceFileName))
+            throw new FileNotFoundException(null, 'Could not find block outer template block.xt');
+    
+        return self::executeFromFile($sourceFileName, $blockInfo);        
     }
 
 /**
@@ -957,20 +955,11 @@ class xarTpl extends Object
  */
     public static function includeThemeTemplate($templateName, $tplData)
     {
-        // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
-        $templateName = xarVarPrepForOS($templateName);
-        $themeDir = self::getThemeDir();
-        $commonDir = self::getThemeDir('common');
-        if (file_exists("$themeDir/includes/$templateName.xt")) {
-            // include template in current theme
-            $sourceFileName = "$themeDir/includes/$templateName.xt";
-        } elseif (file_exists("$commonDir/includes/$templateName.xt")) {
-            // include template in common
-            $sourceFileName = "$commonDir/includes/$templateName.xt";
-        } else {
+        // get source file (current > common)
+        $sourceFileName = self::getScopeFileName('theme', self::getThemeName(), $templateName, null, 'includes');
+        if (empty($sourceFileName))
             // Not found: raise an exception
             throw new FileNotFoundException($templateName, 'Could not find include template #(1).xt');
-        }
         return self::executeFromFile($sourceFileName, $tplData);
     }
 
@@ -993,6 +982,7 @@ class xarTpl extends Object
         $themeDir = self::getThemeDir();
         $commonDir = self::getThemeDir('common');
         
+        // @checkme: when do we pass a list of modules to this function?        
         $modules = explode(',',$modName);
         foreach ($modules as $module) {
             $thismodule = trim($module);
@@ -1009,6 +999,8 @@ class xarTpl extends Object
                 $sourceFileName = sys::code() . "modules/$thismodule/xartemplates/includes/$templateName.xd";
                 if (file_exists($sourceFileName)) break;
             }
+            // @checkme: dd as fall back in all cases? what if dd happens to supply 
+            // a same named but unrelated template?
             if (!file_exists($sourceFileName)) {
                 $sourceFileName = sys::code() . "modules/dynamicdata/xartemplates/includes/$templateName.xt";
             }
@@ -1016,6 +1008,7 @@ class xarTpl extends Object
         if (file_exists($sourceFileName)) return self::executeFromFile($sourceFileName, $tplData);
 
         // Check for a property template as a fallback
+        // @checkme: again, what happens if we got a match from a same named but unrelated template?
         // property include in current theme
         $sourceFileName = "$themeDir/properties/$propertyName/templates/includes/$templateName.xt";
         if (file_exists($sourceFileName)) return self::executeFromFile($sourceFileName, $tplData);
