@@ -679,52 +679,56 @@ class xarTpl extends Object
             // handle property cascade (caller > owner > dynamicdata)
             if ($modName == 'auto') {
                 // standalone property, called in standalone context (owner)
-                $paths[] = "$basepath/properties/$propertyName/$tplName.xt";
+                $paths[] = "$basepath/properties/$propertyName";
             } else {
                 // property called in module context
                 if ($tplModule == 'auto') {
                     // standalone property (caller) 
-                    $paths[] = "$basepath/modules/$modName/properties/$tplName.xt";
+                    $paths[] = "$basepath/modules/$modName/properties";
                     // standalone property (owner)
-                    $paths[] = "$basepath/properties/$propertyName/$tplName.xt";
+                    $paths[] = "$basepath/properties/$propertyName";
                 } else {
                     // module property (caller)
-                    $paths[] = "$basepath/modules/$modName/properties/$tplName.xt";
+                    $paths[] = "$basepath/modules/$modName/properties";
                     // module property (owner)
-                    $paths[] = "$basepath/modules/$tplModule/properties/$tplName.xt";
+                    $paths[] = "$basepath/modules/$tplModule/properties";
                 }
             }
             // fallback on dd template (dynamicdata)
             if ($modName != 'dynamicdata' && $tplModule != 'dynamicdata')
-                $paths[] =  "$basepath/modules/dynamicdata/properties/$tplName.xt";    
+                $paths[] =  "$basepath/modules/dynamicdata/properties";    
         }
         // look in code 
         if ($modName == 'auto') {
             // standalone property, called in standalone context (owner)
-            $paths[] = "{$codePath}properties/$propertyName/xartemplates/$tplName.xt";
+            $paths[] = "{$codePath}properties/$propertyName/xartemplates";
         } else {
             // property called in module context
             if ($tplModule == 'auto') {
                 // standalone property (caller) 
-                $paths[] = "{$codePath}modules/$modName/xartemplates/properties/$tplName.xt";
+                $paths[] = "{$codePath}modules/$modName/xartemplates/properties";
                 // standalone property (owner)
-                $paths[] = "{$codePath}properties/$propertyName/xartemplates/$tplName.xt";
+                $paths[] = "{$codePath}properties/$propertyName/xartemplates";
             } else {
                 // module property (caller)
-                $paths[] = "{$codePath}modules/$modName/xartemplates/properties/$tplName.xt";
+                $paths[] = "{$codePath}modules/$modName/xartemplates/properties";
                 // module property (owner)
-                $paths[] = "{$codePath}modules/$tplModule/xartemplates/properties/$tplName.xt";
+                $paths[] = "{$codePath}modules/$tplModule/xartemplates/properties";
             }
         }
         // fallback on dd template (dynamicdata)
         if ($modName != 'dynamicdata' && $tplModule != 'dynamicdata')
-            $paths[] =  "{$codePath}modules/dynamicdata/xartemplates/properties/$tplName.xt";  
+            $paths[] =  "{$codePath}modules/dynamicdata/xartemplates/properties";  
+        
+        $tplFiles = array($tplName, $tplBase);
 
         $sourceFileName = '';
-        foreach ($paths as $path) {        
-            if (!file_exists($path)) continue;
-            $sourceFileName = $path;
-            break;
+        foreach ($paths as $path) {
+            foreach ($tplFiles as $tplFile) {       
+                if (!file_exists("$path/$tplFile.xt")) continue;
+                $sourceFileName = "$path/$tplFile.xt";
+                break 2;
+            }
         }
 
         if (empty($sourceFileName)) 
