@@ -636,20 +636,55 @@ class xarTpl extends Object
 
 /**
  * Render a DD object through a template
- *
- * see private DDElement function
-**/
+ * @access public
+ * @param  string $modName      the module name owning the object/property, with fall-back to dynamicdata
+ * @param  string $objectName   the name of the object type, or some other name specified in BL tag or API call
+ * @param  string $tplType      the template type to render
+ *                              objects   : ( showdisplay(default)|showview|showform|showlist )
+ * @param  array  $tplData      arguments for the template
+ * @param  string $tplBase      the template type can be overridden too ( unused )
+ * @throws FileNotFoundException
+ * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
+ */
     public static function object($modName, $objectName, $tplType = 'showdisplay', $tplData = array(), $tplBase = NULL)
     {
-        return self::DDElement($modName,$objectName,$tplType,$tplData,$tplBase,'objects');
+        $modName = xarVarPrepForOS($modName);
+        $objectName = xarVarPrepForOS($objectName);
+        $tplType = xarVarPrepForOS($tplType);
+        $tplBase   = empty($tplBase) ? $tplType : xarVarPrepForOS($tplBase);
+        $cachename = "$modName:$objectName:$tplType:$tplBase:objects";
+
+        // cache frequently-used sourcefilenames for DD elements
+        if (xarCoreCache::isCached('Templates.DDElement', $cachename)) {
+            $sourceFileName = xarCoreCache::getCached('Templates.DDElement', $cachename);
+            return self::executeFromFile($sourceFileName, $tplData);
+        }
+        
+        $sourceFileName = self::getScopeFileName('module', $modName, $tplBase, $objectName, 'objects');
+        if (empty($sourceFileName) && $modName != 'dynamicdata')
+            $sourceFileName = self::getScopeFileName('module', 'dynamicdata', $tplBase, $objectName, 'objects');
+
+        if (empty($sourceFileName)) 
+            throw new FileNotFoundException("DD Element: [$modName],[$tplBase],[$objectName]");
+        
+        xarCoreCache::setCached('Templates.DDElement', $cachename, $sourceFileName);
+        
+        return self::executeFromFile($sourceFileName, $tplData);
     }
 
 /**
  * Render a DD property through a template
  *
- * NOTE: no longer using DDElement method here
- * @todo: add @info here
-**/
+ * @access public
+ * @param  string $modName      the module name owning the object/property, with fall-back to dynamicdata
+ * @param  string $propertyName  the name of the property type, or some other name specified in BL tag or API call
+ * @param  string $tplType      the template type to render
+ *                              properties: ( showoutput(default)|showinput|showhidden|validation|label )
+ * @param  array  $tplData      arguments for the template
+ * @param  string $tplBase      the template type can be overridden too ( unused )
+ * @throws FileNotFoundException
+ * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
+ */
     public static function property($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
     {
         $modName = xarVarPrepForOS($modName);
@@ -732,70 +767,12 @@ class xarTpl extends Object
         }
 
         if (empty($sourceFileName)) 
-            throw new FileNotFoundException(array($path, $modName, $tplBase, $propertyName), 'Missing File: #(1) for DD Element: [#(2)],[#(3)],[#(4)]');
-            //throw new FileNotFoundException("DD Element: [$modName],[$tplBase],[$propertyName]");
+            throw new FileNotFoundException("DD Element: [$modName],[$tplBase],[$propertyName]");
         
         xarCoreCache::setCached('Templates.DDElement', $cachename, $sourceFileName);
         
         return self::executeFromFile($sourceFileName, $tplData);
 
-    }
-
-/**
- * Private helper function to xarTpl::object and xarTpl::property
- * Renders a DD element (object or property) through a template.
- *
- * @access private
- * @param  string $modName      the module name owning the object/property, with fall-back to dynamicdata
- * @param  string $ddName       the name of the object/property type, or some other name specified in BL tag or API call
- * @param  string $tplType      the template type to render
- *                              properties: ( showoutput(default)|showinput|showhidden|validation|label )
- *                              objects   : ( showdisplay(default)|showview|showform|showlist )
- * @param  array  $tplData      arguments for the template
- * @param  string $tplBase      the template type can be overridden too ( unused )
- * @throws FileNotFoundException
- * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
- */
-    private static function DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elements)
-    {
-        $cachename = "$modName:$ddName:$tplType:$tplBase:$elements";
-
-        // cache frequently-used sourcefilenames for DD elements
-        if (xarCoreCache::isCached('Templates.DDElement', $cachename)) {
-            $sourceFileName = xarCoreCache::getCached('Templates.DDElement', $cachename);
-
-        } else {
-            $tplType = xarVarPrepForOS($tplType);
-            // @todo: figure out correct cascade here 
-
-            // Template type for the property can be overridden too (currently unused)
-            $templateBase   = xarVarPrepForOS(empty($tplBase) ? $tplType : $tplBase);
-
-            // Get the right source filename
-            $sourceFileName = self::getSourceFileName($modName, $templateBase, $ddName, $elements);
-
-            // Property fall-back to default template in the module the property belongs to
-            if (empty($sourceFileName) &&
-                $elements == 'properties') {
-                $fallbackmodule = DataPropertyMaster::getProperty(array('type' => $ddName))->tplmodule;
-                if ($fallbackmodule != $modName) {
-                    $sourceFileName = self::getSourceFileName($fallbackmodule, $templateBase, $ddName, $elements);
-                }
-            }
-
-            // Final fall-back to default template in dynamicdata for both objects and properties
-            if (empty($sourceFileName) &&
-                $modName != 'dynamicdata') {
-                $sourceFileName = self::getSourceFileName('dynamicdata', $templateBase, $ddName, $elements);
-            }
-
-            xarCoreCache::setCached('Templates.DDElement', $cachename, $sourceFileName);
-        }
-        if (empty($sourceFileName)) {
-            throw new FileNotFoundException("DD Element: [$modName],[$templateBase],[$ddName]");
-        }
-
-        return self::executeFromFile($sourceFileName, $tplData);
     }
 
 /**
