@@ -455,8 +455,7 @@ class xarTpl extends Object
         $themePath = self::getThemeDir();
         $commonPath = self::getThemeDir('common');
         $codePath = sys::code();
-    
-        $basepaths = array();
+
         if ($scope == 'theme') {
             // theme scope
             // if package isn't current theme or common theme, look there first
@@ -465,6 +464,7 @@ class xarTpl extends Object
             $basepaths[] = $themePath;
             $basepaths[] = $commonPath;
         } else {
+
             switch ($scope) {
                 case 'module':
                     $packages = 'modules';           
@@ -474,7 +474,7 @@ class xarTpl extends Object
                     $packages = 'blocks';
                 break;
                 case 'property':
-                    // standalone properties           
+                    // standalone properties        
                     $packages = 'properties';
                 break;
                 default:
@@ -483,15 +483,18 @@ class xarTpl extends Object
                     throw new BadParameterException($vars, $msg);
                 break;
             }
+
             $basepaths = array(
                 "$themePath/$packages/$package/",
                 "$commonPath/$packages/$package/",
                 "{$codePath}{$packages}/$package/xartemplates/",
             );
+
         } 
         $paths = array();
         foreach ($basepaths as $basepath) {
-            $paths[] = "$basepath/$tplPart/$tplBase-$tplName.xt";
+            if (!empty($tplName))
+                $paths[] = "$basepath/$tplPart/$tplBase-$tplName.xt";
             $paths[] = "$basepath/$tplPart/$tplBase.xt";
             if ($canonical) 
                 $paths[] = "$basepath/$tplPart/$canTemplateName.xt";
@@ -644,11 +647,94 @@ class xarTpl extends Object
 /**
  * Render a DD property through a template
  *
- * see private DDElement function
+ * NOTE: no longer using DDElement method here
+ * @todo: add @info here
 **/
     public static function property($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
     {
-        return self::DDElement($modName,$propertyName,$tplType,$tplData,$tplBase,'properties');
+        $modName = xarVarPrepForOS($modName);
+        $propertyName = xarVarPrepForOS($propertyName);
+        $tplType = xarVarPrepForOS($tplType);
+        $tplBase   = empty($tplBase) ? $tplType : xarVarPrepForOS($tplBase);
+        $cachename = "$modName:$propertyName:$tplType:$tplBase:properties";
+
+        // cache frequently-used sourcefilenames for DD elements
+        if (xarCoreCache::isCached('Templates.DDElement', $cachename)) {
+            $sourceFileName = xarCoreCache::getCached('Templates.DDElement', $cachename);
+            return self::executeFromFile($sourceFileName, $tplData);
+        }
+        
+        // default paths 
+        $themePath = self::getThemeDir();
+        $commonPath = self::getThemeDir('common');
+        $codePath = sys::code();
+        
+        $tplModule = DataPropertyMaster::getProperty(array('type' => $propertyName))->tplmodule;
+        $tplName = "$tplBase-$propertyName";  
+
+        // handle template cascade (current > common > code) 
+        $themepaths = array($themePath, $commonPath);
+        // look in themes (current > common)
+        foreach ($themepaths as $basepath) {
+            // handle property cascade (caller > owner > dynamicdata)
+            if ($modName == 'auto') {
+                // standalone property, called in standalone context (owner)
+                $paths[] = "$basepath/properties/$propertyName/$tplName.xt";
+            } else {
+                // property called in module context
+                if ($tplModule == 'auto') {
+                    // standalone property (caller) 
+                    $paths[] = "$basepath/modules/$modName/properties/$tplName.xt";
+                    // standalone property (owner)
+                    $paths[] = "$basepath/properties/$propertyName/$tplName.xt";
+                } else {
+                    // module property (caller)
+                    $paths[] = "$basepath/modules/$modName/properties/$tplName.xt";
+                    // module property (owner)
+                    $paths[] = "$basepath/modules/$tplModule/properties/$tplName.xt";
+                }
+            }
+            // fallback on dd template (dynamicdata)
+            if ($modName != 'dynamicdata' && $tplModule != 'dynamicdata')
+                $paths[] =  "$basepath/modules/dynamicdata/properties/$tplName.xt";    
+        }
+        // look in code 
+        if ($modName == 'auto') {
+            // standalone property, called in standalone context (owner)
+            $paths[] = "{$codePath}properties/$propertyName/xartemplates/$tplName.xt";
+        } else {
+            // property called in module context
+            if ($tplModule == 'auto') {
+                // standalone property (caller) 
+                $paths[] = "{$codePath}modules/$modName/xartemplates/properties/$tplName.xt";
+                // standalone property (owner)
+                $paths[] = "{$codePath}properties/$propertyName/xartemplates/$tplName.xt";
+            } else {
+                // module property (caller)
+                $paths[] = "{$codePath}modules/$modName/xartemplates/properties/$tplName.xt";
+                // module property (owner)
+                $paths[] = "{$codePath}modules/$tplModule/xartemplates/properties/$tplName.xt";
+            }
+        }
+        // fallback on dd template (dynamicdata)
+        if ($modName != 'dynamicdata' && $tplModule != 'dynamicdata')
+            $paths[] =  "{$codePath}modules/dynamicdata/xartemplates/properties/$tplName.xt";  
+
+        $sourceFileName = '';
+        foreach ($paths as $path) {        
+            if (!file_exists($path)) continue;
+            $sourceFileName = $path;
+            break;
+        }
+
+        if (empty($sourceFileName)) 
+            throw new FileNotFoundException(array($path, $modName, $tplBase, $propertyName), 'Missing File: #(1) for DD Element: [#(2)],[#(3)],[#(4)]');
+            //throw new FileNotFoundException("DD Element: [$modName],[$tplBase],[$propertyName]");
+        
+        xarCoreCache::setCached('Templates.DDElement', $cachename, $sourceFileName);
+        
+        return self::executeFromFile($sourceFileName, $tplData);
+
     }
 
 /**
