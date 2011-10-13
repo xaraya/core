@@ -59,8 +59,29 @@
                       <xsl:when test="@property != ''">
                         <xsl:text>property</xsl:text>
                       </xsl:when>
-                      <xsl:otherwise>
+                      <xsl:when test="@module != ''">
                         <xsl:text>module</xsl:text>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <!-- no identifying param, take a guess based on parent template path -->
+                        <xsl:choose>
+                          <xsl:when test="string-length(substring-before(substring-after($bl_dirname,'modules/'),'/')) = 0">
+                            <xsl:choose>
+                              <xsl:when test="string-length(substring-before(substring-after($bl_dirname,'blocks/'),'/')) &gt; 0">
+                                <xsl:text>block</xsl:text>
+                              </xsl:when>
+                              <xsl:when test="string-length(substring-before(substring-after($bl_dirname,'properties/'),'/')) &gt; 0">
+                                <xsl:text>property</xsl:text>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <xsl:text>module</xsl:text>
+                              </xsl:otherwise>
+                            </xsl:choose>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:text>module</xsl:text>
+                          </xsl:otherwise>
+                        </xsl:choose>
                       </xsl:otherwise>
                     </xsl:choose>                
                   </xsl:otherwise>
@@ -124,21 +145,6 @@
                   <xsl:when test="@includepath != ''">
                     <xsl:value-of select="@includepath"/>
                   </xsl:when>
-                  <!--
-                  <xsl:when test="$scope='system'">
-                    <xsl:choose>
-                      <xsl:when test="string-length(substring-after($bl_dirname, 'xartemplates/')) &gt; 0">
-                        <xsl:value-of select="substring-after($bl_dirname,'xartemplates/')"/>
-                      </xsl:when>
-                      <xsl:when test="string-length(substring-after($bl_dirname, substring-before(substring-after($bl_dirname,'modules/'),'/'))) &gt; 0">
-                         <xsl:value-of select="substring-after($bl_dirname, substring-before(substring-after($bl_dirname,'modules/'),'/'))"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:text>includes</xsl:text>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:when>
-                  -->
                   <xsl:otherwise>
                     <xsl:text>includes</xsl:text>
                   </xsl:otherwise>                            

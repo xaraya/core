@@ -420,6 +420,11 @@ class xarTpl extends Object
 
     }
 
+    public static function exists($scope, $package, $tplBase, $tplName=null, $tplPart='')
+    {
+        return (bool) self::getScopeFileName($scope, $package, $tplBase, $tplName, $tplPart);
+    }
+
 /**
  * Determine the template sourcefile to use
  *
@@ -447,7 +452,7 @@ class xarTpl extends Object
         if (!empty($tplName))
             $tplName = xarVarPrepForOS($tplName);
         if (!empty($tplPart))
-            $tplPart = xarVarPrepForOS($tplPart);
+            $tplPart = strtr(trim(xarVarPrepForOS($tplPart)), " ", "/");
         $canTemplateName = strtr($tplName, "-", "/");
         $canonical = ($canTemplateName == $tplName) ? false : true;
         
@@ -483,12 +488,13 @@ class xarTpl extends Object
                     throw new BadParameterException($vars, $msg);
                 break;
             }
-
-            $basepaths = array(
-                "$themePath/$packages/$package/",
-                "$commonPath/$packages/$package/",
-                "{$codePath}{$packages}/$package/xartemplates/",
-            );
+            if (empty($basepaths)) {
+                $basepaths = array(
+                    "$themePath/$packages/$package/",
+                    "$commonPath/$packages/$package/",
+                    "{$codePath}{$packages}/$package/xartemplates/",
+                );
+            }
 
         } 
         $paths = array();
