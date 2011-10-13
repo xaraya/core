@@ -1012,6 +1012,18 @@ class xarTpl extends Object
     }
 
 /**
+ * xar:template tag handler 
+**/
+    public static function includeTemplate($tplType, $package, $tplName, $tplData=array(), $tplPart='includes')
+    {
+        $sourceFileName = self::getScopeFileName($tplType, $package, $tplName, null, $tplPart);
+        if (empty($sourceFileName))
+            // Not found: raise an exception
+            throw new FileNotFoundException($tplName, 'Could not find include template #(1).xt');
+        return self::executeFromFile($sourceFileName, $tplData);            
+    }
+
+/**
  * Include a subtemplate from the theme space
  *
  * @access public
