@@ -137,8 +137,6 @@
                 </xsl:choose>
               </xsl:variable>
 
-
-          
               <!-- Optional relative path from template folder (default includes) -->
               <xsl:variable name="tplpath">
                 <xsl:choose>
@@ -172,6 +170,14 @@
                 <xsl:call-template name="resolvePHP">
                   <xsl:with-param name="expr" select="$tplpath"/>
                 </xsl:call-template>
+                <xsl:choose>
+                  <xsl:when test="@template != ''">
+                    <xsl:text>","</xsl:text>
+                    <xsl:call-template name="resolvePHP">
+                      <xsl:with-param name="expr" select="@template"/>
+                    </xsl:call-template>
+                  </xsl:when>
+                </xsl:choose>                   
                 <xsl:text>");</xsl:text>                          
               </xsl:processing-instruction>          
             
