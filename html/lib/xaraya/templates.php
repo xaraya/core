@@ -439,7 +439,7 @@ class xarTpl extends Object
  * @todo do we need to load the translations here or a bit later? (here:easy, later: better abstraction) 
  */
 
-    public static function getScopeFileName($scope, $package, $tplBase, $tplName=null, $tplPart='')
+    private static function getScopeFileName($scope, $package, $tplBase, $tplName=null, $tplPart='')
     {
         // prep input
         $package = xarVarPrepForOS($package);
@@ -517,6 +517,7 @@ class xarTpl extends Object
 
 /**
  * Determine the template sourcefile to use
+ * @NOTE: this method is no longer used and is targetted for removal
  *
  * Based on the module, the basename for the template
  * a possible overribe and a subpart and the active
@@ -1012,25 +1013,47 @@ class xarTpl extends Object
     }
 
 /**
- * xar:template tag handler 
+ * xar:template tag handler
+ * Include a subtemplate from wherever
+ *
+ * @access public
+ * @param  string $tplType      scope in which to look for templates [theme|module|block|property]
+ * @param  string $package      name of the theme|module|block|property supplying the template
+ * @param  string $tplName      The name of the template to use
+ * @param  array  $tplData      array of data for the template
+ * @param  string $tplPart      Optional sub path to look for templates in relative to template path
+ * @throws FileNotFoundException
+ * @return string self::executeFromFile($sourceFileName, $tplData);
 **/
     public static function includeTemplate($tplType, $package, $tplName, $tplData=array(), $tplPart='includes')
     {
-        $sourceFileName = self::getScopeFileName($tplType, $package, $tplName, null, $tplPart);
-        if (empty($sourceFileName))
-            // Not found: raise an exception
-            throw new FileNotFoundException($tplName, 'Could not find include template #(1).xt');
+        // chris: added this to replicate behaviour of includeModuleTemplate()
+        $packages = array_map('trim', explode(',', $package));
+        // @checkme: do we really want to fall back on dd in all cases here? 
+        if ($tplType == 'module' && !in_array('dynamicdata', $packages))
+            $packages[] = 'dynamicdata';
+        foreach ($packages as $tplPkg) {
+            if (!$sourceFileName = self::getScopeFileName($tplType, $tplPkg, $tplName, null, $tplPart))
+                continue;
+            break;
+        }
+        if (empty($sourceFileName)) {
+            // Not found: raise an exception        
+            $vars = array($tplType, $tplPart, $tplName, $package);
+            $msg = 'Missing #(1) include template #(2)/#(3) in #(4)';
+            throw new FileNotFoundException($vars, $msg);
+        }
         return self::executeFromFile($sourceFileName, $tplData);            
     }
 
 /**
  * Include a subtemplate from the theme space
+ * @NOTE: this method is no longer used and is targetted for removal
  *
  * @access public
  * @param  string $templateName Basically handler function for <xar:template type="theme".../>
  * @param  array  $tplData      template variables
  * @return string
- * @todo implement common templates in cascade 
  */
     public static function includeThemeTemplate($templateName, $tplData)
     {
@@ -1044,6 +1067,7 @@ class xarTpl extends Object
 
 /**
  * Include a subtemplate from the module space
+ * @NOTE: this method is no longer used and is targetted for removal
  *
  * @access public
  * @param  string $modName      name of the module from which to include the template
@@ -1051,7 +1075,6 @@ class xarTpl extends Object
  * @param  array  $tplData      template variables
  * @param  array  $propertyName name of the property from which to include the template
  * @throws FileNotFoundException
- * @todo implement common templates in cascade 
  * @return string
  */
     public static function includeModuleTemplate($modName, $templateName, $tplData, $propertyName='')
