@@ -420,6 +420,11 @@ class xarTpl extends Object
 
     }
 
+    public static function exists($scope, $package, $tplBase, $tplName=null, $tplPart='')
+    {
+        return (bool) self::getScopeFileName($scope, $package, $tplBase, $tplName, $tplPart);
+    }
+
 /**
  * Determine the template sourcefile to use
  *
@@ -447,7 +452,7 @@ class xarTpl extends Object
         if (!empty($tplName))
             $tplName = xarVarPrepForOS($tplName);
         if (!empty($tplPart))
-            $tplPart = xarVarPrepForOS($tplPart);
+            $tplPart = strtr(trim(xarVarPrepForOS($tplPart)), " ", "/");
         $canTemplateName = strtr($tplName, "-", "/");
         $canonical = ($canTemplateName == $tplName) ? false : true;
         
@@ -483,12 +488,13 @@ class xarTpl extends Object
                     throw new BadParameterException($vars, $msg);
                 break;
             }
-
-            $basepaths = array(
-                "$themePath/$packages/$package/",
-                "$commonPath/$packages/$package/",
-                "{$codePath}{$packages}/$package/xartemplates/",
-            );
+            if (empty($basepaths)) {
+                $basepaths = array(
+                    "$themePath/$packages/$package/",
+                    "$commonPath/$packages/$package/",
+                    "{$codePath}{$packages}/$package/xartemplates/",
+                );
+            }
 
         } 
         $paths = array();
@@ -1025,7 +1031,7 @@ class xarTpl extends Object
  * @throws FileNotFoundException
  * @return string self::executeFromFile($sourceFileName, $tplData);
 **/
-    public static function includeTemplate($tplType, $package, $tplName, $tplData=array(), $tplPart='includes')
+    public static function includeTemplate($tplType, $package, $tplBase, $tplData=array(), $tplPart='includes', $tplName=null)
     {
         // chris: added this to replicate behaviour of includeModuleTemplate()
         $packages = array_map('trim', explode(',', $package));
@@ -1033,13 +1039,13 @@ class xarTpl extends Object
         if ($tplType == 'module' && !in_array('dynamicdata', $packages))
             $packages[] = 'dynamicdata';
         foreach ($packages as $tplPkg) {
-            if (!$sourceFileName = self::getScopeFileName($tplType, $tplPkg, $tplName, null, $tplPart))
+            if (!$sourceFileName = self::getScopeFileName($tplType, $tplPkg, $tplBase, $tplName, $tplPart))
                 continue;
             break;
         }
         if (empty($sourceFileName)) {
             // Not found: raise an exception        
-            $vars = array($tplType, $tplPart, $tplName, $package);
+            $vars = array($tplType, $tplPart, $tplBase, $package);
             $msg = 'Missing #(1) include template #(2)/#(3) in #(4)';
             throw new FileNotFoundException($vars, $msg);
         }
