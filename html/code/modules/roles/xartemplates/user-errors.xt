@@ -55,7 +55,7 @@
                 <div style="margin-top: 20px; margin-left: 20px">
                     Removing this privilege from this user or group is not allowed.
                 </div>
-            <xar:elseif condition="$layout eq 'bad_userhomw'"/>
+            <xar:elseif condition="$layout eq 'bad_userhome'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     #$message#
                 </div>
