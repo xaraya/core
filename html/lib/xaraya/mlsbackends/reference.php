@@ -130,11 +130,9 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
 
         foreach ($this->locales as $locale) {
             if($this->spacedir == "core" || $this->spacedir == "xaraya") {
-                $this->domainlocation  = sys::varpath() . "/locales/"
-                . $locale . "/" . $this->backendtype . "/" . $this->spacedir;
+                $this->domainlocation  = sys::varpath() . "/locales/" . $locale . "/" . $this->backendtype . "/" . $this->spacedir;
             } else {
-                $this->domainlocation  = sys::varpath() . "/locales/"
-                . $locale . "/" . $this->backendtype . "/" . $this->spacedir . "/" . $dnName;
+                $this->domainlocation  = sys::varpath() . "/locales/" . $locale . "/" . $this->backendtype . "/" . $this->spacedir . "/" . $dnName;
             }
 
             if (file_exists($this->domainlocation)) {
