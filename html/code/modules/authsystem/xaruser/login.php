@@ -254,8 +254,11 @@ function authsystem_user_login()
                     $urldata['redirecturl'] = xarModURL(xarModVars::get('modules','defaultmodule'),xarModVars::get('modules','defaulttypename'),xarModVars::get('modules','defaultfuncname'));
                     $urldata['externalurl'] = false;
                 } else {
-                    /* move the half page of code out to a Roles function. No need to repeat everytime it's used*/
-                    $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
+                    try {
+                        $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
+                    } catch (Exception $e) {
+                        return xarTpl::module('roles','user','errors',array('layout' => 'bad_userhome', 'message' => $e->getMessage()));
+                    }
                 }
                 $data = array();
                 if (!is_array($urldata) || !$urldata) {
