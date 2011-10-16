@@ -165,13 +165,13 @@ function convertFile($path)
 	        // NOTE: this should be done using mtn mv (see below) when in a monotone workspace
 		    rename($path, $toxt);
             */
-            /* uncomment if mtn executable is available 
+            /* uncomment if mtn executable is available */
             // NOTE: only do this if you're updating files in a monotone workspace
             $mtnex = 'mtn'; // set an absolute path if mtn is not in your environment $PATH, eg /usr/bin/mtn
             $todir = dirname($path);
             chdir($todir);
             exec("$mtnex mv $oldname $newname");
-            */
+            
         } else {
             echo("Unable to rename $oldname -> $newname, file already exists\n");
         }
