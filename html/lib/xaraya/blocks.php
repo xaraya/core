@@ -201,7 +201,7 @@ class xarBlock extends Object implements ixarBlock
                 // blocks/type/type_admin.php | modules/module/xarblocks/type/type_admin.php
                 $cls[] = $baseclass . 'Admin';
                 $paths[] = "{$basepath}/{$blockinfo['type']}/{$blockinfo['type']}_admin.php";
-                $dps[] = "{$basedp}.{$blockinfo['type']}.{$blockinfo['type']}.admin";
+                $dps[] = "{$basedp}.{$blockinfo['type']}.{$blockinfo['type']}_admin";
                 // blocks/type/admin.php | modules/module/xarblocks/type/admin.php
                 $cls[] = $baseclass . 'Admin';
                 $paths[] = "{$basepath}/{$blockinfo['type']}/admin.php";

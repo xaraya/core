@@ -192,6 +192,7 @@ class xarTpl extends Object
         if (isset(self::$themeName))
             return self::$themeName;
         // If it is not set, set it return the default theme.
+        // @checkme: modules is a depency of templates, redundant check?
         if (method_exists('xarModVars', 'get')) {
             $themeName = xarModVars::get('themes', 'default_theme');
             if (!empty($themeName))
@@ -226,13 +227,8 @@ class xarTpl extends Object
     public static function setPageTemplateName($templateName)
     {
         assert('$templateName != ""');
-        if (file_exists(self::getThemeDir() . "/pages/$templateName.xt")) {
-            // use current theme
-        } elseif (file_exists(self::getThemeDir('common') . "/pages/$templateName.xt")) {
-            // use common
-        } else {
+        if (!self::exists('theme', self::getThemeName(), $templateName, null, 'pages'))
             return false;
-        }
         self::$pageTemplateName = $templateName;
         return true;
     }
@@ -290,7 +286,7 @@ class xarTpl extends Object
         xarCache::setPageTitle($title, $module);
 
         xarLogMessage("TPL: Setting pagetitle to $title");
-        // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable!!!
+        // @checkme: modules is a depency of templates, redundant check?
         if (!method_exists('xarModVars','Get')){
             self::$pageTitle = $title;
         } else {
@@ -373,6 +369,7 @@ class xarTpl extends Object
         //    when clicked opens a page with the variables on that page
         // 2. Create a page in the themes module with an interface
         // 3. Use 1. to link to 2.
+        // @checkme: modules is a depency of templates, redundant check?
         if (method_exists('xarModVars','Get') && function_exists('xarUserGetVar')) {
             if (xarModVars::get('themes', 'variable_dump') &&
                 in_array(xarUserGetVar('uname'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
@@ -847,6 +844,7 @@ class xarTpl extends Object
             case 'module':
                 if (empty($package))
                     list($package) = xarController::$request->getInfo();
+                // @checkme: modules is a depency of templates, redundant check?
                 if (method_exists('xarMod', 'getBaseInfo')) {
                     $modBaseInfo = xarMod::getBaseInfo($package);
                     if (!isset($modBaseInfo)) return;
@@ -1256,7 +1254,7 @@ class xarTpl extends Object
                 (in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))) {
                 // Default to not show the comments
                 self::$showPHPCommentBlockInTemplates = 0;
-                // CHECKME: not sure if this is needed, e.g. during installation
+                // @checkme: modules is a depency of templates, redundant check?
                 if (method_exists('xarModVars','Get')){
                     $showphpcbit = xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates');
                     if (!empty($showphpcbit)) {
@@ -1286,8 +1284,7 @@ class xarTpl extends Object
         if (!isset(self::$showTemplateFilenames)) {
             // Default to not showing it
             self::$showTemplateFilenames = 0;
-            // CHECKME: not sure if this is needed, e.g. during installation
-            // TODO: PHP 5.0/5.1 DO NOT AGREE ON method_exists / is_callable
+            // @checkme: modules is a depency of templates, redundant check?
             if (method_exists('xarModVars','Get')){
                 $showtemplates = xarModVars::get('themes', 'ShowTemplates');
                 if (!empty($showtemplates)) {
