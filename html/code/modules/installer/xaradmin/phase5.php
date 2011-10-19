@@ -112,6 +112,17 @@ function installer_admin_phase5()
         }
     }
 
+    if ($dbType == 'mysqli') {
+        $tokens = explode('.',mysqli_get_server_info($dbconn->getResource()));
+        $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
+        $data['required_version'] = MYSQL_REQUIRED_VERSION;
+        $mysql_version_ok = version_compare($data['version'],$data['required_version'],'ge');
+        if (!$mysql_version_ok) {
+            $data['layout'] = 'bad_version';
+            return xarTpl::module('installer','admin','check_database',$data);
+        }
+    }
+
     if (!$createDB && !$dbExists) {
         $data['dbName'] = $dbName;
         $data['layout'] = 'not_found';

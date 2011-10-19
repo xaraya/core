@@ -194,6 +194,11 @@
                 <xar:else />
                     <li class="warning">WARNING: MySQL as database will not be available</li>
                 </xar:if>
+                <xar:if condition="$mysqliextension">
+                    <li class="success">SUCCESS: The MySQLi Extension is loaded.</li>
+                <xar:else />
+                    <li class="warning">WARNING: MySQLi as database will not be available</li>
+                </xar:if>
                 <xar:if condition="$pgsqlextension">
                     <li class="success">SUCCESS: The PGSQL Extension is loaded.</li>
                 <xar:else />
