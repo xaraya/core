@@ -50,9 +50,12 @@ class BaseShortController extends ShortActionController
         $path = array();
         switch($request->getFunction()) {
             case 'main':
-                // Note : if your main function calls some other function by default,
-                // you should set the path to directly to that other function
-                $path[] = '';
+                if (!empty($params['page'])) {                    
+                    $path[] = $params['page'];
+                    unset($params['page']);
+                } else { 
+                    $path[] = '';
+                }
                 break;
             default:
                 $path[] = '';
