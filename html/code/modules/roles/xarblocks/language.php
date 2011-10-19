@@ -62,7 +62,6 @@ class Roles_LanguageBlock extends BasicBlock
             // Base URL of the site
             $data['return_url'] = xarServer::getBaseURL();
         }
-        
         return $data;
     }
 }
