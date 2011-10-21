@@ -86,6 +86,7 @@ function installer_admin_phase3()
     $data['xmlextension']             = extension_loaded('xml');
     $data['xslextension']             = extension_loaded('xsl');
     $data['mysqlextension']           = extension_loaded('mysql');
+    $data['mysqliextension']          = extension_loaded('mysqli');
     $data['pgsqlextension']           = extension_loaded('pgsql');
     $data['sqliteextension']          = extension_loaded('sqlite');
     $data['pdosqliteextension']       = extension_loaded('pdo_sqlite');
