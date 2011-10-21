@@ -41,7 +41,7 @@ function blocks_admin_modify_type(Array $args=array())
     // determine the interface, method and phase 
     if (!xarVarFetch('interface', 'pre:trim:lower:str:1:',
         $interface, 'display', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('method', 'pre:trim:lower:str:1:',
+    if (!xarVarFetch('block_method', 'pre:trim:lower:str:1:',
         $method, null, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('phase', 'pre:trim:lower:str:1:',
         $phase, 'display', XARVAR_NOT_REQUIRED)) return;
@@ -268,7 +268,7 @@ function blocks_admin_modify_type(Array $args=array())
                     array(
                         'type_id' => $type['type_id'],
                         'interface' => $interface,
-                        'method' => $method,
+                        'block_method' => $method,
                     ));
             xarController::redirect($return_url);
         }
@@ -414,7 +414,7 @@ function blocks_admin_modify_type(Array $args=array())
     $data['type_states'] = xarMod::apiFunc('blocks', 'types', 'getstates');
     $interfaces = array();
     $interfaces[] = array(
-        'url' => xarServer::getCurrentURL(array('interface' => 'display', 'method' => null)),
+        'url' => xarServer::getCurrentURL(array('interface' => 'display', 'block_method' => null)),
         'label' => xarML('Info'),
         'title' => xarML('Display information about this block type'),
         'active' => ($interface == 'display' && $method == 'info'),
@@ -422,19 +422,19 @@ function blocks_admin_modify_type(Array $args=array())
     if ($interface != 'display' || $method != 'status') {
         if (xarSecurityCheck('AdminBlocks', 0)) {
             $interfaces[] = array(
-                'url' => xarServer::getCurrentURL(array('interface' => 'config', 'method' => null)),
+                'url' => xarServer::getCurrentURL(array('interface' => 'config', 'block_method' => null)),
                 'label' => xarML('Config'),
                 'title' => xarML('Modify default configuration for this block type'),
                 'active' => ($interface == 'config'),
             ); 
             $interfaces[] = array(
-                'url' => xarServer::getCurrentURL(array('interface' => 'caching', 'method' => null)),
+                'url' => xarServer::getCurrentURL(array('interface' => 'caching', 'block_method' => null)),
                 'label' => xarML('Caching'),
                 'title' => xarML('Modify default caching configuration for this block type'),
                 'active' => ($interface == 'caching'),
             ); 
             $interfaces[] = array(
-                'url' => xarServer::getCurrentURL(array('interface' => 'access', 'method' => null)),
+                'url' => xarServer::getCurrentURL(array('interface' => 'access', 'block_method' => null)),
                 'label' => xarML('Access'),
                 'title' => xarML('Modify default access configuration for this block type'),
                 'active' => ($interface == 'access'),
@@ -442,7 +442,7 @@ function blocks_admin_modify_type(Array $args=array())
         }
         if ($block->show_preview) {
             $interfaces[] = array(
-                'url' => xarServer::getCurrentURL(array('interface' => 'display', 'method' => 'preview')),
+                'url' => xarServer::getCurrentURL(array('interface' => 'display', 'block_method' => 'preview')),
                 'label' => xarML('Preview'),
                 'title' => xarML('Show a preview of this block type'),
                 'active' => ($interface == 'display' && $method == 'preview'),
@@ -450,7 +450,7 @@ function blocks_admin_modify_type(Array $args=array())
         }        
         if ($block->show_help) {
             $interfaces[] = array(
-                'url' => xarServer::getCurrentURL(array('interface' => 'display', 'method' => 'help')),
+                'url' => xarServer::getCurrentURL(array('interface' => 'display', 'block_method' => 'help')),
                 'label' => xarML('Help'),
                 'title' => xarML('View block type help information'),
                 'active' => ($interface == 'display' && $method == 'help'),

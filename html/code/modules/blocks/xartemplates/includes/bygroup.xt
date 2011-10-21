@@ -82,7 +82,7 @@
                             </td>
                             <td>
                                 <xar:if condition="$item['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
-                                    <a href="xarModURL('blocks', 'admin', 'modify_instance', array('interface' => 'display', 'method' => 'state', 'block_id' => $block_id))#">Type #$type_states[$item['type_state']]['name']#</a>
+                                    <a href="xarModURL('blocks', 'admin', 'modify_instance', array('interface' => 'display', 'block_method' => 'state', 'block_id' => $block_id))#">Type #$type_states[$item['type_state']]['name']#</a>
                                 <xar:else/>
                                     #$instance_states[$item['state']]['name']#
                                 </xar:if>

@@ -218,6 +218,8 @@ function blocks_admin_new_instance()
 
     // option phase - at this point we're either on first run, or have an invalid type_id
     if ($phase == 'options') {
+        // refresh block types
+        if (!xarMod::apiFunc('blocks', 'types', 'refresh')) return;
         // get the list of active block types   
         $types = xarMod::apiFunc('blocks', 'types', 'getitems', 
             array('type_state' => xarBlock::TYPE_STATE_ACTIVE));

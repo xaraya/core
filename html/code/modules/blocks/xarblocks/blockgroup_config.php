@@ -44,11 +44,11 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
                 // add in links to re-order blocks
                 if ($i < $numitems) {
                     $instances[$id]['downurl'] = xarServer::getCurrentURL(
-                        array('block_id' => $this->block_id, 'interface' => 'config', 'method' => 'order', 'move' => $id, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
+                        array('block_id' => $this->block_id, 'interface' => 'config', 'block_method' => 'order', 'move' => $id, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
                 }
                 if ($i > 1) {
                     $instances[$id]['upurl'] = xarServer::getCurrentURL(
-                        array('block_id' => $this->block_id, 'interface' => 'config', 'method' => 'order', 'move' => $id, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
+                        array('block_id' => $this->block_id, 'interface' => 'config', 'block_method' => 'order', 'move' => $id, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
                 }
                 $i++;
             }
@@ -122,7 +122,7 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
             $this->orderInstance($move, $direction);
         
         $data['content'] = $this->getContent();
-        $data['return_url'] = xarServer::getCurrentURL(array('interface' => 'config', 'method' => null, 'move' => null, 'direction' => null, 'authid' => null, 'phase' => null), null, 'group_members');
+        $data['return_url'] = xarServer::getCurrentURL(array('interface' => 'config', 'block_method' => null, 'move' => null, 'direction' => null, 'authid' => null, 'phase' => null), null, 'group_members');
 
         return $data;      
     }

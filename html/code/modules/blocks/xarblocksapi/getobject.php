@@ -23,8 +23,8 @@ function blocks_blocksapi_getobject(Array $args=array())
         if (!empty($args['module']) && !is_string($args['module']))
             $invalid[] = 'module';
         
-        if (isset($args['method']) && !is_string($args['method']))
-            $invalid[] = 'method';
+        if (isset($args['block_method']) && !is_string($args['block_method']))
+            $invalid[] = 'block_method';
         
         if (!empty($invalid)) {
             $msg = 'Invalid #(1) for #(2) module #(3) function #(4)()';
@@ -35,10 +35,10 @@ function blocks_blocksapi_getobject(Array $args=array())
         // keep track of classes we've already loaded 
         static $loaded = array();        
         $key = !empty($args['module']) ? $args['module'] . ':' . $args['type'] : $args['type'];
-        if (!empty($args['method'])) $key .= ':' . $args['method'];
+        if (!empty($args['block_method'])) $key .= ':' . $args['block_method'];
         if (isset($loaded[$key])) {
-            if (isset($args['method']))
-                unset($args['method']); 
+            if (isset($args['block_method']))
+                unset($args['block_method']); 
             $classname = $loaded[$key];
             return new $classname($args);
         }      
@@ -54,15 +54,15 @@ function blocks_blocksapi_getobject(Array $args=array())
         }
         $typepaths = array();
         $typeclass = array();      
-        if (!empty($args['method'])) {
+        if (!empty($args['block_method'])) {
             // method specific class
             // basepath/type/method.php 
-            $typepaths[] = $basepath . $args['type'] . '/' . $args['method'] . '.php';
-            $typeclass[] = $baseclass . ucfirst($args['method']);
+            $typepaths[] = $basepath . $args['type'] . '/' . $args['block_method'] . '.php';
+            $typeclass[] = $baseclass . ucfirst($args['block_method']);
             // basepath/type_method.php (legacy)
-            $typepaths[] = $basepath . $args['type'] . '_' . $args['method'] . '.php';
-            $typeclass[] = $baseclass . ucfirst($args['method']);
-            if ($args['method'] != 'display') {
+            $typepaths[] = $basepath . $args['type'] . '_' . $args['block_method'] . '.php';
+            $typeclass[] = $baseclass . ucfirst($args['block_method']);
+            if ($args['block_method'] != 'display') {
                 // admin methods class
                 // basepath/type/admin.php 
                 $typepaths[] = $basepath . $args['type'] . '/admin.php';
@@ -93,8 +93,8 @@ function blocks_blocksapi_getobject(Array $args=array())
         if (!class_exists($classname) || !is_subclass_of($classname, 'BasicBlock')) 
             throw new ClassNotFoundException($classname);
 
-        if (!empty($args['method']) && !method_exists($classname, $args['method']))
-            throw new FunctionNotFoundException($args['method']);
+        if (!empty($args['block_method']) && !method_exists($classname, $args['block_method']))
+            throw new FunctionNotFoundException($args['block_method']);
 
         // Load the block language files
         if(!xarMLSLoadTranslations($typepath)) {
@@ -102,8 +102,8 @@ function blocks_blocksapi_getobject(Array $args=array())
             return;
         }
         
-        if (isset($args['method']))
-            unset($args['method']);         
+        if (isset($args['block_method']))
+            unset($args['block_method']);         
 
         $object = new $classname($args);
         

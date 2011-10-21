@@ -85,7 +85,7 @@ function blocks_admin_view_instances()
                 // check if this block type supports previews
                 $preview_link = (empty($item['type_info']['show_preview'])) ? '' :
                     xarModURL('blocks', 'admin', 'modify_instance', 
-                        array('block_id' => $block_id, 'interface' => 'display', 'method' => 'preview'));
+                        array('block_id' => $block_id, 'interface' => 'display', 'block_method' => 'preview'));
                 $item['preview_link'] = array(
                     'label' => xarML('Preview'),
                     'title' => xarML('Display preview of this block instance'),
@@ -94,7 +94,7 @@ function blocks_admin_view_instances()
                 // check if this block type supplies help
                 $help_link = (empty($item['type_info']['show_help'])) ? '' :
                     xarModURL('blocks', 'admin', 'modify_instance', 
-                        array('block_id' => $block_id, 'interface' => 'display', 'method' => 'help'));
+                        array('block_id' => $block_id, 'interface' => 'display', 'block_method' => 'help'));
                 $item['help_link'] = array(
                     'label' => xarML('Help'),
                     'title' => xarML('Display help information about this block type'),
@@ -166,7 +166,7 @@ function blocks_admin_view_instances()
                 // check if this block type supports previews
                 $preview_link = (empty($group['type_info']['show_preview'])) ? '' :
                     xarModURL('blocks', 'admin', 'modify_instance', 
-                        array('block_id' => $group_id, 'interface' => 'display', 'method' => 'preview'));
+                        array('block_id' => $group_id, 'interface' => 'display', 'block_method' => 'preview'));
                 $group['preview_link'] = array(
                     'label' => xarML('Preview'),
                     'title' => xarML('Display preview of this block instance'),
@@ -175,7 +175,7 @@ function blocks_admin_view_instances()
                 // check if this block type supplies help
                 $help_link = (empty($group['type_info']['show_help'])) ? '' :
                     xarModURL('blocks', 'admin', 'modify_instance', 
-                        array('block_id' => $group_id, 'interface' => 'display', 'method' => 'help'));
+                        array('block_id' => $group_id, 'interface' => 'display', 'block_method' => 'help'));
                 $group['help_link'] = array(
                     'label' => xarML('Help'),
                     'title' => xarML('Display help information about this block type'),
@@ -233,7 +233,7 @@ function blocks_admin_view_instances()
                         // check if this block type supports previews
                         $preview_link = (empty($block['type_info']['show_preview'])) ? '' :
                             xarModURL('blocks', 'admin', 'modify_instance', 
-                                array('block_id' => $block_id, 'interface' => 'display', 'method' => 'preview'));              
+                                array('block_id' => $block_id, 'interface' => 'display', 'block_method' => 'preview'));              
                         $block['preview_link'] = array(
                             'label' => xarML('Preview'),
                             'title' => xarML('Display preview of this block instance'),
@@ -242,7 +242,7 @@ function blocks_admin_view_instances()
                         // check if this block type supplies help
                         $help_link = (empty($block['type_info']['show_help'])) ? '' :
                             xarModURL('blocks', 'admin', 'modify_instance', 
-                                array('block_id' => $block_id, 'interface' => 'display', 'method' => 'help'));              
+                                array('block_id' => $block_id, 'interface' => 'display', 'block_method' => 'help'));              
                         $block['help_link'] = array(
                             'label' => xarML('Help'),
                             'title' => xarML('Display help information about this block type'),
@@ -293,14 +293,14 @@ function blocks_admin_view_instances()
                     'title' => xarML('View a preview of this block type'),
                     'url' => empty($item['type_info']['show_preview']) ? '' :
                         xarModURL('blocks', 'admin', 'modify_type', 
-                            array('type_id' => $type_id,  'interface' => 'display', 'method' => 'preview')),
+                            array('type_id' => $type_id,  'interface' => 'display', 'block_method' => 'preview')),
                 );  
                 $item['help_link'] = array(
                     'label' => xarML('Help'),
                     'title' => xarML('View help information about this block type'),
                     'url' => empty($item['type_info']['show_help']) ? '' :
                         xarModURL('blocks', 'admin', 'modify_type', 
-                            array('type_id' => $type_id, 'interface' => 'display', 'method' => 'help')),
+                            array('type_id' => $type_id, 'interface' => 'display', 'block_method' => 'help')),
                 );     
                 // check new instance access        
                 $access = array(
@@ -359,7 +359,7 @@ function blocks_admin_view_instances()
                 // check if this block type supports previews
                 $preview_link = (empty($item['type_info']['show_preview'])) ? '' :
                     xarModURL('blocks', 'admin', 'modify_instance', 
-                        array('block_id' => $block_id, 'interface' => 'display', 'method' => 'preview'));
+                        array('block_id' => $block_id, 'interface' => 'display', 'block_method' => 'preview'));
                 $item['preview_link'] = array(
                     'label' => xarML('Preview'),
                     'title' => xarML('Display preview of this block instance'),
@@ -368,7 +368,7 @@ function blocks_admin_view_instances()
                 // check if this block type supplies help
                 $help_link = (empty($item['type_info']['show_help'])) ? '' :
                     xarModURL('blocks', 'admin', 'modify_instance', 
-                        array('block_id' => $block_id, 'interface' => 'display', 'method' => 'help'));
+                        array('block_id' => $block_id, 'interface' => 'display', 'block_method' => 'help'));
                 $item['help_link'] = array(
                     'label' => xarML('Help'),
                     'title' => xarML('Display help information about this block type'),
