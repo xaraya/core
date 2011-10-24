@@ -1124,8 +1124,7 @@ class xarTpl extends Object
         // property include in property       
         $sourceFileName = sys::code() . "properties/$propertyName/xartemplates/includes/$templateName.xt";
         if (file_exists($sourceFileName)) return self::executeFromFile($sourceFileName, $tplData);
-        // @checkme: is this debug code? commenting out for now, put back if required
-        // echo $sourceFileName;exit;
+        
         // Not found: raise an exception
         throw new FileNotFoundException($templateName, 'Could not find include template #(1).xt');
     }
