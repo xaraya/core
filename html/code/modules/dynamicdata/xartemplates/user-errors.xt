@@ -20,7 +20,13 @@
                 </div>                    
             <xar:elseif condition="$layout eq 'duplicate_name'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
-                    A dataobject #$newname# already exists
+                    A dataobject #$name# already exists.
+                    <br/>
+                    Try going back, clicking on the "Overwrite if exists" checkbox, and importing again.
+                </div>
+            <xar:elseif condition="$layout eq 'bad_definition'"/>
+                <div style="margin-top: 20px; margin-left: 20px">
+                    The object could not be imported because of an error in its definition
                 </div>
             <xar:else />
                 <div style="margin-top: 20px; margin-left: 20px">

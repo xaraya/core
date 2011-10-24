@@ -66,19 +66,31 @@ function dynamicdata_admin_import(Array $args=array())
             if (empty($found) || !file_exists($basedir . '/' . $file)) {
                 throw new FileNotFoundException($basedir,'No files were found to import in directory "#(1)"');
             }
-            $objectid = xarMod::apiFunc('dynamicdata','util','import',
+            try {
+                $objectid = xarMod::apiFunc('dynamicdata','util','import',
                                       array('file' => $basedir . '/' . $file,
                                             'keepitemid' => $keepitemid,
                                             'overwrite' =>  $overwrite,
                                             'prefix' => $data['prefix'],
                                             ));
+            } catch (DuplicateException $e) {
+                return xarTplModule('dynamicdata', 'user', 'errors',array('layout' => 'duplicate_name', 'name' => $e->getMessage()));
+            } catch (Exception $e) {
+                return xarTplModule('dynamicdata', 'user', 'errors',array('layout' => 'bad_definition'));
+            }
         } else {
-            $objectid = xarMod::apiFunc('dynamicdata','util','import',
+            try {
+                $objectid = xarMod::apiFunc('dynamicdata','util','import',
                                       array('xml' => $xml,
                                             'keepitemid' => $keepitemid,
                                             'overwrite' =>  $overwrite,
                                             'prefix' => $data['prefix'],
                                             ));
+            } catch (DuplicateException $e) {
+                return xarTplModule('dynamicdata', 'user', 'errors',array('layout' => 'duplicate_name', 'name' => $e->getMessage()));
+            } catch (Exception $e) {
+                return xarTplModule('dynamicdata', 'user', 'errors',array('layout' => 'bad_definition'));
+            }
         }
         if (empty($objectid)) return;
 
