@@ -5,7 +5,7 @@
  * @package blocklayout
  * @subpackage compiler
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -90,7 +90,7 @@ class CompiledTemplate extends Object
             ob_start();
             // this outputs the template and deals with start comments accordingly.
             // @todo bring this in here, not pull in from xarTemplate
-            echo xarTpl_outputTemplate($this->source, $prelimOut);
+            echo xarTpl::outputTemplate($this->source, $prelimOut);
         }
 
         // Fetch output and clean buffer

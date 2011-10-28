@@ -5,7 +5,7 @@
  * @package core
  * @subpackage core
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -32,7 +32,7 @@ if(file_exists('../_MTN/revision'))
         $rev = str_replace(array('old_revision [',']'),'',$t[4]);
 }
 define('XARCORE_VERSION_ID',  'Jamaica');
-define('XARCORE_VERSION_NUM', '2.2.0');
+define('XARCORE_VERSION_NUM', '2.3.0');
 define('XARCORE_VERSION_SUB', 'post rabiem risus');
 define('XARCORE_VERSION_REV', $rev);
 
@@ -452,7 +452,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
                 'generateXMLURLs'        => true
             );
 
-            xarTpl_init($systemArgs);
+            xarTpl::init($systemArgs);
             $whatToLoad ^= xarCore::BIT_TEMPLATES;
         // we're about done here - everything else requires templates !?
         } else {

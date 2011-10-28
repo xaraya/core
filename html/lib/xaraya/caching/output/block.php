@@ -5,7 +5,7 @@
  * @package core
  * @subpackage caching
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -88,7 +88,7 @@ class xarBlockCache extends Object
         // set the cacheCode for the current cacheKey
 
         // the output depends on the current host, theme and locale
-        $factors = xarServer::getVar('HTTP_HOST') . xarTplGetThemeDir() .
+        $factors = xarServer::getVar('HTTP_HOST') . xarTpl::getThemeDir() .
                    xarUserGetNavigationLocale();
 
         // add page identifier if needed
@@ -124,6 +124,7 @@ class xarBlockCache extends Object
      * Get cache settings for the blocks
      * @return array
      */
+    /* As of soloblocks each block carries its own settings which we get from blockinfo
     public static function getCacheSettings()
     {
         if (!isset(self::$cacheSettings)) {
@@ -158,6 +159,7 @@ class xarBlockCache extends Object
         }
         return self::$cacheSettings;
     }
+    */
 
     /**
      * Check if this block is suitable for block caching
@@ -171,20 +173,25 @@ class xarBlockCache extends Object
         if (!empty(self::$cacheKey)) {
             return false;
         }
-
-        if (empty($blockInfo['module']) || empty($blockInfo['bid'])) {
+        
+        if (empty($blockInfo['type']))
+            return false;
+        /* As of soloblocks we can oly rely on type being present
+        if (empty($blockInfo['module']) || empty($blockInfo[''])) {
             return false;
         }
+        */
 
         self::$noCache    = null;
         self::$pageShared = null;
         self::$userShared = null;
         self::$expireTime = null;
 
+        /* As of soloblocks each block carries its own settings which we get from blockinfo
         $settings = self::getCacheSettings();
 
         $blockid = $blockInfo['bid'];
-
+        
         if (isset($settings[$blockid])) {
             self::$noCache    = $settings[$blockid]['nocache'];
             self::$pageShared = $settings[$blockid]['pageshared'];
@@ -192,7 +199,9 @@ class xarBlockCache extends Object
             self::$expireTime = $settings[$blockid]['cacheexpire'];
 
         // CHECKME: cfr. bug 4021 Override caching vars with block BL tag
-        } elseif (!empty($blockInfo['content']) && is_array($blockInfo['content'])) {
+        } else
+        */
+        if (!empty($blockInfo['content']) && is_array($blockInfo['content'])) {
             if (isset($blockInfo['content']['nocache'])) {
                 self::$noCache    = $blockInfo['content']['nocache'];
             }

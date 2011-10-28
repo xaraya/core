@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -131,9 +131,9 @@ class ObjectRefProperty extends SelectProperty
         // Make sure the display and store fields are valid properties of this object
         $fields = array_keys($object->getProperties());
         if (!in_array($this->initialization_display_prop,$fields))
-            throw new EmptyParameterException($object->name . '.' .$this->initialization_display_prop);
+            throw new EmptyParameterException('display_prop: ' . $object->name . '.' .$this->initialization_display_prop);
         if (!in_array($this->initialization_store_prop,$fields))
-            throw new EmptyParameterException($object->name . '.' .$this->initialization_store_prop);
+            throw new EmptyParameterException('store_prop: ' . $object->name . '.' .$this->initialization_store_prop);
 
         // Check if the store_prop is the itemid
         if ($object->properties[$this->initialization_store_prop]->type == 21) { // itemid

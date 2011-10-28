@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:template file="user-mod-head"/>
+    <div class="xar-mod-body">
+        <form action="#xarModURL('themes', 'user', 'switch_theme')#" method="post">
+            <fieldset>
+                <legend>Themes</legend>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="default_theme" class="xar-form-label">
+                            Select Theme
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input property="$user_themes" name="default_theme" id="default_theme"/>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="phase" id="phase" value="update"/>
+                        <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                        <xar:var name="submitLabel">Change Theme</xar:var>
+                        <xar:button type="submit" label="$submitLabel"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</xar:template>

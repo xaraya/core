@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="module" file="dd"/>
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>Utilities - Export DataObject Definition</h2>
+        <xar:template type="module" file="utility-menu"/>
+        <form method="post" action="#xarModURL('dynamicdata','admin','export')#">
+            <fieldset class="xar-form-actions">
+                <legend>Select Object</legend>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="xml" class="xar-form-label">Object :</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input type="object" name="objectid" value="$objectid" display_prop="name" store_prop="objectid" onchange="submit()"/>
+                        <xar:var name="label">Refresh</xar:var>&#160;
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <form>
+            <fieldset>
+                <legend>#$label#</legend>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="xml" class="xar-form-label">Definition :</label>
+                    </div>
+                    <div class="xar-col">
+                        <textarea name="xml" id="xml" class="xar-form-textarealarge">#$xml#</textarea>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <xar:if condition="!empty($convertlink)">
+            <p class="xar-align-center">
+                <a href="#$convertlink#">Create a dedicated table for this object</a>
+            </p>
+        </xar:if>
+        <xar:if condition="!empty($formlink)">
+            <p class="xar-align-center">
+                <a href="#$formlink#">Export the data for all items to your browser</a>
+            </p>
+        </xar:if>
+        <xar:if condition="!empty($filelink)">
+            <p class="xar-align-center">
+                <a href="#$filelink#">Export the data for all items to a file</a>
+            </p>
+        </xar:if>
+    </div>
+</xar:template>

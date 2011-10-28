@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage roles module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -41,7 +41,7 @@ class EmailProperty extends TextBoxProperty
         if (!isset($value)) $value = "";
 
         if ($this->validation_email_confirm) {
-            if (is_array($value) && $value[0] == $value[1]) {
+            if (is_array($value) && trim($value[0]) == trim($value[1])) {
                 $value = $value[0];
             } else {
                 if (!empty($this->validation_email_confirm_invalid)) {
@@ -53,6 +53,7 @@ class EmailProperty extends TextBoxProperty
             }
         }
 
+        $value = trim($value);
         if (!parent::validateValue($value)) return false;
         if (!empty($value)) {
             sys::import('xaraya.validations');

@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -89,7 +89,7 @@ class FileUploadProperty extends DataProperty
 
         // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/default/images
         if (!empty($this->initialization_basedirectory) && preg_match('/\{theme\}/',$this->initialization_basedirectory)) {
-            $curtheme = xarTplGetThemeDir();
+            $curtheme = xarTpl::getThemeDir();
             $this->initialization_basedirectory = preg_replace('/\{theme\}/',$curtheme,$this->initialization_basedirectory);
         }
 

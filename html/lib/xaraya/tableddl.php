@@ -11,7 +11,7 @@
  * @package core
  * @subpackage database
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -54,6 +54,7 @@ function xarDBCreateDatabase($databaseName, $databaseType=NULL, $databaseCharset
 
     switch($databaseType) {
         case 'mysql':
+        case 'mysqli':
         case 'oci8':
         case 'oci8po':
             $sql = 'CREATE DATABASE '. $databaseName . ' DEFAULT CHARACTER SET ' . $databaseCharset;
@@ -111,6 +112,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
+        case 'mysqli':
             sys::import('xaraya.tableddl.mysql');
             $sql = xarDB__mysqlCreateTable($tableName, $fields, $charset);
             break;
@@ -174,6 +176,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
+        case 'mysqli':
             sys::import('xaraya.tableddl.mysql');
             $sql = xarDB__mysqlAlterTable($tableName, $args);
             break;
@@ -223,6 +226,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     switch($databaseType) {
         case 'postgres':
         case 'mysql':
+        case 'mysqli':
         case 'oci8':
         case 'oci8po':
         case 'sqlite':
@@ -272,6 +276,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
+        case 'mysqli':
             if ($index['unique'] == true) {
                 $sql = 'ALTER TABLE '.$tableName.' ADD UNIQUE '.$index['name'];
             } else {
@@ -329,6 +334,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
+        case 'mysqli':
             $sql = 'ALTER TABLE '.$tableName.' DROP INDEX '.$index['name'];
             break;
         case 'postgres':

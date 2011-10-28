@@ -5,7 +5,7 @@
  * @package core
  * @subpackage controllers
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -45,8 +45,8 @@ class xarRoute extends Object implements iRoute
     {
         if (null !== $this->request) {
             if ($this->request->moduleKey) $this->moduleKey   = $this->request->moduleKey;
-            if ($this->request->typeKey) $this->typeKey     = $this->request->typeKey;
-            if ($this->request->funcKey) $this->funcKey     = $this->request->funcKey;
+            if ($this->request->typeKey) $this->typeKey       = $this->request->typeKey;
+            if ($this->request->funcKey) $this->funcKey       = $this->request->funcKey;
         }
 
         $this->defaults += array(

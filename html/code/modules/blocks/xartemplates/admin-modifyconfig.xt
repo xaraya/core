@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Blocks Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
+    <div class="xar-mod-page-head">
         <h2>Modify Blocks Configuration</h2>
-        <ul class="xar-tabs xar-alt xar-norm-outline">
+        <ul class="xar-tabs">
             <xar:var name="title">Choose a set of configuration options</xar:var>
             <xar:var name="label">Configure</xar:var>
             <li class="xar-tabs-label" title="#$title#">#$label#</li>
             <xar:if condition="$tab eq 'general'">
                 <li class="xar-tab-active">
-                    <a href="#xarServer::getCurrentURL()#" class="xar-accent xar-accent-outline">General</a>
+                    <a href="#xarServer::getCurrentURL()#">General</a>
                 </li>
             <xar:else />
                 <li class="xar-tab">
-                    <a href="#xarModURL('blocks', 'admin', 'modifyconfig', array('tab' =&gt; 'general'))#" class="xar-norm xar-norm-outline">
+                    <a href="#xarModURL('blocks', 'admin', 'modifyconfig', array('tab' =&gt; 'general'))#">
                     General</a>
                 </li>
             </xar:if>
         </ul>
+    </div>
+    <div class="xar-mod-page-body">
         <!--
             - - - - - - - - - - - Begin General Options - - - - - - - - - - -
         -->
@@ -29,24 +29,29 @@
             <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
                 <xar:data-form object="$module_settings"/>
                 <fieldset>
-                <div class="xar-form-input-wrapper">
-                    <label for="noexceptions" class="xar-form-label">Exception Handling</label>
-                    <div class="xar-form-container-after">
-                        <xar:data-input type="radio" name="noexceptions" options="$exceptionoptions" value="$noexceptions"/>
-                        <p>By default the blocks module suppresses exceptions it encounters when displaying blocks. When developing blocks or block template over-rides for your site it may be useful to see those exceptions. Exception messages are only visible to the debug administrators, which are defined <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">here</a>.</p>
-
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="noexceptions" class="xar-form-label">Exception Handling</label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:data-input type="radio" name="noexceptions" options="$exceptionoptions" value="$noexceptions"/>
+                            <p>By default the blocks module suppresses exceptions it encounters when displaying blocks. When developing blocks or block template over-rides for your site it may be useful to see those exceptions. Exception messages are only visible to the debug administrators, which are defined <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">here</a>.</p>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="xar-form-actions">
+                    <div class="xar-row">
+                        <div class="xar-col"></div>
+                        <div class="xar-col">
+                            <xar:data-input type="hidden" name="phase" id="phase" value="update"/>
+                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                            <xar:var name="label">Update</xar:var>
+                            <xar:button type="submit" label="$label"/>
+                        </div>
                     </div>
                 </div>
-                </fieldset>
-                <fieldset>
-                   <div class="xar-form-input-wrapper-after">
-                        <xar:data-input type="hidden" name="phase" id="phase" value="update"/>
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                        <xar:var name="label">Update</xar:var>
-                        <xar:button type="submit" label="$label"/>
-                    </div>
-                </fieldset>
             </form>
         </xar:if>
+    </div>
     </div>
 </xar:template>

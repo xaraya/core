@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage blocks module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -34,7 +34,7 @@ function blocks_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         $data = array();
         if (!xarVarFetch('tab', 'pre:trim:lower:str:1:', $data['tab'], '', XARVAR_NOT_REQUIRED)) return;
-        return xarTplModule('blocks','admin','overview', $data);
+        return xarTpl::module('blocks','admin','overview', $data);
     } else {
         xarController::redirect(xarModURL('blocks', 'admin', 'view_instances'));
         return true;

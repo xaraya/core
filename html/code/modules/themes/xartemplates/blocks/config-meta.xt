@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="!empty($metatags)">
+    <!-- display list of stored metatags -->
+    <table class="xar-fullwidth">
+        <caption class="xar-align-left">Meta Tags</caption>
+        <tbody>
+        <xar:foreach in="$metatags" key="$tagkey" value="$metatag">
+            <xar:set name="tagname">"metatags[{$tagkey}]"</xar:set>
+            <xar:set name="tagid">"metatags_{$tagkey}"</xar:set>
+            <tr>
+                <td>
+                    <label for="#$tagid#">Meta</label>                
+                </td>
+                <td>
+                    <xar:set name="tagtype">"{$tagname}[type]"</xar:set>
+                    <xar:set name="tagtypeid">"{$tagid}_type"</xar:set>
+                    <xar:set name="tagtypeval">$metatag['type']</xar:set>
+                    <xar:data-input type="dropdown" name="$tagtype" id="$tagtypeid" options="$metatypes" value="$tagtypeval"/> =
+                    <xar:set name="tagvalue">"{$tagname}[value]"</xar:set>
+                    <xar:set name="tagvalueid">"{$tagid}_value"</xar:set>
+                    <xar:set name="tagvalueval">$metatag['value']</xar:set>
+                    <input type="text" name="#$tagvalue#" id="#$tagvalueid#" value="#$tagvalueval#" class="xar-form-textmedium"/>                
+                </td>
+                <td>
+                    <xar:set name="taglang">"{$tagname}[lang]"</xar:set>
+                    <xar:set name="taglangid">"{$tagid}_lang"</xar:set>
+                    <xar:set name="taglangval">$metatag['lang']</xar:set>
+                    <label for="#$taglangid#">lang</label> =
+                    <xar:data-input type="dropdown" name="$taglang" id="$taglangid" value="$taglangval" options="$metalangs" firstline="n/a"/>
+                </td>                
+                <td>
+                    <xar:set name="tagdir">"{$tagname}[dir]"</xar:set>
+                    <xar:set name="tagdirid">"{$tagid}_dir"</xar:set>
+                    <xar:set name="tagdirval">$metatag['dir']</xar:set>
+                    <label for="#$tagdirid#">dir</label> =                
+                    <xar:data-input type="dropdown" name="$tagdir" id="$tagdirid" value="$tagdirval" options="$metadirs" firstline="n/a"/>
+                </td>
+                <td>
+                    <xar:set name="tagscheme">"{$tagname}[scheme]"</xar:set>
+                    <xar:set name="tagschemeid">"{$tagid}_scheme"</xar:set>
+                    <xar:set name="tagschemeval">$metatag['scheme']</xar:set>
+                    <label for="#$tagschemeid#">scheme</label> =  
+                    <input type="text" name="#$tagscheme#" id="#$tagschemeid#" value="#$tagschemeval#"/>
+                </td>
+            </tr>
+            <tr>
+                <xar:set name="tagcontent">"{$tagname}[content]"</xar:set>
+                <xar:set name="tagcontentid">"{$tagid}_content"</xar:set>
+                <xar:set name="tagcontentval">$metatag['content']</xar:set>
+                <td style="vertical-align: text-top;">
+                    <label for="#$tagcontentid#">Content</label>                
+                </td>
+                <td colspan="4">
+                    <textarea name="#$tagcontent#" id="#$tagcontentid#" cols="80" rows="2">#$tagcontentval#</textarea>                
+                </td>
+            </tr>
+        </xar:foreach>
+        </tbody>
+    </table>
+    </xar:if>
+    
+    <!-- New meta tag input -->
+    <table class="xar-fullwidth xar-margin-nonetop">
+        <caption class="xar-align-left">New Meta Tag</caption>
+        <tbody>
+            <tr>
+                <td>
+                    <label for="metatype">Meta</label>                
+                </td>
+                <td>
+                    <xar:data-input type="dropdown" name="metatype" id="metatype" options="$metatypes"/> =
+                    <input type="text" name="metatypeval" id="metatypeval" value="" class="xar-form-textmedium"/>
+                </td>
+                <td>
+                    <label for="metalang">lang</label> =
+                    <xar:data-input type="dropdown" name="metalang" id="metalang" options="$metalangs" firstline="n/a"/>
+                </td>
+                <td>
+                    <label for="metadir">dir</label> =                
+                    <xar:data-input type="dropdown" name="metadir" id="metadir" options="$metadirs" firstline="n/a"/>
+                </td>
+                <td>
+                    <label for="metascheme">scheme</label> =  
+                    <input type="text" name="metascheme" id="metascheme" value=""/>
+                </td>
+            </tr>        
+            <tr>
+                <td style="vertical-align: text-top;">
+                    <label for="metacontent">Content</label>                
+                </td>
+                <td colspan="4">
+                    <textarea name="metacontent" cols="80" rows="2"></textarea>                
+                </td>
+            </tr>
+        </tbody>   
+    </table>    
+
+    <!-- Display list of stored link tags -->
+    <xar:if condition="!empty($linktags)">
+    <table class="xar-fullwidth xar-margin-thicktop">
+        <caption class="xar-align-left">Link Tags</caption>
+        <thead>
+            <tr>
+                <th>rel</th>
+                <th>href</th>
+                <th>title</th>
+                <th>type</th>
+                <th>Delete</th>
+            </tr>        
+        </thead>
+        <tbody>
+            <xar:foreach in="$linktags" key="$linkkey" value="$linktag">
+            <xar:set name="linkname">"linktags[{$linkkey}]"</xar:set>
+            <xar:set name="linkid">"linktags_{$linkkey}"</xar:set>
+            <tr>
+                <td>
+                    <xar:set name="relname">"{$linkname}[rel]"</xar:set>
+                    <xar:set name="relid">"{$linkid}_rel"</xar:set>
+                    <input type="text" name="#$relname#" id="#$relid#" value="#$linktag.rel#" class="xar-form-textmedium"/>
+                </td>
+                <td>
+                    <xar:set name="hrefname">"{$linkname}[href]"</xar:set>
+                    <xar:set name="hrefid">"{$linkid}_href"</xar:set>
+                    <input type="text" name="#$hrefname#" id="#$hrefid#" value="#$linktag.href#" class="xar-form-textxlong"/>
+                </td>
+                <td>
+                    <xar:set name="titlename">"{$linkname}[title]"</xar:set>
+                    <xar:set name="titleid">"{$linkid}_title"</xar:set>
+                    <input type="text" name="#$titlename#" id="#$titleid#" value="#$linktag.title#"/>
+                </td>
+                <td>
+                    <xar:set name="typename">"{$linkname}[type]"</xar:set>
+                    <xar:set name="typeid">"{$linkid}_type"</xar:set>
+                    <input type="text" name="#$typename#" id="#$typeid#" value="#$linktag.type#" class="xar-form-textmedium"/>
+                </td>
+                <td>
+                    <xar:set name="delname">"{$linkname}[delete]"</xar:set>
+                    <xar:set name="delid">"{$linkid}_delete"</xar:set>
+                    <input type="checkbox" name="#$delname#" id="#$delid#"/>                
+                </td>
+            </tr>
+            </xar:foreach>
+        </tbody>
+    </table>    
+    </xar:if>
+    
+    <!-- New link tag input -->
+    <table class="xar-fullwidth xar-margin-nonetop">
+        <caption class="xar-align-left">New Link Tag</caption>
+        <thead>
+            <tr>
+                <th>rel</th>
+                <th>href</th>
+                <th>title</th>
+                <th>type</th>
+            </tr>        
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <input type="text" name="linkrel" id="linkrel" value="" class="xar-form-textmedium"/>
+                </td>
+                <td>
+                    <input type="text" name="linkhref" id="linkhref" value="" class="xar-form-textxlong"/>
+                </td>
+                <td>
+                    <input type="text" name="linktitle" id="linktitle" value=""/>                
+                </td>
+                <td>
+                    <input type="text" name="linktype" id="linktype" value="" class="xar-form-textmedium"/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</xar:template>

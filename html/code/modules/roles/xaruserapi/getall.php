@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage roles module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -24,10 +24,9 @@
 function roles_userapi_getall(Array $args=array())
 {
     extract($args);
-    // LEGACY
-    if ((empty($idlist) && !empty($uidlist))) {
-        $idlist = $uidlist;
-    }
+
+    // the property uses grouplist rather than group
+    if (isset($grouplist)) $group = $grouplist;
 
     // Optional arguments.
     if (!isset($startnum)) $startnum = 1;
@@ -59,7 +58,26 @@ function roles_userapi_getall(Array $args=array())
         }
     }
 
-    // Restriction by group.
+    $where_clause = array();
+    $bindvars = array();
+
+    # --------------------------------------------------------
+    #
+    # Filter by state
+    #
+    if (!empty($state) && is_numeric($state) && $state == xarRoles::ROLES_STATE_CURRENT) {
+        $where_clause[] = 'roletab.state <> ?';
+        $bindvars[] = (int) xarRoles::ROLES_STATE_DELETED;
+    } elseif (!empty($state) && is_numeric($state) && $state == xarRoles::ROLES_STATE_ALL) {
+    } else {
+        $where_clause[] = 'roletab.state = ?';
+        $bindvars[] = (int) $state;
+    }
+
+    # --------------------------------------------------------
+    #
+    # Filter by single group (see grouplist below)
+    #
     if (isset($group)) {
         $groups = explode(',', $group);
         $group_list = array();
@@ -78,16 +96,10 @@ function roles_userapi_getall(Array $args=array())
         if (empty($group_list)) return array();
     }
 
-    $where_clause = array();
-    $bindvars = array();
-    if (!empty($state) && is_numeric($state) && $state != xarRoles::ROLES_STATE_CURRENT) {
-        $where_clause[] = 'roletab.state = ?';
-        $bindvars[] = (int) $state;
-    } else {
-        $where_clause[] = 'roletab.state <> ?';
-        $bindvars[] = (int) xarRoles::ROLES_STATE_DELETED;
-    }
-
+    # --------------------------------------------------------
+    #
+    # Filter by group list
+    #
     if (empty($group_list)) {
         // Simple query.
         $query = '
@@ -128,16 +140,22 @@ function roles_userapi_getall(Array $args=array())
         $bindvars[] = (int) xarRoles::ROLES_STATE_PENDING;
     }
 
-    // If we aren't including anonymous in the query,
-    // then find the anonymous user's id and add
-    // a where clause to the query.
+    # --------------------------------------------------------
+    #
+    # If we aren't including anonymous in the query,
+    # then find the anonymous user's id and add
+    # a where clause to the query.
+    #
     if (isset($include_anonymous) && !$include_anonymous) {
         $thisrole = xarMod::apiFunc('roles', 'user', 'get', array('uname'=>'anonymous'));
         $where_clause[] = 'roletab.id <> ?';
         $bindvars[] = (int) $thisrole['id'];
     }
 
-    // Return only users (not groups).
+    # --------------------------------------------------------
+    #
+    # Return only users (not groups).
+    #
     $where_clause[] = 'roletab.itemtype = ' . xarRoles::ROLES_USERTYPE;
 
     // Add the where-clause to the query.
@@ -220,8 +238,8 @@ function roles_userapi_getall(Array $args=array())
             }
         }
     }
+
     // Return the users
     return $roles;
 }
-
 ?>

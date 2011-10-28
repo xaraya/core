@@ -7,7 +7,6 @@
         <xar:set name="tabs">xarMod::apiFunc('base', 'admin', 'loadmenuarray', array('layout' => 'tabs'))</xar:set>
         <!-- only display if we found some links -->
         <xar:if condition="!empty($tabs['menulinks'])">
-            <div>
                 <ul class="xar-tabs xar-alt xar-norm-outline">
                     <xar:if condition="!empty($tabs['title'])">
                         <li class="xar-tabs-label" title="#$tabs.title#">#$tabs.label#:</li>
@@ -35,7 +34,6 @@
                         </li>
                     </xar:foreach>
                 </ul>
-            </div>
         </xar:if>
     </xar:if>
 </xar:template>

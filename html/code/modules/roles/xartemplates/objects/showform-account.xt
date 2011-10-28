@@ -15,22 +15,26 @@
         <fieldset>
             <legend>User Details</legend>
             <xar:if condition="(bool)xarModVars::get('roles', 'requirevalidation')">
-                <div class="xar-form-input-wrapper">
-                    <label for="email">Changing your email address will require you to
-                    revalidate your account.</label>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="email">Changing your email address will require you to
+                        revalidate your account.</label>
+                    </div>
                 </div>
             </xar:if>
             <xar:set name="fields">array('name','uname','email','password','regdate')</xar:set>
             <xar:foreach in="$fields" value="$name">
                 <xar:if condition="!isset($properties[$name])"><xar:continue /></xar:if>
-                <div class="xar-form-input-wrapper">
-                    <xar:data-label property="$properties[$name]" for="id"/>
-                    <xar:data-input property="$properties[$name]"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:data-label property="$properties[$name]" for="id"/>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input property="$properties[$name]"/>
+                    </div>
                 </div>
             </xar:foreach>
-            <!--
-            <xar:data-form object="$object" fieldlist="name,uname,email,password,regdate"/>
-            -->
+
             <xar:data-input property="$object->properties['id']" hidden="hidden"/>
             <xar:data-input property="$object->properties['state']" hidden="hidden"/>
             <xar:data-input property="$object->properties['valcode']" hidden="hidden"/>
@@ -39,34 +43,46 @@
 
             <xar:if condition="in_array('passwordupdate', $settings)">
                 <xar:set name="passwordupdate">xarModUserVars::get('roles', 'passwordupdate')</xar:set>
-                <xar:if condition="!empty($passwordupdate)">
-                    <div class="xar-form-input-wrapper">
-                        <label for="passwordupdate" class="xar-form-label">
-                            Password last updated:
-                        </label>
-                        #xarLocaleGetFormattedDate('medium', $passwordupdate)#
-                        #xarLocaleGetFormattedTime('medium', $passwordupdate)#
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="passwordupdate" class="xar-form-label">
+                                Password last updated:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:if condition="!empty($passwordupdate)">
+                                #xarLocaleGetFormattedDate('medium', $passwordupdate)#
+                                #xarLocaleGetFormattedTime('medium', $passwordupdate)#
+                            <xar:else/>
+                                Never
+                            </xar:if>
+                        </div>
                     </div>
-                </xar:if>
             </xar:if>
 
             <xar:if condition="in_array('userlastlogin', $settings)">
                 <xar:set name="userlastlogin">xarModUserVars::get('roles', 'userlastlogin')</xar:set>
                 <xar:if condition="!empty($userlastlogin)">
-                    <div class="xar-form-input-wrapper">
-                        <label for="userlastlogin" class="xar-form-label">
-                            Time of Last Login:
-                        </label>
-                        #xarLocaleGetFormattedDate('medium', $userlastlogin)#
-                        #xarLocaleGetFormattedTime('medium', $userlastlogin)#
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="userlastlogin" class="xar-form-label">
+                                Time of Last Login:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            #xarLocaleGetFormattedDate('medium', $userlastlogin)#
+                            #xarLocaleGetFormattedTime('medium', $userlastlogin)#
+                        </div>
                     </div>
                 </xar:if>
             </xar:if>
 
             <xar:if condition="!empty($formdata['hooks'])">
-                <div class="xar-form-input-wrapper">
-                    <xar:foreach in="$formdata['hooks']" key="$module" value="$output">
-                    #$output#</xar:foreach>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:foreach in="$formdata['hooks']" key="$module" value="$output">
+                        #$output#</xar:foreach>
+                    </div>
                 </div>
             </xar:if>
 

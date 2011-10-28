@@ -2,12 +2,13 @@
 /**
  * Xaraya Jamaica Upgrade
  *
- * @package upgrader
+ * @package modules
+ * @subpackage installer module
+ * @category Xaraya Web Applications Framework
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- *
- * @subpackage upgrade
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
@@ -66,12 +67,12 @@ class Upgrader extends Object
         xarVarSetCached('Upgrade', 'upgrading',1);
 
         // Make sure we can render a page
-        xarTplSetPageTitle(xarML('Xaraya Upgrade'));
-        if(!xarTplSetThemeName('installer'))
+        xarTpl::setPageTitle(xarML('Xaraya Upgrade'));
+        if(!xarTpl::setThemeName('installer'))
             throw new Exception('You need the installer theme if you want to upgrade Xaraya.');
 
         // Set the default page title before calling the module function
-        xarTplSetPageTitle(xarML("Upgrading Xaraya"));
+        xarTpl::setPageTitle(xarML("Upgrading Xaraya"));
     
         $output = xarModFunc('installer','admin','upgrade');
         $this->renderPage($output);
@@ -94,7 +95,7 @@ class Upgrader extends Object
         }
 
         // Render page with the output
-        $pageOutput = xarTpl_renderPage($output);
+        $pageOutput = xarTpl::renderPage($output);
         echo $pageOutput;
         return true;
     }

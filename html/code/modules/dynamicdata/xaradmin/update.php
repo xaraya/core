@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -44,7 +44,7 @@ function dynamicdata_admin_update(Array $args=array())
     if(!xarSecurityCheck('EditDynamicData')) return;
 
     if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
@@ -90,12 +90,12 @@ function dynamicdata_admin_update(Array $args=array())
 
                 if ($myobject->objectid == 1) {
                     $data['label'] = $myobject->properties['label']->value;
-                    xarTplSetPageTitle(xarML('Modify DataObject #(1)', $data['label']));
+                    xarTpl::setPageTitle(xarML('Modify DataObject #(1)', $data['label']));
                 } else {
                     $data['label'] = $myobject->label;
-                    xarTplSetPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
+                    xarTpl::setPageTitle(xarML('Modify Item #(1) in #(2)', $data['itemid'], $data['label']));
                 }
-                return xarTplModule($tplmodule,'admin','modify', $data);
+                return xarTpl::module($tplmodule,'admin','modify', $data);
             }
 
             // Valid and not previewing, update the object
@@ -135,7 +135,7 @@ function dynamicdata_admin_update(Array $args=array())
             $adminaccess = xarSecurityCheck('',0,'All',$myobject->objectid . ":" . $myobject->name . ":" . "All",0,'',0,800);
 
             if (!$adminaccess)
-                return xarTplModule('privileges','user','errors', array('layout' => 'no_privileges'));
+                return xarTpl::module('privileges','user','errors', array('layout' => 'no_privileges'));
 
             $name = $myobject->properties['name']->getValue();
             $myobject->properties['name']->setValue();
@@ -146,7 +146,7 @@ function dynamicdata_admin_update(Array $args=array())
             // Check if this object already exists
             $testobject = DataObjectMaster::getObject(array('name' => $newname));
             if (!empty($testobject->name)) {
-                return xarTplModule('dynamicdata','user','errors', array('layout' => 'duplicate_name', 'newname' => $newname));
+                return xarTpl::module('dynamicdata','user','errors', array('layout' => 'duplicate_name', 'newname' => $newname));
             }
             
             $itemtype = $myobject->getNextItemtype(array('moduleid' => $myobject->properties['module_id']->getValue()));

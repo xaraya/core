@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage mail module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -78,7 +78,7 @@ function mail_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             switch ($data['tab']) {
                 case 'general':
@@ -91,14 +91,19 @@ function mail_admin_modifyconfig()
                     
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
-                        return xarTplModule('mail','admin','modifyconfig', $data);        
+                        return xarTpl::module('mail','admin','modifyconfig', $data);        
                     } else {
                         $itemid = $data['module_settings']->updateItem();
                     }
 
                     if(isset($admin_outgoing)) xarModVars::set('mail','admin_outgoing',$admin_outgoing);
+                    // set the modvars used by sendmail as default from name, address 
+                    $adminname = xarUserGetVar('name', $admin_outgoing);
+                    $adminmail = xarUserGetVar('email', $admin_outgoing);
+                    xarModVars::set('mail', 'adminname', $adminname);
+                    xarModVars::set('mail', 'adminmail', $adminmail);
+                    
                     xarModVars::set('mail', 'ShowTemplates', $showtemplates);
-                    if(isset($adminname)) xarModVars::set('mail', 'adminname', $adminname);
                     xarModVars::set('mail', 'replyto', $replyto);
                     xarModVars::set('mail', 'replytoname', $replytoname);
                     xarModVars::set('mail', 'replytoemail', $replytoemail);

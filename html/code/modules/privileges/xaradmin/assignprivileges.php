@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage privileges module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -54,7 +54,7 @@
             case 'update':
                 // Confirm authorisation code
                 if (!xarSecConfirmAuthKey()) {
-                    return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                    return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
                 }        
                 if (!xarVarFetch('role', 'int', $role_id, 0, XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
                 if (!xarVarFetch('rolename', 'str', $rolename, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
@@ -67,9 +67,20 @@
                 if (!(empty($role_id) || empty($privilege_id))) {
                     $dbconn = xarDB::getConn();
                     $xartable = xarDB::getTables();
-                    $query = "INSERT INTO " . $xartable['security_acl'] . " VALUES (?,?)";
-                    $bindvars = array($role_id,$privilege_id);
-                    if (!$dbconn->Execute($query,$bindvars)) return;
+                    $query = "SELECT role_id FROM " . $xartable['security_acl'] . " WHERE role_id = ? AND privilege_id = ?";
+                    $bindvars = array((int)$role_id,(int)$privilege_id);
+                    $result =& $dbconn->Execute($query,$bindvars);
+                    if (!$result) return;
+
+                    $found = false;
+                    while (!$result->EOF) {
+                        $found = true;
+                        break;
+                    }
+                    if (!$found) {
+                        $query = "INSERT INTO " . $xartable['security_acl'] . " VALUES (?,?)";
+                        if (!$dbconn->Execute($query,$bindvars)) return;
+                    }
                 }
 
                 xarController::redirect(xarModURL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));

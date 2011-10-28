@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage themes module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -12,6 +12,7 @@
 /**
  * List themes and current settings
  * @author Marty Vance
+ * @author Chris Powis <crisp@xaraya.com>
  * @return array data for the template display
  */
 function themes_admin_list()
@@ -19,275 +20,208 @@ function themes_admin_list()
     // Security
     if(!xarSecurityCheck('AdminThemes')) return;
 
-    // form parameters
-    if (!xarVarFetch('startnum', 'isset', $startnum,    NULL,  XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('regen',    'isset', $regen,       NULL,  XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('sort',     'enum:asc:desc:', $sort, NULL,  XARVAR_DONT_SET)) return;
-    //if (!xarVarFetch('selfilter','isset', $selfilter,   NULL,  XARVAR_DONT_SET)) return;
+    // lets regenerate the list on each reload, for now
+    if(!xarMod::apiFunc('themes', 'admin', 'regenerate')) return;
 
-    $data['items'] = array();
+    if (!xarVarFetch('phase', 'pre:trim:lower:enum:update',
+        $phase, null, XARVAR_DONT_SET)) return;
 
-    $data['infolabel']                              = xarML('Info');
-    $data['actionlabel']                            = xarML('Action');
-    $data['optionslabel']                           = xarML('Options');
-    $data['reloadlabel']                            = xarML('Refresh');
-    $data['pager']                                  = '';
-    $authid = xarSecGenAuthKey();
-
-    // pass tru some of the form variables (we dont store them anywhere, atm)
-    $data['hidecore']                               = xarModUserVars::get('themes', 'hidecore');
-    $data['regen']                                  = $regen;
-    $data['selstyle']                               = xarModUserVars::get('themes', 'selstyle');
-    $data['selfilter']                              = xarModUserVars::get('themes', 'selfilter');
-    $data['selclass']                               = xarModUserVars::get('themes', 'selclass');
-    $data['useicons']                               = xarModUserVars::get('themes', 'useicons');
-
-    // select vars for drop-down menus
-    $data['style']['plain']                         = xarML('Plain');
-    $data['style']['preview']                       = xarML('Preview');
-
-    // labels for class names
-    $data['class']['all']                           = xarML('All');
-    $data['class']['system']                        = xarML('System');
-    $data['class']['utility']                       = xarML('Utility');
-    $data['class']['user']                          = xarML('User');
-
-    $data['filter'][XARTHEME_STATE_ANY]                         = xarML('All');
-    $data['filter'][XARTHEME_STATE_INSTALLED]                   = xarML('Installed');
-    $data['filter'][XARTHEME_STATE_ACTIVE]                      = xarML('Active');
-    $data['filter'][XARTHEME_STATE_INACTIVE]                    = xarML('Inactive');
-    $data['filter'][XARTHEME_STATE_UNINITIALISED]               = xarML('Uninitialized');
-    $data['filter'][XARTHEME_STATE_MISSING_FROM_UNINITIALISED]  = xarML('Missing (Not Inited)');
-    $data['filter'][XARTHEME_STATE_MISSING_FROM_INACTIVE]       = xarML('Missing (Inactive)');
-    $data['filter'][XARTHEME_STATE_MISSING_FROM_ACTIVE]         = xarML('Missing (Active)');
-    $data['filter'][XARTHEME_STATE_MISSING_FROM_UPGRADED]       = xarML('Missing (Upgraded)');
-
-    $data['default']                           = xarModVars::get('themes', 'default_theme', 1);
-
-    // obtain list of modules based on filtering criteria
-/*     if($regen){ */
-        // lets regenerate the list on each reload, for now
-        if(!xarMod::apiFunc('themes', 'admin', 'regenerate')) return;
-
-        // assemble filter for theme list
-        $filter = array('State' => $data['selfilter']);
-        if ($data['selclass'] != 'all') {
-            $filter['Class'] = strtr(
-                $data['selclass'],
-                array('system' => 0, 'utility' => 1, 'user' => 2)
-            );
-        }
-        // get themes
-        $themelist = xarMod::apiFunc('themes','admin','getthemelist',  array('filter'=> $filter));
-/*         , array('filter'=> array('State' => $data['selfilter'][0]))); */
-/*     }else{ */
-/*         // or just fetch the quicker old list */
-/*         $themelist = xarMod::apiFunc('themes','admin','GetThemeList', array('filter'=> array('State' => $data['selfilter']))); */
-/*     } */
-
-    // set sorting vars
-    if (empty($sort)) $sort = 'asc'; // this is default for getthemelist()
-    if ($sort == 'desc') {
-        $themelist = array_reverse($themelist);
-        $newsort = 'asc';
-        $sortimage = xarTplGetImage('arrow_up.gif', 'base');
-        $sortlabel = xarML('Sort Ascending');
-    } else {
-        $newsort = 'desc';
-        $sortimage = xarTplGetImage('arrow_down.gif', 'base');
-        $sortlabel = xarML('Sort Descending');
-    }
-    $data['sorturl'] = xarServer::getCurrentURL(array('sort' => $newsort));
-    $data['sortimage'] = $sortimage;
-    $data['sortlabel'] = $sortlabel;
-
-    // get action icons/images
-    $img_disabled       = xarTplGetImage('icons/disabled.png','base');
-    $img_none           = xarTplGetImage('icons/none.png','base');
-    $img_activate       = xarTplGetImage('icons/activate.png','base');
-    $img_deactivate     = xarTplGetImage('icons/deactivate.png','base');
-    $img_upgrade        = xarTplGetImage('icons/software-upgrade.png','base');
-    $img_initialise     = xarTplGetImage('icons/initialize.png','base');
-    $img_remove         = xarTplGetImage('icons/remove.png','base');
-
-    // get other images
-    $data['infoimg']    = xarTplGetImage('icons/info.png','base');
-    $data['editimg']    = xarTplGetImage('icons/hooks.png','base');
-
-    $data['listrowsitems'] = array();
-    $listrows = array();
-    $i = 0;
-
-    // now we can prepare data for template
-    // we will use standard xarMod api calls as much as possible
-    foreach($themelist as $theme){
-
-        // we're going to use the module regid in many places
-        $thisthemeid = $theme['regid'];
-
-        // if this module has been classified as 'Core'
-        // we will disable certain actions
-/*         $themeinfo = xarThemeGetInfo($thisthemeid); */
-/*         if(substr($themeinfo['class'], 0, 4)  == 'Core'){ */
-/*             $coretheme = true; */
-/*         }else{ */
-            $coretheme = false;
-/*         } */
-
-        // for the sake of clarity, lets prepare all our links in advance
-        $initialiseurl = xarModURL('themes', 'admin', 'install',
-            array('id' => $thisthemeid, 'authid' => $authid)
-        );
-        $activateurl = xarModURL('themes', 'admin', 'activate',
-            array('id' => $thisthemeid, 'authid' => $authid)
-        );
-        $deactivateurl = xarModURL('themes', 'admin', 'deactivate',
-            array('id' => $thisthemeid, 'authid' => $authid)
-        );
-        $removeurl = xarModURL('themes', 'admin', 'remove',
-            array('id' => $thisthemeid, 'authid' => $authid)
-        );
-        $upgradeurl = xarModURL('themes', 'admin', 'upgrade',
-            array('id' => $thisthemeid, 'authid' => $authid)
-        );
-
-        // common urls
-        $listrows[$i]['editurl'] = xarModURL('themes', 'admin', 'modify',
-            array('id' => $thisthemeid, 'authid' => $authid)
-        );
-        $listrows[$i]['infourl'] = xarModURL('themes', 'admin', 'themesinfo',
-            array('id' => $thisthemeid)
-        );
-        // added due to the feature request - opens info in new window
-        $listrows[$i]['infourlnew'] = xarModURL('themes', 'admin', 'themesinfo',
-            array('id' => $thisthemeid)
-        );
-        $listrows[$i]['defaulturl']= xarModURL('themes', 'admin', 'setdefault',
-            array('id' => $thisthemeid, 'authid' => $authid)
-        );
-
-        // common listitems
-        $listrows[$i]['coretheme']      = $coretheme;
-        $listrows[$i]['displayname']    = $theme['name'];
-        $listrows[$i]['description']    = $theme['description'];
-        $listrows[$i]['version']        = $theme['version'];
-        $listrows[$i]['edit']           = xarML('Edit');
-        $listrows[$i]['class']          = $theme['class'];
-        $listrows[$i]['directory']      = $theme['directory'];
-
-        if (empty($theme['state'])) {
-            $theme['state'] = 1;
-        }
-
-        // class labels
-        switch($theme['class']) {
-            case '2':
-                $listrows[$i]['classlabel'] = $data['class']['user'];
-                break;
-            case '1':
-                $listrows[$i]['classlabel'] = $data['class']['utility'];
-                break;
-            case '0':
-                $listrows[$i]['classlabel'] = $data['class']['system'];
-                break;
-            default:
-                $listrows[$i]['classlabel'] = xarML('Unknown');
-        }
-
-        // conditional data
-        if($theme['state'] == 1){
-            // this theme is 'Uninitialised'   - set labels and links
-            $statelabel = xarML('Uninitialized');
-            $listrows[$i]['state'] = 1;
-
-            $listrows[$i]['actionlabel']        = xarML('Initialize');
-            $listrows[$i]['actionurl']          = $initialiseurl;
-            $listrows[$i]['removeurl']          = '';
-
-            $listrows[$i]['actionimg1']         = $img_initialise;
-            $listrows[$i]['actionimg2']         = $img_none;
-
-
-        }elseif($theme['state'] == 2){
-            // this theme is 'Inactive'        - set labels and links
-            $statelabel = xarML('Inactive');
-            $listrows[$i]['state'] = 2;
-
-            $listrows[$i]['removelabel']        = xarML('Remove');
-            $listrows[$i]['removeurl']          = $removeurl;
-
-            $listrows[$i]['actionlabel']        = xarML('Activate');
-            $listrows[$i]['actionurl']          = $activateurl;
-
-            $listrows[$i]['actionimg1']         = $img_activate;
-            $listrows[$i]['actionimg2']         = $img_remove;
-        }elseif($theme['state'] == 3){
-            // this theme is 'Active'          - set labels and links
-            $statelabel = xarML('Active');
-            $listrows[$i]['state'] = 3;
-            // here we are checking for theme class
-            // to prevent ppl messing with the core themes
-            if(!$coretheme){
-                $listrows[$i]['actionlabel']    = xarML('Deactivate');
-                $listrows[$i]['actionurl']      = $deactivateurl;
-                $listrows[$i]['removeurl']      = '';
-
-                $listrows[$i]['actionimg1']     = $img_deactivate;
-                $listrows[$i]['actionimg2']     = $img_none;
-            }else{
-                $listrows[$i]['actionlabel']    = xarML('[core module]');
-                $listrows[$i]['actionurl']      = '';
-                $listrows[$i]['removeurl']      = '';
-
-                $listrows[$i]['actionimg1']     = $img_disabled;
-                $listrows[$i]['actionimg2']     = $img_disabled;
+    // update default themes
+    if ($phase == 'update') {
+        if (!xarSecConfirmAuthKey()) 
+            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+        $old_user_theme = xarModVars::get('themes', 'default_theme');
+        $old_admin_theme = xarModVars::get('themes', 'admin_theme');
+        if (!xarVarFetch('user_theme', 'pre:trim:lower:str:1:',
+            $new_user_theme, $old_user_theme, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('admin_theme', 'pre:trim:lower:str:1:',
+            $new_admin_theme, $old_admin_theme, XARVAR_NOT_REQUIRED)) return;
+        if ($new_user_theme != $old_user_theme) {
+            $themeid = xarThemeGetIdFromName($new_user_theme);
+            if ($themeid) {
+                $info = xarThemeGetInfo($themeid);
+                if ($info['class'] != 2) {
+                    $new_user_theme = $old_user_theme;
+                } else {
+                    if (xarVarIsCached('Mod.Variables.themes', 'default_theme')) 
+                        xarVarDelCached('Mod.Variables.themes', 'default_theme');
+                    if (!xarMod::apiFunc('themes','admin','install',array('regid'=>$themeid)))
+                        $new_user_theme = $old_user_theme;
+                }
+            } else {
+                $new_user_theme = $old_user_theme;
             }
-        }elseif($theme['state'] == 4 ||
-                $theme['state'] == 7 ||
-                $theme['state'] == 8 ||
-                $theme['state'] == 9){
-            // this theme is 'Missing'         - set labels and links
-            $statelabel = xarML('Missing');
-            $listrows[$i]['state'] = 4;
-
-            $listrows[$i]['removelabel']        = xarML('Remove');
-            $listrows[$i]['actionlabel']        = xarML('Remove');
-            $listrows[$i]['actionurl']          = $removeurl;
-            $listrows[$i]['removeurl']          = $removeurl;
-
-            $listrows[$i]['actionimg1']         = $img_none;
-            $listrows[$i]['actionimg2']         = $img_remove;
-
-        }elseif($theme['state'] == 5){
-            // this theme is 'Upgraded'        - set labels and links
-            $statelabel = xarML('Upgraded');
-            $listrows[$i]['state'] = 5;
-
-            $listrows[$i]['actionlabel']        = xarML('Upgrade');
-            $listrows[$i]['actionurl']          = $upgradeurl;
-            $listrows[$i]['removeurl']          = '';
-
-            $listrows[$i]['actionimg1']         = $img_none;
-            $listrows[$i]['actionimg2']         = $img_upgrade;
-
+            xarModVars::set('themes', 'default_theme', $new_user_theme);
         }
-
-        // nearly done
-        $listrows[$i]['statelabel']     = $statelabel;
-        $listrows[$i]['regid']          = $thisthemeid;
-
-        // preview images
-        $previewpath = "themes/$theme[directory]/images/preview.jpg";
-        $listrows[$i]['preview'] = file_exists($previewpath) ? $previewpath : '';
-
-        $data['listrowsitems'] = $listrows;
-        $i++;
+        if ($new_admin_theme != $old_admin_theme) {
+            $themeid = xarThemeGetIdFromName($new_admin_theme);
+            if ($themeid) {
+                $info = xarThemeGetInfo($themeid);
+                if ($info['class'] != 2) {
+                    $new_admin_theme = $old_admin_theme;
+                } else {
+                    if (xarVarIsCached('Mod.Variables.themes', 'admin_theme')) 
+                        xarVarDelCached('Mod.Variables.themes', 'admin_theme');
+                    if (!xarMod::apiFunc('themes','admin','install',array('regid'=>$themeid)))
+                        $new_admin_theme = $old_admin_theme;
+                }
+            } else {
+                $new_admin_theme = $old_admin_theme;
+            }
+            // catch null value on first run (2.2.x > 2.3.0)
+            if (is_null($new_admin_theme))
+                $new_admin_theme = $new_user_theme;
+            xarModVars::set('themes', 'admin_theme', $new_admin_theme);
+        }
+        $return_url = xarModURL('themes', 'admin', 'list');
+        xarController::redirect($return_url);
     }
 
-    // detailed info image url
-    $data['infoimage'] = xarTplGetImage('help.gif');
+    
+    // display phase     
+    $data = array();
+        
+    if (!xarVarFetch('startnum', 'int:1:',
+        $data['startnum'], 1, XARVAR_NOT_REQUIRED)) return;
 
-    // Send to template
+    if (!xarVarFetch('tab', 'pre:trim:lower:enum:plain:preview',
+        $data['tab'], null, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('state', 'int',
+        $data['state'], null, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('class', 'int:0:3', // 0=system, 1=utility, 2=user, 3=all
+        $data['class'], null, XARVAR_DONT_SET)) return;
+    if (!xarVarFetch('sort', 'pre:trim:upper:enum:ASC:DESC',
+        $data['sort'], 'ASC', XARVAR_NOT_REQUIRED)) return;
+    
+    if (!isset($data['tab']))
+        $data['tab'] = xarModUserVars::get('themes', 'selstyle');
+    if (!isset($data['state']))
+        $data['state'] = xarModUserVars::get('themes', 'selfilter');
+    if (!isset($data['class']))
+        $data['class'] = xarModUserVars::get('themes', 'selclass');
+    // support legacy use of class name instead of id (2.2.x > 2.3.0)
+    if (isset($data['class']) && ( !is_numeric($data['class']) && is_string($data['class']) ))
+        $data['class'] = strtr($data['class'], array('system' => 0, 'utility' => 1, 'user' => 2, 'all' => 3));
+    
+    $data['items_per_page'] = xarModVars::get('themes', 'items_per_page');
+
+    $authid = xarSecGenAuthKey();
+    // chris: not using this, it's way too complicated
+    //$themes = xarMod::apiFunc('themes','admin','getthemelist', $data);
+    // chris: @todo consolidate functionality from (list, getlist, getthemelist, dropdownlist) 
+    $themes = xarMod::apiFunc('themes', 'admin', 'getitems',
+        array(
+            'state' => $data['state'],
+            'class' => $data['class'],
+            'startnum' => $data['startnum'],
+            'numitems' => $data['items_per_page'],
+            'sort' => 'name ' . $data['sort'],
+        ));
+
+    $data['total'] = xarMod::apiFunc('themes', 'admin', 'countitems',
+        array(
+            'state' => $data['state'],
+            'class' => $data['class'],
+        ));        
+
+    $data['user_theme'] = xarModVars::get('themes', 'default_theme');
+    $data['admin_theme'] = xarModVars::get('themes', 'admin_theme');
+
+    foreach ($themes as $key => $theme) {
+        $theme['info_url'] = xarModURL('themes', 'admin', 'themesinfo',
+            array('id' => $theme['regid']));
+        switch ($theme['state']) {
+            case XARTHEME_STATE_UNINITIALISED: // 1
+                if ($theme['class'] != 4)
+                    $theme['init_url'] = xarModURL('themes', 'admin', 'install',
+                        array('id' => $theme['regid'], 'authid' => $authid));
+            break;
+            case XARTHEME_STATE_INACTIVE: // 2
+                $theme['activate_url'] = xarModURL('themes', 'admin', 'activate',
+                    array('id' => $theme['regid'], 'authid' => $authid));            
+                $theme['remove_url'] = xarModURL('themes', 'admin', 'remove',
+                    array('id' => $theme['regid'], 'authid' => $authid));   
+            break;
+            case XARTHEME_STATE_ACTIVE: // 3
+                if ($theme['name'] != $data['user_theme'] && $theme['name'] != $data['admin_theme']) 
+                    $theme['deactivate_url'] = xarModURL('themes', 'admin', 'deactivate',
+                        array('id' => $theme['regid'], 'authid' => $authid));             
+            break;
+            case XARTHEME_STATE_UPGRADED: // 5
+                $theme['upgrade_url'] = xarModURL('themes', 'admin', 'upgrade',
+                    array('id' => $theme['regid'], 'authid' => $authid));             
+            break;
+            case XARTHEME_STATE_MISSING_FROM_UNINITIALISED: // 4
+            case XARTHEME_STATE_MISSING_FROM_INACTIVE: // 7
+            case XARTHEME_STATE_MISSING_FROM_ACTIVE: // 8
+            case XARTHEME_STATE_MISSING_FROM_UPGRADED: // 9
+                $theme['remove_url'] = xarModURL('themes', 'admin', 'remove',
+                    array('id' => $theme['regid'], 'authid' => $authid));             
+            break;
+            
+        }
+        $themes[$key] = $theme;
+    }
+
+    $data['themes'] = $themes;
+    $data['useicons'] = xarModVars::get('themes', 'use_module_icons');
+    $data['authid'] = $authid;
+
+    $data['states'] = array(
+        XARTHEME_STATE_ANY => 
+            array('id' => XARTHEME_STATE_ANY, 'name' => xarML('All')),
+        XARTHEME_STATE_INSTALLED =>
+            array('id' => XARTHEME_STATE_INSTALLED, 'name' => xarML('Installed')),
+        XARTHEME_STATE_ACTIVE =>    
+            array('id' => XARTHEME_STATE_ACTIVE, 'name' => xarML('Active')),
+        XARTHEME_STATE_INACTIVE =>    
+            array('id' => XARTHEME_STATE_INACTIVE, 'name' => xarML('Inactive')),
+        XARTHEME_STATE_UNINITIALISED =>
+            array('id' => XARTHEME_STATE_UNINITIALISED, 'name' => xarML('Uninitialized')),
+        XARTHEME_STATE_MISSING_FROM_UNINITIALISED =>
+            array('id' => XARTHEME_STATE_MISSING_FROM_UNINITIALISED, 'name' => xarML('Missing (Not Inited)')),
+        XARTHEME_STATE_MISSING_FROM_INACTIVE => 
+            array('id' => XARTHEME_STATE_MISSING_FROM_INACTIVE, 'name' => xarML('Missing (Inactive)')),
+        XARTHEME_STATE_MISSING_FROM_ACTIVE =>   
+            array('id' => XARTHEME_STATE_MISSING_FROM_ACTIVE, 'name' => xarML('Missing (Active)')),
+        XARTHEME_STATE_MISSING_FROM_UPGRADED =>
+            array('id' => XARTHEME_STATE_MISSING_FROM_UPGRADED, 'name' => xarML('Missing (Upgraded)')),
+    );
+          
+    $data['classes'] = array(
+        3 => array('id' => 3, 'name' => xarML('All')),
+        0 => array('id' => 0, 'name' => xarML('System')),
+        1 => array('id' => 1, 'name' => xarML('Utility')),
+        2 => array('id' => 2, 'name' => xarML('User')),
+        4 => array('id' => 4, 'name' => xarML('Core')),
+    );
+    
+    $data['tabs'] = array(
+        array('id' => 'plain', 'name' => xarML('Plain')),
+        array('id' => 'preview', 'name' => xarML('Preview')),
+    );
+
+    // remember filter selections for current user 
+    xarModUserVars::set('themes', 'selstyle', $data['tab']);
+    xarModUserVars::set('themes', 'selfilter', $data['state']);
+    xarModUserVars::set('themes', 'selclass', $data['class']);
+     
+    $count = count($themes);
+    if ($data['state'] == XARTHEME_STATE_ANY) {
+        if ($data['class'] == 3) {
+            $searched = xarML('Showing #(1) themes', $count);
+        } else {
+            $searched = xarML('Showing #(1) #(2) class themes', $count, $data['classes'][$data['class']]['name']);
+        }
+    } else {
+        if ($data['class'] == 3) {
+            $searched = xarML('Showing #(1) themes in #(2) state', $count, $data['states'][$data['state']]['name']);
+        } else {
+            $searched = xarML('Showing #(1) #(2) class themes in #(3) state', $count, $data['classes'][$data['class']]['name'], $data['states'][$data['state']]['name']);
+        }
+    }
+    $data['searched'] = $searched;        
+
     return $data;
 }
 ?>

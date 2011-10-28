@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage modules module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -26,7 +26,7 @@ class ModuleProperty extends ObjectRefProperty
     public $filter = array();
 
 // CHECKME: we're not actually using the objectref property here, because we want displayname etc.
-    public $initialization_refobject    = 'modules';            // ID of the object we want to reference
+    public $initialization_refobject    = 'modules';            // The object we want to reference
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -40,7 +40,6 @@ class ModuleProperty extends ObjectRefProperty
     function showInput(Array $data=array())
     {
         if (!empty($data['filter'])) $this->filter = $data['filter'];
-        if (!empty($data['store_prop'])) $this->initialization_store_prop = $data['store_prop'];
         return parent::showInput($data);
     }
 

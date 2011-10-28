@@ -2,9 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- modules module template: file admin-tools.xd -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Modules Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Toolbox</h2>
         <form method="post" action="#xarModURL('modules','admin','tools')#">

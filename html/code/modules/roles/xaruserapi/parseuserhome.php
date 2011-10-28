@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage roles module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -23,7 +23,7 @@ function roles_userapi_parseuserhome(Array $args=array())
 {
     extract($args);
     if(!isset($url) || !isset($truecurrenturl)) {
-        throw new BadParameterException(null,'Wrong arguments to roles_userapi_userhome.');
+        throw new BadParameterException(null,'Wrong arguments to roles_userapi_parseuserhome.');
     }
 
     $data=array();
@@ -112,8 +112,6 @@ function roles_userapi_parseuserhome(Array $args=array())
                     if (!$allowexternalurl && $externalurl) {
                         $msg = 'External URLs such as #(1) are not permitted in your User Account. Please edit your User Home setting or contact Administration to correct this.';
                         throw new BadParameterException($url,$msg);
-                        // TODO: what should we do about this here?
-                        // return xarTplModule('roles','user','account',array('moduleload'=>'roles'));
                     }
                 }
                 // BUG 2023: Make sure manual URLs are prepped for XML, consistent with xarModURL()

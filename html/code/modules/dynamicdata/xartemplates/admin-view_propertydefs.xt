@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Dynamic Data Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
+    <div class="xar-mod-page-head">
         <h2>Configure Property Types</h2>
         <p>Click Flush Property Cache to clear the DynamicData Property Definitions cache and to
         reload the properties definitions from the file system.</p>
         <form method="post" action="#xarModURL('dynamicdata','admin','update_propertydefs')#">
-            <div class="xar-align-center">
-                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                <input type="hidden" name="flushPropertyCache" value="true"/>
-                <input type="submit" value="Flush Property Cache"/>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <input type="hidden" name="flushPropertyCache" value="true"/>
+                        <xar:var name="label">Flush Property Cache</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
             </div>
         </form>
-        <form method="post" action="#xarModURL('dynamicdata','admin','update_propertydefs')#">
-            <p>The following property types are predefined in Xaraya and may be used in your own
+        </div><!--xar-mod-page-head-->
+        <div class="xar-mod-page-body">
+        <p class="xar-note">The following property types are predefined in Xaraya and may be used in your own
             dynamic properties.</p>
-            <table class="xar-fullwidth">
+        <form method="post" action="#xarModURL('dynamicdata','admin','update_propertydefs')#">      
+           	<table class="xar-items">
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
@@ -47,7 +53,7 @@
                         <td>
                             <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
                                 <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype'=>$field['name']))#" title="Edit">
-                                    <img src="#xarTplGetImage('icons/modify-config.png', 'base')#" width="16" height="16" alt="modify-config"/>
+                                    <xar:img scope="theme" file="icons/modify-config.png" class="xar-icon" alt="modify-config"/>
                                 </a>
                             <xar:else />
                                 <xar:var name="field.configuration"/>
@@ -57,8 +63,8 @@
                     </tr>
                 </xar:foreach>
             </table>
-            <p>Add a new Property Type using the fields below. (TODO)</p>
-            <table class="xar-fullwidth">
+            <p class="xar-note">Add a new Property Type using the fields below. (TODO)</p>
+            <table class="xar-items">
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
@@ -86,13 +92,19 @@
 -->
                 </tr>
             </table>
-            <div class="xar-align-center">
-                <p>Note: any changes you make here will be lost whenever the property cache gets
-                flushed.</p>
-                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                <xar:var name="label">Update Property Types</xar:var>
-                <xar:button type="submit" label="$label"/>
+            <p class="xar-alert">Note: any changes you make here will be lost whenever the property cache gets
+            flushed.</p>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <xar:var name="label">Update Property Types</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
             </div>
         </form>
-    </div>
+    </div><!--/xar-mod-page-body-->
+    </div><!--/xar-mod-body-->
 </xar:template>

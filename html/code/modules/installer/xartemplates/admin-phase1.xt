@@ -9,20 +9,26 @@
     <div id="main_left">
         <h1>Select your Language</h1>
         <form action="install.php" method="post">
-            <p class="center">
-                <label for="install_language">Language:</label>
-                <select id="install_language" name="install_language" class="xar-text">
-                    <xar:foreach in="$languages" key="$key" value="$value">
-                        <xar:if condition="$install_language == $key">
-                            <option value="#$key#" selected="selected">#$value# (#$key#)</option>
-                        <xar:else />
-                            <option value="#$key#">#$value# (#$key#)</option>
-                        </xar:if>
-                    </xar:foreach>
-                </select>
-                <input type="hidden" name="install_phase" id="install_phase" value="2"/>&#160;
-                <input type="submit" value="Continue"/>
-            </p>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <label for="install_language">Language:</label>&#160;
+                        <select id="install_language" name="install_language" class="xar-text">
+                            <xar:foreach in="$languages" key="$key" value="$value">
+                                <xar:if condition="$install_language == $key">
+                                    <option value="#$key#" selected="selected">#$value# (#$key#)</option>
+                                <xar:else />
+                                    <option value="#$key#">#$value# (#$key#)</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                        <input type="hidden" name="install_phase" id="install_phase" value="2"/>&#160;
+                        <xar:var name="label">Continue</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </xar:template>

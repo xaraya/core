@@ -54,7 +54,9 @@
                     <input type="text" name="dd_label[#$field['id']#]" id="dd_label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium"/>
                 </td>
                 <td class="#$displayclass#">
-                    <xar:data-input property="$fieldtypeprop" name="dd_type['.$field['id'].']" id="old_dd_type_'.$field['id'].'" value="$field['type']"/>
+                    <xar:set name="name">'dd_type['.$field['id'].']'</xar:set>
+                    <xar:set name="id">'old_dd_type_'.$field['id']</xar:set>
+                    <xar:data-input property="$fieldtypeprop" name="$name" id="$id" value="$field['type']"/>
                 </td>
                 <td class="#$displayclass#">
                     <input type="text" name="dd_default[#$field['id']#]" id="dd_default_#$field['id']#" value="#xarVarPrepForDisplay($field['defaultvalue'])#" class="xar-form-textmedium"/>
@@ -66,14 +68,14 @@
                             xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $field['id']))
                         </xar:set>
                         <xar:set name="icon">
-                            xarTplGetImage('icons/modify.png', 'base')
+                            xarTpl::getImage('icons/modify.png', 'theme')
                         </xar:set>
                         <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
                         &#160;
 
                         <xar:set name="title">xarML('Move property up')</xar:set>
                         <xar:set name="icon">
-                            xarTplGetImage('icons/go-up.png', 'base')
+                            xarTpl::getImage('icons/go-up.png', 'theme')
                         </xar:set>
                         <xar:if condition="$index gt 1 and $numprops gt 1">
                             <xar:set name="link">
@@ -87,7 +89,7 @@
 
                         <xar:set name="title">xarML('Move property down')</xar:set>
                         <xar:set name="icon">
-                            xarTplGetImage('icons/go-down.png', 'base')
+                            xarTpl::getImage('icons/go-down.png', 'theme')
                         </xar:set>
                         <xar:if condition="$index lt $numprops and $numprops ne 1">
                             <xar:set name="link">
@@ -147,7 +149,9 @@
                         </xar:if>
                     </select>
                     &#160;&#160;Status:&#160;
-                    <xar:data-input property="$fieldstatusprop" name="dd_status['.$field['id'].']" id="dd_status_'.$field['id'].'" size="15" value="$field['status']"/>
+                    <xar:set name="name">'dd_status['.$field['id'].']'</xar:set>
+                    <xar:set name="id">'dd_status_'.$field['id']</xar:set>
+                    <xar:data-input property="$fieldstatusprop" name="$name" id="$id" size="15" value="$field['status']"/>
                 </td>
                 <td class="#$displayclass#">
                     &#160;
@@ -160,21 +164,24 @@
     <xar:if condition="!empty($hooks)">
         <xar:foreach in="$hooks" key="$module" value="$output">#$output#</xar:foreach>
     </xar:if>
-    <fieldset>
-        <div class="xar-align-center">
-            <!--
-            Optional extra table for data sources - use a text box if you want to make this configurable
-            <input type="text" name="table" id="table" value="#$table#"/>
-            -->
-            <xar:if condition="!empty($table)">
-                <input type="hidden" name="table" id="table" value="#$table#"/>
-            </xar:if>
-            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-            <input type="hidden" name="objectid" id="objectid" value="#$objectid#"/>
-            <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>
-            <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
-            <xar:var name="label">Update Properties</xar:var>
-            <input type="submit" value="#$label#"/>
+    <div class="xar-form-actions">
+        <div class="xar-row">
+            <div class="xar-col"></div>
+            <div class="xar-col">
+                <!--
+                Optional extra table for data sources - use a text box if you want to make this configurable
+                <input type="text" name="table" id="table" value="#$table#"/>
+                -->
+                <xar:if condition="!empty($table)">
+                    <input type="hidden" name="table" id="table" value="#$table#"/>
+                </xar:if>
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="objectid" id="objectid" value="#$objectid#"/>
+                <input type="hidden" name="module_id" id="module_id" value="#$module_id#"/>
+                <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
+                <xar:var name="label">Update Properties</xar:var>
+                <xar:button type="submit" label="$label"/>
+            </div>
         </div>
-    </fieldset>
+    </div>
 </xar:template>

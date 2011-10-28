@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>Create new field in table #$table#</h2>
+
+        <form method="post" action="#xarServer::getCurrentURL()#">
+          <fieldset>
+            <legend>Item details</legend>
+            <xar:data-form object="$object"/>
+          </fieldset>
+          <div class="xar-form-actions">
+            <div class="xar-row">
+                <div class="xar-col"></div>
+                <div class="xar-col">
+                  <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                  <input type="hidden" name="table" id="table" value="#$table#"/>
+                  <input type="hidden" name="confirm" id="confirm" value="true"/>
+                  <xar:var name="label">Create</xar:var>
+                  <xar:button type="submit" label="$label"/>
+                </div>
+            </div>
+          </div>
+        </form>
+    </div>
+</xar:template>

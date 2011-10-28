@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage themes module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -26,23 +26,18 @@ function themes_adminapi_update(Array $args=array())
 
     // Argument check
     if (!isset($regid)) throw new EmptyParameterException('regid');
-    if (!isset($updatevars)) throw new EmptyParameterException('updatevars');
+
+    // Get theme information
+    $themeInfo = xarThemeGetInfo($regid);
+    if (!isset($themeInfo)) {
+        throw new ThemeNotFoundException($regid,'Theme (regid: #(1) does not exist.');
+    }
+    $themename = $themeInfo['name'];
 
     // Security Check
     if (!xarSecurityCheck('AdminThemes',0,'All',"All:All:$regId")) return;
 
-    // Get theme name
-    $themeInfo = xarThemeGetInfo($regid);
-    $themename = $themeInfo['name'];
-
-    foreach($updatevars as $uvar){
-        $updated = xarThemeSetVar($themename, $uvar['name'], $uvar['prime'], $uvar['value'], $uvar['description']);
-        if (!isset($updatevars)) {
-            $msg = xarML('Unable to update #(1) variable #(2)).', $themename, $uvar['name']);
-            throw new Exception($msg);
-        }
-
-    }
+    $themeInfo = xarMod::getBaseInfo($themename, 'theme');
 
     return true;
 }

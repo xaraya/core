@@ -2,7 +2,10 @@
 /**
  * Xaraya WebServices Interface
  *
- * @package entrypoint
+ * @package core
+ * @subpackage entrypoint
+ * @category Xaraya Web Applications Framework
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -25,6 +28,8 @@ if (!empty($systemConfiguration['rootDir'])) {
 
 set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 include 'bootstrap.php';
+sys::import('xaraya.caching');
+xarCache::init();
 sys::import('xaraya.core');
 xarCoreInit(XARCORE_SYSTEM_ALL);
 xarWebservicesMain();

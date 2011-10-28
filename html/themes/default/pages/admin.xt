@@ -4,6 +4,8 @@
 "http://xaraya.com/bl2/DTD/bl2-strict.dtd">
 <xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
     <html xml:lang="en" lang="en">
+        <!-- Call blocks early so any css and js is included -->
+        <xar:set name="admingroup"><xar:blockgroup name="admin" id="admin"/></xar:set>
         <head>
             <xar:blockgroup name="header" id="header"/>
             <title>
@@ -13,6 +15,7 @@
             <link rel='icon' href="favicon.ico"/>
             <xar:style scope="common"/>
             <xar:style scope="theme" file="style" title="Xaraya Default Stylesheet"/>
+            <xar:style scope="theme" file="admin" title="Xaraya Default Admin Stylesheet"/>
             <xar:place-css />
             <xar:place-javascript position="head"/>
         </head>
@@ -37,12 +40,12 @@
 
                     <div id="doctab-1" style="display: none">
                         <a id="href-1" href="javascript:showtab(1,2)">
-                            <img src="#xarTplGetImage('icons/toggle.png', 'base')#" />
+                            <xar:img scope="theme" file="icons/toggle.png"/>
                         </a>
                     </div>
                     <div id="doctab-2">
                         <a id="href-2" href="javascript:showtab(2,2)">
-                            <img src="#xarTplGetImage('icons/toggle.png', 'base')#" />
+                            <xar:img scope="theme" file="icons/toggle.png"/>
                         </a>
                     </div>
                     -->
@@ -65,7 +68,7 @@
                         [ Front end ]
                     </a>
                     -->
-                    <xar:blockgroup name="admin" id="admin"/>
+                    #$admingroup#
                 </div>
                 <xar:place-javascript position="body"/>
             </div>

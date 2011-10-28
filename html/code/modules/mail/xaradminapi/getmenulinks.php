@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage mail module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -20,8 +20,6 @@
  */
 function mail_adminapi_getmenulinks()
 {
-    // Get menu links from xml
-    $menulinks = xarMod::apiFunc('base','admin','loadmenuarray',array('modname' => 'mail', 'modtype' => 'admin'));
     if (xarModIsAvailable('scheduler')) {
         $menulinks[] = array('url' => xarModURL('mail','admin','viewq'),
                              'title' => xarML('View all mails scheduled to be sent later'),

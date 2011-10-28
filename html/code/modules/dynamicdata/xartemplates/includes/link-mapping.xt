@@ -13,8 +13,8 @@
                 <xar:if condition="!empty($mapping[$id])">
                     <xar:foreach in="$mapping[$id]" key="$source" value="$numprops">
                         <tr>
-                            <td><a href="#xarModURL('dynamicdata','util','relations',array('objectid'=>$id))#">#$objectinfo['label']#</a></td>
-                            <td><a href="#xarModURL('dynamicdata','util','relations',array('table'=>$source))#">#$source#</a></td>
+                            <td><a href="#xarModURL('dynamicdata','admin','relations',array('objectid'=>$id))#">#$objectinfo['label']#</a></td>
+                            <td><a href="#xarModURL('dynamicdata','admin','relations',array('table'=>$source))#">#$source#</a></td>
                             <td class="xar-align-center">#$numprops#</td>
                         </tr>
                     </xar:foreach>

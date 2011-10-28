@@ -1,0 +1,79 @@
+/* [Xaraya common core css] - html/themes/common/style/core.css
+    <xar:style scope="common"/>
+    Place common core css for all themes here
+        Over-ride per theme by copying file to html/themes/themename/style/core.css
+ ----[/comment]  */
+/* - Default core css files to import - */
+@import url(xarcore-xhtml1-strict.css);
+@import url(tabs.css);
+
+/*
+form related styling
+-------------------------------------------------------------------------[comment] */
+.xar-row {
+    display: block;
+    }
+.xar-col {
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+    }
+.xar-row .xar-col:first-child {
+    width: 35%;
+    }
+.xar-row .xar-col:last-child {
+    width: 65%;
+    }
+/*
+text related styling
+-------------------------------------------------------------------------[comment] */
+.xar-note {
+    color: #60802d;
+    }
+.xar-alert {
+    color: #e10505;
+    }
+.xar-success {
+    color: #5f9013;
+    }
+.xar-error: {
+    color: #ff0000;
+}
+.xar-active {}
+
+/*
+icon related styling
+-------------------------------------------------------------------------[comment] */
+.xar-module-icon {
+    float: right;
+}
+a.xar-icon {
+    text-decoration: none;
+}
+a.xar-icon img{
+    vertical-align: middle;
+}
+img.xar-icon {
+    vertical-align: middle;
+}
+img.xar-icon-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    vertical-align: text-top;
+}
+
+/*
+legend related styling
+-------------------------------------------------------------------------[comment] */
+dl.xar-legend {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+dl.xar-legend dd, dl.xar-legend dt {
+    display: inline;
+    white-space: nowrap;
+    margin:0;
+    padding: 0 1em;
+}

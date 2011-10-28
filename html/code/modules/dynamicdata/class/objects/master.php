@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -203,7 +203,7 @@ class DataObjectMaster extends Object
         } catch (Exception $e) {}
         // Explode the access rules
         try{
-            $this->access_rules = unserialize($this->access);
+            $this->access_rules = unserialize($this->access);            
         } catch (Exception $e) {}
     }
 
@@ -560,6 +560,7 @@ class DataObjectMaster extends Object
                          urlparam,
                          maxid,
                          config,
+                         access,
                          isalias
                   FROM $dynamicobjects ";
         if (!empty($args['name'])) {
@@ -584,6 +585,7 @@ class DataObjectMaster extends Object
             $info['moduleid'], $info['itemtype'],
             $info['class'], $info['filepath'],
             $info['urlparam'], $info['maxid'],    $info['config'],
+            $info['access'],
             $info['isalias']
         ) = $result->fields;
         $result->close();
@@ -701,7 +703,7 @@ class DataObjectMaster extends Object
                 // this is a generic classname for the object, list and interface
                 $class = $args['class'] . 'List';
             }
-            elseif(class_exists($data['class']) && method_exists($data['class'],'getItems'))
+            elseif(class_exists($args['class']) && method_exists($args['class'],'getItems'))
             {
                 // this is a specific classname for the list
                 $class = $args['class'];
@@ -844,6 +846,81 @@ class DataObjectMaster extends Object
         $result = $object->deleteItem();
         unset($object);
         return $result;
+    }
+
+    /**
+     * Get the names and values of
+     */
+    public function getFieldValues(Array $args = array(), $bypass = 0)
+    {
+        $fields = array();
+        $properties = $this->getProperties($args);
+        if ($bypass) {
+            foreach ($properties as $property) {
+                $fields[$property->name] = $property->value;
+            }
+        } else {
+            foreach ($properties as $property) {
+                $fields[$property->name] = $property->getValue();
+            }
+        }
+        return $fields;
+    }
+
+    public function setFieldValues(Array $args = array(), $bypass = 0)
+    {
+        if ($bypass) {
+            foreach ($args as $key => $value)
+                if (isset($this->properties[$key])) $this->properties[$key]->value = $value;
+        } else {
+            foreach ($args as $key => $value)
+                if (isset($this->properties[$key]))  $this->properties[$key]->setValue($value);
+        }
+        return true;
+    }
+
+    public function clearFieldValues(Array $args = array())
+    {
+        $properties = $this->getProperties($args);
+        foreach ($properties as $property) {
+            $fields[$property->name] = $property->clearValue();
+        }
+        return true;
+    }
+
+    /**
+     * Get the labels and values to include in some output display for this item
+     */
+    public function getDisplayValues(Array $args = array())
+    {
+        $displayvalues = array();
+        $properties = $this->getProperties($args);
+        foreach($properties as $property) {
+            $label = xarVarPrepForDisplay($property->label);
+            $displayvalues[$label] = $property->showOutput();
+        }
+        return $displayvalues;
+
+        /* FIXME: the status value isn't being used correctly I think
+        if(count($args['fieldlist']) > 0 || !empty($this->status))
+        {
+            foreach($args['fieldlist'] as $name)
+                if(isset($this->properties[$name]))
+                {
+                    $label = xarVarPrepForDisplay($this->properties[$name]->label);
+                    $displayvalues[$label] = $this->properties[$name]->showOutput();
+                }
+        }
+        else
+        {
+            foreach(array_keys($this->properties) as $name)
+            {
+                $label = xarVarPrepForDisplay($this->properties[$name]->label);
+                $displayvalues[$label] = $this->properties[$name]->showOutput();
+            }
+        }
+        return $displayvalues;
+        */
     }
 
     /**
@@ -1222,19 +1299,16 @@ class DataObjectMaster extends Object
                 break;
         }
 
-        // CHECKME: use access checks similar to blocks here someday ?
-
         // unserialize access levels if necessary
-        if (!empty($this->access_rules) && is_string($this->access_rules)) {
-            try {
-                $this->access_rules = unserialize($this->access_rules);
-            } catch (Exception $e) {
-                $this->access_rules = array();
-            }
+        try {
+            $access_rules = unserialize($this->access_rules['access']);
+        } catch (Exception $e) {
+            $access_rules = array();
         }
 
+        // DD specific access scheme 
         // check if we have specific access rules for this level
-        if (!empty($this->access_rules) && is_array($this->access_rules) && !empty($this->access_rules[$level])) {
+        if (!empty($access_rules) && is_array($access_rules) && !empty($access_rules[$level])) {
             if (empty($roleid) && xarUserIsLoggedIn()) {
                 // get the direct parents of the current user (no ancestors)
                 $grouplist = xarCache::getParents();
@@ -1247,7 +1321,7 @@ class DataObjectMaster extends Object
             }
             foreach ($grouplist as $groupid) {
                 // list of groups that have access at this level
-                if (in_array($groupid, $this->access_rules[$level])) {
+                if (in_array($groupid, $access_rules[$level])) {
                     // one group having access is enough here !
                     return true;
                 }
@@ -1293,6 +1367,5 @@ class DataObjectMaster extends Object
         return self::$access_property->check($args);
 */
     }
-
 }
 ?>

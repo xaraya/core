@@ -5,7 +5,7 @@
         <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
     </div>
             #$pager#
-<table class="xar-fullwidth">
+<table class="xar-items">
     <tr>
             <th>Name</th>
             <th>Groups</th>
@@ -19,10 +19,10 @@
         <tr>
             <td>
                 <xar:if condition="empty($loop:item['title'])">
-                    #$loop:item['name']# 
+                    #$loop:item['name']#
                     <xar:else />
                         <span title="#xarVarPrepfordisplay($loop:item['title'])#">
-                        #$loop:item['name']# 
+                        #$loop:item['name']#
                     </span>
                 </xar:if>
             </td>
@@ -30,7 +30,7 @@
                 <xar:if condition="!empty($loop:item.groups)">
                         <xar:loop name="$loop:item.groups" id="groups">
                         <a href="#xarModURL('blocks','admin','modify_group')#&amp;id=#$loop:groups:item.id#">
-                            #$loop:groups:item.name# 
+                            #$loop:groups:item.name#
                         </a>
                         </xar:loop>
                     <xar:else />
@@ -40,12 +40,12 @@
                 <td>#$loop:item['module']#</td>
             <td>
                 <a href="#$loop:item['typeurl']#" title="#xarML('View block type details')#">
-                    #$loop:item['type']# 
+                    #$loop:item['type']#
                 </a>
             </td>
             <td>
                 <xar:if condition="$loop:item['template'] ne NULL">
-                    #$loop:item['template']# &#160; 
+                    #$loop:item['template']# &#160;
                     <xar:else />
                         <xar:if condition="empty($loop:item['group_template'])">
                             [ default ]

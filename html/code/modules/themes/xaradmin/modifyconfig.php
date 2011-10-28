@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage themes module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -49,6 +49,16 @@ function themes_admin_modifyconfig()
     if (!xarVarFetch('selfilter','int',$data['selfilter'],XARMOD_STATE_ANY,XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('hidecore', 'checkbox', $data['hidecore'], false, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('selstyle','str:1:',$data['selstyle'],'plain',XARVAR_NOT_REQUIRED)) return;
+    
+    // experimental combine/compress css options
+    if (!xarVarFetch('combinecss', 'checkbox', $data['combinecss'], false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('compresscss', 'checkbox', $data['compresscss'], false, XARVAR_NOT_REQUIRED)) return;
+    // can't compress if not combined :)    
+    if ($data['combinecss'] == false) $data['compresscss'] = false;
+    
+    if (!xarVarFetch('enable_user_menu', 'checkbox',
+        $data['enable_user_menu'], xarModVars::get('themes', 'enable_user_menu'), XARVAR_NOT_REQUIRED)) return;
+    
 
     // Dashboard
 //    if (!isset($data['dashtemplate']) || trim($data['dashtemplate']=='')) {
@@ -56,8 +66,14 @@ function themes_admin_modifyconfig()
 //    }
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'themes'));
-    $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls, enable_user_menu');
+    $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
     $data['module_settings']->getItem();
+
+    sys::import('modules.dynamicdata.class.properties.master');
+    $data['user_themes'] = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
+    $data['user_themes']->options = xarMod::apiFunc('themes', 'admin', 'dropdownlist', array('Class' => 2));
+    $data['user_themes']->setValue(xarModVars::get('themes', 'user_themes'));
+    $data['user_themes']->layout = 'vertical';
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -66,13 +82,18 @@ function themes_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             $isvalid = $data['module_settings']->checkInput();
-            if (!$isvalid) {
-                return xarTplModule('themes','admin','modifyconfig', $data);        
+            $andvalid = ($data['enable_user_menu'] != false) ? $data['user_themes']->checkInput('user_themes') : true;
+          
+            if (!$isvalid || !$andvalid) {
+                return xarTpl::module('themes','admin','modifyconfig', $data);        
             } else {
                 $itemid = $data['module_settings']->updateItem();
+                xarModVars::set('themes', 'enable_user_menu', $data['enable_user_menu']);
+                if (isset($data['user_themes']->value))
+                    xarModVars::set('themes','user_themes', $data['user_themes']->value);
             }
             xarModVars::set('themes', 'SiteName', $data['sitename']);
             xarModVars::set('themes', 'SiteTitleSeparator', $data['separator']);
@@ -87,7 +108,11 @@ function themes_admin_modifyconfig()
             xarModVars::set('themes', 'adminpagemenu', $data['adminpagemenu']);
 //            xarModVars::set('themes', 'usedashboard', $data['usedashboard']);
 //            xarModVars::set('themes', 'dashtemplate', $data['dashtemplate']);
-            xarConfigVars::set(null,'Site.BL.ThemesDirectory', $data['defaultThemeDir']);
+            // <chris/> Instead of setting the base theme config var dir directly, 
+            // let xarTpl take care of it, it'll complain if the directory doesn't
+            // exist or the current theme isn't in the directory specified  
+            // xarConfigVars::set(null,'Site.BL.ThemesDirectory', $data['defaultThemeDir']);
+            xarTpl::setBaseDir($data['defaultThemeDir']);
             xarConfigVars::set(null, 'Site.BL.CacheTemplates',$data['cachetemplates']);
             xarConfigVars::set(null, 'Site.BL.MemCacheTemplates',$data['memcachetemplates']);
             xarConfigVars::set(null, 'Site.BL.CompressWhitespace',$data['compresswhitespace']);
@@ -96,6 +121,11 @@ function themes_admin_modifyconfig()
             xarModVars::set('themes', 'selfilter', $data['selfilter']);
             xarModVars::set('themes', 'selsort', $data['selsort']);
 
+            // css combine/compress options
+            xarModVars::set('themes', 'css.combined', $data['combinecss']);
+            xarModVars::set('themes', 'css.compressed', $data['compresscss']);
+
+           
             // Adjust the usermenu hook according to the setting
             /* The usermenu isn't a hook...
             sys::import('xaraya.structures.hooks.observer');

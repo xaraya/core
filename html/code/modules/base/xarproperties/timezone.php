@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -30,59 +30,6 @@ class TimeZoneProperty extends SelectProperty
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
         $this->template  = 'timezone';
-    }
-
-    public function validateValue($value = null)
-    {
-        if (!parent::validateValue($value)) return false;
-
-        if (empty($value)) {
-            // no timezone selected
-            return true;
-
-        } elseif (is_numeric($value)) {
-            // keep old numeric format
-            return true;
-
-        } elseif (is_string($value)) {
-            // check what kind of string we have here
-            $out = @unserialize($value);
-            if ($out !== false) {
-                // we have a serialized value
-                if (empty($out['timezone'])) {
-                    $this->value = '';
-                    return true;
-                }
-                $timezone = $out['timezone'];
-            } else {
-                // we have a text value
-                $timezone = $value;
-            }
-
-        } elseif (is_array($value)) {
-            if (empty($value['timezone'])) {
-                $this->value = '';
-                return true;
-            }
-            $timezone = $value['timezone'];
-        }
-
-        // check if the timezone exists
-        $info = xarMod::apiFunc('base','user','timezones',
-                              array('timezone' => $timezone));
-        if (empty($info)) {
-            $this->invalid = xarML('timezone');
-            $this->value = null;
-            return false;
-        }
-        list($hours,$minutes) = explode(':',$info[0]);
-        // tz offset is in hours
-        $offset = (float) $hours + (float) $minutes / 60;
-        // save a serialized array with timezone and offset
-        $value = array('timezone' => $timezone,
-                       'offset'   => $offset);
-        $this->value = serialize($value);
-        return true;
     }
 
     public function showOutput(Array $data = array())

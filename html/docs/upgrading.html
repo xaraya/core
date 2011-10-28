@@ -145,24 +145,28 @@
                                         </li>
                                         <li>
                                             <p>
-                                                Add the (new) roles data objects: For reference (i.e. the id index values may vary in your database):
+                                                Add or update the (new) roles data objects: For reference (i.e. the id index values may vary in your database):
                                                 <pre>
-INSERT INTO `xar_dynamic_objects` (`id`, `name`, `label`, `module_id`, `itemtype`, `parent_id`, `class`,
+INSERT INTO `xar_dynamic_objects` (`id`, `name`, `label`, `module_id`, `itemtype`, `class`,
 `filepath`, `urlparam`, `maxid`, `config`, `isalias`) VALUES
-(7, 'roles_roles', 'Role', 27, 1, 0, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1),
-(8, 'roles_users', 'User', 27, 2, 0, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1),
-(9, 'roles_groups', 'Group', 27, 3, 0, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1);
+(8, 'roles_users', 'User', 27, 1, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1),
+(9, 'roles_groups', 'Group', 27, 2, 'Role', 'modules/roles/class/role.php', 'itemid', 0, '', 1);
                                                 </pre>
                                             </p>
                                         </li>
                                         <li>
                                             <p>
-                                                Add the (new) privileges data objects: For reference (i.e. the id index values may vary in your database):
+                                               Check the roles table that users have type = 1 and groups type = 2. In Xaraya 1x the corresponding values are 0 for users and 1 for groups. If that is the case then the values need to be adjusted.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Add or update the (new) privileges data objects: For reference (i.e. the id index values may vary in your database):
                                                 <pre>
-INSERT INTO `xar_dynamic_objects` (`id`, `name`, `label`, `module_id`, `itemtype`, `parent_id`, `class`,
+INSERT INTO `xar_dynamic_objects` (`id`, `name`, `label`, `module_id`, `itemtype`, `class`,
 `filepath`, `urlparam`, `maxid`, `config`, `isalias`) VALUES
-(10, 'privileges_baseprivileges', 'Base Privileges', 1098, 1, 0, 'DataObject', '', 'itemid', 0, '', 1),
-(11, 'privileges_privileges', 'Privileges', 1098, 2, 0, 'DataObject', '', 'itemid', 0, '', 1);
+(10, 'privileges_baseprivileges', 'Base Privileges', 1098, 1, 'DataObject', '', 'itemid', 0, '', 1),
+(11, 'privileges_privileges', 'Privileges', 1098, 2, 'DataObject', '', 'itemid', 0, '', 1);
                                                 </pre>
                                             </p>
                                         </li>
@@ -188,12 +192,12 @@ INSERT INTO `xar_dynamic_objects` (`id`, `name`, `label`, `module_id`, `itemtype
                                         </li>
                                         <li>
                                             <p>
-                                                Change xar_dynamic_properties.value to xar_dynamic_properties.defaultvalue in the dd properties table if required.
+                                                Change xar_dynamic_properties.default to xar_dynamic_properties.defaultvalue in the dd properties table if required.
                                             </p>
                                         </li>
                                         <li>
                                             <p>
-                                                Add the modules modvars:
+                                                Add the modules modvars to the module variables table with module_id = 1:
                                                 <br/>
                                                     defaultmoduletype:   user
                                                 <br/>
@@ -219,7 +223,7 @@ s:25:"initialization_other_rule";s:0:"";}'),
 (5, 'module_id', 'Module', 1, 19, '182', 'xar_dynamic_objects.module_id', 33, 5, 'a:4:{s:14:"display_layout";s:7:"default";
 s:24:"initialization_refobject";s:7:"modules";s:25:"initialization_store_prop";s:2:"id";s:27:"initialization_display_prop";
 s:4:"name";}'),
-(6, 'itemtype', 'Item Type', 1, 20, 'xarModAPIFunc(''dynamicdata'',''admin'',''getnextitemtype'')', 'xar_dynamic_objects.itemtype',
+(6, 'itemtype', 'Item Type', 1, 22, 'xarMod::apiFunc(''dynamicdata'',''admin'',''getnextitemtype'')', 'xar_dynamic_objects.itemtype',
 33, 6, 'a:10:{s:18:"display_combo_mode";s:1:"2";s:14:"display_layout";s:7:"default";s:19:"validation_override";
 s:1:"1";s:21:"initialization_module";s:1:"3";s:23:"initialization_itemtype";s:1:"0";s:23:"initialization_function";
 s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";
@@ -273,7 +277,7 @@ s:0:"";}'),
 (150, 'regdate', 'Reg. Date', 5, 8, 'xarMLS_userTime()', 'xar_roles.date_reg', 66, 7, ''),
 (151, 'valcode', 'Val. Code', 5, 2, 'createdbyadmin', 'xar_roles.valcode', 67, 8, ''),
 (152, 'state', 'State', 5, 6, '1', 'xar_roles.state', 33, 9, 'a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";
-s:41:"xarModAPIFunc(''roles'',''user'',''getstates'')";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";
+s:43:"xarMod::apiFunc(''roles'',''user'',''getstates'')";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";
 s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}'),
 (153, 'authmodule', 'Auth. Module', 5, 15, 'xarMod::getID(xarModVars::get(''roles'', ''defaultauthmodule''))',
 'xar_roles.auth_module_id', 67, 10, '');
@@ -292,7 +296,7 @@ s:25:"initialization_other_rule";s:0:"";}'),
 (159, 'regdate', 'Reg. Date', 9, 8, 'xarMLS_userTime()', 'xar_roles.date_reg', 67, 6, ''),
 (160, 'valcode', 'Val. Code', 9, 2, '', 'xar_roles.valcode', 67, 7, ''),
 (161, 'state', 'State', 9, 6, '3', 'xar_roles.state', 67, 8, 'a:6:{s:14:"display_layout";s:7:"default";s:23:"initialization_function";
-s:41:"xarModAPIFunc(''roles'',''user'',''getstates'')";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";
+s:43:"xarMod::apiFunc(''roles'',''user'',''getstates'')";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";
 s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}'),
 (162, 'authmodule', 'Auth. Module', 9, 15, 'xarMod::getID(xarModVars::get(''roles'', ''defaultauthmodule''))',
 'xar_roles.auth_module_id', 67, 9, '');
@@ -324,6 +328,21 @@ DELETE FROM `xar_roles` WHERE `xar_roles`.`name` = 'Myself' LIMIT 1;
 DELETE FROM xar_security_acl s INNER JOIN xar_privileges p ON p.id = s.privilege_id
 INNER JOIN xar_modules m ON p.module_id = m.id AND m.regid = 9
                                                 </pre>
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Remove any usermenu hooks. These hooks are no longer used in 2.x and cannot be updated. Check the hooks table for entries with area GUI and type user.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Check if the dynamic_configurations table contains a column named <b>ignore_empty</b>. If not, add it.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>
+                                                Check if the module_vars table contains an entry with module_id NULL and name System.Core.VersionRev. If no such entryy exists, create it and give it the value <b>s:0:""</b>.
                                             </p>
                                         </li>
                                     </ol>
@@ -361,7 +380,7 @@ INNER JOIN xar_modules m ON p.module_id = m.id AND m.regid = 9
                                             </pre>
                                         </li>
                                         <li>
-                                            Change all "label" attributes in dataproperty tags to "for".
+                                            Change all "label" attributes in data-label tags to "for".
                                         </li>
                                         <li>
                                             Change legacy code calls:
@@ -388,6 +407,9 @@ INNER JOIN xar_modules m ON p.module_id = m.id AND m.regid = 9
     xarModDelVar                      xarModVars::delete($modName, $name)
     xarModDelAllVars                  xarModVars::delete_all
 
+    xarConfigGetVars                  xarConfigVars::get(null, ...)
+    xarConfigSetVar                   xarConfigVars::set(null, ...)
+    
     xarModGetUserVar                  xarModUserVars::get
     xarModSetUserVar                  xarModUserVars::set
 
@@ -396,6 +418,9 @@ INNER JOIN xar_modules m ON p.module_id = m.id AND m.regid = 9
     xarDBGetTables                    xarDB::getTables
 
     xarRegisterMask                   xarMasks::register
+    
+    xarRequestgetInfo                 xarController::$request->getInfo
+    xarResponseRedirect               xarController::redirect
                                             </pre>.
                                         </li>
                                         <li>
@@ -404,6 +429,7 @@ INNER JOIN xar_modules m ON p.module_id = m.id AND m.regid = 9
     &lt;xar:base-include-javascript...   &lt;xar:javascript...
     &lt;xar:base-render-javascript...    &lt;xar:place-javascript...
     &lt;xar:additional-styles />         &lt;xar:place-css />
+    #$tpl:additionalStyles#           &lt;xar:place-css />
                                             </pre>.
                                         </li>
                                         <li>
@@ -447,7 +473,7 @@ nbsp   160
                                             If the module has dataproperties these will need to be rewritten to conform with the Jamaica structure of dataproperties. See e.g. the properties in the Base module's xarproperties directory for examples.
                                         </li>
                                         <li>
-                                            If the module uses &lt;xar:getitem or &lt;xar:getitem tags these need to be adjusted.
+                                            If the module uses &lt;xar:getitem or &lt;xar:getitems tags these need to be adjusted.
                                             <ul>
                                                 <li>
                                                     Use the object attribute to pass the tag an object, and the objectnameattribute to pass the name of an object.
@@ -497,6 +523,9 @@ if (!$good) throw new Exception('Not good');
                                 </p>
                                 <p>
                                     The block group of any admin menus in your themes should be changed to "admin". This makes the admin menus show in the back end when the admin page template mentioned above is being displayed.
+                                </p>
+                                <p>
+                                    Although not required, it is good practice to remove any &lt;xar:mlstring> tags from your theme that are <i>not inside a &lt;xar:ml> tag</i>. Such tags are not longer used to indicate translatable text, as in Xaraya 2x all text nodes in the DOM are considered translatable.
                                 </p>
                                 <a name="misc" style="text-decoration: none;"><h2>Miscellaneous</h2></a> <a href="#top">top</a>
                                 <p>

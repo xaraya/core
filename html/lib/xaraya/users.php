@@ -5,7 +5,7 @@
  * @package core
  * @subpackage user
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -70,7 +70,7 @@ function xarUser_init(Array &$args)
     $GLOBALS['xarUser_authenticationModules'] = $args['authenticationModules'];
 
     xarMLS_setCurrentLocale(xarUserGetNavigationLocale());
-    xarTplSetThemeName(xarUserGetNavigationThemeName());
+    xarTpl::setThemeName(xarUserGetNavigationThemeName());
 
     // These events are now registered during authsystem module init
     // Register the UserLogin event
@@ -243,7 +243,7 @@ function xarUserIsLoggedIn()
  */
 function xarUserGetNavigationThemeName()
 {
-    $themeName = xarTplGetThemeName();
+    $themeName = xarTpl::getThemeName();
 
     if (xarUserIsLoggedIn() && (bool)xarModVars::get('themes', 'enable_user_menu')){
         $id = xarUserGetVar('id');

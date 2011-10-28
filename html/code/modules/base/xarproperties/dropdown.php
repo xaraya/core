@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -304,7 +304,11 @@ class SelectProperty extends DataProperty
         }
 
         // we're interested in one of the known options (= default behaviour)
-        $options = $this->getOptions();
+        if (count($this->options) > 0) {
+            $options = $this->options;
+        } else {
+            $options = $this->getOptions();
+        }
         foreach ($options as $option) {
             if ($option['id'] == $this->value) {
                 if ($check) return true;

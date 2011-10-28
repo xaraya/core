@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage roles module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -69,7 +69,7 @@ class GroupListProperty extends SelectProperty
             // check if this is a valid group id
             $group = xarMod::apiFunc('roles','user','get',
                                    array('id' => $value,
-                                         'itemtype' => 3)); // we're looking for a group here
+                                         'itemtype' => 2)); // we're looking for a group here
             if (!empty($group)) {
                 $this->current_groupid = $value;
                 return true;
@@ -77,7 +77,7 @@ class GroupListProperty extends SelectProperty
         } elseif (empty($value)) {
             return true;
         }
-        $this->invalid = xarML('selection: #(1)', $this->name);
+        $this->invalid = xarML('Bad selection: #(1)', $this->name);
         $this->value = null;
         return false;
     }
@@ -204,8 +204,9 @@ class GroupListProperty extends SelectProperty
             $select_options['group'] = $this->validation_group_list;
         }
         // TODO: handle large # of groups too (optional - less urgent than for users)
-        $groups = xarMod::apiFunc('roles', 'user', 'getallgroups', $select_options);
-        return $groups;
+        $options = $this->getFirstline();
+        $options = array_merge($options,xarMod::apiFunc('roles', 'user', 'getallgroups', $select_options));
+        return $options;
     }
 
 }

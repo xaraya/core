@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage roles module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -142,6 +142,7 @@ function roles_init()
     xarModVars::set('roles', 'allowuserhomeedit', false);
     xarModVars::set('roles', 'loginredirect', true);
     xarModVars::set('roles', 'allowexternalurl', false);
+    xarModVars::set('roles', 'searchbyemail', false);
     xarModVars::set('roles', 'allowemail', false);
     xarModVars::set('roles', 'requirevalidation', true);
     
@@ -151,11 +152,6 @@ function roles_init()
 
 function roles_activate()
 {
-    // --------------------------------------------------------
-    // Register block types
-    xarMod::apiFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'online'));
-    xarMod::apiFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'user'));
-    xarMod::apiFunc('blocks', 'admin','register_block_type', array('modName' => 'roles','blockType' => 'language'));
 
     // Register hooks here, init is too soon
     xarModRegisterHook('item', 'search', 'GUI','roles', 'user', 'search');

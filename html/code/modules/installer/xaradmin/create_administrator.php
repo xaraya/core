@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage installer module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -35,7 +35,7 @@ function installer_admin_create_administrator()
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
 
     xarVarSetCached('installer','installing', true);
-    xarTplSetThemeName('installer');
+    xarTpl::setThemeName('installer');
 
     $data['language'] = $install_language;
     $data['phase'] = 6;
@@ -65,7 +65,7 @@ function installer_admin_create_administrator()
 
     $isvalid = $data['admin']->checkInput();
     if (!$isvalid) {
-        return xarTplModule('installer','admin','create_administrator',$data);
+        return xarTpl::module('installer','admin','create_administrator',$data);
     }
 
     xarModVars::set('mail', 'adminname', $data['admin']->properties['name']->getValue());
@@ -87,72 +87,6 @@ function installer_admin_create_administrator()
     $itemid = $data['admin']->updateItem();
     if (!$itemid) {return;}
 
-    // Register blockgroup block type (blocks)
-    // @CHECKME: move this to blocks init?
-    if (!xarMod::apiFunc('blocks', 'admin', 'register_block_type',
-        array('modName'  => 'blocks', 'blockType'=> 'blockgroup'))) return;
-
-    // Register Block types from modules installed before block apis (base)
-    $blocks = array('adminmenu','waitingcontent','finclude','menu','content');
-
-    foreach ($blocks as $block) {
-        if (!xarMod::apiFunc('blocks', 'admin', 'register_block_type', array('modName'  => 'base', 'blockType'=> $block))) return;
-    }
-
-    if (xarVarIsCached('Mod.BaseInfos', 'blocks')) xarVarDelCached('Mod.BaseInfos', 'blocks');
-
-    // get blockgroup block id
-    $blockgroupBlockType = xarModAPIFunc('blocks', 'user', 'getblocktype',
-                                    array('module'  => 'blocks',
-                                          'type'    => 'blockgroup'));
-
-    $blockgroupBlockTypeID = $blockgroupBlockType['tid'];
-    assert('is_numeric($blockgroupBlockTypeID);');
-
-    // Create default block groups/instances
-    //                            name        template
-    $default_blockgroups = array ('left'   => null,
-                                  'right'  => 'right',
-                                  'header' => 'header',
-                                  'admin'  => null,
-                                  'center' => 'center',
-                                  'topnav' => 'topnav'
-                                  );
-
-    foreach ($default_blockgroups as $name => $template) {
-        if(!xarMod::apiFunc('blocks', 'user', 'get', array('name' => $name))) {
-            // Not there yet
-            if (!xarMod::apiFunc('blocks', 'admin', 'create_instance',
-                 array('name' => $name, 'template' => $template,
-                       'type' => $blockgroupBlockTypeID, 'state' => 2))) return;
-        }
-    }
-
-    // get the admin blockgroup block id
-    $adminBlockgroup = xarMod::apiFunc('blocks', 'user', 'get', array('name' => 'admin'));
-    if ($adminBlockgroup == false) {
-        $msg = xarML("Blockgroup 'admin' not found.");
-        throw new Exception($msg);
-    }
-    $adminBlockgroupID = $adminBlockgroup['bid'];
-    assert('is_numeric($adminBlockgroupID);');
-
-    $adminBlockType = xarMod::apiFunc('blocks', 'user', 'getblocktype',
-                                    array('module'  => 'base',
-                                          'type'    => 'adminmenu'));
-
-    $adminBlockTypeId = $adminBlockType['tid'];
-    assert('is_numeric($adminBlockTypeId);');
-    if (!xarMod::apiFunc('blocks', 'user', 'get', array('name'  => 'adminpanel'))) {
-        if (!xarMod::apiFunc('blocks', 'admin', 'create_instance',
-                           array('title'    => 'Admin',
-                                 'name'     => 'adminpanel',
-                                 'type'     => $adminBlockTypeId,
-                                 'groups'   => array(array('id' => $adminBlockgroupID)),
-                                 'state'    =>  2))) {
-            return;
-        }
-    }
 
     /*********************************************************************
     * Enter some default privileges

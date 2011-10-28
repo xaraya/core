@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -148,8 +148,10 @@ class DataObject extends DataObjectMaster implements iDataObject
         $isvalid = true;
         if (!empty($args['fields'])) {
             $fields = $args['fields'];
+        } elseif (!empty($args['fieldlist'])) {
+            $fields = $args['fieldlist'];
         } else {
-            $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
+            $fields = !empty($this->fieldlist) ? $this->fieldlist : $this->getFieldList();
         }
 
         $this->missingfields = array();
@@ -257,7 +259,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
-        return xarTplObject($args['tplmodule'],$args['template'],'showform',$args);
+        return xarTpl::object($args['tplmodule'],$args['template'],'showform',$args);
     }
 
     /**
@@ -272,6 +274,9 @@ class DataObject extends DataObjectMaster implements iDataObject
         if (!empty($args['fieldlist']) && !is_array($args['fieldlist'])) {
             $args['fieldlist'] = explode(',',$args['fieldlist']);
             if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
+            $this->fieldlist = $args['fieldlist'];
+        } elseif (empty($args['fieldlist'])) {
+            $this->setFieldList();
         }
 
         // If a different itemid was passed, get that item before we display
@@ -285,13 +290,8 @@ class DataObject extends DataObjectMaster implements iDataObject
         $this->callHooks('transform');
 
         $args['properties'] = array();
-        if(count($args['fieldlist']) > 0) {
-            $fields = $args['fieldlist'];
-        } else {
-            $fields = array_keys($this->properties);
-        }
 
-        foreach($fields as $name) {
+        foreach($this->fieldlist as $name) {
             if(!isset($this->properties[$name])) continue;
 
             if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
@@ -301,8 +301,6 @@ class DataObject extends DataObjectMaster implements iDataObject
             if ($this->properties[$name]->type == 21 || !isset($this->hookvalues[$name])) {
                 $args['properties'][$name] = $this->properties[$name];
             } else {
-                // sigh, 5 letters, but so many hours to discover them
-                // anyways, clone the property, so we can safely change it, PHP 5 specific!!
                 $args['properties'][$name] = clone $this->properties[$name];
                 $args['properties'][$name]->value = $this->hookvalues[$name];
             }
@@ -310,7 +308,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         // clean up hookvalues
         $this->hookvalues = array();
 
-        // Order the fields if this is an extended object
+/*        // Order the fields if this is an extended object
         if (!empty($this->fieldorder)) {
             $tempprops = array();
             foreach ($this->fieldorder as $field)
@@ -318,6 +316,7 @@ class DataObject extends DataObjectMaster implements iDataObject
                     $tempprops[$field] = $args['properties'][$field];
             $args['properties'] = $tempprops;
         }
+*/
 
 // CHECKME: we won't call display hooks for this item here (yet) - to be investigated
 //        $this->callHooks('display');
@@ -328,82 +327,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
-        return xarTplObject($args['tplmodule'],$args['template'],'showdisplay',$args);
-    }
-
-    /**
-     * Get the names and values of
-     */
-    public function getFieldValues(Array $args = array(), $bypass = 0)
-    {
-        $fields = array();
-        $properties = $this->getProperties($args);
-        if ($bypass) {
-            foreach ($properties as $property) {
-                $fields[$property->name] = $property->value;
-            }
-        } else {
-            foreach ($properties as $property) {
-                $fields[$property->name] = $property->getValue();
-            }
-        }
-        return $fields;
-    }
-
-    public function setFieldValues(Array $args = array(), $bypass = 0)
-    {
-        if ($bypass) {
-            foreach ($args as $key => $value)
-                if (isset($this->properties[$key])) $this->properties[$key]->value = $value;
-        } else {
-            foreach ($args as $key => $value)
-                if (isset($this->properties[$key]))  $this->properties[$key]->setValue($value);
-        }
-        return true;
-    }
-
-    public function clearFieldValues(Array $args = array())
-    {
-        $properties = $this->getProperties($args);
-        foreach ($properties as $property) {
-            $fields[$property->name] = $property->clearValue();
-        }
-        return true;
-    }
-
-    /**
-     * Get the labels and values to include in some output display for this item
-     */
-    public function getDisplayValues(Array $args = array())
-    {
-        $displayvalues = array();
-        $properties = $this->getProperties($args);
-        foreach($properties as $property) {
-            $label = xarVarPrepForDisplay($property->label);
-            $displayvalues[$label] = $property->showOutput();
-        }
-        return $displayvalues;
-
-        /* FIXME: the status value isn't being used correctly I think
-        if(count($args['fieldlist']) > 0 || !empty($this->status))
-        {
-            foreach($args['fieldlist'] as $name)
-                if(isset($this->properties[$name]))
-                {
-                    $label = xarVarPrepForDisplay($this->properties[$name]->label);
-                    $displayvalues[$label] = $this->properties[$name]->showOutput();
-                }
-        }
-        else
-        {
-            foreach(array_keys($this->properties) as $name)
-            {
-                $label = xarVarPrepForDisplay($this->properties[$name]->label);
-                $displayvalues[$label] = $this->properties[$name]->showOutput();
-            }
-        }
-        return $displayvalues;
-        */
+        return xarTpl::object($args['tplmodule'],$args['template'],'showdisplay',$args);
     }
 
     /**
@@ -537,11 +461,13 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         $args = $this->getFieldValues();
         $args['itemid'] = $this->itemid;
+        $fieldlist = $this->getFieldList();
         foreach(array_keys($this->datastores) as $store)
         {
             // Execute any property-specific code first
             if ($store != '_dummy_') {
-                foreach ($this->datastores[$store]->fields as $property) {
+                foreach ($this->datastores[$store]->fields as $key => $property) {
+                    if (!in_array($key, $fieldlist)) continue;
                     if (method_exists($property,'updatevalue')) {
                         $property->updateValue($this->itemid);
                     }

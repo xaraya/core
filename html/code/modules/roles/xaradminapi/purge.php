@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage roles module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -26,7 +26,7 @@ function roles_adminapi_purge(Array $args=array())
 
 
     if ($state == xarRoles::ROLES_STATE_ACTIVE)
-        return xarTplModule('roles','user','errors',array('layout' => 'purge_active_user'));
+        return xarTpl::module('roles','user','errors',array('layout' => 'purge_active_user'));
 
     $items = xarMod::apiFunc('roles',
              'user',

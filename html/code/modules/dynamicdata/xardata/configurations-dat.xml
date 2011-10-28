@@ -709,4 +709,23 @@
     <property_id>15</property_id>
     <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
-  </configurations></items>
+  </configurations>
+    <configurations itemid="80">
+    <id>68</id>
+    <name>initialization_update_behavior</name>
+    <description>When updating do we add or replace an existing item?</description>
+    <property_id>6</property_id>
+    <label>Update Behavior</label>
+    <ignore_empty>true</ignore_empty>
+    <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:83:"none,Do not affect parents;replace,Replace an existing parent;add,Add a new parent;";}</configuration>
+  </configurations>
+  <configurations itemid="81">
+    <id>69</id>
+    <name>initialization_basegroup</name>
+    <description>A reference to a parent group</description>
+    <property_id>45</property_id>
+    <label>Base Group</label>
+    <ignore_empty>true</ignore_empty>
+    <configuration>a:4:{s:14:"display_layout";s:7:"default";s:19:"validation_override";s:1:"1";s:30:"initialization_update_behavior";s:4:"none";s:24:"initialization_basegroup";s:1:"1";}</configuration>
+  </configurations>
+</items>

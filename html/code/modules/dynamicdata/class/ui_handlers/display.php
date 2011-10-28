@@ -4,7 +4,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -31,7 +31,7 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
      * @param $args['itemid'] item id of the object to display, and/or
      * @param $args['preview'] true if you want dd to call checkInput() = standard dd preview using GET/POST params, or
      * @param $args['values'] array of predefined field values to use = ui-specific preview using arguments in your call
-     * @return string output of xarTplObject() using 'ui_display'
+     * @return string output of xarTpl::object() using 'ui_display'
      */
     function run(array $args = array())
     {
@@ -67,7 +67,7 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
             }
         }
         $title = xarML('Display #(1)', $this->object->label);
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
 
         if (!empty($this->args['itemid'])) {
             if (!$this->object->checkAccess('display'))
@@ -94,7 +94,7 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
             // show a blank object
         }
 
-        $output = xarTplObject(
+        $output = xarTpl::object(
             $this->tplmodule, $this->object->template, 'ui_display',
             array('object' => $this->object,
                   'hooks'  => $this->object->hookoutput,

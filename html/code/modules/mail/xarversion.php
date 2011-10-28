@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage mail module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -24,7 +24,7 @@
 $modversion['name']               = 'Mail';
 $modversion['id']                 = '771';
 $modversion['displayname']        = xarML('Mail');
-$modversion['version']            = '2.2.0';
+$modversion['version']            = '2.3.0';
 $modversion['description']        = 'Mail handling utility module';
 $modversion['displaydescription'] = xarML('Mail handling utility module');
 $modversion['credits']            = 'xardocs/credits.txt';

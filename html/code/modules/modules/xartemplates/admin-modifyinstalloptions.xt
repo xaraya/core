@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:template file="admin-mod-head"/>
+    <!--
     <div class="xar-mod-head">
         <span class="xar-mod-title">#$displayname# Module Configuration</span>
     </div>
+    -->
     <div class="xar-mod-body">
         <form action="#xarModURL('modules', 'admin', 'updateinstalloptions', array('regid' => $regid))#" method="post" enctype="application/x-www-form-urlencoded">
             <xar:template module="$modname" file="installoptions"/>
             <!--        <xar:module main="false" module="#$modname#" type="admin" func="installoptions"/> -->
-            <fieldset>
-                <div class="xar-form-input-wrapper-after">
-                    <xar:var name="label">Save Configuration</xar:var>
-                    <input type="submit" name="update" value="#$label#"/>
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                </div>
+            <fieldset class="xar-form-actions">
+                <xar:var name="label">Save Configuration</xar:var>
+                <xar:button type="submit" label="$label" name="update"/>
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
             </fieldset>
         </form>
     </div>

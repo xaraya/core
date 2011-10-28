@@ -4,7 +4,7 @@
  * @package modules
  * @subpackage themes module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -82,10 +82,10 @@ function themes_adminapi_regenerate()
             // New theme
 
             $sql = "INSERT INTO $xartable[themes]
-                      (name, regid, directory, version)
-                    VALUES (?,?,?,?)";
+                      (name, regid, directory, version, class)
+                    VALUES (?,?,?,?,?)";
             $bindvars = array($themeInfo['name'],$themeInfo['regid'],
-                              $themeInfo['directory'], $themeInfo['version']);
+                              $themeInfo['directory'], $themeInfo['version'], $themeInfo['class']);
             $result = $dbconn->Execute($sql,$bindvars);
 
             $set = xarMod::apiFunc('themes',
@@ -103,6 +103,10 @@ function themes_adminapi_regenerate()
                 }
         }
     }
+    // Reinit the theme configurations
+    sys::import('modules.themes.class.initialization');
+    ThemeInitialization::importConfigurations();
+
     return true;
 }
 ?>

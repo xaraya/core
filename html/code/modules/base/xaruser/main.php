@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -29,21 +29,21 @@ function base_user_main(Array $args=array())
     extract($args);
     if (!xarVarFetch('page','str',$page,'',XARVAR_NOT_REQUIRED)) return;
     if (!empty($page)){
-        xarTplSetPageTitle($page);
+        xarTpl::setPageTitle($page);
         /* Cache the custom page name so it is accessible elsewhere */
         xarVarSetCached('Base.pages','page',$page);
     } else {
         $pageTemplate = xarModVars::get('base', 'AlternatePageTemplateName');
         if (xarModVars::get('base', 'UseAlternatePageTemplate') != '' &&
             $pageTemplate != '') {
-            xarTplSetPageTemplateName($pageTemplate);
+            xarTpl::setPageTemplateName($pageTemplate);
         }
-        xarTplSetPageTitle(xarML('Welcome'));
+        xarTpl::setPageTitle(xarML('Welcome'));
     }
     /* if you want to include different pages in your user-main template
      * return array('page' => $page);
      * if you want to use different user-main-<page> templates
      */
-    return xarTplModule('base','user','main',array(),$page);
+    return xarTpl::module('base','user','main',array(),$page);
 }
 ?>

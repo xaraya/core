@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage authsystem module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -39,6 +39,10 @@ class AuthsystemShortController extends ShortActionController
             case 'login':
                 $data['func'] = 'showloginform';
             break;
+            
+            case 'auth':
+                $data['func'] = 'login';
+            break;
 
             case 'logout':
                 $data['func'] = 'logout';
@@ -70,16 +74,11 @@ class AuthsystemShortController extends ShortActionController
             case 'showloginform':
                 $path[] = 'login';
                 break;
-
-            case 'logout':
-                $path[] = 'logout';
+            case 'login':
+                $path[] = 'auth';
                 break;
-
-            case 'password':
-                $path[] = 'password';
-                break;
-
             default:
+                $path[] = $request->getFunction();
                 break;
         }
         

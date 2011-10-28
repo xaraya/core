@@ -1,171 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Privileges Administration</span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
-        <img src="#xarTplGetImage('privileges.png','base')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
-        <h2>Overview</h2>
-
-        <h3>What is it?</h3>
-        <p>
-            The Privileges module manages privileges on a Xaraya site. Privileges give users and groups
-            different types of access (viewing, changing, deleting etc.) to resources and content on the site. They are the basic components of Xaraya's security system. The Privileges module is a core module within Xaraya and cannot be removed. 
-        </p>
-        <p>
-            Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('privileges')))#">here</a>.
-        </p>
-        <p>Here are some of the things you can do with privileges:</p>
-        <ul>
-            <li>Xaraya's privileges are extremely flexible. You can define privileges at the level
-            of site, realms, modules, component classes within modules, or single instances of
-            those classes.</li>
-            <li>You can use privileges as building blocks. Assemble them into compound privileges
-            tailored to any specific role on the site.</li>
-            <li>You can assign privileges to roles which then pass them on to their children in the
-            roles hierarchy through inheritance.</li>
-            <li>Using the realms functionality you can subdivide one site into many "virtual" sites
-            sharing the same resources.</li>
-        </ul>
-
-        <h3>Concepts</h3>
-        <h4>Masks</h4>
-        <p>
-            Masks are the "barriers to entry" that restrict access to code and data. The are created during the installation of Xaraya, or whenever a new module is added. Masks are deployed in <em>security checks</em> throughout the system. A security check compares the current user's privileges against its mask, and decides whether to grant access or not.
-        </p>
-        <h4>Privileges</h4>
-        <p>
-            Privileges grant certain acess rights to the users or groups they are assigned to. Most modules and Xaray itself come with a set of predefined privileges that can be used, but site administrators can create. modify and assign new privileges as required. You can also combine privileges by using them as elements to create compound privileges. There is no limit to the number of privileges you can create or their levels of nesting.
-        </p>
-        <h4>Access Levels</h4>
-        <p>
-            When you create a privilege that applies to a given module, component and instance, you give it an access level whcih represents the rights a user with the provilege has in the area it applies to. The access levels are:
+        <div class="xar-mod-page-head">
+            <xar:var name="label">Official Icon</xar:var>
+            <xar:img scope="theme" file="privileges.png" alt="$label" width="96" height="96" class="xar-module-icon"/>
+            <h2 class="xar-mod-pagetitle">Overview</h2>
+        </div>
+        <div class="xar-mod-page-body">
+            <h3>What is it?</h3>
+            <p>
+                The Privileges module manages privileges on a Xaraya site. Privileges give users and groups
+                different types of access (viewing, changing, deleting etc.) to resources and content on the site. They are the basic components of Xaraya's security system. The Privileges module is a core module within Xaraya and cannot be removed. 
+            </p>
+            <p>
+                Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('privileges')))#">here</a>.
+            </p>
+            <p>Here are some of the things you can do with privileges:</p>
+            <ul>
+                <li>Xaraya's privileges are extremely flexible. You can define privileges at the level
+                of site, realms, modules, component classes within modules, or single instances of
+                those classes.</li>
+                <li>You can use privileges as building blocks. Assemble them into compound privileges
+                tailored to any specific role on the site.</li>
+                <li>You can assign privileges to roles which then pass them on to their children in the
+                roles hierarchy through inheritance.</li>
+                <li>Using the realms functionality you can subdivide one site into many "virtual" sites
+                sharing the same resources.</li>
+            </ul>
+    
+            <h3>Concepts</h3>
+            <h4>Masks</h4>
+            <p>
+                Masks are the "barriers to entry" that restrict access to code and data. The are created during the installation of Xaraya, or whenever a new module is added. Masks are deployed in <em>security checks</em> throughout the system. A security check compares the current user's privileges against its mask, and decides whether to grant access or not.
+            </p>
+            <h4>Privileges</h4>
+            <p>
+                Privileges grant certain acess rights to the users or groups they are assigned to. Most modules and Xaray itself come with a set of predefined privileges that can be used, but site administrators can create. modify and assign new privileges as required. You can also combine privileges by using them as elements to create compound privileges. There is no limit to the number of privileges you can create or their levels of nesting.
+            </p>
+            <h4>Access Levels</h4>
+            <p>
+                When you create a privilege that applies to a given module, component and instance, you give it an access level whcih represents the rights a user with the provilege has in the area it applies to. The access levels are:
+                <ul>
+                    <li>
+                        <em>None:</em>&#160;no access
+                    </li>
+                    <li>
+                        <em>Overview:</em>&#160;access to some part of the content, but not full content. This level is often used deciding which items in a list to show.
+                    </li>
+                    <li>
+                        <em>Read:</em>&#160;full read access
+                    </li>
+                    <li>
+                        <em>Comment:</em>&#160;allows a user to submit content eg submit a document, submit a
+                        comment
+                    </li>
+                    <li>
+                        <em>Moderate:</em>&#160;may vary from module to module but usually allows editing of other
+                        users' content
+                    </li>
+                    <li>
+                        <em>Edit:</em>&#160;can edit content but not add or delete
+                    </li>
+                    <li>
+                        <em>Add:</em>&#160;can add and edit but not delete
+                    </li>
+                    <li>
+                        <em>Delete:</em>&#160;can delete content as well as add and edit. This level is also known as <em>Manage</em>, and is usually used to allow full modification of a module's data, without access to its configuration settings.
+                    </li>
+                    <li>
+                        <em>Admin:</em>&#160;full administration access
+                    </li>
+                </ul>.
+                Note that the exact meaning of the access levels will vary somewhat across modules. Module authors are free to define how access levels apply to their module(s).
+            </p>
+            <h4>Predefined Privileges</h4>
+            <p>
+                 Xaraya comes preconfigured with a minimal set of privileges that are loaded when you run the installer. These will vary according to the configuration you chose. Examples are:
+            </p>
             <ul>
                 <li>
-                    <em>None:</em>&#160;no access
+                    <strong>Administration:</strong> a privilege that gives a role complete access to all
+                    resources on the site. At installation this privilege is assigned to the role Administrators group and is inherited by the default site administrator (known as <em>admin</em>).
                 </li>
                 <li>
-                    <em>Overview:</em>&#160;access to some part of the content, but not full content. This level is often used deciding which items in a list to show.
+                    <strong>CasualAccess:</strong> this is the privilege assigned to unregistered users (known as <em>anonymous</em>) on the site. It is initially defined to allow viewing access of the front page, as well as
+                    access to the login block.
                 </li>
                 <li>
-                    <em>Read:</em>&#160;full read access
-                </li>
-                <li>
-                    <em>Comment:</em>&#160;allows a user to submit content eg submit a document, submit a
-                    comment
-                </li>
-                <li>
-                    <em>Moderate:</em>&#160;may vary from module to module but usually allows editing of other
-                    users' content
-                </li>
-                <li>
-                    <em>Edit:</em>&#160;can edit content but not add or delete
-                </li>
-                <li>
-                    <em>Add:</em>&#160;can add and edit but not delete
-                </li>
-                <li>
-                    <em>Delete:</em>&#160;can delete content as well as add and edit. This level is also known as <em>Manage</em>, and is usually used to allow full modification of a module's data, without access to its configuration settings.
-                </li>
-                <li>
-                    <em>Admin:</em>&#160;full administration access
-                </li>
-            </ul>.
-            Note that the exact meaning of the access levels will vary somewhat across modules. Module authors are free to define how access levels apply to their module(s).
-        </p>
-        <h4>Predefined Privileges</h4>
-        <p>
-             Xaraya comes preconfigured with a minimal set of privileges that are loaded when you run the installer. These will vary according to the configuration you chose. Examples are:
-        </p>
-        <ul>
-            <li>
-                <strong>Administration:</strong> a privilege that gives a role complete access to all
-                resources on the site. At installation this privilege is assigned to the role Administrators group and is inherited by the default site administrator (known as <em>admin</em>).
-            </li>
-            <li>
-                <strong>CasualAccess:</strong> this is the privilege assigned to unregistered users (known as <em>anonymous</em>) on the site. It is initially defined to allow viewing access of the front page, as well as
-                access to the login block.
-            </li>
-            <li>
-                <strong>GeneralLock:</strong> a privilege that restricts access to certain basic roles and privileges the system requires, such as the default admininstrator. This is to avoid inadvertent removal.
-            </li>
-        </ul>
-        <p>
-            All privileges in the system can be changed or removed but it is recommended you do not remove the default and lock privileges unless you are sure you understand what you are doing.
-        </p>
-
-        <h3>The Admin interface</h3>
-        <p>
-            As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Privileges &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
-        </p>
-        <p>
-            In addition, this module also supports the following configuration options:
-            <ul>
-                <li>
-                    <strong>Exception redirect:</strong>&#160;insufficient access rights usually result in an error message. If this option is checked users that are not logged in will be redirected to the login page instead..
-                </li>
-                <li>
-                    <strong>Last resort admin:</strong>&#160;lets you create an emergency user that can be useful in recovering a site if normal users are shut out because privileges have been misconfigured or corrupted. Checking this option will display a link to the page where the last resort admin is created.
-                </li>
-                <li>
-                    <strong>Realms support:</strong>&#160;checking this option opens a page which lets you define the behavior of <em>realms</em> in your privileges, and also an entry on the Privileges menu for creating and managing realms. Realms are used in conjunction with privileges to create different "views" of a site according to which realms users "belong" to. For more information on realms see <a href="http://xaraya.com/index.php/documentation/607">Xaraya Realms</a>.
-                </li>
-                <li>
-                    <strong>Testing settings:</strong>&#160;lets you display debugging information on privleges to certain users. This is useful for testing new privilege situations on running sites. 
+                    <strong>GeneralLock:</strong> a privilege that restricts access to certain basic roles and privileges the system requires, such as the default admininstrator. This is to avoid inadvertent removal.
                 </li>
             </ul>
-        </p>
-        
-        <p>
-            Clicking on the <strong>View Privileges</strong>link in the Admin menu gives you an overview of all the privileges on your system, both those assigned to roles and those unassigned. Compound privileges are collapsed, but you can click on them to open them up and view their components.
-        </p>
-        <p>
-            Clicking on the <strong>Add Privilege</strong>link in the Admin menu lets you create a new unassigned privilege.When adding or modifying a privilege, you can define it to have its own access rights, or simply to serve as a container for other privileges.
-        </p>
-        <p>
-            Clicking on the <strong>Assign Privileges</strong>link in the Admin menu lets you assign existing privileges to existing users and groups..
-        </p>
-
-        <p>
-            Clicking on the <strong>Manage Realms</strong>link in the Admin menu lets create and manage realms. This menu itme is available only if realms support is active (see above).
-        </p>
-        <h3>Available Blocks</h3>
-        <p>The Privileges module has no blocks.</p>
-
-        <h3>Available Dataproperties</h3>
-        <ul>
-            <li>
-                <strong>Access</strong>:&#160;accepts as input or displays the settings for an (extended) security check.
-            </li>
-            <li>
-                <strong>Privilegestree</strong>:&#160;displays a tree of privileges.
-            </li>
-        </ul>
-
-        <h3>Available Hooks</h3>
-        <p>The Privileges module has no hooks</p>
-
-        <!--
-        <h3>Further Information</h3>
-        <p>Further information on the Privileges module can be found at:</p>
-        <ul>
-            <li>Privileges Module Extension page at 
-            <xar:var name="label">Privileges Module - Xaraya Extension 1098</xar:var>
-            <a title="#$label#" href="http://www.xaraya.com/index.php/release/1098.html">Xaraya Extension and
-            Releases</a>. Click on Version History tab at the bottom to get the latest release
-            information.</li>
-            <li>Related tutorials and documentation on Privileges module at 
-            <xar:var name="label">Related documentation on Privileges</xar:var>
-            <a href="http://www.xaraya.com/index.php/keywords/privileges/" title="#$label#">Xaraya Documentation.</a></li>
-            <li>Extended information for Developers at 
-            <xar:var name="label">RFC 30</xar:var>
-            <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html" title="#$label#">Xaraya RFC-30</a></li>
-        </ul>
-        <p class="xar-sub">
-        <strong>&#160;Privileges Module Overview</strong>
-        <br />&#160;Version 1.0.0&#160; 2006-05-03</p>
-        -->
+            <p>
+                All privileges in the system can be changed or removed but it is recommended you do not remove the default and lock privileges unless you are sure you understand what you are doing.
+            </p>
+    
+            <h3>The Admin interface</h3>
+            <p>
+                As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Privileges &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules (see the Base module overview for an explanation of these).
+            </p>
+            <p>
+                In addition, this module also supports the following configuration options:
+                <ul>
+                    <li>
+                        <strong>Exception redirect:</strong>&#160;insufficient access rights usually result in an error message. If this option is checked users that are not logged in will be redirected to the login page instead..
+                    </li>
+                    <li>
+                        <strong>Last resort admin:</strong>&#160;lets you create an emergency user that can be useful in recovering a site if normal users are shut out because privileges have been misconfigured or corrupted. Checking this option will display a link to the page where the last resort admin is created.
+                    </li>
+                    <li>
+                        <strong>Realms support:</strong>&#160;checking this option opens a page which lets you define the behavior of <em>realms</em> in your privileges, and also an entry on the Privileges menu for creating and managing realms. Realms are used in conjunction with privileges to create different "views" of a site according to which realms users "belong" to. For more information on realms see <a href="http://xaraya.com/index.php/documentation/607">Xaraya Realms</a>.
+                    </li>
+                    <li>
+                        <strong>Testing settings:</strong>&#160;lets you display debugging information on privleges to certain users. This is useful for testing new privilege situations on running sites. 
+                    </li>
+                </ul>
+            </p>
+            
+            <p>
+                Clicking on the <strong>View Privileges</strong>link in the Admin menu gives you an overview of all the privileges on your system, both those assigned to roles and those unassigned. Compound privileges are collapsed, but you can click on them to open them up and view their components.
+            </p>
+            <p>
+                Clicking on the <strong>Add Privilege</strong>link in the Admin menu lets you create a new unassigned privilege.When adding or modifying a privilege, you can define it to have its own access rights, or simply to serve as a container for other privileges.
+            </p>
+            <p>
+                Clicking on the <strong>Assign Privileges</strong>link in the Admin menu lets you assign existing privileges to existing users and groups..
+            </p>
+    
+            <p>
+                Clicking on the <strong>Manage Realms</strong>link in the Admin menu lets create and manage realms. This menu itme is available only if realms support is active (see above).
+            </p>
+            <h3>Available Blocks</h3>
+            <p>The Privileges module has no blocks.</p>
+    
+            <h3>Available Dataproperties</h3>
+            <ul>
+                <li>
+                    <strong>Access</strong>:&#160;accepts as input or displays the settings for an (extended) security check.
+                </li>
+                <li>
+                    <strong>Privilegestree</strong>:&#160;displays a tree of privileges.
+                </li>
+            </ul>
+    
+            <h3>Available Hooks</h3>
+            <p>The Privileges module has no hooks</p>
+    
+            <!--
+            <h3>Further Information</h3>
+            <p>Further information on the Privileges module can be found at:</p>
+            <ul>
+                <li>Privileges Module Extension page at 
+                <xar:var name="label">Privileges Module - Xaraya Extension 1098</xar:var>
+                <a title="#$label#" href="http://www.xaraya.com/index.php/release/1098.html">Xaraya Extension and
+                Releases</a>. Click on Version History tab at the bottom to get the latest release
+                information.</li>
+                <li>Related tutorials and documentation on Privileges module at 
+                <xar:var name="label">Related documentation on Privileges</xar:var>
+                <a href="http://www.xaraya.com/index.php/keywords/privileges/" title="#$label#">Xaraya Documentation.</a></li>
+                <li>Extended information for Developers at 
+                <xar:var name="label">RFC 30</xar:var>
+                <a href="http://www.xaraya.com/documentation/rfcs/rfc0030.html" title="#$label#">Xaraya RFC-30</a></li>
+            </ul>
+            <p class="xar-sub">
+            <strong>&#160;Privileges Module Overview</strong>
+            <br />&#160;Version 1.0.0&#160; 2006-05-03</p>
+            -->
+        </div>
     </div>
 </xar:template>

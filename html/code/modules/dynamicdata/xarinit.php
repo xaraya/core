@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -167,8 +167,8 @@ function dynamicdata_init()
         $stmt = $dbconn->prepareStatement($sql);
 
         $objects = array(
-            array('objects'   ,'Dynamic Objects'   ,$module_id,0,'DataObject','auto', 'itemid',0,'a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:5:{i:0;i:5;i:1;i:2;i:2;i:1;i:3;i:3;i:4;i:4;}s:6:"update";a:1:{i:0;i:2;}s:6:"create";a:1:{i:0;i:2;}s:6:"delete";a:1:{i:0;i:2;}s:6:"config";a:1:{i:0;i:2;}}";}' , 'a:0:{}', false),
-            array('properties','Dynamic Properties',$module_id,1,'DataObject','auto', 'itemid',0,'a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:5:{i:0;i:5;i:1;i:2;i:2;i:1;i:3;i:3;i:4;i:4;}s:6:"update";a:1:{i:0;i:2;}s:6:"create";a:1:{i:0;i:2;}s:6:"delete";a:1:{i:0;i:2;}s:6:"config";a:1:{i:0;i:2;}}";}' , 'a:0:{}', false),
+            array('objects'   ,'Dynamic Objects'   ,$module_id,0,'DataObject','auto', 'itemid',0,'a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:2:{i:0;i:2;i:1;i:3;}s:6:"update";a:2:{i:0;i:2;i:1;i:3;}s:6:"create";a:2:{i:0;i:2;i:1;i:3;}s:6:"delete";a:2:{i:0;i:2;i:1;i:3;}s:6:"config";a:1:{i:0;i:2;}}";}' , 'a:0:{}', false),
+            array('properties','Dynamic Properties',$module_id,1,'DataObject','auto', 'itemid',0,'a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:2:{i:0;i:2;i:1;i:3;}s:6:"update";a:2:{i:0;i:2;i:1;i:3;}s:6:"create";a:2:{i:0;i:2;i:1;i:3;}s:6:"delete";a:2:{i:0;i:2;i:1;i:3;}s:6:"config";a:1:{i:0;i:2;}}";}' , 'a:0:{}', false),
         );
 
         $objectid = array();
@@ -296,7 +296,7 @@ function dynamicdata_init()
             array('urlparam'  ,'URL Param'          ,$objectid[1],2 ,'itemid'      ,$dynamic_objects.'.urlparam'   ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,''),
             array('maxid'     ,'Max Id'             ,$objectid[1],15,'0'           ,$dynamic_objects.'.maxid'      ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,9 ,''),
             array('access'    ,'Access'             ,$objectid[1],2,''             ,$dynamic_objects.'.access'     ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_NOINPUT,10 ,      'a:6:{s:20:"display_minimum_rows";s:1:"1";s:20:"display_maximum_rows";s:2:"10";s:25:"display_column_definition";a:1:{s:5:"value";a:4:{i:0;a:2:{i:0;s:3:"Key";i:1;s:5:"Value";}i:1;a:2:{i:0;s:1:"2";i:1;s:1:"2";}i:2;a:2:{i:0;s:0:"";i:1;s:0:"";}i:3;a:2:{i:0;s:0:"";i:1;s:0:"";}}}s:14:"display_layout";s:7:"default";s:28:"validation_associative_array";s:1:"1";s:24:"initialization_addremove";s:1:"2";}'),
-            array('config'    ,'Configuration'      ,$objectid[1],999 ,''          ,$dynamic_objects.'.config'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11 ,'a:6:{s:20:"display_minimum_rows";s:1:"1";s:20:"display_maximum_rows";s:2:"10";s:25:"display_column_definition";a:1:{s:5:"value";a:4:{i:0;a:2:{i:0;s:3:"Key";i:1;s:5:"Value";}i:1;a:2:{i:0;s:1:"2";i:1;s:1:"2";}i:2;a:2:{i:0;s:0:"";i:1;s:0:"";}i:3;a:2:{i:0;s:0:"";i:1;s:0:"";}}}s:14:"display_layout";s:7:"default";s:28:"validation_associative_array";s:1:"1";s:24:"initialization_addremove";s:1:"2";}'),
+            array('config'    ,'Configuration'      ,$objectid[1],999 ,'a:0:{}'    ,$dynamic_objects.'.config'     ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11 ,'a:6:{s:20:"display_minimum_rows";s:1:"1";s:20:"display_maximum_rows";s:2:"10";s:25:"display_column_definition";a:1:{s:5:"value";a:4:{i:0;a:2:{i:0;s:3:"Key";i:1;s:5:"Value";}i:1;a:2:{i:0;s:1:"2";i:1;s:1:"2";}i:2;a:2:{i:0;s:0:"";i:1;s:0:"";}i:3;a:2:{i:0;s:0:"";i:1;s:0:"";}}}s:14:"display_layout";s:7:"default";s:28:"validation_associative_array";s:1:"1";s:24:"initialization_addremove";s:1:"2";}'),
             array('isalias'   ,'Alias in short URLs',$objectid[1],14,true          ,$dynamic_objects.'.isalias'    ,DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12 ,''),
 
             // Properties for the Properties DD object
@@ -444,18 +444,12 @@ function dynamicdata_init()
 # Set up modvars
 #
     xarModVars::set('dynamicdata', 'items_per_page', 20);
-// CHECKME: syntax error for short urls ?
-    xarModVars::set('dynamicdata', 'shorturla', 0);
     xarModVars::set('dynamicdata', 'use_module_alias',0);
     xarModVars::set('dynamicdata', 'module_alias_name','Query');
     xarModVars::set('dynamicdata', 'debugmode', 0);
     xarModVars::set('dynamicdata', 'administrators', serialize(array()));
     xarModVars::set('dynamicdata', 'getlinkedobjects', 0);
 
-    /**
-     * Register blocks
-     */
-    xarMod::apiFunc('blocks','admin','register_block_type', array('modName'=>'dynamicdata','blockType'=>'form'));
 
     /**
      * Register hooks

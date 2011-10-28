@@ -3,6 +3,11 @@
 <!DOCTYPE blocklayout PUBLIC "-//XAR//DTD BL 2.0 Strict//EN" "http://xaraya.com/bl2/DTD/bl2-strict.dtd">
 <xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
     <html xml:lang="en" lang="en">
+        <!-- Call blocks early so any css and js from them is included -->
+        <xar:set name="leftgroup"><xar:blockgroup name="left" id="left"/></xar:set>
+        <xar:set name="rightgroup"><xar:blockgroup name="right" id="right"/></xar:set>
+        <xar:set name="topnavgroup"><xar:blockgroup name="topnav" id="topnav"/></xar:set>
+        <xar:set name="centergroup"><xar:blockgroup name="center" id="center"/></xar:set> 
         <head>
             <xar:blockgroup name="header" id="header"/>
             <title>
@@ -20,7 +25,7 @@
                 <div id="main">
                     <div id="logo">
                         <a href="index.php" title="home">
-                            <img src="#xarTplGetThemeDir()#/images/xarLogo2.png" width="90" height="90" alt="Xaraya Logo" title="home"/>
+                            <xar:img scope="theme" file="xarLogo2.png" width="90" height="90" alt="Xaraya Logo" title="home"/>
                         </a>
                         <p>
                             <xar:var name="SiteSlogan" scope="module" module="themes"/>
@@ -29,15 +34,16 @@
                     <xar:module id="modulespace"/>
                 </div>
                 <div id="sideInfo1" class="sideInfo">
-                    <xar:blockgroup name="left" id="left"/>
+                    #$leftgroup#
                 </div>
                 <div id="sideInfo2" class="sideInfo">
-                    <xar:blockgroup name="right" id="right"/>
+                    #$rightgroup#
                 </div>
-                <xar:blockgroup name="topnav" id="topnav"/>
-                <xar:blockgroup name="center" id="center"/>
-                <xar:place-javascript position="body"/>
+                #$topnavgroup#
+                #$centergroup#
+                
             </div>
+            <xar:place-javascript position="body"/>
         </body>
     </html>
 </xar:blocklayout>

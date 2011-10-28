@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage modules module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -317,7 +317,7 @@ class Installer extends Object
     {
         if ($this->extType == 'modules') $this->assembledependencies($regid);
         if ($this->extType == 'themes') $this->modulestack->push($regid);
-        $this->installdependencies($regid);
+        return $this->installdependencies($regid);
     }
     
     public function assembledependencies($regid=null)
@@ -395,7 +395,9 @@ class Installer extends Object
             default:                    $initialised = false; break;
         }
 
-        if ($regid == $topid) {
+        // @checkme: <chris/> this doesn't look right
+        // file exists and url point to modules but extType must equal themes ? 
+        if ($regid == $topid && ($this->extType == 'themes')) {
             // First time we've come to this module
             // Is there an install page?
             if (!$initialised && file_exists(sys::code() . 'modules/' . $extInfo['osdirectory'] . '/xartemplates/includes/installoptions.xt')) {
@@ -422,11 +424,16 @@ class Installer extends Object
 
         // if this is a theme we're done
         if ($this->extType == 'themes') {
+            // Reinit the theme configurations
+            // @todo: this belongs in the ThemeActivate observer 
+            sys::import('modules.themes.class.initialization');
+            ThemeInitialization::importConfigurations();
+            // Show the theme list
             xarController::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0)));
             return true;
         }
-        
-        PropertyRegistration::importPropertyTypes(true, array('modules/' . $extInfo['directory'] . '/xarproperties'));
+        // this is now handled by the modules module ModActivate event observer
+        // PropertyRegistration::importPropertyTypes(true, array('modules/' . $extInfo['directory'] . '/xarproperties'));
 
         $nextmodule = $this->modulestack->peek();
         if (empty($nextmodule)) {

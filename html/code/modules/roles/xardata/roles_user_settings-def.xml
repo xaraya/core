@@ -7,7 +7,7 @@
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
-  <access>a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:5:{i:0;i:5;i:1;i:2;i:2;i:1;i:3;i:3;i:4;i:4;}s:6:"update";a:1:{i:0;i:2;}s:6:"create";a:1:{i:0;i:2;}s:6:"delete";a:1:{i:0;i:2;}s:6:"config";a:1:{i:0;i:2;}}";}</access>
+  <access>a:4:{s:14:&quot;display_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;200&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;modify_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;delete_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:6:&quot;access&quot;;s:174:&quot;a:5:{s:7:&quot;display&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;update&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;create&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;delete&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;config&quot;;a:1:{i:0;i:2;}}&quot;;}</access>
   <config>a:0:{}</config>
   <isalias>false</isalias>
   <properties>
@@ -107,7 +107,7 @@
       <type>calendar</type>
       <defaultvalue>xarMLS_userTime()</defaultvalue>
       <source>module variable: roles</source>
-      <status>66</status>
+      <status>161</status>
       <seq>11</seq>
       <configuration></configuration>
     </property>
@@ -117,18 +117,38 @@
       <type>calendar</type>
       <defaultvalue>xarMLS_userTime()</defaultvalue>
       <source>module variable: roles</source>
-      <status>66</status>
+      <status>161</status>
       <seq>12</seq>
       <configuration></configuration>
     </property>
     <property name="usertimezone">
       <id>106</id>
       <label>Set Timezone:</label>
-      <type>static</type>
+      <type>timezone</type>
       <defaultvalue></defaultvalue>
       <source>module variable: roles</source>
-      <status>65</status>
+      <status>33</status>
+      <seq>13</seq>
+      <configuration></configuration>
+    </property>
+    <property name="useremailformat">
+      <id>203</id>
+      <label>Email Format</label>
+      <type>dropdown</type>
+      <defaultvalue></defaultvalue>
+      <source>module variable: roles</source>
+      <status>33</status>
       <seq>14</seq>
+      <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:20:"text,text;html,html;";}</configuration>
+    </property>
+    <property name="primaryparent">
+      <id>201</id>
+      <label>Primary Parent</label>
+      <type>grouplist</type>
+      <defaultvalue></defaultvalue>
+      <source>module variable: roles</source>
+      <status>33</status>
+      <seq>15</seq>
       <configuration></configuration>
     </property>
     <property name="duvsettings">
@@ -138,7 +158,7 @@
       <defaultvalue></defaultvalue>
       <source>module variable: roles</source>
       <status>33</status>
-      <seq>15</seq>
+      <seq>16</seq>
       <configuration>a:3:{s:15:"display_columns";s:1:"3";s:14:"display_layout";s:8:"vertical";s:22:"initialization_options";s:166:"userhome,User Home Page;primaryparent,Primary Parent;passwordupdate,Last Password Update;userlastlogin,Last Login;usertimezone,Time Zone;useremailformat,Email Format;";}</configuration>
     </property>
   </properties>

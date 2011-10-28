@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="user-mod-head"/>
+    <div class="xar-mod-body">
+        <fieldset>
+            <legend>Blocks Problem</legend>
+            <xar:var name="label">System Message</xar:var>
+            <xar:img scope="theme" file="user-error.png" alt="$label" width="96" height="96" class="xar-module-icon"/>
+            <xar:if condition="!isset($layout)">
+                <div style="margin-top: 20px; margin-left: 20px">
+                    No error message is available.
+                    <br />
+                    Please contact the system administrator.
+                </div>                    
+            <xar:elseif condition="$layout eq 'missing_name'"/>
+                <div style="margin-top: 20px; margin-left: 20px">
+                    A name is required to create a block
+                </div>
+            <xar:else />
+                <div style="margin-top: 20px; margin-left: 20px">
+                    No error message is available.
+                    <br />
+                    Please contact the system administrator.
+                </div>                    
+            </xar:if>                
+        </fieldset>
+        <div class="xar-form-actions">
+            <div class="xar-row">
+                <div class="xar-col"></div>
+                <div class="xar-col">
+                    <xar:var name="label">Go back</xar:var>
+                    <xar:button type="cancel" label="$label"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</xar:template>

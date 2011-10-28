@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -50,9 +50,12 @@ class BaseShortController extends ShortActionController
         $path = array();
         switch($request->getFunction()) {
             case 'main':
-                // Note : if your main function calls some other function by default,
-                // you should set the path to directly to that other function
-                $path[] = '';
+                if (!empty($params['page'])) {                    
+                    $path[] = $params['page'];
+                    unset($params['page']);
+                } else { 
+                    $path[] = '';
+                }
                 break;
             default:
                 $path[] = '';

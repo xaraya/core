@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -60,14 +60,14 @@ function dynamicdata_user_display(Array $args=array())
     $myobject->callHooks('display');
     $data['hooks'] = $myobject->hookoutput;
 
-    xarTplSetPageTitle($myobject->label);
+    xarTpl::setPageTitle($myobject->label);
 
     // Return the template variables defined in this function
     if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/user-display.xt') ||
         file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/user-display-' . $args['template'] . '.xt')) {
-        return xarTplModule($args['tplmodule'],'user','display',$data,$args['template']);
+        return xarTpl::module($args['tplmodule'],'user','display',$data,$args['template']);
     } else {
-        return xarTplModule('dynamicdata','user','display',$data,$args['template']);
+        return xarTpl::module('dynamicdata','user','display',$data,$args['template']);
     }
 }
 

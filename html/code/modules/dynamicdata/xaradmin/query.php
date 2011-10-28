@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -197,14 +197,12 @@ function dynamicdata_admin_query(Array $args=array())
         $data['properties'] = array();
     }
 
-    // select properties with status 1 by default
+    // Allow all properties that are not disabled
     $data['field'] = array();
     if (empty($field) || count($field) == 0) {
         foreach (array_keys($data['properties']) as $name) {
             $status = $data['properties'][$name]->getDisplayStatus();
-            if ($status == DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE ||
-                $status == DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY ||
-                $status == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY) {
+            if ($status != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) {
                 $data['field'][$name] = 1;
             }
         }

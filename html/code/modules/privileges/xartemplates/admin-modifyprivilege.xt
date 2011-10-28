@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:javascript module="privileges" filename="xarTree.js"/>
+    <xar:javascript scope="module" module="privileges" filename="xarTree.js"/>
     <script type="text/javascript">
         <!--
         var oldOnLoadFunction = (window.onload) ? window.onload : new Function("","return true;");
@@ -23,245 +23,308 @@
         document.forms['privilegeform'].submit();}
     // -->
     </script>
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">Privileges Administration</span>
-    </div>
-    <div class="xar-mod-body">
-        <xar:template type="module" file="admin-menu"/>
-        <h2>Modify Privilege: #$pname#</h2>
-        <xar:if condition="count($parents) ne 0">
-            <div>
-                <ul class="xar-tabs xar-alt xar-norm-outline">
-                    <xar:var name="title">These are the privileges that contain #$pname# as a component</xar:var>
-                    <xar:var name="label">Used in</xar:var>
-                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
-                    <xar:set name="prevgroup">""</xar:set>
-                    <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
-                        <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
-                            <li class="xar-tab">
-                                <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$parents[$i]['parentid']))#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">
-                                    #$parents[$i]['parentname']#
-                                </a>
-                            </li>
-                        </xar:if>
-                        <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
-                    </xar:for>
-                </ul>
-            </div>
-        </xar:if>
-        <div>
-            <ul class="xar-tabs xar-alt xar-norm-outline">
-                <xar:var name="title">Choose an action to perform on this privilege</xar:var>
-                <xar:var name="label">Manage privilege</xar:var>
-                <li class="xar-tabs-label" title="#$title#">#$label#</li>
-                <li class="xar-tab">
-                    <a href="#xarModURL('privileges','admin','displayprivilege',array('id'=>$ppid))#" class="xar-norm xar-norm-outline">
-                        Display
-                    </a>
-                </li>
-                <li class="xar-tab-active">
-                    <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$ppid))#" class="xar-accent xar-accent-outline">
-                        Modify
-                     </a>
-                </li>
-                <li class="xar-tab">
-                    <a href="#xarModURL('privileges','admin','deleteprivilege',array('id'=>$ppid))#" class="xar-norm xar-norm-outline">
-                        Delete
-                    </a>
-                </li>
-                <li class="xar-tab">
-                    <a href="#xarModURL('privileges','admin','viewroles',array('id'=>$ppid))#" class="xar-norm xar-norm-outline">
-                        Groups/Users
-                    </a>
-                </li>
-            </ul>
-        </div>
-      <form name="privilegeform" id="privilegeform" action="#xarModURL('privileges','admin','updateprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
-            <fieldset>
-                <legend>Privilege properties</legend>
-                <xar:if condition="$frozen">
-                    <div class="xar-form-input-wrapper">
-                    <span class="xar-form-label">Name:</span>#$pname# 
-                    <input type="hidden" name="pname" id="pname" value="#$pname#"/></div>
-                    <p>This privilege cannot be edited or deleted</p>
-                <xar:else />
-                    <div class="xar-form-input-wrapper">
-                        <label for="pname" title="#xarML('TITLE')#" class="xar-form-label">
-                            Name:
-                        </label>
-                        <input type="text" name="pname" id="pname" value="#$pname#" maxlength="40" class="xar-form-textlong"/>
-                    </div>
-                    <xar:set name="onclick">"this.form.action='" . xarModURL('privileges','admin','modifyprivilege') ."';this.form.submit()";</xar:set>
-                    <!-- FIXME: make this dprop support onclick, cause IE6 doesn't do onchange
-                    <div class="xar-form-input-wrapper-after">
-                        <xar:set name="options">
-                            array(
-                                array('id' => 'empty', 'name' => 'empty'),
-                                array('id' => 'full', 'name' => 'with rights'),
-                            )
-                        </xar:set>
-                        <xar:data-input type="radio" name="ptype" id="ptype" options="$options" value="$ptype" onclick="$onclick"/>
-                    </div>
-                    -->
-                    <xar:if condition="$ptype eq 'empty'">
-                        <div class="xar-form-input-wrapper-after">
-                            <input type="radio" name="ptype" id="ptype1_empty" value="empty" checked="checked" onclick=""/>
-                            <label for="ptype1_empty" title="#xarML('This privilege has no children')#">
-                                empty
-                            </label>
-                        </div>
-                        <div class="xar-form-input-wrapper-after">
-                            <input type="radio" name="ptype" id="ptype1_full" value="full" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();"/>
-                            <label for="ptype1_full" title="#xarML('This privilege has children')#">
-                                with rights
-                            </label>
-                        </div>
-                        <xar:else />
-                        <div class="xar-form-input-wrapper-after">
-                            <input type="radio" name="ptype" id="ptype_empty" value="empty" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();"/>
-                            <label for="ptype_empty" title="#xarML('This privilege has no children')#">
-                                empty
-                            </label>
-                        </div>
-                        <div class="xar-form-input-wrapper-after">
-                            <input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();"/>
-                            <label for="ptype_full" title="#xarML('This privilege has children')#">
-                                with rights
-                            </label>
-                        </div>
-                        <xar:if condition="xarModVars::get('privileges','showrealms')">
-                            <div class="xar-form-input-wrapper">
-                                <label for="prealm" title="#xarML('Realm to which this privilege applies')#" class="xar-form-label">Realm:</label>
-                                <xar:data-input type="dropdown" name="prealm" options="$realms" value="$prealm"/>
+    <xar:template file="admin-mod-head"/>
+	<div class="xar-mod-body">
+		<div class="xar-mod-page-head">
+	        <h2>Modify Privilege: #$pname#</h2>
+	        <xar:if condition="count($parents) ne 0">
+	                <ul class="xar-tabs">
+	                    <xar:var name="title">These are the privileges that contain #$pname# as a component</xar:var>
+	                    <xar:var name="label">Used in</xar:var>
+	                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
+	                    <xar:set name="prevgroup">""</xar:set>
+	                    <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
+	                        <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
+	                            <li class="xar-tab">
+	                                <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$parents[$i]['parentid']))#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">
+	                                    #$parents[$i]['parentname']#
+	                                </a>
+	                            </li>
+	                        </xar:if>
+	                        <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
+	                    </xar:for>
+	                </ul>
+	        </xar:if>
+	            <ul class="xar-tabs">
+	                <xar:var name="title">Choose an action to perform on this privilege</xar:var>
+	                <xar:var name="label">Manage privilege</xar:var>
+	                <li class="xar-tabs-label" title="#$title#">#$label#</li>
+	                <li class="xar-tab">
+	                    <a href="#xarModURL('privileges','admin','displayprivilege',array('id'=>$ppid))#">
+	                        Display
+	                    </a>
+	                </li>
+	                <li class="xar-tab-active">
+	                    <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$ppid))#">
+	                        Modify
+	                     </a>
+	                </li>
+	                <li class="xar-tab">
+	                    <a href="#xarModURL('privileges','admin','deleteprivilege',array('id'=>$ppid))#">
+	                        Delete
+	                    </a>
+	                </li>
+	                <li class="xar-tab">
+	                    <a href="#xarModURL('privileges','admin','viewroles',array('id'=>$ppid))#">
+	                        Groups/Users
+	                    </a>
+	                </li>
+	            </ul>
+	      </div>
+	      <div class="xar-mod-page-body">
+	      <form name="privilegeform" id="privilegeform" action="#xarModURL('privileges','admin','updateprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
+	            <fieldset>
+	                <legend>Privilege properties</legend>
+	                <xar:if condition="$frozen">
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <span class="xar-form-label">Name:</span>#$pname# 
                             </div>
-                        </xar:if>
-                    </xar:if>
-                    <xar:if condition="$ptype ne null">
-                        <div class="xar-form-input-wrapper">
-                            <label for="pmodule" title="#xarML('Module which holds the target component')#" class="xar-form-label">
-                                Module:
-                            </label>
-                            <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="all,All" onchange="$onclick" store_prop="name"/>
+                            <div class="xar-col">
+                                <input type="hidden" name="pname" id="pname" value="#$pname#"/>
+                            </div>
                         </div>
-                        <div class="xar-form-input-wrapper">
-                            <label for="pcomponent" title="#xarML('Component to which this privilege applies')#" class="xar-form-label">
-                                Component:
-                            </label>
-                            <select name="pcomponent" id="pcomponent" onchange="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();">
-                                <xar:loop name="$components">
-                                    <xar:if condition="strtolower($loop:item['name']) eq strtolower($pcomponent)">
-
-                                        <option value="#$loop:item['name']#" selected="selected">
-                                        #$loop:item['name']#</option>
+	                    <p>This privilege cannot be edited or deleted</p>
+	                <xar:else />
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <label for="pname" title="#xarML('TITLE')#" class="xar-form-label">
+                                    Name:
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <input type="text" name="pname" id="pname" value="#$pname#" maxlength="40" class="xar-form-textlong"/>
+                            </div>
+                        </div>
+	                    <xar:set name="onclick">"this.form.action='" . xarModURL('privileges','admin','modifyprivilege') ."';this.form.submit()";</xar:set>
+	                    <!-- FIXME: make this dprop support onclick, cause IE6 doesn't do onchange
+	                    <div class="xar-col dummy">
+	                        <xar:set name="options">
+	                            array(
+	                                array('id' => 'empty', 'name' => 'empty'),
+	                                array('id' => 'full', 'name' => 'with rights'),
+	                            )
+	                        </xar:set>
+	                        <xar:data-input type="radio" name="ptype" id="ptype" options="$options" value="$ptype" onclick="$onclick"/>
+	                    </div>
+	                    -->
+	                    <xar:if condition="$ptype eq 'empty'">
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="ptype1_empty" title="#xarML('This privilege has no children')#">
+                                        empty
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <input type="radio" name="ptype" id="ptype1_empty" value="empty" checked="checked" onclick=""/>
+                                </div>
+                            </div>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="ptype1_full" title="#xarML('This privilege has children')#">
+                                        with rights
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <input type="radio" name="ptype" id="ptype1_full" value="full" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();"/>
+                                </div>
+                            </div>
+	                    <xar:else />
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="ptype_empty" title="#xarML('This privilege has no children')#">
+                                        empty
+                                    </label>
+                                </div>
+                                 <div class="xar-col">
+                                    <input type="radio" name="ptype" id="ptype_empty" value="empty" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();"/>
+                                </div>
+                           </div>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="ptype_full" title="#xarML('This privilege has children')#">
+                                        with rights
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <input type="radio" name="ptype" id="ptype_full" value="full" checked="checked" onclick="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();"/>
+                                </div>
+                            </div>
+	                        <xar:if condition="xarModVars::get('privileges','showrealms')">
+                                <div class="xar-row">
+                                    <div class="xar-col">
+                                        <label for="prealm" title="#xarML('Realm to which this privilege applies')#" class="xar-form-label">Realm:</label>
+                                    </div>
+                                    <div class="xar-col">
+                                        <xar:data-input type="dropdown" name="prealm" options="$realms" value="$prealm"/>
+                                    </div>
+                                </div>
+	                        </xar:if>
+	                    </xar:if>
+	                    <xar:if condition="$ptype ne null">
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="pmodule" title="#xarML('Module which holds the target component')#" class="xar-form-label">
+                                        Module:
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="all,All" onchange="$onclick" store_prop="name"/>
+                                </div>
+                            </div>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="pcomponent" title="#xarML('Component to which this privilege applies')#" class="xar-form-label">
+                                        Component:
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <select name="pcomponent" id="pcomponent" onchange="this.form.action='&xar-modurl-privileges-admin-modifyprivilege;';this.form.submit();">
+                                        <xar:loop name="$components">
+                                            <xar:if condition="strtolower($loop:item['name']) eq strtolower($pcomponent)">
+        
+                                                <option value="#$loop:item['name']#" selected="selected">
+                                                #$loop:item['name']#</option>
+                                                <xar:else />
+                                                <option value="#$loop:item['name']#">
+                                                #$loop:item['name']#</option>
+                                            </xar:if>
+                                        </xar:loop>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="plevel" title="#xarML('Level of access')#" class="xar-form-label">
+                                        Level:
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:set name="levels">SecurityLevel::$displayMap</xar:set>
+                                    <!-- TODO: this needs to go -->
+                                    <xar:set name="foo">1; array_shift($levels)</xar:set>
+                                    <xar:set name="options">array()</xar:set>
+                                    <xar:foreach in="$levels" key="$key" value="$value">
+                                        <!-- TODO: this needs to go -->
+                                        <xar:set name="foo">1; $options[] = array('id' =&gt; $key * 100,
+                                        'name' =&gt; $value)</xar:set>
+                                    </xar:foreach>
+                                    <xar:data-input type="dropdown" name="plevel" value="$plevel" options="$options" tabindex="6"/>
+                                </div>
+                            </div>
+	                    </xar:if>
+	                    <xar:if condition="$pcomponent ne 'All' and empty($target)">
+	                        <p>Allow instances of component #$pcomponent# that have:</p>
+	                        <xar:foreach in="$instances" key="$id" value="$instance">
+                                <div class="xar-row">
+                                    <div class="xar-col">
+                                        <label for="pinstance#$id#" class="xar-form-label">
+                                            #$instance['header']#
+                                        </label>
+                                    </div>
+                                    <div class="xar-col">
+                                        <xar:if condition="$instance['type'] eq 'manual'">
+                                            <input type="text" name="pinstance['#$id#']" id="pinstance#$id#" value="#$instance['default']#" size="20" tabindex="7"/>
                                         <xar:else />
-                                        <option value="#$loop:item['name']#">
-                                        #$loop:item['name']#</option>
-                                    </xar:if>
+                                            <select name="pinstance['#$id#']" id="pinstance#$id#" size="1" tabindex="7">
+                                                <xar:foreach in="$instance['dropdown']" value="$option">
+                                                    <xar:if condition="$option['name'] eq $instance['default']">
+                                                        <option value="#$option['name']#" selected="selected">#$option['name']#</option>
+                                                    <xar:else />
+                                                        <option value="#$option['name']#">#$option['name']#</option>
+                                                    </xar:if>
+                                                </xar:foreach>
+                                            </select>
+                                        </xar:if>
+                                    </div>
+                                </div>
+	                        </xar:foreach>
+	                        <xar:elseif condition="!empty($target)"/>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="pinstance0" class="xar-form-label">
+                                        Current Instances:
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <input type="text" name="pinstance[0]" id="pinstance0" value="#$curinstance#" tabindex="7"/>
+                                </div>
+                            </div>
+	                        <p>
+	                            <a href="#$target#" title="#xarML('Use Wizard')#">
+	                                Modify the instances that apply for this privilege
+	                            </a>
+	                        </p>
+	                    </xar:if>
+	                </xar:if>
+	                <xar:if condition="!$frozen">
+	                    <div class="xar-forms-actions">
+                            <div class="xar-row">
+                                <div class="xar-col"></div>
+                                <div class="xar-col">
+                                    <xar:var name="label">Update</xar:var>
+                                    <xar:button type="submit" label="$label"/>
+                                </div>
+                            </div>
+                        </div>
+	                </xar:if>
+	            </fieldset>
+	            <fieldset>
+	                <legend>The Components of '#$pname#':</legend>
+	                <div>
+	                    <xar:template file="tree"/>
+	                </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="privid" title="#xarML('Privilege to add')#" class="xar-form-label">
+                                Add new component
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <select name="privid" id="privid">
+                                <option value=""></option>
+                                <xar:loop name="$privileges">
+                                    <option value="#$loop:item['id']#">#$loop:item['name']#</option>
                                 </xar:loop>
                             </select>
                         </div>
-                        <div class="xar-form-input-wrapper">
-                            <label for="plevel" title="#xarML('Level of access')#" class="xar-form-label">
-                                Level:
-                            </label>
-                            <xar:set name="levels">SecurityLevel::$displayMap</xar:set>
-                            <!-- TODO: this needs to go -->
-                            <xar:set name="foo">1; array_shift($levels)</xar:set>
-                            <xar:set name="options">array()</xar:set>
-                            <xar:foreach in="$levels" key="$key" value="$value">
-                                <!-- TODO: this needs to go -->
-                                <xar:set name="foo">1; $options[] = array('id' =&gt; $key * 100,
-                                'name' =&gt; $value)</xar:set>
-                            </xar:foreach>
-                            <xar:data-input type="dropdown" name="plevel" value="$plevel" options="$options" tabindex="6"/>
+                    </div>
+	            </fieldset>
+                <div class="xar-form-actions">
+                    <div class="xar-row">
+                        <div class="xar-col"></div>
+                        <div class="xar-col">
+                            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                            <input type="hidden" name="poldcomponent" id="poldcomponent" value="#$oldcomponent#"/>
+                            <input type="hidden" name="id" id="id" value="#$ppid#"/>
+                            <xar:var name="value">Add</xar:var>
+                            <input type="button" value="#$value#" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-addmember;&amp;ppid=#$ppid#&amp;authid=#$authid#';this.form.submit();"/>
                         </div>
-                    </xar:if>
-                    <xar:if condition="$pcomponent ne 'All' and empty($target)">
-                        <p>Allow instances of component #$pcomponent# that have:</p>
-                        <xar:foreach in="$instances" key="$id" value="$instance">
-                            <div class="xar-form-input-wrapper">
-                                <label for="pinstance#$id#" class="xar-form-label">
-                                    #$instance['header']#
-                                </label>
-                                <xar:if condition="$instance['type'] eq 'manual'">
-                                    <input type="text" name="pinstance['#$id#']" id="pinstance#$id#" value="#$instance['default']#" size="20" tabindex="7"/>
-                                <xar:else />
-                                    <select name="pinstance['#$id#']" id="pinstance#$id#" size="1" tabindex="7">
-                                        <xar:foreach in="$instance['dropdown']" value="$option">
-                                            <xar:if condition="$option['name'] eq $instance['default']">
-                                                <option value="#$option['name']#" selected="selected">#$option['name']#</option>
-                                            <xar:else />
-                                                <option value="#$option['name']#">#$option['name']#</option>
-                                            </xar:if>
-                                        </xar:foreach>
-                                    </select>
-                                </xar:if>
+                    </div>
+	            </div>
+	        </form>
+	        <fieldset>
+	            <legend>'#$pname#' Component Memberships</legend>
+	            <xar:if condition="count($parents) eq 0">
+	                <p>'#$pname#' is not a member of any other privileges.</p>
+	            <xar:else />
+	                <xar:loop name="$parents">
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <span class="xar-form-label">
+                                    <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$loop->item['parentid']))#">
+                                        #$loop:item['parentname']#
+                                    </a>
+                                </span>
+                                <a href="#xarModURL('privileges','admin','removemember',array('childid'=>$ppid,'parentid'=>$loop->item['parentid'],'authid'=>$authid))#">
+                                    <img src="#sys::code()#modules/privileges/xarimages/remove.gif" alt="#xarML('Remove')#" title="Remove #$pname# from #$loop:item['parentname']#"/>
+                                </a>
                             </div>
-                        </xar:foreach>
-                        <xar:elseif condition="!empty($target)"/>
-                        <div class="xar-form-input-wrapper">
-                            <label for="pinstance0" class="xar-form-label">
-                                Current Instances:
-                            </label>
-                            <input type="text" name="pinstance[0]" id="pinstance0" value="#$curinstance#" tabindex="7"/>
                         </div>
-                        <p>
-                            <a href="#$target#" title="#xarML('Use Wizard')#">
-                                Modify the instances that apply for this privilege
-                            </a>
-                        </p>
-                    </xar:if>
-                </xar:if>
-                <xar:if condition="!$frozen">
-                    <div class="xar-form-input-wrapper-after">
-                        <input type="submit" value="#xarML('Update')#"/>
-                    </div>
-                </xar:if>
-            </fieldset>
-            <fieldset>
-                <legend>The Components of '#$pname#':</legend>
-                <div>
-                    <xar:template file="tree"/>
-                </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="privid" title="#xarML('Privilege to add')#" class="xar-form-label">
-                        Add new component
-                    </label>
-                    <select name="privid" id="privid">
-                        <option value=""></option>
-                        <xar:loop name="$privileges">
-                            <option value="#$loop:item['id']#">#$loop:item['name']#</option>
-                        </xar:loop>
-                    </select>
-                </div>
-                <div class="xar-form-input-wrapper-after">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="poldcomponent" id="poldcomponent" value="#$oldcomponent#"/>
-                    <input type="hidden" name="id" id="id" value="#$ppid#"/>
-                    <xar:var name="value">Add</xar:var>
-                    <input type="button" value="#$value#" onclick="javascript:this.form.action = '&xar-modurl-privileges-admin-addmember;&amp;ppid=#$ppid#&amp;authid=#$authid#';this.form.submit();"/>
-                </div>
-            </fieldset>
-        </form>
-        <fieldset>
-            <legend>'#$pname#' Component Memberships</legend>
-            <xar:if condition="count($parents) eq 0">
-                <p>'#$pname#' is not a member of any other privileges.</p>
-            <xar:else />
-                <xar:loop name="$parents">
-                    <div class="xar-form-input-wrapper">
-                        <span class="xar-form-label">
-                            <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$loop->item['parentid']))#">
-                                #$loop:item['parentname']#
-                            </a>
-                        </span>
-                        <a href="#xarModURL('privileges','admin','removemember',array('childid'=>$ppid,'parentid'=>$loop->item['parentid'],'authid'=>$authid))#">
-                            <img src="#sys::code()#modules/privileges/xarimages/remove.gif" alt="#xarML('Remove')#" title="Remove #$pname# from #$loop:item['parentname']#"/>
-                        </a>
-                    </div>
-                </xar:loop>
-                <br class="xar-clearboth"/>
-            </xar:if>
-        </fieldset>
+	                </xar:loop>
+	                <br class="xar-clearboth"/>
+	            </xar:if>
+	        </fieldset>
+    	</div>
     </div>
 </xar:template>

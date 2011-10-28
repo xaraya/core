@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage dynamicdata module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -100,13 +100,13 @@ function dynamicdata_user_view(Array $args=array())
     // TODO: another stray
     $data['catid'] = $catid;
 
-    xarTplSetPageTitle(xarML('View #(1)', $object->label));
+    xarTpl::setPageTitle(xarML('View #(1)', $object->label));
 
     if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view.xt') ||
         file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view-' . $data['template'] . '.xt')) {
-        return xarTplModule($data['tplmodule'],'user','view',$data,$data['template']);
+        return xarTpl::module($data['tplmodule'],'user','view',$data,$data['template']);
     } else {
-        return xarTplModule('dynamicdata','user','view',$data,$args['template']);
+        return xarTpl::module('dynamicdata','user','view',$data,$args['template']);
     }
 }
 

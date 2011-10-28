@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage installer module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -53,12 +53,12 @@ function installer_admin_phase5()
         $dbHost = '127.0.0.1';
     }
     if ($dbName == '') {
-        return xarTplModule('installer','admin','errors',array('layout' => 'no_database'));
+        return xarTpl::module('installer','admin','errors',array('layout' => 'no_database'));
     }
 
     // allow only a-z 0-9 and _ in table prefix
     if (!preg_match('/^\w*$/',$dbPrefix)) {
-        return xarTplModule('installer','admin','errors',array('layout' => 'bad_character'));
+        return xarTpl::module('installer','admin','errors',array('layout' => 'bad_character'));
     }
     // Save config data
     $config_args = array('dbHost'    => $dbHost,
@@ -97,7 +97,7 @@ function installer_admin_phase5()
         $dbconn = xarDBNewConn($init_args);
       } catch(Exception $e) {
         // It failed without dbname too
-        return xarTplModule('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
+        return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
       }
     }
 
@@ -108,14 +108,25 @@ function installer_admin_phase5()
         $mysql_version_ok = version_compare($data['version'],$data['required_version'],'ge');
         if (!$mysql_version_ok) {
             $data['layout'] = 'bad_version';
-            return xarTplModule('installer','admin','check_database',$data);
+            return xarTpl::module('installer','admin','check_database',$data);
+        }
+    }
+
+    if ($dbType == 'mysqli') {
+        $tokens = explode('.',mysqli_get_server_info($dbconn->getResource()));
+        $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
+        $data['required_version'] = MYSQL_REQUIRED_VERSION;
+        $mysql_version_ok = version_compare($data['version'],$data['required_version'],'ge');
+        if (!$mysql_version_ok) {
+            $data['layout'] = 'bad_version';
+            return xarTpl::module('installer','admin','check_database',$data);
         }
     }
 
     if (!$createDB && !$dbExists) {
         $data['dbName'] = $dbName;
         $data['layout'] = 'not_found';
-        return xarTplModule('installer','admin','check_database',$data);
+        return xarTpl::module('installer','admin','check_database',$data);
     }
 
     $data['confirmDB']  = $confirmDB;
@@ -246,7 +257,7 @@ function installer_admin_phase5()
                               $modversion['category'],
                               isset($modversion['admin']) ? $modversion['admin']:false,
                               isset($modversion['user'])  ? $modversion['user']:false,
-                              3);
+                              3); // chris: shouldn't this be a class constant?
             $result = $newStmt->executeUpdate($bindvars);
             $newModId = $dbconn->getLastId($tables['modules']);
         }
@@ -270,7 +281,10 @@ function installer_admin_phase5()
     if (!xarInstallAPIFunc('initialise', array('directory'=>'authsystem', 'initfunc'=>'activate'))) return;
     if (!xarInstallAPIFunc('initialise', array('directory'=>'privileges', 'initfunc'=>'activate'))) return;
     if (!xarInstallAPIFunc('initialise', array('directory'=>'mail', 'initfunc'=>'activate'))) return;
-
+    // todo: activate blocks here *after* all other core modules
+    // block activation takes care of registering all block types for core modules
+    //if (!xarInstallAPIFunc('initialise', array('directory'=>'blocks', 'initfunc'=>'activate'))) return;
+    
     // create the default masks and privilege instances
     sys::import('modules.privileges.xarsetup');
     initializeSetup();

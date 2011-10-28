@@ -3,7 +3,7 @@
  * @package core
  * @subpackage logging
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -41,7 +41,8 @@ class xarLogger_javascript extends xarLogger
     */
     function writeOut()
     {
-        xarTplAddJavaScript('head', 'code', $this->_buffer);
+        xarMod::apiFunc('themes', 'user', 'registerjs',
+            array('position' => 'head', 'type' => 'code', 'code' => $this->_buffer));
         $this->_buffer = '';
         return true;
     }

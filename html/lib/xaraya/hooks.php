@@ -8,7 +8,7 @@
  * @package core
  * @subpackage hooks
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -454,7 +454,7 @@ function xarModCallHooks($hookScope, $hookAction, $hookId, $extraInfo = NULL, $c
     if (empty($extraInfo))
         $extraInfo = array();
     if (!isset($extraInfo['itemid']))
-        $extrainfo['itemid'] = $hookId;
+        $extraInfo['itemid'] = $hookId;
     if (isset($callerModName) && !isset($extraInfo['module']))
         $extraInfo['module'] = $callerModName;
     if (isset($callerItemType) && !isset($extraInfo['itemtype']))

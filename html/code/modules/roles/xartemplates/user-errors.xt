@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <div class="xar-mod-head"><span class="xar-mod-title">User Error</span></div>
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">User Error</span>
+    </div>
     <div class="xar-mod-body">
         <fieldset>
             <legend>Roles Problem</legend>
             <xar:var name="label">System Message</xar:var>
-            <img src="#xarTplGetImage('user-error.png','base')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
+            <xar:img scope="theme" file="user-error.png" class="xar-module-icon" alt="$label"/>
             <xar:if condition="!isset($layout)">
                 <div style="margin-top: 20px; margin-left: 20px">
                     No error message is available.
@@ -53,6 +55,10 @@
                 <div style="margin-top: 20px; margin-left: 20px">
                     Removing this privilege from this user or group is not allowed.
                 </div>
+            <xar:elseif condition="$layout eq 'bad_userhome'"/>
+                <div style="margin-top: 20px; margin-left: 20px">
+                    #$message#
+                </div>
             <xar:elseif condition="$layout eq 'mail_failed'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     <xar:if condition="!empty($badmails)">
@@ -69,11 +75,14 @@
                 </div>                    
             </xar:if>                
         </fieldset>
-        <fieldset>
-            <div class="xar-form-input-wrapper-after">
-                <xar:var name="label">Go back</xar:var>
-                <xar:button type="cancel" label="$label"/>
+        <div class="xar-form-actions">
+            <div class="xar-row">
+                <div class="xar-col"></div>
+                <div class="xar-col">
+                    <xar:var name="label">Go back</xar:var>
+                    <xar:button type="cancel" label="$label"/>
+                </div>
             </div>
-        </fieldset>
+        </div>
     </div>
 </xar:template>

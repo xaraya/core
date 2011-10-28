@@ -10,28 +10,42 @@
                 <legend>Login</legend>
                 <xar:data-input type="hidden" name="redirecturl" id="returnurl"
                 value="$redirecturl"/>
-                <div class="xar-form-input-wrapper">
-                    <label for="username" class="xar-form-label">Username</label>
-                    <xar:data-input type="textbox" name="uname" id="username" maxlength="255" size="20" tabindex="1"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="username" class="xar-form-label">Username</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input type="textbox" name="uname" id="username" maxlength="255" size="20" tabindex="1"/>
+                    </div>
                 </div>
-                <div class="xar-form-input-wrapper">
-                    <label for="password" class="xar-form-label">Password</label>
-                    <xar:data-input type="password" name="pass" id="password" maxlength="64" size="20" tabindex="2"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="password" class="xar-form-label">Password</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input type="password" name="pass" id="password" maxlength="64" size="20" tabindex="2"/>
+                    </div>
                 </div>
-                <p class="xar-form-input-wrapper-after">
-                    <a href="#xarModURL('roles','user','lostpassword')#">Request a new password</a>
-                </p>
-                <div class="xar-form-input-wrapper-after">
-                    <xar:data-input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3"/>&#160;
-                    <label for="remembermeform">Remember me</label>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <a href="#xarModURL('roles','user','lostpassword')#">Request a new password</a>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3"/>&#160;
+                        <label for="remembermeform">Remember me</label>
+                    </div>
                 </div>
             </fieldset>
-            <fieldset>
-                <div class="xar-align-center">
-                    <input type="submit" value="Login" tabindex="4"/>
-                    <input type="hidden" name="redirecturl" id="returnurl" value="#$redirecturl#"/>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <xar:var name="label">Log In</xar:var>
+                        <xar:button type="submit" label="$label" tabindex="4"/>
+                        <input type="hidden" name="redirecturl" id="returnurl" value="#$redirecturl#"/>
+                    </div>
                 </div>
-            </fieldset>
+            </div>
         </form>
         <script type="text/javascript">
             document.getElementById('username').focus();

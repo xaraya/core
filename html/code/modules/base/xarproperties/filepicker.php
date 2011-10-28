@@ -3,7 +3,7 @@
  * @package modules
  * @subpackage base module
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -24,9 +24,12 @@ class FilePickerProperty extends SelectProperty
     public $desc       = 'File Picker';
 
     public $initialization_basedirectory;
-    public $validation_file_extensions   = '';
+    public $validation_file_extensions   = '';          // holds a string of comma delimited extensions
     public $validation_matches           = '';
     public $display_fullname             = false;
+    
+    public $file_extension_list         = array();      // holds an array of filename extensions
+    public $file_extension_regex        = '';           // holds a string of type 'jpg|gif|png'
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -41,12 +44,17 @@ class FilePickerProperty extends SelectProperty
                 $this->initialization_basedirectory = $temp;
             }
         }
+        // Replace {theme} with the current theme directory
+        $this->initialization_basedirectory = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->initialization_basedirectory);
         $this->setExtensions();
     }
 
     public function showInput(Array $data = array())
     {
         if (isset($data['basedir'])) $this->initialization_basedirectory = $data['basedir'];
+        // Replace {theme} with the current theme directory
+        $this->initialization_basedirectory = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->initialization_basedirectory);
+
         if (isset($data['matches'])) $this->validation_matches = $data['matches'];
         if (isset($data['extensions'])) $this->setExtensions($data['extensions']);
         if (isset($data['display_fullname'])) $this->display_fullname = $data['display_fullname'];
@@ -134,6 +142,7 @@ class FilePickerProperty extends SelectProperty
 
     /**
      * Validate the given filename against the list/regex of allowed file extensions
+     * This method can take an extension or a full file name
      */
     public function validateExtension($filename = '')
     {

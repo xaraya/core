@@ -5,7 +5,7 @@
  * @package core
  * @subpackage controllers
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.3.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -189,7 +189,7 @@ class xarController extends Object
      * 
      * @param redirectURL string the URL to redirect to
      */
-    static function redirect($url)
+    static function redirect($url, $httpResponse=NULL)
     {
         xarCache::noCache();
         $redirectURL = urldecode($url); // this is safe if called multiple times.
@@ -214,8 +214,13 @@ class xarController extends Object
             $header = "Location: $redirectURL";
         }// if
 
+        // default response is temp redirect
+        if (!preg_match('/^301|302|303|307/', $httpResponse)) {
+            $httpResponse = 302;
+        }
+
         // Start all over again
-        header($header);
+        header($header, TRUE, $httpResponse);
 
         // NOTE: we *could* return for pure '1 exit point' but then we'd have to keep track of more,
         // so for now, we exit here explicitly. Besides the end of index.php this should be the only
@@ -230,7 +235,7 @@ class xarController extends Object
     public static function getRouter()
     {
         if (null == self::$router) {
-            sys::import('xaraya.mapper.routers.router');;
+            sys::import('xaraya.mapper.routers.router');
             self::setRouter(new xarRouter());
         }
         return self::$router;
@@ -268,7 +273,7 @@ class xarController extends Object
                 $modType = $entrypoint['action'];
                 $entrypoint = $entrypoint['entry'];
             }
-            self::$emtryPoint = $entrypoint;
+            self::$entryPoint = $entrypoint;
         }
 
         // Create a new request and make its route the current route
@@ -277,6 +282,21 @@ class xarController extends Object
         $args['func'] = $funcName;
         sys::import('xaraya.mapper.request');
         $request = new xarRequest($args);
+        // <chris/> wrt to the problem of xaraya not obeying a particular route
+        // when the main entry point, sans params, is accessed...
+        // Here's an example using the shorturls setting in base module
+        // It's hardly a leap to imagine storing the name of the route to use in a 
+        // similar config var and being able to set that in base module instead (IMO)
+        // assuming multiple routes aren't in use, of course, although we could perhaps
+        // deprecate the per module shorturl setting in favour of a dropdown of routes too :-?
+        /*
+        if (xarMod::$genShortUrls) {
+            $request->setRoute('short');
+        } else {
+            $router = self::getRouter();
+            $request->setRoute($router->getRoute());
+        } 
+        */       
         $router = self::getRouter();
         $request->setRoute($router->getRoute());
 

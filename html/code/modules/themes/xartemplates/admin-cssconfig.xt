@@ -5,11 +5,7 @@
         Temporarily using blocks css because it's already implemented in stable scenario.. TODO: convert to native core.css as soon as practicable 
     -->
     <xar:style scope="common"/>
-    <div class="xar-mod-head">
-        <span class="xar-mod-title">            
-            Themes Administration             
-        </span>
-    </div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Cascading Style Sheets (CSS) Manager</h2>
         <xar:if condition="$component eq ''">
@@ -18,52 +14,56 @@
                 The CSS subsystem can function in one of two modes: configurable (managed) or non-configurable (unmanaged - default). While default mode is extremely fast and fool-proof, the configurable option gives much more flexibility and control over the way css is treated by Xaraya.
             </p>
             <form class="xar-blocks-admin" action="#xarModURL('themes', 'admin', 'cssconfig')#" method="post">
-                <div class="xar-form-input-wrapper">
-                    <xar:var name="label">Enable manual stylesheet configuration</xar:var>
-                    <span title="#$label#" class="xar-form-label">Mode:</span>
-                    <div class="xar-floatleft">
-                        <xar:if condition="$configurable">
-                            <div>
-                                <input type="radio" value="0" id="configurable_false" name="configurable"/>
-                                <xar:var name="label">Let the system handle CSS automatically</xar:var>
-                                <label for="configurable_false" title="#$label#">
-                                    Unmanaged
-                                </label>
-                            </div>
-                            <div>
-                                <input type="radio" value="1" id="configurable_true" checked="checked" name="configurable"/>
-                                <xar:var name="label">Allow manual CSS management</xar:var>
-                                <label for="configurable_true" title="#$label#">
-                                    Managed
-                                </label>
-                            </div>
-                        <xar:else />
-                            <div>
-                                <input type="radio" value="0" id="configurable_false" checked="checked" name="configurable"/>
-                                <xar:var name="label">Let the system handle CSS automatically</xar:var>
-                                <label for="configurable_false" title="#$label#">
-                                    Unmanaged
-                                </label>
-                            </div>
-                            <div>
-                                <input type="radio" value="1" id="configurable_true" name="configurable"/>
-                                <xar:var name="label">Allow manual CSS management</xar:var>
-                                <label for="configurable_true" title="#$label#">
-                                    Managed
-                                </label>
-                            </div>
-                        </xar:if>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Enable manual stylesheet configuration</xar:var>
+                        <span title="#$label#" class="xar-form-label">Mode:</span>
+                        <div class="xar-floatleft">
+                            <xar:if condition="$configurable">
+                                <div>
+                                    <input type="radio" value="0" id="configurable_false" name="configurable"/>
+                                    <xar:var name="label">Let the system handle CSS automatically</xar:var>
+                                    <label for="configurable_false" title="#$label#">
+                                        Unmanaged
+                                    </label>
+                                </div>
+                                <div>
+                                    <input type="radio" value="1" id="configurable_true" checked="checked" name="configurable"/>
+                                    <xar:var name="label">Allow manual CSS management</xar:var>
+                                    <label for="configurable_true" title="#$label#">
+                                        Managed
+                                    </label>
+                                </div>
+                            <xar:else />
+                                <div>
+                                    <input type="radio" value="0" id="configurable_false" checked="checked" name="configurable"/>
+                                    <xar:var name="label">Let the system handle CSS automatically</xar:var>
+                                    <label for="configurable_false" title="#$label#">
+                                        Unmanaged
+                                    </label>
+                                </div>
+                                <div>
+                                    <input type="radio" value="1" id="configurable_true" name="configurable"/>
+                                    <xar:var name="label">Allow manual CSS management</xar:var>
+                                    <label for="configurable_true" title="#$label#">
+                                        Managed
+                                    </label>
+                                </div>
+                            </xar:if>
+                        </div>
                     </div>
                 </div>
-                <div class="xar-form-input-wrapper">
-                    <span class="xar-form-label">
-                    <a href="#$resettagsurl#">(CSS) Stylesheet Tags</a>
-                    </span>#$resettagsurlstatus#
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <span class="xar-form-label">
+                        <a href="#$resettagsurl#">(CSS) Stylesheet Tags</a>
+                        </span>#$resettagsurlstatus#
+                    </div>
                 </div>
-                <div class="xar-align-center">
+                <div class="xar-form-actions">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <xar:var name="label">Submit</xar:var>
-                    <input type="submit" value="#$label#"/>
+                    <xar:button type="submit" label="$label"/>
                 </div>
             </form>
             <h4>Note: About stylesheet tags</h4>
