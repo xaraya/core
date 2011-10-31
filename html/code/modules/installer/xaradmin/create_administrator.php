@@ -19,7 +19,7 @@
  */
 
 /**
- * Create default administrator and default blocks
+ * Create default administrator
  *
  * @access public
  * @param create

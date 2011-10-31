@@ -29,10 +29,6 @@ function installer_admin_bootstrap()
     xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
     xarVarSetCached('installer','installing', true);
 
-    // load modules into *_modules table
-//    if (!xarMod::apiFunc('modules', 'admin', 'regenerate'))
-//        throw new Exception("regenerating module list failed");
-
 # --------------------------------------------------------
 # Create DD configuration and sample objects
 #

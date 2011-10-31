@@ -109,13 +109,6 @@ function blocks_init()
                 'unsigned' => true,
                 'null' => false,
             ),
-            'state' => array(
-                'type' => 'integer',
-                'size' => 'tiny',
-                'unsigned' => true,
-                'null' => false,
-                'default' => xarBlock::BLOCK_STATE_VISIBLE,
-            ),
             'name' => array(
                 'type' => 'varchar',
                 'size' => 64,
@@ -134,6 +127,13 @@ function blocks_init()
                 'type' => 'text',
                 'null' => true,
                 'charset' => $charset,
+            ),
+            'state' => array(
+                'type' => 'integer',
+                'size' => 'tiny',
+                'unsigned' => true,
+                'null' => false,
+                'default' => xarBlock::BLOCK_STATE_VISIBLE,
             ),
         );
         $query = xarDBCreateTable($instances_table, $fields); 
