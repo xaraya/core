@@ -436,12 +436,13 @@ class xarTpl extends Object
  * @param  string $tplBase      The base name for the template
  * @param  string $tplName      The name of the template to use, if any
  * @param  string $tplPart      Optional sub path to look for templates in, default ''
+ * @param  string $callerMod    Optional name of module calling this package (looks here first if supplied)
  * @return string the path [including sys::code()] to an existing template sourcefile, or empty
  *
  * @todo do we need to load the translations here or a bit later? (here:easy, later: better abstraction) 
  */
 
-    private static function getScopeFileName($scope, $package, $tplBase, $tplName=null, $tplPart='')
+    private static function getScopeFileName($scope, $package, $tplBase, $tplName=null, $tplPart='', $callerMod=null)
     {
         // prep input
         $package = xarVarPrepForOS($package);
@@ -488,6 +489,37 @@ class xarTpl extends Object
                     throw new BadParameterException($vars, $msg);
                 break;
             }
+            if (!empty($callerMod) && $callerMod != $package) {                
+                if ($scope != 'module') {
+                    $basepaths = array(
+                        "$themePath/modules/$callerMod/$packages/",
+                        "$commonPath/modules/$callerMod/$packages/",
+                        "{$codePath}modules/$callerMod/xartemplates/$packages/",
+                        "$themePath/modules/$callerMod/",
+                        "$commonPath/modules/$callerMod/",
+                        "{$codePath}modules/$callerMod/xartemplates/",
+                        "$themePath/$packages/$package/",
+                        "$commonPath/$packages/$package/",
+                        "{$codePath}{$packages}/$package/xartemplates/",
+                    );
+                } else {               
+                    $basepaths = array(
+                        "$themePath/modules/$callerMod/",
+                        "$commonPath/modules/$callerMod/",
+                        "{$codePath}modules/$callerMod/xartemplates/",
+                        "$themePath/$packages/$package/",
+                        "$commonPath/$packages/$package/",
+                        "{$codePath}{$packages}/$package/xartemplates/",
+                    );
+                }                         
+            } else {
+                $basepaths = array(
+                    "$themePath/$packages/$package/",
+                    "$commonPath/$packages/$package/",
+                    "{$codePath}{$packages}/$package/xartemplates/",
+                );
+            }  
+            /*          
             if (empty($basepaths)) {
                 if ($packages == 'properties') {
                     $basepaths = array(
@@ -504,6 +536,7 @@ class xarTpl extends Object
                     );
                 }
             }
+            */
 
         } 
         $paths = array();
@@ -714,7 +747,33 @@ class xarTpl extends Object
             $sourceFileName = xarCoreCache::getCached('Templates.DDElement', $cachename);
             return self::executeFromFile($sourceFileName, $tplData);
         }
+
+        $tplModule = DataPropertyMaster::getProperty(array('type' => $propertyName))->tplmodule; 
         
+        if ($modName == 'auto') {
+            // standalone property called in standalone context 
+            $sourceFileName = self::getScopeFileName('property', $propertyName, $tplBase, $propertyName);
+        } else {
+            // property called in module context
+            if ($tplModule == 'auto') {
+                // standalone property (caller > owner) 
+                $sourceFileName = self::getScopeFileName('property', $propertyName, $tplBase, $propertyName, '', $modName);
+            } else {
+                // module property (caller > owner)
+                $sourceFileName = self::getScopeFileName('module', $tplModule, $tplBase, $propertyName, 'properties', $modName);
+                // fall back on dynamicdata template
+                if (empty($sourceFileName))
+                    $sourceFileName = self::getScopeFileName('module', 'dynamicdata', $tplBase, $propertyName, 'properties');
+            }
+        }
+
+        if (empty($sourceFileName)) 
+            throw new FileNotFoundException("DD Element: [$modName],[$tplBase],[$propertyName]");
+        
+        xarCoreCache::setCached('Templates.DDElement', $cachename, $sourceFileName);
+        
+        return self::executeFromFile($sourceFileName, $tplData);
+/*        
         // default paths 
         $themePath = self::getThemeDir();
         $commonPath = self::getThemeDir('common');
@@ -788,7 +847,7 @@ class xarTpl extends Object
         xarCoreCache::setCached('Templates.DDElement', $cachename, $sourceFileName);
         
         return self::executeFromFile($sourceFileName, $tplData);
-
+*/
     }
 
 /**
@@ -1041,7 +1100,7 @@ class xarTpl extends Object
  * @throws FileNotFoundException
  * @return string self::executeFromFile($sourceFileName, $tplData);
 **/
-    public static function includeTemplate($tplType, $package, $tplBase, $tplData=array(), $tplPart='includes', $tplName=null)
+    public static function includeTemplate($tplType, $package, $tplBase, $tplData=array(), $tplPart='includes', $tplName=null, $callerMod=null)
     {
         // chris: added this to replicate behaviour of includeModuleTemplate()
         $packages = array_map('trim', explode(',', $package));
@@ -1049,7 +1108,7 @@ class xarTpl extends Object
         if ($tplType == 'module' && !in_array('dynamicdata', $packages))
             $packages[] = 'dynamicdata';
         foreach ($packages as $tplPkg) {
-            if (!$sourceFileName = self::getScopeFileName($tplType, $tplPkg, $tplBase, $tplName, $tplPart))
+            if (!$sourceFileName = self::getScopeFileName($tplType, $tplPkg, $tplBase, $tplName, $tplPart, $callerMod))
                 continue;
             break;
         }

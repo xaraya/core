@@ -148,7 +148,22 @@
                   </xsl:otherwise>                            
                 </xsl:choose>
               </xsl:variable>
-          
+              
+              <xsl:variable name="caller">
+                <xsl:choose>
+                  <xsl:when test="$scope='block' or $scope='property'">
+                    <xsl:choose>
+                      <xsl:when test="@module != ''">
+                        <xsl:value-of select="@module"/>
+                      </xsl:when>
+                    </xsl:choose>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:text></xsl:text>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              
               <xsl:processing-instruction name="php">
                 <xsl:text>echo xarTpl::includeTemplate("</xsl:text>
                 <xsl:call-template name="resolvePHP">
@@ -177,7 +192,15 @@
                       <xsl:with-param name="expr" select="@template"/>
                     </xsl:call-template>
                   </xsl:when>
-                </xsl:choose>                   
+                </xsl:choose>                  
+                <xsl:choose>
+                  <xsl:when test="$caller != ''">
+                    <xsl:text>","</xsl:text>
+                    <xsl:call-template name="resolvePHP">
+                      <xsl:with-param name="expr" select="$caller"/>
+                    </xsl:call-template>
+                  </xsl:when>
+                </xsl:choose>   
                 <xsl:text>");</xsl:text>                          
               </xsl:processing-instruction>          
             
