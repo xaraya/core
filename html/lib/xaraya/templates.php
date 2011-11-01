@@ -761,11 +761,13 @@ class xarTpl extends Object
             } else {
                 // module property (caller > owner)
                 $sourceFileName = self::getScopeFileName('module', $tplModule, $tplBase, $propertyName, 'properties', $modName);
-                // fall back on dynamicdata template
-                if (empty($sourceFileName))
-                    $sourceFileName = self::getScopeFileName('module', 'dynamicdata', $tplBase, $propertyName, 'properties');
+
             }
         }
+
+        // fall back on dynamicdata template
+        if (empty($sourceFileName))
+            $sourceFileName = self::getScopeFileName('module', 'dynamicdata', $tplBase, $propertyName, 'properties');
 
         if (empty($sourceFileName)) 
             throw new FileNotFoundException("DD Element: [$modName],[$tplBase],[$propertyName]");
