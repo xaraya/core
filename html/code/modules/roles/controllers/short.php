@@ -68,6 +68,10 @@ class RolesShortController extends ShortActionController
                 $data['func'] = 'lostpassword';
             break;
 
+            case 'language':
+                $data['func'] = 'changelanguage';
+            break;
+
             case 'settings':
                 $data['func'] = 'account';
                 $data['tab'] = 'basic';
@@ -106,6 +110,10 @@ class RolesShortController extends ShortActionController
 
             case 'lostpassword':
                 $path[] = 'password';
+                break;
+
+            case 'changelanguage':
+                $path[] = 'language';
                 break;
 
              case 'account':
