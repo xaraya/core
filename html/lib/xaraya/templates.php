@@ -517,7 +517,8 @@ class xarTpl extends Object
                 );
             }  
 
-        } 
+        }
+        
         $paths = array();
         foreach ($basepaths as $basepath) {
             if (!empty($tplName))
