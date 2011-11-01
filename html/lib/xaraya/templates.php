@@ -467,7 +467,6 @@ class xarTpl extends Object
             $basepaths[] = $themePath;
             $basepaths[] = $commonPath;
         } else {
-            $secondary = false;
 
             switch ($scope) {
                 case 'module':
@@ -476,12 +475,10 @@ class xarTpl extends Object
                 case 'block':
                     // standalone blocks
                     $packages = 'blocks';
-                    $secondary = true;
                 break;
                 case 'property':
                     // standalone properties        
                     $packages = 'properties';
-                    $secondary = true;
                 break;
                 default:
                     $vars = array($scope);
@@ -519,24 +516,6 @@ class xarTpl extends Object
                     "{$codePath}{$packages}/$package/xartemplates/",
                 );
             }  
-            /*          
-            if (empty($basepaths)) {
-                if ($packages == 'properties') {
-                    $basepaths = array(
-                        "$themePath/$packages/$package/",
-                        "$commonPath/$packages/$package/",
-                        "{$codePath}modules/" . xarMod::getName() . "/xartemplates/",
-                        "{$codePath}{$packages}/$package/xartemplates/",
-                    );
-                } else {
-                    $basepaths = array(
-                        "$themePath/$packages/$package/",
-                        "$commonPath/$packages/$package/",
-                        "{$codePath}{$packages}/$package/xartemplates/",
-                    );
-                }
-            }
-            */
 
         } 
         $paths = array();
