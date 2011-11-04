@@ -166,8 +166,8 @@ function modules_admin_list()
     );
 
     // remember filter selections for current user 
-    xarModUserVars::set('themes', 'selfilter', $data['state']);
-    xarModUserVars::set('themes', 'hidecore', $data['modtype']);
+    xarModUserVars::set('modules', 'selfilter', $data['state']);
+    xarModUserVars::set('modules', 'hidecore', $data['modtype']);
 
     $count = count($items);
     if ($data['state'] == XARMOD_STATE_ANY) {
