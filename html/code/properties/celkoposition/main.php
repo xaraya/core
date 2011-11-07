@@ -202,7 +202,8 @@ class CelkoPositionProperty extends DataProperty
           }
 
           // TODO: besided portability, also check performance here
-          $SQLquery = "UPDATE " . $this->initialization_celkotable . " SET
+          $table = xarDB::getPrefix() . "_" . $this->initialization_celkotable;
+          $SQLquery = "UPDATE " . $table . " SET
                        " . $this->initialization_celkoleft_id . " = CASE
                         WHEN " . $this->initialization_celkoright_id . " BETWEEN ".$thisItem['left_id']." AND ".$thisItem['right_id']."
                            THEN " . $this->initialization_celkoleft_id . " + ($distance)
@@ -232,7 +233,8 @@ class CelkoPositionProperty extends DataProperty
               $parent_id = $refcat['parent_id'];
           }
           // Update parent id
-          $SQLquery = "UPDATE " . xarDB::getPrefix() . "_" . $this->initialization_celkotable .
+          $table = xarDB::getPrefix() . "_" . $this->initialization_celkotable;
+          $SQLquery = "UPDATE " . $table .
                        " SET " . $this->initialization_celkoparent_id . " = ?
                        WHERE id = ?";
         $result = $this->dbconn->Execute($SQLquery,array($parent_id, $itemid));
@@ -289,18 +291,19 @@ class CelkoPositionProperty extends DataProperty
         $bindvars[3] = array();
 
         /* Opening space for the new node */
-        $SQLquery[1] = "UPDATE " . xarDB::getPrefix() . "_" . $this->initialization_celkotable .
+        $table = xarDB::getPrefix() . "_" . $this->initialization_celkotable;
+        $SQLquery[1] = "UPDATE " . $table .
                         " SET " . $this->initialization_celkoright_id . " = " . $this->initialization_celkoright_id . " + 2
                         WHERE " . $this->initialization_celkoright_id . ">= ?";
         $bindvars[1][] = $point_of_insertion;
 
-        $SQLquery[2] = "UPDATE " . xarDB::getPrefix() . "_" . $this->initialization_celkotable .
+        $SQLquery[2] = "UPDATE " . $table .
                         " SET " . $this->initialization_celkoleft_id . " = " . $this->initialization_celkoleft_id . " + 2
                         WHERE " . $this->initialization_celkoleft_id . ">= ?";
         $bindvars[2][] = $point_of_insertion;
         // Both can be transformed into just one SQL-statement, but i dont know if every database is SQL-92 compliant(?)
 
-        $SQLquery[3] = "UPDATE " . xarDB::getPrefix() . "_" . $this->initialization_celkotable . " SET " .
+        $SQLquery[3] = "UPDATE " . $table . " SET " .
                                     $this->initialization_celkoparent_id . " = ?," .
                                     $this->initialization_celkoleft_id . " = ?," .
                                     $this->initialization_celkoright_id . " = ?
@@ -347,8 +350,9 @@ class CelkoPositionProperty extends DataProperty
        $right_id = $left_id+1;  
     
        // get all children of this node  
+        $table = xarDB::getPrefix() . "_" . $this->initialization_celkotable;
         $q = "SELECT id
-              FROM " . xarDB::getPrefix() . "_" . $this->initialization_celkotable;
+              FROM " . $table;
         $q .= " WHERE " . $this->initialization_celkoparent_id . " = ?";
         $bindvars = array($parent_id);
         $result = $this->dbconn->Execute($q, $bindvars);
@@ -367,7 +371,7 @@ class CelkoPositionProperty extends DataProperty
         $bindvars = array($left_id);
         $bindvars[] = $right_id;
         $bindvars[] = $parent_id;
-        $q = "UPDATE " . xarDB::getPrefix() . "_" . $this->initialization_celkotable;
+        $q = "UPDATE " . $table;
         $q .= " SET " . $this->initialization_celkoleft_id . " = ?, ";
         $q .= $this->initialization_celkoright_id . " = ? ";
         $q .= "WHERE id = ?";  
@@ -431,6 +435,7 @@ class CelkoPositionProperty extends DataProperty
         $indexby = 'default';
 
         $bindvars = array();
+        $table = xarDB::getPrefix() . "_" . $this->initialization_celkotable;
         $SQLquery = "SELECT
                             COUNT(P2.id) AS indent,
                             P1.id,
@@ -438,7 +443,7 @@ class CelkoPositionProperty extends DataProperty
                             P1." . $this->initialization_celkoparent_id . ",
                             P1." . $this->initialization_celkoleft_id . ",
                             P1." . $this->initialization_celkoright_id . 
-                       " FROM " . xarDB::getPrefix() . "_" . $this->initialization_celkotable . " P1, " . xarDB::getPrefix() . "_" . $this->initialization_celkotable . " P2
+                       " FROM " . $table . " P1, " . $table . " P2
                       WHERE P1." . $this->initialization_celkoleft_id . " 
                          >= P2." . $this->initialization_celkoleft_id . " 
                         AND P1." . $this->initialization_celkoleft_id . " 
