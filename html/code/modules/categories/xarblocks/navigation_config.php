@@ -10,59 +10,40 @@
 // ----------------------------------------------------------------------
 
 
-/**
- * modify block settings
- */
-function categories_navigationblock_modify($blockinfo)
+sys::import('modules.categories.xarblocks.navigation');
+
+class Categories_NavigationBlockConfig extends Categories_NavigationBlock implements iBlock
 {
-    // Get current content
-    if (!is_array($blockinfo['content'])) {
-        $vars = @unserialize($blockinfo['content']);
-    } else {
-        $vars = $blockinfo['content'];
-    }
+/**
+ * Modify Function to the Blocks Admin
+ * @param $data array containing title,content
+ */
+    public function modify()
+    {
+        $vars = $this->getContent();
 
-    // Defaults
-    if (empty($vars['layout'])) {
-        $vars['layout'] = 1;
-    }
-    if (empty($vars['showcatcount'])) {
-        $vars['showcatcount'] = 0;
-    }
-    if (empty($vars['showchildren'])) {
-        $vars['showchildren'] = 0;
-    }
-    if (empty($vars['startmodule'])) {
-        $vars['startmodule'] = '';
-    }
-    if (empty($vars['showempty'])) {
-        $vars['showempty'] = 0;
-    }
-    if (empty($vars['dynamictitle'])) {
-        $vars['dynamictitle'] = 0;
-    }
+        $vars['modules'] = array();
+        $vars['modules'][] = array('id' => '',
+                                   'name' => xarML('Adapt dynamically to current page'));
 
-    $vars['modules'] = array();
-    $vars['modules'][] = array('id' => '',
-                               'name' => xarML('Adapt dynamically to current page'));
+        // List contains:
+        // 0. option group for the module
+        // 1. module [base1|base2]
+        // 2.    module [base1]    (for itemtype 0)
+        //       module [base2]
+        // 3.    module:itemtype [base3|base4]
+        // 4.       itemtype [base3]
+        //          itemtype [base4]
 
-    // List contains:
-    // 0. option group for the module
-    // 1. module [base1|base2]
-    // 2.    module [base1]    (for itemtype 0)
-    //       module [base2]
-    // 3.    module:itemtype [base3|base4]
-    // 4.       itemtype [base3]
-    //          itemtype [base4]
+        $allcatbases = xarMod::apiFunc(
+            'categories', 'user', 'getallcatbases',
+            array('order'=>'module', 'format'=>'tree')
+        );
 
-    $allcatbases = xarMod::apiFunc(
-        'categories', 'user', 'getallcatbases',
-        array('order'=>'module', 'format'=>'tree')
-    );
-
-    foreach($allcatbases as $modulecatbases) {
-        // Module label for the option group in the list.
-        $modlabel = xarML('#(1)', ucwords($modulecatbases['module']));
+        $allcatbases = xarMod::apiFunc(
+            'categories', 'user', 'getallcatbases',
+            array('order'=>'module', 'format'=>'tree')
+        );
 
         $vars['modules'][] = array(
             'label' => $modlabel
@@ -113,37 +94,40 @@ function categories_navigationblock_modify($blockinfo)
                 }
             }
         }
+
+
+        // Return output
+        // FIXME: this is wrong, fix the template name and return $vars;
+        $vars['blockid'] = $this->block_id;
+        return xarTplBlock('categories', 'nav-admin', $vars);
     }
 
-    $vars['blockid'] = $blockinfo['bid'];
-    // Return output
-    return xarTplBlock('categories', 'nav-admin', $vars);
-}
-
 /**
- * update block settings
+ * Updates the Block config from the Blocks Admin
+ * @param $data array containing title,content
  */
-function categories_navigationblock_update($blockinfo)
-{
-    $vars = array();
-    if(!xarVarFetch('layout',       'isset', $vars['layout'],       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('showcatcount', 'isset', $vars['showcatcount'], NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('showchildren', 'isset', $vars['showchildren'], NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('showempty',    'checkbox', $vars['showempty'],    false, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('startmodule',  'isset', $vars['startmodule'],  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dynamictitle', 'checkbox', $vars['dynamictitle'], false, XARVAR_DONT_SET)) {return;}
+    public function update()
+    {
+        if(!xarVarFetch('layout',       'isset', $vars['layout'],       $this->layout, XARVAR_DONT_SET)) {return;}
+        if(!xarVarFetch('showcatcount', 'isset', $vars['showcatcount'], false, XARVAR_NOT_REQUIRED)) {return;}
+        if(!xarVarFetch('showchildren', 'isset', $vars['showchildren'], $this->showchildren, XARVAR_DONT_SET)) {return;}
+        if(!xarVarFetch('showempty',    'checkbox', $vars['showempty'], false, XARVAR_NOT_REQUIRED)) {return;}
+        if(!xarVarFetch('startmodule',  'isset', $vars['startmodule'],  $this->startmodule, XARVAR_DONT_SET)) {return;}
+        if(!xarVarFetch('dynamictitle', 'checkbox', $vars['dynamictitle'],  false, XARVAR_NOT_REQUIRED)) {return;}
+        
+        $this->setContent($vars);
+        return true;
+    }
 
-    $blockinfo['content'] = $vars;
-
-    return $blockinfo;
-}
-
-/**
- * built-in block help/information system.
- */
-function categories_navigationblock_help()
-{
-    return '';
+    /**
+     * built-in block help/information system.
+     */
+    /*
+    function categories_navigationblock_help()
+    {
+        return '';
+    }
+    */
 }
 
 ?>
