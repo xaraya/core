@@ -37,7 +37,7 @@
             $result = $dbconn->Execute($query,array($cid));
             if (!$result) return;
         
-            list($parent,$name) = $result->fields;
+            list($name) = $result->fields;
             $result->Close();
         
             $name = rawurlencode($name);
@@ -45,6 +45,19 @@
             return $name;
         }
         
+        public function name2id($name="Top")
+        {
+            if (empty($id)) throw new Exception(xarML('No id passed to name2id'));
+            
+            $query = "SELECT id FROM $this->catstable WHERE name = ?";
+            $result = $dbconn->Execute($query,array($cid));
+            if (!$result) return;
+        
+            list($id) = $result->fields;
+            $result->Close();
+            return $id;
+        }
+
         public function getcatinfo($id=0)
         {
             if (empty($id)) throw new Exception(xarML('No id passed to getcatinfo'));
