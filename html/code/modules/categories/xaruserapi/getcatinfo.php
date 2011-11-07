@@ -34,69 +34,12 @@ function categories_userapi_getcatinfo($args)
        return array();
     }
 
-    $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
-
-    $categoriestable = $xartable['categories'];
-
-    // TODO: simplify api by always using cids, if one cat, only 1 element in the array
-    $SQLquery = "SELECT id,
-                        name,
-                        description,
-                        image,
-                        parent_id,
-                        left_id,
-                        right_id,
-                        state
-                   FROM $categoriestable ";
-    if (isset($cid)) {
-        $SQLquery .= "WHERE id = ?";
-        $bindvars = array($cid);
-    } else {
-        $bindmarkers = '?' . str_repeat(',?',count($cids)-1);
-        $SQLquery .= "WHERE id IN ($bindmarkers)";
-        $bindvars = $cids;
-    }
-
-    $result = $dbconn->Execute($SQLquery,$bindvars);
-    if (!$result) return;
-
-    if ($result->EOF) {
-        xarSession::setVar('errormsg', xarML('Unknown Category'));
-        return false;
-    }
-
-    if (isset($cid)) {
-        list($cid, $name, $description, $image, $parent, $left, $right, $state) = $result->fields;
-        $info = Array(
-                      "cid"         => $cid,
-                      "name"        => $name,
-                      "description" => $description,
-                      "image"       => $image,
-                      "parent"      => $parent,
-                      "left"        => $left,
-                      "right"       => $right,
-                      "state"       => $state
-                     );
-        return $info;
-    } else {
-        $info = array();
-        while (!$result->EOF) {
-            list($cid, $name, $description, $image, $parent, $left, $right, $state) = $result->fields;
-            $info[$cid] = Array(
-                                "cid"         => $cid,
-                                "name"        => $name,
-                                "description" => $description,
-                                "image"       => $image,
-                                "parent"      => $parent,
-                                "left"        => $left,
-                                "right"       => $right,
-                                "state"       => $state
-                               );
-            $result->MoveNext();
-        }
-        return $info;
-    }
+    extract($args);
+    sys::import('modules.categories.class.worker');
+    $worker = new CategoryWorker();
+    if (isset($cid)) $info = $worker->getcatinfo($cid);
+    else $info = $worker->getcatinfo($cids);
+    return $info;
 }
 
 ?>
