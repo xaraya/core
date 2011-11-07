@@ -55,13 +55,42 @@
                 if (!$q->run()) return;
                 $info = $q->row();
             } else {
-                if (!$q->run()) return;
                 $q->eq('id', $id);
+                if (!$q->run()) return;
                 $result = $q->output();
                 $info = array();
                 foreach($result as $row) $info[$row['id']] = $row;
             }
             return $info;
+        }
+
+        public function getchildren($id=0,$myself=0)
+        {
+            if (empty($id)) throw new Exception(xarML('No id passed to getchildren'));
+            
+            $q = new Query('SELECT', $this->cattable);
+            if (is_array()) {
+                if ($myself) {
+                    $c[] = $q->pin('id', $id);
+                    $c[] = $q->pin('parent_id', $id);
+                    $q->qor($c);
+                } else {
+                    $q->in('id', $id);
+                }
+            } else {
+                if ($myself) {
+                    $c[] = $q->peq('id', $id);
+                    $c[] = $q->peq('parent_id', $id);
+                    $q->qor($c);
+                } else {
+                    $q->eq('id', $id);
+                }
+            }
+            $q->addorder('ledt_id');
+            $result = $q->output();
+            $children = array();
+            foreach($result as $row) $children[$row['id']] = $row;
+            return $children;
         }
     }
 ?>

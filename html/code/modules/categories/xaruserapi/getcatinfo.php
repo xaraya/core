@@ -34,7 +34,6 @@ function categories_userapi_getcatinfo($args)
        return array();
     }
 
-    extract($args);
     sys::import('modules.categories.class.worker');
     $worker = new CategoryWorker();
     if (isset($cid)) $info = $worker->getcatinfo($cid);
