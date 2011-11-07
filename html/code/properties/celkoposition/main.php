@@ -4,14 +4,12 @@
  *
  * @package properties
  * @subpackage celkoposition property
- * @category Core Xaraya Property
- * @version 2.2.0
- * @copyright see the html/credits.html file in this release
+ * @category Third Party Xaraya Property
+ * @version 1.0.0
+ * @copyright (C) 2011 Netspan AG
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
  * @author Marc Lutolf <mfl@netspan.ch>
  */
-
 sys::import('modules.dynamicdata.class.properties.base');
 
 /**
@@ -26,7 +24,8 @@ class CelkoPositionProperty extends DataProperty
     public $desc         = 'Celko Position';
     public $reqmodules   = array();
 
-    public $reference_id;               // The ID of the parent item
+    public $reference_id = 0;               // The ID of the parent item
+    public $include_reference = 1;          // Get a reference to the parent object
     public $moving;
     public $position;
     public $rightorleft;
@@ -56,25 +55,25 @@ class CelkoPositionProperty extends DataProperty
     {
         if (!xarVarFetch($name . '_reference_id', 'int:0', $reference_id)) return;
         if (!xarVarFetch($name . '_position', 'enum:1:2:3:4', $position)) return;
-            switch (intval($position)) {
-                case 1: // above - same level
-                default:
-                    $this->rightorleft = 'left';
-                    $this->inorout = 'out';
-                    break;
-                case 2: // below - same level
-                    $this->rightorleft = 'right';
-                    $this->inorout = 'out';
-                    break;
-                case 3: // below - child item
-                    $this->rightorleft = 'right';
-                    $this->inorout = 'in';
-                    break;
-                case 4: // above - child item
-                    $this->rightorleft = 'left';
-                    $this->inorout = 'in';
-                    break;
-            }
+        switch (intval($position)) {
+            case 1: // above - same level
+            default:
+                $this->rightorleft = 'left';
+                $this->inorout = 'out';
+                break;
+            case 2: // below - same level
+                $this->rightorleft = 'right';
+                $this->inorout = 'out';
+                break;
+            case 3: // below - child item
+                $this->rightorleft = 'right';
+                $this->inorout = 'in';
+                break;
+            case 4: // above - child item
+                $this->rightorleft = 'left';
+                $this->inorout = 'in';
+                break;
+        }
         $this->reference_id = $reference_id;
         return true;
     }
@@ -93,9 +92,9 @@ class CelkoPositionProperty extends DataProperty
             
             // CHECKME: why do we need to run updateposition AND updateValue?
             $itemid = $this->updateposition($itemid, $parentid);
-            $this->reference_id = $parentid;
-            $this->rightorleft = 'RIGHT';
-            $this->inorout = 'IN';
+//            $this->reference_id = $parentid;
+//            $this->rightorleft = 'RIGHT';
+//            $this->inorout = 'IN';
             $this->updateValue($itemid);
 
             // We updated a position. now go back and see if any of the unresolveds we have can be resolved
@@ -248,7 +247,7 @@ class CelkoPositionProperty extends DataProperty
         if (!empty($data['itemid'])) {        
             $data['item'] = $this->getItem($data['itemid']);
             $items = $this->getItems(array('cid' => false,
-                                              'eid' => $data['itemid']));
+                                           'eid' => $data['itemid']));
             $data['id'] = $data['itemid'];
         } else {
             $data['item'] = Array('left_id'=>0,'right_id'=>0,'name'=>'','description'=>'', 'template' => '');

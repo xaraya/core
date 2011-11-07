@@ -10,7 +10,7 @@
     </xar:if>
     <fieldset style="border: none">
     <xar:if condition="count($items) eq 0">
-        No items defined yet
+        Top of the tree  <!-- No items defined yet -->
         <input type="hidden" name="#$name#_reference_id" id="#$name#_reference_id" value="#$reference_id#"/>
         <input type="hidden" name="#$name#_position" id="#$name#_position" value="#$position#"/>
     <xar:else />

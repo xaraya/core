@@ -4,11 +4,10 @@
  *
  * @package properties
  * @subpackage celkoposition property
- * @category Core Xaraya Property
- * @version 2.2.0
- * @copyright see the html/credits.html file in this release
+ * @category Third Party Xaraya Property
+ * @version 1.0.0
+ * @copyright (C) 2011 Netspan AG
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
