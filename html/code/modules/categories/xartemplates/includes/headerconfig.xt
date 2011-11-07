@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:style scope="module" module="base" file="navtabs"/>
+    <br />
+    <dl class="xar-tabs">
+        <dt class="help">
+            
+                Applies to:
+            
+        </dt>
+        <xar:if condition="$tab eq 'categories_general'">
+            <xar:set name="class">"active"</xar:set>
+        <xar:if condition="$tab eq 'categories_hooks'"/>
+            <xar:set name="class">"active"</xar:set>
+        <xar:else/>
+            <xar:set name="class">""</xar:set>
+        </xar:if>
+        <dd class="#$class#">
+            <a href="#xarModURL('categories', 'admin', 'modifyconfig', array('tabmodule' => 'categories', 'tab' => 'categories_general'))#">
+            General</a>
+        </dd>
+        <xar:set name="tabs">$hooks['tabs']</xar:set>
+        <xar:foreach in="$tabs" value="$thistab">
+            <xar:set name="configtab">$thistab['module'] . "_" . $thistab['configarea']</xar:set>
+            <xar:if condition="$tab eq $configtab">
+                <xar:set name="class">"active"</xar:set>
+            <xar:else/>
+                <xar:set name="class">""</xar:set>
+            </xar:if>
+            <dd class="#$class#">
+                <a href="#xarModURL('categories', 'admin', 'modifyconfig', array('tabmodule' => $thistab['module'],'tab' => $configtab))#">
+                    #$thistab['configtitle']#
+                </a>
+            </dd>
+        </xar:foreach>
+    </dl>
+</xar:template>

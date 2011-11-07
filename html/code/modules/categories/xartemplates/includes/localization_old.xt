@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="empty($refcid)">
+        <xar:set name="refcid">0</xar:set>
+        <xar:set name="position">1</xar:set>
+    </xar:if>
+
+    <xar:if condition="count($categories) eq 0">
+        <input type="hidden" name="moving[#$cid#]" id="moving[#$cid#]" value="0"/>
+        <input type="hidden" name="refcid[#$cid#]" id="refcid[#$cid#]" value="#$refcid#"/>
+        <input type="hidden" name="position[#$cid#]" id="position[#$cid#]" value="#$position#"/>
+        <input type="hidden" name="catexists[#$cid#]" id="catexists[#$cid#]" value="0"/>
+    <xar:else />
+        <input type="hidden" name="moving[#$cid#]" id="moving[#$cid#]" value="1"/>
+        <tr align="left" valign="middle">
+            <td>In relation to this category:</td>
+            <td><select name="refcid[#$cid#]" id="refcid[#$cid#]">
+                <xar:for start="$i = 0" test="$i lt count($categories)" iter="$i++">
+                    <xar:if condition="$categories[$i]['left'] eq $category['left']-1">
+                        <option value="#$categories[$i]['cid']#" selected="selected"/>
+                        <xar:set name="position">4</xar:set>
+                    <xar:elseif condition="$categories[$i]['right'] eq $category['left']-1"/>
+                        <option value="#$categories[$i]['cid']#" selected="selected"/>
+                        <xar:set name="position">2</xar:set>
+                    <xar:else />
+                        <option value="#$categories[$i]['cid']#"/>
+                    </xar:if>
+                        <xar:for start="$j=1" test="$j lt $categories[$i]['indentation']" iter="$j++">
+                            &#160;&#160;&#160;&#160;
+                        </xar:for>
+                        <xar:if condition="$i eq 0">
+                            --+&#160;&#160;
+                        <xar:else />
+                            <xar:if condition="$categories[$i-1]['indentation'] lt $categories[$i]['indentation']">
+                                --+&#160;&#160;
+                            <xar:else />
+                               &#160;&#160;&#160;+&#160;
+                            </xar:if>
+                        </xar:if>
+                        #$categories[$i]['name']#
+                </xar:for>
+            </select></td>
+        </tr>
+        <!-- The position needs to be set after categories select because
+              There is no position which we can have a selected category that will
+              work in all cases  -->
+        <tr align="left" valign="middle">
+            <td>Position</td>
+            <td><select name="position[#$cid#]" id="position[#$cid#]">
+                <xar:if condition="$position eq 1">
+                    <option value="1" selected="selected"/>
+                <xar:else />
+                    <option value="1"/>
+                </xar:if>
+                Above&#160;-&#160;Same level
+
+                <xar:if condition="$position eq 2">
+                    <option value="2" selected="selected"/>
+                <xar:else />
+                    <option value="2"/>
+                </xar:if>
+                Below&#160;-&#160;Same level
+
+                <xar:if condition="$position eq 3">
+                    <option value="3" selected="selected"/>
+                <xar:else />
+                    <option value="3"/>
+                </xar:if>
+                Below&#160;-&#160;Child Category
+
+                <xar:if condition="$position eq 4">
+                    <option value="4" selected="selected"/>
+                <xar:else />
+                    <option value="4"/>
+                </xar:if>
+                Above&#160;-&#160;Child Category
+
+            </select></td>
+        </tr>
+    </xar:if>
+</xar:template>

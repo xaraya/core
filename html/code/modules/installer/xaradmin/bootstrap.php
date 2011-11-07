@@ -64,8 +64,9 @@ function installer_admin_bootstrap()
                    'themes_configurations',
                    'themes_user_settings',
                     );
-
     if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'themes', 'objects' => $objects))) return;
+    $objects = array('categories');
+    if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'categories', 'objects' => $objects))) return;
 
 # --------------------------------------------------------
 # Set up the standard module variables for the core modules
@@ -75,6 +76,7 @@ function installer_admin_bootstrap()
                         'authsystem',
                         'blocks',
                         'base',
+                        'categories',
                         'dynamicdata',
                         'mail',
                         'modules',

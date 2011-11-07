@@ -1,0 +1,75 @@
+<object name="categories">
+  <objectid>285</objectid>
+  <label>Categories</label>
+  <parent>objects</parent>
+  <module_id>182</module_id>
+  <itemtype>125</itemtype>
+  <class>DataObject</class>
+  <filepath></filepath>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <config></config>
+  <isalias>0</isalias>
+  <properties>
+    <property name="id">
+      <id>3116</id>
+      <label>ID</label>
+      <type>itemid</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_categories.id</source>
+      <status>67</status>
+      <seq>1</seq>
+      <configuration></configuration>
+    </property>
+    <property name="name">
+      <id>3117</id>
+      <label>Name</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_categories.name</source>
+      <status>33</status>
+      <seq>2</seq>
+      <configuration>a:8:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:21:"validation_min_length";s:1:"1";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+    </property>
+    <property name="description">
+      <id>3118</id>
+      <label>Description</label>
+      <type>textarea_medium</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_categories.description</source>
+      <status>34</status>
+      <seq>3</seq>
+      <configuration></configuration>
+    </property>
+    <property name="image">
+      <id>3119</id>
+      <label>Image</label>
+      <type>imagelist</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_categories.image</source>
+      <status>34</status>
+      <seq>4</seq>
+      <configuration>a:4:{s:14:"display_layout";s:7:"default";s:26:"validation_file_extensions";s:20:"gif,jpg,jpeg,png,bmp";s:28:"initialization_basedirectory";s:44:"sys::code() . 'modules/categories/xarimages'";s:24:"initialization_firstline";s:15:",-- No Image --";}</configuration>
+    </property>
+    <property name="child_categories">
+      <id>3121</id>
+      <label>Child Categories</label>
+      <type>object</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_categories.child_object</source>
+      <status>34</status>
+      <seq>5</seq>
+      <configuration>a:5:{s:14:"display_layout";s:7:"default";s:25:"initialization_store_prop";s:4:"name";s:24:"initialization_refobject";s:7:"objects";s:27:"initialization_display_prop";s:4:"name";s:24:"initialization_firstline";s:29:",No external child categories";}</configuration>
+    </property>
+    <property name="position">
+      <id>3120</id>
+      <label>Position</label>
+      <type>celkoposition</type>
+      <defaultvalue></defaultvalue>
+      <source>dummy</source>
+      <status>34</status>
+      <seq>6</seq>
+      <configuration></configuration>
+    </property>
+  </properties>
+</object>

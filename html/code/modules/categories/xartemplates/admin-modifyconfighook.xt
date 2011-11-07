@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <fieldset class="xar-norm">
+        <legend>
+            <strong>
+                
+                    Categories
+                
+            </strong>
+        </legend>
+        <xar:data-input type="categorypicker" name="basecid"  module="$modname" itemtype="$itemtype"/>
+    </fieldset>
+    <!--  TODO: Remove
+    <fieldset class="formelements xar-norm">
+        <legend>
+            <strong>
+                
+                    Categories
+                
+                <xar:if condition="!empty($newcat)">
+                    [ <a href="&xar-modurl-categories-admin-modify;">
+                        
+                            Add
+                        
+                    </a> ]
+                </xar:if>
+            </strong>
+        </legend>
+        <div class="xar-form-input-wrapper">
+            <label for="number_of_categories" class="xar-form-label help" title="#xarML('Enter the number of possible categories that this itemtype will use')#">
+                
+                    Number of possible categories
+                
+            </label> <input type="text" name="number_of_categories" id="number_of_categories" size="3" maxlength="2" value="#$numcats#"/>
+        </div>
+        <xar:set name="cidlist">explode(',',xarModVars::get($modname,'mastercids'.$itemtype))</xar:set>
+        <xar:if condition="isset($cidlist) AND !empty($cidlist)">
+            <xar:foreach in="$cidlist" value="$cid">
+                <div class="xar-form-input-wrapper">
+                    <label for="number_of_categories" class="xar-form-label help" title="#xarML('Base category')#">
+                        
+                            Base category for
+                        
+                    </label>
+                    <xar:data-input type="categories" cid="1" name_prefix="config_" maximum_depth="4" show_edit="true"/>
+                </div>
+            </xar:foreach>
+        </xar:if>
+    </fieldset>
+    -->
+</xar:template>

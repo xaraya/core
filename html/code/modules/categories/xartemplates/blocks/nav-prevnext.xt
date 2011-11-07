@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <table border="0" cellpadding="2" cellspacing="0" width="100%">
+    <tr>
+        <td>
+        <xar:if condition="empty($prevlabel)">
+            &#160;
+        <xar:else />
+            <a href="#$prevlink#"> &lt;&lt; #$prevlabel#</a>
+        </xar:if>
+        </td>
+        <td style="text-align: right;">
+        <xar:if condition="empty($nextlabel)">
+            &#160;
+        <xar:else />
+            <a href="#$nextlink#">#$nextlabel# &gt;&gt; </a>
+        </xar:if>
+        </td>
+    </tr>
+    </table>
+</xar:template>
