@@ -1,15 +1,17 @@
 <?php
 /**
+ * Categories Module
  *
- * CategoryPicker Property
+ * @package modules
+ * @subpackage categories module
+ * @category Xaraya Web Applications Framework
+ * @version 2.3.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/147.html
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2006 by to be added
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link to be added
- * @subpackage Categories Module
  * @author Marc Lutolf <mfl@netspan.ch>
- *
  */
 
 sys::import('modules.dynamicdata.class.properties.base');

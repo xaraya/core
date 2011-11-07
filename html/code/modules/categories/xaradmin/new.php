@@ -1,17 +1,20 @@
 <?php
 /**
+ * Categories Module
  * Add one or more new categories
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) copyright-placeholder
+ * @package modules
+ * @subpackage categories module
+ * @category Xaraya Web Applications Framework
+ * @version 2.3.0
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/147.html
  *
- * @subpackage Categories module
+ * @author Marc Lutolf <mfl@netspan.ch>
  */
-/**
- * @author Marc Lutolf
- */
+
     function categories_admin_new()
     {
         if (!xarVarFetch('itemtype',    'int',    $data['itemtype'], 2, XARVAR_NOT_REQUIRED)) return;

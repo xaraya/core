@@ -1,18 +1,20 @@
 <?php
 /**
+ * Categories Module
  * Modify one or more categories
  *
  * @package modules
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @subpackage categories module
+ * @category Xaraya Web Applications Framework
+ * @version 2.3.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage categories
- * @author Marc Lutolf
- */
-/**
+ * @link http://xaraya.com/index.php/release/147.html
  *
- * @author Marc Lutolf
+ * @author Marc Lutolf <mfl@netspan.ch>
  */
+
 function categories_admin_modify()
 {
     if (!xarVarFetch('return_url',  'isset',  $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}

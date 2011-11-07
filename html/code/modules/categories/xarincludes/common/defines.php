@@ -1,27 +1,18 @@
 <?php
-// File: $Id$
-// ----------------------------------------------------------------------
-// Xaraya Content Management System
-// Copyright (C) 2001 by the Xaraya Development Team.
-// http://www.xaraya.com/
-// ----------------------------------------------------------------------
-// LICENSE
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License (GPL)
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// To read the license please visit http://www.gnu.org/copyleft/gpl.html
-// ----------------------------------------------------------------------
-// Original Author of file:  Rabbitt (aka Carl P. Corliss)
-// Purpose of file:  Defines for the comments API
-// ----------------------------------------------------------------------
+/**
+ * Categories Module
+ *
+ * @package modules
+ * @subpackage categories module
+ * @category Xaraya Web Applications Framework
+ * @version 2.3.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/147.html
+ *
+ * @author Rabbitt (aka Carl P. Corliss)
+ */
 
 if (defined('_COM_SORT_ASC')) {
     return;

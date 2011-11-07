@@ -1,17 +1,19 @@
 <?php
 /**
- * File: $Id$
+ * Categories Module
  *
- * Categories Property
- *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
- * @license GPL <http://www.gnu.org/licenses/gpl.html>
+ * @package modules
+ * @subpackage categories module
+ * @category Xaraya Web Applications Framework
+ * @version 2.3.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
+ * @link http://xaraya.com/index.php/release/147.html
  *
- * @subpackage dynamicdata properties
  * @author mikespub <mikespub@xaraya.com>
-*/
+ */
+
 /**
  * Make a &lt;select&gt; box with tree of categories (&#160;&#160;--+ style)
  * e.g. for use in your own admin pages to select root categories for your

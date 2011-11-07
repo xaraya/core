@@ -1,14 +1,16 @@
 <?php
 /**
- * File: $Id: $
+ * Categories Module
  *
- * Categories System
- *
- * @package Xaraya eXtensible Management System
- * @copyright (C) 2003 by the Xaraya Development Team.
+ * @package modules
+ * @subpackage categories module
+ * @category Xaraya Web Applications Framework
+ * @version 2.3.0
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
- * @subpackage category module
+ * @link http://xaraya.com/index.php/release/147.html
+ *
  * @author Michel Dalle <mikespub@xaraya.com>
  */
 
