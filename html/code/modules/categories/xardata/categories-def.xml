@@ -69,7 +69,7 @@
       <source>dummy</source>
       <status>34</status>
       <seq>6</seq>
-      <configuration></configuration>
+      <configuration>a:6:{s:14:"display_layout";s:7:"default";s:25:"initialization_celkotable";s:10:"categories";s:24:"initialization_celkoname";s:4:"name";s:29:"initialization_celkoparent_id";s:9:"parent_id";s:28:"initialization_celkoright_id";s:8:"right_id";s:27:"initialization_celkoleft_id";s:7:"left_id";}</configuration>
     </property>
   </properties>
 </object>
