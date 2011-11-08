@@ -1179,8 +1179,10 @@ class xarTpl extends Object
         if (file_exists($sourceFileName)) return self::executeFromFile($sourceFileName, $tplData);
 
         // Not found: raise an exception
-        throw new Exception("Could not find include template $templateName.xt");
+        throw new FileNotFoundException($templateName, 'Could not find include template #(1).xt');
     }
+
+/* PRIVATE FUNCTIONS */
 
 /**
  * Execute template from file
