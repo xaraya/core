@@ -1,6 +1,6 @@
 <?php
 /**
- * Xaraya Web Interface Entry Point  
+ * Xaraya Web Interface Entry Point 
  *
  * @package core
  * @subpackage entrypoint
