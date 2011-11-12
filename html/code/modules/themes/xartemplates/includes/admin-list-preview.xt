@@ -5,11 +5,11 @@
         <xar:foreach in="$themes" value="$theme">
             <div id="#$theme['name']#" class="xar-alt-outline" style="min-height:200px;clear:both;margin:1em 0;">
                 <div class="xar-accent" style="width: 250px;vertical-align:top;float:left;">
-                    <xar:set name="preview_img">xarTpl::getImage('preview.jpg', 'theme', $theme['directory'])</xar:set>
-                    <xar:if condition="!empty($preview_img)">
+                    <xar:set name="preview_img">'themes/' . $theme['directory'] . '/images/preview.jpg'</xar:set>
+                    <xar:if condition="is_file($preview_img)">
                         <xar:template type="module" module="themes" file="showimg"/>
                     <xar:else/>
-                        <div style="height:187px;line-height:187px;vertical-align:middle;text-align:center;">
+                        <div style="height:20px;line-height:187px;vertical-align:middle;text-align:center;">
                             <p class="xar-info">Preview unavailable</p>                        
                         </div>
                     </xar:if>
@@ -48,15 +48,16 @@
                         </div>                    
                     </div>
                     <xar:if condition="$theme['class'] eq 2 and $theme['state'] eq XARTHEME_STATE_ACTIVE">
+                        <xar:set name="themename">strtolower($theme['name'])</xar:set>
                         <div class="xar-row xar-alt xar-padding-thick">
                             <div class="xar-col">
                                 User Default
                             </div>
                             <div class="xar-col">
-                                <xar:if condition="$theme['name'] eq $user_theme">
-                                    <input type="radio" name="user_theme" id="user_theme" value="#$theme['name']#" checked="checked"/>
+                                <xar:if condition="$themename eq $user_theme">
+                                    <input type="radio" name="user_theme" id="user_theme" value="#$themename#" checked="checked"/>
                                 <xar:else/>
-                                    <input type="radio" name="user_theme" id="user_theme" value="#$theme['name']#"/>
+                                    <input type="radio" name="user_theme" id="user_theme" value="#$themename#"/>
                                 </xar:if>                                 
                             </div>                    
                         </div>
@@ -65,12 +66,12 @@
                                 Admin Default
                             </div>
                             <div class="xar-col">
-                                <xar:if condition="$theme['name'] eq $admin_theme">
-                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$theme['name']#" checked="checked"/>
-                                <xar:elseif condition="empty($admin_theme) and $theme['name'] eq $user_theme"/>
-                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$theme['name']#" checked="checked"/>
+                                <xar:if condition="$themename eq $admin_theme">
+                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$themename#" checked="checked"/>
+                                <xar:elseif condition="empty($admin_theme) and $themename eq $user_theme"/>
+                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$themename#" checked="checked"/>
                                 <xar:else/>
-                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$theme['name']#"/>
+                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$themename#"/>
                                 </xar:if>                                
                             </div>                    
                         </div>
