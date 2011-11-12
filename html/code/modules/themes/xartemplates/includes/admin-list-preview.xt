@@ -5,11 +5,11 @@
         <xar:foreach in="$themes" value="$theme">
             <div id="#$theme['name']#" class="xar-alt-outline" style="min-height:200px;clear:both;margin:1em 0;">
                 <div class="xar-accent" style="width: 250px;vertical-align:top;float:left;">
-                    <xar:set name="preview_img">xarTpl::getImage('preview.jpg', 'theme', $theme['directory'])</xar:set>
-                    <xar:if condition="!empty($preview_img)">
+                    <xar:set name="preview_img">'themes/' . $theme['directory'] . '/images/preview.jpg'</xar:set>
+                    <xar:if condition="is_file($preview_img)">
                         <xar:template type="module" module="themes" file="showimg"/>
                     <xar:else/>
-                        <div style="height:187px;line-height:187px;vertical-align:middle;text-align:center;">
+                        <div style="height:20px;line-height:187px;vertical-align:middle;text-align:center;">
                             <p class="xar-info">Preview unavailable</p>                        
                         </div>
                     </xar:if>
