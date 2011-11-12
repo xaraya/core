@@ -33,20 +33,21 @@
                         <td>#$classes[$theme['class']]['name']#</td>
                         <td>#$states[$theme['state']]['name']#</td>
                         <xar:if condition="$theme['class'] eq 2 and $theme['state'] eq XARTHEME_STATE_ACTIVE">
+                            <xar:set name="themename">strtolower($theme['name'])</xar:set>
                             <td>
-                                <xar:if condition="$theme['name'] eq $user_theme">
-                                    <input type="radio" name="user_theme" id="user_theme" value="#$theme['name']#" checked="checked"/>
+                                <xar:if condition="$themename eq $user_theme">
+                                    <input type="radio" name="user_theme" id="user_theme" value="#$themename#" checked="checked"/>
                                 <xar:else/>
-                                    <input type="radio" name="user_theme" id="user_theme" value="#$theme['name']#"/>
+                                    <input type="radio" name="user_theme" id="user_theme" value="#$themename#"/>
                                 </xar:if>                            
                             </td>
                             <td>
-                                <xar:if condition="$theme['name'] eq $admin_theme">
-                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$theme['name']#" checked="checked"/>
-                                <xar:elseif condition="empty($admin_theme) and $theme['name'] eq $user_theme"/>
-                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$theme['name']#" checked="checked"/>
+                                <xar:if condition="$themename eq $admin_theme">
+                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$themename#" checked="checked"/>
+                                <xar:elseif condition="empty($admin_theme) and $themename eq $user_theme"/>
+                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$themename#" checked="checked"/>
                                 <xar:else/>
-                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$theme['name']#"/>
+                                    <input type="radio" name="admin_theme" id="admin_theme" value="#$themename#"/>
                                 </xar:if>
                             </td>
                         <xar:else/>
