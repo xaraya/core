@@ -25,10 +25,8 @@ function roles_user_lostpassword()
     //If a user is already logged in, no reason to see this.
     //We are going to send them to their account.
     if (xarUserIsLoggedIn()) {
-        xarController::redirect(xarModURL('roles',
-                                      'user',
-                                      'account'));
-       return true;
+        xarController::redirect(xarModURL('roles', 'user', 'account'));
+        return true;
     }
 
     xarTpl::setPageTitle(xarVarPrepForDisplay(xarML('Lost Password')));
@@ -39,10 +37,7 @@ function roles_user_lostpassword()
 
         case 'request':
         default:
-            $authid = xarSecGenAuthKey();
-            $data = xarTpl::module('roles','user', 'requestpw', array('authid'    => $authid,
-                                                                    'emaillabel' => xarML('E-Mail New Password')));
-
+            $data = array('showmessage' => 0);
             break;
 
         case 'send':
@@ -55,8 +50,10 @@ function roles_user_lostpassword()
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
 
+            $data['showmessage'] = 0;    
             if ((empty($uname)) && (empty($email))) {
-                throw new EmptyParameterException('$uname or $email');
+                $data['showmessage'] = 1;
+                break;
             }
 
             // check for user and grab id if exists
@@ -65,8 +62,8 @@ function roles_user_lostpassword()
                                          'email' => $email));
 
             if (empty($user)) {
-                $vars = array($uname, $email);
-                throw new DataNotFoundException($vars,"The username '#(1)' or the email address '#(2)' is not registered");
+                $data['showmessage'] = 2;
+                break;
             }
             // Make new password
             $user['pass'] = xarMod::apiFunc('roles','user','makepass');
@@ -89,7 +86,7 @@ function roles_user_lostpassword()
             if (!xarMod::apiFunc('roles', 'admin','senduseremail', array('id' => array($user['id'] => '1'), 'mailtype' => 'reminder', 'pass' => $user['pass']))) return;
 
             // Let user know that they have an email on the way.
-            $data = xarTpl::module('roles','user','requestpwconfirm');
+            $data = xarTpl::module('roles','user','requestpwconfirm', $data);
           break;
     }
     return $data;
