@@ -26,6 +26,8 @@ function blocks_admin_modify_type(Array $args=array())
         $vars = array('type_id', 'blocks', 'admin', 'modify_type');
         throw new EmptyParameterException($vars, $msg);
     }
+
+    if (!xarMod::apiFunc('blocks', 'types', 'refresh')) return;
     
     $type = xarMod::apiFunc('blocks', 'types', 'getitem',
         array('type_id' => $type_id));

@@ -3,7 +3,6 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-    <div class="xar-mod-page-head">
         <h2>Configure Property Types</h2>
         <p>Click Flush Property Cache to clear the DynamicData Property Definitions cache and to
         reload the properties definitions from the file system.</p>
@@ -12,99 +11,62 @@
                 <div class="xar-row">
                     <div class="xar-col"></div>
                     <div class="xar-col">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                        <input type="hidden" name="flushPropertyCache" value="true"/>
                         <xar:var name="label">Flush Property Cache</xar:var>
                         <xar:button type="submit" label="$label"/>
                     </div>
                 </div>
             </div>
-        </form>
-        </div><!--xar-mod-page-head-->
-        <div class="xar-mod-page-body">
-        <p class="xar-note">The following property types are predefined in Xaraya and may be used in your own
-            dynamic properties.</p>
-        <form method="post" action="#xarModURL('dynamicdata','admin','update_propertydefs')#">      
-           	<table class="xar-items">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Display Name</th>
-                    <th>Input Format</th>
-                    <th>#$labels['configuration']#</th>
-                </tr>
-                <xar:set name="lastmod">''</xar:set>
-                <xar:foreach in="$fields" value="$field">
-                    <xar:if condition="$field['requiresmodule'] ne $lastmod">
-                        <tr>
-                            <th colspan="5">#$field['requiresmodule']# 
-                            <xar:set name="lastmod">$field['requiresmodule']</xar:set></th>
-                        </tr>
-                    </xar:if>
+            <p class="xar-note">The following property types are predefined in Xaraya and may be used in your own
+                dynamic properties.</p>
+                <table class="xar-items">
                     <tr>
-                        <td class="xar-align-right">#$field['id']#</td>
-                        <td>#$field['name']#</td>
-                        <td>
-                            <input type="text" name="label[#$field['id']#]" id="label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium"/>
-                        </td>
-                        <td>
-                            <xar:data-output property="$fieldtypeprop" value="$field['format']"/>
-                        </td>
-                        <td>
-                            <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
-                                <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype'=>$field['name']))#" title="Edit">
-                                    <xar:img scope="theme" file="icons/modify-config.png" class="xar-icon" alt="modify-config"/>
-                                </a>
-                            <xar:else />
-                                <xar:var name="field.configuration"/>
-                                <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype'=>$field['name']))#">Edit</a>
-                            </xar:if>
-                        </td>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Display Name</th>
+                        <th>Input Format</th>
+                        <th>#$labels['configuration']#</th>
                     </tr>
-                </xar:foreach>
-            </table>
-            <p class="xar-note">Add a new Property Type using the fields below. (TODO)</p>
-            <table class="xar-items">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Display Name</th>
-                    <th>Input Format</th>
-<!--
-                    <th>#$labels['configuration']#</th>
--->
-                </tr>
-                <tr>
-                    <td>#$labels['new']#</td>
-                    <td>
-                        <input type="text" name="name[0]" id="name_0" class="xar-form-textmedium"/>
-                    </td>
-                    <td>
-                        <input type="text" name="label[0]" id="label_0" class="xar-form-textmedium"/>
-                    </td>
-                    <td>
-                        <xar:data-input property="$fieldtypeprop" name="format[0]" id="format_0" value=""/>
-                    </td>
-<!--
-                    <td>
-                        <input type="text" name="validation[0]" id="validation_0" value="" class="xar-form-textmedium"/>
-                    </td>
--->
-                </tr>
-            </table>
-            <p class="xar-alert">Note: any changes you make here will be lost whenever the property cache gets
-            flushed.</p>
-            <div class="xar-form-actions">
-                <div class="xar-row">
-                    <div class="xar-col"></div>
-                    <div class="xar-col">
-                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                        <xar:var name="label">Update Property Types</xar:var>
-                        <xar:button type="submit" label="$label"/>
+                    <xar:set name="lastmod">''</xar:set>
+                    <xar:foreach in="$fields" value="$field">
+                        <xar:if condition="$field['requiresmodule'] ne $lastmod">
+                            <tr>
+                                <th colspan="5">#$field['requiresmodule']# 
+                                <xar:set name="lastmod">$field['requiresmodule']</xar:set></th>
+                            </tr>
+                        </xar:if>
+                        <tr>
+                            <td class="xar-align-right">#$field['id']#</td>
+                            <td>#$field['name']#</td>
+                            <td>
+                                <input type="text" name="label[#$field['id']#]" id="label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium"/>
+                            </td>
+                            <td>
+                                <xar:data-output property="$fieldtypeprop" value="$field['format']"/>
+                            </td>
+                            <td>
+                                <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
+                                    <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype'=>$field['name']))#" title="Edit">
+                                        <xar:img scope="theme" file="icons/modify-config.png" class="xar-icon" alt="modify-config"/>
+                                    </a>
+                                <xar:else />
+                                    <xar:var name="field.configuration"/>
+                                    <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype'=>$field['name']))#">Edit</a>
+                                </xar:if>
+                            </td>
+                        </tr>
+                    </xar:foreach>
+                </table>
+                <div class="xar-form-actions">
+                    <div class="xar-row">
+                        <div class="xar-col"></div>
+                        <div class="xar-col">
+                            <input type="hidden" name="flushPropertyCache" value="true"/>
+                            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                            <xar:var name="label">Flush Property Cache</xar:var>
+                            <xar:button type="submit" label="$label"/>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
-    </div><!--/xar-mod-page-body-->
+            </form>
     </div><!--/xar-mod-body-->
 </xar:template>
