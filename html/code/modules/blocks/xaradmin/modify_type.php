@@ -113,7 +113,7 @@ function blocks_admin_modify_type(Array $args=array())
                             }
                             $block->setBlockTemplate($block_template);
                             $block->setBoxTemplate($box_template);
-                        }                           
+                        }
                         // fall through                  
                     break;
                     default:
