@@ -101,16 +101,14 @@ function modules_adminapi_getitems(Array $args=array())
         $bindvars[] = (bool) $admin_capable;
     }  
 
-    $sorts = strpos($sort, ',') !== false ? array_map('trim', explode(',', $sort)) : array($sort);
-    foreach ($sorts as $pairs) {
-        $pair = array_map('trim', explode(' ', $pairs));
-        $sortfield = $pair[0];
-        if (!isset($select[$sortfield])) continue;
-        $sortorder = isset($pair[1]) ? strtoupper($pair[1]) : 'ASC';
-        $orderby[] = $select[$sortfield] . ' ' . $sortorder;
+    if (!is_array($sort))
+        $sort = strpos($sort, ',') !== false ? array_map('trim', explode(',', $sort)) : array(trim($sort));
+    foreach ($sort as $pairs) {
+        list($sortfield, $sortorder) = array_map('trim', array_pad(explode(' ', $pairs), 2, 'ASC'));
+        if (!isset($select[$sortfield]) || isset($orderby[$sortfield])) continue;
+        $orderby[$sortfield] = $select[$sortfield] . ' ' . strtoupper($sortorder);
     }
     
-
     $query = "SELECT " . join(',', $select);
     $query .= " FROM $modules_table mods";
     if (!empty($where))
