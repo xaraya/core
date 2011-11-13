@@ -88,7 +88,7 @@ function themes_admin_list()
         $data['tab'], null, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('state', 'int',
         $data['state'], null, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('class', 'int:0:3', // 0=system, 1=utility, 2=user, 3=all
+    if (!xarVarFetch('class', 'int:0:4', // 0=system, 1=utility, 2=user, 3=all
         $data['class'], null, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('sort', 'pre:trim:upper:enum:ASC:DESC',
         $data['sort'], 'ASC', XARVAR_NOT_REQUIRED)) return;
