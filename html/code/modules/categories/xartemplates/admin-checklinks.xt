@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div class="xar-mod-head"><span class="xar-mod-title">Categories Administration</span></div>
+    <div class="xar-mod-body">
+       <xar:template type="module" file="admin-menu"/>
+    <h2>Check Orphan Links</h2><br />
+    <div style="margin: auto;">
+    <xar:if condition="empty($modid)">
+            <table border="0" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th valign="center" width="40%">
+                        <b>Module Name</b>
+                    </th>
+                    <th align="center" valign="center" width="15%">
+                        <b>Module<br />Items</b>
+                    </th>
+                    <th align="center" valign="center" width="15%">
+                        <b>Distinct<br />Categories</b>
+                    </th>
+                    <th align="center" valign="center" width="15%">
+                        <b>Total<br />Links</b>
+                    </th>
+                </tr>
+
+                <tr>
+                    <td colspan="4">
+                        &#160;
+                    </td>
+                </tr>
+
+                <xar:if condition="empty($moditems) or count($moditems) eq '0'">
+                    <tr>
+                        <td colspan="4" align="center">
+                            <br />
+                            
+                                There are currently no category links in the database...
+                            
+                            <br />
+                            <br />
+                        </td>
+                    </tr>
+                <xar:else />
+                    <tr>
+                        <td colspan="4">
+                            <div class="xar-norm-outline" style=" margin-left: 1em; margin-right: 1em; width: auto;border-style: dotted none none none;"></div>
+                        </td>
+                    </tr>
+                    <xar:foreach in="$moditems" value="$moditem">
+                        <tr>
+                            <td valign="center" width="40%">
+                                <a href="#$moditem['link']#">#$moditem['name']#</a>
+                            </td>
+                            <td align="center" valign="center" width="15%">
+                                #$moditem['numitems']#
+                            </td>
+                            <td align="center" valign="center" width="15%">
+                                #$moditem['numcats']#
+                            </td>
+                            <td align="center" valign="center" width="15%">
+                                #$moditem['numlinks']#
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <div class="xar-norm-outline" style=" margin-left: 1em; margin-right: 1em; width: auto;border-style: dotted none none none;"></div>
+                            </td>
+                        </tr>
+                    </xar:foreach>
+                    <tr>
+                        <td valign="center" width="40%">
+                            <b>Grand Total</b>
+                        </td>
+                        <td align="center" valign="center" width="15%">
+                            <b>#$numitems#</b>
+                        </td>
+                        <td align="center" valign="center" width="15%">
+                            <b>-</b>
+                        </td>
+                        <td align="center" valign="center" width="15%">
+                            <b>#$numlinks#</b>
+                        </td>
+                    </tr>
+                </xar:if>
+
+            </table>
+    <xar:else/>
+        <h3><xar:ml><xar:mlstring>Module #(1)</xar:mlstring><xar:mlvar>#$modname#</xar:mlvar></xar:ml></h3>
+
+        <xar:if condition="!empty($moditems)">
+            <form method="post" action="&xar-modurl-categories-admin-checklinks;">
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="modid" id="modid" value="#$modid#"/>
+                <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
+
+                <input type="submit" name="confirm" id="confirm" value="#xarML('Delete Links')#"/>
+            </form>
+        </xar:if>
+
+            <table border="0" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th valign="center" width="50%">
+                        <xar:if condition="empty($sortlink['itemid'])">
+                            <b>Item Id</b>
+                        <xar:else/>
+                            <a href="#$sortlink['itemid']#"><b>Item Id</b></a>
+                        </xar:if>
+                    </th>
+                    <th align="center" valign="center" width="30%">
+                        <b>Category<br/>Links</b>
+                    </th>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        &#160;
+                    </td>
+                </tr>
+
+                <xar:if condition="empty($moditems) or count($moditems) eq '0'">
+                    <tr>
+                        <td colspan="2" align="center">
+                            <br />
+                            
+                                There are currently no orphaned category links for this module...
+                            
+                            <br />
+                            <br />
+                        </td>
+                    </tr>
+                <xar:else />
+                    <tr>
+                        <td colspan="2">
+                            <div class="xar-norm-outline" style="margin-left: 1em; margin-right: 1em; width: auto;border-style: dotted none none none;"></div>
+                        </td>
+                    </tr>
+                    <xar:foreach in="$moditems" key="$itemid" value="$moditem">
+                        <tr>
+                            <xar:if condition="!empty($moditem['title']) and !empty($moditem['link'])">
+                            <td valign="center" width="50%">
+                                #$itemid# - <a href="#$moditem['link']#">#$moditem['title']# </a>
+                            </td>
+                            <xar:else/>
+                            <td align="center" valign="center" width="50%">
+                                #$itemid#
+                            </td>
+                            </xar:if>
+                            <td align="center" valign="center" width="30%">
+                            <xar:foreach in="$moditem['cids']" value="$cid">
+                              <xar:if condition="!empty($catinfo[$cid])">
+                                #$catinfo[$cid]['name']#<br/>
+                              <xar:else/>
+                                #$cid#<br/>
+                              </xar:if>
+                            </xar:foreach>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                            <div class="xar-norm-outline" style="margin-left: 1em; margin-right: 1em; width: auto;border-style: dotted none none none;"></div>
+                            </td>
+                        </tr>
+                    </xar:foreach>
+                <xar:if condition="!empty($pager)">
+                    <tr>
+                        <td colspan="2" align="center">
+                            #$pager#
+                        </td>
+                    </tr>
+                </xar:if>
+                    <tr>
+                        <td valign="center" width="50%">
+                            <b>Grand Total</b>:
+                        </td>
+                        <td align="center" valign="center" width="30%">
+                            <b>#$numorphans#</b>
+                        </td>
+                    </tr>
+                </xar:if>
+            </table>
+    </xar:if>
+    </div>
+    </div>
+</xar:template>

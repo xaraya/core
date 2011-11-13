@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">
+            Categories Administration
+        </span>
+    </div>
+    <div class="xar-mod-body">
+       <xar:template type="module" file="admin-menu"/>
+        <fieldset>
+            <legend>
+                Configure Categories Hooks
+            </legend>
+            <xar:set name="url">#xarModURL('categories','admin','hooks')#</xar:set>
+            <xar:module main="false" module="modules" type="admin" func="hooks" curhook="categories" return_url="$url"/>
+        </fieldset>
+        <p>
+            Note: this will allow you to define base categories in your module configuration, and to assign your module items to categories when you create or update them.
+            However, it will not automatically handle filtering the items by category for you, and you will need to use the categories navigation block or add the xar:data-output
+            type="categoriesnavigation" tag in your view and display templates to be able to browse by category afterwards.
+            Some modules like articles and xarpages already do that for you...
+        </p>
+    </div>
+</xar:template>

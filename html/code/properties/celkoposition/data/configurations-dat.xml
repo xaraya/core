@@ -1,0 +1,47 @@
+<items>
+  <configurations itemid="1">
+    <id>1</id>
+    <name>initialization_celkotable</name>
+    <label>Table </label>
+    <description>The table where the celko data is stored</description>
+    <property_id>2</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="2">
+    <id>2</id>
+    <name>initialization_celkoname</name>
+    <label>Name</label>
+    <description>The name field in the celko table</description>
+    <property_id>2</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="3">
+    <id>4</id>
+    <name>initialization_celkoparent_id</name>
+    <label>Parent ID</label>
+    <description>The field that holds the parent id of this item</description>
+    <property_id>2</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="4">
+    <id>4</id>
+    <name>initialization_celkoright_id</name>
+    <label>Right ID</label>
+    <description>The field that holds the right id of this item</description>
+    <property_id>2</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="5">
+    <id>5</id>
+    <name>initialization_celkoleft_id</name>
+    <label>Left ID</label>
+    <description>The field that holds the left id of this item</description>
+    <property_id>2</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+</items>
