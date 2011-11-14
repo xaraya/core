@@ -13,6 +13,7 @@
                 <div>
                     <input type="hidden" name="id" id="id" value="#$id#"/>
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                     <xar:if condition="count($dependencies['satisfied']) ne 0">
                         <h3>Dependencies already satisfied:</h3>
                         <ul>

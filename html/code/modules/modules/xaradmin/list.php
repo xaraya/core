@@ -73,26 +73,29 @@ function modules_admin_list()
     $items = xarMod::apiFunc('modules', 'admin', 'getitems', $itemargs);
 
     $authid = xarSecGenAuthKey();
+
     
     foreach ($items as $key => $item) {
         $item['iscore'] = in_array($item['name'], $coremods);
         $item['info_url'] = xarModURL('modules', 'admin', 'modinfonew', 
             array('id' => $item['regid']));
+        $return_url = xarServer::getCurrentURL(array('state' => $data['state'] != 0 ? 0 : null), false, $item['name']);
+        $return_url = urlencode($return_url);
         switch ($item['state']) {
             case XARMOD_STATE_UNINITIALISED: // 1
                 $item['init_url'] = xarModURL('modules', 'admin', 'install',
-                    array('id' => $item['regid'], 'authid' => $authid)); 
+                    array('id' => $item['regid'], 'authid' => $authid, 'return_url' => $return_url)); 
                 break;
             case XARMOD_STATE_INACTIVE:  // 2
                 $item['activate_url'] = xarModURL('modules', 'admin', 'install',
-                    array('id' => $item['regid'], 'authid' => $authid));             
+                    array('id' => $item['regid'], 'authid' => $authid, 'return_url' => $return_url));
                 $item['remove_url'] = xarModURL('modules', 'admin', 'remove',
-                    array('id' => $item['regid'], 'authid' => $authid));  
+                    array('id' => $item['regid'], 'authid' => $authid, 'return_url' => $return_url));  
                 break;
             case XARMOD_STATE_ACTIVE:  // 3
                 if (!$item['iscore']) {
                     $item['deactivate_url'] = xarModURL('modules', 'admin', 'deactivate',
-                        array('id' => $item['regid'], 'authid' => $authid));                     
+                        array('id' => $item['regid'], 'authid' => $authid, 'return_url' => $return_url));
                 }
                 if (!empty($item['admin_capable']))
                     $item['admin_url'] = xarModURL($item['name'], 'admin');
@@ -101,25 +104,25 @@ function modules_admin_list()
                 break;
             case XARMOD_STATE_UPGRADED: // 5
                 $item['upgrade_url'] = xarModURL('modules', 'admin', 'upgrade',
-                    array('id' => $item['regid'], 'authid' => $authid));              
+                    array('id' => $item['regid'], 'authid' => $authid, 'return_url' => $return_url));
                 break;
             case XARMOD_STATE_MISSING_FROM_UNINITIALISED: // 4           
             case XARMOD_STATE_MISSING_FROM_INACTIVE: // 7
             case XARMOD_STATE_MISSING_FROM_ACTIVE: // 8
             case XARMOD_STATE_MISSING_FROM_UPGRADED: // 9
                 $item['remove_url'] = xarModURL('modules', 'admin', 'remove',
-                    array('id' => $item['regid'], 'authid' => $authid));             
+                    array('id' => $item['regid'], 'authid' => $authid, 'return_url' => $return_url));
                 break;
             case XARMOD_STATE_ERROR_UNINITIALISED: // 10
             case XARMOD_STATE_ERROR_INACTIVE: // 11
             case XARMOD_STATE_ERROR_ACTIVE: // 12
             case XARMOD_STATE_ERROR_UPGRADED: // 13
                 $item['error_url'] = xarModURL('modules', 'admin', 'viewerror',
-                    array('id' => $item['regid'], 'authid' => $authid));              
+                    array('id' => $item['regid'], 'authid' => $authid, 'return_url' => $return_url));
                 break;
             default:
                 $item['remove_url'] = xarModURL('modules', 'admin', 'remove',
-                    array('id' => $item['regid'], 'authid' => $authid));              
+                    array('id' => $item['regid'], 'authid' => $authid, 'return_url' => $return_url));
                 break;
         }
         
