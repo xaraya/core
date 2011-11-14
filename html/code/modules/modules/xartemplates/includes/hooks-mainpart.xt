@@ -3,8 +3,6 @@
     <xar:javascript scope="theme" filename="toggle.js"/>
     <xar:var name="toggletitle">Click to toggle display of available hooks for this module.</xar:var>
     <xar:if condition="empty($observers[$curhook])">
-            <xar:var name="label">Click to toggle details display.</xar:var>
-            <p><a href="javascript:void(0);" title="#$label#" onclick="return toggleDisplay('hookdetails');">Details</a>]</p>
     <ul>
         <xar:foreach in="$observers" key="$module" value="$modinfo">             
             <li>

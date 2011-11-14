@@ -100,6 +100,7 @@
                             <a href="#$sorturl#" title="#$sortlbl#">Name</a>
                             <a href="#$sorturl#" title="#$sortlbl#"><img src="#$sortimg#" class="xar-icon" alt="#$sort#"/></a>
                         </th>
+                        <th>Display Name</th>
                         <th>Version</th>
                         <th>Status</th>
                         <th class="xar-align-right">Actions</th>
@@ -108,7 +109,7 @@
                 <xar:if condition="!empty($searched)">
                     <tfoot>
                         <tr>
-                            <td colspan="4" class="xar-align-center"><xar:var name="searched"/></td>
+                            <td colspan="5" class="xar-align-center"><xar:var name="searched"/></td>
                         </tr>
                     </tfoot>
                 </xar:if>
@@ -118,11 +119,12 @@
                             <tr id="#$item['name']#">
                                 <td>
                                     <xar:if condition="!empty($item['admin_url'])">
-                                        <a href="#$item['admin_url']#" title="#$admintitle#">#$item['displayname']#</a>
+                                        <a href="#$item['admin_url']#" title="#$admintitle#">#$item['name']#</a>
                                     <xar:else/>
-                                        #$item['displayname']#
+                                        #$item['name']#
                                     </xar:if>
                                 </td>
+                                <td>#$item['displayname']#</td>
                                 <td>#$item['version']#</td>
                                 <td>
                                     <xar:if condition="!empty($item['error_url'])">
@@ -202,7 +204,7 @@
                             </tr>
                         </xar:foreach>
                     <xar:else/>
-                        <td colspan="4">
+                        <td colspan="5">
                             <p class="xar-info">No modules found matching selection</p>
                         </td>
                     </xar:if>
