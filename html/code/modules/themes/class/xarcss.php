@@ -235,6 +235,7 @@ class xarCSS extends Object
                 $tag['property'] = $property;
                 $property = xarVarPrepForOS($property);
                 // themes/theme/properties/property/style
+                
                 $paths[] = $themeDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
                 // themes/common/properties/property/style
                 $paths[] = $commonDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
