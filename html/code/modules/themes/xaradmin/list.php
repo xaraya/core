@@ -106,9 +106,6 @@ function themes_admin_list()
     $data['items_per_page'] = xarModVars::get('themes', 'items_per_page');
 
     $authid = xarSecGenAuthKey();
-    // chris: not using this, it's way too complicated
-    //$themes = xarMod::apiFunc('themes','admin','getthemelist', $data);
-    // chris: @todo consolidate functionality from (list, getlist, getthemelist, dropdownlist) 
     $themes = xarMod::apiFunc('themes', 'admin', 'getitems',
         array(
             'state' => $data['state'],
@@ -130,33 +127,35 @@ function themes_admin_list()
     foreach ($themes as $key => $theme) {
         $theme['info_url'] = xarModURL('themes', 'admin', 'themesinfo',
             array('id' => $theme['regid']));
+        $return_url = xarServer::getCurrentURL(array('state' => $data['state'] != XARTHEME_STATE_ANY ? XARTHEME_STATE_ANY : null), false, $theme['name']);
+        $return_url = urlencode($return_url);
         switch ($theme['state']) {
             case XARTHEME_STATE_UNINITIALISED: // 1
                 if ($theme['class'] != 4)
                     $theme['init_url'] = xarModURL('themes', 'admin', 'install',
-                        array('id' => $theme['regid'], 'authid' => $authid));
+                        array('id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url));
             break;
             case XARTHEME_STATE_INACTIVE: // 2
                 $theme['activate_url'] = xarModURL('themes', 'admin', 'activate',
-                    array('id' => $theme['regid'], 'authid' => $authid));            
+                    array('id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url));
                 $theme['remove_url'] = xarModURL('themes', 'admin', 'remove',
-                    array('id' => $theme['regid'], 'authid' => $authid));   
+                    array('id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url));   
             break;
             case XARTHEME_STATE_ACTIVE: // 3
                 if ($theme['name'] != $data['user_theme'] && $theme['name'] != $data['admin_theme']) 
                     $theme['deactivate_url'] = xarModURL('themes', 'admin', 'deactivate',
-                        array('id' => $theme['regid'], 'authid' => $authid));             
+                        array('id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url));
             break;
             case XARTHEME_STATE_UPGRADED: // 5
                 $theme['upgrade_url'] = xarModURL('themes', 'admin', 'upgrade',
-                    array('id' => $theme['regid'], 'authid' => $authid));             
+                    array('id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url));
             break;
             case XARTHEME_STATE_MISSING_FROM_UNINITIALISED: // 4
             case XARTHEME_STATE_MISSING_FROM_INACTIVE: // 7
             case XARTHEME_STATE_MISSING_FROM_ACTIVE: // 8
             case XARTHEME_STATE_MISSING_FROM_UPGRADED: // 9
                 $theme['remove_url'] = xarModURL('themes', 'admin', 'remove',
-                    array('id' => $theme['regid'], 'authid' => $authid));             
+                    array('id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url));
             break;
             
         }
