@@ -25,6 +25,7 @@
             <div class="xar-form-actions">
                 <input type="hidden" name="id" id="id" value="#$id#"/>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                 <xar:var name="label">Remove All</xar:var>
                 <xar:button type="submit" label="$label" name="command" id="command"/>
                 <xar:var name="label">Go back to the modules list</xar:var>

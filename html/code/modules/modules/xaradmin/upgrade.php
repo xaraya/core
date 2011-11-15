@@ -33,7 +33,9 @@ function modules_admin_upgrade()
 
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) {return;}
     if (empty($id)) return xarResponse::notFound();
-
+    if (!xarVarFetch('return_url', 'pre:trim:str:1:',
+        $return_url, '', XARVAR_NOT_REQUIRED)) return;
+        
     $success = true;
 
     // See if we have lost any modules since last generation
@@ -59,11 +61,12 @@ function modules_admin_upgrade()
 
     // set the target location (anchor) to go to within the page
     $target=$minfo['name'];
-
+    if (empty($return_url))
+        $return_url = xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
     // Hmmm, I wonder if the target adding is considered a hack
     // it certainly depends on the implementation of xarModUrl
     //    xarController::redirect(xarModURL('modules', 'admin', "list#$target"));
-    xarController::redirect(xarModURL('modules', 'admin', "list", array('state' => 0), NULL, $target));
+    xarController::redirect($return_url);
 
     return true;
 }

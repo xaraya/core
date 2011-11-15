@@ -38,6 +38,8 @@ function modules_admin_install()
 
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
+    if (!xarVarFetch('return_url', 'pre:trim:str:1:',
+        $return_url, '', XARVAR_NOT_REQUIRED)) return;
 
     // First check for a proper core version
     if (!$installer->checkCore($id)) 
@@ -76,6 +78,7 @@ function modules_admin_install()
         }
 
         $data['authid']       = xarSecGenAuthKey();
+        $data['return_url'] = $return_url;
         return $data;
     }
 
@@ -92,6 +95,8 @@ function modules_admin_install()
         //then the module itself
         $installer->installmodule($id);
     }
+    // Note: if the module installed successfully, the above method will have already redirected,
+    // and thus the following won't be executed 
     xarSessionDelVar('installing');
 
     // set the target location (anchor) to go to within the page
@@ -103,7 +108,10 @@ function modules_admin_install()
         xarOutputFlushCached('base-block');
     }
 
-    xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+    if (empty($return_url))
+        $return_url = xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
+
+    xarController::redirect($return_url);
     return true;
 }
 

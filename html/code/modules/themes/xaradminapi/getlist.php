@@ -12,6 +12,8 @@
 
 /**
  * Gets a list of themes that matches required criteria.
+ * NOTE: this function has been superceded by themes_adminapi_getitems() function
+ * which has expanded capabilites for filtering and sorting results
  *
  * Supported criteria are UserCapable, AdminCapable, Class, Category, State.
  *
@@ -50,102 +52,21 @@
  */
 function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems = NULL, $orderBy = 'name')
 {
-    static $validOrderFields = array('name' => 'themes', 'regid' => 'themes',
-                                     'class' => 'infos');
-    if (!is_array($filter)) {
+    if (!is_array($filter)) 
         throw new BadParameterException('filter','Parameter filter must be an array.');
-    }
+    // this function is identical to getthemelist
+    // the only difference is default state here is any instead of active 
+    if (!isset($filter['State']))
+        $filter['State'] = XARTHEME_STATE_ANY;
+    
+    $get = array(
+        'filter' => $filter,
+        'startNum' => $startNum,
+        'numItems' => $numItems,
+        'orderBy' => $orderBy,
+    );
+    
+    return xarMod::apiFunc('themes', 'admin', 'getthemelist', $get);
 
-    // Optional arguments.
-    if (!isset($startNum)) {
-        $startNum = 1;
-    }
-    if (!isset($numItems)) {
-        $numItems = -1;
-    }
-
-    $orderFields = explode('/', $orderBy);
-    $orderByClauses = array(); $extraSelectClause = '';
-    foreach ($orderFields as $orderField) {
-        if (!isset($validOrderFields[$orderField])) {
-            throw new BadParameterException('orderBy','Parameter orderBy can contain only \'name\' or \'regid\' or \'class\' as items.');
-        }
-        // Here $validOrderFields[$orderField] is the table alias
-        $orderByClauses[] = $validOrderFields[$orderField] . '.' . $orderField;
-        if ($validOrderFields[$orderField] == 'infos') {
-            $extraSelectClause .= ', ' . $validOrderFields[$orderField] . '.' . $orderField;
-        }
-    }
-    $orderByClause = join(', ', $orderByClauses);
-
-    // Determine the right tables to use
-    $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
-    $themestable = $tables['themes'];
-
-    // Construct an array with where conditions and their bind variables
-    $whereClauses = array(); $bindvars = array();
-
-    if (isset($filter['Class'])) {
-        $bindvars[] = $filter['Class'];
-    }
-    if (isset($filter['State'])) {
-        if ($filter['State'] != XARTHEME_STATE_ANY) {
-            $whereClauses[] = 'themes.state = ?';
-            $bindvars[] = $filter['State'];
-        }
-    }
-
-    $themeList = array();
-
-    $whereClause = '';
-    if (!empty($whereClauses)) {
-        $whereClause = 'WHERE ' . join(' AND ', $whereClauses);
-
-    }
-    $query = "SELECT themes.regid,
-                     themes.name,
-                     themes.directory,
-                     themes.state
-              FROM $tables[themes] AS themes $whereClause ORDER BY $orderByClause";
-
-    $stmt = $dbconn->prepareStatement($query);
-    $stmt->setLimit($numItems);
-    $stmt->setOffset($startNum - 1);
-    $result = $stmt->executeQuery($bindvars);
-
-    while($result->next()) {
-        list($themeInfo['regid'],
-             $themeInfo['name'],
-             $themeInfo['directory'],
-             $themeState) = $result->fields;
-
-        if (xarVarIsCached('Theme.Infos', $themeInfo['regid'])) {
-            // Get infos from cache
-            $themeList[] = xarVarGetCached('Theme.Infos', $themeInfo['regid']);
-        } else {
-            $themeInfo['displayname'] = $themeInfo['name'];
-            // Shortcut for os prepared directory
-            $themeInfo['osdirectory'] = xarVarPrepForOS($themeInfo['directory']);
-
-            $themeInfo['state'] = (int) $themeState;
-
-            xarVarSetCached('Theme.BaseInfos', $themeInfo['name'], $themeInfo);
-
-            $themeFileInfo = xarTheme_getFileInfo($themeInfo['osdirectory']);
-            if (!isset($themeFileInfo)) {
-                // There was an entry in the database which was not in the file system,
-                // remove the entry from the database
-                xarMod::apiFunc('themes','admin','remove',array('regid' => $themeInfo['regid']));
-            } else {
-                $themeInfo = array_merge($themeInfo, $themeFileInfo);
-                xarVarSetCached('Theme.Infos', $themeInfo['regid'], $themeInfo);
-                $themeList[] = $themeInfo;
-            }
-        }
-        $themeInfo = array();
-    }
-    $result->close();
-    return $themeList;
 }
 ?>

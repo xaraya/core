@@ -33,7 +33,9 @@ function themes_admin_remove()
 
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
-
+    if (!xarVarFetch('return_url', 'pre:trim:str:1:',
+        $return_url, '', XARVAR_NOT_REQUIRED)) return;
+        
     // Remove theme
     $removed = xarMod::apiFunc('themes',
         'admin',
@@ -41,8 +43,9 @@ function themes_admin_remove()
         array('regid' => $id)); 
     // throw back
     if (!isset($removed)) return;
-
-    xarController::redirect(xarModURL('themes', 'admin', 'list'));
+    if (empty($return_url))
+        $return_url = xarModURL('themes', 'admin', 'list');
+    xarController::redirect($return_url);
     return true;
 } 
 

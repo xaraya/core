@@ -83,7 +83,7 @@ class xarBlock extends Object implements ixarBlock
 
             // check if block expired already
             $now = time();
-            if (isset($block->expire) && $now > $block->expire && $block->expire != 0) {
+            if ($block->expire && $now > $block->expire) {
                 if (!empty($cacheKey))
                     xarBlockCache::setCached($cacheKey, '');
                 return '';

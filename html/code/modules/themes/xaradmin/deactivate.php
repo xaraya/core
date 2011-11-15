@@ -33,13 +33,17 @@ function themes_admin_deactivate()
 
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
-
+    if (!xarVarFetch('return_url', 'pre:trim:str:1:',
+        $return_url, '', XARVAR_NOT_REQUIRED)) return;
+        
     //Checking if the user has already passed thru the GUI:
     xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
 
     // set the target location (anchor) to go to within the page
     $minfo=xarThemeGetInfo($id);
     $target=$minfo['name'];
+    if (empty($return_url))
+        $return_url = xarModURL('themes', 'admin', 'list', array('state' => XARTHEME_STATE_ANY), NULL, $target);
 
     // See if we have lost any modules since last generation
     sys::import('modules.modules.class.installer');
@@ -51,7 +55,7 @@ function themes_admin_deactivate()
 
     // Hmmm, I wonder if the target adding is considered a hack
     // it certainly depends on the implementation of xarModUrl
-    xarController::redirect(xarModURL('themes', 'admin', 'list', array('state' => 0), NULL, $target));
+    xarController::redirect($return_url);
     return true;
 }
 ?>
