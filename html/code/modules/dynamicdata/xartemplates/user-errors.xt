@@ -26,7 +26,8 @@
                 </div>
             <xar:elseif condition="$layout eq 'bad_definition'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
-                    The object could not be imported because of an error in its definition
+                    The object could not be imported because of an error in its definition:
+                    <br/>#$name#
                 </div>
             <xar:else />
                 <div style="margin-top: 20px; margin-left: 20px">
