@@ -39,6 +39,7 @@ function themes_admin_modifyconfig()
     if (!xarVarFetch('copyright', 'str', $data['copyright'], xarModVars::get('themes', 'SiteCopyRight'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('AtomTag', 'str:1:', $data['atomtag'], (bool)xarModVars::get('themes', 'AtomTag'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('compresswhitespace', 'int', $data['compresswhitespace'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('debugmode', 'int', $data['debugmode'], 0, XARVAR_NOT_REQUIRED)) return;
 
     if (!xarVarFetch('themedir','str:1:',$data['defaultThemeDir'],'themes',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('adminpagemenu', 'checkbox', $data['adminpagemenu'], (bool)xarModVars::get('themes', 'adminpagemenu'), XARVAR_NOT_REQUIRED)) {return;}
@@ -124,6 +125,8 @@ function themes_admin_modifyconfig()
             // css combine/compress options
             xarModVars::set('themes', 'css.combined', $data['combinecss']);
             xarModVars::set('themes', 'css.compressed', $data['compresscss']);
+
+            xarModVars::set('themes', 'debugmode', $data['debugmode']);
 
            
             // Adjust the usermenu hook according to the setting

@@ -74,6 +74,12 @@
                 </div>
             </fieldset>
             <fieldset>
+                <legend>                    
+                    Debug Options                    
+                </legend>
+                <xar:template file="debug"/>
+            </fieldset>
+            <fieldset>
                 <legend>User Settings</legend>
                 <xar:set name="enable_user_menu"><xar:var scope="module" module="themes" name="enable_user_menu"/></xar:set>
                 <div class="xar-row">
