@@ -62,7 +62,7 @@ function dynamicdata_admin_updateprop()
             }
             sys::import('modules.dynamicdata.class.objects.master');
             $objectid = DataObjectMaster::createObject(
-                                      array('moduleid' => $modid,
+                                      array('moduleid' => $module_id,
                                             'itemtype' => $itemtype,
                                             'name' => $name,
                                             'label' => ucfirst($name)));
