@@ -221,7 +221,7 @@ function installer_admin_cleanup()
     }
 
     // if install.php still exists, set a reminder instance
-    if (!xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => 'reminder')) && file_exists('install.php')) {
+    if (!xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => 'reminder')) && (file_exists('install.php') || file_exists('upgrade.php'))) {
         // get the default reminder block type info
         $reminder_type = xarMod::apiFunc('blocks', 'types', 'getitem', 
             array('type' => 'content', 'module' => 'base'));
@@ -231,7 +231,9 @@ function installer_admin_cleanup()
         $reminder_block->attachGroup($admin_group['block_id']);
         // set content
         $reminder_content = $reminder_block->storeContent();
-        $reminder_content['content_text'] = 'Please delete install.php from your webroot.';
+        $reminder_content['content_text'] = 'if (is_file("install.php")) echo "<div>Please delete install.php from your web root directory.</div>";
+if (is_file("upgrade.php")) echo "<div>Please delete upgrade.php from your web root directory.</div>";';
+        $reminder_content['content_type'] = 'php';
         $reminder_content['expire'] = time() + 259200;
         // create reminder instance
         if (!$reminder_id =xarMod::apiFunc('blocks', 'instances', 'createitem',

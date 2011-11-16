@@ -192,6 +192,9 @@
                       <xsl:with-param name="expr" select="@template"/>
                     </xsl:call-template>
                   </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:text>","</xsl:text>
+                  </xsl:otherwise>
                 </xsl:choose>                  
                 <xsl:choose>
                   <xsl:when test="$caller != ''">

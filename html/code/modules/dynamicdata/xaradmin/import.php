@@ -76,7 +76,7 @@ function dynamicdata_admin_import(Array $args=array())
             } catch (DuplicateException $e) {
                 return xarTplModule('dynamicdata', 'user', 'errors',array('layout' => 'duplicate_name', 'name' => $e->getMessage()));
             } catch (Exception $e) {
-                return xarTplModule('dynamicdata', 'user', 'errors',array('layout' => 'bad_definition'));
+                return xarTplModule('dynamicdata', 'user', 'errors',array('layout' => 'bad_definition', 'name' => $e->getMessage()));
             }
         } else {
             try {
@@ -89,7 +89,7 @@ function dynamicdata_admin_import(Array $args=array())
             } catch (DuplicateException $e) {
                 return xarTplModule('dynamicdata', 'user', 'errors',array('layout' => 'duplicate_name', 'name' => $e->getMessage()));
             } catch (Exception $e) {
-                return xarTplModule('dynamicdata', 'user', 'errors',array('layout' => 'bad_definition'));
+                return xarTplModule('dynamicdata', 'user', 'errors',array('layout' => 'bad_definition', 'name' => $e->getMessage()));
             }
         }
         if (empty($objectid)) return;
