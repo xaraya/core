@@ -105,6 +105,7 @@ function dynamicdata_utilapi_export(Array $args=array())
     }
     $xml .= "  </properties>\n";
 
+/* We don't use this
     // get object links for this object
     $name = $myobject->properties['name']->value;
     sys::import('modules.dynamicdata.class.objects.links');
@@ -123,8 +124,8 @@ function dynamicdata_utilapi_export(Array $args=array())
         }
         $xml .= "  </links>\n";
     }
+*/
     $xml .= "</object>\n";
-
     return $xml;
 }
 
