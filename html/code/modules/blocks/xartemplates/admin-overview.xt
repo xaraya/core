@@ -5,7 +5,6 @@
     <div class="xar-mod-body">
         <div class="xar-mod-page-head">
             <xar:var name="label">Official Icon</xar:var>
-            <xar:img scope="theme" file="blocks.png" alt="$label" width="96" height="96" class="xar-module-icon"/>
         </div>
         <div class="xar-mod-page-head">
             <h2 class="xar-mod-pagetitle">Overview</h2>
@@ -57,6 +56,7 @@
             </ul>
         </div>
         <div class="xar-mod-page-body">
+            <xar:img scope="theme" file="blocks.png" alt="$label" width="96" height="96" class="xar-module-icon"/>
             <!-- About, basic module overview info and concept -->
             <xar:if condition="empty($tab)">
 
