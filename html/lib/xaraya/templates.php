@@ -520,11 +520,17 @@ class xarTpl extends Object
         }
         
         $paths = array();
-        foreach ($basepaths as $basepath) {
-            if (!empty($tplName))
+        // approach this the other way, look for tplBase-tplName in all paths first
+        if (!empty($tplName)) {
+            foreach ($basepaths as $basepath)
                 $paths[] = "$basepath/$tplPart/$tplBase-$tplName.xt";
+        }
+        // then look for tplBase... (checkme: this is cfr getSourceFileName order)
+        foreach ($basepaths as $basepath) 
             $paths[] = "$basepath/$tplPart/$tplBase.xt";
-            if ($canonical) 
+        // then look at canonical... (see checkme)
+        if ($canonical) {
+            foreach ($basepaths as $basepath)
                 $paths[] = "$basepath/$tplPart/$canTemplateName.xt";
         }
 
