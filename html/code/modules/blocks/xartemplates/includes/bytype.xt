@@ -17,6 +17,9 @@
                         <xar:else/>
                             #$type['type']#
                         </xar:if>
+                        <xar:if condition="!empty($type['module'])">
+                            (#xarMod::getDisplayName($type['module'])#)
+                        </xar:if>
                             Block Type Instances
                     </th>
                     <th class="xar-align-right">
