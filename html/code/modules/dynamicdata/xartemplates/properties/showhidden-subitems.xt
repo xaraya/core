@@ -1,0 +1,33 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+
+    <input type="hidden" name="#$fieldprefix#_fieldprefix" id="#$fieldprefix#_fieldprefix" value="#$fieldprefix#" />
+        
+    <!-- we have a fixed number of items  -->
+        <xar:set name="itemsdisplayed">""</xar:set>
+        <xar:set name="i">0</xar:set>
+
+        <!-- Display the existing objects -->
+        <xar:foreach in="$items" value="$item" >
+            <xar:set name="i">$i+1</xar:set>
+            <xar:set name="itemsdisplayed">$itemsdisplayed . "," . $i</xar:set>
+            <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
+
+            <div id="#$fieldprefix#_item#$i#" style="display: none">
+                <xar:data-form object="$item" fieldprefix="$prefix" tplmodule="$tplmodule" layout="$layout" />
+            </div>
+        </xar:foreach>
+
+        <!-- Display empty objects up to the required minimum (should not really happen) -->
+        <xar:for start="$i = $i+1" test="$i le $minimumitems" iter="$i++">
+            <xar:set name="itemsdisplayed">$itemsdisplayed . "," . $i</xar:set>
+            <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
+
+            <div id="#$fieldprefix#_item#$i#" style="display: none">
+                <xar:data-form object="$emptyobject" fieldprefix="$prefix" tplmodule="$tplmodule" layout="$layout" />
+            </div>
+        </xar:for>
+    
+    <xar:set name="itemsdisplayed">trim($itemsdisplayed,",")</xar:set>
+    <input type="hidden" name="#$fieldprefix#_itemsdisplayed" id="#$fieldprefix#_itemsdisplayed" value="#$itemsdisplayed#" />
+</xar:template>
