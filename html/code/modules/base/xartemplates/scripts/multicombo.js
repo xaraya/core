@@ -32,6 +32,8 @@ function multiCombo(args)
     // array of ids to make visible on init
     this.make_visible = (typeof args.make_visible == 'undefined') ? null : args.make_visible;
 
+    this.auto_sort = (typeof args.auto_sort == 'undefined') ? true : args.auto_sort;
+
     this.leftel; // the left select element
     this.rightel; // the right select element
 
@@ -97,18 +99,45 @@ function multiCombo(args)
         e = formel.getAttribute('onsubmit');
         formel.setAttribute('onsubmit',
             this.id + '.submitForm();' + e);
-
+        
+        this.setOptionHandlers(this.leftel, 'right');
+        this.setOptionHandlers(this.rightel, 'left');        
+        
         // and finally, display the hidden elements
         if (this.make_visible.length) {
             for (i=0;i<this.make_visible.length;i++) {
                 el = document.getElementById(this.make_visible[i]);
-                //alert(el.id);
                 if (el) {
                     el.style.display = '';
                 }
             }
         }
 
+    }
+
+    this.moveOption = function(el, dir)
+    {
+        el.parentNode.remove(el.index);
+        if (dir == 'left') {            
+            this.leftel.add(el);
+            this.sortOptions(this.leftel);
+        } else {
+            this.rightel.add(el);
+            this.sortOptions(this.rightel);
+        }
+        this.setOptionHandlers(this.leftel, 'right');
+        this.setOptionHandlers(this.rightel, 'left'); 
+        this.deselectAll(this.rightel);
+        this.deselectAll(this.leftel);
+    }
+
+    this.setOptionHandlers = function(from, dir)
+    {
+        numopts = from.options.length;
+        for (i=0;i<numopts;i++) {
+            from.options[i].setAttribute('ondblclick',
+                this.id + '.moveOption(this, \'' + dir + '\');');
+        }        
     }
 
     // called onsubmit to disable left and select all options on right
@@ -147,24 +176,31 @@ function multiCombo(args)
         this.sortOptions(to);
         // and deselect them all
         this.deselectAll(to);
+        this.deselectAll(from);
+        this.setOptionHandlers(this.leftel, 'right');
+        this.setOptionHandlers(this.rightel, 'left'); 
     }
 
-    // select all options from select element
+    // select all options from a select element
     this.selectAll = function(from)
     {
-        numopts = from.options.length;
-        for (i=0;i<numopts;i++) {
-            from.options[i].selected = true;
-        }
+        this.setSelected(from, true);
     }
 
-    // deselect all options from select element
+    // deselect all options from a select element
     this.deselectAll = function(from)
     {
+        this.setSelected(from, false);
+    }
+
+    // set selected state of all options from a select element
+    this.setSelected = function(from,s)
+    {
+        var s = (typeof s == 'undefined') ? false : s;
         numopts = from.options.length;
         for (i=0;i<numopts;i++) {
-            from.options[i].selected = false;
-        }
+            from.options[i].selected = s;
+        }        
     }
 
     // remove all options with selected attribute from a select element
@@ -201,6 +237,7 @@ function multiCombo(args)
 
     // helper method to sort options alphabetically
     this.sortOptions = function(obj){
+        if (!this.auto_sort) return;
         var o = new Array();
         if(!obj.options.length) return;
         for(var i=0;i<obj.options.length;i++) {
