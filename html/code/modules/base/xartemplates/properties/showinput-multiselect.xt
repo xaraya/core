@@ -38,7 +38,7 @@
                     </xar:foreach>
                 </select>
             <xar:else />
-                Options not specified in the configuration:
+                Options not specified in the configuration
             </xar:if>
         <xar:else/>
             <xar:if condition="(count($options) gt 0) OR $allowempty">
@@ -58,38 +58,45 @@
                     </xar:foreach>
                 </select>
             <xar:else />
-                Options not specified in the configuration.
+                Options not specified in the configuration
             </xar:if>
         </xar:if>
     <xar:else/>
-        <div>
-            <ul style="list-style-type:none;">
-                <li style="float:left; margin-right: 10px">
-                    <xar:data-input type="multiselect" name="childgroups" options="$options" value="$value"/>
-                    <input type="hidden" name="childgroupsimploded" id="childgroupsimploded"/>
-                </li>
-                <li style="float:left; margin-right: 10px">
-                    <xar:var name="label">Add</xar:var>
-                    <xar:var name="label1">Add Group</xar:var>
-                    <input class="button" type="button" id="add" value="&lt; #$label#" onclick="addSelectedToList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');delSelectedFromList('childgroupsselect'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#$label1#" style="width: 100px;"/>
-                    <br />
-                    <xar:var name="label">Remove</xar:var>
-                    <xar:var name="label1">Remove Group</xar:var>
-                    <input class="button" type="button" id="remove" value="#$label# &gt;" onclick="addSelectedToList('childgroups','childgroupsselect');implodeListKeys('childgroups','childgroupsimploded',',');delSelectedFromList('childgroups'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#$label1#"  style="width: 100px;"/>
-                    <br />
-                    <xar:var name="label">Add All</xar:var>
-                    <xar:var name="label1">Add all groups</xar:var>
-                    <input class="button" type="button" id="addall" value="&lt;&lt; #$label#" onclick="addAllGroup('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');removeAllGroup('childgroupsselect'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',',');checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#$label1#" style="width: 100px;"/>
-                    <br />                                                                                                                                                                                                                                                                                                                       
-                    <xar:var name="label">Remove All</xar:var>
-                    <xar:var name="label1">Remove all groups</xar:var>
-                    <input class="button" type="button" id="removeall" value="#$label# &gt;&gt;" onclick="addAllGroup('childgroups','childgroupsselect');implodeListKeys('childgroups','childgroupsimploded',',');removeAllGroup('childgroups'); sortList('childgroupsselect','childgroups');implodeListKeys('childgroups','childgroupsimploded',','); checkstatus('childgroupsselect','childgroups','removeall','addall','add','remove');" title="#$label1#"  style="width: 100px;" />
-                </li>
-                <li style="float:left;">
-                    <xar:data-input type="multiselect" name="childgroupsselect" options="$unchosen"/>
-                </li>
-            </ul>
-        </div>       
+        <xar:javascript module="base" filename="selectbox.js"/>
+        <xar:set name="boxname1">$name . '_list1'</xar:set>
+        <xar:set name="boxname2">$name . '[]'</xar:set>
+        <script type="text/javascript">
+            var msoptions = new OptionTransfer('#$boxname1#','#$id#');
+            msoptions.setAutoSort(true);
+            msoptions.setDelimiter(',');
+            msoptions.saveNewRightOptions('#$name#_values');
+        </script>
+        <ul style="list-style-type:none;">
+            <li style="float:left; margin-right: 5px">
+                <xar:data-input type="multiselect" name="$boxname1" ondblclick="keywords_opt.transferRight()" options="$options" size="10" layout="onebox"/>
+            </li>
+            <li style="float:left; text-align: center;margin-right: 5px;">
+                <div>
+                    <input onclick="msoptions.transferRight()" type="button" value="&gt;" name="right" />
+                </div>
+                <div>
+                    <input onclick="msoptions.transferAllRight()" type="button" value="&gt;&gt;" name="rightAll" />
+                </div>
+                <div>
+                    <input onclick="msoptions.transferLeft()" type="button" value="&lt;" name="left" />
+                </div>
+                <div>
+                    <input onclick="msoptions.transferAllLeft()" type="button" value="&lt;&lt;" name="leftAll" />
+                </div>
+            </li>
+            <li style="float:left;">
+                <xar:data-input type="multiselect" name="$boxname2" id="$id" ondblclick="keywords_opt.transferLeft()" allowempty="1" value="$value" size="10" layout="onebox"/>
+            </li>
+        </ul>
+        <input type="hidden" size="70" name="#$name#_values" id="#$name#_values"/>
+        <script type="text/javascript">
+            msoptions.init(document.getElementById('#$name#_values').form);
+        </script>
     </xar:if>
 
     <xar:template file="dataproperty_additions" module="base"/>
