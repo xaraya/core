@@ -32,14 +32,15 @@ function multiCombo(args)
     // array of ids to make visible on init
     this.make_visible = (typeof args.make_visible == 'undefined') ? null : args.make_visible;
 
+    // en/disable automatic sorting (default enabled)
     this.auto_sort = (typeof args.auto_sort == 'undefined') ? true : args.auto_sort;
 
     this.leftel; // the left select element
     this.rightel; // the right select element
 
+    // init takes care of everything, this is the only method we need to call in the template 
     this.init = function()
     {
-
         // pointless if we don't have these element ids
         if (!this.left || !this.right || !this.id) return;
 
@@ -66,42 +67,40 @@ function multiCombo(args)
         this.removeSelected(this.leftel);
         // and remove all unselected elements on the right
         this.removeUnselected(this.rightel);
-        // then deselect options in right select
-        this.deselectAll(this.rightel);
 
         // ok now we can set up our button actions
         rightbtn = document.getElementById(this.right_move);
         if (rightbtn) {
             rightbtn.setAttribute('onclick',
-                this.id + '.move(\'left\',\'right\');return false;');
+                this.id + '.move(\'right\');return false;');
             rightbtn.disabled = false;
         }
         rightbtnall = document.getElementById(this.right_move_all);
         if (rightbtnall) {
             rightbtnall.setAttribute('onclick',
-                this.id + '.move(\'left\',\'right\', true);return false;');
+                this.id + '.move(\'right\', true);return false;');
             rightbtnall.disabled = false;
         }
         leftbtn = document.getElementById(this.left_move);
         if (leftbtn) {
             leftbtn.setAttribute('onclick',
-                this.id + '.move(\'right\',\'left\');return false;');
+                this.id + '.move(\'left\');return false;');
             leftbtn.disabled = false;
         }
         leftbtnall = document.getElementById(this.left_move_all);
         if (leftbtnall) {
             leftbtnall.setAttribute('onclick',
-                this.id + '.move(\'right\',\'left\', true);return false;');
+                this.id + '.move(\'left\', true);return false;');
             leftbtnall.disabled = false;
         }
 
-        // attach our submitForm() method to the parent forms onsubmit event
-        e = formel.getAttribute('onsubmit');
+        // prepend our submitForm() method to the parent forms existing onsubmit event
+        onsubmit = formel.getAttribute('onsubmit');
         formel.setAttribute('onsubmit',
-            this.id + '.submitForm();' + e);
+            this.id + '.submitForm();' + onsubmit);
         
-        this.setOptionHandlers(this.leftel, 'right');
-        this.setOptionHandlers(this.rightel, 'left');        
+        // deselect all options, sort them, and set handlers 
+        this.refreshElements();      
         
         // and finally, display the hidden elements
         if (this.make_visible.length) {
@@ -115,29 +114,17 @@ function multiCombo(args)
 
     }
 
-    this.moveOption = function(el, dir)
+    this.refreshElements = function()
     {
-        el.parentNode.remove(el.index);
-        if (dir == 'left') {            
-            this.leftel.add(el);
-            this.sortOptions(this.leftel);
-        } else {
-            this.rightel.add(el);
-            this.sortOptions(this.rightel);
-        }
-        this.setOptionHandlers(this.leftel, 'right');
-        this.setOptionHandlers(this.rightel, 'left'); 
+        // deselect all options
         this.deselectAll(this.rightel);
         this.deselectAll(this.leftel);
-    }
-
-    this.setOptionHandlers = function(from, dir)
-    {
-        numopts = from.options.length;
-        for (i=0;i<numopts;i++) {
-            from.options[i].setAttribute('ondblclick',
-                this.id + '.moveOption(this, \'' + dir + '\');');
-        }        
+        // sort options
+        this.sortOptions(this.rightel);           
+        this.sortOptions(this.leftel);
+        // set dblclick events on options
+        this.setOptionHandlers(this.rightel, 'left'); 
+        this.setOptionHandlers(this.leftel, 'right');
     }
 
     // called onsubmit to disable left and select all options on right
@@ -148,12 +135,23 @@ function multiCombo(args)
         this.selectAll(this.rightel);
     }
 
-    // called by button onclick event to move options
-    this.move = function(from, to, all)
+
+    // set dblclick handlers on options from select element 
+    this.setOptionHandlers = function(from, dir)
     {
-        if (from == 'left') {
+        numopts = from.options.length;
+        for (i=0;i<numopts;i++) {
+            from.options[i].setAttribute('ondblclick',
+                this.id + '.moveOption(this, \'' + dir + '\');');
+        }        
+    }
+
+    // move selected option elements (fired by button onclick)
+    this.move = function(dir, all)
+    {
+        if (dir == 'right') {
             this.moveSelected(this.leftel, this.rightel, all);
-        } else {
+        } else if (dir == 'left') {
             this.moveSelected(this.rightel, this.leftel, all);
         }
     }
@@ -171,14 +169,20 @@ function multiCombo(args)
             }
         }
         // remove options from select
-        this.removeSelected(from);
-        // sort the options in to select
-        this.sortOptions(to);
-        // and deselect them all
-        this.deselectAll(to);
-        this.deselectAll(from);
-        this.setOptionHandlers(this.leftel, 'right');
-        this.setOptionHandlers(this.rightel, 'left'); 
+        this.removeSelected(from);        
+        this.refreshElements();
+    }
+
+    // move a single option element (fired by option ondblclick) 
+    this.moveOption = function(el, dir)
+    {
+        el.parentNode.remove(el.index);
+        if (dir == 'left') {            
+            this.leftel.add(el);
+        } else if (dir == 'right'){
+            this.rightel.add(el);
+        }
+        this.refreshElements();
     }
 
     // select all options from a select element
