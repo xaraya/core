@@ -72,25 +72,25 @@ function multiCombo(args)
         rightbtn = document.getElementById(this.right_move);
         if (rightbtn) {
             rightbtn.setAttribute('onclick',
-                this.id + '.move(\'left\',\'right\');return false;');
+                this.id + '.move(\'right\');return false;');
             rightbtn.disabled = false;
         }
         rightbtnall = document.getElementById(this.right_move_all);
         if (rightbtnall) {
             rightbtnall.setAttribute('onclick',
-                this.id + '.move(\'left\',\'right\', true);return false;');
+                this.id + '.move(\'right\', true);return false;');
             rightbtnall.disabled = false;
         }
         leftbtn = document.getElementById(this.left_move);
         if (leftbtn) {
             leftbtn.setAttribute('onclick',
-                this.id + '.move(\'right\',\'left\');return false;');
+                this.id + '.move(\'left\');return false;');
             leftbtn.disabled = false;
         }
         leftbtnall = document.getElementById(this.left_move_all);
         if (leftbtnall) {
             leftbtnall.setAttribute('onclick',
-                this.id + '.move(\'right\',\'left\', true);return false;');
+                this.id + '.move(\'left\', true);return false;');
             leftbtnall.disabled = false;
         }
 
@@ -146,12 +146,12 @@ function multiCombo(args)
         }        
     }
 
-    // called by button onclick event to move options
-    this.move = function(from, to, all)
+    // move selected option elements (fired by button onclick)
+    this.move = function(dir, all)
     {
-        if (from == 'left') {
+        if (dir == 'right') {
             this.moveSelected(this.leftel, this.rightel, all);
-        } else {
+        } else if (dir == 'left') {
             this.moveSelected(this.rightel, this.leftel, all);
         }
     }
@@ -173,13 +173,13 @@ function multiCombo(args)
         this.refreshElements();
     }
 
-    // move a single option element (fired by ondblclick) 
+    // move a single option element (fired by option ondblclick) 
     this.moveOption = function(el, dir)
     {
         el.parentNode.remove(el.index);
         if (dir == 'left') {            
             this.leftel.add(el);
-        } else {
+        } else if (dir == 'right'){
             this.rightel.add(el);
         }
         this.refreshElements();
