@@ -25,6 +25,8 @@ class MultiSelectProperty extends SelectProperty
     public $validation_allowempty = false;
     public $validation_single_invalid; // CHECKME: is this a validation or something else?
     public $validation_allowempty_invalid;
+    public $validation_override             = false;
+    public $validation_override_invalid;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -33,6 +35,19 @@ class MultiSelectProperty extends SelectProperty
         $this->template =  'multiselect';
     }
 
+    public function checkInput($name = '', $value = null)
+    {
+        $name = empty($name) ? 'dd_'.$this->id : $name;
+        // store the fieldname for configurations who need them (e.g. file uploads)
+        $this->fieldname = $name;
+        $this->invalid = '';
+        if(!isset($value)) {
+            list($found,$value) = $this->fetchValue($name);
+            if (!$found) $value = null;
+        }
+       return $this->validateValue($value);
+    }
+    
     public function validateValue($value = null)
     {
         // do NOT call parent validateValue here - it will always fail !!!

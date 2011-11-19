@@ -453,6 +453,11 @@ class xarTpl extends Object
             $tplPart = strtr(trim(xarVarPrepForOS($tplPart)), " ", "/");
         $canTemplateName = strtr($tplName, "-", "/");
         $canonical = ($canTemplateName == $tplName) ? false : true;
+
+        $cachename = "$scope:$package:$tplBase:$tplName:$tplPart:$callerMod";
+        // cache frequently-used sourcefilenames 
+        if (xarCoreCache::isCached('Templates.Element', $cachename))
+            return xarCoreCache::getCached('Templates.Element', $cachename);
         
         // default paths 
         $themePath = self::getThemeDir();
@@ -544,6 +549,8 @@ class xarTpl extends Object
         }
         // $tplPart may have been empty,
         $sourceFileName = str_replace('//','/',$sourceFileName);
+
+        xarCoreCache::setCached('Templates.Element', $cachename, $sourceFileName);
 
         return $sourceFileName;
        
