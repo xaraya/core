@@ -25,8 +25,6 @@ class MultiSelectProperty extends SelectProperty
     public $validation_allowempty = false;
     public $validation_single_invalid; // CHECKME: is this a validation or something else?
     public $validation_allowempty_invalid;
-    public $validation_override             = false;
-    public $validation_override_invalid;
 
     function __construct(ObjectDescriptor $descriptor)
     {
