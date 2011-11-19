@@ -83,7 +83,7 @@
                             <select name="_dummy" id="left_select" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#" disabled="disabled"><option></option>
                             </select>     
                         </td>
-                        <td id="_show_4" style="display: none;">
+                        <td id="_show_4" style="text-align: center;display: none;">
                             <!-- the hidden buttons, will be enabled by js if available -->
                             <p><input id="right_move" type="button" value="&gt;" disabled="disabled"/></p>
                             <p><input id="right_move_all" type="button" value="&gt;&gt;" disabled="disabled"/></p>
@@ -91,21 +91,21 @@
                             <p><input id="left_move_all" type="button" value="&lt;&lt;" disabled="disabled"/></p> 
                         </td>
                         <td>
-                        <select name="#$name#[]" id="#$id#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
-                            <xar:foreach in="$options" value="$option">
-                                <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
-                                    <xar:if condition="in_array($option['id'],$value)">
-                                        <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                            <select name="#$name#[]" id="#$id#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
+                                <xar:foreach in="$options" value="$option">
+                                    <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
+                                        <xar:if condition="in_array($option['id'],$value)">
+                                            <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                                        <xar:else />
+                                            <option value="#$option['id']#">#$option['name']#</option>
+                                        </xar:if>
+                                    <xar:elseif condition="in_array($option['id'],$value)"/>
+                                        <option selected="selected">#$option['name']#</option>
                                     <xar:else />
-                                        <option value="#$option['id']#">#$option['name']#</option>
+                                        <option>#$option['name']#</option>
                                     </xar:if>
-                                <xar:elseif condition="in_array($option['id'],$value)"/>
-                                    <option selected="selected">#$option['name']#</option>
-                                <xar:else />
-                                    <option>#$option['name']#</option>
-                                </xar:if>
-                            </xar:foreach>
-                        </select>                        
+                                </xar:foreach>
+                            </select>                        
                         </td>                    
                     </tr>                
                 </tbody>            
@@ -124,41 +124,6 @@
         </xar:if>  
 
     <xar:else/>
-        <xar:javascript module="base" filename="selectbox.js"/>
-        <xar:set name="boxname1">$name . '_list1'</xar:set>
-        <xar:set name="boxname2">$name . '[]'</xar:set>
-        <script type="text/javascript">
-            var msoptions = new OptionTransfer('#$boxname1#','#$id#');
-            msoptions.setAutoSort(true);
-            msoptions.setDelimiter(',');
-            msoptions.saveNewRightOptions('#$name#_values');
-        </script>
-        <ul style="list-style-type:none;">
-            <li style="float:left; margin-right: 5px">
-                <xar:data-input type="multiselect" name="$boxname1" ondblclick="keywords_opt.transferRight()" options="$options" size="10" layout="onebox"/>
-            </li>
-            <li style="float:left; text-align: center;margin-right: 5px;">
-                <div>
-                    <input onclick="msoptions.transferRight()" type="button" value="&gt;" name="right" />
-                </div>
-                <div>
-                    <input onclick="msoptions.transferAllRight()" type="button" value="&gt;&gt;" name="rightAll" />
-                </div>
-                <div>
-                    <input onclick="msoptions.transferLeft()" type="button" value="&lt;" name="left" />
-                </div>
-                <div>
-                    <input onclick="msoptions.transferAllLeft()" type="button" value="&lt;&lt;" name="leftAll" />
-                </div>
-            </li>
-            <li style="float:left;">
-                <xar:data-input type="multiselect" name="$boxname2" id="$id" ondblclick="keywords_opt.transferLeft()" allowempty="1" value="$value" size="10" layout="onebox"/>
-            </li>
-        </ul>
-        <input type="hidden" size="70" name="#$name#_values" id="#$name#_values"/>
-        <script type="text/javascript">
-            msoptions.init(document.getElementById('#$name#_values').form);
-        </script>
     </xar:if>
 
     <xar:template file="dataproperty_additions" module="base"/>
