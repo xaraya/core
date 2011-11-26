@@ -32,9 +32,7 @@
                     <tr>
                         <td colspan="4" align="center">
                             <br />
-                            
                                 There are currently no category links in the database...
-                            
                             <br />
                             <br />
                         </td>
@@ -137,7 +135,7 @@
                         <tr>
                             <xar:if condition="!empty($moditem['title']) and !empty($moditem['link'])">
                             <td valign="center" width="50%">
-                                #$itemid# - <a href="#$moditem['link']#">#$moditem['title']# </a>
+                                #$itemid#: <a href="#$moditem['link']#">#$moditem['title']# </a>
                             </td>
                             <xar:else/>
                             <td align="center" valign="center" width="50%">

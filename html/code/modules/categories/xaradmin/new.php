@@ -70,6 +70,7 @@
 
         $data['categories'] = $categories;
         $data['authid'] = xarSecGenAuthKey();
+//        var_dump($data);exit;
         return $data;
     }
 ?>
