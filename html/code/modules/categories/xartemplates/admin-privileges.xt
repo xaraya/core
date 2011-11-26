@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <div class="xar-mod-head"><span class="xar-mod-title">Categories Administration</span></div>
+    <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
     <xar:if condition="$extcomponent eq 'Link'">
         <h2><xar:ml><xar:mlstring>Select Hooked Modules and/or Categories for Privilege '#(1)'</xar:mlstring><xar:mlvar>#$extname#</xar:mlvar></xar:ml></h2>

@@ -3,9 +3,7 @@
     <fieldset class="xar-norm">
         <legend>
             <strong>
-                
-                    Categories
-                
+                Categories
             </strong>
         </legend>
         <xar:data-input type="categorypicker" name="basecid"  module="$modname" itemtype="$itemtype"/>
