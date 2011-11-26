@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div class="xar-mod-head"><span class="xar-mod-title">Categories Administration</span></div>
+    <div class="xar-mod-body">
+       <xar:template type="module" file="admin-menu"/>
+    <h2>Delete Category Links</h2><br />
+    <div style="margin: auto;">
+
+    <div align="center">
+    <xar:if condition="empty($modname)">
+        Are you sure you want to delete all category links ?
+    <xar:elseif condition="empty($itemid)"/>
+        <xar:ml><xar:mlstring>Are you sure you want to delete all category links for module <b>#(1)</b> ?</xar:mlstring><xar:mlvar>#$modname#</xar:mlvar></xar:ml>
+    <xar:else/>
+        <xar:ml><xar:mlstring>Are you sure you want to delete all category links for module <b>#(1)</b> item <b>#(2)</b> ?</xar:mlstring><xar:mlvar>#$modname#</xar:mlvar><xar:mlvar>#$itemid#</xar:mlvar></xar:ml>
+    </xar:if>
+    <br /><br />
+    <form method="post" action="&xar-modurl-categories-admin-unlink;">
+        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+        <input type="hidden" name="modid" id="modid" value="#$modid#"/>
+        <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
+        <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>
+
+        <input type="submit" name="confirm" id="confirm" value="#$confirmbutton#"  />
+    </form></div>
+    </div>
+    </div>
+</xar:template>

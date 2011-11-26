@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div style="clear: both; padding-top: 10px;">
+        <span style="float: left; width: 20%; text-align: right;">
+        <label for="layout#$blockid#">Category layout</label>
+        </span>
+        <span style="float: right; width: 78%; text-align: left;">
+            <xar:set name="options">
+                array(
+                    array('id' => 1, 'name' => xarML('Tree (Side Block)')),
+                    array('id' => 2, 'name' => xarML('Crumbtrail (Top Block)')),
+                    array('id' => 3, 'name' => xarML('Prev/Next (Bottom Block)'))
+                )
+            </xar:set>
+            <xar:set name="id">
+                "layout" . $blockid
+            </xar:set>
+            <xar:data-input type="dropdown" name="layout" id="$id" options="$options" value="$layout"/>
+         </span>
+    </div>
+
+    <div style="clear: both; padding-top: 10px;">
+        <span style="float: left; width: 20%; text-align: right;">
+          <label for="startmodule#$blockid#">Show categories</label>
+        </span>
+        <span style="float: right; width: 78%; text-align: left;">
+          <xar:set name="optgroup">0</xar:set>
+          <select name="startmodule" id="startmodule#$blockid#">
+            <xar:for start="$i = 0" test="$i le count($modules)" iter="$i++">
+                <xar:set name="optgroup">1</xar:set>
+                <optgroup label="Module: #$modules[$i]label#">
+                    <xar:while condition="1">
+                        <xar:if condition="$startmodule eq $modules[$i]['id']">
+                            <option value="#$modules[$i]['id']#" selected="selected">#$modules[$i]['name']#</option>
+                        <xar:else />
+                            <option value="#$modules[$i]['id']#">#$modules[$i]['name']#</option>
+                        </xar:if>
+                        <xar:if condition="!empty($optgroup)">
+                            <xar:break />
+                        </xar:if>
+                    </xar:while>
+                </optgroup>
+            </xar:for>
+
+            </select>
+        </span>
+    </div>
+
+    <div style="clear: both; padding-top: 10px;">
+        <span style="float: left; width: 20%; text-align: right;">
+         <label for="showempty#$blockid#">Show empty categories</label>
+        </span>
+        <span style="float: right; width: 78%; text-align: left;">
+        <xar:if condition="!empty($showempty)">
+            <input type="checkbox" name="showempty" id="showempty#$blockid#" value="1" checked="checked"/>
+        <xar:else />
+            <input type="checkbox" name="showempty" id="showempty#$blockid#" value="1"/>
+        </xar:if>
+        </span>
+    </div>
+
+    <div style="clear: both; padding-top: 10px;">
+        <span style="float: left; width: 20%; text-align: right;">
+         <label for="dynamictitle#$blockid#">Dynamic title (linked to content)</label>
+        </span>
+        <span style="float: right; width: 78%; text-align: left;">
+        <xar:if condition="!empty($dynamictitle)">
+            <input type="checkbox" name="dynamictitle" id="dynamictitle#$blockid#" value="1" checked="checked"/>
+        <xar:else />
+            <input type="checkbox" name="dynamictitle" id="dynamictitle#$blockid#" value="1"/>
+        </xar:if>
+        </span>
+    </div>
+
+    <div style="clear: both; padding-top: 10px;">
+        <span style="float: left; width: 20%; text-align: right;">
+          <label for="showcatcount#$blockid#">Show count per category</label>
+        </span>
+        <span style="float: right; width: 78%; text-align: left;">
+            <xar:set name="options">
+                array(
+                    array('id' => 0, 'name' => xarML('None')),
+                    array('id' => 1, 'name' => xarML('Simple count')),
+                    array('id' => 2, 'name' => xarML('Cascading count'))
+                )
+            </xar:set>
+            <xar:set name="id1">
+                "showcatcount" . $blockid
+            </xar:set>
+            <xar:data-input type="dropdown" name="showcatcount" id="$id1" options="$options" value="$showcatcount"/>
+        </span>
+    </div>
+
+    <div style="clear: both; padding-top: 10px;">
+        <span style="float: left; width: 20%; text-align: right;">
+          <label for="showchildren#$blockid#">Show children</label>
+        </span>
+        <span style="float: right; width: 78%; text-align: left;">
+            <xar:set name="options">
+                array(
+                    array('id' => 0, 'name' => xarML('None')),
+                    array('id' => 1, 'name' => xarML('Direct children only')),
+                    array('id' => 2, 'name' => xarML('All children')),
+                )
+            </xar:set>
+            <xar:set name="id2">
+                "showchildren" . $blockid
+            </xar:set>
+            <xar:data-input type="dropdown" name="showchildren" id="$id2" options="$options" value="$showchildren"/>
+        </span>
+    </div>
+</xar:template>
