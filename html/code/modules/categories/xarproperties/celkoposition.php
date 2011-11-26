@@ -22,7 +22,7 @@ class CelkoPositionProperty extends DataProperty
     public $id           = 30074;
     public $name         = 'celkoposition';
     public $desc         = 'Celko Position';
-    public $reqmodules   = array('base');
+    public $reqmodules   = array('categories');
 
     public $reference_id = 0;               // The ID of the parent item
     public $include_reference = 1;          // Get a reference to the parent object
@@ -45,8 +45,8 @@ class CelkoPositionProperty extends DataProperty
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $this->tplmodule = 'base';
-        $this->filepath  = 'modules/base/xarproperties';
+        $this->tplmodule = 'categories';
+        $this->filepath  = 'modules/categories/xarproperties';
         $this->dbconn = xarDB::getConn();
     }
 
