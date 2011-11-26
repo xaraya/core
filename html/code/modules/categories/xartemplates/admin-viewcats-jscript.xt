@@ -2,60 +2,59 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-       <xar:template type="module" file="admin-menu"/>
-    <h2>View Categories</h2>
-    <div style="margin: auto;">
-    <a href="#xarModURL('categories','admin','modifycat')#">Add Category</a><br /><br />
-    <script src="modules/categories/xarincludes/HTML_TreeMenu-1.1.5/treemenu.js" type="text/javascript"></script>
-    #$cats#
-
-    <br />
-    <table border="0" cellspacing="0" cellpadding="2" style="text-align: center;margin: auto;">
-    <tr>
-        <td>
-            <xar:for start="$i = 1" test="$i le ($pagertotal - $items_per_page)" iter="$i += $items_per_page">
-                <xar:if condition="$i le $pagerstart  AND ($i + $items_per_page) gt $pagerstart">
-                    #$i#-#$i+$items_per_page#
-                <xar:else />
-                    <a href="#xarModURL('categories', 'admin', 'viewcats', array('pagerstart' => $i, 'items_per_page' => $items_per_page))#">
+        <h2>View Categories</h2>
+        <div style="margin: auto;">
+        <a href="#xarModURL('categories','admin','modifycat')#">Add Category</a><br /><br />
+        <script src="modules/categories/xarincludes/HTML_TreeMenu-1.1.5/treemenu.js" type="text/javascript"></script>
+        #$cats#
+    
+        <br />
+        <table border="0" cellspacing="0" cellpadding="2" style="text-align: center;margin: auto;">
+        <tr>
+            <td>
+                <xar:for start="$i = 1" test="$i le ($pagertotal - $items_per_page)" iter="$i += $items_per_page">
+                    <xar:if condition="$i le $pagerstart  AND ($i + $items_per_page) gt $pagerstart">
                         #$i#-#$i+$items_per_page#
-                    </a>
-                </xar:if>
-                <xar:if condition="(($i%100) eq 1) and ($i ne 1)">
-                    <br />
-                <xar:else />
-                    &#160;|&#160;
-                </xar:if>
-            </xar:for>
-            <xar:if condition="$i eq $pagertotal">
-                <xar:if condition="$i le $pagerstart  AND ($i + $items_per_page) gt $pagerstart">
-                    #$i#
-                <xar:else />
-                    <a href="#xarModURL('categories', 'admin', 'viewcats', array('pagerstart' => $i, 'items_per_page' => $items_per_page))#">
+                    <xar:else />
+                        <a href="#xarModURL('categories', 'admin', 'viewcats', array('pagerstart' => $i, 'items_per_page' => $items_per_page))#">
+                            #$i#-#$i+$items_per_page#
+                        </a>
+                    </xar:if>
+                    <xar:if condition="(($i%100) eq 1) and ($i ne 1)">
+                        <br />
+                    <xar:else />
+                        &#160;|&#160;
+                    </xar:if>
+                </xar:for>
+                <xar:if condition="$i eq $pagertotal">
+                    <xar:if condition="$i le $pagerstart  AND ($i + $items_per_page) gt $pagerstart">
                         #$i#
-                    </a>
+                    <xar:else />
+                        <a href="#xarModURL('categories', 'admin', 'viewcats', array('pagerstart' => $i, 'items_per_page' => $items_per_page))#">
+                            #$i#
+                        </a>
+                    </xar:if>
                 </xar:if>
-            </xar:if>
-            <xar:if condition="$i lt $pagertotal">
-                <xar:if condition="$i le $pagerstart  AND ($i + $items_per_page) gt $pagerstart">
-                    #$i#-#$pagertotal#
-                <xar:else />
-                    <a href="#xarModURL('categories', 'admin', 'viewcats', array('pagerstart' => $i, 'items_per_page' => $items_per_page))#">
+                <xar:if condition="$i lt $pagertotal">
+                    <xar:if condition="$i le $pagerstart  AND ($i + $items_per_page) gt $pagerstart">
                         #$i#-#$pagertotal#
-                    </a>
+                    <xar:else />
+                        <a href="#xarModURL('categories', 'admin', 'viewcats', array('pagerstart' => $i, 'items_per_page' => $items_per_page))#">
+                            #$i#-#$pagertotal#
+                        </a>
+                    </xar:if>
                 </xar:if>
-            </xar:if>
-        </td>
-    </tr>
-    <form action="#xarModURL('categories','admin','viewcats',array())#" method="post">
-    <tr><td>Categories per page:&#160;&#160;
-        <input type="text" name="items_per_page" id="items_per_page" value="#$items_per_page#" size="5"/>
-        <input type="submit" value="#$reloadlabel#"/>
-    </td></tr>
-    </form>
-    <tr><td>Categories Total:&#160;&#160;#$pagertotal#</td></tr>
-    </table>
-    <br />
-    </div>
+            </td>
+        </tr>
+        <form action="#xarModURL('categories','admin','viewcats',array())#" method="post">
+        <tr><td>Categories per page:&#160;&#160;
+            <input type="text" name="items_per_page" id="items_per_page" value="#$items_per_page#" size="5"/>
+            <input type="submit" value="#$reloadlabel#"/>
+        </td></tr>
+        </form>
+        <tr><td>Categories Total:&#160;&#160;#$pagertotal#</td></tr>
+        </table>
+        <br />
+        </div>
     </div>
 </xar:template>
