@@ -108,18 +108,17 @@ function categories_userapi_getcat($args)
                 xarSession::setVar('errormsg', xarML('Category does not exist'));
                 return Array();
             }
-
             // If not returning itself we need to take the appropriate
             // left values
             if ($return_itself)
             {
-                $return_child_left = $cat['left'];
-                $return_parent_left = $cat['left'];
+                $return_child_left = $cat['left_id'];
+                $return_parent_left = $cat['left_id'];
             }
             else
             {
-                $return_child_left = $cat['left'] + 1;
-                $return_parent_left = $cat['left'] - 1;
+                $return_child_left = $cat['left_id'] + 1;
+                $return_parent_left = $cat['left_id'] - 1;
             }
 
             // Introducing an AND operator in the WHERE clause
@@ -129,7 +128,7 @@ function categories_userapi_getcat($args)
         if ($getchildren)
         {
             $SQLquery .= "(P1.left_id BETWEEN ? AND ?)";
-            $bindvars[] = $return_child_left; $bindvars[] = $cat['right'];
+            $bindvars[] = $return_child_left; $bindvars[] = $cat['right_id'];
         }
 
         if ($getparents && $getchildren)
@@ -252,7 +251,7 @@ function categories_userapi_getcat($args)
             $categories[$index] = Array(
                 'indentation' => $indentation,
                 'cid'         => $cid,
-                'id'         => $cid,
+                'id'          => $cid,
                 'name'        => $name,
                 'description' => $description,
                 'image'       => $image,

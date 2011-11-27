@@ -23,7 +23,8 @@
         public function __construct()
         {
             sys::import('modules.categories.xartables');
-            $tables = xarDB::importTables(categories_xartables());
+            xarDB::importTables(categories_xartables());
+            $tables = xarDB::getTables();
             $this->cattable = $tables['categories'];
             $this->basetable = $tables['categories_basecategories'];
             $this->linktable = $tables['categories_linkage'];
@@ -63,32 +64,32 @@
             if (empty($id)) throw new Exception(xarML('No id passed to getcatinfo'));
             
             $q = new Query('SELECT', $this->cattable);
-            if (is_array()) {
-                $q->in('id', $id);
-                if (!$q->run()) return;
-                $info = $q->row();
-            } else {
+            if (is_array($id)) {
                 $q->eq('id', $id);
                 if (!$q->run()) return;
                 $result = $q->output();
                 $info = array();
                 foreach($result as $row) $info[$row['id']] = $row;
+            } else {
+                $q->in('id', $id);
+                if (!$q->run()) return;
+                $info = $q->row();
             }
             return $info;
         }
 
         public function getchildren($id=0,$myself=0)
         {
-            if (empty($id)) throw new Exception(xarML('No id passed to getchildren'));
+//            if (empty($id)) throw new Exception(xarML('No id passed to getchildren'));
             
             $q = new Query('SELECT', $this->cattable);
-            if (is_array()) {
+            if (is_array($id)) {
                 if ($myself) {
                     $c[] = $q->pin('id', $id);
                     $c[] = $q->pin('parent_id', $id);
                     $q->qor($c);
                 } else {
-                    $q->in('id', $id);
+                    $q->in('parent_id', $id);
                 }
             } else {
                 if ($myself) {
@@ -96,10 +97,11 @@
                     $c[] = $q->peq('parent_id', $id);
                     $q->qor($c);
                 } else {
-                    $q->eq('id', $id);
+                    $q->eq('parent_id', $id);
                 }
             }
-            $q->addorder('ledt_id');
+            $q->addorder('left_id');
+            if (!$q->run()) return;
             $result = $q->output();
             $children = array();
             foreach($result as $row) $children[$row['id']] = $row;

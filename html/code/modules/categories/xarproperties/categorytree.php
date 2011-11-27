@@ -44,7 +44,7 @@ class CategoryTreeProperty extends DataProperty
         $trees = array();
         $totalcount = 0;
         foreach ($this->options as $entry) {
-            $node = new CategoryTreeNode($entry['cid']);
+            $node = new CategoryTreeNode($entry['id']);
 // Can't do the pager stuff here. needs to happen in the template
 //            $node->start = $data['startnum'];
 //            $node->itemstoshow = $data['items_per_page'];

@@ -13,9 +13,6 @@
  *
  */
 
-/**
- * create item from xarMod::guiFunc('categories','admin','viewcat')
- */
 function categories_admin_viewcats()
 {
     // Get parameters
@@ -26,14 +23,9 @@ function categories_admin_viewcats()
     // Security check
     if(!xarSecurityCheck('ManageCategories')) return;
 
-    $data['options'][] = array('cid' => $activetab);
+    $data['options'][] = array('id' => $activetab);
 
-    if (!isset($useJSdisplay)) {
-        $useJSdisplay = $data['useJSdisplay'] = xarModVars::get('categories','useJSdisplay');
-    } else {
-        $data['useJSdisplay'] = $useJSdisplay;
-    }
-    return xarTplModule('categories','admin','viewcats-render',$data);
+    return $data;
 }
 
 ?>

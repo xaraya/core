@@ -60,7 +60,7 @@
     </table>
 
     <xar:if condition="count($options) eq 1">
-        <xar:set name="activetab">$options[0]['cid']</xar:set>
+        <xar:set name="activetab">$options[0]['id']</xar:set>
         <table border="0" cellspacing="0" cellpadding="2" style="text-align: center;margin: auto;">
             <xar:if condition="$displayindex">
                 <tr>
