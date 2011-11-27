@@ -75,10 +75,10 @@
 
     <xar:if condition="count($options) eq 1">
         <xar:set name="activetab">$options[0]['id']</xar:set>
-        <table border="0" cellspacing="0" cellpadding="2" style="text-align: center;margin: auto;">
             <xar:if condition="$displayindex">
-                <tr>
-                    <td>
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
                         <xar:for start="$i = 1" test="$i le ($pagertotal - $items_per_page)" iter="$i += $items_per_page">
                             <xar:set name="endrow">$i+$items_per_page-1</xar:set>
                             <xar:if condition="$i le $startnum  AND ($i + $items_per_page) gt $startnum">
@@ -112,10 +112,11 @@
                                 </a>
                             </xar:if>
                         </xar:if>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
                         <form action="#xarModURL('categories','admin','viewcats',array())#" method="post">
                             Categories per page:&#160;
                             <input type="hidden" name="startnum" id="startnum" value="#$startnum#"/>
@@ -123,14 +124,14 @@
                             <input type="hidden" name="activetab" id="activetab" value="#$activetab#" size="5"/>
                             <input type="submit" value="#xarML('Reload')#"/>
                         </form>
-                    </td>
-                </tr>
+                    </div>
+                </div>
             </xar:if>
-            <tr>
-                <td>
+            <div class="xar-row">
+                <div class="xar-col"></div>
+                <div class="xar-col">
                     Categories Total:&#160;&#160;#$pagertotal#
-                </td>
-            </tr>
-        </table>
+                </div>
+            </div>
     </xar:if>
 </xar:template>
