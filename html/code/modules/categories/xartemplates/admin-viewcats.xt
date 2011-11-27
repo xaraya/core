@@ -4,8 +4,17 @@
     <div class="xar-mod-body">
         <h2>View Categories</h2>
         <div style="margin: auto;">
+            <xar:var name="title">New Category</xar:var>
             <div style="text-align: right">
-                <a href="#xarModURL('categories','admin','new')#">Add Category</a><br /><br />
+                <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
+                    <a href="#xarModURL('categories','admin','new')#" title="#$title#">
+                        <img src="#xarTplGetImage('icons/'.'add.png', 'base')#" width="16" height="16" alt="#$title#"/>
+                    </a>
+                <xar:else />
+                    <a href="#xarModURL('categories','admin','new')#" title="#$title#">
+                        New Category
+                    </a>
+                </xar:if>
             </div>
             <xar:data-input type="categorymenu" contextmodule="base"/>
             <div style="clear: both">
