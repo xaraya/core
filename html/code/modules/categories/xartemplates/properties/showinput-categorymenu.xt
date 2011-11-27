@@ -5,20 +5,22 @@
 
     <xar:set name="urlinfo">xarController::$request->getInfo()</xar:set>
     <div>
-        <dl class="xar-tabs">
+        <ul class="xar-tabs xar-alt xar-norm-outline">
             <xar:if condition="$layout eq 'toplevel'">
                 <xar:foreach in="$tabs" value="$tab">
                     <xar:set name="condition">$tab['id'] == $activetab</xar:set>
                     <xar:if condition="$condition">
-                        <xar:set name="tabclass">'active'</xar:set>
+                        <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                        <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
                     <xar:else />
-                        <xar:set name="tabclass">''</xar:set>
+                        <xar:set name="tabclass">'xar-tab'</xar:set>
+                        <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
                     </xar:if>
-                        <dd class="#$tabclass#">
-                            <a href="#xarServer::getCurrentURL(array('activetab' => $tab['id']))#">
-                                #$tab['name']#
-                            </a>
-                        </dd>
+                    <li class="#$tabclass#">
+                        <a href="#xarServer::getCurrentURL(array('activetab' => $tab['id']))#" class="#$linkclass#">
+                            #$tab['name']#
+                        </a>
+                    </li>
                 </xar:foreach>
             <xar:else />
                 <xar:foreach in="$tabs" value="$tab">
@@ -32,32 +34,36 @@
                         <xar:set name="mask">$tab['mask']</xar:set>
                         <xar:sec mask="$mask" catch="false">
                             <xar:if condition="$condition">
-                                <xar:set name="tabclass">'active'</xar:set>
+                                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
                             <xar:else />
-                                <xar:set name="tabclass">''</xar:set>
+                                <xar:set name="tabclass">'xar-tab'</xar:set>
+                                <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
                             </xar:if>
-                            <dd class="#$tabclass#">
-                            <a href="#xarModURL($urlinfo[0],$urlinfo[1],$tab['target'])#">
+                            <li class="#$tabclass#">
+                                <a href="#xarModURL($urlinfo[0],$urlinfo[1],$tab['target'])#" class="#$linkclass#">
                                     #$tab['label']#
                                 </a>
-                            </dd>
+                            </li>
                         </xar:sec>            
                     <xar:else />
                         <xar:if condition="$condition">
-                            <xar:set name="tabclass">'active'</xar:set>
+                            <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                            <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
                         <xar:else />
-                            <xar:set name="tabclass">''</xar:set>
+                            <xar:set name="tabclass">'xar-tab'</xar:set>
+                            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
                         </xar:if>
                         <dd class="#$tabclass#">
                             <xar:set name="name">$currentcategory->name</xar:set>
                             <xar:set name="url">isset($currentcategory->url) ? $currentcategory->url : xarServer::getCurrentURL(array('activetab' => $id))</xar:set>
-                            <a href="#$url#">
+                            <a href="#$url#" class="#$linkclass#">
                                 #$name#
                             </a>
                         </dd>
                     </xar:if>
                 </xar:foreach>
             </xar:if>
-        </dl>
+        </ul>
     </div>
 </xar:template>
