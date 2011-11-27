@@ -31,43 +31,10 @@
 
 function categories_userapi_getallcatbases($args)
 {
-    extract($args);
-    $xartable = xarDB::getTables();
-
-// CHECKME: what about this old 'basecids' stuff ?
-/*
-    if (empty($itemtype)) {
-        $cidstring = xarModVars::get($module,'basecids');
-    } else {
-        // FIXME: this doesn't work for itemtype == _XAR_ID_UNREGISTERED !
-        $cidstring = xarModUserVars::get($module,'basecids',$itemtype);
-    }
-    if (!empty($cidstring)) {
-        $rootcids = unserialize($cidstring);
-    } else {
-        $rootcids = array();
-    }
-*/
-
-    sys::import('xaraya.structures.query');
-    $q = new Query('SELECT');
-    $q->addtable($xartable['categories_basecategories'],'base');
-    $q->addtable($xartable['categories'],'category');
-    $q->leftjoin('base.category_id','category.id');
-    $q->addfield('base.id AS id');
-    $q->addfield('base.category_id AS category_id');
-    $q->addfield('base.name AS name');
-    $q->addfield('base.module_id AS module_id');
-    $q->addfield('base.itemtype AS itemtype');
-    $q->addfield('category.left_id AS left_id');
-    $q->addfield('category.right_id AS right_id');
-    if (!empty($module))  $q->eq('module_id',xarMod::getID($module));
-    if (!empty($module_id))  $q->eq('module_id',$module_id);
-    if (isset($itemtype))  $q->eq('itemtype',$itemtype);
-    $q->addorder('base.id');
-//    $q->qecho();
-    if (!$q->run()) return;
-    return $q->output();
+    sys::import('modules.categories.class.worker');
+    $worker = new CategoryWorker();
+    $bases = $worker->getcatbases($args);
+    return $bases;
 }
 
 ?>

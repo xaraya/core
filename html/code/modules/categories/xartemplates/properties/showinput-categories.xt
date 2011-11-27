@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-
-    <!--
-        size and multiple attributes not implemented under 1x. Fix for 2x
-    -->
     <xar:if condition="!empty($size)">
         <xar:set name="sizestring">'size="'.$size.'"'</xar:set>
     <xar:else/>
@@ -26,8 +22,8 @@
     </xar:if>
 
     <input type="hidden" name="#$name#_categories_itemid" value="#$categories_itemid#"/>
-    <input type="hidden" name="#$name#_categories_localmodule" value="#$categories_localmodule#"/>
-    <input type="hidden" name="#$name#_categories_localitemtype" value="#$categories_localitemtype#"/>
+    <input type="hidden" name="#$name#_categories_module" value="#$categories_module#"/>
+    <input type="hidden" name="#$name#_categories_itemtype" value="#$categories_itemtype#"/>
     <xar:set name="index">0</xar:set>
     <xar:foreach in="$trees" value="$nodes">
         <input type="hidden" name="#$name#_categories_basecats[#$index#]" value="#$basecids[$index]#"/>

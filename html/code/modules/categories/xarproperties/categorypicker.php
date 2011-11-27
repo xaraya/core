@@ -138,12 +138,14 @@ class CategoryPickerProperty extends DataProperty
             $data['itemtype'] = 0;
         }
 
-// FIXME: this doesn't work, and is replaced by getallcatbases anyway ?
-        $basecidlist = unserialize(xarModVars::get($data['localmodule'],'basecids',$data['itemtype']));
+        sys::import('modules.categories.class.worker');
+        $worker = new CategoryWorker();
+        $basecidlist = $worker->getcatbases(array('module' => $data['localmodule'], 'itemtype' => $data['itemtype']));
         if (!isset($data['basecids'])) $data['basecids'] = $basecidlist;
         if (!isset($data['numberofbasecats'])) $data['numberofbasecats'] = count($data['basecids']);
         if (!is_array($data['value'])) {
             $msg = xarML('The value passed to the categorypicker property is not an array');
+            return "";  //FIXME
             throw new BadParameterException(null,$msg);
         }
 
