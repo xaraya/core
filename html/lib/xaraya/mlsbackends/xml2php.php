@@ -88,6 +88,14 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
             $this->basePHPDir = "$php_dir/modules/$dnName/";
             $this->baseXMLDir = "$xml_dir/modules/$dnName/";
             break;
+            case XARMLS_DNTYPE_PROPERTY:
+            $this->basePHPDir = "$php_dir/properties/$dnName/";
+            $this->baseXMLDir = "$xml_dir/properties/$dnName/";
+            break;
+            case XARMLS_DNTYPE_BLOCK:
+            $this->basePHPDir = "$php_dir/blocks/$dnName/";
+            $this->baseXMLDir = "$xml_dir/blocks/$dnName/";
+            break;
             case XARMLS_DNTYPE_THEME:
             $this->basePHPDir = "$php_dir/themes/$dnName/";
             $this->baseXMLDir = "$xml_dir/themes/$dnName/";
