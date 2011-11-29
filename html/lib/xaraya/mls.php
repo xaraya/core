@@ -33,6 +33,8 @@ define('XARMLS_UNBOXED_MULTI_LANGUAGE_MODE', 'UNBOXED');
 define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
+define('XARMLS_DNTYPE_PROPERTY', 4);
+define('XARMLS_DNTYPE_BLOCK', 5);
 
 sys::import('xaraya.locales');
 sys::import('xaraya.transforms.xarCharset');
@@ -465,6 +467,20 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
                 $loadedCommons[$dnName.'module'] = true;
                 if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'common')) return; // throw back
                 if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return; // throw back
+            }
+        }
+        if ($dnType == XARMLS_DNTYPE_PROPERTY) {
+            // Load common translations
+            if (!isset($loadedCommons[$dnName.'property'])) {
+                $loadedCommons[$dnName.'property'] = true;
+                if (!$GLOBALS['xarMLS_backend']->loadContext('properties:', 'common')) return; // throw back
+            }
+        }
+        if ($dnType == XARMLS_DNTYPE_BLOCK) {
+            // Load common translations
+            if (!isset($loadedCommons[$dnName.'block'])) {
+                $loadedCommons[$dnName.'block'] = true;
+                if (!$GLOBALS['xarMLS_backend']->loadContext('blocks:', 'common')) return; // throw back
             }
         }
         if ($dnType == XARMLS_DNTYPE_THEME) {

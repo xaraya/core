@@ -120,6 +120,12 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
         case XARMLS_DNTYPE_THEME:
             $this->spacedir = "themes";
             break;
+        case XARMLS_DNTYPE_PROPERTY:
+            $this->spacedir = "properties";
+            break;
+        case XARMLS_DNTYPE_BLOCK:
+            $this->spacedir = "blocks";
+            break;
         case XARMLS_DNTYPE_CORE:
             $this->spacedir = "core";
             break;
