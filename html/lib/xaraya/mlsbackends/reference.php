@@ -136,11 +136,9 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
 
         foreach ($this->locales as $locale) {
             if($this->spacedir == "core" || $this->spacedir == "xaraya") {
-                $this->domainlocation  = sys::varpath() . "/locales/"
-                . $locale . "/" . $this->backendtype . "/" . $this->spacedir;
+                $this->domainlocation  = sys::varpath() . "/locales/" . $locale . "/" . $this->backendtype . "/" . $this->spacedir;
             } else {
-                $this->domainlocation  = sys::varpath() . "/locales/"
-                . $locale . "/" . $this->backendtype . "/" . $this->spacedir . "/" . $dnName;
+                $this->domainlocation  = sys::varpath() . "/locales/" . $locale . "/" . $this->backendtype . "/" . $this->spacedir . "/" . $dnName;
             }
 
             if (file_exists($this->domainlocation)) {
@@ -174,6 +172,12 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
     function findContext($ctxType, $ctxName)
     {
         if (strpos($ctxType, 'modules:') !== false) {
+            list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
+            $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
+        } elseif (strpos($ctxType, 'properties:') !== false) {
+            list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
+            $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
+        } elseif (strpos($ctxType, 'blocks:') !== false) {
             list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
             $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
         } elseif (strpos($ctxType, 'themes:') !== false) {
