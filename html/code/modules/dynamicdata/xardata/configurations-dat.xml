@@ -762,6 +762,15 @@
     <ignore_empty>1</ignore_empty>
     <configuration>a:3:{s:12:"display_size";s:2:"10";s:17:"display_maxlength";s:2:"30";s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
+  <configurations itemid="81">
+    <id>69</id>
+    <name>initialization_basegroup</name>
+    <description>A reference to a parent group</description>
+    <property_id>45</property_id>
+    <label>Base Group</label>
+    <ignore_empty>true</ignore_empty>
+    <configuration>a:4:{s:14:"display_layout";s:7:"default";s:19:"validation_override";s:1:"1";s:30:"initialization_update_behavior";s:4:"none";s:24:"initialization_basegroup";s:1:"1";}</configuration>
+  </configurations>
   <configurations itemid="80">
     <id>79</id>
     <name>display_maximum_rows</name>
@@ -771,4 +780,48 @@
     <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
-</items>
+  <configurations itemid="82">
+    <id>1</id>
+    <name>initialization_celkotable</name>
+    <label>Table </label>
+    <description>The table where the celko data is stored</description>
+    <property_id>2</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="83">
+    <id>2</id>
+    <name>initialization_celkoname</name>
+    <label>Name</label>
+    <description>The name field in the celko table</description>
+    <property_id>2</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="84">
+    <id>4</id>
+    <name>initialization_celkoparent_id</name>
+    <label>Parent ID</label>
+    <description>The field that holds the parent id of this item</description>
+    <property_id>2</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="85">
+    <id>4</id>
+    <name>initialization_celkoright_id</name>
+    <label>Right ID</label>
+    <description>The field that holds the right id of this item</description>
+    <property_id>2</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="86">
+    <id>5</id>
+    <name>initialization_celkoleft_id</name>
+    <label>Left ID</label>
+    <description>The field that holds the left id of this item</description>
+    <property_id>2</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations></items>
