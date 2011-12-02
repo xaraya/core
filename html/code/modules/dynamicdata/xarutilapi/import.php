@@ -105,11 +105,6 @@ function dynamicdata_utilapi_import(Array $args=array())
         if (empty($args['moduleid']) && !empty($args['module_id'])) {
             $args['moduleid'] = $args['module_id'];
         }
-        if (empty($args['moduleid']) && isset($xmlobject->{'moduleid'}[0])) {
-            $args['moduleid'] = (int)$xmlobject->{'moduleid'}[0];
-            $args['module_id'] = $args['moduleid'];
-        }
-
         if (empty($args['name']) || empty($args['moduleid'])) {
             throw new BadParameterException(null,'Missing keys in object definition');
         }
