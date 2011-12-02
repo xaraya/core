@@ -1185,7 +1185,7 @@ class xarTpl extends Object
         $sourceFileName = "$themeDir/properties/$propertyName/templates/includes/$templateName.xt";
         if (file_exists($sourceFileName)) return self::executeFromFile($sourceFileName, $tplData);
         // property include in common
-        $sourceFileName = "$commonDir/properties/$propertyName/templates/includes/$templateName.xt";
+        $sourceFileName = "$commonDir/properties/$propertyName/xartemplates/includes/$templateName.xt";
         if (file_exists($sourceFileName)) return self::executeFromFile($sourceFileName, $tplData); 
         // property include in property       
         $sourceFileName = sys::code() . "properties/$propertyName/xartemplates/includes/$templateName.xt";
