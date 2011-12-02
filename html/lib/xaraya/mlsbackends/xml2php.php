@@ -252,6 +252,8 @@ class PHPBackendGenerator extends Object
         xarMLS__mkdirr($php_locale_dir);
         xarMLS__mkdirr($php_dir);
         xarMLS__mkdirr($modules_dir);
+        xarMLS__mkdirr($properties_dir);
+        xarMLS__mkdirr($blocks_dir);
         xarMLS__mkdirr($themes_dir);
         xarMLS__mkdirr($core_dir);
     }
@@ -270,9 +272,13 @@ class PHPBackendGenerator extends Object
         $php_dir = "$php_locale_dir/php";
         $xml_dir = "$xml_locale_dir/xml";
         $modules_dir = "$php_dir/modules";
+        $properties_dir = "$php_dir/properties";
+        $blocks_dir = "$php_dir/blocks";
         $themes_dir = "$php_dir/themes";
         $core_dir = "$php_dir/core";
         $xml_modules_dir = "$xml_dir/modules";
+        $xml_properties_dir = "$xml_dir/properties";
+        $xml_blocks_dir = "$xml_dir/blocks";
         $xml_themes_dir = "$xml_dir/themes";
         $xml_core_dir = "$xml_dir/core";
 
