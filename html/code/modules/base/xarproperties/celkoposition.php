@@ -87,7 +87,7 @@ class CelkoPositionProperty extends DataProperty
             // There is one item for this itemid. This means it was already created
             // Usually this means the same datasource used for this property and the others of this object item
             if ($this->value) $parentid = $this->unpackValue($itemid);
-            else $parentid = 0;
+            else $parentid = $this->reference_id;
             
             // CHECKME: why do we need to run updateposition AND updateValue?
             $itemid = $this->updateposition($itemid, $parentid);
