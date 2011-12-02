@@ -205,7 +205,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
     function getContextNames($ctxType)
     {
         // FIXME need more global check
-        if (($ctxType == 'core:') || ($ctxType == 'modules:') || ($ctxType == 'themes:')) $directory = '';
+        if (($ctxType == 'core:') || ($ctxType == 'modules:') || ($ctxType == 'properties:') || ($ctxType == 'blocks:') || ($ctxType == 'themes:')) $directory = '';
         else list($prefix,$directory) = explode(':',$ctxType);
         $this->contextlocation = $this->domainlocation . "/" . $directory;
         $ctxNames = array();
@@ -244,6 +244,8 @@ class PHPBackendGenerator extends Object
         $php_locale_dir = "$locales_dir/{$this->locale}";
         $php_dir = "$php_locale_dir/php";
         $modules_dir = "$php_dir/modules";
+        $properties_dir = "$php_dir/properties";
+        $blocks_dir = "$php_dir/blocks";
         $themes_dir = "$php_dir/themes";
         $core_dir = "$php_dir/core";
 
@@ -278,6 +280,16 @@ class PHPBackendGenerator extends Object
         case XARMLS_DNTYPE_MODULE:
             $this->baseDir = "$modules_dir/$dnName/";
             $this->baseXMLDir = "$xml_modules_dir/$dnName/";
+            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS__mkdirr($this->baseDir);
+            break;
+        case XARMLS_DNTYPE_PROPERTY:
+            $this->baseDir = "$properties_dir/$dnName/";
+            $this->baseXMLDir = "$xml_properties_dir/$dnName/";
+            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS__mkdirr($this->baseDir);
+            break;
+        case XARMLS_DNTYPE_BLOCK:
+            $this->baseDir = "$blocks_dir/$dnName/";
+            $this->baseXMLDir = "$xml_blocks_dir/$dnName/";
             if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS__mkdirr($this->baseDir);
             break;
         case XARMLS_DNTYPE_THEME:
