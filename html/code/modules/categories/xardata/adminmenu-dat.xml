@@ -1,0 +1,68 @@
+<adminmenu>
+    <menuitems>
+        <menuitem>
+			<mask>ManageCategories</mask>
+            <includes>
+                <includeitem>main</includeitem>
+                <includeitem>overview</includeitem>
+            </includes>
+            <target>main</target>
+			<title>Module Overview</title>
+            <label>Overview</label>
+        </menuitem>
+        <menuitem>
+			<mask>ManageCategories</mask>
+            <includes>
+                <includeitem>new</includeitem>
+            </includes>
+            <target>new</target>
+			<title>Add a new category</title>
+            <label>Add Category</label>
+        </menuitem>
+        <menuitem>
+			<mask>ManageCategories</mask>
+            <includes>
+                <includeitem>viewcats</includeitem>
+            </includes>
+            <target>viewcats</target>
+			<title>View and Edit categories</title>
+            <label>View Categories</label>
+        </menuitem>
+        <menuitem>
+			<mask>AdminCategories</mask>
+            <includes>
+                <includeitem>stats</includeitem>
+            </includes>
+            <target>stats</target>
+			<title>View category statistics per module</title>
+            <label>View Statistics</label>
+        </menuitem>
+        <menuitem>
+			<mask>AdminCategories</mask>
+            <includes>
+                <includeitem>checklinks</includeitem>
+            </includes>
+            <target>checklinks</target>
+			<title>Check for orphaned category assignments</title>
+            <label>Check Links</label>
+        </menuitem>	
+        <menuitem>
+			<mask>AdminCategories</mask>
+            <includes>
+                <includeitem>hooks</includeitem>
+            </includes>
+            <target>hooks</target>
+			<title>Configure categories hooks for other modules</title>
+            <label>Enable Hooks</label>
+        </menuitem>		
+        <menuitem>
+			<mask>AdminCategories</mask>
+            <includes>
+                <includeitem>modifyconfig</includeitem>
+            </includes>
+            <target>modifyconfig</target>
+			<title>Configure the Categories module</title>
+            <label>Modify Config</label>
+        </menuitem>	
+	</menuitems>
+</adminmenu>

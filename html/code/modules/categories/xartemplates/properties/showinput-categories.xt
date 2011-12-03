@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="!empty($size)">
+        <xar:set name="sizestring">'size="'.$size.'"'</xar:set>
+    <xar:else/>
+        <xar:set name="sizestring">''</xar:set>
+    </xar:if>
+
+    <xar:if condition="!empty($multiple)">
+        <xar:set name="multiplestring">'multiple="multiple"'</xar:set>
+    <xar:else/>
+        <xar:set name="multiplestring">''</xar:set>
+    </xar:if>
+
+    <xar:if condition="isset($onchange)">
+      <xar:set name="evt_change">$onchange</xar:set>
+    <xar:else/>
+      <xar:set name="evt_change">'return true;'</xar:set>
+    </xar:if>
+    <xar:if condition="!isset($style)">
+        <xar:set name="style">''</xar:set>
+    </xar:if>
+
+    <input type="hidden" name="#$name#_categories_itemid" value="#$categories_itemid#"/>
+    <input type="hidden" name="#$name#_categories_module" value="#$categories_module#"/>
+    <input type="hidden" name="#$name#_categories_itemtype" value="#$categories_itemtype#"/>
+    <xar:set name="index">0</xar:set>
+    <xar:foreach in="$trees" value="$nodes">
+        <input type="hidden" name="#$name#_categories_basecats[#$index#]" value="#$basecids[$index]#"/>
+        <xar:if condition="count($trees) eq 1">
+            <!-- Note: categorypicker expects a value, and categories expects an array - handled in code -->
+            <xar:set name="dropdownname">$name . "_categories"</xar:set>
+            <xar:set name="dropdownid">$id . "_categories"</xar:set>
+        <xar:else />
+            <xar:set name="dropdownname">$name . "_categories[" . $index . "]"</xar:set>
+            <xar:set name="dropdownid">$id . "_categories_" . $index</xar:set>
+        </xar:if>
+        <select name="#$dropdownname#" id="#$dropdownid#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
+            <xar:set name="already_passed">false</xar:set>
+            <xar:set name="current_id">0</xar:set>
+            <xar:set name="lastindent">0</xar:set>
+            <xar:if condition="isset($firstline)">
+                <option value="">#$firstline#</option>
+            </xar:if>
+            <xar:foreach in="$nodes" value="$node">
+                <xar:set name="nodeid">$node->id</xar:set>
+                <xar:set name="nodename">$node->name</xar:set>
+                <xar:set name="childobject">$node->child_object</xar:set>
+                <xar:set name="level">$node->getLevel()</xar:set>
+                <xar:if condition="empty($nodeid) or $nodeid ne $nodename">
+                    <xar:if condition="in_array($nodeid,$value)">
+                    <option style="padding-left: #$level#em;" value="#$nodeid#" selected="selected">
+                        #$nodename#
+                    </option>
+                    <xar:else />
+                        <option style="padding-left: #$level#em;" value="#$nodeid#">
+                            #$nodename#
+                        </option>
+                    </xar:if>
+                <xar:elseif condition="in_array($nodeid,$value)"/>
+                    <option style="padding-left: #$level#em;" selected="selected">
+                        #$nodename#
+                    </option>
+                <xar:else />
+                    <option style="padding-left: #$level#em;">
+                        #$nodename#
+                    </option>
+                </xar:if>
+                <xar:if condition="!empty($childobject)"> 
+                    <xar:set name="childlist">DataObjectMaster::getObjectList(array('name' => $childobject))</xar:set>
+                    <xar:set name="childitems">$childlist->getItems(array('sort' => 'name'))</xar:set>
+                    <xar:foreach in="$childitems" value="$childitem">
+                        <xar:set name="fulllink">$nodeid . "." . $childitem['id']</xar:set>
+                        <xar:if condition="in_array($fulllink,$value)">
+                            <xar:set name="level1">$level + 1</xar:set>
+                            <option style="padding-left: #$level1#em;" value="#$fulllink#" selected="selected">
+                                <!-- assume we might not have a name field for the moment -->
+                                <xar:if condition="!empty($childitem.name)"> 
+                                    #$childitem.name#
+                                <xar:else />
+                                    Item #$childitem.id#
+                                </xar:if>
+                            </option>
+                        <xar:else />
+                            <xar:set name="level1">$level + 1</xar:set>
+                            <option style="padding-left: #$level1#em;" value="#$fulllink#">
+                                <!-- assume we might not have a name field for the moment -->
+                                <xar:if condition="!empty($childitem.name)"> 
+                                    #$childitem.name#
+                                <xar:else />
+                                    Item #$childitem.id#
+                                </xar:if>
+                            </option>
+                        </xar:if>
+                    </xar:foreach>
+                </xar:if>
+            </xar:foreach>
+        </select>
+        <xar:if condition="$layout eq 'vertical'">
+            <br />
+        </xar:if>
+        <xar:set name="index">$index+1</xar:set>
+    </xar:foreach>
+
+    <xar:if condition="!empty($show_edit) and !empty($current_id)">
+        <xar:sec id="showEdit" mask="EditCategories" catch="false" component="All" instance="All:$current_id">
+            [&#160;<a href="#xarModURL('categories','admin','modify',array('cid' => $current_id))#">
+            Edit
+            </a> ]
+        </xar:sec>
+    </xar:if>
+    <xar:template file="dataproperty_additions" module="base"/>
+</xar:template>
