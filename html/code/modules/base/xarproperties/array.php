@@ -58,9 +58,10 @@ class ArrayProperty extends DataProperty
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $this->tplmodule = 'base';
-        $this->template = 'array';
-        $this->filepath   = 'modules/base/xarproperties';
+        $this->tplmodule      = 'base';
+        $this->template       = 'array';
+        $this->filepath       = 'modules/base/xarproperties';
+        $this->prepostprocess = 2;
     }
 
     public function checkInput($name = '', $value = null)
@@ -70,16 +71,15 @@ class ArrayProperty extends DataProperty
         $this->fieldname = $name;
         if (!isset($value)) {
             // Get the number of columns and rows
-            $columncount = count($this->display_column_definition['value'][0]);
-            if (!xarVarFetch($name . '["value"]',    'array', $elements, 'array', XARVAR_NOT_REQUIRED)) return;
-
+            $columncount = count($this->display_column_definition[0]);
+            if (!xarVarFetch($name . '["value"]',    'array', $elements, array(), XARVAR_NOT_REQUIRED)) return;
             // Get the number of rows we are saving
             $rows = count($elements);
 
             for ($k=1;$k<=$columncount;$k++) {
                 // Get the property type for this column and get the value from the template
-                $property = DataPropertyMaster::getProperty(array('type' => $this->display_column_definition['value'][1][$k-1]));
-                $property->parseConfiguration($this->display_column_definition['value'][3][$k-1]);
+                $property = DataPropertyMaster::getProperty(array('type' => $this->display_column_definition[1][$k-1]));
+                $property->parseConfiguration($this->display_column_definition[3][$k-1]);
                 $i=0;
                 foreach ($elements as $row) {
                     // Ignore rows where the delete checkbox was checked
@@ -102,8 +102,8 @@ class ArrayProperty extends DataProperty
             }
 
             // Set value to the validation_associative_array  
-            if (!xarVarFetch($name . '["associative_array"]', 'int', $associative_array, 0, XARVAR_NOT_REQUIRED)) return;
-            $this->validation_associative_array = $associative_array;
+//            if (!xarVarFetch($name . '["settings"]["associative_array"]', 'int', $associative_array, 0, XARVAR_NOT_REQUIRED)) return;
+//            $this->validation_associative_array = $associative_array;
         }
         return $this->validateValue($value);
     }
@@ -251,24 +251,21 @@ class ArrayProperty extends DataProperty
         // If this is a column definition, load its configuration up front
         // A bound array property contains itself an array property as part of its configuration
         // The recursed parameter signals we are displaying the configuration property
-        if (isset($data["configuration"])) {
-            $configuration = unserialize($data["configuration"]);
-            if (isset($configuration['display_column_definition']['configuration']) && 
-                !empty($configuration['display_column_definition']['recursed'])) {
-                
-                // Unset the recursed parameter so as not to repeat this
-                unset($configuration['display_column_definition']['recursed']);
-                
+
+        if (!empty($data["configuration"])) {
+        
                 // Load the configuration data
-                $this->parseConfiguration($configuration['display_column_definition']['configuration']);
+                $this->parseConfiguration($data["configuration"]);
                 
                 // Get the values for titles and column types
                 if (!isset($data['column_definition'])) $data['column_definition'] = $this->display_column_definition;
                 $titles = $data['column_definition'][0];
                 $types = $data['column_definition'][1];
-                
-                // CHECKME: Get the value array. This is a bit odd, but not sure we can do better
-                if (isset($data['value']['value'])) $data['value'] = $data['value']['value'];
+                $defaults = $data['column_definition'][2];
+                $configurations = $data['column_definition'][3];
+/*                
+//                // CHECKME: Get the value array. This is a bit odd, but not sure we can do better
+//                if (isset($data['value']['value'])) $data['value'] = $data['value']['value'];
                 // Remove any empty rows, i.e. those where there is no title
                 $temp = array();
                 foreach ($data['value'][0] as $k => $v) {
@@ -279,17 +276,17 @@ class ArrayProperty extends DataProperty
                         $temp[3][] = $data['value'][3][$k];
                     }
                 }
-                $data['value'] = $temp;
-                $data['rows'] = count($data['value'][0]);
+//                $data['value'] = $temp;
+//                $data['rows'] = count($data['value'][0]);
+*/                
                 $data['layout'] = 'configuration';
-            }
         } else {
             try {
                 // New way for configs
-                $titles = $this->display_column_definition['value'][0];
-                $types = $this->display_column_definition['value'][1];
-                $defaults = $this->display_column_definition['value'][2];
-                $configurations = $this->display_column_definition['value'][3];
+                $titles = $this->display_column_definition[0];
+                $types = $this->display_column_definition[1];
+                $defaults = $this->display_column_definition[2];
+                $configurations = $this->display_column_definition[3];
             } catch (Exception $e) {
                 // Legacy way for configs
                 $titles = $this->display_column_definition[0];
@@ -349,7 +346,7 @@ class ArrayProperty extends DataProperty
         if (isset($data['associative_array'])) $this->validation_associative_array = $data['associative_array'];
         if (isset($data['addremove']))         $this->initialization_addremove =  $data['addremove'];
         if (!isset($data['layout']))           $data['layout'] = 'table';
-        
+
         return parent::showInput($data);
     }
 
@@ -357,8 +354,8 @@ class ArrayProperty extends DataProperty
     {
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValue();
-        $data['column_titles'] = $this->display_column_definition['value'][0];
-        $data['column_types'] = $this->display_column_definition['value'][1];
+        $data['column_titles'] = $this->display_column_definition[0];
+        $data['column_types'] = $this->display_column_definition[1];
         $data['rows'] = isset($data['value'][0]) ? count($data['value'][0]) : 0;
         return parent::showOutput($data);
     }
@@ -375,7 +372,7 @@ class ArrayProperty extends DataProperty
                 $temp[3][] = $data['configuration']['display_column_definition']['value'][3][$k];
             }
         }
-        $data['configuration']['display_column_definition']['value'] = $temp;
+        $data['configuration']['display_column_definition'] = $temp;
 
         return parent::updateConfiguration($data);
     }

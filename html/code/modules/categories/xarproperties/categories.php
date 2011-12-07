@@ -70,22 +70,25 @@ class CategoriesProperty extends DataProperty
     public $categories = array();
     public $basecategories = array();
     
-    public $validation_categories;
+//    public $validation_categories;
     public $validation_override = true;
 
+    public $initialization_basecategories;
+    
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $this->template  = 'categories';
-        $this->tplmodule = 'categories';
-        $this->filepath   = 'modules/categories/xarproperties';
+        $this->template       = 'categories';
+        $this->tplmodule      = 'categories';
+        $this->filepath       = 'modules/categories/xarproperties';
+        $this->prepostprocess = 2;
     }
 
     public function checkInput($name = '', $value = null)
     {
         // Pull in local module and itemtype from the form and store for reuse
-        if (!xarVarFetch($name . '_categories_itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch($name . '_categories_module', 'str', $modname, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch($name . '["itemtype"]', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch($name . '["module"]', 'str', $modname, "", XARVAR_NOT_REQUIRED)) return;
         if (empty($modname)) $modname = xarModGetName();
         $this->itemtype = $itemtype;
         $this->module = $modname;
@@ -95,18 +98,20 @@ class CategoriesProperty extends DataProperty
         $this->fieldname = $name;
 
         // Get the categories from the form
-        list($isvalid, $categories) = $this->fetchValue($name . '_categories');
+        list($isvalid, $categories) = $this->fetchValue($name . '["categories"]');
         if ($categories == null) {
-            if (!xarVarFetch($name . '_categories', 'isset', $categories, array(), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch($name . '["categories"]', 'isset', $categories, array(), XARVAR_NOT_REQUIRED)) return;
         }
         // Make sure we have an array
         if (isset($categories) && !is_array($categories)) $categories = array($categories);
-        $this->categories = $categories;
         
         // Get the base categories from the form
-        if (!xarVarFetch($name . '_categories_basecats', 'array', $basecats, array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch($name . '["basecats"]', 'array', $basecats, array(), XARVAR_NOT_REQUIRED)) return;
         $this->basecategories = $basecats;
 
+        // The following passes for validateValue in this property. We do it this way because we have more than one "value"
+        
+        //Begin checks
         // Make sure they are valid unless we can override
         if (!$this->validation_override) {
             if (count($categories) > 0) {
@@ -124,7 +129,7 @@ class CategoriesProperty extends DataProperty
                 }
             }
         }
-        
+
         // Check the number of base categories against the number categories we have
         // Remark: some of the selected categories might be empty here !
         if (count($basecats) != count($categories)) {
@@ -132,6 +137,13 @@ class CategoriesProperty extends DataProperty
             $this->value = null;
             return false;
         }
+        // End checks
+        
+        // We passed the checks, set the categories
+        $this->categories = $categories;
+        
+        // Keep a reference of the data of this property in $this->value, for saving or easy manipulation
+        $this->value = reset($this->categories);        
         return true;
     }
 
@@ -302,7 +314,8 @@ class CategoriesProperty extends DataProperty
         );
         $returnitself = (empty($data['returnitself'])) ? false : $data['returnitself'];
         $data['trees'] = array();
-        if ($data['basecids'] == array(0)) {
+        if (empty($data['basecids'])) $data['basecids'] = array(0);
+        if ($data['basecids'] == array(0) || empty($data['basecids'])) {
             $toplevel = xarMod::apiFunc('categories','user','getchildren',array('cid' => 0));
             $nodes = new BasicSet();
             foreach ($toplevel as $entry) {
@@ -322,7 +335,6 @@ class CategoriesProperty extends DataProperty
                 $data['trees'][] = $nodes;
             }
         }
-
         if (!isset($data['name'])) $data['name'] = "dd_" . $this->id;
         if (!isset($data['javascript'])) $data['javascript'] = '';
         if (!isset($data['multiple'])) $data['multiple'] = 0;
@@ -396,8 +408,17 @@ class CategoriesProperty extends DataProperty
     }
 
     public function showOutput(Array $data = array())
-    {
-        if (empty($data['module'])) {
+    {/*
+        if (!empty($data['itemid'])) $this->itemid = $data['itemid'];
+//var_dump($this->objectref);exit;
+        $links = xarMod::apiFunc('categories', 'user', 'getlinkage',
+                               array('itemid' => $this->itemid,
+                                     'itemtype' => 3,
+                                     'module' => 'dynamicdata',
+                                     ));
+var_dump($links);exit;
+*/
+/*if (empty($data['module'])) {
             if (!empty($data['module'])) {
                 $data['categories_module'] = $data['module'];
             } else {
@@ -455,10 +476,11 @@ class CategoriesProperty extends DataProperty
 
         // Make sure we have an array
         if (!empty($data['value']) && !is_array($data['value'])) $data['value'] = array($data['value']);
-
+*/
+        $data['value'] = $this->value;
         return parent::showOutput($data);
     }
-
+/*
     function getOption($check = false)
     {
         if (!isset($this->value)) {
@@ -473,7 +495,22 @@ class CategoriesProperty extends DataProperty
         if ($check) return false;
         return $this->value;
     }
-
+*/
+    public function updateConfiguration(Array $data = array())
+    {
+        // Remove any empty rows, i.e. those where there is no title
+        $arrayprop = DataPropertyMaster::getProperty(array('name' => 'categorypicker'));
+        $arrayprop->checkInput('dd_' . $this->id . '["initialization_basecategories"]');
+//        var_dump(unserialize($arrayprop->value));die("X");exit;
+        
+        $rows = array();
+        foreach ($data['configuration']['initialization_basecategories']['value'] as $row) {
+            if (isset($row['delete'])) continue;
+            $rows[] = $row;
+        }
+        $data['configuration']['initialization_basecategories'] = $rows;
+        return parent::updateConfiguration($data);
+    }
 }
 
 ?>
