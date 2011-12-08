@@ -39,7 +39,7 @@
                 <!-- name[row] -->
                 <xar:set name="j">$i-1</xar:set>
                 <xar:set name="row_name">"{$name}[value][{$j}]"</xar:set>
-                <xar:set name="row_id">"{$name}_{$j}"</xar:set>
+                <xar:set name="row_id">"{$id}_{$j}"</xar:set>
                 <xar:set name="col_name">"{$row_name}[0]"</xar:set>
                 <xar:set name="col_id">"{$row_id}_0"</xar:set>
                 <tr id="#$row_id#">
@@ -105,7 +105,7 @@
             <xar:if condition="($addremove ne 0)">
                 <xar:set name="thisrow">$lastrow</xar:set>
                 <xar:set name="row_name">"{$name}[value][{$thisrow}]"</xar:set>
-                <xar:set name="row_id">"{$name}_{$thisrow}"</xar:set>
+                <xar:set name="row_id">"{$id}_{$thisrow}"</xar:set>
                 <xar:set name="col_name">"{$row_name}[0]"</xar:set>
                 <xar:set name="col_id">"{$row_id}_0"</xar:set>
                 <!-- Hide this row if we're already at the limit 
@@ -179,6 +179,7 @@
 //<![CDATA[ 
         var #$id# = new arrayTable( {               // var name is the id of this property
             id: '#$id#',                            // the id of this property
+            name: '#$name#',                        // the name of this property
             min: '#$minimum_rows#',                 // minimum rows
             max: '#$maximum_rows#',                 // maximum rows
             addremove: '#$addremove#',              // addremove state [(0=None)|1=add|2=add/delete]
