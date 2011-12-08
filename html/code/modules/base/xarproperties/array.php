@@ -364,16 +364,17 @@ class ArrayProperty extends DataProperty
     {
         // Remove any empty rows, i.e. those where there is no title
         $temp = array();
-        foreach ($data['configuration']['display_column_definition']['value'][0] as $k => $v) {
-            if (!empty($v)) {
-                $temp[0][] = $v;
-                $temp[1][] = $data['configuration']['display_column_definition']['value'][1][$k];
-                $temp[2][] = $data['configuration']['display_column_definition']['value'][2][$k];
-                $temp[3][] = $data['configuration']['display_column_definition']['value'][3][$k];
+        if (isset($data['configuration']['display_column_definition'])) {
+            foreach ($data['configuration']['display_column_definition']['value'][0] as $k => $v) {
+                if (!empty($v)) {
+                    $temp[0][] = $v;
+                    $temp[1][] = $data['configuration']['display_column_definition']['value'][1][$k];
+                    $temp[2][] = $data['configuration']['display_column_definition']['value'][2][$k];
+                    $temp[3][] = $data['configuration']['display_column_definition']['value'][3][$k];
+                }
             }
+            $data['configuration']['display_column_definition'] = $temp;
         }
-        $data['configuration']['display_column_definition'] = $temp;
-
         return parent::updateConfiguration($data);
     }
 }

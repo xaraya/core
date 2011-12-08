@@ -556,11 +556,17 @@ class CelkoPositionProperty extends DataProperty
  */
     private function unpackValue($itemid)
     {
-        // Unpack the values of this property
-        $params = unserialize($this->value);
+        try {
+            // Unpack the values of this property
+            $params = unserialize($this->value);
+            
+            // Get the value for the reference ID (parent)
+            $this->reference_id = $params[$this->initialization_celkoparent_id];
+        } catch (Exception $e) {
+            $this->reference_id = 0;
+            $params['id'] = $itemid;
+        }
         
-        // Get the value for the reference ID (parent)
-        $this->reference_id = $params[$this->initialization_celkoparent_id];
         $this->setCelkoValues($this->reference_id, $params['id']);
                 
         // add this itemid to the list of known parents for subsequent rounds
