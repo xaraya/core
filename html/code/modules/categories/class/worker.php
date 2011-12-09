@@ -66,13 +66,13 @@
             
             $q = new Query('SELECT', $this->cattable);
             if (is_array($id)) {
-                $q->eq('id', $id);
+                $q->in('id', $id);
                 if (!$q->run()) return;
                 $result = $q->output();
                 $info = array();
                 foreach($result as $row) $info[$row['id']] = $row;
             } else {
-                $q->in('id', $id);
+                $q->eq('id', $id);
                 if (!$q->run()) return;
                 $info = $q->row();
             }

@@ -165,7 +165,7 @@ function categories_userapi_getcat($args)
        //$SQLquery .= " AND P1.left_id
        //               NOT BETWEEN ? AND ? ";
        $SQLquery .= " AND (P1.left_id < ? OR P1.left_id > ?)";
-       $bindvars[] = $ecat['left']; $bindvars[] = $ecat['right'];
+       $bindvars[] = $ecat['left_id']; $bindvars[] = $ecat['right_id'];
     }
 
     // Have to specify all selected attributes in GROUP BY

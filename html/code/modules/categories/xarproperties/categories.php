@@ -404,6 +404,10 @@ class CategoriesProperty extends DataProperty
         // Make sure we have an array
         if (!empty($data['value']) && !is_array($data['value'])) $data['value'] = array($data['value']);
 
+        $configuration = unserialize($this->configuration);
+        $data['tree_name'] = $configuration['initialization_basecategories'][1][1];
+        $data['include_self'] = $configuration['initialization_basecategories'][2][1];
+        $data['select_type'] = $configuration['initialization_basecategories'][3][1];
         return parent::showInput($data);
     }
 
