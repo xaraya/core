@@ -245,7 +245,37 @@ class CategoriesProperty extends DataProperty
 */
     public function showInput(Array $data = array())
     {
-        if (empty($data['module'])) {
+        if (!empty($this->configuration)) {
+            $configuration = unserialize($this->configuration);
+            $configuration = $configuration['initialization_basecategories'];
+            $data['tree_name'] = $configuration[0];
+            $data['base_category'] = $configuration[1];
+            $data['include_self'] = $configuration[2];
+            $data['select_type'] = $configuration[3];
+//         var_dump($configuration);exit;
+       } else {
+            $data['tree_name'] = array(1 => 'dork');
+            $data['base_category'] = array(1 => 1);
+            $data['include_self'] = array(1 => 1);
+            $data['select_type'] = array(1 => 1);
+        }
+        
+        $filter = array(
+            'getchildren' => true,
+            'maxdepth' => isset($data['maxdepth'])?$data['maxdepth']:null,
+            'mindepth' => isset($data['mindepth'])?$data['mindepth']:null,
+            'cidlist'  => $this->cidlist,
+        );
+        foreach ($data['base_category'] as $id) {
+            $nodes = new BasicSet();
+            $node = new CategoryTreeNode($id);
+            $node->setfilter($filter);
+            $tree = new CategoryTree($node);
+            $nodes->addAll($node->depthfirstenumeration());
+            $data['trees'][] = $nodes;
+        }
+        $data['value'] = array(2,2,2,2);
+/*        if (empty($data['module'])) {
             if (!empty($data['module'])) {
                 $data['categories_module'] = $data['module'];
             } else {
@@ -301,10 +331,6 @@ class CategoriesProperty extends DataProperty
             // right now works for 1 basecat
             $data['basecids'] = $data['bases'];
         }
-
-        // sort the base categories
-        // TODO: make the sorting changeable
-        //sort($data['basecids']);
 
         $filter = array(
             'getchildren' => true,
@@ -393,10 +419,10 @@ class CategoriesProperty extends DataProperty
 //            $GLOBALS['Categories_MakeSelect_Values'] =& $data['values'];
 //        }
 
-/* FIXME: where was this itemid value supposed to come from ???
+// FIXME: where was this itemid value supposed to come from ???
         // This is just for backward compatibility in the template
-        $data['categories_itemid'] = isset($data['value']) ? $data['value'] : 0;
-*/
+//        $data['categories_itemid'] = isset($data['value']) ? $data['value'] : 0;
+
 
         // Now make the value passed to the template the selected categories
         $data['value'] = $selectedcategories;
@@ -408,6 +434,7 @@ class CategoriesProperty extends DataProperty
         $data['tree_name'] = $configuration['initialization_basecategories'][1][1];
         $data['include_self'] = $configuration['initialization_basecategories'][2][1];
         $data['select_type'] = $configuration['initialization_basecategories'][3][1];
+        */
         return parent::showInput($data);
     }
 
