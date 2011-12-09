@@ -23,7 +23,7 @@ class CategoryPickerProperty extends ArrayProperty
     public $desc       = 'CategoryPicker';
     public $reqmodules = array('categories');
     
-    public $display_column_definition = array(array("Tree Name","Base Category","Include Self","Multiple Select"),array(2,100,14,14),array("New Tree",0,1,1),array("","","",""));  
+    public $display_column_definition = array(array("Tree Name","Base Category","Include Self","Select Type"),array(2,100,14,6),array("New Tree",0,1,0),array("","","",'a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:62:"1,Single Dropdown;2,Multiple - One Box;3,Multiple - Two Boxes;";}'));  
     public $initialization_addremove = 2;
     
     function __construct(ObjectDescriptor $descriptor)
