@@ -102,6 +102,11 @@ function dynamicdata_admin_showpropval(Array $args=array())
                 $newid = $myobject->updateItem();
                 if (empty($newid)) return;
 
+                if (empty($exit)) {
+                    $return_url = xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $itemid));
+                    xarController::redirect($return_url);
+                    return true;
+                }
             }
             if (!empty($exit)) {
                 if (!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}

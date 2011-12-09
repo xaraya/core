@@ -169,7 +169,7 @@ class CelkoPositionProperty extends DataProperty
                 $parent_id = (int)$this->reference_id;
             } else {
                 $parent_id = (int)$parentItem['parent_id'];
-            }var_dump($parent_id);exit;
+            }
             $itemid = $this->updateposition($itemid,$parent_id,$point_of_insertion);
         }
         return true;

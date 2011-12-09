@@ -410,13 +410,11 @@ class CategoriesProperty extends DataProperty
     public function showOutput(Array $data = array())
     {/*
         if (!empty($data['itemid'])) $this->itemid = $data['itemid'];
-//var_dump($this->objectref);exit;
         $links = xarMod::apiFunc('categories', 'user', 'getlinkage',
                                array('itemid' => $this->itemid,
                                      'itemtype' => 3,
                                      'module' => 'dynamicdata',
                                      ));
-var_dump($links);exit;
 */
 /*if (empty($data['module'])) {
             if (!empty($data['module'])) {
@@ -498,17 +496,15 @@ var_dump($links);exit;
 */
     public function updateConfiguration(Array $data = array())
     {
-        // Remove any empty rows, i.e. those where there is no title
+        // Array properties and their extensions have arrays as values
+        // Use the property's checkInput method to get the value
         $arrayprop = DataPropertyMaster::getProperty(array('name' => 'categorypicker'));
         $arrayprop->checkInput('dd_' . $this->id . '["initialization_basecategories"]');
-//        var_dump(unserialize($arrayprop->value));die("X");exit;
         
-        $rows = array();
-        foreach ($data['configuration']['initialization_basecategories']['value'] as $row) {
-            if (isset($row['delete'])) continue;
-            $rows[] = $row;
-        }
-        $data['configuration']['initialization_basecategories'] = $rows;
+        // Assign the value to this configuration property for update
+        $data['configuration']['initialization_basecategories'] = $arrayprop->getValue();
+        
+        // The other configuration properties need no special treatment
         return parent::updateConfiguration($data);
     }
 }

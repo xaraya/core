@@ -250,19 +250,26 @@ class ArrayProperty extends DataProperty
     {
         // If this is a column definition, load its configuration up front
         // A bound array property contains itself an array property as part of its configuration
-        // The recursed parameter signals we are displaying the configuration property
 
         if (!empty($data["configuration"])) {
         
-                // Load the configuration data
-                $this->parseConfiguration($data["configuration"]);
-                
+                // Load the configuration data and get the exploded fields
+                $configfields = $this->parseConfiguration($data["configuration"]);
+//                var_dump($this->display_column_definition);
                 // Get the values for titles and column types
-                if (!isset($data['column_definition'])) $data['column_definition'] = $this->display_column_definition;
-                $titles = $data['column_definition'][0];
-                $types = $data['column_definition'][1];
-                $defaults = $data['column_definition'][2];
-                $configurations = $data['column_definition'][3];
+//                if (!isset($data['column_definition'])) $data['column_definition'] = $this->display_column_definition;
+//                $titles = $data['column_definition'][0];
+//                $types = $data['column_definition'][1];
+//                $defaults = $data['column_definition'][2];
+//                $configurations = $data['column_definition'][3];
+
+                $titles = $this->display_column_definition[0];
+                $types = $this->display_column_definition[1];
+                $defaults = $this->display_column_definition[2];
+                $configurations = $this->display_column_definition[3];
+
+//                $configuration = unserialize($data['configuration']['value']);
+                if (isset($configfields['value'])) $data['value'] = $configfields['value'];
 /*                
 //                // CHECKME: Get the value array. This is a bit odd, but not sure we can do better
 //                if (isset($data['value']['value'])) $data['value'] = $data['value']['value'];
@@ -279,7 +286,8 @@ class ArrayProperty extends DataProperty
 //                $data['value'] = $temp;
 //                $data['rows'] = count($data['value'][0]);
 */                
-                $data['layout'] = 'configuration';
+                // Define the layout for this special case.
+                if ($this->type == 999) $data['layout'] = 'array_configuration';
         } else {
             try {
                 // New way for configs
@@ -295,13 +303,13 @@ class ArrayProperty extends DataProperty
                 $defaults = array();
                 $configurations = array();
             }
-            $data['layout'] = 'table';
-            if (!isset($data['column_defaults']))  $data['column_defaults'] = $defaults;
-            if (!isset($data['column_configurations']))  $data['column_configurations'] = $configurations;
+            
         }
         
         if (!isset($data['column_titles'])) $data['column_titles'] = $titles;
         if (!isset($data['column_types']))  $data['column_types'] = $types;
+        if (!isset($data['column_defaults']))  $data['column_defaults'] = $defaults;
+        if (!isset($data['column_configurations']))  $data['column_configurations'] = $configurations;
 
         // If titles or types were passed directly through the tag, they may be lists we need to turn into arrays
         if (!is_array($data['column_titles'])) $data['column_titles'] = explode(',', $data['column_titles']);
