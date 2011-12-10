@@ -39,12 +39,7 @@ class CategoriesProperty extends DataProperty
 
     public $include_reference   = 1;
 
-    public $baselist   = 'all';
-    public $cidlist    = array();
-    public $itemid     = 0;
-    public $showbase   = true;
-
-    public $module;
+    public $module_id;
     public $itemtype;
     public $categories = array();
     public $basecategories = array();
@@ -97,23 +92,22 @@ class CategoriesProperty extends DataProperty
         $this->basecategories = $basecats;
 
         // Get the categories from the form
-        list($isvalid, $categories) = $this->fetchValue($name . '["categories"]');
-        if ($categories == null) {
-            if (!xarVarFetch($name . '["categories"]', 'isset', $categories, array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch($name . '["categories"]', 'isset', $tempcategories, array(), XARVAR_NOT_REQUIRED)) return;
+
+        // Make sure we have the categories array has the proper form
+        $categories = array();
+        foreach ($tempcategories as $key => $category) {
+            if (!is_array($category)) $category = array($category);
+            $categories[$key] = $category;
+            
         }
-        // Make sure we have an array of categories
-        // CHECKME
-        if (isset($categories) && !is_array($categories)) $categories = array($categories);
+
         $value = $categories;
-        
         return $this->validateValue($value);
     }
 
     public function validateValue($value = null)
     {
-        // The following passes for validateValue in this property. We do it this way because we have more than one "value"
-        
-        //Begin checks
         // Make sure they are valid unless we can override
         if (!$this->validation_override) {
             if (count($value) > 0) {
@@ -131,6 +125,8 @@ class CategoriesProperty extends DataProperty
                 }
             }
         }
+        
+        // CHECKME: do we still need this?
         // Check the number of base categories against the number categories we have
         // Remark: some of the selected categories might be empty here !
         if (count($this->basecategories) != count($value)) {
@@ -138,7 +134,6 @@ class CategoriesProperty extends DataProperty
             $this->value = null;
             return false;
         }
-        // End checks
         
         // We passed the checks, set the categories
         $this->categories = $value;
@@ -150,34 +145,28 @@ class CategoriesProperty extends DataProperty
 
     public function createValue($itemid=0)
     {
-        // If there was no preceding checkInput, do nothing
-        if (!isset($this->module)) return true;
-
+        sys::import('xaraya.structures.query');
+        xarMod::apiLOad('categories');
+        $xartable = xarDB::getTables();
         if (!empty($itemid)) {
-            $result = xarMod::apiFunc('categories', 'admin', 'unlink',
-                              array('iid' => $itemid,
-                                    'itemtype' => $this->itemtype,
-                                    'modid' => xarMod::getRegId($this->module)));
+            $q = new Query('DELETE', $xartable['categories_linkage']); 
+            $q->eq('item_id', (int)$itemid);
+            if ($this->module_id) $q->eq('module_id', $this->module_id);
+            if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
+            $q->run();
         }
 
-        // Remark: some of the selected categories might be empty here !
-        $cleancats = array();
-        foreach ($this->categories as $category) {
-            if (empty($category)) continue;
-            $cleancats[] = $category;
+        foreach ($this->basecategories as $key => $basecategory) {
+            foreach ($this->categories[$key] as $category) {
+                $q = new Query('INSERT', $xartable['categories_linkage']); 
+                $q->addfield('item_id', (int)$itemid);
+                $q->addfield('module_id', $this->module_id);
+                $q->addfield('itemtype', $this->itemtype);
+                $q->addfield('basecategory', $basecategory);
+                $q->addfield('category_id', $category);
+                $q->run();
+            }
         }
-
-        if (count($cleancats) > 0) {
-            $result = xarMod::apiFunc('categories', 'admin', 'linkcat',
-                                  array('cids'        => $cleancats,
-                                        'iids'        => array($itemid),
-                                        'itemtype'    => $this->itemtype,
-                                        'modid'       => xarMod::getRegId($this->module),
-                                        'basecids'    => $this->basecategories,
-                                        'check'       => false,
-                                        'clean_first' => true));
-        }
-
         return true;
     }
 
@@ -192,58 +181,6 @@ class CategoriesProperty extends DataProperty
         return $itemid;
     }
 
-    /* REMEMBERME: old code. remove at some point
-    public function returnInput($name = '', $value = null)
-    {
-        $name = empty($name) ? 'dd_'.$this->id : $name;
-        // store the fieldname for validations who need them (e.g. file uploads)
-        $this->fieldname = $name;
-
-        list($isvalid, $categories) = $this->fetchValue($name . '_categories');
-        if ($isvalid) {
-            if (!is_array($categories)) {
-                $categories = array($categories);
-            } else {
-                if (!xarVarFetch($name . '_categories', 'array', $categories, array(), XARVAR_NOT_REQUIRED)) return;
-            }
-        } else {
-            $categories = array();
-        }
-        return $categories;
-    }
-
-    public function saveInput($name = '', $value = null)
-    {
-        $name = empty($name) ? 'dd_'.$this->id : $name;
-        // store the fieldname for validations who need them (e.g. file uploads)
-        $this->fieldname = $name;
-
-        if (!xarVarFetch($name . '_categories_module', 'str', $modname, '', XARVAR_NOT_REQUIRED)) return;
-        if (empty($modname)) $modname = xarModGetName();
-        if (!xarVarFetch($name . '_categories_itemtype', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch($name . '_categories_basecats', 'array', $basecats, array(), XARVAR_NOT_REQUIRED)) return;
-
-        $categories = $this->returnInput($name, $value);
-
-        if (!xarVarFetch($name . '_categories_itemid', 'int', $itemid, 0, XARVAR_NOT_REQUIRED)) return;
-        if (!$itemid) $itemid = $value;
-
-        $result = xarMod::apiFunc('categories', 'admin', 'unlink',
-                          array('iid' => $itemid,
-                                'itemtype' => $itemtype,
-                                'modid' => xarMod::getRegId($modname)));
-        if (count($categories) > 0) {
-            $result = xarMod::apiFunc('categories', 'admin', 'linkcat',
-                                array('cids'  => $categories,
-                                      'iids'  => array($itemid),
-                                      'itemtype' => $itemtype,
-                                      'modid' => xarMod::getRegId($modname),
-                                      'basecids'  => $basecats,
-                                      'clean_first' => true));
-        }
-        return true;
-    }
-*/
     public function showInput(Array $data = array())
     {
         // Retrieve the configuration settings for this property
@@ -262,11 +199,11 @@ class CategoriesProperty extends DataProperty
         }
         
         // Get an array of category trees, each havig a base category as its head
+        // CHECKME:
         $filter = array(
             'getchildren' => true,
             'maxdepth' => isset($data['maxdepth'])?$data['maxdepth']:null,
             'mindepth' => isset($data['mindepth'])?$data['mindepth']:null,
-            'cidlist'  => $this->cidlist,
         );
         foreach ($data['base_category'] as $id) {
             $nodes = new BasicSet();
@@ -281,6 +218,7 @@ class CategoriesProperty extends DataProperty
         $data['value'] = array();
         xarMod::apiLOad('categories');
         $xartable = xarDB::getTables();
+        sys::import('xaraya.structures.query');
         foreach ($data['base_category'] as $base) {
             $q = new Query('SELECT', $xartable['categories_basecategories']); 
             $q->eq('id', (int)$base);
@@ -295,170 +233,9 @@ class CategoriesProperty extends DataProperty
         // Prepare some variables we need for the template
         $data['categories_module_id'] = $this->module_id;
         $data['categories_itemtype'] = $this->itemtype;
-        var_dump($this->itemtype);
         
-        var_dump($data['value']);
 //        $data['value'] = array(2,2,2,2);
-/*        if (empty($data['module'])) {
-            if (!empty($data['module'])) {
-                $data['categories_module'] = $data['module'];
-            } else {
-                if (!empty($this->module)) {
-                    $data['categories_module'] = $this->module;
-                } else {
-                    $data['categories_module'] = xarModGetName();
-                }
-            }
-        } else {
-            $data['categories_module'] = $data['module'];
-            unset($data['module']);
-        }
-        
-        if (!isset($data['itemtype'])) {
-            if (!empty($this->itemtype)) {
-                $data['categories_itemtype'] = $this->itemtype;
-            } else {
-                $data['categories_itemtype'] = 0;
-            }
-        } else {
-            $data['categories_itemtype'] = $data['itemtype'];
-        }
 
-        if (isset($data['validation'])) $this->parseValidation($data['validation']);
-        if (!isset($data['bases'])) $data['bases'] = $this->baselist;
-
-        if (!is_array($data['bases'])) {
-            // Return an array where each toplevel category is a base category
-            if (strtolower($data['bases']) == 'all') {
-                if (empty($data['categories_itemtype'])) {
-                    $basecats = xarMod::apiFunc('categories','user','getallcatbases',array('module' => $data['categories_module']));
-                } else {
-                    $basecats = xarMod::apiFunc('categories','user','getallcatbases',array('module' => $data['categories_module'], 'itemtype' => $data['categories_itemtype']));
-                }
-                $data['basecids'] = array();
-                foreach ($basecats as $basecat) $data['basecids'][] = $basecat['category_id'];
-
-            // Return an array where the only base category is the parent all categories
-            } elseif (strtolower($data['bases']) == 'single') {
-                $data['basecids'] = array(0);
-
-            // Return an array with no base categories
-            } elseif (strtolower($data['bases']) == 'none') {
-                $data['basecids'] = array();
-
-            // Return an array of base categories we got from the tag
-            } else {
-                $data['basecids'] = explode(',',$data['bases']);
-            }
-        } else {
-            // still todo: display manually entered basecat trees
-            // right now works for 1 basecat
-            $data['basecids'] = $data['bases'];
-        }
-
-        $filter = array(
-            'getchildren' => true,
-            'maxdepth' => isset($data['maxdepth'])?$data['maxdepth']:null,
-            'mindepth' => isset($data['mindepth'])?$data['mindepth']:null,
-            'cidlist'  => $this->cidlist,
-        );
-        $returnitself = (empty($data['returnitself'])) ? false : $data['returnitself'];
-        $data['trees'] = array();
-        if (empty($data['basecids'])) $data['basecids'] = array(0);
-        if ($data['basecids'] == array(0) || empty($data['basecids'])) {
-            $toplevel = xarMod::apiFunc('categories','user','getchildren',array('cid' => 0));
-            $nodes = new BasicSet();
-            foreach ($toplevel as $entry) {
-                $node = new CategoryTreeNode($entry['id']);
-                $node->setfilter($filter);
-                $tree = new CategoryTree($node);
-                $nodes->addAll($node->depthfirstenumeration());
-            }
-            $data['trees'][] = $nodes;
-        } else {
-            foreach ($data['basecids'] as $cid) {
-                $nodes = new BasicSet();
-                $node = new CategoryTreeNode($cid);
-                $node->setfilter($filter);
-                $tree = new CategoryTree($node);
-                $nodes->addAll($node->depthfirstenumeration());
-                $data['trees'][] = $nodes;
-            }
-        }
-        if (!isset($data['name'])) $data['name'] = "dd_" . $this->id;
-        if (!isset($data['javascript'])) $data['javascript'] = '';
-        if (!isset($data['multiple'])) $data['multiple'] = 0;
-
-        if (empty($data['show_edit']) || !empty($data['multiple'])) {
-            $data['show_edit'] = 0;
-        }
-
-        // Now we need to figure out which categories are displayed
-        $selectedcategories = array();
-    
-        if (!empty($data['itemid'])) {
-            $data['categories_itemid'] = $data['itemid'];
-        } elseif (isset($this->_itemid)) {
-            $data['categories_itemid'] = $this->_itemid;
-        } else {
-            $data['categories_itemid'] = 0;
-        }
-
-        // We have a valid itemid, so get its linked categories
-        // This is the case of a property attached to an object
-        if (!empty($this->categories)) {
-            // We are in displaying a preview, or checkInput for our object failed
-            $selectedcategories = $this->categories;
-        } elseif (!empty($data['categories_itemid'])) {           
-            // No checkInput has run, we are in an existing object or a standalone with an itemid given
-            $links = xarMod::apiFunc('categories', 'user', 'getlinkage',
-                                   array('itemid' => $data['categories_itemid'],
-                                         'itemtype' => $data['categories_itemtype'],
-                                         'module' => $data['categories_module'],
-                                          ));
-            $catlink = array();
-            foreach ($links as $link) {
-                $fulllink = !empty($link['childid']) ? $link['id'] . "." . $link['childid'] : $link['id'];
-                $catlink[$link['basecategory_id']] = $fulllink;
-            }
-            foreach ($data['basecids'] as $basecid)
-                $selectedcategories[] = isset($catlink[$basecid]) ? $catlink[$basecid]: 0;
-        }
-
-        // We have a categories attribute
-        // This is the case of a standalone property
-        if (!empty($data['categories'])) $selectedcategories = $data['categories'];
-        
-        // This is just for backward compatibility in the template
-        if (empty($selectedcategories) && isset($data['value']))  $selectedcategories = $data['value'];
-
-        // CHECKME: are you sure you want to do that ?
-        // No information passed, so just make the base categories the selected categories
-        if (empty($selectedcategories))  $selectedcategories = $data['basecids'];
-
-    // Note : $data['values'][$id] will be updated inside the template, so that when several
-    //        select boxes are used with overlapping trees, categories will only be selected once
-    // This requires that the values are passed by reference : $data['values'] =& $seencids;
-//        if (isset($data['values'])) {
-//            $GLOBALS['Categories_MakeSelect_Values'] =& $data['values'];
-//        }
-
-// FIXME: where was this itemid value supposed to come from ???
-        // This is just for backward compatibility in the template
-//        $data['categories_itemid'] = isset($data['value']) ? $data['value'] : 0;
-
-
-        // Now make the value passed to the template the selected categories
-        $data['value'] = $selectedcategories;
-
-        // Make sure we have an array
-        if (!empty($data['value']) && !is_array($data['value'])) $data['value'] = array($data['value']);
-
-        $configuration = unserialize($this->configuration);
-        $data['tree_name'] = $configuration['initialization_basecategories'][1][1];
-        $data['include_self'] = $configuration['initialization_basecategories'][2][1];
-        $data['select_type'] = $configuration['initialization_basecategories'][3][1];
-        */
         return parent::showInput($data);
     }
 
