@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="nodesize">$nodes->size()</xar:set>
     <xar:if condition="!isset($size)">
-        <xar:if condition="count($nodes) gt 5">
+        <xar:if condition="$nodesize gt 5">
             <xar:set name="size">5</xar:set>
         <xar:else />
-            <xar:set name="size">count($nodes)</xar:set>
+            <xar:set name="size">$nodesize</xar:set>
         </xar:if>
     </xar:if>
 
@@ -20,7 +21,7 @@
 
     <xar:if condition="$select_type eq 2">
         <xar:if condition="!empty($single)">
-            <xar:if condition="(count($nodes) gt 0) OR $allowempty">
+            <xar:if condition="($nodesize gt 0) OR $allowempty">
                 <select name="#$name#[]" id="#$id#" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
                     <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
                 </select>
@@ -28,7 +29,7 @@
                 Options not specified in the configuration
             </xar:if>
         <xar:else/>
-            <xar:if condition="(count($nodes) gt 0) OR $allowempty">
+            <xar:if condition="($nodesize gt 0) OR $allowempty">
                 <select name="#$name#[]" id="#$id#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
                     <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
                 </select>
@@ -37,7 +38,7 @@
             </xar:if>
         </xar:if>
     <xar:elseif condition="$select_type eq 3"/>
-        <xar:if condition="(count($nodes) gt 0) OR $allowempty">
+        <xar:if condition="($nodesize gt 0) OR $allowempty">
             <xar:javascript scope="module" module="base" filename="multicombo.js"/>
             <xar:if condition="empty($style)"><xar:set name="style">'min-width:10em;'</xar:set></xar:if>
             <table class="xar-displayinline">

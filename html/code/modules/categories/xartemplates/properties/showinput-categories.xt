@@ -22,22 +22,12 @@
         <xar:set name="style">''</xar:set>
     </xar:if>
 
-<!--    <input type="hidden" name="#$name#[itemid]" value="#$categories_itemid#"/>
-    <input type="hidden" name="#$name#[module]" value="#$categories_module#"/>
-    <input type="hidden" name="#$name#[itemtype]" value="#$categories_itemtype#"/>
-    -->
     <xar:set name="index">1</xar:set>
 
     <xar:foreach in="$trees" value="$nodes">
-        <input type="hidden" name="#$name#[basecats][#$index#]" value="#$base_category[$index]#"/>
-        <xar:if condition="count($trees) eq 1">
-            <!-- Note: categorypicker expects a value, and categories expects an array - handled in code -->
-            <xar:set name="dropdownname">$name . "[categories]"</xar:set>
-            <xar:set name="dropdownid">$id . "_categories"</xar:set>
-        <xar:else />
-            <xar:set name="dropdownname">$name . "[categories][" . $index . "]"</xar:set>
-            <xar:set name="dropdownid">$id . "_categories_" . $index</xar:set>
-        </xar:if>
+        <input type="hidden" name="#$name#[base_category][#$index#]" value="#$base_category[$index]#"/>
+        <input type="hidden" name="#$name#[module_id][#$index#]" value="#$categories_module_id#"/>
+        <input type="hidden" name="#$name#[itemtype][#$index#]" value="#$categories_itemtype#"/>
         
         <xar:set name="subdata">
             array(
@@ -48,6 +38,8 @@
                 'nodes' => $nodes,
                 'select_type' => $select_type[$index],
                 'tabindex' => $tabindex,
+                'evt_change' => $evt_change,
+                'style' => $style,
             )
         </xar:set>
 

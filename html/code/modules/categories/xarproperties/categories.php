@@ -11,43 +11,20 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/147.html
  *
- * @author mikespub <mikespub@xaraya.com>
+ * @author Marc Lutolf <mfl@netspan.ch>
  */
 
 /**
- * Make a &lt;select&gt; box with tree of categories (&#160;&#160;--+ style)
- * e.g. for use in your own admin pages to select root categories for your
- * module, choose a particular subcategory for an item etc.
+ * This property displays a series of 1 or more category selectors.
+ * The selectors can be:
+ * - a dropdown: the user can choose one category
+ * - a multiselect box: the user can select one of more categories
+ * - a set of 2 multiselect boxes: user moves one or more categories from one box to the other
  *
- *  -- INPUT --
- * @param $args['cid'] optional ID of the root category used for the tree
- *                     (if not specified, the whole tree is shown)
- * @param $args['eid'] optional ID to exclude from the tree (probably not
- *                     very useful in this context)
- * @param $args['multiple'] optional flag (1) to have a multiple select box
- * @param $args['values'] optional array $values[$id] = 1 to mark option $id
- *                        as selected
- * @param $args['return_itself'] include the cid itself (default false)
- * @param $args['select_itself'] allow selecting the cid itself if included (default false)
- * @param $args['show_edit'] show edit link for current selection (default false)
- * @param $args['javascript'] add onchange, onblur or whatever javascript to select (default empty)
- * @param $args['size'] optional size of the select field (default empty)
- * @param $args['name_prefix'] optional prefix for the select field name (default empty)
- *
- *  -- OUTPUT --
- * @returns string
- * @return select box for categories :
- *
- * &lt;select name="cids[]"&gt; (or &lt;select name="cids[]" multiple&gt;)
- * &lt;option value="123"&gt;&#160;&#160;--+&#160;My Cat 123
- * &lt;option value="124" selected&gt;&#160;&#160;&#160;&#160;+&#160;My Cat 123
- * ...
- * &lt;/select&gt;
- *
- *
- *   Options
- *   cids:  bascid:cid[,cid] - select only cids who are descendants of the given basecid(s)
- *   bases: bascid[,bascid] - select only cids who are descendants of the given basecid(s)
+ * Each selector has as data a tree of categories whose parent is a base category
+ * The property also references a module ID and an itemtype.
+ * When bound to an object these are taken from the parent object.
+ * Otherwise these can be added as attributes or the tag, or they take default values.
  */
 
 sys::import('modules.dynamicdata.class.properties.base');
@@ -59,6 +36,8 @@ class CategoriesProperty extends DataProperty
     public $name       = 'categories';
     public $desc       = 'Categories';
     public $reqmodules = array('categories');
+
+    public $include_reference   = 1;
 
     public $baselist   = 'all';
     public $cidlist    = array();
@@ -82,41 +61,64 @@ class CategoriesProperty extends DataProperty
         $this->tplmodule      = 'categories';
         $this->filepath       = 'modules/categories/xarproperties';
         $this->prepostprocess = 2;
+        $this->include_reference = 1;
+        
+        // Set some variables we need
+        // Case of a bound property
+        var_dump($this->objectref);
+        if (isset($this->objectref)) $this->module_id = (int)$this->objectref->module_id;
+        // Override or a standalone property
+        if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
+        // No hint at all, take the current module
+        if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarModGetName());
+
+        // Do the same for itemtypes
+        if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;
+        if (isset($data['itemtype'])) $this->itemtype = (int)$data['itemtype'];
+        // No hint at all, assume all itemtypes
+        if (!isset($this->itemtype)) $this->itemtype = 0;
     }
 
     public function checkInput($name = '', $value = null)
     {
+        $name = empty($name) ? 'dd_'.$this->id : $name;
+        // store the fieldname for validations who need them (e.g. file uploads)
+        $this->fieldname = $name;
+
         // Pull in local module and itemtype from the form and store for reuse
         if (!xarVarFetch($name . '["itemtype"]', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch($name . '["module"]', 'str', $modname, "", XARVAR_NOT_REQUIRED)) return;
         if (empty($modname)) $modname = xarModGetName();
         $this->itemtype = $itemtype;
-        $this->module = $modname;
+        $this->module_id = xarMod::getID($modname);
         
-        $name = empty($name) ? 'dd_'.$this->id : $name;
-        // store the fieldname for validations who need them (e.g. file uploads)
-        $this->fieldname = $name;
+        // Get the base categories from the form
+        if (!xarVarFetch($name . '["base_category"]', 'array', $basecats, array(), XARVAR_NOT_REQUIRED)) return;
+        $this->basecategories = $basecats;
 
         // Get the categories from the form
         list($isvalid, $categories) = $this->fetchValue($name . '["categories"]');
         if ($categories == null) {
             if (!xarVarFetch($name . '["categories"]', 'isset', $categories, array(), XARVAR_NOT_REQUIRED)) return;
         }
-        // Make sure we have an array
+        // Make sure we have an array of categories
+        // CHECKME
         if (isset($categories) && !is_array($categories)) $categories = array($categories);
+        $value = $categories;
         
-        // Get the base categories from the form
-        if (!xarVarFetch($name . '["basecats"]', 'array', $basecats, array(), XARVAR_NOT_REQUIRED)) return;
-        $this->basecategories = $basecats;
+        return $this->validateValue($value);
+    }
 
+    public function validateValue($value = null)
+    {
         // The following passes for validateValue in this property. We do it this way because we have more than one "value"
         
         //Begin checks
         // Make sure they are valid unless we can override
         if (!$this->validation_override) {
-            if (count($categories) > 0) {
+            if (count($value) > 0) {
                 $checkcats= array();
-                foreach ($categories as $category) {
+                foreach ($value as $category) {
                     if (empty($category)) continue;
                     $catparts = explode('.',$category);
                     $category = $catparts[0];
@@ -129,10 +131,9 @@ class CategoriesProperty extends DataProperty
                 }
             }
         }
-
         // Check the number of base categories against the number categories we have
         // Remark: some of the selected categories might be empty here !
-        if (count($basecats) != count($categories)) {
+        if (count($this->basecategories) != count($value)) {
             $this->invalid = xarML("The number of categories and their base categories is not the same");
             $this->value = null;
             return false;
@@ -140,10 +141,10 @@ class CategoriesProperty extends DataProperty
         // End checks
         
         // We passed the checks, set the categories
-        $this->categories = $categories;
+        $this->categories = $value;
         
         // Keep a reference of the data of this property in $this->value, for saving or easy manipulation
-        $this->value = reset($this->categories);        
+        $this->value = $value;        
         return true;
     }
 
@@ -245,6 +246,7 @@ class CategoriesProperty extends DataProperty
 */
     public function showInput(Array $data = array())
     {
+        // Retrieve the configuration settings for this property
         if (!empty($this->configuration)) {
             $configuration = unserialize($this->configuration);
             $configuration = $configuration['initialization_basecategories'];
@@ -252,7 +254,6 @@ class CategoriesProperty extends DataProperty
             $data['base_category'] = $configuration[1];
             $data['include_self'] = $configuration[2];
             $data['select_type'] = $configuration[3];
-//         var_dump($configuration);exit;
        } else {
             $data['tree_name'] = array(1 => 'dork');
             $data['base_category'] = array(1 => 1);
@@ -260,6 +261,7 @@ class CategoriesProperty extends DataProperty
             $data['select_type'] = array(1 => 1);
         }
         
+        // Get an array of category trees, each havig a base category as its head
         $filter = array(
             'getchildren' => true,
             'maxdepth' => isset($data['maxdepth'])?$data['maxdepth']:null,
@@ -274,7 +276,29 @@ class CategoriesProperty extends DataProperty
             $nodes->addAll($node->depthfirstenumeration());
             $data['trees'][] = $nodes;
         }
-        $data['value'] = array(2,2,2,2);
+        
+        // Get an array of values (selected items) for each tree
+        $data['value'] = array();
+        xarMod::apiLOad('categories');
+        $xartable = xarDB::getTables();
+        foreach ($data['base_category'] as $base) {
+            $q = new Query('SELECT', $xartable['categories_basecategories']); 
+            $q->eq('id', (int)$base);
+            if ($this->module_id) $q->eq('module_id', $this->module_id);
+            if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
+            $q->addfield('category_id');
+            $q->run();
+            $result = $q->output();
+            $data['value'][$base] = !empty($result['category_id']) ? $result : array();        
+        }
+        
+        // Prepare some variables we need for the template
+        $data['categories_module_id'] = $this->module_id;
+        $data['categories_itemtype'] = $this->itemtype;
+        var_dump($this->itemtype);
+        
+        var_dump($data['value']);
+//        $data['value'] = array(2,2,2,2);
 /*        if (empty($data['module'])) {
             if (!empty($data['module'])) {
                 $data['categories_module'] = $data['module'];
