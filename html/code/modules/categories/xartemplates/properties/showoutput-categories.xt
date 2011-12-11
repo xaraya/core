@@ -1,26 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:set name="catinfo">xarMod::apiFunc('categories', 'user', 'getcatinfo', array('cids' => $value))</xar:set>
     <xar:if condition="$layout eq 'default' OR $layout eq 'horizontal' OR empty($layout)">
-       <xar:foreach in="$catinfo" value="$category">
-            <xar:if condition="!$showbase">
-                <xar:if condition="$category['id'] ne $category['basecategory_id']">
-                    #$category['name']#&#160;
-                </xar:if>
-            <xar:else />
-                #$category['name']#&#160;
-            </xar:if>
+       <xar:foreach in="$value" value="$category">
+            #$category['name']#&#160;
         </xar:foreach>
     <xar:else />
         <xar:foreach in="$catinfo" value="$category">
-            <xar:if condition="!$showbase">
-                <xar:if condition="$category['id'] ne $category['basecategory_id']">
-                    #$category['name']#<br />
-                </xar:if>
-            <xar:else />
-                #$category['name']#<br />
-            </xar:if>
+            #$category['name']#<br />
         </xar:foreach>
     </xar:if>
 </xar:template>

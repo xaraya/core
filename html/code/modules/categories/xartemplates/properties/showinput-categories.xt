@@ -26,8 +26,8 @@
 
     <xar:foreach in="$trees" value="$nodes">
         <input type="hidden" name="#$name#[base_category][#$index#]" value="#$base_category[$index]#"/>
-        <input type="hidden" name="#$name#[module_id][#$index#]" value="#$categories_module_id#"/>
-        <input type="hidden" name="#$name#[itemtype][#$index#]" value="#$categories_itemtype#"/>
+        <input type="hidden" name="#$name#[module_id]" value="#$categories_module_id#"/>
+        <input type="hidden" name="#$name#[itemtype]" value="#$categories_itemtype#"/>
         
         <xar:set name="subdata">
             array(

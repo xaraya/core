@@ -57,21 +57,6 @@ class CategoriesProperty extends DataProperty
         $this->filepath       = 'modules/categories/xarproperties';
         $this->prepostprocess = 2;
         $this->include_reference = 1;
-        
-        // Set some variables we need
-        // Case of a bound property
-        var_dump($this->objectref);
-        if (isset($this->objectref)) $this->module_id = (int)$this->objectref->module_id;
-        // Override or a standalone property
-        if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
-        // No hint at all, take the current module
-        if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarModGetName());
-
-        // Do the same for itemtypes
-        if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;
-        if (isset($data['itemtype'])) $this->itemtype = (int)$data['itemtype'];
-        // No hint at all, assume all itemtypes
-        if (!isset($this->itemtype)) $this->itemtype = 0;
     }
 
     public function checkInput($name = '', $value = null)
@@ -82,11 +67,10 @@ class CategoriesProperty extends DataProperty
 
         // Pull in local module and itemtype from the form and store for reuse
         if (!xarVarFetch($name . '["itemtype"]', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch($name . '["module"]', 'str', $modname, "", XARVAR_NOT_REQUIRED)) return;
-        if (empty($modname)) $modname = xarModGetName();
+        if (!xarVarFetch($name . '["module_id"]', 'int', $module_id, 182, XARVAR_NOT_REQUIRED)) return;
+        $this->module_id = $module_id;
         $this->itemtype = $itemtype;
-        $this->module_id = xarMod::getID($modname);
-        
+       
         // Get the base categories from the form
         if (!xarVarFetch($name . '["base_category"]', 'array', $basecats, array(), XARVAR_NOT_REQUIRED)) return;
         $this->basecategories = $basecats;
@@ -146,7 +130,7 @@ class CategoriesProperty extends DataProperty
     public function createValue($itemid=0)
     {
         sys::import('xaraya.structures.query');
-        xarMod::apiLOad('categories');
+        xarMod::apiLoad('categories');
         $xartable = xarDB::getTables();
         if (!empty($itemid)) {
             $q = new Query('DELETE', $xartable['categories_linkage']); 
@@ -183,6 +167,19 @@ class CategoriesProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
+        // Set the module_id: case of a bound property
+        if (isset($this->objectref)) $this->module_id = (int)$this->objectref->module_id;
+        // Override or a standalone property
+        if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
+        // No hint at all, take the current module
+        if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarModGetName());
+
+        // Do the same for itemtypes
+        if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;
+        if (isset($data['itemtype'])) $this->itemtype = (int)$data['itemtype'];
+        // No hint at all, assume all itemtypes
+        if (!isset($this->itemtype)) $this->itemtype = 0;
+
         // Retrieve the configuration settings for this property
         if (!empty($this->configuration)) {
             $configuration = unserialize($this->configuration);
@@ -192,7 +189,7 @@ class CategoriesProperty extends DataProperty
             $data['include_self'] = $configuration[2];
             $data['select_type'] = $configuration[3];
        } else {
-            $data['tree_name'] = array(1 => 'dork');
+            $data['tree_name'] = array(1 => 'New Tree');
             $data['base_category'] = array(1 => 1);
             $data['include_self'] = array(1 => 1);
             $data['select_type'] = array(1 => 1);
@@ -216,7 +213,7 @@ class CategoriesProperty extends DataProperty
         
         // Get an array of values (selected items) for each tree
         $data['value'] = array();
-        xarMod::apiLOad('categories');
+        xarMod::apiLoad('categories');
         $xartable = xarDB::getTables();
         sys::import('xaraya.structures.query');
         foreach ($data['base_category'] as $base) {
@@ -240,73 +237,39 @@ class CategoriesProperty extends DataProperty
     }
 
     public function showOutput(Array $data = array())
-    {/*
-        if (!empty($data['itemid'])) $this->itemid = $data['itemid'];
-        $links = xarMod::apiFunc('categories', 'user', 'getlinkage',
-                               array('itemid' => $this->itemid,
-                                     'itemtype' => 3,
-                                     'module' => 'dynamicdata',
-                                     ));
-*/
-/*if (empty($data['module'])) {
-            if (!empty($data['module'])) {
-                $data['categories_module'] = $data['module'];
-            } else {
-                $data['categories_module'] = xarModGetName();
-            }
-        } else {
-            $data['categories_module'] = $data['module'];
-            unset($data['module']);
+    {
+        // Set the module_id: case of a bound property
+        if (isset($this->objectref)) {
+            $this->module_id = (int)$this->objectref->module_id;
+            $itemid = $this->objectref->properties['id']->value;
         }
-        if (empty($data['itemtype'])) {
-            $data['categories_itemtype'] = 0;
-        } else {
-            $data['categories_itemtype'] = $data['itemtype'];
-        }
+        // Override or a standalone property
+        if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
+        // No hint at all, take the current module
+        if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarModGetName());
 
-        if (isset($data['validation'])) $this->parseValidation($data['validation']);
-        if (!isset($data['showbase'])) $data['showbase'] = $this->showbase;
+        // Do the same for itemtypes
+        if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;
+        if (isset($data['itemtype'])) $this->itemtype = (int)$data['itemtype'];
+        // No hint at all, assume all itemtypes
+        if (!isset($this->itemtype)) $this->itemtype = 0;
 
-        if (!isset($data['name'])) $data['name'] = "dd_" . $this->id;
+        // Pick up an itemid if one was passed
+        if (isset($data['itemid'])) $itemid = (int)$data['itemid'];
 
-        if (!empty($data['itemid'])) {
-            $data['categories_itemid'] = $data['itemid'];
-        } elseif (isset($this->_itemid)) {
-            $data['categories_itemid'] = $this->_itemid;
-        } else {
-            $data['categories_itemid'] = 0;
-        }
+        sys::import('xaraya.structures.query');
+        xarMod::apiLoad('categories');
+        $xartable = xarDB::getTables();
+        $q = new Query('SELECT'); 
+        $q->addtable( $xartable['categories'],'c');
+        $q->addtable( $xartable['categories_linkage'],'cl');
+        $q->join('c.id','cl.category_id');
+        $q->eq('item_id', $itemid);
+        if ($this->module_id) $q->eq('module_id', $this->module_id);
+        if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
+        $q->run();
+        $this->value = $q->output();
 
-        // We have a valid itemid, so get its linked categories
-        // This is the case of a property attached to an object
-        $selectedcategories = array();
-        if (!empty($this->categories)) {
-            // We are in displaying a preview, or checkInput for our object failed
-            $selectedcategories = $this->categories;
-        } elseif (!empty($data['categories_itemid'])) {
-            // No checkInput has run, we are in an existing object or a standalone with an itemid given
-            if (empty($this->value)) {
-                $data['value'] = array();
-                $links = xarMod::apiFunc('categories', 'user', 'getlinkage',
-                                       array('itemid' => $data['categories_itemid'],
-                                             'itemtype' => $data['categories_itemtype'],
-                                             'module' => $data['categories_module'],
-                                             ));
-                foreach ($links as $link) 
-                    $selectedcategories[] = $link['id'];
-            }
-        }
-
-        // We have a categories attribute
-        // This is the case of a standalone property
-        if (!empty($data['categories'])) $selectedcategories = $data['categories'];
-
-        // Now make the value passed to the template the selected categories
-        $data['value'] = $selectedcategories;
-
-        // Make sure we have an array
-        if (!empty($data['value']) && !is_array($data['value'])) $data['value'] = array($data['value']);
-*/
         $data['value'] = $this->value;
         return parent::showOutput($data);
     }
