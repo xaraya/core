@@ -273,22 +273,7 @@ class CategoriesProperty extends DataProperty
         $data['value'] = $this->value;
         return parent::showOutput($data);
     }
-/*
-    function getOption($check = false)
-    {
-        if (!isset($this->value)) {
-             if ($check) return true;
-             return null;
-        }
-        $result = xarMod::apiFunc('categories','user','getcatinfo',array('cid' => $this->value));
-        if (!empty($result)) {
-            if ($check) return true;
-            return $result['name'];
-        }
-        if ($check) return false;
-        return $this->value;
-    }
-*/
+
     public function updateConfiguration(Array $data = array())
     {
         // Array properties and their extensions have arrays as values
