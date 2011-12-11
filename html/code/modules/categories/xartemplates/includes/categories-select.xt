@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:set name="dropdownname">$name . "[categories][" . $index . "]"</xar:set>
-    <xar:set name="dropdownid">$id . "_categories_" . $index</xar:set>
-    <select name="#$dropdownname#" id="#$dropdownid#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
+    <xar:set name="selectname">$name . "[categories][" . $index . "]"</xar:set>
+    <xar:set name="selectid">$id . "_categories_" . $index</xar:set>
+    <select name="#$selectname#" id="#$selectid#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
         <xar:if condition="isset($firstline)">
             <option value="">#$firstline#</option>
         </xar:if>

@@ -77,7 +77,7 @@ class CategoriesProperty extends DataProperty
 
         // Get the categories from the form
         if (!xarVarFetch($name . '["categories"]', 'isset', $tempcategories, array(), XARVAR_NOT_REQUIRED)) return;
-
+//var_dump($_POST);exit;
         // Make sure we have the categories array has the proper form
         $categories = array();
         foreach ($tempcategories as $key => $category) {

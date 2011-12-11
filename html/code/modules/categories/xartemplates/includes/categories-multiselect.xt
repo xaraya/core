@@ -19,10 +19,13 @@
       <xar:set name="style">''</xar:set>
     </xar:if>
 
+    <xar:set name="selectname">$name . "[categories][" . $index . "]"</xar:set>
+    <xar:set name="selectid">$id . "_categories_" . $index</xar:set>
+
     <xar:if condition="$select_type eq 2">
         <xar:if condition="!empty($single)">
             <xar:if condition="($nodesize gt 0) OR $allowempty">
-                <select name="#$name#[]" id="#$id#" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
+                <select name="#$selectname#" id="#$selectid#" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
                     <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
                 </select>
             <xar:else />
@@ -30,7 +33,7 @@
             </xar:if>
         <xar:else/>
             <xar:if condition="($nodesize gt 0) OR $allowempty">
-                <select name="#$name#[]" id="#$id#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
+                <select name="#$selectname#" id="#$selectid#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
                     <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
                 </select>
             <xar:else />
@@ -66,7 +69,7 @@
                             <p><input id="left_move_all" type="button" value="&lt;&lt;" disabled="disabled"/></p> 
                         </td>
                         <td>
-                            <select name="#$name#[]" id="#$id#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
+                            <select name="#$selectname#" id="#$selectid#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
                                 <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
                             </select>                        
                         </td>                    
@@ -77,7 +80,7 @@
             var multi_#$id# = new multiCombo( {     // var name is the id of this object
                 id: 'multi_#$id#',                  // the var name we're using  
                 left: 'left_select',                // id of the left select element
-                right: '#$id#',                     // id of the right select element (dd id)
+                right: '#$selectid#',                     // id of the right select element (dd id)
                 make_visible: ['_show_1', '_show_2', '_show_3', '_show_4']  // element ids to make visible 
             } );
             multi_#$id#.init();
