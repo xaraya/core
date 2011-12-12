@@ -19,7 +19,7 @@
       <xar:set name="style">''</xar:set>
     </xar:if>
 
-    <xar:set name="selectname">$name . "[categories][" . $index . "]"</xar:set>
+    <xar:set name="selectname">$name . "[categories][" . $index . "][]"</xar:set>
     <xar:set name="selectid">$id . "_categories_" . $index</xar:set>
 
     <xar:if condition="$select_type eq 2">

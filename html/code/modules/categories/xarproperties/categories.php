@@ -45,7 +45,6 @@ class CategoriesProperty extends DataProperty
     public $basecategories = array();
     
 //    public $validation_categories;
-    public $validation_override = true;
 
     public $initialization_basecategories;
     
@@ -56,7 +55,6 @@ class CategoriesProperty extends DataProperty
         $this->tplmodule      = 'categories';
         $this->filepath       = 'modules/categories/xarproperties';
         $this->prepostprocess = 2;
-        $this->include_reference = 1;
     }
 
     public function checkInput($name = '', $value = null)
@@ -76,16 +74,36 @@ class CategoriesProperty extends DataProperty
         $this->basecategories = $basecats;
 
         // Get the categories from the form
-        if (!xarVarFetch($name . '["categories"]', 'isset', $tempcategories, array(), XARVAR_NOT_REQUIRED)) return;
-//var_dump($_POST);exit;
-        // Make sure we have the categories array has the proper form
-        $categories = array();
-        foreach ($tempcategories as $key => $category) {
-            if (!is_array($category)) $category = array($category);
-            $categories[$key] = $category;
+        // Select type of each tree can be diferent
+        foreach ($this->basecategories as $key => $base_category) {
+            $select_type = 1;
+            if ($select_type == 1) $select_type = 'dropdown';
+            else $select_type = 'multiselect';
+            if ($select_type == 'dropdown') {
+                // For a simple dropdown just get an array of values
+                if (!xarVarFetch($name . '["categories"]', 'isset', $categories, array(), XARVAR_NOT_REQUIRED)) return;
+            } else {
+                // For multiselects we need to create the property and the options
+                /*
+                xarMod::apiLoad('categories');
+                $xartable = xarDB::getTables();
+                sys::import('xaraya.structures.query');
+                $q = new Query('SELECT', $xartable['categories_basecategories']); 
+                $q->eq('id', (int)$base);
+                if ($this->module_id) $q->eq('module_id', $this->module_id);
+                if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
+                $q->addfield('category_id');
+                $q->run();
+                $result = $q->output();
+                */
+                $category_property = DataPropertyMaster::getProperty(array('name' => $select_type));
+                // We won't bother checking the values here
+                $category_property->validation_override = true;
+                $category_property->checkInput('dd_122["categories"][' . $key . ']');
+                $categories[$key] = $category_property->getValue();
+            }
             
         }
-
         $value = $categories;
         return $this->validateValue($value);
     }
@@ -93,7 +111,8 @@ class CategoriesProperty extends DataProperty
     public function validateValue($value = null)
     {
         // Make sure they are valid unless we can override
-        if (!$this->validation_override) {
+//        if (!$this->validation_override) {
+        if (0) {
             if (count($value) > 0) {
                 $checkcats= array();
                 foreach ($value as $category) {
