@@ -7,7 +7,7 @@
         <xar:set name="nodeid">$node->id</xar:set>
         <xar:set name="nodename">$node->name</xar:set>
         <xar:set name="childobject">$node->child_object</xar:set>
-        <xar:set name="level">$node->getLevel()</xar:set>#$level#
+        <xar:set name="level">$node->getLevel()</xar:set>
         <xar:if condition="empty($nodeid) or $nodeid ne $nodename">
             <xar:if condition="in_array($nodeid,$value)">
             <option style="padding-left: #$level#em;" value="#$nodeid#" selected="selected">

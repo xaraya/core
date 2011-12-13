@@ -41,6 +41,7 @@ class CategoriesProperty extends DataProperty
 
     public $module_id;
     public $itemtype;
+    public $itemid;
     public $categories = array();
     public $basecategories = array();
     
@@ -76,7 +77,7 @@ class CategoriesProperty extends DataProperty
         // Get the categories from the form
         // Select type of each tree can be diferent
         foreach ($this->basecategories as $key => $base_category) {
-            $select_type = 2;
+            $select_type = 3;
             if ($select_type == 1) $select_type = 'dropdown';
             else $select_type = 'multiselect';
                 if (!xarVarFetch($name . '["categories"]', 'isset', $categories, array(), XARVAR_NOT_REQUIRED)) return;
@@ -125,12 +126,14 @@ class CategoriesProperty extends DataProperty
 
     public function createValue($itemid=0)
     {
+        // For both create and update we remove any existing links and create the new ones
         sys::import('xaraya.structures.query');
         xarMod::apiLoad('categories');
         $xartable = xarDB::getTables();
         if (!empty($itemid)) {
             $q = new Query('DELETE', $xartable['categories_linkage']); 
             $q->eq('item_id', (int)$itemid);
+            // CHRCKME: shouldn't we force a value for module_id and itemtype?
             if ($this->module_id) $q->eq('module_id', $this->module_id);
             if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
             $q->run();
@@ -176,6 +179,10 @@ class CategoriesProperty extends DataProperty
         // No hint at all, assume all itemtypes
         if (!isset($this->itemtype)) $this->itemtype = 0;
 
+        // Get the itemid
+        $itemid = $this->_itemid;
+        if (isset($data['itemid'])) $itemid = (int)$data['itemid'];
+
         // Retrieve the configuration settings for this property
         if (!empty($this->configuration)) {
             $configuration = unserialize($this->configuration);
@@ -191,8 +198,8 @@ class CategoriesProperty extends DataProperty
             $data['select_type'] = array(1 => 1);
         }
         
-        // Get an array of category trees, each havig a base category as its head
-        // CHECKME:
+        // Get an array of category trees, each having a base category as its head
+        // CHECKME: what is this again?
         $filter = array(
             'getchildren' => true,
             'maxdepth' => isset($data['maxdepth'])?$data['maxdepth']:null,
@@ -207,28 +214,30 @@ class CategoriesProperty extends DataProperty
             $data['trees'][] = $nodes;
         }
         
-        // Get an array of values (selected items) for each tree
+        // Get an array of values (selected categories) for each tree
         $data['value'] = array();
         xarMod::apiLoad('categories');
         $xartable = xarDB::getTables();
         sys::import('xaraya.structures.query');
         foreach ($data['base_category'] as $base) {
-            $q = new Query('SELECT', $xartable['categories_basecategories']); 
-            $q->eq('id', (int)$base);
+            $q = new Query('SELECT', $xartable['categories_linkage']); 
+            $q->eq('basecategory', (int)$base);
+            $q->eq('item_id', (int)$itemid);
             if ($this->module_id) $q->eq('module_id', $this->module_id);
             if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
             $q->addfield('category_id');
             $q->run();
             $result = $q->output();
-            $data['value'][$base] = !empty($result['category_id']) ? $result : array();        
+            $categories = array();
+            foreach ($result as $row) 
+                if (!empty($row['category_id'])) $categories[] = $row['category_id'];
+            $data['value'][$base] = $categories;
         }
         
         // Prepare some variables we need for the template
         $data['categories_module_id'] = $this->module_id;
         $data['categories_itemtype'] = $this->itemtype;
         
-//        $data['value'] = array(2,2,2,2);
-
         return parent::showInput($data);
     }
 

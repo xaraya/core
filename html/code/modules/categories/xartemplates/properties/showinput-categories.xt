@@ -33,7 +33,7 @@
             array(
                 'id' => $id,
                 'name' => $name,
-                'value' => $value,
+                'value' => $value[$index],
                 'index' => $index,
                 'nodes' => $nodes,
                 'select_type' => $select_type[$index],
