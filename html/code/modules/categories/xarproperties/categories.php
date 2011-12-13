@@ -141,6 +141,9 @@ class CategoriesProperty extends DataProperty
 
         foreach ($this->basecategories as $key => $basecategory) {
             foreach ($this->categories[$key] as $category) {
+                // Ignore if no category was chosen (value = 0)
+                if (empty($category)) continue;
+                
                 $q = new Query('INSERT', $xartable['categories_linkage']); 
                 $q->addfield('item_id', (int)$itemid);
                 $q->addfield('module_id', $this->module_id);
