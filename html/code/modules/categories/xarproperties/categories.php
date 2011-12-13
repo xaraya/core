@@ -76,33 +76,10 @@ class CategoriesProperty extends DataProperty
         // Get the categories from the form
         // Select type of each tree can be diferent
         foreach ($this->basecategories as $key => $base_category) {
-            $select_type = 1;
+            $select_type = 2;
             if ($select_type == 1) $select_type = 'dropdown';
             else $select_type = 'multiselect';
-            if ($select_type == 'dropdown') {
-                // For a simple dropdown just get an array of values
                 if (!xarVarFetch($name . '["categories"]', 'isset', $categories, array(), XARVAR_NOT_REQUIRED)) return;
-            } else {
-                // For multiselects we need to create the property and the options
-                /*
-                xarMod::apiLoad('categories');
-                $xartable = xarDB::getTables();
-                sys::import('xaraya.structures.query');
-                $q = new Query('SELECT', $xartable['categories_basecategories']); 
-                $q->eq('id', (int)$base);
-                if ($this->module_id) $q->eq('module_id', $this->module_id);
-                if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
-                $q->addfield('category_id');
-                $q->run();
-                $result = $q->output();
-                */
-                $category_property = DataPropertyMaster::getProperty(array('name' => $select_type));
-                // We won't bother checking the values here
-                $category_property->validation_override = true;
-                $category_property->checkInput('dd_122["categories"][' . $key . ']');
-                $categories[$key] = $category_property->getValue();
-            }
-            
         }
         $value = $categories;
         return $this->validateValue($value);
@@ -258,9 +235,13 @@ class CategoriesProperty extends DataProperty
     public function showOutput(Array $data = array())
     {
         // Set the module_id: case of a bound property
+        $itemid = 0;
         if (isset($this->objectref)) {
             $this->module_id = (int)$this->objectref->module_id;
-            $itemid = $this->objectref->properties['id']->value;
+            // Ignore itemid if this is an object list; need to get the ID from the corresponding attribute
+            if (isset($this->objectref->itemid)) {
+                $itemid = $this->objectref->properties['id']->value;
+            }
         }
         // Override or a standalone property
         if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
