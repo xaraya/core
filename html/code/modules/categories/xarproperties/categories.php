@@ -200,7 +200,6 @@ class CategoriesProperty extends DataProperty
             $data['include_self'] = array(1 => 1);
             $data['select_type'] = array(1 => 1);
         }
-        
         // Get an array of category trees, each having a base category as its head
         // CHECKME: what is this again?
         $filter = array(
@@ -208,7 +207,10 @@ class CategoriesProperty extends DataProperty
             'maxdepth' => isset($data['maxdepth'])?$data['maxdepth']:null,
             'mindepth' => isset($data['mindepth'])?$data['mindepth']:null,
         );
-        foreach ($data['base_category'] as $id) {
+        foreach ($data['base_category'] as $trees) {
+            // The base category is a single category (no multiselect, so get the category ID
+            $tree = is_array($trees) ? reset($trees) : $trees;
+            $id = is_array($tree) ? reset($tree) : $tree;
             $nodes = new BasicSet();
             $node = new CategoryTreeNode($id);
             $node->setfilter($filter);
@@ -218,25 +220,32 @@ class CategoriesProperty extends DataProperty
         }
         
         // Get an array of values (selected categories) for each tree
-        $data['value'] = array();
-        xarMod::apiLoad('categories');
-        $xartable = xarDB::getTables();
-        sys::import('xaraya.structures.query');
-        foreach ($data['base_category'] as $base) {
-            $q = new Query('SELECT', $xartable['categories_linkage']); 
-            $q->eq('basecategory', (int)$base);
-            $q->eq('item_id', (int)$itemid);
-            if ($this->module_id) $q->eq('module_id', $this->module_id);
-            if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
-            $q->addfield('category_id');
-            $q->run();
-            $result = $q->output();
-            $categories = array();
-            foreach ($result as $row) 
-                if (!empty($row['category_id'])) $categories[] = $row['category_id'];
-            $data['value'][$base] = $categories;
+        if (!isset($data['value'])) {
+            $data['value'] = array();
+            xarMod::apiLoad('categories');
+            $xartable = xarDB::getTables();
+            sys::import('xaraya.structures.query');
+            foreach ($data['base_category'] as $key => $trees) {
+                // The base category is a single category (no multiselect, so get the category ID
+                $key = key($trees);
+                $tree = reset($trees);
+                // Get the first base category in the tree (there is only one)
+                $base = reset($tree);
+                $q = new Query('SELECT', $xartable['categories_linkage']); 
+                $q->eq('basecategory', (int)$base);
+                $q->eq('item_id', (int)$itemid);
+                if ($this->module_id) $q->eq('module_id', $this->module_id);
+                if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
+                $q->addfield('category_id');
+                $q->run();
+                $result = $q->output();
+                $categories = array();
+                foreach ($result as $row) 
+                    if (!empty($row['category_id'])) $categories[] = $row['category_id'];
+                $data['value'][$key] = $categories;
+            }
         }
-        
+
         // Prepare some variables we need for the template
         $data['categories_module_id'] = $this->module_id;
         $data['categories_itemtype'] = $this->itemtype;
