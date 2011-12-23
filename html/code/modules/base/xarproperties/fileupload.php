@@ -362,8 +362,6 @@ class FileUploadProperty extends DataProperty
     public function showOutput(Array $data = array())
     {
         extract($data);
-var_dump(filter_var('true', FILTER_VALIDATE_BOOLEAN));
-var_dump((bool) 'true');
         if (!isset($value)) $value = $this->value;
 
         if ($this->UploadsModule_isHooked) {
