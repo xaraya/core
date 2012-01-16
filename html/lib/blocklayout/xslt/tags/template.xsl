@@ -94,7 +94,9 @@
                   <xsl:when test="$scope='theme'">
                     <xsl:choose>
                       <xsl:when test="@theme != ''">
-                        <xsl:value-of select="@theme"/>
+                        <xsl:text>"</xsl:text>
+                          <xsl:value-of select="@theme"/>
+                        <xsl:text>"</xsl:text>
                       </xsl:when>
                       <xsl:otherwise>
                         <xsl:text>xarTpl::getThemeName()</xsl:text>
@@ -104,30 +106,42 @@
                   <xsl:when test="$scope='block'">
                     <xsl:choose>
                       <xsl:when test="@block != ''">
-                        <xsl:value-of select="@block"/>
+                        <xsl:text>"</xsl:text>
+                          <xsl:value-of select="@block"/>
+                        <xsl:text>"</xsl:text>
                       </xsl:when>
                       <xsl:when test="string-length(substring-before(substring-after($bl_dirname,'blocks/'),'/')) &gt; 0">
-                        <xsl:value-of select="substring-before(substring-after($bl_dirname,'blocks/'),'/')"/>
+                        <xsl:text>"</xsl:text>
+                          <xsl:value-of select="substring-before(substring-after($bl_dirname,'blocks/'),'/')"/>
+                        <xsl:text>"</xsl:text>
                       </xsl:when>
                     </xsl:choose>
                   </xsl:when>
                   <xsl:when test="$scope='property'">
                     <xsl:choose>
                       <xsl:when test="@property != ''">
-                        <xsl:value-of select="@property"/>
+                        <xsl:text>"</xsl:text>
+                          <xsl:value-of select="@property"/>
+                        <xsl:text>"</xsl:text>
                       </xsl:when>
                       <xsl:when test="string-length(substring-before(substring-after($bl_dirname,'properties/'),'/')) &gt; 0">
-                        <xsl:value-of select="substring-before(substring-after($bl_dirname,'properties/'),'/')"/>
+                        <xsl:text>"</xsl:text>
+                          <xsl:value-of select="substring-before(substring-after($bl_dirname,'properties/'),'/')"/>
+                        <xsl:text>"</xsl:text>
                       </xsl:when>
                     </xsl:choose>
                   </xsl:when>
                   <xsl:otherwise>
-                     <xsl:choose>
-                       <xsl:when test="@module != ''">
-                         <xsl:value-of select="@module"/>
-                       </xsl:when>
+                    <xsl:choose>
+                      <xsl:when test="@module != ''">
+                        <xsl:text>"</xsl:text>
+                          <xsl:value-of select="@module"/>
+                        <xsl:text>"</xsl:text>
+                      </xsl:when>
                       <xsl:when test="string-length(substring-before(substring-after($bl_dirname,'modules/'),'/')) &gt; 0">
-                        <xsl:value-of select="substring-before(substring-after($bl_dirname,'modules/'),'/')"/>
+                        <xsl:text>"</xsl:text>
+                          <xsl:value-of select="substring-before(substring-after($bl_dirname,'modules/'),'/')"/>
+                        <xsl:text>"</xsl:text>
                       </xsl:when>
                       <xsl:otherwise>
                         <xsl:text>xarMod::getName()</xsl:text>
@@ -169,11 +183,11 @@
                 <xsl:call-template name="resolvePHP">
                    <xsl:with-param name="expr" select="$scope"/>
                 </xsl:call-template>
-                <xsl:text>","</xsl:text>        
+                <xsl:text>",</xsl:text>        
                 <xsl:call-template name="resolvePHP">
                    <xsl:with-param name="expr" select="$package"/>
                 </xsl:call-template>           
-                <xsl:text>","</xsl:text> 
+                <xsl:text>,"</xsl:text> 
                  <xsl:call-template name="resolvePHP">
                    <xsl:with-param name="expr" select="@file"/>
                 </xsl:call-template>
