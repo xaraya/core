@@ -661,6 +661,14 @@ class xarMod extends Object implements IxarMod
             if(!empty($GLOBALS['xarMLS_currentLocale']))
                 xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
             break;
+        case 'property':
+            $fileName = sys::code() . 'properties/' . $modOsDir . '/main.php';
+            $part = 'main';
+            break;
+        case 'block':
+            $fileName = sys::code() . 'blocks/' . $modOsDir . '/' . $modOsDir . '.php';
+            $part = $modOsDir;
+            break;
         case 'theme':
             $fileName = xarConfigVars::get(null,'Site.BL.ThemesDirectory') . '/' . $modOsDir . '/xartheme.php';
             $part = 'xartheme';

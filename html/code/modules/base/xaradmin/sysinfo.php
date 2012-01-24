@@ -23,9 +23,7 @@ function base_admin_sysinfo()
 
     xarVarFetch('what','int:-1:127',$what,INFO_GENERAL, XARVAR_NOT_REQUIRED);
     $data['what'] = $what;
-    // FIXME: dirty dirty
     ob_start();
-    // FIXME: can we split this up in more manageable parts?
     phpinfo($what);
     $val_phpinfo = ob_get_contents();
     ob_end_clean();

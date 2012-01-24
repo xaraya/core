@@ -3,8 +3,6 @@
     <xar:javascript scope="theme" filename="toggle.js"/>
     <xar:var name="toggletitle">Click to toggle display of available hooks for this module.</xar:var>
     <xar:if condition="empty($observers[$curhook])">
-            <xar:var name="label">Click to toggle details display.</xar:var>
-            <p><a href="javascript:void(0);" title="#$label#" onclick="return toggleDisplay('hookdetails');">Details</a>]</p>
     <ul>
         <xar:foreach in="$observers" key="$module" value="$modinfo">             
             <li>
@@ -28,11 +26,11 @@
                     </ul>
                 </div>
                 <!-- hide hook details on page load (only if js enabled :) ) -->
-                <![CDATA[
-                <script type="text/javascript">
+                
+                <script type="text/javascript"><![CDATA[
                     setDisplayOff('hookdetails#$module#');
-                </script>
-                ]]>                
+                ]]></script>
+                                
             </li>
         </xar:foreach>
     </ul>
@@ -53,11 +51,11 @@
                     </ul>
                 </div>
                 <!-- hide hook details on page load (only if js enabled :) ) -->
-                <![CDATA[
-                <script type="text/javascript">
+                
+                <script type="text/javascript"><![CDATA[
                     setDisplayOff('hookdetails#$curhook#');
-                </script>
-                ]]>    
+                ]]></script>
+                    
     </xar:if>
 
     <xar:if condition="!empty($cats)">
@@ -77,15 +75,16 @@
                             <!-- Hooked to none -->
                             <div class="xar-row">
                                 <div class="xar-col">
+                                    <label for="#$subject_id#_hookstate_0">Do NOT enable #$observers[$curhook]['displayname']# hooks in #$modinfo['displayname']#</label>
+                                </div>
+                                <div class="xar-col">
                                     <xar:if condition="$modinfo['hookstate'] eq 0">
                                         <input type="radio" id="#$subject_id#_hookstate_0" name="#$subject_name#[hookstate]" value="0" checked="checked" onclick="setDisplayOff('#$subject_id#_itemtypes');setDisplayOff('#$subject_id#_itemtypes_0');"/>
                                     <xar:else/>
                                         <input type="radio" id="#$subject_id#_hookstate_0" name="#$subject_name#[hookstate]" value="0" onclick="setDisplayOff('#$subject_id#_itemtypes');setDisplayOff('#$subject_id#_itemtypes_0');"/>
                                     </xar:if>
                                 </div>
-                                <div class="xar-col">
-                                    <label for="#$subject_id#_hookstate_0">Do NOT enable #$observers[$curhook]['displayname']# hooks in #$modinfo['displayname']#</label>
-                                </div>
+
                             </div>
                             <!-- hooked to all scopes, all itemtypes -->
                             <div class="xar-row">
@@ -129,17 +128,17 @@
                             </xar:if>
 
                             <xar:if condition="$modinfo['hookstate'] eq 2">
-                                <![CDATA[
-                                 <script type="text/javascript">
+                                
+                                 <script type="text/javascript"><![CDATA[
                                      setDisplayOn('#$subject_id#_itemtypes_0'); document.getElementById('#$subject_id#_hookstate_2').checked="checked";
-                                 </script>
-                                ]]>
+                                 ]]></script>
+                                
                             <xar:else/>
-                                <![CDATA[
-                                 <script type="text/javascript">
+                                
+                                 <script type="text/javascript"><![CDATA[
                                      setDisplayOff('#$subject_id#_itemtypes_0');
-                                 </script>
-                                ]]>
+                                 ]]></script>
+                                
                             </xar:if>
 
                             <xar:if condition="!empty($modinfo['itemtypes'])">
@@ -218,17 +217,17 @@
                                     </xar:foreach>
                                     </ul>
                                     <xar:if condition="$typeinfo['scopes'][0] eq 2">
-                                        <![CDATA[
-                                            <script type="text/javascript">
+                                        
+                                            <script type="text/javascript"><![CDATA[
                                             setDisplayOn('#$type_id#_scopes'); document.getElementById('#$type_id#_scopes_0_2').checked="checked";
-                                            </script>
-                                        ]]>
+                                            ]]></script>
+                                        
                                     <xar:else/>
-                                        <![CDATA[
-                                            <script type="text/javascript">
+                                        
+                                            <script type="text/javascript"><![CDATA[
                                             setDisplayOff('#$type_id#_scopes');
-                                            </script>
-                                        ]]>
+                                            ]]></script>
+                                        
                                     </xar:if>  
                                 </xar:if>
                                 </li>
@@ -240,17 +239,17 @@
                         </fieldset>
                         <!-- End subject module -->
                             <xar:if condition="$modinfo['hookstate'] eq 3">
-                                 <![CDATA[
-                                 <script type="text/javascript">
+                                 
+                                 <script type="text/javascript"><![CDATA[
                                      setDisplayOn('#$subject_id#_itemtypes'); document.getElementById('#$subject_id#_hookstate_3').checked="checked";
-                                 </script>
-                                ]]>
+                                 ]]></script>
+                                
                             <xar:else/>
-                                <![CDATA[
-                                 <script type="text/javascript">
+                                
+                                 <script type="text/javascript"><![CDATA[
                                      setDisplayOff('#$subject_id#_itemtypes');
-                                 </script>
-                                ]]>
+                                 ]]></script>
+                                
                             </xar:if>                        
                     </xar:foreach>
                     <!-- End module category -->

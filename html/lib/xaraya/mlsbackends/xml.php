@@ -149,7 +149,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
     function getContextNames($ctxType)
     {
         // FIXME need more global check
-        if (($ctxType == 'core:') || ($ctxType == 'modules:') || ($ctxType == 'themes:')) $directory = '';
+        if (($ctxType == 'core:') || ($ctxType == 'modules:') || ($ctxType == 'properties:') || ($ctxType == 'blocks:') || ($ctxType == 'themes:')) $directory = '';
         else list($prefix,$directory) = explode(':',$ctxType);
         $this->contextlocation = $this->domainlocation . "/" . $directory;
 

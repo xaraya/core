@@ -246,6 +246,12 @@ class xarCSS extends Object
         }
         if (empty($paths)) return;
 
+         // Debug display
+         if (xarModVars::get('themes','debugmode') && 
+         in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+             var_dump($paths);
+         }
+
         foreach ($paths as $path) {
             if (!file_exists($path)) continue;
             $filePath = $path;

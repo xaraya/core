@@ -54,7 +54,7 @@ function roles_adminapi_senduseremail(Array $args=array())
                         'uname' => $user['uname'],
                         'phase' => 'getvalidate',
                         'valcode' => $user['valcode'],
-                    ))
+                    ), false)
                 : '';            
 
             //user specific data

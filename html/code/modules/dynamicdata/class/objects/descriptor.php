@@ -32,7 +32,7 @@ class DataObjectDescriptor extends ObjectDescriptor
                     $args['moduleid'] = $value;
                 } else {
                     //$info = xarMod::getInfo(xarMod::getRegID($value));
-                    $args['moduleid'] = xarMod::getRegID($value); //$info['systemid']; FIXME
+                    $args['moduleid'] = xarMod::getRegID($value);
                 }
                 break;
             }
@@ -45,7 +45,7 @@ class DataObjectDescriptor extends ObjectDescriptor
                 $args['fallbackmodule'] = 'dynamicdata';
             }
             //$info = xarMod::getInfo(xarMod::getRegID($args['fallbackmodule']));
-            $args['moduleid'] = xarMod::getRegID($args['fallbackmodule']); // $info['systemid'];  FIXME change id
+            $args['moduleid'] = xarMod::getRegID($args['fallbackmodule']);
         }
         if (!isset($args['itemtype'])) $args['itemtype'] = 0;
         return $args;
@@ -106,7 +106,7 @@ class DataObjectDescriptor extends ObjectDescriptor
         }
         // object property is called module_id now instead of moduleid for whatever reason !?
         $args['module_id'] = $args['moduleid'];
-        if (empty($args['tplmodule'])) $args['tplmodule'] = xarMod::getName($args['moduleid']); //FIXME: go to systemid
+        if (empty($args['tplmodule'])) $args['tplmodule'] = xarMod::getName($args['moduleid']);
         if (empty($args['template'])) $args['template'] = $args['name'];
         return $args;
     }

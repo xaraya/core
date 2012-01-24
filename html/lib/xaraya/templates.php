@@ -453,6 +453,11 @@ class xarTpl extends Object
             $tplPart = strtr(trim(xarVarPrepForOS($tplPart)), " ", "/");
         $canTemplateName = strtr($tplName, "-", "/");
         $canonical = ($canTemplateName == $tplName) ? false : true;
+
+        $cachename = "$scope:$package:$tplBase:$tplName:$tplPart:$callerMod";
+        // cache frequently-used sourcefilenames 
+        if (xarCoreCache::isCached('Templates.Element', $cachename))
+            return xarCoreCache::getCached('Templates.Element', $cachename);
         
         // default paths 
         $themePath = self::getThemeDir();
@@ -520,11 +525,17 @@ class xarTpl extends Object
         }
         
         $paths = array();
-        foreach ($basepaths as $basepath) {
-            if (!empty($tplName))
+        // approach this the other way, look for tplBase-tplName in all paths first
+        if (!empty($tplName)) {
+            foreach ($basepaths as $basepath)
                 $paths[] = "$basepath/$tplPart/$tplBase-$tplName.xt";
+        }
+        // then look for tplBase... (checkme: this is cfr getSourceFileName order)
+        foreach ($basepaths as $basepath) 
             $paths[] = "$basepath/$tplPart/$tplBase.xt";
-            if ($canonical) 
+        // then look at canonical... (see checkme)
+        if ($canonical) {
+            foreach ($basepaths as $basepath)
                 $paths[] = "$basepath/$tplPart/$canTemplateName.xt";
         }
 
@@ -538,6 +549,8 @@ class xarTpl extends Object
         }
         // $tplPart may have been empty,
         $sourceFileName = str_replace('//','/',$sourceFileName);
+
+        xarCoreCache::setCached('Templates.Element', $cachename, $sourceFileName);
 
         return $sourceFileName;
        
@@ -1172,7 +1185,7 @@ class xarTpl extends Object
         $sourceFileName = "$themeDir/properties/$propertyName/templates/includes/$templateName.xt";
         if (file_exists($sourceFileName)) return self::executeFromFile($sourceFileName, $tplData);
         // property include in common
-        $sourceFileName = "$commonDir/properties/$propertyName/templates/includes/$templateName.xt";
+        $sourceFileName = "$commonDir/properties/$propertyName/xartemplates/includes/$templateName.xt";
         if (file_exists($sourceFileName)) return self::executeFromFile($sourceFileName, $tplData); 
         // property include in property       
         $sourceFileName = sys::code() . "properties/$propertyName/xartemplates/includes/$templateName.xt";

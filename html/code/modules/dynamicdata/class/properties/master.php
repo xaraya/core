@@ -289,5 +289,18 @@ class DataPropertyMaster extends Object
         }
         return PropertyRegistration::Retrieve();
     }
+
+    /**
+     * Class method to check if a property is available
+     */
+    static function isAvailable($name=null)
+    {
+        if (empty($name)) return false;
+        $types= self::getPropertyTypes();
+        foreach ($types as $type) {
+            if ($type['name'] == $name) return true;
+        }
+        return false;
+    }
 }
 ?>

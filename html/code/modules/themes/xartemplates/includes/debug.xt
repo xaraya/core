@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    If debug mode is active, exception messages are visible to the debug administrators, which are defined <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">here</a>.
+    <div class="xar-row">
+        <div class="xar-col">
+            <xar:var name="label">Debug mode</xar:var>
+            <label for="checked" title="#$label#" class="xar-form-label">            
+                Enable debug mode:            
+            </label>
+        </div>
+        <div class="xar-col">
+            <xar:set name="checked">xarModVars::get('themes', 'debugmode')</xar:set>
+            <xar:data-input type="checkbox" name="debugmode"  checked="$checked"/>
+        </div>
+    </div>
+</xar:template>

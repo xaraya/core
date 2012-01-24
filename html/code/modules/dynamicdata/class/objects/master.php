@@ -20,9 +20,6 @@
 
 sys::import('modules.dynamicdata.class.objects.descriptor');
 
-// FIXME: only needed for the DataPropertyMaster::DD_* constants (or explicit import) - handle differently ?
-//sys::import('modules.dynamicdata.class.properties.master');
-
 class DataObjectMaster extends Object
 {
     protected $descriptor  = null;      // descriptor object of this class

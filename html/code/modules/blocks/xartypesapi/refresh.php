@@ -54,8 +54,26 @@ function blocks_typesapi_refresh(Array $args=array())
                 // check the block can be instantiated
                 $block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $type);
                 $state = xarBlock::TYPE_STATE_ACTIVE;
-                if ($block->type_category != $type['type_category']) {
+                if ($block->type_category != $type['type_category']) 
                     $update['type_category'] = $block->type_category;
+                $type_info = array();
+                if ($block->text_type != $type['type_info']['text_type'])
+                    $type_info['text_type'] = $block->text_type;
+                if ($block->text_type_long != $type['type_info']['text_type_long'])
+                    $type_info['text_type_long'] = $block->text_type_long;
+                if ($block->author != $type['type_info']['author'])
+                    $type_info['author'] = $block->author;
+                if ($block->contact != $type['type_info']['contact'])
+                    $type_info['contact'] = $block->contact;                       
+                if ($block->credits != $type['type_info']['credits'])
+                    $type_info['credits'] = $block->credits;
+                if ($block->license != $type['type_info']['license'])
+                    $type_info['license'] = $block->license;
+                if (!empty($type_info)) {
+                    $type_info += $type['type_info'];
+                    $update['type_info'] = $type_info;
+                } else {
+                    unset($type_info);
                 }
                        
             } catch (FileNotFoundException $e) {

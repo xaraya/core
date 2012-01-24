@@ -76,7 +76,9 @@ class RolesShortController extends ShortActionController
                 $data['func'] = 'account';
                 $data['tab'] = 'basic';
             break;
-
+            case 'validate':
+                $data['func'] = 'getvalidation';
+                break;
             default:
                 $data['func'] = 'account';
             break;
@@ -150,7 +152,9 @@ class RolesShortController extends ShortActionController
                     unset($params['id']);
                 }
                 break;
-
+              case 'getvalidation':
+                  $path[] = 'validate';
+                  break;
             default:
                 break;
         }
