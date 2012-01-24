@@ -24,7 +24,7 @@ class UsernameProperty extends TextBoxProperty
     public $reqmodules = array('roles');
 
     public $display_linkrule                = 0;
-    public $validation_existrule            = 0;
+    public $validation_existrule            = 0;    // 0: no rule; 1: must not already exist; 2: must already exist
     public $validation_existrule_invalid;
     public $initialization_store_type       = 'name';
     public $initialization_display_name     = 'uname';
