@@ -340,9 +340,6 @@
                     </xar:if>
                 </td>
                 <td>
-                    <!-- fixme the access property should be able to handle this
-                    <xar:set name="inputname">"modulelist[".$module['name']."][view_access]"</xar:set>
-                     -->
                     <xar:set name="inputid">"modulelist_".$module['name']."_view_access"</xar:set>
                     <xar:if condition="isset($modulelist[$module['name']]['view_access'])">
                         <xar:set name="inputval">$modulelist[$module['name']]['view_access']</xar:set>

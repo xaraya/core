@@ -17,6 +17,7 @@ function arrayTable(args)
 {
     // config values and their defaults
     this.id = (typeof args.id == 'undefined') ? null : args.id;
+    this.name = (typeof args.name == 'undefined') ? this.id : args.name;
     this.min       = (typeof args.min == 'undefined')       ? 2         : parseInt(args.min);
     this.max       = (typeof args.max == 'undefined')       ? 10        : parseInt(args.max);
     this.addremove = (typeof args.addremove == 'undefined') ? 0         : parseInt(args.addremove);
@@ -62,9 +63,9 @@ function arrayTable(args)
  * NOTE: this method must be called *after* the table is rendered in the DOM
 **/
     this.init = function() {
-        if (!this.id) {
+        if (!this.id || !this.name) {
             if (this.debug)
-                this.debugMsg(this.id + '.init() id is required');
+                this.debugMsg(this.id + '.init() id and name are required');
             return;
         }
         this.table = document.getElementById(this.id + '_' + this.rows_id);
@@ -285,9 +286,9 @@ function arrayTable(args)
 
     this.setIndex = function(els, idx)
     {
-        value_re = new RegExp('^(' + this.id + '\\[value\\]\\[)(\\d+)(\\]\\[\\d+\\])$');
+        value_re = new RegExp('^(' + this.name + '\\[value\\]\\[)(\\d+)(\\]\\[\\d+\\])$');
         valueid_re = new RegExp('^(' + this.id + '_)(\\d+)(_\\d+)$');
-        delete_re = new RegExp('^(' + this.id + '\\[value\\]\\[)(\\d+)(\\]\\[' + this.del_id + '\\])$');
+        delete_re = new RegExp('^(' + this.name + '\\[value\\]\\[)(\\d+)(\\]\\[' + this.del_id + '\\])$');
         deleteid_re = new RegExp('^(' + this.id + '_)(\\d+)(_' + this.del_id + ')$');
         delbtnid_re = new RegExp('^(' + this.id + '_)(\\d+)(_' + this.del_id + '_btn)$');
         indexid_re = new RegExp('^(' + this.id + '_)(\\d+)(_0)$');
@@ -334,6 +335,7 @@ function arrayTable(args)
         msg = "Debug : " +
               msg + "\n" +
               'id: ' + this.id + "\n" +
+              'name: ' + this.name + "\n" +
               'min: ' + this.min + "\n" +
               'max: ' + this.max + "\n" +
               'addremove: ' + this.addremove + "\n" +

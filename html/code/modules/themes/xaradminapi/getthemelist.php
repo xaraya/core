@@ -25,134 +25,44 @@
 function themes_adminapi_getthemelist(Array $args=array())
 {
     extract($args);
-
-    static $validOrderFields = array('name' => 'themes', 'regid' => 'themes');
-
+    static $validOrderFields = array('name' => 'themes', 'regid' => 'themes',
+                                     'class' => 'infos');
     if (!isset($filter)) $filter = array();
-    if (!is_array($filter)) {
-        throw new BadParameterException('filter','The parameter #(1) must be an array.');
-    }
+    if (!is_array($filter)) 
+        throw new BadParameterException('filter','Parameter filter must be an array.');
 
-    // Optional arguments.
-    if (!isset($startNum)) $startNum = 1;
-    if (!isset($numItems)) $numItems = -1;
-    if (!isset($orderBy)) $orderBy = 'name';
-
-    // Construct order by clause
-    $orderFields = explode('/', $orderBy);
-    $orderByClauses = array(); $extraSelectClause = '';
-    foreach ($orderFields as $orderField) {
-        if (!isset($validOrderFields[$orderField])) {
-            throw new BadParameterException('orderBy','The parameter #(1) can contain only \'name\' or \'regid\' or \'class\' as items.');
+    // build an array of arguments for getitems from the params supplied to this function
+    $get = array();
+    if (isset($startNum))
+        $get['startnum'] = $startNum;
+    if (isset($numItems))
+        $get['numitems'] = $numItems;
+        
+    if (!empty($orderBy)) {
+        $sort = array_map('trim', explode('/', $orderBy));
+        foreach ($sort as $sortfield) {
+            if (!array_key_exists($sortfield, $validOrderFields))
+                throw new BadParameterException('orderBy',
+                    'Parameter orderBy can contain only \'name\' or \'regid\' or \'class\' as items.');
         }
-        // Here $validOrderFields[$orderField] is the table alias
-        $orderByClauses[] = $validOrderFields[$orderField] . '.' . $orderField;
-        if ($validOrderFields[$orderField] == 'infos') {
-            $extraSelectClause .= ', ' . $validOrderFields[$orderField] . '.' . $orderField;
-        }
-    }
-    $orderByClause = join(', ', $orderByClauses);
-
-    // Determine the tables we are going to use
-    $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
-    $themestable = $tables['themes'];
-
-    // Construct arrays for the where conditions and their bind variables
-    $whereClauses = array(); $bindvars = array();
-
-    if (isset($filter['State'])) {
-        if ($filter['State'] != XARTHEME_STATE_ANY) {
-            if ($filter['State'] != XARTHEME_STATE_INSTALLED) {
-                $whereClauses[] = 'themes.state = ?';
-                $bindvars[] = $filter['State'];
-            } else {
-                $whereClauses[] = 'themes.state != ? AND themes.state < ? AND themes.state != ?';
-                $bindvars[] = XARTHEME_STATE_UNINITIALISED;
-                $bindvars[] = XARTHEME_STATE_MISSING_FROM_INACTIVE;
-                $bindvars[] = XARTHEME_STATE_MISSING_FROM_UNINITIALISED;
-            }
-        }
+        $get['sort'] = $sort;
     } else {
-        $whereClauses[] = 'themes.state = ?';
-        $bindvars[] = XARTHEME_STATE_ACTIVE;
+        $get['sort'] = 'name';
+    }        
+
+    if (isset($filter['Class'])) {
+        $get['class'] = $filter['Class'];
+    } elseif (isset($Class)) {
+        $get['class'] = $Class;
     }
-
-    $whereClause = '';
-    if (!empty($whereClauses)) {
-        $whereClause = 'WHERE ' . join(' AND ', $whereClauses);
+    
+    if (isset($filter['State'])) {
+        $get['state'] = $filter['State'];
+    } else {
+        $get['state'] = XARTHEME_STATE_ACTIVE;
     }
-    $themeList = array();
+    
+    return xarMod::apiFunc('themes', 'admin', 'getitems', $get);
 
-    $query = "SELECT themes.regid,
-                     themes.name,
-                     themes.directory,
-                     themes.state,
-                     themes.class
-              FROM $themestable AS themes $whereClause ORDER BY $orderByClause";
-
-    $stmt = $dbconn->prepareStatement($query);
-    $stmt->setLimit($numItems);
-    $stmt->setOffset($startNum - 1);
-    $result = $stmt->executeQuery($bindvars);
-
-    while($result->next()) {
-        list($themeInfo['regid'],
-             $themeInfo['name'],
-             $themeInfo['directory'],
-             $themeState) = $result->fields;
-
-        if (xarVarIsCached('Theme.Infos', $themeInfo['regid'])) {
-            // Get infos from cache
-            $themeList[] = xarVarGetCached('Theme.Infos', $themeInfo['regid']);
-        } else {
-            $themeInfo['displayname'] = $themeInfo['name'];
-            // Shortcut for os prepared directory
-            $themeInfo['osdirectory'] = xarVarPrepForOS($themeInfo['directory']);
-
-            $themeInfo['state'] = (int) $themeState;
-
-            xarVarSetCached('Theme.BaseInfos', $themeInfo['name'], $themeInfo);
-
-            $themeFileInfo = xarTheme_getFileInfo($themeInfo['osdirectory']);
-            // @checkme: does getFileInfo ever return null or void for this to be true?
-            // @fixme: in any case, the empty fileinfo check below renders this pointless 
-            if (!isset($themeFileInfo)) {
-                // Following changes were applied by <andyv> on 21st May 2003
-                // as per the patch by Garrett Hunter
-                // Credits: Garrett Hunter <Garrett.Hunter@Verizon.net>
-                switch ($themeInfo['state']) {
-                case XARTHEME_STATE_UNINITIALISED:
-                    $themeInfo['state'] = XARTHEME_STATE_MISSING_FROM_UNINITIALISED;
-                    break;
-                case XARTHEME_STATE_INACTIVE:
-                    $themeInfo['state'] = XARTHEME_STATE_MISSING_FROM_INACTIVE;
-                    break;
-                case XARTHEME_STATE_ACTIVE:
-                    $themeInfo['state'] = XARTHEME_STATE_MISSING_FROM_ACTIVE;
-                    break;
-                case XARTHEME_STATE_UPGRADED:
-                    $themeInfo['state'] = XARTHEME_STATE_MISSING_FROM_UPGRADED;
-                    break;
-                }
-                //$themeInfo['class'] = "";
-                $themeInfo['version'] = "&#160;";
-                // end patch
-            }
-
-            // Ignore cases where the theme is in the db but not present in the filesystem
-            if (empty($themeFileInfo)) continue;
-                
-            $themeInfo = array_merge($themeInfo, $themeFileInfo);
-
-            xarVarSetCached('Theme.Infos', $themeInfo['regid'], $themeInfo);
-
-            $themeList[] = $themeInfo;
-        }
-        $themeInfo = array();
-    }
-    $result->close();
-
-    return $themeList;
 }
 ?>

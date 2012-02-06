@@ -61,7 +61,7 @@ function xar_base_calendar(obj_target, base_url) {
     this.time_comp = BUL_TIMECOMPONENT;
     this.year_scroll = BUL_YEARSCROLL;
     this.base_url = base_url + '/' + STR_HTMLPATH;
-    
+
     // register in global collections
     this.id = calendars.length;
     calendars[this.id] = this;
@@ -111,7 +111,7 @@ function xar_base_calendar_prs_tsmp (str_datetime) {
     // if positive integer treat as milliseconds from epoch
     if (RE_NUM.exec(str_datetime))
         return new Date(str_datetime);
-        
+
     // else treat as date in string format
     var arr_datetime = str_datetime.split(' ');
     return this.prs_time(arr_datetime[1], this.prs_date(arr_datetime[0]));
@@ -135,7 +135,7 @@ function xar_base_calendar_prs_date (str_date) {
 
     if (arr_date[1] < 1 || arr_date[1] > 12) return xar_base_calendar_error ("Invalid month value: '" + arr_date[1] + "'.\nAllowed range is 01-12.");
     dt_date.setMonth(arr_date[1]-1);
-     
+
     if (arr_date[0] < 100) arr_date[0] = Number(arr_date[0]) + (arr_date[0] < NUM_CENTYEAR ? 2000 : 1900);
     dt_date.setFullYear(arr_date[0]);
 
@@ -153,11 +153,11 @@ function xar_base_calendar_prs_time (str_time, dt_date) {
     var arr_time = String(str_time ? str_time : '').split(':');
 
     if (!arr_time[0]) dt_date.setHours(0);
-    else if (RE_NUM.exec(arr_time[0])) 
+    else if (RE_NUM.exec(arr_time[0]))
         if (arr_time[0] < 24) dt_date.setHours(arr_time[0]);
         else return xar_base_calendar_error ("Invalid hours value: '" + arr_time[0] + "'.\nAllowed range is 00-23.");
     else return xar_base_calendar_error ("Invalid hours value: '" + arr_time[0] + "'.\nAllowed values are unsigned integers.");
-    
+
     if (!arr_time[1]) dt_date.setMinutes(0);
     else if (RE_NUM.exec(arr_time[1]))
         if (arr_time[1] < 60) dt_date.setMinutes(arr_time[1]);

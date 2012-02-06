@@ -36,7 +36,9 @@ function modules_admin_remove ()
 
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
-
+    if (!xarVarFetch('return_url', 'pre:trim:str:1:',
+        $return_url, '', XARVAR_NOT_REQUIRED)) return;
+        
     //Checking if the user has already passed thru the GUI:
     xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
 
@@ -44,6 +46,8 @@ function modules_admin_remove ()
 
     // set the target location (anchor) to go to within the page
     $target=$minfo['name'];
+    if (empty($return_url))
+        $return_url = xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
 
     sys::import('modules.modules.class.installer');
     $installer = Installer::getInstance();    
@@ -55,13 +59,14 @@ function modules_admin_remove ()
             if(!xarMod::apiFunc('modules','admin','remove',array('regid' => $id)))  return;
             // Clear the property cache
             PropertyRegistration::importPropertyTypes(true);
-            xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+            xarController::redirect($return_url);
         } else {
             // There are dependents, let's build a GUI
             $data                 = array();
             $data['id']           = $id;
             $data['authid']       = xarSecGenAuthKey();
             $data['dependencies'] = $dependents;
+            $data['return_url']   = $return_url;
             return $data;
         }
     }
@@ -80,7 +85,7 @@ function modules_admin_remove ()
     // Hmmm, I wonder if the target adding is considered a hack
     // it certainly depends on the implementation of xarModUrl
     //    xarController::redirect(xarModURL('modules', 'admin', "list#$target"));
-    xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+    xarController::redirect($return_url);
     // Never reached
     return true;
 }

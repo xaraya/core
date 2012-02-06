@@ -35,7 +35,9 @@ function modules_admin_activate()
 
     if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
-
+    if (!xarVarFetch('return_url', 'pre:trim:str:1:',
+        $return_url, '', XARVAR_NOT_REQUIRED)) return;
+        
     // Activate
     $activated = xarMod::apiFunc('modules',
                               'admin',
@@ -47,8 +49,10 @@ function modules_admin_activate()
     $minfo=xarMod::getInfo($id);
     // set the target location (anchor) to go to within the page
     $target=$minfo['name'];
-
-    xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target));
+    if (empty($return_url))
+        $return_url = xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
+        
+    xarController::redirect($return_url);
     return true;
 }
 

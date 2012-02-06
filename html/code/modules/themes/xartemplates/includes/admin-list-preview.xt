@@ -2,20 +2,22 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:if condition="!empty($themes)">
     <form method="post" action="#xarModURL('themes', 'admin', 'list')#">
-        <xar:foreach in="$themes" value="$theme">
-            <div id="#$theme['name']#" class="xar-alt-outline" style="min-height:200px;clear:both;margin:1em 0;">
-                <div class="xar-accent" style="width: 250px;vertical-align:top;float:left;">
+        <table class="xar-fullwidth">
+            <xar:foreach in="$themes" value="$theme">
+                <tr id="#$theme['name']#">
+                    <td style="width:250px;min-height:200px;" class="xar-padding-thickends">
                     <xar:set name="preview_img">'themes/' . $theme['directory'] . '/images/preview.jpg'</xar:set>
                     <xar:if condition="is_file($preview_img)">
                         <xar:template type="module" module="themes" file="showimg"/>
                     <xar:else/>
-                        <div style="height:20px;line-height:187px;vertical-align:middle;text-align:center;">
+                        <div style="height:200px;line-height:187px;vertical-align:middle;text-align:center;">
                             <p class="xar-info">Preview unavailable</p>                        
                         </div>
-                    </xar:if>
-                </div>
-                <div style="margin-left:260px;">
-                    <div class="xar-row xar-alt xar-padding-thick">
+                    </xar:if>                    
+                    </td>
+                    <td class="xar-padding-thickends">
+
+                    <div class="xar-row xar-alt xar-padding-thick" style="clear:none;">
                         <div class="xar-col">
                             Theme Name
                         </div>
@@ -148,10 +150,11 @@
                                 </xar:if>                            
                             </xar:if>                            
                         </div>                    
-                    </div>
-                </div>
-            </div>                
-        </xar:foreach>
+                    </div>                    
+                    </td>            
+                </tr>
+            </xar:foreach>
+        </table>
         <xar:if condition="$class gt 1">
             <xar:var name="submitLabel">Update Themes</xar:var>
         </xar:if>

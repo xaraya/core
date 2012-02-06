@@ -60,7 +60,7 @@ class TextBoxProperty extends DataProperty
             if (!empty($this->validation_max_length_invalid)) {
                 $this->invalid = xarML($this->validation_max_length_invalid);
             } else {
-                $this->invalid = xarML('#(1) #(3): must be less than #(2) characters long', $this->name,$this->validation_max_length + 1, $this->desc);
+                $this->invalid = xarML('#(1) field #(3): must be less than #(2) characters long', $this->name,$this->validation_max_length + 1, $this->desc);
             }
             $this->value = null;
             return false;
@@ -68,7 +68,7 @@ class TextBoxProperty extends DataProperty
             if (!empty($this->validation_min_length_invalid)) {
                 $this->invalid = xarML($this->validation_min_length_invalid);
             } else {
-                $this->invalid = xarML('#(1) #(3): must be at least #(2) characters long', $this->name,$this->validation_min_length, $this->desc);
+                $this->invalid = xarML('#(1) field #(3): must be at least #(2) characters long', $this->name,$this->validation_min_length, $this->desc);
             }
             $this->value = null;
             return false;
@@ -76,7 +76,7 @@ class TextBoxProperty extends DataProperty
             if (!empty($this->validation_regex_invalid)) {
                 $this->invalid = xarML($this->validation_regex_invalid);
             } else {
-                $this->invalid = xarML('#(1) #(2): does not match required pattern', $this->name, $this->desc);
+                $this->invalid = xarML('#(1) field #(2): does not match required pattern', $this->name, $this->desc);
             }
             $this->value = null;
             return false;

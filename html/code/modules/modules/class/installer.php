@@ -422,6 +422,12 @@ class Installer extends Object
             throw new Exception($msg);
         }
 
+        // return url may have been supplied 
+        if (!xarVarFetch('return_url', 'pre:trim:str:1:',
+            $return_url, '', XARVAR_NOT_REQUIRED)) return;
+        if (empty($return_url))
+            $return_url = xarModURL($this->extType, 'admin', 'list', array('state' => 0), null, $extInfo['name']);
+
         // if this is a theme we're done
         if ($this->extType == 'themes') {
             // Reinit the theme configurations
@@ -429,7 +435,7 @@ class Installer extends Object
             sys::import('modules.themes.class.initialization');
             ThemeInitialization::importConfigurations();
             // Show the theme list
-            xarController::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0)));
+            xarController::redirect($return_url);
             return true;
         }
         // this is now handled by the modules module ModActivate event observer
@@ -440,7 +446,7 @@ class Installer extends Object
             // Looks like we're done
             $this->modulestack->clear();
             // set the target location (anchor) to go to within the page
-            $target = $extInfo['name'];
+            //$target = $extInfo['name'];
 
             if (function_exists('xarOutputFlushCached')) {
                 xarOutputFlushCached('base');
@@ -448,7 +454,7 @@ class Installer extends Object
                 xarOutputFlushCached('base-block');
             }
 
-            xarController::redirect(xarModURL($this->extType, 'admin', 'list', array('state' => 0), NULL, $target));
+            xarController::redirect($return_url);
         } else {
             // Do the next module
             if (!$this->installdependencies($nextmodule)) return;

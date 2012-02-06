@@ -33,6 +33,19 @@ class MultiSelectProperty extends SelectProperty
         $this->template =  'multiselect';
     }
 
+    public function checkInput($name = '', $value = null)
+    {
+        $name = empty($name) ? 'dd_'.$this->id : $name;
+        // store the fieldname for configurations who need them (e.g. file uploads)
+        $this->fieldname = $name;
+        $this->invalid = '';
+        if(!isset($value)) {
+            list($found,$value) = $this->fetchValue($name);
+            if (!$found) $value = null;
+        }
+       return $this->validateValue($value);
+    }
+    
     public function validateValue($value = null)
     {
         // do NOT call parent validateValue here - it will always fail !!!

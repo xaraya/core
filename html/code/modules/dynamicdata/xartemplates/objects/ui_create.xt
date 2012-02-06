@@ -34,13 +34,13 @@
                 <legend>Item Details</legend>
                 <xar:template file="showinvalids" module="dynamicdata"/>
                 <xar:data-form object="$object"/>
-            <!-- Remove hooks from DD for now ???
+            <!-- Remove hooks from DD for now ??? chris: they show in modify, why not here -->
                 <xar:if condition="!empty($hooks)">
                     <xar:foreach in="$hooks" key="$module" value="$output">
                         #$output#
                     </xar:foreach>
                 </xar:if>
-            -->
+
             </fieldset>
             <fieldset class="xar-form-actions">
                 <!-- if we use the current URL, the object is already specified -->

@@ -33,6 +33,8 @@ define('XARMLS_UNBOXED_MULTI_LANGUAGE_MODE', 'UNBOXED');
 define('XARMLS_DNTYPE_CORE', 1);
 define('XARMLS_DNTYPE_THEME', 2);
 define('XARMLS_DNTYPE_MODULE', 3);
+define('XARMLS_DNTYPE_PROPERTY', 4);
+define('XARMLS_DNTYPE_BLOCK', 5);
 
 sys::import('xaraya.locales');
 sys::import('xaraya.transforms.xarCharset');
@@ -467,6 +469,20 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
                 if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return; // throw back
             }
         }
+        if ($dnType == XARMLS_DNTYPE_PROPERTY) {
+            // Load common translations
+            if (!isset($loadedCommons[$dnName.'property'])) {
+                $loadedCommons[$dnName.'property'] = true;
+                if (!$GLOBALS['xarMLS_backend']->loadContext('properties:', 'common')) return; // throw back
+            }
+        }
+        if ($dnType == XARMLS_DNTYPE_BLOCK) {
+            // Load common translations
+            if (!isset($loadedCommons[$dnName.'block'])) {
+                $loadedCommons[$dnName.'block'] = true;
+                if (!$GLOBALS['xarMLS_backend']->loadContext('blocks:', 'common')) return; // throw back
+            }
+        }
         if ($dnType == XARMLS_DNTYPE_THEME) {
             // Load common translations
             if (!isset($loadedCommons[$dnName.'theme'])) {
@@ -508,19 +524,41 @@ function xarMLSLoadTranslations($path)
         return true;
     }
 
+    // If this is a core file, get the translations and bail
+    if (strpos($path, sys::lib()) === 0) {
+        $translations = xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
+        return $translations;        
+    }
+    
+    // Remove the parts of the path before the dnType marker ('xaraya', 'modules' etc.)
+    if (strpos($path, sys::code()) === 0) {
+        // This is a module, property or block file
+        $path = substr($path, strlen(sys::code()));
+    } elseif (strpos($path, 'themes') === 0) {
+        // This is a theme file
+    } else {
+        throw new Exception('Unknown MLS path: ' . $path);
+    }
+    
     // Get a structured representation of the path.
     $pathElements = explode("/",$path);
 
-    // Initialise some defaults
-    $dnType = XARMLS_DNTYPE_MODULE; $possibleOverride = false; $ctxType = 'modules';
-
     // Determine dnType
-    // Lets get core files out of the way
-    if($pathElements[0] == 'lib') return xarMLS_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
 
-    // modules have a fixed place, so if it's not 'modules/blah/blah' it's themes, period.
-    // NOTE: $pathElements changes here!
-    if(array_shift($pathElements) != 'modules') {
+    $firstelement = array_shift($pathElements);
+    if ($firstelement == 'modules') {
+        $dnType = XARMLS_DNTYPE_MODULE;
+        $possibleOverride = false;
+        $ctxType= 'modules';
+    } elseif ($firstelement == 'properties') {
+        $dnType = XARMLS_DNTYPE_PROPERTY;
+        $possibleOverride = false;
+        $ctxType= 'properties';
+    } elseif ($firstelement == 'blocks') {
+        $dnType = XARMLS_DNTYPE_BLOCK;
+        $possibleOverride = false;
+        $ctxType= 'blocks';
+    } else {
         $dnType = XARMLS_DNTYPE_THEME;
         $possibleOverride = true;
         $ctxType= 'themes';
