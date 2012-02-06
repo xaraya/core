@@ -9,7 +9,7 @@
         <xar:set name="childobject">$node->child_object</xar:set>
         <xar:set name="level">$node->getLevel()</xar:set>
         <xar:if condition="empty($nodeid) or $nodeid ne $nodename">
-            <xar:if condition="in_array($nodeid,$value)">
+            <xar:if condition="isset($value) AND is_array($value) AND in_array($nodeid,$value)">
             <option style="padding-left: #$level#em;" value="#$nodeid#" selected="selected">
                 #$nodename#
             </option>

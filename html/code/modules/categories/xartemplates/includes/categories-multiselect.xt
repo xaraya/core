@@ -24,7 +24,7 @@
 
     <xar:if condition="$select_type eq 2">
         <xar:if condition="!empty($single)">
-            <xar:if condition="($nodesize gt 0) OR $allowempty">
+            <xar:if condition="($nodesize gt 0) OR !empty($allowempty)">
                 <select name="#$selectname#" id="#$selectid#" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
                     <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
                 </select>
@@ -32,7 +32,7 @@
                 Options not specified in the configuration
             </xar:if>
         <xar:else/>
-            <xar:if condition="($nodesize gt 0) OR $allowempty">
+            <xar:if condition="($nodesize gt 0) OR !empty($allowempty)">
                 <select name="#$selectname#" id="#$selectid#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
                     <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
                 </select>
@@ -41,7 +41,7 @@
             </xar:if>
         </xar:if>
     <xar:elseif condition="$select_type eq 3"/>
-        <xar:if condition="($nodesize gt 0) OR $allowempty">
+        <xar:if condition="($nodesize gt 0) OR !empty($allowempty)">
             <xar:javascript scope="module" module="base" filename="multicombo.js"/>
             <xar:if condition="empty($style)"><xar:set name="style">'min-width:10em;'</xar:set></xar:if>
             <table class="xar-displayinline">

@@ -30,6 +30,54 @@ class CategoryPickerProperty extends ArrayProperty
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/categories/xarproperties';
+        $this->prepostprocess = 2;
+    }
+
+    public function createValue($itemid=0)
+    {
+        // Set the module_id: case of a bound property
+        if (isset($this->objectref)) $this->module_id = (int)$this->objectref->module_id;
+        // Override or a standalone property
+        if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
+        // No hint at all, take the current module
+        if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarModGetName());
+
+        // Do the same for itemtypes
+        if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;
+        if (isset($data['itemtype'])) $this->itemtype = (int)$data['itemtype'];
+        // No hint at all, assume all itemtypes
+        if (!isset($this->itemtype)) $this->itemtype = 0;
+
+        // For both create and update we remove any existing base categories and create the new ones
+        sys::import('xaraya.structures.query');
+        xarMod::apiLoad('categories');
+        $xartable = xarDB::getTables();
+        if (!empty($itemid)) {
+            $q = new Query('DELETE', $xartable['categories_basecategories']); 
+            // CHRCKME: shouldn't we force a value for module_id and itemtype?
+            $q->eq('module_id', $this->module_id);
+            $q->eq('itemtype', $this->itemtype);
+            $q->run();
+        }
+
+        foreach ($this->basecategories as $key => $basecategory) {
+            foreach ($this->categories[$key] as $category) {
+                // Ignore if no category was chosen (value = 0)
+                if (empty($category)) continue;
+                
+                $q = new Query('INSERT', $xartable['categories_basecategories']); 
+                $q->addfield('module_id', $this->module_id);
+                $q->addfield('itemtype', $this->itemtype);
+                $q->addfield('category_id', $category);
+                $q->run();
+            }
+        }
+        return true;
+    }
+
+    public function updateValue($itemid=0)
+    {
+        return $this->createValue($itemid);
     }
 }
 

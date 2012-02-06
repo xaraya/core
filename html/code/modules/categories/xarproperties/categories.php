@@ -39,6 +39,11 @@ class CategoriesProperty extends DataProperty
 
     public $include_reference   = 1;
 
+    public $validation_single = false;
+    public $validation_allowempty = false;
+    public $validation_single_invalid; // CHECKME: is this a validation or something else?
+    public $validation_allowempty_invalid;
+
     public $module_id;
     public $itemtype;
     public $itemid;
@@ -169,6 +174,8 @@ class CategoriesProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
+        if (isset($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
+
         // Set the module_id: case of a bound property
         if (isset($this->objectref)) $this->module_id = (int)$this->objectref->module_id;
         // Override or a standalone property
@@ -191,12 +198,12 @@ class CategoriesProperty extends DataProperty
             $configuration = unserialize($this->configuration);
             $configuration = $configuration['initialization_basecategories'];
             $data['tree_name'] = $configuration[0];
-            $data['base_category'] = $configuration[1];
+            $base_categories = $configuration[1];
             $data['include_self'] = $configuration[2];
             $data['select_type'] = $configuration[3];
        } else {
             $data['tree_name'] = array(1 => 'New Tree');
-            $data['base_category'] = array(1 => 1);
+            $base_categories = array(1 => 1);
             $data['include_self'] = array(1 => 1);
             $data['select_type'] = array(1 => 1);
         }
@@ -207,15 +214,27 @@ class CategoriesProperty extends DataProperty
             'maxdepth' => isset($data['maxdepth'])?$data['maxdepth']:null,
             'mindepth' => isset($data['mindepth'])?$data['mindepth']:null,
         );
-        foreach ($data['base_category'] as $trees) {
-            // The base category is a single category (no multiselect, so get the category ID
+        
+        // The somewhat convoluted way of getting to the actual base category ids is a consequence of 
+        // using the array property (categorypicker) to define them
+        $data['base_category'] = array();
+        foreach ($base_categories as $key => $trees) {
+            // The base category is a single category (no multiselect), so get the category ID
             $tree = is_array($trees) ? reset($trees) : $trees;
             $id = is_array($tree) ? reset($tree) : $tree;
+            $data['base_category'][$key] = $id;
             $nodes = new BasicSet();
             $node = new CategoryTreeNode($id);
             $node->setfilter($filter);
             $tree = new CategoryTree($node);
             $nodes->addAll($node->depthfirstenumeration());
+            if (!$data['include_self'][$key]) {
+                $elements = $nodes->toArray();
+                $nodes->clear();
+                array_shift($elements);
+                foreach($elements as $element)
+                    $nodes->add($element);
+            }
             $data['trees'][] = $nodes;
         }
         
@@ -225,14 +244,9 @@ class CategoriesProperty extends DataProperty
             xarMod::apiLoad('categories');
             $xartable = xarDB::getTables();
             sys::import('xaraya.structures.query');
-            foreach ($data['base_category'] as $key => $trees) {
-                // The base category is a single category (no multiselect, so get the category ID
-                $key = key($trees);
-                $tree = reset($trees);
-                // Get the first base category in the tree (there is only one)
-                $base = reset($tree);
+            foreach ($data['base_category'] as $key => $value) {
                 $q = new Query('SELECT', $xartable['categories_linkage']); 
-                $q->eq('basecategory', (int)$base);
+                $q->eq('basecategory', (int)$value);
                 $q->eq('item_id', (int)$itemid);
                 if ($this->module_id) $q->eq('module_id', $this->module_id);
                 if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
