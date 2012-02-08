@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="$layout eq 'default' OR $layout eq 'horizontal' OR empty($layout)">
+       <xar:foreach in="$value" value="$category">
+            #$category['name']#&#160;
+        </xar:foreach>
+    <xar:else />
+        <xar:foreach in="$catinfo" value="$category">
+            #$category['name']#<br />
+        </xar:foreach>
+    </xar:if>
+</xar:template>

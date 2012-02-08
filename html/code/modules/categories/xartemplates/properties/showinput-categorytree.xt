@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <table border="0" width="100%" cellspacing="0" cellpadding="0">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Child Categories</th>
+            <th>Image</th>
+            <th style="text-align: center;">Options</th>
+        </tr>
+
+        <xar:var name="modifytitle">Modify category</xar:var>
+        <xar:var name="deletetitle">Delete category</xar:var>
+        <xar:set name="displayindex">0</xar:set>    
+        <xar:foreach in="$trees" value="$categories">
+            <xar:foreach in="$categories" value="$node">
+
+                <xar:set name="displayindex">$displayindex + 1</xar:set>   
+                <xar:if condition="$displayindex lt $startnum">
+                    <xar:continue />
+                </xar:if>
+                <xar:if condition="$displayindex ge $startnum + $items_per_page">
+                    <xar:break />
+                </xar:if>
+
+                <xar:set name="cid">$node->id</xar:set>
+                <xar:set name="name">$node->name</xar:set>
+                <xar:set name="description">$node->description</xar:set>
+                <xar:set name="child_object">$node->child_object</xar:set>
+                <xar:set name="image">$node->image</xar:set>
+                <!--<xar:set name="map">$node->map</xar:set>-->
+                <xar:set name="level">$node->getLevel()</xar:set>
+
+                <xar:if condition="(($displayindex + 1) % 2)">
+                    <xar:set name="displayclass">'xar-accent'</xar:set>
+                <xar:else />
+                    <xar:set name="displayclass">'xar-normal'</xar:set>
+                </xar:if>
+
+                <tr>
+                    <td class="#$displayclass#" style="text-align: left; margin-left: 5px">
+                        <xar:for start="$i = 1" test="$i le $level" iter="$i++">
+                            <img src="#xarTplGetImage('blank.png','categories')#"/>
+                        </xar:for>
+                       #$name#
+                    </td>
+                    <td class="#$displayclass#" style="text-align: left; margin-left: 5px;">#$description#</td>
+                    <td class="#$displayclass#" style="text-align: left; margin-left: 5px;">#$child_object#</td>
+                    <td class="#$displayclass#"><xar:if condition="empty($image)">&#160;<xar:else />#$image#</xar:if></td>
+                    <td class="#$displayclass#" style="text-align: center;">
+                        <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
+                            <a href="#xarModURL('categories', 'admin', 'modify', array('cid' => $cid))#" title="#$modifytitle#">
+                                <img src="#xarTplGetImage('icons/'.'modify.png', 'base')#" width="16" height="16" alt="#$modifytitle#"/>
+                            </a>
+                        <xar:else />
+                            <a href="#xarModURL('categories', 'admin', 'modify', array('cid' => $cid))#" title="#$modifytitle#">
+                                Modify
+                            </a>
+                        </xar:if>
+                        &#160;|&#160;
+                        <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
+                            <a href="#xarModURL('categories', 'admin', 'deletecat', array('cid' => $cid))#" title="#$deletetitle#">
+                                <img src="#xarTplGetImage('icons/'.'delete.png', 'base')#" width="16" height="16" alt="#$deletetitle#"/>
+                            </a>
+                        <xar:else />
+                            <a href="#xarModURL('categories', 'admin', 'deletecat', array('cid' => $cid))#" title="#$deletetitle#">
+                                Delete
+                            </a>
+                        </xar:if>
+                    </td>
+                </tr>
+            </xar:foreach>
+        </xar:foreach>
+    </table>
+
+    <xar:if condition="count($options) eq 1">
+        <xar:set name="activetab">$options[0]['id']</xar:set>
+            <xar:if condition="$displayindex">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <xar:for start="$i = 1" test="$i le ($pagertotal - $items_per_page)" iter="$i += $items_per_page">
+                            <xar:set name="endrow">$i+$items_per_page-1</xar:set>
+                            <xar:if condition="$i le $startnum  AND ($i + $items_per_page) gt $startnum">
+                                #$i#-#$endrow#
+                            <xar:else />
+                                <a href="#xarModURL('categories', 'admin', 'viewcats', array('activetab' => $activetab,'startnum' => $i, 'items_per_page' => $items_per_page))#">
+                                    #$i#-#$endrow#
+                                </a>
+                            </xar:if>
+                            <xar:if condition="(($i%100) eq 1) and ($i ne 1)">
+                                <br />
+                            <xar:else />
+                                &#160;|&#160;
+                            </xar:if>
+                        </xar:for>
+                        <xar:if condition="$i eq $pagertotal">
+                            <xar:if condition="$i le $startnum  AND ($i + $items_per_page) gt $startnum">
+                                #$i#
+                            <xar:else />
+                                <a href="#xarModURL('categories', 'admin', 'viewcats', array('activetab' => $activetab,'startnum' => $i, 'items_per_page' => $items_per_page))#">
+                                    #$i#
+                                </a>
+                            </xar:if>
+                        </xar:if>
+                        <xar:if condition="$i lt $pagertotal">
+                            <xar:if condition="$i le $startnum  AND ($i + $items_per_page) gt $startnum">
+                                #$i#-#$pagertotal#
+                            <xar:else />
+                                <a href="#xarModURL('categories', 'admin', 'viewcats', array('activetab' => $activetab,'startnum' => $i, 'items_per_page' => $items_per_page))#">
+                                    #$i#-#$pagertotal#
+                                </a>
+                            </xar:if>
+                        </xar:if>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <form action="#xarModURL('categories','admin','viewcats',array())#" method="post">
+                            Categories per page:&#160;
+                            <input type="hidden" name="startnum" id="startnum" value="#$startnum#"/>
+                            <input type="text" name="items_per_page" id="items_per_page" value="#$items_per_page#" size="5"/>&#160;&#160;
+                            <input type="hidden" name="activetab" id="activetab" value="#$activetab#" size="5"/>
+                            <input type="submit" value="#xarML('Reload')#"/>
+                        </form>
+                    </div>
+                </div>
+            </xar:if>
+            <div class="xar-row">
+                <div class="xar-col"></div>
+                <div class="xar-col">
+                    Categories Total:&#160;&#160;#$pagertotal#
+                </div>
+            </div>
+    </xar:if>
+</xar:template>

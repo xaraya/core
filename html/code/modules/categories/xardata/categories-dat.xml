@@ -1,0 +1,26 @@
+<items>
+  <categories itemid="1">
+    <id>1</id>
+    <name>General</name>
+    <description>A default top level category</description>
+    <image></image>
+    <child_categories></child_categories>
+    <position>1</position>
+  </categories>
+  <categories itemid="2">
+    <id>2</id>
+    <name>People</name>
+    <description>A category that relates to site users</description>
+    <image></image>
+    <child_categories></child_categories>
+    <position>2</position>
+  </categories>
+  <categories itemid="3">
+    <id>3</id>
+    <name>Topics</name>
+    <description>A category that relates to site topics</description>
+    <image></image>
+    <child_categories></child_categories>
+    <position>3</position>
+  </categories>
+</items>

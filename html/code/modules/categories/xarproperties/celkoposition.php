@@ -17,12 +17,23 @@ sys::import('modules.dynamicdata.class.properties.base');
  *
  * Show the position of an item in a tree of nested sets
  */
+
+/**
+ * Notes
+ *
+ * - This property always has a reference to the parent object
+ * - The default value for the celko table is xar_categories. Properties using other tables need to explicitly state the table.
+ * - When exporting, we store parent_id, left_id, right_id in the value filed of the property
+ * - As a consequence, a non-empty $this-value menas we are in the process of importing from an XML file.
+ *
+ */
+
 class CelkoPositionProperty extends DataProperty
 {
     public $id           = 30074;
     public $name         = 'celkoposition';
     public $desc         = 'Celko Position';
-    public $reqmodules   = array('base');
+    public $reqmodules   = array('categories');
 
     public $reference_id = 0;               // The ID of the parent item
     public $include_reference = 1;          // Get a reference to the parent object
@@ -45,8 +56,8 @@ class CelkoPositionProperty extends DataProperty
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $this->tplmodule = 'base';
-        $this->filepath  = 'modules/base/xarproperties';
+        $this->tplmodule = 'categories';
+        $this->filepath  = 'modules/categories/xarproperties';
         $this->dbconn = xarDB::getConn();
     }
 
@@ -81,11 +92,17 @@ class CelkoPositionProperty extends DataProperty
     {
         $n = $this->countItems($itemid);
         if ($n > 1) {
-            // There is more than one item for this itemid. That's a problem.
+# --------------------------------------------------------
+#
+# There is more than one item for this itemid. That's a problem.
+#
             throw new Exception(xarML('More than one item for the itemid value #(1)',$itemid));
         } elseif ($n == 1) {
-            // There is one item for this itemid. This means it was already created
-            // Usually this means the same datasource used for this property and the others of this object item
+# --------------------------------------------------------
+#
+# There is one item for this itemid. This means it was already created
+# Usually this means the same datasource is used for this property and the other properties of this object item (ex: categories table)
+#
             if ($this->value) {
                 $parentid = $this->unpackValue($itemid);
             } elseif ($this->reference_id == 0) {
@@ -99,7 +116,7 @@ class CelkoPositionProperty extends DataProperty
                 $parentItem = $this->getItem($this->reference_id);
                 $parentid = $parentItem['parent_id'];
             }
-            
+
             // CHECKME: why do we need to run updateposition AND updateValue?
             $itemid = $this->updateposition($itemid, $parentid);
 //            $this->reference_id = $parentid;
@@ -107,7 +124,10 @@ class CelkoPositionProperty extends DataProperty
 //            $this->inorout = 'IN';
             $this->updateValue($itemid);
 
-            // We updated a position. now go back and see if any of the unresolveds we have can be resolved
+# --------------------------------------------------------
+#
+# We updated a position. Now go back and see if any of the unresolveds we have can be resolved
+#
             foreach ($this->parentunresolveds as $key => $value) {
                 if (isset($this->parentindices[$value])) {
                     $this->reference_id = $this->parentindices[$value];
@@ -119,15 +139,21 @@ class CelkoPositionProperty extends DataProperty
             }
             
         } else {
-            // There is no item for this itemid yet
-            // The datasource for this property is likely different from that of the other properties of this object.
-            // We'll need to create an item.
+# --------------------------------------------------------
+#
+# There is no item for this itemid yet
+# The datasource for this property is likely different from that of the other properties of this object.
+# We'll need to create an item.
+#
             if ($this->value) {
             // FIXME: this has not been tested!!!
                 $this->unpackValue();
             } else {
-                // No value, this insert is via the UI
-                // Obtain current information on the reference item
+# --------------------------------------------------------
+#
+# No value, this insert is via the UI rather than via import
+# Obtain current information on the reference item
+#
                 $parentItem = $this->getItem($this->reference_id);
                 
                 if ($parentItem == false) {
@@ -340,6 +366,9 @@ class CelkoPositionProperty extends DataProperty
         return serialize($this->getItem($id));
     }
     
+/**
+ * Return the number of items in the celko table that have this itemid
+ */
     private function countItems($itemid)
     {
         $sql = "SELECT COUNT(id) AS childnum
@@ -531,14 +560,24 @@ class CelkoPositionProperty extends DataProperty
         return $items;
     }
 
-    // Takes the serialized value in $this->value and assigns its unserialized values to their proper places
+/**
+ * Unpack the value of this property (imported from an XML file)
+ *
+ * Takes the serialized value in $this->value and assigns its unserialized values to their proper places
+ */
     private function unpackValue($itemid)
     {
-        // Unpack the values of this property
-        $params = unserialize($this->value);
+        try {
+            // Unpack the values of this property
+            $params = unserialize($this->value);
+            
+            // Get the value for the reference ID (parent)
+            $this->reference_id = $params[$this->initialization_celkoparent_id];
+        } catch (Exception $e) {
+            $this->reference_id = 0;
+            $params['id'] = $itemid;
+        }
         
-        // Get the value for the reference ID (parent)
-        $this->reference_id = $params[$this->initialization_celkoparent_id];
         $this->setCelkoValues($this->reference_id, $params['id']);
                 
         // add this itemid to the list of known parents for subsequent rounds

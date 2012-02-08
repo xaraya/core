@@ -39,25 +39,26 @@ class DataProperty extends Object implements iDataProperty
     public $layout = '';
     public $tplmodule = 'dynamicdata';
     public $configuration = '';
-    public $dependancies = '';    // semi-colon seperated list of files that must be present for this property to be available (optional)
-    public $args         = array(); //args that hold alias info
-    public $anonymous = 0;        // if true the name, rather than the dd_xx designation is used in displaying the property
+    public $dependancies = '';     // semi-colon separated list of files that must be present for this property to be available (optional)
+    public $args = array();        // args that hold alias info
+    public $anonymous = 0;         // if true the name, rather than the dd_xx designation is used in displaying the property
+    public $prepostprocess = 0;    // when saving to the db: 0 = no processing; 1 = preprocessing; 2 = postprocessing; 3 = pre- and postprocessing
 
-    public $datastore = '';    // name of the data store where this property comes from
-    public $operation = null;  // some operation or function to apply for this property (COUNT, SUM, ...)
-    public $aliasname = null;  // the aliasname used with the operation or function on this property
+    public $datastore = '';        // name of the data store where this property comes from
+    public $operation = null;      // some operation or function to apply for this property (COUNT, SUM, ...)
+    public $aliasname = null;      // the aliasname used with the operation or function on this property
 
-    public $value = null;      // value of this property for a particular DataObject
-    public $invalid = '';      // result of the checkInput/validateValue methods
-    public $fieldname = null;  // fieldname used by checkInput() for configurations who need them (e.g. file uploads)
+    public $value = null;          // value of this property for a particular DataObject
+    public $invalid = '';          // result of the checkInput/validateValue methods
+    public $fieldname = null;      // fieldname used by checkInput() for configurations who need them (e.g. file uploads)
 
     public $include_reference = 0; // tells the object this property belongs to whether to add a reference of itself to me
-    public $objectref = null;  // object this property belongs to
-    public $_objectid = null;  // objectid this property belongs to
-    public $_fieldprefix = ''; // the object's fieldprefix
+    public $objectref = null;      // object this property belongs to
+    public $_objectid = null;      // objectid this property belongs to
+    public $_fieldprefix = '';     // the object's fieldprefix
 
-    public $_itemid;           // reference to $itemid in DataObject, where the current itemid is kept
-    public $_items;            // reference to $items in DataObjectList, where the different item values are kept
+    public $_itemid;               // reference to $itemid in DataObject, where the current itemid is kept
+    public $_items;                // reference to $items in DataObjectList, where the different item values are kept
 
     public $configurationtypes = array('display','validation','initialization');
 //    public $display_template                = "";
@@ -595,6 +596,8 @@ class DataProperty extends Object implements iDataProperty
                 }
             }
         }
+        // Return the exploded fields
+        return $fields;
     }
 
     /**
@@ -625,7 +628,7 @@ class DataProperty extends Object implements iDataProperty
     public function showConfiguration(Array $data = array())
     {
         if (!isset($data['configuration'])) $data['configuration'] = $this->configuration;
-        $this->parseConfiguration($data['configuration']);
+        $fields = $this->parseConfiguration($data['configuration']);
 
         if (!isset($data['name']))  $data['name'] = 'dd_'.$this->id;
         if (!isset($data['id']))  $data['id'] = 'dd_'.$this->id;
