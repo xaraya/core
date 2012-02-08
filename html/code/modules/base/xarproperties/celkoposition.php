@@ -86,8 +86,12 @@ class CelkoPositionProperty extends DataProperty
         } elseif ($n == 1) {
             // There is one item for this itemid. This means it was already created
             // Usually this means the same datasource used for this property and the others of this object item
-            if ($this->value) $parentid = $this->unpackValue($itemid);
-            elseif ($this->inorout == 'in') {
+            if ($this->value) {
+                $parentid = $this->unpackValue($itemid);
+            } elseif ($this->reference_id == 0) {
+                // This item is the first item to be created
+                $parentid = $this->reference_id;            
+            } elseif ($this->inorout == 'in') {
                 // This item is a child, so its parent is the reference item  
                 $parentid = $this->reference_id;
             } else {
