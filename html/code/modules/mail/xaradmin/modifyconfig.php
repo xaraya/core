@@ -34,9 +34,9 @@ function mail_admin_modifyconfig()
     $data['encoding'] = xarModVars::get('mail', 'encoding');
 
     //redirect address - ensure it's set
-    $redirectaddress = trim(xarModVars::get('mail', 'redirectaddress'));
-    if (isset($redirectaddress) && !empty($redirectaddress)){
-        $data['redirectaddress']=xarVarPrepForDisplay($redirectaddress);
+    $address = trim(xarModVars::get('mail', 'redirectaddress'));
+    if (isset($address) && !empty($address)){
+        $data['redirectaddress']=xarVarPrepForDisplay($address);
     }else{
         $data['redirectaddress']='';
     }
@@ -133,7 +133,7 @@ function mail_admin_modifyconfig()
                     if (!xarVarFetch('replacestrings', 'str:1', $replacestrings, '', XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('suppresssending', 'checkbox', $suppresssending, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('redirectsending', 'checkbox', $redirectsending, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('redirectaddress', 'str:1', $redirectaddress, '', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('redirectaddress', 'str:1:', $redirectaddress, '', XARVAR_NOT_REQUIRED)) return;
 
                     // update the data
                     xarModVars::set('mail', 'html', $html);

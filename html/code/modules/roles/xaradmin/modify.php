@@ -82,6 +82,9 @@ function roles_admin_modify()
         // Check for a valid confirmation key
         if(!xarSecConfirmAuthKey()) return;
 
+        // Enforce a check on the existence of a user of this user name
+        $data['object']->properties['uname']->validation_existrule = 1;
+        
         // Get the data from the form
         $isvalid = $data['object']->checkInput();
 
