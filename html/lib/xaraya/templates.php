@@ -741,20 +741,25 @@ class xarTpl extends Object
             return self::executeFromFile($sourceFileName, $tplData);
         }
 
-        $tplModule = DataPropertyMaster::getProperty(array('type' => $propertyName))->tplmodule; 
-        
-        if ($modName == 'auto') {
-            // standalone property called in standalone context 
-            $sourceFileName = self::getScopeFileName('property', $propertyName, $tplBase, $propertyName);
-        } else {
-            // property called in module context
-            if ($tplModule == 'auto') {
-                // standalone property (caller > owner) 
-                $sourceFileName = self::getScopeFileName('property', $propertyName, $tplBase, $propertyName, '', $modName);
-            } else {
-                // module property (caller > owner)
-                $sourceFileName = self::getScopeFileName('module', $tplModule, $tplBase, $propertyName, 'properties', $modName);
+        $sourceFileName = self::getScopeFileName('module', $modName, $tplBase, $propertyName, 'properties');
 
+        // Property fall-back to default template in the module the property belongs to
+        if (empty($sourceFileName)) {
+            $tplModule = DataPropertyMaster::getProperty(array('type' => $propertyName))->tplmodule; 
+            
+            if ($modName == 'auto') {
+                // standalone property called in standalone context 
+                $sourceFileName = self::getScopeFileName('property', $propertyName, $tplBase, $propertyName);
+            } else {
+                // property called in module context
+                if ($tplModule == 'auto') {
+                    // standalone property (caller > owner) 
+                    $sourceFileName = self::getScopeFileName('property', $propertyName, $tplBase, $propertyName, '', $modName);
+                } else {
+                    // module property (caller > owner)
+                    $sourceFileName = self::getScopeFileName('module', $tplModule, $tplBase, $propertyName, 'properties', $modName);
+    
+                }
             }
         }
 
