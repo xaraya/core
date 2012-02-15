@@ -44,7 +44,9 @@ class FilePickerProperty extends SelectProperty
                 $this->initialization_basedirectory = $temp;
             }
         }
-        // Replace {theme} with the current theme directory
+        // Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory
+        $this->initialization_basedirectory = preg_replace('/\{user_theme\}/',"themes/".xarModVars::get('themes', 'default_theme'),$this->initialization_basedirectory);
+        $this->initialization_basedirectory = preg_replace('/\{admin_theme\}/',"themes/".xarModVars::get('themes', 'admin_theme'),$this->initialization_basedirectory);
         $this->initialization_basedirectory = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->initialization_basedirectory);
         $this->setExtensions();
     }
@@ -52,7 +54,10 @@ class FilePickerProperty extends SelectProperty
     public function showInput(Array $data = array())
     {
         if (isset($data['basedir'])) $this->initialization_basedirectory = $data['basedir'];
-        // Replace {theme} with the current theme directory
+
+        // Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory
+        $this->initialization_basedirectory = preg_replace('/\{user_theme\}/',"themes/".xarModVars::get('themes', 'default_theme'),$this->initialization_basedirectory);
+        $this->initialization_basedirectory = preg_replace('/\{admin_theme\}/',"themes/".xarModVars::get('themes', 'admin_theme'),$this->initialization_basedirectory);
         $this->initialization_basedirectory = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->initialization_basedirectory);
 
         if (isset($data['matches'])) $this->validation_matches = $data['matches'];

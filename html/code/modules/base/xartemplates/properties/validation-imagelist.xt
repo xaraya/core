@@ -6,7 +6,7 @@
             <td>Base directory</td>
             <td>
                 <input type="text" name="#$name#[basedir]" id="#$id#_basedir" value="#$basedir#" size="#$size#" tabindex="#$tabindex#"/>
-                <br />Note : {theme} will be replaced by the current theme directory - e.g.
+                <br />Note : {theme} will be replaced by the appropriate theme directory - e.g.
                 {theme}/images -&gt; themes/default/images
             </td>
         </tr>

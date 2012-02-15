@@ -37,12 +37,12 @@ class ImageProperty extends TextBoxProperty
         parent::__construct($descriptor);
         $this->template  = 'image';
 
-        // Note : {theme} will be replaced by the current theme directory - e.g. {theme}/images -> themes/default/images
-        if (!empty($this->initialization_basedirectory) && preg_match('/\{theme\}/',$this->initialization_basedirectory)) {
-            $curtheme = xarTpl::getThemeDir();
-            $this->initialization_basedirectory = preg_replace('/\{theme\}/',$curtheme,$this->initialization_basedirectory);
-            // FIXME: baseurl is no longer initialized - could be different from basedir !
-        }
+        // Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory
+        $this->initialization_basedirectory = preg_replace('/\{user_theme\}/',"themes/".xarModVars::get('themes', 'default_theme'),$this->initialization_basedirectory);
+        $this->initialization_basedirectory = preg_replace('/\{admin_theme\}/',"themes/".xarModVars::get('themes', 'admin_theme'),$this->initialization_basedirectory);
+        $this->initialization_basedirectory = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->initialization_basedirectory);
+        // FIXME: baseurl is no longer initialized - could be different from basedir !
+
         if ($this->initialization_image_source == 'upload') $this->upload = true;
     }
 
