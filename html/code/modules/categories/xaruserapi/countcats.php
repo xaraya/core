@@ -19,8 +19,8 @@
  *         $total = xarMod::apiFunc('categories', 'user', 'countcats', array());
  *
  * @param $args['cid'] The ID of the category you are counting for (optional)
- * @param $args['left'] The left value for that category (optional)
- * @param $args['right'] The right value for that category (optional)
+ * @param $args['left_id'] The left value for that category (optional)
+ * @param $args['right_id'] The right value for that category (optional)
  * @returns int
  * @return number of categories
  */
@@ -39,13 +39,13 @@ function categories_userapi_countcats($args)
     $bindvars = array();
 
     // Get number of categories
-    if (!empty($left) && is_numeric($left) &&
-        !empty($right) && is_numeric($right)) {
+    if (!empty($left_id) && is_numeric($left_id) &&
+        !empty($right_id) && is_numeric($right_id)) {
         $sql = "SELECT COUNT(id) AS childnum
                   FROM $categoriestable
                  WHERE left_id
                BETWEEN ? AND ?";
-        $bindvars[] = $left; $bindvars[] = $right;
+        $bindvars[] = $left_id; $bindvars[] = $right_id;
     } elseif (!empty($cid) && is_numeric($cid)) {
         $sql = "SELECT COUNT(P2.id) AS childnum
                   FROM $categoriestable AS P1,
