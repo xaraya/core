@@ -27,11 +27,11 @@
                         </td>
                     </tr>
     
-                    <xar:if condition="empty($moditems) or count($moditems) eq '0'">
+                    <xar:if condition="empty($moditems) or count($moditems) eq 0">
                         <tr>
                             <td colspan="4" align="center">
                                 <br />
-                                    There are currently no category links in the database...
+                                    There are currently no orphan category links in the database...
                                 <br />
                                 <br />
                             </td>
