@@ -35,7 +35,7 @@ class CelkoPositionProperty extends DataProperty
     public $desc         = 'Celko Position';
     public $reqmodules   = array('categories');
 
-    public $reference_id = 0;               // The ID of the parent item
+    public $reference_id = 0;               // The ID of the item relative to which we define the position of this item
     public $include_reference = 1;          // Get a reference to the parent object
     public $moving;
     public $position;

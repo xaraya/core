@@ -25,7 +25,7 @@
                                     Modify
                                 </a>
                                 &#160;|&#160;
-                                <a href="#xarModURL('categories', 'admin', 'deletecat', array('cid' => $loop:item['cid']))#">
+                                <a href="#xarModURL('categories', 'admin', 'delete', array('cid' => $loop:item['cid']))#">
                                     Delete
                                 </a>
                             </td>

@@ -7,7 +7,7 @@
         <h2>
             Delete Category
         </h2>
-        <form class="xar-formwidget" action="#xarModURL('categories','admin','deletecat')#" method="post"  enctype="application/x-www-form-urlencoded">
+        <form class="xar-formwidget" action="#xarModURL('categories','admin','delete')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>
                     <strong>
@@ -32,9 +32,11 @@
                     </xar:ml>
                 </div>
                 <div>
-                    <input type="submit" name="confirm" id="confirmyes" value="#xarML('Delete')#"/>
+                    <xar:var name="label">Delete</xar:var>
+                    <xar:button type="submit" name="confirm" label="$label"/>
                     &#160;
-                    <input type="reset" value="#xarML('Cancel')#" onclick="javascript:history.go(-1)"/>
+                    <xar:var name="label">Cancel</xar:var>
+                    <xar:button type="cancel" label="$label"/>
                 </div>
             </fieldset>
         </form>

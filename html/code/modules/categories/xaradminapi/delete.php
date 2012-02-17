@@ -19,14 +19,14 @@
  * @returns bool
  * @return true on success, false on failure
  */
-function categories_adminapi_deletecat($args)
+function categories_adminapi_delete($args)
 {
     // Get arguments from argument array
     extract($args);
     // Argument check
     if (empty($cid)) {
         $msg = xarML('Invalid #(1) for #(2) function #(3)() in module #(4)',
-                     'cid', 'admin', 'deletecat', 'categories');
+                     'cid', 'admin', 'delete', 'categories');
         throw new Exception($msg);
     }
 
@@ -40,7 +40,7 @@ function categories_adminapi_deletecat($args)
     $cat = xarMod::apiFunc('categories', 'user', 'getcatinfo', $args);
     if ($cat == false) {
         $msg = xarML('Category does not exist. Invalid #(1) for #(2) function #(3)() in module #(4)',
-                     'category', 'admin', 'deletecat', 'categories');
+                     'category', 'admin', 'delete', 'categories');
         throw new Exception($msg);
     }
     // These are set to be used later on
@@ -53,7 +53,7 @@ function categories_adminapi_deletecat($args)
                                 $args);
     if ($categories == false || count($categories) == 0) {
         $msg = xarML('Category does not exist. Invalid #(1) for #(2) function #(3)() in module #(4)',
-                     'category', 'admin', 'deletecat', 'categories');
+                     'category', 'admin', 'delete', 'categories');
         throw new Exception($msg);
     }
     // Useful Variables set...

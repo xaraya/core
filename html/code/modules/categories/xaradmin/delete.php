@@ -21,7 +21,7 @@
  * @param str confirm OPTIONAL
  * @return bool
  */
-function categories_admin_deletecat()
+function categories_admin_delete()
 {
     if (!xarVarFetch('cid','int:1:',$cid)) return;
     if (!xarVarFetch('confirm','str:1:',$confirm,'',XARVAR_NOT_REQUIRED)) return;
@@ -45,8 +45,6 @@ function categories_admin_deletecat()
 
 
         $data = Array('cid'=>$cid,'name'=>$cat['name']);
-        $data['nolabel'] = xarML('No');
-        $data['yeslabel'] = xarML('Yes');
         $data['authkey'] = xarSecGenAuthKey();
 
         $data['numcats'] = xarMod::apiFunc('categories','user','countcats',
@@ -56,7 +54,7 @@ function categories_admin_deletecat()
                                           array('cids' => array('_'.$cid),
                                                 'modid' => 0));
         // Return output
-        return xarTplModule('categories','admin','delete',$data);
+        return $data;
     }
 
 
@@ -68,7 +66,7 @@ function categories_admin_deletecat()
     // Pass to API
     if (!xarMod::apiFunc('categories',
                        'admin',
-                       'deletecat',
+                       'delete',
                        array('cid' => $cid))) return;
 
     xarController::redirect(xarModURL('categories','admin','viewcats', array()));
