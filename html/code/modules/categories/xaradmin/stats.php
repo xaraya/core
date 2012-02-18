@@ -133,7 +133,7 @@ function categories_admin_stats()
                                         'numitems' => $numstats,
                                         'startnum' => $startnum,
                                         'sort' => $sort,
-                                        'catid' => $catid));
+                                        'catid' => $catid));var_dump($catid);
         $showtitle = xarModVars::get('categories','showtitle');
         if (!empty($getitems) && !empty($showtitle)) {
            $itemids = array_keys($getitems);
