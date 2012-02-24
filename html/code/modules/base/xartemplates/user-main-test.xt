@@ -8,4 +8,5 @@
             You can experiment with various blocklayout features and template tags here if you want...
         </p>
     </div>
+    <xar:data-input type="statelisting"/>
 </xar:template>
