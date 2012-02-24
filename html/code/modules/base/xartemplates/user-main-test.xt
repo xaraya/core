@@ -123,5 +123,4 @@
         <xar:set name="foo">var_dump($items)</xar:set>
     
     </div>
-    <xar:data-input type="statelisting"/>
 </xar:template>
