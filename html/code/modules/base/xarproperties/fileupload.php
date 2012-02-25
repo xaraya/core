@@ -26,7 +26,7 @@ class FileUploadProperty extends DataProperty
     public $initialization_basedirectory    = 'var/uploads';
     public $initialization_importdirectory  = null;
     public $validation_file_extensions      = 'gif|jpg|jpeg|png|bmp|pdf|doc|txt';
-    public $initialization_basepath         = null;
+//    public $initialization_basepath         = null;
     // TODO: support the different options in code below
     public $initialization_multiple         = TRUE;
     public $methods = array('trusted'  => false,
@@ -70,17 +70,19 @@ class FileUploadProperty extends DataProperty
             }
             */
         }
-
+/*
         if(xarServer::getVar('PATH_TRANSLATED')) {
-            $base_directory = dirname(realpath(xarServer::getVar('PATH_TRANSLATED')));
+            $basepath = dirname(realpath(xarServer::getVar('PATH_TRANSLATED')));
         } elseif(xarServer::getVar('SCRIPT_FILENAME')) {
-            $base_directory = dirname(realpath(xarServer::getVar('SCRIPT_FILENAME')));
+            $basepath = dirname(realpath(xarServer::getVar('SCRIPT_FILENAME')));
         } else {
-            $base_directory = './';
+            $basepath = './';
         }
 
-        $this->initialization_basepath = $base_directory;
-
+        $this->initialization_basepath = $basepath;
+*/
+        $this->initialization_basepath = sys::root();
+        
         if (empty($this->initialization_basedirectory) && $this->UploadsModule_isHooked != TRUE) {
             $this->initialization_basedirectory = 'var/uploads';
         }
@@ -213,7 +215,7 @@ class FileUploadProperty extends DataProperty
 
             // use a temporary file if we process the file directly after validation (read & delete, move, save to db, ...)
             if ($this->use_temporary_file) {
-                $filepath = tempnam(realpath($this->initialization_basepath . '/' . $this->initialization_basedirectory), 'tempdd');
+                $filepath = tempnam(realpath($this->initialization_basepath . $this->initialization_basedirectory), 'tempdd');
 
             //} elseif ($this->obfuscate_filename) {
             // TODO: obfuscate filename + return hash & original filename + handle that combined value in the other methods
@@ -224,11 +226,11 @@ class FileUploadProperty extends DataProperty
             //    if (count($fileparts) > 1) {
             //        $filehash .= '.' . array_pop($fileparts);
             //    }
-            //    $filepath = $this->initialization_basepath . '/' . $this->initialization_basedirectory . '/'. $filehash;
+            //    $filepath = $this->initialization_basepath . $this->initialization_basedirectory . '/'. $filehash;
 
             } else {
                 $filename = $file['name'];
-                $filepath = $this->initialization_basepath . '/' . $this->initialization_basedirectory . '/'. $filename;
+                $filepath = $this->initialization_basepath . $this->initialization_basedirectory . '/'. $filename;
                 if ($this->validation_allow_duplicates == 2) {
                     // overwrite existing file if necessary
                 } elseif ($this->validation_allow_duplicates == 1 && file_exists($filepath)) {
@@ -243,11 +245,11 @@ class FileUploadProperty extends DataProperty
                     }
                     $i = 1;
                     $filename = $filebase . '_' . $i . $fileext;
-                    $filepath = $this->initialization_basepath . '/' . $this->initialization_basedirectory . '/'. $filename;
+                    $filepath = $this->initialization_basepath . $this->initialization_basedirectory . '/'. $filename;
                     while (file_exists($filepath)) {
                         $i++;
                         $filename = $filebase . '_' . $i . $fileext;
-                        $filepath = $this->initialization_basepath . '/' . $this->initialization_basedirectory . '/'. $filename;
+                        $filepath = $this->initialization_basepath . $this->initialization_basedirectory . '/'. $filename;
                     }
                 } elseif ($this->validation_allow_duplicates == 0 && file_exists($filepath)) {
                     // duplicate files are not allowed
