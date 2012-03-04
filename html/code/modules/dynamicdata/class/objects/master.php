@@ -1255,6 +1255,12 @@ class DataObjectMaster extends Object
                         $rightside = $object->propertysource($right, $object, $prefix);
                     } catch (Exception $e) {echo 'Cannot translate ' . $right . ' to a valid datasource<br />'; }
                     $this->dataquery->leftjoin($leftside,$rightside);
+                    
+                    // FIXME: We don't yet support a sort order for related object items, so order them by ID for now
+                    $parts = explode('.',$right);
+                    $parts[0] = trim($parts[0]);
+                    // We should actually sort by the objects primary key, but lets forgoe that for now
+                    $this->dataquery->setorder($parts . ".id");
                 }
             } catch (Exception $e) {
                 if (isset($left)) echo 'Bad object relation: ' . $left . ' or ' . $right;
