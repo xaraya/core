@@ -381,11 +381,9 @@ class DataProperty extends Object implements iDataProperty
         }
 
         // Display directive for the name
-        if(!isset($data['name'])) {
-            if ($this->anonymous == true) $data['name'] = $this->name;
-            else $data['name'] = 'dd_'.$this->id;
-        }
-        if(!isset($data['id']))          $data['id']   = $data['name'];
+        if ($this->anonymous == true) $name = $this->name;
+        else $name = 'dd_'.$this->id;
+        $id = $name;
 
         // Add the object's field prefix if there is one
         $prefix = '';
@@ -393,8 +391,12 @@ class DataProperty extends Object implements iDataProperty
         if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0)  $prefix = $this->_fieldprefix . '_';
         // A field prefix added here can override the previous one
         if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
-        if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
-        if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
+        if(!empty($prefix)) $name = $prefix . $name;
+        if(!empty($prefix)) $id = $prefix . $id;
+
+        // Allow for overrides form the template
+        if(!isset($data['id']))          $data['id']   = $id;
+        if(!isset($data['name']))          $data['name']   = $name;
 
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
