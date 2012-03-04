@@ -1258,9 +1258,9 @@ class DataObjectMaster extends Object
                     
                     // FIXME: We don't yet support a sort order for related object items, so order them by ID for now
                     $parts = explode('.',$right);
-                    $parts[0] = trim($parts[0]);
+                    $table = trim($parts[0]);
                     // We should actually sort by the objects primary key, but lets forgoe that for now
-                    $this->dataquery->setorder($parts . ".id");
+                    $this->dataquery->setorder($table . ".id");
                 }
             } catch (Exception $e) {
                 if (isset($left)) echo 'Bad object relation: ' . $left . ' or ' . $right;
