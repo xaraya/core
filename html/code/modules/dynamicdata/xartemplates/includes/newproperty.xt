@@ -9,11 +9,7 @@
                 </label>
             </div>
             <div class="xar-col">
-                <select class="dd-norm" name="dd_source[0]" id="dd_source_0">
-                    <xar:foreach in="$sources" value="$mysource">
-                        <option>#$mysource#</option>
-                    </xar:foreach>
-                </select>
+                <xar:data-input type="dropdown" class="dd-norm" name="dd_source[0]" options="$sources" />
             </div>
         </div>
         <div class="xar-row">
