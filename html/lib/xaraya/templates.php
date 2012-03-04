@@ -750,6 +750,12 @@ class xarTpl extends Object
             if ($modName == 'auto') {
                 // standalone property called in standalone context 
                 $sourceFileName = self::getScopeFileName('property', $propertyName, $tplBase, $propertyName);
+                
+                if (empty($sourceFileName)) {
+                    // property inherits its template
+                    $sourceFileName = self::getScopeFileName('module', $tplModule, $tplBase, $propertyName, 'properties', $modName);
+                }
+                var_dump($tplModule);
             } else {
                 // property called in module context
                 if ($tplModule == 'auto') {
