@@ -9,7 +9,7 @@
             All fields are required to create a new role on the system.
         </p>
         <xar:set name="itemtype">$object->properties['role_type']->value</xar:set>
-        <xar:if condition="!empty($object->withupload)">
+        <xar:if condition="!empty($object->upload)">
             <xar:set name="enctype">'multipart/form-data'</xar:set>
         <xar:else />
             <xar:set name="enctype">'application/x-www-form-urlencoded'</xar:set>
