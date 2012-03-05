@@ -1739,7 +1739,7 @@ class Query
         }
         $this->tables = $newtables;
         
-        // Now remove the links that contain them
+        // Remove the links that contain them
         $newlinks = array();
         foreach ($this->tablelinks as $link) {
             $fullfield1 = $this->_deconstructfield($link['field1']);
@@ -1748,6 +1748,15 @@ class Query
             $newlinks[] = $link;
         }
         $this->tablelinks = $newlinks;
+        
+        // Remove the sort orders that contain them
+        $newsorts = array();
+        foreach ($this->sorts as $sort) {
+            $fullfield = $this->_deconstructfield($sort['name']);
+            if (isset($tables[$fullfield['table']])) continue;
+            $newsorts[] = $sort;
+        }
+        $this->sorts = $newsorts;
         
         return true;
     }
