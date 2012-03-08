@@ -39,6 +39,9 @@ class NumberBoxProperty extends TextBoxProperty
     {
         if (!parent::validateValue($value)) return false;
 
+        // Remove any whitespace
+        $value = trim($value);
+
         // We might have picked up empty string values in the configuration
         if ($this->validation_min_value == "") $this->validation_min_value = null;
         if ($this->validation_max_value == "") $this->validation_max_value = null;
