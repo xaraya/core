@@ -257,7 +257,9 @@ class FileUploadProperty extends DataProperty
                 }
             }
 
-            if (!move_uploaded_file($file['tmp_name'], $filepath)) {
+            try {
+                move_uploaded_file($file['tmp_name'], $filepath);
+            } catch(Exception $e) {
                 $this->invalid = xarML('The file upload failed');
                 $this->value = null;
                 return false;
