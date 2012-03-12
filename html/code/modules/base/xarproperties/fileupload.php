@@ -365,6 +365,7 @@ class FileUploadProperty extends DataProperty
     public function showOutput(Array $data = array())
     {
         extract($data);
+
         if (!isset($value)) $value = $this->value;
 
         if ($this->UploadsModule_isHooked) {
@@ -447,25 +448,6 @@ class FileUploadProperty extends DataProperty
             $valid = $valid && preg_match("/\.$filetype$/",$name);
         }
         return $valid;
-
-/*        $pos = strrpos($filename, '.');
-        if ($pos !== false) {
-            $extension = substr($filename, $pos + 1);
-        } else {
-            // in case we already got the extension from $dir->getExtension()
-            $extension = $filename;
-        }
-
-        if (!empty($this->file_extension_list) &&
-            !in_array($extension, $this->file_extension_list)) {
-            return false;
-        }
-        if (!empty($this->file_extension_regex) &&
-            !preg_match('/^' . $this->file_extension_regex . '$/', $extension)) {
-            return false;
-        }
-        return true;
-*/
     }
 }
 
