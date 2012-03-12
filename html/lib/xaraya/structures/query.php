@@ -1664,6 +1664,13 @@ class Query
         // If we want ALL fields (i.e. *), no need to optimize
         if (empty($this->fields)) return true;
         
+        // Bail if we have a function here
+        // CHECKME: do a match function here
+        foreach ($this->fields as $field) {
+            if (strpos(strtolower($field['name']),'count(') !== false) return true;
+        }
+        if (empty($this->fields)) return true;
+        
         // Put the table names in an array for processing. 
         // We'll remove all the relevant tables from this array
         $tables = array();

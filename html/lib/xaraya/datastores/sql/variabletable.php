@@ -222,10 +222,15 @@ class VariableTableDataStore extends SQLDataStore
 
     function getItems(array $args = array())
     {
+        // FIXME: this is a hack
+        if (!empty($this->object->where) && !is_array($this->object->where)) {
+            $this->object->where = array($this->object->where);
+        }
+        
         if (!empty($args['numitems'])) {
-            $numitems = $args['numitems'];
+            $this->object->numitems = $args['numitems'];
         } else {
-            $numitems = 0;
+            $this->object->numitems = 0;
         }
         if (!empty($args['startnum'])) {
             $startnum = $args['startnum'];
@@ -255,7 +260,7 @@ class VariableTableDataStore extends SQLDataStore
 
         $process = array();
         foreach ($propids as $propid) {
-            if (!empty($this->groupby) && in_array($propid,$this->groupby)) {
+            if (!empty($this->object->groupby) && in_array($propid,$this->object->groupby)) {
                 continue;
             } elseif (empty($properties[$propid]->operation)) {
                 continue; // all fields should be either GROUP BY or have some operation
@@ -289,7 +294,7 @@ class VariableTableDataStore extends SQLDataStore
             $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars);
 
-            if (count($this->sort) > 0) {
+            if (count($this->object->sort) > 0) {
                 $items = array();
                 $dosort = 1;
             } else {
@@ -311,7 +316,7 @@ class VariableTableDataStore extends SQLDataStore
 
             if ($dosort) {
                 $code = '';
-                foreach ($this->sort as $sortitem) {
+                foreach ($this->object->sort as $sortitem) {
                     $code .= 'if (!isset($a['.$sortitem['field'].'])) $a['.$sortitem['field'].'] = "";';
                     $code .= 'if (!isset($b['.$sortitem['field'].'])) $b['.$sortitem['field'].'] = "";';
                     $code .= 'if ($a['.$sortitem['field'].'] != $b['.$sortitem['field'].']) {';
@@ -323,7 +328,7 @@ class VariableTableDataStore extends SQLDataStore
                     $code .= '} else {';
                 }
                 $code .= 'return 0;';
-                foreach ($this->sort as $sortitem) {
+                foreach ($this->object->sort as $sortitem) {
                     $code .= '}';
                 }
                 $compare = create_function('$a, $b', $code);
@@ -391,13 +396,13 @@ class VariableTableDataStore extends SQLDataStore
             }
 
             // TODO: combine with sort someday ? Not sure if that's possible in this way...
-            if ($numitems > 0) {
+            if ($this->object->numitems > 0) {
                 // <mrb> Why is this only here?
                 $query .= ' ORDER BY item_id, property_id';
                 $stmt = $this->prepareStatement($query);
 
                 // Note : this assumes that every property of the items is stored in the table
-                $numrows = $numitems * count($propids);
+                $numrows = $this->object->numitems * count($propids);
                 if ($startnum > 1) {
                     $startrow = ($startnum - 1) * count($propids) + 1;
                 } else {
@@ -437,7 +442,7 @@ class VariableTableDataStore extends SQLDataStore
         // ------------------------------------------------------
         // TODO: make sure this is portable !
         // more difficult case where we need to create a pivot table, basically
-        } elseif ($numitems > 0 || count($this->sort) > 0 || count($this->where) > 0 || count($this->groupby) > 0) {
+        } elseif ($this->object->numitems > 0 || !empty($this->object->sort) || !empty($this->object->where) || !empty($this->object->groupby)) {
 
             $dbtype = $this->getType();
             if (substr($dbtype,0,4) == 'oci8') {
@@ -459,9 +464,9 @@ class VariableTableDataStore extends SQLDataStore
                  ORDER BY item_id, property_id;', " . count($propids) . ")
             AS dd(item_id int, " . join(' text, ',$propids) . " text)";
 
-            if (count($this->where) > 0) {
+            if (count($this->object->where) > 0) {
                 $query .= " WHERE ";
-                foreach ($this->where as $whereitem) {
+                foreach ($this->object->where as $whereitem) {
                     $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
                 }
             }
@@ -474,10 +479,10 @@ class VariableTableDataStore extends SQLDataStore
             $query .= " FROM $dynamicdata
                        WHERE property_id IN (" . join(', ',$propids) . ")
                     GROUP BY item_id ";
-
-            if (count($this->where) > 0) {
+/*
+            if (count($this->object->where) > 0) {
                   $query .= " HAVING ";
-                foreach ($this->where as $whereitem) {
+                foreach ($this->object->where as $whereitem) {
                     // Postgres does not support column aliases in HAVING clauses, but you can use the same aggregate function
                     if (substr($dbtype,0,8) == 'postgres') {
                         $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'MAX(CASE WHEN property_id = ' . 'dd_' . $whereitem['field'] . " THEN $propval ELSE '' END) " . $whereitem['clause'] . $whereitem['post'] . ' ';
@@ -487,34 +492,36 @@ class VariableTableDataStore extends SQLDataStore
                 }
             }
 
-            if (count($this->sort) > 0) {
+            if (count($this->object->sort) > 0) {
                 $query .= " ORDER BY ";
-                $join = '';
-                foreach ($this->sort as $sortitem) {
+                $join = '';//var_dump($this->object->sort);exit;
+                foreach ($this->object->sort as $sortitem) {
+                    if (empty($sortitem)) continue;
                     $query .= $join . 'dd_' . $sortitem['field'] . ' ' . $sortitem['sortorder'];
                     $join = ', ';
                 }
             }
-
+            */
+echo $query;
             // we got the query
             $stmt = $this->prepareStatement($query);
 
-            if ($numitems > 0) {
-                $stmt->setLimit($numitems);
+            if ($this->object->numitems > 0) {
+                $stmt->setLimit($this->object->numitems);
                 $stmt->setOffset($startnum - 1);
             }
             // All prepared, run it
             $result = $stmt->executeQuery();
 
             $isgrouped = 0;
-            if (count($this->groupby) > 0) {
+            if (count($this->object->groupby) > 0) {
                 $isgrouped = 1;
                 $items = array();
                 $combo = array();
                 $id = 0;
                 $process = array();
                 foreach ($propids as $propid) {
-                    if (in_array($propid,$this->groupby)) {
+                    if (in_array($propid,$this->object->groupby)) {
                         // Note: we'll process the *TIME_BY_* operations for the groupid
                         continue;
                     } elseif (empty($properties[$propid]->operation)) {
@@ -545,7 +552,7 @@ class VariableTableDataStore extends SQLDataStore
                         $propval[$propid] = array_shift($values);
                     }
                     $groupid = '';
-                    foreach ($this->groupby as $propid) {
+                    foreach ($this->object->groupby as $propid) {
                         // handle *TIME_BY_* operations here
                         if (!empty($propval[$propid]) && !empty($properties[$propid]->operation)) {
                             switch ($properties[$propid]->operation) {
@@ -578,7 +585,7 @@ class VariableTableDataStore extends SQLDataStore
                         $combo[$groupid] = $id;
                         // add this "itemid" to the list
                         $this->_itemids[] = $id;
-                        foreach ($this->groupby as $propid) {
+                        foreach ($this->object->groupby as $propid) {
                             // add the item to the value list for this property
                             $properties[$propid]->setItemValue($id,$propval[$propid]);
                         }
@@ -870,10 +877,10 @@ class VariableTableDataStore extends SQLDataStore
             $result = $stmt->executeQuery($bindvars);
 
             if ($result->first()) return;
-            $numitems = $result->getInt(1);
+            $this->object->numitems = $result->getInt(1);
             $result->close();
 
-            return $numitems;
+            return $this->object->numitems;
 
             // TODO: make sure this is portable !
         } elseif (count($this->where) > 0) {
@@ -900,10 +907,10 @@ class VariableTableDataStore extends SQLDataStore
             $result = $stmt->executeQuery();
             if (!$result->first()) return;
 
-            $numitems = $result->getInt(1);
+            $this->object->numitems = $result->getInt(1);
             $result->close();
 
-            return $numitems;
+            return $this->object->numitems;
 
         // here we grab everyting
         } else {
@@ -922,10 +929,10 @@ class VariableTableDataStore extends SQLDataStore
             $result = $stmt->executeQuery($propids);
             if (!$result->first()) return;
 
-            $numitems = $result->getInt(1);
+            $this->object->numitems = $result->getInt(1);
             $result->close();
 
-            return $numitems;
+            return $this->object->numitems;
         }
     }
 

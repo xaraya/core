@@ -21,8 +21,8 @@ sys::import('modules.dynamicdata.class.objects.interfaces');
 class DataObjectList extends DataObjectMaster implements iDataObjectList
 {
     public $itemids  = array();           // the list of item ids used in data stores
-    public $where    = '';
-    public $sort     = '';
+    public $where    = array();
+    public $sort     = array();
     public $groupby  = array();     // the list of property names to group by (if any) - see also isgrouped
     public $numitems = null;
     public $startnum = null;

@@ -123,4 +123,54 @@
         <xar:set name="foo">var_dump($items)</xar:set>
     
     </div>
+
+<!-- Define the fields we are using -->
+<!-- input fields -->
+a: <input name="a"/>
+b: <input name="b"/>
+
+<!-- output field -->
+c: <input name="c"/>
+
+<!-- trigger fields -->
+<xar:set name="options">
+    array(
+    array('id' => 1, 'name' =>1),
+    array('id' => 2, 'name' =>2),
+    )
+</xar:set>
+d: <xar:data-input type="dropdown" name="d" options="$options"/>
+e: <xar:data-input type="textbox" name="e"/>
+    
+<script type="text/javascript" src="http://localhost:8888/bermuda/html/code/modules/jquery/xartemplates/includes/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="http://localhost:8888/bermuda/html/code/modules/jquery/xartemplates/includes/jquery.field.js"></script>
+<script type="text/javascript" src="http://localhost:8888/bermuda/html/code/modules/jquery/xartemplates/includes/jquery.calculation.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(
+  function (){
+    // update the plug-in version
+    $("##idPluginVersion").text($.Calculation.version);
+function recalc(){$("[name^=c]").calc("net + tax",{net: $("input[name^=a]"),tax: $("input[name^=b]"),});}recalc();$("input[name^=a]").bind("keyup", recalc);$("input[name^=b]").bind("keyup", recalc);$("input[name^=d]").bind("change", recalc);$("input[name^=e]").bind("change", recalc);
+    }
+  );
+</script>
+
+    
+    <!-- the calculation is a + b -> c -->
+    <xar:calculation>
+        <xar:calc formula="net + tax" select="name" target="c">
+            <xar:calcvar name="net" select="name" field="a"/>
+            <xar:calcvar name="tax" select="name" field="b"/>
+            
+            <!-- the calculation is triggered by a keyup event in field a or b -->
+            <xar:calcbinding event="keyup" select="name" field="a"/>
+            <xar:calcbinding event="keyup" select="name" field="b"/>
+            
+            <!-- the calculation does not work with field d -->
+            <xar:calcbinding event="change" select="name" field="d"/>
+            <!-- it works with a change event in a textbox  -->
+            <xar:calcbinding event="change" select="name" field="e"/>
+        </xar:calc>
+    </xar:calculation>
 </xar:template>

@@ -12,7 +12,7 @@
                     <xar:data-label property="$properties[$name]" for="id"/>
                 </div>
                 <div class="xar-col">
-                    <xar:data-input property="$properties[$name]"/>
+                    <xar:data-input property="$properties[$name]" style="width: 150px"/>
                 </div>
             </div>
         </xar:foreach>
