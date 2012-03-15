@@ -502,7 +502,7 @@ class VariableTableDataStore extends SQLDataStore
                 }
             }
             */
-echo $query;
+
             // we got the query
             $stmt = $this->prepareStatement($query);
 
