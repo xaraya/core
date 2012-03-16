@@ -58,11 +58,6 @@ function privileges_admin_modifyconfig()
         break;
 
         case 'testing':
-             $testmask=trim(xarModVars::get('privileges', 'testmask'));
-             if (!isset($testmask) || empty($testmask)) {
-                 $testmask='All';
-             }
-             $data['testmask'] = $testmask;
              $settestergroup=xarModVars::get('privileges','testergroup');
              if (!isset($settestergroupp) || empty($settestergroup)) {
                  $settestergrouprole = xarFindRole('Administrators');

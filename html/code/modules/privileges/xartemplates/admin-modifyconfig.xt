@@ -399,7 +399,11 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <input type="text" name="testmask" id="testmask" value="#$testmask#"/>
+                            <xar:set name="value">trim(xarModVars::get('privileges', 'testmask'))</xar:set>
+                            <xar:if condition="empty($value)">
+                                <xar:set name="value">'All'</xar:set>
+                            </xar:if>
+                            <input type="text" name="testmask" id="testmask" value="#$value#"/>
                             <p class="xar-col dummy">
                                 Adding a mask name here will show only the checks involving that mask
                             </p>
