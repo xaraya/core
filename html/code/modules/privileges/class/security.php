@@ -526,7 +526,7 @@ class xarSecurity extends Object
                 if ($privilege['level'] >= $mask['level']) {
                     if($test && ($testmask == $mask['name'] || $testmask == "All")) {
                         echo "<font color='blue'>[" . $privilege['name'] . "] wins</font>. Mask includes privilege. Privilege level greater or equal. Continuing with other checks.. <br />";
-                        $msg = $privilege->getName()." WINS! ".
+                        $msg = $privilege['name'] ." WINS! ".
                             "Mask includes privilege. Privilege level ".
                             "greater or equal.\n";
                         xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
