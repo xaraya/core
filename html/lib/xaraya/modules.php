@@ -576,12 +576,12 @@ class xarMod extends Object implements IxarMod
 
         if ($type == 'theme') {
             $query = "SELECT items.regid, items.directory,
-                         items.id, items.state, items.name, items.configuration
+                         items.id, items.version, items.state, items.name, items.configuration
                   FROM   $table items
                   WHERE  items.name = ? OR items.directory = ?";
         } else {
             $query = "SELECT items.regid, items.directory,
-                         items.id, items.state, items.name
+                         items.id, items.version, items.state, items.name
                   FROM   $table items
                   WHERE  items.name = ? OR items.directory = ?";
         }
@@ -596,15 +596,15 @@ class xarMod extends Object implements IxarMod
 
         $modBaseInfo = array();
         if ($type == 'theme') {
-            list($regid,  $directory, $systemid, $state, $name, $configuration) = $result->getRow();
+            list($regid,  $directory, $systemid, $version, $state, $name, $configuration) = $result->getRow();
         } else {
-            list($regid,  $directory, $systemid, $state, $name) = $result->getRow();
+            list($regid,  $directory, $systemid, $version, $state, $name) = $result->getRow();
         }
         $result->Close();
 
         $modBaseInfo['regid'] = (int) $regid;
         $modBaseInfo['systemid'] = (int) $systemid;
-        $modBaseInfo['version'] = (int) $state;
+        $modBaseInfo['version'] = $version;
         $modBaseInfo['state'] = (int) $state;
         $modBaseInfo['name'] = $name;
         $modBaseInfo['directory'] = $directory;
