@@ -3,7 +3,7 @@
  * @package core
  * @subpackage structures
  * @category Xaraya Web Applications Framework
- * @version 2.2.0
+ * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -44,6 +44,7 @@ class Query
 //    public $bindpublics;
     public $bindstring;
     public $limits              = true;         // Flag that indicates whether the (SELECT) query uses limits
+    public $optimize            = true;         // Flag that indicates whether the query will be optimized
     public $distinctselect = false;
     public $distinctarray = array();
 
@@ -99,7 +100,7 @@ class Query
         if ($this->debugflag) $querystart = microtime(true);
 
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
-        if (empty($statement)) $this->optimize();
+        if (empty($statement) && ($this->optimize == true)) $this->optimize();
 
         $this->setstatement($statement);
 
@@ -1346,7 +1347,7 @@ class Query
     public function getrows()
     {
         if (isset($this->output) && $this->rowstodo == 0) return count($this->output);
-        $this->optimize();
+        if ($this->optimize == true) $this->optimize();
         if ($this->type == 'SELECT' && $this->rowstodo != 0 && $this->limits == 1) {
             if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
             if ($this->israwstatement) {
@@ -1597,6 +1598,10 @@ class Query
     public function setbinding($x=true)
     {
         $this->usebinding = $x;
+    }
+    public function setoptimize($x=true)
+    {
+        $this->optimize = $x;
     }
     public function setorop($x='OR')
     {
