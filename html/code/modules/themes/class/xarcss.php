@@ -235,6 +235,7 @@ class xarCSS extends Object
                 $tag['property'] = $property;
                 $property = xarVarPrepForOS($property);
                 // themes/theme/properties/property/style
+                
                 $paths[] = $themeDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
                 // themes/common/properties/property/style
                 $paths[] = $commonDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
@@ -249,12 +250,19 @@ class xarCSS extends Object
          // Debug display
          if (xarModVars::get('themes','debugmode') && 
          in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-             var_dump($paths);
+            foreach ($paths as $path) {
+                echo xarML('Available: ') . $path . "<br/>";                
+            }
          }
 
         foreach ($paths as $path) {
             if (!file_exists($path)) continue;
             $filePath = $path;
+            // Debug display
+             if (xarModVars::get('themes','debugmode') && 
+             in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+                echo xarML('Chosen: ') . $path . "<br/>";
+             }
             break;
         }
         if (empty($filePath)) return;
