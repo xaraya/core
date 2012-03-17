@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:set name="already_passed">false</xar:set>
+    <xar:set name="current_id">0</xar:set>
+    <xar:set name="lastindent">0</xar:set>
+    <xar:foreach in="$nodes" value="$node">
+        <xar:set name="nodeid">$node->id</xar:set>
+        <xar:set name="nodename">$node->name</xar:set>
+        <xar:set name="childobject">$node->child_object</xar:set>
+        <xar:set name="level">$node->getLevel()</xar:set>
+        <xar:if condition="empty($nodeid) or $nodeid ne $nodename">
+            <xar:if condition="isset($value) AND is_array($value) AND in_array($nodeid,$value)">
+            <option style="padding-left: #$level#em;" value="#$nodeid#" selected="selected">
+                #$nodename#
+            </option>
+            <xar:else />
+                <option style="padding-left: #$level#em;" value="#$nodeid#">
+                    #$nodename#
+                </option>
+            </xar:if>
+        <xar:elseif condition="in_array($nodeid,$value)"/>
+            <option style="padding-left: #$level#em;" selected="selected">
+                #$nodename#
+            </option>
+        <xar:else />
+            <option style="padding-left: #$level#em;">
+                #$nodename#
+            </option>
+        </xar:if>
+        <xar:if condition="!empty($childobject)"> 
+            <xar:set name="childlist">DataObjectMaster::getObjectList(array('name' => $childobject))</xar:set>
+            <xar:set name="childitems">$childlist->getItems(array('sort' => 'name'))</xar:set>
+            <xar:foreach in="$childitems" value="$childitem">
+                <xar:set name="fulllink">$nodeid . "." . $childitem['id']</xar:set>
+                <xar:if condition="in_array($fulllink,$value)">
+                    <xar:set name="level1">$level + 1</xar:set>
+                    <option style="padding-left: #$level1#em;" value="#$fulllink#" selected="selected">
+                        <!-- assume we might not have a name field for the moment -->
+                        <xar:if condition="!empty($childitem.name)"> 
+                            #$childitem.name#
+                        <xar:else />
+                            Item #$childitem.id#
+                        </xar:if>
+                    </option>
+                <xar:else />
+                    <xar:set name="level1">$level + 1</xar:set>
+                    <option style="padding-left: #$level1#em;" value="#$fulllink#">
+                        <!-- assume we might not have a name field for the moment -->
+                        <xar:if condition="!empty($childitem.name)"> 
+                            #$childitem.name#
+                        <xar:else />
+                            Item #$childitem.id#
+                        </xar:if>
+                    </option>
+                </xar:if>
+            </xar:foreach>
+        </xar:if>
+    </xar:foreach>
+</xar:template>

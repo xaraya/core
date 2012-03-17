@@ -51,6 +51,12 @@ class MultiSelectProperty extends SelectProperty
         // do NOT call parent validateValue here - it will always fail !!!
         //if (!parent::validateValue($value)) return false;
 
+        // If we allow values not in the options, accept the current value and return
+        if ($this->validation_override) {
+            $this->value = $value;
+            return true;
+        }
+
         $value = $this->getSerializedValue($value);
         $validlist = array();
         $options = $this->getOptions();

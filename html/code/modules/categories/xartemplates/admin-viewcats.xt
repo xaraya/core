@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>View Categories</h2>
+        <div style="margin: auto;">
+            <xar:var name="title">New Category</xar:var>
+            <div style="text-align: right">
+                <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
+                    <a href="#xarModURL('categories','admin','new')#" title="#$title#">
+                        <img src="#xarTplGetImage('icons/'.'add.png', 'base')#" width="16" height="16" alt="#$title#"/>
+                    </a>
+                <xar:else />
+                    <a href="#xarModURL('categories','admin','new')#" title="#$title#">
+                        New Category
+                    </a>
+                </xar:if>
+            </div>
+            <xar:data-input type="categorymenu" contextmodule="base"/>
+            <div style="clear: both">
+                <xar:if condition="empty($options)">
+                    <div align="center">
+                        <h3>No base category chosen</h3><br />
+                    </div>
+                <xar:else />
+                    <xar:data-input type="categorytree" options="$options" startnum="$startnum" items_per_page="$items_per_page"/>
+                </xar:if>
+            </div>
+        </div>
+    </div>
+</xar:template>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="!empty($catdescr)">
+    <div class="xar-mod-head"><span class="xar-mod-title">#$catdescr#<xar:if condition="!empty($cathooks) and !empty($cathooks['pubsub'])"> #$cathooks['pubsub']#</xar:if></span></div>
+    </xar:if>
+
+    <table border="0" cellpadding="1" cellspacing="0">
+    <tr>
+        <td valign="top">
+            #$cattitle# :
+        </td>
+        <td valign="top">
+            <xar:loop id="trails" name="$cattrails">
+                <xar:loop id="catitems" name="$loop:trails:item['catitems']">
+    <!--
+    The 'baseflag' variable allows you to skip certain categories in the trail :
+      #$loop:catitems:item['baseflag']# = 0 : top level
+      #$loop:catitems:item['baseflag']# = 1 : above the base category
+      #$loop:catitems:item['baseflag']# = 2 : base category
+      #$loop:catitems:item['baseflag']# = 3 : below the base category
+      #$loop:catitems:item['baseflag']# = 4 : current category
+    -->>
+                    #$loop:catitems:item['catjoin']#
+                    <xar:if condition="empty($loop:catitems:item['catlink'])">
+                        #$loop:catitems:item['catlabel']#
+                    <xar:else />
+                        <a href="#$loop:catitems:item['catlink']#">#$loop:catitems:item['catlabel']#</a>
+                    </xar:if>
+                </xar:loop>
+                <xar:if condition="!empty($loop:trails:item['catcount'])">
+                    (#$loop:trails:item['catcount']#)
+                </xar:if>
+                <xar:if condition="!empty($loop:trails:item['viewall']) and ((!empty($caticons) and count($caticons) gt 0) or (!empty($catlines) and count($catlines) gt 0))">
+                    [<a href="#$loop:trails:item['viewall']#">include children</a>]
+                </xar:if>
+                <br />
+            </xar:loop>
+        </td>
+    </tr>
+    </table>
+
+    <xar:if condition="!empty($catimage)">
+        <br />
+        <table border="0" width="95%">
+            <tr>
+                <td align="center" valign="top">
+                    <img src="#$catimage#" border="0" alt="#$catname#"/>
+                </td>
+            </tr>
+        </table>
+    </xar:if>
+
+    <xar:if condition="!empty($cathooks)">
+        <br />
+        <!-- TODO: do something specific with pubsub, hitcount, comments etc. -->
+        <xar:foreach in="$cathooks" key="$hookmodule" value="$hookoutput">
+            <xar:if condition="$hookmodule ne 'pubsub'">
+                #$hookoutput#
+            </xar:if>
+        </xar:foreach>
+    </xar:if>
+
+    <xar:if condition="!empty($caticons) and count($caticons) gt 0">
+        <br />
+        <table border="0" cellpadding="8" cellspacing="0" width="95%">
+                <xar:loop id="icons" name="$caticons">
+            <tr>
+                    <td align="center" valign="middle">
+                        <a href="#$loop:icons:item['catlink']#"><img src="#$loop:icons:item['catimage']#" border="0" alt="#$loop:icons:item['catlabel']#"/><br />#$loop:icons:item['catlabel']#</a>
+                        <xar:if condition="!empty($loop:icons:item['catcount'])">
+                            (#$loop:icons:item['catcount']#)
+                        </xar:if>
+                    </td>
+                    <xar:if condition="$loop:icons:item['catnum'] % 2 eq 0">
+                    </xar:if>
+            </tr>
+                </xar:loop>
+        </table>
+    </xar:if>
+
+    <xar:if condition="!empty($catlines) and count($catlines) gt 0">
+        <br />
+        <table border="0" cellpadding="8" cellspacing="0">
+            <tr>
+                <td valign="top">
+                <xar:loop id="catlines" name="$catlines">
+                    #$loop:catlines:item['beforetags']#
+                    <a href="#$loop:catlines:item['catlink']#">#$loop:catlines:item['catlabel']#</a>
+                    <xar:if condition="!empty($loop:catlines:item['catcount'])">
+                        (#$loop:catlines:item['catcount']#)
+                    </xar:if>
+                    <xar:if condition="!empty($loop:catlines:item['catdescr'])">
+                        : #$loop:catlines:item['catdescr']#
+                    </xar:if>
+                    #$loop:catlines:item['aftertags']#
+                </xar:loop>
+                </td>
+            </tr>
+        </table>
+    </xar:if>
+
+    <br />
+</xar:template>

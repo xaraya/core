@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="nodesize">$nodes->size()</xar:set>
+    <xar:if condition="!isset($size)">
+        <xar:if condition="$nodesize gt 5">
+            <xar:set name="size">5</xar:set>
+        <xar:else />
+            <xar:set name="size">$nodesize</xar:set>
+        </xar:if>
+    </xar:if>
+
+    <xar:if condition="isset($onchange)">
+      <xar:set name="evt_change">$onchange</xar:set>
+    <xar:else/>
+      <xar:set name="evt_change">'return true;'</xar:set>
+    </xar:if>
+    <xar:if condition="!isset($style)">
+      <xar:set name="style">''</xar:set>
+    </xar:if>
+
+    <xar:set name="selectname">$name . "[categories][" . $index . "][]"</xar:set>
+    <xar:set name="selectid">$id . "_categories_" . $index</xar:set>
+
+    <xar:if condition="$select_type eq 2">
+        <xar:if condition="!empty($single)">
+            <xar:if condition="($nodesize gt 0) OR !empty($allowempty)">
+                <select name="#$selectname#" id="#$selectid#" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
+                    <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
+                </select>
+            <xar:else />
+                Options not specified in the configuration
+            </xar:if>
+        <xar:else/>
+            <xar:if condition="($nodesize gt 0) OR !empty($allowempty)">
+                <select name="#$selectname#" id="#$selectid#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
+                    <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
+                </select>
+            <xar:else />
+                Options not specified in the configuration
+            </xar:if>
+        </xar:if>
+    <xar:elseif condition="$select_type eq 3"/>
+        <xar:if condition="($nodesize gt 0) OR !empty($allowempty)">
+            <xar:javascript scope="module" module="base" filename="multicombo.js"/>
+            <xar:if condition="empty($style)"><xar:set name="style">'min-width:10em;'</xar:set></xar:if>
+            <table class="xar-displayinline">
+                <thead>
+                    <tr>
+                        <!-- the first two cells are hidden if js is not available -->
+                        <th id="_show_1" style="display: none;">Available Options</th>
+                        <th id="_show_2" style="display: none;">&#160;</th>
+                        <!-- the last cell holds the real multi-select and is always visible -->
+                        <th>Selected Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="_show_3" style="display: none;">
+                            <!-- the hidden select, will be populated and enabled by js if available -->
+                            <select name="_dummy" id="left_select" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#" disabled="disabled"><option></option>
+                            </select>     
+                        </td>
+                        <td id="_show_4" style="text-align: center;display: none;">
+                            <!-- the hidden buttons, will be enabled by js if available -->
+                            <p><input id="right_move" type="button" value="&gt;" disabled="disabled"/></p>
+                            <p><input id="right_move_all" type="button" value="&gt;&gt;" disabled="disabled"/></p>
+                            <p><input id="left_move" type="button" value="&lt;" disabled="disabled"/></p>
+                            <p><input id="left_move_all" type="button" value="&lt;&lt;" disabled="disabled"/></p> 
+                        </td>
+                        <td>
+                            <select name="#$selectname#" id="#$selectid#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
+                                <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
+                            </select>                        
+                        </td>                    
+                    </tr>                
+                </tbody>            
+            </table>
+            <script type="text/javascript">//<![CDATA[
+            var multi_#$id# = new multiCombo( {     // var name is the id of this object
+                id: 'multi_#$id#',                  // the var name we're using  
+                left: 'left_select',                // id of the left select element
+                right: '#$selectid#',                     // id of the right select element (dd id)
+                make_visible: ['_show_1', '_show_2', '_show_3', '_show_4']  // element ids to make visible 
+            } );
+            multi_#$id#.init();
+            //]]></script>
+        <xar:else />
+            Options not specified in the configuration.
+        </xar:if>  
+
+    <xar:else/>
+    </xar:if>
+</xar:template>
