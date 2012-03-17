@@ -155,7 +155,7 @@
                 </div>
                 <div class="xar-col">
 	                <xar:if condition="!empty($hookobservers)">
-	                    <ul class="xar-form-container-after">                    
+	                    <ul>                    
 	                        <xar:foreach in="$hookobservers" key="$event" value="$info">
 	                            <li>#$event#</li>
 	                        </xar:foreach>
