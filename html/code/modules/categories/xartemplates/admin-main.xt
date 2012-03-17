@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+       <img src="#xarTplGetImage('categories.png')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
+        <h2>
+            Overview
+        </h2>
+        <h3>
+                What is it?
+        </h3>
+            <p><em>Categories is a Xaraya Utility Module.</em>
+                It is currently responsible for accomplishing these tasks:
+                <ul>
+                    <li>Allows the use of site wide categories for content modules to use as needed.</li>
+                </ul>
+            </p>
+            <h3>
+                The Admin interface
+           </h3>
+            <p>From the menu, you have two choices.  'Add a New Category', and 'View Categories'.
+                <ul>
+                    <li>Add a new category -- Allows you to add a new category to your site categories tree.</li>
+                    <li>View Categories -- This area allows you to view the entire categorization tree, allowing a easy way to modify it.</li>
+                </ul>
+            </p>
+            <h3>
+                Included Blocks
+            </h3>
+            <p>
+                The Navigation block allows navigation of any module using the category hooks.
+            </p>
+             <h3>
+                Included Hooks
+        </h3>
+            <p>
+                Categories provides all the hooks necessary to allow categories to be available within other modules.
+            </p>
+            </div>
+            <div class="xar-mod-foot xar-align-center xar-padding-thick">
+        <p>
+            Extended information about this module can be found here. [modules module]
+        </p>
+    </div>
+</xar:template>

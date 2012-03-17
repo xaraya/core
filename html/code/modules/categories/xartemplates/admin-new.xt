@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>
+            Create New Category
+        </h2>
+        <form action="#xarModURL('categories','admin','create',array())#" method="post" enctype="application/x-www-form-urlencoded">
+            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+            <xar:for iter="$i++" start="$i=1" test="$i le $repeat">
+                <fieldset class="xar-norm">
+                    <legend>
+                        <strong>
+                        Category&#160;#$i#</strong>
+                    </legend>
+                    <xar:set name="object">$objects[$i]</xar:set>
+                    <xar:data-form object="$object"/>
+                    <xar:if condition="!empty($hooks)">
+                        <xar:foreach in="$hooks" key="$module" value="$output">#$output#</xar:foreach>
+                    </xar:if>
+                </fieldset>
+            </xar:for>
+            <fieldset class="xar-norm">
+                <div class="xar-form-input-wrapper">
+                    <div class="xar-form-container-after">
+                        <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                        <input type="hidden" name="itemtype" value="#$itemtype#"/>
+                        <input type="submit" value="#xarML('Add')#"/>
+                        <!--
+                            <input type="reset" value="#xarML('Reset')#"/>
+                        -->
+                    </div>
+                </div>
+            </fieldset>
+            <xar:if condition="xarModVars::get('categories','allowbatch')">
+                <fieldset class="xar-norm">
+                    <legend>
+                        <strong>
+                            Batch Processing
+                        </strong>
+                    </legend>
+                    <div class="xar-form-input-wrapper">
+                        <label for="repeat" class="xar-form-label help" title="#xarML('Input and save a set of categories at the same time.')#">
+                            Category forms to display
+                        </label>
+                        <input class="xar-form-textlong" type="text" name="repeat" id="repeat" value="#$repeat#"/>
+                    </div>
+                </fieldset>
+                <fieldset class="xar-norm">
+                    <div class="xar-form-input-wrapper">
+                        <div class="xar-form-container-after">
+                            <input type="submit" name="reassign" id="reassign" size="3" value="#xarML('Submit')#"/>
+                            <!--
+                                <input type="reset" value="#xarML('Reset')#"/>
+                            -->
+                        </div>
+                    </div>
+                </fieldset>
+            </xar:if>
+        </form>
+    </div>
+</xar:template>

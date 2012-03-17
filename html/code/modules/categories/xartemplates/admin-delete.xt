@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="module" file="forms"/>
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>
+            Delete Category
+        </h2>
+        <form class="xar-formwidget" action="#xarModURL('categories','admin','delete')#" method="post" enctype="application/x-www-form-urlencoded">
+            <fieldset>
+                <legend>
+                    <strong>
+                        <xar:ml>
+                            <xar:mlstring>
+                                Delete category '#(1)'?
+                            </xar:mlstring>
+                            <xar:mlvar>
+                                #$name#
+                            </xar:mlvar>
+                        </xar:ml>
+                    </strong>
+                </legend>
+                <input type="hidden" name="ok" id="ok" value="1"/>
+                <input type="hidden" name="cid" id="cid" value="#$cid#"/>
+                <input type="hidden" name="authid" id="authid" value="#$authkey#"/>
+                <div>
+                    <xar:ml>
+                        <xar:mlstring>This category has #(1) sub-categories and #(2) module items assigned to them.</xar:mlstring>
+                        <xar:mlvar>#$numcats#</xar:mlvar>
+                        <xar:mlvar>#$numitems#</xar:mlvar>
+                    </xar:ml>
+                </div>
+                <div>
+                    <xar:var name="label">Delete</xar:var>
+                    <xar:button type="submit" name="confirm" label="$label"/>
+                    &#160;
+                    <xar:var name="label">Cancel</xar:var>
+                    <xar:button type="cancel" label="$label"/>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</xar:template>

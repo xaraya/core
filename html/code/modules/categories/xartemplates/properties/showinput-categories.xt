@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="!empty($size)">
+        <xar:set name="sizestring">'size="'.$size.'"'</xar:set>
+    <xar:else/>
+        <xar:set name="sizestring">''</xar:set>
+    </xar:if>
+
+    <xar:if condition="!empty($multiple)">
+        <xar:set name="multiplestring">'multiple="multiple"'</xar:set>
+    <xar:else/>
+        <xar:set name="multiplestring">''</xar:set>
+    </xar:if>
+
+    <xar:if condition="isset($onchange)">
+      <xar:set name="evt_change">$onchange</xar:set>
+    <xar:else/>
+      <xar:set name="evt_change">'return true;'</xar:set>
+    </xar:if>
+    <xar:if condition="!isset($style)">
+        <xar:set name="style">''</xar:set>
+    </xar:if>
+
+    <xar:set name="index">1</xar:set>
+
+    <xar:foreach in="$trees" value="$nodes">
+        <input type="hidden" name="#$name#[base_category][#$index#]" value="#$base_category[$index]#"/>
+        <input type="hidden" name="#$name#[module_id]" value="#$categories_module_id#"/>
+        <input type="hidden" name="#$name#[itemtype]" value="#$categories_itemtype#"/>
+        
+        <xar:set name="subdata">
+            array(
+                'id' => $id,
+                'name' => $name,
+                'value' => isset($value[$index]) ? $value[$index] : 0,
+                'index' => $index,
+                'nodes' => $nodes,
+                'select_type' => $select_type[$index],
+                'tabindex' => $tabindex,
+                'evt_change' => $evt_change,
+                'style' => $style,
+            )
+        </xar:set>
+
+        <xar:if condition="$select_type[$index] eq 1">
+            <xar:template module="categories" file="categories-select" subdata="$subdata"/>
+        <xar:else/>
+            <xar:template module="categories" file="categories-multiselect" subdata="$subdata"/>
+        </xar:if>
+    
+        <xar:if condition="$layout eq 'vertical'">
+            <br />
+        </xar:if>
+        <xar:set name="index">$index+1</xar:set>
+    </xar:foreach>
+
+    <xar:if condition="!empty($show_edit) and !empty($current_id)">
+        <xar:sec id="showEdit" mask="EditCategories" catch="false" component="All" instance="All:$current_id">
+            [&#160;<a href="#xarModURL('categories','admin','modify',array('cid' => $current_id))#">
+            Edit
+            </a> ]
+        </xar:sec>
+    </xar:if>
+    
+    <xar:template file="dataproperty_additions" module="base"/>
+</xar:template>
