@@ -189,9 +189,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function setSort($sort)
     {
+        $this->sort = array();  // FIXME: this should not be necessary
+        
         if(is_array($sort)) {
             $this->sort = $sort;
-        } else {
+        } elseif (!empty($sort)) {
             $this->sort = explode(',',$sort);
         }
         foreach($this->sort as $criteria) {
