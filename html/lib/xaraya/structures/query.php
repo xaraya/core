@@ -525,6 +525,12 @@ class Query
                                   'field2' => $field2,
                                   'op' => 'REGEXP'),$active);
     }
+    public function between($field1,$field2,$active=1)
+    {
+        return $this->addcondition(array('field1' => $field1,
+                                  'field2' => $field2,
+                                  'op' => 'BETWEEN'),$active);
+    }
 
     public function peq($field1,$field2)      {return $this->eq($field1,$field2,0);}
     public function pne($field1,$field2)      {return $this->ne($field1,$field2,0);}
@@ -733,7 +739,9 @@ class Query
             if ($condition['op'] == '!=') return $condition['field1'] . " IS NOT NULL";
         }
 
-        if (in_array(strtolower($condition['op']),array('in','not in'))) {
+        $expression_flag = !is_array($condition['field2']) && strtolower(substr($condition['field2'],0,5)) == 'expr:';
+        
+        if (!$expression_flag && in_array(strtolower($condition['op']),array('in','not in'))) {
             if (is_array($condition['field2'])) {
                 $elements = array();
                 if ($this->usebinding) {
@@ -746,12 +754,27 @@ class Query
                 }
 
                 $sqlfield = '(' . implode(',',$elements) . ')';
-            }
-            else {
+            } else {
                 $sqlfield = '(' . $condition['field2'] . ')';
             }
+        } elseif (!$expression_flag && in_array(strtolower($condition['op']),array('between'))) {
+            if (is_array($condition['field2'])) {
+                $elements = array();
+                if ($this->usebinding) {
+                    foreach ($condition['field2'] as $element) {
+                        $this->bindvars[] = $element;
+                        $elements[] = '?';
+                    }
+                } else {
+                    foreach ($condition['field2'] as $element) $elements[] = $this->dbconn->qstr($element);
+                }
+
+                $sqlfield = $elements[0] . ' AND ' . $elements[1];
+            } else {
+                throw new Exception(xarML('Improper syntax for BETWEEN'));
+            }
         } else {
-            if (strtolower(substr($condition['field2'],0,5)) == 'expr:') {
+            if ($expression_flag) {
                 $condition['field2'] = trim(substr($condition['field2'],5));
                 $sqlfield = $condition['field2'];
             } elseif (gettype($condition['field2']) == 'string' && !mb_eregi('JOIN', $condition['op'])) {
