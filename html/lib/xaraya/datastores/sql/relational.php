@@ -360,7 +360,9 @@ class RelationalDataStore extends SQLDataStore
         if (!in_array($this->object->primary, $this->object->fieldlist)) {
             $q->addfield($this->object->properties[$this->object->primary]->source . ' AS ' . $this->object->primary);
         }
-        $q->setorder($this->object->properties[$this->object->primary]->source);
+        // CHECKME: the following line makes sure we order the items at least according to ID
+        // Is this a good idea?
+        $q->addorder($this->object->properties[$this->object->primary]->source);
         
         // Run the query
         if (!$q->run()) throw new Exception(xarML('Query failed'));
