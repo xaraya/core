@@ -147,4 +147,40 @@
     <xsl:call-template name="xar:condition"/>
   </xsl:template>
 
+  <xsl:template match="xar:setorder">
+    <xsl:text>$__q->setorder(</xsl:text>
+    <xsl:text>$__object->properties['</xsl:text>
+    <xsl:value-of select="@property"/>
+    <xsl:text>']->source,</xsl:text>
+    <xsl:choose>
+      <xsl:when test="@sort">
+        <xsl:text>'</xsl:text>
+        <xsl:value-of select="@sort"/>
+        <xsl:text>'</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>'ASC'</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>);</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="xar:addorder">
+    <xsl:text>$__q->addorder(</xsl:text>
+    <xsl:text>$__object->properties['</xsl:text>
+    <xsl:value-of select="@property"/>
+    <xsl:text>']->source,</xsl:text>
+    <xsl:choose>
+      <xsl:when test="@sort">
+        <xsl:text>'</xsl:text>
+        <xsl:value-of select="@sort"/>
+        <xsl:text>'</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>'ASC'</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>);</xsl:text>
+  </xsl:template>
+
 </xsl:stylesheet>
