@@ -388,9 +388,6 @@ class CelkoPositionProperty extends DataProperty
     // Given a left and right link id, define a point of insertion to the left or right of either
     private function find_point_of_insertion($inorout, $rightorleft, $left, $right)
     {
-        $rightorleft = strtolower ($rightorleft);
-        $inorout = strtolower ($inorout);
-
         switch($rightorleft) {
            case "RIGHT":
                $point_of_insertion = $right;
