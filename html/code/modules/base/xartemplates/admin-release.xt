@@ -7,6 +7,9 @@
             <p>
                 Please note we no longer support package bundles (core, base, full). Instead you can get all you need and more at the repositories below.
             </p>
+            <p>
+                The core releases at Sourceforge are considered "official" releases. The nightly core releases are snapshots of the latest code and are not considered fully tested. For modules, properties and blocks (the last two only for Jamaica) the project makes no such distinction as we cannot guarantee testing of all these components.
+            </p>
             <h4>Xaraya Jamaica (2.x) Releases</h4>
             <table>
                 <tr>
