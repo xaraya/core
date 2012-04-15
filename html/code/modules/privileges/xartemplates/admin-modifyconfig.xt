@@ -359,7 +359,7 @@
                 <fieldset>
                     <legend>Testing Settings</legend>
                     <p class="xar-note">
-                        These settings let a designated tester see security check messages on a live site.
+                        The options activated below display messages visible to the debug administrators, which are defined <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">here</a>.
                     </p>
                     <div class="xar-row">
                         <div class="xar-col">
@@ -405,7 +405,7 @@
                             </xar:if>
                             <input type="text" name="testmask" id="testmask" value="#$value#"/>
                             <p class="xar-col dummy">
-                                Adding a mask name here will show only the checks involving that mask
+                                &#160;Adding a mask name here will show only the checks involving that mask
                             </p>
                         </div>
                 </div>
