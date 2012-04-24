@@ -328,6 +328,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
          *       of Xaraya classes someday, we could initialize this earlier, e.g. in bootstrap ?
          */
     /* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ? */
+        sys::import('xaraya.caching');
         if (xarCache::$variableCacheIsEnabled) {
             sys::import('xaraya.autoload');
             xarAutoload::initialize();
