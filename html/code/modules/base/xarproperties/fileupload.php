@@ -385,10 +385,10 @@ class FileUploadProperty extends DataProperty
                     return '';
                 }
                 // if the uploads module is hooked (to be verified and set by the calling module)
-                if (!empty($this->initialization_basedirectory) && file_exists($this->initialization_basedirectory . '/'. $value) && is_file($this->initialization_basedirectory . '/'. $value)) {
-                    $data['basedir'] = $this->initialization_basedirectory;
+                if (file_exists($value) && is_file($value)) {
+                    $data['file_OK'] = true;
                 } else {
-                    $data['basedir'] = null; // something went wrong here
+                    $data['file_OK'] = false; // something went wrong here
                 }
             }
             return parent::showOutput($data);
