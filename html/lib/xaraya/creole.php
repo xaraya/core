@@ -104,10 +104,14 @@ class xarDB extends Creole
     // Overridden
     public static function getConnection($dsn, $flags = 0)
     {
-        $conn = parent::getConnection($dsn, $flags);
-        if (!isset($conn)) {
-            return;
+        try {
+            $conn = parent::getConnection($dsn, $flags);
+        } catch (Exception $e) {
+            throw $e;
         }
+//        if (!isset($conn)) {
+//            return;
+//        }
         self::setFirstDSN($conn->getDSN());
         self::setFirstFlags($conn->getFlags());
         self::$connections[] =& $conn;

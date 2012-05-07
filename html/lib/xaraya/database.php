@@ -79,7 +79,11 @@ function &xarDBNewConn(array $args = null)
     //         place. Unfortunately, that is just not portable.
     $flags |= xarDB::COMPAT_ASSOC_LOWER;
 
-    $conn = xarDB::getConnection($dsn,$flags); // cached on dsn hash, so no worries
+    try {
+        $conn = xarDB::getConnection($dsn,$flags); // cached on dsn hash, so no worries
+    } catch (Exception $e) {
+        die("Connection error: a database connection could not be established");
+    }
     xarLogMessage("New connection created, now serving " . xarDB::$count . " connections");
     return $conn;
 }

@@ -1260,7 +1260,7 @@ class DataObjectMaster extends Object
                     $parts = explode('.',$right);
                     $table = trim($parts[0]);
                     // We should actually sort by the objects primary key, but lets forgoe that for now
-                    $this->dataquery->setorder($table . ".id");
+//                    $this->dataquery->setorder($table . ".id");
                 }
             } catch (Exception $e) {
                 if (isset($left)) echo 'Bad object relation: ' . $left . ' or ' . $right;
