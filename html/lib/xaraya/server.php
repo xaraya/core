@@ -365,7 +365,7 @@ class xarServer extends Object
                         $find = $matches[2];
                         // ... replace it in-line if it's not empty
                         if (!empty($v)) {
-                            $request = preg_replace("#(&|\?)".preg_quote($find)."#","$k=$v",$request);
+                            $request = preg_replace("#(&|\?)".preg_quote($find)."#","$1$k=$v",$request);
 
                             // ... or remove it otherwise
                         } elseif ($matches[1] == '?') {
