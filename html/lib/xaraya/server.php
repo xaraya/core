@@ -365,11 +365,11 @@ class xarServer extends Object
                         $find = $matches[2];
                         // ... replace it in-line if it's not empty
                         if (!empty($v)) {
-                            $request = preg_replace("§(&|\?)".preg_quote($find)."§","$k=$v",$request);
+                            $request = preg_replace("#(&|\?)".preg_quote($find)."#","$k=$v",$request);
 
                             // ... or remove it otherwise
                         } elseif ($matches[1] == '?') {
-                            $request = preg_replace("§\?".preg_quote($find)."(&|)§",'?',$request);
+                            $request = preg_replace("#\?".preg_quote($find)."(&|)#",'?',$request);
                         } else {
                             $request = str_replace("&$find",'',$request);
                         }
