@@ -17,7 +17,7 @@
     </xar:if>
 
     <xar:if condition="!empty($previousvalue)">
-        <input type="hidden" name="#$name#_previous_value" value="#$value#"/>
+        <input type="hidden" name="previous_value_#$name#" value="#$value#"/>
     </xar:if>
     
     <xar:if condition="empty($rows) OR (!empty($rows) AND (count($options) le $rows))">
