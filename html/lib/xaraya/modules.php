@@ -887,7 +887,7 @@ class xarMod extends Object implements IxarMod
                 xarMod::apiLoad($modName, $modType);
             } else {
                 try {
-                    return self::privateLoad($modName, $modType);
+                    xarMod::load($modName,$modType);
                 } catch (Exception $e) {
                     return xarController::$response->NotFound();
                 }
