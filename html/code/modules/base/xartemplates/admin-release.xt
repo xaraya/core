@@ -10,6 +10,51 @@
             <p>
                 The core releases at Sourceforge are considered "official" releases. The nightly core releases are snapshots of the latest code and are not considered fully tested. For modules, properties and blocks (the last two only for Jamaica) the project makes no such distinction as we cannot guarantee testing of all these components.
             </p>
+            <h4>Xaraya Bermuda (2.x) Releases</h4>
+            <table>
+                <tr>
+                    <th style="width: 300px">
+                        What
+                    </th>
+                    <th style="width: 300px">
+                        Where
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        The Xaraya core and core modules
+                    </td>
+                    <td>
+                        <a href="http://sourceforge.net/projects/xaraya/files/">Bermuda Core</a>
+                        <br/>OR<br/>
+                        <a href="http://mt.xaraya.com/download/nightly/core/">Bermuda Core (Nightly)</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Non-core Modules
+                    </td>
+                    <td>
+                        <a href="http://mt.xaraya.com/download/nightly/modules/bermuda/">Bermuda Modules (Nightly)</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Standalone Properties
+                    </td>
+                    <td>
+                        Bermuda runs Jamaica Properties (see below)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Standalone Blocks
+                    </td>
+                    <td>
+                        Bermuda runs Jamaica Blocks (see below)
+                    </td>
+                </tr>
+            </table>
             <h4>Xaraya Jamaica (2.x) Releases</h4>
             <table>
                 <tr>
