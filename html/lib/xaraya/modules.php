@@ -886,7 +886,11 @@ class xarMod extends Object implements IxarMod
             if ($funcType == 'api') {
                 xarMod::apiLoad($modName, $modType);
             } else {
-                xarMod::load($modName,$modType);
+                try {
+                    return self::privateLoad($modName, $modType);
+                } catch (Exception $e) {
+                    return xarController::$response->NotFound();
+                }
             }
             // let's check for that function again to be sure
             if (!function_exists($modFunc)) {
@@ -946,11 +950,7 @@ class xarMod extends Object implements IxarMod
      */
     static function load($modName, $modType = 'user')
     {
-        try {
-            return self::privateLoad($modName, $modType);
-        } catch (Exception $e) {
-            return xarController::$response->NotFound();
-        }
+        return self::privateLoad($modName, $modType);
     }
 
     /**
