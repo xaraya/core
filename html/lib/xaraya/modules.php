@@ -946,7 +946,11 @@ class xarMod extends Object implements IxarMod
      */
     static function load($modName, $modType = 'user')
     {
-        return self::privateLoad($modName, $modType);
+        try {
+            return self::privateLoad($modName, $modType);
+        } catch (Exception $e) {
+            return xarController::$response->NotFound();
+        }
     }
 
     /**
