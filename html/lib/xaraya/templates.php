@@ -539,11 +539,24 @@ class xarTpl extends Object
                 $paths[] = "$basepath/$tplPart/$canTemplateName.xt";
         }
 
+         // Debug display
+         if (xarModVars::get('themes','debugmode') && 
+         in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+            foreach ($paths as $path) {
+                echo xarML('Location: ') . $path . "<br/>";                
+            }
+         }
+
         $sourceFileName = '';
         if (!empty($paths)) {
             foreach ($paths as $file) {
                 if (!file_exists($file)) continue;
                 $sourceFileName = $file;
+                // Debug display
+                 if (xarModVars::get('themes','debugmode') && 
+                 in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+                    echo xarML('Chosen: ') . $file . "<br/>";
+                 }
                 break;
             }
         }
