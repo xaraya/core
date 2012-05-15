@@ -1944,7 +1944,12 @@ class Query
         }
 
         // Run the insert on this table
-        if (!$q->run()) return false;
+        try {
+            $q->run();
+        } catch (Exception $e) {
+            $msg = $q->tostring() . "<br/>" . $e->getMessage();
+            throw new Exception($msg);
+        }
                 
         // Try to retrieve the record we just inserted
         $dbInfo = $this->dbconn->getDatabaseInfo();
