@@ -1877,7 +1877,7 @@ class Query
             // Run an insert
             $theselinks = isset($linkfields[$thistable['alias']]) ? $linkfields[$thistable['alias']] : array();
             try {
-            $fieldsdone = $this->partialinsert($thistable,$fieldstodo,$theselinks);
+                $fieldsdone = $this->partialinsert($thistable,$fieldstodo,$theselinks);
             } catch (Exception $e) {throw $e;}
             
             // We've run the insert for this table, remove it from the list of todos
@@ -1947,7 +1947,7 @@ class Query
         try {
             $q->run();
         } catch (Exception $e) {
-            $msg = $q->tostring() . "<br/>" . $e->getMessage();
+            $msg = 'Failed to execute: ' . $q->tostring();
             throw new Exception($msg);
         }
                 
