@@ -170,8 +170,10 @@ class RelationalDataStore extends SQLDataStore
         try {
             $q->run();
         } catch (Exception $e) {
-            echo xarML('The following query failed:<br/>');
+            echo xarML('The following notional query failed:<br/>');
             $q->qecho();
+            echo xarML('<br/>The specific message was:<br/>');
+            $e->getMessage();
             exit;
         }
 
