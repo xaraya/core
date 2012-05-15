@@ -1869,7 +1869,7 @@ class Query
                 }
             }
             // Sanity check:do we still have our primary table?
-            if (!isset($tablestodo[$primarytable])) throw new Exception('Primary table no longer available!');
+            if (!isset($tablestodo[$primarytable])) die('Primary table no longer available!');
             
             // If we found nothing we must be almost finished: run an insert on the primary table
             if (empty($thistable)) $thistable = $tablestodo[$primarytable];
