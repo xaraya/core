@@ -113,7 +113,9 @@ class Query
             if ($this->type == 'INSERT' && count($this->tables) > 1) {
                 if (empty($this->primary))
                     throw new Exception(xarML('Cannot execute a multitable insert without a primary field defined'));
-                $this->multiinsert(); 
+                try {
+                    $this->multiinsert(); 
+                } catch (Exception $e) {throw $e}
                 return true;
             }
 
