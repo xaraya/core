@@ -1876,7 +1876,10 @@ class Query
 
             // Run an insert
             $theselinks = isset($linkfields[$thistable['alias']]) ? $linkfields[$thistable['alias']] : array();
-            $fieldsdone = $this->partialinsert($thistable,$fieldstodo,$theselinks);            
+            try {
+            $fieldsdone = $this->partialinsert($thistable,$fieldstodo,$theselinks);
+            } catch (Exception $e) {throw $e;}
+            
             // We've run the insert for this table, remove it from the list of todos
             unset($tablestodo[$thistable['alias']]);
             $tablequeue = array();
