@@ -115,7 +115,7 @@ class Query
                     throw new Exception(xarML('Cannot execute a multitable insert without a primary field defined'));
                 try {
                     $this->multiinsert(); 
-                } catch (Exception $e) {throw $e}
+                } catch (Exception $e) {throw $e;}
                 return true;
             }
 
