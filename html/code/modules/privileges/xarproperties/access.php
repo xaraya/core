@@ -100,8 +100,8 @@ class AccessProperty extends DataProperty
             $data['showfailure'] = 1;
         }
         
-        $data['groupoptions'] = $this->getgroupoptions();
-        $data['leveloptions'] = $this->getleveloptions();
+        if (!isset($data['groupoptions'])) $data['groupoptions'] = $this->getgroupoptions();
+        if (!isset($data['leveloptions'])) $data['leveloptions'] = $this->getleveloptions();
         $data['failureoptions'] = $this->getfailureoptions();
 
         return parent::showOutput($data);
