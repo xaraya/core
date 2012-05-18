@@ -41,7 +41,7 @@
     <div class="xar-mod-page-body">
         <fieldset>
             <legend>#$object:label# Properties:</legend>
-            <xar:if condition="!empty($object->withupload)">
+            <xar:if condition="!empty($object->upload)">
                 <xar:set name="enctype">'multipart/form-data'</xar:set>
             <xar:else />
                 <xar:set name="enctype">'application/x-www-form-urlencoded'</xar:set>
