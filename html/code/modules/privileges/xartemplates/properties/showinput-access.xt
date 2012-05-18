@@ -22,7 +22,11 @@
                 </label>
             </div>
             <div class="xar-col">
-                <xar:data-input type="multiselect" name="$propname" options="$groupoptions" value="$group"/>
+                <xar:if condition="$group_multiselect">
+                    <xar:data-input type="multiselect" name="$propname" options="$groupoptions" value="$group"/>
+                <xar:else/>
+                    <xar:data-input type="grouplist" name="$propname" options="$groupoptions" value="$group"/>
+                </xar:if>
             </div>
         </div>
         <div class="xar-row">

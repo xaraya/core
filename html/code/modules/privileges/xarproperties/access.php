@@ -23,7 +23,7 @@ class AccessProperty extends DataProperty
     public $level       = 100;
     public $failure     = 0;
     public $myself      = -6;
-    public $multiselect = false;
+    public $initialization_group_multiselect = false;
 
     public $module      = 'All';
     public $component   = 'All';
@@ -40,13 +40,19 @@ class AccessProperty extends DataProperty
     public function checkInput($name = '', $value = null)
     {
         $dropdown = DataPropertyMaster::getProperty(array('name' => 'dropdown'));        
-        $multiselect = DataPropertyMaster::getProperty(array('name' => 'multiselect'));        
         $value = array();
         
         // Check the group
-        $multiselect->options = $this->getgroupoptions();
-        if (!$multiselect->checkInput($name . '_group')) return false;
-        $value['group'] = $multiselect->value;
+        if ($this->initialization_group_multiselect) {
+            $multiselect = DataPropertyMaster::getProperty(array('name' => 'multiselect'));        
+            $multiselect->options = $this->getgroupoptions();
+            if (!$multiselect->checkInput($name . '_group')) return false;
+            $value['group'] = $multiselect->value;
+        } else {
+            $dropdown->options = $this->getgroupoptions();
+            if (!$dropdown->checkInput($name . '_group')) return false;
+            $value['group'] = $dropdown->value;
+        }
         
         // Check the level
         $dropdown->options = $this->getleveloptions();
@@ -64,6 +70,9 @@ class AccessProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
+        if (isset($data['group_multiselect']))   $this->initialization_group_multiselect = $data['group_multiselect'];
+        $data['group_multiselect'] = $this->initialization_group_multiselect;
+
         if (isset($data['value'])) {
             $this->setValue($data['value']);
         } else {
@@ -86,6 +95,9 @@ class AccessProperty extends DataProperty
 
     public function showOutput(Array $data = array())
     {
+        if (isset($data['group_multiselect']))   $this->initialization_group_multiselect = $data['group_multiselect'];
+        $data['group_multiselect'] = $this->initialization_group_multiselect;
+
         if (isset($data['value'])) {
             $this->setValue($data['value']);
         } else {
@@ -172,7 +184,11 @@ class AccessProperty extends DataProperty
     public function check(Array $data=array(), $exclusive=1)
     {
         if ($this->checkRealm($data)) {
-            if (isset($data['group']))     $this->group = unserialize($data['group']);
+            if ($this->initialization_group_multiselect) {
+                if (isset($data['group']))     $this->group = unserialize($data['group']);
+            } else {
+                if (isset($data['group']))     $this->group = $data['group'];
+            }
             if ($exclusive) {
                 // We check the level only if group access is disabled
                 if (!empty($this->group)) {
@@ -219,7 +235,24 @@ class AccessProperty extends DataProperty
     {
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
         $access = false;
-        foreach ($this->group as $group) {
+        if ($this->initialization_group_multiselect) {
+            foreach ($this->group as $group) {
+                if ($group == $this->myself) {
+                    $access = true;
+                } elseif ($group == $anonID) {
+                    if (!xarUserIsLoggedIn()) $access = true;
+                } elseif ($group == -$anonID) {
+                    if (xarUserIsLoggedIn()) $access = true;
+                } elseif ($group) {
+                    $rolesgroup = xarRoles::getRole($group);
+                    $thisuser = xarCurrentRole();
+                    if (is_object($rolesgroup)) {
+                        if ($thisuser->isAncestor($rolesgroup)) $access = true;
+                    } 
+                }
+                if ($access) break;
+            }
+        } else {
             if ($group == $this->myself) {
                 $access = true;
             } elseif ($group == $anonID) {
@@ -233,9 +266,27 @@ class AccessProperty extends DataProperty
                     if ($thisuser->isAncestor($rolesgroup)) $access = true;
                 } 
             }
-            if ($access) break;
         }
         return $access;
     }
+}
+
+sys::import('modules.dynamicdata.class.properties.interfaces');
+
+class AccessPropertyInstall extends AccessProperty implements iDataPropertyInstall
+{
+
+    public function install(Array $data=array())
+    {
+        $dat_file = sys::code() . 'modules/privileges/xardata/privileges_access_configurations-dat.xml';
+        $data = array('file' => $dat_file);
+        try {
+            $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+        } catch (Exception $e) {
+            //
+        }
+        return true;
+    }
+    
 }
 ?>
