@@ -51,6 +51,8 @@ class AccessProperty extends DataProperty
             $multiselect->validation_override = $this->validation_override;
             if (!$multiselect->checkInput($name . '_group')) return false;
             $value['group'] = $multiselect->value;
+            // The override is only meant for the groups
+            $multiselect->validation_override = false;
         } else {
             $dropdown->options = $this->getgroupoptions();
             $dropdown->validation_override = $this->validation_override;
