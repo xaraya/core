@@ -48,11 +48,6 @@ class SelectProperty extends DataProperty
     {
         if (!parent::validateValue($value)) return false;
 
-        // check if we allow values other than those in the options
-        if ($this->validation_override) {
-            return true;
-        }
-        
         $options = $this->getOptions();
         if (!empty($options) && ($this->display_rows <= $options)) {
             $found = false;
@@ -71,7 +66,10 @@ class SelectProperty extends DataProperty
         if ($isvalid) {
             return true;
         }
-        
+        // check if we allow values other than those in the options
+        if ($this->validation_override) {
+            return true;
+        }
         if (!empty($this->validation_override_invalid)) {
             $this->invalid = xarML($this->validation_override_invalid);
         } else {
