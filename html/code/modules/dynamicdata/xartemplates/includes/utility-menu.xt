@@ -52,6 +52,7 @@
                     <a href="#xarModURL('dynamicdata','admin','meta')#" class="#$linkclass#">Table Browser</a>
                 </li>
             </xar:sec>
+            <!--
             <xar:sec mask="AdminDynamicData" catch="false">
                 <xar:set name="dummy">$activetab=='relations'?xarTpl::setPageTitle('Object Mapping'):''</xar:set>
                 <xar:set name="tabclass">$activetab=='relations'?'xar-tab-active':'xar-tab'</xar:set>
@@ -60,6 +61,7 @@
                     <a href="#xarModURL('dynamicdata','admin','relations')#" class="#$linkclass#">Object Mapping</a>
                 </li>
             </xar:sec>
+            -->
             <!--
             <xar:sec mask="AdminDynamicData" catch="false">
                 <xar:set name="dummy">$activetab=='migrate'?xarTpl::setPageTitle('Migrate'):''</xar:set>
