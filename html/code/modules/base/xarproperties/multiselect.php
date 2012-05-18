@@ -51,26 +51,24 @@ class MultiSelectProperty extends SelectProperty
         // do NOT call parent validateValue here - it will always fail !!!
         //if (!parent::validateValue($value)) return false;
 
-        // check if we allow values other than those in the options
-        if ($this->validation_override) {
-            return true;
-        }
-        
         $value = $this->getSerializedValue($value);
         $validlist = array();
         $options = $this->getOptions();
         foreach ($options as $option) {
             array_push($validlist,$option['id']);
         }
-        foreach ($value as $val) {
-            if (!in_array($val,$validlist)) {
-                if (!empty($this->validation_override_invalid)) {
-                    $this->invalid = xarML($this->validation_override_invalid);
-                } else {
-                    $this->invalid = xarML('unallowed selection: #(1) for #(2)', $val, $this->name);
+        // check if we allow values other than those in the options
+        if (!$this->validation_override) {        
+            foreach ($value as $val) {
+                if (!in_array($val,$validlist)) {
+                    if (!empty($this->validation_override_invalid)) {
+                        $this->invalid = xarML($this->validation_override_invalid);
+                    } else {
+                        $this->invalid = xarML('unallowed selection: #(1) for #(2)', $val, $this->name);
+                    }
+                    $this->value = null;
+                    return false;
                 }
-                $this->value = null;
-                return false;
             }
         }
         $this->value = serialize($value);
