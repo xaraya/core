@@ -24,6 +24,8 @@ class AccessProperty extends DataProperty
     public $failure     = 0;
     public $myself      = -6;
     public $initialization_group_multiselect = false;
+    public $validation_override              = false;
+
 
     public $module      = 'All';
     public $component   = 'All';
@@ -46,12 +48,16 @@ class AccessProperty extends DataProperty
         if ($this->initialization_group_multiselect) {
             $multiselect = DataPropertyMaster::getProperty(array('name' => 'multiselect'));        
             $multiselect->options = $this->getgroupoptions();
+            $multiselect->validation_override = $this->validation_override;
             if (!$multiselect->checkInput($name . '_group')) return false;
             $value['group'] = $multiselect->value;
         } else {
             $dropdown->options = $this->getgroupoptions();
+            $dropdown->validation_override = $this->validation_override;
             if (!$dropdown->checkInput($name . '_group')) return false;
             $value['group'] = $dropdown->value;
+            // The override is only meant for the groups
+            $dropdown->validation_override = false;
         }
         
         // Check the level
