@@ -132,7 +132,7 @@ class AccessProperty extends DataProperty
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
         $options = xarRoles::getgroups();
         $firstlines = array(
-//            array('id' => 0, 'name' => xarML('No requirement')),
+            array('id' => 0, 'name' => xarML('No requirement')),
             array('id' => $this->myself, 'name' => xarML('Current User')),
             array('id' => $anonID, 'name' => xarML('Users not logged in')),
             array('id' => -$anonID, 'name' => xarML('Users logged in')),
@@ -191,12 +191,17 @@ class AccessProperty extends DataProperty
 
     public function check(Array $data=array(), $exclusive=1)
     {
+        // We need to be in the correct realm
         if ($this->checkRealm($data)) {
-            if ($this->initialization_group_multiselect) {
-                if (isset($data['group']))     $this->group = unserialize($data['group']);
-            } else {
-                if (isset($data['group']))     $this->group = $data['group'];
+            // Check if this is a multiselect property by testing if the group is unserialized
+            try {
+                if (isset($data['group'])) $this->group = unserialize($data['group']);
+                $this->initialization_group_multiselect = true;
+            } catch (Exception $e) {
+                if (isset($data['group'])) $this->group = $data['group'];
+                $this->initialization_group_multiselect = false;
             }
+
             if ($exclusive) {
                 // We check the level only if group access is disabled
                 if (!empty($this->group)) {
