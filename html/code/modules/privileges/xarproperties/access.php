@@ -23,6 +23,7 @@ class AccessProperty extends DataProperty
     public $level       = 100;
     public $failure     = 0;
     public $myself      = -6;
+    public $allallowed  = array('Administrators');
     public $initialization_group_multiselect = false;
     public $validation_override              = false;
 
@@ -200,8 +201,10 @@ class AccessProperty extends DataProperty
 
     public function check(Array $data=array(), $exclusive=1)
     {
-        // Administrators always have access
-        if (xarIsParent('Administrators', xarUserGetVar('uname'))) return true;
+        // Some groups always have access
+        foreach ($allallowed as $allowed) {
+            if (xarIsParent($allowed, xarUserGetVar('uname'))) return true;        
+        }
         
         // We need to be in the correct realm
         if ($this->checkRealm($data)) {
