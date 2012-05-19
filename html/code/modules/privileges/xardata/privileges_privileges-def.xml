@@ -7,6 +7,8 @@
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
+  <datastore>relational</datastore>
+  <sources>a:1:{s:10:"privileges";a:2:{i:0;s:14:"xar_privileges";i:1;s:8:"internal";}}</sources>
   <access>a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:5:{i:0;i:5;i:1;i:2;i:2;i:1;i:3;i:3;i:4;i:4;}s:6:"update";a:1:{i:0;i:2;}s:6:"create";a:1:{i:0;i:2;}s:6:"delete";a:1:{i:0;i:2;}s:6:"config";a:1:{i:0;i:2;}}";}</access>
   <config>a:0:{}</config>
   <isalias>true</isalias>
@@ -16,7 +18,7 @@
       <label>ID</label>
       <type>itemid</type>
       <defaultvalue></defaultvalue>
-      <source>xar_privileges.id</source>
+      <source>privileges.id</source>
       <status>65</status>
       <seq>1</seq>
       <configuration></configuration>
@@ -26,7 +28,7 @@
       <label>Name</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_privileges.name</source>
+      <source>privileges.name</source>
       <status>33</status>
       <seq>2</seq>
       <configuration></configuration>
@@ -36,7 +38,7 @@
       <label>Realm</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_privileges.realm_id</source>
+      <source>privileges.realm_id</source>
       <status>33</status>
       <seq>3</seq>
       <configuration></configuration>
@@ -46,7 +48,7 @@
       <label>Module</label>
       <type>module</type>
       <defaultvalue></defaultvalue>
-      <source>xar_privileges.module_id</source>
+      <source>privileges.module_id</source>
       <status>33</status>
       <seq>4</seq>
       <configuration>a:2:{s:10:&quot;validation&quot;;s:8:&quot;systemid&quot;;s:8:&quot;override&quot;;s:1:&quot;1&quot;;}</configuration>
@@ -56,7 +58,7 @@
       <label>Component</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_privileges.component</source>
+      <source>privileges.component</source>
       <status>33</status>
       <seq>5</seq>
       <configuration></configuration>
@@ -66,7 +68,7 @@
       <label>Instance</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_privileges.instance</source>
+      <source>privileges.instance</source>
       <status>33</status>
       <seq>6</seq>
       <configuration></configuration>
@@ -76,7 +78,7 @@
       <label>Level</label>
       <type>dropdown</type>
       <defaultvalue></defaultvalue>
-      <source>xar_privileges.level</source>
+      <source>privileges.level</source>
       <status>33</status>
       <seq>7</seq>
       <configuration>0,No Access;100,Overview;200,Read;300,Comment;400,Moderate;500,Edit;600,Add;700,Delete;800,Adminster;-1,Invalid</configuration>
@@ -86,7 +88,7 @@
       <label>Description</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_privileges.description</source>
+      <source>privileges.description</source>
       <status>65</status>
       <seq>8</seq>
       <configuration></configuration>
@@ -96,7 +98,7 @@
       <label>Type</label>
       <type>dropdown</type>
       <defaultvalue>2</defaultvalue>
-      <source>xar_privileges.itemtype</source>
+      <source>privileges.itemtype</source>
       <status>65</status>
       <seq>8</seq>
       <configuration>0,Base;1,Privilege;3,Mask</configuration>
