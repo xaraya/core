@@ -206,7 +206,7 @@ class AccessProperty extends DataProperty
     public function check(Array $data=array(), $exclusive=1)
     {
         // Some groups always have access
-        foreach ($allallowed as $allowed) {
+        foreach ($this->allallowed as $allowed) {
             if (xarIsParent($allowed, xarUserGetVar('uname'))) return true;        
         }
         
