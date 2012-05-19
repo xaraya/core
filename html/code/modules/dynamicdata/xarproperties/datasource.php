@@ -27,6 +27,7 @@ class DataSourceProperty extends SelectProperty
     public $desc       = 'Data Source';
     public $reqmodules = array('dynamicdata');
 
+    public $include_reference   = 1;
     public $validation_override = true;
 
     function __construct(ObjectDescriptor $descriptor)
@@ -42,19 +43,8 @@ class DataSourceProperty extends SelectProperty
             if (!empty($firstline)) $this->options = array_merge($options,$this->options);
             return $this->options;
         }
-        
-        $sources = DataStoreFactory::getDataSources();
-        if (isset($sources) && is_array($sources)) {
-            foreach ($sources as $source) {
-                $options[] = array('id' => $source, 'name' => $source);
-            }
-        }
-
-        // Save options only when we're dealing with an object list
-        if (!empty($this->_items)) {
-            $this->options = $options;
-        }
-        return $options;
+        $sources = is_object($this->objectref) ? $this->objectref->datasources : array();
+        return DataStoreFactory::getDataSources($sources);
     }
 }
 ?>

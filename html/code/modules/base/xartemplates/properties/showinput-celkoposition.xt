@@ -21,18 +21,24 @@
             <select name="#$name#_reference_id" id="#$name#_reference_id">
                 <xar:for start="$i = 0" test="$i lt count($items)" iter="$i++">
                     <xar:if condition="$items[$i]['left'] eq $item['left_id']-1">
+                        <!-- The present item is the first child -->
                         <xar:set name="position">4</xar:set>
                         <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
-                        <xar:elseif condition="$items[$i]['right'] eq $item['left_id']-1"/>
+                    <xar:elseif condition="$items[$i]['right'] eq $item['left_id']-1"/>
+                        <!-- The present item is the next sibling -->
                         <xar:set name="position">2</xar:set>
                         <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
-                        <xar:else />
+                    <xar:elseif condition="$items[$i]['left'] eq $item['right_id']+1"/>
+                        <!-- The present item is the previous sibling -->
+                        <xar:set name="position">1</xar:set>
+                        <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
+                    <xar:else />
                         <option value="#$items[$i]['id']#">#$items[$i]['slash_separated']#</option>
                     </xar:if>
                 </xar:for>
             </select>
         </div>
-        <!-->The position needs to be set after items select because There is no position which we can have a selected item that will work in all cases-->
+        <!-- The position needs to be set after items select because There is no position which we can have a selected item that will work in all cases-->
         <div class="xar-form-input-wrapper">
             <label for="#$name#_position" class="xar-form-label help" title="#xarML('Position of this item.')#">
                 Position
