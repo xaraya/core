@@ -93,11 +93,13 @@ class AccessProperty extends DataProperty
             $data['showfailure'] = 1;
         }
         
-        try {
-            unserialize($data['group']);
-            $data['group_multiselect'] = true;
-        } catch(Exception $e) {
-            $data['group_multiselect'] = false;
+        if (!isset($data['group_multiselect'])) {
+            try {
+                unserialize($data['group']);
+                $data['group_multiselect'] = true;
+            } catch(Exception $e) {
+                $data['group_multiselect'] = false;
+            }
         }
         
         if (!isset($data['groupoptions'])) $data['groupoptions'] = $this->getgroupoptions();
@@ -123,11 +125,13 @@ class AccessProperty extends DataProperty
             $data['showfailure'] = 1;
         }
         
-        try {
-            unserialize($data['group']);
-            $data['group_multiselect'] = true;
-        } catch(Exception $e) {
-            $data['group_multiselect'] = false;
+        if (!isset($data['group_multiselect'])) {
+            try {
+                unserialize($data['group']);
+                $data['group_multiselect'] = true;
+            } catch(Exception $e) {
+                $data['group_multiselect'] = false;
+            }
         }
         
         if (!isset($data['groupoptions'])) $data['groupoptions'] = $this->getgroupoptions();
