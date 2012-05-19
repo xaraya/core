@@ -19,7 +19,7 @@ class AccessProperty extends DataProperty
     public $desc        = 'Access';
     public $reqmodules  = array('privileges');
 
-    public $group       = array();
+    public $group       = array(0);
     public $level       = 100;
     public $failure     = 0;
     public $myself      = -6;
@@ -78,9 +78,6 @@ class AccessProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
-        if (isset($data['group_multiselect']))   $this->initialization_group_multiselect = $data['group_multiselect'];
-        $data['group_multiselect'] = $this->initialization_group_multiselect;
-
         if (isset($data['value'])) {
             $this->setValue($data['value']);
         } else {
@@ -94,6 +91,14 @@ class AccessProperty extends DataProperty
         } else {
             $data['showfailure'] = 1;
         }
+        
+        try {
+            unserialize($data['group']);
+            $data['group_multiselect'] = true;
+        } catch(Exception $e) {
+            $data['group_multiselect'] = false;
+        }
+        
         if (!isset($data['groupoptions'])) $data['groupoptions'] = $this->getgroupoptions();
         if (!isset($data['leveloptions'])) $data['leveloptions'] = $this->getleveloptions();
         $data['failureoptions'] = $this->getfailureoptions();
@@ -103,9 +108,6 @@ class AccessProperty extends DataProperty
 
     public function showOutput(Array $data = array())
     {
-        if (isset($data['group_multiselect']))   $this->initialization_group_multiselect = $data['group_multiselect'];
-        $data['group_multiselect'] = $this->initialization_group_multiselect;
-
         if (isset($data['value'])) {
             $this->setValue($data['value']);
         } else {
@@ -118,6 +120,13 @@ class AccessProperty extends DataProperty
             $data['failure'] = $value['failure'];
         } else {
             $data['showfailure'] = 1;
+        }
+        
+        try {
+            unserialize($data['group']);
+            $data['group_multiselect'] = true;
+        } catch(Exception $e) {
+            $data['group_multiselect'] = false;
         }
         
         if (!isset($data['groupoptions'])) $data['groupoptions'] = $this->getgroupoptions();
