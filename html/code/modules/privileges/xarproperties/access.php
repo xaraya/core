@@ -200,6 +200,9 @@ class AccessProperty extends DataProperty
 
     public function check(Array $data=array(), $exclusive=1)
     {
+        // Administrators always have access
+        if (xarIsParent('Administrators', xarUserGetVar('uname'))) return true;
+        
         // We need to be in the correct realm
         if ($this->checkRealm($data)) {
             // Check if this is a multiselect property by testing if the group is unserialized
