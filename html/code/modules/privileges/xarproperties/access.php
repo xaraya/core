@@ -278,14 +278,14 @@ class AccessProperty extends DataProperty
                 if ($access) break;
             }
         } else {
-            if ($group == $this->myself) {
+            if ($this->group == $this->myself) {
                 $access = true;
-            } elseif ($group == $anonID) {
+            } elseif ($this->group == $anonID) {
                 if (!xarUserIsLoggedIn()) $access = true;
-            } elseif ($group == -$anonID) {
+            } elseif ($this->group == -$anonID) {
                 if (xarUserIsLoggedIn()) $access = true;
-            } elseif ($group) {
-                $rolesgroup = xarRoles::getRole($group);
+            } elseif ($this->group) {
+                $rolesgroup = xarRoles::getRole($this->group);
                 $thisuser = xarCurrentRole();
                 if (is_object($rolesgroup)) {
                     if ($thisuser->isAncestor($rolesgroup)) $access = true;
