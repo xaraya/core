@@ -24,7 +24,9 @@ function base_adminapi_getmodulesettings(Array $args=array())
         $object->properties[$name]->source = 'module variables: ' . $args['module'];
     }
     $object->datastores = array();
-    $object->getDatastores();
+    $object->getDatastore();
+    
+    // Store the module id in the object's field for now
     return $object;
 }
 ?>
