@@ -109,8 +109,9 @@ class FilePickerProperty extends SelectProperty
             $id = $name;
             if (!$this->display_fullname) $name = substr($name, 0, strlen($name) - strlen($dir->getExtension()) - 1);
             if(!empty($this->validation_matches) && (strpos($this->validation_matches,$name) === false)) continue;
-            $options[] = array('id' => $id, 'name' => $name);
+            $options[$name] = array('id' => $id, 'name' => $name);
         }
+        ksort($options);
 
         // Save options only when we're dealing with an object list
         if (!empty($this->_items)) {

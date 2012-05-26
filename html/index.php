@@ -66,6 +66,10 @@ function xarMain()
     $SiteSlogan = xarModVars::get('themes', 'SiteSlogan');
     xarTpl::setPageTitle(xarVarPrepForDisplay($SiteSlogan));
 
+    // Check the Installation
+    if ((xarController::$request->getModule() != 'installer') && (xarSystemVars::get(sys::CONFIG, 'DB.Installation') != 3))
+        die('Xaraya was not properly installed. The exact error cannot be diagnosed.<br/>Please rerun the installer. If you have important data in your database please make a backup first.');
+
     // Theme Override
     xarVarFetch('theme','str:1:',$themeName,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
     if (!empty($themeName)) {

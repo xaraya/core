@@ -58,4 +58,12 @@ $systemConfiguration['Log.Filename'] = 'xarayalog.txt';
  *       in php4.4 and php5.x versions or the bug in the zend optimizer
  */
  $systemConfiguration['Exception.ErrorLevel'] = E_ALL;
+
+/* Database Installation Status
+ * This tracks the installer's progress
+ * 0 = not installed
+ * 1 = incomplete
+ * 3 = complete
+ */
+ $systemConfiguration['DB.Installation'] = '0';
 ?>

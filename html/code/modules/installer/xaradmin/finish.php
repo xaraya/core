@@ -39,6 +39,10 @@ function installer_admin_finish()
     xarConfigVars::set(null, 'Site.BL.CompressWhitespace', 1);
     xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
 
+    // Declare the installation a success
+    $variables = array('DB.Installation' => 3);
+    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
+    
     switch ($returnurl) {
         case ('base'):
             xarController::redirect(xarModURL('base','admin','modifyconfig'));

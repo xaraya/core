@@ -886,7 +886,11 @@ class xarMod extends Object implements IxarMod
             if ($funcType == 'api') {
                 xarMod::apiLoad($modName, $modType);
             } else {
-                xarMod::load($modName,$modType);
+                try {
+                    xarMod::load($modName,$modType);
+                } catch (Exception $e) {
+                    return xarController::$response->NotFound();
+                }
             }
             // let's check for that function again to be sure
             if (!function_exists($modFunc)) {

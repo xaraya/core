@@ -63,11 +63,18 @@ class MultiSelectProperty extends SelectProperty
         foreach ($options as $option) {
             array_push($validlist,$option['id']);
         }
-        foreach ($value as $val) {
-            if (!in_array($val,$validlist)) {
-                $this->invalid = xarML('selection: #(1)', $this->name);
-                $this->value = null;
-                return false;
+        // check if we allow values other than those in the options
+        if (!$this->validation_override) {        
+            foreach ($value as $val) {
+                if (!in_array($val,$validlist)) {
+                    if (!empty($this->validation_override_invalid)) {
+                        $this->invalid = xarML($this->validation_override_invalid);
+                    } else {
+                        $this->invalid = xarML('unallowed selection: #(1) for #(2)', $val, $this->name);
+                    }
+                    $this->value = null;
+                    return false;
+                }
             }
         }
         $this->value = serialize($value);

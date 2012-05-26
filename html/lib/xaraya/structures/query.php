@@ -523,6 +523,12 @@ class Query
                                   'field2' => $field2,
                                   'op' => 'REGEXP'),$active);
     }
+    public function between($field1,$field2,$active=1)
+    {
+        return $this->addcondition(array('field1' => $field1,
+                                  'field2' => $field2,
+                                  'op' => 'BETWEEN'),$active);
+    }
 
     public function peq($field1,$field2)
     {
@@ -772,6 +778,22 @@ class Query
             }
             else {
                 $sqlfield = '(' . $condition['field2'] . ')';
+            }
+        } elseif (in_array(strtolower($condition['op']),array('between'))) {
+            if (is_array($condition['field2'])) {
+                $elements = array();
+                if ($this->usebinding) {
+                    foreach ($condition['field2'] as $element) {
+                        $this->bindvars[] = $element;
+                        $elements[] = '?';
+                    }
+                } else {
+                    foreach ($condition['field2'] as $element) $elements[] = $this->dbconn->qstr($element);
+                }
+
+                $sqlfield = $elements[0] . ' AND ' . $elements[1];
+            } else {
+                throw new Exception(xarML('Improper syntax for BETWEEN'));
             }
         } else {
             if (gettype($condition['field2']) == 'string' && !mb_eregi('JOIN', $condition['op'])) {
