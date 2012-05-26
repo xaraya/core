@@ -101,6 +101,7 @@ class AccessProperty extends DataProperty
                 $data['group_multiselect'] = false;
             }
         }
+        if (!isset($value['group'])) $value['group'] = $data['group_multiselect'] ? array(0) : 0;
         
         if (!isset($data['groupoptions'])) $data['groupoptions'] = $this->getgroupoptions();
         if (!isset($data['leveloptions'])) $data['leveloptions'] = $this->getleveloptions();
@@ -133,6 +134,7 @@ class AccessProperty extends DataProperty
                 $data['group_multiselect'] = false;
             }
         }
+        if (!isset($value['group'])) $value['group'] = $data['group_multiselect'] ? array(0) : 0;
         
         if (!isset($data['groupoptions'])) $data['groupoptions'] = $this->getgroupoptions();
         if (!isset($data['leveloptions'])) $data['leveloptions'] = $this->getleveloptions();
