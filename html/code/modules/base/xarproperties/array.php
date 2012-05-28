@@ -58,9 +58,9 @@ class ArrayProperty extends DataProperty
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        $this->tplmodule = 'base';
-        $this->template = 'array';
-        $this->filepath   = 'modules/base/xarproperties';
+        $this->tplmodule      = 'base';
+        $this->template       = 'array';
+        $this->filepath       = 'modules/base/xarproperties';
     }
 
     public function checkInput($name = '', $value = null)
