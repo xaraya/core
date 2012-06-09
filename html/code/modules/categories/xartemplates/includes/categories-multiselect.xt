@@ -70,7 +70,7 @@
                         </td>
                         <td>
                             <select name="#$selectname#" id="#$selectid#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
-                                <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
+                                <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value, 'include_self' => $include_self)"/>
                             </select>                        
                         </td>                    
                     </tr>                
