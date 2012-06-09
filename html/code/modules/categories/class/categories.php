@@ -191,6 +191,20 @@
                     $this->treedata[$row['name']] = $nodedata;
                 }
             }
+            if ($node->id == 0) {
+                $vr = array(
+                      'id'           => 0,
+                      'parent'       => 0,
+                      'name'         => 'Root',
+                      'description'  => 'A virtual root node',
+                      'indentation'  => 0,
+                      'image'        => '',
+                      'child_object' => '',
+                      'left'         => 1,
+                      'right'        => 2,
+                );
+                $this->treedata['VirtualRoot'] = $vr;
+            }
             parent::createnodes($node);
         }
     }
