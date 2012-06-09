@@ -51,6 +51,16 @@
       <seq>4</seq>
       <configuration>a:4:{s:14:"display_layout";s:7:"default";s:26:"validation_file_extensions";s:20:"gif,jpg,jpeg,png,bmp";s:28:"initialization_basedirectory";s:44:"sys::code() . 'modules/categories/xarimages'";s:24:"initialization_firstline";s:15:",-- No Image --";}</configuration>
     </property>
+    <property name="template">
+      <id>3119</id>
+      <label>Template</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>xar_categories.template</source>
+      <status>34</status>
+      <seq>7</seq>
+      <configuration>a:4:{s:14:"display_layout";s:7:"default";s:26:"validation_file_extensions";s:20:"gif,jpg,jpeg,png,bmp";s:28:"initialization_basedirectory";s:44:"sys::code() . 'modules/categories/xarimages'";s:24:"initialization_firstline";s:15:",-- No Image --";}</configuration>
+    </property>
     <property name="child_categories">
       <id>3121</id>
       <label>Child Categories</label>
@@ -58,7 +68,7 @@
       <defaultvalue></defaultvalue>
       <source>xar_categories.child_object</source>
       <status>34</status>
-      <seq>5</seq>
+      <seq>8</seq>
       <configuration>a:5:{s:14:"display_layout";s:7:"default";s:25:"initialization_store_prop";s:4:"name";s:24:"initialization_refobject";s:7:"objects";s:27:"initialization_display_prop";s:4:"name";s:24:"initialization_firstline";s:29:",No external child categories";}</configuration>
     </property>
     <property name="position">
@@ -68,7 +78,7 @@
       <defaultvalue></defaultvalue>
       <source>dummy</source>
       <status>34</status>
-      <seq>6</seq>
+      <seq>9</seq>
       <configuration>a:6:{s:14:"display_layout";s:7:"default";s:25:"initialization_celkotable";s:14:"xar_categories";s:24:"initialization_celkoname";s:4:"name";s:29:"initialization_celkoparent_id";s:9:"parent_id";s:28:"initialization_celkoright_id";s:8:"right_id";s:27:"initialization_celkoleft_id";s:7:"left_id";}</configuration>
     </property>
   </properties>
