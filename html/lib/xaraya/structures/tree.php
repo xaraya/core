@@ -121,20 +121,22 @@ class Tree extends Object implements ITree
         $lastidsdone = array();
         if (!is_object($inputdata)) $inputdata = new ArrayObject($inputdata);
 
-        // Get the toplevel elements..can there be more than 1?
+        // Identify the top level node.; it is always a single node
         for($iterator = $inputdata->getIterator();$iterator->valid();$iterator->next()) {
             $thiskey = $iterator->key();
             $thisvalue = $iterator->current();
-            if ($thisvalue['id'] == $node->id) {
+            
+            if ((int)$thisvalue['id'] == $node->id) {
                 $thisvalue['nodelevel'] = 0;
                 $thisvalue['children'] = array();
                 $this->treedata[$node->id] = $thisvalue;
                 $lastidsdone[] = $thisvalue['id'];
                 unset($tempdata[$thiskey]);
+                break;
             }
         }
 
-        // Now do the other elements
+        // Now go through the other elements and assign level etc.
         $lastcount = count($tempdata);
         $nodelevel = 0;
         while (true) {
@@ -144,6 +146,7 @@ class Tree extends Object implements ITree
             for($iterator = $inputdata->getIterator();$iterator->valid();$iterator->next()) {
                 $thiskey = $iterator->key();
                 $thisvalue = $iterator->current();
+
                 if (in_array($thisvalue['parent'],$lastidsdone)) {
                     $thisvalue['nodelevel'] = $nodelevel;
                     $thisvalue['children'] = array();
