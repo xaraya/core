@@ -71,15 +71,20 @@ class ArrayProperty extends DataProperty
         $this->fieldname = $name;
         if (!isset($value)) {
             // Get the number of columns and rows
-            $columncount = count($this->display_column_definition[0]);
+            if (isset($this->display_column_definition['value'])) {
+                $displayconfig = $this->display_column_definition['value'];
+            } else {
+                $displayconfig = $this->display_column_definition;
+            }
+            $columncount = count($displayconfig[0]);
             if (!xarVarFetch($name . '["value"]',    'array', $elements, array(), XARVAR_NOT_REQUIRED)) return;
             // Get the number of rows we are saving
             $rows = count($elements);
 
             for ($k=1;$k<=$columncount;$k++) {
                 // Get the property type for this column and get the value from the template
-                $property = DataPropertyMaster::getProperty(array('type' => $this->display_column_definition[1][$k-1]));
-                $property->parseConfiguration($this->display_column_definition[3][$k-1]);
+                $property = DataPropertyMaster::getProperty(array('type' => $displayconfig[1][$k-1]));
+                $property->parseConfiguration($displayconfig[3][$k-1]);
                 $i=0;
                 foreach ($elements as $row) {
                     // Ignore rows where the delete checkbox was checked
@@ -250,12 +255,10 @@ class ArrayProperty extends DataProperty
     {
         // If this is a column definition, load its configuration up front
         // A bound array property contains itself an array property as part of its configuration
-
         if (!empty($data["configuration"])) {
         
                 // Load the configuration data and get the exploded fields
                 $configfields = $this->parseConfiguration($data["configuration"]);
-//                var_dump($this->display_column_definition);
                 // Get the values for titles and column types
 //                if (!isset($data['column_definition'])) $data['column_definition'] = $this->display_column_definition;
 //                $titles = $data['column_definition'][0];
@@ -263,10 +266,15 @@ class ArrayProperty extends DataProperty
 //                $defaults = $data['column_definition'][2];
 //                $configurations = $data['column_definition'][3];
 
-                $titles = $this->display_column_definition[0];
-                $types = $this->display_column_definition[1];
-                $defaults = $this->display_column_definition[2];
-                $configurations = $this->display_column_definition[3];
+                if (isset($this->display_column_definition['value'])) {
+                    $displayconfig = $this->display_column_definition['value'];
+                } else {
+                    $displayconfig = $this->display_column_definition;
+                }
+                $titles = $displayconfig[0];
+                $types = $displayconfig[1];
+                $defaults = $displayconfig[2];
+                $configurations = $displayconfig[3];
 
 //                $configuration = unserialize($data['configuration']['value']);
                 if (isset($configfields['value'])) $data['value'] = $configfields['value'];
@@ -291,10 +299,11 @@ class ArrayProperty extends DataProperty
         } else {
             try {
                 // New way for configs
-                $titles = $this->display_column_definition[0];
-                $types = $this->display_column_definition[1];
-                $defaults = $this->display_column_definition[2];
-                $configurations = $this->display_column_definition[3];
+                $displayconfig = $this->display_column_definition['value'];
+                $titles = $displayconfig[0];
+                $types = $displayconfig[1];
+                $defaults = $displayconfig[2];
+                $configurations = $displayconfig[3];
             } catch (Exception $e) {
                 // Legacy way for configs
                 $titles = $this->display_column_definition[0];
@@ -362,8 +371,9 @@ class ArrayProperty extends DataProperty
     {
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValue();
-        $data['column_titles'] = $this->display_column_definition[0];
-        $data['column_types'] = $this->display_column_definition[1];
+        $displayconfig = $this->display_column_definition['value'];
+        $data['column_titles'] = $displayconfig[0];
+        $data['column_types'] = $displayconfig[1];
         $data['rows'] = isset($data['value'][0]) ? count($data['value'][0]) : 0;
         return parent::showOutput($data);
     }
