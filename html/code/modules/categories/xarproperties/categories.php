@@ -179,6 +179,7 @@ class CategoriesProperty extends DataProperty
         if (isset($data['include_no_line'])) $this->initialization_include_no_cat = $data['include_no_line'];
         if (isset($data['include_all_line'])) $this->initialization_include_all_cats = $data['include_all_line'];
         if (isset($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
+        if (isset($data['configuration'])) $this->configuration = $data['configuration'];
 
         // Set the module_id: case of a bound property
         if (isset($this->objectref)) $this->module_id = (int)$this->objectref->module_id;
