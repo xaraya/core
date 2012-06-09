@@ -43,6 +43,8 @@ class CategoriesProperty extends DataProperty
     public $validation_allowempty = false;
     public $validation_single_invalid; // CHECKME: is this a validation or something else?
     public $validation_allowempty_invalid;
+    public $initialization_include_no_cat   = 1;
+    public $initialization_include_all_cats = 0;
 
     public $module_id;
     public $itemtype;
@@ -174,6 +176,8 @@ class CategoriesProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
+        if (isset($data['include_no_line'])) $this->initialization_include_no_cat = $data['include_no_line'];
+        if (isset($data['include_all_line'])) $this->initialization_include_all_cats = $data['include_all_line'];
         if (isset($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
 
         // Set the module_id: case of a bound property
@@ -214,7 +218,6 @@ class CategoriesProperty extends DataProperty
             'maxdepth' => isset($data['maxdepth'])?$data['maxdepth']:null,
             'mindepth' => isset($data['mindepth'])?$data['mindepth']:null,
         );
-        
         // The somewhat convoluted way of getting to the actual base category ids is a consequence of 
         // using the array property (categorypicker) to define them
         $data['base_category'] = array();
@@ -224,7 +227,11 @@ class CategoriesProperty extends DataProperty
             $id = is_array($tree) ? reset($tree) : $tree;
             $data['base_category'][$key] = $id;
             $nodes = new BasicSet();
-            $node = new CategoryTreeNode($id);
+            if ($id == -1) {
+                $node = new CategoryTreeNode();
+            } else {
+                $node = new CategoryTreeNode($id);
+            }
             $node->setfilter($filter);
             $tree = new CategoryTree($node);
             $nodes->addAll($node->depthfirstenumeration());
@@ -315,7 +322,6 @@ class CategoriesProperty extends DataProperty
         // Use the property's checkInput method to get the value
         $arrayprop = DataPropertyMaster::getProperty(array('name' => 'categorypicker'));
         $arrayprop->checkInput('dd_' . $this->id . '["initialization_basecategories"]');
-        
         // Assign the value to this configuration property for update
         $data['configuration']['initialization_basecategories'] = $arrayprop->getValue();
         
