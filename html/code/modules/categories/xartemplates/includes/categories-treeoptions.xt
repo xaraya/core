@@ -3,11 +3,27 @@
     <xar:set name="already_passed">false</xar:set>
     <xar:set name="current_id">0</xar:set>
     <xar:set name="lastindent">0</xar:set>
+
+    <!-- check if the top level is a virtual node -->
+    <!--
+    -->
+    <xar:set name="ismulti">0</xar:set>
+    
     <xar:foreach in="$nodes" value="$node">
         <xar:set name="nodeid">$node->id</xar:set>
+        <xar:if condition="$nodeid eq 0">
+            <xar:set name="ismulti">1</xar:set>
+            <xar:continue/>
+        </xar:if>
+    
         <xar:set name="nodename">$node->name</xar:set>
         <xar:set name="childobject">$node->child_object</xar:set>
+
         <xar:set name="level">$node->getLevel()</xar:set>
+        <xar:if condition="$ismulti">
+            <xar:set name="level">$level - 1</xar:set>
+        </xar:if>
+
         <xar:if condition="empty($nodeid) or $nodeid ne $nodename">
             <xar:if condition="isset($value) AND is_array($value) AND in_array($nodeid,$value)">
             <option style="padding-left: #$level#em;" value="#$nodeid#" selected="selected">
