@@ -24,7 +24,7 @@
 
     <xar:set name="index">1</xar:set>
 
-    <xar:foreach in="$trees" value="$nodes">
+    <xar:foreach in="$trees" key="$key" value="$nodes">
         <input type="hidden" name="#$name#[base_category][#$index#]" value="#$base_category[$index]#"/>
         <input type="hidden" name="#$name#[module_id]" value="#$categories_module_id#"/>
         <input type="hidden" name="#$name#[itemtype]" value="#$categories_itemtype#"/>
@@ -42,6 +42,7 @@
                 'style' => $style,
                 'include_all_cats' => $include_all_cats,
                 'include_no_cat' => $include_no_cat,
+                'include_self' => $include_self[$key],
             )
         </xar:set>
 

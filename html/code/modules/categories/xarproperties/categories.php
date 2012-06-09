@@ -247,7 +247,7 @@ class CategoriesProperty extends DataProperty
                 foreach($elements as $element)
                     $nodes->add($element);
             }
-            $data['trees'][] = $nodes;
+            $data['trees'][$key] = $nodes;
         }
         
         // Get an array of values (selected categories) for each tree

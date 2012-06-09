@@ -10,6 +10,6 @@
         <xar:if condition="$include_no_cat">
             <option value="0">No category</option>
         </xar:if>
-        <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
+        <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value, 'include_self' => $include_self)"/>
     </select>
 </xar:template>

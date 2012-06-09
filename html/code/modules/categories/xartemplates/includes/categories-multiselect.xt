@@ -26,7 +26,7 @@
         <xar:if condition="!empty($single)">
             <xar:if condition="($nodesize gt 0) OR !empty($allowempty)">
                 <select name="#$selectname#" id="#$selectid#" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
-                    <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
+                    <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value, 'include_self' => $include_self)"/>
                 </select>
             <xar:else />
                 Options not specified in the configuration
@@ -34,7 +34,7 @@
         <xar:else/>
             <xar:if condition="($nodesize gt 0) OR !empty($allowempty)">
                 <select name="#$selectname#" id="#$selectid#" multiple="multiple" size="#$size#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
-                    <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value)"/>
+                    <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value, 'include_self' => $include_self)"/>
                 </select>
             <xar:else />
                 Options not specified in the configuration

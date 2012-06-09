@@ -21,6 +21,9 @@
         <xar:if condition="$ismulti">
             <xar:set name="level">$level - 1</xar:set>
         </xar:if>
+        <xar:if condition="!$include_self">
+            <xar:set name="level">$level - 1</xar:set>
+        </xar:if>
 
         <xar:if condition="empty($nodeid) or $nodeid ne $nodename">
             <xar:if condition="isset($value) AND is_array($value) AND in_array($nodeid,$value)">
