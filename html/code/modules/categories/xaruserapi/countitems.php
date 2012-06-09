@@ -57,7 +57,7 @@ function categories_userapi_countitems($args)
     if($dbconn->databaseType == 'sqlite') {
         $sql .= ')';
     }
-var_dump($sql);
+
     $result = $dbconn->Execute($sql);
     if (!$result) return;
 
