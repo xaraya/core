@@ -44,8 +44,8 @@ function categories_adminapi_delete($args)
         throw new Exception($msg);
     }
     // These are set to be used later on
-    $right = $cat['right'];
-    $left = $cat['left'];
+    $right = $cat['right_id'];
+    $left = $cat['left_id'];
     $deslocation_inside = $right - $left + 1;
     $categories = xarMod::apiFunc('categories',
                                 'user',
