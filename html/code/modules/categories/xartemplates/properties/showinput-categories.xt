@@ -40,6 +40,8 @@
                 'tabindex' => $tabindex,
                 'evt_change' => $evt_change,
                 'style' => $style,
+                'include_all_cats' => $include_all_cats,
+                'include_no_cat' => $include_no_cat,
             )
         </xar:set>
 
