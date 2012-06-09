@@ -97,6 +97,7 @@ function categories_userapi_getcat($args)
                 BETWEEN P2.left_id AND
                         P2.right_id";
 */
+
     if (isset($cid) && !is_array($cid) && $cid != false)
     {
         if ($getchildren || $getparents)
@@ -204,15 +205,9 @@ function categories_userapi_getcat($args)
             $result = $dbconn->Execute($SQLquery, $bindvars);
         }
     }
-
     if (!$result) return;
 
-    if ($result->EOF) {
-        //It´s ok.. no category found
-        // The user doesn´t need to be informed, he will see it....
-//        xarSession::setVar('statusmsg', xarML('No category found'));
-        return Array();
-    }
+    if ($result->EOF) return array();
 
     $categories = array();
 
@@ -268,7 +263,6 @@ function categories_userapi_getcat($args)
     if (!empty($dropdown)) {
         $categories[0] = array('id' => 0, 'name' => '');
     }
-
     return $categories;
 }
 
