@@ -12,7 +12,7 @@
  * @author Marco Canini
  */
 
-$GLOBALS["Xaraya_PageTime"] = microtime(true);
+$GLOBALS["Xaraya_PageTime"] = microtime(true); 
 
 /**
  * Load the layout file so we know where to find the Xaraya directories
