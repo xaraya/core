@@ -5,7 +5,7 @@
  * @package modules
  * @subpackage roles module
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.3.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
@@ -25,7 +25,7 @@
  
 $modversion['name']               = 'Roles';
 $modversion['id']                 = '27';
-$modversion['version']            = '2.4.0';
+$modversion['version']            = '2.3.1';
 $modversion['displayname']        = xarML('Roles');
 $modversion['description']        = 'User and Group management';
 $modversion['displaydescription'] = xarML('User and Group management');

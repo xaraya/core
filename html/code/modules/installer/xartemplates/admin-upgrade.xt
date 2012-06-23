@@ -268,6 +268,8 @@
                 <xar:template file="notes-230"/>
             -->
                 No notes available
+            <xar:elseif condition="XARCORE_VERSION_NUM eq '2.3.1'"/>
+                No notes available
             </xar:if>
         </xar:if>
         <xar:if condition="!empty($upgrade['errormessage'])">
