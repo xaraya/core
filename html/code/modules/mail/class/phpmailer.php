@@ -820,9 +820,9 @@ class PHPMailer extends Object
                 $result .= $this->AddrAppend("To", $this->to);
             else if (count($this->cc) == 0)
                 $result .= $this->HeaderLine("To", "undisclosed-recipients:;");
-            if(count($this->cc) > 0)
-                $result .= $this->AddrAppend("Cc", $this->cc);
         }
+        if(count($this->cc) > 0)
+            $result .= $this->AddrAppend("Cc", $this->cc);
 
         $from = array();
         $from[0][0] = trim($this->From);

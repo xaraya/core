@@ -24,7 +24,7 @@ function roles_userapi_checkprivilege(Array $args=array())
 
     if(!isset($privilege)) throw new EmptyParameterException('privilege');
 
-    if (empty($id)) $id = xarSession::getVar('id');
+    if (empty($id)) $id = xarSession::getVar('role_id');
     $role = xarRoles::get($id);
     return $role->hasPrivilege($privilege);
 }
