@@ -53,6 +53,7 @@ function installer_admin_upgrade()
                                 '2.2.0',
                                 '2.3.0',
                                 '2.3.1',
+                                '2.4.0',
     );
     
         
