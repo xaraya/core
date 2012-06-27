@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>View Statistics</h2><br />
+        <div style="margin: auto;">
+        <xar:if condition="empty($modid)">
+                <table border="0" width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th valign="center" width="40%">
+                            <b>Module Name</b>
+                        </th>
+                        <th align="center" valign="center" width="15%">
+                            <b>Module<br />Items</b>
+                        </th>
+                        <th align="center" valign="center" width="15%">
+                            <b>Distinct<br />Categories</b>
+                        </th>
+                        <th align="center" valign="center" width="15%">
+                            <b>Total<br />Links</b>
+                        </th>
+                        <th align="center" valign="center" width="15%">
+                            <b>Action</b>
+                        </th>
+                    </tr>
+    
+                    <tr>
+                        <td colspan="5">
+                            &#160;
+                        </td>
+                    </tr>
+    
+                    <xar:if condition="empty($moditems) or count($moditems) eq '0'">
+                        <tr>
+                            <td colspan="5" align="center">
+                                <br />
+                                    There are currently no category links in the database...
+                                <br />
+                                <br />
+                            </td>
+                        </tr>
+                    <xar:else />
+                        <tr>
+                            <td colspan="5">
+                                <div class="xar-norm-outline" style=" margin-left: 1em; margin-right: 1em; width: auto;border-style: dotted none none none;"></div>
+                            </td>
+                        </tr>
+                        <xar:foreach in="$moditems" value="$moditem">
+                            <tr>
+                                <td valign="center" width="40%">
+                                    <a href="#$moditem['link']#">#$moditem['name']#</a>
+                                </td>
+                                <td align="center" valign="center" width="15%">
+                                    #$moditem['numitems']#
+                                </td>
+                                <td align="center" valign="center" width="15%">
+                                    #$moditem['numcats']#
+                                </td>
+                                <td align="center" valign="center" width="15%">
+                                    #$moditem['numlinks']#
+                                </td>
+                                <td align="center" valign="center" width="15%">
+                                    <a href="#$moditem['delete']#"><b>Delete</b></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <div class="xar-norm-outline" style=" margin-left: 1em; margin-right: 1em; width: auto;border-style: dotted none none none;"></div>
+                                </td>
+                            </tr>
+                        </xar:foreach>
+                        <tr>
+                            <td valign="center" width="40%">
+                                <b>Grand Total</b>
+                            </td>
+                            <td align="center" valign="center" width="15%">
+                                <b>#$numitems#</b>
+                            </td>
+                            <td align="center" valign="center" width="15%">
+                                <b>-</b>
+                            </td>
+                            <td align="center" valign="center" width="15%">
+                                <b>#$numlinks#</b>
+                            </td>
+                            <td align="center" valign="center" width="15%">
+                                <!-- not supported by unlink API at the moment
+                                <a href="#$delete#">Delete All</a>
+                                -->
+                            </td>
+                        </tr>
+                    </xar:if>
+    
+                    <tr>
+                        <td colspan="5">
+                            <div class="xar-accent xar-norm-outline" style="text-align: justify;padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
+                                
+                                    By clicking on <b>Delete</b> you can delete all category links associated with a particular
+                                    module. Clicking on a module will take you to that module's statistics page containing
+                                    the figures for each of that module's items that have category links associated with them.
+                                    From there you can delete all category links associated with a particular item.
+                                
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+        <xar:else/>
+            <h3><xar:ml><xar:mlstring>Module #(1)</xar:mlstring><xar:mlvar>#$modname#</xar:mlvar></xar:ml></h3>
+    
+                <xar:if condition="empty($catid)">
+                    <a href="#xarModURL('categories','admin','checklinks',array('modid' => $modid, 'itemtype' => $itemtype))#">Check Orphan Links</a><br/>
+                </xar:if>
+    
+                <xar:set name="urlextra">array('modid' => $modid)</xar:set>
+                <xar:data-output type="categorynavigation" module="$module" itemtype="$itemtype" catid="$catid" urlmodule="categories" urltype="admin" urlfunc="stats" urlextra="$urlextra" showcatcount="2"/>
+    
+                <table border="0" width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th valign="center" width="50%">
+                            <xar:if condition="empty($sortlink['itemid'])">
+                                <b>Item Id</b>
+                            <xar:else/>
+                                <a href="#$sortlink['itemid']#"><b>Item Id</b></a>
+                            </xar:if>
+                        </th>
+                        <th align="center" valign="center" width="30%">
+                            <b>Category<br/>Links</b>
+                        </th>
+                        <th align="center" valign="center" width="20%">
+                            <b>Action</b>
+                        </th>
+                    </tr>
+    
+                    <tr>
+                        <td colspan="3">
+                            &#160;
+                        </td>
+                    </tr>
+    
+                    <xar:if condition="empty($moditems) or count($moditems) eq '0'">
+                        <tr>
+                            <td colspan="3" align="center">
+                                <br />
+                                
+                                    There are currently no category links attached to this module...
+                                
+                                <br />
+                                <br />
+                            </td>
+                        </tr>
+                    <xar:else />
+                        <tr>
+                            <td colspan="3">
+                                <div class="xar-norm-outline" style="margin-left: 1em; margin-right: 1em; width: auto;border-style: dotted none none none;"></div>
+                            </td>
+                        </tr>
+                        <xar:foreach in="$moditems" key="$itemid" value="$moditem">
+                            <tr>
+                                <xar:if condition="!empty($moditem['title']) and !empty($moditem['link'])">
+                                <td valign="center" width="50%">
+                                    #$itemid#: <a href="#$moditem['link']#">#$moditem['title']# </a>
+                                </td>
+                                <xar:else/>
+                                <td align="center" valign="center" width="50%">
+                                    #$itemid#
+                                </td>
+                                </xar:if>
+                                <td align="center" valign="center" width="30%">
+                                <xar:foreach in="$moditem['cids']" value="$cid">
+                                  <xar:if condition="!empty($catinfo[$cid])">
+                                    #$catinfo[$cid]['name']#<br/>
+                                  <xar:else/>
+                                    #$cid#<br/>
+                                  </xar:if>
+                                </xar:foreach>
+                                </td>
+                                <td align="center" valign="center" width="20%">
+                                    <a href="#$moditem['delete']#"><b>Delete</b></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                <div class="xar-norm-outline" style="margin-left: 1em; margin-right: 1em; width: auto;border-style: dotted none none none;"></div>
+                                </td>
+                            </tr>
+                        </xar:foreach>
+                    <xar:if condition="!empty($pager)">
+                        <tr>
+                            <td colspan="3" align="center">
+                                <xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$total"/>
+                            </td>
+                        </tr>
+                    </xar:if>
+                        <tr>
+                            <td valign="center" width="50%">
+                                <b>Grand Total</b>:
+                            </td>
+                            <td align="center" valign="center" width="30%">
+                                <b>#$numlinks#</b>
+                            </td>
+                            <td align="center" valign="center" width="20%">
+                                <xar:if condition="empty($catid)">
+                                    <a href="#$delete#">Delete All</a>
+                                <xar:else/>
+                                    <!-- not supported by unlink API at the moment -->
+                                </xar:if>
+                            </td>
+                        </tr>
+                    </xar:if>
+                    <tr>
+                        <td colspan="3">
+                            <div class="xar-accent xar-norm-outline" style="text-align: justify;padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
+                                
+                                    By clicking on <b>Delete</b> you can delete all category links associated with a particular
+                                    module's item.
+                                
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+        </xar:if>
+        </div>
+    </div>
+</xar:template>

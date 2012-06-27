@@ -401,7 +401,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
                 // Execute any property-specific code first
                 foreach ($this->datastores[$primarystore]->fields as $property) {
-                    if (method_exists($property,'createvalue')) {
+                    if (method_exists($property,'createvalue') && $property->prepostprocess) {
                         $property->createValue($this->itemid);
                     }
                 }
@@ -423,11 +423,9 @@ class DataObject extends DataObjectMaster implements iDataObject
                 continue;
 
             // Execute any property-specific code first
-            if ($store != '_dummy_') {
-                foreach ($this->datastores[$store]->fields as $property) {
-                    if (method_exists($property,'createvalue')) {
-                        $property->createValue($this->itemid);
-                    }
+            foreach ($this->datastores[$store]->fields as $property) {
+                if (method_exists($property,'createvalue') && $property->prepostprocess) {
+                    $property->createValue($this->itemid);
                 }
             }
             
@@ -465,12 +463,10 @@ class DataObject extends DataObjectMaster implements iDataObject
         foreach(array_keys($this->datastores) as $store)
         {
             // Execute any property-specific code first
-            if ($store != '_dummy_') {
-                foreach ($this->datastores[$store]->fields as $key => $property) {
-                    if (!in_array($key, $fieldlist)) continue;
-                    if (method_exists($property,'updatevalue')) {
-                        $property->updateValue($this->itemid);
-                    }
+            foreach ($this->datastores[$store]->fields as $key => $property) {//var_dump($fieldlist);var_dump($key);die($key);
+                if (!in_array($property->name, $fieldlist)) continue;
+                if (method_exists($property,'updatevalue') && $property->prepostprocess) {
+                    $property->updateValue($this->itemid);
                 }
             }
 

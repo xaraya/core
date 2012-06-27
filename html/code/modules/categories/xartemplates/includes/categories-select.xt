@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="selectname">$name . "[categories][" . $index . "][]"</xar:set>
+    <xar:set name="selectid">$id . "_categories_" . $index</xar:set>
+    <select name="#$selectname#" id="#$selectid#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
+        <xar:if condition="$include_all_cats">
+            <option value="-1">All categories</option>
+        </xar:if>
+        <xar:if condition="$include_no_cat">
+            <option value="0">No category</option>
+        </xar:if>
+        <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value, 'include_self' => $include_self)"/>
+    </select>
+</xar:template>
