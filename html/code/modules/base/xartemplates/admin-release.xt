@@ -70,9 +70,9 @@
                         The Xaraya core and core modules
                     </td>
                     <td>
-                        <a href="http://sourceforge.net/projects/xaraya/files/">Jamaica Core</a>
+                        <a href="http://sourceforge.net/projects/xaraya/files/" target="_blank">Jamaica Core</a>
                         <br/>OR<br/>
-                        <a href="http://mt.xaraya.com/download/nightly/core/">Jamaica Core (Nightly)</a>
+                        <a href="http://mt.xaraya.com/download/nightly/core/" target="_blank">Jamaica Core (Nightly)</a>
                     </td>
                 </tr>
                 <tr>
@@ -80,7 +80,7 @@
                         Non-core Modules
                     </td>
                     <td>
-                        <a href="http://mt.xaraya.com/download/nightly/modules/jamaica/">Jamaica Modules (Nightly)</a>
+                        <a href="http://mt.xaraya.com/download/nightly/modules/jamaica/" target="_blank">Jamaica Modules (Nightly)</a>
                     </td>
                 </tr>
                 <tr>
@@ -88,7 +88,7 @@
                         Standalone Properties
                     </td>
                     <td>
-                        <a href="http://mt.xaraya.com/download/nightly/properties/jamaica/">Jamaica Properties (Nightly)</a>
+                        <a href="http://mt.xaraya.com/download/nightly/properties/jamaica/" target="_blank">Jamaica Properties (Nightly)</a>
                     </td>
                 </tr>
                 <tr>
@@ -96,7 +96,7 @@
                         Standalone Blocks
                     </td>
                     <td>
-                        <a href="http://mt.xaraya.com/download/nightly/blocks/jamaica/">Jamaica Blocks (Nightly)</a>
+                        <a href="http://mt.xaraya.com/download/nightly/blocks/jamaica/" target="_blank">Jamaica Blocks (Nightly)</a>
                     </td>
                 </tr>
             </table>
@@ -115,9 +115,9 @@
                         The Xaraya core and core modules
                     </td>
                     <td>
-                        <a href="http://sourceforge.net/projects/xaraya/files/">Aruba Core</a>
+                        <a href="http://sourceforge.net/projects/xaraya/files/" target="_blank">Aruba Core</a>
                         <br/>OR<br/>
-                        <a href="http://mt.xaraya.com/download/nightly/core/">Aruba Core (Nightly)</a>
+                        <a href="http://mt.xaraya.com/download/nightly/core/" target="_blank">Aruba Core (Nightly)</a>
                     </td>
                 </tr>
                 <tr>
@@ -125,7 +125,7 @@
                         Non-core Modules
                     </td>
                     <td>
-                        <a href="http://mt.xaraya.com/download/nightly/modules/aruba/">Aruba Modules (Nightly)</a>
+                        <a href="http://mt.xaraya.com/download/nightly/modules/aruba/" target="_blank">Aruba Modules (Nightly)</a>
                     </td>
                 </tr>
             </table>

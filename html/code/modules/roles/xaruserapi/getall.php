@@ -71,6 +71,7 @@ function roles_userapi_getall(Array $args=array())
     } elseif (!empty($state) && is_numeric($state) && $state == xarRoles::ROLES_STATE_ALL) {
     } else {
         $where_clause[] = 'roletab.state = ?';
+        $state = empty($state) ? 0 : $state;
         $bindvars[] = (int) $state;
     }
 
