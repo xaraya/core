@@ -6,7 +6,7 @@
         <h2>Upgrading your system</h2>
         <fieldset>
             <legend>Version Information</legend>
-            <table>
+            <table class="xar-table">
                 <tr>
                     <th></th>
                     <th>Your Files</th>

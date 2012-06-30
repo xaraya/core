@@ -13,7 +13,7 @@
     </xar:if>
     </div><!--/xar-mod-page-head-->
     <div class="xar-mod-page-body">
-        <table class="xar-items">
+        <table class="xar-items xar-table">
             <tr>
                 <xar:foreach in="$properties" key="$name">
                     <th class="xar-form-textlong">

@@ -6,7 +6,7 @@
         <legend title="Module: Dynamic Data - Component: Item - Instance: #$instance#">
             Default Access Rights Using Privileges
         </legend>
-        <table>
+        <table class="xar-table">
             <tr>
                 <th>Group</th>
                 <xar:foreach in="$levels" key="$level" value="$info">

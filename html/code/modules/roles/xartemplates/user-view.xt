@@ -9,7 +9,7 @@
             <xar:if condition="!empty($message)">
                 <p>#xarVarPrepForDisplay($message)#</p>
             <xar:else />
-                <table width="100%" border="1" cellspacing="0" cellpadding="2">
+                <table width="100%" border="1" cellspacing="0" cellpadding="2" class="xar-table">
                     <tr>
                         <!--
                         <xar:foreach in="$itemlabels" value="$label">

@@ -22,7 +22,7 @@
     <xar:set name="icon_preview">xarTpl::getImage('icons/display.png','theme')</xar:set>
     <xar:set name="icon_delete">xarTpl::getImage('icons/delete.png','theme')</xar:set>
 
-    <table class="xar-fullwidth xar-items">
+    <table class="xar-fullwidth xar-items xar-table">
         <thead>
             <tr>
                 <th>Name</th>

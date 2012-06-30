@@ -26,7 +26,7 @@
             </xar:if>
             <xar:if condition="empty($tables)">
             <xar:elseif condition="empty($table)"/>
-                <table>
+                <table class="xar-table">
                     <tr>
                         <th>Name</th>
                         <th>Actions</th>
@@ -68,7 +68,7 @@
                 Relation</a>
                 -->
                 </p>
-                <table>
+                <table class="xar-table">
                     <tr>
                         <th>Name</th>
                         <th>Label</th>

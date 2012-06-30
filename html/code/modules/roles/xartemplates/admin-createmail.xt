@@ -40,7 +40,7 @@
             <!--
                 Module List Sort and Filter Controls table
             -->
-            <table class="xar-fullwidth">
+            <table class="xar-fullwidth xar-table">
                 <tr>
                     <th class="xar-nowrap">
                         <xar:var name="label">Select display type</xar:var>
@@ -169,7 +169,7 @@
                     <xar:if condition="count($users) eq 0">
                         <p>No users match</p>
                     <xar:else />
-                        <table class="xar-fullwidth">
+                        <table class="xar-fullwidth xar-table">
                             <tr>
                                 <th>
                                     <a href="#xarModURL('roles','admin','createmail',array('state'=>$state,'order'=>'name'))#">

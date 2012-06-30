@@ -21,7 +21,7 @@
         <xar:if condition="$phase ne 1">
             <h2>Version Status</h2>
             <h3>Version Information</h3>
-            <table style="width: 90%; min-width: 900p">
+            <table style="width: 90%; min-width: 900p" class="xar-table">
                 <tr>
                     <th></th>
                     <th>Your Files</th>
@@ -135,7 +135,7 @@
                 <input type="hidden" name="password" value="#$password#"/>
                 <input type="hidden" name="phase" id="phase" value="4"/>
                 <xar:foreach in="$upgrades" key="$version" value="$upgrade">
-                    <table style="margin-top:10px; width:100%">
+                    <table style="margin-top:10px; width:100%" class="xar-table">
                         <tr>
                             <th style="border-bottom: dotted 1px; text-align: left">Task</th>
                             <th style="border-bottom: dotted 1px; width:10%; text-align: left">Result</th>
@@ -191,7 +191,7 @@
                 <input type="hidden" name="password" value="#$password#"/>
                 <input type="hidden" name="phase" id="phase" value="5"/>
                 <xar:foreach in="$checks" key="$version" value="$check">
-                    <table style="margin-top:10px; width:100%">
+                    <table style="margin-top:10px; width:100%" class="xar-table">
                         <tr>
                             <th style="border-bottom: dotted 1px; text-align: left">Task</th>
                             <th style="border-bottom: dotted 1px; width:10%; text-align: left">Result</th>

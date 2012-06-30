@@ -11,7 +11,7 @@
                 The core releases at Sourceforge are considered "official" releases. The nightly core releases are snapshots of the latest code and are not considered fully tested. For modules, properties and blocks (the last two only for Jamaica) the project makes no such distinction as we cannot guarantee testing of all these components.
             </p>
             <h4>Xaraya Jamaica (2.x) Releases</h4>
-            <table>
+            <table class="xar-table">
                 <tr>
                     <th style="width: 300px">
                         What
@@ -56,7 +56,7 @@
                 </tr>
             </table>
             <h4>Xaraya Aruba (1.x) Releases</h4>
-            <table>
+            <table class="xar-table">
                 <tr>
                     <th style="width: 300px">
                         What

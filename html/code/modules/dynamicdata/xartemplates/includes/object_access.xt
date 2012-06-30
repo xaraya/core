@@ -47,7 +47,7 @@
             <input type="checkbox" id="do_access" name="do_access" value="1" onclick="javascript:dd_disable_checkboxes('access_')"/>
         </xar:if>
         &#160;Override default access rights ?</label>
-        <table>
+        <table class="xar-table">
             <tr>
                 <th>Group</th>
                 <xar:foreach in="$levels" key="$level" value="$info">
@@ -80,7 +80,7 @@
             Additional Content Filters
         </legend>
         Automatically filter items in views for specific groups ?
-        <table>
+        <table class="xar-table">
             <tr>
                 <th>Group</th>
                 <th>Property</th>

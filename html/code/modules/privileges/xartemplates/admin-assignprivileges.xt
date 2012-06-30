@@ -25,7 +25,7 @@
                     </xar:if>
                 </legend>
                 <xar:if condition="count($groupassignments) > 0">
-                    <table border="0" name="list" id="list" class="xar-items">
+                    <table border="0" name="list" id="list" class="xar-items xar-table">
                         <tr>
                             <th>
                                 Privilege
@@ -104,7 +104,7 @@
                     </xar:if>
                 </legend>
                 <xar:if condition="count($anonassignments) > 0">
-                    <table border="0" name="list" id="list" width="100%" cellpadding="2" cellspacing="2">
+                    <table border="0" name="list" id="list" width="100%" cellpadding="2" cellspacing="2" class="xar-table">
                         <tr>
                             <th>
                                 Privilege
@@ -179,7 +179,7 @@
                     </xar:if>
                 </legend>
                 <xar:if condition="count($userassignments) > 0">
-                    <table border="0" name="list" id="list" width="100%" cellpadding="2" cellspacing="2">
+                    <table border="0" name="list" id="list" width="100%" cellpadding="2" cellspacing="2" class="xar-table">
                         <tr>
                             <th>
                                 Privilege

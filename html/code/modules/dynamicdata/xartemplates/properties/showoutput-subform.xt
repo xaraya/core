@@ -6,7 +6,7 @@
             <div style="clear:both">&#160;</div>
             <xar:if condition="is_array($object)">
                 <xar:if condition="!empty($layout) and $layout eq 'table'">
-                    <table class="xar-items">
+                    <table class="xar-items xar-table">
                     <xar:set name="i">0</xar:set>
                     <xar:foreach in="$object" key="$key" value="$item">
                         <xar:if condition="empty($i)">

@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="!empty($metatags)">
     <!-- display list of stored metatags -->
-    <table class="xar-fullwidth">
+    <table class="xar-fullwidth xar-table">
         <caption class="xar-align-left">Meta Tags</caption>
         <tbody>
         <xar:foreach in="$metatags" key="$tagkey" value="$metatag">
@@ -62,7 +62,7 @@
     </xar:if>
     
     <!-- New meta tag input -->
-    <table class="xar-fullwidth xar-margin-nonetop">
+    <table class="xar-fullwidth xar-margin-nonetop xar-table">
         <caption class="xar-align-left">New Meta Tag</caption>
         <tbody>
             <tr>
@@ -99,7 +99,7 @@
 
     <!-- Display list of stored link tags -->
     <xar:if condition="!empty($linktags)">
-    <table class="xar-fullwidth xar-margin-thicktop">
+    <table class="xar-fullwidth xar-margin-thicktop xar-table">
         <caption class="xar-align-left">Link Tags</caption>
         <thead>
             <tr>
@@ -147,7 +147,7 @@
     </xar:if>
     
     <!-- New link tag input -->
-    <table class="xar-fullwidth xar-margin-nonetop">
+    <table class="xar-fullwidth xar-margin-nonetop xar-table">
         <caption class="xar-align-left">New Link Tag</caption>
         <thead>
             <tr>

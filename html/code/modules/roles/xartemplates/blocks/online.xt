@@ -9,7 +9,7 @@
         (comment by andyv)
     -->
      <xar:if condition="!empty($activeusers) AND $showusers">
-        <table class="xar-fullwidth xar-roles-nicetable">
+        <table class="xar-fullwidth xar-roles-nicetable xar-table">
             <tr>
                 <td class="xar-threequarterswidth">Users</td>
                 <td>&#160;</td>
@@ -55,7 +55,7 @@
         </table>
     </xar:if>
     <xar:if condition="$showusertotal OR $showanontotal">
-        <table class="xar-fullwidth xar-roles-nicetable">
+        <table class="xar-fullwidth xar-roles-nicetable xar-table">
             <xar:if condition="$showusertotal">
                 <tr>
                     <td>

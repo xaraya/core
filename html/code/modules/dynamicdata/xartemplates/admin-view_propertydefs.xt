@@ -18,7 +18,7 @@
             </div>
             <p class="xar-note">The following property types are predefined in Xaraya and may be used in your own
                 dynamic properties.</p>
-                <table class="xar-items">
+                <table class="xar-items xar-table">
                     <tr>
                         <th>ID</th>
                         <th>Name</th>

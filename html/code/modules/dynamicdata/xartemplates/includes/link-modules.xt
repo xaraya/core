@@ -4,7 +4,7 @@
     <xar:if condition="count($relations) gt 0">
         <fieldset>
         <legend>Links for #$module#</legend>
-        <table>
+        <table class="xar-table">
             <tr>
                 <th>Module</th>
                 <th>Link Type</th>

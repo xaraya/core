@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- TODO: multi-column output -->
-    <table>
+    <table class="xar-table">
         <tr>
             <xar:foreach in="$properties" key="$name">
                 <th class="xar-form-textlong">

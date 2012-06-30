@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <fieldset>
         <legend>Mapping Objects to Datastores</legend>
-        <table>
+        <table class="xar-table">
             <tr>
                 <th>Objects</th>
                 <th>Datastores</th>

@@ -317,7 +317,7 @@
                 <p>
                     Dataproperties can be deployed as fields in a dataobject or as standalone widgets. The following are some examples of standalone dataproperties that can be included as tags on web pages.
                 </p>
-                <table border="1">
+                <table border="1" class="xar-table">
                     <tr>
                         <td valign="middle">
                             <xar:data-input type="grouplist"/>

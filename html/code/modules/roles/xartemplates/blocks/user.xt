@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:style scope="block" file="onlineblock"/>
     <xar:set name="thisuser">xarMod::apiFunc('roles','user','get',array('id' => xarSession::getVar('role_id')))</xar:set>
-    <table class="xar-fullwidth xar-roles-nicetable">
+    <table class="xar-fullwidth xar-roles-nicetable xar-table">
          <tr>
              <td class="xar-threequarterswidth">
                  User:

@@ -59,7 +59,7 @@
         <xar:else />
             <fieldset>
                 <legend>Click On The Mask You Want To Test Privileges Against:</legend>
-                <table class="xar-fullwidth">
+                <table class="xar-fullwidth xar-table">
                     <tr>
                         <th>Mask</th>
                         <xar:if condition="xarModVars::get('privileges','showrealms')">
@@ -91,7 +91,7 @@
         <xar:if condition="!empty($test)">
             <fieldset>
                 <legend>Masks:</legend>
-                <table class="xar-fullwidth">
+                <table class="xar-fullwidth xar-table">
                     <tr>
                         <th>Mask</th>
                         <xar:if condition="xarModVars::get('privileges','showrealms')">
@@ -118,7 +118,7 @@
             </fieldset>
             <fieldset>
                 <legend>Privileges:</legend>
-                <table class="xar-fullwidth">
+                <table class="xar-fullwidth xar-table">
                     <xar:if condition="$testresult ne false">
                         <tr>
                             <th>Privilege</th>

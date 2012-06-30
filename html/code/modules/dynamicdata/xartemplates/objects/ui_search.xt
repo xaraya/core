@@ -78,7 +78,7 @@
                         <!-- show properties in three columns to save screen space -->
                         <xar:set name="size">floor((count($show_props) - 0.5) / 3) + 1</xar:set>
                         <xar:set name="columns">array_chunk($show_props,$size)</xar:set>
-                        <table>
+                        <table class="xar-table">
                             <tr>
                             <xar:foreach in="$columns" value="$proplist">
                                 <td valign="top">

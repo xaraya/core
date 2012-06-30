@@ -59,7 +59,7 @@
         <xar:if condition="count($static) gt 0">
             <fieldset>
                 <legend>#$statictitle#</legend>
-                <table class="xar-fullwidth">
+                <table class="xar-fullwidth xar-table">
                     <tr>
                         <th>Name</th>
                         <th>Label</th>

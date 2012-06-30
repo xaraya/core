@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="empty($layout) or $layout eq 'default'">
-        <table width="100%" border="1" cellspacing="0" cellpadding="4">
+        <table width="100%" border="1" cellspacing="0" cellpadding="4" class="xar-table">
             <tr>
                 <xar:foreach in="$labels" value="$item">
                     <th class="xar-align-center">#$item['label']#</th>
@@ -47,7 +47,7 @@
             </div>
         </xar:if>
     <xar:elseif condition="$layout eq 'cells'"/>
-        <table width="100%" border="1" cellspacing="0" cellpadding="4">
+        <table width="100%" border="1" cellspacing="0" cellpadding="4" class="xar-table">
             <tr>
                 <xar:foreach in="$labels" value="$item">
                     <th class="xar-align-center">#$item['label']#</th>

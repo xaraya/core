@@ -5,7 +5,7 @@
         <form method="post" action="#xarModURL('dynamicdata','admin','relations')#">
             <fieldset>
                 <legend>Links for #$table#</legend>
-                <table>
+                <table class="xar-table">
                     <tr>
                         <td class="xar-align-center">
                             <input type="checkbox" name="what[#$link['id']#]" id="what_#$link['id']#" value="1"/>
@@ -226,7 +226,7 @@
 
     <fieldset>
     <legend>Fields in Table #$table#</legend>
-    <table>
+    <table class="xar-table">
         <tr>
             <th>Name</th>
             <th>Label</th>

@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <fieldset>
         <legend>Foreign Key Definitions in Tables</legend>
-        <table>
+        <table class="xar-table">
             <tr>
                 <th>From Table</th>
                 <th>From Field</th>

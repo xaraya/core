@@ -57,7 +57,7 @@
             <xar:data-input type="dropdown" name="menustyle" id="menustyle" options="$sortorder" value="$menustyle"/>
         </div>
     </div>
-    <table class="xar-items">
+    <table class="xar-items xar-table">
         <thead>
             <tr>
                 <th class="xar-align-left">

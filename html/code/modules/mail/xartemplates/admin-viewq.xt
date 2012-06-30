@@ -16,7 +16,7 @@
 #$log#
 </pre>
                 <xar:elseif condition="!empty($mail)"/>
-                    <table>
+                    <table class="xar-table">
                         <tr>
                             <td>Mail ID</td>
                             <td>#xarVarPrepForDisplay($id)#</td>
@@ -67,7 +67,7 @@
                     <xar:var name="label">Process Queue</xar:var>
                     <xar:button type="submit" label="$label"/>
                 </form>
-                <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                <table width="100%" border="0" cellspacing="0" cellpadding="2" class="xar-table">
                     <tr>
                         <th>Mail ID</th>
                         <th>Send After</th>

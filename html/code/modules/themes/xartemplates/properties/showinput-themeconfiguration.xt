@@ -6,7 +6,7 @@
         <xar:if condition="count($configs) eq 0">
             No configuration options are defined, or those defined are not used in the theme. Define some <a href="#xarModURL('themes','admin','new_config')#">here</a>.
         <xar:else />
-            <table>
+            <table class="xar-table">
                 <tr>
                     <th>Value</th>
                     <th>Description</th>

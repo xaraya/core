@@ -8,7 +8,7 @@
     <!--
         You can use different user-displayhook-[objectname].xd templates for different objects
     -->
-    <table width="100%" border="0" cellspacing="0" cellpadding="4">
+    <table width="100%" border="0" cellspacing="0" cellpadding="4" class="xar-table">
         <xar:foreach in="$properties" key="$name" value="$property">
             <xar:if condition="$properties[$name]:getDisplayStatus() ne DataPropertyMaster::DD_DISPLAYSTATE_DISABLED">
 

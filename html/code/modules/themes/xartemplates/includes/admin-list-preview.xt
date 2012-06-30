@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:if condition="!empty($themes)">
     <form method="post" action="#xarModURL('themes', 'admin', 'list')#">
-        <table class="xar-fullwidth">
+        <table class="xar-fullwidth xar-table">
             <xar:foreach in="$themes" value="$theme">
                 <tr id="#$theme['name']#">
                     <td style="width:250px;min-height:200px;" class="xar-padding-thickends">

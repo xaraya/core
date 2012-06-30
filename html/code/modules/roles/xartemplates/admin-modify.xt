@@ -229,7 +229,7 @@
         </fieldset>
         <fieldset>
             <legend>Group Memberships</legend>
-            <table class="xar-fullwidth">
+            <table class="xar-fullwidth xar-table">
                 <tr>
                     <th>Group</th>
                     <th>Remove</th>

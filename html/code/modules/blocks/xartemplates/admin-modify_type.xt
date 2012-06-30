@@ -108,7 +108,7 @@
                 <fieldset>
                     <legend>Block Type Tag Parameters</legend>                
             <!-- Permitted xar:block tag parameters for this block type -->
-            <table class="xar-fullwidth">
+            <table class="xar-fullwidth xar-table">
                 <thead>
                     <tr>
                         <th>Attribute</th>
@@ -300,7 +300,7 @@
                         <xar:else/>
                             <fieldset>
                                 <legend>Templates and groups</legend>
-                                <table class="xar-fullwidth xar-margin-thickends">
+                                <table class="xar-fullwidth xar-margin-thickends xar-table">
                                     <thead>
                                         <tr>
                                             <th>Instance Group</th>

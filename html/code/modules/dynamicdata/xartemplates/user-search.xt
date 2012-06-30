@@ -19,7 +19,7 @@
                     <h2>Search #$item['label']#</h2>
                     <form method="post" action="#xarServer::getCurrentURL()#">
                         <div>
-                            <table border="0" cellpadding="2" cellspacing="0">
+                            <table border="0" cellpadding="2" cellspacing="0" class="xar-table">
                                 <tr>
                                     <td class="xar-valign-top">
                                     <label for="q">Search for</label>:</td>
@@ -81,7 +81,7 @@
             <p></p>
             <xar:if condition="!empty($item['result'])">#$item['result']# 
             <xar:else />
-            <table border="0" cellpadding="2" cellspacing="0">
+            <table border="0" cellpadding="2" cellspacing="0" class="xar-table">
                 <tr>
                     <td class="xar-valign-top">Search on:</td>
                     <td>

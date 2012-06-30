@@ -2,11 +2,11 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="empty($layout) or $layout eq 'default'">
-        <table border="0" cellspacing="0" cellpadding="4">
+        <table border="0" cellspacing="0" cellpadding="4" class="xar-table">
             <xar:foreach in="$items" value="$item">
                 <tr>
                     <td>
-                        <table border="0" cellspacing="0" cellpadding="4">
+                        <table border="0" cellspacing="0" cellpadding="4" class="xar-table">
                             <xar:foreach in="$item['fields']" value="$field">
                                 <tr>
                                     <td class="xar-align-right">
@@ -46,7 +46,7 @@
             <xar:else />---</xar:if></div>
         </xar:if>
         <xar:elseif condition="$layout eq 'list'"/>
-        <table border="0" cellspacing="0" cellpadding="4">
+        <table border="0" cellspacing="0" cellpadding="4" class="xar-table">
             <tr>
                 <xar:foreach in="$labels" value="$item">
                     <th class="xar-align-center">#$item['label']#</th>

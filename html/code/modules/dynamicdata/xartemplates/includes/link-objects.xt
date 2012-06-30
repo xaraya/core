@@ -13,7 +13,7 @@
                 <img src="http://yuml.me/diagram/class/#$yumlspec#" />
             </xar:if>
 
-            <table>
+            <table class="xar-table">
                 <tr>
                     <th>Delete</th>
                     <th>Parent</th>
@@ -249,7 +249,7 @@
 
     <fieldset>
     <legend>Properties of #$object:label# <a href="#xarModURL('dynamicdata','admin','modifyprop', array('itemid' => $objectid))#" title="Modify Properties for #$object:label#"><xar:img scope="theme" file="icons/modify-config.png" class="xar-icon"/></a></legend>
-    <table>
+    <table class="xar-table">
         <tr>
             <th>Name</th>
             <th>Label</th>

@@ -5,7 +5,7 @@
     <div class="xar-mod-body">
         <xar:if condition="xarModVars::get('privileges','showrealms')">
             <xar:template type="module" file="admin-realms"/>
-            <table class="xar-fullwidth xar-clearboth">
+            <table class="xar-fullwidth xar-clearboth xar-table">
                 <tr>
                     <th style="text-align: left; padding-left: .5em;">Name</th>
                     <th style="text-align: center; padding-left: .5em;">Actions</th>

@@ -45,7 +45,7 @@
                 <p>No privileges inherited.</p>
             <xar:else />
                 <div class="xar-fullwidth xar-overflow-auto xar-area-large">
-                    <table class="xar-fullwidth">
+                    <table class="xar-fullwidth xar-table">
                         <tr>
                             <th>Name</th>
                             <xar:if condition="xarModVars::get('privileges','showrealms')">
@@ -96,7 +96,7 @@
                 <p>No privileges assigned.</p>
             <xar:else />
                 <p>Note: only relevant privileges are shown.</p>
-                <table class="xar-fullwidth">
+                <table class="xar-fullwidth xar-table">
                     <tr>
                         <th>Name</th>
                         <xar:if condition="xarModVars::get('privileges','showrealms')">

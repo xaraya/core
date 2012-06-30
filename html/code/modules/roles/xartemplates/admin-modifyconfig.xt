@@ -159,7 +159,7 @@
                         <legend>Basic User Variables</legend>
                         <p>Always available in a user role, and can be retrieved as
                         <strong>xarUserGetVar('varname')</strong></p>
-                            <table>
+                            <table class="xar-table">
                                 <tr>
                                     <th>Name</th>
                                     <th>Description</th>
@@ -186,7 +186,7 @@
                         <p>Optional in a user role. Once activated they can be retrieved as
                         <strong>xarModUserVars::get('roles','varname','id')</strong></p>
                             <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="nolabels" fieldlist="duvsettings"/>
-                            <table>
+                            <table class="xar-table">
                                 <tr>
                                     <th>Name</th>
                                     <th>Description</th>

@@ -11,7 +11,7 @@
         <xar:set name="imgmodify">#xarTpl::getImage('icons/modify.png', 'theme')#</xar:set>
         <xar:var name="imgmodifyalt">Modify</xar:var>
         <xar:var name="imgmodifytitle">Modify this block instance</xar:var>
-        <table class="xar-items">
+        <table class="xar-items xar-table">
             <caption class="xar-align-left xar-padding-thickends" id="group_members">Blockgroup Members</caption>
             <thead>
                 <tr>

@@ -6,7 +6,7 @@
         <h2>Send notification</h2>
         <p>This page allows you to send a notification to the changed user(s).</p>
         <form name="updatestate" action="#xarModURL('roles','admin','updatestate')#" method="post" enctype="application/x-www-form-urlencoded">
-            <table border="0" cellpadding="2" cellspacing="2">
+            <table border="0" cellpadding="2" cellspacing="2" class="xar-table">
                 <tr>
                     <td colspan="2">
                         <input type="hidden" name="authid" id="authid" value="#$authid#"/>

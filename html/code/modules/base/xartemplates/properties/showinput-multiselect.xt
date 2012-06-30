@@ -66,7 +66,7 @@
         <xar:if condition="(count($options) gt 0) OR $allowempty">
             <xar:javascript scope="module" module="base" filename="multicombo.js"/>
             <xar:if condition="empty($style)"><xar:set name="style">'min-width:10em;'</xar:set></xar:if>
-            <table class="xar-displayinline">
+            <table class="xar-displayinline xar-table">
                 <thead>
                     <tr>
                         <!-- the first two cells are hidden if js is not available -->
