@@ -131,8 +131,18 @@
                         <xar:set name="prop_name">"{$col_name}"</xar:set>
                         <xar:set name="prop_id">"{$col_id}"</xar:set>
                         <td>
+                            <xar:if condition="isset($column_defaults[$k])">
+                                <xar:set name="col_default">$column_defaults[$k]</xar:set>
+                            <xar:else/>
+                                <xar:set name="col_default">''</xar:set>
+                            </xar:if>
+                            <xar:if condition="isset($column_configurations[$k])">
+                                <xar:set name="col_config">$column_configurations[$k]</xar:set>
+                            <xar:else/>
+                                <xar:set name="col_config">''</xar:set>
+                            </xar:if>
                             <span style="display: #$index_display#">#$prop_name#</span>
-                            <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$column_defaults[$k]"  configuration="$column_configurations[$k]"/>
+                            <xar:data-input type="$column_types[$k]" name="$prop_name" id="$prop_id" value="$col_default" configuration="$col_config"/>
                         </td>
                     </xar:for>
                     <td class="xar-align-right">
