@@ -359,6 +359,7 @@ class xarTpl extends Object
         $tplData['_bl_module_name'] = $modName;
         $tplData['_bl_module_type'] = $modType;
         $tplData['_bl_module_func'] = $funcName;
+        $tplData['_bl_template']    = $sourceFileName;
         $tpl = (object) null;
         $tpl->pageTitle = self::getPageTitle();
         $tplData['tpl'] = $tpl;
