@@ -282,7 +282,7 @@ final class sys extends Object
      * @param  string $dp 'dot path' a dot separated string describing which component to include
      * @param  bool $root whether to prepend the relative root directory
     **/
-    private static function once($dp, $root=true)
+    private static function once($dp, $root=true, $offset='')
     {
         // If we already have it get out of here asap
         if(!isset(self::$has[$dp]))
@@ -291,8 +291,8 @@ final class sys extends Object
             self::$has[$dp] = true;
             // tiny bit faster would be to use include, but this is quite a bit safer
             // and it will be executed only once anyway. (i.e. if everything uses this class)
-            if ($root) return include_once(self::root() . str_replace('.','/',$dp).'.php');
-            return include_once(str_replace('.','/',$dp).'.php');
+            if ($root) return include_once($offset . self::root() . str_replace('.','/',$dp).'.php');
+            return include_once($offset . str_replace('.','/',$dp).'.php');
         }
         return true;
     }
@@ -312,12 +312,12 @@ final class sys extends Object
      * @see    sys::once()
      * @todo   do we want to support sys::import('blocklayout.*') ?
     **/
-    public static function import($dp)
+    public static function import($dp, $offset='')
     {
         if((0===strpos($dp,'modules.')) || (0===strpos($dp,'properties.')) || (0===strpos($dp,'blocks.'))) {
-            return self::once(self::shortpath($GLOBALS['systemConfiguration']['codeDir'] . $dp), false);
+            return self::once(self::shortpath($GLOBALS['systemConfiguration']['codeDir'] . $dp), false, $offset);
         }
-        return self::once($GLOBALS['systemConfiguration']['libDir'] . $dp);
+        return self::once($GLOBALS['systemConfiguration']['libDir'] . $dp, true, $offset);
     }
 
     /**
@@ -326,11 +326,11 @@ final class sys extends Object
      *
      * @return string
     **/
-    public static function root()
+    public static function root($offset='')
     {
         // We are in bootstrap.php and we want <root>
         if(!isset(self::$root))
-            self::$root = $GLOBALS['systemConfiguration']['rootDir'];
+            self::$root = $offset . $GLOBALS['systemConfiguration']['rootDir'];
         return self::$root;
     }
 
@@ -340,11 +340,11 @@ final class sys extends Object
      *
      * @return string
     **/
-    public static function lib()
+    public static function lib($offset='')
     {
         // We are in bootstrap.php and we want <lib>
         if(!isset(self::$lib))
-            self::$lib = $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['libDir'];
+            self::$lib = $offset . $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['libDir'];
         return self::$lib;
     }
 
@@ -354,11 +354,11 @@ final class sys extends Object
      *
      * @return string
     **/
-    public static function code()
+    public static function code($offset='')
     {
         // We are in bootstrap.php and we want <code>
         if(!isset(self::$code))
-            self::$code = self::shortpath($GLOBALS['systemConfiguration']['codeDir']);
+            self::$code = $offset . self::shortpath($GLOBALS['systemConfiguration']['codeDir']);
         return self::$code;
     }
 
@@ -390,13 +390,13 @@ final class sys extends Object
      * @return string the var directory path name
      * @todo the .key.php construct seems odd
     **/
-    public static function varpath()
+    public static function varpath($offset='')
     {
         if (isset(self::$var)) return self::$var;
         if (isset($GLOBALS['systemConfiguration']['varDir'])) {
-            self::$var = $GLOBALS['systemConfiguration']['varDir'];
+            self::$var = $offset . $GLOBALS['systemConfiguration']['varDir'];
         } else {
-            self::$var = './var';
+            self::$var = $offset . './var';
         }
         return self::$var;
     }
