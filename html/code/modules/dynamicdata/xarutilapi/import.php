@@ -278,7 +278,8 @@ function dynamicdata_utilapi_import(Array $args=array())
                 if (isset($child->$propertyname)) {
                     // Run the import value through the property's validation routine
                     //$check = $property->validateValue((string)$child->$propertyname);
-                    $value = (string)$child->$propertyname;
+                    $value = $property->importValue($child);
+//                    $value = (string)$child->$propertyname;
                     try {
                         $boolean->validate($value, array());
                     } catch (Exception $e) {

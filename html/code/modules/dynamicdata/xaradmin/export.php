@@ -111,13 +111,14 @@ function dynamicdata_admin_export(Array $args=array())
             $xml .= "<items>\n";
             foreach ($mylist->items as $itemid => $item) {
                 $xml .= '  <'.$mylist->name.' itemid="'.$itemid.'">'."\n";
-                foreach (array_keys($mylist->properties) as $name) {
+                foreach ($mylist->properties as $name => $property) {
                     if (isset($item[$name])) {
                         if ($name == 'configuration') {
                         // don't replace anything in the serialized value
                             $xml .= "    <$name>" . $item[$name];
                         } else {
-                            $xml .= "    <$name>" . xarVarPrepForDisplay($item[$name]);
+                            $xml .= "    <$name>";
+                            $xml .= $property->exportValue($itemid, $item);
                         }
                     } else {
                         $xml .= "    <$name>";
