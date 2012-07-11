@@ -23,8 +23,9 @@ function modules_admin_hooks(Array $args=array())
     // Security
     if(!xarSecurityCheck('ManageModules')) return;
 
-    if (!xarVarFetch('hook', 'isset', $curhook, null, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('curhook', 'isset', $curhook, null, XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('layout', 'pre:trim:lower:enum:bycat', $layout, 'bycat', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('return_url', 'str', $return_url, '', XARVAR_NOT_REQUIRED)) return;
     extract($args);
     
     // Get list of hook module(s) (observers) and the available hooks supplied 
@@ -38,7 +39,7 @@ function modules_admin_hooks(Array $args=array())
         $modules = xarMod::apiFunc('modules', 'admin', 'getlist', $get);
         if (!isset($modules)) return;
         // get list of modules / itemtypes this module is hooked to
-        $obssubjects = xarHooks::getObserverSubjects($curhook);        
+        $obssubjects = xarHooks::getObserverSubjects($curhook);
         $cats = array();
         $subjects = array();
         foreach ($modules as $k => $modinfo) {
@@ -128,7 +129,6 @@ function modules_admin_hooks(Array $args=array())
     $data['return_url'] = $return_url;
     
     return $data;    
-
 }
 
 ?>

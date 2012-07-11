@@ -20,7 +20,7 @@
 function categories_admin_hooks()
 {
     // Security check
-    if(!xarSecurityCheck('ViewCategories')) return;
+    if(!xarSecurityCheck('ManageCategories')) return;
 
     $data = array();
 
