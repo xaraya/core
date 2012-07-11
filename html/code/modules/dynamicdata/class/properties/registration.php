@@ -314,11 +314,31 @@ class PropertyRegistration extends DataContainer
             // might as well put this directly after the include above.
             $newClasses = get_declared_classes();
 
-            // See what class(es) we have here
+            // Sort the classes into the proper order for installation
+            $classesToSort = array();
+            $edges = array();
+            foreach ($newClasses as $thisclass) {
+                // Just get properties
+                if (!is_subclass_of($thisclass, 'DataProperty')) continue;
+                
+                // Ignore installer classes of properties (they are extensions)
+                if (substr($thisclass, -7) == 'Install') continue;
+                
+                // Good class: add it to the array
+                $classesToSort[] = $thisclass;
+                
+                if (isset($thisclass::$deferto) && is_array($thisclass::$deferto)) {
+                    foreach ($thisclass::$deferto as $defered) {
+                        $edges[] = array($defered,$thisclass);
+                    }
+                }
+            }
+            // Now sort the properties in the order they need to be installed
+            $sortedClasses = self::topological_sort($classesToSort, $edges);
+            
+            // Process the sorted classes
             $i=0;
-            foreach($newClasses as $index => $propertyClass) {
-                // If it doesnt exist something weird is goin on
-                if (!is_subclass_of($propertyClass, 'DataProperty')) {;continue;}
+            foreach($sortedClasses as $index => $propertyClass) {
                 $processedClasses[] = $propertyClass;
 
                 // Main part
@@ -410,6 +430,33 @@ class PropertyRegistration extends DataContainer
             $installer = new $class($descriptor);
             $installer->install();
         }
+    }   
+
+    // Taken from http://www.calcatraz.com/blog/php-topological-sort-function-384
+    private static function topological_sort($nodeids, $edges) {
+        $L = $S = $nodes = array();
+        foreach($nodeids as $id) {
+            $nodes[$id] = array('in'=>array(), 'out'=>array());
+            foreach($edges as $e) {
+                if ($id==$e[0]) { $nodes[$id]['out'][]=$e[1]; }
+                if ($id==$e[1]) { $nodes[$id]['in'][]=$e[0]; }
+            }
+        }
+        foreach ($nodes as $id=>$n) { if (empty($n['in'])) $S[]=$id; }
+        while (!empty($S)) {
+            $L[] = $id = array_shift($S);
+            foreach($nodes[$id]['out'] as $m) {
+                $nodes[$m]['in'] = array_diff($nodes[$m]['in'], array($id));
+                if (empty($nodes[$m]['in'])) { $S[] = $m; }
+            }
+            $nodes[$id]['out'] = array();
+        }
+        foreach($nodes as $n) {
+            if (!empty($n['in']) or !empty($n['out'])) {
+                return null; // not sortable as graph is cyclic
+            }
+        }
+        return $L;
     }
 }
 ?>
