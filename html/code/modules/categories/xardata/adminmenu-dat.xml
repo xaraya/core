@@ -53,7 +53,7 @@
             </includes>
             <target>hooks</target>
 			<title>Configure categories hooks for other modules</title>
-            <label>Enable Hooks</label>
+            <label>Manage Hooks</label>
         </menuitem>		
         <menuitem>
 			<mask>AdminCategories</mask>
