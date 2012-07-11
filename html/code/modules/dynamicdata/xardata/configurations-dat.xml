@@ -773,13 +773,4 @@
     <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
-  <configurations itemid="87">
-    <id>173</id>
-    <name>initialization_basecategories</name>
-    <label>Base Categories</label>
-    <description>A set of categories that form the top of category trees</description>
-    <property_id>30050</property_id>
-    <ignore_empty>1</ignore_empty>
-    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
-  </configurations>
 </items>
