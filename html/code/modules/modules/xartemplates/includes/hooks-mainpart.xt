@@ -3,37 +3,37 @@
     <xar:javascript scope="theme" filename="toggle.js"/>
     <xar:var name="toggletitle">Click to toggle display of available hooks for this module.</xar:var>
     <xar:if condition="empty($observers[$curhook])">
-    <ul>
-        <xar:foreach in="$observers" key="$module" value="$modinfo">             
-            <li>
-                <a href="#xarServer::getCurrentURL(array('hook' => $module))#">
-                    #$modinfo['displayname']#
-                </a>
-                 : #$modinfo['displaydescription']# 
-                [ <a href="javascript:void(0);" title="#$toggletitle#" onclick="return toggleDisplay('hookdetails#$module#');">Details</a> ]
-                <div id="hookdetails#$module#">
-                    <p>The #$modinfo['displayname']# module supplies the following hooks...</p>                    
-                    <ul>
-                        <xar:foreach in="$modinfo['scopes']" key="$scope" value="$events">
-                            <li><h4>#$scope# Hooks</h4>
-                                <ul>                                
-                                <xar:foreach in="$events" key="$event" value="$hook">
-                                    <li>#$event#</li>
-                                </xar:foreach>
-                                </ul>                            
-                            </li>
-                        </xar:foreach>
-                    </ul>
-                </div>
-                <!-- hide hook details on page load (only if js enabled :) ) -->
-                
-                <script type="text/javascript"><![CDATA[
-                    setDisplayOff('hookdetails#$module#');
-                ]]></script>
-                                
-            </li>
-        </xar:foreach>
-    </ul>
+        <ul>
+            <xar:foreach in="$observers" key="$module" value="$modinfo">             
+                <li>
+                    <a href="#xarServer::getCurrentURL(array('hook' => $module))#">
+                        #$modinfo['displayname']#
+                    </a>
+                     : #$modinfo['displaydescription']# 
+                    [ <a href="javascript:void(0);" title="#$toggletitle#" onclick="return toggleDisplay('hookdetails#$module#');">Details</a> ]
+                    <div id="hookdetails#$module#">
+                        <p>The #$modinfo['displayname']# module supplies the following hooks...</p>                    
+                        <ul>
+                            <xar:foreach in="$modinfo['scopes']" key="$scope" value="$events">
+                                <li><h4>#$scope# Hooks</h4>
+                                    <ul>                                
+                                    <xar:foreach in="$events" key="$event" value="$hook">
+                                        <li>#$event#</li>
+                                    </xar:foreach>
+                                    </ul>                            
+                                </li>
+                            </xar:foreach>
+                        </ul>
+                    </div>
+                    <!-- hide hook details on page load (only if js enabled :) ) -->
+                    
+                    <script type="text/javascript"><![CDATA[
+                        setDisplayOff('hookdetails#$module#');
+                    ]]></script>
+                                    
+                </li>
+            </xar:foreach>
+        </ul>
     <xar:else/>
         <h3>Configure modules #$observers[$curhook]['displayname']# is hooked to [ <a href="javascript:void(0);" title="#$toggletitle#" onclick="return toggleDisplay('hookdetails#$curhook#');">Details</a> ]</h3>    
                 <div id="hookdetails#$curhook#">
