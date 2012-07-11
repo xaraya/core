@@ -36,6 +36,7 @@ class CategoriesProperty extends DataProperty
     public $name       = 'categories';
     public $desc       = 'Categories';
     public $reqmodules = array('categories');
+    public static $deferto    = array('CategoryPickerProperty');
 
     public $include_reference   = 1;
 
@@ -45,6 +46,7 @@ class CategoriesProperty extends DataProperty
     public $validation_allowempty_invalid;
     public $initialization_include_no_cat   = 1;
     public $initialization_include_all_cats = 0;
+    public $initialization_basecategories;
 
     public $module_id;
     public $itemtype;
@@ -54,7 +56,6 @@ class CategoriesProperty extends DataProperty
     
 //    public $validation_categories;
 
-    public $initialization_basecategories;
     
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -287,7 +288,11 @@ class CategoriesProperty extends DataProperty
             $this->module_id = (int)$this->objectref->module_id;
             // Ignore itemid if this is an object list; need to get the ID from the corresponding attribute
             if (isset($this->objectref->itemid)) {
-                $itemid = $this->objectref->properties['id']->value;
+                if (isset($this->objectref->properties['objectid'])) {
+                    $itemid = $this->objectref->properties['objectid']->value;
+                } else {
+                    $itemid = $this->objectref->properties['id']->value;
+                }
             }
         }
         // Override or a standalone property
@@ -317,7 +322,7 @@ class CategoriesProperty extends DataProperty
         $q->run();
         $this->value = $q->output();
 
-        $data['value'] = $this->value;
+        $data['value'] = $this->value;//var_dump($data);$q->qecho();
         return parent::showOutput($data);
     }
 
@@ -335,4 +340,17 @@ class CategoriesProperty extends DataProperty
     }
 }
 
+class CategoriesPropertyInstall extends CategoriesProperty implements iDataPropertyInstall
+{
+    public function install(Array $data=array())
+    {
+        $files[] = sys::code() . 'modules/categories/xardata/categories_configurations-dat.xml';
+        foreach ($files as $file) {
+            try {
+                $objectid = xarMod::apiFunc('dynamicdata','util','import', array('file' => $file));
+            } catch (Exception $e) {}
+        }
+        return true;
+    }    
+}
 ?>
