@@ -4,6 +4,7 @@
     <name>General</name>
     <description>A default top level category</description>
     <image></image>
+    <template></template>
     <child_categories></child_categories>
     <position>1</position>
   </categories>
@@ -12,6 +13,7 @@
     <name>People</name>
     <description>A category that relates to site users</description>
     <image></image>
+    <template></template>
     <child_categories></child_categories>
     <position>2</position>
   </categories>
@@ -20,7 +22,71 @@
     <name>Topics</name>
     <description>A category that relates to site topics</description>
     <image></image>
+    <template></template>
     <child_categories></child_categories>
     <position>3</position>
+  </categories>
+  <categories itemid="4">
+    <id>4</id>
+    <name>Test</name>
+    <description>Test</description>
+    <image></image>
+    <template></template>
+    <child_categories></child_categories>
+    <position>4</position>
+  </categories>
+  <categories itemid="5">
+    <id>5</id>
+    <name>System</name>
+    <description>Categories related to core modules</description>
+    <image></image>
+    <template></template>
+    <child_categories></child_categories>
+    <position>5</position>
+  </categories>
+  <categories itemid="6">
+    <id>6</id>
+    <name>DynamicData</name>
+    <description>Categories related to the DynamicData module</description>
+    <image></image>
+    <template></template>
+    <child_categories></child_categories>
+    <position>6</position>
+  </categories>
+  <categories itemid="7">
+    <id>7</id>
+    <name>Reserved</name>
+    <description>DataObjects that are required by the DynamicData module</description>
+    <image></image>
+    <template></template>
+    <child_categories></child_categories>
+    <position>7</position>
+  </categories>
+  <categories itemid="8">
+    <id>8</id>
+    <name>Core</name>
+    <description>DataObjects used by core modules</description>
+    <image></image>
+    <template></template>
+    <child_categories></child_categories>
+    <position>8</position>
+  </categories>
+  <categories itemid="9">
+    <id>9</id>
+    <name>General</name>
+    <description>DataObjects used by non core modules</description>
+    <image></image>
+    <template></template>
+    <child_categories></child_categories>
+    <position>9</position>
+  </categories>
+  <categories itemid="10">
+    <id>10</id>
+    <name>Users</name>
+    <description>Categories related to site users</description>
+    <image></image>
+    <template></template>
+    <child_categories></child_categories>
+    <position>10</position>
   </categories>
 </items>
