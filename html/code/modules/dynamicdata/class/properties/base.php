@@ -836,7 +836,17 @@ class DataProperty extends Object implements iDataProperty
 
     public function castType($value=null)
     {
-        return $value;
+        return (string)$value;
+    }
+
+    public function importValue(SimpleXMLElement $element)
+    {
+        return $this->castType($element->{$this->name});
+    }
+
+    public function exportValue($itemid, $item)
+    {
+        return xarVarPrepForDisplay($item[$this->name]);
     }
 }
 ?>
