@@ -81,6 +81,7 @@ function categories_userapi_getcat($args)
                         P1.name,
                         P1.description,
                         P1.image,
+                        P1.template,
                         P1.child_object,
                         P1.parent_id,
                         P1.left_id,
@@ -170,7 +171,7 @@ function categories_userapi_getcat($args)
     }
 
     // Have to specify all selected attributes in GROUP BY
-    $SQLquery .= " GROUP BY P1.id, P1.name, P1.description, P1.image, P1.parent_id, P1.left_id, P1.right_id ";
+    $SQLquery .= " GROUP BY P1.id, P1.name, P1.description, P1.image, P1.template, P1.parent_id, P1.left_id, P1.right_id ";
 
     $having = array();
     // Postgre doesnt accept the output name ('indent' here) as a parameter in the where/having clauses
@@ -218,6 +219,7 @@ function categories_userapi_getcat($args)
                 $name,
                 $description,
                 $image,
+                $template,
                 $child_object,
                 $parent,
                 $left,
@@ -250,7 +252,8 @@ function categories_userapi_getcat($args)
                 'name'        => $name,
                 'description' => $description,
                 'image'       => $image,
-                'child_object'       => $child_object,
+                'template'    => $template,
+                'child_object'=> $child_object,
                 'parent'      => $parent,
                 'left'        => $left,
                 'right'       => $right,

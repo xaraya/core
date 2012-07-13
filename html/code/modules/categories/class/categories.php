@@ -27,6 +27,7 @@
                                 name,
                                 description,
                                 image,
+                                template,
                                 parent_id,
                                 left_id,
                                 right_id
@@ -46,6 +47,7 @@
         public $name = '';
         public $description = '';
         public $image = '';
+        public $template = '';
         public $child_object = "";
         public $parent = 0;
         public $left = 0;
@@ -71,6 +73,7 @@
                                 name,
                                 description,
                                 image,
+                                template,
                                 child_object,
                                 parent_id,
                                 left_id,
@@ -84,7 +87,7 @@
             $set = new BasecSet();
             while (!$result->EOF) {
                 $c = new CategoryTreeNode();
-                list($c->id, $c->name, $c->description, $c->image, $o->child_object, $c->parent, $c->left, $c->right) = $result->fields;
+                list($c->id, $c->name, $c->description, $c->image, $c->template, $o->child_object, $c->parent, $c->left, $c->right) = $result->fields;
                 $collection->add($c);
             }
             return $collection;
@@ -180,6 +183,7 @@
                     'description' => $row['description'],
                     'indentation' => $row['indentation'],
                     'image' => $row['image'],
+                    'template' => $row['template'],
                     'child_object' => $row['child_object'],
                     'left' => $row['left'],
                     'right' => $row['right'],
@@ -199,6 +203,7 @@
                       'description'  => 'A virtual root node',
                       'indentation'  => 0,
                       'image'        => '',
+                      'template'     => '',
                       'child_object' => '',
                       'left'         => 1,
                       'right'        => 2,
