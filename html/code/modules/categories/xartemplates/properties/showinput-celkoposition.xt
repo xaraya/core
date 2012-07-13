@@ -23,10 +23,10 @@
                     <xar:if condition="$items[$i]['left'] eq $item['left_id']-1">
                         <xar:set name="position">4</xar:set>
                         <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
-                        <xar:elseif condition="$items[$i]['right'] eq $item['left_id']-1"/>
+                    <xar:elseif condition="$items[$i]['right'] eq $item['left_id']-1"/>
                         <xar:set name="position">2</xar:set>
                         <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
-                        <xar:else />
+                    <xar:else />
                         <option value="#$items[$i]['id']#">#$items[$i]['slash_separated']#</option>
                     </xar:if>
                 </xar:for>

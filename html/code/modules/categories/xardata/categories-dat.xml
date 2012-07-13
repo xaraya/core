@@ -6,7 +6,7 @@
     <image></image>
     <template></template>
     <child_categories></child_categories>
-    <position>1</position>
+    <position>a:4:{i:0;i:1;i:1;i:0;i:2;i:19;i:3;i:20;}</position>
   </categories>
   <categories itemid="2">
     <id>2</id>
@@ -15,7 +15,7 @@
     <image></image>
     <template></template>
     <child_categories></child_categories>
-    <position>2</position>
+    <position>a:4:{i:0;i:2;i:1;i:0;i:2;i:17;i:3;i:18;}</position>
   </categories>
   <categories itemid="3">
     <id>3</id>
@@ -24,7 +24,7 @@
     <image></image>
     <template></template>
     <child_categories></child_categories>
-    <position>3</position>
+    <position>a:4:{i:0;i:3;i:1;i:0;i:2;i:15;i:3;i:16;}</position>
   </categories>
   <categories itemid="4">
     <id>4</id>
@@ -33,7 +33,7 @@
     <image></image>
     <template></template>
     <child_categories></child_categories>
-    <position>4</position>
+    <position>a:4:{i:0;i:4;i:1;i:0;i:2;i:13;i:3;i:14;}</position>
   </categories>
   <categories itemid="5">
     <id>5</id>
@@ -42,7 +42,7 @@
     <image></image>
     <template></template>
     <child_categories></child_categories>
-    <position>5</position>
+    <position>a:4:{i:0;i:5;i:1;i:0;i:2;i:5;i:3;i:12;}</position>
   </categories>
   <categories itemid="6">
     <id>6</id>
@@ -51,7 +51,7 @@
     <image></image>
     <template></template>
     <child_categories></child_categories>
-    <position>6</position>
+    <position>a:4:{i:0;i:6;i:1;i:5;i:2;i:6;i:3;i:11;}</position>
   </categories>
   <categories itemid="7">
     <id>7</id>
@@ -60,7 +60,7 @@
     <image></image>
     <template></template>
     <child_categories></child_categories>
-    <position>7</position>
+    <position>a:4:{i:0;i:7;i:1;i:6;i:2;i:7;i:3;i:8;}</position>
   </categories>
   <categories itemid="8">
     <id>8</id>
@@ -69,7 +69,7 @@
     <image></image>
     <template></template>
     <child_categories></child_categories>
-    <position>8</position>
+    <position>a:4:{i:0;i:8;i:1;i:6;i:2;i:9;i:3;i:10;}</position>
   </categories>
   <categories itemid="9">
     <id>9</id>
@@ -78,7 +78,7 @@
     <image></image>
     <template></template>
     <child_categories></child_categories>
-    <position>9</position>
+    <position>a:4:{i:0;i:9;i:1;i:0;i:2;i:3;i:3;i:4;}</position>
   </categories>
   <categories itemid="10">
     <id>10</id>
@@ -87,6 +87,6 @@
     <image></image>
     <template></template>
     <child_categories></child_categories>
-    <position>10</position>
+    <position>a:4:{i:0;i:10;i:1;i:0;i:2;i:1;i:3;i:2;}</position>
   </categories>
 </items>

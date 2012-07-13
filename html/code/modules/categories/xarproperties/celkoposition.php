@@ -23,8 +23,8 @@ sys::import('modules.dynamicdata.class.properties.base');
  *
  * - This property always has a reference to the parent object
  * - The default value for the celko table is xar_categories. Properties using other tables need to explicitly state the table.
- * - When exporting, we store parent_id, left_id, right_id in the value filed of the property
- * - As a consequence, a non-empty $this-value menas we are in the process of importing from an XML file.
+ * - When exporting, we store parent_id, left_id, right_id in the value field of the property
+ * - As a consequence, a non-empty $this-value means we are in the process of importing from an XML file.
  *
  */
 
@@ -44,14 +44,16 @@ class CelkoPositionProperty extends DataProperty
 //    public $parent;
     public $catexists;
     public $dbconn;
-    public $parentindices     = array();    // helper variable to hold parent items when importing
-    public $parentunresolveds = array();    // helper variable to hold unresolved parent references (key) and their itemids (value)
+    public $itemindices     = array();    // helper variable to hold items when importing
+    public $itemsknown      = array();    // helper variable to hold known references: oldkey => newkey
+    public $itemsunresolved = array();    // helper variable to hold unresolved references: newkey => oldkey
+    public $offset          = 0;          // helper variable to hold offsets for left and right ids
     
     public $initialization_celkotable     = 'xar_categories';
     public $initialization_celkoname      = 'name';
     public $initialization_celkoparent_id = 'parent_id';
-    public $initialization_celkoright_id  = 'right_id';
     public $initialization_celkoleft_id   = 'left_id';
+    public $initialization_celkoright_id  = 'right_id';
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -104,40 +106,57 @@ class CelkoPositionProperty extends DataProperty
 # Usually this means the same datasource is used for this property and the other properties of this object item (ex: categories table)
 #
             if ($this->value) {
-                $parentid = $this->unpackValue($itemid);
-            } elseif ($this->reference_id == 0) {
-                // This item is the first item to be created
-                $parentid = $this->reference_id;            
-            } elseif ($this->inorout == 'in') {
-                // This item is a child, so its parent is the reference item  
-                $parentid = $this->reference_id;
-            } else {
-                // This item is on he same level as the reference item; the parent is the same as that of the reference item
-                $parentItem = $this->getItem($this->reference_id);
-                $parentid = $parentItem['parent_id'];
-            }
-
-            // CHECKME: why do we need to run updateposition AND updateValue?
-            $itemid = $this->updateposition($itemid, $parentid);
-//            $this->reference_id = $parentid;
-//            $this->rightorleft = 'RIGHT';
-//            $this->inorout = 'IN';
-            $this->updateValue($itemid);
-
-# --------------------------------------------------------
-#
-# We updated a position. Now go back and see if any of the unresolveds we have can be resolved
-#
-            foreach ($this->parentunresolveds as $key => $value) {
-                if (isset($this->parentindices[$value])) {
-                    $this->reference_id = $this->parentindices[$value];
-                    $this->rightorleft = 'RIGHT';
-                    $this->inorout = 'IN';
-                    $this->updateValue($key);
-                    unset($this->parentunresolveds[$key]);
+                // If we are just starting an import, calculate the offset for new left and right links
+                if (empty($this->itemsknown)) $this->offset = ($this->countItems() - 1) * 2;echo $this->offset;
+                
+                // Unpack the values of this property
+                $params = unserialize($this->value);
+                // Add this item to the list of known items for subsequent rounds
+                $this->itemindices[$params[0]] = $params;
+                $this->itemsknown[$params[0]] = $itemid;
+                // Add this itemid to the list of items to be resolved
+                $this->itemsunresolved[$itemid] = $params[0];
+                
+                sys::import('xaraya.structures.query');
+                foreach ($this->itemsunresolved as $newkey => $oldkey) {
+                    if (isset($this->itemindices[$oldkey])) {
+                        $params = $this->itemindices[$oldkey];//var_dump($params);
+                        $checkparent = (($params[1] == 0) || isset($this->itemsknown[$params[1]]));
+                        if ($checkparent) {
+                            // We have the parent reference: update the entry
+                            $q = new Query('UPDATE', $this->initialization_celkotable);
+                            if ($params[1] != 0) {
+                                $q->addfield($this->initialization_celkoparent_id, $this->itemsknown[$params[1]]);
+                            } else {
+                                $q->addfield($this->initialization_celkoparent_id, $params[1]);
+                            }
+                            $q->addfield($this->initialization_celkoleft_id, $params[2] + $this->offset);
+                            $q->addfield($this->initialization_celkoright_id, $params[3] + $this->offset);
+                            $q->eq('id', $newkey);echo $this->offset;
+                            $q->qecho();echo "<br/>";
+                            $q->run();
+    
+                            // Remove this entry from the unresolveds
+                            unset($this->itemsunresolved[$newkey]);
+                        }
+                    }
                 }
-            }
             
+            } else {
+                if ($this->reference_id == 0) {
+                    // This item is the first item to be created
+                    $parentid = $this->reference_id;            
+                } elseif ($this->inorout == 'in') {
+                    // This item is a child, so its parent is the reference item  
+                    $parentid = $this->reference_id;
+                } else {
+                    // This item is on he same level as the reference item; the parent is the same as that of the reference item
+                    $parentItem = $this->getItem($this->reference_id);
+                    $parentid = $parentItem['parent_id'];
+                }
+                $itemid = $this->updateposition($itemid, $parentid);
+                $this->updateValue($itemid);
+            }
         } else {
 # --------------------------------------------------------
 #
@@ -369,10 +388,13 @@ class CelkoPositionProperty extends DataProperty
 /**
  * Return the number of items in the celko table that have this itemid
  */
-    private function countItems($itemid)
+    private function countItems($itemid=0)
     {
         $sql = "SELECT COUNT(id) AS childnum
-                  FROM " . $this->initialization_celkotable . " WHERE id = " . $itemid;
+                  FROM " . $this->initialization_celkotable;
+        if (!empty($itemid)) {
+            $sql .= " WHERE id = " . $itemid;
+        }
         $result = $this->dbconn->Execute($sql);
         if (!$result) return;
         $num = $result->fields[0];
@@ -523,11 +545,6 @@ class CelkoPositionProperty extends DataProperty
                    ) = $result->fields;
             $result->MoveNext();
 
-/*          CHECKME: how do we handle privileges?
-            if (!xarSecurityCheck('ViewCategories',0,'Category',"$name:$cid")) {
-                 continue;
-            }
-*/
             if ($indexby == 'cid') {
                 $index = $id;
             } else {
@@ -556,7 +573,6 @@ class CelkoPositionProperty extends DataProperty
         if (!empty($dropdown)) {
             $items[0] = array('id' => 0, 'name' => '');
         }
-
         return $items;
     }
 
@@ -565,42 +581,63 @@ class CelkoPositionProperty extends DataProperty
  *
  * Takes the serialized value in $this->value and assigns its unserialized values to their proper places
  */
+    // Itemid is the id of the row created. We assume same table for all properties of the object
     private function unpackValue($itemid)
     {
         try {
             // Unpack the values of this property
             $params = unserialize($this->value);
+            // Add this item to the list of known items for subsequent rounds
+            $this->itemindices[$params[0]] = $params;
+            $this->itemsknown[$params[0]] = $itemid;
+            // Add this itemid to the list of items to be resolved
+            $this->itemsunresolved[$itemid] = $params[0];
+            return true;
             
             // Get the value for the reference ID (parent)
-            $this->reference_id = $params[$this->initialization_celkoparent_id];
+//            $parent_id = $params[1];
         } catch (Exception $e) {
-            $this->reference_id = 0;
-            $params['id'] = $itemid;
+//            $parent_id = 0;
+//            $params[0] = $itemid;
         }
         
-        $this->setCelkoValues($this->reference_id, $params['id']);
+        $this->setCelkoValues($itemid, $params[0]);
                 
-        // add this itemid to the list of known parents for subsequent rounds
-        $this->parentindices[$params['id']] = $itemid;
-        return $this->reference_id;
+        return $parent_id;
     }
     
-    private function setCelkoValues($parentid, $itemid)
+    private function setCelkoValues($newid, $oldid)
     {
-        if (isset($this->parentindices[$parentid])) {
-            $this->reference_id = $this->parentindices[$parentid];
+        if (isset($this->itemindices[$newid])) {
+            $params = $this->itemindices[$newid];
+            $oldid = $params[0];
         } else {
             // We'll still need to resolve this entry later
             // add this parent to the list of known parents for subsequent rounds
-            $this->parentindices[$parentid] = null;
-            $this->parentunresolveds[$itemid] = $parentid;
-            $this->reference_id = 0;
+            $this->itemindices[$newid] = null;
+            $this->itemsunresolved[$itemid] = $newid;
+            $parent_id = 0;
         }
         
         // Set the left and right values null and let the updateposition method take care of them
         $this->right = null;
         $this->left = null;
         return true;
+    }
+    
+    public function importValue(SimpleXMLElement $element)
+    {
+        return $element->{$this->name};
+    }
+
+/**
+ * The export value is a serialized array with the elements itemid, parentid, leftid, rightid
+ */
+    public function exportValue($itemid, $item)
+    {
+        $thisItem = $this->getItem($itemid);
+        $exportvalue = serialize(array((int)$itemid, (int)$thisItem['parent_id'], (int)$thisItem['left_id'], (int)$thisItem['right_id']));
+        return $exportvalue;
     }
 }
 ?>
