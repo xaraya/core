@@ -21,11 +21,23 @@ sys::import('modules.dynamicdata.class.properties.base');
 /**
  * Notes
  *
+ * - This property is used in creating hierarchical data using the nested set model
  * - This property always has a reference to the parent object
  * - The default value for the celko table is xar_categories. Properties using other tables need to explicitly state the table.
- * - When exporting, we store parent_id, left_id, right_id in the value field of the property
- * - As a consequence, a non-empty $this-value means we are in the process of importing from an XML file.
- *
+ * - When exporting, we store itemid, parent_id, left_id, right_id in the value field of the property
+ * - As a consequence, a non-empty $this-value when running the createValue method means we are in the process of importing from an XML file.
+ * - When exporting we save an entire tree at a time
+ * - Consequently when importing we import an entire tree. This tree is added as a new tree at the root level, alongside the trees already in the database.
+ *   We therefore need to translate the itemid and parent_id values we are importing into the values of the new entries we are creating in the database,
+ *   we also need to adjust all the left and right values. The latter adjustments are simply a matter of adding 2*n to the value of each left and right id, 
+ *   where n is the number of entries already present in the table before the import.
+ * - When creating values we have to distinguish between cases where the celkoposition property is using the same database table as other properties of the object in question,
+ *   and where it is using a different table. Since the property does not define a source in the object's property configuration page, but rather defines its source table in its configuration page,
+ *   this means that the property's createValue method takes care of creating the entry it needs, rather than the object's createItem method.
+ *   In such cases createValue always runs AFTER createItem. This means that if the property is using the same table as other properties of the object, it will find a database entry has already 
+ *   been created and only needs to update the values of that entry. This is the case of the categories object, which uses the same xar_categories table for all its properties.
+ * - In contrast if the celkopposiion property uses a different source table than the object's other properties, it will (first) have to create an entry in that source table itself.
+ *   We currently don't have any examples of such a case, but this might be the case of Chris' Uebertable :)
  */
 
 class CelkoPositionProperty extends DataProperty
@@ -106,8 +118,10 @@ class CelkoPositionProperty extends DataProperty
 # Usually this means the same datasource is used for this property and the other properties of this object item (ex: categories table)
 #
             if ($this->value) {
+                // If we have a value, then we are creating an item from an imported XML file
+                
                 // If we are just starting an import, calculate the offset for new left and right links
-                if (empty($this->itemsknown)) $this->offset = ($this->countItems() - 1) * 2;echo $this->offset;
+                if (empty($this->itemsknown)) $this->offset = ($this->countItems() - 1) * 2;
                 
                 // Unpack the values of this property
                 $params = unserialize($this->value);
@@ -120,7 +134,7 @@ class CelkoPositionProperty extends DataProperty
                 sys::import('xaraya.structures.query');
                 foreach ($this->itemsunresolved as $newkey => $oldkey) {
                     if (isset($this->itemindices[$oldkey])) {
-                        $params = $this->itemindices[$oldkey];//var_dump($params);
+                        $params = $this->itemindices[$oldkey];
                         $checkparent = (($params[1] == 0) || isset($this->itemsknown[$params[1]]));
                         if ($checkparent) {
                             // We have the parent reference: update the entry
@@ -132,8 +146,7 @@ class CelkoPositionProperty extends DataProperty
                             }
                             $q->addfield($this->initialization_celkoleft_id, $params[2] + $this->offset);
                             $q->addfield($this->initialization_celkoright_id, $params[3] + $this->offset);
-                            $q->eq('id', $newkey);echo $this->offset;
-                            $q->qecho();echo "<br/>";
+                            $q->eq('id', $newkey);
                             $q->run();
     
                             // Remove this entry from the unresolveds
