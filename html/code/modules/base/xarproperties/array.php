@@ -371,9 +371,8 @@ class ArrayProperty extends DataProperty
     {
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValue();
-        $displayconfig = $this->display_column_definition['value'];
-        $data['column_titles'] = $displayconfig[0];
-        $data['column_types'] = $displayconfig[1];
+        $data['column_titles'] = $this->display_column_definition[0];
+        $data['column_types'] = $this->display_column_definition[1];
         $data['rows'] = isset($data['value'][0]) ? count($data['value'][0]) : 0;
         return parent::showOutput($data);
     }
