@@ -299,7 +299,7 @@ class ArrayProperty extends DataProperty
         } else {
             try {
                 // New way for configs
-                $displayconfig = $this->display_column_definition['value'];
+                $displayconfig = $this->display_column_definition;
                 $titles = $displayconfig[0];
                 $types = $displayconfig[1];
                 $defaults = $displayconfig[2];
