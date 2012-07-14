@@ -36,11 +36,11 @@ function categories_userapi_getitemtypes($args)
 /* itemtype 0 not used, means "All". Itemtype 1 not used, would be a category object without properties*/
     $itemtypes[1] = array('label' => xarML('Bare Category'),
                           'title' => xarML('View Bare Category'),
-                          'url'   => xarModURL('categories','admin','viewcats')
+                          'url'   => xarModURL('categories','admin','view')
                          );
     $itemtypes[2] = array('label' => xarML('Category'),
                           'title' => xarML('View Category'),
-                          'url'   => xarModURL('categories','admin','viewcats')
+                          'url'   => xarModURL('categories','admin','view')
                          );
 
     if ($extensionitemtypes = xarMod::apiFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 147, 'native' =>false),0)) {

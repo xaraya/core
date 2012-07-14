@@ -30,7 +30,7 @@ function categories_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return array();
     } else {
-        xarController::redirect(xarModURL('categories', 'admin', 'viewcats'));
+        xarController::redirect(xarModURL('categories', 'admin', 'view'));
     }
 
     return true;

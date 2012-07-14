@@ -47,7 +47,7 @@ function categories_admin_create()
         $data['objects'][$i]->createItem();
     }
 
-    xarController::redirect(xarModURL('categories','admin','viewcats'));
+    xarController::redirect(xarModURL('categories','admin','view'));
 //    xarController::redirect(xarModURL('categories','admin','new',array('repeat' => $data['repeat'])));
     return true;
 }

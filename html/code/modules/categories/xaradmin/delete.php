@@ -69,7 +69,7 @@ function categories_admin_delete()
                        'delete',
                        array('cid' => $cid))) return;
 
-    xarController::redirect(xarModURL('categories','admin','viewcats', array()));
+    xarController::redirect(xarModURL('categories','admin','view', array()));
 
     return true;
 }

@@ -13,7 +13,7 @@
  *
  */
 
-function categories_admin_viewcats()
+function categories_admin_view()
 {
     // Get parameters
     if(!xarVarFetch('activetab',    'isset', $activetab,    0, XARVAR_NOT_REQUIRED)) {return;}
