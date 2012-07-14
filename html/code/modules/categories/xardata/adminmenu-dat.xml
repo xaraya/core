@@ -22,9 +22,9 @@
         <menuitem>
 			<mask>ManageCategories</mask>
             <includes>
-                <includeitem>viewcats</includeitem>
+                <includeitem>view</includeitem>
             </includes>
-            <target>viewcats</target>
+            <target>view</target>
 			<title>View and Edit categories</title>
             <label>View Categories</label>
         </menuitem>
