@@ -58,7 +58,7 @@ function categories_adminapi_updatecat($args)
          )
         )
        ) {
-        $msg = xarML('Bad Parameters for function #(1)', 'categories_adminapi_updatecat');
+        $msg = xarML('Bad Parameters for function #(1)', 'categories_adminapi_update');
         throw new BadParameterException(null, $msg);
     }
 
@@ -178,7 +178,7 @@ function categories_adminapi_updatecat($args)
         { // Show them that moving is not set, or else they wont know why it
           // is not working
 /* no worries - cfr. bug 3809
-            $msg = xarML('Bad Parameters for function #(1), moving not set, yet parameters for moving present', 'categories_adminapi_updatecat');
+            $msg = xarML('Bad Parameters for function #(1), moving not set, yet parameters for moving present', 'categories_adminapi_update');
             throw new BadParameterException(null, $msg);
 */
         }

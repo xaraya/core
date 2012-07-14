@@ -232,7 +232,7 @@ function categories_init()
     xarRegisterMask('ViewCategoryLink','All','categories','Link','All:All:All:All','ACCESS_OVERVIEW');
     xarRegisterMask('SubmitCategoryLink','All','categories','Link','All:All:All:All','ACCESS_COMMENT');
     xarRegisterMask('EditCategoryLink','All','categories','Link','All:All:All:All','ACCESS_EDIT');
-    xarRegisterMask('DeleteCategoryLink','All','categories','Link','All:All:All:All','ACCESS_DELETE');
+    xarRegisterMask('ManageCategoryLink','All','categories','Link','All:All:All:All','ACCESS_DELETE');
 
     xarRegisterPrivilege('ViewCategories','All','categories','Category','All','ACCESS_OVERVIEW');
     xarRegisterPrivilege('ReadCategories','All','categories','Category','All','ACCESS_READ');
