@@ -192,7 +192,7 @@
                     $cidlist = $node->cidlist[$node->id];
                     if (in_array($row['cid'],$cidlist)) $this->treedata[] = $nodedata;
                 } else {
-                    $this->treedata[$row['name']] = $nodedata;
+                    $this->treedata[$row['id']] = $nodedata;
                 }
             }
             if ($node->id == 0) {
