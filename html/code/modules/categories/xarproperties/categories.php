@@ -322,7 +322,7 @@ class CategoriesProperty extends DataProperty
         $q->run();
         $this->value = $q->output();
 
-        $data['value'] = $this->value;//var_dump($data);$q->qecho();
+        $data['value'] = $this->value;
         return parent::showOutput($data);
     }
 

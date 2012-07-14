@@ -105,20 +105,6 @@ function categories_init()
 
     # --------------------------------------------------
 
-    $q = new Query();
-    $query = "DROP TABLE IF EXISTS " . $prefix . "_categories_basecategories";
-    if (!$q->run($query)) return;
-    $query = "CREATE TABLE " . $prefix . "_categories_basecategories (
-      id integer unsigned NOT NULL auto_increment,
-      category_id int(11) DEFAULT '1' NOT NULL,
-      module_id int(11) DEFAULT NULL,
-      itemtype int(11) DEFAULT NULL,
-      name varchar(64) NOT NULL,
-      selectable int(1) DEFAULT '1' NOT NULL,
-      PRIMARY KEY  (id)
-    )";
-    if (!$q->run($query)) return;
-
     // when a new module item is being specified
     if (!xarModRegisterHook('item', 'new', 'GUI', 'categories', 'admin', 'newhook'))  return false;
 

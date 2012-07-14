@@ -56,31 +56,6 @@ class CategoryPickerProperty extends ArrayProperty
         if (isset($data['itemtype'])) $this->itemtype = (int)$data['itemtype'];
         // No hint at all, assume all itemtypes
         if (!isset($this->itemtype)) $this->itemtype = 0;
-
-        // For both create and update we remove any existing base categories and create the new ones
-        sys::import('xaraya.structures.query');
-        xarMod::apiLoad('categories');
-        $xartable = xarDB::getTables();
-        if (!empty($itemid)) {
-            $q = new Query('DELETE', $xartable['categories_basecategories']); 
-            // CHRCKME: shouldn't we force a value for module_id and itemtype?
-            $q->eq('module_id', $this->module_id);
-            $q->eq('itemtype', $this->itemtype);
-            $q->run();
-        }
-
-        foreach ($this->basecategories as $key => $basecategory) {
-            foreach ($this->categories[$key] as $category) {
-                // Ignore if no category was chosen (value = 0)
-                if (empty($category)) continue;
-                
-                $q = new Query('INSERT', $xartable['categories_basecategories']); 
-                $q->addfield('module_id', $this->module_id);
-                $q->addfield('itemtype', $this->itemtype);
-                $q->addfield('category_id', $category);
-                $q->run();
-            }
-        }
         return true;
     }
 
