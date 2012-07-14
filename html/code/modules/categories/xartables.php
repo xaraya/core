@@ -30,7 +30,6 @@ function categories_xartables()
     $xartable = array();
 
     // Set the table name
-    $xartable['tags'] = xarDB::getPrefix() . '_tags';
     $xartable['categories'] = xarDB::getPrefix() . '_categories';
     $xartable['categories_linkage'] = xarDB::getPrefix() . '_categories_linkage';
     $xartable['categories_basecategories'] = xarDB::getPrefix() . '_categories_basecategories';

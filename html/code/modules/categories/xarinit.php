@@ -103,44 +103,7 @@ function categories_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-/*    $query = "DROP TABLE IF EXISTS " . $prefix . "_tags";
-    $result =& $dbconn->Execute($query);
-    $query = "CREATE TABLE " . $prefix . "_tags (
-        id                integer unsigned NOT NULL auto_increment,
-        tagger_module_id  integer unsigned default NULL,
-        tagger_itemtype   integer unsigned default NULL,
-        tagged_module_id  integer unsigned default NULL,
-        tagged_itemtype   integer unsigned default NULL,
-        tagged_itemid     integer unsigned default NULL,
-        timecreated       integer unsigned NOT NULL default '0', 
-        timelasthit       integer unsigned NOT NULL default '0', 
-        state             tinyint unsigned NOT NULL default '3', 
-        role_id           integer unsigned NOT NULL default '0', 
-        count             integer unsigned NOT NULL default '0', 
-        PRIMARY KEY  (id), 
-        KEY i_tag_timecreated (timecreated), 
-        KEY i_tag_ltimelasthit (timelasthit), 
-        KEY i_tag_state (state), 
-        KEY i_tag_role_id (role_id), 
-        KEY i_tag_count (count) 
-    ) TYPE=MyISAM";
-    $result =& $dbconn->Execute($query);
-*/  
     # --------------------------------------------------
-
-    /* Don't implement for now
-    $q = new Query();
-    $query = "DROP TABLE IF EXISTS " . $prefix . "_categories_linkage_summary";
-    if (!$q->run($query)) return;
-    $query = "CREATE TABLE " . $prefix . "_categories_linkage_summary (
-      category_id int(11) DEFAULT NULL,
-      module_id int(11) DEFAULT NULL,
-      itemtype int(11) DEFAULT NULL,
-      links int(11) DEFAULT NULL,
-      PRIMARY KEY  (category_id)
-    )";
-    if (!$q->run($query)) return;
-    */
 
     $q = new Query();
     $query = "DROP TABLE IF EXISTS " . $prefix . "_categories_basecategories";
