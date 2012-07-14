@@ -58,27 +58,5 @@
                 $id = parent::createItem($args);
             }
         }
-
-/*
-        function updateItem(Array $args = array())
-        {
-            $id = isset($args['itemid']) ? $args['itemid'] : $this->itemid;
-            $this->getItem(array('itemid' => $id));
-            $old_parentid = $this->properties['parent_id']->value;
-            $isvalid = $this->checkInput();
-            $id = parent::updateItem($args);
-
-            $ddname = "dd_" . $this->properties['parent_id']->id;
-            list($isvalid,$new_parentid) = $this->properties['parent_id']->fetchValue($ddname);
-            // CHECKME: do we need to bail if isvalid not true?
-
-            // only update Celko if the parent has changed
-            if (($old_parentid - $new_parentid) != 0) {
-                return xarMod::apiFunc('categories','admin','updatecelkolinks',array('cid' => $id, 'type' => 'update'));
-            } else {
-                return true;
-            }
-        }
-*/
     }
 ?>
