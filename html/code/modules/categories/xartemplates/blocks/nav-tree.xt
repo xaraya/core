@@ -30,21 +30,21 @@
             </xar:if>
             <br />
             <xar:if condition="!empty($catitem['catchildren']) and count($catitem['catchildren']) gt 0">
-            <xar:foreach in="$catitem['catchildren']" value="$catchild">
-                &#160;&#160;&#149;&#160;
-                <xar:if condition="empty($catchild['clink'])">
-                    <b>#$catchild['clabel']#</b>
-                <xar:else />
-                    <a href="#$catchild['clink']#">#$catchild['clabel']#</a>
-                </xar:if>
-                <xar:if condition="count($cids) gt 0 and in_array($catchild['cid'],$cids)">
-                    +
-                </xar:if>
-                <xar:if condition="!empty($catchild['ccount'])">
-                    (#$catchild['ccount']#)
-                </xar:if>
-                <br />
-            </xar:foreach>
+                <xar:foreach in="$catitem['catchildren']" value="$catchild">
+                    &#160;&#160;&#149;&#160;
+                    <xar:if condition="empty($catchild['clink'])">
+                        <b>#$catchild['clabel']#</b>
+                    <xar:else />
+                        <a href="#$catchild['clink']#">#$catchild['clabel']#</a>
+                    </xar:if>
+                    <xar:if condition="count($cids) gt 0 and in_array($catchild['cid'],$cids)">
+                        +
+                    </xar:if>
+                    <xar:if condition="!empty($catchild['ccount'])">
+                        (#$catchild['ccount']#)
+                    </xar:if>
+                    <br />
+                </xar:foreach>
             </xar:if>
         </xar:foreach>
         <br />

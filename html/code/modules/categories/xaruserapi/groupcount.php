@@ -82,7 +82,6 @@ function categories_userapi_groupcount($args)
     }
     $sql .= ' GROUP BY ' . $field;
 
-
     $result = $dbconn->Execute($sql);
     if (!$result) return;
 
