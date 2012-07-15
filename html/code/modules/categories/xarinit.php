@@ -30,6 +30,10 @@ sys::import('xaraya.structures.query');
 */
 function categories_init()
 {
+# --------------------------------------------------------
+#
+# Set up tables
+#
     // Get database information
     $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
@@ -103,8 +107,24 @@ function categories_init()
     $result =& $dbconn->Execute($query);
     if (!$result) return;
 
-    # --------------------------------------------------
+    $q = new Query();
+    $query = "DROP TABLE IF EXISTS " . $prefix . "_categories_basecategories";
+    if (!$q->run($query)) return;
+    $query = "CREATE TABLE " . $prefix . "_categories_basecategories (
+      id integer unsigned NOT NULL auto_increment,
+      category_id int(11) DEFAULT '1' NOT NULL,
+      module_id int(11) DEFAULT NULL,
+      itemtype int(11) DEFAULT NULL,
+      name varchar(64) NOT NULL,
+      selectable int(1) DEFAULT '1' NOT NULL,
+      PRIMARY KEY  (id)
+    )";
+    if (!$q->run($query)) return;
 
+# --------------------------------------------------------
+#
+# Set up hooks
+#
     // when a new module item is being specified
     if (!xarModRegisterHook('item', 'new', 'GUI', 'categories', 'admin', 'newhook'))  return false;
 
@@ -130,15 +150,6 @@ function categories_init()
     // (set object ID to the module name !)
     if (!xarModRegisterHook('module', 'remove', 'API', 'categories', 'admin', 'removehook'))  return false;
 
-/*  FIXME: clean up, update, whatever :)
-
-    // Register blocks
-    if (!xarMod::apiFunc('blocks',
-                       'admin',
-                       'register_block_type',
-                       array('modName'  => 'categories',
-                             'blockType'=> 'navigation'))) return;
-*/
     /*********************************************************************
     * Define instances for this module
     * Format is
@@ -161,12 +172,10 @@ function categories_init()
     'parent_id','Instances of the categories module, including multilevel nesting');
 */
 
-    /*********************************************************************
-    * Register the module components that are privileges objects
-    * Format is
-    * xarregisterMask(Name,Realm,Module,Component,Instance,Level,Description)
-    *********************************************************************/
-
+# --------------------------------------------------------
+#
+# Set up masks
+#
     xarRegisterMask('ViewCategories','All','categories','Category','All:All','ACCESS_OVERVIEW');
     xarRegisterMask('ReadCategories','All','categories','Category','All:All','ACCESS_READ');
     xarRegisterMask('CommmentCategories','All','categories','Category','All:All','ACCESS_COMMENT');
@@ -183,6 +192,10 @@ function categories_init()
     xarRegisterMask('EditCategoryLink','All','categories','Link','All:All:All:All','ACCESS_EDIT');
     xarRegisterMask('ManageCategoryLink','All','categories','Link','All:All:All:All','ACCESS_DELETE');
 
+# --------------------------------------------------------
+#
+# Set up privileges
+#
     xarRegisterPrivilege('ViewCategories','All','categories','Category','All','ACCESS_OVERVIEW');
     xarRegisterPrivilege('ReadCategories','All','categories','Category','All','ACCESS_READ');
     xarRegisterPrivilege('CommmentCategories','All','categories','Category','All','ACCESS_COMMENT');
