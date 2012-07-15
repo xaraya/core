@@ -107,5 +107,18 @@
             foreach($result as $row) $children[$row['id']] = $row;
             return $children;
         }
+
+        public function gettoplevel()
+        {
+            $q = new Query('SELECT', $this->cattable);
+            $q->eq('parent_id', 0);
+            if (!$q->run()) return;
+            $result = $q->output();//var_dump($result);
+            return $result;
+        }
+        public function gettoplevelcount()
+        {
+            return count($this->gettoplevel());
+        }
     }
 ?>

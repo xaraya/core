@@ -113,14 +113,9 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
             $mastercids = $rootcids;
         } else {
             // Get number of categories for this module + item type
-
-            $numcats = xarMod::apiFunc(
-                'categories', 'user', 'countcatbases',
-                array(
-                    'module'=>$modname,
-                    'itemtype'=>(empty($itemtype) ? NULL : $itemtype)
-                )
-            );
+            sys::import('modules.categories.class.worker');
+            $worker = new CategoryWorker();
+            $numcats = $worker->gettoplevelcount();
 
             if (empty($numcats)) {
                 // no categories to show here -> return empty output
@@ -128,22 +123,14 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
             }
 
             // Get master cids for this module + item type
-            $mastercids = xarMod::apiFunc(
-                'categories', 'user', 'getallcatbases',
-                array(
-                    'module' => $modname,
-                    'format' => 'cids',
-                    'order' => 'cid',
-                    'itemtype' => (empty($itemtype) ? NULL : $itemtype)
-                )
-            );
+            $toplevelcats = $worker->gettoplevel();
 
-            if (empty($mastercids)) {
+            if (empty($toplevelcats)) {
                 // no categories to show here -> return empty output
                 return;
             }
-
-            $mastercids = array_unique($mastercids);
+            $mastercids = array();
+            foreach ($toplevelcats as $tlc) $mastercids[$tlc['id']] = (int)$tlc['id'];
 
             if (!empty($startmodule)) {
                 $rootcids = $mastercids;
@@ -176,7 +163,6 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 xarVarSetCached('Blocks.categories','deepcount', $deepcount);
             }
         }
-
         if (!empty($showcatcount)) {
             if (xarVarIsCached('Blocks.categories', 'catcount') && empty($startmodule)) {
                 $catcount = xarVarGetCached('Blocks.categories', 'catcount');
@@ -368,10 +354,10 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                     // TODO: now this is a tricky part...
                         $link = xarModURL($modname,$type,$func,
                                          array('itemtype' => $itemtype,
-                                               'catid' => $cat['cid']));
+                                               'catid' => $cat['id']));
                         $label = xarVarPrepForDisplay($cat['name']);
                         $data['catitems'][] = array('catlabel' => $label,
-                                                    'catid' => $cat['cid'],
+                                                    'catid' => $cat['id'],
                                                     'catlink' => $link,
                                                     'catjoin' => $join);
                         $join = ' | ';
@@ -408,18 +394,18 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                         $join = ' &gt; ';
                         foreach ($parents as $cat) {
                             $label = xarVarPrepForDisplay($cat['name']);
-                            if ($cat['cid'] == $cid && empty($itemid) && empty($andcids)) {
+                            if ($cat['id'] == $cid && empty($itemid) && empty($andcids)) {
                                 $link = '';
                             } else {
                             // TODO: now this is a tricky part...
                                 $link = xarModURL($modname,$type,$func,
                                                  array('itemtype' => $itemtype,
-                                                       'catid' => $cat['cid']));
+                                                       'catid' => $cat['id']));
                             }
-                            if ($cat['cid'] == $cid) {
+                            if ($cat['id'] == $cid) {
                                 // show optional count
-                                if (isset($catcount[$cat['cid']])) {
-                                    $curcount = $catcount[$cat['cid']];
+                                if (isset($catcount[$cat['id']])) {
+                                    $curcount = $catcount[$cat['id']];
                                 }
                                 if (!empty($cat['description'])) {
                                     $descriptions[] = xarVarPrepHTMLDisplay($cat['description']);
@@ -432,7 +418,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 }
                             }
                             $catitems[] = array('catlabel' => $label,
-                                                'catid' => $cat['cid'],
+                                                'catid' => $cat['id'],
                                                 'catlink' => $link,
                                                 'catjoin' => $join);
                         }
@@ -578,9 +564,9 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                             $label = xarVarPrepForDisplay($cat['name']);
                             $link = xarModURL($modname,$type,$func,
                                              array('itemtype' => $itemtype,
-                                                   'catid' => $cat['cid']));
-                            if (!empty($catcount[$cat['cid']])) {
-                                $count = $catcount[$cat['cid']];
+                                                   'catid' => $cat['id']));
+                            if (!empty($catcount[$cat['id']])) {
+                                $count = $catcount[$cat['id']];
                             } else {
                                 $count = 0;
                             }
@@ -589,7 +575,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 $image = xarTplGetImage($cat['image'],'categories');
                                 $numicons++;
                                 $data['caticons'][] = array('catlabel' => $label,
-                                                            'catid' => $cat['cid'],
+                                                            'catid' => $cat['id'],
                                                             'catlink' => $link,
                                                             'catimage' => $image,
                                                             'catcount' => $count,
@@ -603,7 +589,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 $beforetags = '<li>';
                                 $aftertags = '</li>';
                                 $data['catlines'][] = array('catlabel' => $label,
-                                                            'catid' => $cat['cid'],
+                                                            'catid' => $cat['id'],
                                                             'catlink' => $link,
                                                             'catdescr' => $descr,
                                                             'catcount' => $count,
@@ -669,12 +655,12 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                                        'return_itself' => true));
                         foreach ($children as $cat) {
                             // TODO: now this is a tricky part...
-                            if (!empty($catcount[$cat['cid']])) {
-                                $count = $catcount[$cat['cid']];
+                            if (!empty($catcount[$cat['id']])) {
+                                $count = $catcount[$cat['id']];
                             } else {
                                 $count = 0;
 
-                                if (!empty($showempty) || !empty($deepcount[$cat['cid']])) {
+                                if (!empty($showempty) || !empty($deepcount[$cat['id']])) {
                                     // We are not hiding empty categories - set count to zero.
                                     $count = 0;
                                 } else {
@@ -685,21 +671,22 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
 
                             $link = xarModURL($modname,$type,$func,
                                              array('itemtype' => $itemtype,
-                                                   'catid' => $cat['cid']));
+                                                   'catid' => $cat['id']));
 
                             $label = xarVarPrepForDisplay($cat['name']);
-                            if ($cat['cid'] == $cid) {
+                            if ($cat['id'] == $cid) {
                                 $catparents[] = array('catlabel' => $label,
-                                                      'catid' => $cat['cid'],
+                                                      'catid' => $cat['id'],
                                                       'catlink' => $link,
                                                       'catcount' => $count);
                             } else {
                                 $catitems[] = array('catlabel' => $label,
-                                                    'catid' => $cat['cid'],
+                                                    'catid' => $cat['id'],
                                                     'catlink' => $link,
                                                     'catcount' => $count);
                             }
                         }
+                        if (empty($catitems) && empty ($catparents)) continue;
                         $data['cattrees'][] = array('catitems' => $catitems,
                                                     'catparents' => $catparents);
                     }
@@ -712,8 +699,8 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                                  array('cid' => $cid,
                                                        'return_itself' => true));
                         foreach ($children as $cat) {
-                            if (!empty($catcount[$cat['cid']])) {
-                                $count = $catcount[$cat['cid']];
+                            if (!empty($catcount[$cat['id']])) {
+                                $count = $catcount[$cat['id']];
                             } else {
                                 $count = 0;
 
@@ -721,7 +708,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 // as a child category may be empty, but it could still have
                                 // descendants with items.
 
-                                if (!empty($showempty) || !empty($deepcount[$cat['cid']])) {
+                                if (!empty($showempty) || !empty($deepcount[$cat['id']])) {
                                     // We are not hiding empty categories - set count to zero.
                                     $count = 0;
                                 } else {
@@ -734,16 +721,16 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                         // TODO: now this is a tricky part...
                             $link = xarModURL($modname,$type,$func,
                                              array('itemtype' => $itemtype,
-                                                   'catid' => $cat['cid']));
+                                                   'catid' => $cat['id']));
 
-                            if ($cat['cid'] == $cid) {
+                            if ($cat['id'] == $cid) {
                                 $catparents[] = array('catlabel' => $label,
-                                                      'catid' => $cat['cid'],
+                                                      'catid' => $cat['id'],
                                                       'catlink' => $link,
                                                       'catcount' => $count);
                             } elseif ($showchildren > 0) {
                                 $catitems[] = array('catlabel' => $label,
-                                                    'catid' => $cat['cid'],
+                                                    'catid' => $cat['id'],
                                                     'catlink' => $link,
                                                     'catcount' => $count);
                             }
@@ -782,14 +769,14 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                             $label = xarVarPrepForDisplay($cat['name']);
                             $link = xarModURL($modname,$type,$func,
                                              array('itemtype' => $itemtype,
-                                                   'catid' => $cat['cid']));
-                            if (!empty($catcount[$cat['cid']])) {
-                                $count = $catcount[$cat['cid']];
+                                                   'catid' => $cat['id']));
+                            if (!empty($catcount[$cat['id']])) {
+                                $count = $catcount[$cat['id']];
                             } else {
                                 $count = 0;
                             }
                             $catparents[] = array('catlabel' => $label,
-                                                  'catid' => $cat['cid'],
+                                                  'catid' => $cat['id'],
                                                   'catlink' => $link,
                                                   'catcount' => $count);
                         }
@@ -805,8 +792,8 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
 
                         // Generate list of sibling categories
                         foreach ($siblings as $cat) {
-                            if (!empty($catcount[$cat['cid']])) {
-                                $count = $catcount[$cat['cid']];
+                            if (!empty($catcount[$cat['id']])) {
+                                $count = $catcount[$cat['id']];
                             } else {
                                 $count = 0;
 
@@ -814,7 +801,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 // as a child category may be empty, but it could still have
                                 // descendants with items.
 
-                                if (!empty($showempty) || !empty($deepcount[$cat['cid']])) {
+                                if (!empty($showempty) || !empty($deepcount[$cat['id']])) {
                                     // We are not hiding empty categories - set count to zero.
                                     $count = 0;
                                 } else {
@@ -828,14 +815,14 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 $modname, $type, $func,
                                 array(
                                     'itemtype' => $itemtype,
-                                    'catid' => $cat['cid']
+                                    'catid' => $cat['id']
                                 )
                             );
 
 
-                            $savecid = $cat['cid'];
+                            $savecid = $cat['id'];
                             $catchildren = array();
-                            if ($cat['cid'] == $cid) {
+                            if ($cat['id'] == $cid) {
                                 if (empty($itemid) && empty($andcids)) {
                                     $link = '';
                                 }
@@ -845,14 +832,14 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                     // TODO: now this is a tricky part...
                                         $clink = xarModURL($modname,$type,$func,
                                                           array('itemtype' => $itemtype,
-                                                                'catid' => $cat['cid']));
-                                        if (!empty($catcount[$cat['cid']])) {
-                                            $ccount = $catcount[$cat['cid']];
+                                                                'catid' => $cat['id']));
+                                        if (!empty($catcount[$cat['id']])) {
+                                            $ccount = $catcount[$cat['id']];
                                         } else {
                                             $ccount = 0;
                                         }
                                         $catchildren[] = array('clabel' => $clabel,
-                                                               'cid' => $cat['cid'],
+                                                               'cid' => $cat['id'],
                                                                'clink' => $clink,
                                                                'ccount' => $ccount);
                                     }
