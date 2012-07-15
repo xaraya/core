@@ -17,7 +17,9 @@
                 <xar:data-display object="$object" fieldlist="$fieldlist"/>
             </fieldset>
             <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-            <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>#$showval# 
+            <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>
+            <!-- This is the main part of the page -->
+            #$showval# 
             <div class="xar-form-actions">
                 <div class="xar-row">
                     <div class="xar-col"></div>
