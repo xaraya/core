@@ -530,42 +530,17 @@ class Query
                                   'op' => 'BETWEEN'),$active);
     }
 
-    public function peq($field1,$field2)
-    {
-        return $this->eq($field1,$field2,0);
-    }
-    public function pne($field1,$field2)
-    {
-        return $this->ne($field1,$field2,0);
-    }
-    public function pgt($field1,$field2)
-    {
-        return $this->gt($field1,$field2,0);
-    }
-    public function pge($field1,$field2)
-    {
-        return $this->ge($field1,$field2,0);
-    }
-    public function ple($field1,$field2)
-    {
-        return $this->le($field1,$field2,0);
-    }
-    public function plt($field1,$field2)
-    {
-        return $this->lt($field1,$field2,0);
-    }
-    public function plike($field1,$field2)
-    {
-        return $this->like($field1,$field2,0);
-    }
-    public function pnotlike($field1,$field2)
-    {
-        return $this->notlike($field1,$field2,0);
-    }
-    public function pregex($field1,$field2)
-    {
-        return $this->regex($field1,$field2,0);
-    }
+    public function peq($field1,$field2)      {return $this->eq($field1,$field2,0);}
+    public function pne($field1,$field2)      {return $this->ne($field1,$field2,0);}
+    public function pgt($field1,$field2)      {return $this->gt($field1,$field2,0);}
+    public function pge($field1,$field2)      {return $this->ge($field1,$field2,0);}
+    public function plt($field1,$field2)      {return $this->lt($field1,$field2,0);}
+    public function ple($field1,$field2)      {return $this->le($field1,$field2,0);}
+    public function plike($field1,$field2)    {return $this->like($field1,$field2,0);}
+    public function pnotlike($field1,$field2) {return $this->notlike($field1,$field2,0);}
+    public function pin($field1,$field2)      {return $this->in($field1,$field2,0);}
+    public function pnotin($field1,$field2)   {return $this->notin($field1,$field2,0);}
+    public function pregex($field1,$field2)   {return $this->regex($field1,$field2,0);}
 
    public function qand()
     {
