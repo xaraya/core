@@ -65,5 +65,4 @@ function categories_adminapi_removehook($args)
     return $extrainfo;
 }
 
-
 ?>
