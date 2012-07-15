@@ -26,9 +26,9 @@
         <span style="float: right; width: 78%; text-align: left;">
           <xar:set name="optgroup">0</xar:set>
           <select name="startmodule" id="startmodule#$blockid#">
-            <xar:for start="$i = 0" test="$i le count($modules)" iter="$i++">
+            <xar:for start="$i=0" test="$i lt count($modules)" iter="$i++">
                 <xar:set name="optgroup">1</xar:set>
-                <optgroup label="Module: #$modules[$i]label#">
+                <optgroup label="Module: #$modules[$i]#['label']">
                     <xar:while condition="1">
                         <xar:if condition="$startmodule eq $modules[$i]['id']">
                             <option value="#$modules[$i]['id']#" selected="selected">#$modules[$i]['name']#</option>

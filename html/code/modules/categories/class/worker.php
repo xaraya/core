@@ -27,6 +27,7 @@
             xarDB::importTables(categories_xartables());
             $tables = xarDB::getTables();
             $this->cattable = $tables['categories'];
+            $this->basetable = $tables['categories_basecategories'];
             $this->linktable = $tables['categories_linkage'];
         }
         
@@ -113,12 +114,57 @@
             $q = new Query('SELECT', $this->cattable);
             $q->eq('parent_id', 0);
             if (!$q->run()) return;
-            $result = $q->output();//var_dump($result);
+            $result = $q->output();
             return $result;
         }
+
         public function gettoplevelcount()
         {
             return count($this->gettoplevel());
         }
+
+        public function getcatbases($args)
+        {
+            extract($args);
+            $xartable = xarDB::getTables();
+        
+            sys::import('xaraya.structures.query');
+            $q = new Query('SELECT');
+            $q->addtable($xartable['categories_basecategories'],'base');
+            $q->addtable($xartable['categories'],'category');
+            $q->leftjoin('base.category_id','category.id');
+            $q->addfield('base.id AS id');
+            $q->addfield('base.category_id AS category_id');
+            $q->addfield('base.name AS name');
+            $q->addfield('base.module_id AS module_id');
+            $q->addfield('base.itemtype AS itemtype');
+            $q->addfield('category.left_id AS left_id');
+            $q->addfield('category.right_id AS right_id');
+            // Aliases for 1.x modules calling categories
+        // FIXME: no way to have get the same field twice with different aliases ?
+            //$q->addfield('base.category_id AS cid');
+            if (!empty($module))  $q->eq('module_id',xarMod::getRegID($module));
+            if (!empty($module_id))  $q->eq('module_id',$module_id);
+            if (isset($itemtype))  $q->eq('itemtype',$itemtype);
+            $q->addorder('base.id');
+        //    $q->qecho();
+            if (!$q->run()) return;
+        
+            $output = $q->output();
+            if (!empty($output)) {
+                foreach (array_keys($output) as $idx) {
+                    if (isset($output[$idx]['category_id']) && !isset($output[$idx]['cid'])) {
+                        $output[$idx]['cid'] = $output[$idx]['category_id'];
+                    }
+                }
+            }
+            return $output;
+        }
+
+        public function getcatbasecount($args)
+        {
+            return count($this->getcatbases($args));
+        }
+
     }
 ?>

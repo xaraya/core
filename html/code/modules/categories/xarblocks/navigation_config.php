@@ -21,12 +21,12 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
  * Modify Function to the Blocks Admin
  * @param $data array containing title,content
  */
-    public function modify()
+    public function configmodify()
     {
-        $vars = $this->getContent();
+        $data = $this->getContent();
 
-        $vars['modules'] = array();
-        $vars['modules'][] = array('id' => '',
+        $data['modules'] = array();
+        $data['modules'][] = array('id' => '',
                                    'name' => xarML('Adapt dynamically to current page'));
 
         // List contains:
@@ -38,78 +38,69 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
         // 4.       itemtype [base3]
         //          itemtype [base4]
 
-        $allcatbases = xarMod::apiFunc(
-            'categories', 'user', 'getallcatbases',
-            array('order'=>'module', 'format'=>'tree')
-        );
+        sys::import('modules.categories.class.worker');
+        $worker = new CategoryWorker();
+        $allcatbases = $worker->getcatbases(array('order'=>'module', 'format'=>'tree'));
 
-        $allcatbases = xarMod::apiFunc(
-            'categories', 'user', 'getallcatbases',
-            array('order'=>'module', 'format'=>'tree')
-        );
-
-        $vars['modules'][] = array(
-            'label' => $modlabel
-        );
-
-        $indent = '&#160;&#160;&#160;';
-
-        foreach($modulecatbases['itemtypes'] as $thisitemtype => $itemtypecatbase) {
-            if (!empty($itemtypecatbase['catbases'])) {
-                $catlist = '[';
-                $join = '';
-                foreach($itemtypecatbase['catbases'] as $itemtypecatbases) {
-                    $catlist .= $join . $itemtypecatbases['category']['name'];
-                    $join = ' | ';
-                }
-                $catlist .= ']';
-
-                //if (empty($itemtypecatbase['itemtype']['label'])) {
-                if ($thisitemtype == 0) {
-                    // Default module cats at top level.
-                    $indent_level = 0;
-                    $itemtypelabel = '';
-                } else {
-                    // Item types at one level deeper
-                    $indent_level = 1;
-                    $itemtypelabel = ' -&gt; ' . xarML('#(1)', $itemtypecatbase['itemtype']['label']);
-                }
-
-                // Module-Itemtype [all cats]
-                $vars['modules'][] = array(
-                    'id' => $modulecatbases['module'] . '.' . $thisitemtype . '.0',
-                    'name' => str_repeat($indent, $indent_level) . $modlabel . $itemtypelabel . ' ' . $catlist
-                );
-
-                // Individual categories a level deeper.
-                $indent_level += 1;
-
-                // Individual base categories where there are more than one.
-                if (count($itemtypecatbase['catbases']) > 1) {
+        foreach($allcatbases as $modulecatbases) {
+            // Module label for the option group in the list.
+            $modlabel = xarML('#(1)', ucwords($modulecatbases['module']));
+            $data['modules'][] = array('label' => $modlabel);
+    
+            $indent = '&#160;&#160;&#160;';
+    
+            foreach($modulecatbases['itemtypes'] as $thisitemtype => $itemtypecatbase) {
+                if (!empty($itemtypecatbase['catbases'])) {
+                    $catlist = '[';
+                    $join = '';
                     foreach($itemtypecatbase['catbases'] as $itemtypecatbases) {
-                        $catlist = '[' . $itemtypecatbases['category']['name'] . ']';
-                        if ($thisitemtype == 0) {$itemtypelabel = $modlabel;}
-                        $vars['modules'][] = array(
-                            'id' => $modulecatbases['module'] . '.' . $thisitemtype . '.' . $itemtypecatbases['category']['cid'],
-                            'name' => str_repeat($indent, $indent_level) . $itemtypelabel . ' ' . $catlist
-                        );
+                        $catlist .= $join . $itemtypecatbases['category']['name'];
+                        $join = ' | ';
+                    }
+                    $catlist .= ']';
+    
+                    //if (empty($itemtypecatbase['itemtype']['label'])) {
+                    if ($thisitemtype == 0) {
+                        // Default module cats at top level.
+                        $indent_level = 0;
+                        $itemtypelabel = '';
+                    } else {
+                        // Item types at one level deeper
+                        $indent_level = 1;
+                        $itemtypelabel = ' -&gt; ' . xarML('#(1)', $itemtypecatbase['itemtype']['label']);
+                    }
+    
+                    // Module-Itemtype [all cats]
+                    $data['modules'][] = array(
+                        'id' => $modulecatbases['module'] . '.' . $thisitemtype . '.0',
+                        'name' => str_repeat($indent, $indent_level) . $modlabel . $itemtypelabel . ' ' . $catlist
+                    );
+    
+                    // Individual categories a level deeper.
+                    $indent_level += 1;
+    
+                    // Individual base categories where there are more than one.
+                    if (count($itemtypecatbase['catbases']) > 1) {
+                        foreach($itemtypecatbase['catbases'] as $itemtypecatbases) {
+                            $catlist = '[' . $itemtypecatbases['category']['name'] . ']';
+                            if ($thisitemtype == 0) {$itemtypelabel = $modlabel;}
+                            $data['modules'][] = array(
+                                'id' => $modulecatbases['module'] . '.' . $thisitemtype . '.' . $itemtypecatbases['category']['cid'],
+                                'name' => str_repeat($indent, $indent_level) . $itemtypelabel . ' ' . $catlist
+                            );
+                        }
                     }
                 }
             }
         }
-
-
-        // Return output
-        // FIXME: this is wrong, fix the template name and return $vars;
-        $vars['blockid'] = $this->block_id;
-        return xarTplBlock('categories', 'nav-admin', $vars);
+        return $data;
     }
 
 /**
  * Updates the Block config from the Blocks Admin
  * @param $data array containing title,content
  */
-    public function update()
+    public function configupdate(Array $data=array())
     {
         if(!xarVarFetch('layout',       'isset', $vars['layout'],       $this->layout, XARVAR_DONT_SET)) {return;}
         if(!xarVarFetch('showcatcount', 'isset', $vars['showcatcount'], false, XARVAR_NOT_REQUIRED)) {return;}
