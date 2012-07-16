@@ -15,7 +15,11 @@
         <xar:set name="displayindex">0</xar:set>    
         <xar:foreach in="$trees" value="$categories">
             <xar:foreach in="$categories" value="$node">
-
+                <xar:set name="cid">$node->id</xar:set>
+                <xar:if condition="empty($cid)">
+                    <xar:continue/>
+                </xar:if>
+                
                 <xar:set name="displayindex">$displayindex + 1</xar:set>   
                 <xar:if condition="$displayindex lt $startnum">
                     <xar:continue />
@@ -24,14 +28,13 @@
                     <xar:break />
                 </xar:if>
 
-                <xar:set name="cid">$node->id</xar:set>
                 <xar:set name="name">$node->name</xar:set>
                 <xar:set name="description">$node->description</xar:set>
                 <xar:set name="child_object">$node->child_object</xar:set>
                 <xar:set name="image">$node->image</xar:set>
                 <xar:set name="template">$node->template</xar:set>
                 <!--<xar:set name="map">$node->map</xar:set>-->
-                <xar:set name="level">$node->getLevel()</xar:set>
+                <xar:set name="level">$node->getLevel()-1</xar:set>
 
                 <xar:if condition="(($displayindex + 1) % 2)">
                     <xar:set name="displayclass">'xar-accent'</xar:set>
@@ -51,24 +54,26 @@
                     <td class="#$displayclass#"><xar:if condition="empty($image)">&#160;<xar:else />#$image#</xar:if></td>
                     <td class="#$displayclass#" style="text-align: left; margin-left: 5px;">#$template#</td>
                     <td class="#$displayclass#" style="text-align: center;">
-                        <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
-                            <a href="#xarModURL('categories', 'admin', 'modify', array('itemid' => $cid))#" title="#$modifytitle#">
-                                <img src="#xarTplGetImage('icons/'.'modify.png', 'base')#" width="16" height="16" alt="#$modifytitle#"/>
-                            </a>
-                        <xar:else />
-                            <a href="#xarModURL('categories', 'admin', 'modify', array('itemid' => $cid))#" title="#$modifytitle#">
-                                Modify
-                            </a>
-                        </xar:if>
-                        &#160;|&#160;
-                        <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
-                            <a href="#xarModURL('categories', 'admin', 'delete', array('itemid' => $cid))#" title="#$deletetitle#">
-                                <img src="#xarTplGetImage('icons/'.'delete.png', 'base')#" width="16" height="16" alt="#$deletetitle#"/>
-                            </a>
-                        <xar:else />
-                            <a href="#xarModURL('categories', 'admin', 'delete', array('itemid' => $cid))#" title="#$deletetitle#">
-                                Delete
-                            </a>
+                        <xar:if condition="!empty($cid)">
+                            <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
+                                <a href="#xarModURL('categories', 'admin', 'modify', array('itemid' => $cid))#" title="#$modifytitle#">
+                                    <img src="#xarTplGetImage('icons/'.'modify.png', 'base')#" width="16" height="16" alt="#$modifytitle#"/>
+                                </a>
+                            <xar:else />
+                                <a href="#xarModURL('categories', 'admin', 'modify', array('itemid' => $cid))#" title="#$modifytitle#">
+                                    Modify
+                                </a>
+                            </xar:if>
+                            &#160;|&#160;
+                            <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
+                                <a href="#xarModURL('categories', 'admin', 'delete', array('itemid' => $cid))#" title="#$deletetitle#">
+                                    <img src="#xarTplGetImage('icons/'.'delete.png', 'base')#" width="16" height="16" alt="#$deletetitle#"/>
+                                </a>
+                            <xar:else />
+                                <a href="#xarModURL('categories', 'admin', 'delete', array('itemid' => $cid))#" title="#$deletetitle#">
+                                    Delete
+                                </a>
+                            </xar:if>
                         </xar:if>
                     </td>
                 </tr>
