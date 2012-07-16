@@ -23,7 +23,7 @@
                     </th>
                 </xar:foreach>
                 <xar:if condition="empty($linkfield)">
-                    <th class="xar-form-textlong">Action</th>
+                    <th class="xar-form-textlong" style="text-align: center;">Actions</th>
                 </xar:if>
             </tr>
             <xar:set name="adminlistserial">xarModVars::get('dynamicdata','administrators')</xar:set>
