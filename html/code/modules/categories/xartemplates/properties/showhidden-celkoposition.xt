@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="empty($reference_id)">
+        <xar:set name="reference_id">0</xar:set>
+        <xar:if condition="!empty($func) and $func eq 'modify'">
+            <xar:set name="position">1</xar:set>
+        <xar:else />
+            <xar:set name="position">2</xar:set>
+        </xar:if>
+    </xar:if>
+    <input type="hidden" name="#$name#_reference_id" id="#$name#_reference_id" value="#$reference_id#"/>
+    <input type="hidden" name="#$name#_position" id="#$name#_position" value="#$position#"/>
+</xar:template>

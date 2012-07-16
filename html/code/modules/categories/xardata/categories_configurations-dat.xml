@@ -1,0 +1,29 @@
+<items>
+  <configurations itemid="1">
+    <id>1</id>
+    <name>initialization_basecategories</name>
+    <label>Base Categories</label>
+    <description>A set of categories that form the top of category trees</description>
+    <property_id>30050</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="2">
+    <id>2</id>
+    <name>initialization_include_no_cat</name>
+    <label>Include No Category Line</label>
+    <description>Display a No Category Line</description>
+    <property_id>14</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+  <configurations itemid="3">
+    <id>3</id>
+    <name>initialization_include_all_cats</name>
+    <label>Include All Categories Line</label>
+    <description>Display a All Categories Line</description>
+    <property_id>14</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+</items>
