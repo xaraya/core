@@ -22,7 +22,7 @@
                     </strong>
                 </legend>
                 <input type="hidden" name="ok" id="ok" value="1"/>
-                <input type="hidden" name="cid" id="cid" value="#$cid#"/>
+                <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>
                 <input type="hidden" name="authid" id="authid" value="#$authkey#"/>
                 <div>
                     <xar:ml>

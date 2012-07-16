@@ -23,11 +23,11 @@
  */
 function categories_admin_delete()
 {
-    if (!xarVarFetch('cid','int:1:',$cid)) return;
+    if (!xarVarFetch('itemid','int:1:',$data['itemid'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('confirm','str:1:',$confirm,'',XARVAR_NOT_REQUIRED)) return;
 
     // Security check
-    if(!xarSecurityCheck('ManageCategories',1,'category',"All:$cid")) return;
+    if(!xarSecurityCheck('ManageCategories',1,'category',"All:" . $data['itemid'])) return;
 
     // Check for confirmation
     if (empty($confirm)) {
@@ -36,7 +36,7 @@ function categories_admin_delete()
         $cat = xarMod::apiFunc('categories',
                              'user',
                              'getcatinfo',
-                              array('cid' => $cid));
+                              array('cid' => $data['itemid']));
 
         if ($cat == false) {
             $msg = xarML('The category to be deleted does not exist', 'categories');
@@ -44,14 +44,15 @@ function categories_admin_delete()
         }
 
 
-        $data = Array('cid'=>$cid,'name'=>$cat['name']);
+        $data['cid'] = $data['itemid'];
+        $data['name'] = $cat['name'];
         $data['authkey'] = xarSecGenAuthKey();
 
         $data['numcats'] = xarMod::apiFunc('categories','user','countcats',
                                          $cat);
         $data['numcats'] -= 1;
         $data['numitems'] = xarMod::apiFunc('categories','user','countitems',
-                                          array('cids' => array('_'.$cid),
+                                          array('cids' => array('_'.$data['itemid']),
                                                 'modid' => 0));
         // Return output
         return $data;
@@ -63,11 +64,9 @@ function categories_admin_delete()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    // Pass to API
-    if (!xarMod::apiFunc('categories',
-                       'admin',
-                       'delete',
-                       array('cid' => $cid))) return;
+    sys::import('modules.dynamicdata.class.objects.master');
+    $data['objects'] = DataObjectMaster::getObject(array('name' => xarModVars::get('categories','categoriesobject')));
+    $data['objects']->deleteItem(array('itemid' => $data['itemid']));
 
     xarController::redirect(xarModURL('categories','admin','view', array()));
 

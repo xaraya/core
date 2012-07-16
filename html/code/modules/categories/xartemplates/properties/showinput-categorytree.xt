@@ -52,21 +52,21 @@
                     <td class="#$displayclass#" style="text-align: left; margin-left: 5px;">#$template#</td>
                     <td class="#$displayclass#" style="text-align: center;">
                         <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
-                            <a href="#xarModURL('categories', 'admin', 'modify', array('cid' => $cid))#" title="#$modifytitle#">
+                            <a href="#xarModURL('categories', 'admin', 'modify', array('itemid' => $cid))#" title="#$modifytitle#">
                                 <img src="#xarTplGetImage('icons/'.'modify.png', 'base')#" width="16" height="16" alt="#$modifytitle#"/>
                             </a>
                         <xar:else />
-                            <a href="#xarModURL('categories', 'admin', 'modify', array('cid' => $cid))#" title="#$modifytitle#">
+                            <a href="#xarModURL('categories', 'admin', 'modify', array('itemid' => $cid))#" title="#$modifytitle#">
                                 Modify
                             </a>
                         </xar:if>
                         &#160;|&#160;
                         <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
-                            <a href="#xarModURL('categories', 'admin', 'delete', array('cid' => $cid))#" title="#$deletetitle#">
+                            <a href="#xarModURL('categories', 'admin', 'delete', array('itemid' => $cid))#" title="#$deletetitle#">
                                 <img src="#xarTplGetImage('icons/'.'delete.png', 'base')#" width="16" height="16" alt="#$deletetitle#"/>
                             </a>
                         <xar:else />
-                            <a href="#xarModURL('categories', 'admin', 'delete', array('cid' => $cid))#" title="#$deletetitle#">
+                            <a href="#xarModURL('categories', 'admin', 'delete', array('itemid' => $cid))#" title="#$deletetitle#">
                                 Delete
                             </a>
                         </xar:if>
