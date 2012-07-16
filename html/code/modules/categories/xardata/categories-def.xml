@@ -57,7 +57,7 @@
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source>xar_categories.template</source>
-      <status>34</status>
+      <status>33</status>
       <seq>7</seq>
       <configuration>a:4:{s:14:"display_layout";s:7:"default";s:26:"validation_file_extensions";s:20:"gif,jpg,jpeg,png,bmp";s:28:"initialization_basedirectory";s:44:"sys::code() . 'modules/categories/xarimages'";s:24:"initialization_firstline";s:15:",-- No Image --";}</configuration>
     </property>
