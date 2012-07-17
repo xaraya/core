@@ -256,7 +256,7 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($value)) $value = $this->getValue();
         else $this->setValue($value);
 
-        if (isset($this->validation_notequals)  && $value == $this->validation_notequals) {
+        if (isset($this->validation_notequals) && $value == $this->validation_notequals) {
             if (!empty($this->validation_notequals_invalid)) {
                 $this->invalid = xarML($this->validation_notequals_invalid);
             } else {
@@ -264,7 +264,7 @@ class DataProperty extends Object implements iDataProperty
             }
             $this->value = null;
             return false;
-        } elseif (isset($this->validation_equals)  && $value != $this->validation_equals) {
+        } elseif (isset($this->validation_equals) && $value != $this->validation_equals) {
             if (!empty($this->validation_equals_invalid)) {
                 $this->invalid = xarML($this->validation_equals_invalid);
             } else {
