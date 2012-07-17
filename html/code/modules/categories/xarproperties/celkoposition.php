@@ -51,8 +51,8 @@ class CelkoPositionProperty extends DataProperty
     public $include_reference = 1;          // Get a reference to the parent object
     public $moving;
     public $position;
-    public $rightorleft       = 'RIGHT';
-    public $inorout           = 'IN';
+    public $rightorleft;
+    public $inorout;
 //    public $parent;
     public $catexists;
     public $dbconn;
@@ -82,20 +82,20 @@ class CelkoPositionProperty extends DataProperty
         switch (intval($position)) {
             case 1: // above - same level
             default:
-                $this->rightorleft = 'LEFT';
-                $this->inorout = 'OUT';
+                $this->rightorleft = 'left';
+                $this->inorout = 'out';
                 break;
             case 2: // below - same level
-                $this->rightorleft = 'RIGHT';
-                $this->inorout = 'OUT';
+                $this->rightorleft = 'right';
+                $this->inorout = 'out';
                 break;
             case 3: // below - child item
-                $this->rightorleft = 'RIGHT';
-                $this->inorout = 'IN';
+                $this->rightorleft = 'right';
+                $this->inorout = 'in';
                 break;
             case 4: // above - child item
-                $this->rightorleft = 'LEFT';
-                $this->inorout = 'IN';
+                $this->rightorleft = 'left';
+                $this->inorout = 'in';
                 break;
         }
         $this->reference_id = $reference_id;
@@ -208,7 +208,7 @@ class CelkoPositionProperty extends DataProperty
             }
 
             /* Find the right parent for this item */
-            if (strtolower($this->inorout) == 'IN') {
+            if (strtolower($this->inorout) == 'in') {
                 $parent_id = (int)$this->reference_id;
             } else {
                 $parent_id = (int)$parentItem['parent_id'];
@@ -221,23 +221,25 @@ class CelkoPositionProperty extends DataProperty
     public function updateValue($itemid=0)
     {
         // Obtain current information on the item
-        $this_item = $this->getItem($itemid);
-        if ($this_item == false) {
+        $thisItem = $this->getItem($itemid);
+
+        if ($thisItem == false) {
            xarSession::setVar('errormsg', xarML('That item does not exist'));
            return false;
         }
 
        // Obtain current information on the reference item
-       $reference_item = $this->getItem($this->reference_id);
-       if ($reference_item == false) {
+       $refcat = $this->getItem($this->reference_id);
+
+       if ($refcat == false) {
            xarSession::setVar('errormsg', xarML('That item does not exist'));
            return false;
        }
 
        // Checking if the reference ID is of a child or itself
        if (
-           ($reference_item['left_id'] >= $this_item['left_id'])  &&
-           ($reference_item['left_id'] <= $this_item['right_id'])
+           ($refcat['left_id'] >= $thisItem['left_id'])  &&
+           ($refcat['left_id'] <= $thisItem['right_id'])
           )
        {
             $msg = xarML('This item references siblings.');
@@ -248,59 +250,59 @@ class CelkoPositionProperty extends DataProperty
        $point_of_insertion =
                    $this->find_point_of_insertion($this->inorout, 
                                                   $this->rightorleft, 
-                                                  $reference_item['left_id'], 
-                                                  $reference_item['right_id']);
-       $size = $this_item['right_id'] - $this_item['left_id'] + 1;
-       $distance = $point_of_insertion - $this_item['left_id'];
+                                                  $refcat['left_id'], 
+                                                  $refcat['right_id']);
+       $size = $thisItem['right_id'] - $thisItem['left_id'] + 1;
+       $distance = $point_of_insertion - $thisItem['left_id'];
 
        // If necessary to move then evaluate
        if ($distance != 0) { // It´s Moving, baby!  Do the Evolution!
           if ($distance > 0)
           { // moving forward
-              $distance = $point_of_insertion - $this_item['right_id'] - 1;
+              $distance = $point_of_insertion - $thisItem['right_id'] - 1;
               $deslocation_outside = -$size;
-              $between_string = ($this_item['right_id'] + 1)." AND ".($point_of_insertion - 1);
+              $between_string = ($thisItem['right_id'] + 1)." AND ".($point_of_insertion - 1);
           }
           else
           { // $distance < 0 (moving backward)
               $deslocation_outside = $size;
-              $between_string = $point_of_insertion." AND ".($this_item['left_id'] - 1);
+              $between_string = $point_of_insertion." AND ".($thisItem['left_id'] - 1);
           }
 
           // TODO: besided portability, also check performance here
           $SQLquery = "UPDATE " . $this->initialization_celkotable . " SET
                        " . $this->initialization_celkoleft_id . " = CASE
-                        WHEN " . $this->initialization_celkoright_id . " BETWEEN ".$this_item['left_id']." AND ".$this_item['right_id']."
+                        WHEN " . $this->initialization_celkoright_id . " BETWEEN ".$thisItem['left_id']." AND ".$thisItem['right_id']."
                            THEN " . $this->initialization_celkoleft_id . " + ($distance)
                         WHEN " . $this->initialization_celkoleft_id . " BETWEEN $between_string
                            THEN " . $this->initialization_celkoleft_id . " + ($deslocation_outside)
                         ELSE " . $this->initialization_celkoleft_id . "
                         END,
                       " . $this->initialization_celkoright_id . " = CASE
-                        WHEN " . $this->initialization_celkoright_id . " BETWEEN ".$this_item['left_id']." AND ".$this_item['right_id']."
+                        WHEN " . $this->initialization_celkoright_id . " BETWEEN ".$thisItem['left_id']." AND ".$thisItem['right_id']."
                            THEN " . $this->initialization_celkoright_id . " + ($distance)
                         WHEN " . $this->initialization_celkoright_id . " BETWEEN $between_string
                            THEN " . $this->initialization_celkoright_id . " + ($deslocation_outside)
                         ELSE " . $this->initialization_celkoright_id . "
                         END
                      ";
-         // This seems SQL-92 standard... Its a good test to see if
-         // the databases we are supporting are complying with it. This can be
-         // broken down in 3 simple UPDATES which shouldnt be a problem with any database
+                     // This seems SQL-92 standard... Its a good test to see if
+                     // the databases we are supporting are complying with it. This can be
+                     // broken down in 3 simple UPDATES which shouldnt be a problem with any database
 
-        $result = $this->dbconn->Execute($SQLquery);
-        if (!$result) return;
+            $result = $this->dbconn->Execute($SQLquery);
+            if (!$result) return;
 
-        /* Find the right parent for this item */
-        if (strtolower($this->inorout) == 'IN') {
-          $parent_id = $this->reference_id;
-        } else {
-          $parent_id = $reference_item['parent_id'];
-        }
-        // Update parent id
-        $SQLquery = "UPDATE " . $this->initialization_celkotable .
-                   " SET " . $this->initialization_celkoparent_id . " = ?
-                   WHERE id = ?";
+          /* Find the right parent for this item */
+          if (strtolower($this->inorout) == 'in') {
+              $parent_id = $this->reference_id;
+          } else {
+              $parent_id = $refcat['parent_id'];
+          }
+          // Update parent id
+          $SQLquery = "UPDATE " . $this->initialization_celkotable .
+                       " SET " . $this->initialization_celkoparent_id . " = ?
+                       WHERE id = ?";
         $result = $this->dbconn->Execute($SQLquery,array($parent_id, $itemid));
         if (!$result) return;
 
@@ -385,9 +387,9 @@ class CelkoPositionProperty extends DataProperty
         $result = $q->row();
         if (empty($result)) return $result;
         $result['name'] = $result[$this->initialization_celkoname];
-        $result['parent_id'] = (int)$result[$this->initialization_celkoparent_id];
-        $result['left_id'] = (int)$result[$this->initialization_celkoleft_id];
-        $result['right_id'] = (int)$result[$this->initialization_celkoright_id];
+        $result['parent_id'] = $result[$this->initialization_celkoparent_id];
+        $result['left_id'] = $result[$this->initialization_celkoleft_id];
+        $result['right_id'] = $result[$this->initialization_celkoright_id];
         return $result;
     }
     
@@ -452,16 +454,19 @@ class CelkoPositionProperty extends DataProperty
     // Given a left and right link id, define a point of insertion to the left or right of either
     private function find_point_of_insertion($inorout, $rightorleft, $left, $right)
     {
+        $rightorleft = strtolower ($rightorleft);
+        $inorout = strtolower ($inorout);
+
         switch($rightorleft) {
-           case "RIGHT":
+           case "right":
                $point_of_insertion = $right;
 
                switch($inorout) {
-                  case "OUT":
+                  case "out":
                      $point_of_insertion++;
                   break;
 
-                  case "IN":
+                  case "in":
                   break;
 
                   default:
@@ -470,13 +475,13 @@ class CelkoPositionProperty extends DataProperty
                }
 
            break;
-           case "LEFT":
+           case "left":
                $point_of_insertion = $left;
                switch($inorout) {
-                  case "OUT":
+                  case "out":
                   break;
 
-                  case "IN":
+                  case "in":
                      $point_of_insertion++;
                   break;
 
