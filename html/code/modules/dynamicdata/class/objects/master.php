@@ -272,6 +272,20 @@ class DataObjectMaster extends Object
     }
 
     /**
+     * Set the display status of some properties
+     */
+    function setDisplayStatus($fieldlist=array(), $status)
+    {
+        if(!empty($fieldlist)) {
+            foreach($fieldlist as $field)
+                // Ignore those disabled AND those that don't exist
+                if(isset($this->properties[$field]))
+                    $this->properties[$field]->setDisplayStatus($status);
+        }
+        return true;
+    }
+
+    /**
      * Get the data stores where the dynamic properties of this object are kept
     **/
     function getDataStore($reset = false)
