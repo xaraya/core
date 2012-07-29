@@ -208,7 +208,7 @@
                       'left'         => 1,
                       'right'        => 2,
                 );
-                $this->treedata['VirtualRoot'] = $vr;
+                $this->treedata[0] = $vr;
             }
             parent::createnodes($node);
         }
