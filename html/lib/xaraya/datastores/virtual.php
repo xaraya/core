@@ -1,6 +1,6 @@
 <?php
 /**
- * Data Store is a dummy (for in-memory data storage, perhaps)
+ * Data Store is a virtual (for in-memory data storage, perhaps)
  *
  * @package core
  * @subpackage datastores
