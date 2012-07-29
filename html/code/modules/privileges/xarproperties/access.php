@@ -19,7 +19,7 @@ class AccessProperty extends DataProperty
     public $desc        = 'Access';
     public $reqmodules  = array('privileges');
 
-    public $group       = array(0);
+    public $group;
     public $level       = 100;
     public $failure     = 0;
     public $myself      = -6;
@@ -272,6 +272,7 @@ class AccessProperty extends DataProperty
     {
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
         $access = false;
+        if (is_array($this->group)) $this->initialization_group_multiselect = true;
         if ($this->initialization_group_multiselect) {
             foreach ($this->group as $group) {
                 if ($group == $this->myself) {
