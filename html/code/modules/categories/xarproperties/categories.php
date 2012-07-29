@@ -156,7 +156,7 @@ class CategoriesProperty extends DataProperty
                 $q->addfield('item_id', (int)$itemid);
                 $q->addfield('module_id', $this->module_id);
                 $q->addfield('itemtype', $this->itemtype);
-                $q->addfield('basecategory', $basecategory);
+                $q->addfield('basecategory', $key);
                 $q->addfield('category_id', $category);
                 $q->run();
             }
@@ -259,7 +259,7 @@ class CategoriesProperty extends DataProperty
             sys::import('xaraya.structures.query');
             foreach ($data['base_category'] as $key => $value) {
                 $q = new Query('SELECT', $xartable['categories_linkage']); 
-                $q->eq('basecategory', (int)$value);
+                $q->eq('basecategory', (int)$key);
                 $q->eq('item_id', (int)$itemid);
                 if ($this->module_id) $q->eq('module_id', $this->module_id);
                 if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
