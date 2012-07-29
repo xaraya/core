@@ -61,13 +61,13 @@ class SelectProperty extends DataProperty
             }
             if (!$found) $value = null;
         }
+        // check if we allow values other than those in the options
+        if ($this->validation_override) {
+            return true;
+        }
         // check if this option really exists
         $isvalid = $this->getOption(true);
         if ($isvalid) {
-            return true;
-        }
-        // check if we allow values other than those in the options
-        if ($this->validation_override) {
             return true;
         }
         if (!empty($this->validation_override_invalid)) {
