@@ -492,14 +492,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     {
         // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
-        return $this->datastore->countItems($args);
-        // initialize the itemcount
-        $this->itemcount = null;
-
-            $this->itemcount = $this->datastores[$this->startstore]->countItems($args);
-            return $this->itemcount;
-                $this->itemcount = $this->datastores[$name]->countItems($args);
-                return $this->itemcount;
+        $this->itemcount = $this->datastore->countItems($args);
+        return $this->itemcount;
     }
 
     /**
