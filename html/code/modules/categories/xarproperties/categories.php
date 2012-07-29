@@ -83,12 +83,12 @@ class CategoriesProperty extends DataProperty
         $this->basecategories = $basecats;
 
         // Get the categories from the form
-        // Select type of each tree can be diferent
+        // Select type of each tree can be different
         foreach ($this->basecategories as $key => $base_category) {
             $select_type = 3;
             if ($select_type == 1) $select_type = 'dropdown';
             else $select_type = 'multiselect';
-                if (!xarVarFetch($name . '["categories"]', 'isset', $categories, array(), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch($name . '["categories"]', 'isset', $categories, array(), XARVAR_NOT_REQUIRED)) return;
         }
         $value = $categories;
         return $this->validateValue($value);
