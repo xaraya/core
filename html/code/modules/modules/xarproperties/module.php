@@ -25,6 +25,7 @@ class ModuleProperty extends ObjectRefProperty
 
     public $filter = array();
 
+    // these correspond to what we actually get from the modules getlist() function below
     public $initialization_refobject    = 'modules';            // The object we want to reference
     public $initialization_store_prop   = 'regid';
     public $initialization_display_prop = 'name';
