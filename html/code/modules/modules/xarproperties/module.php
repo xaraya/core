@@ -25,16 +25,14 @@ class ModuleProperty extends ObjectRefProperty
 
     public $filter = array();
 
-// CHECKME: we're not actually using the objectref property here, because we want displayname etc.
     public $initialization_refobject    = 'modules';            // The object we want to reference
+    public $initialization_store_prop   = 'regid';
+    public $initialization_display_prop = 'name';
 
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath = 'modules/modules/xarproperties';
-        // these correspond to what we actually get from the modules getlist() function below
-        $this->initialization_store_prop   = 'regid';
-        $this->initialization_display_prop = 'displayname';
     }
 
     function showInput(Array $data=array())
