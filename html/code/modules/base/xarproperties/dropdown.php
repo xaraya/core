@@ -41,7 +41,7 @@ class SelectProperty extends DataProperty
         parent::__construct($descriptor);
         $this->template  = 'dropdown';
         $this->tplmodule = 'base';
-        $this->filepath   = 'modules/base/xarproperties';
+        $this->filepath  = 'modules/base/xarproperties';
     }
 
     public function validateValue($value = null)
