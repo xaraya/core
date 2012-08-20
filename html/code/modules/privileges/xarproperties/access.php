@@ -219,7 +219,7 @@ class AccessProperty extends DataProperty
                 if (isset($data['group'])) $group = unserialize($data['group']);
                 else $group = $this->group;
             } catch (Exception $e) {
-                $group = 0;
+                $group = $data['group'];
             }
             if (is_array($group)){
                 // This is a multiselect
