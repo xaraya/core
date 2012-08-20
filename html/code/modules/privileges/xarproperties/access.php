@@ -214,28 +214,33 @@ class AccessProperty extends DataProperty
         
         // We need to be in the correct realm
         if ($this->checkRealm($data)) {
-            // Check if this is a multiselect property by testing if the group is unserialized
             $disabled = false;
             try {
-                if (isset($data['group'])) $this->group = unserialize($data['group']);
-                $this->initialization_group_multiselect = true;
-                if (in_array(0,$this->group)) $disabled = true;
+                if (isset($data['group'])) $group = unserialize($data['group']);
+                else $group = $this->group;
             } catch (Exception $e) {
-                if (isset($data['group'])) $this->group = $data['group'];
+                $group = $data['group'];
+            }
+            if (is_array($group)){
+                // This is a multiselect
+                $this->initialization_group_multiselect = true;
+                if (in_array(0,$group)) $disabled = true;
+            } else {
+                // This is a dropdown
                 $this->initialization_group_multiselect = false;
-                if ($this->group == 0) $disabled = true;
+                if ($group == 0) $disabled = true;
             }
 
             if ($exclusive) {
                 // We check the level only if group access is disabled
                 if (!$disabled) {
-                    return $this->checkGroup($data);
+                    return $this->checkGroup($group);
                 } else {
                     return $this->checkLevel($data);
                 }
             } else {
                 // Both group access and level must be satisfied
-                return $this->checkGroup($data) && $this->checkLevel($data);
+                return $this->checkGroup($group) && $this->checkLevel($data);
             }
         } else {
             return false;
@@ -268,12 +273,13 @@ class AccessProperty extends DataProperty
         return $access;
     }
     
-    public function checkGroup(Array $data=array())
+    public function checkGroup(Array $groups=array())
     {
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
         $access = false;
+        if (is_array($groups)) $this->initialization_group_multiselect = true;
         if ($this->initialization_group_multiselect) {
-            foreach ($this->group as $group) {
+            foreach ($groups as $group) {
                 if ($group == $this->myself) {
                     $access = true;
                 } elseif ($group == $anonID) {
@@ -290,14 +296,15 @@ class AccessProperty extends DataProperty
                 if ($access) break;
             }
         } else {
-            if ($this->group == $this->myself) {
+            $group = $groups;
+            if ($group == $this->myself) {
                 $access = true;
-            } elseif ($this->group == $anonID) {
+            } elseif ($group == $anonID) {
                 if (!xarUserIsLoggedIn()) $access = true;
-            } elseif ($this->group == -$anonID) {
+            } elseif ($group == -$anonID) {
                 if (xarUserIsLoggedIn()) $access = true;
-            } elseif ($this->group) {
-                $rolesgroup = xarRoles::getRole($this->group);
+            } elseif ($group) {
+                $rolesgroup = xarRoles::getRole($group);
                 $thisuser = xarCurrentRole();
                 if (is_object($rolesgroup)) {
                     if ($thisuser->isAncestor($rolesgroup)) $access = true;
