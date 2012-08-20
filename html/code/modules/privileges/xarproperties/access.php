@@ -214,14 +214,19 @@ class AccessProperty extends DataProperty
         
         // We need to be in the correct realm
         if ($this->checkRealm($data)) {
-            // Check if this is a multiselect property by testing if the group is unserialized
             $disabled = false;
             try {
                 if (isset($data['group'])) $this->group = unserialize($data['group']);
+                else $this->group = $data['group'];
+            } catch (Exception $e) {
+                $this->group = 0;
+            }
+            if (is_array($this->group)){
+                // This is a multiselect
                 $this->initialization_group_multiselect = true;
                 if (in_array(0,$this->group)) $disabled = true;
-            } catch (Exception $e) {
-                if (isset($data['group'])) $this->group = $data['group'];
+            } else {
+                // This is a dropdown
                 $this->initialization_group_multiselect = false;
                 if ($this->group == 0) $disabled = true;
             }
