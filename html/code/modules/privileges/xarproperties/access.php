@@ -19,7 +19,7 @@ class AccessProperty extends DataProperty
     public $desc        = 'Access';
     public $reqmodules  = array('privileges');
 
-    public $group;
+    public $group       = 0;
     public $level       = 100;
     public $failure     = 0;
     public $myself      = -6;
@@ -216,31 +216,31 @@ class AccessProperty extends DataProperty
         if ($this->checkRealm($data)) {
             $disabled = false;
             try {
-                if (isset($data['group'])) $this->group = unserialize($data['group']);
-                else $this->group = $data['group'];
+                if (isset($data['group'])) $group = unserialize($data['group']);
+                else $group = $this->group;
             } catch (Exception $e) {
-                $this->group = 0;
+                $group = 0;
             }
-            if (is_array($this->group)){
+            if (is_array($group)){
                 // This is a multiselect
                 $this->initialization_group_multiselect = true;
-                if (in_array(0,$this->group)) $disabled = true;
+                if (in_array(0,$group)) $disabled = true;
             } else {
                 // This is a dropdown
                 $this->initialization_group_multiselect = false;
-                if ($this->group == 0) $disabled = true;
+                if ($group == 0) $disabled = true;
             }
 
             if ($exclusive) {
                 // We check the level only if group access is disabled
                 if (!$disabled) {
-                    return $this->checkGroup($data);
+                    return $this->checkGroup($group);
                 } else {
                     return $this->checkLevel($data);
                 }
             } else {
                 // Both group access and level must be satisfied
-                return $this->checkGroup($data) && $this->checkLevel($data);
+                return $this->checkGroup($group) && $this->checkLevel($data);
             }
         } else {
             return false;
@@ -273,13 +273,13 @@ class AccessProperty extends DataProperty
         return $access;
     }
     
-    public function checkGroup(Array $data=array())
+    public function checkGroup(Array $groups=array())
     {
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
         $access = false;
-        if (is_array($this->group)) $this->initialization_group_multiselect = true;
+        if (is_array($groups)) $this->initialization_group_multiselect = true;
         if ($this->initialization_group_multiselect) {
-            foreach ($this->group as $group) {
+            foreach ($groups as $group) {
                 if ($group == $this->myself) {
                     $access = true;
                 } elseif ($group == $anonID) {
@@ -296,14 +296,15 @@ class AccessProperty extends DataProperty
                 if ($access) break;
             }
         } else {
-            if ($this->group == $this->myself) {
+            $group = $groups;
+            if ($group == $this->myself) {
                 $access = true;
-            } elseif ($this->group == $anonID) {
+            } elseif ($group == $anonID) {
                 if (!xarUserIsLoggedIn()) $access = true;
-            } elseif ($this->group == -$anonID) {
+            } elseif ($group == -$anonID) {
                 if (xarUserIsLoggedIn()) $access = true;
-            } elseif ($this->group) {
-                $rolesgroup = xarRoles::getRole($this->group);
+            } elseif ($group) {
+                $rolesgroup = xarRoles::getRole($group);
                 $thisuser = xarCurrentRole();
                 if (is_object($rolesgroup)) {
                     if ($thisuser->isAncestor($rolesgroup)) $access = true;
