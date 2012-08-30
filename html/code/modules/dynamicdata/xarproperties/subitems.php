@@ -24,6 +24,7 @@ class SubItemsProperty extends DataProperty
     public $toupdate          = array();                   // holds the ids of items to update
     public $tocreate          = array();                   // holds the ids of items to create
     public $todelete          = array();                   // holds the ids of items to delete
+    public $defaultvalues     = array();                   // holds the default values of the object's properties. allows for overrides
 
     /*
     *   In this property the "value" ($itemsdata) corresponds to an array of the form
@@ -186,8 +187,11 @@ class SubItemsProperty extends DataProperty
 
         $data['object']->setFieldPrefix($newprefix);
         
-        // Get the object's default values
-        foreach ($data['object']->getProperties() as $name  => $property) $data['defaultfieldvalues'][$name] = $property->defaultvalue;
+        // Get the object's default values, with overrides, and pass them to the template
+        foreach ($data['object']->getProperties() as $name  => $property) 
+            if (!isset($this->defaultvalues[$name])) $data['defaultfieldvalues'][$name] = $property->defaultvalue;
+            else $data['defaultfieldvalues'][$name] = $this->defaultvalues[$name];
+        
         $data['itemid'] = $this->_itemid;
 
         // Check for the items data:
