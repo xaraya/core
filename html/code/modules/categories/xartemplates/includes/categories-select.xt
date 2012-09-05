@@ -8,7 +8,11 @@
             <option value="-1">All categories</option>
         </xar:if>
         <xar:if condition="$include_no_cat">
-            <option value="0">No category</option>
+            <xar:if condition="empty($value[$index])">
+                <option value="0" selected="selected">No category</option>
+            <xar:else/>
+                <option value="0">No category</option>
+            </xar:if>
         </xar:if>
         <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value, 'include_self' => $include_self)"/>
     </select>
