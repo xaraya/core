@@ -58,7 +58,8 @@ function authsystem_user_login()
     if (preg_match('/authsystem/',$redirecturl)) {
         $redirecturl = $redirect;
     }
-
+    $redirecturl = xarVarPrepHTMLDisplay($redirecturl);
+    
     // Scan authentication modules and set user state appropriately
     $extAuthentication = false;
     foreach($xarUser_authenticationModules as $authModName) {
