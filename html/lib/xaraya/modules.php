@@ -926,14 +926,7 @@ class xarMod extends Object implements IxarMod
             }
         }
 
-        if (!$found) {
-            if (!$isLoaded || empty($msg)) {
-                // if it's loaded but not found, then set the error message to that
-                $msg = 'Module '. strtoupper($funcType) .' function #(1) does not exist or could not be loaded.';
-                $params = array($modFunc);
-            }
-            throw new FunctionNotFoundException($params, $msg);
-        }
+        if (!$found) return xarController::$response->NotFound();
 
         $funcResult = $modFunc($args);
         return $funcResult;
