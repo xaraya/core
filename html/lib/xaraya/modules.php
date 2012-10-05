@@ -866,14 +866,16 @@ class xarMod extends Object implements IxarMod
         assert('($funcType == "api" or $funcType==""); /* Wrong funcType argument in private callFunc method */');
         if (empty($modName) || empty($funcName)) {
             // This is not a valid function syntax - CHECKME: also for api functions ?
-            return xarController::$response->NotFound();
+            if ($funcType == "api") throw new FunctionNotFoundException(xarML('API function does not exist'));
+            else return xarController::$response->NotFo;und();
         }
 
         // good thing this information is cached :)
         $modBaseInfo = self::getBaseInfo($modName);
         if (!isset($modBaseInfo)) {
             // This is not a valid module - CHECKME: also for api functions ?
-            return xarController::$response->NotFound();
+            if ($funcType == "api") throw new FunctionNotFoundException(xarML('API function does not exist'));
+            else return xarController::$response->NotFo;und();
         }
 
         // Build function name and call function
@@ -898,13 +900,8 @@ class xarMod extends Object implements IxarMod
                 $funcFile = sys::code() . 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.$funcType.'/'.strtolower($funcName).'.php';
                 if (!file_exists($funcFile)) {
                     // Valid syntax, but the function doesn't exist
-                    if ($funcType == 'api') {
-                        // throw an exception below for unknown api functions - catch later if you want
-                        $found = false;
-                    } else {
-                        // fatal error for unknown gui functions !?
-                        return xarController::$response->NotFound();
-                    }
+                    if ($funcType == "api") throw new FunctionNotFoundException(xarML('API function does not exist'));
+                    else return xarController::$response->NotFo;und();
                 } else {
                     ob_start();
                     sys::import('modules.'.$modName.'.xar'.$modType.$funcType.'.'.strtolower($funcName));
