@@ -867,7 +867,7 @@ class xarMod extends Object implements IxarMod
         if (empty($modName) || empty($funcName)) {
             // This is not a valid function syntax - CHECKME: also for api functions ?
             if ($funcType == "api") throw new FunctionNotFoundException(xarML('API function does not exist'));
-            else return xarController::$response->NotFo;und();
+            else return xarController::$response->NotFound();
         }
 
         // good thing this information is cached :)
@@ -875,7 +875,7 @@ class xarMod extends Object implements IxarMod
         if (!isset($modBaseInfo)) {
             // This is not a valid module - CHECKME: also for api functions ?
             if ($funcType == "api") throw new FunctionNotFoundException(xarML('API function does not exist'));
-            else return xarController::$response->NotFo;und();
+            else return xarController::$response->NotFound();
         }
 
         // Build function name and call function
@@ -901,7 +901,7 @@ class xarMod extends Object implements IxarMod
                 if (!file_exists($funcFile)) {
                     // Valid syntax, but the function doesn't exist
                     if ($funcType == "api") throw new FunctionNotFoundException(xarML('API function does not exist'));
-                    else return xarController::$response->NotFo;und();
+                    else return xarController::$response->NotFound();
                 } else {
                     ob_start();
                     sys::import('modules.'.$modName.'.xar'.$modType.$funcType.'.'.strtolower($funcName));
