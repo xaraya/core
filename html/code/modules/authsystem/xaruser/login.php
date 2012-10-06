@@ -48,7 +48,7 @@ function authsystem_user_login()
         return xarTpl::module('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
     if (!xarVarFetch('pass','str:0:254',$pass,'',XARVAR_NOT_REQUIRED)) return;
     if (empty($pass))
-    return xarTpl::module('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
+        return xarTpl::module('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
 
     $redirect = xarServer::getBaseURL();
     if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
