@@ -13,7 +13,7 @@
         <format resource="http://www.w3.org/1999/xhtml"/>
         <encoded>
             <![CDATA[ #$summary# ]]>
-</encoded>
+        </encoded>
         <description>
             <xar:var name="rsssummary"/>
         </description>
