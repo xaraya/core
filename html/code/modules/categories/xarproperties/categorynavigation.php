@@ -117,7 +117,7 @@ class CategoryNavigationProperty extends SelectProperty
         $itemid = $data['itemid'];
 
         // Get base cids for this module + item type
-// CHECKME: getallcatbases has changed result format !
+// CHECKME: getcatbases has changed result format !
         sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         $basecats = $worker->getcatbases(
