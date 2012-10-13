@@ -864,9 +864,12 @@ class xarMod extends Object implements IxarMod
     private static function callFunc($modName,$modType,$funcName,$args,$funcType = '')
     {
         assert('($funcType == "api" or $funcType==""); /* Wrong funcType argument in private callFunc method */');
+
+        // Build function name
+        $modFunc = "{$modName}_{$modType}{$funcType}_{$funcName}";
         if (empty($modName) || empty($funcName)) {
             // This is not a valid function syntax - CHECKME: also for api functions ?
-            if ($funcType == "api") throw new FunctionNotFoundException(xarML('API function does not exist'));
+            if ($funcType == "api") throw new FunctionNotFoundException($modFunc);
             else return xarController::$response->NotFound();
         }
 
@@ -874,12 +877,11 @@ class xarMod extends Object implements IxarMod
         $modBaseInfo = self::getBaseInfo($modName);
         if (!isset($modBaseInfo)) {
             // This is not a valid module - CHECKME: also for api functions ?
-            if ($funcType == "api") throw new FunctionNotFoundException(xarML('API function does not exist'));
+            if ($funcType == "api") throw new FunctionNotFoundException($modFunc);
             else return xarController::$response->NotFound();
         }
 
-        // Build function name and call function
-        $modFunc = "{$modName}_{$modType}{$funcType}_{$funcName}";
+        // Call function
         $found = true;
         $isLoaded = true;
         $msg = '';
@@ -900,7 +902,7 @@ class xarMod extends Object implements IxarMod
                 $funcFile = sys::code() . 'modules/'.$modBaseInfo['osdirectory'].'/xar'.$modType.$funcType.'/'.strtolower($funcName).'.php';
                 if (!file_exists($funcFile)) {
                     // Valid syntax, but the function doesn't exist
-                    if ($funcType == "api") throw new FunctionNotFoundException(xarML('API function does not exist'));
+                    if ($funcType == "api") throw new FunctionNotFoundException($modFunc);
                     else return xarController::$response->NotFound();
                 } else {
                     ob_start();
