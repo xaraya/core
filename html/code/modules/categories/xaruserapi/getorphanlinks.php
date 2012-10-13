@@ -34,7 +34,9 @@ function categories_userapi_getorphanlinks($args)
         $itemtype = 0;
     }
 
-    $catbases = xarMod::apiFunc('categories','user','getallcatbases',
+    sys::import('modules.categories.class.worker');
+    $worker = new CategoryWorker();
+    $catbases = $worker->getcatbases(
                               array('modid'    => $modid,
                                     'itemtype' => $itemtype));
     if (empty($catbases)) {

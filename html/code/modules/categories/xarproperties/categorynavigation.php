@@ -118,7 +118,12 @@ class CategoryNavigationProperty extends SelectProperty
 
         // Get base cids for this module + item type
 // CHECKME: getallcatbases has changed result format !
-        $basecats = xarMod::apiFunc('categories','user','getallcatbases',array('module' => $modname, 'itemtype' =>$data['itemtype']));
+        sys::import('modules.categories.class.worker');
+        $worker = new CategoryWorker();
+        $basecats = $worker->getcatbases(
+                                  array('module'    => $modname,
+                                        'itemtype' => $data['itemtype']));
+
         if (empty($basecats)) return ''; // no categories to show here -> return empty output
         $basecids = array();
         foreach ($basecats as $tempcat) {
