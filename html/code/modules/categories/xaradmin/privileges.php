@@ -248,13 +248,18 @@ function categories_admin_privileges($args)
     if (!empty($moduleid)) {
         $modinfo = xarMod::getInfo($moduleid);
         $modname = $modinfo['name'];
+        sys::import('modules.categories.class.worker');
+        $worker = new CategoryWorker();
         if (!empty($itemtype)) {
-            $basecats = xarMod::apiFunc('categories','user','getallcatbases',array('module' => 'articles', 'itemtype' => $pubid));
+            $basecats = $worker->getcatbases(
+                                  array('module'    => 'articles',
+                                        'itemtype' => $pubid));
             foreach ($basecats as $catid) {
                 $catlist[$catid['cid']] = 1;
             }
         } else {
-            $basecats = xarMod::apiFunc('categories','user','getallcatbases',array('module' => 'articles'));
+            $basecats = $worker->getcatbases(
+                                  array('module'    => 'articles'));
             foreach ($basecats as $catid) {
                 $catlist[$catid['cid']] = 1;
             }
