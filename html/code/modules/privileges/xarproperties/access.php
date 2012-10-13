@@ -19,7 +19,7 @@ class AccessProperty extends DataProperty
     public $desc        = 'Access';
     public $reqmodules  = array('privileges');
 
-    public $group       = array(0);
+    public $group       = 0;
     public $level       = 100;
     public $failure     = 0;
     public $myself      = -6;
