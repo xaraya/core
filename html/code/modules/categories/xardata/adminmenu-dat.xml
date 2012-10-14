@@ -37,6 +37,7 @@
 			<title>View category statistics per module</title>
             <label>View Statistics</label>
         </menuitem>
+        <!--
         <menuitem>
 			<mask>AdminCategories</mask>
             <includes>
@@ -46,6 +47,7 @@
 			<title>Check for orphaned category assignments</title>
             <label>Check Links</label>
         </menuitem>	
+        -->
         <menuitem>
 			<mask>AdminCategories</mask>
             <includes>

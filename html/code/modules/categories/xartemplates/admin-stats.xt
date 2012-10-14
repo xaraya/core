@@ -87,9 +87,11 @@
         <xar:else/>
             <h3><xar:ml><xar:mlstring>Module #(1)</xar:mlstring><xar:mlvar>#$modname#</xar:mlvar></xar:ml></h3>
     
+                <!--
                 <xar:if condition="empty($catid)">
                     <a href="#xarModURL('categories','admin','checklinks',array('modid' => $modid, 'itemtype' => $itemtype))#">Check Orphan Links</a><br/>
                 </xar:if>
+                -->
     
                 <xar:set name="urlextra">array('modid' => $modid)</xar:set>
                 <xar:data-output type="categorynavigation" module="$module" itemtype="$itemtype" catid="$catid" urlmodule="categories" urltype="admin" urlfunc="stats" urlextra="$urlextra" showcatcount="2"/>
@@ -114,9 +116,7 @@
                         <tr>
                             <td colspan="3" align="center">
                                 <br />
-                                
                                     There are currently no category links attached to this module...
-                                
                                 <br />
                                 <br />
                             </td>
