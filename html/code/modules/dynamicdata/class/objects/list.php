@@ -65,6 +65,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // Set the arguments passed via the constructor. These override the configuration settings
         $this->setArguments($args);
+        
+        // Set limits if required
+        if (isset($this->numitems) && is_numeric($this->numitems)) $this->dataquery->rowstodo = $this->numitems;
+        if (isset($this->startnum) && is_numeric($this->startnum)) $this->dataquery->startat = $this->startnum;
 
         // Get a reference to each property's value
         foreach ($this->properties as $property) {
