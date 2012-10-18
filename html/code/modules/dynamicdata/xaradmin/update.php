@@ -174,6 +174,9 @@ function dynamicdata_admin_update(Array $args=array())
 
     if (!empty($return_url)) {
         xarController::redirect($return_url);
+    } elseif ($myobject->objectid == 1) { // for dynamic objects, return to modify
+        xarController::redirect(xarModURL('dynamicdata', 'admin', 'modify',
+                                      array('itemid' => $itemid)));
     } elseif ($myobject->objectid == 2) { // for dynamic properties, return to modifyprop
         $objectid = $myobject->properties['objectid']->value;
         xarController::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
