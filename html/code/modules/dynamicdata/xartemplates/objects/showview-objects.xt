@@ -3,14 +3,36 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- TODO: multi-column output -->
     <div class="xar-mod-page-head">
-    <xar:style scope="module" module="dynamicdata" file="dd"/>
-    <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
-        <xar:template file="catnavigation"/>
-    </xar:if>
-
-    <xar:if condition="empty($layout)">
-        <xar:set name="layout">'default'</xar:set>
-    </xar:if>
+        <xar:style scope="module" module="dynamicdata" file="dd"/>
+        <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
+            <xar:template file="catnavigation"/>
+        </xar:if>
+    
+        <xar:if condition="empty($layout)">
+            <xar:set name="layout">'default'</xar:set>
+        </xar:if>
+        <xar:if condition="empty($object:itemcount)">
+            <!-- if we don't have an item total show prev / next links -->
+            <div>
+                <xar:if condition="$object:startnum gt 1">
+                    <div class="xar-halfwidth xar-floatleft">
+                        <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->startnum" urltemplate="$object->pagerurl" template="multipageprev"/>
+                    </div>
+                </xar:if>
+                <xar:if condition="count($object:items) eq $object:numitems">
+                    <div class="xar-halfwidth xar-floatright xar-align-right">
+                        <xar:set name="newtotal">$object->startnum+$object->numitems</xar:set>
+                        <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$newtotal" urltemplate="$object->pagerurl" template="multipagenext"/>
+                    </div>
+                </xar:if>
+                <br class="xar-clearboth"/>
+            </div>
+        <xar:elseif condition="$object:itemcount gt $object:numitems"/>
+            <!-- show the pager -->
+            <div class="xar-align-center">
+                <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->itemcount" urltemplate="$object->pagerurl"/>
+            </div>
+        </xar:if>
     </div><!--/xar-mod-page-head-->
     <div class="xar-mod-page-body">
         <table class="xar-items xar-table">
@@ -97,27 +119,27 @@
         </table>
 	</div><!--/xar-mod-page-body-->
 	<div class="xar-mod-page-foot">
-    <xar:if condition="empty($object:itemcount)">
-        <!-- if we don't have an item total show prev / next links -->
-        <div>
-        <xar:if condition="$object:startnum gt 1">
-            <div class="xar-halfwidth xar-floatleft">
-                <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->startnum" urltemplate="$object->pagerurl" template="multipageprev"/>
+        <xar:if condition="empty($object:itemcount)">
+            <!-- if we don't have an item total show prev / next links -->
+            <div>
+                <xar:if condition="$object:startnum gt 1">
+                    <div class="xar-halfwidth xar-floatleft">
+                        <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->startnum" urltemplate="$object->pagerurl" template="multipageprev"/>
+                    </div>
+                </xar:if>
+                <xar:if condition="count($object:items) eq $object:numitems">
+                    <div class="xar-halfwidth xar-floatright xar-align-right">
+                        <xar:set name="newtotal">$object->startnum+$object->numitems</xar:set>
+                        <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$newtotal" urltemplate="$object->pagerurl" template="multipagenext"/>
+                    </div>
+                </xar:if>
+                <br class="xar-clearboth"/>
+            </div>
+        <xar:elseif condition="$object:itemcount gt $object:numitems"/>
+            <!-- show the pager -->
+            <div class="xar-align-center">
+                <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->itemcount" urltemplate="$object->pagerurl"/>
             </div>
         </xar:if>
-        <xar:if condition="count($object:items) eq $object:numitems">
-            <div class="xar-halfwidth xar-floatright xar-align-right">
-                <xar:set name="newtotal">$object->startnum+$object->numitems</xar:set>
-                <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$newtotal" urltemplate="$object->pagerurl" template="multipagenext"/>
-            </div>
-        </xar:if>
-        <br class="xar-clearboth"/>
-        </div>
-    <xar:elseif condition="$object:itemcount gt $object:numitems"/>
-        <!-- show the pager -->
-        <div class="xar-align-center">
-            <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->itemcount" urltemplate="$object->pagerurl"/>
-        </div>
-    </xar:if>
     </div><!--/xar-mod-page-foot-->
 </xar:template>
