@@ -7,16 +7,20 @@
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
-  <access>a:4:{s:14:&quot;display_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;200&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;modify_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;delete_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:6:&quot;access&quot;;s:174:&quot;a:5:{s:7:&quot;display&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;update&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;create&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;delete&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;config&quot;;a:1:{i:0;i:2;}}&quot;;}</access>
-  <config></config>
   <isalias>true</isalias>
+  <access>a:4:{s:14:&quot;display_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;200&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;modify_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;delete_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:6:&quot;access&quot;;s:174:&quot;a:5:{s:7:&quot;display&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;update&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;create&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;delete&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;config&quot;;a:1:{i:0;i:2;}}&quot;;}</access>
+  <config>a:0:{}</config>
+  <datastore>relational</datastore>
+  <sources>a:1:{s:22:"dynamic_configurations";a:2:{i:0;s:26:"xar_dynamic_configurations";i:1;s:8:"internal";}}</sources>
+  <relations>a:0:{}</relations>
+  <objects>a:0:{}</objects>
   <properties>
     <property name="id">
       <id>23</id>
       <label>ID</label>
       <type>itemid</type>
       <defaultvalue></defaultvalue>
-      <source>xar_dynamic_configurations.id</source>
+      <source>dynamic_configurations.id</source>
       <status>33</status>
       <seq>1</seq>
       <configuration></configuration>
@@ -26,7 +30,7 @@
       <label>Name</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_dynamic_configurations.name</source>
+      <source>dynamic_configurations.name</source>
       <status>33</status>
       <seq>2</seq>
       <configuration></configuration>
@@ -36,7 +40,7 @@
       <label>Label</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_dynamic_configurations.label</source>
+      <source>dynamic_configurations.label</source>
       <status>33</status>
       <seq>3</seq>
       <configuration></configuration>
@@ -46,7 +50,7 @@
       <label>Description</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_dynamic_configurations.description</source>
+      <source>dynamic_configurations.description</source>
       <status>34</status>
       <seq>4</seq>
       <configuration></configuration>
@@ -56,7 +60,7 @@
       <label>Property</label>
       <type>fieldtype</type>
       <defaultvalue>1</defaultvalue>
-      <source>xar_dynamic_configurations.property_id</source>
+      <source>dynamic_configurations.property_id</source>
       <status>33</status>
       <seq>5</seq>
       <configuration>a:7:{s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:1:"2";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:20:"initialization_other";s:0:"";}</configuration>
@@ -66,7 +70,7 @@
       <label>Ignore Empty Input</label>
       <type>checkbox</type>
       <defaultvalue>1</defaultvalue>
-      <source>xar_dynamic_configurations.ignore_empty</source>
+      <source>dynamic_configurations.ignore_empty</source>
       <status>33</status>
       <seq>6</seq>
       <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:11:"0,No;1,Yes;";}</configuration>
@@ -76,7 +80,7 @@
       <label>Configuration</label>
       <type>configuration</type>
       <defaultvalue></defaultvalue>
-      <source>xar_dynamic_configurations.configuration</source>
+      <source>dynamic_configurations.configuration</source>
       <status>34</status>
       <seq>7</seq>
       <configuration></configuration>
