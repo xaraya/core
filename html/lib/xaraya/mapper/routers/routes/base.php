@@ -74,5 +74,10 @@ class xarRoute extends Object implements iRoute
         
         return false;
     }
+
+    public function getParts()
+    {
+        return $this->parts;
+    }
 }
 ?>
