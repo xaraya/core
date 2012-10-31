@@ -51,15 +51,17 @@ class DefaultRoute extends xarRoute
         // Parse the query part of the URL
         $urlparts = parse_url($path);
         if (empty($urlparts['query'])) return false;
-        //Note that the explode depends on  &amp;
-        $pairs = explode('&amp;', $urlparts['query']);
+        
+        // Cater to URLs with &amp;
+        $querypart = preg_replace('/&amp;/','&',$urlparts['query']);
+        $pairs = explode(xarController::$separator, $querypart);
         foreach($pairs as $pair) {
             if (trim($pair) == '') continue;
             $pairparts = explode('=', $pair);
             if (empty($pairparts[1])) return false;
             $params[$pairparts[0]] = urldecode($pairparts[1]);
         }
-                
+
         // If we don't have a module param, bail
         if (empty($params[$this->moduleKey])) return false;
         
@@ -77,7 +79,7 @@ class DefaultRoute extends xarRoute
         $this->parts[$this->funcKey] = $params[$this->funcKey];
         unset($params[$this->funcKey]);
         
-        $this->parts['params'] = $params;
+        $this->parts['funcargs'] = $params;
         
         $request->setRoute('default');
         return true;
