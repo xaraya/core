@@ -21,14 +21,15 @@ class xarRequest extends Object
     protected $modulekey = 'module';
     protected $typekey   = 'type';
     protected $funckey   = 'func';
-    protected $module    = 'base';
-    protected $modulealias = '';
-    protected $type      = 'user';
-    protected $func      = 'main';
-    protected $funcargs  = array();
-    protected $object    = 'objects';
-    protected $method    = 'view';
     protected $route     = 'default';
+
+    public $module    = 'base';
+    public $modulealias = '';
+    public $type      = 'user';
+    public $func      = 'main';
+    public $funcargs  = array();
+    public $object    = 'objects';
+    public $method    = 'view';
     
     public $defaultRequestInfo = array();
     public $isObjectURL        = false;
@@ -49,39 +50,51 @@ class xarRequest extends Object
 
     function setURL($url=null)
     {
-        if (is_array($url)) {
-            // This is an array representing a traditional Xaraya URL array
-            if (!empty($url['module'])) {
-                // Resolve if this is an alias for some other module
-                $this->setModule(xarModAlias::resolve($url['module']));
-                if ($this->getModule() != $url['module']) $this->setModuleAlias($url['module']);
-                unset($url['module']);
-            }
-            if (!empty($url['type'])) {
-                $this->setType($url['type']);
-                unset($url['type']);
-            }
-            if (!empty($url['func'])) {
-                $this->setFunction($url['func']);
-                unset($url['func']);
-            }
-            $this->setFunctionArgs($url);
-        } else {
-            if (null == $url) {
-                // This is a string representing a URL
-                // Try and get it from the current request path
-                $url = xarServer::getCurrentURL();
-                $params = $_GET;
+        if (null != $url) {
+            // A URL was passed
+            if (is_array($url)) {
+                // This is an array representing a traditional Xaraya URL array
+                if (!empty($url['module'])) {
+                    // Resolve if this is an alias for some other module
+                    $this->setModule(xarModAlias::resolve($url['module']));
+                    if ($this->getModule() != $url['module']) $this->setModuleAlias($url['module']);
+                    unset($url['module']);
+                }
+                if (!empty($url['type'])) {
+                    $this->setType($url['type']);
+                    unset($url['type']);
+                }
+                if (!empty($url['func'])) {
+                    $this->setFunction($url['func']);
+                    unset($url['func']);
+                }
+                
+                // Rename the array so we can use the code at the end
+                $params = $url;
+                
+                // CHECKME: how should this URL be stored?
+                
             } else {
+                // This is a string representing a URL
+                $url = preg_replace('/&amp;/','&',$url);
                 $params = xarController::parseQuery($url);
+                if (!empty($params['module'])) $this->setModule($params['module']);
+                if (!empty($params['type'])) $this->setType($params['type']);
+                if (!empty($params['func'])) $this->setFunction($params['func']);
+                
+                // Store the URL
+                $this->url = $url;
+                
             }
+        } else {
+            // CHECKME: are these next lines needed?
+            // Try and get it from the current request path
+            $url = xarServer::getCurrentURL();
+            $params = $_GET;
+
             // We now have a URL. Set it.
             $this->url = $url;
-            
-            if (!empty($params['module'])) $this->setModule($params['module']);
-            if (!empty($params['type'])) $this->setType($params['type']);
-            if (!empty($params['func'])) $this->setFunction($params['func']);
-
+        
             // See if this is an object call; easiest to start like this 
             xarVarFetch('object', 'regexp:/^[a-z][a-z_0-9]*$/', $objectName, NULL, XARVAR_NOT_REQUIRED);
             // Found a module object name
@@ -118,17 +131,17 @@ class xarRequest extends Object
                 }
 
             }
-            // Get the query parameters too
-            // Module, type, func, object and method are reserved names, so remove them from the array
-            unset($params['module']);
-            unset($params['type']);
-            unset($params['func']);
-            unset($params['object']);
-            unset($params['method']);
-            $this->setFunctionArgs($params);
-            // At this point the request has assembled the module or object it belongs to and any query parameters.
-            // What is still to be defined by routing are the type (for modules) and function/function arguments or method (for objects).            
         }
+        // Finally get the query parameters
+        // Module, type, func, object and method are reserved names, so remove them from the array
+        unset($params['module']);
+        unset($params['type']);
+        unset($params['func']);
+        unset($params['object']);
+        unset($params['method']);
+        $this->setFunctionArgs($params);
+        // At this point the request has assembled the module or object it belongs to and any query parameters.
+        // What is still to be defined by routing are the type (for modules) and function/function arguments or method (for objects).            
     }
     
     /**
@@ -156,7 +169,7 @@ class xarRequest extends Object
      * @todo <marco> Investigate this aliases thing before to integrate and promote it!
      */
     public function getInfo($url='')
-    {        
+    {
         static $currentRequestInfo = NULL;
         static $loopHole = NULL;
         if (is_array($currentRequestInfo) && empty($url)) {
