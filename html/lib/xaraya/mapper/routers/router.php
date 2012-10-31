@@ -49,7 +49,12 @@ class xarRouter extends Object
     {
         $this->addDefaultRoutes();
         foreach (array_reverse($this->routes) as $name => $route) {
-            if ($params = $route->match($request)) {
+            if ($route->match($request)) {
+                $publicproperties = array_keys($request->getPublicProperties());
+                foreach ($route->getParts() as $key => $value) {
+                    if (in_array($key,$publicproperties)) $request->$key = $value;
+                }
+                $publicproperties = $request->getPublicProperties();
                 $request->setRoute($name);
                 $this->currentRoute = $name;
                 return true;
