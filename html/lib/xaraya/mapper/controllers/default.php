@@ -24,7 +24,6 @@ class DefaultActionController extends BaseActionController implements iControlle
     {
         xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $module, NULL, XARVAR_NOT_REQUIRED);
         if (null != $module) {
-            $data['module'] = $module;
             xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['type'], xarController::$request->getType(), XARVAR_NOT_REQUIRED);
             xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['func'], xarController::$request->getFunction(), XARVAR_NOT_REQUIRED);
         }
