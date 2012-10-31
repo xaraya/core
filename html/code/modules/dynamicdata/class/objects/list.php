@@ -21,14 +21,12 @@ sys::import('modules.dynamicdata.class.objects.interfaces');
 class DataObjectList extends DataObjectMaster implements iDataObjectList
 {
     public $itemids  = array();           // the list of item ids used in data stores
-    public $where    = '';
-    public $sort     = '';
+    public $where    = array();
+    public $sort     = array();
     public $groupby  = array();     // the list of property names to group by (if any) - see also isgrouped
     public $numitems = null;
     public $startnum = null;
     public $count    = 0;           // specify if you want DD to count items before getting them (e.g. for the pager)
-
-    public $startstore = null;      // the data store we should start with (for sort)
 
     public $items = array();       // the result array of itemid => (property name => value)
     public $itemcount = null;       // the number of items given by countItems()
@@ -60,13 +58,17 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             try {
                 // CHECKME: this should be abstracted
                 $configargs = unserialize($args['config']);
-                foreach ($configargs as $key => $value) if (!empty($key)) $this->{$key} = $value[0];
+                foreach ($configargs as $key => $value) if (!empty($key)) $this->{$key} = $value;
                 $this->configuration = $configargs;
             } catch (Exception $e) {}
         }
 
         // Set the arguments passed via the constructor. These override the configuration settings
         $this->setArguments($args);
+        
+        // Set limits if required
+        if (isset($this->numitems) && is_numeric($this->numitems)) $this->dataquery->rowstodo = $this->numitems;
+        if (isset($this->startnum) && is_numeric($this->startnum)) $this->dataquery->startat = $this->startnum;
 
         // Get a reference to each property's value
         foreach ($this->properties as $property) {
@@ -75,6 +77,62 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // Get a reference to each property's value
         $this->configuration['items'] =& $this->items;
+    }
+
+    /**
+     * Apply as set of filter values to an object's query
+     */
+
+    private function addFilterCondition($name,$filter,$value)
+    {
+        try {
+            switch ($filter) {
+                case '=':
+                    $this->dataquery->eq($this->properties[$name]->source, $value);
+                break;
+                case '!=':
+                    $this->dataquery->ne($this->properties[$name]->source, $value);
+                break;
+                case '>':
+                    $this->dataquery->gt($this->properties[$name]->source, $value);
+                break;
+                case '<':
+                    $this->dataquery->lt($this->properties[$name]->source, $value);
+                break;
+                case '>=':
+                    $this->dataquery->ge($this->properties[$name]->source, $value);
+                break;
+                case '<=':
+                    $this->dataquery->le($this->properties[$name]->source, $value);
+                break;
+                case 'like':
+                    $this->dataquery->like($this->properties[$name]->source, $value);
+                break;
+                case 'notlike':
+                    $this->dataquery->notlike($this->properties[$name]->source, $value);
+                break;
+                case 'null':
+                    $this->dataquery->eq($this->properties[$name]->source, NULL);
+                break;
+                case 'notnull':
+                    $this->dataquery->ne($this->properties[$name]->source, NULL);
+                break;
+                case 'regex':
+                    $this->dataquery->regex($this->properties[$name]->source, $value);
+                break;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+        return true;
+    }
+    public function applyFilters(Array $args = array())
+    {
+        $properties = $this->getProperties($args);
+        foreach ($args as $key => $value) {
+            $this->addFilterCondition($key,$value['filter'],$value['value']);
+        }
+        return true;
     }
 
     /**
@@ -96,9 +154,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         if (!is_array($this->groupby)) $this->groupby = explode(',',$this->groupby);
 
-// CHECKME: this should filter the fieldlist based on the status as well - cfr. master.php
+        $this->getDataStore(true);
         // If a fieldlist was passed, only get the appropriate datastores
-        if (isset($args['fieldlist'])) $this->getDataStores(true);
+//        if (isset($args['fieldlist'])) $this->getDataStores(true);
 
         // REMOVEME: secondary is now always false
         // add where clause if itemtype is one of the properties (e.g. articles)
@@ -111,23 +169,20 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 
         // Note: they can be empty here, which means overriding any previous criteria
-        foreach(array_keys($this->datastores) as $name) {
             // make sure we don't have some left-over sort criteria
-            $this->datastores[$name]->cleanSort();
+            $this->datastore->cleanSort();
             // make sure we don't have some left-over where clauses
-            $this->datastores[$name]->cleanWhere();
+            $this->datastore->cleanWhere();
             // make sure we don't have some left-over group by fields
-            $this->datastores[$name]->cleanGroupBy();
+            $this->datastore->cleanGroupBy();
             if(isset($args['cache']))
                 // pass the cache value to the datastores
-                $this->datastores[$name]->cache = $args['cache'];
-        }
+                $this->datastore->cache = $args['cache'];
         $this->setSort($this->sort);
         // add content filters before setWhere()
         $this->addFilters();
         $this->setWhere($this->where);
         $this->setGroupBy($this->groupby);
-//        $this->setCategories($this->catid);
 
     }
 
@@ -138,12 +193,16 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function setSort($sort)
     {
+        $this->sort = array();  // FIXME: this should not be necessary
+        
         if(is_array($sort)) {
             $this->sort = $sort;
-        } else {
+        } elseif (!empty($sort)) {
             $this->sort = explode(',',$sort);
         }
         foreach($this->sort as $criteria) {
+            if (empty($criteria)) return true;
+            
             // split off trailing ASC or DESC
             if(preg_match('/^(.+)\s+(ASC|DESC)\s*$/',$criteria,$matches)) {
                 $criteria = trim($matches[1]);
@@ -152,28 +211,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $sortorder = 'ASC';
             }
 
-            if(isset($this->properties[$criteria])) {
-                // pass the sort criteria to the right data store
-                $datastore = $this->properties[$criteria]->datastore;
-                // assign property to datastore if necessary
-                if(empty($datastore)) {
-                    list($storename, $storetype) = $this->properties[$criteria]->getDataStore();
-                    if(!isset($this->datastores[$storename]))
-                        $this->addDataStore($storename, $storetype);
+            // Make sure the field is added to the query 
+//            $this->dataquery->addfield($criteria);
 
-                    $this->properties[$criteria]->datastore = $storename;
-                    $this->datastores[$storename]->addField($this->properties[$criteria]); // use reference to original property
-                    $datastore = $storename;
-                }
-                elseif($this->properties[$criteria]->type == 21)
-                    $this->datastores[$datastore]->addField($this->properties[$criteria]); // use reference to original property
-
-                $this->datastores[$datastore]->addSort($this->properties[$criteria],$sortorder);
-
-                // if we're sorting on some field, we should start querying by the data store that holds it
-                if (!isset($this->startstore))
-                   $this->startstore = $datastore;
-            }
+            // Add the field's order clause
+            $this->dataquery->addorder($this->properties[$criteria]->source, $sortorder);
         }
     }
 
@@ -243,90 +285,19 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     }
 
     /**
-     * Add where clause for a property
-     *
-     * @param string $name property name
-     * @param string $clause SQL clause, e.g. = 123, IN ('this', 'that'),  LIKE '%something%', etc.
-     * @param string $join '' for the first, 'and' or 'or' for the next
-     * @param string $pre optional pre (
-     * @param string $post optional post )
-     */
-    public function addWhere($name, $clause, $join='', $pre='', $post='')
-    {
-        if (!isset($this->properties[$name])) return;
-
-        // pass the where clause to the right data store
-        $datastore = $this->properties[$name]->datastore;
-        // assign property to datastore if necessary
-        if(empty($datastore)) {
-            list($storename, $storetype) = $this->properties[$name]->getDataStore();
-            if(!isset($this->datastores[$storename]))
-                $this->addDataStore($storename, $storetype);
-
-            $this->properties[$name]->datastore = $storename;
-            $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
-            $datastore = $storename;
-        } elseif($this->properties[$name]->type == 21)
-            $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
-
-        if ($datastore == '_dummy_') {
-            // CHECKME: could the dummy datastore actually do something here ?
-            return;
-        }
-
-        $this->datastores[$datastore]->addWhere(
-            $this->properties[$name],
-            $clause,
-            $join,
-            $pre,
-            $post
-        );
-    }
-
-    /**
      * Set where clause
      *
      * @param mixed where string or array of name => value pairs
      */
     public function setWhere($where)
     {
-        if (empty($where)) {
-            return;
-
-        } elseif (is_array($where)) {
-            $join = '';
-            foreach ($where as $name => $val) {
-                if (empty($name) || !isset($val) || $val === '') continue;
-                if (!isset($this->properties[$name])) continue;
-                if (is_numeric($val)) {
-                    $mywhere = " = " . $val;
-                } elseif (is_string($val)) {
-                    $val = str_replace("'","\\'",$val);
-                    $mywhere = " = '" . $val . "'";
-                } elseif (is_array($val) && count($val) > 0) {
-                    if (is_numeric($val[0])) {
-                        $mywhere = " IN (" . implode(", ", $val) . ")";
-                    } elseif (is_string($val[0])) {
-                        $val = str_replace("'","\\'",$val);
-                        $mywhere = " IN ('" . implode("', '", $val) . "')";
-                    } else {
-                        continue;
-                    }
-                } else {
-                    continue;
-                }
-                $this->addWhere($name, $mywhere, $join);
-
-                // default AND when using array format
-                $join = 'and';
-            }
-            return;
-        }
-
+        if (empty($where)) return true;
+        
         // find all single-quoted pieces of text with and/or and replace them first, to
         // allow where clauses like : title eq 'this and that' and body eq 'here or there'
         $idx = 0;
         $found = array();
+        if (is_array($where)) $where = $where[0];
         if(preg_match_all("/'(.*?)'/",$where,$matches)) {
             foreach($matches[1] as $match) {
                 // skip if it doesn't contain and/or
@@ -344,8 +315,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 
         // cfr. BL compiler - adapt as needed (I don't think == and === are accepted in SQL)
-        $findLogic      = array(' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge ');
-        $replaceLogic   = array( ' = ', ' != ',  ' < ',  ' > ',  ' = ', ' != ', ' <= ', ' >= ');
+        $findLogic      = array(' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge ', ' like ');
+        $replaceLogic   = array( ' = ', ' != ',  ' < ',  ' > ',  ' = ', ' != ', ' <= ', ' >= ', ' like ');
 
         $where = str_replace($findLogic, $replaceLogic, $where);
 
@@ -363,6 +334,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
 
             $pieces = preg_split('/\s+/',$part);
+            if (count($pieces) == 0) continue;
             $pre = '';
             $post = '';
             $name = array_shift($pieces);
@@ -385,6 +357,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
 
             if(isset($this->properties[$name])) {
+                $this->addFilterCondition($name,$pieces[0],trim($pieces[1],"'"));
+/*
                 if(empty($idx)) {
                     $mywhere = join(' ',$pieces);
                 } else {
@@ -398,7 +372,14 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                         $mywhere .= $piece . ' ';
                     }
                 }
-                $this->addWhere($name, $mywhere, $join, $pre, $post);
+                $this->datastore->addWhere(
+                    $this->properties[$name],
+                    $mywhere,
+                    $join,
+                    $pre,
+                    $post
+                );
+                */
             }
         }
     }
@@ -412,29 +393,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     public function setGroupBy($groupby)
     {
         foreach($this->groupby as $name) {
-            if(isset($this->properties[$name])) {
-                // pass the sort criteria to the right data store
-                $datastore = $this->properties[$name]->datastore;
-                // assign property to datastore if necessary
-                if(empty($datastore)) {
-                    list($storename, $storetype) = $this->properties[$name]->getDataStore();
-                    if(!isset($this->datastores[$storename])) {
-                        $this->addDataStore($storename, $storetype);
-                    }
-
-                    $this->properties[$name]->datastore = $storename;
-                    $this->datastores[$storename]->addField($this->properties[$name]); // use reference to original property
-                    $datastore = $storename;
-                }
-                elseif($this->properties[$name]->type == 21) {
-                    $this->datastores[$datastore]->addField($this->properties[$name]); // use reference to original property
-                }
-                $this->datastores[$datastore]->addGroupBy($this->properties[$name]);
-                // if we're grouping by some field, we should start querying by the data store that holds it
-                if(!isset($this->startstore)) {
-                   $this->startstore = $datastore;
-                }
-            }
+            // If it fails, just ignore it
+            try {
+                $this->dataquery->addgroup($this->properties[$name]->source);
+            } catch (Exception $e) {}
         }
     }
 
@@ -468,16 +430,14 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             )
         );
 
-        foreach(array_keys($this->datastores) as $name) {
-            $this->datastores[$name]->addJoin(
-                $categoriesdef['table'],
-                $categoriesdef['field'],
-                array(),
-                $categoriesdef['where'],
-                'and',
-                $categoriesdef['more']
-            );
-        }
+        $this->datastore->addJoin(
+            $categoriesdef['table'],
+            $categoriesdef['field'],
+            array(),
+            $categoriesdef['where'],
+            'and',
+            $categoriesdef['more']
+        );
     }
 
     /**
@@ -487,9 +447,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function &getItems(Array $args = array())
     {
-        // initialize the items array
-        $this->items = array();
-
         // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
 
@@ -501,31 +458,32 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if(empty($args['startnum'])) {
             $args['startnum'] = $this->startnum;
         }
-        // if we don't have a start store yet, but we do have a primary datastore, we'll start there
-        if(empty($this->startstore) && !empty($this->primary)) {
-            $this->startstore = $this->properties[$this->primary]->datastore;
-        }
-
-        // count the items first if we haven't done so yet, but only on demand (args['count'] = 1)
-        if (!empty($this->count) && !isset($this->itemcount)) {
-            $this->countItems();
-        }
-
-       // first get the items from the start store (if any)
-        if(!empty($this->startstore)) {
-            $this->datastores[$this->startstore]->getItems($args);
-
-            // check if we found something - if not, no sense looking further
-            if(count($this->itemids) == 0) return $this->items;
-        }
-        // then retrieve the other info about those items
-        foreach(array_keys($this->datastores) as $name) {
-            if(!empty($this->startstore) && $name == $this->startstore) {
-                continue;
+        if(!empty($args['fieldlist'])) {
+            $fields = $this->getFieldList();
+            $this->setFieldList($args['fieldlist']);
+        } else {
+            // count the items first if we haven't done so yet, but only on demand (args['count'] = 1)
+            if (!empty($this->count) && !isset($this->itemcount)) {
+                $this->countItems();
             }
-
-            $this->datastores[$name]->getItems($args);
         }
+        $this->items = array();
+        $this->datastore->getItems($args);
+        
+        if (!empty($args['getvirtuals'])) {
+            // Get the values of properties with virtual datastore and add them to the items array
+            foreach ($this->getFieldList() as $fieldname) {
+                if (empty($this->properties[$fieldname]->source)) {
+                    if (method_exists($this->properties[$fieldname],'getItemValue')) {
+                        foreach ($this->items as $key => $value) {
+                            $this->items[$key][$fieldname] = $this->properties[$fieldname]->getItemValue($key);
+                        }
+                    }
+                }
+            }
+        }
+        if(!empty($args['fieldlist'])) $this->setFieldList($fields);
+
         return $this->items;
     }
 
@@ -538,28 +496,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     {
         // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
-
-        // initialize the itemcount
-        $this->itemcount = null;
-
-        // if we don't have a start store yet, but we do have a primary datastore, we'll count there
-        if(empty($this->startstore) && !empty($this->primary)) {
-            $this->startstore = $this->properties[$this->primary]->datastore;
-        }
-        // try to count the items in the start store (if any)
-        if(!empty($this->startstore)) {
-            $this->itemcount = $this->datastores[$this->startstore]->countItems($args);
-            return $this->itemcount;
-        } else {
-            // If we don't have a start store, we're probably stuck,
-            // but we'll try the first one anyway :)
-            // TODO: find some better way to determine which data store to count in
-            foreach(array_keys($this->datastores) as $name) {
-                // this looks like a loop but it isnt :-) (yet)
-                $this->itemcount = $this->datastores[$name]->countItems($args);
-                return $this->itemcount;
-            }
-        }
+        $this->itemcount = $this->datastore->countItems($args);
+        return $this->itemcount;
     }
 
     /**
@@ -590,11 +528,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     if(($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE)
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
+                    || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_INPUTSTATE_IGNORED)
                     ) {
-                        $args['properties'][$name] =& $this->properties[$name];
-                    } elseif (!empty($this->groupby) && in_array($name, $this->groupby)) {
-                        $args['properties'][$name] =& $this->properties[$name];
-                    } elseif (!empty($this->properties[$name]->operation)) {
                         $args['properties'][$name] =& $this->properties[$name];
                     }
                 }
@@ -604,12 +539,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 if(($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
+                || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_INPUTSTATE_IGNORED)
                 ) {
-                    $args['properties'][$name] =& $this->properties[$name];
-                } elseif (!empty($this->groupby) && in_array($name, $this->groupby)) {
-                    $args['properties'][$name] =& $this->properties[$name];
-                } elseif (!empty($this->properties[$name]->operation)) {
-                    $args['properties'][$name] =& $this->properties[$name];
+                        $args['properties'][$name] =& $this->properties[$name];
                 }
 
             // Order the fields if this is an extended object
@@ -622,7 +554,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
         }
 
-        $args['items'] =& $this->items;
+        // If we have an items parameter, take it as valid 
+        if (isset($args['items'])) {
+            $this->items = $args['items'];
+        } else {
+            $args['items'] =& $this->items;
+        }
 
         // add link to display the item
         if(empty($args['linktype']))  $args['linktype'] = $this->linktype;
@@ -672,7 +609,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         sys::import('xaraya.objects');
 
         // get view options for each item
-        if(empty($this->isgrouped)) {
+        if(empty($this->groupby)) {
             // reset cached urls
             $this->cached_urls = array();
             foreach(array_keys($this->items) as $itemid) {
@@ -697,10 +634,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
         }
 
-        if(!empty($this->isgrouped)) {
+        if(!empty($this->groupby)) {
             foreach(array_keys($args['properties']) as $name) {
                 if(!empty($this->properties[$name]->operation))
-                    $this->properties[$name]->label = $this->properties[$name]->operation . ' ' . $this->properties[$name]->label;
+                    $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
             }
             $args['linkfield'] = 'N/A';
         }
@@ -867,8 +804,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if(empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
+        if (!is_array($args['fieldlist'])) {
+            $args['fieldlist'] = explode(',',$args['fieldlist']);
+            if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
+        }
+        
         if(count($args['fieldlist']) == 0 && empty($this->status)) {
-            $args['fieldlist'] = array_keys($this->properties);
+            $args['fieldlist'] = $this->getFieldList();
         }
         $viewvalues = array();
         foreach($this->itemids as $itemid) {
@@ -997,22 +939,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $args['numitems'] = $this->numitems;
             if(empty($args['startnum']))
                 $args['startnum'] = $this->startnum;
-
-            // if we don't have a start store yet, but we do have a primary datastore, we'll start there
-            if(empty($this->startstore) && !empty($this->primary)) {
-                $this->startstore = $this->properties[$this->primary]->datastore;
-            }
-            $start = false;
         }
 
-        $itemid = null;
-        // first get the items from the start store (if any)
-        if(!empty($this->startstore)) {
-            $itemid = $this->datastores[$this->startstore]->getNext($args);
-
-            // check if we found something - if not, no sense looking further
-            if(empty($itemid)) return;
-        }
+        $itemid = $this->datastore->getNext($args);
         return $itemid;
     }
 }
