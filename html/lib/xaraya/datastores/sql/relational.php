@@ -366,9 +366,11 @@ class RelationalDataStore extends SQLDataStore
         // Is this a good idea?
         $q->addorder($this->object->properties[$this->object->primary]->source);
         
-        // Add limits if called for
-        $q->setrowstodo($numitems);
-        $q->setstartat($startnum);
+        if (!empty($numitems)) {
+            // Add limits if called for
+            $q->setrowstodo($numitems);
+            $q->setstartat($startnum);
+        }
         
         // Run the query
         if (!$q->run()) throw new Exception(xarML('Query failed'));
