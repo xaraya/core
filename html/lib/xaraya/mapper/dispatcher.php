@@ -24,12 +24,11 @@ class xarDispatcher extends Object
         if (file_exists(sys::code() . 'modules/' . $request->getModule() . '/controllers/' . $request->getRoute() . '.php')) {
             sys::import('modules.' . $request->getModule() . '.controllers.' . $request->getRoute());
             $controllername = UCFirst($request->getModule()) . UCFirst($request->getRoute()) . 'Controller';
-            $controller = new $controllername($request);
         } else {
             sys::import('xaraya.mapper.controllers.' . $request->getRoute());
             $controllername = UCFirst($request->getRoute()) . 'ActionController';
-            $controller = new $controllername($request);
         }
+        $controller = new $controllername($request);
         $request->setActionString($controller->getActionString($request));
         return $controller;
     }
