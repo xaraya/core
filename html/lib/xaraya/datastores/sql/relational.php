@@ -517,8 +517,8 @@ class RelationalDataStore extends SQLDataStore
         //Make sure we have a primary field
         if (empty($this->object->primary)) throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
 
-        // Complete the dataquery
-        $q = $this->object->dataquery;
+        // Create the query
+        $q = clone $this->object->dataquery;
         $q->clearfields();
         $q->addfield('COUNT(DISTINCT ' . $this->object->properties[$this->object->primary]->source . ')');
 
