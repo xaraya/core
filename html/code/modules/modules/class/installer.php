@@ -115,7 +115,11 @@ class Installer extends Object
             }
         }
 
-        $dependency = $extInfo['dependency'];
+        if (isset($extInfo['dependencyinfo'])) {
+            $dependency = $extInfo['dependencyinfo'];
+        } else {
+            $dependency = $extInfo['dependency'];
+        }
         if (empty($dependency)) $dependency = array();
 
         foreach ($dependency as $module_id => $conditions) {
@@ -185,7 +189,11 @@ class Installer extends Object
             }
         }
 
-        $dependency = $extInfo['dependency'];
+        if (isset($extInfo['dependencyinfo'])) {
+            $dependency = $extInfo['dependencyinfo'];
+        } else {
+            $dependency = $extInfo['dependency'];
+        }
         if (empty($dependency)) $dependency = array();
 
         //The dependencies are ok, they shouldnt change in the middle of the
@@ -267,12 +275,12 @@ class Installer extends Object
             // adding a proper array of module states would be nice...
             if ($this->databaseExtensions[$name]['state'] == XARMOD_STATE_UNINITIALISED) continue;
 
-            if (isset($extInfo['dependency']) &&
-                !empty($extInfo['dependency'])) {
-                $dependency = $extInfo['dependency'];
+            if (isset($extInfo['dependencyinfo'])) {
+                $dependency = $extInfo['dependencyinfo'];
             } else {
-                $dependency = array();
+                $dependency = $extInfo['dependency'];
             }
+            if (empty($dependency)) $dependency = array();
 
             foreach ($dependency as $module_id => $conditions) {
                 if (is_array($conditions)) {
@@ -347,8 +355,12 @@ class Installer extends Object
             }
         }
 
-        $dependencies = $extInfo['dependency'];
-        if (empty($dependencies)) $dependencies = array();
+        if (isset($extInfo['dependencyinfo'])) {
+            $dependency = $extInfo['dependencyinfo'];
+        } else {
+            $dependency = $extInfo['dependency'];
+        }
+        if (empty($dependency)) $dependency = array();
 
         $testmod = $this->modulestack->peek();
         if ($regid != $testmod) $this->modulestack->push($regid);
