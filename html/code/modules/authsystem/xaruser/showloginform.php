@@ -24,6 +24,8 @@ function authsystem_user_showloginform(Array $args = array())
     xarVarFetch('redirecturl', 'str:1:254', $redirecturl, xarServer::getBaseURL(), XARVAR_NOT_REQUIRED);
     $data['redirecturl'] = xarVarPrepHTMLDisplay($redirecturl);
 
+    return $data;
+    
     if (!xarUserIsLoggedIn()) {
         return $data;
     } else {
