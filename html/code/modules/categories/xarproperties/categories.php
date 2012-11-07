@@ -44,14 +44,9 @@ class CategoriesProperty extends DataProperty
     public $validation_allowempty = false;
     public $validation_single_invalid; // CHECKME: is this a validation or something else?
     public $validation_allowempty_invalid;
-    public $initialization_include_no_cat   = 0;
+    public $initialization_include_no_cat   = 1;
     public $initialization_include_all_cats = 0;
-    public $initialization_basecategories   = array(
-                                                0 => array(1=>'New Tree'),
-                                                1 => array(1=>array(1=>-1)),
-                                                2 => array(1=>true),
-                                                3 => array(1=>1),
-                                                    );
+    public $initialization_basecategories;
 
     public $module_id;
     public $itemtype;
@@ -329,32 +324,6 @@ class CategoriesProperty extends DataProperty
 
         $data['value'] = $this->value;
         return parent::showOutput($data);
-    }
-
-    public function getItems($category=0, $object=null)
-    {
-        if (empty($object)) $object = $this->objectref;
-        if (empty($object)) throw new Exception(xarML('No object found for the getItems method'));
-        if (empty($this->itemid)) $this->itemid = $object->properties[$object->primary]->value;
-        $prinaryfield = $object->properties[$object->primary]->source;
-        xarMod::load('categories');
-        $q = $object->dataquery;
-        $tables = xarDB::getTables();
-        $q->addtable($tables['categories'],'c');
-        $q->addtable($tables['categories_linkage'],'l');
-        $q->leftjoin('l.category_id','c.id');
-        $q->leftjoin($prinaryfield,'l.item_id');
-        if (!empty($category)) {
-            if (is_array($category)) {
-                $q->in('c.id', $category);
-            } else {
-                $q->eq('c.id', $category);
-            }
-        }
-        $q->run();
-//        $q->qecho();
-        $items = $q->output();
-        return $items;
     }
 
     public function updateConfiguration(Array $data = array())
