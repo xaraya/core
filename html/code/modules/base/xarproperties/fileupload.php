@@ -444,6 +444,7 @@ class FileUploadProperty extends DataProperty
         // Validate each array element (name)
         $valid = true;
         foreach ($filename as $name) {
+            if (empty($name)) continue;
             $name = xarVarPrepForOS(basename(strval($name)));
             $valid = $valid && preg_match("/\.$filetype$/",$name);
         }

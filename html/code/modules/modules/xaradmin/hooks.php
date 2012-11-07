@@ -23,7 +23,7 @@ function modules_admin_hooks(Array $args=array())
     // Security
     if(!xarSecurityCheck('ManageModules')) return;
 
-    if (!xarVarFetch('curhook', 'isset', $curhook, null, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('hook', 'isset', $curhook, null, XARVAR_NOT_REQUIRED)) {return;}
     if (!xarVarFetch('layout', 'pre:trim:lower:enum:bycat', $layout, 'bycat', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('return_url', 'str', $return_url, '', XARVAR_NOT_REQUIRED)) return;
     extract($args);

@@ -28,6 +28,17 @@ class RadioButtonsProperty extends SelectProperty
         $this->template  = 'radio';
     }
 
+    public function checkInput($name = '', $value = null)
+    {
+        $name = empty($name) ? 'dd_'.$this->id : $name;
+        // store the fieldname for configurations who need them (e.g. file uploads)
+        $this->fieldname = $name;
+        if (!isset($value)) {
+            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
+        }
+        return $this->validateValue($value);
+    }
+
     public function showInput(Array $data = array())
     {
         if (!empty($data['checked'])) $data['value'] = $data['checked'];

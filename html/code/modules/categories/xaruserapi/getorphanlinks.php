@@ -39,10 +39,11 @@ function categories_userapi_getorphanlinks($args)
     $catbases = $worker->getcatbases(
                               array('modid'    => $modid,
                                     'itemtype' => $itemtype));
+
     if (empty($catbases)) {
         $args['reverse'] = 1;
         // any link is an orphan here
-        return xarMod::apiFunc('categories','user','getlinks', $args);
+//        return xarMod::apiFunc('categories','user','getlinks', $args);
     }
 
     $seencid = array();
@@ -58,7 +59,7 @@ function categories_userapi_getorphanlinks($args)
     $catlist = xarMod::apiFunc('categories','user','getcatinfo',
                              array('cids' => array_keys($seencid)));
     uasort($catlist,'categories_userapi_getorphanlinks_sortbyleft');
-
+var_dump($catbases);
     // Security check
     if(!xarSecurityCheck('ViewCategoryLink')) return;
 
@@ -97,7 +98,7 @@ function categories_userapi_getorphanlinks($args)
                 ON $categoriestable.id = $categorieslinkagetable.category_id
              WHERE $categorieslinkagetable.module_id = ?
                AND $categorieslinkagetable.itemtype = ?
-               AND (" . join(' OR ', $where) . ")";
+               AND (" . join(' OR ', $where) . ")";var_dump($sql);var_dump($bindvars);
 
     if (!empty($numitems)) {
         if (empty($startnum)) {

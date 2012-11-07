@@ -7,7 +7,7 @@
 ul.xar-tabs {
     list-style: none;
     border-width: 0 0 1px 0;
-    border-style: solid;
+    border-style: dotted;
     padding: 0 .5em;
     margin: 1em 0;
     zoom: 1;                    /* fix for IE */
@@ -36,14 +36,14 @@ ul.xar-tabs li.xar-tab a {
     white-space: nowrap;
     float: left;
     border-width: 1px 1px 0 1px;
-    border-style: solid;
+    border-style: dotted;
     padding: .1em .75em .4em .75em;
 }
 ul.xar-tabs li.xar-tab-active a {
     white-space: nowrap;
     float: left;
     border-width: 1px 1px 0 1px;
-    border-style: solid;
+    border-style: dotted;
     padding: .1em .75em .69em .75em; /* .69 bottom not subject to rounding errors
                                                    causing active tab to wrap badly at .70 */
     position: relative;
