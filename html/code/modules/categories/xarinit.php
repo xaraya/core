@@ -247,18 +247,10 @@ function categories_upgrade($oldversion)
     return true;
 }
 
-/**
- * Delete the categories module
- *
- * @author  Jim McDonald, Flávio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
- * @access  public
- * @param   no parameters
- * @return  true on success or false on failure
- * @todo    restore the default behaviour prior to 1.0 release
-*/
 function categories_delete()
 {
-    return true;
+  //this module cannot be removed
+  return false;
 }
 
 ?>
