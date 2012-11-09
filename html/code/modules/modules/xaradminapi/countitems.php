@@ -71,7 +71,7 @@ function modules_adminapi_countitems(Array $args=array())
     }
     
     if (!$include_core) {
-        $coremods = array('base','roles','privileges','blocks','themes','authsystem','mail','dynamicdata','installer','modules');
+        $coremods = array('base','roles','privileges','blocks','themes','authsystem','mail','dynamicdata','installer','modules','categories');
         $where[] = 'mods.name NOT IN (' . implode(',', array_fill(0, count($coremods), '?')) . ')';
         $bindvars = array_merge($bindvars, $coremods);        
     }

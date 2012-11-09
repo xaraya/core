@@ -24,7 +24,7 @@ function modules_admin_list()
 
     if(!xarMod::apiFunc('modules', 'admin', 'regenerate')) return;
 
-    $coremods = array('base','roles','privileges','blocks','themes','authsystem','mail','dynamicdata','installer','modules');
+    $coremods = array('base','roles','privileges','blocks','themes','authsystem','mail','dynamicdata','installer','modules','categories');
 
     // display phase     
     $data = array();
