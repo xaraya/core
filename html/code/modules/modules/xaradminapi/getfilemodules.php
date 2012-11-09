@@ -60,15 +60,16 @@ function modules_adminapi_getfilemodules(Array $args=array())
                     }
 
                     // Found a directory
-                    $name         = $modOsDir;
-                    $nameinfile   = $modFileInfo['name'];
-                    $regId        = $modFileInfo['id'];
-                    $version      = $modFileInfo['version'];
-                    $class        = $modFileInfo['class'];
-                    $category     = $modFileInfo['category'];
-                    $adminCapable = $modFileInfo['admin_capable'];
-                    $userCapable  = $modFileInfo['user_capable'];
-                    $dependency   = $modFileInfo['dependency'];
+                    $name           = $modOsDir;
+                    $nameinfile     = $modFileInfo['name'];
+                    $regId          = $modFileInfo['id'];
+                    $version        = $modFileInfo['version'];
+                    $class          = $modFileInfo['class'];
+                    $category       = $modFileInfo['category'];
+                    $adminCapable   = $modFileInfo['admin_capable'];
+                    $userCapable    = $modFileInfo['user_capable'];
+                    $dependency     = $modFileInfo['dependency'];
+                    $dependencyinfo = $modFileInfo['dependency'];
 
                     // TODO: beautify :-)
                     if (!isset($regId)) {
@@ -139,7 +140,8 @@ function modules_adminapi_getfilemodules(Array $args=array())
                                          'category'      => $category,
                                          'admin_capable' => $adminCapable,
                                          'user_capable'  => $userCapable,
-                                         'dependency'    => $dependency);
+                                         'dependency'    => $dependency,
+                                         'dependencyinfo'=> $dependencyinfo);
                     } else {
                             $fileModules[$name] = array('directory'     => $modOsDir,
                                                         'name'          => $name,
@@ -150,7 +152,8 @@ function modules_adminapi_getfilemodules(Array $args=array())
                                                         'category'      => $category,
                                                         'admin_capable' => $adminCapable,
                                                         'user_capable'  => $userCapable,
-                                                        'dependency'    => $dependency);
+                                                        'dependency'    => $dependency,
+                                                        'dependencyinfo'=> $dependencyinfo);
                     } // if
                 } // if
         } // switch

@@ -116,37 +116,42 @@ class Installer extends Object
         }
 
         if (isset($extInfo['dependencyinfo'])) {
-            $dependencies = $extInfo['dependencyinfo'];
+            $dependency = $extInfo['dependencyinfo'];
         } else {
-            $dependencies = $extInfo['dependency'];
+            $dependency = $extInfo['dependency'];
         }
-        if (empty($dependencies)) $dependencies = array();
+        if (empty($dependency)) $dependency = array();
 
-        foreach ($dependencies as $module_id => $dependency) {
+        foreach ($dependency as $module_id => $conditions) {
 
-            if (is_array($dependency)) {
+            if (is_array($conditions)) {
+                // Ignore the core
+                if (empty($module_id)) continue;
 
                 //Required module inexistent
                 if (!isset($dbMods[$module_id]))
                     throw new ModuleNotFoundException($module_id,'Required module missing (ID #(1))');
 
                 sys::import('xaraya.version');
-                if (xarVersion::compare($dependency['minversion'], $dbMods[$module_id]['version']) >= 0) {
+                if (xarVersion::compare($conditions['minversion'], $dbMods[$module_id]['version']) >= 0) {
                     //Need to add some info for the user
                     return false; // 1st version is bigger
                 }
 
                //Not to be checked, at least not for now
                /*
-                if (xarVersion::compare($dependency['maxversion'], $dbMods[$module_id]['version']) < 0) {
+                if (xarVersion::compare($conditions['maxversion'], $dbMods[$module_id]['version']) < 0) {
                     //Need to add some info for the user
                     return false; // 1st version is smaller
                 }
                 */
 
             } else {
+                // Ignore the core
+                if (empty($conditions)) continue;
+
                 //Required module inexistent
-                if (!isset($dbMods[$dependency]))
+                if (!isset($dbMods[$conditions]))
                     throw new ModuleNotFoundException($conditions,'Required module missing (ID #(1))');
             }
         }
@@ -160,6 +165,8 @@ class Installer extends Object
 
         // Argument check
         if (!isset($regid)) throw new EmptyParameterException('regid');
+        // Ignore the core
+        if (empty($regid)) return true;
 
         // See if we have lost any modules since last generation
         if (!$this->checkformissing()) { return; }
@@ -190,21 +197,21 @@ class Installer extends Object
         }
 
         if (isset($extInfo['dependencyinfo'])) {
-            $dependencies = $extInfo['dependencyinfo'];
+            $dependency = $extInfo['dependencyinfo'];
         } else {
-            $dependencies = $extInfo['dependency'];
+            $dependency = $extInfo['dependency'];
         }
-        if (empty($dependencies)) $dependencies = array();
+        if (empty($dependency)) $dependency = array();
 
         //The dependencies are ok, they shouldnt change in the middle of the
         //script execution, so let's assume this.
-        foreach ($dependencies as $module_id => $dependency) {
-            if (is_array($dependency)) {
+        foreach ($dependency as $module_id => $conditions) {
+            if (is_array($conditions)) {
                 //The module id is in $modId
                 $modId = $module_id;
             } else {
-                //The module id is in $dependency
-                $modId = $dependency;
+                //The module id is in $conditions
+                $modId = $conditions;
             }
 
             // RECURSIVE CALL
@@ -276,19 +283,19 @@ class Installer extends Object
             if ($this->databaseExtensions[$name]['state'] == XARMOD_STATE_UNINITIALISED) continue;
 
             if (isset($extInfo['dependencyinfo'])) {
-                $dependencies = $extInfo['dependencyinfo'];
+                $dependency = $extInfo['dependencyinfo'];
             } else {
-                $dependencies = $extInfo['dependency'];
+                $dependency = $extInfo['dependency'];
             }
-            if (empty($dependencies)) $dependencies = array();
+            if (empty($dependency)) $dependency = array();
 
-            foreach ($dependencies as $module_id => $dependency) {
-                if (is_array($dependency)) {
+            foreach ($dependency as $module_id => $conditions) {
+                if (is_array($conditions)) {
                     //The module id is in $modId
                     $modId = $module_id;
                 } else {
-                    //The module id is in $dependency
-                    $modId = $dependency;
+                    //The module id is in $conditions
+                    $modId = $conditions;
                 }
 
                 //Not dependent, then go to the next dependency!!!
@@ -337,6 +344,8 @@ class Installer extends Object
 
         // Argument check
         if (!isset($regid)) throw new EmptyParameterException('regid');
+        // Ignore the core
+        if (empty($regid)) return true;
 
         // See if we have lost any modules since last generation
         if (!$this->checkformissing()) {return;}
@@ -356,25 +365,28 @@ class Installer extends Object
         }
 
         if (isset($extInfo['dependencyinfo'])) {
-            $dependencies = $extInfo['dependencyinfo'];
+            $dependency = $extInfo['dependencyinfo'];
         } else {
-            $dependencies = $extInfo['dependency'];
+            $dependency = $extInfo['dependency'];
         }
-        if (empty($dependencies)) $dependencies = array();
+        if (empty($dependency)) $dependency = array();
 
         $testmod = $this->modulestack->peek();
         if ($regid != $testmod) $this->modulestack->push($regid);
 
         //The dependencies are ok, assuming they shouldnt change in the middle of the
         //script execution.
-        foreach ($dependencies as $module_id => $dependency) {
-            if (is_array($dependency)) {
+        foreach ($dependency as $module_id => $conditions) {
+            if (is_array($conditions)) {
                 //The module id is in $modId
                 $modId = $module_id;
             } else {
-                //The module id is in $dependency
-                $modId = $dependency;
+                //The module id is in $conditions
+                $modId = $conditions;
             }
+            // Ignore the core
+            if (empty($modId)) continue;
+            
             if (!xarMod::isAvailable(xarMod::getName($modId))) {
                 if (!$this->assembledependencies($modId)) {
                     $msg = xarML('Unable to initialise dependency module with ID (#(1)).', $modId);
