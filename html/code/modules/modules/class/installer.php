@@ -116,29 +116,29 @@ class Installer extends Object
         }
 
         if (isset($extInfo['dependencyinfo'])) {
-            $dependency = $extInfo['dependencyinfo'];
+            $dependencies = $extInfo['dependencyinfo'];
         } else {
-            $dependency = $extInfo['dependency'];
+            $dependencies = $extInfo['dependency'];
         }
-        if (empty($dependency)) $dependency = array();
+        if (empty($dependencies)) $dependencies = array();
 
-        foreach ($dependency as $module_id => $conditions) {
+        foreach ($dependencies as $module_id => $dependency) {
 
-            if (is_array($conditions)) {
+            if (is_array($dependency)) {
 
                 //Required module inexistent
                 if (!isset($dbMods[$module_id]))
                     throw new ModuleNotFoundException($module_id,'Required module missing (ID #(1))');
 
                 sys::import('xaraya.version');
-                if (xarVersion::compare($conditions['minversion'], $dbMods[$module_id]['version']) >= 0) {
+                if (xarVersion::compare($dependency['minversion'], $dbMods[$module_id]['version']) >= 0) {
                     //Need to add some info for the user
                     return false; // 1st version is bigger
                 }
 
                //Not to be checked, at least not for now
                /*
-                if (xarVersion::compare($conditions['maxversion'], $dbMods[$module_id]['version']) < 0) {
+                if (xarVersion::compare($dependency['maxversion'], $dbMods[$module_id]['version']) < 0) {
                     //Need to add some info for the user
                     return false; // 1st version is smaller
                 }
@@ -146,7 +146,7 @@ class Installer extends Object
 
             } else {
                 //Required module inexistent
-                if (!isset($dbMods[$conditions]))
+                if (!isset($dbMods[$dependency]))
                     throw new ModuleNotFoundException($conditions,'Required module missing (ID #(1))');
             }
         }
@@ -190,21 +190,21 @@ class Installer extends Object
         }
 
         if (isset($extInfo['dependencyinfo'])) {
-            $dependency = $extInfo['dependencyinfo'];
+            $dependencies = $extInfo['dependencyinfo'];
         } else {
-            $dependency = $extInfo['dependency'];
+            $dependencies = $extInfo['dependency'];
         }
-        if (empty($dependency)) $dependency = array();
+        if (empty($dependencies)) $dependencies = array();
 
         //The dependencies are ok, they shouldnt change in the middle of the
         //script execution, so let's assume this.
-        foreach ($dependency as $module_id => $conditions) {
-            if (is_array($conditions)) {
+        foreach ($dependencies as $module_id => $dependency) {
+            if (is_array($dependency)) {
                 //The module id is in $modId
                 $modId = $module_id;
             } else {
-                //The module id is in $conditions
-                $modId = $conditions;
+                //The module id is in $dependency
+                $modId = $dependency;
             }
 
             // RECURSIVE CALL
@@ -276,19 +276,19 @@ class Installer extends Object
             if ($this->databaseExtensions[$name]['state'] == XARMOD_STATE_UNINITIALISED) continue;
 
             if (isset($extInfo['dependencyinfo'])) {
-                $dependency = $extInfo['dependencyinfo'];
+                $dependencies = $extInfo['dependencyinfo'];
             } else {
-                $dependency = $extInfo['dependency'];
+                $dependencies = $extInfo['dependency'];
             }
-            if (empty($dependency)) $dependency = array();
+            if (empty($dependencies)) $dependencies = array();
 
-            foreach ($dependency as $module_id => $conditions) {
-                if (is_array($conditions)) {
+            foreach ($dependencies as $module_id => $dependency) {
+                if (is_array($dependency)) {
                     //The module id is in $modId
                     $modId = $module_id;
                 } else {
-                    //The module id is in $conditions
-                    $modId = $conditions;
+                    //The module id is in $dependency
+                    $modId = $dependency;
                 }
 
                 //Not dependent, then go to the next dependency!!!
