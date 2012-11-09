@@ -51,7 +51,7 @@ function modules_admin_deactivate ()
 
     // If we haven't been to the deps GUI, check that first
     if (!$command) {
-        //First check the modules dependencies
+        // First check for the modules depending on this one
         $dependents = $installer->getalldependents($id);
         if(count($dependents['active']) > 1) {
             //Let's make a nice GUI to show the user the options
