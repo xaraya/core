@@ -230,8 +230,9 @@ class xarEvents extends Object implements ixarEvents
                     // unregister the event so it can be re-registered ( = updated :) )
                     if (!static::unregisterSubject($event, $module)) return;
                 } else {
+                    // CHECKME: doesn't unique mean we can have the same subject for different modules?
                     // oops, that event is already registered by another module, pick a different one!
-                    throw new DuplicateEventRegistrationException($event);
+                    // throw new DuplicateEventRegistrationException($event);
                 }
             }
         } elseif ($itemtype == static::getObserverType()) {
