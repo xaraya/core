@@ -69,7 +69,7 @@ function modules_adminapi_getfilemodules(Array $args=array())
                     $adminCapable   = $modFileInfo['admin_capable'];
                     $userCapable    = $modFileInfo['user_capable'];
                     $dependency     = $modFileInfo['dependency'];
-                    $dependencyinfo = $modFileInfo['dependency'];
+                    $dependencyinfo = $modFileInfo['dependencyinfo'];
 
                     // TODO: beautify :-)
                     if (!isset($regId)) {
