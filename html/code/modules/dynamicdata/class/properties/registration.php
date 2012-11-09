@@ -245,8 +245,22 @@ class PropertyRegistration extends DataContainer
                 foreach($activeMods as $modInfo) {
                     // FIXME: the modinfo directory does NOT end with a /
                     $dir = 'modules/' .$modInfo['osdirectory'] . '/xarproperties';
-                    if(file_exists(sys::code() . $dir)){
+                    if(file_exists(sys::code() . $dir)) {
                         $propDirs[] = $dir;
+                    }
+                    
+                    // Ignore the next part if this is dynamicdata, as it was already loaded above
+                    if ($modInfo['osdirectory'] == 'dynamicdata') continue;
+                    
+                    // If there is a configurations-dat.xml file in this module, then load it now
+                    // CHECKME: For more flexibility this could be done through a PropertyInstall class
+                    $dir = 'modules/' .$modInfo['osdirectory'] . '/xardata/configurations-dat.xml';
+                    if(file_exists(sys::code() . $dir)) {
+                        $dat_file = sys::code() . $dir;
+                        $data = array('file' => $dat_file);
+                        try {
+                            $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+                        } catch (Exception $e) {}                        
                     }
                 }
 
