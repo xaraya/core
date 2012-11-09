@@ -356,11 +356,11 @@ class Installer extends Object
         }
 
         if (isset($extInfo['dependencyinfo'])) {
-            $dependency = $extInfo['dependencyinfo'];
+            $dependencies = $extInfo['dependencyinfo'];
         } else {
-            $dependency = $extInfo['dependency'];
+            $dependencies = $extInfo['dependency'];
         }
-        if (empty($dependency)) $dependency = array();
+        if (empty($dependencies)) $dependencies = array();
 
         $testmod = $this->modulestack->peek();
         if ($regid != $testmod) $this->modulestack->push($regid);
