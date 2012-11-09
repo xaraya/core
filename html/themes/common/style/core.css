@@ -22,7 +22,9 @@ form related styling
     width: 35%;
     }
 .xar-row .xar-col:last-child {
-    width: 65%;
+/*    width: 65%; */
+    min-width: 100px;
+    max-width: 65%;
     }
 /*
 text related styling
