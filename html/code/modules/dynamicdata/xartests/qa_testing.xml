@@ -5,6 +5,7 @@
   <itemtype>3</itemtype>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
+  <datastore>relational</datastore>
   <config></config>
   <isalias>true</isalias>
   <properties>
