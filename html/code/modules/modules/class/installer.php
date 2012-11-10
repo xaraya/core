@@ -133,7 +133,10 @@ class Installer extends Object
                     throw new ModuleNotFoundException($module_id,'Required module missing (ID #(1))');
 
                 sys::import('xaraya.version');
-                if (xarVersion::compare($conditions['minversion'], $dbMods[$module_id]['version']) >= 0) {
+                if (xarVersion::compare($conditions['minversion'], $dbMods[$module_id]['version']) > 0) {
+                    $msg = xarML('Stopped installation of module #(1). ',$extInfo['name']);
+                    $msg .= xarML('The current version of the module #(1) is #(2). The required version is #(3).',$dbMods[$module_id]['name'],$dbMods[$module_id]['version'],$conditions['minversion']);
+                    die($msg);
                     //Need to add some info for the user
                     return false; // 1st version is bigger
                 }
