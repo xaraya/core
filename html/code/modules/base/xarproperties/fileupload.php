@@ -424,26 +424,26 @@ class FileUploadProperty extends DataProperty
     /**
      * Validate the given filename against the list/regex of allowed file extensions
      */
-    public function validateExtension($filename = '')
+    public function validateExtension($filenames = '')
     {
         // Make sure we cover the case of an array, as we might have multiple uploads
-        if (!is_array($filename)) $filename = array($filename);
+        if (!is_array($filenames)) $filenames = array($filenames);
         
         // Allow if no filename
-        if (count($filename) == 1) {
-            $name = end($filename);
+        if (count($filenames) == 1) {
+            $name = end($filenames);
             if (empty($name)) return true;
         }
         
         // If no filetype restriction then let it through
-        $filetype = $this->validation_file_extensions;
-        if (empty($filetype)) return true;
+        $filetypes = $this->validation_file_extensions;
+        if (empty($filetypes)) return true;
         
         // Validate each array element (name)
         $valid = true;
-        foreach ($filename as $name) {
+        foreach ($filenames as $name) {
             $name = xarVarPrepForOS(basename(strval($name)));
-            $valid = $valid && preg_match("/\.$filetype$/",$name);
+            $valid = $valid && preg_match("/\.$filetypes$/",strtolower($name));
         }
         return $valid;
     }
