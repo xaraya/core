@@ -40,7 +40,9 @@
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>);}catch(Exception $e){if(xarModVars::get('dynamicdata','debugmode')&amp;&amp;in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))echo "&lt;pre&gt;".$e->getMessage()."&lt;/pre&gt;";}</xsl:text>
+        <xsl:text>);}catch(Exception $e){
+        if(xarModVars::get('dynamicdata','debugmode')&amp;&amp;in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))
+        echo "&lt;pre&gt;".$e->getMessage()."&lt;/pre&gt;";}</xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <!-- We do have a property in the attribute -->
@@ -74,7 +76,8 @@
       </xsl:otherwise>
     </xsl:choose>
     <xsl:text>)}catch(Exception $e){
-        if(xarModVars::get('dynamicdata','debugmode')&amp;&amp;in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))echo "&lt;pre&gt;".$e->getMessage()."&lt;/pre&gt;";}</xsl:text>
+    if(xarModVars::get('dynamicdata','debugmode')&amp;&amp;in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))
+    echo "&lt;pre&gt;".$e->getMessage()."&lt;/pre&gt;";}</xsl:text>
   </xsl:processing-instruction>
 </xsl:template>
 
