@@ -790,4 +790,5 @@
     <property_id>14</property_id>
     <ignore_empty>1</ignore_empty>
     <configuration>a:5:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:20:"validation_notequals";s:0:"";s:17:"validation_equals";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
-  </configurations></items>
+  </configurations>
+</items>
