@@ -126,7 +126,13 @@ function roles_userapi_getallroles(Array $args=array())
     $items['nativeitems'] = $q->output();
     $itemids = array();
     foreach ($items['nativeitems'] as $item) $itemids[] = $item['id'];
-    $items['dditems'] = xarMod::apiFunc('dynamicdata','user','getitems',array('moduleid' => 27, 'itemtype' => $itemtype, 'itemids' => $itemids,'getobject' => true));
+    switch ($itemtype) {
+        case 1: $name = "roles_roles"; break;
+        case 2: $name = "roles_users"; break;
+        case 3: $name = "roles_groups"; break;
+    }
+    $object = DataObjectMaster::getObjectList(array('name' => $name));
+    $items['dditems'] = $object->getItems(array('itemids' => $itemids,'getobject' => true));
 /*    for ($i = 0, $max = count($items); $i < $max; $i++) {
         if (!isset($properties[$items[$i]['id']])) continue;
         $items[$i] = array_merge($items[$i],$properties[$items[$i]['id']]);
