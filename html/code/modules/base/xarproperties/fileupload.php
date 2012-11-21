@@ -430,7 +430,7 @@ class FileUploadProperty extends DataProperty
     {
         // Make sure we cover the case of an array, as we might have multiple uploads
         if (!is_array($filenames)) $filenames = array($filenames);
-        
+
         // Allow if no filename
         if (count($filenames) == 1) {
             $name = end($filenames);
