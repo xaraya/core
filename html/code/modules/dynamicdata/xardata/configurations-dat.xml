@@ -773,4 +773,21 @@
     <ignore_empty>1</ignore_empty>
     <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
   </configurations>
-</items>
+  <configurations itemid="87">
+    <id>87</id>
+    <name>display_striptags</name>
+    <label>Strip HTML Tags</label>
+    <description>Whether to filter the output for HTML tags allowed by e.g. the HTML module</description>
+    <property_id>14</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:5:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:20:"validation_notequals";s:0:"";s:17:"validation_equals";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations>
+  <configurations itemid="88">
+    <id>88</id>
+    <name>initialization_sanitize</name>
+    <label>Sanitize Input</label>
+    <description>Whether to remove unwanted characters from input</description>
+    <property_id>14</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:5:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:20:"validation_notequals";s:0:"";s:17:"validation_equals";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+  </configurations></items>

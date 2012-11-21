@@ -62,10 +62,11 @@ class DataProperty extends Object implements iDataProperty
 
     public $configurationtypes = array('display','validation','initialization');
 //    public $display_template                = "";
-    public $display_layout                  = "default";       // we display the default layout of a template
-    public $display_required                = false;           // the field is not tagged as "required" for input
-    public $display_tooltip                 = "";              // there is no tooltip text, and so no tooltip
-    public $initialization_transform        = false;           // generic trigger that can be checked in getValue and setValue
+    public $display_layout                  = "default";      // we display the default layout of a template
+    public $display_required                = false;          // the field is not tagged as "required" for input
+    public $display_tooltip                 = "";             // there is no tooltip text, and so no tooltip
+    public $display_striptags               = false;          // we don't filter put certain HTML tags
+    public $initialization_transform        = false;          // generic trigger that can be checked in getValue and setValue
     public $initialization_other_rule       = null;
     public $validation_notequals            = null;           //  check whether a property value does not equal a given value
     public $validation_equals               = null;           //  check whether a property value equals a given value
@@ -429,11 +430,14 @@ class DataProperty extends Object implements iDataProperty
         $data['name'] = $this->name;
         if (empty($data['_itemid'])) $data['_itemid'] = 0;
 
-        if(!isset($data['value']))    $data['value']    = $this->value;
+        if(!isset($data['value']))     $data['value']    = $this->value;
+        // If this is set, pass only allowed HTML tags
+        if ($this->display_striptags)  $data['value']    = xarVarPrepHTMLDisplay($data['value']);
+        
         // TODO: does this hurt when it is an array?
-        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
-        if(!isset($data['template'])) $data['template'] = $this->template;
-        if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
+        if(!isset($data['tplmodule'])) $data['tplmodule']   = $this->tplmodule;
+        if(!isset($data['template']))  $data['template'] = $this->template;
+        if(!isset($data['layout']))    $data['layout']   = $this->display_layout;
 
         // Add the configuration options defined via UI
         if(isset($data['configuration'])) {
