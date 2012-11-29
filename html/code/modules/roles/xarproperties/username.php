@@ -54,7 +54,7 @@ class UsernameProperty extends TextBoxProperty
         // We allow the special value [All]
         
         if ($value != '[All]') {
-        $role = xarRoles::ufindRole($value);        
+            $role = xarRoles::ufindRole($value, xarRoles::ROLES_USERTYPE, xarRoles::ROLES_STATE_ALL);
             switch ((int)$this->validation_existrule) {
                 case 1:
                 if (!empty($role)) {
