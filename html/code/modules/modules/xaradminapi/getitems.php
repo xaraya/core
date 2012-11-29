@@ -32,15 +32,16 @@ function modules_adminapi_getitems(Array $args=array())
     $orderby = array();
     $bindvars = array();
 
-    $select['regid'] = 'mods.regid';
-    $select['name'] = 'mods.name';
-    $select['directory'] = 'mods.directory';
-    $select['version'] = 'mods.version';
-    $select['systemid'] = 'mods.id';
-    $select['class'] = 'mods.class';
-    $select['category'] = 'mods.category';
-    $select['state'] = 'mods.state';
-    $select['user_capable'] = 'mods.user_capable';
+    $select['id']            = 'mods.id';
+    $select['regid']         = 'mods.regid';
+    $select['name']          = 'mods.name';
+    $select['directory']     = 'mods.directory';
+    $select['version']       = 'mods.version';
+    $select['systemid']      = 'mods.id';
+    $select['class']         = 'mods.class';
+    $select['category']      = 'mods.category';
+    $select['state']         = 'mods.state';
+    $select['user_capable']  = 'mods.user_capable';
     $select['admin_capable'] = 'mods.admin_capable';    
 
     if (!empty($regid)) {

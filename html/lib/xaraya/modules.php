@@ -697,14 +697,14 @@ class xarMod extends Object implements IxarMod
         // name and id are required, assert them, otherwise the module is invalid
         assert('isset($version["name"]) && isset($version["id"]); /* Both name and id need to be present in xarversion.php */');
         $FileInfo['name']           = $version['name'];
-        $FileInfo['id']             = (int) $version['id'];
+        $FileInfo['regid']          = (int) $version['id'];
         $FileInfo['displayname']    = isset($version['displayname'])    ? $version['displayname'] : $version['name'];
         $FileInfo['description']    = isset($version['description'])    ? $version['description'] : false;
         $FileInfo['displaydescription'] = isset($version['displaydescription']) ? $version['displaydescription'] : $FileInfo['description'];
-        $FileInfo['admin']          = isset($version['admin'])          ? $version['admin'] : false;
-        $FileInfo['admin_capable']  = isset($version['admin'])          ? $version['admin'] : false;
-        $FileInfo['user']           = isset($version['user'])           ? $version['user'] : false;
-        $FileInfo['user_capable']   = isset($version['user'])           ? $version['user'] : false;
+        $FileInfo['admin']          = isset($version['admin'])          ? (bool) $version['admin'] : false;
+        $FileInfo['admin_capable']  = isset($version['admin'])          ? (bool) $version['admin'] : false;
+        $FileInfo['user']           = isset($version['user'])           ? (bool) $version['user'] : false;
+        $FileInfo['user_capable']   = isset($version['user'])           ? (bool) $version['user'] : false;
         $FileInfo['securityschema'] = isset($version['securityschema']) ? $version['securityschema'] : false;
         $FileInfo['class']          = isset($version['class'])          ? $version['class'] : false;
         $FileInfo['category']       = isset($version['category'])       ? $version['category'] : false;
