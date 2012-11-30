@@ -69,15 +69,19 @@
         <xar:else />
             <form method="post" action="#xarModURL('roles','admin','delete')#" enctype="application/x-www-form-urlencoded">
                 <h3 class="xar-align-center">Confirm the deletion of #$itemtypename# #$name#</h3>
-                <div class="xar-form-actions">
-                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                    <input type="hidden" name="id" id="id" value="#$id#"/>
-                    <input type="hidden" name="confirmation" id="confirmation" value="1"/>
-                    <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#"/>
-                    <xar:var name="label">Delete</xar:var>
-                    <xar:button type="submit" label="$label"/>
-                    <xar:var name="label">Cancel</xar:var>
-                    <xar:button type="cancel" label="$label"/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                    </div>
+                    <div class="xar-col">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <input type="hidden" name="id" id="id" value="#$id#"/>
+                        <input type="hidden" name="confirmation" id="confirmation" value="1"/>
+                        <input type="hidden" name="returnurl" id="returnurl" value="#$returnurl#"/>
+                        <xar:var name="label">Delete</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                        <xar:var name="label">Cancel</xar:var>
+                        <xar:button type="cancel" label="$label"/>
+                    </div>
                 </div>
             </form>
         </xar:if>
