@@ -76,6 +76,11 @@ class RolesShortController extends ShortActionController
                 $data['func'] = 'account';
                 $data['tab'] = 'basic';
             break;
+            
+            case 'usermenu':
+                $data['func'] = 'usermenu';
+            break;
+
             case 'validate':
                 $data['func'] = 'getvalidation';
                 break;
@@ -137,6 +142,10 @@ class RolesShortController extends ShortActionController
                 break;
 
               case 'usermenu':
+                $path[] = 'usermenu';
+                break;
+
+              case 'settings':
                 $path[] = 'settings';
                 if (!empty($params['phase']) && ($params['phase'] == 'formbasic' || $params['phase'] == 'form')) {
                     // Note : this URL format is no longer in use
