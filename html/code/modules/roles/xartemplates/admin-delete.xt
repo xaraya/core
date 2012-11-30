@@ -72,7 +72,7 @@
                     <div class="xar-col">
                     </div>
                     <div class="xar-col">
-                        <h3 class="xar-align-center">Confirm the deletion of #$itemtypename# #$name#</h3>
+                        <h3>Confirm the deletion of #$itemtypename# #$name#</h3>
                     </div>
                 </div>
                 <div class="xar-row">
