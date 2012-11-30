@@ -68,7 +68,13 @@
             <p>You do not have the privileges to delete #$itemtypename# #$name#</p>
         <xar:else />
             <form method="post" action="#xarModURL('roles','admin','delete')#" enctype="application/x-www-form-urlencoded">
-                <h3 class="xar-align-center">Confirm the deletion of #$itemtypename# #$name#</h3>
+                <div class="xar-row">
+                    <div class="xar-col">
+                    </div>
+                    <div class="xar-col">
+                        <h3 class="xar-align-center">Confirm the deletion of #$itemtypename# #$name#</h3>
+                    </div>
+                </div>
                 <div class="xar-row">
                     <div class="xar-col">
                     </div>
