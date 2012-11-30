@@ -40,7 +40,7 @@ function themes_adminapi_getfilethemes()
 
                     // Found a directory
                     $name         = $themeFileInfo['name'];
-                    $regId        = $themeFileInfo['id'];
+                    $regId        = $themeFileInfo['regid'];
                     $directory    = $themeFileInfo['directory'];
                     $author       = $themeFileInfo['author'];
                     $homepage     = $themeFileInfo['homepage'];
