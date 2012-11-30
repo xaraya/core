@@ -94,7 +94,7 @@ function themes_init()
 
     xarModVars::set('themes', 'SiteName', 'Your Site Name');
     xarModVars::set('themes', 'SiteSlogan', 'Your Site Slogan');
-    xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright 2003 ');
+    xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright 2013 ');
     xarModVars::set('themes', 'SiteTitleSeparator', ' :: ');
     xarModVars::set('themes', 'SiteTitleOrder', 'default');
     xarModVars::set('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="themes/common/images/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder"/></a>');
