@@ -62,7 +62,7 @@ function modules_adminapi_getfilemodules(Array $args=array())
                     // Found a directory
                     $name           = $modOsDir;
                     $nameinfile     = $modFileInfo['name'];
-                    $regId          = $modFileInfo['id'];
+                    $regId          = $modFileInfo['regid'];
                     $version        = $modFileInfo['version'];
                     $class          = $modFileInfo['class'];
                     $category       = $modFileInfo['category'];
