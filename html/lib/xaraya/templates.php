@@ -899,7 +899,7 @@ class xarTpl extends Object
         
         // handle legacy calls still passing module as second param
         // @todo remove this when all modules are passing correct params 
-        if ($scope != 'theme' && $scope != 'module' && $scope != 'property') {
+        if ($scope != 'theme' && $scope != 'module' && $scope != 'property' && $scope != 'block') {
             // assume module scope 
             $package = $scope;
             $scope = 'module';
@@ -957,6 +957,16 @@ class xarTpl extends Object
                 $paths[] = sys::code() . 'properties/' . $package . '/xarimages/' . $fileName;
                 // property images
                 $paths[] = sys::code() . 'properties/' . $package . '/xartemplates/images/' . $fileName;
+                break;
+            case 'block':
+                if (empty($package)) return;
+                $package = xarVarPrepForOS($package);
+                // current theme block images
+                $paths[] = self::getThemeDir() . '/blocks/' . $package . '/images/' . $fileName;
+                // common block images
+                $paths[] = self::getThemeDir('common') . '/blocks/' . $package . '/images/' . $fileName;
+                // code/blocks/block/xartemplates/style
+                $paths[27] = sys::code() . 'blocks/' . $package . '/xarimages/' . $fileName;
                 break;
         }
         if (empty($paths)) return;
