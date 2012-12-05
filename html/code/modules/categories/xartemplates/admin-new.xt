@@ -25,7 +25,6 @@
                 <div class="xar-form-input-wrapper">
                     <div class="xar-form-container-after">
                         <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
-                        <input type="hidden" name="itemtype" value="#$itemtype#"/>
                         <input type="submit" value="#xarML('Add')#"/>
                         <!--
                             <input type="reset" value="#xarML('Reset')#"/>
