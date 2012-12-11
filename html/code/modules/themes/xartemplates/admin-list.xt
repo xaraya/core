@@ -88,13 +88,17 @@
                 <xar:var name="sortlbl">Sort by name ascending</xar:var>
             </xar:if>                         
             
-            <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>
+            <div class="xar-align-center">
+                <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>
+            </div>
             <xar:if condition="$tab eq 'plain'">
                 <xar:template type="module" module="themes" file="admin-list-plain"/> 
             <xar:else/>
                 <xar:template type="module" module="themes" file="admin-list-preview"/>
             </xar:if>
-            <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>        
+            <div class="xar-align-center">
+                <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>
+            </div>
         </div>
     </div>
     <xar:if condition="!empty($useicons)">
