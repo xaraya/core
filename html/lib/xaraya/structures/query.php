@@ -1770,7 +1770,9 @@ class Query
 
     private function multiinsert()
     {
-        // Determine which is the primary table and field, get its value
+# --------------------------------------------------------
+# Determine which is the primary table and field, get its value
+#
         $parts = explode('.',$this->primary);
         if (!isset($parts[1])) 
             throw new Exception(xarML('Incorrect format for primary field: missing table alias'));            
@@ -1786,9 +1788,10 @@ class Query
         }
         $primaryvalue = $this->lastid($tablesource, $parts[1]) + 1;
         
-        // Get convenient arrays to track the tables, links and fields
-        
-        // Get the links we will work with; we only consider inner joins
+# --------------------------------------------------------
+# Get convenient arrays to track the tables, links and fields
+# Get the links we will work with; we only consider inner joins
+#
         $tablelinks = array();
         foreach ($this->tablelinks as $link) {
             // Only support INNER JOINs
@@ -1798,10 +1801,14 @@ class Query
             ) $tablelinks[] = $link;
         }
         
-        // Get the tables joined by the links and re-present them
+# --------------------------------------------------------
+# Get the tables joined by the links and re-present them
+#
         $tablestodo = $this->findInternalTables($primarytable, $tablelinks);
 
-        // Now weed out any of the links above that don't deal with these tables
+# --------------------------------------------------------
+# Now weed out any of the links above that don't deal with these tables
+#
         $linkstodo = array();
         $tablekeys = array_keys($tablestodo);
         foreach ($tablelinks as $link) {
@@ -1810,13 +1817,18 @@ class Query
             if (in_array($field1['table'],$tablekeys) || in_array($field2['table'],$tablekeys))
                 $linkstodo[] = $link;
         }
-        // Finally get all the fields we'll be working with
+
+# --------------------------------------------------------
+# Finally get all the fields we'll be working with
+#
         foreach ($this->fields as $field) $fieldstodo[$field['table'] . '.' . $field['name']] = $field;
 
-        // Assign values to all the link fields where we can
-        // At the end of this process we will have linkfields with either values at both ends of the link
-        // or no values. In the latter case the code will just insert the next possible value, as such cases
-        // must involve at least one primary key.
+# --------------------------------------------------------
+# Assign values to all the link fields where we can
+# At the end of this process we will have linkfields with either values at both ends of the link
+# or no values. In the latter case the code will just insert the next possible value, as such cases
+# must involve at least one primary key.
+#
         $linkstoprocess = $linkstodo;
         $temp = array();
         
@@ -1843,13 +1855,16 @@ class Query
             $linkfields[$parts['table']][$parts['table'] . "." . $parts['name']] = array('name' => $parts['name'], 'table' => $parts['table'], 'value' => $value);
         }
 
-        // Set up an array which holds the number of links per table
+# --------------------------------------------------------
+# Set up an array which holds the number of links per table
+#
         $tablequeue = array();
         foreach ($tablestodo as $table) $tablequeue[$table['alias']] = 0;
 
-        // Go through the tables, running an insert for each and its fields
+# --------------------------------------------------------
+# Go through the tables, running an insert for each and its fields
+#
         while (count($tablestodo)) {
-
             foreach ($linkstodo as $link) {
                 // This link is not present in the insert fields
                 if (!isset($fieldstodo[$link['field1']])) {
@@ -1862,32 +1877,44 @@ class Query
                 }            
             }
 
-            // Now pick up the table to run an insert on
-            // Look for a table with 1 link, saving the primary table for last
+# --------------------------------------------------------
+# Now pick up the table to run an insert on
+# Look for a table with 1 link, saving the primary table for last
+#
             foreach ($tablequeue as $alias => $hits) {
                 if (($hits == 1) && ($alias != $primarytable)) {
                     $thistable = $tablestodo[$alias];
                     break;
                 }
             }
-            // Sanity check: do we still have our primary table?
+# --------------------------------------------------------
+# Sanity check: do we still have our primary table?
+#
             if (!isset($tablestodo[$primarytable])) throw new Exception('Primary table ' . $primarytable . ' no longer available!');
             
-            // If we found nothing we must be almost finished: run an insert on the primary table
+# --------------------------------------------------------
+# If we found nothing we must be almost finished: run an insert on the primary table
+#
             if (empty($thistable)) $thistable = $tablestodo[$primarytable];
 
-            // Run an insert
+# --------------------------------------------------------
+# Run an insert
+#
             $theselinks = isset($linkfields[$thistable['alias']]) ? $linkfields[$thistable['alias']] : array();
             try {
                 $fieldsdone = $this->partialinsert($thistable,$fieldstodo,$theselinks);
             } catch (Exception $e) {throw $e;}
             
-            // We've run the insert for this table, remove it from the list of todos
+# --------------------------------------------------------
+# We've run the insert for this table, remove it from the list of todos
+#
             unset($tablestodo[$thistable['alias']]);
             $tablequeue = array();
             foreach ($tablestodo as $table) $tablequeue[$table['alias']] = 0;
 
-            // Now check the fieldlinks for links to other tables
+# --------------------------------------------------------
+# Now check the field links for links to other tables
+#
             $newlinks = array();
             foreach ($linkstodo as $link) {
                 $fulllink = $this->_deconstructfield($link['field1']);
@@ -1917,26 +1944,38 @@ class Query
     
     private function partialinsert($table=array(), $fieldstodo=array(),$linkfields=array())
     {
-        // Create an insert query based on this table
+# --------------------------------------------------------
+# Create an insert query based on this table
+#
         $q = new Query('INSERT');
         $q->tables[] = $table;
         
-        // Pick out the fields that are in this table
+# --------------------------------------------------------
+# Pick out the fields that are in this table
+#
         $fieldsdone = array();
         foreach ($fieldstodo as $key => $field) {
-            //Ignore the fields of other tables
+# --------------------------------------------------------
+# Ignore the fields of other tables
+#
             if ($field['table'] != $table['alias']) continue;
             
-            // If we used the %next% keyword, get the next itemid
+# --------------------------------------------------------
+# If we used the %next% keyword, get the next itemid
+#
             if ($fieldstodo[$key]['value'] === '%next%') {
                 $fieldstodo[$key]['value'] = $q->lastid($table['name'], $field['name']) + 1;
             }
-            // Add it to this query
+# --------------------------------------------------------
+# Add it to this query
+#
             $q->fields[] =& $fieldstodo[$key];
             $fieldsdone[$key] =& $fieldstodo[$key];
         }
 
-        // Now add the link fields from this table, only if it hasn't already been added
+# --------------------------------------------------------
+# Now add the link fields from this table, only if it hasn't already been added
+#
         foreach ($linkfields as $key => $field) {
             // If we used the %next% keyword, get the next itemid
             if ($linkfields[$key]['value'] === '%next%') {
@@ -1945,7 +1984,9 @@ class Query
             if (!isset($fieldsdone[$key])) $q->fields[] = $linkfields[$key];
         }
 
-        // Run the insert on this table
+# --------------------------------------------------------
+# Run the insert on this table
+#
         try {
             $q->run();
         } catch (Exception $e) {
@@ -1953,7 +1994,9 @@ class Query
             throw new Exception($msg);
         }
                 
-        // Try to retrieve the record we just inserted
+# --------------------------------------------------------
+# Try to retrieve the record we just inserted
+#
         $dbInfo = $this->dbconn->getDatabaseInfo();
         $tableobject = $dbInfo->getTable($table['name']);
         $primarykey = $tableobject->getPrimaryKey()->getName();
@@ -1965,7 +2008,9 @@ class Query
         $q->eq($primarykey, $itemid);
         if (!$q->run()) return false;
         
-        // Return the array of the fields we used for this insert and their values
+# --------------------------------------------------------
+# Return the array of the fields we used for this insert and their values
+#
         return $q->row();
     }
     
