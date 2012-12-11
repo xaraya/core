@@ -302,16 +302,6 @@ class DataObject extends DataObjectMaster implements iDataObject
         // clean up hookvalues
         $this->hookvalues = array();
 
-/*        // Order the fields if this is an extended object
-        if (!empty($this->fieldorder)) {
-            $tempprops = array();
-            foreach ($this->fieldorder as $field)
-                if (isset($args['properties'][$field]))
-                    $tempprops[$field] = $args['properties'][$field];
-            $args['properties'] = $tempprops;
-        }
-*/
-
 // CHECKME: we won't call display hooks for this item here (yet) - to be investigated
 //        $this->callHooks('display');
 //        $data['hooks'] = $this->hookoutput;
