@@ -92,7 +92,9 @@
                 <xar:var name="sortlbl">Sort by name ascending</xar:var>
             </xar:if>
 
-            <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>
+            <div class="xar-align-center">
+                <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>
+            </div>
             <table class="xar-items xar-table">
                 <thead>
                     <tr>
@@ -210,7 +212,9 @@
                     </xar:if>
                 </tbody>
             </table>
-            <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>
+            <div class="xar-align-center">
+                <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>
+            </div>
         </div>
     </div>
     <xar:if condition="!empty($useicons)">
