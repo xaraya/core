@@ -93,6 +93,7 @@ class ThemeInitialization extends Object
             // Assume this theme has its own init routine
             sys::import($dir . '.init');
         } else {
+            // Otherwise use the default routine from the themes module
             $class = 'ThemeInit';
             sys::import('modules.themes.class.init');
         }
