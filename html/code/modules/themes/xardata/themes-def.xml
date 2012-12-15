@@ -64,14 +64,24 @@
       <seq>5</seq>
       <configuration>a:0:{}</configuration>
     </property>
-    <property name="state">
+    <property name="configuration">
       <id>9139</id>
+      <label>Configuration</label>
+      <type>themeconfiguration</type>
+      <defaultvalue></defaultvalue>
+      <source>themes.configuration</source>
+      <status>34</status>
+      <seq>6</seq>
+      <configuration></configuration>
+    </property>
+    <property name="state">
+      <id>9140</id>
       <label>State</label>
       <type>dropdown</type>
       <defaultvalue>1</defaultvalue>
       <source>themes.state</source>
       <status>33</status>
-      <seq>6</seq>
+      <seq>t</seq>
       <configuration>a:3:{s:12:"display_rows";s:3:"100";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:30:"0,Deleted;1,Inactive;3,Active;";}</configuration>
     </property>
   </properties>

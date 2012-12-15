@@ -6,77 +6,81 @@
   <class>DataObject</class>
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
-  <maxid>0</maxid>
-  <access>a:4:{s:14:&quot;display_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;200&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;modify_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;delete_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:6:&quot;access&quot;;s:174:&quot;a:5:{s:7:&quot;display&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;update&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;create&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;delete&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;config&quot;;a:1:{i:0;i:2;}}&quot;;}</access>
-  <config>a:0:{}</config>
+  <maxid>581</maxid>
+  <access>a:4:{s:14:&amp;amp;quot;display_access&amp;amp;quot;;a:3:{s:5:&amp;amp;quot;group&amp;amp;quot;;s:1:&amp;amp;quot;0&amp;amp;quot;;s:5:&amp;amp;quot;level&amp;amp;quot;;s:3:&amp;amp;quot;200&amp;amp;quot;;s:7:&amp;amp;quot;failure&amp;amp;quot;;s:1:&amp;amp;quot;0&amp;amp;quot;;}s:13:&amp;amp;quot;modify_access&amp;amp;quot;;a:3:{s:5:&amp;amp;quot;group&amp;amp;quot;;s:1:&amp;amp;quot;0&amp;amp;quot;;s:5:&amp;amp;quot;level&amp;amp;quot;;s:3:&amp;amp;quot;800&amp;amp;quot;;s:7:&amp;amp;quot;failure&amp;amp;quot;;s:1:&amp;amp;quot;0&amp;amp;quot;;}s:13:&amp;amp;quot;delete_access&amp;amp;quot;;a:3:{s:5:&amp;amp;quot;group&amp;amp;quot;;s:1:&amp;amp;quot;0&amp;amp;quot;;s:5:&amp;amp;quot;level&amp;amp;quot;;s:3:&amp;amp;quot;800&amp;amp;quot;;s:7:&amp;amp;quot;failure&amp;amp;quot;;s:1:&amp;amp;quot;0&amp;amp;quot;;}s:6:&amp;amp;quot;access&amp;amp;quot;;s:174:&amp;amp;quot;a:5:{s:7:&amp;amp;quot;display&amp;amp;quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&amp;amp;quot;update&amp;amp;quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&amp;amp;quot;create&amp;amp;quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&amp;amp;quot;delete&amp;amp;quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&amp;amp;quot;config&amp;amp;quot;;a:1:{i:0;i:2;}}&amp;amp;quot;;}</access>
   <isalias>true</isalias>
+  <datastore>relational</datastore>
+  <config>a:1:{s:0:"";a:1:{i:0;s:0:"";}}</config>
+  <sources>a:1:{s:14:&quot;configurations&quot;;a:2:{i:0;s:25:&quot;xar_themes_configurations&quot;;i:1;s:8:&quot;internal&quot;;}}</sources>
+  <relations>a:1:{i:0;a:2:{i:0;s:0:&quot;&quot;;i:1;s:0:&quot;&quot;;}}</relations>
+  <objects>a:1:{i:0;a:2:{i:0;s:0:&quot;&quot;;i:1;s:0:&quot;&quot;;}}</objects>
   <properties>
     <property name="id">
-      <id>95</id>
+      <id>99</id>
       <label>ID</label>
       <type>itemid</type>
       <defaultvalue></defaultvalue>
-      <source>xar_themes_configurations.id</source>
+      <source>configurations.id</source>
       <status>33</status>
       <seq>1</seq>
       <configuration></configuration>
     </property>
     <property name="theme_id">
-      <id>96</id>
+      <id>100</id>
       <label>Theme</label>
       <type>objectref</type>
       <defaultvalue></defaultvalue>
-      <source>xar_themes_configurations.theme_id</source>
+      <source>configurations.theme_id</source>
       <status>33</status>
       <seq>2</seq>
       <configuration>a:6:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:6:"themes";s:25:"initialization_store_prop";s:5:"regid";s:27:"initialization_display_prop";s:4:"name";s:24:"initialization_firstline";s:12:"0,All Themes";}</configuration>
     </property>
     <property name="name">
-      <id>97</id>
+      <id>101</id>
       <label>Name</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_themes_configurations.name</source>
+      <source>configurations.name</source>
       <status>33</status>
       <seq>3</seq>
       <configuration></configuration>
     </property>
     <property name="label">
-      <id>98</id>
+      <id>102</id>
       <label>Label</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_themes_configurations.label</source>
+      <source>configurations.label</source>
       <status>33</status>
       <seq>4</seq>
       <configuration></configuration>
     </property>
     <property name="description">
-      <id>99</id>
+      <id>103</id>
       <label>Description</label>
       <type>textarea</type>
       <defaultvalue></defaultvalue>
-      <source>xar_themes_configurations.description</source>
+      <source>configurations.description</source>
       <status>34</status>
       <seq>5</seq>
       <configuration></configuration>
     </property>
     <property name="property_id">
-      <id>100</id>
+      <id>104</id>
       <label>Property</label>
       <type>fieldtype</type>
       <defaultvalue>1</defaultvalue>
-      <source>xar_themes_configurations.property_id</source>
+      <source>configurations.property_id</source>
       <status>33</status>
       <seq>6</seq>
       <configuration>a:7:{s:14:"display_layout";s:7:"default";s:24:"initialization_refobject";s:1:"2";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:20:"initialization_other";s:0:"";}</configuration>
     </property>
     <property name="configuration">
-      <id>101</id>
+      <id>105</id>
       <label>Configuration</label>
       <type>configuration</type>
       <defaultvalue></defaultvalue>
-      <source>xar_themes_configurations.configuration</source>
+      <source>configurations.configuration</source>
       <status>34</status>
       <seq>7</seq>
       <configuration></configuration>
