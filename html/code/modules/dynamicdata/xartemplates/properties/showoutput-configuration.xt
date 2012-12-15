@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="settings">unserialize($value)</xar:set>
+    <xar:if condition="is_array($settings)">
+        <table>
+            <tr>
+                <th>Setting</th>
+                <th>Value</th>
+            </tr>
+            <xar:foreach in="$settings" key="$key" value="$setting">
+                <tr>
+                    <td>
+                        #$key#
+                    </td>
+                    <td>
+                        #$setting#
+                    </td>
+                </tr>
+            </xar:foreach>
+        </table>
+    <xar:else/>
+        No settings
+    </xar:if>
+</xar:template>

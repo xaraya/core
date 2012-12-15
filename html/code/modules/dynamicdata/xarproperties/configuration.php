@@ -15,12 +15,12 @@
 /**
  * Include the base class
  */
-sys::import('modules.base.xarproperties.textbox');
+sys::import('modules.base.xarproperties.textarea');
 
 /**
  * Handle the configuration property
  */
-class ConfigurationProperty extends TextBoxProperty
+class ConfigurationProperty extends TextAreaProperty
 {
     public $id         = 998;
     public $name       = 'configuration';
@@ -29,12 +29,12 @@ class ConfigurationProperty extends TextBoxProperty
 
     // Default to static text
     public $proptype = 1;
-    //public $initialization_prop_type = null;
 
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
+        $this->template   = 'configuration';
         $this->include_reference = 1;
     }
 
@@ -90,17 +90,10 @@ class ConfigurationProperty extends TextBoxProperty
         return $property->showConfiguration($data);
     }
 
-    public function showOutput(Array $args = array())
+    public function showOutput(Array $data = array())
     {
-        extract($args);
-
-        if (isset($value)) {
-            $value = xarVarPrepHTMLDisplay($value);
-        } else {
-            $value = xarVarPrepHTMLDisplay($this->value);
-        }
-
-        return $value;
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        return parent::showOutput($data);
     }
 }
 ?>
