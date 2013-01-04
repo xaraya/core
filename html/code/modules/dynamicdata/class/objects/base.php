@@ -405,6 +405,10 @@ class DataObject extends DataObjectMaster implements iDataObject
                 $this->properties[$fieldname]->createValue($this->itemid);
             }
         }
+        
+        // Set the value of the primary index property
+        $this->properties[$this->primary]->value = $this->itemid;
+        
         return $this->itemid;
     }
 
