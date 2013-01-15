@@ -49,7 +49,6 @@ class ShortActionController extends BaseActionController implements iController
         $path = $this->getInitialPath($request);
         $path .= self::$delimiter;
         foreach ($request->getFunctionArgs() as  $key => $value) {
-            if (empty($value)) continue;
             $path .= $key . '=' . $value . xarController::$separator;
         }
         $path = substr($path,0,strlen($path)-1);
