@@ -79,7 +79,6 @@ function dynamicdata_adminapi_showform(Array $args=array())
         $object->checkInput();
     }
 
-    return $object->showForm(array('layout'   => $layout,
-                                   'template' => $template));
+    return $object->showForm($args);
 }
 ?>
