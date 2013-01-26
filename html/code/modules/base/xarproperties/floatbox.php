@@ -24,6 +24,7 @@ class FloatBoxProperty extends NumberBoxProperty
 
     public $display_size                    = 10;
     public $display_maxlength               = 30;
+    public $initialization_encrypt          = false;
 
     public $defaultvalue   = 0;
     
