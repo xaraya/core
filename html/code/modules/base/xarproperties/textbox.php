@@ -82,7 +82,7 @@ class TextBoxProperty extends DataProperty
             return false;
         } else {
     // TODO: allowable HTML ?
-            $this->value = $value;
+            $this->setValue($value);
             return true;
         }
     }
@@ -101,26 +101,6 @@ class TextBoxProperty extends DataProperty
         if(!isset($data['onfocus']))   $data['onfocus']   = null;
 
         return parent::showInput($data);
-    }
-
-    public function setValue($value=null)
-    {
-        parent::setValue($value);
-        if ($this->initialization_encrypt) {
-            sys::import('xaraya.encryptor');
-            $encryptor = xarEncryptor::instance();
-            $this->value = $encryptor->encrypt($this->value);
-        }
-    }
-    public function getValue()
-    {
-        $value = parent::getValue();
-        if ($this->initialization_encrypt) {
-            sys::import('xaraya.encryptor');
-            $encryptor = xarEncryptor::instance();
-            $value = $encryptor->decrypt($value);
-        }
-        return $value;
     }
 }
 
