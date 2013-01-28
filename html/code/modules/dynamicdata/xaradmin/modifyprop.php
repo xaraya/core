@@ -44,6 +44,7 @@ function dynamicdata_admin_modifyprop()
         );
     }
     $objectinfo = DataObjectMaster::getObjectInfo($args);
+    $data['objectinfo'] =& $objectinfo;
     $object = DataObjectMaster::getObject($args);
 
     if (isset($objectinfo)) {
