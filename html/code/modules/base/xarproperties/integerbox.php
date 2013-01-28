@@ -31,6 +31,7 @@ class NumberBoxProperty extends TextBoxProperty
     public $display_size                   = 10;
     public $display_maxlength              = 30;
     public $display_numberformat           = 0;
+    public $initialization_encrypt         = false;
 
     function __construct(ObjectDescriptor $descriptor)
     {
