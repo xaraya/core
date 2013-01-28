@@ -21,7 +21,8 @@
 
         private function __construct()
         {
-            include_once(sys::lib()."xaraya/encryption.php");            
+            // Use include instead of include_once, in case we have loaded this var in another scope
+            include(sys::lib()."xaraya/encryption.php");            
             $this->algorithm = mcrypt_module_open($encryption['cipher'], '', $encryption['mode'], '');
 //            $this->initvector = mcrypt_create_iv(mcrypt_enc_get_iv_size($this->algorithm), MCRYPT_RAND);
             $this->initvector = $encryption['initvector'];
@@ -37,17 +38,21 @@
 
         public function decrypt($value)
         {
-            mcrypt_generic_init($this->algorithm, $this->key, $this->initvector);
-            $value = mdecrypt_generic($this->algorithm, base64_decode($value));
-            mcrypt_generic_deinit($this->algorithm);
+            if ($value != '') {
+                mcrypt_generic_init($this->algorithm, $this->key, $this->initvector);
+                $value = mdecrypt_generic($this->algorithm, base64_decode($value));
+                mcrypt_generic_deinit($this->algorithm);
+            }
             return trim($value);
         }
 
         public function encrypt($value=null)
         {
-            mcrypt_generic_init($this->algorithm, $this->key, $this->initvector);
-            $value = base64_encode(mcrypt_generic($this->algorithm, $value));
-            mcrypt_generic_deinit($this->algorithm);
+            if ($value != '') {
+                mcrypt_generic_init($this->algorithm, $this->key, $this->initvector);
+                $value = base64_encode(mcrypt_generic($this->algorithm, $value));
+                mcrypt_generic_deinit($this->algorithm);
+            }
             return trim($value);
         }
     }
