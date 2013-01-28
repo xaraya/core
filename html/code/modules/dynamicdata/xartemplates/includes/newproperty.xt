@@ -2,16 +2,20 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <fieldset>
         <legend>New Property</legend>
-        <div class="xar-row">
-            <div class="xar-col">
-                <label for="dd_source_0" class="xar-form-label">
-                    #$propertyfields['source']['label']#:
-                </label>
+        <xar:if condition="!isset($objectinfo) OR ($objectinfo['datastore'] ne 'none')">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label for="dd_source_0" class="xar-form-label">
+                        #$propertyfields['source']['label']#:
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input type="dropdown" class="dd-norm" name="dd_source[0]" options="$sources" />
+                </div>
             </div>
-            <div class="xar-col">
-                <xar:data-input type="dropdown" class="dd-norm" name="dd_source[0]" options="$sources" />
-            </div>
-        </div>
+        <xar:else/>
+            <xar:data-input type="dropdown" class="dd-norm" name="dd_source[0]" options="$sources" value="" hidden="hidden"/>
+        </xar:if>
         <div class="xar-row">
             <div class="xar-col">
                 <label for="dd_label_0" class="xar-form-label">

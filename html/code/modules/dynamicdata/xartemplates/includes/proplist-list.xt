@@ -133,11 +133,16 @@
                     &#160;
                 </td>
                 <td colspan="5" class="#$displayclass#">
-                    Source:&#160;
                     <xar:set name="name">'dd_source[' . $field['id'] . ']'</xar:set>
                     <xar:set name="id">'dd_source_' . $field['id']</xar:set>
-                    <xar:data-input type="dropdown" class="dd-norm" name="$name" id="$id" value="$field['source']" options="$sources" />
-                    &#160;&#160;Status:&#160;
+                    <xar:if condition="!isset($objectinfo) OR ($objectinfo['datastore'] ne 'none')">
+                        Source:&#160;
+                        <xar:data-input type="dropdown" class="dd-norm" name="$name" id="$id" value="$field['source']" options="$sources" />
+                        &#160;&#160;
+                    <xar:else/>
+                        <xar:data-input type="dropdown" class="dd-norm" name="$name" id="$id" value="$field['source']" options="$sources" hidden="hidden"/>
+                    </xar:if>
+                    Status:&#160;
                     <xar:set name="name">'dd_status['.$field['id'].']'</xar:set>
                     <xar:set name="id">'dd_status_'.$field['id']</xar:set>
                     <xar:data-input property="$fieldstatusprop" name="$name" id="$id" size="15" value="$field['status']"/>
