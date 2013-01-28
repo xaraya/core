@@ -35,9 +35,7 @@ function dynamicdata_adminapi_showform(Array $args=array())
     }
     // or optional template, if you want e.g. to handle individual fields
     // differently for a specific module / item type
-    if (empty($template)) {
-        $template = '';
-    }
+    if (empty($template)) $template = '';
 
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {
