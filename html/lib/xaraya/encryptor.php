@@ -37,9 +37,11 @@
 
         public function decrypt($value)
         {
-            mcrypt_generic_init($this->algorithm, $this->key, $this->initvector);
-            $value = mdecrypt_generic($this->algorithm, base64_decode($value));
-            mcrypt_generic_deinit($this->algorithm);
+            if ($value != '') {
+                mcrypt_generic_init($this->algorithm, $this->key, $this->initvector);
+                $value = mdecrypt_generic($this->algorithm, base64_decode($value));
+                mcrypt_generic_deinit($this->algorithm);
+            }
             return trim($value);
         }
 
