@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <fieldset>
         <legend>New Property</legend>
-        <xar:if condition="!isset($objectinfo) OR ($objectinfo['datastore'] ne 'none')">
+        <xar:if condition="!isset($objectinfo) OR ($objectinfo['datastore'] eq 'relational')">
             <div class="xar-row">
                 <div class="xar-col">
                     <label for="dd_source_0" class="xar-form-label">
@@ -13,6 +13,8 @@
                     <xar:data-input type="dropdown" class="dd-norm" name="dd_source[0]" options="$sources" />
                 </div>
             </div>
+        <xar:elseif condition="$objectinfo['datastore'] eq 'dynamicdata'"/>
+            <xar:data-input type="dropdown" class="dd-norm" name="dd_source[0]" options="$sources" value="dynamicdata" hidden="hidden"/>
         <xar:else/>
             <xar:data-input type="dropdown" class="dd-norm" name="dd_source[0]" options="$sources" value="" hidden="hidden"/>
         </xar:if>

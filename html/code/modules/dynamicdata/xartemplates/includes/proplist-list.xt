@@ -135,10 +135,12 @@
                 <td colspan="5" class="#$displayclass#">
                     <xar:set name="name">'dd_source[' . $field['id'] . ']'</xar:set>
                     <xar:set name="id">'dd_source_' . $field['id']</xar:set>
-                    <xar:if condition="!isset($objectinfo) OR ($objectinfo['datastore'] ne 'none')">
+                    <xar:if condition="!isset($objectinfo) OR ($objectinfo['datastore'] eq 'relational')">
                         Source:&#160;
                         <xar:data-input type="dropdown" class="dd-norm" name="$name" id="$id" value="$field['source']" options="$sources" />
                         &#160;&#160;
+                    <xar:elseif condition="$objectinfo['datastore'] eq 'dynamicdata'"/>
+                        <xar:data-input type="dropdown" class="dd-norm" name="$name" id="$id" value="dynamicdata" options="$sources" hidden="hidden"/>
                     <xar:else/>
                         <xar:data-input type="dropdown" class="dd-norm" name="$name" id="$id" value="$field['source']" options="$sources" hidden="hidden"/>
                     </xar:if>

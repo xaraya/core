@@ -178,9 +178,11 @@ class DataStoreFactory extends Object
 
         // TODO: re-evaluate this once we're further along
         $modules = xarMod::apiFunc('modules', 'admin', 'getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+        /*
         foreach ($modules as $module) {
             $sources[] = array('id'=> $module['regid'], 'name' => 'module variable: ' . $module['name']);
         }
+        */
         // try to get the meta table definition
         if (!empty($args))
         {
