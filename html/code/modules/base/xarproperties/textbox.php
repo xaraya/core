@@ -31,7 +31,6 @@ class TextBoxProperty extends DataProperty
     public $validation_max_length_invalid;
     public $validation_regex                = null;
     public $validation_regex_invalid;
-    public $initialization_encrypt          = false;
     public $initialization_sanitize         = false;
 
     function __construct(ObjectDescriptor $descriptor)
