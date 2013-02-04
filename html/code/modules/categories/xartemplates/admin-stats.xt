@@ -48,7 +48,15 @@
                                 #$moditem['numlinks']#
                             </td>
                             <td align="center" valign="center" width="15%">
-                                <a href="#$moditem['delete']#"><b>Delete</b></a>
+                                <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
+                                    <a href="#$moditem['delete']#">
+                                        <xar:set name="imgfile">'icons/'.'delete.png'</xar:set>
+                                        <xar:var name="label">Delete Links</xar:var>
+                                        <xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$label"/>
+                                    </a>
+                                <xar:else />
+                                    <a href="#$moditem['delete']#"><b>Delete</b></a>
+                                </xar:if>
                             </td>
                         </tr>
                     </xar:foreach>
@@ -115,35 +123,40 @@
                     <xar:if condition="empty($moditems) or count($moditems) eq '0'">
                         <tr>
                             <td colspan="3" align="center">
-                                <br />
-                                    There are currently no category links attached to this module...
-                                <br />
-                                <br />
+                                There are currently no category links attached to this module...
                             </td>
                         </tr>
                     <xar:else />
                         <xar:foreach in="$moditems" key="$itemid" value="$moditem">
                             <tr style="border-bottom: 1px dotted">
                                 <xar:if condition="!empty($moditem['title']) and !empty($moditem['link'])">
-                                <td valign="center" width="50%">
-                                    #$itemid#: <a href="#$moditem['link']#">#$moditem['title']# </a>
-                                </td>
+                                    <td valign="center" width="50%">
+                                        #$itemid#: <a href="#$moditem['link']#">#$moditem['title']# </a>
+                                    </td>
                                 <xar:else/>
-                                <td align="center" valign="center" width="50%">
-                                    #$itemid#
-                                </td>
+                                    <td align="center" valign="center" width="50%">
+                                        #$itemid#
+                                    </td>
                                 </xar:if>
                                 <td align="center" valign="center" width="30%">
-                                <xar:foreach in="$moditem['cids']" value="$cid">
-                                  <xar:if condition="!empty($catinfo[$cid])">
-                                    #$catinfo[$cid]['name']#<br/>
-                                  <xar:else/>
-                                    #$cid#<br/>
-                                  </xar:if>
-                                </xar:foreach>
+                                    <xar:foreach in="$moditem['cids']" value="$cid">
+                                      <xar:if condition="!empty($catinfo[$cid])">
+                                        #$catinfo[$cid]['name']#<br/>
+                                      <xar:else/>
+                                        #$cid#<br/>
+                                      </xar:if>
+                                    </xar:foreach>
                                 </td>
                                 <td align="center" valign="center" width="20%">
-                                    <a href="#$moditem['delete']#"><b>Delete</b></a>
+                                    <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
+                                        <a href="#$moditem['delete']#">
+                                            <xar:set name="imgfile">'icons/'.'delete.png'</xar:set>
+                                            <xar:var name="label">Delete Links</xar:var>
+                                            <xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$label"/>
+                                        </a>
+                                    <xar:else />
+                                        <a href="#$moditem['delete']#"><b>Delete</b></a>
+                                    </xar:if>
                                 </td>
                             </tr>
                         </xar:foreach>
@@ -173,10 +186,8 @@
                     <tr>
                         <td colspan="3">
                             <div class="xar-accent xar-norm-outline" style="text-align: justify;padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-                                
-                                    Click on <b>Delete</b> to remove all category links associated with a particular
-                                    module's item.
-                                
+                                Click on <b>Delete</b> to remove all category links associated with a particular
+                                module's item.
                             </div>
                         </td>
                     </tr>
