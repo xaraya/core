@@ -26,10 +26,7 @@
                 <xar:if condition="empty($moditems) or count($moditems) eq '0'">
                     <tr>
                         <td colspan="5" align="center">
-                            <br />
-                                There are currently no category links in the database...
-                            <br />
-                            <br />
+                            There are currently no category links in the database...
                         </td>
                     </tr>
                 <xar:else />
