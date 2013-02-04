@@ -110,7 +110,7 @@ function dynamicdata_admin_update(Array $args=array())
             if ($myobject->objectid == 1) {
                 // check if we need to set a module alias (or remove it) for short URLs
                 $name = $myobject->properties['name']->value;
-                $alias = xarModGetAlias($name);
+                $alias = xarModAlias::resolve($name);
                 $isalias = $myobject->properties['isalias']->value;
                 if (!empty($isalias)) {
                     // no alias defined yet, so we create one

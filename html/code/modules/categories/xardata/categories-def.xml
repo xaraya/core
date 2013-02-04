@@ -5,7 +5,7 @@
   <module_id>182</module_id>
   <itemtype>125</itemtype>
   <class>DataObject</class>
-  <filepath></filepath>
+  <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <config></config>
