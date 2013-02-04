@@ -22,16 +22,6 @@ function installer_admin_finish()
 {
     xarVarFetch('returnurl', 'str', $returnurl, 'site', XARVAR_NOT_REQUIRED);
 
-# --------------------------------------------------------
-# Create wrapper DD overlay objects for the privileges modules
-#
-    $objects = array(
-                   'privileges_baseprivileges',
-                   'privileges_privileges',
-                     );
-
-    if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'privileges', 'objects' => $objects))) return;
-
     // Default for the site time zone is the system time zone
     xarConfigVars::set(null, 'Site.Core.TimeZone', xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
 

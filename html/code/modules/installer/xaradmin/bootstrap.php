@@ -65,9 +65,19 @@ function installer_admin_bootstrap()
                    'themes_user_settings',
                     );
     if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'themes', 'objects' => $objects))) return;
-    $objects = array('categories');
+
+    $objects = array(
+                   'categories',
+                   'categories_linkages',
+                    );
     if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'categories', 'objects' => $objects))) return;
 
+    $objects = array(
+                   'privileges_baseprivileges',
+                   'privileges_privileges',
+                     );
+
+    if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'privileges', 'objects' => $objects))) return;
 # --------------------------------------------------------
 # Set up the standard module variables for the core modules
 # Never use createItem with modvar storage. Instead, you update itemid == 0
