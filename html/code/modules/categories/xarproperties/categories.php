@@ -206,12 +206,19 @@ class CategoriesProperty extends DataProperty
 
         // Retrieve the configuration settings for this property
         if (!empty($this->configuration)) {
-            $configuration = unserialize($this->configuration);
-            $configuration = $configuration['initialization_basecategories'];
-            $data['tree_name'] = $configuration[0];
-            $base_categories = $configuration[1];
-            $data['include_self'] = $configuration[2];
-            $data['select_type'] = $configuration[3];
+            try {
+                $configuration = unserialize($this->configuration);
+                $configuration = $configuration['initialization_basecategories'];
+                $data['tree_name'] = $configuration[0];
+                $base_categories = $configuration[1];
+                $data['include_self'] = $configuration[2];
+                $data['select_type'] = $configuration[3];
+            } catch(Exception $e) {
+                $data['tree_name'] = array(1 => 'New Tree');
+                $base_categories = array(1 => 1);
+                $data['include_self'] = array(1 => 1);
+                $data['select_type'] = array(1 => 1);
+            }
        } else {
             $data['tree_name'] = array(1 => 'New Tree');
             $base_categories = array(1 => 1);
