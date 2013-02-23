@@ -309,8 +309,11 @@ class ArrayProperty extends DataProperty
                 $titles = $this->display_column_definition[0];
                 $types = $this->display_column_definition[1];
                 // FIXME: this needs to be checked for in the template
-                $defaults = array();
-                $configurations = array();
+                // CHECKME: what was the logic for this?
+                //$defaults = array();
+                //$configurations = array();
+                $defaults = $this->display_column_definition[2];
+                $configurations = $this->display_column_definition[3];
             }
             
         }
