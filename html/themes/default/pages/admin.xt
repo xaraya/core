@@ -51,7 +51,7 @@
                     -->
 
                     <div style="text-align: right">
-                        <a href="#xarServer::getBaseURL()#">
+                        <a href="#xarServer::getBaseURL()#" style="text-decoration: none">
                             <xar:var name="SiteName" scope="module" module="themes"/>
                         </a>
                     </div>
