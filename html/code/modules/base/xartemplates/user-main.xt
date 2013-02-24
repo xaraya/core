@@ -93,6 +93,9 @@
                         The <a href="#xarModURL('blocks','admin')#">Blocks</a> module lets you create and manage blocks.
                     </li>
                     <li>
+                        The <a href="#xarModURL('categories','admin')#">Categories</a> module lets you create and manage categories that can be applied to your data objects.
+                    </li>
+                    <li>
                         The <a href="#xarModURL('dynamicdata','admin')#">DynamicData</a> module makesit possible to create custom objects for your applications.
                     </li>
                     <li>
