@@ -51,7 +51,9 @@
                     -->
 
                     <div style="text-align: right">
-                        <xar:var name="SiteName" scope="module" module="themes"/>
+                        <a href="#xarServer::getBaseURL()#">
+                            <xar:var name="SiteName" scope="module" module="themes"/>
+                        </a>
                     </div>
                     <div id="docpage-1">
                         <xar:module id="modulespace"/>
