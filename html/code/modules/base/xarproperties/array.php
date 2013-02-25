@@ -299,7 +299,7 @@ class ArrayProperty extends DataProperty
         } else {
             try {
                 // New way for configs
-                $displayconfig = $this->display_column_definition;
+                $displayconfig = $this->display_column_definition['value'];
                 $titles = $displayconfig[0];
                 $types = $displayconfig[1];
                 $defaults = $displayconfig[2];
@@ -374,8 +374,9 @@ class ArrayProperty extends DataProperty
     {
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValue();
-        $data['column_titles'] = $this->display_column_definition[0];
-        $data['column_types'] = $this->display_column_definition[1];
+        $displayconfig = $this->display_column_definition['value'];
+        $data['column_titles'] = $displayconfig[0];
+        $data['column_types'] = $displayconfig[1];
         $data['rows'] = isset($data['value'][0]) ? count($data['value'][0]) : 0;
         return parent::showOutput($data);
     }
