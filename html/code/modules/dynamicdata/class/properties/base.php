@@ -64,7 +64,8 @@ class DataProperty extends Object implements iDataProperty
     public $display_layout                  = "default";      // we display the default layout of a template
     public $display_required                = false;          // the field is not tagged as "required" for input
     public $display_tooltip                 = "";             // there is no tooltip text, and so no tooltip
-    public $display_striptags               = false;          // we don't filter put certain HTML tags
+    public $display_striptags               = false;          // we don't filter out certain HTML tags
+    public $initialization_encrypt          = false;          // if the value is stored in encrypted form, the db field needs to be varchar, text etc.
     public $initialization_transform        = false;          // generic trigger that can be checked in getValue and setValue
     public $initialization_other_rule       = null;
     public $validation_notequals            = null;           //  check whether a property value does not equal a given value
