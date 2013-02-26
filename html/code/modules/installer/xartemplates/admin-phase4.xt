@@ -138,7 +138,7 @@
             <strong>not</strong> be able to create the database for you. It will be able to populate
             an already existing database.
             </p>
-            <div class="xar-form-actions" style="margin: 2em 0;">
+            <div class="xar-form-actions">
                 <div class="xar-row">
                     <div class="xar-col"></div>
                     <div class="xar-col">
