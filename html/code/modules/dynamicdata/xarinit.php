@@ -200,9 +200,14 @@ function dynamicdata_init()
                 'a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:5:{i:0;i:5;i:1;i:2;i:2;i:1;i:3;i:3;i:4;i:4;}s:6:"update";a:1:{i:0;i:2;}s:6:"create";a:1:{i:0;i:2;}s:6:"delete";a:1:{i:0;i:2;}s:6:"config";a:1:{i:0;i:2;}}";}',
                 'a:0:{}',
                 serialize(array(
-                    'dynamic_objects' => array($prefix . '_dynamic_objects', 'internal')
+                    'dynamic_objects' => array($prefix . '_dynamic_objects', 'internal'),
+                    'linkages' => array($prefix . '_categories_linkage', 'foreign'),
+                    'categories' => array($prefix . '_categories', 'foreign'),
                 )),
-                'a:0:{}',
+                serialize(array(
+                    array('dynamic_objects.id', 'linkages.item_id'),
+                    array('linkages.category_id', 'categories.id'),
+                )),
                 'a:0:{}',
                 false
                 ),
