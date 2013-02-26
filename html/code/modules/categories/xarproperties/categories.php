@@ -263,78 +263,87 @@ class CategoriesProperty extends DataProperty
             $data['trees'][$key] = $nodes;
         }
         
-        // Get an array of values (selected categories) for each tree
-        if (!isset($data['value'])) {
-            $data['value'] = array();
-            xarMod::apiLoad('categories');
-            $xartable = xarDB::getTables();
-            sys::import('xaraya.structures.query');
-            foreach ($data['base_category'] as $key => $value) {
-                $q = new Query('SELECT', $xartable['categories_linkage']); 
-                $q->eq('basecategory', (int)$key);
-                $q->eq('item_id', (int)$itemid);
-                if ($this->module_id) $q->eq('module_id', $this->module_id);
-                if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
-                $q->addfield('category_id');
-                $q->run();
-                $result = $q->output();
-                $categories = array();
-                foreach ($result as $row) 
-                    if (!empty($row['category_id'])) $categories[] = $row['category_id'];
-                $data['value'][$key] = $categories;
+        if (!empty($this->source)) {
+            if (!isset($data['value'])) $data['value'] = array(1=>array(1 => $this->value));
+        } else {
+             // Get an array of values (selected categories) for each tree
+            if (!isset($data['value'])) {
+                $data['value'] = array();
+                xarMod::apiLoad('categories');
+                $xartable = xarDB::getTables();
+                sys::import('xaraya.structures.query');
+                foreach ($data['base_category'] as $key => $value) {
+                    $q = new Query('SELECT', $xartable['categories_linkage']); 
+                    $q->eq('basecategory', (int)$key);
+                    $q->eq('item_id', (int)$itemid);
+                    if ($this->module_id) $q->eq('module_id', $this->module_id);
+                    if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
+                    $q->addfield('category_id');
+                    $q->run();
+                    $result = $q->output();
+                    $categories = array();
+                    foreach ($result as $row) 
+                        if (!empty($row['category_id'])) $categories[] = $row['category_id'];
+                    $data['value'][$key] = $categories;
+                }
             }
-        }
+       }
 
         // Prepare some variables we need for the template
         $data['categories_module_id'] = $this->module_id;
         $data['categories_itemtype'] = $this->itemtype;
-        
+
         return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
     {
-        // Set the module_id: case of a bound property
-        $itemid = 0;
-        if (isset($this->objectref)) {
-            $this->module_id = (int)$this->objectref->module_id;
-            // Ignore itemid if this is an object list; need to get the ID from the corresponding attribute
-            if (isset($this->objectref->itemid)) {
-                if (isset($this->objectref->properties['objectid'])) {
-                    $itemid = $this->objectref->properties['objectid']->value;
-                } else {
-                    $itemid = $this->objectref->properties['id']->value;
+        if (!empty($this->source)) {
+            $this->tplmodule = 'dynamicdata';
+            $this->template = '';
+        } else {
+            // Set the module_id: case of a bound property
+            $itemid = 0;
+            if (isset($this->objectref)) {
+                $this->module_id = (int)$this->objectref->module_id;
+                // Ignore itemid if this is an object list; need to get the ID from the corresponding attribute
+                if (isset($this->objectref->itemid)) {
+                    if (isset($this->objectref->properties['objectid'])) {
+                        $itemid = $this->objectref->properties['objectid']->value;
+                    } else {
+                        $itemid = $this->objectref->properties['id']->value;
+                    }
                 }
             }
+            // Override or a standalone property
+            if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
+            // No hint at all, take the current module
+            if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarModGetName());
+    
+            // Do the same for itemtypes
+            if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;
+            if (isset($data['itemtype'])) $this->itemtype = (int)$data['itemtype'];
+            // No hint at all, assume all itemtypes
+            if (!isset($this->itemtype)) $this->itemtype = 0;
+    
+            // Pick up an itemid if one was passed
+            if (isset($data['itemid'])) $itemid = (int)$data['itemid'];
+    
+            sys::import('xaraya.structures.query');
+            xarMod::apiLoad('categories');
+            $xartable = xarDB::getTables();
+            $q = new Query('SELECT'); 
+            $q->addtable( $xartable['categories'],'c');
+            $q->addtable( $xartable['categories_linkage'],'cl');
+            $q->join('c.id','cl.category_id');
+            $q->eq('item_id', $itemid);
+            if ($this->module_id) $q->eq('module_id', $this->module_id);
+            if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
+            $q->run();
+            $this->value = $q->output();
+    
+            $data['value'] = $this->value;
         }
-        // Override or a standalone property
-        if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
-        // No hint at all, take the current module
-        if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarModGetName());
-
-        // Do the same for itemtypes
-        if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;
-        if (isset($data['itemtype'])) $this->itemtype = (int)$data['itemtype'];
-        // No hint at all, assume all itemtypes
-        if (!isset($this->itemtype)) $this->itemtype = 0;
-
-        // Pick up an itemid if one was passed
-        if (isset($data['itemid'])) $itemid = (int)$data['itemid'];
-
-        sys::import('xaraya.structures.query');
-        xarMod::apiLoad('categories');
-        $xartable = xarDB::getTables();
-        $q = new Query('SELECT'); 
-        $q->addtable( $xartable['categories'],'c');
-        $q->addtable( $xartable['categories_linkage'],'cl');
-        $q->join('c.id','cl.category_id');
-        $q->eq('item_id', $itemid);
-        if ($this->module_id) $q->eq('module_id', $this->module_id);
-        if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
-        $q->run();
-        $this->value = $q->output();
-
-        $data['value'] = $this->value;
         return parent::showOutput($data);
     }
 
