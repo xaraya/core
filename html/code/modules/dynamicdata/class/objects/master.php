@@ -59,7 +59,7 @@ class DataObjectMaster extends Object
     public $linkfunc = 'display';       // optional link function for use in getActionURL() (defaults to 'display', unused for object URLs)
     private $cached_urls  = array();    // cached URLs for use in getActionURL()
 
-    public $primary = null;             // primary key is item id
+    public $primary = null;             // primary key is item id (or objectid in the case of the objects object)
     public $secondary = null;           // secondary key could be item type (e.g. for articles)
     public $filter = false;             // set this true to automatically filter by current itemtype on secondary key
     public $upload = false;             // flag indicating if this object has some property that provides file upload
@@ -1187,7 +1187,7 @@ class DataObjectMaster extends Object
                             if ($type != "SELECT" && $tabletype != "internal") continue;
 //                            if (is_array($value)) $value = current($value);
                             if ($prefix) $this->dataquery->addtable($value,$object->name . "_" . $key);
-                            else $this->dataquery->addtable($value,$key);    
+                            else $this->dataquery->addtable($value,$key);
                         }
                     }
                 }
@@ -1283,6 +1283,7 @@ class DataObjectMaster extends Object
         }
 
         foreach ($object->properties as $name => $property) {
+            // Recursive call for subitems properties
             if ($object->properties[$name]->type == 30069 &&
                 $object->properties[$name]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED                
             ) {
