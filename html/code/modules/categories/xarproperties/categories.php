@@ -93,7 +93,7 @@ class CategoriesProperty extends DataProperty
             $select_type = 3;
             if ($select_type == 1) $select_type = 'dropdown';
             else $select_type = 'multiselect';
-            if (!xarVarFetch($name . '["categories"]', 'isset', $categories, array(), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch($name . '["categories"]', 'array', $categories, array(), XARVAR_NOT_REQUIRED)) return;
         }
         $value = $categories;
         return $this->validateValue($value);
