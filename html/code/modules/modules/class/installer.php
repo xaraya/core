@@ -162,6 +162,38 @@ class Installer extends Object
         return true;
     }
 
+    public function getpropdependencies($regid)
+    {
+        // Get module information
+        try {
+            $extInfo = xarMod::getInfo($regid);
+        } catch (NotFoundExceptions $e) {
+            //Add this module to the unsatisfiable list
+            $this->unsatisfiable[$regid] = $regid;
+            //Return now, we can't find more info about this module
+            return true;
+        }
+        
+        $props = array();
+        if (isset($extInfo['propertyinfo'])) {
+            $props = $extInfo['propertyinfo'];
+        }
+
+        sys::import('modules.dynamicdata.class.properties.master');
+        $types = DataPropertyMaster::getPropertyTypes();
+        
+        $dependencies['satisfied'] = array();
+        $dependencies['unsatisfiable'] = array();
+        foreach ($props as $id => $conditions) {
+            if (isset($types[$id])) {
+                $dependencies['satisfied'][] = $conditions['name'];
+            } else {
+                $dependencies['unsatisfiable'][] = $conditions['name'];
+            }
+        }
+        return $dependencies;
+    }
+    
     public function getalldependencies($regid)
     {
         static $checked_ids = array();
@@ -186,7 +218,7 @@ class Installer extends Object
         } catch (NotFoundExceptions $e) {
             //Add this module to the unsatisfiable list
             $this->unsatisfiable[$regid] = $regid;
-            //Return now, we cant find more info about this module
+            //Return now, we can't find more info about this module
             return true;
         }
 
