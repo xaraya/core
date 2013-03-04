@@ -131,7 +131,7 @@ function modules_adminapi_getitems(Array $args=array())
         $item = array();
         foreach (array_keys($select) as $field)
             $item[$field] = array_shift($result->fields);
-        
+
         if (xarVarIsCached('Mod.Infos', $item['regid'])) {
             // merge cached info with db info 
             $item += xarVarGetCached('Mod.Infos', $item['regid']);
@@ -163,7 +163,6 @@ function modules_adminapi_getitems(Array $args=array())
                 }
             }        
         }
-        
         $items[] = $item;    
     }
     $result->close();
