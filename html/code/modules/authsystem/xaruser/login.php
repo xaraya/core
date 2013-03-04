@@ -249,26 +249,31 @@ function authsystem_user_login()
             xarModUserVars::set('roles','userlastlogin',time()); //this is what everyone else will see
 
             $externalurl=false; //used as a flag for userhome external url
-            if ((bool)xarModVars::get('roles', 'loginredirect')) {
-                $truecurrenturl = xarServer::getCurrentURL(array(), false);
-                $url = xarMod::apiFunc('roles','user','getuserhome',array('itemid' => $user['id']));
-                if (empty($url)) {
-                    $urldata['redirecturl'] = xarModURL(xarModVars::get('modules','defaultmodule'),xarModVars::get('modules','defaulttypename'),xarModVars::get('modules','defaultfuncname'));
-                    $urldata['externalurl'] = false;
-                } else {
-                    try {
-                        $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
-                    } catch (Exception $e) {
-                        return xarTpl::module('roles','user','errors',array('layout' => 'bad_userhome', 'message' => $e->getMessage()));
+            if(isset($redirecturl)) {
+                $redirecturl = $redirecturl;
+            } else {
+                if ((bool)xarModVars::get('roles', 'loginredirect')) {
+                    $truecurrenturl = xarServer::getCurrentURL(array(), false);
+                    $url = xarMod::apiFunc('roles','user','getuserhome',array('itemid' => $user['id']));
+                    if (empty($url)) {
+                        $urldata['redirecturl'] = xarModURL(xarModVars::get('modules','defaultmodule'),xarModVars::get('modules','defaulttypename'),xarModVars::get('modules','defaultfuncname'));
+                        $urldata['externalurl'] = false;
+                    } else {
+                        try {
+                            $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
+                        } catch (Exception $e) {
+                            return xarTpl::module('roles','user','errors',array('layout' => 'bad_userhome', 'message' => $e->getMessage()));
+                        }
                     }
-                }
-                $data = array();
-                if (!is_array($urldata) || !$urldata) {
-                    $externalurl = false;
-                    $redirecturl = xarServer::getBaseURL();
-                } else{
-                    $externalurl = $urldata['externalurl'];
-                    $redirecturl = $urldata['redirecturl'];
+                    $data = array();
+                    if (!is_array($urldata) || !$urldata) {
+                        $externalurl = false;
+                        $redirecturl = xarServer::getBaseURL();
+    
+                    } else{
+                        $externalurl = $urldata['externalurl'];
+                        $redirecturl = $urldata['redirecturl'];
+                    }
                 }
             }
             
