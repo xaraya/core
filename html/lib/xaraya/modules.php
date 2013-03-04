@@ -713,6 +713,7 @@ class xarMod extends Object implements IxarMod
         $FileInfo['contact']        = isset($version['contact'])        ? $version['contact'] : false;
         $FileInfo['dependency']     = isset($version['dependency'])     ? $version['dependency'] : array();
         $FileInfo['dependencyinfo'] = isset($version['dependencyinfo']) ? $version['dependencyinfo'] : array();
+        $FileInfo['propertyinfo']   = isset($version['propertyinfo'])   ? $version['propertyinfo'] : array();
         $FileInfo['extensions']     = isset($version['extensions'])     ? $version['extensions'] : array();
         $FileInfo['directory']      = isset($version['directory'])      ? $version['directory'] : false;
         $FileInfo['homepage']       = isset($version['homepage'])       ? $version['homepage'] : false;

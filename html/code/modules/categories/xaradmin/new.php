@@ -17,7 +17,6 @@
 
     function categories_admin_new()
     {
-        if (!xarVarFetch('itemtype',    'int',    $data['itemtype'], 2, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('return_url',  'isset',  $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}
         if(!xarVarFetch('repeat','int:1:', $data['repeat'], 1, XARVAR_NOT_REQUIRED)) {return;}
 
@@ -37,7 +36,6 @@
 
         $catinfo = array();
         $catinfo['module'] = 'categories';
-        $catinfo['itemtype'] = $data['itemtype'];
         $catinfo['itemid'] = '';
         $hooks = xarModCallHooks('item','new','',$catinfo);
         if (empty($hooks)) {

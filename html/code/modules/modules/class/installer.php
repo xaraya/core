@@ -162,6 +162,38 @@ class Installer extends Object
         return true;
     }
 
+    public function getpropdependencies($regid)
+    {
+        // Get module information
+        try {
+            $extInfo = xarMod::getInfo($regid);
+        } catch (NotFoundExceptions $e) {
+            //Add this module to the unsatisfiable list
+            $this->unsatisfiable[$regid] = $regid;
+            //Return now, we can't find more info about this module
+            return true;
+        }
+        
+        $props = array();
+        if (isset($extInfo['propertyinfo'])) {
+            $props = $extInfo['propertyinfo'];
+        }
+
+        sys::import('modules.dynamicdata.class.properties.master');
+        $types = DataPropertyMaster::getPropertyTypes();
+        
+        $dependencies['satisfied'] = array();
+        $dependencies['unsatisfiable'] = array();
+        foreach ($props as $id => $conditions) {
+            if (isset($types[$id])) {
+                $dependencies['satisfied'][] = $conditions['name'];
+            } else {
+                $dependencies['unsatisfiable'][] = $conditions['name'];
+            }
+        }
+        return $dependencies;
+    }
+    
     public function getalldependencies($regid)
     {
         static $checked_ids = array();
@@ -186,7 +218,7 @@ class Installer extends Object
         } catch (NotFoundExceptions $e) {
             //Add this module to the unsatisfiable list
             $this->unsatisfiable[$regid] = $regid;
-            //Return now, we cant find more info about this module
+            //Return now, we can't find more info about this module
             return true;
         }
 
@@ -206,8 +238,9 @@ class Installer extends Object
         }
         if (empty($dependency)) $dependency = array();
 
-        //The dependencies are ok, they shouldnt change in the middle of the
+        //The dependencies are ok, they shouldn't change in the middle of the
         //script execution, so let's assume this.
+        $previousdependencies = array();
         foreach ($dependency as $module_id => $conditions) {
             if (is_array($conditions)) {
                 //The module id is in $modId
@@ -218,7 +251,8 @@ class Installer extends Object
             }
 
             // RECURSIVE CALL
-            if (!$this->getalldependencies($modId)) {
+            $previousdependencies = $this->getalldependencies($modId);
+            if (!$previousdependencies) {
                 $msg = xarML('Unable to get dependencies for module with ID (#(1)).', $modId);
                 throw new Exception($msg);
             }
@@ -227,10 +261,10 @@ class Installer extends Object
         // Unsatisfiable and Satisfiable are assuming the user can't
         //use some hack or something to set the modules as initialised/active
         //without its proper dependencies
-        if (count($this->unsatisfiable)) {
+        if (isset($previousdependencies['unsatisfiable']) && count($previousdependencies['unsatisfiable'])) {
             //Then this module is unsatisfiable too
             $this->unsatisfiable[$extInfo['regid']] = $extInfo;
-        } elseif (count($this->satisfiable)) {
+        } elseif (isset($previousdependencies['satisfiable']) && count($previousdependencies['satisfiable'])) {
             //Then this module is satisfiable too
             //As if it were initialised, then all dependencies would have
             //to be already satisfied

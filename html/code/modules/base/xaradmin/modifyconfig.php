@@ -77,7 +77,9 @@ function base_admin_modifyconfig()
 
     if (extension_loaded('mcrypt')) {
         // Don't use sys::import, the scope of the var would be wrong
-        include_once(sys::lib()."xaraya/encryption.php");
+        // Don't use sys::import, the scope of the var would be wrong
+        // Use include instead of include_once, in case we have loaded this var in another scope
+        include(sys::lib()."xaraya/encryption.php");
         $data['encryption'] = $encryption;
 
         $ciphers = array();
@@ -128,7 +130,7 @@ function base_admin_modifyconfig()
                     if (!xarVarFetch('defaulttype',    'str:1:', $defaultModuleType, xarModVars::get('modules', 'defaultmoduletype'), XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('defaultfunction','str:1:', $defaultModuleFunction,xarModVars::get('modules', 'defaultmodulefunction'),XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('defaultdatapath','str:1:', $defaultDataPath, xarModVars::get('modules', 'defaultdatapath'),XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('shorturl','checkbox',$enableShortURLs,false,XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('shorturl','str',$enableShortURLs,false,XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('htmlenitites','checkbox',$FixHTMLEntities,false,XARVAR_NOT_REQUIRED)) return;
 
                     $isvalid = $data['module_settings']->checkInput();
