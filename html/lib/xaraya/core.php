@@ -436,7 +436,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
                             'defaultTimeZone'     => xarConfigVars::get(null, 'Site.Core.TimeZone'),
                             'defaultTimeOffset'   => xarConfigVars::get(null, 'Site.MLS.DefaultTimeOffset'),
                             );
-        xarMLS_init($systemArgs);
+        xarMLS::init($systemArgs);
     
 
         /*
