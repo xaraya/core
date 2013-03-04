@@ -14,6 +14,7 @@
  * @author Roger Raymond <roger@asphyxia.com>
  * @author Marcel van der Boom <mrb@hsdev.com>
  * @author Volodymyr Metenchuk <voll@xaraya.com>
+ * @author Marc Lutolf
  * @todo Dynamic Translations
  * @todo Timezone and DST support (default offset is supported now)
  * @todo Write standard core translations
