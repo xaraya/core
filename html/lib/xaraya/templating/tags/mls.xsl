@@ -14,7 +14,7 @@
 -->
 <xsl:template match="xar:ml">
   <xsl:processing-instruction name="php">
-    <xsl:text>echo xarML(</xsl:text>
+    <xsl:text>echo xarMLS::xarML(</xsl:text>
     <xsl:apply-templates/>
     <xsl:for-each select=".//xar:var">
       <xsl:text>,</xsl:text>
@@ -35,7 +35,7 @@
   do it again (TEMP, ugly)
 -->
 <xsl:template match="xar:set/xar:ml">
-  <xsl:text>xarML(</xsl:text>
+  <xsl:text>xarMLS::xarML(</xsl:text>
   <xsl:apply-templates/>
   <xsl:for-each select=".//xar:var">
     <xsl:text>,</xsl:text>
@@ -104,7 +104,7 @@
 
 <!-- mlstring inside set just needs to resolve the text node -->
 <xsl:template match="xar:set/xar:mlstring">
-  <xsl:text>xarML(</xsl:text>
+  <xsl:text>xarMLS::xarML(</xsl:text>
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>
