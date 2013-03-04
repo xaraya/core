@@ -118,7 +118,7 @@ class xarUser extends Object
     
         self::$authenticationModules = $args['authenticationModules'];
     
-        xarMLS_setCurrentLocale(self::getNavigationLocale());
+        xarMLS::setCurrentLocale(self::getNavigationLocale());
         xarTpl::setThemeName(self::getNavigationThemeName());
     
         // These events are now registered during authsystem module init

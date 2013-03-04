@@ -70,8 +70,8 @@ function installer_admin_phase3()
     $cacheIsWritable            = check_dir($cacheDir);
     $cacheTemplatesIsWritable   = (check_dir($cacheTemplatesDir) || @mkdir($cacheTemplatesDir, 0700));
     $rssTemplatesIsWritable     = (check_dir($rssTemplatesDir) || @mkdir($rssTemplatesDir, 0700));
-    $phpLanguageFilesIsWritable = xarMLS__iswritable($phpLanguageDir);
-    $xmlLanguageFilesIsWritable = xarMLS__iswritable($xmlLanguageDir);
+    $phpLanguageFilesIsWritable = xarMLS::iswritable($phpLanguageDir);
+    $xmlLanguageFilesIsWritable = xarMLS::iswritable($xmlLanguageDir);
     $maxexectime = trim(ini_get('max_execution_time'));
     $memLimit = trim(ini_get('memory_limit'));
     $memLimit = empty($memLimit) ? xarML('Undetermined') : $memLimit;

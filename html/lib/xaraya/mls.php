@@ -139,12 +139,12 @@ class xarMLS extends Object
             $GLOBALS['xarMLS_mode'] = $args['MLSMode'];
             if (!function_exists('mb_http_input')) {
                 // mbstring required
-                throw new Exception('xarMLS_init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
+                throw new Exception('xarMLS::init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
             }
             break;
         default:
             $GLOBALS['xarMLS_mode'] = 'BOXED';
-            //throw new Exception('xarMLS_init: Unknown MLS mode: '.$args['MLSMode']);
+            //throw new Exception('xarMLS::init: Unknown MLS mode: '.$args['MLSMode']);
         }
         $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
     

@@ -112,7 +112,7 @@ sys::import('xaraya.mapper.main');
 
 // Start Logging Facilities as soon as possible
 $systemArgs = array();
-xarLog_init($systemArgs);
+xarLog::init($systemArgs);
 
 // Start HTTP Protocol Server/Request/Response utilities
 $systemArgs = array('enableShortURLsSupport' =>false,
@@ -174,7 +174,7 @@ $systemArgs = array('translationsBackend' => 'xml2php',
                     'MLSMode'             => 'BOXED',
                     'defaultLocale'       => $install_language,
                     'allowedLocales'      => $allowedLocales);
-xarMLS_init($systemArgs);
+xarMLS::init($systemArgs);
 
 /**
  * Entry function for the installer
