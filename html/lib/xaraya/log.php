@@ -13,6 +13,7 @@
  * @author Marco Canini <marco@xaraya.com>
  * @author Flavio Botelho <nuncanada@ig.com.br>
  * @author Marcel van der Boom
+ * @author Marc Lutolf
  * @todo  Document functions
  * @todo  Add options to simple & html logger
  * @todo  When calendar & xarLocaleFormatDate is done complete simple logger and html logger
@@ -45,10 +46,6 @@ class LoggerException extends Exception
 
 // Legacy calls
 
-function xarLog_init($args)
-{   
-    return xarLog::init($args); 
-}
 function xarLogConfigFile()
 {   
     return xarLog::configFile(); 
