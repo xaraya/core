@@ -48,7 +48,7 @@ function authsystem_user_login()
         return xarTpl::module('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
     if (!xarVarFetch('pass','str:0:254',$pass,'',XARVAR_NOT_REQUIRED)) return;
     if (empty($pass))
-    return xarTpl::module('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
+        return xarTpl::module('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
 
     $redirect = xarServer::getBaseURL();
     if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
@@ -60,7 +60,7 @@ function authsystem_user_login()
     }
     $redirecturl = xarVarPrepHTMLDisplay($redirecturl);
     $rememberme = xarVarPrepHTMLDisplay($rememberme);
-    
+//echo $redirecturl;exit;
     // Scan authentication modules and set user state appropriately
     $extAuthentication = false;
     foreach($xarUser_authenticationModules as $authModName) {
@@ -276,7 +276,7 @@ function authsystem_user_login()
                     }
                 }
             }
-            
+
             if ($externalurl) {
                 /* Open in IFrame - works if you need it */
                 /* $data['page'] = $redirecturl;

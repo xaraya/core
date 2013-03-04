@@ -119,6 +119,8 @@ function xarWebservicesMain()
 
         break;
     case 'soap' :
+        if (!extension_loaded('soap')) {
+        }
         if(xarModIsAvailable('soapserver')) {
             $server = xarModAPIFunc('soapserver','user','initsoapserver');
 
@@ -129,10 +131,7 @@ function xarWebservicesMain()
                 echo $fault->serialize();
             }
             // Try to process the request
-            if ($server) {
-                global $HTTP_RAW_POST_DATA;
-                $server->service($HTTP_RAW_POST_DATA);
-            }
+            if ($server) $server::handle();
         }
         if (!$server) {
             xarLogMessage("Could not load SOAP server, giving up");

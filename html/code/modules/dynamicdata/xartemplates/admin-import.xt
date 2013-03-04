@@ -71,7 +71,7 @@
                     </div>
                     <div class="xar-col">
                         <xar:set name="empty">''</xar:set>
-                        <textarea name="xml" id="xml" class="xar-form-textarealarge">#$empty#</textarea>
+                        <textarea name="xml" id="xml" class="xar-form-textareaxlarge" style="width: 40em">#$empty#</textarea>
                     </div>
                 </div>
                 <div class="xar-row">

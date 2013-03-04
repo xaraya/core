@@ -4,7 +4,7 @@
     <xar:if condition="!empty($value)">
         <!-- we're using a hidden field to keep track of any previously uploaded file here -->
         <span id="#$id#_text">Uploaded file: 
-        <xar:var name="value"/>
+        <xar:var name="value"/>&#160;
         <xar:var name="label">Clear</xar:var>
         <input type="button" onClick="document.getElementById('#$id#_hidden').value='';document.getElementById('#$id#_text').innerHTML='';" value="#$label#"/>
         <br /></span>
