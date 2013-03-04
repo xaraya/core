@@ -112,7 +112,7 @@ class xarController extends Object
             }
         }
 
-        $value = xarMLS_convertFromInput($value, $method);
+        $value = xarMLS::convertFromInput($value, $method);
 
         if (get_magic_quotes_gpc()) {
             $value = self::__stripslashes($value);
