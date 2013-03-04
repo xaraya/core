@@ -43,123 +43,191 @@ class LoggerException extends Exception
     // Fill in later.
 }
 
-/**
- * Initialize the logging subsystem
- *
- * @return void
- * @throws LoggerException
-**/
-function xarLog_init(&$args)
-{
+// Legacy calls
 
-    $GLOBALS['xarLog_loggers'] = array();
-    
-    // Only log if logging is enabled and if the config.system file is presents
-    try {
-        if (!xarSystemVars::get(sys::CONFIG, 'Log.Enabled')) return true;
-    } catch (Exception $e) {
-        return true;
-    }
-    
-    $xarLogConfig = array();
-
-    if (xarLogConfigReadable())
-    {
-        // CHECKME: do we need to wrap this?
-        if (!include (xarLogConfigFile())) {
-            throw new LoggerException('xarLog_init: Log configuration file is invalid!');
-        }
-
-    } elseif (xarLogFallbackPossible()) {
-        //Fallback mechanism to allow some logging in important cases when
-        //the user might not have logging yet installed, or for some reason we
-        //should be able to have a way to get error messages back => installation?!
-        $logFile = xarLogFallbackFile();
-        if ($logFile) {
-            $xarLogConfig[] = array(
-                'type'      => 'simple',
-                'config'    => array(
-                    'fileName' => $logFile,
-                    'loglevel'  => XARLOG_LEVEL_ALL));
-        }
-    }
-
-    // If none of these => do nothing.
-     foreach ($xarLogConfig as $logger) {
-        xarLog__add_logger($logger['type'], $logger['config']);
-     }
-
-    // Subsystem initialized, register a shutdown function
-    register_shutdown_function('xarLog__shutdown_handler');
-
-    return true;
+function xarLog_init($args)
+{   
+    return xarLog::init($args); 
 }
-
-/**
- * Will return the log configuration file directory and name
- */
 function xarLogConfigFile()
-{
-    static $logConfigFile;
-
-    if (isset($logConfigFile)) return $logConfigFile;
-
-    $logConfigFile = sys::varpath() . '/logs/config.log.php';
-
-    if (file_exists($logConfigFile)) {
-        $logConfigFile = realpath($logConfigFile);
-    }
-
-    return $logConfigFile;
+{   
+    return xarLog::configFile(); 
 }
-
-/**
- * Will return true if the log config file exists and is readable, and false if not
- */
 function xarLogConfigReadable()
-{
-    $logConfigFile = xarLogConfigFile();
+{   
+    return xarLog::configReadable(); 
+}
+function xarLogFallbackFile()
+{   
+    return xarLog::fallbackFile(); 
+}
+function xarLogFallbackPossible()
+{   
+    return xarLog::fallbackPossible(); 
+}
+function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG)
+{   
+    return xarLog::message($message, $level); 
+}
+function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
+{   
+    return xarLog::variable($name, $var, $level); 
+}
 
-    if (file_exists($logConfigFile) && is_readable($logConfigFile)) {
+class xarLog extends Object
+{
+    static private $configFile;
+    static private $logFile;
+    static public $loggers  = array();
+    static public $config  = array();
+    
+    static public function init(&$args)
+    {
+        $GLOBALS['xarLog_loggers'] = array();
+        
+        // Only log if logging is enabled and if the config.system file is presents
+        try {
+            if (!xarSystemVars::get(sys::CONFIG, 'Log.Enabled')) return true;
+        } catch (Exception $e) {
+            return true;
+        }
+        
+        $xarLogConfig = array();
+    
+        if (self::configReadable())
+        {
+            // CHECKME: do we need to wrap this?
+            if (!include (self::configFile())) {
+                throw new LoggerException('xarLog_init: Log configuration file is invalid!');
+            }
+    
+        } elseif (self::fallbackPossible()) {
+            //Fallback mechanism to allow some logging in important cases when
+            //the user might not have logging yet installed, or for some reason we
+            //should be able to have a way to get error messages back => installation?!
+            $logFile = self::fallbackFile();
+            if ($logFile) {
+                self::$config[] = array(
+                    'type'      => 'simple',
+                    'config'    => array(
+                        'fileName' => $logFile,
+                        'loglevel'  => XARLOG_LEVEL_ALL));
+            }
+        }
+    
+        // If none of these => do nothing.
+         foreach (self::$config as $logger) {
+            self::addLogger($logger['type'], $logger['config']);
+         }
+    
+        // Subsystem initialized, register a shutdown function
+        register_shutdown_function('xarLog__shutdown_handler');
+    
         return true;
     }
 
-    return false;
-}
-
-/**
- * Will return the log file directory and name
- */
-function xarLogFallbackFile ()
-{
-    static $logFile;
-
-    if (isset($logFile)) return $logFile;
-
-    $logFile = sys::varpath() . '/logs/' . xarSystemVars::get(sys::CONFIG, 'Log.Filename');
-    if (!file_exists($logFile)) touch($logFile);
-    $logFile = realpath($logFile);
-
-    return $logFile;
-}
-
-/**
- * Will check if the fallback mechanism can be used
- * @return boolean
- */
-function xarLogFallbackPossible ()
-{
-    $logFile = xarLogFallbackFile ();
-    if (file_exists($logFile) && is_writeable($logFile)) {
-        return true;
+    /**
+     * Will return the log configuration file directory and name
+     */
+    static public function configFile()
+    {
+        if (isset(self::$configFile)) return self::$configFile;
+    
+        $logConfigFile = sys::varpath() . '/logs/config.log.php';
+    
+        if (file_exists($logConfigFile)) {
+            self::$configFile = realpath($logConfigFile);
+        }
+        return self::$configFile;
     }
 
-    return false;
+    /**
+     * Will return true if the log config file exists and is readable, and false if not
+     */
+    static public function configReadable()
+    {
+        $logConfigFile = self::configFile();
+    
+        if (file_exists($logConfigFile) && is_readable($logConfigFile)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Will return the log file directory and name
+     */
+    static public function fallbackFile ()
+    {
+        if (isset(self::$logFile)) return self::$logFile;
+    
+        $logFile = sys::varpath() . '/logs/' . xarSystemVars::get(sys::CONFIG, 'Log.Filename');
+        if (!file_exists($logFile)) touch($logFile);
+        self::$logFile = realpath($logFile);
+        return self::$logFile;
+    }
+
+    /**
+     * Will check if the fallback mechanism can be used
+     * @return boolean
+     */
+    static public function fallbackPossible ()
+    {
+        $logFile = self::fallbackFile();
+        if (file_exists($logFile) && is_writeable($logFile)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Log a message
+     * @param string message. The message to log
+     * @param string level. The level for this message OPTIONAL Defaults to XARLOG_LEVEL_DEBUG
+     *
+     */
+    static public function message($message, $level = XARLOG_LEVEL_DEBUG)
+    {
+        if (($level == XARLOG_LEVEL_DEBUG) && !xarCoreIsDebuggerActive()) return;
+        // this makes a copy of the object, so the original $this->_buffer was never updated
+        //foreach ($_xarLoggers as $logger) {
+        foreach (array_keys(self::$loggers) as $id) {
+           self::$loggers[$id]->notify($message, $level);
+        }
+    }
+    
+    static public function variable($name, $var, $level = XARLOG_LEVEL_DEBUG)
+    {
+        $args = array('name'=>$name, 'var'=>$var, 'format'=>'text');
+    
+        //Encapsulate core libraries in classes and let __call work lazy loading
+        sys::import('xaraya.log.functions.dumpvariable');
+        self::message(xarLog__dumpVariable($args),$level);
+    }
+
+    /**
+     * Add a logger to active loggers
+     *
+     * @return void
+     * @throws LoggerException
+    **/
+    static public function addLogger($type, $config_args)
+    {
+        sys::import('xaraya.log.loggers.'.$type);
+        $type = 'xarLogger_'.$type;
+    
+         if (!$observer = new $type()) {
+             throw new LoggerException('xarLog_init: Unable to instantiate class for logging: '.$type);
+         }
+    
+          $observer->setConfig($config_args);
+    
+          self::$loggers[] = &$observer;
+    }
 }
 
 /**
  * Shutdown handler for the logging system
- *
  *
  */
 function xarLog__shutdown_handler()
@@ -190,51 +258,4 @@ function xarLog__shutdown_handler()
     }
  */
 }
-
-/**
- * Add a logger to active loggers
- *
- * @return void
- * @throws LoggerException
-**/
-function xarLog__add_logger($type, $config_args)
-{
-    sys::import('xaraya.log.loggers.'.$type);
-    $type = 'xarLogger_'.$type;
-
-     if (!$observer = new $type()) {
-         throw new LoggerException('xarLog_init: Unable to instantiate class for logging: '.$type);
-     }
-
-      $observer->setConfig($config_args);
-
-      $GLOBALS['xarLog_loggers'][] = &$observer;
-}
-
-/**
- * Log a message
- * @param string message. The message to log
- * @param string level. The level for this message OPTIONAL Defaults to XARLOG_LEVEL_DEBUG
- *
- */
-function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG)
-{
-
-    if (($level == XARLOG_LEVEL_DEBUG) && !xarCoreIsDebuggerActive()) return;
-    // this makes a copy of the object, so the original $this->_buffer was never updated
-    //foreach ($_xarLoggers as $logger) {
-    foreach (array_keys($GLOBALS['xarLog_loggers']) as $id) {
-       $GLOBALS['xarLog_loggers'][$id]->notify($message, $level);
-    }
-}
-
-function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
-{
-    $args = array('name'=>$name, 'var'=>$var, 'format'=>'text');
-
-    //Encapsulate core libraries in classes and let __call work lazy loading
-    sys::import('xaraya.log.functions.dumpvariable');
-    xarLogMessage(xarLog__dumpVariable($args),$level);
-}
-
 ?>
