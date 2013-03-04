@@ -10,11 +10,11 @@
 
 <!--
   xar:ml tags signals something is up for translation as a unit, so
-  group everything below into one xarML call
+  group everything below into one translate call
 -->
 <xsl:template match="xar:ml">
   <xsl:processing-instruction name="php">
-    <xsl:text>echo xarMLS::xarML(</xsl:text>
+    <xsl:text>echo xarMLS::translate(</xsl:text>
     <xsl:apply-templates/>
     <xsl:for-each select=".//xar:var">
       <xsl:text>,</xsl:text>
@@ -35,7 +35,7 @@
   do it again (TEMP, ugly)
 -->
 <xsl:template match="xar:set/xar:ml">
-  <xsl:text>xarMLS::xarML(</xsl:text>
+  <xsl:text>xarMLS::translate(</xsl:text>
   <xsl:apply-templates/>
   <xsl:for-each select=".//xar:var">
     <xsl:text>,</xsl:text>
@@ -104,7 +104,7 @@
 
 <!-- mlstring inside set just needs to resolve the text node -->
 <xsl:template match="xar:set/xar:mlstring">
-  <xsl:text>xarMLS::xarML(</xsl:text>
+  <xsl:text>xarMLS::translate(</xsl:text>
   <xsl:call-template name="resolveText">
     <xsl:with-param name="expr" select="."/>
   </xsl:call-template>

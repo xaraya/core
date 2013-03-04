@@ -64,12 +64,12 @@ function xarMLSGetCharsetFromLocale($locale)
     return xarMLS::getCharsetFromLocale($locale); 
 }
 function xarML($rawstring/*, ...*/)
-{   
-    return xarMLS::xarML($rawstring/*, ...*/); 
+{
+    return call_user_func_array(array('xarMLS', 'translate'), func_get_args());
 }
 function xarMLByKey($key/*, ...*/)
 {   
-    return xarMLS::xarMLByKey($key/*, ...*/); 
+    return call_user_func_array(array('xarMLS', 'translateByKey'), func_get_args());
 }
 function xarLocaleGetInfo($locale)
 {   
@@ -250,7 +250,7 @@ class xarMLS extends Object
      * @author Marco Canini <marco@xaraya.com>
      * @return string the translated string, or the original string if no translation is available
      */
-    static public function xarML($rawstring/*, ...*/)
+    static public function translate($rawstring/*, ...*/)
     {
         // if an empty string is passed in, just return an empty string. it's
         // the most sensible thing to do
@@ -296,7 +296,7 @@ class xarMLS extends Object
      * @throws BadParameterException
      * @return string the translation string, or the key if no translation is available
      */
-    static public function xarMLByKey($key/*, ...*/)
+    static public function translateByKey($key/*, ...*/)
     {
         // Key must have a value and not contain spaces
         if(empty($key) || strpos($key," ")) throw new BadParameterException('key');
