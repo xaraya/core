@@ -15,6 +15,7 @@
  * @author Xaraya Development Team
  * @param array    $args array of optional parameters<br/>
  *        string   $args['regid'] registered module id
+ *        string   $args['name'] module's name
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_NOT_EXIST
  */
@@ -24,6 +25,7 @@ function modules_adminapi_initialise(Array $args=array())
     extract($args);
 
     // Argument check
+    if (isset($name)) $regid = xarMod::getRegid($name, 'module');
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Get module information
