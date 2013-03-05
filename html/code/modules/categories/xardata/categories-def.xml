@@ -1,85 +1,109 @@
 <object name="categories">
-  <objectid>285</objectid>
+  <objectid>29</objectid>
   <label>Categories</label>
-  <parent>objects</parent>
   <module_id>182</module_id>
-  <itemtype>125</itemtype>
+  <itemtype>24</itemtype>
   <class>DataObject</class>
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
-  <maxid>0</maxid>
-  <config></config>
-  <isalias>0</isalias>
+  <maxid>4</maxid>
+  <access>a:0:{}</access>
+  <isalias>false</isalias>
+  <datastore>relational</datastore>
+  <config>a:0:{}</config>
+  <sources>a:1:{s:10:&quot;categories&quot;;a:2:{i:0;s:14:&quot;xar_categories&quot;;i:1;s:8:&quot;internal&quot;;}}</sources>
+  <relations>a:0:{}</relations>
+  <objects>a:0:{}</objects>
   <properties>
     <property name="id">
-      <id>3116</id>
+      <id>237</id>
       <label>ID</label>
       <type>itemid</type>
       <defaultvalue></defaultvalue>
-      <source>xar_categories.id</source>
+      <source>categories.id</source>
       <status>67</status>
       <seq>1</seq>
       <configuration></configuration>
     </property>
     <property name="name">
-      <id>3117</id>
+      <id>238</id>
       <label>Name</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_categories.name</source>
+      <source>categories.name</source>
       <status>33</status>
       <seq>2</seq>
       <configuration>a:8:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:21:"validation_min_length";s:1:"1";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
     <property name="description">
-      <id>3118</id>
+      <id>239</id>
       <label>Description</label>
       <type>textarea_medium</type>
       <defaultvalue></defaultvalue>
-      <source>xar_categories.description</source>
+      <source>categories.description</source>
       <status>34</status>
       <seq>3</seq>
       <configuration></configuration>
     </property>
     <property name="image">
-      <id>3119</id>
+      <id>7717</id>
       <label>Image</label>
       <type>imagelist</type>
       <defaultvalue></defaultvalue>
-      <source>xar_categories.image</source>
-      <status>34</status>
+      <source>categories.image</source>
+      <status>33</status>
       <seq>4</seq>
-      <configuration>a:4:{s:14:"display_layout";s:7:"default";s:26:"validation_file_extensions";s:20:"gif,jpg,jpeg,png,bmp";s:28:"initialization_basedirectory";s:44:"sys::code() . 'modules/categories/xarimages'";s:24:"initialization_firstline";s:15:",-- No Image --";}</configuration>
+      <configuration>a:2:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:26:"validation_file_extensions";s:20:"gif,jpg,jpeg,png,bmp";s:18:"validation_matches";s:0:"";s:28:"initialization_basedirectory";s:44:"sys::code() . 'modules/categories/xarimages'";s:24:"initialization_firstline";s:15:",-- No Image --";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
     <property name="template">
-      <id>3119</id>
+      <id>240</id>
       <label>Template</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_categories.template</source>
-      <status>33</status>
-      <seq>7</seq>
-      <configuration>a:4:{s:14:"display_layout";s:7:"default";s:26:"validation_file_extensions";s:20:"gif,jpg,jpeg,png,bmp";s:28:"initialization_basedirectory";s:44:"sys::code() . 'modules/categories/xarimages'";s:24:"initialization_firstline";s:15:",-- No Image --";}</configuration>
+      <source>categories.template</source>
+      <status>34</status>
+      <seq>5</seq>
+      <configuration>a:11:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:26:"validation_file_extensions";s:0:"";s:18:"validation_matches";s:0:"";s:28:"initialization_basedirectory";s:33:"code/modules/categories/xarimages";s:24:"initialization_firstline";s:15:",-- No Image --";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
     <property name="child_categories">
-      <id>3121</id>
+      <id>241</id>
       <label>Child Categories</label>
       <type>object</type>
       <defaultvalue></defaultvalue>
-      <source>xar_categories.child_object</source>
+      <source>categories.child_object</source>
       <status>34</status>
-      <seq>8</seq>
+      <seq>6</seq>
       <configuration>a:5:{s:14:"display_layout";s:7:"default";s:25:"initialization_store_prop";s:4:"name";s:24:"initialization_refobject";s:7:"objects";s:27:"initialization_display_prop";s:4:"name";s:24:"initialization_firstline";s:29:",No external child categories";}</configuration>
     </property>
     <property name="position">
-      <id>3120</id>
+      <id>242</id>
       <label>Position</label>
       <type>celkoposition</type>
       <defaultvalue></defaultvalue>
-      <source>dummy</source>
+      <source></source>
       <status>34</status>
-      <seq>9</seq>
+      <seq>7</seq>
       <configuration>a:6:{s:14:"display_layout";s:7:"default";s:25:"initialization_celkotable";s:14:"xar_categories";s:24:"initialization_celkoname";s:4:"name";s:29:"initialization_celkoparent_id";s:9:"parent_id";s:28:"initialization_celkoright_id";s:8:"right_id";s:27:"initialization_celkoleft_id";s:7:"left_id";}</configuration>
+    </property>
+    <property name="links">
+      <id>7719</id>
+      <label>Links</label>
+      <type>integerbox</type>
+      <defaultvalue></defaultvalue>
+      <source>categories.links</source>
+      <status>33</status>
+      <seq>8</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
+    <property name="state">
+      <id>7718</id>
+      <label>State</label>
+      <type>dropdown</type>
+      <defaultvalue>3</defaultvalue>
+      <source>categories.state</source>
+      <status>33</status>
+      <seq>9</seq>
+      <configuration>a:9:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:24:"initialization_firstline";s:0:"";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:29:"0,Delete;1,Inactive;3,Active;";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
   </properties>
 </object>

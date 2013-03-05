@@ -34,23 +34,12 @@ class DataObject extends DataObjectMaster implements iDataObject
     **/
     public function __construct(DataObjectDescriptor $descriptor)
     {
-      // get the object type information from our parent class
+        // get the object type information from our parent class
         $this->loader($descriptor);
 
-        // Set the configuration parameters
-        $args = $descriptor->getArgs();
+        // Get a reference to each property's value and find the primarys index
         if (!empty($args['config'])) {
-            try {
-                $configargs = unserialize($args['config']);
-                foreach ($configargs as $key => $value) if (!empty($key)) $this->{$key} = $value;
-                $this->configuration = $configargs;
-            } catch (Exception $e) {}
         }
-
-        // set the specific item id (or 0)
-        if(isset($args['itemid'])) $this->itemid = $args['itemid'];
-
-        // Get a reference to each property's value
         foreach ($this->properties as $property) {
             $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);
         }
@@ -63,28 +52,30 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         if(!empty($args['itemid']))
         {
-            if($args['itemid'] != $this->itemid)
+            if($args['itemid'] != $this->itemid) {
                 // initialise the properties again and refresh the contents of the object configuration
                 foreach($this->properties as $property) {
                     $property->value = $property->defaultvalue;
                     $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);
                 }
-
+                $this->dataquery->clearconditions();
+            }
             $this->itemid = $args['itemid'];
         }
-
         if (!empty($this->primary) && !empty($this->properties[$this->primary])) {
+        	$this->properties[$this->primary]->value = $this->itemid;
             $primarystore = $this->properties[$this->primary]->datastore;
         }
 
-        foreach($this->datastores as $name => $datastore) {
-            $itemid = $datastore->getItem($this->toArray());
-            
-            // only worry about finding something in primary datastore (if any)
-            if(empty($itemid) && !empty($primarystore) && $primarystore == $name) {
-                return;
-            }
-        }
+        /* General sequence:
+         * 1. Run the datastore's getItem method
+         *
+         * This may need to be adjusted in the future
+         */
+
+        $itemid = $this->datastore->getItem($args);
+
+        if(!empty($args['fieldlist'])) $this->setFieldList($args['fieldlist']);
 
         // Turn the values retrieved into proper PHP values
         foreach($this->properties as $property) {
@@ -100,11 +91,9 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function getInvalids(Array $args = array())
     {
-        if (!empty($args['fields'])) {
-            $fields = $args['fields'];
-        } else {
-            $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
-        }
+        if (!empty($args['fields'])) $fields = $args['fields'];
+        else $fields = $this->getFieldList();
+
         $invalids = array();
         foreach($fields as $name) {
             if (!empty($this->properties[$name]->invalid))
@@ -115,14 +104,8 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function clearInvalids()
     {
-        if (!empty($args['fields'])) {
-            $fields = $args['fields'];
-        } else {
-            $fields = !empty($this->fieldlist) ? $this->fieldlist : array_keys($this->properties);
-        }
-        foreach($fields as $name) {
+        foreach(array_keys($this->properties) as $name)
             $this->properties[$name]->invalid = '';
-        }
         return true;
     }
 
@@ -210,10 +193,21 @@ class DataObject extends DataObjectMaster implements iDataObject
     }
 
     /**
+     * Check the filter input values for this item
+     */
+    public function checkFilterInput(Array $args = array())
+    {
+        $isvalid = $this->checkInput($args, 1, 'dd');
+        $this->clearInvalids();
+        return $isvalid;
+    }
+
+    /**
      * Show an input form for this item
      */
     public function showForm(Array $args = array())
     {
+//        $args = $this->toArray($args);
         $args = $args + $this->getPublicProperties();
         $this->setFieldPrefix($args['fieldprefix']);
 
@@ -229,13 +223,13 @@ class DataObject extends DataObjectMaster implements iDataObject
             if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
         }
         
-        $args['properties'] = array();
         if(count($args['fieldlist']) > 0) {
             $fields = $args['fieldlist'];
         } else {
             $fields = array_keys($this->properties);
         }
 
+        $args['properties'] = array();
         foreach($fields as $name) {
             if(!isset($this->properties[$name])) continue;
 
@@ -321,6 +315,27 @@ class DataObject extends DataObjectMaster implements iDataObject
     }
 
     /**
+     * Get the filter values of the object's properties
+     */
+    public function getFilters(Array $args = array(), $bypass = 0)
+    {
+        $fields = array();
+        $properties = $this->getProperties($args);
+        if ($bypass) {
+            foreach ($properties as $property) {
+                if ($property->filter == 'nofilter') continue;
+                $fields[$property->name] = array('filter' => $property->filter, 'value' => $property->value);
+            }
+        } else {
+            foreach ($properties as $property) {
+                if ($property->filter == 'nofilter') continue;
+                $fields[$property->name] = array('filter' => $property->filter, 'value' => $property->getValue());
+            }
+        }
+        return $fields;
+    }
+
+    /**
      * Get and set for field prefixes
      */
     public function getFieldPrefix()
@@ -337,31 +352,29 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function createItem(Array $args = array())
     {
-        // The id of the item^to be created is
+        //  The id of the item to be created is
         //  1. An itemid arg passed
         //  2. An id arg passed ot the primary index
         //  3. 0
         
-        // reset the primary property holding the itemid if there is one
-        if (!empty($this->primary) && !empty($this->properties[$this->primary])) {
-            $this->properties[$this->primary]->setValue(0);
-        }
+        $this->properties[$this->primary]->setValue(0);
         if(count($args) > 0) {
             foreach($args as $name => $value) {
                 if(isset($this->properties[$name])) {
-                    $this->properties[$name]->setValue($value);
+                    $this->properties[$name]->value = $value;
                 }
             }
             if(isset($args['itemid'])) {
                 $this->itemid = $args['itemid'];
             } else {
-                $this->itemid = $this->properties[$this->primary]->getValue();
+                if(!empty($this->primary)) {
+                    $this->itemid = $this->properties[$this->primary]->getValue();
+                }
             }
         }
         // special case when we try to create a new object handled by dynamicdata
         if(
             $this->objectid == 1 &&
-        // FIXME: this should really be moduleid, not module_id
             $this->properties['module_id']->value == xarMod::getRegID('dynamicdata')
             //&& $this->properties['itemtype']->value < 2
         )
@@ -369,65 +382,33 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->properties['itemtype']->setValue($this->getNextItemtype($args));
         }
 
-        // check that we have a valid item id, or that we can create one if it's set to 0
-        if(empty($this->itemid)) {
-            // no primary key identified for this object, so we're stuck
-            if(!isset($this->primary)) {
-                $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-                $vars = array('primary key', 'DataObject', 'createItem', 'dynamicdata');
-                throw new BadParameterException($vars,$msg);
-            }
-            $value = $this->properties[$this->primary]->getValue();
+        /* General sequence:
+         * 1. Run the property-specific createValue methods for properties using the current datastore
+         * 2. Run the object's createItem method
+         * 3. Run the property-specific createValue methods for properties using the virtual datastore
+         *
+         * This may need to be adjusted in the future
+         */
+        $value = $this->properties[$this->primary]->getValue();
 
-            // we already have an itemid value in the properties
-            if(!empty($value)) {
-                $this->itemid = $value;
-            } elseif(!empty($this->properties[$this->primary]->datastore)) {
-                // we'll let the primary datastore create an itemid for us
-                $primarystore = $this->properties[$this->primary]->datastore;
-                // add the primary to the data store fields if necessary
-                if(!empty($this->fieldlist) && !in_array($this->primary,$this->fieldlist))
-                    $this->datastores[$primarystore]->addField($this->properties[$this->primary]); // use reference to original property
-
-                // Execute any property-specific code first
-                foreach ($this->datastores[$primarystore]->fields as $property) {
-                    if (method_exists($property,'createvalue') && $property->prepostprocess) {
-                        $property->createValue($this->itemid);
-                    }
-                }
-
-                $this->itemid = $this->datastores[$primarystore]->createItem($this->toArray());
-            } else {
-                $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-                $vars = array('primary key datastore', 'Dynamic Object', 'createItem', 'DynamicData');
-                throw new BadParameterException($vars,$msg);
+        foreach ($this->getFieldList() as $fieldname) {
+            if (!empty($this->properties[$fieldname]->source) &&
+                method_exists($this->properties[$fieldname],'createvalue')) {
+                $this->properties[$fieldname]->createValue($this->itemid);
             }
         }
-        if(empty($this->itemid)) return;
+        $this->itemid = $this->datastore->createItem();
 
-        $args = $this->getFieldValues();
-        $args['itemid'] = $this->itemid;
-        foreach(array_keys($this->datastores) as $store) {
-            // skip the primary store
-            if(isset($primarystore) && $store == $primarystore)
-                continue;
-
-            // Execute any property-specific code first
-            foreach ($this->datastores[$store]->fields as $property) {
-                if (method_exists($property,'createvalue') && $property->prepostprocess) {
-                    $property->createValue($this->itemid);
-                }
+        foreach ($this->getFieldList() as $fieldname) {
+            if (empty($this->properties[$fieldname]->source) &&
+                method_exists($this->properties[$fieldname],'createvalue')) {
+                $this->properties[$fieldname]->createValue($this->itemid);
             }
-            
-            // Now run the create routine of the this datastore
-            $itemid = $this->datastores[$store]->createItem($args);
-            if(empty($itemid))
-                return;
         }
-
-        // call create hooks for this item
-        $this->callHooks('create');
-
+        
+        // Set the value of the primary index property
+        $this->properties[$this->primary]->value = $this->itemid;
+        
         return $this->itemid;
     }
 
@@ -441,31 +422,32 @@ class DataObject extends DataObjectMaster implements iDataObject
                 if(isset($this->properties[$name]))
                     $this->properties[$name]->setValue($value);
         }
-        if(empty($this->itemid)) {
-            // Try getting the id value from the item ID property if it exists
-            foreach($this->properties as $property)
-                if ($property->type == 21) $this->itemid = $property->value;
+        if(empty($this->itemid) && !empty($this->primary)) {
+            $this->itemid = $this->properties[$this->primary]->getValue();
         }
 
-        $args = $this->getFieldValues();
-        $args['itemid'] = $this->itemid;
-        $fieldlist = $this->getFieldList();
-        foreach(array_keys($this->datastores) as $store)
-        {
-            // Execute any property-specific code first
-            foreach ($this->datastores[$store]->fields as $key => $property) {//var_dump($fieldlist);var_dump($key);die($key);
-                if (!in_array($property->name, $fieldlist)) continue;
-                if (method_exists($property,'updatevalue') && $property->prepostprocess) {
-                    $property->updateValue($this->itemid);
-                }
+        /* General sequence:
+         * 1. Run the property-specific updateValue methods for properties using the current datastore
+         * 2. Run the object's updateItem method
+         * 3. Run the property-specific updateValue methods for properties using the virtual datastore
+         *
+         * This may need to be adjusted in the future
+         */
+
+        foreach ($this->getFieldList() as $fieldname) {
+            if (!empty($this->properties[$fieldname]->source) &&
+                method_exists($this->properties[$fieldname],'updatevalue')) {
+                $this->properties[$fieldname]->updateValue($this->itemid);
             }
-
-            // Now run the update routine of the this datastore
-            $itemid = $this->datastores[$store]->updateItem($args);
         }
+        $this->itemid = $this->datastore->updateItem();
 
-        // call update hooks for this item
-        $this->callHooks('update');
+        foreach ($this->getFieldList() as $fieldname) {
+            if (empty($this->properties[$fieldname]->source) &&
+                method_exists($this->properties[$fieldname],'updatevalue')) {
+                $this->properties[$fieldname]->updateValue($this->itemid);
+            }
+        }
 
         return $this->itemid;
     }
@@ -492,11 +474,29 @@ class DataObject extends DataObjectMaster implements iDataObject
         // delete the item in all the data stores
         $args = $this->getFieldValues();
         $args['itemid'] = $this->itemid;
-        foreach(array_keys($this->datastores) as $store)
-        {
-            $itemid = $this->datastores[$store]->deleteItem($args);
-            if(empty($itemid))
-                return;
+
+        /* General sequence:
+         * 1. Run the property-specific deleteValue methods for properties using the current datastore
+         * 2. Run the object's deleteItem method
+         * 3. Run the property-specific deleteValue methods for properties using the virtual datastore
+         *
+         * This may need to be adjusted in the future
+         */
+
+        foreach ($this->getFieldList() as $fieldname) {
+            if (!empty($this->properties[$fieldname]->source) &&
+                method_exists($this->properties[$fieldname],'deletevalue')) {
+                $this->properties[$fieldname]->deleteValue($this->itemid);
+            }
+        }
+        $this->itemid = $this->datastore->deleteItem();
+        if(empty($this->itemid)) return;                    // CHECKME: Is this needed?
+        
+        foreach ($this->getFieldList() as $fieldname) {
+            if (empty($this->properties[$fieldname]->source) &&
+                method_exists($this->properties[$fieldname],'deletevalue')) {
+                $this->properties[$fieldname]->deleteValue($this->itemid);
+            }
         }
 
         // call delete hooks for this item

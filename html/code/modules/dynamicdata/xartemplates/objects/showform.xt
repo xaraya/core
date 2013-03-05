@@ -12,11 +12,19 @@
                     <xar:data-label property="$properties[$name]" for="id"/>
                 </div>
                 <div class="xar-col">
-                    <xar:data-input property="$properties[$name]"/>
+                    <xar:data-input property="$properties[$name]" style="width: 150px"/>
                 </div>
             </div>
         </xar:foreach>
-        <xar:else />
+    <xar:elseif condition="$layout eq 'filter'" />
+        <xar:foreach in="$properties" key="$name" value="$property">
+            <div class="xar-form-input-wrapper">
+                <xar:data-label property="$properties[$name]" for="id" />
+                <xar:data-filter property="$properties[$name]" for="id" />
+                <xar:data-input property="$properties[$name]" />
+            </div>
+        </xar:foreach>
+    <xar:else />
         <!-- You can also specify your own layout here or in a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->
         <xar:template module="$tplmodule" file="form-$layout"/>
     </xar:if>

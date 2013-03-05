@@ -4,7 +4,7 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <!-- This section deals with dependancies. -->
-        <xar:if condition="!empty($dependencies)">
+        <xar:if condition="!empty($moduledependencies)">
             <h2>Module Installation: Unsatisfied Dependencies</h2>
             <p>
                 The module #$displayname# you are trying to install depends on additional components. Please review the listing below:
@@ -14,18 +14,34 @@
                     <input type="hidden" name="id" id="id" value="#$id#"/>
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
-                    <xar:if condition="count($dependencies['satisfied']) ne 0">
-                        <h3>Dependencies already satisfied:</h3>
+                    <xar:if condition="count($propertydependencies['satisfied']) ne 0">
+                        <h3>Property dependencies already satisfied:</h3>
                         <ul>
-                            <xar:foreach in="$dependencies['satisfied']" value="$modInfo">
+                            <xar:foreach in="$propertydependencies['satisfied']" value="$name">
+                                <li>#$name#</li>
+                            </xar:foreach>
+                        </ul>
+                    </xar:if>
+                    <xar:if condition="count($propertydependencies['unsatisfiable']) ne 0">
+                        <h3>Property dependencies which cannot be satisfied:</h3>
+                        <ul>
+                            <xar:foreach in="$propertydependencies['unsatisfiable']" value="$name">
+                                <li>#$name#</li>
+                            </xar:foreach>
+                        </ul>
+                    </xar:if>
+                    <xar:if condition="count($moduledependencies['satisfied']) ne 0">
+                        <h3>Module dependencies already satisfied:</h3>
+                        <ul>
+                            <xar:foreach in="$moduledependencies['satisfied']" value="$modInfo">
                                 <li>#xarML($modInfo['displayname'])#</li>
                             </xar:foreach>
                         </ul>
                     </xar:if>
-                    <xar:if condition="count($dependencies['satisfiable']) ne 0">
-                        <h3>Dependencies which can be satisfied:</h3>
+                    <xar:if condition="count($moduledependencies['satisfiable']) ne 0">
+                        <h3>Module dependencies which can be satisfied:</h3>
                         <ul>
-                            <xar:foreach in="$dependencies['satisfiable']" value="$modInfo">
+                            <xar:foreach in="$moduledependencies['satisfiable']" value="$modInfo">
                                 <li>
                                     <xar:if condition="$modInfo['regid'] ne $id">
                                         #$modInfo['displayname']# 
@@ -36,10 +52,10 @@
                             </xar:foreach>
                         </ul>
                     </xar:if>
-                    <xar:if condition="count($dependencies['unsatisfiable']) ne 0">
-                        <h3>Dependencies which cannot be satisfied</h3>
+                    <xar:if condition="count($moduledependencies['unsatisfiable']) ne 0">
+                        <h3>Module dependencies which cannot be satisfied</h3>
                         <ul>
-                            <xar:foreach in="$dependencies['unsatisfiable']" value="$modInfo">                                
+                            <xar:foreach in="$moduledependencies['unsatisfiable']" value="$modInfo">                                
                                     <xar:if condition="is_array($modInfo) AND ($modInfo['displayname'] ne xarML('Unknown') AND !empty($modInfo['displayname']))">
                                         <xar:continue />
                                     <xar:elseif condition="is_array($modInfo) AND ($modInfo['displayname'] eq xarML('Unknown') OR empty($modInfo['displayname']))"/>

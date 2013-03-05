@@ -44,6 +44,8 @@ function dynamicdata_admin_modifyprop()
         );
     }
     $objectinfo = DataObjectMaster::getObjectInfo($args);
+    $data['objectinfo'] =& $objectinfo;
+    $object = DataObjectMaster::getObject($args);
 
     if (isset($objectinfo)) {
         $objectid = $objectinfo['objectid'];
@@ -102,19 +104,7 @@ function dynamicdata_admin_modifyprop()
         $data['fields'] = array();
     }
 
-    // get possible data sources (with optional extra table)
-// TODO: combine with static tables list below someday ?
-    $params = array();
-    if (!empty($table)) {
-        $params['table'] = $table;
-        $data['table'] = $table;
-    } else {
-        $data['table'] = null;
-    }
-    $data['sources'] = DataStoreFactory::getDataSources($params);
-    if (empty($data['sources'])) {
-        $data['sources'] = array();
-    }
+    $data['sources'] = DataStoreFactory::getDataSources($object->datasources);
 
     $isprimary = 0;
     foreach (array_keys($data['fields']) as $field) {
@@ -158,8 +148,6 @@ function dynamicdata_admin_modifyprop()
         }
         return $data;
     }
-
-// CHECKME: this part is no longer relevant when dealing with actual objects !?
 
     $data['details'] = $details;
 
