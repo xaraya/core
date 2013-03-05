@@ -1,83 +1,87 @@
 <object name="caregories_linkages">
-  <objectid>19</objectid>
+  <objectid>15</objectid>
   <label>Category Linkages</label>
   <module_id>182</module_id>
-  <itemtype>14</itemtype>
+  <itemtype>12</itemtype>
   <class>DataObject</class>
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
-  <maxid>0</maxid>
+  <maxid>17</maxid>
   <access></access>
-  <config>a:1:{s:0:"";a:1:{i:0;s:0:"";}}</config>
   <isalias>true</isalias>
-  <category>19</category>
+  <datastore>relational</datastore>
+  <config>a:1:{s:0:"";a:1:{i:0;s:0:"";}}</config>
+  <sources>a:1:{s:8:&quot;linkages&quot;;a:2:{i:0;s:22:&quot;xar_categories_linkage&quot;;i:1;s:8:&quot;internal&quot;;}}</sources>
+  <relations>a:1:{i:0;a:2:{i:0;s:0:&quot;&quot;;i:1;s:0:&quot;&quot;;}}</relations>
+  <objects>a:1:{i:0;a:2:{i:0;s:0:&quot;&quot;;i:1;s:0:&quot;&quot;;}}</objects>
+  <category></category>
   <properties>
     <property name="id">
-      <id>165</id>
+      <id>118</id>
       <label>ID</label>
       <type>itemid</type>
       <defaultvalue></defaultvalue>
-      <source>xar_categories_linkage.id</source>
+      <source>linkages.id</source>
       <status>65</status>
       <seq>1</seq>
       <configuration></configuration>
     </property>
     <property name="category">
-      <id>151</id>
+      <id>119</id>
       <label>Category</label>
       <type>objectref</type>
       <defaultvalue></defaultvalue>
-      <source>xar_categories_linkage.category_id</source>
+      <source>linkages.category_id</source>
       <status>33</status>
       <seq>2</seq>
       <configuration>a:14:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:20:"validation_notequals";s:0:"";s:17:"validation_equals";s:0:"";s:24:"initialization_refobject";s:10:"categories";s:25:"initialization_store_prop";s:2:"id";s:27:"initialization_display_prop";s:4:"name";s:24:"initialization_firstline";s:0:"";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
     <property name="child_category">
-      <id>152</id>
+      <id>120</id>
       <label>Child Category</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_categories_linkage.child_category_id</source>
+      <source>linkages.child_category_id</source>
       <status>33</status>
       <seq>3</seq>
       <configuration></configuration>
     </property>
     <property name="item_id">
-      <id>153</id>
+      <id>121</id>
       <label>Item ID</label>
       <type>integerbox</type>
       <defaultvalue>0</defaultvalue>
-      <source>xar_categories_linkage.item_id</source>
+      <source>linkages.item_id</source>
       <status>33</status>
       <seq>4</seq>
       <configuration></configuration>
     </property>
     <property name="module">
-      <id>154</id>
+      <id>122</id>
       <label>Module</label>
       <type>module</type>
       <defaultvalue></defaultvalue>
-      <source>xar_categories_linkage.module_id</source>
+      <source>linkages.module_id</source>
       <status>33</status>
       <seq>5</seq>
       <configuration>a:14:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:20:"validation_notequals";s:0:"";s:17:"validation_equals";s:0:"";s:24:"initialization_refobject";s:7:"modules";s:25:"initialization_store_prop";s:2:"id";s:27:"initialization_display_prop";s:4:"name";s:24:"initialization_firstline";s:0:"";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
     </property>
     <property name="itemtype">
-      <id>155</id>
+      <id>123</id>
       <label>Itemtype</label>
       <type>integerbox</type>
       <defaultvalue></defaultvalue>
-      <source>xar_categories_linkage.itemtype</source>
+      <source>linkages.itemtype</source>
       <status>33</status>
       <seq>6</seq>
       <configuration></configuration>
     </property>
     <property name="base_category">
-      <id>156</id>
+      <id>124</id>
       <label>Base Category</label>
       <type>objectref</type>
       <defaultvalue></defaultvalue>
-      <source>xar_categories_linkage.basecategory</source>
+      <source>linkages.basecategory</source>
       <status>33</status>
       <seq>7</seq>
       <configuration>a:14:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:20:"validation_notequals";s:0:"";s:17:"validation_equals";s:0:"";s:24:"initialization_refobject";s:10:"categories";s:25:"initialization_store_prop";s:2:"id";s:27:"initialization_display_prop";s:4:"name";s:24:"initialization_firstline";s:0:"";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>

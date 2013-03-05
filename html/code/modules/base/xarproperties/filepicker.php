@@ -16,6 +16,11 @@ sys::import('xaraya.structures.relativedirectoryiterator');
 
 /**
  * Handle file picker property
+ * Parameters:
+ * basedir          base directory whose contents are displayed
+ * matches          string to filter the directory contents with
+ * extensions       list of valid extensions to show
+ * display_fullname displax filenames with extensions
  */
 class FilePickerProperty extends SelectProperty
 {
