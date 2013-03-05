@@ -92,7 +92,7 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
 class xarUser extends Object
 {
     private static $objectRef;
-    private static $authenticationModules;
+    public static $authenticationModules;
     
     /**
      * Initialise the User System
@@ -127,6 +127,9 @@ class xarUser extends Object
         // Register the UserLogout event
         //xarEvents::register('UserLogout');
     
+        // Populate the GLOBAL for legacy calls
+        $GLOBALS['xarUser_authenticationModules'] =  self::$authenticationModules;
+        
         return true;
     }
 

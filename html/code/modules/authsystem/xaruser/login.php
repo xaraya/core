@@ -29,8 +29,6 @@
  */
 function authsystem_user_login()
 {
-    global $xarUser_authenticationModules;
-
     if (!$_COOKIE) {
         return xarTpl::module('authsystem','user','errors',array('layout' => 'no_cookies'));
     }
@@ -63,7 +61,7 @@ function authsystem_user_login()
     
     // Scan authentication modules and set user state appropriately
     $extAuthentication = false;
-    foreach($xarUser_authenticationModules as $authModName) {
+    foreach(xarUser::$authenticationModules as $authModName) {
 
        switch(strtolower($authModName)) {
        // Ooof, didn't realize we were doing this.  We really need a hook here.
