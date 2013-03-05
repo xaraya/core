@@ -15,6 +15,7 @@
  * @author Xaraya Development Team
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['regid'] the id of the module
+ *        string   $args['name'] module's name
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
@@ -31,6 +32,7 @@ function modules_adminapi_remove(Array $args=array())
     $tables = xarDB::getTables();
 
     // Get module information
+    if (isset($name)) $regid = xarMod::getRegid($name, 'module');
     $modinfo = xarMod::getInfo($regid);
 
     //TODO: Add check if there is any dependents
