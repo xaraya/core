@@ -108,7 +108,7 @@ function arrayTable(args)
         // clone the template 
         var row = tpl.cloneNode(true);
         // match the tpl_id suffix
-        row_re = new RegExp(this.tpl_id + '$');
+        row_re = new RegExp(this.tpl_id);
         // replace the tpl_id suffix with the current index  
         row.id = row.id.replace(row_re, idx);
         // make the row visible 
@@ -117,7 +117,6 @@ function arrayTable(args)
         this.table.appendChild(row);
         // move the template to the end (NOTE: no need to use removeRow method here) 
         this.table.removeChild(tpl); 
-        this.table.appendChild(tpl);
         // reindex the rows 
         this.reIndex();
 
