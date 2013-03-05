@@ -644,35 +644,6 @@ class xarUser extends Object
         if (empty(self::$objectRef) || empty(self::$objectRef->properties[$name])) {
             return false;
         }
-    
-        return true;
-    }
-    
-    /**
-     * 
-     * @return boolean
-     * @throws SQLException
-     * @todo replace with some roles API ?
-    **/
-    static private function setUsersTableUserVar($name, $value, $userId)
-    {
-        $dbconn   = xarDB::getConn();
-        $xartable = xarDB::getTables();
-    
-        $rolestable = $xartable['roles'];
-        $usercolumns = $xartable['users_column'];
-    
-        // The $name variable will be used to get the appropriate column
-        // from the users table.
-        try {
-            $dbconn->begin();
-            $query = "UPDATE $rolestable SET $usercolumns[$name] = ? WHERE id = ?";
-            $stmt = $dbconn->prepareStatement($query);
-            $stmt->executeUpdate(array($value,$userId));
-        } catch (SQLException $e) {
-            $dbconn->rollback();
-            throw $e;
-        }
         return true;
     }
 }
