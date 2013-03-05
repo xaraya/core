@@ -15,6 +15,7 @@
  * @author Marty Vance
  * @param array    $args array of optional parameters<br/>
  *        string   $args['regid'] registered theme id
+ *        string   $args['name'] theme's name
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, THEME_NOT_EXIST
  */
@@ -23,6 +24,7 @@ function themes_adminapi_initialise(Array $args=array())
 
     extract($args);
 
+    if (isset($name)) $regid = xarMod::getRegid($name, 'theme');
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Get theme information
