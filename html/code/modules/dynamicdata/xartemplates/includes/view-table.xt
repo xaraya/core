@@ -29,10 +29,10 @@
                         <xar:if condition="empty($fields[$name])">&#160; 
                         <xar:elseif condition="!empty($linkfield) and $linkfield eq $name and !empty($links[$itemid]['display'])"/>
                             <a href="#$links[$itemid]['display']['olink']#" title="#$links[$itemid]['display']['otitle']#">
-                                <xar:data-output property="$properties[$name]" itemid="$fields['id']" value="$fields[$name]"/>
+                                <xar:data-output property="$properties[$name]" value="$fields[$name]"/>
                             </a>
                         <xar:else />
-                            <xar:data-output property="$properties[$name]" itemid="$fields['id']" value="$fields[$name]"/>
+                            <xar:data-output property="$properties[$name]" value="$fields[$name]"/>
                         </xar:if>
                     </td>
                 </xar:foreach>

@@ -44,8 +44,9 @@ function dynamicdata_adminapi_delete(Array $args=array())
         $itemtype = 0;
     }
 
-    $myobject = DataObjectMaster::getObject(array('moduleid' => $module_id,
-                                         'itemtype' => $itemtype,
+    $args = DataObjectDescriptor::getObjectID(array('moduleid'  => $module_id,
+                                       'itemtype'  => $itemtype));
+    $myobject = DataObjectMaster::getObject(array('objectid' => $args['objectid'],
                                          'itemid'   => $itemid));
     if (empty($myobject)) return;
     if (!$myobject->checkAccess('delete'))

@@ -13,7 +13,7 @@
  *
  */
 
-public $tagged_module_id;
+/*public $tagged_module_id;
 public $tagged_itemtype;
 public $tagged_itemid;
 public $tagger_module_id;
@@ -76,7 +76,7 @@ function __construct($tagged_module_id=null,
     // Security check
     if (!xarSecurityCheck('ViewCategoryLink',0)) return array();
 
-/*
+
     if (count($cids) > 0) {
         if (count($iids) > 0) {
             foreach ($cids as $cid) {
@@ -97,7 +97,7 @@ function __construct($tagged_module_id=null,
     } else {
         if(!xarSecurityCheck('ViewCategoryLink',1,'Link',"$modid:All:All:All")) return;
     }
-*/
+
 
     // dummy cids array when we're going for x categories at a time
     if (isset($groupcids) && count($cids) == 0) {
@@ -251,5 +251,6 @@ function __construct($tagged_module_id=null,
 
     return $leftjoin;
 }
+*/
 
 ?>

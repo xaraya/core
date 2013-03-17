@@ -56,10 +56,11 @@ function modules_admin_install()
         $command = false;
     }
 
-    $data['dependencies'] = $installer->getalldependencies($id);
+    $data['propertydependencies'] = $installer->getpropdependencies($id);
+    $data['moduledependencies'] = $installer->getalldependencies($id);
 
     //Only show the status screen if there are dependencies that cannot be satisfied
-    if (!$command && !empty($data['dependencies']['unsatisfiable'])) {
+    if (!$command && (!empty($data['moduledependencies']['unsatisfiable']) || !empty($data['propertydependencies']['unsatisfiable']))) {
         //Let's make a nice GUI to show the user the options
         $data['id'] = $id;
         //They come in 3 arrays: satisfied, satisfiable and unsatisfiable

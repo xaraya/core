@@ -47,6 +47,6 @@
         </div>
     <xar:elseif condition="$object:itemcount gt $object:numitems"/>
         <!-- show the pager -->
-            <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->itemcount" urltemplate="$object->pagerurl"/>
+        <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->itemcount" urltemplate="$object->pagerurl"/>
     </xar:if>
 </xar:template>
