@@ -58,7 +58,7 @@ class DefaultRoute extends xarRoute
         foreach($pairs as $pair) {
             if (trim($pair) == '') continue;
             $pairparts = explode('=', $pair);
-            if (empty($pairparts[1])) return false;
+            if (!isset($pairparts[1])) return false;
             $params[$pairparts[0]] = urldecode($pairparts[1]);
         }
 
