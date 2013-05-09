@@ -25,7 +25,7 @@
 function modules_admin_main()
 {
     // Security
-    if(!xarSecurityCheck('EditModules')) return;
+    if(!xarSecurityCheck('ViewModules')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();
