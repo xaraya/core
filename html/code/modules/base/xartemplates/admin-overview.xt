@@ -14,7 +14,7 @@
                 The Base module provides overall site configuration options and displays global information about the site to the administrator(s) through its administration menu. It also provides a simple means of adding custom static pages to your site. The Base module is a core module within Xaraya and cannot be removed.
             </p>
             <p>
-                Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('base')))#">here</a>.
+                Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfo',array('id' => xarMod::getRegid('base')))#">here</a>.
             </p>
     
             <h3>Concepts</h3>

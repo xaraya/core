@@ -66,7 +66,7 @@
                     Xaraya and cannot be removed.
                 </p>
                 <p>
-                    Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('blocks')))#">here</a>.
+                    Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfo',array('id' => xarMod::getRegid('blocks')))#">here</a>.
                 </p>
 
                 <h3>Concepts</h3>
