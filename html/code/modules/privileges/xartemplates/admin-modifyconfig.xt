@@ -141,18 +141,8 @@
                         </div>
                     </div>
                 </fieldset>
-                <div class="xar-form-actions">
-                    <div class="xar-row">
-                        <div class="xar-col"></div>
-                        <div class="xar-col">
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                            <input type="hidden" name="phase" id="phase" value="update"/>
-                            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                            <xar:var name="label">Update Privileges Configuration</xar:var>
-                            <xar:button type="submit" label="$label"/>
-                        </div>
-                    </div>
-                </div>
+                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                <xar:template file="update-button" module="base" />
             </form>
         </xar:if>
         <!-- Begin Realms Options -->
@@ -241,18 +231,8 @@
                         </div>
                     </fieldset>
                 </xar:if>
-                <div class="xar-form-actions">
-                    <div class="xar-row">
-                        <div class="xar-col"></div>
-                        <div class="xar-col">
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                            <input type="hidden" name="phase" id="phase" value="update"/>
-                            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                            <xar:var name="label">Update Privileges Configuration</xar:var>
-                            <xar:button type="submit" label="$label"/>
-                        </div>
-                    </div>
-                </div>
+                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                <xar:template file="update-button" module="base" />
             </form>
         </xar:if>
         <!-- Begin Last Resort -->
@@ -311,18 +291,8 @@
                     </xar:if>
                     <xar:set name="dummy">xarSession::setVar('statusmsg','')</xar:set>
                 </fieldset>
-                <div class="xar-form-actions">
-                    <div class="xar-row">
-                        <div class="xar-col"></div>
-                        <div class="xar-col">
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                            <input type="hidden" name="phase" id="phase" value="update"/>
-                            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                            <xar:var name="label">Update Privileges Configuration</xar:var>
-                            <xar:button type="submit" label="$label"/>
-                        </div>
-                    </div>
-                </div>
+                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                <xar:template file="update-button" module="base" />
             </form>
         </xar:if>
         <!-- Begin Masks -->
@@ -336,18 +306,8 @@
                 <xar:set name="object">DataObjectMaster::getObjectList(array('name' => 'privileges_privileges', 'where' => $where))</xar:set>
                 <xar:data-view object="$object"/>
             </fieldset>
-            <div class="xar-form-actions">
-                <div class="xar-row">
-                    <div class="xar-col"></div>
-                    <div class="xar-col">
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                        <input type="hidden" name="phase" id="phase" value="update"/>
-                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                        <xar:var name="label">Update Privileges Configuration</xar:var>
-                        <xar:button type="submit" label="$label"/>
-                    </div>
-                </div>
-            </div>
+            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+            <xar:template file="update-button" module="base" />
         </xar:if>
         <!-- Begin Mask-Based Security Checks by Group -->
         <xar:if condition="$tab eq 'maskbased'">
@@ -410,18 +370,8 @@
                         </div>
                 </div>
                 </fieldset>
-                <div class="xar-form-actions">
-                    <div class="xar-row">
-                        <div class="xar-col"></div>
-                        <div class="xar-col">
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                            <input type="hidden" name="phase" id="phase" value="update"/>
-                            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                            <xar:var name="label">Update</xar:var>
-                            <xar:button type="submit" label="$label"/>
-                        </div>
-                    </div>
-                </div>
+                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                <xar:template file="update-button" module="base" />
             </form>
         </xar:if>
     </div>

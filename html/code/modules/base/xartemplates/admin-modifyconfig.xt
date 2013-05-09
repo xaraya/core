@@ -287,18 +287,8 @@
                     </div>
                 </fieldset>
                 <xar:data-form object="$module_settings"/>
-                <div class="xar-form-actions">
-                    <div class="xar-row">
-                        <div class="xar-col"></div>
-                        <div class="xar-col">
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                            <input type="hidden" name="phase" id="phase" value="update"/>
-                            <xar:var name="label">Update</xar:var>
-                            <xar:button type="submit" label="$label"/>
-                        </div>
-                    </div>
-                </div>
+                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                <xar:template file="update-button" module="base" />
             </form>
             <!-- Begin Security Options -->
             <xar:elseif condition="$tab eq 'security'"/>
@@ -524,35 +514,15 @@
                             You need to install the PHP mcrypt extension to access encryption functionality
                         </xar:if>
                     </fieldset>
-                    <div class="xar-form-actions">
-                        <div class="xar-row">
-                            <div class="xar-col"></div>
-                            <div class="xar-col">
-                                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                                <input type="hidden" name="phase" id="phase" value="update"/>
-                                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                                <xar:var name="label">Update</xar:var>
-                                <xar:button type="submit" label="$label"/>
-                            </div>
-                        </div>
-                    </div>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <xar:template file="update-button" module="base" />
                 </form>
             <!-- Begin Locale Options -->
             <xar:elseif condition="$tab eq 'locales'"/>
                 <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                     <xar:template file="modifyconfig-locales" module="base" type="module"/>
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                    <input type="hidden" name="phase" id="phase" value="update"/>
                     <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                    <div class="xar-form-actions">
-                        <div class="xar-row">
-                            <div class="xar-col"></div>
-                            <div class="xar-col">
-                                <xar:var name="label">Update</xar:var>
-                                <xar:button type="submit" label="$label"/>
-                            </div>
-                        </div>
-                    </div>
+                    <xar:template file="update-button" module="base" />
                 </form>
             <!-- Begin Logging Options -->
             <xar:elseif condition="$tab eq 'logging'"/>
@@ -608,18 +578,8 @@
                                 </div>
                             </div>
                         </fieldset>
-                        <div class="xar-form-actions">
-                            <div class="xar-row">
-                                <div class="xar-col"></div>
-                                <div class="xar-col">
-                                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                                    <input type="hidden" name="phase" id="phase" value="update"/>
-                                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                                    <xar:var name="label">Update</xar:var>
-                                    <xar:button type="submit" label="$label"/>
-                                </div>
-                            </div>
-                        </div>
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                        <xar:template file="update-button" module="base" />
                     </form>
                 </xar:if>
             <!-- Begin Other Options -->
@@ -719,18 +679,8 @@
                         </div>
                     </div>
                 </fieldset>
-                <div class="xar-form-actions">
-                    <div class="xar-row">
-                        <div class="xar-col"></div>
-                        <div class="xar-col">
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                            <input type="hidden" name="phase" id="phase" value="update"/>
-                            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                            <xar:var name="label">Update</xar:var>
-                            <xar:button type="submit" label="$label"/>
-                        </div>
-                    </div>
-                </div>
+                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                <xar:template file="update-button" module="base" />
             </form>
         </xar:if>
     </div><!--/xar-mod-page-body-->
