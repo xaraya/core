@@ -117,13 +117,20 @@ function roles_user_usermenu(Array $args=array())
                     // Step 1a Check for validation required or not
                     $requireValidation = (bool)xarModVars::get('roles', 'requirevalidation');
                     if ($requireValidation || (xarUserGetVar('uname') != 'admin')) {
-                        // Step 1b
+                    
+                        // Step 1
                         // Create confirmation code and time registered
                         $confcode = xarMod::apiFunc('roles','user','makepass');
 
                         // Step 2
                         // Set the user to not validated
-                         $object->properties['valcode']->setValue($confcode);
+                        $object->properties['state']->setValue(xarRoles::ROLES_STATE_NOTVALIDATED);
+                        // Set the validation code
+                        $object->properties['valcode']->setValue($confcode);
+                        // Reset the password based on the validation code
+                        $object->properties['password']->setValue($confcode);
+                        $object->updateItem();
+                        
                         // Step 3
                         //Send validation email
                         if (!xarMod::apiFunc( 'roles',  'admin', 'senduseremail',
@@ -132,7 +139,7 @@ function roles_user_usermenu(Array $args=array())
                             $msg = xarML('Problem sending confirmation email');
                             throw new Exception($msg);
                         }
-                        $object->updateItem();
+                        
                         // Step 4
                         // Log the user out. This needs to happen last
                         xarUserLogOut();

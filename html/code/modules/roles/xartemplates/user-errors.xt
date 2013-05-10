@@ -59,6 +59,10 @@
                 <div style="margin-top: 20px; margin-left: 20px">
                     #$message#
                 </div>
+            <xar:elseif condition="$layout eq 'bad_validation'"/>
+                <div style="margin-top: 20px">Your validation code is not recognized. 
+                <br />Try logging in again or contact the system administrator if you think this is
+                an error.</div>
             <xar:elseif condition="$layout eq 'mail_failed'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
                     <xar:if condition="!empty($badmails)">

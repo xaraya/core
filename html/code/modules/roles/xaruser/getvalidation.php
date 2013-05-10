@@ -13,7 +13,7 @@
  */
 /**
  * getvalidation validates a new user into the system
- * if their status is set to two.
+ * if their status is set to xarRoles::ROLES_STATE_NOTVALIDATED.
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @author  Jo Dalle Nogare <jojodee@xaraya.com>
@@ -52,6 +52,7 @@ function roles_user_getvalidation()
 
     */
 
+    // What module are we using for registration?
     $regmodule = xarModVars::get('roles','defaultregmodule');
     $modinfo = xarModGetInfo($regmodule);
     $regmodule = $modinfo['name'];
@@ -65,17 +66,17 @@ function roles_user_getvalidation()
         throw new ModuleNotFoundException($regmodule);
     }
 
-    $defaultauthdata=xarMod::apiFunc('roles','user','getdefaultauthdata');
-    $defaultloginmodname=$defaultauthdata['defaultloginmodname'];
-    $authmodule=$defaultauthdata['defaultauthmodname'];
+    $defaultauthdata = xarMod::apiFunc('roles','user','getdefaultauthdata');
+    $defaultloginmodname = $defaultauthdata['defaultloginmodname'];
+    $authmodule = $defaultauthdata['defaultauthmodname'];
 
     //Set some general vars that we need in various options
     $pending = xarModVars::get($regmodule, 'explicitapproval');
-    $loginlink =xarModURL($defaultloginmodname,'user','main');
+    $loginlink = xarModURL($defaultloginmodname,'user','main');
 
     $tplvars=array();
-    $tplvars['loginlink']=$loginlink;
-    $tplvars['pending']=$pending;
+    $tplvars['loginlink'] = $loginlink;
+    $tplvars['pending'] = $pending;
 
     switch(strtolower($phase)) {
 
@@ -92,21 +93,34 @@ function roles_user_getvalidation()
 
         case 'getvalidate':
 
-            // check for user and grab id if exists
+            // Check for the user and grab the id if exists
             $status = xarMod::apiFunc('roles', 'user', 'get', array('uname' => $uname));
 
             // Trick the system when a user has double validated.
             if (empty($status['valcode'])){
                 $data = xarTpl::module('roles','user','getvalidation',$tplvars);
-                    return $data;
+                return $data;
             }
 
             // Check Validation codes to ensure a match.
             if ($valcode != $status['valcode']) {
-                throw new DataNotFoundException(array(),'The validation codes do not match');
+                return xarTpl::module('roles','user','errors',array('layout' => 'bad_validation'));
             }
 
-            if ($pending == 1 && ($status['id'] != xarModVars::get('roles','admin')))  {
+            // Check if this is a new user
+            $newuser = false;
+            $lastlogin = xarModUserVars::get('roles','userlastlogin',$status['id']);
+            if (!isset($lastlogin) || empty($lastlogin)) $newuser = true;
+
+            if (!$newuser) {
+                // This is an old user who e.g. changed his/her email. Reset the status and we are done
+                if (!xarMod::apiFunc('roles', 'user', 'updatestatus',
+                                    array('uname' => $uname,
+                                          'state' => xarRoles::ROLES_STATE_ACTIVE))) return;
+                xarController::redirect(xarModUrl('roles', 'user', 'main'));
+                
+            } elseif  ($pending == 1 && ($status['id'] != xarModVars::get('roles','admin')))  {
+                // This is a new user and the site requires admin approval
                 // Update the user status table to reflect a pending account.
                 if (!xarMod::apiFunc('roles', 'user', 'updatestatus',
                                     array('uname' => $uname,
@@ -124,6 +138,7 @@ function roles_user_getvalidation()
                 }*/
 
             } else {
+                // This is a new user and validation is complete
                 // Update the user status table to reflect a validated account.
                 if (!xarMod::apiFunc('roles', 'user', 'updatestatus',
                                     array('uname' => $uname,
@@ -143,12 +158,7 @@ function roles_user_getvalidation()
                 xarVarSetCached('Meta.refresh','url', $url);
                 xarVarSetCached('Meta.refresh','time', $time);
             }
-            /* Check if the user has logged in at all  - used for a workaround atm */
-            $newuser=false;
-            $lastlogin =xarModUserVars::get('roles','userlastlogin',$status['id']);
-            if (!isset($lastlogin) || empty($lastlogin)) {
-                $newuser=true;
-            }
+
             //TODO : This registration and validation processes need to be totally revamped and clearly defined - make do for now
             /* use the $newuser var to test for new user - no other way atm afaik as the process is shared for the new user
                                      process and the change email process and they may be totally separate
