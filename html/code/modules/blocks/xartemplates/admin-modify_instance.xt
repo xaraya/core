@@ -310,14 +310,18 @@
                 </xar:if>
 
                 <xar:if condition="!empty($submitLabel)">
-                    <fieldset>
-                        <div class="xar-form-action xar-align-center">
-                            <input type="hidden" name="phase" id="phase" value="update"/>
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                            <input type="hidden" name="block_id" id="block_id" value="#$block['block_id']#"/>
-                            <input type="hidden" name="interface" id="interface" value="#$interface#"/>
-                            <input type="hidden" name="method" id="method" value="#$method#"/>
-                            <input type="submit" value="#$submitLabel#"/>
+                    <fieldset class="xar-form-actions">
+                        <div class="xar-row">
+                            <div class="xar-col">
+                            </div>
+                            <div class="xar-col">
+                                <input type="hidden" name="phase" id="phase" value="update"/>
+                                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                                <input type="hidden" name="block_id" id="block_id" value="#$block['block_id']#"/>
+                                <input type="hidden" name="interface" id="interface" value="#$interface#"/>
+                                <input type="hidden" name="method" id="method" value="#$method#"/>
+                                <input type="submit" value="#$submitLabel#"/>
+                            </div>
                         </div>
                     </fieldset>
                 </xar:if>
