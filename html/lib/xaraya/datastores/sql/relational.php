@@ -15,6 +15,17 @@ sys::import('xaraya.datastores.sql');
  */
 class RelationalDataStore extends SQLDataStore
 {
+    private $encryptor;
+    
+    function __construct($name=null)
+    {
+        parent::__construct($name);
+        
+        // Load the encryption class in case we have encrypted fields
+        sys::import('xaraya.encryptor');
+        $this->encryptor = xarEncryptor::instance();
+    }
+
     function __toString()
     {
         return "relational";
@@ -89,6 +100,10 @@ class RelationalDataStore extends SQLDataStore
         $index = 0;
         foreach ($result as $row) {
             foreach ($fieldlist as $fieldname) {
+                // Decrypt if required
+                if (!empty($this->object->properties[$fieldname]->initialization_encrypt))
+                    $row[$fieldname] = $this->encryptor->decrypt($row[$fieldname]);
+
                 // Subitem properties get special treatment
                 if (in_array($this->object->properties[$fieldname]->type,array(30069,30120))) {
                     $this->setItemValue($itemid, $row, $fieldname, $this->object);
@@ -141,19 +156,25 @@ class RelationalDataStore extends SQLDataStore
             } elseif (isset($args[$field->name])) {
                 // We have an override through the method's parameters
                 $q->addfield($field->source, $args[$field->name]);
-            } elseif ($field->name == $this->object->primary){
-                // Ignore the primary value if not set
-                if (!isset($itemid)) continue;
-                $q->addfield($field->source, $itemid);
             } elseif ($field->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_IGNORED) {
                 // Ignore the fields with IGNORE status
                 continue;
             } elseif (!in_array($fieldtablealias[0], array_keys($q->tables))) {
                 // Ignore the fields from tables that are foreign
                 continue;
+            } elseif ($field->name == $this->object->primary){
+                // Ignore the primary value if not set
+                if (!isset($itemid)) continue;
+                $q->addfield($field->source, $itemid);
             } else {
                 // No override, just take the value the property already has
-                $q->addfield($field->source, $field->value);
+                // Encrypt if required
+                if (!empty($field->initialization_encrypt)) {
+                    $fieldvalue = $this->encryptor->encrypt($field->value);
+                } else {
+                    $fieldvalue = $field->value;
+                }
+                $q->addfield($field->source, $fieldvalue);
             }
         }
 
@@ -219,15 +240,24 @@ class RelationalDataStore extends SQLDataStore
             } elseif ($field->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_IGNORED) {
                 // Ignore the fields with IGNORE status
                 continue;
-            } elseif (isset($args[$field->name])) {
-                // We have an override through the methods parameters
-                $q->addfield($field->source, $args[$field->name]);
             } elseif (!in_array($fieldtablealias[0], array_keys($q->tables))) {
                 // Ignore the fields from tables that are foreign
                 continue;
+            } elseif (isset($args[$field->name])) {
+                // We have an override through the methods parameters
+                // Encrypt if required
+                if (!empty($field->initialization_encrypt))
+                    $args[$field->name] = $this->encryptor->encrypt($args[$field->name]);
+                $q->addfield($field->source, $args[$field->name]);
             } else {
                 // No override, just take the value the property already has
-                $q->addfield($field->source, $field->value);
+                // Encrypt if required
+                if (!empty($field->initialization_encrypt)) {
+                    $fieldvalue = $this->encryptor->encrypt($field->value);
+                } else {
+                    $fieldvalue = $field->value;
+                }
+                $q->addfield($field->source, $fieldvalue);
             }
         }
 
@@ -342,7 +372,7 @@ class RelationalDataStore extends SQLDataStore
         if (count($this->object->properties) < 1) return;
         
         //Make sure we have a primary field
-        if (empty($this->object->primary)) throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
+//        if (empty($this->object->primary)) throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
 
         // Complete the dataquery
         $q = $this->object->dataquery;
@@ -359,12 +389,13 @@ class RelationalDataStore extends SQLDataStore
         }
         
         // Make sure we include the primary key, even if it won't be displayed
-        if (!in_array($this->object->primary, $this->object->fieldlist)) {
+        if (!empty($this->object->primary) && !in_array($this->object->primary, $this->object->fieldlist)) {
             $q->addfield($this->object->properties[$this->object->primary]->source . ' AS ' . $this->object->primary);
         }
         // CHECKME: the following line makes sure we order the items at least according to ID
         // Is this a good idea?
-        $q->addorder($this->object->properties[$this->object->primary]->source);
+        if (!empty($this->object->primary))
+            $q->addorder($this->object->properties[$this->object->primary]->source);
         
         if (!empty($numitems)) {
             // Add limits if called for
@@ -378,23 +409,28 @@ class RelationalDataStore extends SQLDataStore
         if (empty($result)) return;
 
         // Distribute the results to the appropriate properties
-
         $fordisplay = (isset($args['fordisplay'])) ? $args['fordisplay'] : 0;
-        foreach ($result as $row) {
-            // Get the value of the primary key
-            $itemid = $row[$this->object->primary];
+        foreach ($result as $key => $row) {
+            if (!empty($this->object->primary))  {
+                // Get the value of the primary key
+                $itemid = $row[$this->object->primary];
+            } else {
+                // No primary filed: use the row key
+                $itemid = $key;
+            }
             
             // add this itemid to the list
-            if ($saveids) {
-                $this->_itemids[] = $itemid;
-            }
+            if ($saveids) $this->_itemids[] = $itemid;
 
             // Set the values of the valid properties
-
             foreach ($this->object->fieldlist as $fieldname) {
+                // Decrypt if required
+                if (!empty($this->object->properties[$fieldname]->initialization_encrypt))
+                    $row[$fieldname] = $this->encryptor->decrypt($row[$fieldname]);
+
                 $this->setItemValue($itemid, $row, $fieldname, $this->object, $fordisplay);
             }
-        }    
+        }
    }
 
     /**
@@ -521,12 +557,13 @@ class RelationalDataStore extends SQLDataStore
         }
 
         //Make sure we have a primary field
-        if (empty($this->object->primary)) throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
+//        if (empty($this->object->primary)) throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
 
         // Create the query
         $q = clone $this->object->dataquery;
         $q->clearfields();
-        $q->addfield('COUNT(DISTINCT ' . $this->object->properties[$this->object->primary]->source . ')');
+//        $q->addfield('COUNT(DISTINCT ' . $this->object->properties[$this->object->primary]->source . ')');
+        $q->addfield('COUNT(*)');
 
         // Run the query
         if (!$q->run()) throw new Exception(xarML('Query failed'));
