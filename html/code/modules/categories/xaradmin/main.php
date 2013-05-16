@@ -19,7 +19,6 @@
  */
 function categories_admin_main()
 {
-
     // Security check
     if(!xarSecurityCheck('ViewCategories')) return;
 

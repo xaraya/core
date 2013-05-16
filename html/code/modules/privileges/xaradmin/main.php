@@ -25,7 +25,7 @@
 function privileges_admin_main()
 {
     // Security
-    if(!xarSecurityCheck('EditPrivileges')) return;
+    if(!xarSecurityCheck('ViewPrivileges')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();
