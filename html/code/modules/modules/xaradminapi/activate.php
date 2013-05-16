@@ -15,6 +15,7 @@
  * @access public
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['regid'] module's registered id
+ *        string   $args['name'] module's name
  * @return boolean
  * @throws BAD_PARAM
  */
@@ -23,6 +24,7 @@ function modules_adminapi_activate(Array $args=array())
     extract($args);
 
     // Argument check
+    if (isset($name)) $regid = xarMod::getRegid($name, 'module');
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     $modInfo = xarMod::getInfo($regid);

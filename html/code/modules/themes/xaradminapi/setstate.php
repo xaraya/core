@@ -15,6 +15,7 @@
  * @author Marty Vance
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['regid'] the theme id<br/>
+ *        string   $args['name'] themes's name
  *        integer  $args['state'] the state
  * @throws BAD_PARAM,NO_PERMISSION
  */
@@ -24,6 +25,7 @@ function themes_adminapi_setstate(Array $args=array())
     extract($args);
 
     // Argument check
+    if (isset($name)) $regid = xarMod::getRegid($name, 'theme');
     if (!isset($regid)) throw new EmptyParameterException('regid');
     if (!isset($state)) throw new EmptyParameterException('state');
 

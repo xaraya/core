@@ -16,6 +16,7 @@
  * @author Marty Vance
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['regid'] the id of the theme
+ *        string   $args['name'] theme's name
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
@@ -30,6 +31,7 @@ function themes_adminapi_remove(Array $args=array())
     $tables = xarDB::getTables();
 
     // Get theme information
+    if (isset($name)) $regid = xarMod::getRegid($name, 'theme');
     $themeInfo = xarThemeGetInfo($regid);
     $defaultTheme = xarModVars::get('themes','default_theme');
 
