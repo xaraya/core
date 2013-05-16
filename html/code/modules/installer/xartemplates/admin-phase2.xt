@@ -296,22 +296,18 @@ POSSIBILITY OF SUCH DAMAGES.
     </div>
         <form action="install.php" method="post">
             <div class="xar-row"> 
-                <div class="xar-col">
-                    <input type="radio" name="agree" id="agree" value="agree"/>            
-                    &#160;
-                    <label for="agree">
-                        I have read and agree to abide by the Terms and Conditions as stated above
-                    </label>
-                </div>
+                <input type="radio" name="agree" id="agree" value="agree"/>            
+                &#160;
+                <label for="agree">
+                    I have read and agree to abide by the Terms and Conditions as stated above
+                </label>
             </div>
             <div class="xar-row">
-                <div class="xar-col">
-                    <input type="radio" name="agree" id="disagree" value="disagree" checked="checked"/>
-                    &#160;
-                    <label for="disagree">
-                        I have read and do NOT agree to abide by the Terms and Conditions as stated above
-                    </label>
-                </div>
+                <input type="radio" name="agree" id="disagree" value="disagree" checked="checked"/>
+                &#160;
+                <label for="disagree">
+                    I have read and do NOT agree to abide by the Terms and Conditions as stated above
+                </label>
             </div>
             <xar:if condition="$retry eq 1">
                 <p style="color: #f00;">

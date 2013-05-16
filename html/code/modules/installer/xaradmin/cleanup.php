@@ -53,9 +53,6 @@ function installer_admin_cleanup()
 
 
 /**
- * SoloBlocks Scenario
- *
- * Blocks module now registers block types automatically
  * The following code takes care of setting up groups and block instances
 **/
     // refresh block types (auto registers available solo/module block types) 
@@ -79,6 +76,13 @@ function installer_admin_cleanup()
         if (!xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => $name))) {
             $content = $group_type['type_info'];
             $content['box_template'] = $template;
+            if ($name == 'admin') {
+                // Set the access to the admin blockgroup to limit it by default 
+                // to members of the Administrators group
+                $content['display_access']['group'] = 2;
+                $content['modify_access']['group'] = 2;
+                $content['delete_access']['group'] = 2;
+            }
             if (!xarMod::apiFunc('blocks', 'instances', 'createitem',
                 array(
                     'type_id' => $group_type['type_id'],
@@ -102,6 +106,11 @@ function installer_admin_cleanup()
         $menu_block = xarMod::apiFunc('blocks', 'blocks', 'getobject', $menu_type);
         // attach the left group to the menu instance
         $menu_block->attachGroup($left_group['block_id']);
+        // For now we don't show the dynamicdata module in the menu to anonymous users
+        // because the content can only be seen by logged in users
+        $content = $menu_block->getContent();
+        $content['modulelist']['dynamicdata']['view_access']['group'] = -5;
+        $menu_block->setContent($content);
         // create menu instance
         if (!$menu_id =xarMod::apiFunc('blocks', 'instances', 'createitem',
             array(
