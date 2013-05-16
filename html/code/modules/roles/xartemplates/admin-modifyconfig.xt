@@ -137,18 +137,8 @@
                             </div>
                         </div>
                     </fieldset>
-                    <div class="xar-form-actions">
-                        <div class="xar-row">
-                            <div class="xar-col"></div>
-                            <div class="xar-col">
-                                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                                <input type="hidden" name="phase" id="phase" value="update"/>
-                                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                                <xar:var name="label">Update Roles Configuration</xar:var>
-                                <xar:button type="submit" label="$label"/>
-                            </div>
-                        </div>
-                    </div>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <xar:template file="update-button" module="base" />
                 </form>
                 <!--
                     - - - - - - - - - - - - - - - - - Begin User Variable Options - - - - - - - - - - - - - - - - - - -
@@ -226,45 +216,25 @@
                                 </tr>
                             </table>
                         </fieldset>
-                        <div class="xar-form-actions">
-                            <div class="xar-row">
-                                <div class="xar-col"></div>
-                                <div class="xar-col">
-                                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                                    <input type="hidden" name="phase" id="phase" value="update"/>
-                                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                                    <xar:var name="label">Update Roles Configuration</xar:var>
-                                    <xar:button type="submit" label="$label"/>
-                                </div>
-                            </div>
-                        </div>
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                        <xar:template file="update-button" module="base" />
                     </form>
                 <!--
                     - - - - - - - - - - - - - - - - - Begin User Hooks Options - - - - - - - - - - - - - - - - - - -
                 -->
                 <xar:elseif condition="$tab eq 'hooks'"/>
                 <xar:if condition="!empty($hooks)">
-                  <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
-                      <fieldset>
+                    <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
+                       <fieldset>
                             <legend>Default Hooks For Users</legend>
                             <xar:foreach in="$hooks" key="$hookmodule">
                                 #$hooks[$hookmodule]#
                             </xar:foreach>
-                      </fieldset>
-                      <div class="xar-form-actions">
-                            <div class="xar-row">
-                                <div class="xar-col"></div>
-                                <div class="xar-col">
-                                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                                    <input type="hidden" name="phase" id="phase" value="update"/>
-                                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                                    <xar:var name="label">Update Roles Configuration</xar:var>
-                                    <xar:button type="submit" label="$label"/>
-                                </div>
-                            </div>
-                      </div>
+                        </fieldset>
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                        <xar:template file="update-button" module="base" />
                     </form>
-                    <xar:else />
+                <xar:else />
                     <p>No hooks are enabled for Users.</p>
                 </xar:if>
                 <!--
@@ -279,20 +249,10 @@
                             <xar:foreach in="$hooks" key="$hookmodule">
                             #$hooks[$hookmodule]#</xar:foreach>
                         </fieldset>
-                        <div class="xar-form-actions">
-                            <div class="xar-row">
-                                <div class="xar-col"></div>
-                                <div class="xar-col">
-                                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                                    <input type="hidden" name="phase" id="phase" value="update"/>
-                                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                                    <xar:var name="label">Update Roles Configuration</xar:var>
-                                    <xar:button type="submit" label="$label"/>
-                                </div>
-                            </div>
-                        </div>
+                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                        <xar:template file="update-button" module="base" />
                     </form>
-                    <xar:else />
+                <xar:else />
                     <p>No hooks are enabled for Groups.</p>
                 </xar:if>
                 <!--
@@ -322,18 +282,8 @@
                         <h4>More Settings</h4>
                         <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="default" fieldlist="$mylist"/>
                     -->
-                    <div class="xar-form-actions">
-                        <div class="xar-row">
-                            <div class="xar-col"></div>
-                            <div class="xar-col">
-                                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                                <input type="hidden" name="phase" id="phase" value="update"/>
-                                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                                <xar:var name="label">Update</xar:var>
-                                <xar:button type="submit" label="$label"/>
-                            </div>
-                        </div>
-                    </div>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <xar:template file="update-button" module="base" />
                 </form>
                 <!--
                     - - - - - - - - - - - - - - - - - Begin Debugging Options - - - - - - - - - - - - - - - - - - -
@@ -365,18 +315,8 @@
                             </div>
                         </div>
                     </fieldset>
-                    <div class="xar-form-actions">
-                        <div class="xar-row">
-                            <div class="xar-col"></div>
-                            <div class="xar-col">
-                                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                                <input type="hidden" name="phase" id="phase" value="update"/>
-                                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                                <xar:var name="label">Update</xar:var>
-                                <xar:button type="submit" label="$label"/>
-                            </div>
-                        </div>
-                    </div>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <xar:template file="update-button" module="base" />
                 </form>
             </xar:if>
         </div><!--xar-mod-page-body-->

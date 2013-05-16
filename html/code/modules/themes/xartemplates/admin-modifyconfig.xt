@@ -172,7 +172,7 @@
 	                    <xar:set name="value">
 	                        <xar:var scope="module" module="themes" name="SiteFooter"/>
 	                    </xar:set>
-	                    <xar:data-input type="textarea" name="footer" cols="40" rows="3" value="$value" class="xar-form-textareamedium"/>
+	                    <xar:data-input type="textarea" name="footer" cols="60" rows="5" value="$value" class="xar-form-textareamedium"/>
                     </div>
                 </div>
                 #xarVarDelCached('Mod.Variables.themes','SiteFooter')# 
@@ -354,17 +354,7 @@
                     </div>
                 </xar:if>
             </fieldset>
-            <div class="xar-form-actions">
-                <div class="xar-row">
-                    <div class="xar-col"></div>
-                    <div class="xar-col">
-                        <xar:data-input type="hidden" name="phase" id="phase" value="update"/>
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                        <xar:var name="label">Update</xar:var>
-                        <xar:button type="submit" label="$label"/>
-                    </div>
-                </div>
-            </div>
+            <xar:template file="update-button" module="base" />
         </form>
         <form action="#xarServer::getCurrentURL()#" method="post">
             <fieldset>

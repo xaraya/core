@@ -3,86 +3,76 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-    <div class="xar-mod-page-head">
-        <h2>            
-            Modify DynamicData Configuration            
-        </h2>
-        <xar:set name="params">array()</xar:set>
-        <xar:if condition="$tab eq ''">
-            <xar:set name="tab">'general'</xar:set>
-        </xar:if>
-        <xar:set name="tabclass">''</xar:set>
-        <ul class="xar-tabs xar-alt xar-norm-outline">
-            <xar:var name="title">Choose dynamicdata aspect to configure</xar:var>
-            <xar:var name="label">Aspect</xar:var>
-            <li class="xar-tabs-label" title="#$title#">#$label#</li>
-            <xar:set name="tabclass">'xar-tab'</xar:set>
-            <xar:set name="linkclass">''</xar:set>
-            <xar:set name="y">$params['tab']='general'</xar:set>
-            <xar:if condition="$tab eq 'general'">
-                <xar:set name="tabclass">'xar-tab-active'</xar:set>
-                <xar:set name="linkclass">''</xar:set>
+        <div class="xar-mod-page-head">
+            <h2>            
+                Modify DynamicData Configuration            
+            </h2>
+            <xar:set name="params">array()</xar:set>
+            <xar:if condition="$tab eq ''">
+                <xar:set name="tab">'general'</xar:set>
             </xar:if>
-            <li class="#$tabclass#">
-                <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">General</a>
-            </li>
+            <xar:set name="tabclass">''</xar:set>
+            <ul class="xar-tabs xar-alt xar-norm-outline">
+                <xar:var name="title">Choose dynamicdata aspect to configure</xar:var>
+                <xar:var name="label">Aspect</xar:var>
+                <li class="xar-tabs-label" title="#$title#">#$label#</li>
+                <xar:set name="tabclass">'xar-tab'</xar:set>
+                <xar:set name="linkclass">''</xar:set>
+                <xar:set name="y">$params['tab']='general'</xar:set>
+                <xar:if condition="$tab eq 'general'">
+                    <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                    <xar:set name="linkclass">''</xar:set>
+                </xar:if>
+                <li class="#$tabclass#">
+                    <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">General</a>
+                </li>
             
-            <xar:set name="y">$params['tab']='managehooks'</xar:set>
-            <xar:set name="tabclass">'xar-tab'</xar:set>
-            <xar:set name="linkclass">''</xar:set>
-            <xar:if condition="$tab eq 'managehooks'">
-                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                <xar:set name="y">$params['tab']='managehooks'</xar:set>
+                <xar:set name="tabclass">'xar-tab'</xar:set>
                 <xar:set name="linkclass">''</xar:set>
-            </xar:if>
-            <xar:set name="y">$params['tab']='managehooks'</xar:set>
-            <li class="#$tabclass#">
-                <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">Manage Hooks</a>
-            </li>
-        </ul>
-    </div><!--/xar-mod-page-head-->
-    <div class="xar-mod-page-body">
+                <xar:if condition="$tab eq 'managehooks'">
+                    <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                    <xar:set name="linkclass">''</xar:set>
+                </xar:if>
+                <xar:set name="y">$params['tab']='managehooks'</xar:set>
+                <li class="#$tabclass#">
+                    <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">Manage Hooks</a>
+                </li>
+            </ul>
+        </div><!--/xar-mod-page-head-->
+        <div class="xar-mod-page-body">
 
-        <!-- General tab -->
-        <xar:if condition="$tab eq 'general'">
-            <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
-                <h3>                
-                    General Options                
-                </h3>
-                <xar:data-form object="$module_settings"/>
-                <fieldset>
-                    <legend>                    
-                        Defaults                    
-                    </legend>
-                    <xar:template file="config_defaults"/>
-                </fieldset>
-                <fieldset>
-                    <legend>                    
-                        Display                    
-                    </legend>
-                    <xar:template file="config_display"/>
-                </fieldset>
-                <div class="xar-form-actions">
-                    <div class="xar-row">
-                        <div class="xar-col"></div>
-                        <div class="xar-col">
-                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
-                            <input type="hidden" name="phase" id="phase" value="update"/>
-                            <xar:var name="label">Update</xar:var>
-                            <xar:button type="submit" label="$label"/>
-                        </div>
-                    </div>
-                </div>
-            </form>
+            <!-- General tab -->
+            <xar:if condition="$tab eq 'general'">
+                <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
+                    <h3>                
+                        General Options                
+                    </h3>
+                    <xar:data-form object="$module_settings"/>
+                    <fieldset>
+                        <legend>                    
+                            Defaults                    
+                        </legend>
+                        <xar:template file="config_defaults"/>
+                    </fieldset>
+                    <fieldset>
+                        <legend>                    
+                            Display                    
+                        </legend>
+                        <xar:template file="config_display"/>
+                    </fieldset>
+                    <xar:template file="update-button" module="base" />
+                </form>
             <xar:elseif condition="$tab eq 'managehooks'"/>
-            <!-- Hooks tab -->
-            <fieldset>
-                <legend>
-                    Configure Dynamicdata Hooks
-                </legend>
-                <xar:set name="url">#xarModURL('dynamicdata','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
-                <xar:module main="false" module="modules" type="admin" func="hooks" curhook="dynamicdata" return_url="$url"/>
-            </fieldset>
-        </xar:if>
-    </div><!--/xar-mod-page-body-->
+                <!-- Hooks tab -->
+                <fieldset>
+                    <legend>
+                        Configure Dynamicdata Hooks
+                    </legend>
+                    <xar:set name="url">#xarModURL('dynamicdata','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
+                    <xar:module main="false" module="modules" type="admin" func="hooks" curhook="dynamicdata" return_url="$url"/>
+                </fieldset>
+            </xar:if>
+        </div><!--/xar-mod-page-body-->
     </div>
 </xar:template>
