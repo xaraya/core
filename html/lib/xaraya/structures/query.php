@@ -335,16 +335,16 @@ class Query
         else throw new BadParameterException(null,'This function can only take 1 or 2 parameters');
 
         $done = false;
-        for ($i=0;$i<count($this->fields);$i++) {
+        foreach ($this->fields as $key => $field) {
             // if we already have this field , bail
-            if ($this->fields[$i] == $argsarray) {$done = true; break;}
+            if ($this->fields[$key] == $argsarray) {$done = true; break;}
             
             // If at least the name and table are identical, we might still be able to add alias info
-            if ($this->fields[$i]['name'] == $argsarray['name'] && $this->fields[$i]['table'] == $argsarray['table']) {
+            if ($this->fields[$key]['name'] == $argsarray['name'] && isset($this->fields[$key]['table']) && $this->fields[$key]['table'] == $argsarray['table']) {
                 if (isset($argsarray['alias'])) {
-                    $this->fields[$i]['alias'] = $argsarray['alias'];                
+                    $this->fields[$key]['alias'] = $argsarray['alias'];                
                 }
-                if (isset($argsarray['value'])) $this->fields[$i]['value'] = $argsarray['value'];
+                if (isset($argsarray['value'])) $this->fields[$key]['value'] = $argsarray['value'];
                 $done = true;
                 break;
             }
