@@ -264,7 +264,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
          */
         $systemArgs = array();
         sys::import('xaraya.log');
-        xarLog_init($systemArgs);
+        xarLog::init($systemArgs);
         
         /**
          * Make sure we can get time for logging
@@ -436,7 +436,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
                             'defaultTimeZone'     => xarConfigVars::get(null, 'Site.Core.TimeZone'),
                             'defaultTimeOffset'   => xarConfigVars::get(null, 'Site.MLS.DefaultTimeOffset'),
                             );
-        xarMLS_init($systemArgs);
+        xarMLS::init($systemArgs);
     
 
         /*
@@ -508,7 +508,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
     
             // Start User System
             $systemArgs = array('authenticationModules' => xarConfigVars::get(null, 'Site.User.AuthenticationModules'));
-            xarUser_init($systemArgs);
+            xarUser::init($systemArgs);
             $whatToLoad ^= xarCore::BIT_USER;
         // we're about done here - everything else requires Users !?
         } else {

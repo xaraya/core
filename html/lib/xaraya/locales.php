@@ -64,7 +64,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
     }
 
     $fileName = sys::varpath() . '/locales/$locale/locale.php';
-    if (!$parsedLocale = xarMLS__parseLocaleString($locale)) return false;
+    if (!$parsedLocale = xarMLS::parseLocaleString($locale)) return false;
     $siteCharset = $parsedLocale['charset'];
     $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
     $utf8FileName = sys::varpath() . '/locales/$utf8locale/locale.php';
@@ -87,7 +87,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
 /* TODO: delete after new backend testing
         if ($GLOBALS['xarMLS_backendName'] == 'xml2php') {
 */
-            if (!$parsedLocale = xarMLS__parseLocaleString($locale)) return $falsereturn;
+            if (!$parsedLocale = xarMLS::parseLocaleString($locale)) return $falsereturn;
             $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
             $siteCharset = $parsedLocale['charset'];
             $res = $GLOBALS['xarMLS_localeDataLoader']->load($utf8locale);
@@ -354,14 +354,14 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
             return '';
         }
         if ($addoffset) {
-            $timestamp = xarMLS_userTime();
+            $timestamp = xarMLS::userTime();
         } else {
             $timestamp = time();
         }
     } elseif ($timestamp >= 0) {
         if ($addoffset) {
             // adjust for the user's timezone offset
-            $timestamp += xarMLS_userOffset($timestamp) * 3600;
+            $timestamp += xarMLS::userOffset($timestamp) * 3600;
         }
     } else {
         // invalid dates < 0 (e.g. from strtotime) return an empty date string
@@ -432,14 +432,14 @@ function xarLocaleFormatDate($format = null, $timestamp = null, $addoffset = tru
             return '';
         }
         if ($addoffset) {
-            $timestamp = xarMLS_userTime();
+            $timestamp = xarMLS::userTime();
         } else {
             $timestamp = time();
         }
     } elseif ($timestamp >= 0) {
         if ($addoffset) {
             // adjust for the user's timezone offset
-            $timestamp += xarMLS_userOffset($timestamp) * 3600;
+            $timestamp += xarMLS::userOffset($timestamp) * 3600;
         }
     } else {
         // invalid dates < 0 (e.g. from strtotime) return an empty date string
@@ -483,7 +483,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
 {
     // if we don't have a timestamp, get the user's current time
     if(!isset($timestamp)) {
-        $timestamp = xarMLS_userTime();
+        $timestamp = xarMLS::userTime();
     } elseif ($timestamp < 0) {
         // invalid dates < 0 (e.g. from strtotime) return an empty date string
         return '';
@@ -610,7 +610,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
                 break;
 
             case '%z' :
-                $user_offset = (string) xarMLS_userOffset($timestamp);
+                $user_offset = (string) xarMLS::userOffset($timestamp);
                 // check to see if this is a negative or positive offset
                 $f_offset = strstr($user_offset,'-')  ? '-' : '+';
                 $user_offset = str_replace('-','',$user_offset); // replace the - if it exists
