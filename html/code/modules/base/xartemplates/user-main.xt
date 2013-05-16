@@ -40,10 +40,9 @@
 
         <h3>Highlights of this release</h3>
         <ul>
-            <li>Rewritten core: faster and lighter</li>
-            <li>Rewritten Blocklayout templating system based on XSL </li>
-            <li>Enhanced dynamicdata functionality: more consistent and flexible objects and properties for more power and better performance</li>
-            <li>New Installer and Default themes</li>
+            <li>Categories included as a core module</li>
+            <li>Rewritten Dynamicdata module with enhanced functionality</li>
+            <li>Enhanced  mapper functionality for short URLs and other URL paths</li>
         </ul>
 
         <h3>Support</h3>
@@ -91,6 +90,9 @@
                     </li>
                     <li>
                         The <a href="#xarModURL('blocks','admin')#">Blocks</a> module lets you create and manage blocks.
+                    </li>
+                    <li>
+                        The <a href="#xarModURL('categories','admin')#">Categories</a> module lets you create and manage categories that can be applied to your data objects.
                     </li>
                     <li>
                         The <a href="#xarModURL('dynamicdata','admin')#">DynamicData</a> module makesit possible to create custom objects for your applications.

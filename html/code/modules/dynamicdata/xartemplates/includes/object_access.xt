@@ -152,14 +152,18 @@
         further limit access e.g. for Anonymous visitors to only see those items where the property 'Age' is greater than 12.
         <br/><em>Note: if you specify several filters for the same group, they will be combined (AND).</em>
     </fieldset>
-    <fieldset class="xar-form-actions">
-        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-        <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
-        <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
-        <xar:if condition="!empty($return_url)">
-            <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
-        </xar:if>
-        <xar:var name="label">Update</xar:var>
-        <xar:button type="submit" label="$label" name="confirm"/>
-    </fieldset>
+    <div class="xar-row">
+        <div class="xar-col">
+        </div>
+        <div class="xar-col">
+            <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+            <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+            <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
+            <xar:if condition="!empty($return_url)">
+                <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+            </xar:if>
+            <xar:var name="label">Update</xar:var>
+            <xar:button type="submit" label="$label" name="confirm"/>
+        </div>
+    </div>
 </xar:template>
