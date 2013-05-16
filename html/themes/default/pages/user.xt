@@ -30,7 +30,9 @@
                             <xar:var name="SiteSlogan" scope="module" module="themes"/>
                         </p>
                     </div>
-                    <xar:module id="modulespace"/>
+                    <xar:if condition="xarUser::isLoggedIn()">
+                        <xar:module id="modulespace"/>
+                    </xar:if>
                 </div>
                 <div id="sideInfo1" class="sideInfo">
                     #$leftgroup#
