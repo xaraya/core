@@ -86,6 +86,7 @@ function categories_init()
     if (!$result) return;
 
     $fields = array(
+        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
         'category_id'   => array('type'=>'integer','null'=>false),
         'child_category_id'   => array('type'=>'integer','null'=>false),
         'item_id'   => array('type'=>'integer','null'=>false),
