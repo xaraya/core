@@ -102,7 +102,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
 **/
     protected function getModuleLink($link, $expand=false)
     {
-        if (empty($link['modname']) || empty($link['visible']) || (bool)xarModVars::get($link['modname'], $this->menumodtype . '_menu_link')) return;
+        if (empty($link['modname']) || empty($link['visible']) || (bool)xarModVars::get($link['modname'], $this->menumodtype . '_menu_link')) return false;
 
         $modname = $link['modname'];
         $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
@@ -116,7 +116,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
                 'group' => $this->modulelist[$modname]['view_access']['group'],
                 'level' => $this->modulelist[$modname]['view_access']['level'],
             );
-            if (!$accessproperty->check($args)) return;
+            if (!$accessproperty->check($args)) return false;
         }
         if (!empty($this->modulelist[$modname]['alias_name']) && empty($link['label'])) {
             $aliasname = $this->modulelist[$modname]['alias_name'];
