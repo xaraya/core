@@ -15,14 +15,14 @@
  */
 interface ixarBlock
 {
-    const TYPE_STATE_ACTIVE = 1; 
-    const TYPE_STATE_MISSING = 2;
-    const TYPE_STATE_ERROR = 3;    
+    const TYPE_STATE_ACTIVE          = 1; 
+    const TYPE_STATE_MISSING         = 2;
+    const TYPE_STATE_ERROR           = 3;    
     const TYPE_STATE_MOD_UNAVAILABLE = 4; 
 
-    const BLOCK_STATE_HIDDEN = 0;   // Hidden blocks still execute, they just don't render
+    const BLOCK_STATE_HIDDEN   = 0; // Hidden blocks still execute, they just don't render
     const BLOCK_STATE_INACTIVE = 1; // Inactive blocks don't execute, don't render
-    const BLOCK_STATE_VISIBLE = 2;
+    const BLOCK_STATE_VISIBLE  = 2;
 
     public static function render(Array $data=array());
     public static function renderBlock(Array $args=array());

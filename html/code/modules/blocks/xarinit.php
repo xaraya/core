@@ -205,6 +205,7 @@ function blocks_init()
                              'limit' => 20));
     xarDefineInstance('blocks','BlockItem',$instances);
 
+    xarRegisterMask('ViewBlocks','All','blocks','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditBlocks','All','blocks','All','All','ACCESS_EDIT');
     xarRegisterMask('AddBlocks','All','blocks','All','All','ACCESS_ADD');
     xarRegisterMask('ManageBlocks','All','blocks','All','All','ACCESS_DELETE');

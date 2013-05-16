@@ -308,7 +308,7 @@ class xarMod extends Object implements IxarMod
      */
     static function getRegId($modName, $type = 'module')
     {
-        $ids = self::getIds($modName);
+        $ids = self::getIds($modName, $type);
         return !is_null($ids['regid']) ? (int)$ids['regid'] : null;
     }
 

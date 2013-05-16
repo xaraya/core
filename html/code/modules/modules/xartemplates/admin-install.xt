@@ -53,7 +53,7 @@
                                             </xar:if>
                                             <br />Install this module first, then try this installation again. 
                                         </li>
-                                    <xar:elseif condition="is_numeric($modInfo['id'])"/>
+                                    <xar:elseif condition="is_numeric($modInfo['regid'])"/>
                                         <li>
                                             <xar:if condition="isset($dependencyinfo[$modInfo['regid']])">
                                             Missing a module #$dependencyinfo[$modInfo]# (ID #$modInfo#). 

@@ -37,7 +37,6 @@ class Base_AdminmenuBlockDisplay extends Base_AdminmenuBlock implements iBlockMo
  */
     public function display()
     {
-
         $data = $this->getContent();
 
         foreach ($this->xarmodules as $mod) {

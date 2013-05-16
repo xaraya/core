@@ -36,6 +36,7 @@ function mail_init()
     xarModRegisterHook('item', 'delete', 'API', 'mail', 'admin', 'hookmaildelete');
     xarModRegisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
 
+    xarRegisterMask('ViewMail','All','mail','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditMail','All','mail','All','All','ACCESS_EDIT');
     xarRegisterMask('AddMail','All','mail','All','All','ACCESS_ADD');
     xarRegisterMask('ManageMail', 'All','mail','All','All','ACCESS_DELETE');

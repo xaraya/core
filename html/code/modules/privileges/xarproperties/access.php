@@ -273,7 +273,7 @@ class AccessProperty extends DataProperty
         return $access;
     }
     
-    public function checkGroup(Array $groups=array())
+    public function checkGroup($groups=array())
     {
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
         $access = false;

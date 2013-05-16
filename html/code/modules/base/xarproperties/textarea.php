@@ -25,7 +25,6 @@ class TextAreaProperty extends DataProperty
 
     public $display_rows = 2;
     public $display_columns = 50;
-    public $initialization_encrypt = false;
 
     function __construct(ObjectDescriptor $descriptor)
     {

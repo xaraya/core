@@ -77,7 +77,7 @@ function modules_admin_list()
     
     foreach ($items as $key => $item) {
         $item['iscore'] = in_array($item['name'], $coremods);
-        $item['info_url'] = xarModURL('modules', 'admin', 'modinfonew', 
+        $item['info_url'] = xarModURL('modules', 'admin', 'modinfo', 
             array('id' => $item['regid']));
         $return_url = xarServer::getCurrentURL(array('state' => $data['state'] != 0 ? 0 : null), false, $item['name']);
         $return_url = urlencode($return_url);

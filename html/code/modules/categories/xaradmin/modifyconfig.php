@@ -90,7 +90,6 @@
         }
         $data['hooks'] = $hooks;
         $data['tabmodule'] = $tabmodule;
-        $data['authid'] = xarSecGenAuthKey();
         return $data;
     }
 ?>

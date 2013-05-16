@@ -215,7 +215,6 @@
                         </xar:foreach>
                     </xar:if>
                     <div class="xar-align-center xar-clearboth">
-                        <input type="hidden" name="parents" id="parents" value="#$parents#"/>
                         <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
                         <input type="hidden" name="itemid" id="itemid" value="#$id#"/>
                         <input type="hidden" name="tplmodule" id="tplmodule" value="roles"/>

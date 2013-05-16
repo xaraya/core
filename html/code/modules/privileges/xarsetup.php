@@ -175,11 +175,13 @@ function initializeSetup()
     xarMasks::register('AttachRole','All','roles','Relation','All',xarSecurityLevel('ACCESS_ADD'));
     xarMasks::register('RemoveRole','All','roles','Relation','All',xarSecurityLevel('ACCESS_DELETE'));
 
+    xarMasks::register('ViewPrivileges','All','privileges','All','All',xarSecurityLevel('ACCESS_OVERVIEW'));
     xarMasks::register('EditPrivileges','All','privileges','All','All',xarSecurityLevel('ACCESS_EDIT'));
     xarMasks::register('AddPrivileges','All','privileges','All','All',xarSecurityLevel('ACCESS_ADD'));
     xarMasks::register('ManagePrivileges','All','privileges','All','All',xarSecurityLevel('ACCESS_DELETE'));
     xarMasks::register('AdminPrivileges','All','privileges','All','All',xarSecurityLevel('ACCESS_ADMIN'));
 
+    xarMasks::register('ViewModules','All','modules','All','All',xarSecurityLevel('ACCESS_OVERVIEW'));
     xarMasks::register('EditModules','All','modules','All','All',xarSecurityLevel('ACCESS_EDIT'));
     xarMasks::register('ManageModules','All','modules','All','All',xarSecurityLevel('ACCESS_DELETE'));
     xarMasks::register('AdminModules','All','modules','All','All',xarSecurityLevel('ACCESS_ADMIN'));
