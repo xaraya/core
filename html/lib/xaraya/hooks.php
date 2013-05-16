@@ -240,9 +240,15 @@ class xarHooks extends xarEvents
         // Delete hook
         try {
             $dbconn->begin();
-            $query = "DELETE FROM $htable
-                      WHERE observer = ? AND subject = ?";
-            $bindvars = array($observer_id, $subject_id);
+            if ($observer == 'all') {
+                $query = "DELETE FROM $htable
+                          WHERE subject = ?";
+                $bindvars = array($subject_id);
+            } else {
+                $query = "DELETE FROM $htable
+                          WHERE observer = ? AND subject = ?";
+                $bindvars = array($observer_id, $subject_id);
+            }
             // itemtype -1 = detach from all subject itemtypes 
             if ($itemtype !== -1) {
                 $query .= " AND itemtype = ?";
