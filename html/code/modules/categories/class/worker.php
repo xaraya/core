@@ -143,9 +143,9 @@
             // Aliases for 1.x modules calling categories
         // FIXME: no way to have get the same field twice with different aliases ?
             //$q->addfield('base.category_id AS cid');
-            if (!empty($module))  $q->eq('module_id',xarMod::getRegID($module));
-            if (!empty($module_id))  $q->eq('module_id',$module_id);
-            if (isset($itemtype))  $q->eq('itemtype',$itemtype);
+            if (!empty($module))  $q->eq('module_id',(int)xarMod::getRegID($module));
+            if (!empty($module_id))  $q->eq('module_id',(int)$module_id);
+            if (isset($itemtype))  $q->eq('itemtype',(int)$itemtype);
             $q->addorder('base.id');
         //    $q->qecho();
             if (!$q->run()) return;
