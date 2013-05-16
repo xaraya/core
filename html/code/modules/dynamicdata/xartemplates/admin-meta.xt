@@ -114,7 +114,7 @@
                             <label for="xml" class="xar-form-label">Definition:</label>
                         </div>
                         <div class="xar-col">
-                                <textarea name="xml" id="xml" class="xar-form-textarealarge">
+                                <textarea name="xml" id="xml" class="xar-form-textareaxlarge">
                                     <xar:if condition="$export eq 'ddl'">
                                     <xar:template file="exportddl"/>
                                     <xar:else />

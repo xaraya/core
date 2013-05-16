@@ -74,7 +74,7 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <textarea name="notifymsg" id="notifymsg" class="xar-form-textarealarge">#$notifymsg#</textarea>
+                        <textarea name="notifymsg" id="notifymsg" class="xar-form-textareaxlarge">#$notifymsg#</textarea>
                     </div>
                 </div>
             </fieldset>
@@ -91,7 +91,7 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <textarea name="lockedoutmsg" id="lockedoutmsg" class="xar-form-textarealarge">#$lockedoutmsg#</textarea>
+                        <textarea name="lockedoutmsg" id="lockedoutmsg" class="xar-form-textareaxlarge">#$lockedoutmsg#</textarea>
                     </div>
                 </div>
             </fieldset>
