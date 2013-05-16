@@ -1,44 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <form action="#xarModURL('authsystem','user','login')#" method="post" class="xar-margin-none">
-        <xar:set name="id">'returnurl'.$_bl_block_id</xar:set>
-        <xar:set name="unameid">'uname'.$_bl_block_id</xar:set>
-        <xar:set name="passid">'pass'.$_bl_block_id</xar:set>
-        <xar:set name="remembermeid">'rememberme'.$_bl_block_id</xar:set>
-        <xar:data-input type="hidden" name="redirecturl" id="$id" value="$return_url"/>
-        
+    <form id="authsystemBlocksLogin" action="#xarModURL('authsystem','user','login')#" method="post">
         <fieldset>
-	        <div class="row">
-		        <div class="col">
-			        <xar:var name="label">Enter your user name</xar:var>
-			        <label for="#$unameid#" title="#$label#">Username:</label>
-		        </div>
-		        <div class="col">
-			        <xar:data-input type="textbox" class="xar-fullwidth" name="uname" id="$unameid" maxlength="64"/>
-		        </div>
-	        </div>
-	        <div class="row">
-		        <div class="col">
-			        <xar:var name="label">Enter your password</xar:var>
-			        <label for="#$passid#" title="#$label#">Password:</label>
-			    </div>
-		        <div class="col">
-	        		<xar:data-input type="password" class="xar-fullwidth" name="pass" id="$passid" maxlength="64"/>
-	        	</div>
-	        </div>
-        </fieldset>
-        
-        <fieldset class="xar-form-actions">
-	        <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') ne 'High'">
-	            <label class="xar-displayblock" for="#$remembermeid#">
-	                <xar:data-input type="checkbox" name="rememberme" id="$remembermeid" value="1"/>
-	                Don't ask for password
-	            </label>
-	        </xar:if>
-	        <xar:var name="label">Log In</xar:var>
-            <xar:button type="submit" label="$label"/>
-	        <a href="#xarModURL('roles','user','lostpassword')#" class="xar-action-secondary">Request new password</a>
+            <legend>Login</legend>
+            <input type="hidden" name="redirecturl" id="returnurl#$blockid#"
+            value="#$return_url#"/>
+            <div class="textInputContainer">
+                <label for="uname#$blockid#" title="#xarML('Enter your user name')#">
+                Username:</label>
+                <input type="text" name="uname" id="uname#$blockid#" maxlength="64"/>
+            </div>
+            <div class="passInputContainer">
+                <label for="pass#$blockid#" title="#xarML('Enter your password')#">
+                Password:</label>
+                <input type="password" name="pass" id="pass#$blockid#" maxlength="64"/>
+            </div>
+            <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') ne 'High'">
+                <div class="checkInputContainer">
+                    <input type="checkbox" name="rememberme" id="rememberme#$blockid#" value="1"/>&#160;
+                    <label for="rememberme#$blockid#">Don't ask for password</label>
+                </div>
+            </xar:if>
+            <div class="submitInputContainer">
+                <input type="submit" value="#xarML('Log In')#"/>
+            </div>
+            <p>
+                <a href="#xarModURL('roles','user','lostpassword')#">Request new password</a>
+            </p>
         </fieldset>
     </form>
 </xar:template>
