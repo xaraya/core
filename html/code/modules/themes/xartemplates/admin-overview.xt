@@ -14,7 +14,7 @@
                 The Themes module manages the themes available on your Xaraya installation, which in turn define the site's display and look-and-feel. It also provides performance and development options for administrators and theme developers. The Themes module is a core module within Xaraya and cannot be removed.
             </p>
             <p>
-                Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('themes')))#">here</a>.
+                Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfo',array('id' => xarMod::getRegid('themes')))#">here</a>.
             </p>
     
             <h3>Concepts</h3>

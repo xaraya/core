@@ -15,7 +15,7 @@
                 different types of access (viewing, changing, deleting etc.) to resources and content on the site. They are the basic components of Xaraya's security system. The Privileges module is a core module within Xaraya and cannot be removed. 
             </p>
             <p>
-                Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfonew',array('id' => xarMod::getRegid('privileges')))#">here</a>.
+                Detail information on this module can be found <a href="#xarModURL('modules','admin','modinfo',array('id' => xarMod::getRegid('privileges')))#">here</a>.
             </p>
             <p>Here are some of the things you can do with privileges:</p>
             <ul>
