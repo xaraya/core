@@ -558,6 +558,11 @@ class Query
                                              'conj' => $this->andoperator,
                                              'active' => 1);
             if (!is_array($field)) $field = array($field);
+            
+            // Make the conjunctions below ths one inactive, so as to avoid writng them twice
+            foreach ($field as $condition) {
+                if (isset($this->conjunctions[$condition])) $this->conjunctions[$condition]['active'] = 0;
+            }
         }
         return $key;
     }
@@ -573,6 +578,11 @@ class Query
                                              'conj' => $this->oroperator,
                                              'active' => 1);
             if (!is_array($field)) $field = array($field);
+
+            // Make the conjunctions below ths one inactive, so as to avoid writng them twice
+            foreach ($field as $condition) {
+                if (isset($this->conjunctions[$condition])) $this->conjunctions[$condition]['active'] = 0;
+            }
         }
         return $key;
     }
@@ -825,8 +835,6 @@ class Query
             }
         }
         $this->cstring = trim($this->cstring);
-//        if (substr($this->cstring,0,1) == '(') 
-//            $this->cstring = substr($this->cstring,1,strlen($this->cstring)-2);
         return $this->cstring;
     }
 
