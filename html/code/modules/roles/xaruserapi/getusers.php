@@ -23,7 +23,7 @@ function roles_userapi_getUsers(Array $args=array())
     extract($args);
 
     if(!isset($id)) throw new EmptyParameterException('id');
-
+    if(empty($id)) return array();
 
 // Security Check
     if(!xarSecurityCheck('ReadRoles')) return;
