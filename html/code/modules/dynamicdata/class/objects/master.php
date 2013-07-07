@@ -438,95 +438,8 @@ class DataObjectMaster extends Object
      * @todo no ref return?
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
     **/
-    static function getObjectInfo(Array $args=array())
-    {
-        if (!isset($args['objectid']) && (!isset($args['name']))) {
-           throw new Exception(xarML('Cannot get object information without an objectid or a name'));
-        }
 
-        $cacheKey = 'DynamicData.ObjectInfo';
-        if (!empty($args['name'])) {
-            $infoid = $args['name'];
-        } elseif (!empty($args['objectid'])) {
-            $infoid = (int)$args['objectid'];
-        } else {
-            if (empty($args['moduleid'])) {
-                // try to get the current module from elsewhere
-                $args = DataObjectDescriptor::getModID($args);
-            }
-            if (empty($args['itemtype'])) {
-                // set default itemtype
-                $args['itemtype'] = 0;
-            }
-            $infoid = $args['moduleid'].':'.$args['itemtype'];
-        }
-        if(xarCoreCache::isCached($cacheKey,$infoid)) {
-            return xarCoreCache::getCached($cacheKey,$infoid);
-        }
-
-        $dbconn = xarDB::getConn();
-        xarMod::loadDbInfo('dynamicdata','dynamicdata');
-        $xartable = xarDB::getTables();
-
-        $dynamicobjects = $xartable['dynamic_objects'];
-
-        $bindvars = array();
-        xarLogMessage('DD: query in getObjectInfo');
-        $query = "SELECT id,
-                         name,
-                         label,
-                         module_id,
-                         itemtype,
-                         class,
-                         filepath,
-                         urlparam,
-                         maxid,
-                         config,
-                         access,
-                         datastore,
-                         sources,
-                         relations,
-                         objects,
-                         isalias
-                  FROM $dynamicobjects ";
-        if (!empty($args['name'])) {
-            $query .= " WHERE name = ? ";
-            $bindvars[] = $args['name'];
-        } elseif (!empty($args['objectid'])) {
-            $query .= " WHERE id = ? ";
-            $bindvars[] = (int) $args['objectid'];
-        } else {
-            $query .= " WHERE module_id = ?
-                          AND itemtype = ? ";
-            $bindvars[] = (int) $args['moduleid'];
-            $bindvars[] = (int) $args['itemtype'];
-        }
-
-        $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars);
-        if(!$result->first()) return;
-        $info = array();
-        list(
-            $info['objectid'], $info['name'],     $info['label'],
-            $info['moduleid'], $info['itemtype'],
-            $info['class'], $info['filepath'],
-            $info['urlparam'], $info['maxid'],    
-            $info['config'],
-            $info['access'],
-            $info['datastore'],
-            $info['sources'],
-            $info['relations'],
-            $info['objects'],
-            $info['isalias']
-        ) = $result->fields;
-        $result->close();
-
-        xarCore::setCached($cacheKey,$info['objectid'],$info);
-        xarCore::setCached($cacheKey,$info['name'],$info);
-        return $info;
-    }
-
-    private static function _getObjectInfo(Array $args=array())
+    private static function getObjectInfo(Array $args=array())
     {
         if (!isset($args['objectid']) && (!isset($args['name']))) {
            throw new Exception(xarML('Cannot get object information without an objectid or a name'));
@@ -604,7 +517,7 @@ class DataObjectMaster extends Object
     **/
     static function &getObject(Array $args=array())
     {
-        $info = self::_getObjectInfo($args);
+        $info = self::getObjectInfo($args);
         
         if (empty($info)) {
             if (isset($args['name'])) $identifier = xarML('the name is #(1)',$args['name']);
@@ -715,7 +628,7 @@ class DataObjectMaster extends Object
         }
 // FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
         // Complete the info if this is a known object
-        $info = self::_getObjectInfo($args);
+        $info = self::getObjectInfo($args);
         if (empty($info)) {
             if (isset($args['name'])) $identifier = xarML('the name is #(1)',$args['name']);
             if (isset($args['objectid'])) $identifier = xarML('the objectid is #(1)',$args['objectid']);
@@ -799,7 +712,7 @@ class DataObjectMaster extends Object
 
     static function isObject(Array $args)
     {
-        $info = self::_getObjectInfo($args);
+        $info = self::getObjectInfo($args);
         return !empty($info);
     }
 
