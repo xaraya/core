@@ -331,11 +331,11 @@ class CelkoPositionProperty extends DataProperty
             while ((count($item_Stack) > 0 ) &&
                    ($item_Stack[count($item_Stack)-1]['indentation'] >= $item['indentation'])
                   ) {
-               array_pop($item_Stack);
+                array_pop($item_Stack);
             }
 
             foreach ($item_Stack as $stack_cat) {
-                    $items[$key]['slash_separated'] .= $stack_cat['name'].'&#160;/&#160;';
+                $items[$key]['slash_separated'] .= $stack_cat['name'].'&#160;/&#160;';
             }
 
             array_push($item_Stack, $item);
