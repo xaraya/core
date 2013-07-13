@@ -247,7 +247,7 @@ class xarBlock extends Object implements ixarBlock
             return;
         
         $object = new $classname($blockinfo);
-        
+
         return $object;
         
     }
@@ -296,7 +296,7 @@ class xarBlock extends Object implements ixarBlock
                 $block->setBlockTemplate(null);
             }
             return xarTpl::block(
-                $block->module, $block->type, $tplData, $block->block_template, $block->template_base);
+                $block->module, $block->type, $tplData, $block->block_template, $block->template_base, $block->tplmodule);
         } elseif (!empty($tplData) && is_string($tplData)) {
             return $tplData;
         } else {
