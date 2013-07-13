@@ -41,6 +41,7 @@
       <xsl:text>'title'    =&gt; "</xsl:text><xsl:value-of select="@title"/><xsl:text>",&nl;</xsl:text>
       <xsl:text>'template' =&gt; "</xsl:text><xsl:value-of select="@template"/><xsl:text>",&nl;</xsl:text>
       <xsl:text>'state'    =&gt; "</xsl:text><xsl:value-of select="@state"/><xsl:text>",&nl;</xsl:text>
+      <xsl:text>'tplmodule'=&gt; "</xsl:text><xsl:value-of select="@tplmodule"/><xsl:text>",&nl;</xsl:text>
       <!-- If ancestral blockgroup tags set a template attribute, use that here -->
       <xsl:text>'box_template' =&gt; ('</xsl:text>
       <xsl:value-of select="ancestor::xar:blockgroup[@template]"/>
@@ -50,7 +51,7 @@
       <xsl:call-template name="atts2args">
         <xsl:with-param
           name="nodeset"
-          select="@*[name() != 'instance' and name() != 'module' and name() != 'type' and name() != 'name' and  name() != 'title' and name() != 'template' and name() != 'state'] "/>
+          select="@*[name() != 'instance' and name() != 'module' and name() != 'type' and name() != 'name' and  name() != 'title' and name() != 'template' and name() != 'state' and name() != 'tplmodule'] "/>
       </xsl:call-template>
       <xsl:text>))</xsl:text>
     </xsl:when>

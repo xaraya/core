@@ -62,6 +62,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     protected $template_base;
     protected $block_template;
     protected $box_template;
+    protected $tplmodule;
 
     // Block caching configuration, supplied by blocks subsystem (dbinfo, or over-ridden by blocktag) 
     protected $nocache             = 0; // 0 = caching on; 1 = caching off;
@@ -214,7 +215,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     final public function getInstanceInfo()
     {
         $allowed = array(
-            'block_id', 'name', 'state', 'title', 'group_id', 'group', 
+            'block_id', 'name', 'state', 'title', 'group_id', 'group', 'tplmodule'
         ); 
         $info = array();
         foreach ($allowed as $p)

@@ -398,7 +398,7 @@ class xarTpl extends Object
  * @throws FileNotFoundException
  * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
  */
-    public static function block($modName, $blockType, $tplData = array(), $tplName = NULL, $tplBase = NULL)
+    public static function block($modName, $blockType, $tplData = array(), $tplName = NULL, $tplBase = NULL, $tplModule = NULL)
     {
         // use name of blocktype as base unless over-ridden
         $tplBase = empty($tplBase) ? $blockType : $tplBase;
@@ -406,8 +406,8 @@ class xarTpl extends Object
             // get module block template (current > common > module)
             $sourceFileName = self::getScopeFileName('module', $modName, $tplBase, $tplName, 'blocks');
         } else {
-            // get standalone block template (current > common > block)
-            $sourceFileName = self::getScopeFileName('block', $blockType, $tplBase, $tplName);
+            // get standalone block template (current > common > module override > block)
+            $sourceFileName = self::getScopeFileName('block', $blockType, $tplBase, $tplName, '', $tplModule);
         }
         if (empty($sourceFileName)) {
             $msg = "Block: [#(1)],[#(2)],[#(3)]";

@@ -51,6 +51,7 @@ abstract class BasicBlock extends BlockType implements iBlock
     // File Information, supplied by developer, never changes during a versions lifetime, required
     protected $type = 'basicblock';
     protected $module = ''; // module block type belongs to, if any
+    protected $tplmodule = ''; // module calling the block, that may have its own template for it
     protected $text_type = 'Basic Block';  // Block type display name
     protected $text_type_long = 'Parent class for all block instances'; // Block type description
     protected $xarversion = '0.0.0';    // must be a 3 point version number

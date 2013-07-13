@@ -263,7 +263,6 @@ class xarBlock extends Object implements ixarBlock
  */        
     public static function guiMethod(iBlock $block, $method, $block_tpl=null)
     {
-
         if (!method_exists($block, $method)) 
             throw new FunctionNotFoundException($method);
         

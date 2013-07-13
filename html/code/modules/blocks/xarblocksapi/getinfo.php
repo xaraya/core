@@ -114,7 +114,9 @@ function blocks_blocksapi_getinfo(Array $args=array())
     // title over-ride             
     if (!empty($args['title']))
         $blockinfo['title'] = $args['title'];
-    
+    if (!empty($args['tplmodule'])) 
+        $blockinfo['tplmodule'] = $args['tplmodule'];
+
     $content = $blockinfo['content'];
 
     // caching over-rides
@@ -126,7 +128,7 @@ function blocks_blocksapi_getinfo(Array $args=array())
         $content['usershared'] = $args['usershared'];
     if (isset($args['cacheexpire']))
         $content['cacheexpire'] = $args['cacheexpire'];
-    
+
     // template over-rides from block tag 
     if (!empty($args['template'])) {
         if (strpos($args['template'], ';') !== false) {
@@ -151,7 +153,7 @@ function blocks_blocksapi_getinfo(Array $args=array())
         'type_category', 'nocache', 'pageshared', 'usershared', 'cacheexpire',
         'add_access', 'modify_access', 'delete_access', 'display_access', 'expire', 
         'box_template', 'block_template', 'instance_groups', 'show_preview', 'show_help',
-    );                
+    );
     foreach ($content as $k => $v) {
         if (in_array($k, $to_skip) || !isset($args[$k])) continue;        
         $datatype = gettype($v);
