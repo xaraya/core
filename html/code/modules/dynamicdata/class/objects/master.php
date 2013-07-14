@@ -439,7 +439,7 @@ class DataObjectMaster extends Object
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
     **/
 
-    private static function getObjectInfo(Array $args=array())
+    public static function getObjectInfo(Array $args=array())
     {
         if (!isset($args['objectid']) && (!isset($args['name']))) {
            throw new Exception(xarML('Cannot get object information without an objectid or a name'));
