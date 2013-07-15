@@ -31,7 +31,11 @@ function dynamicdata_adminapi_importpropertytypes(Array $args=array())
     if(!isset($dirs)) {
        $dirs = array();
     }
-    $proptypes = PropertyRegistration::importPropertyTypes($flush,$dirs);
+    try {
+        $proptypes = PropertyRegistration::importPropertyTypes($flush,$dirs);
+    } catch (Exception $e) {
+        throw $e;
+    }
     return $proptypes;
 }
 ?>
