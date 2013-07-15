@@ -116,7 +116,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
                 'group' => $this->modulelist[$modname]['view_access']['group'],
                 'level' => $this->modulelist[$modname]['view_access']['level'],
             );
-            if (!$accessproperty->check($args)) return;
+            if (!$accessproperty->check($args)) return false;
         }
         if (!empty($this->modulelist[$modname]['alias_name']) && empty($link['label'])) {
             $aliasname = $this->modulelist[$modname]['alias_name'];
