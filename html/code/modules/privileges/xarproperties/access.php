@@ -229,6 +229,7 @@ class AccessProperty extends DataProperty
                 // This is a dropdown
                 $this->initialization_group_multiselect = false;
                 if ($group == 0) $disabled = true;
+                $group = array($group);
             }
 
             if ($exclusive) {
