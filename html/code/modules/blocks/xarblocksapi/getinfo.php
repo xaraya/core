@@ -117,7 +117,12 @@ function blocks_blocksapi_getinfo(Array $args=array())
     if (!empty($args['tplmodule'])) 
         $blockinfo['tplmodule'] = $args['tplmodule'];
 
-    $content = $blockinfo['content'];
+    // Allow overrides from the template
+    if (isset($args['content'])) {
+        $content = $args['content'] + $blockinfo['content'];
+    } else {
+        $content = $blockinfo['content'];
+    }
 
     // caching over-rides
     if (isset($args['nocache']))

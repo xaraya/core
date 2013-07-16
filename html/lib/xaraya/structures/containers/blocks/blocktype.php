@@ -251,9 +251,12 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     final protected function setConfiguration()
     {
         $allowed = array_keys($this->getConfiguration());
-        if (empty($this->block_id)) { 
-            $content = !empty($this->blockinfo['type_info']) ? $this->blockinfo['type_info'] : array();
+        if (empty($this->block_id)) {
+            // We assume this is a block tag: attributes overwrite the type_info
+            if (!empty($this->blockinfo['type_info'])) $content = $this->blockinfo['content'] + $this->blockinfo['type_info'];
+            $content = $this->blockinfo['content'];
         } else {
+            // We assume a block created via the UI
             $content = $this->blockinfo['content'];
         }
         foreach ($content as $p => $v) {
@@ -286,8 +289,11 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     {
         if (empty($content)) {
             if (empty($this->block_id)) { 
-                $content = !empty($this->blockinfo['type_info']) ? $this->blockinfo['type_info'] : array();
+                // We assume this is a block tag: attributes overwrite the type_info
+                if (!empty($this->blockinfo['type_info'])) $content = $this->blockinfo['content'] + $this->blockinfo['type_info'];
+                $content = $this->blockinfo['content'];
             } else {
+                // We assume a block created via the UI
                 $content = $this->blockinfo['content'];
             }
         }
