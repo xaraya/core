@@ -548,8 +548,8 @@ class xarTpl extends Object
                 break;
             }
         }
-        // $tplPart may have been empty,
-        $sourceFileName = str_replace('//','/',$sourceFileName);
+        // Some parts may have been empty, remove extra slashes
+        $sourceFileName = preg_replace('%\/\/+%','/',$sourceFileName);
 
         xarCoreCache::setCached('Templates.Element', $cachename, $sourceFileName);
 
@@ -671,8 +671,8 @@ class xarTpl extends Object
             $sourceFileName = '';
         }        
 
-        // Subpart may have been empty,
-        $sourceFileName = str_replace('//','/',$sourceFileName);
+        // Some parts may have been empty, remove extra slashes
+        $sourceFileName = preg_replace('%\/\/+%','/',$sourceFileName);
 
         return $sourceFileName;
     }
