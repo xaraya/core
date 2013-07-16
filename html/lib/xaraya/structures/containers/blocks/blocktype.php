@@ -254,7 +254,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
         if (empty($this->block_id)) {
             // We assume this is a block tag: attributes overwrite the type_info
             if (!empty($this->blockinfo['type_info'])) $content = $this->blockinfo['content'] + $this->blockinfo['type_info'];
-            $content = $this->blockinfo['content'];
+            else $content = $this->blockinfo['content'];
         } else {
             // We assume a block created via the UI
             $content = $this->blockinfo['content'];
@@ -291,7 +291,7 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
             if (empty($this->block_id)) { 
                 // We assume this is a block tag: attributes overwrite the type_info
                 if (!empty($this->blockinfo['type_info'])) $content = $this->blockinfo['content'] + $this->blockinfo['type_info'];
-                $content = $this->blockinfo['content'];
+                else $content = $this->blockinfo['content'];
             } else {
                 // We assume a block created via the UI
                 $content = $this->blockinfo['content'];
