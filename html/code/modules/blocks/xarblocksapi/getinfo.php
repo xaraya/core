@@ -115,7 +115,12 @@ function blocks_blocksapi_getinfo(Array $args=array())
     if (!empty($args['title']))
         $blockinfo['title'] = $args['title'];
     
-    $content = $blockinfo['content'];
+    // Allow overrides from the template
+    if (isset($args['content'])) {
+        $content = $args['content'] + $blockinfo['content'];
+    } else {
+        $content = $blockinfo['content'];
+    }
 
     // caching over-rides
     if (isset($args['nocache']))
