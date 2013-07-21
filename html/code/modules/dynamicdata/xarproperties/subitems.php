@@ -132,7 +132,7 @@ class SubItemsProperty extends DataProperty
  */
     public function mountValue($itemid=0)
     {
-        $this->setItemsData($this->getItemsData());
+        $this->_setItemsData($this->_getItemsData());
         return true;
     }
 
@@ -192,7 +192,7 @@ class SubItemsProperty extends DataProperty
                 }
             } else {
                     // 3. Otherwise get the values from the parent object
-                    $data['items'] = $this->getItemsData();
+                    $data['items'] = $this->_getItemsData();
             }
 
             // 4. If still no items and we are passing default values from the property, use them
@@ -250,8 +250,27 @@ class SubItemsProperty extends DataProperty
         return parent::showOutput($data);
     }
 
-    // FIXME: getitemsdata and setitemsdata should operate as opposites
-    public function getItemsData($withkeys=0)
+/*
+ * The public function just returns the contents of the itemsdata array corresponding to this property's key
+ */
+    public function getItemsData()
+    {
+        $name = 'dd_'.$this->id;
+        if (!isset($this->itemsdata[$name])) $this->itemsdata[$name] = array();
+        return $this->itemsdata[$name];
+    }
+
+/*
+ * The public function adds the key to the args and saves as the contents of the itemsdata array corresponding to this property's key
+ */
+    public function setItemsData($args=array())
+    {
+        $name = 'dd_'.$this->id;
+        $this->itemsdata[$name] = $args;
+    }
+    
+    // FIXME: _getitemsdata and _setitemsdata should operate as opposites
+    private function _getItemsData($withkeys=0)
     {
         $name = 'dd_'.$this->id;
         $items = $this->transposeItems();
@@ -260,7 +279,7 @@ class SubItemsProperty extends DataProperty
         return $items[$name];
     }
 
-    public function setItemsData($args=array(), $withnokeys=0)
+    private function _setItemsData($args=array(), $withnokeys=0)
     {
         if ($withnokeys) {
             $this->itemsdata = $args;
