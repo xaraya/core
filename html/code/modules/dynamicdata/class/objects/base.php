@@ -69,6 +69,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         /* General sequence:
          * 1. Run the datastore's getItem method
+         * 2. Run the property-specific mountItem method for properties using the virtual datastore
          *
          * This may need to be adjusted in the future
          */
@@ -82,6 +83,13 @@ class DataObject extends DataObjectMaster implements iDataObject
             try {
                 $property->value = $property->castType($property->value);
             } catch(Exception $e) {}
+        }
+
+        foreach ($this->getFieldList() as $fieldname) {
+            if (empty($this->properties[$fieldname]->source) &&
+                method_exists($this->properties[$fieldname],'mountValue')) {
+                $this->properties[$fieldname]->mountValue($this->itemid);
+            }
         }
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
@@ -384,7 +392,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         /* General sequence:
          * 1. Run the property-specific createValue methods for properties using the current datastore
-         * 2. Run the object's createItem method
+         * 2. Run the datastore's createItem method
          * 3. Run the property-specific createValue methods for properties using the virtual datastore
          *
          * This may need to be adjusted in the future
@@ -428,7 +436,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         /* General sequence:
          * 1. Run the property-specific updateValue methods for properties using the current datastore
-         * 2. Run the object's updateItem method
+         * 2. Run the datastore's updateItem method
          * 3. Run the property-specific updateValue methods for properties using the virtual datastore
          *
          * This may need to be adjusted in the future

@@ -104,50 +104,20 @@ class SubItemsProperty extends DataProperty
         return $isvalid;
     }
 
+/*
+ * Note: "create" refers to the operation being performed by the parent item.
+ */
     public function createValue($itemid=0)
     {
-        list($sublink, $link) = $this->getLinks();
-        // Create or update each item
-        try {
-            if (empty($newprefix)) {
-                // Creation happens programmatically
-                $newprefix = 'dd_'.$this->id;
-            } else {
-                // Creation happens via UI submit, checkInput has run
-                $newprefix = array_shift($this->prefixarray);
-            }
-
-            // Only do this if we actually have any items to be created/updated (might just be a delete call)
-            if (isset($this->itemsdata[$newprefix])) {
-                foreach ($this->itemsdata[$newprefix] as $itemdata) {
-                    $primary =& $this->subitemsobject->properties[$this->subitemsobject->primary];
-                    $this->subitemsobject->setFieldValues($itemdata);
-                    $primary =& $this->subitemsobject->properties[$this->subitemsobject->primary];
-                    if (empty($primary->value)) {
-                        // Insert the link value to the parent object
-                        $this->subitemsobject->properties[$sublink]->value = $this->objectref->properties[$link]->value;
-                        $itemid = $this->subitemsobject->createItem();
-                    } elseif ($primary->value) {
-                        $itemid = $this->subitemsobject->updateItem();
-                    }
-                // Clear the value of the primary index in preparation for the next round
-                    $primary->value = 0;
-                    $this->subitemsobject->itemid = 0;
-                }
-            }
-        } catch (Exception $e) {
-            $msg = xarML('Subitem create/update failed: #(1)',$this->name);
-            throw new Exception($msg);
-        }
-        // Delete any items that are no longer present
-        $this->deleteValue($itemid);
-        
-        return true;
+        return $this->valueFunction($itemid, 'create');
     }
 
+/*
+ * Note: "update" refers to the operation being performed by the parent item.
+ */
     public function updateValue($itemid=0)
     {
-        return $this->createValue($itemid);
+        return $this->valueFunction($itemid, 'update');
     }
 
     public function deleteValue($itemid=0)
@@ -155,6 +125,15 @@ class SubItemsProperty extends DataProperty
         foreach($this->todelete as $id)
             $this->subitemsobject->deleteItem(array('itemid' => $id));
         return $itemid;
+    }
+
+/*
+ * Move the items from the parent object to the subitem's itemsdata property
+ */
+    public function mountValue($itemid=0)
+    {
+        $this->setItemsData($this->getItemsData());
+        return true;
     }
 
     public function showInput(Array $data = array())
@@ -268,23 +247,28 @@ class SubItemsProperty extends DataProperty
             $this->localmodule = $info[0];
             $data['localmodule'] = $this->localmodule;
         }
-
         return parent::showOutput($data);
     }
 
     // FIXME: getitemsdata and setitemsdata should operate as opposites
-    public function getItemsData()
+    public function getItemsData($withkeys=0)
     {
         $name = 'dd_'.$this->id;
         $items = $this->transposeItems();
-        if (!isset($items[$name])) return array();
+        if (!isset($items[$name])) $items[$name] = array();
+        if ($withkeys) return $items;
         return $items[$name];
     }
 
-    public function setItemsData($args=array())
+    public function setItemsData($args=array(), $withnokeys=0)
     {
-        $name = 'dd_'.$this->id;
-        $this->itemsdata[$name] = $args;
+        if ($withnokeys) {
+            $this->itemsdata = $args;
+        } else {
+            $name = 'dd_'.$this->id;
+            $this->itemsdata[$name] = $args;
+        }
+        return true;
     }
 
     private function transposeItems()
@@ -331,5 +315,57 @@ class SubItemsProperty extends DataProperty
         }
         return true;
     }   
+
+/*
+ * This function creates or updates subitems.
+ * Note that an update of the parent update does not imply the subitems are all updated:
+ * We might be creating new subitems even while updating the parent item.
+ * However, when creating a new parent item, all the subitems are created, too.
+ *
+ */
+    private function valueFunction($itemid=0, $functiontype='create')
+    {
+        list($sublink, $link) = $this->getLinks();
+        // Create or update each item
+        try {
+            if (empty($newprefix)) {
+                // Creation happens programmatically
+                $newprefix = 'dd_'.$this->id;
+            } else {
+                // Creation happens via UI submit, checkInput has run
+                $newprefix = array_shift($this->prefixarray);
+            }
+
+            // Only do this if we actually have any items to be created/updated (might just be a delete call)
+            if (isset($this->itemsdata[$newprefix])) {
+                foreach ($this->itemsdata[$newprefix] as $itemdata) {
+                    $primary =& $this->subitemsobject->properties[$this->subitemsobject->primary];
+                    $this->subitemsobject->setFieldValues($itemdata);
+                    $primary =& $this->subitemsobject->properties[$this->subitemsobject->primary];
+                    
+                    // If we are creating a new parent item, we need to set the primary index to 0
+                    if ($functiontype == 'create') $primary->value = 0;
+                    
+                    if (empty($primary->value)) {
+                        // Insert the link value to the parent object
+                        $this->subitemsobject->properties[$sublink]->value = $this->objectref->properties[$link]->value;
+                        $itemid = $this->subitemsobject->createItem();
+                    } else {
+                        $itemid = $this->subitemsobject->updateItem();
+                    }
+                // Clear the value of the primary index in preparation for the next round
+                    $primary->value = 0;
+                    $this->subitemsobject->itemid = 0;
+                }
+            }
+        } catch (Exception $e) {
+            $msg = xarML('Subitem create/update failed: #(1)',$this->name);
+            throw new Exception($msg);
+        }
+        // Delete any items that are no longer present
+        $this->deleteValue($itemid);
+        
+        return true;
+    }
 }
 ?>
