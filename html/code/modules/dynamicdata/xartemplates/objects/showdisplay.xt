@@ -10,9 +10,7 @@
         <xar:set name="layout">'default'</xar:set>
     </xar:if>
     <xar:if condition="$layout eq 'default'">
-        <table class="xar-fullwidth xar-table">
         <xar:foreach in="$properties" key="$name" value="$property">
-            <tr><td>
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:data-label property="$properties[$name]" for="id"/>
@@ -21,9 +19,7 @@
                     <xar:data-output property="$properties[$name]"/>
                 </div>
             </div>
-            </td></tr>
         </xar:foreach>
-        </table>
     <xar:else />
         <!-- You can include your own layout here or specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->
         <xar:template module="$tplmodule" file="display-$layout"/>
