@@ -331,6 +331,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
         sys::import('xaraya.caching');
         xarCache::Init();
         if (xarCache::$variableCacheIsEnabled) {
+            sys::import('xaraya.caching.variable');
 //            sys::import('xaraya.autoload');
 //            xarAutoload::initialize();
         }
