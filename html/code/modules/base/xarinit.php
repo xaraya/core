@@ -79,6 +79,29 @@ function base_init()
         $dbconn->Execute($query);
 
         /*********************************************************************
+         * Here we install the cache_data table
+         * Possibly move this somewhere else?
+         *********************************************************************/
+        $fields = array(
+                        'id'           => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
+                        'type'         => array('type'=>'varchar','size'=>64   ,'null'=>false, 'charset' => $charset),
+                        'cache_key'    => array('type'=>'varchar','size'=>64   ,'null'=>false, 'charset' => $charset),
+                        'code'         => array('type'=>'varchar','size'=>64   ,'null'=>false, 'charset' => $charset),
+                        'time'         => array('type'=>'integer','unsigned'=>true, 'null'=>false),
+                        'size'         => array('type'=>'integer','unsigned'=>true, 'null'=>false),
+                        'cache_check'  => array('type'=>'boolean', 'default'=>  false)
+                        'data'         => array('type'=>'blob'   ,'null'=>true),
+                        );
+        $query = xarDBCreateTable($sessionInfoTable,$fields);
+        $dbconn->Execute($query);
+
+        $index = array('name'   => $prefix.'_cache_id',
+                       'fields' => array('id'),
+                       'unique' => false);
+        $query = xarDBCreateIndex($sessionInfoTable,$index);
+        $dbconn->Execute($query);
+
+        /*********************************************************************
          * Here we install the module variables table and set some default
          * variables
          *********************************************************************/
