@@ -604,6 +604,18 @@ class DataObjectMaster extends Object
     **/
     static function &getObject(Array $args=array())
     {
+        /* with autoload and variable caching activated */
+        // Identify the variable by its arguments here
+        $hash = md5(serialize($args));
+        // Get a cache key for this variable if it's suitable for variable caching
+        $cacheKey = xarCache::getObjectKey('DataObject', $hash);
+        // Check if the variable is cached
+        if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
+            // Return the cached variable
+            $object = xarVariableCache::getCached($cacheKey);
+            return $object;
+        }
+
         $info = self::_getObjectInfo($args);
         
         if (empty($info)) {
@@ -621,14 +633,12 @@ class DataObjectMaster extends Object
         if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) include_once(sys::code() . $data['filepath']);
         else sys::import('modules.dynamicdata.class.objects.base');
         $descriptor = new DataObjectDescriptor($data);
-
-        // Try to get the object from the cache
-        // Disable this for now
-        if (xarCore::isCached('DDObject', MD5(serialize($data)))) {
-            $object = clone xarCore::getCached('DDObject', MD5(serialize($data)));
-        } else {
-            $object = new $data['class']($descriptor);
-//            xarCore::setCached('DDObject', MD5(serialize($data)), clone $object);
+        $object = new $data['class']($descriptor);
+        
+        /* with autoload and variable caching activated */
+        // Set the variable in cache
+        if (!empty($cacheKey)) {
+            xarVariableCache::setCached($cacheKey, $object);
         }
         return $object;
     }
@@ -706,7 +716,7 @@ class DataObjectMaster extends Object
         // Identify the variable by its arguments here
         $hash = md5(serialize($args));
         // Get a cache key for this variable if it's suitable for variable caching
-        $cacheKey = xarCache::getVariableKey('DataObjectList', $hash);
+        $cacheKey = xarCache::getObjectKey('DataObjectList', $hash);
         // Check if the variable is cached
         if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
             // Return the cached variable
