@@ -52,9 +52,9 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         if (empty($table)) return false;
 
         // we actually retrieve the value here too
-        $query = "SELECT id, time, size, check, data
+        $query = "SELECT id, time, size, cache_check, data
                   FROM $table
-                  WHERE type = ? AND key = ? AND code = ?";
+                  WHERE type = ? AND cache_key = ? AND code = ?";
         $bindvars = array($this->type, $key, $this->code);
         // Prepare it once.
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
@@ -107,9 +107,9 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         $table = $this->getTable();
         if (empty($table)) return;
 
-        $query = "SELECT id, time, size, check, data
+        $query = "SELECT id, time, size, cache_check, data
                   FROM $table
-                  WHERE type = ? AND key = ? AND code = ?";
+                  WHERE type = ? AND cache_key = ? AND code = ?";
         $bindvars = array($this->type, $key, $this->code);
         // Prepare it once
         if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
@@ -163,7 +163,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
             $query = "UPDATE $table
                          SET time = ?,
                              size = ?,
-                             check = ?,
+                             cache_check = ?,
                              data = ?
                        WHERE id = ?";
             $bindvars = array($time, $size, $check, $value, (int) $this->lastid);
@@ -171,7 +171,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
             $stmt->executeUpdate($bindvars);
         } else {
             try {
-                $query = "INSERT INTO $table (type, key, code, time, size, check, data)
+                $query = "INSERT INTO $table (type, cache_key, code, time, size, cache_check, data)
                            VALUES (?, ?, ?, ?, ?, ?, ?)";
                 $bindvars = array($this->type, $key, $this->code, $time, $size, $check, $value);
                 $stmt = $this->dbconn->prepareStatement($query);
@@ -193,7 +193,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
             $bindvars = array((int) $this->lastid);
         } else {
             $query = "DELETE FROM $table
-                            WHERE type = ? AND key = ? AND code = ?";
+                            WHERE type = ? AND cache_key = ? AND code = ?";
             $bindvars = array($this->type, $key, $this->code);
         }
         $stmt = $this->dbconn->prepareStatement($query);
@@ -211,7 +211,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
             $bindvars = array($this->type);
         } else {
             $key = '%'.$key.'%';
-            $query = "DELETE FROM $table  WHERE type = ? AND key LIKE ?";
+            $query = "DELETE FROM $table  WHERE type = ? AND cache_key LIKE ?";
             $bindvars = array($this->type,$key);
         }
         $stmt = $this->dbconn->prepareStatement($query);
@@ -300,7 +300,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         if (empty($table)) return false;
 
         // we actually retrieve the value here too
-        $query = "SELECT id, time, key, code, size, check
+        $query = "SELECT id, time, cache_key, code, size, cache_check
                   FROM $table
                   WHERE type = ?";
         $bindvars = array($this->type);
@@ -325,7 +325,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         $table = $this->getTable();
         if (empty($table)) return false;
 
-        $query = "SELECT DISTINCT key
+        $query = "SELECT DISTINCT cache_key
                   FROM $table
                   WHERE type = ?";
         $bindvars = array($this->type);
