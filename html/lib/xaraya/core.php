@@ -329,9 +329,10 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
          */
     /* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ? */
         sys::import('xaraya.caching');
+        xarCache::Init();
         if (xarCache::$variableCacheIsEnabled) {
-            sys::import('xaraya.autoload');
-            xarAutoload::initialize();
+//            sys::import('xaraya.autoload');
+//            xarAutoload::initialize();
         }
     /*
     // Testing of autoload + second-level cache storage - please do not use on live sites
