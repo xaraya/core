@@ -20,7 +20,7 @@
             <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
             <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>
     
-            <input type="submit" name="confirm" id="confirm" value="#$confirmbutton#"  />
+            <xar:button type="submit" name="confirm" id="confirm" label="$confirmbutton"/>
         </form></div>
         </div>
     </div>

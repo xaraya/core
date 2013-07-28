@@ -426,7 +426,7 @@
                             <input type="hidden" name="type_id" id="type_id" value="#$type['type_id']#"/>
                             <input type="hidden" name="interface" id="interface" value="#$interface#"/>
                             <input type="hidden" name="method" id="method" value="#$method#"/>
-                            <input type="submit" value="#$submitLabel#"/>
+                            <xar:button type="submit" label="$submitLabel"/>
                         </div>
                     </fieldset>
                 </xar:if>

@@ -25,7 +25,8 @@
                 <div class="xar-form-input-wrapper">
                     <div class="xar-form-container-after">
                         <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
-                        <input type="submit" value="#xarML('Add')#"/>
+                        <xar:var name="label">Add</xar:var>
+                        <xar:button type="submit" label="$label"/>
                         <!--
                             <input type="reset" value="#xarML('Reset')#"/>
                         -->
@@ -49,7 +50,8 @@
                 <fieldset class="xar-norm">
                     <div class="xar-form-input-wrapper">
                         <div class="xar-form-container-after">
-                            <input type="submit" name="reassign" id="reassign" size="3" value="#xarML('Submit')#"/>
+                            <xar:var name="label">Submit</xar:var>
+                            <xar:button type="submit" name="reassign" id="reassign" label="$label"/>
                             <!--
                                 <input type="reset" value="#xarML('Reset')#"/>
                             -->

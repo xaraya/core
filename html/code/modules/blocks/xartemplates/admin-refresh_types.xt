@@ -161,7 +161,7 @@
                     <input type="hidden" name="type" id="type" value="admin"/>
                     <input type="hidden" name="func" id="func" value="refresh_types"/>
                     <xar:var name="submitLabel">Refresh Again</xar:var>
-                    <input type="submit" value="#$submitLabel#"/>
+                    <xar:button type="submit" label="$submitLabel"/>
                 </form>
             </div>
         </fieldset>

@@ -12,7 +12,7 @@
             <div class="xar-col">
                 <input type="text" name="filter" id="filter" value="#$filter#"/>&#160;
                 <xar:var name="submitLabel">Apply filter</xar:var>
-                <input type="submit" value="#$submitLabel#"/>
+                <xar:button type="submit" label="$submitLabel"/>
             </div>
         </div>                
     </form>

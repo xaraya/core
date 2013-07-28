@@ -178,8 +178,7 @@
                 <xar:if condition="$step gt 1">
                     <xar:button type="submit" label="$label" name="back"/>
                 <xar:else />
-                    <input class="dd-norm" type="submit" name="back" value="#$label#"
-                    disabled="disabled"/>
+                    <xar:button type="submit" name="back" label="$label" disabled="disabled"/>
                 </xar:if>
                 <xar:var name="label">Next</xar:var>
                 <xar:button type="submit" label="$label" name="next"/>
@@ -189,8 +188,8 @@
                     <xar:button type="submit" label="$label" name="test"/>
                     <xar:button type="submit" label="$label1" name="confirm"/>
                 <xar:else />
-                    <input class="dd-norm" type="submit" name="test" value="#$label#" disabled="disabled"/>
-                    <input class="dd-norm" type="submit" name="confirm" value="#$label1#" disabled="disabled"/>
+                    <xar:button type="submit" name="test" label="$label" disabled="disabled"/>
+                    <xar:button type="submit" name="confirm" label="$label1" disabled="disabled"/>
                 </xar:if>
             </fieldset>
             <xar:if condition="!empty($from['module']) and !empty($to['module'])">

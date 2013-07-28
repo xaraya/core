@@ -21,7 +21,8 @@
                         <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>
                         <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
                         <input type="hidden" name="itemtype" value="#$itemtype#"/>
-                        <input type="submit" value="#xarML('Update')#"/>
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label"/>
                         <input type="hidden" name="creating" id="creating" value="false"/>
                         <!--
                             <input type="reset" value="#xarML('Reset')#"/>

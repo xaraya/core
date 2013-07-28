@@ -26,7 +26,7 @@
                     <fieldset>
                         <div class="xar-row">
                             <xar:var name="submitLabel">Create instance</xar:var>
-                            <input type="submit" value="$submitLabel"/>
+                            <xar:button type="submit" label="$submitLabel"/>
                         </div>
                     </fieldset>
                 </noscript>
@@ -148,7 +148,7 @@
                         </div>
                         <div class="xar-col">
                             <xar:var name="submitLabel">Create Instance</xar:var>
-                            <input type="submit" value="#$submitLabel#"/>
+                            <xar:button type="submit" label="$submitLabel"/>
                         </div>
                     </div>
                 </fieldset>

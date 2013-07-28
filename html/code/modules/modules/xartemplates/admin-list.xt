@@ -33,7 +33,7 @@
                             <noscript>
                             <td>
                                 <xar:var name="applyLabel">Apply Filter</xar:var>
-                                <input type="submit" name="apply" id="apply" value="#$applyLabel#"/>
+                                <xar:button type="submit" name="apply" id="apply" label="$applyLabel"/>
                             </td>
                             </noscript>
                         </tr>

@@ -72,7 +72,8 @@
                     <input type="hidden" name="modid" id="modid" value="#$modid#"/>
                     <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
     
-                    <input type="submit" name="confirm" id="confirm" value="#xarML('Delete Links')#"/>
+                    <xar:var name="label">Delete Links </xar:var>
+                    <xar:button type="submit" name="confirm" id="confirm" label="$label"/>
                 </form>
             </xar:if>
     
