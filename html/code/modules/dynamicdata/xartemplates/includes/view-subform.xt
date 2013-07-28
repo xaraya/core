@@ -5,7 +5,7 @@
     <xar:else/>
         <xar:set name="fieldprefix">''</xar:set>
     </xar:if>
-    <table class="xar-norm xar-table">
+    <table class="xar-table xar-norm">
         <tr>
             <xar:foreach in="$properties" key="$name">
                 <th>

@@ -2,7 +2,7 @@
 <schema name="#$schemaName#" xmlns="http://xaraya.com/2007/schema"xmlns:xar="http://xaraya.com/2004/blocklayout">
     <description>Auto generated schema file for development purposes</description>
     <xar:foreach in="$tables" value="$table">
-        <table name="#$table:getName()#">
+        <table class="xar-table" name="#$table:getName()#">
             <xar:foreach in="#$table:getColumns()#" value="$column">
                     <xar:set name="value">$column->isAutoIncrement()?'true':'false'</xar:set>
                 <column id="#$table:getName()#.#$column:getName()#" name="#$column:getName()#">

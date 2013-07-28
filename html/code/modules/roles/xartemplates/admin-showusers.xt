@@ -85,7 +85,7 @@
         <div class="xar-mod-page-body">
         <form method="post" action="#xarModURL('roles','admin','showusers',array('reload'=>'reload'))#">
             <!-- User List Sort and Filter Controls table (taken from the modules module) @todo make this general -->
-            <table class="xar-items-controls xar-table">
+            <table class="xar-table xar-items-controls">
                 <tr>
                     <th>
                         <xar:var name="label">Select display type</xar:var>
@@ -169,7 +169,7 @@
                 <!-- @todo: add this to the filter GUI? -->
                 <xar:set name="fieldlist">array('id','uname','email','regdate')</xar:set>
                 <xar:data-getitems object="$object" values="$values" properties="$properties" sort="$order" fieldlist="$fieldlist"/>
-                <table class="xar-items xar-table">
+                <table class="xar-table xar-items">
                     <tr>
                         <xar:foreach in="$properties" key="$name">
                         	<xar:if condition="xarController::getVar('order') eq $name">

@@ -5,7 +5,7 @@
     <div class="xar-fullwidth">
         <!-- we don't use xar:data-form or xar:data-input here, because this is typically not an input form -->
         <xar:foreach in="$items" key="$itemid" value="$fields">
-            <table class="xar-norm xar-norm-outline xar-fullwidth xar-table">
+            <table class="xar-table xar-norm xar-norm-outline xar-fullwidth">
                 <tr>
                     <th>Sort by</th>
                     <th colspan="2">

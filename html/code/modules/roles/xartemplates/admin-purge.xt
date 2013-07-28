@@ -40,7 +40,7 @@
             <h3>Recall Deleted Groups and Users</h3>
             <form method="post" action="#xarModURL('roles','admin','purge')#" enctype="application/x-www-form-urlencoded">
                 <!-- Module List Sort and Filter Controls table -->
-                <table class="xar-fullwidth xar-table">
+                <table class="xar-table xar-fullwidth">
                     <tr>
                         <th>
                             <xar:var name="label">Search for users with either their real name, login name or email matching the string</xar:var>
@@ -95,7 +95,7 @@
                     <p>#$recallmessage#
                     <xar:if condition="$recallsearch ne ''">matching '#$recallsearch#'</xar:if></p>
                     <xar:else />
-                        <table class="xar-fullwidth xar-table">
+                        <table class="xar-table xar-fullwidth">
                             <tr>
                                 <th>Real name</th>
                                 <th>User Name</th>
@@ -148,7 +148,7 @@
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="operation" id="operation" value="purge"/>
                 <!-- Roles List Sort and Filter Controls table -->
-                <table class="xar-fullwidth xar-table">
+                <table class="xar-table xar-fullwidth">
                     <tr>
                         <th>
                             <xar:var name="label">Search for users with either their real name, login name or email matching the string</xar:var>
@@ -199,7 +199,7 @@
                         </xar:if>
                     </p>
                 <xar:else />
-                    <table class="xar-fullwidth xar-table">
+                    <table class="xar-table xar-fullwidth">
                         <tr>
                             <th>Real name</th>
                             <th>User Name</th>

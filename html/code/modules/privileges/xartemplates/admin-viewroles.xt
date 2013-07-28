@@ -79,7 +79,7 @@
             <xar:if condition="count($roles) eq 0">
                 <p>This privilege is not assigned to any user or group.</p>
                 <xar:else />
-                <table class="xar-fullwidth xar-table">
+                <table class="xar-table xar-fullwidth">
                     <tr>
                         <th>Type</th>
                         <th>Name</th>

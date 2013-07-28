@@ -16,7 +16,7 @@
     <!-- Import the array table js -->
     <xar:javascript module="base" filename="array.js"/>
 
-    <table class="xar-border-none xar-margin-thicktop xar-table">
+    <table class="xar-table xar-border-none xar-margin-thicktop">
         <thead>
             <tr>
                 <!-- This column holds the index of the respective row -->

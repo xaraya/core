@@ -11,7 +11,7 @@
                 <input type="hidden" name="module" id="module" value="themes"/>
                 <input type="hidden" name="type" id="type" value="admin"/>
                 <input type="hidden" name="func" id="func" value="list"/>
-                <table class="xar-items-controls xar-table">
+                <table class="xar-table">
                     <thead>
                         <tr>
                             <th><label for="tab">Style</label></th>

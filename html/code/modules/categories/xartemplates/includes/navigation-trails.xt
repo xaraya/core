@@ -4,7 +4,7 @@
     <div class="xar-mod-head"><span class="xar-mod-title">#$catdescr#<xar:if condition="!empty($cathooks) and !empty($cathooks['pubsub'])"> #$cathooks['pubsub']#</xar:if></span></div>
     </xar:if>
 
-    <table border="0" cellpadding="1" cellspacing="0">
+    <table class="xar-table" border="0" cellpadding="1" cellspacing="0">
     <tr>
         <td valign="top">
             #$cattitle# :
@@ -41,7 +41,7 @@
 
     <xar:if condition="!empty($catimage)">
         <br />
-        <table border="0" width="95%">
+        <table class="xar-table" border="0" width="95%">
             <tr>
                 <td align="center" valign="top">
                     <img src="#$catimage#" border="0" alt="#$catname#"/>
@@ -62,7 +62,7 @@
 
     <xar:if condition="!empty($caticons) and count($caticons) gt 0">
         <br />
-        <table border="0" cellpadding="8" cellspacing="0" width="95%">
+        <table class="xar-table" border="0" cellpadding="8" cellspacing="0" width="95%">
                 <xar:loop id="icons" name="$caticons">
             <tr>
                     <td align="center" valign="middle">
@@ -80,7 +80,7 @@
 
     <xar:if condition="!empty($catlines) and count($catlines) gt 0">
         <br />
-        <table border="0" cellpadding="8" cellspacing="0">
+        <table class="xar-table" border="0" cellpadding="8" cellspacing="0">
             <tr>
                 <td valign="top">
                 <xar:loop id="catlines" name="$catlines">

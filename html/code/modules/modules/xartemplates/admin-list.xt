@@ -12,7 +12,7 @@
                 <input type="hidden" name="module" id="module" value="modules"/>
                 <input type="hidden" name="type" id="type" value="admin"/>
                 <input type="hidden" name="func" id="func" value="list"/>
-                <table class="xar-items-controls xar-table">
+                <table class="xar-table xar-items-controls">
                     <thead>
                         <tr>
                             <th><label for="state">State</label></th>
@@ -95,7 +95,7 @@
             <div class="xar-align-center">
                 <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>
             </div>
-            <table class="xar-items xar-table">
+            <table class="xar-table xar-items">
                 <thead>
                     <tr>
                         <th>

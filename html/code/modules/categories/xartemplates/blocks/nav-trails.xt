@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:if condition="!empty($catdescr)">
-    <table border="0" cellpadding="2" cellspacing="0" width="100%">
+    <table class="xar-table" border="0" cellpadding="2" cellspacing="0" width="100%">
     <tr>
         <td align="center" valign="top">
             <h3>#$catdescr#</h3>
@@ -11,7 +11,7 @@
     <br />
     </xar:if>
 
-    <table border="0" cellpadding="2" cellspacing="0" width="100%">
+    <table class="xar-table" border="0" cellpadding="2" cellspacing="0" width="100%">
     <tr>
         <td valign="top">
             #$cattitle# :
@@ -37,7 +37,7 @@
 
     <xar:if condition="!empty($catimage)">
     <br />
-    <table border="0" cellpadding="2" cellspacing="0" width="100%">
+    <table class="xar-table" border="0" cellpadding="2" cellspacing="0" width="100%">
     <tr>
         <td align="center" valign="top">
             <img src="#$catimage#" border="0" alt="#$catname#"/>
@@ -48,7 +48,7 @@
 
     <xar:if condition="!empty($caticons) and count($caticons) gt 0">
         <br />
-        <table border="0" cellpadding="2" cellspacing="0" width="100%">
+        <table class="xar-table" border="0" cellpadding="2" cellspacing="0" width="100%">
             <xar:for start="$i = 0" test="$i le count($caticons)" iter="$i++">
                 <xar:set name="j">0</xar:set>
                 <xar:while condition="1">
@@ -71,7 +71,7 @@
 
     <xar:if condition="!empty($catlines) and count($catlines) gt 0">
     <br />
-    <table border="0" cellpadding="2" cellspacing="0" width="100%">
+    <table class="xar-table" border="0" cellpadding="2" cellspacing="0" width="100%">
     <tr>
         <td valign="top">
         <xar:loop id="catlines" name="$catlines">

@@ -5,7 +5,7 @@
                                        array('objectid' => 2,
                                              'allprops' => true))
     </xar:set>
-    <table class="xar-fullwidth xar-table">
+    <table class="xar-table xar-fullwidth">
         <tr>
             <th>
                 #$propertyfields.id.label#

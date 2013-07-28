@@ -9,7 +9,7 @@
     -->
     <xar:style scope="module" module="dynamicdata" file="dd"/>
     <!-- You can give a custom 'newlink' argument to showView() higher up -->
-        <table class="xar-items xar-table">
+        <table class="xar-table xar-items">
             <tr>
                 <xar:foreach in="$properties" key="$name">
             		<xar:if condition="xarController::getVar('sort') eq $name">

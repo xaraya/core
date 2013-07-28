@@ -6,7 +6,7 @@
         <h2>Utilities : Query #$label#</h2>
         <xar:template type="module" file="utility-menu"/>
         <form method="post" action="#xarModURL('dynamicdata','admin','query')#">
-            <table border="0" cellpadding="5" class="xar-align-left xar-fullwidth xar-table">
+            <table border="0" cellpadding="5" class="xar-table xar-align-left xar-fullwidth">
                 <tr>
                     <td>
                         <label for="itemid">Object:</label>
@@ -121,7 +121,7 @@
                 </tr>
             </table>
             <!--
-            <table border="0" cellpadding="5" class="xar-table">
+            <table class="xar-table" border="0" cellpadding="5">
                 <xar:if condition="!empty($properties)">
                     <tr>
                         <td>
@@ -245,7 +245,7 @@
             <xar:comment>vertical layout of basically the same table as above (as requested by
             johnny, implemented by andyv) NOTE: if someone ever need the horisontal layout, then
             please implement a GUI switch</xar:comment>
-            <table summary="Query Options" class="xar-align-left xar-fullwidth xar-table">
+            <table summary="Query Options" class="xar-table xar-align-left xar-fullwidth">
                 <tr>
                     <th>Property:</th>
                     <xar:if condition="!empty($groupby)">

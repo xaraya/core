@@ -13,7 +13,7 @@
             <input type="hidden" name="extrealm" id="extrealm" value="#$extrealm#"/>
             <input type="hidden" name="extmodule" id="extmodule" value="#$extmodule#"/>
             <input type="hidden" name="extcomponent" id="extcomponent" value="#$extcomponent#"/>
-            <table border="1" cellpadding="8" cellspacing="0" class="xar-table">
+            <table class="xar-table" border="1" cellpadding="8" cellspacing="0">
                 <xar:if condition="!empty($extcomponent) and $extcomponent eq 'Item'">
                     <tr>
                         <th class="xar-align-right xar-valign-top">Module</th>

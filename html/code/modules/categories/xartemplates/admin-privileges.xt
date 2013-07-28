@@ -16,7 +16,7 @@
             <input type="hidden" name="extmodule" id="extmodule" value="#$extmodule#"/>
             <input type="hidden" name="extcomponent" id="extcomponent" value="#$extcomponent#"/>
     
-        <table border="1" cellpadding="8" cellspacing="0">
+        <table class="xar-table" border="1" cellpadding="8" cellspacing="0">
     
         <xar:if condition="$extcomponent eq 'Link'">
         <tr><th valign="top" align="right">

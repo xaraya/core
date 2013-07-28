@@ -36,7 +36,7 @@
         -->
         </xar:data-getitems>
         
-        <table>
+        <table class="xar-table">
             <xar:foreach in="$items" key="$key" value="$value">
                 <tr><td>#$key#</td><td>#$value['uname']#</td><td>#$value['name']#</td></tr>
             </xar:foreach>

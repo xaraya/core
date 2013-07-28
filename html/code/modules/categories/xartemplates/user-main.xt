@@ -37,7 +37,7 @@
       <xar:set name="miditem">round(($numcats - 0.5) / 2)</xar:set>
       <xar:if condition="$numcats gt 7">
       <!--  TODO: Review this
-        <table border="0"><tr><td valign="top">
+        <table class="xar-table" border="0"><tr><td valign="top">
       <ul>
       <xar:foreach in="$categories" key="$id" value="$category">
         <li> <a href="#$category['link']#">#$category['name']#</a> </li>

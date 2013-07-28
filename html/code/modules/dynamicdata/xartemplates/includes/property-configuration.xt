@@ -47,7 +47,7 @@
         <form method="post" action="#xarModURL('dynamicdata','admin','showpropval')#">
             <fieldset>
                 <legend>Property Type Summary</legend>
-                <table class="xar-fullwidth xar-table">
+                <table class="xar-table xar-fullwidth">
                     <tr>
                         <td>
                             <div class="xar-row">

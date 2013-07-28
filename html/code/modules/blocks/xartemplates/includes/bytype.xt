@@ -8,7 +8,7 @@
     <xar:set name="icon_delete">xarTpl::getImage('icons/delete.png','theme')</xar:set>
     <xar:set name="icon_add">xarTpl::getImage('icons/add.png','theme')</xar:set>
     <xar:foreach in="$list" key="$type_id" value="$type">
-        <table class="xar-fullwidth xar-items xar-margin-nonetop xar-table">
+        <table class="xar-table xar-fullwidth xar-items xar-margin-nonetop">
             <thead>
                 <tr>
                     <th colspan="5">

@@ -64,7 +64,7 @@ uasort($groups,'by_name')</xar:set>
     </xar:if>
 </xar:sec>
 
-<table class="xar-fullwidth xar-table">
+<table class="xar-table xar-fullwidth">
 <tr>
     <xar:foreach in="$fieldlist" value="$name">
         <th><xar:data-label property="$properties[$name]"/></th>

@@ -7,7 +7,7 @@
         <xar:if condition="!empty($unchanged)">
             <h3>Unchanged</h3>
             <p>The following block types were not changed</p>
-            <table class="xar-fullwidth xar-table">
+            <table class="xar-table xar-fullwidth">
                 <thead>
                     <tr>
                         <th>Type</th>
@@ -32,7 +32,7 @@
         <xar:if condition="!empty($new)">
             <h3>New Block Types</h3>
             <p>The following block types were added to the system</p>
-            <table class="xar-fullwidth xar-table">
+            <table class="xar-table xar-fullwidth">
                 <thead>
                     <tr>
                         <th>Type</th>
@@ -58,7 +58,7 @@
         <xar:if condition="!empty($new)">
             <h3>Activated Block Types</h3>
             <p>The following block types were reactivated</p>
-            <table class="xar-fullwidth xar-table">
+            <table class="xar-table xar-fullwidth">
                 <thead>
                     <tr>
                         <th>Type</th>
@@ -83,7 +83,7 @@
         <xar:if condition="!empty($error)">
             <h3>Block Types in Error</h3>
             <p>The following block types were found to be in error state</p>
-            <table class="xar-fullwidth xar-table">
+            <table class="xar-table xar-fullwidth">
                 <thead>
                     <tr>
                         <th>Type</th>
@@ -108,7 +108,7 @@
         <xar:if condition="!empty($missing)">
             <h3>Missing Block Types</h3>
             <p>The following block types were found to be missing</p>
-            <table class="xar-fullwidth xar-table">
+            <table class="xar-table xar-fullwidth">
                 <thead>
                     <tr>
                         <th>Type</th>
@@ -133,7 +133,7 @@
         <xar:if condition="!empty($unavailable)">
             <h3>Unavailable Block Types</h3>
             <p>The following block types were found to belong to modules which are not active</p>
-            <table class="xar-fullwidth xar-table">
+            <table class="xar-table xar-fullwidth">
                 <thead>
                     <tr>
                         <th>Type</th>

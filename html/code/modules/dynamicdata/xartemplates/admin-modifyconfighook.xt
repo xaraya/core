@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- You can use different admin-modifyconfighook-[objectname].xd templates for different objects -->
-    <table class="xar-items xar-table">
+    <table class="xar-table xar-items">
         <tr>
           <th class="xar-align-center" colspan="7">
             #$labels.dynamicdata# [ <a href="#$link#">#$labels.config#</a>]

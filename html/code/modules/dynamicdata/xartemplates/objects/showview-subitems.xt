@@ -12,7 +12,7 @@
         <xar:set name="layout">'default'</xar:set>
     </xar:if>
     <div class="xar-fullwidth">
-        <table class="xar-fullwidth">
+        <table class="xar-table xar-fullwidth">
             <tr>
                 <xar:foreach in="$properties" key="$name">
                     <th class="xar-form-textlong">

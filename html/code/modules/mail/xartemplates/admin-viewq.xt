@@ -67,7 +67,7 @@
                     <xar:var name="label">Process Queue</xar:var>
                     <xar:button type="submit" label="$label"/>
                 </form>
-                <table width="100%" border="0" cellspacing="0" cellpadding="2" class="xar-table">
+                <table class="xar-table" width="100%" border="0" cellspacing="0" cellpadding="2">
                     <tr>
                         <th>Mail ID</th>
                         <th>Send After</th>

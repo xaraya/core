@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <div class="xar-fullwidth">
-        <table class="xar-fullwidth xar-table">
+        <table class="xar-table xar-fullwidth">
             <tr>
                 <xar:foreach in="$properties" key="$name">
                     <th class="xar-form-textlong">

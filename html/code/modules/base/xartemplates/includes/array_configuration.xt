@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <table class="xar-border-none xar-margin-thicktop xar-table">
+    <table class="xar-table xar-border-none xar-margin-thicktop">
         <thead>
             <tr>
                 <th class="xar-align-left">Column</th>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <table class="xar-norm xar-table">
+    <table class="xar-table xar-norm">
         <xar:if condition="empty($ishooked)">
             <tr>
                 <td colspan="2">

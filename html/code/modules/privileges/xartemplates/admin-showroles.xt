@@ -13,7 +13,7 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Assignment</h2>
-        <table border="0" width="100%" cellpadding="2" class="xar-table">
+        <table class="xar-table" border="0" width="100%" cellpadding="2">
             <xar:if condition="count($roles) eq 0">
                 <tr>
                     <td colspan="3">This privilege is not assigned to any user or group.</td>
@@ -43,12 +43,12 @@
                 </xar:loop>
             </xar:if>
         </table>
-        <table border="0" width="100%" class="xar-table">
+        <table class="xar-table" border="0" width="100%">
             <tr>
                 <th class="xar-align-center">Current Privileges</th>
             </tr>
         </table>
-        <table border="0" cellspacing="5" width="100%" class="xar-table">
+        <table class="xar-table" border="0" cellspacing="5" width="100%">
             <tr>
                 <td>
                     <a href="#xarModURL('privileges','admin','newprivilege')#">Add Privilege</a>

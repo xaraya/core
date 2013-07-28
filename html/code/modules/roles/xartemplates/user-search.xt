@@ -24,7 +24,7 @@
         <xar:foreach in="$properties" key="$field">
             <xar:set name="dummy">1; $col = intval($i/4); $columns[$col][] = $field; $i++</xar:set>
         </xar:foreach>
-        <table border="0" cellpadding="2" cellspacing="0" class="xar-table">
+        <table class="xar-table" border="0" cellpadding="2" cellspacing="0">
             <tr>
                 <td class="xar-align-top">Search on:</td>
                 <!--

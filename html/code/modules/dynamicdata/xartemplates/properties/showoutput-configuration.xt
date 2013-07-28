@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="settings">unserialize($value)</xar:set>
     <xar:if condition="is_array($settings)">
-        <table>
+        <table class="xar-table">
             <tr>
                 <th>Setting</th>
                 <th>Value</th>

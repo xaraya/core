@@ -2,7 +2,7 @@
         <fieldset>
             <legend>Block Tag Parameters</legend>
             <!-- Permitted xar:block tag parameters for this block type -->
-            <table class="xar-fullwidth xar-table">
+            <table class="xar-table xar-fullwidth">
                 <thead>
                     <tr>
                         <th>Attribute</th>

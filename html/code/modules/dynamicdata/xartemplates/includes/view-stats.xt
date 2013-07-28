@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- TODO: multi-column output -->
     <div class="xar-fullwidth">
-        <table class="xar-fullwidth xar-table">
+        <table class="xar-table xar-fullwidth">
             <tr>
                 <xar:foreach in="$properties" key="$name">
                     <th class="xar-form-textlong">
