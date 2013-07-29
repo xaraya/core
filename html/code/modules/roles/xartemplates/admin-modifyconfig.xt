@@ -85,12 +85,12 @@
                     <xar:data-form object="$module_settings"/>
                     <fieldset class="table">
                         <legend>Default Group and Site Administrator</legend>
-                        <div class="row">
-                            <div class="col">
+                        <div class="xar-row">
+                            <div class="xar-col">
                                 <xar:var name="label">Select the admin user that cannot be deleted</xar:var>
                                 <label for="siteadmin" title="#$label#" class="xar-form-label">Designated Site Admin:</label>
                             </div>
-                            <div class="col">
+                            <div class="xar-col">
                                 <select name="siteadmin" id="siteadmin">
                                     <xar:loop name="$siteadmins">
                                         <xar:if condition="$loop:item['id'] eq xarModVars::get('roles','admin')">
@@ -106,33 +106,33 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
+                        <div class="xar-row">
+                            <div class="xar-col">
                                 <xar:var name="label">New Users automatically get assigned to this Group</xar:var>
                                 <label for="defaultgroup" title="#$label#" class="xar-form-label">Default Group For New Users:</label>
                             </div>
-                            <div class="col">
+                            <div class="xar-col">
                                 <xar:data-input type="grouplist" name="defaultgroup" id="defaultgroup" value="$defaultgroup"/>
                             </div>
                         </div>
                     </fieldset>
                     <fieldset>
                         <legend>Default Authentication &amp; Registration Modules</legend>
-                        <div class="row">
-                            <div class="col">
+                        <div class="xar-row">
+                            <div class="xar-col">
                                 <xar:var name="label">Select the module that manages authentication of users</xar:var>
                                 <label for="defaultauthmodule" title="#$label#" class="xar-form-label">Authentication:</label>
                             </div>
-                            <div class="col">
+                            <div class="xar-col">
                                 <xar:data-input type="module" name="defaultauthmodule" class="Authentication" value="$defaultauthmod" validation="name" firstline="Choose a module"/>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
+                        <div class="xar-row">
+                            <div class="xar-col">
                                 <xar:var name="label">Select the module that manages registration of users</xar:var>
                                 <label for="defaultregmodule" title="#$label#" class="xar-form-label">Registration:</label>
                             </div>
-                            <div class="col">
+                            <div class="xar-col">
                                 <xar:data-input type="module" name="defaultregmodule" class="Registration" value="$defaultregmod" validation="name" firstline="Choose a module"/>
                             </div>
                         </div>

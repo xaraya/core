@@ -5,7 +5,6 @@
         <thead>
             <tr>
                 <th>
-                      
                     <a href="#$sorturl#" title="#$sortlbl#">Name</a>
                     <a href="#$sorturl#" title="#$sortlbl#"><img src="#$sortimg#" class="xar-icon" alt="#$sort#"/></a>
                 </th>
