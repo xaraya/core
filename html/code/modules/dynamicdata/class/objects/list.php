@@ -144,7 +144,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     {
         if (empty($args)) return true;
         foreach ($args as $key => $value) $this->{$key} = $value;
-        // Make sure we have an array for itemids and groupings
+        // Make sure we have an array for itemids, groupings and fieldlist
         if (!is_array($this->itemids)) {
             if(is_numeric($this->itemids)) {
                 $this->itemids = array($this->itemids);
@@ -153,6 +153,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
         }
         if (!is_array($this->groupby)) $this->groupby = explode(',',$this->groupby);
+        if (!is_array($this->fieldlist)) $this->fieldlist = explode(',',$this->fieldlist);
 
         $this->getDataStore(true);
         // If a fieldlist was passed, only get the appropriate datastores
