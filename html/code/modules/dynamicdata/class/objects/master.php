@@ -239,6 +239,7 @@ class DataObjectMaster extends Object
     {
         $fields = array();
         if(!empty($fieldlist)) {
+            if (!is_array($fieldlist)) $fieldlist = explode(',', $fieldlist);
             foreach($fieldlist as $field)
                 // Ignore those disabled AND those that don't exist
                 if(isset($this->properties[$field]) && ($this->properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED))
