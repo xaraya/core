@@ -29,7 +29,15 @@ form related styling
     min-width: 100px;
     max-width: 65%;
     }
-/*
+.xar-col-condensed {
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+    }
+.xar-row .xar-col-condensed {
+    min-width: 100px;
+    max-width: 10%;
+    }
 text related styling
 -------------------------------------------------------------------------[comment] */
 .xar-note {
