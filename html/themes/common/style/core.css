@@ -19,7 +19,10 @@ form related styling
     height: 100%;
     }
 .xar-row .xar-col:first-child {
-    width: 35%;
+    width: 30%;
+    }
+.xar-row .xar-col {
+    width: 25%;
     }
 .xar-row .xar-col:last-child {
 /*    width: 65%; */

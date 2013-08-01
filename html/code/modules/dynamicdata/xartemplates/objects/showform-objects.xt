@@ -9,10 +9,12 @@
                 <xar:data-input property="$properties[$name]" hidden="hidden"/>
         <xar:else/>
             <div class="xar-row">
-                <xar:data-label property="$properties[$name]" for="id"/>
-            </div>
-            <div class="xar-col">
-                <xar:data-input property="$properties[$name]"/>
+                <div class="xar-col">
+                    <xar:data-label property="$properties[$name]" for="id"/>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties[$name]"/>
+                </div>
             </div>
         </xar:if>
     </xar:foreach>

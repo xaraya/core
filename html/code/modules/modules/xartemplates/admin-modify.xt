@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:if condition="empty($return_url)">
-        <!--
-            When this template is not included somewhere else, build some header
-            stuff
-        -->
-        <xar:template file="admin-mod-head"/>
-        <div class="xar-mod-body">
-            <xar:template file="hooked-mainpart" module="modules"/>
-        </div>
-    <xar:else />
-        <!--
-            Just show the list
-        -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
         <xar:template file="hooked-mainpart" module="modules"/>
-        <xar:var name="label">Save Changes</xar:var>
-        <xar:button type="submit" label="$label"/>
-    </xar:if> 
+        <xar:if condition="empty($return_url)">
+            <xar:var name="label">Save Changes</xar:var>
+            <xar:button type="submit" label="$label"/>
+        </xar:if> 
+    </div>
 </xar:template>

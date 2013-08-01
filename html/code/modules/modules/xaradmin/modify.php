@@ -126,7 +126,7 @@ function modules_admin_modify(Array $args=array())
         $observers[$observer]['hookstate'] = $hookstate;
         $observers[$observer]['itemtypes'] = $itemtypes;
     }
-    
+
     $data['id'] = $id;
     $data['observers'] = $observers;
     $data['module'] = $modname;
