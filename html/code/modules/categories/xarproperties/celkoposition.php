@@ -311,6 +311,9 @@ class CelkoPositionProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
+        if (!isset($data['position'])) $data['position'] = $this->position;
+        if (!isset($data['reference_id'])) $data['reference_id'] = $this->reference_id;
+        
         $data['itemid'] = isset($data['itemid']) ? $data['itemid'] : $this->_itemid;
         if (!empty($data['itemid'])) {        
             $data['item'] = $this->getItem($data['itemid']);
