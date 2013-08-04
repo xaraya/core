@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:if condition="count($items) eq 0">
-        Top of the tree  <!-- No items defined yet -->
+        <!-- No items defined yet -->
         <input type="hidden" name="#$name#_reference_id" id="#$name#_reference_id" value="0"/>
         <input type="hidden" name="#$name#_position" id="#$name#_position" value="2"/>
     <xar:else />
