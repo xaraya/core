@@ -1,56 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <fieldset style="border: none">
     <xar:if condition="count($items) eq 0">
         Top of the tree  <!-- No items defined yet -->
         <input type="hidden" name="#$name#_reference_id" id="#$name#_reference_id" value="0"/>
         <input type="hidden" name="#$name#_position" id="#$name#_position" value="2"/>
     <xar:else />
-        <div class="xar-form-input-wrapper">
-            <label for="reference_id" class="xar-form-label help" title="#xarML('Item relationship hiearchy.')#">
-                In relation to
-            </label>
-            <select name="#$name#_reference_id" id="#$name#_reference_id">
-                <xar:for start="$i = 0" test="$i lt count($items)" iter="$i++">
-                    <xar:if condition="$items[$i]['left'] eq $item['left_id']-1">
-                        <!-- The present item is the first child -->
-                        <xar:set name="_position">4</xar:set>
-                        <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
-                    <xar:elseif condition="$items[$i]['right'] eq $item['left_id']-1"/>
-                        <!-- The present item is the previous sibling -->
-                        <xar:set name="_position">1</xar:set>
-                        <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
-                    <xar:elseif condition="$items[$i]['left'] eq $item['right_id']+1"/>
-                        <!-- The present item is the next sibling -->
-                        <xar:set name="_position">2</xar:set>
-                        <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
-                    <xar:else />
-                        <option value="#$items[$i]['id']#">#$items[$i]['slash_separated']#</option>
-                    </xar:if>
-                </xar:for>
-            </select>
-        </div>
-        <xar:if condition="!$isnew">
-            <xar:set name="position">$_position</xar:set>
-        </xar:if>
+        <div class="xar-row">
+            <div class="xar-col-condensed">
+                <label for="reference_id" class="help" title="#xarML('Item relationship hiearchy.')#">
+                    In relation to
+                </label>
+            </div>
+            <div class="xar-col-condensed">
+                <xar:set name="ddname">$name . '_reference_id'</xar:set>
+                <xar:set name="ddid">$name . '_reference_id'</xar:set>
+                <xar:if condition="!$isnew">
+                    <select name="#$ddname#" id="#$ddid#">
+                        <xar:for start="$i = 0" test="$i lt count($items)" iter="$i++">
+                            <xar:if condition="$items[$i]['left'] eq $item['left_id']-1">
+                                <!-- The present item is the first child -->
+                                <xar:set name="_position">4</xar:set>
+                                <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
+                            <xar:elseif condition="$items[$i]['right'] eq $item['left_id']-1"/>
+                                <!-- The present item is the previous sibling -->
+                                <xar:set name="_position">1</xar:set>
+                                <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
+                            <xar:elseif condition="$items[$i]['left'] eq $item['right_id']+1"/>
+                                <!-- The present item is the next sibling -->
+                                <xar:set name="_position">2</xar:set>
+                                <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
+                            <xar:else />
+                                <option value="#$items[$i]['id']#">#$items[$i]['slash_separated']#</option>
+                            </xar:if>
+                        </xar:for>
+                    </select>
+                    <xar:set name="position">$_position</xar:set>
+                <xar:else/>
+                    <select name="#$ddname#" id="#$ddid#">
+                        <xar:for start="$i = 0" test="$i lt count($items)" iter="$i++">
+                            <xar:if condition="$items[$i]['id'] eq $reference_id">
+                                <option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
+                            <xar:else />
+                                <option value="#$items[$i]['id']#">#$items[$i]['slash_separated']#</option>
+                            </xar:if>
+                        </xar:for>
+                    </select>
+                </xar:if>
+            </div>
+        </div>#$position# #$reference_id#
         <!-- The position needs to be set after items select because There is no position which we can have a selected item that will work in all cases-->
-        <div class="xar-form-input-wrapper">
-            <label for="#$name#_position" class="xar-form-label help" title="#xarML('Position of this item.')#">
-                Position
-            </label>
-            <xar:set name="options">
-                array(
-                    array('id' => '1', 'name' => xarML('Right before, in the same level')),
-                    array('id' => '2', 'name' => xarML('Right after, in the same level')),
-                    array('id' => '4', 'name' => xarML('The first child item')),
-                    array('id' => '3', 'name' => xarML('The last child item')),
-                )
-            </xar:set>
-            <xar:set name="ddname">$name . '_position'</xar:set>
-            <xar:set name="ddid">$name . '_position'</xar:set>
-            <xar:data-input type="dropdown" name="$ddname" id="$ddid" value="$position" options="$options"/>
-            <div style="clear: both;">&#160;</div>
+        <div class="xar-row">
+            <div class="xar-col-condensed">
+                <label for="#$name#_position" class="help" title="#xarML('Position of this item.')#">
+                    Position
+                </label>
+            </div>
+            <div class="xar-col-condensed">
+                <xar:set name="options">
+                    array(
+                        array('id' => '1', 'name' => xarML('Right before, in the same level')),
+                        array('id' => '2', 'name' => xarML('Right after, in the same level')),
+                        array('id' => '4', 'name' => xarML('The first child item')),
+                        array('id' => '3', 'name' => xarML('The last child item')),
+                    )
+                </xar:set>
+                <xar:set name="ddname">$name . '_position'</xar:set>
+                <xar:set name="ddid">$name . '_position'</xar:set>
+                <xar:data-input type="dropdown" name="$ddname" id="$ddid" value="$position" options="$options"/>
+                <div style="clear: both;">&#160;</div>
+            </div>
         </div>
     </xar:if>
-    </fieldset>
 </xar:template>

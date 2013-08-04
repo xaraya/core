@@ -80,20 +80,20 @@ class CelkoPositionProperty extends DataProperty
         if (!xarVarFetch($name . '_reference_id', 'int:0', $reference_id)) return;
         if (!xarVarFetch($name . '_position', 'enum:1:2:3:4', $position)) return;
         switch (intval($position)) {
-            case 1: // above - same level
+            case 1: // before - same level
             default:
                 $this->rightorleft = 'left';
                 $this->inorout = 'out';
                 break;
-            case 2: // below - same level
+            case 2: // after - same level
                 $this->rightorleft = 'right';
                 $this->inorout = 'out';
                 break;
-            case 3: // below - child item
+            case 3: // last child item
                 $this->rightorleft = 'right';
                 $this->inorout = 'in';
                 break;
-            case 4: // above - child item
+            case 4: // first child item
                 $this->rightorleft = 'left';
                 $this->inorout = 'in';
                 break;
@@ -156,18 +156,36 @@ class CelkoPositionProperty extends DataProperty
                 }
             
             } else {
+                if (empty($this->reference_id)) {
+                    $point_of_insertion = 1;
+                } else {
+                    $parentItem = $this->getItem($this->reference_id);
+               
+                    $this->right = $parentItem['right_id'];
+                    $this->left = $parentItem['left_id'];                
+                    /* Find out where you should put the new item in */
+                    if (
+                       !($point_of_insertion = $this->find_point_of_insertion($this->inorout, 
+                                                                              $this->rightorleft, 
+                                                                              $this->left, 
+                                                                              $this->right))
+                      )
+                    {
+                       return false;
+                    }
+                }
+                
                 if ($this->reference_id == 0) {
                     // This item is the first item to be created
-                    $parentid = $this->reference_id;            
+                    $parent_id = $this->reference_id;            
                 } elseif ($this->inorout == 'in') {
                     // This item is a child, so its parent is the reference item  
-                    $parentid = $this->reference_id;
+                    $parent_id = $this->reference_id;
                 } else {
                     // This item is on he same level as the reference item; the parent is the same as that of the reference item
-                    $parentItem = $this->getItem($this->reference_id);
-                    $parentid = $parentItem['parent_id'];
+                    $parent_id = $parentItem['parent_id'];
                 }
-                $itemid = $this->updateposition($itemid, $parentid);
+                $itemid = $this->updateposition($itemid, $parent_id, $point_of_insertion);
                 $this->updateValue($itemid);
             }
         } else {
@@ -350,7 +368,56 @@ class CelkoPositionProperty extends DataProperty
         // Let the template know whether this is a new or existing object
         $data['isnew'] = empty($this->objectref->properties['id']->value);
 
+        // If the current item has no reference item, then find the last such item and make this one the next in line
+        if ($data['reference_id'] == 0 && !empty($items)) {
+            $right = array();
+            foreach ($items as $key => $row) {
+                $right[$key]  = $row['right'];
+            }
+            sort($right);
+            $rightkeys = array_keys($right);
+            $topkey = array_pop($rightkeys);
+            $data['reference_id'] = (int)$items[$topkey]['id'];
+        }
+        
         return parent::showInput($data);
+
+    }
+    
+    public function showHidden(Array $data = array())
+    {
+        if (!isset($data['position'])) $data['position'] = $this->position;
+        if (!isset($data['reference_id'])) $data['reference_id'] = $this->reference_id;
+        
+        $data['itemid'] = isset($data['itemid']) ? $data['itemid'] : $this->_itemid;
+        if (!empty($data['itemid'])) {        
+            $data['item'] = $this->getItem($data['itemid']);
+            $items = $this->getItems(array('cid' => false,
+                                           'eid' => $data['itemid']));
+            $data['id'] = $data['itemid'];
+        } else {
+            $data['item'] = Array('left_id'=>0,'right_id'=>0,'name'=>'','description'=>'', 'template' => '');
+            $items = $this->getItems(array('cid' => false));
+            $data['id'] = null;
+        }
+        $data['items'] = $items;
+        
+        // Let the template know whether this is a new or existing object
+        $data['isnew'] = empty($this->objectref->properties['id']->value);
+
+        // If the current item has no reference item, then find the last such item and make this one the next in line
+        if ($data['reference_id'] == 0 && !empty($items)) {
+            $right = array();
+            foreach ($items as $key => $row) {
+                $right[$key]  = $row['right'];
+            }
+            sort($right);
+            $rightkeys = array_keys($right);
+            $topkey = array_pop($rightkeys);
+            $data['reference_id'] = (int)$items[$topkey]['id'];
+        }
+        
+        return parent::showHidden($data);
 
     }
     
