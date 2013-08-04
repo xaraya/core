@@ -47,10 +47,10 @@ class CelkoPositionProperty extends DataProperty
     public $desc         = 'Celko Position';
     public $reqmodules   = array('categories');
 
-    public $reference_id = 0;               // The ID of the item relative to which we define the position of this item
+    public $reference_id      = 0;          // The ID of the item relative to which we define the position of this item
     public $include_reference = 1;          // Get a reference to the parent object
     public $moving;
-    public $position;
+    public $position          = 2;          // By default the position of this item is after the previous item
     public $rightorleft;
     public $inorout;
 //    public $parent;
@@ -346,6 +346,10 @@ class CelkoPositionProperty extends DataProperty
         }
 
         $data['items'] = $items;
+        
+        // Let the template know whether this is a new or existing object
+        $data['isnew'] = empty($this->objectref->properties['id']->value);
+
         return parent::showInput($data);
 
     }
