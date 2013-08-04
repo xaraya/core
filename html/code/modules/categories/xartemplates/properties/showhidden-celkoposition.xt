@@ -25,9 +25,9 @@
         </xar:if>
         <xar:set name="ddname">$name . '_reference_id'</xar:set>
         <xar:set name="ddid">$name . '_reference_id'</xar:set>
-        <input type="text" name="#$ddname#" id="#$ddid#" value="#$reference_id#"/>
+        <input type="hidden" name="#$ddname#" id="#$ddid#" value="#$reference_id#"/>
         <xar:set name="ddname">$name . '_position'</xar:set>
         <xar:set name="ddid">$name . '_position'</xar:set>
-        <input type="text" name="#$ddname#" id="#$ddid#" value="#$position#"/>
+        <input type="hidden" name="#$ddname#" id="#$ddid#" value="#$position#"/>
     </xar:if>
 </xar:template>
