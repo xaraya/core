@@ -1128,9 +1128,10 @@ class DataObjectMaster extends Object
         }
 
         // add extra info for traditional hook modules
-        $this->hookvalues['module'] = xarMod::getName($this->moduleid);
-        $this->hookvalues['itemtype'] = $this->itemtype;
-        $this->hookvalues['itemid'] = $this->itemid;
+// FIXME: THis causes problems if you have a property named "module", "itemtype" etc.
+//        $this->hookvalues['module'] = xarMod::getName($this->moduleid);
+//        $this->hookvalues['itemtype'] = $this->itemtype;
+//        $this->hookvalues['itemid'] = $this->itemid;
         // CHECKME: is this sufficient in most cases, or do we need an explicit xarModURL() ?
         $this->hookvalues['returnurl'] = xarServer::getCurrentURL();
 
@@ -1284,7 +1285,7 @@ class DataObjectMaster extends Object
                     // FIXME: We don't yet support a sort order for related object items, so order them by ID for now
                     $parts = explode('.',$right);
                     $table = trim($parts[0]);
-                    // We should actually sort by the objects primary key, but lets forgoe that for now
+                    // We should actually sort by the object's primary key, but lets forgoe that for now
 //                    $this->dataquery->setorder($table . ".id");
                 }
             } catch (Exception $e) {
