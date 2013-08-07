@@ -576,7 +576,7 @@ class xarTpl extends Object
  * @todo do we need to load the translations here or a bit later? (here:easy, later: better abstraction)
  * @todo implement common templates in cascade 
  */
-    private static function getSourceFileName($modName,$tplBase, $templateName = NULL, $tplSubPart = '')
+/*    private static function getSourceFileName($modName,$tplBase, $templateName = NULL, $tplSubPart = '')
     {
         if(method_exists('xarMod','getBaseInfo')) {
             if(!($modBaseInfo = xarMod::getBaseInfo($modName))) return;
@@ -675,7 +675,7 @@ class xarTpl extends Object
         $sourceFileName = preg_replace('%\/\/+%','/',$sourceFileName);
 
         return $sourceFileName;
-    }
+    }*/
 
 /**
  * Render a DD object through a template
@@ -1113,6 +1113,7 @@ class xarTpl extends Object
  * @param  string $tplName      The name of the template to use
  * @param  array  $tplData      array of data for the template
  * @param  string $tplPart      Optional sub path to look for templates in relative to template path
+ * @param  string $callerMod    Optional name of the module calling the template, if different from $package
  * @throws FileNotFoundException
  * @return string self::executeFromFile($sourceFileName, $tplData);
 **/
