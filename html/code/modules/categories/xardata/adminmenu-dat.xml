@@ -1,4 +1,4 @@
-<adminmenu>
+<menu>
     <menuitems>
         <menuitem>
 			<mask>ManageCategories</mask>
@@ -67,4 +67,4 @@
             <label>Modify Configuration</label>
         </menuitem>	
 	</menuitems>
-</adminmenu>
+</menu>
