@@ -7,39 +7,9 @@
             <h2>            
                 Modify DynamicData Configuration            
             </h2>
-            <xar:set name="params">array()</xar:set>
-            <xar:if condition="$tab eq ''">
-                <xar:set name="tab">'general'</xar:set>
-            </xar:if>
-            <xar:set name="tabclass">''</xar:set>
-            <ul class="xar-tabs xar-alt xar-norm-outline">
-                <xar:var name="title">Choose dynamicdata aspect to configure</xar:var>
-                <xar:var name="label">Aspect</xar:var>
-                <li class="xar-tabs-label" title="#$title#">#$label#</li>
-                <xar:set name="tabclass">'xar-tab'</xar:set>
-                <xar:set name="linkclass">''</xar:set>
-                <xar:set name="y">$params['tab']='general'</xar:set>
-                <xar:if condition="$tab eq 'general'">
-                    <xar:set name="tabclass">'xar-tab-active'</xar:set>
-                    <xar:set name="linkclass">''</xar:set>
-                </xar:if>
-                <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">General</a>
-                </li>
-            
-                <xar:set name="y">$params['tab']='managehooks'</xar:set>
-                <xar:set name="tabclass">'xar-tab'</xar:set>
-                <xar:set name="linkclass">''</xar:set>
-                <xar:if condition="$tab eq 'managehooks'">
-                    <xar:set name="tabclass">'xar-tab-active'</xar:set>
-                    <xar:set name="linkclass">''</xar:set>
-                </xar:if>
-                <xar:set name="y">$params['tab']='managehooks'</xar:set>
-                <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">Manage Hooks</a>
-                </li>
-            </ul>
-        </div><!--/xar-mod-page-head-->
+            <xar:set name="xmldata">'modifyconfig'</xar:set>
+            <xar:template type="module" module="base" file="admin-menu-skel"/>
+        </div>
         <div class="xar-mod-page-body">
 
             <!-- General tab -->

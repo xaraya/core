@@ -1,0 +1,34 @@
+<menu>
+    <menutitle>
+        <label>Configure</label>
+        <title>Choose a set of configuration options to modify</title>
+        <variable>tab</variable>
+    </menutitle>
+    <menuitems>
+        <menuitem>
+            <value>display</value>
+            <target>modifyconfig</target>
+            <label>Site Display</label>
+        </menuitem>
+        <menuitem>
+            <value>security</value>
+            <target>modifyconfig</target>
+            <label>Sessions and Security</label>
+        </menuitem>
+        <menuitem>
+            <value>locales</value>
+            <target>modifyconfig</target>
+            <label>Languages and Locales</label>
+        </menuitem>
+        <menuitem>
+            <value>logging</value>
+            <target>modifyconfig</target>
+            <label>Logging</label>
+        </menuitem>
+        <menuitem>
+            <value>other</value>
+            <target>modifyconfig</target>
+            <label>Other</label>
+        </menuitem>
+    </menuitems>
+</menu>

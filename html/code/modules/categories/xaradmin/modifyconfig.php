@@ -21,19 +21,8 @@
         // Security Check
         if (!xarSecurityCheck('AdminCategories')) return;
         if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-        if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'categories_general', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('tabmodule', 'str:1:100', $tabmodule, 'categories', XARVAR_NOT_REQUIRED)) return;
-        $hooks = xarModCallHooks('module', 'getconfig', 'categories');
-        if (!empty($hooks) && isset($hooks['tabs'])) {
-            foreach ($hooks['tabs'] as $key => $row) {
-                $configarea[$key]  = $row['configarea'];
-                $configtitle[$key] = $row['configtitle'];
-                $configcontent[$key] = $row['configcontent'];
-            }
-            array_multisort($configtitle, SORT_ASC, $hooks['tabs']);
-        } else {
-            $hooks['tabs'] = array();
-        }
 
         $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'categories'));
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
@@ -44,11 +33,9 @@
             case 'modify':
             default:
                 switch ($data['tab']) {
-                    case 'categories_general':
+                    case 'general':
                         break;
                     case 'categories_hooks':
-                        break;
-                    case 'tab3':
                         break;
                     default:
                         break;
@@ -88,7 +75,6 @@
                 break;
 
         }
-        $data['hooks'] = $hooks;
         $data['tabmodule'] = $tabmodule;
         return $data;
     }

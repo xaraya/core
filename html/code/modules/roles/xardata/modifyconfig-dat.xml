@@ -1,0 +1,39 @@
+<menu>
+    <menutitle>
+        <label>Configure</label>
+        <title>Configure</title>
+        <variable>tab</variable>
+    </menutitle>
+    <menuitems>
+        <menuitem>
+            <value>general</value>
+            <target>modifyconfig</target>
+            <label>General</label>
+        </menuitem>
+        <menuitem>
+            <value>duvs</value>
+            <target>modifyconfig</target>
+            <label>User Variables</label>
+        </menuitem>
+        <menuitem>
+            <value>hooks</value>
+            <target>modifyconfig</target>
+            <label>User Hooks</label>
+        </menuitem>
+        <menuitem>
+            <value>managehooks</value>
+            <target>modifyconfig</target>
+            <label>Manage Hooks</label>
+        </menuitem>
+        <menuitem>
+            <value>memberlist</value>
+            <target>modifyconfig</target>
+            <label>Member Options</label>
+        </menuitem>
+        <menuitem>
+            <value>debugging</value>
+            <target>modifyconfig</target>
+            <label>Debugging</label>
+        </menuitem>
+    </menuitems>
+</menu>

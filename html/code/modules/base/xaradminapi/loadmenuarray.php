@@ -51,38 +51,54 @@ function base_adminapi_loadmenuarray(Array $args=array())
     }
     if (!isset($args['layout'])) $args['layout'] = 'links';
 
+    // Make sure we have default values
     $menu = array();
     $menulinks = array();
-    $xmlfile = sys::code() . "modules/{$args['modname']}/xardata/{$args['modtype']}menu-dat.xml";
+    
+    if (!empty($args['xmldata'])) {
+        $xmlfile = sys::code() . "modules/{$args['modname']}/xardata/{$args['xmldata']}-dat.xml";
+    } else {
+        $xmlfile = sys::code() . "modules/{$args['modname']}/xardata/{$args['modtype']}menu-dat.xml";
+    }
     if (file_exists($xmlfile) && empty($args['noxml'])) {
         try {
             $xml = simplexml_load_file($xmlfile);
-            if($args['layout'] == 'tabs' && isset($xml->menutitle)) {
+
+            if(isset($xml->menutitle)) {
                 $menutitle = $xml->menutitle;
                 $menu['label'] = isset($menutitle->label) ? trim((string)$menutitle->label) : xarML('Actions');
                 $menu['title'] = isset($menutitle->title) ? trim((string)$menutitle->title) : xarML('Choose an action to perform');
+                $menu['variable'] = isset($menutitle->variable) ? trim((string)$menutitle->variable) : '';
             }
-            $menulinks = array();
+
             foreach ($xml->menuitems->children() as $menuitem) {
-                $target = isset($menuitem->target) ? trim((string)$menuitem->target) : null;
-                $label = isset($menuitem->label) ? trim((string)$menuitem->label) : xarML('Missing label');
-                $title = isset($menuitem->title) ? trim((string)$menuitem->title) : $label;
-                $mask = isset($menuitem->mask) ? trim((string)$menuitem->mask) : null;
-                $type = isset($menuitem->type) ? trim((string)$menuitem->type) : $args['modtype'] != 'user' ? $args['modtype'] : null;
-                $active = array();
+                $target    = isset($menuitem->target)    ? trim((string)$menuitem->target) : null;
+                $label     = isset($menuitem->label)     ? trim((string)$menuitem->label) : xarML('Missing label');
+                $title     = isset($menuitem->title)     ? trim((string)$menuitem->title) : $label;
+                $mask      = isset($menuitem->mask)      ? trim((string)$menuitem->mask) : null;
+                $condition = isset($menuitem->condition) ? trim((string)$menuitem->condition) : null;
+                $type      = isset($menuitem->type)      ? trim((string)$menuitem->type) : $args['modtype'] != 'user' ? $args['modtype'] : null;
+                $value     = isset($menuitem->value)     ? $menuitem->value : NULL;
+                $active    = array();
                 if (isset($menuitem->includes)) {
                     foreach ($menuitem->includes->children() as $include) {
                         $active[] = trim((string)$include);
                     }
                 }
+                if (!empty($menu['variable'])) {
+                    $url = xarModURL($args['modname'], $type, $target, array($menu['variable'] => $value));
+                } else {
+                    $url = xarModURL($args['modname'], $type, $target);
+                }
                 $menulinks[] = array(
-                    //'id' => !empty($target) ? $target : 'main',
-                    'label' => $label,
-                    'title' => $title,
-                    'url' => xarModURL($args['modname'], $type, $target, array()),
-                    'type' => !empty($type) ? $type : $args['modtype'],
-                    'mask' => $mask,
-                    'active' => $active,
+                    'label'       => $label,
+                    'title'       => $title,
+                    'url'         => $url,
+                    'type'        => !empty($type) ? $type : $args['modtype'],
+                    'mask'        => $mask,
+                    'condition'   => $condition,
+                    'active'      => $active,
+                    'value'       => $value,
                     //'isactive' => in_array($args['funcname'], $active) ? 1 : 0,
                 );
             }
@@ -103,12 +119,24 @@ function base_adminapi_loadmenuarray(Array $args=array())
     if (!empty($menulinks)) {
         $currenturl = xarServer::getCurrentURL();
         foreach ($menulinks as $k => $v) {
-            // sec check
+            // Security check
             if (!empty($v['mask']) && !xarSecurityCheck($v['mask'], 0)) {
                 unset($menulinks[$k]);
                 continue;
             }
-            // active link?
+            // General condition
+            if (isset($v['condition'])) {
+                if(preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/',$v['condition'])) {
+                    eval('$value = ' . $v['condition'] .';');
+                } else {
+                    $value = $v['condition'];
+                }
+                if(!$value) {
+                    unset($menulinks[$k]);
+                    continue;
+                }
+            }
+            // Active link?
             if (!empty($v['active']) && is_array($v['active']) && in_array($args['funcname'], $v['active']) ||
                 $v['url'] == $currenturl) {
                 $menulinks[$k]['isactive'] = 1;

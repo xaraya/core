@@ -13,6 +13,10 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Modify Mail Configuration</h2>
+        <xar:set name="xmldata">'modifyconfig'</xar:set>
+        <xar:template type="module" module="base" file="admin-menu-skel"/>
+        
+        <!--
         <xar:set name="params">array()</xar:set>
         <xar:if condition="$tab eq ''">
             <xar:set name="tab">'general'</xar:set>
@@ -32,20 +36,7 @@
             <li class="#$tabclass#">
                 <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">General</a>
             </li>
-            
-            <!-- Hide for now
-            <xar:set name="tabclass">'xar-tab'</xar:set>
-            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
-            <xar:if condition="$tab eq 'incoming'">
-                <xar:set name="tabclass">'xar-tab-active'</xar:set>
-                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
-            </xar:if>
-            <xar:set name="y">$params['tab']='incoming'</xar:set>
-            <li class="#$tabclass#">
-                <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">Incoming</a>
-            </li>
-            -->
-            
+                        
             <xar:set name="y">$params['tab']='outgoing'</xar:set>
             <xar:set name="tabclass">'xar-tab'</xar:set>
             <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
@@ -70,6 +61,7 @@
                 <a href="#xarServer::getCurrentURL($params)#" class="#$linkclass#">Manage Hooks</a>
             </li>
         </ul>
+    -->
         <form method="post" action="#xarServer::getCurrentURL()#" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded">
 
             <!-- General tab -->

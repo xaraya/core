@@ -13,64 +13,11 @@
     </script>
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-    <div class="xar-mod-page-head">
-        <h2 class="xar-mod-pagetitle">Modify System Configuration</h2>
-        <ul class="xar-tabs">
-            <xar:var name="title">Choose a set of configuration options to modify</xar:var>
-            <xar:var name="label">Modify</xar:var>
-            <li class="xar-tabs-label" title="#$title#">#$label#</li>
-            <xar:if condition="$tab eq 'display'">
-                <li class="xar-tab-active">
-                    <a href="#xarServer::getCurrentURL()#">Site Display</a>
-                </li>
-            <xar:else />
-                <li class="xar-tab">
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'display'))#">
-                    Site Display</a>
-                </li>
-            </xar:if>
-            <xar:if condition="$tab eq 'security'">
-                <li class="xar-tab-active">
-                    <a href="#xarServer::getCurrentURL()#">Sessions/Security</a>
-                </li>
-            <xar:else />
-                <li class="xar-tab">
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'security'))#">
-                    Sessions and Security</a>
-                </li>
-            </xar:if>
-            <xar:if condition="$tab eq 'locales'">
-                <li class="xar-tab-active">
-                    <a href="#xarServer::getCurrentURL()#">Languages and Locales</a>
-                </li>
-            <xar:else />
-                <li class="xar-tab">
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'locales'))#">
-                    Languages and Locales</a>
-                </li>
-            </xar:if>
-            <xar:if condition="$tab eq 'logging'">
-                <li class="xar-tab-active">
-                    <a href="#xarServer::getCurrentURL()#">Logging</a>
-                </li>
-            <xar:else />
-                <li class="xar-tab">
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'logging'))#">
-                    Logging</a>
-                </li>
-            </xar:if>
-            <xar:if condition="$tab eq 'other'">
-                <li class="xar-tab-active">
-                    <a href="#xarServer::getCurrentURL()#">Other</a>
-                </li>
-            <xar:else />
-                <li class="xar-tab">
-                    <a href="#xarModURL('base', 'admin', 'modifyconfig', array('tab' =&gt; 'other'))#">
-                    Other</a>
-                </li>
-            </xar:if>
-        </ul>
-        </div><!--/xar-mod-page-head-->
+        <div class="xar-mod-page-head">
+            <h2 class="xar-mod-pagetitle">Modify System Configuration</h2>
+            <xar:set name="xmldata">'modifyconfig'</xar:set>
+            <xar:template type="module" module="base" file="admin-menu-skel"/>
+        </div>
         <div class="xar-mod-page-body">
         <!-- Begin Site Display Options -->
         <xar:if condition="$tab eq 'display'">

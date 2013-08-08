@@ -64,7 +64,7 @@
             </includes>
             <target>modifyconfig</target>
 			<title>Configure the Categories module</title>
-            <label>Modify Config</label>
+            <label>Modify Configuration</label>
         </menuitem>	
 	</menuitems>
 </adminmenu>
