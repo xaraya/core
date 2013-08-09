@@ -6,36 +6,8 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Recall / Purge</h2>
-        <div>
-            <ul class="xar-tabs xar-alt xar-norm-outline">
-                <xar:var name="title">Choose</xar:var>
-                <xar:var name="label">Choose</xar:var>
-                <li class="xar-tabs-label" title="#$title#">#$label#</li>
-                <xar:if condition="$operation eq 'recall'">
-                    <li class="xar-tab-active">
-                        <a href="#xarModURL('roles','admin','purge',array('operation'=>'recall'))#" class="xar-accent xar-accent-outline">
-                            Recall Groups and Users
-                        </a>
-                    </li>
-                    <li class="xar-tab">
-                        <a href="#xarModURL('roles','admin','purge',array('operation'=>'purge'))#" class="xar-norm xar-norm-outline">
-                            Purge Users
-                        </a>
-                    </li>
-                <xar:else />
-                    <li class="xar-tab">
-                        <a href="#xarModURL('roles','admin','purge',array('operation'=>'recall'))#" class="xar-norm xar-norm-outline">
-                            Recall Groups and Users
-                        </a>
-                    </li>
-                    <li class="xar-tab-active">
-                        <a href="#xarModURL('roles','admin','purge',array('operation'=>'purge'))#" class="xar-accent xar-accent-outline">
-                        Purge Users
-                        </a>
-                    </li>
-                </xar:if>
-            </ul>
-        </div>
+        <xar:set name="xmldata">'purge'</xar:set>
+        <xar:template type="module" module="base" file="admin-menu-skel"/>
         <xar:if condition="$operation eq 'recall'">
             <h3>Recall Deleted Groups and Users</h3>
             <form method="post" action="#xarModURL('roles','admin','purge')#" enctype="application/x-www-form-urlencoded">

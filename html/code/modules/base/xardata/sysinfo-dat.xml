@@ -1,0 +1,49 @@
+<menu>
+    <menutitle>
+        <label>PHP Information</label>
+        <title>Click on a tab to display specific information from your server php installation</title>
+        <variable>what</variable>
+    </menutitle>
+    <menuitems>
+        <menuitem>
+            <value>1</value>
+            <target>sysinfo</target>
+            <label>General info</label>
+        </menuitem>
+        <menuitem>
+            <value>2</value>
+            <target>sysinfo</target>
+            <label>Credits</label>
+        </menuitem>
+        <menuitem>
+            <value>4</value>
+            <target>sysinfo</target>
+            <label>Configuration</label>
+        </menuitem>
+        <menuitem>
+            <value>8</value>
+            <target>sysinfo</target>
+            <label>Modules</label>
+        </menuitem>
+        <menuitem>
+            <value>16</value>
+            <target>sysinfo</target>
+            <label>Environment</label>
+        </menuitem>
+        <menuitem>
+            <value>32</value>
+            <target>sysinfo</target>
+            <label>Variables</label>
+        </menuitem>
+        <menuitem>
+            <value>64</value>
+            <target>sysinfo</target>
+            <label>License</label>
+        </menuitem>
+        <menuitem>
+            <value>-1</value>
+            <target>sysinfo</target>
+            <label>All</label>
+        </menuitem>
+    </menuitems>
+</menu>

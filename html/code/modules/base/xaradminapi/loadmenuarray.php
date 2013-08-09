@@ -85,6 +85,11 @@ function base_adminapi_loadmenuarray(Array $args=array())
                         $active[] = trim((string)$include);
                     }
                 }
+                if (isset($value)) {
+                    if(preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/',$value)) {
+                        eval('$value = ' . $value .';');
+                    }
+                }
                 if (!empty($menu['variable'])) {
                     $url = xarModURL($args['modname'], $type, $target, array($menu['variable'] => $value));
                 } else {

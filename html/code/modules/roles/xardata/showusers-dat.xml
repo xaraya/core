@@ -1,0 +1,39 @@
+<menu>
+    <menutitle>
+        <label>Manage Role</label>
+        <title>Choose an action to perform on a user or group</title>
+        <variable>id</variable>
+    </menutitle>
+    <menuitems>
+        <menuitem>
+            <value>xarCoreCache::getCached('Roles.users', 'id')</value>
+            <target>display</target>
+            <label>Display</label>
+        </menuitem>
+        <menuitem>
+            <value>xarCoreCache::getCached('Roles.users', 'id')</value>
+            <target>modify</target>
+            <label>Modify</label>
+        </menuitem>
+        <menuitem>
+            <value>xarCoreCache::getCached('Roles.users', 'id')</value>
+            <target>delete</target>
+            <label>Delete</label>
+        </menuitem>
+        <menuitem>
+            <value>xarCoreCache::getCached('Roles.users', 'id')</value>
+            <target>showprivileges</target>
+            <label>Privileges</label>
+        </menuitem>
+        <menuitem>
+            <value>xarCoreCache::getCached('Roles.users', 'id')</value>
+            <target>showusers</target>
+            <label>Users</label>
+        </menuitem>
+        <menuitem>
+            <value>xarCoreCache::getCached('Roles.users', 'id')</value>
+            <target>testprivileges</target>
+            <label>Test privileges</label>
+        </menuitem>
+    </menuitems>
+</menu>

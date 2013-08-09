@@ -1,0 +1,24 @@
+<menu>
+    <menutitle>
+        <label>Function</label>
+        <title>Choose a mail function to perform</title>
+        <variable>tab</variable>
+    </menutitle>
+    <menuitems>
+        <menuitem>
+            <value>createmail</value>
+            <target>createmail</target>
+            <label>Send Mail</label>
+        </menuitem>
+        <menuitem>
+            <value>modifyemail</value>
+            <target>modifyemail</target>
+            <label>Templates</label>
+        </menuitem>
+        <menuitem>
+            <value>modifynotice</value>
+            <target>modifynotice</target>
+            <label>Configure</label>
+        </menuitem>
+    </menuitems>
+</menu>
