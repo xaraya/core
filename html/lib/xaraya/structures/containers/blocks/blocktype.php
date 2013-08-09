@@ -252,9 +252,10 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     {
         $allowed = array_keys($this->getConfiguration());
         if (empty($this->block_id)) {
-            // We assume this is a block tag: attributes overwrite the type_info
-            if (!empty($this->blockinfo['type_info'])) $content = $this->blockinfo['content'] + $this->blockinfo['type_info'];
-            else $content = $this->blockinfo['content'];
+            // We assume this is a block tag: attributes overwrite the type_info (if they exist)
+            $attributes = isset($this->blockinfo['content']) ? $this->blockinfo['content'] : array();
+            if (!empty($this->blockinfo['type_info'])) $content = $attributes + $this->blockinfo['type_info'];
+            else $content = $attributes;
         } else {
             // We assume a block created via the UI
             $content = $this->blockinfo['content'];
@@ -289,9 +290,10 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     {
         if (empty($content)) {
             if (empty($this->block_id)) { 
-                // We assume this is a block tag: attributes overwrite the type_info
-                if (!empty($this->blockinfo['type_info'])) $content = $this->blockinfo['content'] + $this->blockinfo['type_info'];
-                else $content = $this->blockinfo['content'];
+                // We assume this is a block tag: attributes overwrite the type_info (if they exist)
+                $attributes = isset($this->blockinfo['content']) ? $this->blockinfo['content'] : array();
+                if (!empty($this->blockinfo['type_info'])) $content = $attributes + $this->blockinfo['type_info'];
+                else $content = $attributes;
             } else {
                 // We assume a block created via the UI
                 $content = $this->blockinfo['content'];
