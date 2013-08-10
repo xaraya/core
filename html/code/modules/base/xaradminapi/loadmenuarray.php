@@ -48,6 +48,7 @@ function base_adminapi_loadmenuarray(Array $args=array())
         // handle modules using util as an admin type
         if ($args['modtype'] == 'util') $args['modtype'] = 'admin';
         if (empty($args['funcname'])) $args['funcname'] = $urlinfo[2];
+        if (empty($args['urlargs'])) $args['urlargs'] = array();
     }
     if (!isset($args['layout'])) $args['layout'] = 'links';
 
@@ -91,10 +92,9 @@ function base_adminapi_loadmenuarray(Array $args=array())
                     }
                 }
                 if (!empty($menu['variable'])) {
-                    $url = xarModURL($args['modname'], $type, $target, array($menu['variable'] => $value));
-                } else {
-                    $url = xarModURL($args['modname'], $type, $target);
+                    $args['urlargs'][$menu['variable']] = $value;
                 }
+                $url = xarModURL($args['modname'], $type, $target, $args['urlargs']);
                 $menulinks[] = array(
                     'label'       => $label,
                     'title'       => $title,

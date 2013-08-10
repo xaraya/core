@@ -9,6 +9,11 @@
             <xar:set name="pname">$object->properties['name']->getValue()</xar:set>
         </xar:if>
         <h2>Test Privileges of #$itemtypename# '#$pname#':</h2>
+        <xar:set name="request">xarController::$request->getInfo()</xar:set>
+        <xar:set name="activetab">#$request.2#</xar:set>
+        <xar:set name="xmldata">'showusers'</xar:set>
+        <xar:set name="urlargs">array('id' => $id, 'reload' => 'reload')</xar:set>
+        <xar:template type="module" module="base" file="admin-menu-skel"/>
         <xar:if condition="count($parents) ne 0">
             <div>
                 <ul class="xar-tabs xar-alt xar-norm-outline">
@@ -30,8 +35,6 @@
                 </ul>
             </div>
         </xar:if>
-        <!-- Show the general tab list for roles -->
-        <xar:template file="tablist"/>
         <form action="#xarModURL('roles','admin','testprivileges')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Scope</legend>

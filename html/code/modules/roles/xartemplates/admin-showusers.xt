@@ -27,15 +27,12 @@
                 '#xarVarPrepForDisplay($search)#'
             </xar:if>(#$totalselect#)
         </h2>
-        <!-- TODO set the active tab here -->
-        <!-- Show the general tab list for roles -->
         <xar:set name="itemtype">xarRoles::ROLES_GROUPTYPE</xar:set>
         <xar:set name="request">xarController::$request->getInfo()</xar:set>
         <xar:set name="activetab">#$request.2#</xar:set>
-        <xar:set name="dummy">xarCoreCache::setCached('Roles.users', 'tab', $activetab)</xar:set>
         <xar:set name="xmldata">'showusers'</xar:set>
+        <xar:set name="urlargs">array('id' => $id, 'reload' => 'reload')</xar:set>
         <xar:template type="module" module="base" file="admin-menu-skel"/>
-        <xar:template file="tablist"/>
         <xar:if condition="$selstyle eq '0'">
         <xar:elseif condition="$selstyle eq '1'"/>
             <fieldset>

@@ -9,6 +9,11 @@
             <xar:set name="thisname">$object->properties['name']->getValue()</xar:set>
         </xar:if>
         <h2>Manage #$itemtypename# '#$thisname#':</h2>
+        <xar:set name="request">xarController::$request->getInfo()</xar:set>
+        <xar:set name="activetab">#$request.2#</xar:set>
+        <xar:set name="xmldata">'showusers'</xar:set>
+        <xar:set name="urlargs">array('id' => $id, 'reload' => 'reload')</xar:set>
+        <xar:template type="module" module="base" file="admin-menu-skel"/>
         <xar:if condition="count($parents) gt 0">
             <div>
                 <ul class="xar-tabs xar-alt xar-norm-outline">
@@ -30,40 +35,6 @@
                 </ul>
             </div>
         </xar:if>
-        <div>
-            <ul class="xar-tabs xar-alt xar-norm-outline">
-                <xar:var name="title">Actions</xar:var>
-                <xar:var name="label">Actions</xar:var>
-                <li class="xar-tabs-label" title="#$title#">#$label#</li>
-                <li class="xar-tab">
-                    <a href="#xarModURL('roles','admin','display',array('id'=>$id))#" class="xar-norm xar-norm-outline">
-                        Display
-                    </a>
-                </li>
-                <li class="xar-tab">
-                    <a href="#xarModURL('roles','admin','modify',array('id'=>$id))#" class="xar-norm xar-norm-outline">
-                        Modify
-                    </a>
-                </li>
-                <li class="xar-tab-active">
-                    <a href="#xarModURL('roles','admin','delete',array('id'=>$id))#" class="xar-accent xar-accent-outline">
-                        Delete
-                    </a>
-                </li>
-                <li class="xar-tab">
-                    <a href="#xarModURL('roles','admin','showprivileges',array('id'=>$id))#" class="xar-norm xar-norm-outline">
-                        Privileges
-                    </a>
-                </li>
-                <xar:if condition="$ptype eq 1">
-                    <li class="xar-tab">
-                        <a href="#xarModURL('roles','admin','showusers',array('id'=>$id))#" class="xar-norm xar-norm-outline">
-                            Users
-                        </a>
-                    </li>
-                </xar:if>
-            </ul>
-        </div>
         <xar:if condition="$frozen">
             <p>You do not have the privileges to delete #$itemtypename# #$name#</p>
         <xar:else />
