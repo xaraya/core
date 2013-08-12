@@ -247,6 +247,11 @@ class SubItemsProperty extends DataProperty
             $this->localmodule = $info[0];
             $data['localmodule'] = $this->localmodule;
         }
+        
+        // Some args need to be passed on to the object
+        if (isset($data['layout'])) $data['object']->layout = $data['layout'];
+        if (isset($data['tplmodule'])) $data['object']->tplmodule = $data['tplmodule'];
+        
         return parent::showOutput($data);
     }
 
