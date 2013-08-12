@@ -229,7 +229,7 @@ class SubItemsProperty extends DataProperty
         if (isset($data['layout'])) $data['object']->layout = $data['layout'];
         if (isset($data['tplmodule'])) $data['object']->tplmodule = $data['tplmodule'];
         
-        return xarTpl::property($data['tplmodule'], $data['template'], 'showinput', $data);
+        return parent::showInput($data);
     }
 
     public function showOutput(Array $data = array())
@@ -256,7 +256,7 @@ class SubItemsProperty extends DataProperty
         if (isset($data['layout'])) $data['object']->layout = $data['layout'];
         if (isset($data['tplmodule'])) $data['object']->tplmodule = $data['tplmodule'];
         
-        return xarTpl::property($data['tplmodule'], $data['template'], 'showoutput', $data);
+        return parent::showOutput($data);
     }
 
 /*
