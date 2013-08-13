@@ -259,6 +259,61 @@ class SubItemsProperty extends DataProperty
         return parent::showOutput($data);
     }
 
+    public function showHidden(Array $data = array())
+    {
+        // Force the fieldprefix
+        $data['fieldprefix'] = $this->fieldprefix;
+        $this->setPrefix($this->fieldprefix);
+        
+        if (empty($data['addremove'])) $data['addremove'] = $this->initialization_addremove;
+        if (empty($data['minimumitems'])) $data['minimumitems'] = $this->initialization_minimumitems;
+
+        // This will hold the item(s)
+        $data['object'] = $this->subitemsobject;
+        $oldprefix = $this->objectref->getFieldPrefix();
+        $newprefix = empty($oldprefix) ? $this->fieldprefix : $oldprefix . "_" . $this->fieldprefix;
+        $data['newprefix'] = $newprefix;
+
+        $data['object']->setFieldPrefix($newprefix);
+        
+        // Get the object's default values, with overrides, and pass them to the template
+        foreach ($data['object']->getProperties() as $name  => $property) 
+            if (!isset($this->defaultvalues[$name])) $data['defaultfieldvalues'][$name] = $property->defaultvalue;
+            else $data['defaultfieldvalues'][$name] = $this->defaultvalues[$name];
+        
+        $data['itemid'] = $this->_itemid;
+
+        if (empty($data['items'])) {
+            // 2. Nothing passed in the tag, look for the items data if checkInput ran
+            if (!empty($this->itemsdata)) {
+                try {
+                    // Display the items from previous rounds
+                    $data['items'] = $this->itemsdata[$newprefix];   
+                    unset($this->itemsdata[$newprefix]);
+                } catch (Exception $e) {
+                    // Display the newly added items 
+                    $data['items'] = array_shift($this->itemsdata);   
+                }
+            } else {
+                    // 3. Otherwise get the values from the parent object
+                    $data['items'] = $this->_getItemsData();
+            }
+
+            // 4. If still no items and we are passing default values from the property, use them
+            if (empty($data['items']) && is_array($this->defaultvalue) && !empty($this->defaultvalue)) {
+                $data['items'] = $this->defaultvalue;
+            }
+
+            // 5. Add items of the object's defaultvalues if the number of items does not reach the minimum to be displayed
+            if ($data['minimumitems'] > count($data['items'])) {
+                $limit = $data['minimumitems'];
+                $start = count($data['items']);
+                for ($i=$start;$i<$limit;$i++) $data['items'][$i+1] = $data['defaultfieldvalues'];
+            }
+        }
+        return parent::showHidden($data);
+    }
+
 /*
  * The public function just returns the contents of the itemsdata array corresponding to this property's key
  */

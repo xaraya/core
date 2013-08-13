@@ -1,33 +1,25 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-    <input type="hidden" name="#$fieldprefix#_fieldprefix" id="#$fieldprefix#_fieldprefix" value="#$fieldprefix#" />
-        
-    <!-- we have a fixed number of items  -->
-        <xar:set name="itemsdisplayed">""</xar:set>
-        <xar:set name="i">0</xar:set>
+    <xar:set name="itemkeys">implode(',',array_keys($items))</xar:set>
+    <xar:set name="itemkenumber_of_subitems">count($items)</xar:set>
+    <input type="hidden" name="number_of_subitems_#$newprefix#" id="number_of_subitems_#$newprefix#" value="#$itemkenumber_of_subitems#" />
+    <input type="hidden" name="itemid_#$newprefix#" id="itemid_#$newprefix#" value="#$itemid#" />
+    <input type="hidden" name="subitem_ids_#$newprefix#" id="subitem_ids_#$newprefix#" value="#$itemkeys#" />
+    <input type="hidden" name="subitem_previous_ids_#$newprefix#" id="subitem_previous_ids_#$newprefix#" value="#$itemkeys#" />
 
-        <!-- Display the existing objects -->
-        <xar:foreach in="$items" value="$item" >
-            <xar:set name="i">$i+1</xar:set>
-            <xar:set name="itemsdisplayed">$itemsdisplayed . "," . $i</xar:set>
-            <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
-
-            <div id="#$fieldprefix#_item#$i#" style="display: none">
-                <xar:data-form object="$item" fieldprefix="$prefix" tplmodule="$tplmodule" layout="$layout" />
+    <div id="item_content_#$fieldprefix#" style="display: none">
+        <xar:set name="index">'index_' . $fieldprefix</xar:set>
+        <xar:set name="$index">0</xar:set>
+        <xar:set name="prefix">$object->getFieldPrefix()</xar:set>
+        <xar:foreach in="$items" key="$key" value="$item">
+            <!-- xar:set name="$index">$$index+1</xar:set> -->
+            <xar:set name="$index">$key</xar:set>
+            <xar:set name="dummy">$object->setFieldPrefix($$index . '_' . $prefix)</xar:set>
+            <xar:set name="dummy">$object->setFieldValues($item)</xar:set>
+            <div id="#$key#">
+                <xar:data-form object="$object" tplmodule="$tplmodule" layout="$layout" />
             </div>
         </xar:foreach>
-
-        <!-- Display empty objects up to the required minimum (should not really happen) -->
-        <xar:for start="$i = $i+1" test="$i le $minimumitems" iter="$i++">
-            <xar:set name="itemsdisplayed">$itemsdisplayed . "," . $i</xar:set>
-            <xar:set name="prefix">"Item_" . $i . "_" . $fieldprefix</xar:set>
-
-            <div id="#$fieldprefix#_item#$i#" style="display: none">
-                <xar:data-form object="$emptyobject" fieldprefix="$prefix" tplmodule="$tplmodule" layout="$layout" />
-            </div>
-        </xar:for>
-    
-    <xar:set name="itemsdisplayed">trim($itemsdisplayed,",")</xar:set>
-    <input type="hidden" name="#$fieldprefix#_itemsdisplayed" id="#$fieldprefix#_itemsdisplayed" value="#$itemsdisplayed#" />
+    </div>
 </xar:template>
