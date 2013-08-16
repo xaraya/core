@@ -259,15 +259,13 @@ class ArrayProperty extends DataProperty
         
                 // Load the configuration data and get the exploded fields
                 $configfields = $this->parseConfiguration($data["configuration"]);
-                // Get the values for titles and column types
-//                if (!isset($data['column_definition'])) $data['column_definition'] = $this->display_column_definition;
-//                $titles = $data['column_definition'][0];
-//                $types = $data['column_definition'][1];
-//                $defaults = $data['column_definition'][2];
-//                $configurations = $data['column_definition'][3];
 
                 if (isset($this->display_column_definition['value'])) {
                     $displayconfig = $this->display_column_definition['value'];
+
+                    // Define the layout for this special case, where the arrayproperty is a configuration setting of an array property
+                    // How best to tell?
+                    if ($this->type == 999) $data['layout'] = 'array_configuration';
                 } else {
                     $displayconfig = $this->display_column_definition;
                 }
@@ -276,26 +274,8 @@ class ArrayProperty extends DataProperty
                 $defaults = $displayconfig[2];
                 $configurations = $displayconfig[3];
 
-//                $configuration = unserialize($data['configuration']['value']);
                 if (isset($configfields['value'])) $data['value'] = $configfields['value'];
-/*                
-//                // CHECKME: Get the value array. This is a bit odd, but not sure we can do better
-//                if (isset($data['value']['value'])) $data['value'] = $data['value']['value'];
-                // Remove any empty rows, i.e. those where there is no title
-                $temp = array();
-                foreach ($data['value'][0] as $k => $v) {
-                    if (!empty($v)) {
-                        $temp[0][] = $v;
-                        $temp[1][] = $data['value'][1][$k];
-                        $temp[2][] = $data['value'][2][$k];
-                        $temp[3][] = $data['value'][3][$k];
-                    }
-                }
-//                $data['value'] = $temp;
-//                $data['rows'] = count($data['value'][0]);
-*/                
-                // Define the layout for this special case.
-                if ($this->type == 999) $data['layout'] = 'array_configuration';
+
         } else {
             try {
                 // New way for configs
@@ -308,10 +288,6 @@ class ArrayProperty extends DataProperty
                 // Legacy way for configs
                 $titles = $this->display_column_definition[0];
                 $types = $this->display_column_definition[1];
-                // FIXME: this needs to be checked for in the template
-                // CHECKME: what was the logic for this?
-                //$defaults = array();
-                //$configurations = array();
                 $defaults = $this->display_column_definition[2];
                 $configurations = $this->display_column_definition[3];
             }
