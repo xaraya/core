@@ -4,9 +4,5 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <xar:template file="hooked-mainpart" module="modules"/>
-        <xar:if condition="empty($return_url)">
-            <xar:var name="label">Save Changes</xar:var>
-            <xar:button type="submit" label="$label"/>
-        </xar:if> 
     </div>
 </xar:template>
