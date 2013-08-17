@@ -6,11 +6,14 @@
         <xar:if condition="!isset($xmldata)">
             <xar:set name="xmldata">''</xar:set>
         </xar:if>
+        <xar:if condition="!isset($phpdata)">
+            <xar:set name="phpdata">''</xar:set>
+        </xar:if>
         <xar:if condition="!isset($urlargs)">
             <xar:set name="urlargs">array()</xar:set>
         </xar:if>
         <!-- loadmenuarray function does all the hard work for us :) -->
-        <xar:set name="navitems">xarMod::apiFunc('base', 'admin', 'loadmenuarray', array('layout' => 'tabs', 'xmldata' => $xmldata, 'urlargs' => $urlargs))</xar:set>
+        <xar:set name="navitems">xarMod::apiFunc('base', 'admin', 'loadmenuarray', array('layout' => 'tabs', 'xmldata' => $xmldata, 'phpdata' => $phpdata, 'urlargs' => $urlargs))</xar:set>
         <!-- only display if we found some links -->
         <xar:if condition="!empty($navitems['menulinks'])">
             <ul class="xar-tabs xar-alt xar-norm-outline">

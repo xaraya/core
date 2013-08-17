@@ -55,13 +55,45 @@ function base_adminapi_loadmenuarray(Array $args=array())
     // Make sure we have default values
     $menu = array();
     $menulinks = array();
-    
+
     if (!empty($args['xmldata'])) {
         $xmlfile = sys::code() . "modules/{$args['modname']}/xardata/{$args['xmldata']}-dat.xml";
     } else {
         $xmlfile = sys::code() . "modules/{$args['modname']}/xardata/{$args['modtype']}menu-dat.xml";
     }
-    if (file_exists($xmlfile) && empty($args['noxml'])) {
+    if (!empty($args['phpdata'])) {
+        foreach ($args['phpdata'] as $menuitem) {
+            $url       = isset($menuitem['url'])       ? trim((string)$menuitem['url']) : null;
+            $target    = isset($menuitem['target'])    ? trim((string)$menuitem['target']) : null;
+            $label     = isset($menuitem['label'])     ? trim((string)$menuitem['label']) : xarML('Missing label');
+            $title     = isset($menuitem['title'])     ? trim((string)$menuitem['title']) : $label;
+            $mask      = isset($menuitem['mask'])      ? trim((string)$menuitem['mask']) : null;
+            $condition = isset($menuitem['condition']) ? trim((string)$menuitem['condition']) : null;
+            $type      = isset($menuitem['type'])      ? trim((string)$menuitem['type']) : $args['modtype'] != 'user' ? $args['modtype'] : null;
+            $value     = isset($menuitem['value'])     ? $menuitem['value'] : null;
+            $active    = array();
+            if (isset($value)) {
+                if(preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/',$value)) {
+                    eval('$value = ' . $value .';');
+                }
+            }
+            if (!empty($menu['variable'])) {
+                $args['urlargs'][$menu['variable']] = $value;
+            }
+            if (!isset($url)) $url = xarModURL($args['modname'], $type, $target, $args['urlargs']);
+            $menulinks[] = array(
+                'label'       => $label,
+                'title'       => $title,
+                'url'         => $url,
+                'type'        => !empty($type) ? $type : $args['modtype'],
+                'mask'        => $mask,
+                'condition'   => $condition,
+                'active'      => $active,
+                'value'       => $value,
+                //'isactive' => in_array($args['funcname'], $active) ? 1 : 0,
+            );
+        }
+    } elseif (file_exists($xmlfile) && empty($args['noxml'])) {
         try {
             $xml = simplexml_load_file($xmlfile);
 
@@ -79,7 +111,7 @@ function base_adminapi_loadmenuarray(Array $args=array())
                 $mask      = isset($menuitem->mask)      ? trim((string)$menuitem->mask) : null;
                 $condition = isset($menuitem->condition) ? trim((string)$menuitem->condition) : null;
                 $type      = isset($menuitem->type)      ? trim((string)$menuitem->type) : $args['modtype'] != 'user' ? $args['modtype'] : null;
-                $value     = isset($menuitem->value)     ? $menuitem->value : NULL;
+                $value     = isset($menuitem->value)     ? $menuitem->value : null;
                 $active    = array();
                 if (isset($menuitem->includes)) {
                     foreach ($menuitem->includes->children() as $include) {

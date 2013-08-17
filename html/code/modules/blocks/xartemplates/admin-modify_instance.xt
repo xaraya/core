@@ -4,7 +4,8 @@
     <xar:template type="module" module="blocks" file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Modify Block Instance</h2>
-        <xar:template type="module" module="blocks" file="admin-interfaces"/>
+        <xar:set name="phpdata">$interfaces</xar:set>
+        <xar:template type="module" module="base" file="admin-menu-skel"/>
         <xar:if condition="$interface eq 'display'">
             <xar:template type="module" module="blocks" file="instance-info"/>
 
@@ -320,7 +321,7 @@
                                 <input type="hidden" name="block_id" id="block_id" value="#$block['block_id']#"/>
                                 <input type="hidden" name="interface" id="interface" value="#$interface#"/>
                                 <input type="hidden" name="method" id="method" value="#$method#"/>
-                                <input type="submit" value="#$submitLabel#"/>
+                                <xar:button type="submit" value="$submitLabel"/>
                             </div>
                         </div>
                     </fieldset>
