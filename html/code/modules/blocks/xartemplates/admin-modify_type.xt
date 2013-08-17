@@ -4,7 +4,8 @@
     <xar:template type="module" module="blocks" file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>#$type['type_info']['text_type']# Block Type</h2>
-        <xar:template type="module" module="blocks" file="admin-interfaces"/>
+        <xar:set name="phpdata">$interfaces</xar:set>
+        <xar:template type="module" module="base" file="admin-menu-skel"/>
         <!-- Basic type information (from db), displayed in every interface -->
         <fieldset>
             <legend>Block Type</legend>
