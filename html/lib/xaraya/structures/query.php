@@ -1014,13 +1014,14 @@ class Query
         foreach ($this->tablelinks as $link) {
             $fullfield1 = $this->_deconstructfield($link['field1']);
             $fullfield2 = $this->_deconstructfield($link['field2']);
+            
+            // In general one table has already been added to the query string, and we need that table
+            // to be first in the next clause sothat the syntax is correct. This next part makes sure that happens
+            // For the initial two tables at the beginning of the query string this has no effect.
             if (isset($tablesdone[$fullfield2['table']])) {
                 $temp = $fullfield2;
                 $fullfield2 = $fullfield1;
                 $fullfield1 = $temp;
-                $temp = $link['field2'];
-                $link['field2'] = $link['field1'];
-                $link['field1'] = $temp;
             }
             $name = $this->_gettablenamefromalias($fullfield1['table']);
             if (isset($tablesdone[$fullfield1['table']])) {
