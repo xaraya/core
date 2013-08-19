@@ -1016,7 +1016,7 @@ class Query
             $fullfield2 = $this->_deconstructfield($link['field2']);
             
             // In general one table has already been added to the query string, and we need that table
-            // to be first in the next clause sothat the syntax is correct. This next part makes sure that happens
+            // to be first in the next clause so that the syntax is correct. This next part makes sure that happens,
             // For the initial two tables at the beginning of the query string this has no effect.
             if (isset($tablesdone[$fullfield2['table']])) {
                 $temp = $fullfield2;
