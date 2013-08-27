@@ -82,5 +82,25 @@
       <seq>7</seq>
       <configuration></configuration>
     </property>
+    <property name="frontend_page">
+      <id>101</id>
+      <label>Default Frontend Pag</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>module variable: base</source>
+      <status>33</status>
+      <seq>8</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
+    <property name="backend_page">
+      <id>102</id>
+      <label>Default Backend Page</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>module variable: base</source>
+      <status>33</status>
+      <seq>9</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
   </properties>
 </object>

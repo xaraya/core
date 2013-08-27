@@ -663,7 +663,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
                 $modulefields[$this->modulename]['source'] = $field->source;
             }
             $numitems = 0;
-            foreach ($modulefields as $key => $values) {//var_dump($modulefields);exit;
+            foreach ($modulefields as $key => $values) {
                 if (count($values)<1) continue;
                 $modid = xarMod::getID(substr(trim($values['source']),17));
                 $bindmarkers = '?' . str_repeat(',?',count($values['name'])-1);
