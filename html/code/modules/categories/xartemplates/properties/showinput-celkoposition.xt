@@ -47,7 +47,7 @@
                     </select>
                 </xar:if>
             </div>
-        </div>#$position# #$reference_id#
+        </div>
         <!-- The position needs to be set after items select because There is no position which we can have a selected item that will work in all cases-->
         <div class="xar-row">
             <div class="xar-col-condensed">
