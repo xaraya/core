@@ -21,7 +21,7 @@ sys::import('modules.dynamicdata.class.objects.interfaces');
  */
 class DataObject extends DataObjectMaster implements iDataObject
 {
-    public $itemid         = 0;
+    public $itemid;
     public $missingfields  = array(); // reference to fields not found by checkInput
 
 // CHECKME: should exclude VIEWONLY here, as well as DISABLED (and IGNORED ?)
@@ -36,6 +36,7 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         // get the object type information from our parent class
         $this->loader($descriptor);
+        unset($descriptor);
 
         // Get a reference to each property's value and find the primarys index
         if (!empty($args['config'])) {
@@ -247,15 +248,6 @@ class DataObject extends DataObjectMaster implements iDataObject
             $args['properties'][$name] = $this->properties[$name];
         }
 
-        // Order the fields if this is an extended object
-        if (!empty($this->fieldorder)) {
-            $tempprops = array();
-            foreach ($this->fieldorder as $field)
-                if (isset($args['properties'][$field]))
-                    $tempprops[$field] = $args['properties'][$field];
-            $args['properties'] = $tempprops;
-        }
-
         // pass some extra template variables for use in BL tags, API calls etc.
         //FIXME: check these
         $args['isprimary'] = !empty($this->primary);
@@ -292,7 +284,6 @@ class DataObject extends DataObjectMaster implements iDataObject
         $this->callHooks('transform');
 
         $args['properties'] = array();
-
         foreach($this->fieldlist as $name) {
             if(!isset($this->properties[$name])) continue;
 
@@ -303,16 +294,12 @@ class DataObject extends DataObjectMaster implements iDataObject
             if ($this->properties[$name]->type == 21 || !isset($this->hookvalues[$name])) {
                 $args['properties'][$name] = $this->properties[$name];
             } else {
-                $args['properties'][$name] = clone $this->properties[$name];
+                $args['properties'][$name] = $this->properties[$name];
                 $args['properties'][$name]->value = $this->hookvalues[$name];
             }
         }
         // clean up hookvalues
         $this->hookvalues = array();
-
-// CHECKME: we won't call display hooks for this item here (yet) - to be investigated
-//        $this->callHooks('display');
-//        $data['hooks'] = $this->hookoutput;
 
         // pass some extra template variables for use in BL tags, API calls etc.
         //FIXME: check these
@@ -365,20 +352,20 @@ class DataObject extends DataObjectMaster implements iDataObject
         //  2. An id arg passed ot the primary index
         //  3. 0
         
-        $this->properties[$this->primary]->setValue(0);
+        // Reset the itemid
+        $this->itemid = null;
+        
         if(count($args) > 0) {
             foreach($args as $name => $value) {
                 if(isset($this->properties[$name])) {
                     $this->properties[$name]->value = $value;
                 }
             }
-            if(isset($args['itemid'])) {
-                $this->itemid = $args['itemid'];
-            } else {
-                if(!empty($this->primary)) {
-                    $this->itemid = $this->properties[$this->primary]->getValue();
-                }
-            }
+        }
+        if(isset($args['itemid'])) {
+            $this->itemid = $args['itemid'];
+        } elseif (!empty($this->properties[$this->primary]->value)) {
+            $this->itemid = $this->properties[$this->primary]->value;
         }
         // special case when we try to create a new object handled by dynamicdata
         if(
