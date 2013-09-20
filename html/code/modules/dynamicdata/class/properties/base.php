@@ -398,14 +398,14 @@ class DataProperty extends Object implements iDataProperty
 
         // Allow for overrides form the template
         if(!isset($data['id']))          $data['id']   = $id;
-        if(!isset($data['name']))          $data['name']   = $name;
+        if(!isset($data['name']))        $data['name']   = $name;
 
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
-        if(!isset($data['template'])) $data['template'] = $this->template;
-        if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
+        if(!isset($data['template']))    $data['template'] = $this->template;
+        if(!isset($data['layout']))      $data['layout']   = $this->display_layout;
 
-        if(!isset($data['tabindex'])) $data['tabindex'] = 0;
-        if(!isset($data['value']))    $data['value']    = $this->value;
+        if(!isset($data['tabindex']))    $data['tabindex'] = 0;
+        if(!isset($data['value']))       $data['value']    = $this->value;
         if (!empty($this->invalid)) {
             $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : xarML($this->invalid);
         } else {
