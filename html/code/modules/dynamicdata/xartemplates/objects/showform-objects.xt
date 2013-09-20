@@ -6,7 +6,7 @@
             <xar:continue/>
         </xar:if>
         <xar:if condition="$property->getDisplayStatus() eq 3">
-                <xar:data-input property="$properties[$name]" hidden="hidden"/>
+            <xar:data-input property="$properties[$name]" hidden="hidden"/>
         <xar:else/>
             <div class="xar-row">
                 <div class="xar-col">
