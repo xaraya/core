@@ -70,7 +70,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         /* General sequence:
          * 1. Run the datastore's getItem method
-         * 2. Run the property-specific mountItem method for properties using the virtual datastore
+         * 2. Run the property-specific mountValue method for properties using the virtual datastore
          *
          * This may need to be adjusted in the future
          */
