@@ -2,6 +2,6 @@
 *
 # Except these files and directories
 !.gitignore
-!blocklayout
-!creole
-!xaraya
+!blocklayout/
+!creole/
+!xaraya/
