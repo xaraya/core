@@ -38,8 +38,10 @@ function dynamicdata_user_filtertag(Array $args=array())
                     $q->eq($source[$name],NULL); break;
                 case 'notnull' : 
                     $q->ne($source[$name],NULL); break;
-                case 'like%' : 
+                case 'like' : 
                     $q->like($source[$name],'%'.$value[$name].'%'); break;
+                case 'notlike' : 
+                    $q->notlike($source[$name],'%'.$value[$name].'%'); break;
                 default:
                     $q->$op[$name]($source[$name],$value[$name]); break;
             }

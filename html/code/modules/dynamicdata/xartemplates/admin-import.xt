@@ -22,9 +22,8 @@
                     </div>
                     <div class="xar-col">
 	                    <input type="text" name="basedir" id="basedir" value="#$basedir#" maxlength="250" class="xar-form-textxlong"/>
-	                    &#160;
 	                    <xar:var name="label">Refresh</xar:var>
-                        <xar:button type="submit" label="$label" name="refresh" id="refresh"/>
+                        <span style="margin-left: 10px"><xar:button type="submit" label="$label" name="refresh" id="refresh"/></span>
                     </div>
                 </div>
                 <div class="xar-row">

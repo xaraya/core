@@ -27,7 +27,6 @@
                         <xar:set name="options">
                             array(
                                 array('id' => 'like',        'name' => 'LIKE'),
-                                array('id' => 'like%', 'name' => 'LIKE %...%'),
                                 array('id' => 'notlike',    'name' => 'NOT LIKE'),
                                 array('id' => 'eq',           'name' => '='),
                                 array('id' => 'ne',          'name' => '!='),
