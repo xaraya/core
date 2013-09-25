@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<xar:if condition="!empty($meta) and is_array($meta)">
-    <xar:foreach in="$meta" key="$type" value="$values">
-        <!-- Ignore tags with no values -->
-        <xar:if condition="empty($values)"><xar:continue/></xar:if>
-        <!-- Ignore tags with a language different than that of the current locale -->
-        <xar:set name="lang">substr(xarUser::getNavigationLocale(),0,2)</xar:set>
-        <xar:if condition="!empty($values['lang']) AND ($lang != $values['lang'])">
-            <xar:continue/>
-        </xar:if>
-        <xar:foreach in="$values" key="$value" value="$tags">
-            <xar:if condition="empty($tags)"><xar:continue/></xar:if>
-            <xar:foreach in="$tags" key="$index" value="$tag">
-                <xar:if condition="empty($tag) or empty($tag['content'])"><xar:continue/></xar:if>
-                <xar:if condition="$tag['type'] eq 'name'">
-                    <meta name="#$tag['value']#" content="#$tag['content']#" lang="#$tag['lang']#" xml:lang="#$tag['lang']#" dir="#$tag['dir']#" scheme="#$tag['scheme']#"/>
-                <xar:elseif condition="$tag['type'] eq 'http-equiv'"/>
-                    <meta http-equiv="#$tag['value']#" content="#$tag['content']#" lang="#$tag['lang']#" xml:lang="#$tag['lang']#" dir="#$tag['dir']#" scheme="#$tag['scheme']#"/>
-                </xar:if>
+    <xar:set name="lang">substr(xarUser::getNavigationLocale(),0,2)</xar:set>
+    <xar:if condition="!empty($meta) and is_array($meta)">
+        <xar:foreach in="$meta" key="$type" value="$values">
+            <xar:if condition="empty($values)"><xar:continue/></xar:if>
+            <xar:foreach in="$values" key="$value" value="$tags">
+                <xar:if condition="empty($tags)"><xar:continue/></xar:if>
+               <xar:foreach in="$tags" key="$index" value="$tag">
+                    <!-- Ignore tags with no content -->
+                    <xar:if condition="empty($tag) or empty($tag['content'])"><xar:continue/></xar:if>
+                    <!-- Ignore tags with a language different than that of the current locale -->
+                    <xar:if condition="!empty($tag['lang']) AND ($lang != $tag['lang'])">
+                        <xar:continue/>
+                    </xar:if>
+                    <xar:if condition="$tag['type'] eq 'name'">
+                        <meta name="#$tag['value']#" content="#$tag['content']#" lang="#$tag['lang']#" xml:lang="#$tag['lang']#" dir="#$tag['dir']#" scheme="#$tag['scheme']#"/>
+                    <xar:elseif condition="$tag['type'] eq 'http-equiv'"/>
+                        <meta http-equiv="#$tag['value']#" content="#$tag['content']#" lang="#$tag['lang']#" xml:lang="#$tag['lang']#" dir="#$tag['dir']#" scheme="#$tag['scheme']#"/>
+                    </xar:if>
+                </xar:foreach>
             </xar:foreach>
         </xar:foreach>
-    </xar:foreach>
-</xar:if>               
+    </xar:if>               
 </xar:template>
