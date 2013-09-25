@@ -39,7 +39,7 @@ function themes_admin_new_config()
             $itemid = $data['object']->createItem();
             
             // Jump to the next page
-            xarResponse::redirect(xarModURL('themes','admin','view_configs'));
+            xarController::redirect(xarModURL('themes','admin','view_configs'));
             return true;
         }
     }

@@ -39,7 +39,7 @@
                 $itemid = $data['object']->updateItem(array('itemid' => $data['itemid']));
                 
                 // Jump to the next page
-                xarResponse::redirect(xarModURL('themes','admin','view_configs'));
+                xarController::redirect(xarModURL('themes','admin','view_configs'));
                 return true;
             }
         }
