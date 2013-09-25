@@ -58,8 +58,10 @@ function dynamicdata_admin_view(Array $args=array())
         return xarResponse::Forbidden(xarML('View #(1) is forbidden', $object->label));
 
     // Check if we are filtering
-    $conditions = unserialize(xarSession::getVar('DynamicData.Filter.objects'));
-    if (!empty($conditions)) $object->dataquery->addconditions($conditions);
+    try {
+        $conditions = unserialize(xarSession::getVar('DynamicData.Filter.' . $object->name));
+        if (!empty($conditions)) $object->dataquery->addconditions($conditions);
+    } catch (Exception $e) {}
 
     // Pass back the relevant variables to the template if necessary
     $data = $object->toArray();
