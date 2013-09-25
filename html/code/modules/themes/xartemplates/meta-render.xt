@@ -2,7 +2,13 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:if condition="!empty($meta) and is_array($meta)">
     <xar:foreach in="$meta" key="$type" value="$values">
+        <!-- Ignore tags with no values -->
         <xar:if condition="empty($values)"><xar:continue/></xar:if>
+        <!-- Ignore tags with a language different than that of the current locale -->
+        <xar:set name="lang">substr(xarUser::getNavigationLocale(),0,2)</xar:set>
+        <xar:if condition="!empty($values['lang']) AND ($lang != $values['lang'])">
+            <xar:continue/>
+        </xar:if>
         <xar:foreach in="$values" key="$value" value="$tags">
             <xar:if condition="empty($tags)"><xar:continue/></xar:if>
             <xar:foreach in="$tags" key="$index" value="$tag">
