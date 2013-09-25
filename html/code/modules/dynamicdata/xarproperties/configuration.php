@@ -46,9 +46,6 @@ class ConfigurationProperty extends TextAreaProperty
         }
         $data['type'] = $this->proptype;
 
-// TODO: support nested configurations (e.g. for array of properties) ?
-//       Problem is setting the proptype of the child config in the parent config
-
         if (empty($data['type'])) {
             $data['type'] = 1; // default DataProperty class
         }
@@ -67,8 +64,6 @@ class ConfigurationProperty extends TextAreaProperty
 
     public function showInput(Array $data = array())
     {
-        //$data['type'] = $data['value']['initialization_prop_type']; only shows once
-
         // set property type from object reference (= dynamic configuration) if possible
         if (!empty($this->objectref) && !empty($this->objectref->properties['property_id'])) {
             $this->proptype = $this->objectref->properties['property_id']->value;
