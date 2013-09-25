@@ -15,9 +15,7 @@ sys::import('modules.dynamicdata.class.objects.master');
 
 function themes_admin_new_config()
 {
-    // Security
-//die("X");
-//    if(!xarSecurityCheck('AddThemes')) return;
+    if(!xarSecurityCheck('AddThemes')) return;
 
     if (!xarVarFetch('confirm',    'bool',   $data['confirm'], false,     XARVAR_NOT_REQUIRED)) return;
 
