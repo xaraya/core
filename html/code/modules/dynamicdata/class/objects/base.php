@@ -216,7 +216,6 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function showForm(Array $args = array())
     {
-//        $args = $this->toArray($args);
         $args = $args + $this->getPublicProperties();
         $this->setFieldPrefix($args['fieldprefix']);
 
