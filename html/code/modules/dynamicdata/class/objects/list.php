@@ -54,6 +54,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // Set the configuration parameters
         $args = $descriptor->getArgs();
+        unset($descriptor);
         if (!empty($args['config'])) {
             try {
                 // CHECKME: this should be abstracted
