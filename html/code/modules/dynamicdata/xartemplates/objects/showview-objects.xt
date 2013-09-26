@@ -11,6 +11,10 @@
         <xar:if condition="empty($layout)">
             <xar:set name="layout">'default'</xar:set>
         </xar:if>
+        <fieldset>
+            <legend>Filter</legend>
+            <xar:data-filter object="$object" fields="name"/>
+        </fieldset>
         <xar:if condition="empty($object:itemcount)">
             <!-- if we don't have an item total show prev / next links -->
             <div>
