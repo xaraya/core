@@ -185,5 +185,6 @@ function dynamicdata_admin_updateprop()
     xarController::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
                         array('itemid'    => $objectid,
                               'table'    => $table)));
+    return true;
 }
 ?>
