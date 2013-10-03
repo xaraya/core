@@ -603,7 +603,7 @@ class DataObjectMaster extends Object
      * @return object the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
-    static function &getObject(Array $args=array())
+    static function getObject(Array $args=array())
     {
         /* with autoload and variable caching activated */
         // Identify the variable by its arguments here
