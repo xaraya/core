@@ -644,7 +644,7 @@ class DataObjectMaster extends Object
         return $object;
     }
     
-    static function &getfObject(Array $args=array())
+    static function getfObject(Array $args=array())
     {
         /* with autoload and variable caching activated */
         // Identify the variable by its arguments here
@@ -711,7 +711,7 @@ class DataObjectMaster extends Object
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
     **/
-    static function &getObjectList(Array $args=array())
+    static function getObjectList(Array $args=array())
     {
         /* with autoload and variable caching activated */
         // Identify the variable by its arguments here
