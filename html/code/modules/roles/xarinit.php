@@ -26,7 +26,7 @@
 function roles_init()
 {
     $dbconn =& xarDB::getConn();
-    $tables =& xarDB::getTables();
+    $tables = xarDB::getTables();
 
     $prefix = xarDB::getPrefix();
     $tables['roles'] = $prefix . '_roles';

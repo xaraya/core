@@ -23,7 +23,7 @@ function themes_init()
 {
     // Get database information
     $dbconn = xarDB::getConn();
-    $tables =& xarDB::getTables();
+    $tables = xarDB::getTables();
 
     $prefix = xarDB::getPrefix();
     $tables['themes']     = $prefix . '_themes';
