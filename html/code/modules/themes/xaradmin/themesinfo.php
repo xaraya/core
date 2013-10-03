@@ -36,7 +36,7 @@ function themes_admin_themesinfo()
 
     // get the theme object corresponding to this theme
     sys::import('modules.dynamicdata.class.objects.master');
-    $theme = & DataObjectMaster::getObject(array('name'   => 'themes'));
+    $theme = DataObjectMaster::getObject(array('name'   => 'themes'));
     $id = $theme->getItem(array('itemid' => $info['systemid']));
     if (empty($theme)) return;
 

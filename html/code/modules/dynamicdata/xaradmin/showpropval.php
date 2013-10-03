@@ -38,7 +38,7 @@ function dynamicdata_admin_showpropval(Array $args=array())
     }
 
     // get the object corresponding to this dynamic property
-    $myobject = & DataObjectMaster::getObject(array('name'   => 'properties',
+    $myobject = DataObjectMaster::getObject(array('name'   => 'properties',
                                                     'itemid' => $itemid));
     if (empty($myobject)) return;
 

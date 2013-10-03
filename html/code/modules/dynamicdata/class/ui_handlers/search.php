@@ -109,7 +109,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
 
         if(!isset($this->object)) 
         {
-            $this->object =& DataObjectMaster::getObject($this->args);
+            $this->object = DataObjectMaster::getObject($this->args);
             if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
                 return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
 
@@ -153,7 +153,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             $result = null;
         } else {
             // get result list
-            $result =& DataObjectMaster::getObjectList($this->args);
+            $result = DataObjectMaster::getObjectList($this->args);
             if(empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) 
                 return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
             // add the where clauses directly here to avoid quoting issues
@@ -222,7 +222,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
 
         if(!isset($this->object)) 
         {
-            $this->object =& DataObjectMaster::getObject($this->args);
+            $this->object = DataObjectMaster::getObject($this->args);
             if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
                 return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
 
@@ -277,7 +277,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             $result = null;
         } else {
             // get result list
-            $result =& DataObjectMaster::getObjectList($this->args);
+            $result = DataObjectMaster::getObjectList($this->args);
             if(empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) 
                 return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
             // add the where clauses directly here to avoid quoting issues

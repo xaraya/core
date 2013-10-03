@@ -144,9 +144,9 @@ class DataObjectDefaultHandler extends Object
 
         if (!isset($this->object)) {
             if (!empty($this->args['itemid'])) {
-                $this->object =& DataObjectMaster::getObject($this->args);
+                $this->object = DataObjectMaster::getObject($this->args);
             } else {
-                $this->object =& DataObjectMaster::getObjectList($this->args);
+                $this->object = DataObjectMaster::getObjectList($this->args);
             }
             if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
                 return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));

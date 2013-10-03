@@ -161,7 +161,7 @@ function dynamicdata_admin_query(Array $args=array())
     $data['jointables'] = '';
 
     if (!empty($itemid)) {
-        $data['object'] = & DataObjectMaster::getObjectList(array('objectid' => $itemid,
+        $data['object'] = DataObjectMaster::getObjectList(array('objectid' => $itemid,
                                                         'join' => $join));
         if (isset($data['object']) && !empty($data['object']->objectid)) {
             $data['itemid'] = $data['object']->objectid;
@@ -188,7 +188,7 @@ function dynamicdata_admin_query(Array $args=array())
             return;
         }
     } elseif (!empty($table)) {
-        $data['object'] = & DataObjectMaster::getObjectList(array('table' => $table));
+        $data['object'] = DataObjectMaster::getObjectList(array('table' => $table));
         if (!isset($data['object'])) return;
         $data['label'] = xarML('Table #(1)',$table);
         $data['properties'] =& $data['object']->properties;

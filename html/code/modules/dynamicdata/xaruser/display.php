@@ -31,7 +31,7 @@ function dynamicdata_user_display(Array $args=array())
     if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('tplmodule','isset', $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
 
-    $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
+    $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name' => $name,
                                          'itemid'   => $itemid,
                                          'tplmodule' => $tplmodule));

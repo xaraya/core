@@ -19,7 +19,7 @@
  */
 function dynamicdata_utilapi_export(Array $args=array())
 {
-        $myobject = & DataObjectMaster::getObject(array('name' => 'objects'));
+        $myobject = DataObjectMaster::getObject(array('name' => 'objects'));
     if (isset($args['objectref'])) {
         $myobject->getItem(array('itemid' => $args['objectref']->objectid));
 

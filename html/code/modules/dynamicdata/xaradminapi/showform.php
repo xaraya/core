@@ -63,7 +63,7 @@ function dynamicdata_adminapi_showform(Array $args=array())
         $args['fieldlist'] = null;
     }
 
-    $object = & DataObjectMaster::getObject($args);
+    $object = DataObjectMaster::getObject($args);
     if (empty($itemid)) {
         if (!$object->checkAccess('create'))
             return xarML('Create #(1) is forbidden', $object->label);

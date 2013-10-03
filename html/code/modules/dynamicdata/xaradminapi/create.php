@@ -53,7 +53,7 @@ function dynamicdata_adminapi_create(Array $args=array())
     }
 
     // TODO: test this
-    $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
+    $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'itemid'   => $itemid));
     if (empty($myobject)) return;
     if (!$myobject->checkAccess('create'))

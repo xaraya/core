@@ -33,7 +33,7 @@ function dynamicdata_admin_delete(Array $args=array())
     if(!xarVarFetch('template',   'isset', $template,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
 
-    $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
+    $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name'       => $name,
                                          'join'       => $join,
                                          'table'      => $table,
@@ -129,7 +129,7 @@ function dynamicdata_admin_delete(Array $args=array())
     // special case for a dynamic object : delete its properties too // TODO: and items
 // TODO: extend to any parent-child relation ?
     if ($data['objectid'] == 1) {
-        $mylist = & DataObjectMaster::getObjectList(array('objectid' => $data['itemid']));
+        $mylist = DataObjectMaster::getObjectList(array('objectid' => $data['itemid']));
         foreach (array_keys($mylist->properties) as $name) {
             $propid = $mylist->properties[$name]->id;
             $propid = DataPropertyMaster::deleteProperty(array('itemid' => $propid));

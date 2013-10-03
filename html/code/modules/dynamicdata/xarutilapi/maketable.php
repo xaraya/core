@@ -56,7 +56,7 @@ function dynamicdata_utilapi_maketable(Array $args=array())
             $itemid = null;
         }
 
-        $myobject = & DataObjectMaster::getObject(array('objectid' => $objectid,
+        $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
                                              'moduleid' => $module_id,
                                              'itemtype' => $itemtype,
                                              'itemid'   => $itemid,

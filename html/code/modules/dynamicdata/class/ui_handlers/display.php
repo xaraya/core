@@ -56,7 +56,7 @@ class DataObjectDisplayHandler extends DataObjectDefaultHandler
 
         if(!isset($this->object)) 
         {
-            $this->object =& DataObjectMaster::getObject($this->args);
+            $this->object = DataObjectMaster::getObject($this->args);
             if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
                 return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
 
