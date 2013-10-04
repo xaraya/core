@@ -30,7 +30,7 @@ function authsystem_init()
        xarModVars::get('roles', 'defaultauthmodule', 'authsystem');
     }
 
-    $dbconn =& xarDB::getConn();
+    $dbconn = xarDB::getConn();
     $xartable = xarDB::getTables();
     $modulesTable = xarDB::getPrefix() .'_modules';
     $modid = xarModGetIDFromName('authsystem');
