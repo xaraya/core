@@ -40,7 +40,7 @@ class CategoryMenuProperty extends CategoryTreeProperty
         } else {
             // the top level of categories need not have a common parent
             xarMod::loadDbInfo('categories');
-            $xartable = xarDB::getTables();
+            $xartable =& xarDB::getTables();
             sys::import('xaraya.structures.query');
             $q = new Query('SELECT',$xartable['categories']);
             $q->addfield('id');

@@ -28,7 +28,7 @@ function privileges_admin_modifyrealm()
     if (!xarVarFetch('name',      'str:1.20', $name,      '',      XARVAR_NOT_REQUIRED)) {return;}
     
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
 
     if (empty($confirmed)) {
         $bindvars = array();

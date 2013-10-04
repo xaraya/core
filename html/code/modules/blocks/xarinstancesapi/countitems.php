@@ -92,7 +92,7 @@ function blocks_instancesapi_countitems(Array $args=array())
     }    
 
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
     $blocks_table  = $tables['block_instances'];
     $types_table   = $tables['block_types'];
     $modules_table = $tables['modules'];

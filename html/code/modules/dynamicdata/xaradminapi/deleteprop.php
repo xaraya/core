@@ -47,7 +47,7 @@ function dynamicdata_adminapi_deleteprop(Array $args=array())
     // TODO: security check on object level
 
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     // It's good practice to name the table and column definitions you
     // are getting - $table and $column don't cut it in more complex
     // modules

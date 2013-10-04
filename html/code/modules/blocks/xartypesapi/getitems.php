@@ -72,7 +72,7 @@ function blocks_typesapi_getitems(Array $args=array())
     }
 
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
     $types_table   = $tables['block_types'];
     $modules_table = $tables['modules'];
     

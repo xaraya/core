@@ -40,7 +40,7 @@ function blocks_instancesapi_updateitem(Array $args=array())
     }
 
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
     $blocks_table = $tables['block_instances'];    
     $set = array();
     $where = array();

@@ -26,7 +26,7 @@ function categories_userapi_getlinkage($args)
 
     $modid = xarMod::getID($module);
 
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
     sys::import('xaraya.structures.query');
     $q = new Query('SELECT');
     $q->addtable($tables['categories_linkage'],'cl');

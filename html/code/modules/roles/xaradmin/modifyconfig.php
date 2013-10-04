@@ -43,7 +43,7 @@ function roles_admin_modifyconfig()
         throw new Exception('The designated site admin does not have administration privileges');
 
     $dbconn   = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $acltable = xarDB::getPrefix() . '_security_acl';
     $query    = "SELECT role_id FROM $acltable
                  WHERE privilege_id  = ?";

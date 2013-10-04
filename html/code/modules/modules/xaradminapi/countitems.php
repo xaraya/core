@@ -21,7 +21,7 @@ function modules_adminapi_countitems(Array $args=array())
         
     // Determine the tables we are going to use
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
     $modules_table = $tables['modules'];
     
     $select = array();

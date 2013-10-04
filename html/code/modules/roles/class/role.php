@@ -55,7 +55,7 @@ class Role extends DataObject
         sys::import('modules.privileges.xartables');
         xarDB::importTables(privileges_xartables());
 
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $this->rolestable = $xartable['roles'];
         $this->rolememberstable = $xartable['rolemembers'];
         $this->privilegestable = $xartable['privileges'];
@@ -78,7 +78,7 @@ class Role extends DataObject
     {
         // Confirm that this group or user does not already exist
         xarMod::loadDbInfo('roles','roles');
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $dynamicobjects = $this->rolestable;
         $bindvars = array();
         $query = "SELECT name, uname
@@ -231,7 +231,7 @@ class Role extends DataObject
     public function removeMember($member)
     {
         // delete the relevant entry from the rolemembers table
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $rolesmemobjects = $this->rolememberstable;
         $query = "DELETE FROM $rolesmemobjects WHERE role_id = ? AND parent_id = ?";
         $bindvars = array($member->getID(), $this->getID());
@@ -355,7 +355,7 @@ class Role extends DataObject
         $date_reg = '';
 
         xarMod::loadDbInfo('roles','roles');
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $bindvars = array();
         $query = "UPDATE $this->rolestable
                   SET name = $name,
@@ -396,7 +396,7 @@ class Role extends DataObject
         // We'll have to get it.
         xarLogMessage("ROLE: getting privileges for id: " . $this->properties['id']->value);
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $query = "SELECT  p.id, p.name, r.name, p.module_id, m.name,
                           component, instance, level, description
                   FROM    $this->acltable acl,
@@ -581,7 +581,7 @@ class Role extends DataObject
      */
     public function countChildren($state = xarRoles::ROLES_STATE_CURRENT, $selection = NULL, $itemtype = NULL)
     {
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $rolesmemobjects = $this->rolememberstable;
         $rolesobjects = $this->rolestable;
         $bindvars = array();
@@ -817,7 +817,7 @@ class Role extends DataObject
     public function adjustParentUsers($adjust)
     {
         xarMod::loadDbInfo('roles','roles');
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $memberobject =  $this->rolestable;
         $bindvars = array();
         $query = "SELECT users AS users FROM $memberobject";

@@ -40,7 +40,7 @@ function categories_userapi_getcat($args)
     extract($args);
 
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
 
     if (!isset($return_itself)) {
         $return_itself = false;

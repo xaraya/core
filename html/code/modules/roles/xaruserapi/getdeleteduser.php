@@ -44,7 +44,7 @@ function roles_userapi_getdeleteduser(Array $args=array())
 
     // Get database setup
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
 
     $rolestable = $xartable['roles'];
 

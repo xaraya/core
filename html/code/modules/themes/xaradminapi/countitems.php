@@ -11,7 +11,7 @@ function themes_adminapi_countitems(Array $args=array())
         
     // Determine the tables we are going to use
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
     $themes_table = $tables['themes'];
 
     $where = array();

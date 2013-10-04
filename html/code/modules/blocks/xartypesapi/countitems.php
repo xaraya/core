@@ -57,7 +57,7 @@ function blocks_typesapi_countitems(Array $args=array())
     }
 
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
     $types_table   = $tables['block_types'];
     $modules_table = $tables['modules'];
 

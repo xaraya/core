@@ -24,7 +24,7 @@ function privileges_adminapi_get(Array $args=array())
         throw new VariableValidationException(array('itemid',$itemid,'numeric'));
     }
 
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $query = "SELECT p.id, p.name, p.realm_id,
                      m.regid, p.component, p.instance,
                      p.level,  p.description

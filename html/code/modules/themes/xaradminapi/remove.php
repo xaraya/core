@@ -28,7 +28,7 @@ function themes_adminapi_remove(Array $args=array())
 
     // Remove variables and theme
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
 
     // Get theme information
     if (isset($name)) $regid = xarMod::getRegid($name, 'theme');

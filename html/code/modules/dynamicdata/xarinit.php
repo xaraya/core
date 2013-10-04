@@ -25,7 +25,7 @@ function dynamicdata_init()
      * Create tables
      */
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $prefix = xarDB::getPrefix();
 
     $dynamic_objects = $xartable['dynamic_objects'];
@@ -626,7 +626,7 @@ function dynamicdata_createPropDefTable()
 
     // Get existing DB info
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $prefix = xarDB::getPrefix();
     $dynamic_properties_def = $xartable['dynamic_properties_def'];
     $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');

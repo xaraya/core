@@ -61,7 +61,7 @@ function categories_userapi_isdescendant($args)
     }
 
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
 
     $categoriestable = $xartable['categories'];
 

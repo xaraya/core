@@ -75,7 +75,7 @@ function blocks_typesapi_createitem(Array $args=array())
     unset($blocktype);
 
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
     $types_table = $tables['block_types'];
     
     $query = "INSERT INTO $types_table

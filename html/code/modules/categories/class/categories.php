@@ -21,7 +21,7 @@
         function get(int $id)
         {
             $dbconn = xarDB::getConn();
-            $xartable = xarDB::getTables();
+            $xartable =& xarDB::getTables();
 
             $SQLquery = "SELECT id,
                                 name,
@@ -67,7 +67,7 @@
         function getChildren()
         {
             $dbconn = xarDB::getConn();
-            $xartable = xarDB::getTables();
+            $xartable =& xarDB::getTables();
 
             $SQLquery = "SELECT id,
                                 name,
@@ -106,7 +106,7 @@
         function getChildCount()
         {
             $dbconn = xarDB::getConn();
-            $xartable = xarDB::getTables();
+            $xartable =& xarDB::getTables();
 
             $SQLquery = "SELECT COUNT(*) FROM " . $xartable['categories'] . " WHERE parent_id = ? ORDER BY left_id";
             $bindvars = array($this->id);
@@ -121,7 +121,7 @@
         function isDescendant(CategoryTreeNode $n)
         {
             $dbconn = xarDB::getConn();
-            $xartable = xarDB::getTables();
+            $xartable =& xarDB::getTables();
 
             $query = '
                 SELECT  P1.id

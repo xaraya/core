@@ -36,7 +36,7 @@ function categories_init()
 #
     // Get database information
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
 
     $prefix = xarDB::getPrefix();
 
@@ -233,7 +233,7 @@ function categories_upgrade($oldversion)
 {
     // Get database information
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
 
     // Upgrade dependent on old version number
     switch($oldversion) {

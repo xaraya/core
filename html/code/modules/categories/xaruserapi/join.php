@@ -117,7 +117,7 @@ function __construct($tagged_module_id=null,
     }
 
     // Table definition
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $categorieslinkagetable = $xartable['categories_linkage'];
 
     $leftjoin = array();

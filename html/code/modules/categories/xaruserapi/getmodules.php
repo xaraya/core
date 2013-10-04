@@ -33,7 +33,7 @@ function categories_userapi_getmodules($args)
 
     // Database information
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $linkagetable = $xartable['categories_linkage'];
     $prefix = xarDB::getPrefix();
     $modulestable = $prefix . '_modules';

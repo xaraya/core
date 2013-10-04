@@ -97,7 +97,7 @@ class ObjectRefProperty extends SelectProperty
             if ($this->initialization_display_prop == 'id') $sortprop = "objectid";
             else $sortprop = $this->initialization_display_prop;
             $dbconn = xarDB::getConn();
-            $xartable = xarDB::getTables();
+            $xartable =& xarDB::getTables();
             $q = "SELECT id, name, label, module_id, itemtype, class, filepath,
                 urlparam, maxid, config, isalias FROM " . $xartable['dynamic_objects'] . " ORDER BY " . $sortprop;
             $result = $dbconn->executeQuery($q);

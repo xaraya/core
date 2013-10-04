@@ -66,7 +66,7 @@
                 }
                 if (!(empty($role_id) || empty($privilege_id))) {
                     $dbconn = xarDB::getConn();
-                    $xartable = xarDB::getTables();
+                    $xartable =& xarDB::getTables();
                     $query = "SELECT role_id FROM " . $xartable['security_acl'] . " WHERE role_id = ? AND privilege_id = ?";
                     $bindvars = array((int)$role_id,(int)$privilege_id);
                     $result =& $dbconn->Execute($query,$bindvars);
@@ -91,7 +91,7 @@
                 $ids = explode(',',$assignment);
                 if ((count($ids) == 2) && !(empty($ids[0]) || empty($ids[1]))) {
                     $dbconn = xarDB::getConn();
-                    $xartable = xarDB::getTables();
+                    $xartable =& xarDB::getTables();
                     $query = "DELETE FROM " . $xartable['security_acl'] .
                               " WHERE role_id = ? AND privilege_id = ?";
                     $bindvars = $ids;

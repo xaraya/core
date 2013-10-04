@@ -79,7 +79,7 @@ function categories_adminapi_linkcat($args)
 
     // Get database setup
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $categorieslinkagetable = $xartable['categories_linkage'];
 
     if ($clean_first)

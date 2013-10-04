@@ -33,7 +33,7 @@ function privileges_admin_newrealm()
         }        
 
         $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $bindvars = array();
         $tbl = $xartable['security_realms'];
         $query = "SELECT name FROM $tbl WHERE name = ?";

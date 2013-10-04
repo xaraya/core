@@ -59,7 +59,7 @@ class DataObjectDescriptor extends ObjectDescriptor
     static function getObjectID(Array $args=array())
     {
         xarMod::loadDbInfo('dynamicdata','dynamicdata');
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $dynamicobjects = $xartable['dynamic_objects'];
 
         $query = "SELECT id,

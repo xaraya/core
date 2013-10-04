@@ -23,7 +23,7 @@ function blocks_init()
 
     // Get database information
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
     $prefix = xarDB::getPrefix();
     $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
     

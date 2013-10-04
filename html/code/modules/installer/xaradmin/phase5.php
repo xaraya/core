@@ -229,7 +229,7 @@ function installer_admin_phase5()
     // 3. Load the definitions of all the modules in the modules table
     $prefix = xarDB::getPrefix();
     $modulesTable = $prefix .'_modules';
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
 
     $newModSql   = "INSERT INTO $modulesTable
                     (name, regid, directory,

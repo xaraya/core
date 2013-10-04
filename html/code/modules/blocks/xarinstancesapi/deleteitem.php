@@ -87,7 +87,7 @@ function blocks_instancesapi_deleteitem(Array $args=array())
     unset($instance, $block);
 
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
     $block_table = $tables['block_instances'];
 
     $query = "DELETE FROM $block_table

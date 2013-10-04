@@ -25,7 +25,7 @@
             sys::import('xaraya.structures.query');
             sys::import('modules.categories.xartables');
             xarDB::importTables(categories_xartables());
-            $tables = xarDB::getTables();
+            $tables =& xarDB::getTables();
             $this->cattable = $tables['categories'];
             $this->basetable = $tables['categories_basecategories'];
             $this->linktable = $tables['categories_linkage'];
@@ -126,7 +126,7 @@
         public function getcatbases($args)
         {
             extract($args);
-            $xartable = xarDB::getTables();
+            $xartable =& xarDB::getTables();
         
             sys::import('xaraya.structures.query');
             $q = new Query('SELECT');

@@ -27,7 +27,7 @@ function privileges_admin_viewrealms()
     if (!xarVarFetch('show', 'isset', $data['show'], 'assigned', XARVAR_NOT_REQUIRED)) return;
 
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $rolesobjects = $xartable['security_realms'];
     $bindvars = array();
     $query = "SELECT id AS id, name AS name FROM $rolesobjects ";

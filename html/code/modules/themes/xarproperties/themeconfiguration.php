@@ -111,7 +111,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
         } else {
             sys::import('xaraya.structures.query');
             xarMod::load('themes');
-            $tables = xarDB::getTables();
+            $tables =& xarDB::getTables();
             $q = new Query('SELECT',$tables['themes_configurations']);
             $c[] = $q->peq('theme_id',$this->theme_id);
             $c[] = $q->peq('theme_id',0);

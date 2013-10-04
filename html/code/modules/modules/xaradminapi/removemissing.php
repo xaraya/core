@@ -32,7 +32,7 @@ function modules_adminapi_removemissing(Array $args=array())
     // Get module information
     //    $modinfo = xarMod::getInfo($regid);
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
 
     $modInfo = xarMod::getInfo($regid);
     $modId = $modInfo['systemid'];

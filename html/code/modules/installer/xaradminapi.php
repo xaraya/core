@@ -152,7 +152,7 @@ function installer_adminapi_createdb(Array $args=array())
                        'databaseName' => $dbName,
                        'systemTablePrefix' => $dbPrefix,
                        'siteTablePrefix' => $dbPrefix);
-   $dbconn =& xarDBNewConn($createArgs);
+   $dbconn = xarDBNewConn($createArgs);
 
    $dbCharset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
    $query = xarDBCreateDatabase($dbName,$dbType,$dbCharset);
@@ -183,7 +183,7 @@ function installer_adminapi_CheckForField(Array $args=array())
     }
 
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
 
     // CHECKME: Is this portable? In any case, use the meta classes
     $query = "desc $table_name";

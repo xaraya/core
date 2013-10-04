@@ -55,7 +55,7 @@ class ModulesModuleRemoveSubject extends ApiHookSubject
         
         // remove the module from hooks and events...
         $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
+        $tables =& xarDB::getTables();
 
         // Delete any hooks assigned for that module, or by that module
         $query = "DELETE FROM $tables[hooks] WHERE observer = ? OR subject = ?";

@@ -34,7 +34,7 @@ function categories_userapi_getlinkages($args)
     // Get arguments from argument array
     extract($args);
 
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     sys::import('xaraya.structures.query');
     $q = new Query('SELECT', $xartable['categories_linkage']);
     if (!empty($module)) $q->eq('module_id',xarMod::getID($module));

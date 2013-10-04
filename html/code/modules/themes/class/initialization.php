@@ -24,7 +24,7 @@ class ThemeInitialization extends Object
     {
         $dbconn = xarDB::getConn();
         xarMod::loadDbInfo('themes','themes');
-        $tables = xarDB::getTables();
+        $tables =& xarDB::getTables();
         $sql = "DELETE FROM $tables[themes_configurations]";
         $res = $dbconn->ExecuteUpdate($sql);
         return $res;

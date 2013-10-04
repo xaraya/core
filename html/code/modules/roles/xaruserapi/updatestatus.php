@@ -30,7 +30,7 @@ function roles_userapi_updatestatus(Array $args=array())
 
     // Get DB Set-up
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
 
     $rolesTable = $xartable['roles'];
 

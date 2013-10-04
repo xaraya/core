@@ -38,7 +38,7 @@ function roles_admin_createmail()
     }
 
     sys::import('xaraya.structures.query');
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     if ($type == 'single') {
         $id = $role->getID();
         $data['users'][$role->getID()] =

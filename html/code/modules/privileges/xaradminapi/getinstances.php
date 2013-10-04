@@ -37,7 +37,7 @@
         }
 
         $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $query = "SELECT header, query, ddlimit
                   FROM " . $xartable['security_instances'] ."
                   WHERE module_id = ? AND component = ?

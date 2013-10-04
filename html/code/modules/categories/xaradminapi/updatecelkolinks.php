@@ -31,7 +31,7 @@ function categories_adminapi_updatecelkolinks($args)
 
         // Get database setup
         $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $categoriestable = $xartable['categories'];
         $bindvars = array();
         $bindvars[1] = array();

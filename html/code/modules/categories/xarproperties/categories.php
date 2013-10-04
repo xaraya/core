@@ -142,7 +142,7 @@ class CategoriesProperty extends DataProperty
         // For both create and update we remove any existing links and create the new ones
         sys::import('xaraya.structures.query');
         xarMod::apiLoad('categories');
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         if (!empty($itemid)) {
             $q = new Query('DELETE', $xartable['categories_linkage']); 
             $q->eq('item_id', (int)$itemid);
@@ -270,7 +270,7 @@ class CategoriesProperty extends DataProperty
             if (!isset($data['value'])) {
                 $data['value'] = array();
                 xarMod::apiLoad('categories');
-                $xartable = xarDB::getTables();
+                $xartable =& xarDB::getTables();
                 sys::import('xaraya.structures.query');
                 foreach ($data['base_category'] as $key => $value) {
                     $q = new Query('SELECT', $xartable['categories_linkage']); 
@@ -331,7 +331,7 @@ class CategoriesProperty extends DataProperty
     
             sys::import('xaraya.structures.query');
             xarMod::apiLoad('categories');
-            $xartable = xarDB::getTables();
+            $xartable =& xarDB::getTables();
             $q = new Query('SELECT'); 
             $q->addtable( $xartable['categories'],'c');
             $q->addtable( $xartable['categories_linkage'],'cl');
@@ -355,7 +355,7 @@ class CategoriesProperty extends DataProperty
         $prinaryfield = $object->properties[$object->primary]->source;
         xarMod::load('categories');
         $q = $object->dataquery;
-        $tables = xarDB::getTables();
+        $tables =& xarDB::getTables();
         $q->addtable($tables['categories'],'c');
         $q->addtable($tables['categories_linkage'],'l');
         $q->leftjoin('l.category_id','c.id');

@@ -30,7 +30,7 @@ function modules_adminapi_updateversion(Array $args=array())
 
     //  Get database connection and tables
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $modules_table = $xartable['modules'];
 
     // Get module information from the filesystem

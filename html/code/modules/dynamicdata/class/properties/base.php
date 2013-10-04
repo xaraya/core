@@ -796,7 +796,7 @@ class DataProperty extends Object implements iDataProperty
         if (xarCoreCache::isCached('DynamicData','Configurations')) {
              $allconfigproperties = xarCoreCache::getCached('DynamicData','Configurations');
         } else {
-            $xartable = xarDB::getTables();
+            $xartable =& xarDB::getTables();
             $configurations = $xartable['dynamic_configurations'];
 
             $bindvars = array();

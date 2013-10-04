@@ -127,7 +127,7 @@ function categories_userapi_leftjoin($args)
     }
 
     // Table definition
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $categorieslinkagetable = $xartable['categories_linkage'];
 
     $leftjoin = array();

@@ -24,7 +24,7 @@ sys::import('xaraya.tableddl');
 function privileges_init()
 {
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
 
     $prefix = xarDB::getPrefix();
     $tables['privileges'] = $prefix . '_privileges';

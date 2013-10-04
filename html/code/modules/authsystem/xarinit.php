@@ -31,7 +31,7 @@ function authsystem_init()
     }
 
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $modulesTable = xarDB::getPrefix() .'_modules';
     $modid = xarModGetIDFromName('authsystem');
     // update the modversion class and admin capable

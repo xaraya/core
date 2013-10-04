@@ -70,7 +70,7 @@ function categories_adminapi_unlink($args)
 
     // Get datbase setup
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $categorieslinkagetable = $xartable['categories_linkage'];
 
     // Delete the link

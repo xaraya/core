@@ -45,7 +45,7 @@
         }
 
         $dbconn = xarDB::getConn();
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $query = "SELECT DISTINCT component
                   FROM " . $xartable['security_instances'] . "
                   WHERE module_id = ?

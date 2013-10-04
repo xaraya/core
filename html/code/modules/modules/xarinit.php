@@ -23,7 +23,7 @@ function modules_init()
 {
     // Get database information
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
 
     $prefix = xarDB::getPrefix();
 
@@ -265,7 +265,7 @@ function modules_upgrade($oldversion)
         case '2.0.0':
             // Get database information
             $dbconn = xarDB::getConn();
-            $xartable = xarDB::getTables();
+            $xartable =& xarDB::getTables();
 
             //Load Table Maintainance API
             sys::import('xaraya.tableddl');
@@ -284,7 +284,7 @@ function modules_upgrade($oldversion)
              * NOTE: we do this here, not in base, because the event system depends on the module system
             **/
             $dbconn = xarDB::getConn();
-            $tables = xarDB::getTables();
+            $tables =& xarDB::getTables();
 
             $prefix = xarDB::getPrefix();
 

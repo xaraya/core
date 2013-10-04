@@ -32,7 +32,7 @@ function modules_adminapi_updateproperties(Array $args=array())
     if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regid")) return;
 
     // Update
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $q = 'UPDATE ' . $xartable['modules'] . ' SET ';
     $uparts=array(); $bindvars=array();
     //    if (isset($displayname)) {$uparts[] = 'directory=?'; $bindvars[] = $displayname;}

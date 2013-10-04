@@ -43,7 +43,7 @@ function categories_userapi_getneighbours($args)
 //    }
 
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
 
     $categoriestable = $xartable['categories'];
 

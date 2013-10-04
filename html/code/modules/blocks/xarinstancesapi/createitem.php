@@ -62,7 +62,7 @@ function blocks_instancesapi_createitem(Array $args=array())
         $content = $type['type_info'];
 
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
     $blocks_table = $tables['block_instances'];
     
     $query = "INSERT INTO $blocks_table    

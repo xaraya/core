@@ -43,7 +43,7 @@ function blocks_typesapi_updateitem(Array $args=array())
     }
 
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
     $types_table = $tables['block_types'];    
     $set = array();
     $where = array();

@@ -118,7 +118,7 @@ class xarPrivilege extends xarMask
     */
     function removeMember($member)
     {
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $rolesobjects = $this->privmemberstable;
         $bindvars = array();
         $query = "DELETE FROM $rolesobjects ";
@@ -551,7 +551,7 @@ class xarPrivilege extends xarMask
     */
     function isRootPrivilege()
     {
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $previlegeobjects = $this->privilegestable;
         $privilegmemobjects = $this->privmemberstable;
         $bindvars = array();

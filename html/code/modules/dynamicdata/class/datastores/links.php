@@ -238,7 +238,7 @@ class DataStoreLinks extends Object
     {
         // load tables for 'dynamic_data'
         xarMod::loadDbInfo('dynamicdata','dynamicdata');
-        $xartables = xarDB::getTables();
+        $xartables =& xarDB::getTables();
     
         $mapping = array();
         $properties = xarMod::apiFunc('dynamicdata','user','getobjectlist',
@@ -274,7 +274,7 @@ class DataStoreLinks extends Object
     {
         // load tables for 'dynamic_data'
         xarMod::loadDbInfo('dynamicdata','dynamicdata');
-        $xartables = xarDB::getTables();
+        $xartables =& xarDB::getTables();
     
         $sourcemapping = array();
         $properties = xarMod::apiFunc('dynamicdata','user','getobjectlist',

@@ -70,7 +70,7 @@ function modules_adminapi_upgrade(Array $args=array())
 
     // Note the changes in the database...
     $dbconn = xarDB::getConn();
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
 
     $sql = "UPDATE $xartable[modules]
             SET version = ?, admin_capable = ?, user_capable = ?,

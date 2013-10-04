@@ -51,7 +51,7 @@ function blocks_typesapi_deleteitem(Array $args=array())
     unset($type, $type_instances);
     
     $dbconn = xarDB::getConn();
-    $tables = xarDB::getTables();
+    $tables =& xarDB::getTables();
     $types_table = $tables['block_types'];
 
     $query = "DELETE FROM $types_table

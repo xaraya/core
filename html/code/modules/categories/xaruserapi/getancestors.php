@@ -73,7 +73,7 @@ function categories_userapi_getancestors($args)
 
     // Only do the database stuff if there are uncached cids to fetch.
     if (!empty($dbcids)) {
-        $xartable = xarDB::getTables();
+        $xartable =& xarDB::getTables();
         $categoriestable = $xartable['categories'];
 
         // TODO : evaluate alternative with 2 queries
