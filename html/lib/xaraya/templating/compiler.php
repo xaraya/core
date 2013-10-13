@@ -74,6 +74,9 @@ class XarayaCompiler extends xarBLCompiler
         // Add the custom tags from modules
         $xslFiles = array_merge($xslFiles,$this->getModuleTagPaths());
 
+        // Get any custom tags in standalone blocks
+        $xslFiles = array_merge($xslFiles,$this->getBlockTagPaths());
+
         return $xslFiles;
     }
 
@@ -98,6 +101,36 @@ class XarayaCompiler extends xarBLCompiler
         $files = array();
         foreach($activeMods as $modInfo) {
             $filepath = sys::code() . 'modules/' .$modInfo['osdirectory'] . '/tags';
+            if (!is_dir($filepath)) continue;
+            $filepath = realpath($filepath);
+            if (strpos($filepath, '\\') != false) {
+                // On Windows, drive letters are preceeded by an extra / [file:///C:/...]
+                $fileURI = 'file:///' . str_replace('\\','/',$filepath);
+            } else {
+                $fileURI = 'file://' . $filepath;
+            }
+            foreach (new DirectoryIterator($filepath) as $fileInfo) {
+                if($fileInfo->isDot()) continue;
+                $pathinfo = pathinfo($fileInfo->getPathName());
+                if(isset($pathinfo['extension']) && $pathinfo['extension'] != 'xsl') continue;
+                $files[] = $fileURI . "/" . $fileInfo->getFileName();
+            }
+        }            
+        return $files;
+    }
+
+    private function getBlockTagPaths()
+    {
+        if (function_exists('xarModAPIFunc')) {
+            $activeBlocks = xarMod::apiFunc('blocks', 'instances', 'getitems', array('state' => 2));
+        } else {
+            return array();
+        }
+        assert('!empty($activeBlocks)'); // this should never happen
+
+        $files = array();
+        foreach($activeBlocks as $blockInfo) {
+            $filepath = sys::code() . 'blocks/' .$blockInfo['name'] . '/tags';
             if (!is_dir($filepath)) continue;
             $filepath = realpath($filepath);
             if (strpos($filepath, '\\') != false) {
