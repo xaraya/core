@@ -166,7 +166,7 @@ class xarJS extends Object
     {
         if (!isset(self::$instance)) {
             // try unserializing the stored modvar
-            self::$instance = @unserialize(xarModVars::get(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE));
+            //self::$instance = @unserialize(xarModVars::get(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE));
             // fall back to new instance (first run)
             if (empty(self::$instance)) {
                 $c = __CLASS__;
@@ -556,7 +556,6 @@ class xarJS extends Object
  * @param string  $index index to use, optional
  * @return boolean true on success
 **/
-    //public function queue($position, $type, $scope, $data, $tag, $index='')
     public function queue($position, $type, $scope, $data, $tag, $index='')
     {
         //if (empty($scope) || empty($position) || empty($type) || empty($data) || empty($tag)) return;
@@ -651,7 +650,6 @@ class xarJS extends Object
 **/
     public function render($args)
     {
-
         $javascript = $this->getQueued($args);
         if (empty($javascript)) return;
         $args['javascript'] = $javascript;
@@ -745,21 +743,85 @@ class xarJS extends Object
             }
          }
 
-         foreach ($paths as $path) {
-             if (!file_exists($path)) continue;
-             $filePath = $path;
-            // Debug display
-             if (xarModVars::get('themes','debugmode') && 
-             in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-                echo xarML('Chosen: ') . $path . "<br/>";
+         $namearray = 0; //$this->checkForLatest($file);
+         if ($namearray != false) {
+            // Set up an "earliest" version
+            $latest = array('version' => '0.0.0', 'filepath' => '');
+            // We are looking for the latest version of a file/library
+             foreach ($paths as $path) {
+                $name = basename($path);
+                $dir = dirname($path);
+                if (!is_dir($dir) || (strpos($name, $namearray[0]) !== 0)) continue;
+                
+                // Check all the files in this directory
+                echo $dir." <-- dir<br/>";
+                $directory = new DirectoryIterator($dir);
+                foreach ($directory as $fileinfo) {
+                    if ($fileinfo->isDot()) continue;
+                    
+                    // Valid file -> check it
+                    $thisname = $fileinfo->getFilename();echo $thisname."<br/>";echo $namearray[0]."<br/>";
+                    if (strpos($thisname, $namearray[0]) !== 0) continue;
+                    echo "Y";
+                    // Get the version and extension
+                    $thisarray = explode('-', $thisname);
+                    $dotitems = explode('.', $thisarray[1]);
+                    if (count($dotitems) < 4) continue;
+                    
+                    // Assemble the version number
+                    $version = $dotitems[0] . "." . $dotitems[1] . "." . $dotitems[2];
+                    
+                    // Deduce the extension
+                    $extension = substr($file, strlen($name . "-" . $version));
+                    
+                    // Check this version against the current latest version
+                    $oldversion = xarVersion::parse($latest['version']);
+                    $newversion = xarVersion::parse($version);
+                    if (xarVersion::compare($oldversion, $newversion)) {
+                        $latest = array('version' => $version, 'filepath' => $thisname);
+                    } else {
+                        continue;
+                    }
+                }
+
+                // Debug display
+                 if (xarModVars::get('themes','debugmode') && 
+                 in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+                    echo xarML('Chosen: ') . $path . "<br/>";
+                 }
+                 $filePath = $latest['filepath'];
              }
-             break;
+         } else {
+            // We are looking for a specific version of a file/library
+             foreach ($paths as $path) {
+                 if (!file_exists($path)) continue;
+                 $filePath = $path;
+                // Debug display
+                 if (xarModVars::get('themes','debugmode') && 
+                 in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+                    echo xarML('Chosen: ') . $path . "<br/>";
+                 }
+                 break;
+             }
          }
          if (empty($filePath)) return;
 
          return $filePath;
     }
 
+/**
+ * Private function to check if we want the latest version rather than a specific version
+ * A valid filename needs to have the form <namestring>-<version>.js where
+ * <namestring> is an alpha string that represents a file name
+ * <version> must have the form x.x.x, e.g. 1.0.1
+**/
+    private function checkForLatest($file)
+    {
+        $namearray = explode('-', $file);
+        if (count($namearray) < 2) return false;
+        if (strpos($namearray[1], 'latest') !== 0) return false;
+        return $namearray;
+    }
 }
 
 /**
