@@ -746,6 +746,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             return $options;
         }
 
+        // Limit this to objects and maybe remove it altogether
+        // This should be done in the templates
+        // It is creating unnecessary shorturl encodes
+        if ($this->objectid == 1) {
         if ($allow_read) {
             $options['display'] = array('otitle' => xarML('Display'),
                                         'oicon'  => 'display.png',
@@ -792,7 +796,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                                        'olink'  => $this->getActionURL('delete', $itemid),
                                        'ojoin'  => '|');
         }
-
+        }
         return $options;
     }
 
