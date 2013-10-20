@@ -240,7 +240,7 @@ function blocks_instancesapi_getitems(Array $args=array())
         $items[$item['block_id']] = $item;
     }
 
-    $result->close();                  
+    $result->close();
     return $items;  
 }
 ?>
