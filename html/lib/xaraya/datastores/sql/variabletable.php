@@ -23,6 +23,8 @@ sys::import('xaraya.datastores.sql');
 **/
 class VariableTableDataStore extends SQLDataStore
 {
+    protected $table = 'dynamic_data';
+    
     /**
      * Get the field name used to identify this property (we use the property id here)
      */
@@ -57,7 +59,7 @@ class VariableTableDataStore extends SQLDataStore
         }
         if (count($propids) < 1) return;
 
-        $dynamicdata = $this->getTable('dynamic_data');
+        $dynamicdata = $this->getTable($this->table);
 
         $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
         $query = "SELECT property_id, value
@@ -103,7 +105,7 @@ class VariableTableDataStore extends SQLDataStore
 
         $props = array_keys($this->object->properties);
 
-        $dynamicdata = $this->getTable('dynamic_data');
+        $dynamicdata = $this->getTable($this->table);
         foreach ($props as $prop) {
             // ignore empty datasource
             if (empty($this->object->properties[$prop]->source)) continue;
@@ -145,7 +147,7 @@ class VariableTableDataStore extends SQLDataStore
         $propids = array();
         foreach ($this->object->properties as $prop) $propids[] = $prop->id;
 
-        $dynamicdata = $this->getTable('dynamic_data');
+        $dynamicdata = $this->getTable($this->table);
 
         // get the current dynamic data fields for all properties of this item
         $bindmarkers = '?' . str_repeat(',?',count($propids)-1);
@@ -206,7 +208,7 @@ class VariableTableDataStore extends SQLDataStore
 
         $propids = array();
         foreach ($this->object->properties as $prop) $propids[] = $prop->id;
-        $dynamicdata = $this->getTable('dynamic_data');
+        $dynamicdata = $this->getTable($this->table);
 
         // get the current dynamic data fields for all properties of this item
         $bindmarkers = '?' . str_repeat(',?', count($propids) -1);
@@ -222,6 +224,9 @@ class VariableTableDataStore extends SQLDataStore
 
     function getItems(array $args = array())
     {
+        // Bail if no properties have yet been defined
+        if(count($this->object->properties) == 0) return array();
+        
         // FIXME: this is a hack
         if (!empty($this->object->where) && !is_array($this->object->where)) {
             $this->object->where = array($this->object->where);
@@ -268,7 +273,7 @@ class VariableTableDataStore extends SQLDataStore
             $process = $propid;
         }
 
-        $dynamicdata = $this->getTable('dynamic_data');
+        $dynamicdata = $this->getTable($this->table);
 
         // ------------------------------------------------------
         // easy case where we already know the items we want
@@ -828,6 +833,9 @@ class VariableTableDataStore extends SQLDataStore
 
     function countItems(array $args = array())
     {
+        // Bail if no properties have yet been defined
+        if(count($this->object->properties) == 0) return array();
+        
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
         } elseif (isset($this->_itemids)) {
@@ -840,7 +848,7 @@ class VariableTableDataStore extends SQLDataStore
             $this->cache = $args['cache'];
         }
 
-        $dynamicdata = $this->getTable('dynamic_data');
+        $dynamicdata = $this->getTable($this->table);
 
         $propids = array();
         foreach ($this->object->properties as $prop) $propids[] = $prop->id;
