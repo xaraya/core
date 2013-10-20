@@ -43,6 +43,7 @@
                 'include_all_cats' => $include_all_cats,
                 'include_no_cat' => $include_no_cat,
                 'include_self' => $include_self[$key],
+                'layout' => $layout
             )
         </xar:set>
 
