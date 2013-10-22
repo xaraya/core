@@ -170,13 +170,16 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
         }
 
-        // Note: they can be empty here, which means overriding any previous criteria
+        // Make sure we don't have an empty datastore
+        if (is_object($this->datastore)) {
+            // Note: they can be empty here, which means overriding any previous criteria
             // make sure we don't have some left-over sort criteria
             $this->datastore->cleanSort();
             // make sure we don't have some left-over where clauses
             $this->datastore->cleanWhere();
             // make sure we don't have some left-over group by fields
             $this->datastore->cleanGroupBy();
+        }
             if(isset($args['cache']))
                 // pass the cache value to the datastores
                 $this->datastore->cache = $args['cache'];
