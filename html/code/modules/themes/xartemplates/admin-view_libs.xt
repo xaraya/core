@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+    	<div class="xar-mod-page-head">
+	        <h2>
+	            View Javascript Libraries
+	        </h2>
+	        <!--
+            <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
+	            <xar:var name="label">Refresh</xar:var>
+                <xar:button type="submit" name="refresh" label="$label"/>
+            </form>
+            -->
+	    </div>
+		<div class="xar-mod-page-body">
+            <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
+                <table class="table xar-table">
+                    <tr>
+                        <th>Sequence</th>
+                        <th>Library</th>
+                        <th>Version</th>
+                        <th>Scope</th>
+                        <th>Package</th>
+                        <th>Path</th>
+                        <th>File</th>
+                        <th>Autoload</th>
+                    </tr>
+                    <xar:foreach in="$fieldvalues" value="$value">
+                        <tr>
+                            <td>
+                                <xar:set name="name">'dd_id[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_id_' . $value['id']</xar:set>
+                                <xar:data-input name="$name" id="$id" property="$properties['id']" value="$value['id']" hidden="hidden"/>
+                                <xar:set name="name">'dd_seq[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_seq_' . $value['id']</xar:set>
+                                <xar:data-input name="$name" id="$id" property="$properties['seq']" value="$value['seq']"/>
+                            </td>
+                            <td>
+                                <xar:set name="name">'dd_name[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_name_' . $value['id']</xar:set>
+                                <xar:data-input name="$name" id="$id" property="$properties['name']" value="$value['name']"/>
+                            </td>
+                            <td>
+                                <xar:set name="name">'dd_version[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_version_' . $value['id']</xar:set>
+                                <xar:data-input name="$name" id="$id" property="$properties['version']" value="$value['version']"/>
+                            </td>
+                            <td>
+                                <xar:set name="name">'dd_scope[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_scope_' . $value['id']</xar:set>
+                                <xar:data-input name="$name" id="$id" property="$properties['scope']" value="$value['scope']"/>
+                            </td>
+                            <td>
+                                <xar:set name="name">'dd_package[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_package_' . $value['id']</xar:set>
+                                <xar:data-input name="$name" id="$id" property="$properties['package']" value="$value['package']"/>
+                            </td>
+                            <td>
+                                <xar:set name="name">'dd_path[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_path_' . $value['id']</xar:set>
+                                <xar:data-input name="$name" id="$id" property="$properties['path']" value="$value['path']"/>
+                            </td>
+                            <td>
+                                <xar:set name="name">'dd_file[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_file_' . $value['id']</xar:set>
+                                <xar:data-input property="$properties['file']" value="$value['file']"/>
+                            </td>
+                            <td>
+                                <xar:set name="name">'dd_load[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_load_' . $value['id']</xar:set>
+                                <xar:data-input name="$name" id="$id" property="$properties['load']" value="$value['load']"/>
+                            </td>
+                        </tr>
+                    </xar:foreach>
+                </table>
+                <div class="xar-row">
+                    <div class="xar-col">
+                    </div>
+                    <div class="xar-col">
+                        <input type="hidden" name="confirm" id="confirm" value="true"/>
+                        <xar:var name="label">Save</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</xar:template>

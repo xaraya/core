@@ -29,6 +29,15 @@
         <menuitem>
             <mask>AdminThemes</mask>
             <includes>
+                <includeitem>view_libs</includeitem>
+            </includes>
+            <target>view_libs</target>
+            <title>Manage Javascript and CSS libraries</title>
+            <label>Libraries</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminThemes</mask>
+            <includes>
                 <includeitem>modifyconfig</includeitem>
             </includes>
             <target>modifyconfig</target>
