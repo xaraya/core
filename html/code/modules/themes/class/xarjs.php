@@ -14,6 +14,14 @@
 /**
  * Base JS Class
 **/
+
+/**
+ * Notes
+ * This is a persistent object. Once instantiated it saves itself in a modvar
+ * Each time it wakes up it checks the filesystem for JS libraries 
+ * So rather than storing and accessing such information in the database,
+ * we can get it by simply instantiating this object.
+**/
 class xarJS extends Object
 {
     // the name of the module and the modvar to use for storing this object
@@ -41,8 +49,8 @@ class xarJS extends Object
     // public properties - these are stored when the property goes out of scope
     // array of lib objects
     public $libs            = array();
-    // default lib to load...
-    public $default_lib     = '';
+    // default libs to load...
+    public $default_libs    = array();
 
     // array of script srcs found by scope ...
     public $scripts = array();
@@ -89,7 +97,6 @@ class xarJS extends Object
 **/
     public function __wakeup()
     {
-
         $this->refresh();
     }
 /**
@@ -166,7 +173,7 @@ class xarJS extends Object
     {
         if (!isset(self::$instance)) {
             // try unserializing the stored modvar
-            //self::$instance = @unserialize(xarModVars::get(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE));
+            self::$instance = @unserialize(xarModVars::get(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE));
             // fall back to new instance (first run)
             if (empty(self::$instance)) {
                 $c = __CLASS__;
@@ -181,13 +188,15 @@ class xarJS extends Object
     {
         // now find all libs in the filesystem
         // we want to look in all active themes
-        $themes = xarMod::apiFunc('themes', 'admin', 'getlist',
-            array('filter' => array('Class' => 2, 'State' => XARTHEME_STATE_ACTIVE)));
+        $filter = array('Class' => 2, 'State' => XARTHEME_STATE_ACTIVE);
+        $themes = xarMod::apiFunc('themes', 'admin', 'getlist', $filter);
         // we want to look in all active modules
         $modules = xarMod::apiFunc('modules', 'admin', 'getlist',
             array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+        // we want to look in all active themes
+        // we want to look in all active modules
         // set default paths and filenames
-        $libName     = $this->name;
+//        $libName     = $this->name;
         $baseDir     = xarTpl::getBaseDir();
         $themeDir    = xarTpl::getThemeDir();
         $themeName   = xarTpl::getThemeName();
@@ -218,18 +227,32 @@ class xarJS extends Object
             // look in code/modules/<module>/xartemplates/lib/libname/*
             $paths[] = "{$codeDir}modules/{$modOSDir}/xartemplates/{$libBase}";
         }
+        
         // build an array of potential libraries
+        // Below the lib directory we expect to find a directory with a library's name
+        // Below that the next level must be one or more directories with different versions of the library
+        sys::import('xaraya.version');
         $libs = array();
         foreach ($paths as $path) {
             if (!is_dir($path)) continue;
             $folders = $this->getFolders($path, 1);
             if (empty($folders)) continue;
             foreach (array_keys($folders) as $lib) {
+                $subpath = $path . "/" . $lib;
+                $versions = $this->getFolders($subpath, 1);
+                if (empty($versions)) continue;
+                $validversions = array();
+                foreach (array_keys($versions) as $version) {
+                    $valid = xarVersion::parse($version);
+                    if(!$valid) continue;
+                    $validversions[] = $version;
+                }
                 // keep track of found libs
                 $libs[$lib] = 1;
                 // init lib if necessary
                 if (!isset($this->libs[$lib]))
                     $this->libs[$lib] = new xarJSLib($lib);
+                    $this->libs[$lib]->versions = $validversions;
                 // refresh lib
                 $this->libs[$lib]->findFiles();
             }
@@ -884,7 +907,7 @@ class xarJSLib extends Object
             array('filter' => array('Class' => 2, 'State' => XARTHEME_STATE_ACTIVE)));
         // we want to look in all active modules
         $modules = xarMod::apiFunc('modules', 'admin', 'getlist',
-            array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+            array('filter' => array('State' => 2)));
         // set default paths and filenames
         $libName     = $this->name;
         $baseDir     = xarTpl::getBaseDir();
@@ -921,64 +944,69 @@ class xarJSLib extends Object
         foreach ($paths as $scope => $packages) {
             foreach ($packages as $package => $path) {
                 if (!is_dir($path)) continue;
-                $files = xarJS::getFiles($path);
-                if (empty($files)) continue;
-                foreach ($files as $folder => $items) {
-                    foreach ($items as $file => $filepath) {
-                        // store script as scope - package - libbase/libname - file
-                        // eg, scripts[theme][common][lib/jquery][jquery-1.4.4.min.js] =
-                        // /themes/common/lib/jquery/jquery-1.4.4.min.js
-                        // init the actual tag info used to init this lib
-                        $tag = array(
-                            'lib' => $libName,
-                            'scope' => $scope,
-                            'type' => 'lib',
-                        );
-                        switch ($scope) {
-                            case 'theme':
-                            case 'common':
-                                $tag['theme'] = $package;
-                            break;
-                            case 'module':
-                            case 'block':
-                                $tag['module'] = $package;
-                            break;
-                            case 'property':
-                                $tag['property'] = $package;
-                            break;
-                        }
-                        $ext = pathinfo($file, PATHINFO_EXTENSION);
-                        switch ($ext) {
-                            case 'js':
-                                $tag['src'] = $file;
-                                $base = "{$libBase}/{$libName}";
-                                // remove the filename from the path
-                                $basepath = str_replace("/$file", '', $filepath);
-                                // remove anything before the base
-                                $basepath = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
-                                // if this isn't base, keep everything after base
-                                if ($basepath != $base)
-                                    $base = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
-                                $tag['base'] = $base;
-                                $this->scripts[$scope][$package][$base][$file] = $tag;
-                            break;
-                            case 'css':
-                                $tag['file'] = $file;
-                                $this->styles[$scope][$package][$base][$file] = $tag;
-                            break;
-                            case 'xt':
-                                $tag['template'] = str_replace('.xt', '', $file);
-                                $this->templates[$scope][$package][$base][$file] = $tag;
-                            break;
-                            case 'xml':
-                                if ($file == xarJS::LIB_XML) {
-                                    // read the lib xml file...
-                                    $this->readLibXml($filepath);
-                                    //$this->xml[$scope][$package][$base][$file] = $tag;
-                                } elseif ($file == xarJS::LIB_PLUGIN_XML) {
+                $versions = xarJS::getFolders($path, 1);
+                if (empty($versions)) continue;
+                foreach (array_keys($versions) as $version) {
+                    $subpath = $path . "/" . $version;
+                    $files = xarJS::getFiles($subpath);
+                    if (empty($files)) continue;
+                    foreach ($files as $folder => $items) {
+                        foreach ($items as $file => $filepath) {
+                            // store script as scope - package - libbase/libname - file
+                            // eg, scripts[theme][common][lib/jquery][jquery-1.4.4.min.js] =
+                            // /themes/common/lib/jquery/jquery-1.4.4.min.js
+                            // init the actual tag info used to init this lib
+                            $tag = array(
+                                'lib' => $libName,
+                                'scope' => $scope,
+                                'type' => 'lib',
+                            );
+                            switch ($scope) {
+                                case 'theme':
+                                case 'common':
+                                    $tag['theme'] = $package;
+                                break;
+                                case 'module':
+                                case 'block':
+                                    $tag['module'] = $package;
+                                break;
+                                case 'property':
+                                    $tag['property'] = $package;
+                                break;
+                            }
+                            $ext = pathinfo($file, PATHINFO_EXTENSION);
+                            switch ($ext) {
+                                case 'js':
+                                    $tag['src'] = $file;
+                                    $base = "{$libBase}/{$libName}";
+                                    // remove the filename from the path
+                                    $basepath = str_replace("/$file", '', $filepath);
+                                    // remove anything before the base
+                                    $basepath = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
+                                    // if this isn't base, keep everything after base
+                                    if ($basepath != $base)
+                                        $base = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
+                                    $tag['base'] = $base;
+                                    $this->scripts[$version][$scope][$package][$base][$file] = $tag;
+                                break;
+                                case 'css':
+                                    $tag['file'] = $file;
+                                    $this->styles[$version][$scope][$package][$base][$file] = $tag;
+                                break;
+                                case 'xt':
+                                    $tag['template'] = str_replace('.xt', '', $file);
+                                    $this->templates[$version][$scope][$package][$base][$file] = $tag;
+                                break;
+                                case 'xml':
+                                    if ($file == xarJS::LIB_XML) {
+                                        // read the lib xml file...
+                                        $this->readLibXml($filepath);
+                                        //$this->xml[$scope][$package][$base][$file] = $tag;
+                                    } elseif ($file == xarJS::LIB_PLUGIN_XML) {
 
-                                }
-                            break;
+                                    }
+                                break;
+                            }
                         }
                     }
                 }
