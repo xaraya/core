@@ -48,12 +48,14 @@ function themes_admin_view_libs()
                                 $data['fieldvalues'][$id] = array(
                                     'id' => $id,
                                     'seq' => $seqindex,
-                                    'name' => $filearray['lib'],
+                                    'type' => 'lib',
+                                    'position' => 'head',
+                                    'lib' => $filearray['lib'],
                                     'version' => $version,
                                     'scope' => $scope,
                                     'package' => $package,
-                                    'path' => $path,
-                                    'file' => $file,
+                                    'base' => $path,
+                                    'src' => $file,
                                     'load' => 0,
                                 );
                             }
@@ -66,14 +68,16 @@ function themes_admin_view_libs()
 
     if(!xarVarFetch('confirm',      'bool', $confirm,          false, XARVAR_DONT_SET)) {return;}
     if ($confirm) {
-        if(!xarVarFetch('dd_load',   'array', $dd_load,         array(), XARVAR_DONT_SET)) {return;}
-        if(!xarVarFetch('dd_seq',    'array', $dd_seq,          array(), XARVAR_DONT_SET)) {return;}
+        if(!xarVarFetch('dd_load',     'array', $dd_load,         array(), XARVAR_DONT_SET)) {return;}
+        if(!xarVarFetch('dd_seq',      'array', $dd_seq,          array(), XARVAR_DONT_SET)) {return;}
+        if(!xarVarFetch('dd_position', 'array', $dd_position,     array(), XARVAR_DONT_SET)) {return;}
         $libobject->default_libs = array();
         foreach (array_keys($dd_load) as $id) {
             // The file may have disappeared in the meantime
             if (!isset($data['fieldvalues'][$id])) continue;
             $libobject->default_libs[$id] = $data['fieldvalues'][$id];
             $libobject->default_libs[$id]['seq'] = $dd_seq[$id];
+            $libobject->default_libs[$id]['position'] = $dd_position[$id];
         }
         // Sort the array by sequence
         $temp = array();
@@ -111,7 +115,6 @@ function themes_admin_view_libs()
         $row['load'] = 0;
         $data['fieldvalues'][$row['id']] = $row;
     }
-
     return $data;
 }
 

@@ -116,5 +116,15 @@
       <seq>10</seq>
       <configuration>a:0:{}</configuration>
     </property>
+    <property name="position">
+      <id>5904</id>
+      <label>Position</label>
+      <type>dropdown</type>
+      <defaultvalue>head</defaultvalue>
+      <source></source>
+      <status>33</status>
+      <seq>11</seq>
+      <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:20:"head,Head;body,Body;";}</configuration>
+    </property>
   </properties>
 </object>

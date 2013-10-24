@@ -97,7 +97,13 @@ class xarJS extends Object
 **/
     public function __wakeup()
     {
+        // Check what libraries are present in the filesystem
         $this->refresh();
+        
+        // Load the default libraries
+        foreach($this->default_libs as $lib) {
+            $this->register($lib);
+        }
     }
 /**
  * Object sleep method
@@ -366,7 +372,7 @@ class xarJS extends Object
         // support deprecated use of filename parameter (for now)
         if (empty($src) && !empty($filename)) $src = $filename;
 
-        // try to determin scope if none supplied
+        // try to determine scope if none supplied
         if (empty($scope)) {
             // scope can be implied by attributes
             if (!empty($block)) {
@@ -500,7 +506,7 @@ class xarJS extends Object
                 // optionally specify lib style
                 if (!empty($style))
                     $tag['style'] = $style;
-                $tag['base'] = !empty($base) ? $base : xarJS::LIB_BASE . '/' . $lib;
+                $tag['base'] = !empty($base) ? $base : xarJS::LIB_BASE . '/' . $lib . '/' . $version;
             break;
             // code
             case 'code':

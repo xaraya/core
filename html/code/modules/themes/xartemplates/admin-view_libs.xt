@@ -19,12 +19,14 @@
                 <table class="table xar-table">
                     <tr>
                         <th>Sequence</th>
-                        <th>Library</th>
+                        <th>Type</th>
+                        <th>Name</th>
                         <th>Version</th>
                         <th>Scope</th>
                         <th>Package</th>
                         <th>Path</th>
                         <th>File</th>
+                        <th>Position</th>
                         <th>Autoload</th>
                     </tr>
                     <xar:foreach in="$fieldvalues" value="$value">
@@ -38,9 +40,14 @@
                                 <xar:data-input name="$name" id="$id" property="$properties['seq']" value="$value['seq']"/>
                             </td>
                             <td>
-                                <xar:set name="name">'dd_name[' . $value['id'] . ']'</xar:set>
-                                <xar:set name="id">'dd_name_' . $value['id']</xar:set>
-                                <xar:data-input name="$name" id="$id" property="$properties['name']" value="$value['name']"/>
+                                <xar:set name="name">'dd_type[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_type_' . $value['id']</xar:set>
+                                <xar:data-input name="$name" id="$id" property="$properties['type']" value="$value['type']"/>
+                            </td>
+                            <td>
+                                <xar:set name="name">'dd_lib[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_lib_' . $value['id']</xar:set>
+                                <xar:data-input name="$name" id="$id" property="$properties['lib']" value="$value['lib']"/>
                             </td>
                             <td>
                                 <xar:set name="name">'dd_version[' . $value['id'] . ']'</xar:set>
@@ -58,14 +65,19 @@
                                 <xar:data-input name="$name" id="$id" property="$properties['package']" value="$value['package']"/>
                             </td>
                             <td>
-                                <xar:set name="name">'dd_path[' . $value['id'] . ']'</xar:set>
-                                <xar:set name="id">'dd_path_' . $value['id']</xar:set>
-                                <xar:data-input name="$name" id="$id" property="$properties['path']" value="$value['path']"/>
+                                <xar:set name="name">'dd_base[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_base_' . $value['id']</xar:set>
+                                <xar:data-input name="$name" id="$id" property="$properties['base']" value="$value['base']"/>
                             </td>
                             <td>
-                                <xar:set name="name">'dd_file[' . $value['id'] . ']'</xar:set>
-                                <xar:set name="id">'dd_file_' . $value['id']</xar:set>
-                                <xar:data-input property="$properties['file']" value="$value['file']"/>
+                                <xar:set name="name">'dd_src[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_src_' . $value['id']</xar:set>
+                                <xar:data-input property="$properties['src']" value="$value['src']"/>
+                            </td>
+                            <td>
+                                <xar:set name="name">'dd_position[' . $value['id'] . ']'</xar:set>
+                                <xar:set name="id">'dd_position_' . $value['id']</xar:set>
+                                <xar:data-input name="$name" id="$id" property="$properties['position']" value="$value['position']"/>
                             </td>
                             <td>
                                 <xar:set name="name">'dd_load[' . $value['id'] . ']'</xar:set>
