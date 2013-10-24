@@ -11,17 +11,15 @@
                     <xar:if condition="empty($scopes)"><xar:continue/></xar:if>
                     <xar:foreach in="$scopes" value="$script">
                         <xar:if condition="$script['type'] eq 'lib'">
-    <script type="text/javascript" src="#$script['url']#">
-    </script>                        
+                            <script type="text/javascript" src="#$script['url']#"/>
                         <xar:elseif condition="$script['type'] eq 'plugin'"/>
                         
                         <xar:elseif condition="$script['type'] eq 'src'"/>
-    <script type="text/javascript" src="#$script['url']#">&#160;
-    </script>                        
+                            <script type="text/javascript" src="#$script['url']#"/>
                         <xar:elseif condition="$script['type'] eq 'code'"/>
-    <script type="text/javascript">
-        #$script['code']#
-    </script>                        
+                            <script type="text/javascript">
+                                #$script['code']#
+                            </script>                        
                         <xar:elseif condition="$script['type'] eq 'event'"/>
                         
                         </xar:if>
