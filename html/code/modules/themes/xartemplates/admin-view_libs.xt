@@ -77,7 +77,7 @@
                             <td>
                                 <xar:set name="name">'dd_position[' . $value['id'] . ']'</xar:set>
                                 <xar:set name="id">'dd_position_' . $value['id']</xar:set>
-                                <xar:data-input name="$name" id="$id" property="$properties['position']" value="$value['position']"/>
+                                <xar:data-input name="$name" id="$id" property="$properties['position']" value="$value['position']" style="width: 100px"/>
                             </td>
                             <td>
                                 <xar:set name="name">'dd_load[' . $value['id'] . ']'</xar:set>
