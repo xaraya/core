@@ -34,7 +34,7 @@ function themes_userapi_registerjs($args)
 {
     extract($args);
     
-    if (empty($code) && empty($filename) && empty($src)) return;
+    if (empty($lib) && empty($plugin) && empty($code) && empty($filename) && empty($src)) return;
     if (empty($position)) $args['position'] = 'head';
     if (empty($index)) $args['index'] = null;
     

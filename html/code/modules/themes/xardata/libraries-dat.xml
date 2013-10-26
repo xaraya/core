@@ -1,0 +1,24 @@
+<menu>
+    <menutitle>
+        <label>Library Type</label>
+        <title>Choose the type of libraries to be shown</title>
+        <variable>tab</variable>
+    </menutitle>
+    <menuitems>
+        <menuitem>
+            <value>auto</value>
+            <target>view_libs</target>
+            <label>Loaded Javascript Libraries</label>
+        </menuitem>
+        <menuitem>
+            <value>local</value>
+            <target>view_libs</target>
+            <label>Local Javascript Libraries</label>
+        </menuitem>
+        <menuitem>
+            <value>remote</value>
+            <target>view_libs</target>
+            <label>Remote Javascript Libraries</label>
+        </menuitem>
+    </menuitems>
+</menu>

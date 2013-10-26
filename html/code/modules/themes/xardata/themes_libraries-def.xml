@@ -36,9 +36,9 @@
       <seq>2</seq>
       <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:26:"lib,Library;plugin,Plugin;";}</configuration>
     </property>
-    <property name="name">
+    <property name="lib">
       <id>5894</id>
-      <label>Name</label>
+      <label>Library</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source></source>
@@ -59,7 +59,7 @@
     <property name="scope">
       <id>5899</id>
       <label>Scope</label>
-      <type>static</type>
+      <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source></source>
       <status>65</status>
@@ -69,27 +69,27 @@
     <property name="package">
       <id>5900</id>
       <label>Package</label>
-      <type>static</type>
+      <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source></source>
       <status>65</status>
       <seq>6</seq>
       <configuration>a:0:{}</configuration>
     </property>
-    <property name="path">
+    <property name="base">
       <id>5896</id>
       <label>Path</label>
-      <type>static</type>
+      <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source></source>
       <status>65</status>
       <seq>7</seq>
       <configuration>a:0:{}</configuration>
     </property>
-    <property name="file">
+    <property name="src">
       <id>5901</id>
-      <label>File</label>
-      <type>static</type>
+      <label>Source</label>
+      <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source></source>
       <status>65</status>

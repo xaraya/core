@@ -32,8 +32,8 @@
                 <includeitem>view_libs</includeitem>
             </includes>
             <target>view_libs</target>
-            <title>Manage Javascript and CSS libraries</title>
-            <label>Libraries</label>
+            <title>Manage external Javascript libraries</title>
+            <label>Javascript</label>
         </menuitem>
         <menuitem>
             <mask>AdminThemes</mask>

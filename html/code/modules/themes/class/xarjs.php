@@ -48,7 +48,9 @@ class xarJS extends Object
 
     // public properties - these are stored when the property goes out of scope
     // array of lib objects
-    public $libs            = array();
+    public $local_libs      = array();
+    // array of lib objects
+    public $remote_libs     = array();
     // default libs to load...
     public $default_libs    = array();
 
@@ -246,25 +248,30 @@ class xarJS extends Object
             foreach (array_keys($folders) as $lib) {
                 $subpath = $path . "/" . $lib;
                 $versions = $this->getFolders($subpath, 1);
-                if (empty($versions)) continue;
+                if (empty($versions)) continue;                
                 $validversions = array();
                 foreach (array_keys($versions) as $version) {
                     $valid = xarVersion::parse($version);
                     if(!$valid) continue;
                     $validversions[] = $version;
                 }
+                
                 // keep track of found libs
                 $libs[$lib] = 1;
+                
                 // init lib if necessary
-                if (!isset($this->libs[$lib]))
-                    $this->libs[$lib] = new xarJSLib($lib);
-                    $this->libs[$lib]->versions = $validversions;
+                if (!isset($this->local_libs[$lib]))
+                    $this->local_libs[$lib] = new xarJSLib($lib);
+                    $this->local_libs[$lib]->versions = $validversions;
+                    
                 // refresh lib
-                $this->libs[$lib]->findFiles();
+                $this->local_libs[$lib]->findFiles();
+                // Sort by version in descending order
+                krsort($this->local_libs[$lib]->scripts);
             }
         }
         // remove any missing libs
-        foreach ($this->libs as $compare => $curlib) {
+        foreach ($this->local_libs as $compare => $curlib) {
             if (!isset($libs[$compare]))
                 unset($this->$libs[$compare]);
         }
@@ -498,15 +505,21 @@ class xarJS extends Object
                 // @todo: check lib exists...
                 $tag['lib'] = $lib;
                 // optionally specify lib source file name
-                if (!empty($src))
-                    $tag['src'] = $src;
+                if (empty($src)) $src = '';echo $src;
                 // optionally specify lib version
-                if (!empty($version))
-                    $tag['version'] = $version;
+                if (empty($version) || (!empty($version) && $version == 'latest')) {
+                    $version = '';
+                }
+                $info = $this->getLibInfo($lib, $version, $src);
+                if (empty($info)) return;
+                $tag['version'] = $info['version'];
+                $tag['base'] = $info['base'];
+                $package = $info['package'];
+                $src = $info['src'];
+
                 // optionally specify lib style
                 if (!empty($style))
                     $tag['style'] = $style;
-                $tag['base'] = !empty($base) ? $base : xarJS::LIB_BASE . '/' . $lib . '/' . $version;
             break;
             // code
             case 'code':
@@ -557,7 +570,7 @@ class xarJS extends Object
                     unset($params);
                 }
                 $tag['url'] = $filePath;
-            } elseif ($type=='src') {
+            } elseif ($type=='src' || $type=='lib') {
                 // not local, just include the external source
                 $tag['src'] = $file;
                 $tag['url'] = $file;
@@ -839,17 +852,62 @@ class xarJS extends Object
     }
 
 /**
- * Private function to check if we want the latest version rather than a specific version
- * A valid filename needs to have the form <namestring>-<version>.js where
- * <namestring> is an alpha string that represents a file name
- * <version> must have the form x.x.x, e.g. 1.0.1
+ * getLibInfo method
+ *
+ * Get the information of a specific version of a library that Xaraya is aware of
+ * This can be a local or remote library
+ * Fallback is to the latest version that Xaraya knows about
+ *
+ * @author Marc Lutolf <mfl@netspan.ch>
+ * @param array   $lib JS library name
+ * @return string version number
+ * @throws none
 **/
-    private function checkForLatest($file)
+    private function getLibInfo($lib, $vers='', $src='')
     {
-        $namearray = explode('-', $file);
-        if (count($namearray) < 2) return false;
-        if (strpos($namearray[1], 'latest') !== 0) return false;
-        return $namearray;
+        // We will look at the local and remote libraries Xaraya is aware of
+        // Ceteris paribus, remote libraries will be privileged
+        
+        $candidates = array();
+
+        if (isset ($this->local_libs[$lib])) {
+            $lib = $this->local_libs[$lib];
+        
+            // Start by taking the latest version
+            $scripts = $lib->scripts;
+            foreach ($scripts as $version => $versionarray) {
+                foreach ($versionarray as $scope => $scopearray) {
+                    foreach ($scopearray as $package => $packagearray) {
+                        foreach ($packagearray as $dir => $dirarray) {
+                            foreach ($dirarray as $file => $filearray) {
+                                if (!empty($src) && ($filearray['src'] != $src)) continue;
+                                if (!empty($vers) && ($filearray['version'] != $vers)) continue;
+                                $candidates[] = $filearray;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach ($this->remote_libs as $thislib) {
+            foreach ($dirarray as $file => $filearray) {
+                if (!empty($src) && ($thislib['src'] != $src)) continue;
+                if (!empty($vers) && ($thislib['version'] != $vers)) continue;
+                $candidates[] = $thislib;
+            }
+        }
+        
+        // Sort the libraries by descending version and origin
+        if (!empty($candidates)) {
+            foreach ($candidates as $key => $row) {
+                $tempversion[$key] = $row['version'];
+                $temporigin[$key]  = $row['origin'];
+           }
+            array_multisort($tempversion, SORT_DESC, $temporigin, SORT_DESC, $candidates);
+        }
+        // Return the first acceptable candidate
+        return current($candidates);
     }
 }
 
@@ -963,9 +1021,10 @@ class xarJSLib extends Object
                             // /themes/common/lib/jquery/jquery-1.4.4.min.js
                             // init the actual tag info used to init this lib
                             $tag = array(
-                                'lib' => $libName,
-                                'scope' => $scope,
-                                'type' => 'lib',
+                                'lib'    => $libName,
+                                'scope'  => $scope,
+                                'type'   => 'lib',
+                                'origin' => 'local',
                             );
                             switch ($scope) {
                                 case 'theme':
@@ -984,6 +1043,8 @@ class xarJSLib extends Object
                             switch ($ext) {
                                 case 'js':
                                     $tag['src'] = $file;
+                                    $tag['version'] = $version;
+                                    $tag['package'] = $package;
                                     $base = "{$libBase}/{$libName}";
                                     // remove the filename from the path
                                     $basepath = str_replace("/$file", '', $filepath);
