@@ -9,11 +9,9 @@
 	    </div>
 		<div class="xar-mod-page-body">
             <xar:if condition="$tab eq 'auto'">
-                <h3>
+                <h2>
                     Loaded Javascript Libraries
-                </h3>
-<xar:javascript module="base" filename="formcheck.js" position="head"/>
-<xar:javascript type="lib" lib="jquery" />
+                </h2>
                 <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
                     <table class="table xar-table">
                         <tr>
@@ -107,9 +105,9 @@
                     </div>
                 </form>
             <xar:elseif condition="$tab eq 'local'"/>
-                <h3>
+                <h2>
                     Local Javascript Libraries
-                </h3>
+                </h2>
 	        <!--
             <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
 	            <xar:var name="label">Refresh</xar:var>
@@ -201,9 +199,9 @@
                     </div>
                 </form>
             <xar:elseif condition="$tab eq 'remote'"/>
-                <h3>
+                <h2>
                     Remote Javascript Libraries
-                </h3>
+                </h2>
                 <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
                     <table class="table xar-table">
                         <thead>
