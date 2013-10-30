@@ -749,56 +749,57 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             return $options;
         }
 
-        // Limit this to objects and maybe remove it altogether
+        // Limit this to the dynamicdata module and maybe remove it altogether
         // This should be done in the templates
         // It is creating unnecessary shorturl encodes
-        if ($this->objectid == 1) {
-        if ($allow_read) {
-            $options['display'] = array('otitle' => xarML('Display'),
-                                        'oicon'  => 'display.png',
-                                        'olink'  => $this->getActionURL('display', $itemid),
-                                        'ojoin'  => '');
-        }
-        if ($allow_edit) {
-            $options['modify'] = array('otitle' => xarML('Edit'),
-                                       'oicon'  => 'modify.png',
-                                       'olink'  => $this->getActionURL('modify', $itemid),
-                                       'ojoin'  => '|');
-        }
-        // extra options when showing the dynamic objects themselves
-        if ($allow_edit && $this->objectid == 1) {
-            // CHECKME: access should be based on the objects themselves here (but probably too heavy) ?
-            $options['modifyprops'] = array('otitle' => xarML('Properties'),
-                                            'oicon'  => 'modify-config.png',
-                                            'olink'  => $this->getActionURL('modifyprop', $itemid),
-                                            'ojoin'  => '|');
-            $options['access'] = array('otitle' => xarML('Access'),
-                                            'oicon'  => 'privileges.png',
-                                            'olink'  => $this->getActionURL('access', $itemid),
-                                            'ojoin'  => '|');
-            $options['viewitems'] = array('otitle' => xarML('Items'),
-                                          'oicon'  => 'item-list.png',
-                                          'olink'  => $this->getActionURL('viewitems', $itemid),
-                                          'ojoin'  => '|'
-                                         );
-        }
-        //if ($allow_add)  {
-        // CHECKME: and/or skip cloning in object interface ?
-        //if ($allow_add && $this->linktype != 'object')  {
-        // CHECKME: allow cloning only for the dynamic objects themselves ?
-        if ($allow_add && $this->objectid == 1)  {
-            // TODO: define 'clone' as a standard action for objects if we want it, instead of overloading 'modify' action
-            $options['clone'] = array('otitle' => xarML('Clone'),
-                                       'oicon'  => 'add.png',
-                                       'olink'  => $this->getActionURL('modify', $itemid, array('tab' => 'clone')),
-                                       'ojoin'  => '|');
-        }
-        if ($allow_delete)  {
-            $options['delete'] = array('otitle' => xarML('Delete'),
-                                       'oicon'  => 'delete.png',
-                                       'olink'  => $this->getActionURL('delete', $itemid),
-                                       'ojoin'  => '|');
-        }
+        $info = xarController::$request->getInfo();
+        if ($info[0] == 'dynamicdata') {
+            if ($allow_read) {
+                $options['display'] = array('otitle' => xarML('Display'),
+                                            'oicon'  => 'display.png',
+                                            'olink'  => $this->getActionURL('display', $itemid),
+                                            'ojoin'  => '');
+            }
+            if ($allow_edit) {
+                $options['modify'] = array('otitle' => xarML('Edit'),
+                                           'oicon'  => 'modify.png',
+                                           'olink'  => $this->getActionURL('modify', $itemid),
+                                           'ojoin'  => '|');
+            }
+            // extra options when showing the dynamic objects themselves
+            if ($allow_edit && $this->objectid == 1) {
+                // CHECKME: access should be based on the objects themselves here (but probably too heavy) ?
+                $options['modifyprops'] = array('otitle' => xarML('Properties'),
+                                                'oicon'  => 'modify-config.png',
+                                                'olink'  => $this->getActionURL('modifyprop', $itemid),
+                                                'ojoin'  => '|');
+                $options['access'] = array('otitle' => xarML('Access'),
+                                                'oicon'  => 'privileges.png',
+                                                'olink'  => $this->getActionURL('access', $itemid),
+                                                'ojoin'  => '|');
+                $options['viewitems'] = array('otitle' => xarML('Items'),
+                                              'oicon'  => 'item-list.png',
+                                              'olink'  => $this->getActionURL('viewitems', $itemid),
+                                              'ojoin'  => '|'
+                                             );
+            }
+            //if ($allow_add)  {
+            // CHECKME: and/or skip cloning in object interface ?
+            //if ($allow_add && $this->linktype != 'object')  {
+            // CHECKME: allow cloning only for the dynamic objects themselves ?
+            if ($allow_add && $this->objectid == 1)  {
+                // TODO: define 'clone' as a standard action for objects if we want it, instead of overloading 'modify' action
+                $options['clone'] = array('otitle' => xarML('Clone'),
+                                           'oicon'  => 'add.png',
+                                           'olink'  => $this->getActionURL('modify', $itemid, array('tab' => 'clone')),
+                                           'ojoin'  => '|');
+            }
+            if ($allow_delete)  {
+                $options['delete'] = array('otitle' => xarML('Delete'),
+                                           'oicon'  => 'delete.png',
+                                           'olink'  => $this->getActionURL('delete', $itemid),
+                                           'ojoin'  => '|');
+            }
         }
         return $options;
     }
