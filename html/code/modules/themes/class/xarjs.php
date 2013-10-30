@@ -505,7 +505,7 @@ class xarJS extends Object
                 // @todo: check lib exists...
                 $tag['lib'] = $lib;
                 // optionally specify lib source file name
-                if (empty($src)) $src = '';echo $src;
+                if (empty($src)) $src = '';
                 // optionally specify lib version
                 if (empty($version) || (!empty($version) && $version == 'latest')) {
                     $version = '';
