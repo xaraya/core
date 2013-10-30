@@ -716,7 +716,7 @@ class xarJS extends Object
  * @return string path to file if found, empty otherwise
  * @throws none
 **/
-    private function findFile($scope, $file, $base, $package='')
+    public function findFile($scope, $file, $base, $package='')
     {
         if (empty($scope) || empty($file) || empty($base)) return;
 
@@ -733,12 +733,12 @@ class xarJS extends Object
                 $paths[] = $commonDir . '/' . $base . '/' . $file;
                 break;
             case 'block':
-                // soloblocks
+                // Standalone blocks
                 if (empty($package)) return;
                 $paths[] = "$themeDir/blocks/$package/$base/$file";
                 $paths[] = "$commonDir/blocks/$package/$base/$file";
                 $paths[] = "{$codeDir}blocks/$package/xartemplates/$base/$file";
-            break;
+                break;
             case 'module':
                 if (empty($package))
                     $package = xarMod::getName();
@@ -766,6 +766,7 @@ class xarJS extends Object
                 $paths[] = $codeDir . 'modules/' . $modOsDir . '/xartemplates/includes/' . $file;
                 break;
             case 'property':
+                // Standalone properties
                 if (empty($package)) return;
                 // themes/theme/properties/property/scripts
                 $paths[] = $themeDir . '/properties/' . $package . '/' . $base . '/' . $file;
@@ -781,7 +782,7 @@ class xarJS extends Object
          if (xarModVars::get('themes','debugmode') && 
          in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
             foreach ($paths as $path) {
-                echo xarML('Location: ') . $path . "<br/>";                
+                echo xarML('Possible location: ') . $path . "<br/>";                
             }
          }
 
