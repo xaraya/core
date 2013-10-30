@@ -785,66 +785,16 @@ class xarJS extends Object
             }
          }
 
-         $namearray = 0; //$this->checkForLatest($file);
-         if ($namearray != false) {
-            // Set up an "earliest" version
-            $latest = array('version' => '0.0.0', 'filepath' => '');
-            // We are looking for the latest version of a file/library
-             foreach ($paths as $path) {
-                $name = basename($path);
-                $dir = dirname($path);
-                if (!is_dir($dir) || (strpos($name, $namearray[0]) !== 0)) continue;
-                
-                // Check all the files in this directory
-                echo $dir." <-- dir<br/>";
-                $directory = new DirectoryIterator($dir);
-                foreach ($directory as $fileinfo) {
-                    if ($fileinfo->isDot()) continue;
-                    
-                    // Valid file -> check it
-                    $thisname = $fileinfo->getFilename();echo $thisname."<br/>";echo $namearray[0]."<br/>";
-                    if (strpos($thisname, $namearray[0]) !== 0) continue;
-                    echo "Y";
-                    // Get the version and extension
-                    $thisarray = explode('-', $thisname);
-                    $dotitems = explode('.', $thisarray[1]);
-                    if (count($dotitems) < 4) continue;
-                    
-                    // Assemble the version number
-                    $version = $dotitems[0] . "." . $dotitems[1] . "." . $dotitems[2];
-                    
-                    // Deduce the extension
-                    $extension = substr($file, strlen($name . "-" . $version));
-                    
-                    // Check this version against the current latest version
-                    $oldversion = xarVersion::parse($latest['version']);
-                    $newversion = xarVersion::parse($version);
-                    if (xarVersion::compare($oldversion, $newversion)) {
-                        $latest = array('version' => $version, 'filepath' => $thisname);
-                    } else {
-                        continue;
-                    }
-                }
-
-                // Debug display
-                 if (xarModVars::get('themes','debugmode') && 
-                 in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-                    echo xarML('Chosen: ') . $path . "<br/>";
-                 }
-                 $filePath = $latest['filepath'];
+        // We are looking for a specific version of a file/library
+         foreach ($paths as $path) {
+             if (!file_exists($path)) continue;
+             $filePath = $path;
+            // Debug display
+             if (xarModVars::get('themes','debugmode') && 
+             in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+                echo xarML('Chosen: ') . $path . "<br/>";
              }
-         } else {
-            // We are looking for a specific version of a file/library
-             foreach ($paths as $path) {
-                 if (!file_exists($path)) continue;
-                 $filePath = $path;
-                // Debug display
-                 if (xarModVars::get('themes','debugmode') && 
-                 in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-                    echo xarML('Chosen: ') . $path . "<br/>";
-                 }
-                 break;
-             }
+             break;
          }
          if (empty($filePath)) return;
 
