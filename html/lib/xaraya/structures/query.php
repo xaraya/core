@@ -164,8 +164,8 @@ class Query
                         //$o = $result->FetchField($i);
                         // FIXME: get rid of it more globally since this never was portable anyway and it kills performance
                         $tmp = array_slice($result->fields,$i,1);
-                        $finally_we_got_the_name_of_the_field  = key($tmp);
-                        $this->fields[$finally_we_got_the_name_of_the_field]['name'] = strtolower($finally_we_got_the_name_of_the_field);
+                        $namefield  = key($tmp);
+                        $this->fields[$namefield]['name'] = strtolower($namefield);
                     }
                     $result->setFetchMode(ResultSet::FETCHMODE_NUM);
                     $result->next(); $result->previous();
