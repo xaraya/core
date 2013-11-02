@@ -62,8 +62,8 @@ class FieldStatusProperty extends SelectProperty
     public function checkInput($name = '', $value = null)
     {
         if (empty($name)) {
-            $inputname = 'input_dd_'.$this->id;
-            $displayname = 'display_dd_'.$this->id;
+            $inputname = 'input_' . $this->propertyprefix . $this->id;
+            $displayname = 'display_' . $this->propertyprefix . $this->id;
         } else {
             $inputname = 'input_'.$name;
             $displayname = 'display_'.$name;

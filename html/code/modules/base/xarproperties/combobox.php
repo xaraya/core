@@ -33,7 +33,7 @@ sys::import('modules.base.xarproperties.dropdown');
 
         public function checkInput($name = '', $value = null)
         {
-            $name = empty($name) ? 'dd_'.$this->id : $name;
+            $name = empty($name) ? $this->propertyprefix . $this->id : $name;
 
             // First check for text in the text box
             $tbname  = $name.'_tb';

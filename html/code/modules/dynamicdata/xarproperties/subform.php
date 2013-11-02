@@ -51,7 +51,7 @@ class SubFormProperty extends DataProperty
 
     public function checkInput($name = '', $value = null)
     {
-        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $name = empty($name) ? $this->propertyprefix . $this->id : $name;
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
@@ -72,7 +72,7 @@ class SubFormProperty extends DataProperty
         if (isset($this->fieldname)) {
             $name = $this->fieldname;
         } else {
-            $name = 'dd_'.$this->id;
+            $name = $this->propertyprefix . $this->id;
         }
 
 

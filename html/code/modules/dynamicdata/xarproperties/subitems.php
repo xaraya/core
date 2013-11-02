@@ -47,7 +47,7 @@ class SubItemsProperty extends DataProperty
         $this->tplmodule = 'dynamicdata';
         $this->filepath   = 'modules/dynamicdata/xarproperties';
 
-        $this->fieldprefix    = $this->_fieldprefix . 'dd_'.$this->id;
+        $this->fieldprefix    = $this->_fieldprefix . $this->propertyprefix . $this->id;
         sys::import('modules.dynamicdata.class.objects.master');
         // FIXME: properties should not be instantiated when being registered
         // In this case refreshing the property cache causes a failure which we have to catch
@@ -83,7 +83,7 @@ class SubItemsProperty extends DataProperty
         $data['object'] = $this->subitemsobject;
         
         // Get this propery's name
-        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $name = empty($name) ? $this->propertyprefix . $this->id : $name;
         
         // First we need to check all the data on the template
         // If checkInput fails, don't bail
@@ -138,7 +138,7 @@ class SubItemsProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
-        if (!isset($data['name'])) $data['name'] = 'dd_'.$this->id;
+        if (!isset($data['name'])) $data['name'] = $this->propertyprefix . $this->id;
         if (!isset($data['label'])) $data['label'] = $this->label;
 
         if (!empty($data['object']))  $this->initialization_refobject = $data['object'];
@@ -319,7 +319,7 @@ class SubItemsProperty extends DataProperty
  */
     public function getItemsData()
     {
-        $name = 'dd_'.$this->id;
+        $name = $this->propertyprefix . $this->id;
         if (!isset($this->itemsdata[$name])) $this->itemsdata[$name] = array();
         return $this->itemsdata[$name];
     }
@@ -329,14 +329,14 @@ class SubItemsProperty extends DataProperty
  */
     public function setItemsData($args=array())
     {
-        $name = 'dd_'.$this->id;
+        $name = $this->propertyprefix . $this->id;
         $this->itemsdata[$name] = $args;
     }
     
     // FIXME: _getitemsdata and _setitemsdata should operate as opposites
     private function _getItemsData($withkeys=0)
     {
-        $name = 'dd_'.$this->id;
+        $name = $this->propertyprefix . $this->id;
         $items = $this->transposeItems();
         if (!isset($items[$name])) $items[$name] = array();
         if ($withkeys) return $items;
@@ -348,7 +348,7 @@ class SubItemsProperty extends DataProperty
         if ($withnokeys) {
             $this->itemsdata = $args;
         } else {
-            $name = 'dd_'.$this->id;
+            $name = $this->propertyprefix . $this->id;
             $this->itemsdata[$name] = $args;
         }
         return true;
@@ -356,7 +356,7 @@ class SubItemsProperty extends DataProperty
 
     private function transposeItems()
     {
-        $name = 'dd_'.$this->id;
+        $name = $this->propertyprefix . $this->id;
         if (empty($this->objectref->items)) return array();
         $itemsarray = reset($this->objectref->items);
         $namelength = strlen($this->initialization_refobject) + 1;
@@ -413,7 +413,7 @@ class SubItemsProperty extends DataProperty
         try {
             if (empty($newprefix)) {
                 // Creation happens programmatically
-                $newprefix = 'dd_'.$this->id;
+                $newprefix = $this->propertyprefix . $this->id;
             } else {
                 // Creation happens via UI submit, checkInput has run
                 $newprefix = array_shift($this->prefixarray);

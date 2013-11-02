@@ -35,7 +35,7 @@ class MultiSelectProperty extends SelectProperty
 
     public function checkInput($name = '', $value = null)
     {
-        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $name = empty($name) ? $this->propertyprefix . $this->id : $name;
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         $this->invalid = '';

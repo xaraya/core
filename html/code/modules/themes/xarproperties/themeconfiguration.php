@@ -41,7 +41,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
 
     public function checkInput($name = '', $value = null)
     {
-        $name = !empty($name) ? $name : 'dd_'.$this->id;        
+        $name = !empty($name) ? $name : $this->propertyprefix . $this->id;        
         if (!xarVarFetch($name,'isset',$configuration,NULL,XARVAR_NOT_REQUIRED)) return;        
         $this->value = serialize($configuration);
         return true;

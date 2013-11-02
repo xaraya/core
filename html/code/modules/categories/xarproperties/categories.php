@@ -73,7 +73,7 @@ class CategoriesProperty extends DataProperty
 
     public function checkInput($name = '', $value = null)
     {
-        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $name = empty($name) ? $this->propertyprefix . $this->id : $name;
         // store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
 
@@ -378,7 +378,7 @@ class CategoriesProperty extends DataProperty
         // Array properties and their extensions have arrays as values
         // Use the property's checkInput method to get the value
         $arrayprop = DataPropertyMaster::getProperty(array('name' => 'categorypicker'));
-        $arrayprop->checkInput('dd_' . $this->id . '["initialization_basecategories"]');
+        $arrayprop->checkInput($this->propertyprefix . $this->id . '["initialization_basecategories"]');
         // Assign the value to this configuration property for update
         $data['configuration']['initialization_basecategories'] = $arrayprop->getValue();
         

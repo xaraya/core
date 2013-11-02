@@ -117,7 +117,7 @@ class FileUploadProperty extends DataProperty
 
     function checkInput($name='', $value = null)
     {
-        if (empty($name)) $name = 'dd_' . $this->id;
+        if (empty($name)) $name = $this->propertyprefix . $this->id;
 
         // Store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
@@ -134,7 +134,7 @@ class FileUploadProperty extends DataProperty
         if (!parent::validateValue($value)) return false;
 
         if (isset($this->fieldname)) $name = $this->fieldname;
-        else $name = 'dd_'.$this->id;
+        else $name = $this->propertyprefix . $this->id;
 
         // retrieve new value for preview + new/modify combinations
         if (xarVarIsCached('DynamicData.FileUpload',$name)) {
@@ -310,7 +310,7 @@ class FileUploadProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
-        $data['name'] = empty($data['name']) ? 'dd_'.$this->id : $data['name'];
+        $data['name'] = empty($data['name']) ? $this->propertyprefix . $this->id : $data['name'];
         $data['upname'] = $data['name'] .'_upload';
 //        $id = empty($id) ? $name : $id;
 //        if (!isset($value)) {

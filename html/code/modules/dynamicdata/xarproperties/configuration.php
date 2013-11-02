@@ -50,7 +50,7 @@ class ConfigurationProperty extends TextAreaProperty
             $data['type'] = 1; // default DataProperty class
         }
 
-        $data['name'] = !empty($name) ? $name : 'dd_'.$this->id;
+        $data['name'] = !empty($name) ? $name : $this->propertyprefix . $this->id;
         $property =& DataPropertyMaster::getProperty($data);
         if (empty($property)) return;
 

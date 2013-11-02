@@ -40,7 +40,7 @@ class NameProperty extends TextBoxProperty
 
     public function checkInput($name = '', $value = null)
     {
-        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $name = empty($name) ? $this->propertyprefix . $this->id : $name;
         if ($this->initialization_refobject == 'roles_groups') {
             $property = DataPropertyMaster::getProperty(array('name' => 'objectref'));
             $property->validation_override = true;
