@@ -55,6 +55,7 @@ class DataProperty extends Object implements iDataProperty
     public $objectref = null;      // object this property belongs to
     public $_objectid = null;      // objectid this property belongs to
     public $_fieldprefix = '';     // the object's fieldprefix
+    public $propertyprefix = 'dd_';// the object's fieldprefix
 
     public $_itemid;               // reference to $itemid in DataObject, where the current itemid is kept
     public $_items;                // reference to $items in DataObjectList, where the different item values are kept
@@ -225,7 +226,7 @@ class DataProperty extends Object implements iDataProperty
      */
     public function checkInput($name = '', $value = null)
     {
-        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $name = empty($name) ? $this->propertyprefix . $this->id : $name;
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         $this->invalid = '';
@@ -384,7 +385,7 @@ class DataProperty extends Object implements iDataProperty
 
         // Display directive for the name
         if ($this->anonymous == true) $name = $this->name;
-        else $name = 'dd_'.$this->id;
+        else $name = $this->propertyprefix . $this->id;
         $id = $name;
 
         // Add the object's field prefix if there is one
@@ -500,8 +501,8 @@ class DataProperty extends Object implements iDataProperty
             extract($data);
 
         $data['name']  = $this->name;
-        $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
-        $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
+        $data['name']     = !empty($data['name']) ? $data['name'] : $this->propertyprefix . $this->id;
+        $data['id']       = !empty($data['id'])   ? $data['id']   : $this->propertyprefix . $this->id;
         if(!isset($data['id'])) $data['id']   = $data['name'];
         
         $data['label'] = isset($data['label']) ? xarVarPrepForDisplay($data['label']) : xarVarPrepForDisplay($this->label);
@@ -579,8 +580,8 @@ class DataProperty extends Object implements iDataProperty
      */
     function showHidden(Array $data = array())
     {
-        $data['name']     = !empty($data['name']) ? $data['name'] : 'dd_'.$this->id;
-        $data['id']       = !empty($data['id'])   ? $data['id']   : 'dd_'.$this->id;
+        $data['name']     = !empty($data['name']) ? $data['name'] : $this->propertyprefix . $this->id;
+        $data['id']       = !empty($data['id'])   ? $data['id']   : $this->propertyprefix . $this->id;
 
         // Add the object's field prefix if there is one
         $prefix = '';
@@ -710,8 +711,8 @@ class DataProperty extends Object implements iDataProperty
         if (!isset($data['configuration'])) $data['configuration'] = $this->configuration;
         $fields = $this->parseConfiguration($data['configuration']);
 
-        if (!isset($data['name']))  $data['name'] = 'dd_'.$this->id;
-        if (!isset($data['id']))  $data['id'] = 'dd_'.$this->id;
+        if (!isset($data['name']))  $data['name'] = $this->propertyprefix . $this->id;
+        if (!isset($data['id']))  $data['id'] = $this->propertyprefix . $this->id;
         if (!isset($data['tabindex']))  $data['tabindex'] = 0;
         if (!isset($this->invalid))  $data['invalid'] = xarML('Invalid #(1)', $this->invalid);
         else $data['invalid'] = '';
@@ -747,7 +748,7 @@ class DataProperty extends Object implements iDataProperty
         extract($data);
         $valid = false;
         // in case we need to process additional input fields based on the name
-        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $name = empty($name) ? $this->propertyprefix . $this->id : $name;
 
         // do something with the configuration and save it in $this->configuration
         if (isset($configuration) && is_array($configuration)) {
@@ -872,7 +873,7 @@ class DataProperty extends Object implements iDataProperty
     {
         if(!isset($data['name'])) {
             if ($this->anonymous == true) $data['name'] = $this->name;
-            else $data['name'] = 'dd_'.$this->id;
+            else $data['name'] = $this->propertyprefix . $this->id;
         }
         $data['name'] = $this->getPrefix($data) . $data['name'];
         return $data['name'];
