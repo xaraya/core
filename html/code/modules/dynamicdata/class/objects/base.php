@@ -160,8 +160,8 @@ class DataObject extends DataObjectMaster implements iDataObject
             // checking for any transitory name given a property via $args needs to be done at the property level
             $ddname = $this->propertyprefix . $this->properties[$name]->id;
             if (!empty($args['fieldprefix']) || $args['fieldprefix'] === '0') {
-                $name1 = $args['fieldprefix'] . "_" .$name;
-                $name2 = $args['fieldprefix'] . "_" .$ddname;
+                $name1 = $args['fieldprefix'] . "_" . $name;
+                $name2 = $args['fieldprefix'] . "_" . $ddname;
             } else {
                 $name1 = $name;
                 $name2 = $ddname;
