@@ -82,6 +82,7 @@ function base_init()
          * Here we install the cache_data table
          * Possibly move this somewhere else?
          *********************************************************************/
+        $cacheInfoTable = $prefix . '_cache_data';
         $fields = array(
                         'id'           => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                         'type'         => array('type'=>'varchar','size'=>64   ,'null'=>false, 'charset' => $charset),
@@ -92,13 +93,13 @@ function base_init()
                         'cache_check'  => array('type'=>'boolean', 'default'=>  false),
                         'data'         => array('type'=>'blob'   ,'null'=>true),
                         );
-        $query = xarDBCreateTable($sessionInfoTable,$fields);
+        $query = xarDBCreateTable($cacheInfoTable,$fields);
         $dbconn->Execute($query);
 
         $index = array('name'   => $prefix.'_cache_id',
                        'fields' => array('id'),
                        'unique' => false);
-        $query = xarDBCreateIndex($sessionInfoTable,$index);
+        $query = xarDBCreateIndex($cacheInfoTable,$index);
         $dbconn->Execute($query);
 
         /*********************************************************************
