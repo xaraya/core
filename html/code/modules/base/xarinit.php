@@ -89,7 +89,7 @@ function base_init()
                         'code'         => array('type'=>'varchar','size'=>64   ,'null'=>false, 'charset' => $charset),
                         'time'         => array('type'=>'integer','unsigned'=>true, 'null'=>false),
                         'size'         => array('type'=>'integer','unsigned'=>true, 'null'=>false),
-                        'cache_check'  => array('type'=>'boolean', 'default'=>  false)
+                        'cache_check'  => array('type'=>'boolean', 'default'=>  false),
                         'data'         => array('type'=>'blob'   ,'null'=>true),
                         );
         $query = xarDBCreateTable($sessionInfoTable,$fields);
