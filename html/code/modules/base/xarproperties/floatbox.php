@@ -26,6 +26,7 @@ class FloatBoxProperty extends NumberBoxProperty
     public $display_maxlength              = 30;
     public $display_numberformat           = '2';
 
+    public $basetype   = 'decimal';
     public $defaultvalue   = 0;
     
     function __construct(ObjectDescriptor $descriptor)

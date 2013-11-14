@@ -22,7 +22,7 @@ class NumberBoxProperty extends TextBoxProperty
     public $name       = 'integerbox';
     public $desc       = 'Number Box';
 
-    public $basetype   = 'number';
+    public $basetype   = 'integer';
 
     public $validation_min_value           = null;
     public $validation_min_value_invalid;
