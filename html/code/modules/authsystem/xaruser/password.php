@@ -2,8 +2,7 @@
 /**
  * Display a password request page
  *
- * @package modules
- * @subpackage authsystem module
+ * @package modules\authsystem
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,13 +10,15 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/42.html
  */
-/**
- * Sends a new password to the user if they have forgotten theirs.
- * @return array data for the template display
- *
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- */
 
+/**
+ * Display a password request page.
+ * 
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * 
+ * @param array $args Arguments passed to Gui function. 
+ * @return array Data for the display template
+ */
 function authsystem_user_password($args = array())
 {
     return xarMod::guiFunc('roles','user','lostpassword',$args);

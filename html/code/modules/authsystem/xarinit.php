@@ -2,8 +2,7 @@
 /**
  * Functions that manage installation, upgrade and deinstallation of the module
  *
- * @package modules
- * @subpackage authsystem module
+ * @package modules\authsystem
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -20,7 +19,13 @@
 /**
  * Initialise the module. This function is called once when the module is intalled.
  *
- * @return boolean true on success, false on failure
+ * @author Jan Schrage
+ * @author John Cox
+ * @author Gregor Rothfuss
+ * @author Jo Dalle Nogare <jojodee@xaraya.com>
+ * 
+ * @param void N/A
+ * @return boolean True on success, false on failure
  */
 function authsystem_init()
 {
@@ -47,8 +52,14 @@ function authsystem_init()
 
 /**
  * Activate the module. This function is called when the module is changed from installed to active state.
- *
- * @return boolean true on success, false on failure
+ * 
+ * @author Jan Schrage
+ * @author John Cox
+ * @author Gregor Rothfuss
+ * @author Jo Dalle Nogare <jojodee@xaraya.com>
+ * 
+ * @param void N/A
+ * @return boolean True on success, false on failure
  */
 function authsystem_activate()
 {
@@ -74,8 +85,13 @@ function authsystem_activate()
 /**
  * Upgrade the module from an old version. This function is called when the module is being upgraded.
  *
+ * @author Jan Schrage
+ * @author John Cox
+ * @author Gregor Rothfuss
+ * @author Jo Dalle Nogare <jojodee@xaraya.com>
+ * 
  * @param string $oldversion The three digit version number of the currently installed (old) version
- * @return boolean true on success, false on failure
+ * @return boolean True on success, false on failure
  */
 function authsystem_upgrade($oldversion)
 {
@@ -94,7 +110,13 @@ function authsystem_upgrade($oldversion)
  * Delete the module.
  * This function is called when the module is being uninstalled.
  *
- * @return boolean true on success, false on failure
+ * @author Jan Schrage
+ * @author John Cox
+ * @author Gregor Rothfuss
+ * @author Jo Dalle Nogare <jojodee@xaraya.com>
+ *
+ * @param void N/A 
+ * @return boolean Function always returns false. It cannot be deleted.
  */
 function authsystem_delete()
 {

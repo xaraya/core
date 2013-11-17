@@ -11,6 +11,7 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/42.html
  */
+
 /**
  * Main entry point for the admin interface of this module
  *
@@ -19,7 +20,9 @@
  * The function displays the module's overview page, or redirects to another page if overviews are disabled.
  *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
- * @return mixed output display string or boolean true if redirected
+ * 
+ * @param void N/A
+ * @return string|boolean If the page redirects true is returned, else a display string.
  */
 function authsystem_admin_main()
 {

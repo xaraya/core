@@ -2,8 +2,7 @@
 /**
  * Create a new password for the user
  *
- * @package modules
- * @subpackage authsystem module
+ * @package modules\authsystem
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,8 +10,13 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/42.html
  */
+
 /**
- * createpassword - create a new password for the user
+ * Function to create a password for a user
+ * 
+ * @param void N/A
+ * @return boolean Returns true on success, false upon failure. 
+ * @throws BadParameterException Thrown if not all parameters have been given in the GET/POST data
  */
 function authsystem_admin_createpassword()
 {
