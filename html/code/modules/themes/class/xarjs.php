@@ -816,6 +816,8 @@ class xarJS extends Object
 **/
     private function getLibInfo($lib, $vers='', $src='')
     {
+        if (empty($src)) return;
+
         // We will look at the local and remote libraries Xaraya is aware of
         // Ceteris paribus, remote libraries will be privileged
         
