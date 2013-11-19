@@ -19,12 +19,21 @@
  * @return array
  */
 sys::import('modules.authsystem.xarblocks.login');
+
+/**
+ * Authsystem Login Block Display
+ * 
+ * @author Jim McDonald
+ */
 class Authsystem_LoginBlockDisplay extends Authsystem_LoginBlock implements iBlock
 {
-/**
- * Display func.
- * @param $data array containing title,content
- */
+
+    /**
+     * Method to display the login
+     * 
+     * @param void N/A
+     * @return array Returns display data array.
+     */
     function display()
     {
         $data = $this->getContent();

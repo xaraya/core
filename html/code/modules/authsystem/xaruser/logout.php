@@ -2,8 +2,7 @@
 /**
  * Log a user out from the system
  *
- * @package modules
- * @subpackage authsystem module
+ * @package modules\authsystem
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,10 +10,15 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/42.html
  */
+
 /**
- * log user out of system
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @return boolean true on success of redirect
+ * Log a user out of the system.
+ * 
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * 
+ * @param  void N/A
+ * @return boolean Returns true if the user has been logged out successfullly. 
+ * @throws ForbiddenOperationException Thrown if the user could not be logged out.
  */
 function authsystem_user_logout()
 {

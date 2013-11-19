@@ -2,8 +2,7 @@
 /**
  * Log a user in to the system
  *
- * @package modules
- * @subpackage authsystem module
+ * @package modules\authsystem
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,21 +10,17 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/42.html
  */
+
 /**
- * log user in to system
- * Description of status
- * Status 0 = deleted user
- * Status 1 = inactive user
- * Status 2 = not validated user
- * Status 3 = actve user
- *
- * @param   uname users name
- * @param   pass user password
- * @param   rememberme session set to expire
- * @param   redirecturl page to return user if possible
- * @return  true if status is 3
- * @raise   exceptions raised if status is 0, 1, or 2
- * @author  Marc Lutolf <marcinmilan@xaraya.com>
+ * Log a user into the system
+ * 
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @param  void N/A
+ * @return boolean|int Returns true if the user was logged in successfully.<br/>
+ *                     Else it returns an error code:<br/>
+ *                     0: Deleted User<br/>
+ *                     1: Inactive User<br/>
+ *                     2: Not Validated User
  */
 function authsystem_user_login()
 {

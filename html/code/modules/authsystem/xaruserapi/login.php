@@ -15,14 +15,16 @@
  * @author John Cox
  * @author Gregor Rothfuss
  */
+
 /**
- * log a user in
+ *Api function to log a user on to the system
+ * 
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array   $args array of optional parameters<br/>
- *        string  $args['uname'] user name of user<br/>
- *        string  $args['pass'] password of user<br/>
- *        string  $args['rememberme'] remember this user (optional)
- * @return boolean true on success, false on failure
+ * @param  string[]  $args Array of optional parameters<br/>
+ *         string    $args['uname'] User name of user<br/>
+ *         string    $args['pass'] Password of user<br/>
+ *         string    $args['rememberme'] Remember this user (optional)
+ * @return boolean Returns true on success, false upon failure
  */
 function authsystem_userapi_login(Array $args=array())
 {

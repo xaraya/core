@@ -2,8 +2,7 @@
 /**
  * Authenticate a user
  *
- * @package modules
- * @subpackage authsystem module
+ * @package modules\authsystem
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,18 +10,23 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/42.html
  */
+
 /**
- * authenticate a user
- * @public
+ * Authenticate a user
+ * 
  * @author Marco Canini
- * @param array    $args array of optional parameters<br/>
- *        string  $args['uname'] user name of user<br/>
- *        string  $args['pass'] password of user
- * @todo use roles api, not direct db
- * @return int id on successful authentication, XARUSER_AUTH_FAILED otherwise
+ * @param  string[] $args Array of optional parameters<br/>
+ *         string   $args['uname'] user name of user<br/>
+ *         string   $args['pass'] password of user
+ * @return int Returns user id on successful authentication, XARUSER_AUTH_FAILED otherwise
  */
 function authsystem_userapi_authenticate_user(Array $args=array())
 {
+    /** 
+     * Pending
+     * @todo use roles api, not direct db
+     */
+    
     extract($args);
 
     assert('!empty($uname) && isset($pass)');

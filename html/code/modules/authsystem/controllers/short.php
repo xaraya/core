@@ -26,8 +26,17 @@
 
 sys::import('xaraya.mapper.controllers.short');
 
+/**
+ * Authsystem Short Contrller implementation
+ */
 class AuthsystemShortController extends ShortActionController
 {
+    /**
+     * Function to decode data
+     * 
+     * @param string[]  $data Data array to be decoded.
+     * @return string[] Returns decoded data array.
+     */
     function decode(Array $data=array())
     {
         $token = $this->firstToken();
@@ -59,6 +68,12 @@ class AuthsystemShortController extends ShortActionController
         return $data;
     }
     
+    /**
+     * Method to encode xarRequest object
+     * 
+     * @param xarRequest $request Request object to be encoded
+     * @return string Returns encoded request string
+     */
     public function encode(xarRequest $request)
     {  
         if ($request->getType() == 'admin') return parent::encode($request);

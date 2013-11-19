@@ -2,8 +2,7 @@
 /**
  * Login Block
  *
- * @package modules
- * @subpackage authsystem module
+ * @package modules\authsystem
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -19,6 +18,12 @@
  * @return array
  */
 sys::import('xaraya.structures.containers.blocks.basicblock');
+
+/**
+ * Authsystem Login Block
+ *
+ * @author Jim McDonald
+ */
 class Authsystem_LoginBlock extends BasicBlock implements iBlock
 {
     protected $type                = 'login';
