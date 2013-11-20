@@ -251,7 +251,7 @@ class xarCSS extends Object
          if (xarModVars::get('themes','debugmode') && 
          in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
             foreach ($paths as $path) {
-                echo xarML('Location: ') . $path . "<br/>";                
+                echo xarML('Possible location: ') . $path . "<br/>";                
             }
          }
 
