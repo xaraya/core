@@ -19,6 +19,7 @@
 
         if (!xarVarFetch('itemid' ,    'int',    $data['itemid'] , 0 ,          XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('confirm',    'bool',   $data['confirm'], false,       XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('return_url', 'str',   $return_url, '', XARVAR_NOT_REQUIRED)) {return;}
 
         $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_configurations'));
         $data['object']->getItem(array('itemid' => $data['itemid']));
@@ -33,14 +34,18 @@
             
             if (!$isvalid) {
                 // Bad data: redisplay the form with error messages
-                return xarTpl::module('themes','admin','modify_config', $data);        
+                return xarTpl::module('themes','admin','modify_config', $data);
             } else {
                 // Good data: create the item
                 $itemid = $data['object']->updateItem(array('itemid' => $data['itemid']));
-                
-                // Jump to the next page
-                xarController::redirect(xarModURL('themes','admin','view_configs'));
-                return true;
+
+                if (!empty($return_url)) {
+                    // FIXME: this is a hack for short URLS
+                    xarController::redirect($return_url);
+                } else {
+                    xarController::redirect(xarModURL('themes','admin','view_configs'));
+                    return true;
+                }
             }
         }
         return $data;
