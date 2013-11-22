@@ -20,7 +20,6 @@
         <legend>Mode of Operation</legend>
         <p>The multilanguage system (MLS) works in three different modes.</p>
         <dl>
-        	<dt><label for="mlsmode_single">SINGLE</label></dt>
         	<dd>
 	            <xar:if condition="$single_checked">
 	                <input type="radio" id="mlsmode_single" name="mlsmode" value="SINGLE"
@@ -37,56 +36,24 @@
             </dd>
         </dl>
         <dl>
-        	<dt>
-        		<label for="mlsmode_boxed">BOXED</label>
-        	</dt>
             <dd>
 	            <xar:if condition="$boxed_checked">
 	                <input type="radio" id="mlsmode_boxed" name="mlsmode" value="BOXED" checked="checked"/>
 	            <xar:else/>
 	                <input type="radio" id="mlsmode_boxed" name="mlsmode" value="BOXED"/>
 	            </xar:if>&#160;
-	            Per Page Mode
+	            Multilanguage Mode
             </dd>
             <dd>
             <p>
-                MLS can use more than one character set in the site (the same consideration for the single or multi byte matter as above can be applied here), but only one character set per page is used (this is an obvious concept maybe, but important to understand). Due to this fact content cannot be shared across through different language areas (for example an Arabic comment won't be shown in the English area even if they are referring to the same object, e.g. an article available in both English and Arabic). Another point is that every operation involves only a single language. This mode can produce unexpected results if mb_string is not installed. 
+                MLS uses an universal character set to represent everything (read: UTF-8). This guarantees that no conversion is needed for the content representation. Every page is always shown according to the user chosen language, but the page can contain texts in other languages (for example a French article and comments inside an English page).  This mode can produce unexpected results if the mb_string extension is not installed. 
             </p>    
 	            <xar:if condition="function_exists('mb_strlen')">
-	            	<p class="xar-success">It is installed on this server, so you can give this mode a try.</p>
+	            	<p class="xar-success">The extension is installed on this server, so you can use this mode.</p>
+	            <xar:else/>
+	            	<p class="xar-alert">The extension is not installed on this server, so you cannot use this mode reliably.</p>
 	            </xar:if>
             </dd>
-        </dl>
-        <dl>
-        <xar:if condition="function_exists('mb_strlen')">
-	    	<dt>
-	        	<label for="mlsmode_unboxed">UNBOXED</label>
-	        	<p class="xar-alert">(experimental!)</p>
-	    	</dt>
-	    	<dd>
-	            <xar:if condition="$unboxed_checked">
-	                <input type="radio" id="mlsmode_unboxed" name="mlsmode" value="UNBOXED" checked="checked"/>
-	            <xar:else/>
-	                <input type="radio" id="mlsmode_unboxed" name="mlsmode" value="UNBOXED"/>
-	            </xar:if>&#160;
-	            Full Multilanguage
-	        	<p class="xar-note">
-		            Please note that you cannot use the UNBOXED mode of the MultiLanguage system unless you have php 4.3.0 with the mbstring extension compiled in.
-		        </p>
-	        	<p>
-	            MLS uses an universal character set to represent everything (read: UTF-8). This guarantees that no conversion is needed for the content representation. Every page is always shown according to the user chosen language, but the page can contain texts in other languages (for example a French article and comments inside an English page).
-	        	</p>
-	    	</dd>
-        <xar:else />
-            <dt>
-            	<label class="xar-alert">Note</label>
-            </dt>
-            <dd>
-            <p class="xar-alert">
-                Full multilanguage functionality (UNBOXED) is not available. To enable it you need to install the mb_string PHP extension on this server. 
-            </p>
-            </dd>
-        </xar:if>
         </dl>
     </fieldset>
     <fieldset>

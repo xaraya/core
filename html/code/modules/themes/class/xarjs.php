@@ -273,7 +273,7 @@ class xarJS extends Object
         // remove any missing libs
         foreach ($this->local_libs as $compare => $curlib) {
             if (!isset($libs[$compare]))
-                unset($this->$libs[$compare]);
+                unset($this->local_libs[$compare]);
         }
 
     }
@@ -821,7 +821,7 @@ class xarJS extends Object
         
         $candidates = array();
 
-        if (isset ($this->local_libs[$lib])) {
+        if (isset($this->local_libs[$lib])) {
             $lib = $this->local_libs[$lib];
         
             // Start by taking the latest version
@@ -842,11 +842,9 @@ class xarJS extends Object
         }
 
         foreach ($this->remote_libs as $thislib) {
-            foreach ($dirarray as $file => $filearray) {
-                if (!empty($src) && ($thislib['src'] != $src)) continue;
-                if (!empty($vers) && ($thislib['version'] != $vers)) continue;
-                $candidates[] = $thislib;
-            }
+            if (!empty($src) && ($thislib['src'] != $src)) continue;
+            if (!empty($vers) && ($thislib['version'] != $vers)) continue;
+            $candidates[] = $thislib;
         }
         
         // Sort the libraries by descending version and origin
