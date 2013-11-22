@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -162,7 +161,11 @@ class SelectProperty extends DataProperty
 
     /**
      * Retrieve the list of options on demand
-     * N.B. the code below is repetitive, but lets leave it clearly separated for each type of input for the moment
+     * 
+     * N.B. the code below is repetitive, but lets leave it clearly separated for 
+     * each type of input for the moment
+     * 
+     * @param void N/A
      */
     function getOptions()
     {
@@ -259,6 +262,12 @@ class SelectProperty extends DataProperty
         return $options;
     }
 
+    /**
+     * Gets the first line
+     * 
+     * @param void N/A
+     * @return array Array containing first line
+     */
     function getFirstline()
     {
         $firstline = $this->initialization_firstline;
@@ -289,12 +298,12 @@ class SelectProperty extends DataProperty
      * Retrieve or check an individual option on demand
      *
      * @param  $check boolean
-     * @return if check == false:
-     *                - display value, if found, of an option whose store value is $this->value
-     *                - $this->value, if not found
-     * @return if check == true:
-     *                - true, if an option exists whose store value is $this->value
-     *                - false, if no such option exists
+     * @return if check == false:<br/>
+     *                - display value, if found, of an option whose store value is $this->value<br/>
+     *                - $this->value, if not found<br/>
+     *         if check == true:<br/>
+     *                - true, if an option exists whose store value is $this->value<br/>
+     *                - false, if no such option exists<br/>
      */
     function getOption($check = false)
     {

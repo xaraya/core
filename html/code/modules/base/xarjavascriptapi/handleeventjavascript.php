@@ -1,8 +1,7 @@
 <?php
 /**
  * Base JavaScript management functions
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -13,6 +12,7 @@
 
 /**
  * Handle render javascript form field tags
+ * 
  * Handle <xar:base-trigger-javascript ...> form field tags
  * Format : <xar:place-javascript definition="$definition"/> with $definition an array
  *       or <xar:place-javascript position="head|body|whatever|" type="code|src|whatever|"/>
@@ -20,7 +20,7 @@
  * Typical use in the head section is: <xar:place-javascript position="head"/>
  *
  * @author Jason Judge
- * @param $args array containing the form field definition or the type, position, ...
+ * @param $args array Containing the form field definition or the type, position, ...
  * @return string an empty string
  */ 
 function base_javascriptapi_handleeventjavascript(Array $args=array())

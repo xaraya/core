@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -111,6 +110,12 @@ class MultiSelectProperty extends SelectProperty
         return $this->getSerializedValue($this->_items[$itemid][$this->name]);
     }
 
+    /**
+     * Unserializes a given value
+     * 
+     * @param string $value Serialized value
+     * @return array Return unserialized value of $value param
+     */
     public function getSerializedValue($value)
     {
         if (empty($value)) {

@@ -14,6 +14,7 @@
 /**
  * Handle render javascript form field tags
  * Get JavaScript event attributes for a tag.
+ * 
  * Returns all submitted JavaScript fragments for a position (tag) and type (list of event names)
  * as a single string. Each attribute will be returned in name="value" format. Only non-empty
  * attributes will be returned.
@@ -31,6 +32,7 @@
  * the total code involved in the JavaScript is quite small.
  *
  * @author Jason Judge
+ * 
  * @param $args[position] the location of the event trigger; defaults to 'body'
  * @param $args[type] the type of event trigger; several as a comma-separated list
  * @return string an empty string

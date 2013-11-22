@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -12,6 +11,7 @@
 
 /**
  * Base JavaScript management functions
+ * 
  * Include a section of inline JavaScript code in a page.
  * Used when a module needs to generate custom JS on-the-fly,
  * such as "var lang_msg = xarML('error - aborted');"
@@ -20,7 +20,8 @@
  * @param $args['position'] position on the page; generally 'head' or 'body'
  * @param $args['code'] the JavaScript code fragment
  * @param $args['index'] optional index in the JS array; unique identifier
- * @return boolean true=success; null=fail
+ * 
+ * @return boolean Returns true on success, false on failure
  */
 function base_javascriptapi_moduleinline(Array $args=array())
 {

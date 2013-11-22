@@ -1,8 +1,7 @@
 <?php
 /**
  * Extract links
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -10,18 +9,19 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
+
 /**
  * Extract a list of links from some HTML content (cfr. getfile and checklink)
- * Note: this is definitely not meant as an exhaustive link extractor
+ * Note: This is definitely not meant as an exhaustive link extractor
  *
  * @author mikespub
- * @access public
- * @param array    $args array of optional parameters<br/>
- *        string   $args['content'] string the HTML content that you want to extract links from<br/>
- *        string   $args['getlocal'] bool indicates if we want to get local URLs (default is true)<br/>
- *        string   $args['getremote'] bool indicates if we want to get remote URLs (default is false)<br/>
- *        string   $args['baseurl'] string optional base URL for the content (default is this site)<br/>
- * @return array list of links found
+ * 
+ * @param array    $args Array of optional parameters<br/>
+ *        string   $args['content'] String the HTML content that you want to extract links from<br/>
+ *        string   $args['getlocal'] bool Indicates if we want to get local URLs (default is true)<br/>
+ *        string   $args['getremote'] bool Indicates if we want to get remote URLs (default is false)<br/>
+ *        string   $args['baseurl'] string Optional base URL for the content (default is this site)<br/>
+ * @return array List of links found
  */
 function base_userapi_extractlinks(Array $args=array())
 {

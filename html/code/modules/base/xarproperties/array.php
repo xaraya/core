@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,13 +13,10 @@
  * Notes
  *
  * The value array is of the form $value[column][row]
- * This is done so that we can easily access the set of values of a given column, which are all of the same property type
+ * This is done so that we can easily access the set of values of a given column, 
+ * which are all of the same property type
  * 
  * The value in value[0][row] is always the row number, starting with 1
- * 
- * 
- * 
- * 
  */
 
 /* include the base class */
@@ -251,7 +247,7 @@ class ArrayProperty extends DataProperty
         return $value;
     }
 
-    public function showInput(Array $data = array())
+        public function showInput(Array $data = array())
     {
         // If this is a column definition, load its configuration up front
         // A bound array property contains itself an array property as part of its configuration
@@ -346,7 +342,7 @@ class ArrayProperty extends DataProperty
         return parent::showInput($data);
     }
 
-    public function showOutput(Array $data = array())
+       public function showOutput(Array $data = array())
     {
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValue();

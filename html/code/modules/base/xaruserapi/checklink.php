@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -9,19 +8,19 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
+
 /**
  * Check the status of some URL
  *
- * @subpackage base
  * @author mikespub
- * @access public
- * @param array   $args array of optional parameters<br/>
- *        string  $args['url'] the absolute URL for the link<br/>
- *        string  $args['method'] the request method to use (default is HEAD, alternative is GET)<br/>
- *        boolean $args['skiplocal'] indicates if we want to skip checking local URLs (default is true)<br/>
- *        string  $args['referer'] optional referer (default is base URL of your site)<br/>
- *        boolean $args['follow'] indicates if we want to follow redirects or not (default is true)<br/>
- * @return integer status of the link
+ * 
+ * @param array   $args Array of optional parameters<br/>
+ *        string  $args['url'] The absolute URL for the link<br/>
+ *        string  $args['method'] The request method to use (default is HEAD, alternative is GET)<br/>
+ *        boolean $args['skiplocal'] Indicates if we want to skip checking local URLs (default is true)<br/>
+ *        string  $args['referer'] Optional referer (default is base URL of your site)<br/>
+ *        boolean $args['follow'] Indicates if we want to follow redirects or not (default is true)<br/>
+ * @return integer Status of the link
  */
 function base_userapi_checklink(Array $args=array())
 {

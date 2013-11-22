@@ -2,8 +2,7 @@
 /**
  * OrderSelect Property
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -40,6 +39,13 @@ class OrderSelectProperty extends MultiSelectProperty
         return $this->validateOrder($order);
 
     }
+    
+    /**
+     * Validates the order of values
+     * 
+     * @param string $order Order of the values
+     * @return boolean Returns true on success, false on failure
+     */
     function validateOrder($order = null)
     {
         if (!isset($order)) $order = $this->order;

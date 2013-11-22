@@ -2,8 +2,7 @@
 /**
  * base-pager template tag
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,10 +10,14 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
 */
-/* Wrapper for xarTplPager::getPager() (see modules/base/class/pager.php)
+
+/** 
+ * Wrapper for xarTplPager::getPager() (see modules/base/class/pager.php)
+ * 
  * Used by the base-pager template tag
  * Returns a pager based on url, startnum, itemsperpage and totalitems
  * Usage, eg <xar:pager startnum="1" itemsperpage="10" total="30"/>
+ * 
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['total'] - required, total items of this type<br/>
  *        integer  $args['startnum'] optional, the current page startnum, if empty<br/>
@@ -39,6 +42,8 @@
  *                 (not sure what they do, included for completeness)<br/>
  *        integer  $args['firstitem']<br/>
  *        integer  $args['firstpage']<br/>
+ *
+ * @return string Output display string
  */
 function base_userapi_pager(Array $args=array())
 {

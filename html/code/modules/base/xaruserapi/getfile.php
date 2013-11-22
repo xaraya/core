@@ -1,8 +1,7 @@
 <?php
 /**
  * Get a file from the Internet
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -10,21 +9,23 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
+
 /**
+ * 
  * Gets a file from the Internet
  *
- * Returns the content of the file (possibly cached). Don't use this to download huge files :)
+ * Returns the content of the file (possibly cached). Not intended for large files.
+
  * @author mikespub
- * @access public
- * @param array    $args array of optional parameters<br/>
- *        string   $args['url'] the absolute URL for the file<br/>
- *        boolean  $args['cached'] indicates whether this file can be cached or not<br/>
- *        string   $args['cachedir'] directory (under var/) where the file should be cached<br/>
- *        integer  $args['refresh'] integer refresh time for the file in seconds<br/>
- *        string   $args['extension'] file extension to use after the MD5-hashed filename in cache<br/>
- *        boolean  $args['archive'] indicates if we want to re-create a directory structure and archive the file as is<br/>
- *        boolean  $args['superrors'] indicates whether we want to die without an error shown (for blocks)
- * @return string content of the file
+ * @param array    $args Array of optional parameters<br/>
+ *        string   $args['url'] The absolute URL for the file<br/>
+ *        boolean  $args['cached'] Indicates whether this file can be cached or not<br/>
+ *        string   $args['cachedir'] Directory (under var/) where the file should be cached<br/>
+ *        integer  $args['refresh'] Integer refresh time for the file in seconds<br/>
+ *        string   $args['extension'] File extension to use after the MD5-hashed filename in cache<br/>
+ *        boolean  $args['archive'] Indicates if we want to re-create a directory structure and archive the file as is<br/>
+ *        boolean  $args['superrors'] Indicates whether we want to die without an error shown (for blocks)
+ * @return string Content of the file
  */
 function base_userapi_getfile(Array $args=array())
 {

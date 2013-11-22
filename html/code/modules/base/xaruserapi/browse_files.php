@@ -2,8 +2,7 @@
 /**
  * Browse for files and directories
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,11 +10,12 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
+
 /**
  * Browse for files and directories (recursion supported).
  * Originally in Xarpages, and used to provide lists of APIs and templates.
  *
- * @param array   $args array of optional parameters<br/>
+ * @param array   $args Array of optional parameters<br/>
  *
  * Identifying the base directory:<br/>
  *        string  $args['basedir'] the absolute or relative base directory<br/>
@@ -39,21 +39,24 @@
  *        boolean $args['retdirs'] flag that indicates directories should be returned (default false)<br/>
  *        boolean $args['retfiles'] flag that indicates files should be returned (default true)<br/>
  *
- * @todo support sorting of the files (by name, by date, asc/desc, etc)
- * @todo support timestamp matching (older, younger, range)
- * @todo support other areas than the module 'home', e.g. module theme area
- * @todo support multi-theme searching, allowing images to be searched in many places
- * @todo support retpath value 'rel2' for path relative to the site entry point
- * @todo support retpath value 'api' to return 'API' forms of the path (module:type:func string)
- * @todo allow the returning of more detailed file information than just names - full inode info (Windows?)
- * @todo provide a transform function for the filename, probably a callback function, e.g. 'my_logo.gif' => 'My Logo'
- * @todo allow wildcards for modules and even for basedir, so the function will scan multiple modules or trees
- * @todo support case sensitive/insensitive flag
- * @todo support 'maxfiles' to limit the number of files that can be returned
  */
-
 function base_userapi_browse_files(Array $args=array())
 {
+    /**
+     * Pending
+     * @todo support sorting of the files (by name, by date, asc/desc, etc)
+     * @todo support timestamp matching (older, younger, range)
+     * @todo support other areas than the module 'home', e.g. module theme area
+     * @todo support multi-theme searching, allowing images to be searched in many places
+     * @todo support retpath value 'rel2' for path relative to the site entry point
+     * @todo support retpath value 'api' to return 'API' forms of the path (module:type:func string)
+     * @todo allow the returning of more detailed file information than just names - full inode info (Windows?)
+     * @todo provide a transform function for the filename, probably a callback function, e.g. 'my_logo.gif' => 'My Logo'
+     * @todo allow wildcards for modules and even for basedir, so the function will scan multiple modules or trees
+     * @todo support case sensitive/insensitive flag
+     * @todo support 'maxfiles' to limit the number of files that can be returned
+     */
+    
     extract($args);
 
     // Maximum possible directory levels the function will follow.

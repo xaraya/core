@@ -1,8 +1,7 @@
 <?php
 /**
  * Base JavaScript management functions
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,6 +13,7 @@
 /**
  * Handle render javascript form field tags
  * Get JavaScript for a tag event.
+ * 
  * Returns all submitted JavaScript fragments for a position (tag) and type (event name)
  * as a single string, each statement separated by a semi-colon.
  * 
@@ -30,6 +30,7 @@
  * the total code involved in the JavaScript is quite small.
  *
  * @author Jason Judge
+ * 
  * @param $args[position] the location of the event trigger; defaults to 'body'
  * @param $args[type] the type of event trigger; e.g. 'onload', 'onmouseover'
  * @return string an empty string
