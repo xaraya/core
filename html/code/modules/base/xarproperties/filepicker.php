@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -16,6 +15,7 @@ sys::import('xaraya.structures.relativedirectoryiterator');
 
 /**
  * Handle file picker property
+ * 
  * Parameters:
  * basedir          base directory whose contents are displayed
  * matches          string to filter the directory contents with
@@ -127,6 +127,10 @@ class FilePickerProperty extends SelectProperty
 
     /**
      * Set the list/regex of allowed file extensions, depending on the syntax used (cfr. image, webpage, ...)
+     * 
+     * @param string|string[] $file_extensions String or array of file extensions.
+     *                                      If a string is used, multiple file extensions shall be
+     *                                      separated by "," or valid regular expression
      */
     public function setExtensions($file_extensions = null)
     {
@@ -154,6 +158,9 @@ class FilePickerProperty extends SelectProperty
     /**
      * Validate the given filename against the list/regex of allowed file extensions
      * This method can take an extension or a full file name
+     * 
+     * @param string $filename Extension or full file name
+     * @return boolean
      */
     public function validateExtension($filename = '')
     {

@@ -2,8 +2,7 @@
 /**
  * Finclude Block configuration interface
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -19,19 +18,25 @@
 sys::import('modules.base.xarblocks.finclude');
 class Base_FincludeBlockConfig extends Base_FincludeBlock implements iBlock
 {
-/**
- * Modify Function to the Blocks Admin
- * @param $blockinfo array containing title,content
- */
+
+    /**
+     * Modify function to the blocks admin
+     * This method does not apply modifications
+     * 
+     * @param array $data Data array for configutation modifications
+     * @return string Returns content
+     */
     public function configmodify(Array $data=array())
     {
         return $this->getContent();
     }
 
-/**
- * Updates the Block config from the Blocks Admin
- * @param $blockinfo array containing title,content
- */
+    /**
+     * Updates the Block config from the Blocks Admin
+     * 
+     * @param array $data Config data array
+     * @return boolean Returns true on success, false on failure.
+     */
     public function configupdate(Array $data=array())
     {
         if (!xarVarFetch('url', 'pre:trim:str:1:', 

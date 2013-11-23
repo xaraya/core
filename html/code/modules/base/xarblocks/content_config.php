@@ -2,8 +2,7 @@
 /**
  * Content Block configuration interface
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -22,11 +21,14 @@
 sys::import('modules.base.xarblocks.content');
 class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
 {
-/**
- * Modify Function to the Blocks Admin
- * @author Jason Judge
- * @param $blockinfo array containing title,content
- */
+
+    /**
+     * Modify Function to the Blocks Admin
+     * 
+     * @author Jason Judge
+     * @param void N/A
+     * @return string Returns display data
+     */
     public function configmodify()
     {
         $data = $this->getContent();
@@ -40,10 +42,11 @@ class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
         return $data;
     }
 
-/**
- * Updates the Block config from the Blocks Admin
- * @param $blockinfo array containing title,content
- */
+    /**
+     * Updates the Block config from the Blocks Admin
+     * @param array $data Data array for configuration update
+     * @return boolean Returns true on success, false on failure
+     */
     public function configupdate(Array $data=array())
     {
         if (xarVarFetch('content_type', 'pre:lower:passthru:enum:text:html:php:custom:data', $content_type, 'text', XARVAR_NOT_REQUIRED)) {

@@ -362,6 +362,7 @@ class DataProperty extends Object implements iDataProperty
      * @param $args['module'] which module is responsible for the templating
      * @param $args['template'] what's the partial name of the showinput template.
      * @param $args[*] rest of arguments is passed on to the templating method.
+     * 
      * @return string containing the HTML (or other) text to output in the BL template
      */
     public function showInput(Array $data = array())

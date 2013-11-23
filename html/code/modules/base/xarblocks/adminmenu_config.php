@@ -2,8 +2,7 @@
 /**
  * Adminmenu Block configuration interface
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -25,15 +24,20 @@ class Base_AdminmenuBlockConfig extends Base_AdminmenuBlock implements iBlockMod
 
 /**
  * This method is called by the BasicBlock class constructor
+ * 
+ * @param void N/A
 **/    
     public function init()
     {
         parent::init();
     }
-/**
- * Modify Function to the Blocks Admin
- * @param $data array containing title,content
- */
+    /**
+     * Modify Function to the Blocks Admin
+     * 
+     * @param string $data['title']
+     * @param string $data['content']
+     * @return array
+     */
     public function configmodify(Array $data=array())
     {
         $data = $this->getContent();
@@ -50,10 +54,12 @@ class Base_AdminmenuBlockConfig extends Base_AdminmenuBlock implements iBlockMod
         return $data;
     }
 
-/**
- * Updates the Block config from the Blocks Admin
- * @param $data array containing title,content
- */
+    /**
+     * Updates the Block config from the Blocks Admin
+     * 
+     * @param array $data Data array continaing title, content
+     * @return boolean Returns true on success, false on failure
+     */
     public function configupdate(Array $data=array())
     {
         $data = parent::update($data);

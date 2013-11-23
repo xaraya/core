@@ -2,8 +2,7 @@
 /**
  * Base Module Initialisation
  *
- * @package modules
- * @subpackage base module
+ * @package modules\basec
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -18,10 +17,15 @@
  * Load Table Maintainance API
  */
 sys::import('xaraya.tableddl');
+
 /**
- * Initialise the base module
+ * Initialize the base module
+ * 
+ * @author Marcel van der Boom
  *
- * @return boolean
+ * @param void N/A 
+ * @return boolean True is init was successfull, false if failed.
+ * @throws Exception Thrown if database initialization has failed
  */
 function base_init()
 {
@@ -238,9 +242,11 @@ function base_init()
 
 /**
  * Upgrade this module from an old version
- *
- * @param oldVersion
- * @return boolean true on success, false on failure
+ * 
+ * @author Marcel van der Boom
+ * 
+ * @param string $oldversion The three digit version number of the currently installed (old) version
+ * @return boolean Returns true on success, false on failure. 
  */
 function base_upgrade($oldversion)
 {
@@ -255,7 +261,10 @@ function base_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return boolean
+ * @author Marcel van der Boom
+ * 
+ * @param void N/A
+ * @return boolean Always returns false. This module cannot be removed.
  */
 function base_delete()
 {

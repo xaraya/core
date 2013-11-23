@@ -2,8 +2,7 @@
 /**
  * Return a newCurl object
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,10 +10,12 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
+
 /**
  * Return a new xarCurl object.
- * $args are passed directly to the class.
- * @param array    $args array of optional parameters<br/>
+ * 
+ * @param array $args Optional set of arguments
+ * @return \xarCurl xarCurl Object returned
  */
 function base_userapi_newcurl(Array $args=array())
 {

@@ -2,8 +2,7 @@
 /**
  * Get output buffer
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,12 +10,15 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
+
 /**
  * Get output buffer(s) (e.g. before trying to send back some file or image)
  *
  * @author Carl P. Corliss
  * @author the Base module development team
- * @return array containing the contents of the different output buffers
+ * 
+ * @param void N/A
+ * @return Array containing the contents of the different output buffers
  */
 function base_userapi_get_output_buffer()
 {

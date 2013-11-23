@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -15,12 +14,14 @@
  * Find the path for a JavaScript file.
  *
  * @author Jason Judge
- * @param $args['module'] module name; or
+ * 
+ * @param $args['module'] Module name; or
  * @param $args['moduleid'] module ID (deprecated)
  * @param $args['modid'] module ID
  * @param $args['filename'] file name
  * @return string|void the virtual pathname for the JS file; an empty value if not found
- * @checkme: the default module should be the current *template* module, not the *request* module?
+ * 
+ * @checkme: The default module should be the current *template* module, not the *request* module?
  */
 function base_javascriptapi__findfile(Array $args=array())
 {

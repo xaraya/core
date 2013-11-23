@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- This is a generic form template for any DD object. You can use a specific template for one particular object in this directory as showform-[objectname].xd, and/or use templates in your own [module]/xartemplates/objects directory by specifying the tplmodule="..." argument in the xar:data-form BL tag or showForm() method call. -->
+    <xar:if condition="empty($layout)">
+        <xar:set name="layout">'default'</xar:set>
+    </xar:if>
+    <xar:if condition="$layout eq 'default'">
+        <xar:if condition="isset($properties['id'])">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">ID</xar:var>
+                    <label for="theme_id" title="#$label#" size="3">ID</label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties['id']" class="xar-form-textauto"/>
+                </div>
+            </div>
+        </xar:if>
+        <xar:if condition="isset($properties['theme_id'])">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">The number of items to show on each page.</xar:var>
+                    <label for="theme_id" title="#$label#" size="3">Theme:</label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties['theme_id']" class="xar-form-textauto"/>
+                </div>
+            </div>
+        </xar:if>
+        <xar:if condition="isset($properties['name'])">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">Name</xar:var>
+                    <label for="theme_id" title="#$label#" size="3">Name</label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties['name']" class="xar-form-textauto"/>
+                </div>
+            </div>
+        </xar:if>
+        <xar:if condition="isset($properties['label'])">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">Label</xar:var>
+                    <label for="theme_id" title="#$label#" size="3">Label</label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties['label']" class="xar-form-textauto"/>
+                </div>
+            </div>
+        </xar:if>
+        <xar:if condition="isset($properties['description'])">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">Description</xar:var>
+                    <label for="theme_id" title="#$label#" size="3">Description</label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties['description']" class="xar-form-textauto"/>
+                </div>
+            </div>
+        </xar:if>
+        <xar:if condition="isset($properties['property_id'])">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">Property</xar:var>
+                    <label for="theme_id" title="#$label#" size="3">Property</label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties['property_id']" class="xar-form-textauto" onchange="this.form.submit()"/>
+                </div>
+            </div>
+        </xar:if>
+        <xar:if condition="isset($properties['configuration'])">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">Configuration</xar:var>
+                    <label for="theme_id" title="#$label#" size="3">Configuration</label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties['configuration']" class="xar-form-textauto"/>
+                </div>
+            </div>
+        </xar:if>
+    <xar:elseif condition="$layout eq 'filter'" />
+        <xar:foreach in="$properties" key="$name" value="$property">
+            <div class="xar-form-input-wrapper">
+                <xar:data-label property="$properties[$name]" for="id" />
+                <xar:data-filter property="$properties[$name]" for="id" />
+                <xar:data-input property="$properties[$name]" />
+            </div>
+        </xar:foreach>
+    <xar:else />
+        <!-- You can also specify your own layout here or in a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->
+        <xar:template module="$tplmodule" file="form-$layout"/>
+    </xar:if>
+</xar:template>

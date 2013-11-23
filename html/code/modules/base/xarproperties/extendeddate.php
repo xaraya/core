@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -107,8 +106,11 @@ class ExtendedDateProperty extends CalendarProperty
         }
     } /* validateValue */
 
-    /**
+   /**
      * Show the input according to the requested dateformat.
+     * 
+     * @param string[] $data Array containing the value of the property                           
+     * @return string Input data
      */
     public function showInput(Array $data = array())
     {
@@ -157,6 +159,9 @@ class ExtendedDateProperty extends CalendarProperty
 
     /**
      * Show the output according to the requested dateformat.
+     * 
+     * @param string[] $data Array containing the value of the property                           
+     * @return string Output data
      */
     public function showOutput(Array $data = array())
     {

@@ -10,16 +10,17 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
+
 /**
  * Gets a file from the Internet
  * Returns the favicon (if any) from a given url
  * When no icon is found, an empty one is returned, defined in this function
  *
  * @author Panayotis Vryonis (lilina package)
- * @access public
- * @param array    $args array of optional parameters<br/>
- *        string  $args['url'] the absolute URL for the file
- * @return string content of the file
+
+ * @param array    $args Array of optional parameters<br/>
+ *        string   $args['url'] The absolute URL for the file
+ * @return string Content of the file
  */
 function base_userapi_getfavicon(Array $args=array())
 {
@@ -72,6 +73,12 @@ function base_userapi_getfavicon(Array $args=array())
     return $cached_ico;
 }
 
+/**
+ * Get the favicon URL for any given URL
+ * 
+ * @param string $url
+ * @return boolean|string Returns false if url is not valid, else it returns the favicon url for the given url.
+ */
 function __getFaviconURL($url)
 {
     if(empty($url) || $url == 'http://'){

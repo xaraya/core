@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -65,6 +64,12 @@ class CalculatedProperty extends TextBoxProperty
         return parent::showOutput($args);
     }
 
+    /**
+     * Calcualtes the properties value
+     * 
+     * @param float[] $args Holds 'value' parameter
+     * @return null|string|float Returns null or string upon failure or a the calculated float
+     */
     private function calculateValue(Array $args=array())
     {
         if (empty($this->calculation)) {
@@ -105,6 +110,8 @@ class CalculatedProperty extends TextBoxProperty
 
     /**
      * Parse calculation rule, e.g. ( price * quantity + 5 ) / 0.95
+     * 
+     * @param void N/A
      */
     private function parseCalculation()
     {
