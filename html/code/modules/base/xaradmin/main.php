@@ -2,8 +2,7 @@
 /**
  * Main entry point for the admin interface of this module
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -23,7 +22,9 @@
  *
  * @author John Robeson
  * @author Greg Allan
- * @return mixed output display string or boolean true if redirected
+ * 
+ * @param void N/A
+ * @return mixed Output display string or boolean true if redirected
  */
 function base_admin_main()
 {

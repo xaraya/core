@@ -2,8 +2,7 @@
 /**
  * Menu Block display interface
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -23,14 +22,22 @@ sys::import('modules.base.xarblocks.menu');
 
 class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
 {
+    /**
+     * This method is called by the BasicBlock class constructor
+     * 
+     * @param void N/A
+     */
     public function init()
     {
         parent::init();
     }
-/**
- * Display func.
- * @param $data array containing title,content
- */
+
+    /**
+     * Display function
+     * 
+     * @param array $data Data array
+     * @return array Display data array or null if nothing is to display.
+     */
     function display(Array $data=array())
     {
         $data = $this->getContent();
@@ -90,7 +97,12 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
         return $data;
     }
 
-
+    /**
+     * Method to get user links
+     * 
+     * @param void N/A
+     * @return string[] Array containing user links.
+     */
     public function getUserLinks()
     {
         $userlinks = array();
@@ -148,7 +160,12 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
         return $userlinks;
     }
 
-
+    /**
+     * Method to get help content
+     * 
+     * @param void N/A
+     * @return array Display data array
+     */
     public function help()
     {
         return $this->getContent();

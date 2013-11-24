@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -9,6 +8,7 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
+
 /**
  * Curl Class
  * @package modules
@@ -161,8 +161,11 @@ class xarCurl extends Object
 
     /**
      * Initialize a new session.
+     * 
      * This only needs to be called to reopen a new session after the initial
      * session is closed. Alternatively, discard the object and create a new one.
+     * 
+     * @param void N/A
      */
     function init()
     {
@@ -192,8 +195,13 @@ class xarCurl extends Object
         $this->header = array();
     }
 
-    // Set an option.
-    // The session must be open to set an option.
+    /**
+     * Set an option. Session must be open.
+     * 
+     * @param mixed $option Option to set
+     * @param mixed $value Value to set to the option
+     * @return boolean Returns true on success false on failure
+     */
     function setopt($option, $value)
     {
         if (!isset($this->curl)) {
@@ -203,7 +211,14 @@ class xarCurl extends Object
         return curl_setopt($this->curl, $option, $value);
     }
 
-    // Add GET or POST parameters (name/value pair or an array)
+    /**
+     * Add GET or POST parameters (name/value pair or an array)
+     * 
+     * @param type $name
+     * @param type $value
+     * @param type $type
+     * @return boolean
+     */
     function _param($name = '', $value = '', $type = '')
     {
         if (!isset($name) || $name == '') {
@@ -239,7 +254,9 @@ class xarCurl extends Object
     }
 
     /**
-     * Set the URL.
+     * Set URL for curl
+     * 
+     * @param string $url Url
      */
     function seturl($url)
     {
@@ -252,19 +269,34 @@ class xarCurl extends Object
      * Add POST parameters (name/value pair or an array)
      * Can be called as many times as necessary to load up
      * all the POST parameters.
+     * 
+     * @param string $name Post variable name
+     * @param mixed $value Post variable value
+     * @return boolean
      */
     function post($name = '', $value = '')
     {
         return $this->_param($name, $value, 'POST');
     }
 
-    // Add GET parameters (name/value pair or an array)
-    // Same rules apply as for the post() method.
+    /**
+     * Add GET parameters (name/value pair or an array)
+     * Same rules apply as for the post() method.
+     * 
+     * @param string $name Get variable name
+     * @param mixed $value Get variable value
+     * @return bollean
+     */
     function get($name = '', $value = '')
     {
         return $this->_param($name, $value, 'GET');
     }
 
+    /**
+     * Upload file
+     * 
+     * @param string $filename Path to file to upload
+     */
     function uploadfile($filename)
     {
         // TODO: finish this off (not looked at this at all).
@@ -277,12 +309,18 @@ class xarCurl extends Object
     }
 
     /**
-     * Execute the fetch.
-     * @TODO handle a 'moved' response by going to the new location (calling exec a
-     * second time will rebuild the GET and POST parameters on the new URL).
+     * Execute curl fetch
+     * 
+     * @param void N/A
+     * @return boolean Returns true on on success, false on failure
      */
     function exec()
     {
+        /**
+         * Pending
+         * @TODO handle a 'moved' response by going to the new location (calling exec a
+         * second time will rebuild the GET and POST parameters on the new URL).
+         */
         // Minimum requirements is for a curl object and a URL
         if (!isset($this->url)) {
             $this->errno = -1;
@@ -396,9 +434,16 @@ class xarCurl extends Object
     }
 
     /**
+     * 
+     */
+    
+    /**
      * Get info fields from the curl object.
      * These info fields will remain available even after the curl session
      * has been closed.
+     * 
+     * @param mixed $option
+     * @return mixed
      */
     function getinfo($option = NULL)
     {
@@ -440,7 +485,10 @@ class xarCurl extends Object
     }
 
     /**
-     * Close the curl handle (i.e. session), if currently open.
+     * Close curl call
+     * 
+     * @param void N/A
+     * @return boolean Return true on success false on failure
      */
     function close()
     {
@@ -454,21 +502,23 @@ class xarCurl extends Object
         return true;
     }
 
-    // Return the curl version.
+    /**
+     * Return curl version
+     * @return string Curl version
+     */
     function version()
     {
         return curl_version();
     }
 
     /**
-    * decode a string that is encoded w/ "chunked' transfer encoding
+    * Decode a string that is encoded w/ "chunked' transfer encoding
     * as defined in RFC2068 19.4.6
     *
     * This method extracted from other classes in Xaraya (see nusoap).
     *
     * @param    string $buffer
     * @return   string
-    * @access   public
     */
     function _decode_chunked($buffer)
     {

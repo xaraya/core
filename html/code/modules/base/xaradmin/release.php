@@ -2,8 +2,7 @@
 /**
  *  View recent extension releases
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -15,12 +14,17 @@
  * View recent module releases via central repository
  *
  * @author John Cox
- * @access public
+ * 
+ * @param void N/A
  * @return array data for the template display
- * @todo change feed url once release module is moved
  */
 function base_admin_release()
 {
+    /**
+     * Pending
+     * 
+     * @todo change feed url once release module is moved
+     */
     // Security
     if(!xarSecurityCheck('ManageBase')) return;
 

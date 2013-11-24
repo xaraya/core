@@ -2,8 +2,7 @@
 /**
  * Modify the configuration settings of this module
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,6 +10,7 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
+
 /**
  * Modify the configuration settings of this module
  *
@@ -18,7 +18,9 @@
  *
  * @author John Robeson
  * @author Greg Allan
- * @return mixed data array for the template display or output display string if invalid data submitted
+ * 
+ * @param void N/A
+ * @return mixed Data array for the template display or output display string if invalid data submitted
  */
 function base_admin_modifyconfig()
 {

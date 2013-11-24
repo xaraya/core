@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -9,10 +8,15 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/68.html
  */
-/**
- * @param array    $args array of optional parameters<br/>
- */
 
+/**
+ * Get module settings for admin API
+ * 
+ * @param array $args Optional parameters.
+ * @param string $args['module'] Required module parameter
+ * @return object Returns data object
+ * @throws Exception Thrown if module parameter was not given
+ */
 function base_adminapi_getmodulesettings(Array $args=array())
 {
     if (empty($args['module']))

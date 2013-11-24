@@ -2,8 +2,7 @@
 /**
  * Utility function pass individual menu items to the main menu
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -13,6 +12,7 @@
  */
 /**
  * Utility function to get an array of menulinks from {modtype} getmenulinks function or {modtype}menu-dat.xml file
+ * 
  * This function pays no respect to the active state of the module, calling functions must determine that
  * It looks for menu links for the specified module and type, falling back to the current request module and type
  * It first looks for links in xml files in ./code/modules/{modname}/xardata/{modtype}menu-dat.xml
