@@ -2,8 +2,7 @@
 /**
  * Confirm logout from Admin panels system
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -13,13 +12,14 @@
  *
  * @author Andy Varganov <andyv@xaraya.com>
  */
+
 /**
  * Confirm logout from administration system
  *
  * @author  Andy Varganov <andyv@xaraya.com>
- * @access  public
- * @param   no parameters
- * @return  array data for the template display
+
+ * @param   void N/A
+ * @return  array Data array for display template.
 */
 function base_admin_confirmlogout()
 {

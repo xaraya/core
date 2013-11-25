@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -25,12 +24,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-/*  Written by Reverend Jim (jim@revjim.net)
+/**  
+ * Written by Reverend Jim (jim@revjim.net)
  *
- *  http://revjim.net/code/feedParser/
+ * http://revjim.net/code/feedParser/
  */
-
-
 class feedParser extends Object
 {
 

@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -12,20 +11,24 @@
 
 class xarTplPager Extends Object
 {
-/**
- * Creates pager information with no assumptions to output format.
- *
- * @since 2003/10/09
- * @access public
- * @param integer $startNum     start item
- * @param integer $total        total number of items present
- * @param integer $itemsPerPage number of links to display (default=10)
- * @param integer $blockOptions number of pages to display at once (default=10) or array of advanced options
- *
- * @todo  Move this somewhere else, preferably transparent and a widget (which might be mutually exclusive)
- */
+    /**
+     * Creates pager information with no assumptions to output format.
+     *
+     * @since 2003/10/09
+     * 
+     * @param int $currentItem Start item
+     * @param int $total Total number of items present
+     * @param int $itemsPerPage Number of links to dispsplay (default 10)
+     * @param int|array $blockOptions Number of pages to display at once (default 10) or array of optinal parameters
+     * @return array Data array containing pager info
+     */
     public static function getInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions = 10)
     {
+        /**
+         * Pending
+         * 
+         * @todo  Move this somewhere else, preferably transparent and a widget (which might be mutually exclusive)
+         */
         // Default block options.
         if (is_numeric($blockOptions)) {
             $pageBlockSize = $blockOptions;
@@ -194,21 +197,22 @@ class xarTplPager Extends Object
         return $data;
 
     }
-/**
- * Equivalent of pnHTML()'s Pager function (used by the base-pager template tag widget)
- *
- * @since 1.13 - 2003/10/09
- * @access public
- * @param integer $startnum     start item
- * @param integer $total        total number of items present
- * @param string  $urltemplate  template for url, will replace '%%' with item number
- * @param integer $perpage      number of links to display (default=10)
- * @param integer $blockOptions number of pages to display at once (default=10) or array of advanced options
- * @param integer $template     alternative template name within $tplmodule/user (default 'pager')
- * @param string  $tplmodule    alternative module to look for templates in (default 'base')
- * @return string output display string
- *
- */
+
+    /**
+     * Equivalent of pnHTML()'s Pager function (used by the base-pager template tag widget)
+     *
+     * @since 1.13 - 2003/10/09
+     * 
+     * @param integer $startnum     start item
+     * @param integer $total        total number of items present
+     * @param string  $urltemplate  template for url, will replace '%%' with item number
+     * @param integer $perpage      number of links to display (default=10)
+     * @param integer $blockOptions number of pages to display at once (default=10) or array of advanced options
+     * @param integer $template     alternative template name within $tplmodule/user (default 'pager')
+     * @param string  $tplmodule    alternative module to look for templates in (default 'base')
+     * @return string output display string
+     *
+     */
     public static function getPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $blockOptions = array(), $template = 'default', $tplmodule = 'base')
     {
         // Quick check to ensure that we have work to do
@@ -241,9 +245,14 @@ class xarTplPager Extends Object
 
         return trim(xarTpl::module($tplmodule, 'pager', $template, $data));
     }
-/**
- * Return a properly formatted pager url (startnum=%%) for use in getPager() method
-**/
+
+    /**
+     * Return formatted pagerurl for user in getPager method
+     * 
+     * @param type $urlitemmatch
+     * @param type $urltemplate
+     * @return string
+     */
     public static function getPagerURL($urlitemmatch = '%%', $urltemplate = null)
     {
         if (empty($urltemplate))

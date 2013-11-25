@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.2.0
  * @copyright see the html/credits.html file in this release
@@ -11,6 +10,13 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
+/**
+ * Function to read a file
+ * 
+ * @param array $args Function parameters
+ * @param string $args['file'] File to be opened.
+ * @return boolean|string Return either the file contents or false if no file was given.
+ */
 function base_adminapi_read_file($args)
 {
     if (empty($args['file'])) return false;

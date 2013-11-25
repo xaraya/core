@@ -2,8 +2,7 @@
 /**
  * Menu Block
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -22,6 +21,9 @@
 // Inherit properties and methods from MenuBlock class
 sys::import('xaraya.structures.containers.blocks.menublock');
 
+/**
+ * Base Menu Block
+ */
 class Base_MenuBlock extends MenuBlock implements iBlock
 {
     protected $type                = 'menu';
@@ -71,7 +73,11 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                                   );
 
 
-    
+    /**
+     * This method is called by the BasicBlock class constructor
+     * 
+     * @param void N/A
+     */ 
     public function init()
     {
         parent::init();
@@ -80,9 +86,12 @@ class Base_MenuBlock extends MenuBlock implements iBlock
             $this->userlinks = $this->links_default;
     }
 
-/**
- * This method is called by the BasicBlock class constructor
-**/
+    /**
+     * This method is called by the BasicBlock class constructor
+     * 
+     * @param string $oldversion Version to upgrade from (old version)
+     * @return boolean Returns true on success, false/null on failure
+     */
     public function upgrade($oldversion) 
     {
         switch ($oldversion) {
@@ -160,9 +169,14 @@ class Base_MenuBlock extends MenuBlock implements iBlock
         return true;
     }
 
-/**
- * Decode urls
-**/
+    /**
+     * Method to decode urls
+     * 
+     * @param string $url Url string to decode
+     * @param boolean $infoarray Boolean value to determine wether or not to return
+     *                           the decoded url as an array
+     * @return string[]|string Returns either decoded url as a string or parts array
+     */
     protected function _decodeURL($url, $infoarray=false)
     {
         $url = preg_replace('/&amp;/','&', $url);

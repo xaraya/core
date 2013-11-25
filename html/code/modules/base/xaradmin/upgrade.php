@@ -2,8 +2,7 @@
 /**
  *  View recent extension releases
  *
- * @package modules
- * @subpackage base module
+ * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -12,15 +11,19 @@
  * @link http://xaraya.com/index.php/release/68.html
  */
 /**
- * 
+ * Function to upgrade module
  *
  * @author John Cox
- * @access public
- * @return array data for the template display
- * @todo change feed url once release module is moved
+ *
+ * @param void N/A
+ * @return array Data for the template display
  */
 function base_admin_upgrade()
 {
+    /**
+     * Pending
+     * @todo change feed url once release module is moved
+     */
     // Security
     if(!xarSecurityCheck('AdminBase')) return;
     

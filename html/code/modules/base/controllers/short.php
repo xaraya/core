@@ -24,6 +24,9 @@
 
 sys::import('xaraya.mapper.controllers.short');
 
+/**
+ * Base short controller
+ */
 class BaseShortController extends ShortActionController
 {
     function decode(Array $data=array())
