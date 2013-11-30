@@ -164,6 +164,9 @@ class Installer extends Object
 
     public function getpropdependencies($regid)
     {
+        $dependencies['satisfied'] = array();
+        $dependencies['unsatisfiable'] = array();
+
         // Get module information
         try {
             $extInfo = xarMod::getInfo($regid);
@@ -171,7 +174,7 @@ class Installer extends Object
             //Add this module to the unsatisfiable list
             $this->unsatisfiable[$regid] = $regid;
             //Return now, we can't find more info about this module
-            return true;
+            return $dependencies;
         }
         
         $props = array();
@@ -182,8 +185,6 @@ class Installer extends Object
         sys::import('modules.dynamicdata.class.properties.master');
         $types = DataPropertyMaster::getPropertyTypes();
         
-        $dependencies['satisfied'] = array();
-        $dependencies['unsatisfiable'] = array();
         foreach ($props as $id => $conditions) {
             if (isset($types[$id])) {
                 $dependencies['satisfied'][] = $conditions['name'];

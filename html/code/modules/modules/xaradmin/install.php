@@ -45,7 +45,7 @@ function modules_admin_install()
     if (!$installer->checkCore($id)) 
         return xarTpl::module('modules','user','errors',array('layout' => 'invalid_core', 'modname' => xarMod::getName($id)));
 
-    //Next check the modules dependencies
+    // Next check the modules dependencies
     // TODO: investigate try/catch clause here, it's not trivial
     try {
         $installer->verifydependency($id);
@@ -56,13 +56,33 @@ function modules_admin_install()
         $command = false;
     }
 
-    $data['propertydependencies'] = $installer->getpropdependencies($id);
     $data['moduledependencies'] = $installer->getalldependencies($id);
 
+    // Finally check the property dependencies
+    if (!xarVarFetch('ignore_properties', 'int:1:', $ignore_properties, 0, XARVAR_NOT_REQUIRED)) return;
+    $propdependencies['satisfied'] = array();
+    $propdependencies['unsatisfiable'] = array();
+    if (isset($data['moduledependencies']['satisfied'])) {
+        foreach ($data['moduledependencies']['satisfied'] as $key => $value) {
+            $newdependencies = $installer->getpropdependencies($key);
+            $propdependencies['satisfied'] += $newdependencies['satisfied'];
+            $propdependencies['unsatisfiable'] += $newdependencies['unsatisfiable'];
+        }
+    }
+    if (isset($data['moduledependencies']['satisfiable'])){
+        foreach ($data['moduledependencies']['satisfiable'] as $key => $value) {
+            $newdependencies = $installer->getpropdependencies($key);
+            $propdependencies['satisfied'] += $newdependencies['satisfied'];
+            $propdependencies['unsatisfiable'] += $newdependencies['unsatisfiable'];
+        }
+    }
+    $data['propdependencies'] = $propdependencies;
+
     //Only show the status screen if there are dependencies that cannot be satisfied
-    if (!$command && (!empty($data['moduledependencies']['unsatisfiable']) || !empty($data['propertydependencies']['unsatisfiable']))) {
+    if (!$command && (!empty($data['moduledependencies']['unsatisfiable']) || !empty($data['propdependencies']['unsatisfiable']))) {
         //Let's make a nice GUI to show the user the options
         $data['id'] = $id;
+//        echo "<pre>";var_dump($data);exit;
         //They come in 3 arrays: satisfied, satisfiable and unsatisfiable
         //First 2 have $modInfo under them for each module,
         //3rd has only 'regid' key with the ID of the module
@@ -80,6 +100,10 @@ function modules_admin_install()
 
         $data['authid']       = xarSecGenAuthKey();
         $data['return_url'] = $return_url;
+        return $data;
+    }
+
+    if (!$ignore_properties && !empty($propdependencies['unsatisfied'])) {
         return $data;
     }
 

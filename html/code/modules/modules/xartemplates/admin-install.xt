@@ -4,7 +4,7 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <!-- This section deals with dependancies. -->
-        <xar:if condition="!empty($moduledependencies)">
+        <xar:if condition="!empty($moduledependencies['unsatisfiable'])">
             <h2>Module Installation: Unsatisfied Dependencies</h2>
             <p>
                 The module #$displayname# you are trying to install depends on additional components. Please review the listing below:
@@ -14,15 +14,15 @@
                     <input type="hidden" name="id" id="id" value="#$id#"/>
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
-                    <xar:if condition="count($propertydependencies['satisfied']) ne 0">
+                    <xar:if condition="isset($propdependencies['satisfied']) AND count($propdependencies['satisfied']) ne 0">
                         <h3>Property dependencies already satisfied:</h3>
                         <ul>
-                            <xar:foreach in="$propertydependencies['satisfied']" value="$name">
+                            <xar:foreach in="$propdependencies['satisfied']" value="$name">
                                 <li>#$name#</li>
                             </xar:foreach>
                         </ul>
                     </xar:if>
-                    <xar:if condition="count($propertydependencies['unsatisfiable']) ne 0">
+                    <xar:if condition="isset($propdependencies['unsatisfied']) AND count($propertydependencies['unsatisfiable']) ne 0">
                         <h3>Property dependencies which cannot be satisfied:</h3>
                         <ul>
                             <xar:foreach in="$propertydependencies['unsatisfiable']" value="$name">
@@ -93,11 +93,42 @@
                                     </xar:if>
                             </xar:foreach>
                         </ul>
+                        <div class="xar-alert">
+                            The installation cannot proceed. You need to first make available the module(s) that represent unsatisfiable dependencies.
+                        </div>
                     <xar:else />
                         <xar:var name="label">Install All</xar:var>
                         <xar:button type="submit" label="$label" name="command" id="command" tabindex="9"/>
                     </xar:if>
                 </div>
+            </form>
+        </xar:if>
+        <xar:if condition="isset($propdependencies['unsatisfiable']) AND count($propdependencies['unsatisfiable']) ne 0">
+            <form action="#xarModURL('modules','admin','install')#" method="post" enctype="application/x-www-form-urlencoded">
+                <h3>Property dependencies that are not satisfied</h3>
+                <ul>
+                    <xar:foreach in="$propdependencies['unsatisfiable']" value="$propInfo">                                
+                        <li>
+                            #$propInfo#
+                        </li>
+                    </xar:foreach>
+                </ul>
+                <xar:if condition="empty($moduledependencies['unsatisfiable'])">
+                    <div class="xar-alert">
+                        The installation can complete, but the missing properties may lead to unexpected results when running the module.
+                        You can however add the missing properties at any time after this installation is complete.
+                    </div>
+                    <input type="hidden" name="id" id="id" value="#$id#"/>
+                    <input type="hidden" name="ignore_properties" id="ignore_properties" value="1"/>
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <xar:var name="label">Continue</xar:var>
+                    <xar:button type="submit" label="$label" name="command" id="command" tabindex="9"/>
+                <xar:else/>
+                    <div class="xar-alert">
+                        The missing properties may lead to unexpected results when running the installed module.
+                        You can however add the missing properties at any time after this installation is complete.
+                    </div>
+                </xar:if>
             </form>
         </xar:if>
         <!-- This section deals with install errors. -->
