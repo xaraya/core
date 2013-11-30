@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @scenario soloblock
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -10,11 +9,15 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
- * view block types
+ * View block types
+ * 
  * @author Jim McDonald
  * @author Paul Rosania
- * @return array data for the template display
+ * 
+ * @param void N/A
+ * @return array Display template data array
  */
 function blocks_admin_view_types()
 {

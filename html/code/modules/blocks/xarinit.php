@@ -2,8 +2,7 @@
 /**
  * Initialise the blocks module
  *
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -12,12 +11,16 @@
  * @link http://xaraya.com/index.php/release/13.html
  */
 
+sys::import('xaraya.tableddl');
+
 /**
- * initialise the blocks module
+ * Initialise the blocks module
+ * 
  * @author Jim McDonald
  * @author Paul Rosania
+ * 
+ * @param void N/A
  */
-sys::import('xaraya.tableddl');
 function blocks_init()
 {
 
@@ -218,9 +221,9 @@ function blocks_init()
 
 /**
  * Upgrade this module from an old version
- *
- * @param oldVersion
- * @return boolean true on success, false on failure
+ * 
+ * @param string $oldversion
+ * @return boolean True on success, false on failure
  */
 function blocks_upgrade($oldversion)
 {
@@ -240,7 +243,7 @@ function blocks_upgrade($oldversion)
 /**
  * Delete this module
  *
- * @return boolean
+ * @return boolean Always returns false. This module cannot be deleted
  */
 function blocks_delete()
 {

@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -9,16 +8,23 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
- * modify a block instance
- * @TODO Need to sperate this out to API calls.
+ * Modify a block instance
+ * 
  * @author Jim McDonald
  * @author Paul Rosania
+ * 
+ * @param void N/A
  * @return array data for the template display
  */
-
 function blocks_admin_modify_instance()
 {
+    /**
+     * Pending
+     * 
+     * @TODO Need to sperate this out to API calls.
+     */
     if (!xarSecurityCheck('ManageBlocks')) return;
 
     if (!xarVarFetch('block_id', 'int:1:',

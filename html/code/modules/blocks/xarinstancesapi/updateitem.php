@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @scenario soloblock
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -14,6 +13,15 @@
  * @author Chris Powis <crisp@xaraya.com>
  * @todo 
 **/
+
+/**
+ * 
+ * Updates an item in the API
+ * 
+ * @param array $args
+ * @return integer Returns block id
+ * @throws BadParameterException
+ */
 function blocks_instancesapi_updateitem(Array $args=array())
 {
     extract($args);

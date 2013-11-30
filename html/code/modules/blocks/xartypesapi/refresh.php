@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @scenario soloblock
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -10,10 +9,15 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
+ * 
  * @author Chris Powis <crisp@xaraya.com>
- * @todo 
-**/
+ * 
+ * @staticvar boolean $runonce
+ * @param array $args Parameter data array
+ * @return boolean True on success, false on failure
+ */
 function blocks_typesapi_refresh(Array $args=array())
 {
     // only need to run this once 

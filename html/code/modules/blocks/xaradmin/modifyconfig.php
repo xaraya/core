@@ -2,8 +2,7 @@
 /**
  * Modify the configuration settings of this module
  *
- * @package modules
- * @subpackage blocks module
+ * @package modules\blacks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,12 +13,14 @@
  * @author John Robeson
  * @author Greg Allan
  */
+
 /**
  * Modify the configuration settings of this module
  *
  * Standard GUI function to display and update the configuration settings of the module based on input data.
  *
- * @return mixed data array for the template display or output display string if invalid data submitted
+ * @param void N/A
+ * @return boolean|array data array for the template display or output display string if invalid data submitted
  */
 function blocks_admin_modifyconfig()
 {

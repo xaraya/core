@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @scenario soloblock
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -11,9 +10,18 @@
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
- * @author Chris Powis <crisp@xaraya.com>
+ * 
  * @todo 
 **/
+
+/**
+ * Fetched block state array
+ * 
+ * @author Chris Powis <crisp@xaraya.com>
+ * 
+ * @param array $args
+ * @return array Returns block state array
+ */
 function blocks_instancesapi_getstates(Array $args=array())
 {
     return array(

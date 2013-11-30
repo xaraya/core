@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @scenario soloblock
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -10,10 +9,17 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
+ * Get blocks API info
+ * 
  * @author Chris Powis <crisp@xaraya.com>
- * @todo 
-**/
+ * @param array $args Parameter data array
+ * @return array Returns block info array
+ * @throws EmptyParameterException
+ * @throws BadParameterException
+ * @throws DataNotFoundException
+ */
 function blocks_blocksapi_getinfo(Array $args=array())
 {
     // must have at least type or instance 

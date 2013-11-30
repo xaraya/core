@@ -2,8 +2,7 @@
 /**
  * Blockgroup Block
  *
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,14 +10,14 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
+sys::import('xaraya.structures.containers.blocks.basicblock');
+
 /**
  * Initialise block info
  *
  * @author  Chris Powis <crisp@xaraya.com>
- * @access  public
- * @return  void
 */
-sys::import('xaraya.structures.containers.blocks.basicblock');
 class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
 {
     

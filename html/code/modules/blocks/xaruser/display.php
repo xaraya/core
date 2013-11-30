@@ -2,8 +2,7 @@
 /**
  * Display a single block in the module space
  *
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -12,11 +11,13 @@
  * @link http://xaraya.com/index.php/release/13.html
  *
  */
+
 /**
- * @return array
+ * 
  * @author Marcel van der Boom <mrb@hsdev.com>
- * @param  string $name name of the block to render
- * @return array data for the template display
+ * 
+ * @param array $args Parameter data array.
+ * @return array Display data array 
  */
 function blocks_user_display(Array $args=array())
 {

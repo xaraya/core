@@ -2,8 +2,7 @@
 /**
  * Update the configuration parameters
  *
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,20 +10,25 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
  * Update the configuration parameters of the module based on data from the modification form
  *
  * @author Jon Haworth
  * @author jsb <jsb@xaraya.com>
+ * 
  * @access public
  * @param array    $args array of optional parameters<br/>
- *        string   $args['starttime'] (seconds or hh:mm:ss)<br/>
- *        string   $args['direction'] (from or to)
+ * @param string   $args['starttime'] (seconds or hh:mm:ss)<br/>
+ * @param string   $args['direction'] (from or to)
  * @return string $convertedtime (hh:mm:ss or seconds)
- * @todo maybe add support for days?
  */
 function blocks_userapi_convertseconds(Array $args=array())
 {
+    /**
+     * Pending 
+     * @todo maybe add support for days?
+     */
     extract($args);
 
     $convertedtime = '';

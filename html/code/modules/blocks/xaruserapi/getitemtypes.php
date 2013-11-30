@@ -2,8 +2,7 @@
 /**
  * Retrieve a list of itemtypes of this module
  *
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,6 +10,7 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
  * Utility function to retrieve the list of itemtypes of this module (if any).
  * @param array    $args array of optional parameters<br/>

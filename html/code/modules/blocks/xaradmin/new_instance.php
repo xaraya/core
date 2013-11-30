@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @scenario soloblock
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -10,12 +9,16 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
- * display type options, form and add a new block instance to the system
+ * Display type options, form and add a new block instance to the system
+ * 
  * @author Jim McDonald
  * @author Paul Rosania
  * @author Chris Powis
- * @return array data for the template display
+ * 
+ * @param void N/A
+ * @return array Data display array
 */
 function blocks_admin_new_instance()
 {

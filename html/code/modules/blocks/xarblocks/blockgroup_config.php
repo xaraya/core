@@ -2,8 +2,7 @@
 /**
  * Blockgroup Block configuration interface
  *
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,20 +10,21 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
+sys::import('modules.blocks.xarblocks.blockgroup');
+
 /**
  * Manage block config
  *
  * @author  Chris Powis <crisp@xaraya.com>
- * @access  public
- * @return  void
 */
-sys::import('modules.blocks.xarblocks.blockgroup');
 class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBlockGroup
-{
-/**
- * Modify Function to the Blocks Admin
- * @param $data array containing title,content
- */
+{   
+    /**
+     * Modify Function to the Blocks Admin
+     * @param array $data Array containing title,content
+     * @return array Data array
+     */
     public function configmodify(Array $data=array())
     {
         if (!empty($this->group_instances))         
