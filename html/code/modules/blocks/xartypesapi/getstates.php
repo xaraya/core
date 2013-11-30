@@ -10,10 +10,15 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
+ * Returns blocks state array
+ * 
  * @author Chris Powis <crisp@xaraya.com>
- * @todo 
-**/
+ * 
+ * @param array $args
+ * @return array Block state array
+ */
 function blocks_typesapi_getstates(Array $args=array())
 {
 

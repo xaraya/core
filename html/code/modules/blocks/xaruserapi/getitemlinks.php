@@ -2,8 +2,7 @@
 /**
  * Utility function to pass individual item links
  *
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,12 +10,13 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
- * utility function to pass individual item links to whoever
+ * Utility function to pass individual item links to whoever
  *
  * @param array    $args array of optional parameters<br/>
- *        string   $args['itemtype'] item type (optional)<br/>
- *        array    $args['itemids'] array of item ids to get
+ * @param string   $args['itemtype'] item type (optional)<br/>
+ * @param array    $args['itemids'] array of item ids to get
  * @return array the itemlink(s) for the item(s).
  */
 function blocks_userapi_getitemlinks(Array $args=array())

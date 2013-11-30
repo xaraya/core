@@ -1,8 +1,7 @@
 <?php
 /**
  * Unregister block types
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -13,19 +12,18 @@
 /**
  * Unregister block type
  *
+ * IMPORTANT: this function is marked for deprecation
+ * The blocks subsystem now automatically creates block types
+ * when modules are removed
+ * 
  * @author Jim McDonald
  * @author Paul Rosania
  * @access public
  * @param array    $args array of optional parameters<br/>
- *        string   $args['modName'] the module name<br/>
- *        string   $args['blockType'] the block type
+ * @param string   $args['modName'] the module name<br/>
+ * @param string   $args['blockType'] the block type
  * @return boolean true on success, false on failure
  */
-/**
- * IMPORTANT: this function is marked for deprecation
- * The blocks subsystem now automatically creates block types
- * when modules are removed
-**/
 function blocks_adminapi_unregister_block_type(Array $args=array())
 {
     return true;

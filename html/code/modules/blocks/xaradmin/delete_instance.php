@@ -1,8 +1,8 @@
 <?php
 /**
  * Block management - delete a block
- * @package modules
- * @subpackage blocks module
+ * 
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -10,10 +10,17 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
- * delete a block instance
+ * 
+ * Delete a block instance
+ * 
  * @author Jim McDonald
  * @author Paul Rosania
+ * 
+ * @return array Data array
+ * @throws EmptyParameterException Thrown if no block id has been passed
+ * @throws IdNotFoundException Thrown if no block with the given block id was found in the API
  */
 function blocks_admin_delete_instance()
 {

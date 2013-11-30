@@ -1,8 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
- * @scenario soloblock
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -10,10 +8,17 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
+ * Function to delete type
+ * 
  * @author Chris Powis <crisp@xaraya.com>
- * @todo 
-**/
+ * 
+ * @param array $args Set of optional parameters
+ * @return array Returns data array
+ * @throws EmptyParameterException
+ * @throws IdNotFoundException
+ */
 function blocks_admin_delete_type(Array $args = array())
 {
     if (!xarSecurityCheck('AdminBlocks')) return;

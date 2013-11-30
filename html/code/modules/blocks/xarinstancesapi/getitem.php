@@ -11,9 +11,19 @@
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
- * @author Chris Powis <crisp@xaraya.com>
+ * 
  * @todo 
 **/
+
+/**
+ * Fetches an item from the API
+ * 
+ * @author Chris Powis <crisp@xaraya.com>
+ * 
+ * @param array $args Parameter data array
+ * @return boolean|array Returns false on failure data array on success
+ * @throws EmptyParameterException
+ */
 function blocks_instancesapi_getitem(Array $args=array())
 {
     if (empty($args)) {

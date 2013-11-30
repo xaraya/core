@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @scenario soloblock
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -10,10 +9,21 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
+ * 
+ * Gets an object from the blocks API
+ * 
  * @author Chris Powis <crisp@xaraya.com>
- * @todo 
-**/
+ * 
+ * @staticvar array $loaded Keeps track of clases that have been loaded
+ * @param array $args Parameter data array
+ * @return object Object to be returned
+ * @throws BadParameterException
+ * @throws FileNotFoundException
+ * @throws ClassNotFoundException
+ * @throws FunctionNotFoundException
+ */
 function blocks_blocksapi_getobject(Array $args=array())
 {
         // must have a valid type

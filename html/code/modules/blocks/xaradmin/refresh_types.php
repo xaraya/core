@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @scenario soloblock
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -10,10 +9,14 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
+ * 
+ * 
  * @author Chris Powis <crisp@xaraya.com>
- * @todo 
-**/
+ * @param void N/A
+ * @return type Returns data display array
+ */
 function blocks_admin_refresh_types(Array $args=array())
 {
     if (!xarSecurityCheck('AdminBlocks')) return;

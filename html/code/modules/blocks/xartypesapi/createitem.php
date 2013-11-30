@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @scenario soloblock
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -10,10 +9,17 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
 /**
+ * Creates an item in the API
+ * 
  * @author Chris Powis <crisp@xaraya.com>
- * @todo 
-**/
+ * 
+ * @param array $args Parameter data array
+ * @return boolean|integer Returns newly created id on success or falce on failure
+ * @throws BadParameterException
+ * @throws DuplicateException
+ */
 function blocks_typesapi_createitem(Array $args=array())
 {
     extract($args);

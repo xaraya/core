@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -10,10 +9,13 @@
  * @link http://xaraya.com/index.php/release/13.html
  */
 /**
- * view block instances
+ * View block instances
+ * 
  * @author Jim McDonald
  * @author Paul Rosania
- * @return array data for the template display
+ * 
+ * @param void N/A
+ * @return array Teamplate display data array
  */
 function blocks_admin_view_instances()
 {

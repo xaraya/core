@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @scenario soloblock
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -10,10 +9,7 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
-/**
- * @author Chris Powis <crisp@xaraya.com>
- * @todo 
-**/
+
 /**
  * Get a list of available block types from the file system
  *
@@ -21,7 +17,13 @@
  * /code/blocks/typename/* - looks for file named typename.php (solo blocks)
  * /code/modules/modulename/xarblocks/typename/* - looks for file named typename.php (module blocks)
  * /code/modules/modulename/xarblocks/* - looks for files that don't have an _ (ugly, legacy, deprecated)
-**/
+ * 
+ * @author Chris Powis <crisp@xaraya.com>
+ * 
+ * @staticvar array $types
+ * @param array $args Parameter data array
+ * @return array List of available block types
+ */
 function blocks_typesapi_getfiles(Array $args=array())
 {
     static $types = array();

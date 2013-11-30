@@ -2,8 +2,7 @@
 /**
  * Main entry point for the admin interface of this module
  *
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -20,8 +19,11 @@
  *
  * @author Jim McDonald
  * @author Paul Rosania
+ * 
+ * @param void N/A
  * @return mixed output display string or boolean true if redirected
  */
+
 function blocks_admin_main()
 {
     // Security

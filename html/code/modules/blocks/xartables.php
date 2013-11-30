@@ -1,7 +1,6 @@
 <?php
 /**
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -12,9 +11,12 @@
 
 /**
  * Return table name definitions to Xaraya.
+ * 
  * This function is called internally by the core whenever the module is
  * loaded. It adds the table names to a globally accessible array
- * @return array the registered tables of this module
+ * 
+ * @param void N/A
+ * @return array Registered table names to a globally accessibl array
  */
 function blocks_xartables()
 {

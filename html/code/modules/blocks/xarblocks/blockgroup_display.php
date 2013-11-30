@@ -2,8 +2,7 @@
 /**
  * Blockgroup Block display interface
  *
- * @package modules
- * @subpackage blocks module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,20 +10,19 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/13.html
  */
+
+sys::import('modules.blocks.xarblocks.blockgroup');
+
 /**
  * Display block
  *
  * @author  Chris Powis <crisp@xaraya.com>
- * @access  public
- * @return  void
 */
-sys::import('modules.blocks.xarblocks.blockgroup');
 class Blocks_BlockgroupBlockDisplay extends Blocks_BlockgroupBlock implements iBlockGroup
 {
-/**
- * Display func.
- * @param none
- */
+    /**
+     * Display function
+     */
     function display(Array $data=array())
     {
 
