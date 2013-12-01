@@ -949,7 +949,7 @@ class xarJSLib extends Object
         foreach ($modules as $mod) {
             $modOSDir = $mod['osdirectory'];
             // look in code/modules/<module>/xartemplates/lib/libname/*
-            $paths['modules'][$modOSDir] = "{$codeDir}modules/{$modOSDir}/xartemplates/{$libBase}/{$libName}";
+            $paths['module'][$modOSDir] = "{$codeDir}modules/{$modOSDir}/xartemplates/{$libBase}/{$libName}";
         }
         // find files in all lib folders, all themes, all modules, all properties
         $this->scripts = array();
