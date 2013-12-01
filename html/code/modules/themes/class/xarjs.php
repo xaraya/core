@@ -204,7 +204,6 @@ class xarJS extends Object
         // we want to look in all active themes
         // we want to look in all active modules
         // set default paths and filenames
-//        $libName     = $this->name;
         $baseDir     = xarTpl::getBaseDir();
         $themeDir    = xarTpl::getThemeDir();
         $themeName   = xarTpl::getThemeName();
@@ -920,7 +919,7 @@ class xarJSLib extends Object
             array('filter' => array('Class' => 2, 'State' => XARTHEME_STATE_ACTIVE)));
         // we want to look in all active modules
         $modules = xarMod::apiFunc('modules', 'admin', 'getlist',
-            array('filter' => array('State' => 2)));
+            array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
         // set default paths and filenames
         $libName     = $this->name;
         $baseDir     = xarTpl::getBaseDir();
