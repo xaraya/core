@@ -274,33 +274,6 @@ class xarCSS extends Object
     }
 
 /**
- * Render function
- *
- * Render queued css
- *
- * @author Chris Powis <crisp@xaraya.com>
- * @access public
- * @params array   $args array of optional parameters<br/>
- *         boolean $args[comments] show comments, optional, default false
- * @todo option to turn on/off style comments in UI, cfr template comments
- * @return string templated output of css to render
- * @throws none
-**/
-    public function render($args)
-    {
-        //print_r(self::$css);
-        if (empty(self::$css)) return;
-        extract($args);
-        if ($this->combined) {
-            $this->combine();
-        }
-        $args['styles'] = self::$css;
-        $args['comments'] = !empty($comments);
-
-        return xarTpl::module('themes', 'css', 'render', $args);
-    }
-
-/**
  * Queue function
  *
  * Add css to queue
@@ -350,6 +323,33 @@ class xarCSS extends Object
         self::$css[$method][$scope][$index] = $data;
 
         return true;
+    }
+
+/**
+ * Render function
+ *
+ * Render queued css
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access public
+ * @params array   $args array of optional parameters<br/>
+ *         boolean $args[comments] show comments, optional, default false
+ * @todo option to turn on/off style comments in UI, cfr template comments
+ * @return string templated output of css to render
+ * @throws none
+**/
+    public function render($args)
+    {
+        //print_r(self::$css);
+        if (empty(self::$css)) return;
+        extract($args);
+        if ($this->combined) {
+            $this->combine();
+        }
+        $args['styles'] = self::$css;
+        $args['comments'] = !empty($comments);
+
+        return xarTpl::module('themes', 'css', 'render', $args);
     }
 
 /**
