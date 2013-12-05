@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -15,7 +14,6 @@
 
 /**
  * show some categories navigation in a template
-// TODO: clean up all those ways to get parameters + better templating
  *
  * @param $args['module'] string module that you want to navigate in (default current module)
  * @param $args['itemtype'] integer item type of the module items (default none)
@@ -43,6 +41,11 @@ sys::import('modules.categories.xarproperties.categorytree');
 
 class CategoryNavigationProperty extends SelectProperty
 {
+    /**
+     * Pending
+     * TODO: clean up all those ways to get parameters + better templating
+     */
+    
     public $id         = 30073;
     public $name       = 'categorynavigation';
     public $desc       = 'Category Navigation';
@@ -1059,6 +1062,10 @@ class CategoryNavigationProperty extends SelectProperty
 
     /**
      * sort navigation trails by base category order, then by Celko tree
+     * 
+     * @param array $a Parameter data array
+     * @param array $b Parameter data array
+     * @return int Returns sort number
      */
     static function sortbyorder ($a,$b)
     {

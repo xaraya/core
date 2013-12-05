@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,7 +10,7 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/147.html
  *
- * @author Jim McDonald, Flávio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
+ * @author Jim McDonald, Flï¿½vio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
  */
 
 //Load Table Maintainance API
@@ -19,15 +18,13 @@ sys::import('xaraya.tableddl');
 sys::import('xaraya.structures.query');
 
 /**
- * Initialise the categories module
+ * * Initialise the categories module
  *
- * @author  Jim McDonald, Flávio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
- * @access  public
- * @param   none
- * @return  true on success or void or false on failure
- * @throws  'DATABASE_ERROR'
- * @todo    nothing
-*/
+ * @author  Jim McDonald, Flï¿½vio Botelho <nuncanada@xaraya.com>
+ * @author  mikespub <postnuke@mikespub.net>
+ * @param   void N/A
+ * @return  boolean True on success null/false on failure.
+ */
 function categories_init()
 {
 # --------------------------------------------------------
@@ -222,7 +219,7 @@ function categories_init()
 /**
  * Upgrade the categories module from an old version
  *
- * @author  Jim McDonald, Flávio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
+ * @author  Jim McDonald, Flï¿½vio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
  * @access  public
  * @param   $oldVersion
  * @return  true on success or false on failure

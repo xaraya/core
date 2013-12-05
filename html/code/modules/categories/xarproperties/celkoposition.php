@@ -2,8 +2,7 @@
 /**
  * CelkoPosition Property
  *
- * @package properties
- * @subpackage celkoposition property
+ * @package properties\celkoposition
  * @category Third Party Xaraya Property
  * @version 1.0.0
  * @copyright (C) 2011 Netspan AG
@@ -16,9 +15,7 @@ sys::import('modules.dynamicdata.class.properties.base');
  * Handle the CelkoPosition property
  *
  * Show the position of an item in a tree of nested sets
- */
-
-/**
+ *
  * Notes
  *
  * - This property is used in creating hierarchical data using the nested set model
@@ -39,7 +36,6 @@ sys::import('modules.dynamicdata.class.properties.base');
  * - In contrast if the celkopposiion property uses a different source table than the object's other properties, it will (first) have to create an entry in that source table itself.
  *   We currently don't have any examples of such a case, but this might be the case of Chris' Uebertable :)
  */
-
 class CelkoPositionProperty extends DataProperty
 {
     public $id           = 30074;

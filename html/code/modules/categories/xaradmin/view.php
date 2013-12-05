@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -13,6 +12,11 @@
  *
  */
 
+/**
+ * View admin categories
+ * 
+ * @return array|null Returns display data array on succes, null on failure
+ */
 function categories_admin_view()
 {
     // Get parameters

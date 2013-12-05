@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,12 +13,11 @@
  */
 
 /**
- * utility function to pass individual item links to whoever
+ * Utility function to pass individual item links to whoever
  *
  * @param $args['itemtype'] item type (optional)
  * @param $args['itemids'] array of item ids to get
- * @returns array
- * @return array containing the itemlink(s) for the item(s).
+ * @return array Returns array containing the itemlink(s) for the item(s).
  */
 function categories_userapi_getitemlinks($args)
 {

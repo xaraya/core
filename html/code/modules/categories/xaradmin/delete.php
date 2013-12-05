@@ -13,13 +13,15 @@
  *
  * @author Marc Lutolf <mfl@netspan.ch>
  */
+
 /**
  * Delete a category
  *
  * This function also shows a count on the number of child categories of the current category
- * @param id cid
- * @param str confirm OPTIONAL
- * @return bool
+ * 
+ * @param void N/A
+ * @return array|null Returns display data array on success, null on failure
+ * @throws BadParameterException Thrown if given category was not found in API
  */
 function categories_admin_delete()
 {

@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,13 +13,13 @@
  */
 
 /**
- * modify categories for an item - hook for ('item','modify','GUI')
- *
+ * Modify categories for an item - hook for ('item','modify','GUI')
+ * 
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @return string|array|null Returns display data array on success null on failure. 
+ * If security checks fail an empty string is returned
+ * @throws BadParameterException Thrown if object ID was not passed to function
  */
 function categories_admin_modifyhook($args)
 {

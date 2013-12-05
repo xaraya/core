@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -42,6 +41,12 @@ class CategoryPickerProperty extends ArrayProperty
         $this->prepostprocess = 2;
     }
 
+    /**
+     * Create Value
+     * 
+     * @param int $itemid
+     * @return boolean Returns true
+     */
     public function createValue($itemid=0)
     {
         // Set the module_id: case of a bound property
@@ -59,6 +64,11 @@ class CategoryPickerProperty extends ArrayProperty
         return true;
     }
 
+    /**
+     * Updates value for the given item id.
+     * @param int $itemid ID of the item to be updated
+     * @return boolean Returns true on success, false on failure
+     */
     public function updateValue($itemid=0)
     {
         return $this->createValue($itemid);

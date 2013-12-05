@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -15,21 +14,24 @@
 
 /**
  * Get an array of assigned category details for a specific item, limiting by a base cid if required.
+ * 
+ * Get categories for an item, optionally limiting to just one category branch (to be expanded to allow base categories by name).
+ * 
  * @param $args['basecid'] optional base cid under which the returned categories must lie
  * @param $args['basecids'] optional array of base cids under which the returned categories must lie
  * @param $args['module'] name of the module; or
  * @param $args['modid'] module ID
  * @param $args['itemtype'] item type
  * @param $args['itemid'] item ID
- * @returns int
- * @return number of items
- * TODO: allow ordering of the results by name, description etc.
+ * @return array|boolean Returns category info on success, false on failure.
  */
-
-// Get categories for an item, optionally limiting to just one category branch (to be expanded to allow base categories by name).
-
 function categories_userapi_getitemcats($args)
 {
+    /**
+     * Pending
+     * TODO: allow ordering of the results by name, description etc.
+     */
+    
     // Get arguments from argument array
     extract($args);
 

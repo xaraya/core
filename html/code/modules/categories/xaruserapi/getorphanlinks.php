@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,13 +13,12 @@
  */
 
 /**
- * get orphan links
- * @param $args['modid'] module´s ID
+ * Get orphan links
+ * @param $args['modid'] moduleï¿½s ID
  * @param $args['itemtype'] item type (if any)
  * @param $args['numitems'] optional number of items to return
  * @param $args['startnum'] optional start at this number (1-based)
- * @returns array
- * @return item array, or false on failure
+ * @return array Returns an array of orphan links, or false on failure
  */
 function categories_userapi_getorphanlinks($args)
 {

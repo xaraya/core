@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\category
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -20,6 +19,11 @@
         protected $basetable;
         protected $linktable;
 
+        /**
+         * Constructor for CategoryWorker
+         * 
+         * @param void N/A
+         */
         public function __construct()
         {
             sys::import('xaraya.structures.query');
@@ -31,6 +35,13 @@
             $this->linktable = $tables['categories_linkage'];
         }
         
+        /**
+         * Fetches the name for a given id from the database
+         * 
+         * @param int $id ID of Category
+         * @return string|null Returns name as string or null if category was not found
+         * @throws Exception Thrown if no ID was given
+         */
         public function id2name($id=0)
         {
             if (empty($id)) throw new Exception(xarML('No id passed to id2name'));
@@ -47,6 +58,13 @@
             return $name;
         }
         
+        /**
+         * Fetches ID of category given by its name from the database
+         * 
+         * @param string $name Name of the category to fetch
+         * @return int|null Returns the ID of a category or null if no category was found
+         * @throws Exception Thrown if $name was empty
+         */
         public function name2id($name="Top")
         {
             if (empty($id)) throw new Exception(xarML('No id passed to name2id'));
@@ -60,6 +78,13 @@
             return $id;
         }
 
+        /**
+         * Fetch category info from database by its id
+         * 
+         * @param int $id ID of the category to fetch information for
+         * @return array|null Category data array, null if no category was found
+         * @throws Exception Thrown if no ID was passed to the method
+         */
         public function getcatinfo($id=0)
         {
             if (empty($id)) throw new Exception(xarML('No id passed to getcatinfo'));
@@ -79,6 +104,13 @@
             return $info;
         }
 
+        /**
+         * Fetch the children of a category
+         * 
+         * @param int $id ID of the parent category
+         * @param boolean $myself
+         * @return array|null Data array containing children of the given category, null if no children were found
+         */
         public function getchildren($id=0,$myself=0)
         {
 //            if (empty($id)) throw new Exception(xarML('No id passed to getchildren'));
@@ -109,6 +141,12 @@
             return $children;
         }
 
+        /**
+         * Fetch top level categories from the tree in the database
+         * 
+         * @param void N/A
+         * @return array Category data array
+         */
         public function gettoplevel()
         {
             $q = new Query('SELECT', $this->cattable);
@@ -118,11 +156,23 @@
             return $result;
         }
 
+        /**
+         * Fetch the top level count
+         * 
+         * @param void N/A
+         * @return int Count of top level categories
+         */
         public function gettoplevelcount()
         {
             return count($this->gettoplevel());
         }
 
+        /**
+         * Fetch category bases from database
+         * 
+         * @param array $args Parameter data array
+         * @return array Category bases data array
+         */
         public function getcatbases($args)
         {
             extract($args);
@@ -161,6 +211,12 @@
             return $output;
         }
 
+        /**
+         * Fetch count of category bases from database
+         * 
+         * @param array $args Parameter data array
+         * @return int Count of Category bases
+         */
         public function getcatbasecount($args)
         {
             return count($this->getcatbases($args));

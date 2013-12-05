@@ -3,8 +3,7 @@
  * Categories Module
  * Add one or more new categories
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -15,6 +14,12 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
+    /**
+     * Create new category in admin
+     * 
+     * @param void N/A
+     * @return array|null Returns display data array on success, null on failure
+     */
     function categories_admin_new()
     {
         if (!xarVarFetch('return_url',  'isset',  $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}

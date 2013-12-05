@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,13 +13,12 @@
  */
 
 /**
- * delete linkage for an item - hook for ('item','delete','API')
- *
+ * Delete linkage for an item - hook for ('item','delete','API')
+ * 
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @return array Data array
+ * @throws BadParameterException Thrown if object was not found
  */
 function categories_adminapi_deletehook($args)
 {

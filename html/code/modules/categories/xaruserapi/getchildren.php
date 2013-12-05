@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,13 +13,12 @@
  */
 
 /**
- * get direct children of a specific (list of) category
+ * Get direct children of a specific (list of) category
  *
  * @param $args['cid'] id of category to get children for, or
  * @param $args['cids'] array of category ids to get children for
  * @param $args['return_itself'] =Boolean= return the cid itself (default false)
- * @returns array
- * @return array of category info arrays, false on failure
+ * @return array Return array of category info arrays, false on failure
  */
 function categories_userapi_getchildren($args)
 {

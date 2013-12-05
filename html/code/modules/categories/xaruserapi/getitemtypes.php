@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -12,22 +11,13 @@
  * @link http://xaraya.com/index.php/release/147.html
  *
  */
+
 /**
  * Utility function to retrieve the list of item types of this module (if any)
  *
- * @package Xaraya eXtensible Management System
- * @copyright (C) copyright-placeholder
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- *
- * @subpackage Categories module
- */
-/**
- * utility function to retrieve the list of item types of this module (if any)
- *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @returns array
- * @return array containing the item types and their description
+ * @param array $args Parameter data array
+ * @return array Returns array containing the item types and their description
  */
 function categories_userapi_getitemtypes($args)
 {

@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,10 +13,10 @@
  */
 
 /**
- * get links
+ * Get links
  * @param $args['cids'] array of ids of categories to get linkage for (OR/AND)
  * @param $args['iids'] array of ids of itens to get linkage for
- * @param $args['modid'] module´s ID
+ * @param $args['modid'] moduleï¿½s ID
  * @param $args['itemtype'] item type (if any)
  * @param $args['numitems'] optional number of items to return
  * @param $args['startnum'] optional start at this number (1-based)
@@ -26,8 +25,7 @@
  *                         else the keys are the 'cids'
  * @param $args['andcids'] true means AND-ing categories listed in cids
  * @param $args['groupcids'] the number of categories you want items grouped by
- * @returns array
- * @return item array, or false on failure
+ * @return array Returns item array, or false on failure
  */
 function categories_userapi_getlinks($args)
 {

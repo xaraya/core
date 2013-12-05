@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,11 +13,12 @@
  */
 
 /**
- * utility function pass individual menu items to the main menu
+ * Utility function pass individual menu items to the main menu
  *
  * @author the Example module development team
- * @returns array
- * @return array containing the menulinks for the main menu items.
+ * 
+ * @param void N/A
+ * @return arrau Array containing menulinks for the main menu items.
  */
 function categories_adminapi_getmenulinks()
 {

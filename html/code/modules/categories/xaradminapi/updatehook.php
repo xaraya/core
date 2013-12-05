@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -18,10 +17,9 @@
  * Needs $extrainfo['cids'] from arguments, or 'cids' from input
  *
  * @param $args['objectid'] ID of the object
- * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @param $args['extrainfo'] Extra information
+ * @return array Returns extrainfo array.
+ * @throws BadParameterException Thrown if invalid parameters have been given.
  */
 function categories_adminapi_updatehook($args)
 {

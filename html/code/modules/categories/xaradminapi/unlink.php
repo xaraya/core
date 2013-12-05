@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -15,10 +14,13 @@
 
 /**
  * Delete all links for a specific Item ID
+ * 
  * @param $args['iid'] the ID of the item
  * @param $args['modid'] ID of the module
  * @param $args['itemtype'] item type
  * @param $args['confirm'] from delete GUI
+ * @return boolean|null Returns true on success, null on failure
+ * @throws BadParameterException Thrown if invalid parameters have been given
  */
 function categories_adminapi_unlink($args)
 {
@@ -50,7 +52,7 @@ function categories_adminapi_unlink($args)
                                         'reverse' => 0));
 
     // Note : this is a feature, not a bug in this case :-)
-        // If Link doesn´t exist then
+        // If Link doesnï¿½t exist then
         if ($childiids == Array()) {
             return true;
         }

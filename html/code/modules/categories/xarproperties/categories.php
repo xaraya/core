@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -13,6 +12,9 @@
  *
  * @author Marc Lutolf <mfl@netspan.ch>
  */
+
+sys::import('modules.dynamicdata.class.properties.base');
+sys::import('modules.categories.xarproperties.categorytree');
 
 /**
  * This property displays a series of 1 or more category selectors.
@@ -26,10 +28,6 @@
  * When bound to an object these are taken from the parent object.
  * Otherwise these can be added as attributes or the tag, or they take default values.
  */
-
-sys::import('modules.dynamicdata.class.properties.base');
-sys::import('modules.categories.xarproperties.categorytree');
-
 class CategoriesProperty extends DataProperty
 {
     public $id         = 100;
@@ -137,6 +135,12 @@ class CategoriesProperty extends DataProperty
         return true;
     }
 
+    /**
+     * Create Value
+     * 
+     * @param int $itemid
+     * @return boolean Returns true
+     */
     public function createValue($itemid=0)
     {
         // For both create and update we remove any existing links and create the new ones
@@ -169,11 +173,22 @@ class CategoriesProperty extends DataProperty
         return true;
     }
 
+    /**
+     * Updates value for the given item id.
+     * @param int $itemid ID of the item to be updated
+     * @return boolean Returns true on success, false on failure
+     */
     public function updateValue($itemid=0)
     {
         return $this->createValue($itemid);
     }
 
+    /**
+     * Deletes a value by item ID. Not implemented
+     * 
+     * @param int $itemid Item ID to be deleted
+     * @return int Returns Item ID
+     */
     public function deleteValue($itemid=0)
     {
         // TODO make this work, but do we need it?
@@ -347,6 +362,14 @@ class CategoriesProperty extends DataProperty
         return parent::showOutput($data);
     }
 
+    /**
+     * Fetches items from the database
+     * 
+     * @param int $category Category ID of the items
+     * @param object $object Object the property belongs to
+     * @return array Array of fetched items
+     * @throws Exception Thrown if no object was given.
+     */
     public function getItems($category=0, $object=null)
     {
         if (empty($object)) $object = $this->objectref;
@@ -389,6 +412,12 @@ class CategoriesProperty extends DataProperty
 
 class CategoriesPropertyInstall extends CategoriesProperty implements iDataPropertyInstall
 {
+    /**
+     * Install method
+     * 
+     * @param array $data Parameter data array
+     * @return boolean Returns true.
+     */
     public function install(Array $data=array())
     {
         $files[] = sys::code() . 'modules/categories/xardata/categories_configurations-dat.xml';

@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,10 +13,9 @@
  */
 
 /**
- * get the list of modules and itemtypes for which we're categorising items
+ * Get the list of modules and itemtypes for which we're categorising items
  *
- * @returns array
- * @return $array[$modid][$itemtype] = array('items' => $numitems,'cats' => $numcats,'links' => $numlinks);
+ * @return array Returns an array in the following format $array[$modid][$itemtype] = array('items' => $numitems,'cats' => $numcats,'links' => $numlinks);
  */
 function categories_userapi_getmodules($args)
 {

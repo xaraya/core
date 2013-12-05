@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,13 +13,13 @@
  */
 
 /**
- * select categories for a new item - hook for ('item','new','GUI')
- *
+ * Select categories for a new item - hook for ('item','new','GUI')
+ * 
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * 
+ * @return string|array|null Returns display data array on success null on failure. 
+ * If security checks fail an empty string is returned
  */
 function categories_admin_newhook($args)
 {

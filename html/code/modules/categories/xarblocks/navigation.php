@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -40,7 +39,9 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
     public $dynamictitle        = false;
 
     /**
-     * display block
+     * Display block
+     * 
+     * @param void N/A
      */
     function display()
     {

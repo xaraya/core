@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,7 +13,9 @@
  */
 
 /**
- * create one or more new categories
+ * Create one or more new categories
+ * 
+ * @return boolean|string Returns true on success, string on security failure
  */
 function categories_admin_create()
 {

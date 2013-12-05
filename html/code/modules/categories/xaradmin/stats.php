@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -15,6 +14,9 @@
 
 /**
  * View statistics about category links
+ * 
+ * @param void N/A
+ * @return array|null Returns display data array on success, null on failure.
  */
 function categories_admin_stats()
 {

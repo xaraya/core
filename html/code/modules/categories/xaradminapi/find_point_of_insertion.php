@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,18 +13,15 @@
  */
 
 /**
- * find the correct point of insertion for a node in Celko´s model for
+ * Find the correct point of insertion for a node in Celkoï¿½s model for
  * hierarchical SQL Trees.
  *
- *  -- INPUT --
- * 1st param $inorout Where the new category should be: IN or OUT
- * 2nd param $rightorleft Where the new category should be: RIGHT or LEFT
- * 3rd param $right The right value of the reference category
- * 4th param $left The left value of the reference category
- *
- *  -- OUTPUT --
- * @returns int
- * @return value of left for the new category on success, false on failure
+ * @param string $args['inorout'] Where the new category should be: IN or OUT
+ * @param string $args['rightorleft'] Where the new category should be: RIGHT or LEFT
+ * @param type $args['right'] The right value of the reference category
+ * @param type $args['left'] The left value of the reference category
+ * @return type Returns the point of insertion value
+ * @throws BadParameterException Thrown if parameters contain invalid values
  */
 function categories_adminapi_find_point_of_insertion($args)
 {
