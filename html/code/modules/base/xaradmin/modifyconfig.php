@@ -51,14 +51,6 @@ function base_admin_modifyconfig()
     $tzobject = new DateTimeZone(xarConfigVars::get(null, 'Site.Core.TimeZone'));
     $data['sitedatetime']->setTimezone($tzobject);
 
-    /*
-    $data['editor'] = xarModVars::get('base','editor');
-    $data['editors'] = array(array('displayname' => xarML('none')));
-    if(xarModIsAvailable('htmlarea')) $data['editors'][] = array('displayname' => 'htmlarea');
-    if(xarModIsAvailable('fckeditor')) $data['editors'][] = array('displayname' => 'fckeditor');
-    if(xarModIsAvailable('tinymce')) $data['editors'][] = array('displayname' => 'tinymce');
-    */
-    
     $data['allowedlocales'] = xarConfigVars::get(null, 'Site.MLS.AllowedLocales');
     foreach($locales as $locale) {
         if (in_array($locale, $data['allowedlocales'])) $active = true;
