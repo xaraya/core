@@ -551,6 +551,7 @@ class xarJS extends Object
                 preg_match("!://($server|localhost|127\.0\.0\.1)(:\d+|)/!",$file)) {
                 // Local absolute url, just include it
                 $tag['url'] = $file;                
+            
             } elseif (!preg_match("!^https?://!",$file) ||
                 preg_match("!://($server|localhost|127\.0\.0\.1)(:\d+|)/!",$file)) {
                 // break off any params
@@ -573,6 +574,7 @@ class xarJS extends Object
                     unset($params);
                 }
                 $tag['url'] = $filePath;
+            
             } elseif ($type=='src' || $type=='lib') {
                 // Not a local file, just include the external source
                 $tag['src'] = $file;
