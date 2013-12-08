@@ -213,13 +213,15 @@ class xarCSS extends Object
                 if (!isset($modInfo)) return;
                 $tag['module'] = $module;
                 $modOsDir = $modInfo['osdirectory'];
-                // handle legacy calls to styles in base module now located in common/style
+                
+                // Handle legacy calls to styles in base module now located in common/style
                 if ($module == 'base') {
                     // themes/theme/style
                     $paths[] = $themeDir . '/' . $tag['base'] . '/' . $fileName;
                     // themes/common/style
                     $paths[] = $commonDir . '/' . $tag['base'] . '/' . $fileName;
                 }
+                
                 // themes/theme/modules/module/style
                 $paths[] = $themeDir . '/modules/' . $modOsDir . '/' . $tag['base'] . '/' . $fileName;
                 // themes/theme/modules/module/styles (legacy)
