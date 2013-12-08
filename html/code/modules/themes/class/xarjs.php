@@ -547,7 +547,11 @@ class xarJS extends Object
         foreach ($files as $file) {
             // check if file is local...
             $server = xarServer::getHost();
-            if (!preg_match("!^https?://!",$file) ||
+            if (($tag['type'] == "src") &&
+                preg_match("!://($server|localhost|127\.0\.0\.1)(:\d+|)/!",$file)) {
+                // Local absolute url, just include it
+                $tag['url'] = $file;                
+            } elseif (!preg_match("!^https?://!",$file) ||
                 preg_match("!://($server|localhost|127\.0\.0\.1)(:\d+|)/!",$file)) {
                 // break off any params
                 if (strpos($file, '?') !== false)
@@ -570,7 +574,7 @@ class xarJS extends Object
                 }
                 $tag['url'] = $filePath;
             } elseif ($type=='src' || $type=='lib') {
-                // not local, just include the external source
+                // Not a local file, just include the external source
                 $tag['src'] = $file;
                 $tag['url'] = $file;
             } else {
