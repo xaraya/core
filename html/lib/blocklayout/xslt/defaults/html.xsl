@@ -29,7 +29,7 @@
       Problematic elements
 
       - empty div elements bork everything, so first, leave their spacing alone
-      which doesnt influence correctness, but saves a whole lot of trouble.
+      which doesn't influence correctness, but saves a whole lot of trouble.
       - empty script element works in safari, but not in FF
   -->
   <xsl:template match="div|script|iframe|a">
