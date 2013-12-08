@@ -37,6 +37,8 @@ class xarRequest extends Object
     public $entryPoint;
     public $separator    = '&';
     
+    private $isAjax   = null;
+    
     function __construct($url=null)
     {
         // Make this load lazily
@@ -287,6 +289,19 @@ class xarRequest extends Object
     {
         $this->dispatched = $flag ? true : false;
         return true;
+    }
+
+    public function isAJAX()
+    {
+        if (!isset($this->isAjax)) {
+            $xhp = xarServer::getVar('HTTP_X_REQUESTED_WITH');
+            if (isset($xhp) && (strtolower($xhp) === 'xmlhttprequest')) {
+                $this->isAjax = true;
+            } else {
+                $this->isAjax = false;
+            }
+        }
+        return $this->isAjax;
     }
 }
 
