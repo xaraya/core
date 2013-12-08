@@ -719,6 +719,7 @@ class xarJS extends Object
     {
         if (empty($scope) || empty($file) || empty($base)) return;
 
+        // set common paths to look in
         $themeDir = xarTpl::getThemeDir();
         $commonDir = xarTpl::getThemeDir('common');
         $codeDir = sys::code();
