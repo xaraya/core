@@ -317,7 +317,13 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
             sys::import('xaraya.database');
     
             // Connect to database
-            xarDB_init($systemArgs);
+            try {
+                xarDB_init($systemArgs);
+            } catch (Exception $e) {
+                // Catch the error here rather than in the subsystem, because we might be connection to different databases
+                // and want to cater to possible errors in each
+                die("Connection error: a database connection could not be established");
+            }
             $whatToLoad ^= xarCore::BIT_DATABASE;
         }
 

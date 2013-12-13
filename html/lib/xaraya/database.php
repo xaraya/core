@@ -46,7 +46,11 @@ function xarDB_init(array &$args)
     xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
 
     if(!isset($args['doConnect']) or $args['doConnect']) {
-      xarDBNewConn($args);
+        try {
+            xarDBNewConn($args);
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
     return true;
 }
@@ -83,7 +87,6 @@ function &xarDBNewConn(array $args = null)
         $conn = xarDB::getConnection($dsn,$flags); // cached on dsn hash, so no worries
     } catch (Exception $e) {
         throw $e;
-//        die("Connection error: a database connection could not be established");
     }
     xarLogMessage("New connection created, now serving " . xarDB::$count . " connections");
     return $conn;
