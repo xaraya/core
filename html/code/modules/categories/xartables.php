@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -11,19 +10,16 @@
  * @link http://www.xaraya.com
  * @link http://xaraya.com/index.php/release/147.html
  *
- * @author Jim McDonald, Flávio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
+ * @author Jim McDonald, Flï¿½vio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
  */
 
 /**
- * specifies module tables namees
+ * Specifies module tables namees
  *
- * @author  Jim McDonald, Flávio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
- * @access  public
- * @param   none
- * @return  $xartable array
- * @throws  no exceptions
- * @todo    nothing
-*/
+ * @author  Jim McDonald, Flï¿½vio Botelho <nuncanada@xaraya.com>
+ * @author  mikespub <postnuke@mikespub.net>
+ * @return  array Table information
+ */
 function categories_xartables()
 {
     // Initialise table array

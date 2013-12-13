@@ -29,7 +29,7 @@ function modules_admin_modinfo()
 
     // obtain maximum information about module
     $modinfo = xarMod::getInfo($id);
-    
+
     // data vars for template
     $data['modid']              = xarVarPrepForDisplay($id);
     $data['modname']            = xarVarPrepForDisplay($modinfo['name']);
@@ -51,9 +51,15 @@ function modules_admin_modinfo()
     $data['modauthor']          = xarVarPrepForDisplay($modinfo['author']);
     $data['modcontact']         = xarVarPrepForDisplay($modinfo['contact']);
     if(!empty($modinfo['dependencyinfo'])){
+
         $dependencies = array();
         foreach ($modinfo['dependencyinfo'] as $key => $value) {
-            $dependencies[] = $value . ' (' . $key . ')';
+            if ($key != 0) {
+                $data['link'] = xarModURL('modules','admin','modinfo', array('id' => $key));
+                $dependencies[] = '<a href="'.$data["link"].'">'.$value['name'].'</a>';
+            } else {
+                $dependencies[] = $value['name'];
+            }
             $data['moddependencies'] = implode(', ', $dependencies);
         }
     } else {
@@ -61,7 +67,7 @@ function modules_admin_modinfo()
     }
     
     $modname = $modinfo['name'];
-    $subjects = array();
+/*    $subjects = array();
     $observers = xarEvents::getObserverModules();
     $hookobservers = xarHooks::getObserverModules($modname);
     //$hooksubjects = xarHooks::getSubjectModules();
@@ -69,7 +75,7 @@ function modules_admin_modinfo()
     if (!empty($hookobservers[$modname]['hooks'])) {
         $data['hookobservers'] = $hookobservers[$modname]['hooks'];
     }
-        
+        */
     return $data;
 }
 

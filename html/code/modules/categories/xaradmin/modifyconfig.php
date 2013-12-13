@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -13,9 +12,12 @@
  *
  */
 
-/**
- * modify configuration
- */
+    /**
+     * Function to modify admin configuration
+     * 
+     * @param void N/A
+     * @return array|boolean Returns display data array or true on success, null on failure.
+     */
     function categories_admin_modifyconfig()
     {
         // Security Check

@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,17 +13,19 @@
  */
 
 /**
- * delete all category links for a module - hook for ('module','remove','API')
- * // TODO: remove per itemtype ?
- *
+ * Delete all category links for a module - hook for ('module','remove','API')
+ * 
  * @param $args['objectid'] ID of the object (must be the module name here !!)
  * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @return array Data array
+ * @throws BadParameterException Thrown is invalid parameters have been given
  */
 function categories_adminapi_removehook($args)
 {
+    /**
+     * Pending
+     * TODO: remove per itemtype ?
+     */
     extract($args);
 
     if (!isset($extrainfo)) {

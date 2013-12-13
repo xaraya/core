@@ -2,7 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
+ * @package modules\categories
  * @subpackage categories module
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -14,7 +14,14 @@
  */
 
 /**
+ * 
+ */
+
+/**
  * Manage definition of instances for privileges (unfinished)
+ * 
+ * @param array $args Parameter data array
+ * @return array|null Return display data array on success, null on failure.
  */
 function categories_admin_privileges($args)
 {

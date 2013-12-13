@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,7 +13,7 @@
  */
 
 /**
- * return the field names and correct values for joining on categories table
+ * Return the field names and correct values for joining on categories table
  * example : SELECT ..., $cid, ...
  *           FROM ...
  *           LEFT JOIN $table
@@ -25,26 +24,26 @@
  *
  * @param $args['modid'] your module ID (use xarMod::getRegId('mymodule'))
  * @param $args['itemtype'] your item type (default is none) or array of itemtypes
- *
  * @param $args['iids'] optional array of item ids that we are selecting on
  * @param $args['cids'] optional array of cids we're counting for (OR/AND)
  * @param $args['andcids'] true means AND-ing categories listed in cids
  * @param $args['groupcids'] the number of categories you want items grouped by
- *
  * @param $args['cidtree'] get items in cid or anywhere below it (= slower than cids, usually)
  *
- * @returns array
- * @return array('table' => 'xar_categories_linkage',
+ * @return array Returns an array in the following format array('table' => 'xar_categories_linkage',
  *               'field' => 'xar_categories_linkage.item_id',
  *               'where' => 'xar_categories_linkage.module_id = ...
  *                           AND xar_categories_linkage.id IN (...)',
  *               'category_id'   => 'xar_categories_linkage.category_id',
  *               ...
  *               'moduleid' => 'nuke_categories_linkage.module_id')
- * @todo think about qstr() and bindvars here, this function return a string, so it's a bit harder
  */
 function categories_userapi_leftjoin($args)
 {
+    /**
+     * Pending 
+     * @todo think about qstr() and bindvars here, this function return a string, so it's a bit harder
+     */
     // Get arguments from argument array
     extract($args);
 

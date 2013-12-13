@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,7 +13,10 @@
  */
 
 /**
- * update item from categories_admin_modify
+ * Update item from categories_admin_modify
+ * 
+ * @param void N/A
+ * @return boolean|null Returns true on success, null on failure
  */
 function categories_admin_update()
 {

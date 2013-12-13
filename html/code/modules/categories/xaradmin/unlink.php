@@ -14,7 +14,14 @@
  */
 
 /**
- * Delete category links of module items
+ * 
+ */
+
+/**
+ * Delete category links of module items.
+ * 
+ * @param void N/A
+ * @return boolean|null Returns true on success, null on failure.
  */
 function categories_admin_unlink()
 { 

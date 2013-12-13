@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,7 +13,10 @@
  */
 
 /**
- * the main user function
+ * The main user function
+ * 
+ * @param void N/A
+ * @return array Returns display data array
  */
 function categories_user_main()
 {

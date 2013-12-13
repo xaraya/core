@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,7 +13,7 @@
  */
 
 /**
- * link items to categories
+ * Link items to categories
  * @param $args['cids'] Array of IDs of the category
  * @param $args['iids'] Array of IDs of the items
  * @param $args['basecids'] Array of IDs of the base category
@@ -26,6 +25,21 @@
  * @param $args['clean_first'] If is set to true then any link of the item IDs
  *                             at iids will be removed before inserting the
  *                             new ones
+ */
+
+/**
+ * Link items to categories or links each cid in cids to each iid in iids
+ * 
+ * @param $args['cids'] Array of IDs of the category
+ * @param $args['iids'] Array of IDs of the items
+ * @param $args['basecids'] Array of IDs of the base category
+ * @param $args['modid'] ID of the module
+ * @param $args['itemtype'] item type
+ * @param $args['clean_first'] If is set to true then any link of the item IDs
+ *                             at iids will be removed before inserting the
+ *                             new ones
+ * @return boolean|null Returns true on success, null on failure.
+ * @throws BadParameterException Thrown if invalid parameters have been given
  */
 function categories_adminapi_linkcat($args)
 {

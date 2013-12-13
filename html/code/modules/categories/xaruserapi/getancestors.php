@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,8 +13,7 @@
  */
 
 /**
- * TODO: point 'getparents()' to this function.
- * Get ancestors (starting with parent, working towards root) of a specific
+ * * Get ancestors (starting with parent, working towards root) of a specific
  * [list of] category. This function used to be 'getparents', the new name
  * being less ambiguous (see XLST AxisNames for examples).
  *
@@ -25,11 +23,16 @@
  * @param $args['return_itself'] alias of 'self'
  * @param $args['order'] 'root' or 'self' first; default 'root' (i.e. oldest ancestor first)
  * @param $args['descendants'] array to determine how descendants will be returned: 'tree', 'lists', 'list', ['none']
- * @returns array
- * @return array of category info arrays, false on failure
+ * @staticvar array $cached
+ * @param type $args
+ * @return boolean|array Returns array of category info or false on failure
  */
 function categories_userapi_getancestors($args)
 {
+    /**
+     * Pending
+     * TODO: point 'getparents()' to this function.
+     */
     // Cache each database retrieval.
     // The final result will be an array of aliases (aka pointers) into this cache.
     static $cached = array();

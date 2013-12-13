@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -13,6 +12,13 @@
  *
  */
 
+/**
+ * Updates celko links
+ * 
+ * @param array $args Parameter data array
+ * @return boolean|null Returns true on success, null on failure.
+ * @throws BadParameterExcepton Thrown is invalid parameters have been given.
+ */
 function categories_adminapi_updatecelkolinks($args)
 {
     extract($args);
@@ -65,7 +71,7 @@ function categories_adminapi_updatecelkolinks($args)
        $distance = $point_of_insertion - $cat['left'];
 
        // If necessary to move then evaluate
-       if ($distance != 0) { // It´s Moving, baby!  Do the Evolution!
+       if ($distance != 0) { // Itï¿½s Moving, baby!  Do the Evolution!
           if ($distance > 0)
           { // moving forward
               $distance = $point_of_insertion - $cat['right'] - 1;

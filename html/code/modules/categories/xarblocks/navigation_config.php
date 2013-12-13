@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -17,10 +16,12 @@ sys::import('modules.categories.xarblocks.navigation');
 
 class Categories_NavigationBlockConfig extends Categories_NavigationBlock implements iBlock
 {
-/**
- * Modify Function to the Blocks Admin
- * @param $data array containing title,content
- */
+    /**
+     * Modify Function to the Blocks Admin
+     * 
+     * @param void N/A
+     * @return array Returns data array
+     */
     public function configmodify()
     {
         $data = $this->getContent();
@@ -96,10 +97,12 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
         return $data;
     }
 
-/**
- * Updates the Block config from the Blocks Admin
- * @param $data array containing title,content
- */
+    /**
+     * Updates the Block config from the Blocks Admin
+     * 
+     * @param array $data Parameter data array
+     * @return boolean|null Returns true on success and null on failure 
+     */
     public function configupdate(Array $data=array())
     {
         if(!xarVarFetch('layout',       'isset', $vars['layout'],       $this->layout, XARVAR_DONT_SET)) {return;}

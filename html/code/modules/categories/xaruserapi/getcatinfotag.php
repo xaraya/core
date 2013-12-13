@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -28,9 +27,9 @@
  * the tag at runtime. The parameter 'runtime' defines the runtime mode.
  *
  * @author Jason Judge
- * @param $args array containing the form field definition of the module, type, id, base, ...
+ * @param $args Array containing the form field definition of the module, type, id, base, ...
  * @returns string
- * @return empty string
+ * @return string Returns category information tag string or an empty string on failure
  */
 function categories_userapi_getcatinfotag($args)
 {

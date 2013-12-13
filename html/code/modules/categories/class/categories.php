@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -18,6 +17,12 @@
 
     class Categories extends Object
     {
+        /**
+         * Fetches CategoryTreeNode object from database
+         * 
+         * @param int $id Id of the CategoryTreeNode
+         * @return \CategoryTreeNode
+         */
         function get(int $id)
         {
             $dbconn = xarDB::getConn();
@@ -64,6 +69,12 @@
 
         public $cidlist = null;
 
+        /**
+         * Fetches a collection of the node's children
+         * 
+         * @param void N/A
+         * @return object Collection of \CategoryTreeNode
+         */
         function getChildren()
         {
             $dbconn = xarDB::getConn();
@@ -93,11 +104,20 @@
             return $collection;
         }
 
+        /**
+         * Returns the parent of the CategoryTreeNode
+         * 
+         * @param void N/A
+         * @return \CategoryTreeNode
+         */
         function getParent()
         {
             return Categories::get($this->parent);
         }
 
+        /**
+         * Not implemented
+         */
         function getChildAt()
         {
 
@@ -118,6 +138,12 @@
         }
 
 
+        /**
+         * Check is a CategoryTreeNode is a descendant
+         * 
+         * @param CategoryTreeNode $n Node to look up
+         * @return boolean True if the given CategoryTreeNode is a decendant
+         */
         function isDescendant(CategoryTreeNode $n)
         {
             $dbconn = xarDB::getConn();
@@ -143,15 +169,30 @@
             }
         }
 
+        /**
+         * Load values from array
+         * @param array $args Data array for CategoryTreeNode
+         */
         function load(Array $args)
         {
             foreach($args as $key => $value) $this->$key = $value;
         }
 
+        /**
+         * Set filter
+         * @param type $args Filter Data aray
+         */
         function setfilter($args=array())
         {
             foreach ($args as $key => $value) $this->$key = $value;
         }
+        
+        /**
+         * Return this object as an array
+         * 
+         * @param void N/A
+         * @return array CategoryTreeNode information as array
+         */
         function toArray()
         {
             return array('id' => $this->id, 'name' => $this->name);

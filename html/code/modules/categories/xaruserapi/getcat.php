@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,19 +13,8 @@
  */
 
 /**
- * get categories
- *
- * @param $args['cid'] =Integer= restrict output only to this category ID and its sibbling (default none)
- * @param $args['eid'] =Integer= do not output this category and its sibblings (default none)
- * @param $args['maximum_depth'] =Integer= return categories with the given depth or less
- * @param $args['minimum_depth'] =Integer= return categories with the given depth or more
- * @param $args['indexby'] =string= specify the index type for the result array (default 'default')
- *  They only change the output IF 'cid' is set:
- *    @param $args['getchildren'] =Boolean= get children of category (default false)
- *    @param $args['getparents'] =Boolean= get parents of category (default false)
- *    @param $args['return_itself'] =Boolean= return the cid itself (default false)
- * @return =Array= of categories, or =Boolean= false on failure
-
+ * Get categories
+ * 
  * Examples:
  *    getcat() => Return all the categories
  *    getcat(Array('cid' -> ID)) => Only cid and its children, grandchildren and
@@ -34,6 +22,17 @@
  *    getcat(Array('eid' -> ID)) => All categories will be returned EXCEPT
  *                                   eid and its children, grandchildren and
  *                                   every other sibbling will be returned
+ * 
+ * @param $args['cid'] =Integer= restrict output only to this category ID and its sibbling (default none)
+ * @param $args['eid'] =Integer= do not output this category and its sibblings (default none)
+ * @param $args['maximum_depth'] =Integer= return categories with the given depth or less
+ * @param $args['minimum_depth'] =Integer= return categories with the given depth or more
+ * @param $args['indexby'] =string= specify the index type for the result array (default 'default')
+ *  They only change the output IF 'cid' is set:
+ * @param $args['getchildren'] =Boolean= get children of category (default false)
+ * @param $args['getparents'] =Boolean= get parents of category (default false)
+ * @param $args['return_itself'] =Boolean= return the cid itself (default false)
+ * @return array|boolean Returns array of categories, or false on failure
  */
 function categories_userapi_getcat($args)
 {

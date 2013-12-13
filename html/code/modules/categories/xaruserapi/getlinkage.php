@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -13,6 +12,12 @@
  *
  */
 
+/**
+ * Fetches category linkage from database
+ * 
+ * @param array $args Parameter data array
+ * @return array Linkage data array
+ */
 function categories_userapi_getlinkage($args)
 {
     extract($args);

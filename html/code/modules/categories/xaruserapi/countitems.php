@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,13 +13,12 @@
  */
 
 /**
- * count number of items
+ * Count number of items
  * @param $args['cids'] optional array of cids we're counting for (OR/AND)
  * @param $args['andcids'] true means AND-ing categories listed in cids
- * @param $args['modid'] module´s ID
+ * @param $args['modid'] moduleï¿½s ID
  * @param $args['itemtype'] item type
- * @returns int
- * @return number of items
+ * @return int Returns the item count
  */
 function categories_userapi_countitems($args)
 {

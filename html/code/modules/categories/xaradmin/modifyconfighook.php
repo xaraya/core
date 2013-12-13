@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,13 +13,12 @@
  */
 
 /**
- * modify configuration for a module - hook for ('module','modifyconfig','GUI')
- *
+ * Modify configuration for a module - hook for ('module','modifyconfig','GUI')
+ * 
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @return string Returns display string
+ * @throws BadParameterException Thrown if modid was not found
  */
 function categories_admin_modifyconfighook($args)
 {

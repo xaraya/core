@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,14 +13,13 @@
  */
 
 /**
- * get info on neighbours based on left/right numbers
+ * Get info on neighbours based on left/right numbers
  * (easiest is to pass it a category array coming from getcat*)
  *
  * @param $args['left'] left number
  * @param $args['right'] right number
-// * @param $args['parent'] parent id (optional)
- * @returns array
- * @return TODO
+ * @param $args['parent'] parent id (optional)
+ * @return array Returns array containing neighbours info
  */
 function categories_userapi_getneighbours($args)
 {

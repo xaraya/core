@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -13,9 +12,10 @@
  *
  */
 /**
- * the main administration function
+ * The main administration function
+ * 
  * This function redirects to the view categories function
- * @return bool true on success
+ * @return bool Returns true on success, false on failure
  */
 function categories_admin_main()
 {

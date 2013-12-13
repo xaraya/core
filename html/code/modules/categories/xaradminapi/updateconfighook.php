@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,14 +13,12 @@
  */
 
 /**
- * update configuration for a module - hook for ('module','updateconfig','API')
+ * Update configuration for a module - hook for ('module','updateconfig','API')
  * Needs $extrainfo['cids'] from arguments, or 'cids' from input
  *
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
- * @returns bool
- * @return true on success, false on failure
- * @raise BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @return array Returns data array.
  */
 function categories_adminapi_updateconfighook($args)
 {

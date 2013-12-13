@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,11 +13,10 @@
  */
 
 /**
- * get info on a specific (list of) category
+ * Get info on a specific (list of) category
  * @param $args['cid'] id of category to get info, or
  * @param $args['cids'] array of category ids to get info
- * @returns array
- * @return category info array, or array of cat info arrays, false on failure
+ * @return array Returns category info array, or array of cat info arrays, false on failure
  */
 function categories_userapi_getcatinfo($args)
 {

@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -12,11 +11,12 @@
  * @link http://xaraya.com/index.php/release/147.html
  *
  */
+
 /**
  * Check category links for orphans
- * @param int modid The module ID
- * @param int itemtype The id for the itemtype
- * @return array returns the data for the template
+ * 
+ * @param void N/A
+ * @return array|boolean Returns data array on success, false|null on failure
  */
 function categories_admin_checklinks()
 {

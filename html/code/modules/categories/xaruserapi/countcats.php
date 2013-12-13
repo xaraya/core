@@ -2,8 +2,7 @@
 /**
  * Categories Module
  *
- * @package modules
- * @subpackage categories module
+ * @package modules\categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,15 +13,14 @@
  */
 
 /**
- * count number of categories (optionally below some category)
+ * Count number of categories (optionally below some category)
  * Usage : $num = xarMod::apiFunc('categories', 'user', 'countcats', $cat);
  *         $total = xarMod::apiFunc('categories', 'user', 'countcats', array());
  *
  * @param $args['cid'] The ID of the category you are counting for (optional)
  * @param $args['left_id'] The left value for that category (optional)
  * @param $args['right_id'] The right value for that category (optional)
- * @returns int
- * @return number of categories
+ * @return int Returns number of categories
  */
 function categories_userapi_countcats($args)
 {
