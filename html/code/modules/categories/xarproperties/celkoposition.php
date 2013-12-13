@@ -53,7 +53,7 @@ class CelkoPositionProperty extends DataProperty
     public $position          = 2;          // By default the position of this item is after the previous item
     public $rightorleft;
     public $inorout;
-//    public $parent;
+
     public $catexists;
     public $dbconn;
     public $itemindices     = array();    // helper variable to hold items when importing
@@ -66,6 +66,8 @@ class CelkoPositionProperty extends DataProperty
     public $initialization_celkoparent_id = 'parent_id';
     public $initialization_celkoleft_id   = 'left_id';
     public $initialization_celkoright_id  = 'right_id';
+
+    public $atomic_value    = array();    // The atomic calues of this property are lrft, right and parent
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -470,6 +472,15 @@ class CelkoPositionProperty extends DataProperty
     public function getItemValue($id) 
     {
         return serialize($this->getItem($id));
+    }
+    
+    public function mountValue($id) 
+    {
+        $result = $this->getItem($id);
+        if (empty($result)) return $result;
+        $this->atomic_value['left'] = $result['left_id'];
+        $this->atomic_value['right'] = $result['right_id'];
+        $this->atomic_value['parent'] = $result['parent_id'];
     }
     
 /**
