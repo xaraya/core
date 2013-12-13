@@ -76,13 +76,17 @@ class MySQLConnection extends ConnectionCommon implements Connection {
 		$encoding = !empty($dsninfo['encoding']) ? $dsninfo['encoding'] : null;
 
         @ini_set('track_errors', true);
-        if ($dbhost && $user && $pw) {
-            $conn = $persistent ? mysql_pconnect($dbhost, $user, $pw, $connect_flags) : mysql_connect($dbhost, $user, $pw, null, $connect_flags);
-        } elseif ($dbhost && $user) {
-            $conn = $persistent ? mysql_pconnect($dbhost, $user, null, $connect_flags) : mysql_connect($dbhost, $user, null, null, $connect_flags);
-        } elseif ($dbhost) {
-            $conn = $persistent ? mysql_pconnect($dbhost, null, null, $connect_flags) : mysql_connect($dbhost, null, null, null, $connect_flags);
-        } else {
+        try {
+            if ($dbhost && $user && $pw) {
+                $conn = $persistent ? mysql_pconnect($dbhost, $user, $pw, $connect_flags) : mysql_connect($dbhost, $user, $pw, null, $connect_flags);
+            } elseif ($dbhost && $user) {
+                $conn = $persistent ? mysql_pconnect($dbhost, $user, null, $connect_flags) : mysql_connect($dbhost, $user, null, null, $connect_flags);
+            } elseif ($dbhost) {
+                $conn = $persistent ? mysql_pconnect($dbhost, null, null, $connect_flags) : mysql_connect($dbhost, null, null, null, $connect_flags);
+            } else {
+                $conn = false;
+            }
+        } catch (Exception $e) {
             $conn = false;
         }
         @ini_restore('track_errors');
