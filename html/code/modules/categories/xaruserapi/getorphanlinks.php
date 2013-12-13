@@ -34,10 +34,21 @@ function categories_userapi_getorphanlinks($args)
         $itemtype = 0;
     }
 
+    sys::import('xaraya.structures.query');
+    $tables =& xarDB::getTables();
+    $q = new Query();
+    $q->addtable($tables['categories'], 'c');
+    $q->addtable($tables['categories_linkage'], 'cl');
+    $q->leftjoin('cl.category_id', 'c.id');
+    $q->addfield('cl.category_id');
+    $q->eq('c.id', NULL);
+    $q->addgroup('cl.category_id');
+    $q->run();
+    $q->qecho();
     sys::import('modules.categories.class.worker');
     $worker = new CategoryWorker();
     $catbases = $worker->getcatbases(
-                              array('modid'    => $modid,
+                              array('module_id'    => $modid,
                                     'itemtype' => $itemtype));
     if (empty($catbases)) {
         $args['reverse'] = 1;
@@ -66,7 +77,7 @@ function categories_userapi_getorphanlinks($args)
     $dbconn = xarDB::getConn();
 
     // Table definition
-    $xartable = xarDB::getTables();
+    $xartable =& xarDB::getTables();
     $categoriestable = $xartable['categories'];
     $categorieslinkagetable = $xartable['categories_linkage'];
 
