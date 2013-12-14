@@ -14,7 +14,11 @@
                         #$key#
                     </td>
                     <td>
-                        #$setting#
+                        <xar:if condition="is_array($setting)">
+                            Array
+                        <xar:else/>
+                            #$setting#
+                        </xar:if>
                     </td>
                 </tr>
             </xar:foreach>
