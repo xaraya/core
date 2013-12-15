@@ -12,7 +12,7 @@
  * @link http://xaraya.com/index.php/release/147.html
  *
  * @subpackage categories module
- * @author Jim McDonald, Flávio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
+ * @author Jim McDonald, Flavio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
 */
     $modversion['name']           = 'categories';
     $modversion['id']             = '147';
