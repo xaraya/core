@@ -176,6 +176,27 @@
         public function getcatbases($args)
         {
             extract($args);
+            if (!isset($object)) throw new Exception(xarML('Nissing object for getcatbases'));
+            sys::import('modules.dynamicdata.class.objects.master');
+            $object = DataObjectMaster::getObject(array('name' => $object));
+
+            if (!isset($property) && isset($object->properties['categories'])) {
+                $property = $object->properties['categories'];
+            } elseif (isset($property)) {
+                $property = $object->properties[$property];
+            } else {
+                return array();
+            }
+            
+            $configuration = $property->initialization_basecategories;
+            $base_values = $configuration[1];
+            $bases = array();
+            foreach ($base_values as $base_value) {
+                $base = (int)$base_value[1][0];
+                $bases[] = $base;
+            }
+            return $bases;
+            
             $xartable =& xarDB::getTables();
         
             sys::import('xaraya.structures.query');
