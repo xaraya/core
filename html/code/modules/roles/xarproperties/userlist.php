@@ -33,7 +33,8 @@ class UserListProperty extends SelectProperty
     public $initialization_userlist = '';
     public $initialization_orderlist = '';
     public $validation_group_list           = null;
-    public $validation_override             = true;
+    public $validation_override             = true;    // Allow values not in the dropdown
+    public $display_profile_link            = false;   // Wrap the output valuee in a link to the user's profile
     public $display_showfields = '';
     public $display_showglue = '';
 
@@ -124,6 +125,8 @@ class UserListProperty extends SelectProperty
     // in a link or not.
     public function showOutput(Array $data = array())
     {
+        if (isset($data['profile_link'])) $this->display_profile_link = $data['profile_link'];
+        
         extract($data);
         if (!isset($value)) $value = $this->value;
 
@@ -166,4 +169,23 @@ class UserListProperty extends SelectProperty
         return $options;
     }
 }
+
+
+sys::import('modules.dynamicdata.class.properties.interfaces');
+
+class UserListPropertyInstall extends UserListProperty implements iDataPropertyInstall
+{
+    public function install(Array $data=array())
+    {
+        $dat_file = sys::code() . 'modules/roles/xardata/userlist_configurations-dat.xml';
+        $data = array('file' => $dat_file);
+        try {
+            $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+        } catch (Exception $e) {
+            //
+        }
+        return true;
+    }
+}
+
 ?>
