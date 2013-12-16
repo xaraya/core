@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:if condition="$profile_display">
+    <xar:if condition="$profile_link">
         <a href="#xarModURL('roles','user','display',array('id'=>$value))#">
             #$user#
         </a>
