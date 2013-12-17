@@ -34,7 +34,7 @@ class UserListProperty extends SelectProperty
     public $initialization_orderlist = '';
     public $validation_group_list           = null;
     public $validation_override             = true;    // Allow values not in the dropdown
-    public $display_profile_link            = false;   // Wrap the output valuee in a link to the user's profile
+    public $display_profile_link            = false;   // Wrap the output value in a link to the user's profile
     public $display_showfields = '';
     public $display_showglue = '';
 
@@ -170,7 +170,6 @@ class UserListProperty extends SelectProperty
     }
 }
 
-
 sys::import('modules.dynamicdata.class.properties.interfaces');
 
 class UserListPropertyInstall extends UserListProperty implements iDataPropertyInstall
@@ -187,5 +186,4 @@ class UserListPropertyInstall extends UserListProperty implements iDataPropertyI
         return true;
     }
 }
-
 ?>
