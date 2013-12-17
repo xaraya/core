@@ -388,7 +388,7 @@ class SelectProperty extends DataProperty
 
 sys::import('modules.dynamicdata.class.properties.interfaces');
 
-class SelectPropertyInstall extends SelectProperty implements iDataPropertyInstall
+class DropdownPropertyInstall extends SelectProperty implements iDataPropertyInstall
 {
     public function install(Array $data=array())
     {
