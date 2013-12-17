@@ -33,7 +33,8 @@ class SelectProperty extends DataProperty
     public $initialization_options          = null;
     public $validation_override             = false;
     public $validation_override_invalid;
-    public $display_rows                    = 0;   // If there are more than these rows,display as a textbox
+    public $display_rows                    = 0;       // If there are more than these rows,display as a textbox
+    public $display_option_link             = false;   // Wrap the output value in a link to the option's display page
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -142,6 +143,7 @@ class SelectProperty extends DataProperty
 
     public function showOutput(Array $data = array())
     {
+        if (isset($data['option_link'])) $this->display_option_link = $data['option_link'];
         if (isset($data['value'])) $this->value = $data['value'];
 
         // If we have options passed, take them.
@@ -384,4 +386,20 @@ class SelectProperty extends DataProperty
     }
 }
 
+sys::import('modules.dynamicdata.class.properties.interfaces');
+
+class SelectPropertyInstall extends SelectProperty implements iDataPropertyInstall
+{
+    public function install(Array $data=array())
+    {
+        $dat_file = sys::code() . 'modules/base/xardata/dropdown_configurations-dat.xml';
+        $data = array('file' => $dat_file);
+        try {
+            $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+        } catch (Exception $e) {
+            //
+        }
+        return true;
+    }
+}
 ?>

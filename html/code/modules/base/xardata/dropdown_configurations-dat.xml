@@ -1,0 +1,11 @@
+<items>
+  <configurations itemid="531">
+    <id>531</id>
+    <name>display_option_link</name>
+    <label>Option Link Display</label>
+    <description>Wrap the property in a link that points to the option's display page</description>
+    <property_id>14</property_id>
+    <ignore_empty>0</ignore_empty>
+    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+  </configurations>
+</items>
