@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="!empty($option['name'])">
-        <xar:if condition="$option_link">
+        <xar:if condition="!empty($option_link)">
             <xar:if condition="!empty($option['link'])">
                 <a href="#$option.link#">#$option.name#</a>
             <xar:else/>
