@@ -244,7 +244,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
             || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)) continue;
 
-            $args['properties'][$name] = $this->properties[$name];
+            $args['properties'][$name] =& $this->properties[$name];
         }
 
         // pass some extra template variables for use in BL tags, API calls etc.
@@ -291,9 +291,9 @@ class DataObject extends DataObjectMaster implements iDataObject
             || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)) continue;
 
             if ($this->properties[$name]->type == 21 || !isset($this->hookvalues[$name])) {
-                $args['properties'][$name] = $this->properties[$name];
+                $args['properties'][$name] =& $this->properties[$name];
             } else {
-                $args['properties'][$name] = $this->properties[$name];
+                $args['properties'][$name] =& $this->properties[$name];
                 $args['properties'][$name]->value = $this->hookvalues[$name];
             }
         }
@@ -346,6 +346,12 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function createItem(Array $args = array())
     {
+        // Sanity check: do we have a primary field?
+        if (empty($this->primary)) {
+            $msg = xarML("Cannot create an item: the object has no primary field");
+            die($msg);
+        }
+        
         //  The id of the item to be created is
         //  1. An itemid arg passed
         //  2. An id arg passed ot the primary index
@@ -366,7 +372,8 @@ class DataObject extends DataObjectMaster implements iDataObject
         } elseif (!empty($this->properties[$this->primary]->value)) {
             $this->itemid = $this->properties[$this->primary]->value;
         }
-        // special case when we try to create a new object handled by dynamicdata
+        
+        // Special case when we try to create a new object handled by dynamicdata
         if(
             $this->objectid == 1 &&
             $this->properties['module_id']->value == xarMod::getRegID('dynamicdata')
@@ -408,6 +415,12 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function updateItem(Array $args = array())
     {
+        // Sanity check: do we have a primary field?
+        if (empty($this->primary)) {
+            $msg = xarML("Cannot update an item: the object has no primary field");
+            die($msg);
+        }
+        
         if(count($args) > 0) {
             if(!empty($args['itemid']))
                 $this->itemid = $args['itemid'];
@@ -448,6 +461,12 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function deleteItem(Array $args = array())
     {
+        // Sanity check: do we have a primary field?
+        if (empty($this->primary)) {
+            $msg = xarML("Cannot delete an item: the object has no primary field");
+            die($msg);
+        }
+        
         if(!empty($args['itemid']))
             $this->itemid = $args['itemid'];
 
