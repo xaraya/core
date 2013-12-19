@@ -20,7 +20,7 @@
             #xarController::redirect(xarServer::getCurrentURL(array('update'=> null)))#
         </xar:if>
         <form method="post">
-        <p>Please specify which objects should be shown to your users here</p>
+        <p>Please specify which objects should be shown to your (not signed on) users here</p>
         <ul>
             <xar:foreach in="$object:items" value="$item">
                 <xar:if condition="empty($startlist)">
