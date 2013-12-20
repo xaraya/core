@@ -348,7 +348,7 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         // Sanity check: do we have a primary field?
         if (empty($this->primary)) {
-            $msg = xarML("Cannot create an item: the object has no primary field");
+            $msg = xarML('The object #(1) has no primary key', $this->name);
             die($msg);
         }
         
@@ -415,12 +415,6 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function updateItem(Array $args = array())
     {
-        // Sanity check: do we have a primary field?
-        if (empty($this->primary)) {
-            $msg = xarML("Cannot update an item: the object has no primary field");
-            die($msg);
-        }
-        
         if(count($args) > 0) {
             if(!empty($args['itemid']))
                 $this->itemid = $args['itemid'];
@@ -461,12 +455,6 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function deleteItem(Array $args = array())
     {
-        // Sanity check: do we have a primary field?
-        if (empty($this->primary)) {
-            $msg = xarML("Cannot delete an item: the object has no primary field");
-            die($msg);
-        }
-        
         if(!empty($args['itemid']))
             $this->itemid = $args['itemid'];
 
