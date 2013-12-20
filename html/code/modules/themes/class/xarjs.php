@@ -828,10 +828,10 @@ class xarJS extends Object
         $candidates = array();
 
         if (isset($this->local_libs[$lib])) {
-            $lib = $this->local_libs[$lib];
+            $thislib = $this->local_libs[$lib];
         
             // Start by taking the latest version
-            $scripts = $lib->scripts;
+            $scripts = $thislib->scripts;
             foreach ($scripts as $version => $versionarray) {
                 foreach ($versionarray as $scope => $scopearray) {
                     foreach ($scopearray as $package => $packagearray) {
@@ -848,6 +848,7 @@ class xarJS extends Object
         }
 
         foreach ($this->remote_libs as $thislib) {
+            if (!empty($lib) && ($thislib['lib'] != $lib)) continue;
             if (!empty($src) && ($thislib['src'] != $src)) continue;
             if (!empty($vers) && ($thislib['version'] != $vers)) continue;
             $candidates[] = $thislib;
