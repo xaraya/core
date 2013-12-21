@@ -317,8 +317,8 @@ class xarRequest extends Object
             } else {
                 echo $msg;
             }
+            exit;
         }
-        exit;
     }
 }
 
