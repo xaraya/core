@@ -501,6 +501,9 @@ function xarSecGenAuthKey($modName = NULL)
  */
 function xarSecConfirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=false)
 {
+    // We don't need this check for AJAX calls
+    if (xarController::$request->isAjax()) return true;
+
     if(!isset($modName)) list($modName) = xarController::$request->getInfo();
     $authid = xarController::getVar($authIdVarName);
 

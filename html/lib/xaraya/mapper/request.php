@@ -303,6 +303,23 @@ class xarRequest extends Object
         }
         return $this->isAjax;
     }
+
+    public function exitAjax()
+    {
+        if ($this->isAjax()) exit;
+    }
+
+    public function msgAjax($msg)
+    {
+        if ($this->isAjax()) {
+            if (is_array($msg)) {
+                var_dump($msg);
+            } else {
+                echo $msg;
+            }
+        }
+        exit;
+    }
 }
 
 ?>
