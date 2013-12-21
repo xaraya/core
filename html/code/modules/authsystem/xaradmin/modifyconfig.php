@@ -32,6 +32,7 @@ function authsystem_admin_modifyconfig()
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'authsystem'));
     $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls');
     $data['module_settings']->getItem();
+    
     switch (strtolower($phase)) {
         case 'modify':
         default:
@@ -44,6 +45,8 @@ function authsystem_admin_modifyconfig()
             }        
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
+                // If this is an AJAX call, send back a message (and end)
+                xarController::$request->msgAjax($data['module_settings']->displayInvalids());
                 return xarTpl::module('authsystem','admin','modifyconfig', $data);        
             } else {
                 $itemid = $data['module_settings']->updateItem();
@@ -51,6 +54,9 @@ function authsystem_admin_modifyconfig()
             xarModVars::set('authsystem', 'uselockout', $data['uselockout']);
             xarModVars::set('authsystem', 'lockouttime', $data['lockouttime']);
             xarModVars::set('authsystem', 'lockouttries', $data['lockouttries']);
+            
+            // If this is an AJAX call, end here
+            xarController::$request->exitAjax();
             break;
     }
     return $data;
