@@ -2,6 +2,20 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <div id="xar-message">
-        
+        <xar:if condition="isset($message)">
+            <xar:if condition="is_array($message)">
+                <xar:foreach values="$message" key="$title" value="$text">
+                    <div>
+                        #$title#<br/>
+                        #$text#
+                    </div>
+                </xar:foreach>
+            <xar:else/>
+                <div>
+                    #$message#
+                </div>
+            </xar:if>
+        <xar:else/>
+        </xar:if>
     </div>
 </xar:template>
