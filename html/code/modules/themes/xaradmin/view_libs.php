@@ -187,7 +187,7 @@ function themes_admin_view_libs()
                 $libobject->remote_libs[$id]['origin'] = 'remote';
             }
             
-            // Ad a new remote library
+            // Add a new remote library
             if(!xarVarFetch('new_lib',      'str', $new_lib,      '', XARVAR_DONT_SET)) {return;}
             if (!empty($new_lib)) {
                 if(!xarVarFetch('new_id',       'str', $new_id,       '', XARVAR_DONT_SET)) {return;}
