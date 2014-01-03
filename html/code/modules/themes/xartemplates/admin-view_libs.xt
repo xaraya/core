@@ -206,7 +206,7 @@
                     <table class="table xar-table">
                         <thead>
                             <tr>
-                                <th>Sequence</th>
+                                <!-- <th>Sequence</th> -->
                                 <th>Type</th>
                                 <th>Name</th>
                                 <th>Version</th>
@@ -224,14 +224,14 @@
                         <xar:else/>
                             <xar:foreach in="$fieldvalues" value="$value">
                                 <tr>
-                                    <td>
                                         <xar:set name="name">'dd_id[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_id_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['id']" value="$value['id']" hidden="hidden"/>
-                                      <!-- <xar:set name="name">'dd_seq[' . $value['id'] . ']'</xar:set>
+                                    <!-- <td>
+                                      <xar:set name="name">'dd_seq[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_seq_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['seq']" value="$value['seq']"/>
-                                    --> </td>
+                                    </td> -->
                                     <td>
                                         <xar:set name="name">'dd_type[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_type_' . $value['id']</xar:set>
@@ -270,11 +270,11 @@
                             </xar:foreach>
                         </xar:if>
                             <tr>
-                                <td colspan="8">
+                                <td colspan="6">
                                 </td>
                             </tr>        
                             <tr>
-                            <th>&#160;</th>
+                            <!-- <th>&#160;</th> -->
                             <th>Type</th>
                             <th>Name</th>
                             <th>Version</th>
@@ -282,9 +282,9 @@
                             <th>Autoload</th>
                             </tr>        
                             <tr>
-                                <td>
+                                <!-- <td>
                                     &#160;
-                                </td>
+                                </td> -->
                                 <td>
                                     <xar:set name="name">'new_type'</xar:set>
                                     <xar:set name="id">'new_type'</xar:set>
