@@ -295,7 +295,7 @@ class xarRequest extends Object
     {
         if (!isset($this->isAjax)) {
             $xhp = xarServer::getVar('HTTP_X_REQUESTED_WITH');
-            if (isset($xhp) && (strtolower($xhp) === 'xmlhttprequest')) {
+            if (isset($xhp) && (strtolower($xhp) === 'xmlhttprequest') && xarConfigVars::get(null, 'Site.Core.AllowAJAX')) {
                 $this->isAjax = true;
             } else {
                 $this->isAjax = false;
@@ -313,7 +313,9 @@ class xarRequest extends Object
     {
         if ($this->isAjax()) {
             if (is_array($msg)) {
-                var_dump($msg);
+                 $data = array('message' => $msg);
+                 $output = xarTpl::includeTemplate('theme','','user-message',$data);
+                 echo $output;
             } else {
                 echo $msg;
             }
@@ -321,5 +323,4 @@ class xarRequest extends Object
         }
     }
 }
-
 ?>
