@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="!empty($invalids)">
+        <table class="xar-table" border="0" cellspacing="0" cellpadding="4">
+            <xar:foreach in="$invalids" key="$key" value="$value">
+                <tr class="xar-align-left xar-valign-middle">
+                    <td class="xar-align-left">
+                        <strong>#$key# :</strong>
+                    </td>
+                    <td class="xar-align-left">
+                        #$value#
+                    </td>
+                </tr>
+            </xar:foreach>
+        </table>
+    </xar:if>
+</xar:template>

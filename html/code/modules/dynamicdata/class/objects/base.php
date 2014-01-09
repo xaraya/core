@@ -111,6 +111,12 @@ class DataObject extends DataObjectMaster implements iDataObject
         return $invalids;
     }
 
+    public function displayInvalids(Array $args = array())
+    {
+        $invalids = $this->getInvalids($args);
+        return xarTpl::module('dynamicdata', 'user', 'displayinvalids', array('invalids' => $invalids));
+    }
+
     public function clearInvalids()
     {
         foreach(array_keys($this->properties) as $name)
