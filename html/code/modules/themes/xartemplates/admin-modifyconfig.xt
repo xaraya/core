@@ -275,7 +275,17 @@
                         //]]>                    
                     </script>
                  </xar:if>
-                 
+                <div class="xar-row">
+                    <div class="xar-col">
+	                    <label for="enableajax">
+	                        Enable AJAX
+	                    </label>
+                    </div>
+                    <div class="xar-col">
+	                    <xar:set name="allowajax">xarConfigVars::get(null, 'Site.Core.AllowAJAX')</xar:set>
+	                    <xar:data-input type="checkbox" name="allowajax" id="allowajax" checked="$allowajax"/>
+                    </div>
+                </div>
             </fieldset>
             <fieldset>
                 <legend>BlockLayout Templating Engine</legend>

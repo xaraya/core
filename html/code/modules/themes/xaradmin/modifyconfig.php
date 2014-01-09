@@ -56,6 +56,7 @@ function themes_admin_modifyconfig()
     if (!xarVarFetch('compresscss', 'checkbox', $data['compresscss'], false, XARVAR_NOT_REQUIRED)) return;
     // can't compress if not combined :)    
     if ($data['combinecss'] == false) $data['compresscss'] = false;
+    if (!xarVarFetch('allowajax', 'checkbox', $data['allowajax'], false, XARVAR_NOT_REQUIRED)) return;
     
     if (!xarVarFetch('enable_user_menu', 'checkbox',
         $data['enable_user_menu'], xarModVars::get('themes', 'enable_user_menu'), XARVAR_NOT_REQUIRED)) return;
@@ -117,6 +118,7 @@ function themes_admin_modifyconfig()
             xarConfigVars::set(null, 'Site.BL.CacheTemplates',$data['cachetemplates']);
             xarConfigVars::set(null, 'Site.BL.MemCacheTemplates',$data['memcachetemplates']);
             xarConfigVars::set(null, 'Site.BL.CompressWhitespace',$data['compresswhitespace']);
+            xarConfigVars::set(null, 'Site.Core.AllowAJAX',$data['allowajax']);
             xarModVars::set('themes', 'hidecore', $data['hidecore']);
             xarModVars::set('themes', 'selstyle', $data['selstyle']);
             xarModVars::set('themes', 'selfilter', $data['selfilter']);
