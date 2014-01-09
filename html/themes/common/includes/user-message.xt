@@ -4,11 +4,11 @@
     <div id="xar-message">
         <xar:if condition="isset($message)">
             <xar:if condition="is_array($message)">
-                <xar:foreach values="$message" key="$title" value="$text">
+                <xar:foreach in="$message" key="$title" value="$text">
                     <div>
-                        #$title#<br/>
+                        <div class="xar-title">#$title#</div>
                         #$text#
-                    </div>
+                      </div>
                 </xar:foreach>
             <xar:else/>
                 <div>

@@ -1,10 +1,16 @@
 This directory contains directories with javascript libraries.
-The correct structure is:
+The required structure is:
 
 common/lib
      |
      --- library name (directory)
                 |
-                --- library versione (directory)
-                           |
-                           --- library file
+                --- library versions (directory)
+                |          |
+                |          --- library file
+                |
+                --- plugins (directory)
+                        |
+                        --- plugin versions (directory)
+                                |
+                                --- plugin file
