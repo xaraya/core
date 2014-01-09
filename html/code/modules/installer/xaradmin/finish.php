@@ -29,6 +29,9 @@ function installer_admin_finish()
     xarConfigVars::set(null, 'Site.BL.CompressWhitespace', 1);
     xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
 
+    // Default for AJAX calls
+    xarConfigVars::set(null, 'Site.Core.AllowAJAX', true);
+
     // Declare the installation a success
     $variables = array('DB.Installation' => 3);
     xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
