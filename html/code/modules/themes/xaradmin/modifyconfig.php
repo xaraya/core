@@ -130,22 +130,9 @@ function themes_admin_modifyconfig()
 
             xarModVars::set('themes', 'debugmode', $data['debugmode']);
 
-           
-            // Adjust the usermenu hook according to the setting
-            /* The usermenu isn't a hook...
-            sys::import('xaraya.structures.hooks.observer');
-            $observer = new BasicObserver('themes','user','usermenu');
-            $subject = new HookSubject('roles');
-            if (xarModVars::get('themes','enable_user_menu')) {
-                $subject->attach($observer);
-            } else {
-                $subject->detach($observer);
-            }
-            */
-            
             sys::import('modules.dynamicdata.class.properties.master');
             $caches = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
-            $caches->checkInput('bl_flushcaches');
+            $caches->checkInput('flushcaches');
             xarModVars::set('themes','flushcaches', $caches->value);
             
             // Flush the caches
