@@ -82,6 +82,7 @@ function themes_admin_view_libs()
                                         'package' => $package,
                                         'base' => $path,
                                         'src' => $file,
+                                        'plugins' => implode(',',array_keys($lib->plugins)),
                                         'load' => 0,
                                     );
                                 }
@@ -163,6 +164,7 @@ function themes_admin_view_libs()
         if ($confirm) {
             if(!xarVarFetch('dd_id',       'array', $dd_id,       array(), XARVAR_DONT_SET)) {return;}
             if(!xarVarFetch('dd_type',     'array', $dd_type,     array(), XARVAR_DONT_SET)) {return;}
+            if(!xarVarFetch('dd_parent',   'array', $dd_parent,   array(), XARVAR_DONT_SET)) {return;}
             if(!xarVarFetch('dd_lib',      'array', $dd_lib,      array(), XARVAR_DONT_SET)) {return;}
             if(!xarVarFetch('dd_version',  'array', $dd_version,  array(), XARVAR_DONT_SET)) {return;}
             if(!xarVarFetch('dd_scope',    'array', $dd_scope,    array(), XARVAR_DONT_SET)) {return;}
@@ -174,17 +176,19 @@ function themes_admin_view_libs()
             $libobject->remote_libs = array();
             foreach ($dd_id as $id) {
                 if (empty($dd_lib[$id])) continue;
-                $libobject->remote_libs[$id]['id'] = $id;
-                $libobject->remote_libs[$id]['type'] = $dd_type[$id];
-                $libobject->remote_libs[$id]['lib'] = $dd_lib[$id];
-                $libobject->remote_libs[$id]['version'] = $dd_version[$id];
-                $libobject->remote_libs[$id]['scope'] = $dd_scope[$id];
-                $libobject->remote_libs[$id]['package'] = $dd_package[$id];
-                $libobject->remote_libs[$id]['base'] = $dd_base[$id];
-                $libobject->remote_libs[$id]['src'] = $dd_src[$id];
+                $newid = $dd_type[$id] . "." . $dd_lib[$id] . "." . $dd_version[$id] . "." . $dd_scope[$id] . "." . $dd_base[$id];
+                $libobject->remote_libs[$newid]['id'] = $newid;
+                $libobject->remote_libs[$newid]['type'] = $dd_type[$id];
+                $libobject->remote_libs[$newid]['parent'] = $dd_parent[$id];
+                $libobject->remote_libs[$newid]['lib'] = $dd_lib[$id];
+                $libobject->remote_libs[$newid]['version'] = $dd_version[$id];
+                $libobject->remote_libs[$newid]['scope'] = $dd_scope[$id];
+                $libobject->remote_libs[$newid]['package'] = $dd_package[$id];
+                $libobject->remote_libs[$newid]['base'] = $dd_base[$id];
+                $libobject->remote_libs[$newid]['src'] = $dd_src[$id];
                 if (!isset($dd_load[$id])) $dd_load[$id] = 0;
-                $libobject->remote_libs[$id]['load'] = $dd_load[$id];
-                $libobject->remote_libs[$id]['origin'] = 'remote';
+                $libobject->remote_libs[$newid]['load'] = $dd_load[$id];
+                $libobject->remote_libs[$newid]['origin'] = 'remote';
             }
             
             // Add a new remote library
@@ -192,6 +196,7 @@ function themes_admin_view_libs()
             if (!empty($new_lib)) {
                 if(!xarVarFetch('new_id',       'str', $new_id,       '', XARVAR_DONT_SET)) {return;}
                 if(!xarVarFetch('new_type',     'str', $new_type,     '', XARVAR_DONT_SET)) {return;}
+                if(!xarVarFetch('new_parent',   'str', $new_parent,   '', XARVAR_DONT_SET)) {return;}
                 if(!xarVarFetch('new_version',  'str', $new_version,  '', XARVAR_DONT_SET)) {return;}
                 if(!xarVarFetch('new_scope',    'str', $new_scope,    '', XARVAR_DONT_SET)) {return;}
                 if(!xarVarFetch('new_package',  'str', $new_package,  '', XARVAR_DONT_SET)) {return;}
@@ -201,6 +206,7 @@ function themes_admin_view_libs()
                 $id = $new_type . "." . $new_lib . "." . $new_version . "." . $new_scope . "." . $new_base;
                 $libobject->remote_libs[$id]['id'] = $id;
                 $libobject->remote_libs[$id]['type'] = $new_type;
+                $libobject->remote_libs[$id]['parent'] = $new_parent;
                 $libobject->remote_libs[$id]['lib'] = $new_lib;
                 $libobject->remote_libs[$id]['version'] = $new_version;
                 $libobject->remote_libs[$id]['scope'] = $new_scope;

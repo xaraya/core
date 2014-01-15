@@ -2,6 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!--  Process only if there is JavaScript present -->
+    <xar:set name="libs">array()</xar:set>
     <xar:if condition="!empty($javascript) and is_array($javascript)">
         <xar:foreach in="$javascript" value="$positions">
             <xar:if condition="empty($positions)"><xar:continue/></xar:if>
@@ -12,8 +13,17 @@
                     <xar:foreach in="$scopes" value="$script">
                         <xar:if condition="$script['type'] eq 'lib'">
                             <script type="text/javascript" src="#$script['url']#"/>
+                            <xar:set name="dummy">1;$libs[] = $script['lib']</xar:set>
                         <xar:elseif condition="$script['type'] eq 'plugin'"/>
-                        
+                            <!-- Plugins are loaded only if the corresponding library was loaded -->
+                            <xar:if condition="in_array($script['lib'], $libs)">
+                                <script type="text/javascript" src="#$script['url']#"/>
+                            <xar:else/>
+                                <xar:ml>
+                                    The plugin #(1) cannot be loaded
+                                    <xar:mlvar>#$script['plugin']#</xar:mlvar>
+                                </xar:ml>
+                            </xar:if>
                         <xar:elseif condition="$script['type'] eq 'src'"/>
                             <script type="text/javascript" src="#$script['url']#"/>
                         <xar:elseif condition="$script['type'] eq 'code'"/>

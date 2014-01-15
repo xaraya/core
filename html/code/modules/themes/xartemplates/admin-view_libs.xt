@@ -17,6 +17,7 @@
                         <tr>
                             <th>Sequence</th>
                             <th>Type</th>
+                            <th>Library</th>
                             <th>Name</th>
                             <th>Version</th>
                             <th>Scope</th>
@@ -46,6 +47,11 @@
                                         <xar:set name="name">'dd_type[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_type_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['type']" value="$value['type']"/>
+                                    </td>
+                                    <td>
+                                        <xar:set name="name">'dd_parent[' . $value['id'] . ']'</xar:set>
+                                        <xar:set name="id">'dd_parent_' . $value['id']</xar:set>
+                                        <xar:data-input name="$name" id="$id" property="$properties['parent']" value="$value['parent']"/>
                                     </td>
                                     <td>
                                         <xar:set name="name">'dd_lib[' . $value['id'] . ']'</xar:set>
@@ -125,6 +131,7 @@
                             <th>Package</th>
                             <th>Path</th>
                             <th>File</th>
+                            <th>Plugins</th>
                             <th>Autoload</th>
                         </tr>
                         <xar:if condition="empty($fieldvalues)">
@@ -180,6 +187,12 @@
                                         <xar:data-input property="$properties['src']" value="$value['src']"/>
                                     </td>
                                     <td>
+                                        #$value['plugins']#
+                                        <xar:set name="name">'dd_parent[' . $value['id'] . ']'</xar:set>
+                                        <xar:set name="id">'dd_parent_' . $value['id']</xar:set>
+                                        <!-- <xar:data-input name="$name" id="$id" property="$properties['parent']" value="$value['parent']"/>
+                                    --></td>
+                                    <td>
                                         <xar:set name="name">'dd_load[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_load_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['load']" value="$value['load']"/>
@@ -200,7 +213,7 @@
                 </form>
             <xar:elseif condition="$tab eq 'remote'"/>
                 <h2>
-                    Remote Javascript Libraries
+                    Remote Javascript Libraries and Plugins
                 </h2>
                 <form method="post" action="#xarServer::getCurrentURL()#" style="margin-top: 10px; margin-bottom: 10px;">
                     <table class="table xar-table">
@@ -208,6 +221,7 @@
                             <tr>
                                 <!-- <th>Sequence</th> -->
                                 <th>Type</th>
+                                <th>Library</th>
                                 <th>Name</th>
                                 <th>Version</th>
                                 <th>Path</th>
@@ -236,6 +250,11 @@
                                         <xar:set name="name">'dd_type[' . $value['id'] . ']'</xar:set>
                                         <xar:set name="id">'dd_type_' . $value['id']</xar:set>
                                         <xar:data-input name="$name" id="$id" property="$properties['type']" value="$value['type']" style="width: 100px"/>
+                                    </td>
+                                    <td>
+                                        <xar:set name="name">'dd_parent[' . $value['id'] . ']'</xar:set>
+                                        <xar:set name="id">'dd_parent' . $value['id']</xar:set>
+                                        <xar:data-input name="$name" id="$id" property="$properties['parent']" value="$value['parent']" class="xar-form-textmedium"/>
                                     </td>
                                     <td>
                                         <xar:set name="name">'dd_lib[' . $value['id'] . ']'</xar:set>
@@ -276,6 +295,7 @@
                             <tr>
                             <!-- <th>&#160;</th> -->
                             <th>Type</th>
+                            <th>Library</th>
                             <th>Name</th>
                             <th>Version</th>
                             <th>Path</th>
@@ -288,12 +308,12 @@
                                 <td>
                                     <xar:set name="name">'new_type'</xar:set>
                                     <xar:set name="id">'new_type'</xar:set>
-                                    <xar:set name="options">
-                                        array(
-                                            array('id' => 'lib', 'name' => 'Library'),
-                                        )
-                                    </xar:set>
-                                    <xar:data-input name="$name" id="$id" type="dropdown" options="$options" style="width: 100px"/>
+                                    <xar:data-input name="$name" id="$id" property="$properties['type']" value="lib" style="width: 100px"/>
+                                </td>
+                                <td>
+                                    <xar:set name="name">'new_parent'</xar:set>
+                                    <xar:set name="id">'new_parent'</xar:set>
+                                    <xar:data-input name="$name" id="$id" type="textbox" class="xar-form-textmedium"/>
                                 </td>
                                 <td>
                                     <xar:set name="name">'new_lib'</xar:set>
@@ -327,6 +347,11 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            To remove a library or plugin, set its name to empty
+                        </div>
+                    </div>
                     <div class="xar-row">
                         <div class="xar-col">
                         </div>

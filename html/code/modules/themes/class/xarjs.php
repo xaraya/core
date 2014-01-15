@@ -36,6 +36,9 @@ class xarJS extends Object
     // base folder to look in for lib styles
     const LIB_STYLE                = 'style';
 
+    // base folder to look in for plugins
+    const LIB_PLUGINS              = 'plugins';
+
     // the file names for plugins and lib xml files
     const LIB_XML                  = 'xarlib.xml';
     const LIB_PLUGIN_XML           = 'xarplugin.xml';
@@ -192,6 +195,21 @@ class xarJS extends Object
         return self::$instance;
     }
 
+/**
+ * Refresh function
+ *
+ * 1. Identify all local javascript libraries
+ * 2. For each library create the corresponding object
+ * 3. Find all the associated files and add them to the object
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @author Marc Lutolf <mfl@netspan.ch>
+ * @access public
+ * @params none
+ * @return none
+ * @throws none
+ *
+**/
     public function refresh()
     {
         // now find all libs in the filesystem
@@ -248,11 +266,11 @@ class xarJS extends Object
                 $subpath = $path . "/" . $lib;
                 $versions = $this->getFolders($subpath, 1);
                 if (empty($versions)) continue;                
-                $validversions = array();
-                foreach (array_keys($versions) as $version) {
-                    $valid = xarVersion::parse($version);
-                    if(!$valid) continue;
-                    $validversions[] = $version;
+                
+                // Remove any versions which are not valid
+                foreach ($versions as $key => $value) {
+                    $valid = xarVersion::parse($key);
+                    if(!$valid) unset($versions[$key]);
                 }
                 
                 // keep track of found libs
@@ -261,9 +279,9 @@ class xarJS extends Object
                 // init lib if necessary
                 if (!isset($this->local_libs[$lib]))
                     $this->local_libs[$lib] = new xarJSLib($lib);
-                    $this->local_libs[$lib]->versions = $validversions;
                     
                 // refresh lib
+                $this->local_libs[$lib]->versions = $versions;
                 $this->local_libs[$lib]->findFiles();
                 // Sort by version in descending order
                 krsort($this->local_libs[$lib]->scripts);
@@ -456,24 +474,21 @@ class xarJS extends Object
                 $tag['lib'] = $lib;
                 // @todo: check plugin exists
                 $tag['plugin'] = $plugin;
-                // optionally specify lib source file name
-                if (!empty($src))
-                    $tag['src'] = $src;
-                // optionally specify lib version
-                if (!empty($version))
-                    $tag['version'] = $version;
-                // optionally specify lib style
-                if (!empty($style))
-                    $tag['style'] = $style;
                 // optionally specific plugin source file name
-                if (!empty($pluginsrc))
-                    $tag['pluginsrc'] = $pluginsrc;
+                if (empty($file)) $file = '';
                 // optionally specify plugin version
-                if (!empty($pluginversion))
-                    $tag['pluginversion'] = $pluginversion;
+                if (empty($version) || (!empty($version) && $version == 'latest')) {
+                    $version = '';
+                }
                 // optionally specify plugin style
-                if (!empty($pluginstyle))
-                    $tag['pluginstyle'] = $pluginstyle;
+                if (empty($style)) $style = '';
+                
+                $info = $this->getPluginInfo($lib, $plugin, $version, $file, $style);
+                if ($info['origin'] == 'local') {
+                    $src = xarServer::getBaseURL() . $info['src'];
+                } else {
+                    $src = $info['src'];
+                }
             break;
             // lib event
             case 'event':
@@ -519,6 +534,58 @@ class xarJS extends Object
                 // optionally specify lib style
                 if (!empty($style))
                     $tag['style'] = $style;
+
+                // If this is a local library, it may include plugins: register them
+                if ($info['origin'] == 'local') {
+                    $hasplugins = false;
+                    $plugins = array();
+                    if (!empty($args['plugins'])) {
+                        if ($args['plugins'] == 'all') {
+                            $hasplugins = true;
+                            $args['plugins'] = array();
+                        } else {
+                            $requestedplugins = explode(',',$args['plugins']);
+                            foreach ($requestedplugins as $plugin) {
+                                $namearray = explode(':',$plugin);
+                                $plugins[trim($namearray[0])] = trim($plugin);
+                            }
+                        }
+                    }
+                    if (!empty($plugins)) $hasplugins = true;
+                
+                    if ($hasplugins) {
+                        sys::import('xaraya.version');
+                        $libfilePath = $this->findFile($scope, trim($src), $tag['base'], $package);
+                        foreach ($this->local_libs[$info['lib']]->plugins as $name => $plugin) {
+                            $libname = "/".$lib."/";
+                            $pos = strripos ($libfilePath ,$libname);
+                            if (!empty($plugins)) {
+                                // One or more plugin names were passed
+                                // If we don't have such a plugin, bail
+                                if (!isset($plugins[$name])) continue;
+                                
+                                $namearray = explode(':',$plugins[$name]);
+                                // Get (perhaps) the version and file name and style passed
+                                $version = !empty($namearray[1]) ? trim($namearray[1]) : '';
+                                $file = !empty($namearray[2]) ? trim($namearray[2]) : $name;
+                                $style = !empty($namearray[3]) ? trim($namearray[3]) : '';
+                            } else {
+                                // No specific plugins passed, just "all"
+                                // In this case we assume the name of the file to be loaded will be the same as the plugin name + ".js"
+                                $version = '';
+                                $file = $name;
+                            }
+                            $registerargs = array(
+                                            'plugin' => $name,
+                                            'lib' => $info['lib'],
+                                            );
+                            if (!empty($version)) $registerargs['version'] = $version;
+                            if (!empty($file)) $registerargs['file'] = $file;
+                            if (!empty($style)) $registerargs['style'] = $style;
+                            $this->register($registerargs);
+                        }
+                    }
+                }
             break;
             // code
             case 'code':
@@ -547,9 +614,13 @@ class xarJS extends Object
         foreach ($files as $file) {
             // check if file is local...
             $server = xarServer::getHost();
-            if (($tag['type'] == "src") &&
+            if ($tag['type'] == "plugin") {
+                // Whatever the URL, just include it
+                $tag['url'] = $file;                
+            
+            } elseif ($tag['type'] == "src" &&
                 preg_match("!://($server|localhost|127\.0\.0\.1)(:\d+|)/!",$file)) {
-                // Local absolute url, just include it
+                // Local absolute URL, just include it
                 $tag['url'] = $file;                
             
             } elseif (!preg_match("!^https?://!",$file) ||
@@ -558,7 +629,7 @@ class xarJS extends Object
                 if (strpos($file, '?') !== false)
                     list($file, $params) = explode('?', $file, 2);
                 // get path relative to web root
-                $relPath = $this->findFile($scope, trim($file), $tag['base'], $package, true);
+                $relPath = $this->findFile($scope, trim($file), $tag['base'], $package);
                 if (empty($relPath)) continue;
                 // if type is code or event, we want the file contents
                 if ($type == 'code' || $type == 'event') {
@@ -575,7 +646,7 @@ class xarJS extends Object
                 }
                 $tag['url'] = $filePath;
             
-            } elseif ($type=='src' || $type=='lib') {
+            } elseif ($type=='src' || $type=='lib' || $type=='plugin') {
                 // Not a local file, just include the external source
                 $tag['src'] = $file;
                 $tag['url'] = $file;
@@ -583,7 +654,7 @@ class xarJS extends Object
                 continue;
             }
             // queue the tag
-            $this->queue($position, $type, $scope, $tag['url'], $tag);
+            return $this->queue($tag['position'], $type, $scope, $tag['url'], $tag);
         }
 
     }
@@ -816,8 +887,10 @@ class xarJS extends Object
  * Fallback is to the latest version that Xaraya knows about
  *
  * @author Marc Lutolf <mfl@netspan.ch>
- * @param array   $lib JS library name
- * @return string version number
+ * @param string $lib JS library name
+ * @param string $vers JS library version
+ * @param string $src JS library source
+ * @return array library information
  * @throws none
 **/
     private function getLibInfo($lib, $vers='', $src='')
@@ -848,9 +921,73 @@ class xarJS extends Object
         }
 
         foreach ($this->remote_libs as $thislib) {
+            if ($thislib['type'] != 'lib') continue;
             if (!empty($lib) && ($thislib['lib'] != $lib)) continue;
             if (!empty($src) && ($thislib['src'] != $src)) continue;
             if (!empty($vers) && ($thislib['version'] != $vers)) continue;
+            $candidates[] = $thislib;
+        }
+        
+        // Sort the libraries by descending version and origin
+        if (!empty($candidates)) {
+            foreach ($candidates as $key => $row) {
+                $tempversion[$key] = $row['version'];
+                $temporigin[$key]  = $row['origin'];
+            }
+            array_multisort($tempversion, SORT_DESC, $temporigin, SORT_DESC, $candidates);
+        }
+        // Return the first acceptable candidate
+        $chosen = current($candidates);
+        return $chosen;
+    }
+
+/**
+ * getPluginInfo method
+ *
+ * Get the information of a specific version of a plugin that Xaraya is aware of
+ * This can be a local or remote library
+ * Fallback is to the latest version that Xaraya knows about
+ *
+ * @author Marc Lutolf <mfl@netspan.ch>
+ * @param string $lib JS library name
+ * @param string $vers JS library version
+ * @param string $src JS library source
+ * @return array library information
+ * @throws none
+**/
+    private function getPluginInfo($lib, $plug, $vers='', $file='', $style='')
+    {
+        // We will look at the local and remote library plugins Xaraya is aware of
+        // Ceteris paribus, remote plugins will be privileged
+        
+        $candidates = array();
+
+        if (isset($this->local_libs[$lib])) {
+            $thislib = $this->local_libs[$lib];
+        
+            // Start by taking the latest version, or the version asked for
+            $plugins = $thislib->plugins;
+            foreach ($plugins as $plugin => $pluginarray) {
+                if ($plug != $plugin)  continue;
+                foreach ($pluginarray as $version => $versionarray) {
+                    if (!empty($vers) && ($version != $vers)) continue;
+                    //if (!empty($src) && ($versionarray['src'] != $src)) continue;
+                    foreach ($versionarray as $filearray) {
+                        $pluginfile = basename($filearray['src'], '.js');
+                        if (!empty($file) && ($pluginfile != $file)) continue;
+                        if (!empty($vers) && ($filearray['version'] != $vers)) continue;
+                        $candidates[] = $filearray;
+                    }
+                }
+            }
+        }
+
+        foreach ($this->remote_libs as $thislib) {
+            if ($thislib['type'] != 'plugin') continue;
+            if (!empty($lib) && ($thislib['parent'] != $lib)) continue;
+            if (!empty($vers) && ($thislib['version'] != $vers)) continue;
+            $pluginfile = basename($thislib['src'], '.js');
+            if (!empty($file) && ($pluginfile != $file)) continue;
             $candidates[] = $thislib;
         }
         
@@ -863,7 +1000,8 @@ class xarJS extends Object
             array_multisort($tempversion, SORT_DESC, $temporigin, SORT_DESC, $candidates);
         }
         // Return the first acceptable candidate
-        return current($candidates);
+        $chosen = current($candidates);
+        return $chosen;
     }
 }
 
@@ -884,7 +1022,7 @@ class xarJSLib extends Object
     public $script        = array(); // default script
     public $style         = array(); // default style
     public $scriptfolder  = '';      // where to look for lib scripts
-    public $pluginfolder  = '';      // where to look for plugins, relative to script folder
+    public $pluginfolder  = 'plugins';      // where to look for plugins, relative to base folder
     public $stylefolder   = '';      // where to look for styles, relative to script folder
     public $versions      = array(); // array of known versions
     public $dependencies  = array(); // array of lib dependencies
@@ -959,14 +1097,23 @@ class xarJSLib extends Object
             // look in code/modules/<module>/xartemplates/lib/libname/*
             $paths['module'][$modOSDir] = "{$codeDir}modules/{$modOSDir}/xartemplates/{$libBase}/{$libName}";
         }
+        
+        // Load the version class to check versions
+        sys::import('xaraya.version');
+        
         // find files in all lib folders, all themes, all modules, all properties
         $this->scripts = array();
+        $this->plugins = array();
         foreach ($paths as $scope => $packages) {
             foreach ($packages as $package => $path) {
                 if (!is_dir($path)) continue;
                 $versions = xarJS::getFolders($path, 1);
                 if (empty($versions)) continue;
                 foreach (array_keys($versions) as $version) {
+                    // Check if this is a valid version folder
+                    $valid = xarVersion::parse($version);
+                    if(!$valid) continue;
+                    
                     $subpath = $path . "/" . $version;
                     $files = xarJS::getFiles($subpath);
                     if (empty($files)) continue;
@@ -1029,6 +1176,47 @@ class xarJSLib extends Object
 
                                     }
                                 break;
+                            }
+                        }
+                    }
+                }
+                // Check for plugins
+                $subpath = $path . "/" . $this->pluginfolder;
+                if (!is_dir($subpath)) continue;
+                $plugins = xarJS::getFolders($subpath, 1);
+                if (empty($plugins)) continue;
+                foreach (array_keys($plugins) as $plugin) {
+                    // We have a plugin folder
+                    $this->plugins[$plugin] = array();
+                    $pluginpath = $subpath . "/" . $plugin;
+                    $versions = xarJS::getFolders($pluginpath, 1);
+                    if (empty($versions)) continue;
+                    foreach (array_keys($versions) as $version) {
+                        // Check if this is a valid version folder
+                        $valid = xarVersion::parse($version);
+                        if(!$valid) continue;
+                        $versionpath = $pluginpath . "/" . $version;
+                        $this->plugins[$plugin][$version] = array();
+
+                        // Get the plugin files for this version
+                        $files = xarJS::getFiles($versionpath);
+                        if (empty($files)) continue;
+                        foreach ($files as $folder => $items) {
+                            foreach ($items as $file => $filepath) {
+                                $ext = pathinfo($file, PATHINFO_EXTENSION);
+                                switch ($ext) {
+                                    case 'js':
+                                        $this->plugins[$plugin][$version][$file] = array(
+                                                                                'src' => $filepath,
+                                                                                'version' => $version,
+                                                                                'origin' => 'local',
+                                                                                );
+                                    break;
+                                    case 'css':
+                                    case 'xt':
+                                    case 'xml':
+                                    // Do nothing for now
+                                }
                             }
                         }
                     }
