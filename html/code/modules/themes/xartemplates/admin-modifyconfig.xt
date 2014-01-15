@@ -373,7 +373,7 @@
                 <div class="xar-row">
                 	<div class="xar-col">
 	                    <xar:var name="label">Remove all the cached templates</xar:var>
-	                    <label for="bl_flushcache" title="#$label#" class="xar-form-label">
+	                    <label for="flushcaches" title="#$label#" class="xar-form-label">
 	                        Flush caches:
 	                    </label>
                     </div>
