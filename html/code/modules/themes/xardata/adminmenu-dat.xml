@@ -29,18 +29,18 @@
         <menuitem>
             <mask>AdminThemes</mask>
             <includes>
-                <includeitem>view_css</includeitem>
+                <includeitem>view_csslibs</includeitem>
             </includes>
-            <target>view_css</target>
+            <target>view_csslibs</target>
             <title>Manage external CSS libraries</title>
             <label>CSS</label>
         </menuitem>
         <menuitem>
             <mask>AdminThemes</mask>
             <includes>
-                <includeitem>view_libs</includeitem>
+                <includeitem>view_jslibs</includeitem>
             </includes>
-            <target>view_libs</target>
+            <target>view_jslibs</target>
             <title>Manage external Javascript libraries</title>
             <label>Javascript</label>
         </menuitem>

@@ -14,7 +14,7 @@
 
 sys::import('modules.dynamicdata.class.objects.master');
 
-function themes_admin_view_libs()
+function themes_admin_view_jslibs()
 {
     // Security
      if(!xarSecurityCheck('EditThemes')) return;
