@@ -29,6 +29,15 @@
         <menuitem>
             <mask>AdminThemes</mask>
             <includes>
+                <includeitem>view_css</includeitem>
+            </includes>
+            <target>view_css</target>
+            <title>Manage external CSS libraries</title>
+            <label>CSS</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminThemes</mask>
+            <includes>
                 <includeitem>view_libs</includeitem>
             </includes>
             <target>view_libs</target>
