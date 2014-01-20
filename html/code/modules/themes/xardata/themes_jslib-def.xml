@@ -1,6 +1,6 @@
-<object name="themes_libraries">
+<object name="themes_jslibraries">
   <objectid>549</objectid>
-  <label>Libraries</label>
+  <label>JS Libraries</label>
   <module_id>182</module_id>
   <itemtype>209</itemtype>
   <class>DataObject</class>
