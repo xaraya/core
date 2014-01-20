@@ -7,17 +7,17 @@
     <menuitems>
         <menuitem>
             <value>auto</value>
-            <target>view_libs</target>
+            <target>view_jslibs</target>
             <label>Loaded Javascript Libraries</label>
         </menuitem>
         <menuitem>
             <value>local</value>
-            <target>view_libs</target>
+            <target>view_jslibs</target>
             <label>Local Javascript Libraries</label>
         </menuitem>
         <menuitem>
             <value>remote</value>
-            <target>view_libs</target>
+            <target>view_jslibs</target>
             <label>Remote Javascript Libraries</label>
         </menuitem>
     </menuitems>
