@@ -1,0 +1,130 @@
+<object name="themes_csslibraries">
+  <objectid>549</objectid>
+  <label>CSS Libraries</label>
+  <module_id>182</module_id>
+  <itemtype>209</itemtype>
+  <class>DataObject</class>
+  <filepath>auto</filepath>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <access>a:0:{}</access>
+  <isalias>true</isalias>
+  <datastore>none</datastore>
+  <config>a:1:{s:0:"";a:1:{i:0;s:0:"";}}</config>
+  <sources>a:1:{s:0:&quot;&quot;;a:2:{i:0;s:0:&quot;&quot;;i:1;s:8:&quot;internal&quot;;}}</sources>
+  <relations>a:1:{i:0;a:2:{i:0;s:0:&quot;&quot;;i:1;s:0:&quot;&quot;;}}</relations>
+  <objects>a:1:{i:0;a:2:{i:0;s:0:&quot;&quot;;i:1;s:0:&quot;&quot;;}}</objects>
+  <category></category>
+  <properties>
+    <property name="seq">
+      <id>5897</id>
+      <label>Sequence</label>
+      <type>integerbox</type>
+      <defaultvalue></defaultvalue>
+      <source></source>
+      <status>33</status>
+      <seq>1</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
+    <property name="type">
+      <id>5903</id>
+      <label>Type</label>
+      <type>dropdown</type>
+      <defaultvalue>lib</defaultvalue>
+      <source></source>
+      <status>64</status>
+      <seq>2</seq>
+      <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:26:"lib,Library;plugin,Plugin;";}</configuration>
+    </property>
+    <property name="lib">
+      <id>5894</id>
+      <label>Library</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source></source>
+      <status>65</status>
+      <seq>3</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
+    <property name="version">
+      <id>5895</id>
+      <label>Version</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source></source>
+      <status>65</status>
+      <seq>4</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
+    <property name="scope">
+      <id>5899</id>
+      <label>Scope</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source></source>
+      <status>65</status>
+      <seq>5</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
+    <property name="package">
+      <id>5900</id>
+      <label>Package</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source></source>
+      <status>65</status>
+      <seq>6</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
+    <property name="base">
+      <id>5896</id>
+      <label>Path</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source></source>
+      <status>65</status>
+      <seq>7</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
+    <property name="src">
+      <id>5901</id>
+      <label>Source</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source></source>
+      <status>65</status>
+      <seq>8</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
+    <property name="load">
+      <id>5898</id>
+      <label>Load</label>
+      <type>checkbox</type>
+      <defaultvalue></defaultvalue>
+      <source></source>
+      <status>33</status>
+      <seq>9</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
+    <property name="id">
+      <id>5902</id>
+      <label>ID</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source></source>
+      <status>65</status>
+      <seq>10</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
+    <property name="position">
+      <id>5904</id>
+      <label>Position</label>
+      <type>dropdown</type>
+      <defaultvalue>head</defaultvalue>
+      <source></source>
+      <status>33</status>
+      <seq>11</seq>
+      <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:20:"head,Head;body,Body;";}</configuration>
+    </property>
+  </properties>
+</object>
