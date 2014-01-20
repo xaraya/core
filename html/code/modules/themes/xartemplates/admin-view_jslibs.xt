@@ -4,7 +4,7 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
     	<div class="xar-mod-page-head">
-            <xar:set name="xmldata">'libraries'</xar:set>
+            <xar:set name="xmldata">'jslibraries'</xar:set>
             <xar:template type="module" module="base" file="admin-menu-skel"/>
 	    </div>
 		<div class="xar-mod-page-body">
