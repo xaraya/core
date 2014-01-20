@@ -23,6 +23,13 @@ class xarCSS extends Object
  * @author Chris Powis   <crisp@xaraya.com>
  * @todo evaluate if these are really necessary
 **/
+    // the name of the module and the modvar to use for storing this object
+    const STORAGE_MODULE           = 'themes';
+    const STORAGE_VARIABLE         = 'css.libs';
+    // base folder to look in for libs
+    const LIB_BASE                 = 'style';
+    const LIB_BASE_ALT             = 'xarstyles';
+
     const CSSRELSTYLESHEET         = "stylesheet";
     const CSSRELALTSTYLESHEET      = "alternate";
     const CSSTYPETEXT              = "text/css";
@@ -45,12 +52,32 @@ class xarCSS extends Object
     private static $instance;
     private static $css;
 
+    // array of sheet objects
+    public $local_libs      = array();
+    // array of sheet objects
+    public $remote_libs     = array();
+    // default sheets to load...
+    public $default_libs    = array();
+
     // experimental combine/compress options
     private $cacheDir   = 'cache/css';
     private $combined   = true;
     private $compressed = true;
 
-    // prevent direct creation of this object
+/**
+ * object constructor
+ *
+ * Unless the modvar is deleted outside this object
+ * this function will only ever been run once (first run)
+ * so we use it to populate the initial defaults
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access private prevents direct creation of this singleton, use getInstance()
+ * @params none
+ * @throws none
+ * @return void
+**/
+
     private function __construct()
     {
         $this->combined   = xarModVars::get('themes', 'css.combined');
@@ -58,7 +85,75 @@ class xarCSS extends Object
     }
 
 /**
+ * Object wakeup
+ *
+ * This is called immediately after the object is unserialized
+ * this function is only ever run once per page request
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access public
+ * @params none
+ * @throws none
+ * @returns void
+**/
+    public function __wakeup()
+    {
+        // Check what libraries are present in the filesystem
+        $this->refresh();
+        // Load the default libraries
+        foreach($this->default_libs as $lib) {
+//            $this->register($lib);
+        }
+    }
+/**
+ * Object sleep method
+ *
+ * This is called whenever the object is serialized
+ * this function is only ever run once per page request
+ * Use it to perform operations immediately before the object goes out of scope
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @access public
+ * @params none
+ * @throws none
+ * @returns array public object properties to store values for
+**/
+    public function __sleep()
+    {
+        // set the last run time before we exit
+        $this->last_run = time();
+        // return the array of public property names to store
+        return array_keys($this->getPublicProperties());
+    }
+
+/**
+ * Object destructor
+ *
+ * This method is called when the object goes out of scope,
+ * typically this will be when xaraya exits
+ * but can be forced at any time by unsetting this object
+ *
+ * At this point we want to store the current object, serialized
+ * To the modvar specified by the module and modvar constants
+**/
+    public function __destruct()
+    {
+        // basically, we serialize and set this object as a modvar
+        // xarModVars::set can be a little flaky,
+        // this workaround seems to do the trick
+        // NOTE: when we call serialize here, the __sleep() magic method is called
+        try {
+            xarModVars::set(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE, serialize($this));
+        } catch (Exception $e) {
+            xarModVars::delete(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE);
+            xarModVars::set(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE, serialize($this));
+       }
+    }
+
+/**
  * Get instance function
+ *
+ * This is the only way to obtain this object instance
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
@@ -67,13 +162,175 @@ class xarCSS extends Object
  * @throws none
  *
 **/
-    public static function getInstance()
+    public static function getInstance_old()
     {
         if (!isset(self::$instance)) {
             $c = __CLASS__;
             self::$instance = new $c;
         }
         return self::$instance;
+    }
+
+    public static function getInstance()
+    {
+        if (!isset(self::$instance)) {
+            // try unserializing the stored modvar
+            self::$instance = @unserialize(xarModVars::get(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE));
+            // fall back to new instance (first run)
+            if (empty(self::$instance)) {
+                $c = __CLASS__;
+                // this is the one and only time the __construct() method will be run
+                self::$instance = new $c;
+            }
+        }
+        return self::$instance;
+    }
+
+/**
+ * Refresh function
+ *
+ * 1. Identify all local javascript libraries
+ * 2. For each library create the corresponding object
+ * 3. Find all the associated files and add them to the object
+ *
+ * @author Chris Powis <crisp@xaraya.com>
+ * @author Marc Lutolf <mfl@netspan.ch>
+ * @access public
+ * @params none
+ * @return none
+ * @throws none
+ *
+**/
+    public function refresh()
+    {
+        // now find all libs in the filesystem
+        // we want to look in all active themes
+        $filter = array('Class' => 2, 'State' => XARTHEME_STATE_ACTIVE);
+        $themes = xarMod::apiFunc('themes', 'admin', 'getlist', $filter);
+        // we want to look in all active modules
+        $modules = xarMod::apiFunc('modules', 'admin', 'getlist',
+            array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+        // we want to look in all active themes
+        // we want to look in all active modules
+        // set default paths and filenames
+        $baseDir     = xarTpl::getBaseDir();
+        $themeDir    = xarTpl::getThemeDir();
+        $themeName   = xarTpl::getThemeName();
+        $commonDir   = xarTpl::getThemeDir('common');
+        $codeDir     = sys::code();
+        $libBase     = xarCSS::LIB_BASE;
+        $libBaseAlt  = xarCSS::LIB_BASE_ALT;
+
+        $paths = array();
+        // search common too
+        $themes[] = array('osdirectory' => 'common');
+        // first we want to look in each active theme...
+        foreach ($themes as $theme) {
+            $themeOSDir = $theme['osdirectory'];
+            // look for libs in themes/<theme>/style/*
+            $paths[] = "{$baseDir}/{$themeOSDir}/{$libBase}";
+            $paths[] = "{$baseDir}/{$themeOSDir}/{$libBaseAlt}";       // Remove?
+            // then in each active module, this theme
+            foreach ($modules as $mod) {
+                $modOSDir = $mod['osdirectory'];
+                // look in themes/<theme>/modules/<module>/lib/*
+                $paths[] = "{$baseDir}/{$themeOSDir}/modules/{$modOSDir}/{$libBase}";       // Remove?
+                $paths[] = "{$baseDir}/{$themeOSDir}/modules/{$modOSDir}/{$libBaseAlt}";
+            }
+        }
+        // now we look in each active module
+        foreach ($modules as $mod) {
+            $modOSDir = $mod['osdirectory'];
+            // look in code/modules/<module>/xartemplates/lib/libname/*
+            $paths[] = "{$codeDir}modules/{$modOSDir}/{$libBaseAlt}";
+        }
+
+        // build an array of potential libraries
+        // Below the lib directory we expect to find a directory with a library's name
+        // Below that the next level must be one or more directories with different versions of the library
+        sys::import('xaraya.version');
+        $libs = array();
+        foreach ($paths as $path) {
+            if (!is_dir($path)) continue;
+            $folders = $this->getFolders($path, 1);
+            if (empty($folders)) continue;
+            foreach (array_keys($folders) as $lib) {
+                $subpath = $path . "/" . $lib;
+                $versions = $this->getFolders($subpath, 1);
+                if (empty($versions)) continue;                
+                
+                // Remove any versions which are not valid
+                foreach ($versions as $key => $value) {
+                    $valid = xarVersion::parse($key);
+                    if(!$valid) unset($versions[$key]);
+                }
+                
+                // keep track of found libs
+                $libs[$lib] = 1;
+                // init lib if necessary
+                if (!isset($this->local_libs[$lib]))
+                    $this->local_libs[$lib] = new xarCSSLib($lib);
+                    
+                // refresh lib
+                $this->local_libs[$lib]->versions = $versions;
+                $this->local_libs[$lib]->findFiles();
+                // Sort by version in descending order
+                krsort($this->local_libs[$lib]->styles);
+            }
+        }
+        // remove any missing libs
+        foreach ($this->local_libs as $compare => $curlib) {
+            if (!isset($libs[$compare]))
+                unset($this->local_libs[$compare]);
+        }
+
+    }
+
+    public static function getFolders($path, $levels=0)
+    {
+        $folders = array();
+        try {
+            foreach (new DirectoryIterator($path) as $item) {
+                if ($item->isDir() && !$item->isDot() &&
+                    (string) $item->current() != '_MTN') {
+                    $folders[(string) $item->current()] = (string) $item->current();
+                    if ($levels <> 1) {
+                        $folders = array_merge($folders, self::getFolders($item->getPathName(), $levels--));
+                    }
+                }
+            }
+        } catch (Exception $e) { }
+        return $folders;
+   }
+
+   public static function getFiles($path, $levels=0, $rel=false)
+   {
+       $rel=false;
+       $files = array();
+       if ($rel === true) {
+           $base = $path;
+           $parent = '';
+       } elseif ($rel=== false) {
+           $base = $path;
+           $parent = false;
+       } else {
+           $base = !empty($rel) ? $rel . '/' : '' . basename($path);
+           $parent = $base;
+       }
+       $exts = array('js', 'css', 'xml', 'xt');
+       try {
+            foreach (new DirectoryIterator($path) as $item) {
+                if ($item->isFile() && !$item->isDot() &&
+                    in_array(pathinfo($item, PATHINFO_EXTENSION), $exts)) {
+                    $fileName = (string) $item->current();
+                    $files[$base][$fileName] = $item->getPathName();
+                } elseif ($levels <> 1 &&
+                    $item->isDir() && !$item->isDot()) {
+                    $files = array_merge_recursive($files, self::getFiles($item->getPathName(), $levels--, $parent));
+                }
+            }
+        } catch (Exception $e) { }
+        return $files;
     }
 
 /**
@@ -563,6 +820,181 @@ class xarCSS extends Object
     public function __clone()
     {
         throw new ForbiddenException();
+    }
+}
+
+/**
+ * Base CSS Lib Class
+ *
+ * This object models a CSS Framework
+**/
+class xarCSSLib extends Object
+{
+    // required meta data, filled in when the object is created
+    public $name;
+    public $displayname;
+    public $description;
+    public $osdirectory;
+
+    // All the optional meta data for this library
+    public $script        = array(); // default script
+    public $style         = array(); // default style
+    public $scriptfolder  = '';      // where to look for lib scripts
+    public $pluginfolder  = 'plugins';      // where to look for plugins, relative to base folder
+    public $stylefolder   = '';      // where to look for styles, relative to script folder
+    public $versions      = array(); // array of known versions
+    public $dependencies  = array(); // array of lib dependencies
+    public $events        = array(); // array of events supplied by lib
+
+    // Library files
+    public $styles        = array(); // all styles
+
+    public function __construct($name)
+    {
+        if (empty($name))
+            throw new BadParameterException($name, 'Invalid name "#(1)" for xarCSSLib');
+        // first run, populate the library meta data
+        $this->name = $name;
+        $this->displayname = ucfirst($this->name);
+        $this->description = xarML('#(1) CSS Framework', $this->displayname);
+        $this->osdirectory = xarVarPrepForOS($this->name);
+    }
+
+/**
+ * Find library files
+ * The intent here is to scan the entire filesystem looking for files
+ * and folders belonging to this library
+**/
+    public function findFiles()
+    {
+        // we want to look in all active themes
+        $themes = xarMod::apiFunc('themes', 'admin', 'getlist',
+            array('filter' => array('Class' => 2, 'State' => XARTHEME_STATE_ACTIVE)));
+        // we want to look in all active modules
+        $modules = xarMod::apiFunc('modules', 'admin', 'getlist',
+            array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+        // set default paths and filenames
+        $libName     = $this->name;
+        $baseDir     = xarTpl::getBaseDir();
+        $themeDir    = xarTpl::getThemeDir();
+        $themeName   = xarTpl::getThemeName();
+        $commonDir   = xarTpl::getThemeDir('common');
+        $codeDir     = sys::code();
+        $libBase     = xarCSS::LIB_BASE;
+        $libBaseAlt  = xarCSS::LIB_BASE_ALT;
+
+        $paths = array();
+        $themes[] = array('osdirectory' => 'common');
+        // first we want to look in each active theme...
+        foreach ($themes as $theme) {
+            $themeOSDir = $theme['osdirectory'];
+            // look in themes/<theme>/lib/libname/*
+            $paths['theme'][$themeOSDir] = "{$baseDir}/{$themeOSDir}/{$libBase}/{$libName}";
+            // then in each active module, this theme
+            foreach ($modules as $mod) {
+                $modOSDir = $mod['osdirectory'];
+                // look in themes/<theme>/modules/<module>/lib/libname/*
+                $paths['module'][$modOSDir] = "{$baseDir}/{$themeOSDir}/modules/{$modOSDir}/{$libBaseAlt}/{$libName}";
+            }
+        }
+        // now we look in each active module
+        foreach ($modules as $mod) {
+            $modOSDir = $mod['osdirectory'];
+            // look in code/modules/<module>/xartemplates/lib/libname/*
+            $paths['module'][$modOSDir] = "{$codeDir}modules/{$modOSDir}/{$libBaseAlt}/{$libName}";
+        }
+        
+        // Load the version class to check versions
+        sys::import('xaraya.version');
+        
+        // find files in all lib folders, all themes, all modules, all properties
+        $this->scripts = array();
+        $this->styles = array();
+        foreach ($paths as $scope => $packages) {
+            foreach ($packages as $package => $path) {
+                if (!is_dir($path)) continue;
+                $versions = xarCSS::getFolders($path, 1);
+                if (empty($versions)) continue;
+                foreach (array_keys($versions) as $version) {
+                    // Check if this is a valid version folder
+                    $valid = xarVersion::parse($version);
+                    if(!$valid) continue;
+                    
+                    $subpath = $path . "/" . $version;
+//                echo "<pre>";var_dump($subpath);//exit;
+                    $files = xarCSS::getFiles($subpath);
+                    if (empty($files)) continue;
+                    foreach ($files as $folder => $items) {
+                        foreach ($items as $file => $filepath) {
+                            // store script as scope - package - libbase/libname - file
+                            // eg, scripts[theme][common][lib/jquery][jquery-1.4.4.min.js] =
+                            // /themes/common/lib/jquery/jquery-1.4.4.min.js
+                            // init the actual tag info used to init this lib
+                            $tag = array(
+                                'lib'    => $libName,
+                                'scope'  => $scope,
+                                'type'   => 'lib',
+                                'origin' => 'local',
+                            );
+                            switch ($scope) {
+                                case 'theme':
+                                case 'common':
+                                    $tag['theme'] = $package;
+                                break;
+                                case 'module':
+                                case 'block':
+                                    $tag['module'] = $package;
+                                break;
+                                case 'property':
+                                    $tag['property'] = $package;
+                                break;
+                            }
+                            $ext = pathinfo($file, PATHINFO_EXTENSION);
+                            switch ($ext) {
+                                case 'js':
+                                    $tag['src'] = $file;
+                                    $tag['version'] = $version;
+                                    $tag['package'] = $package;
+                                    $base = "{$libBase}/{$libName}";
+                                    // remove the filename from the path
+                                    $basepath = str_replace("/$file", '', $filepath);
+                                    // remove anything before the base
+                                    $basepath = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
+                                    // if this isn't base, keep everything after base
+                                    if ($basepath != $base)
+                                        $base = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
+                                    $tag['base'] = $base;
+                                    $this->scripts[$version][$scope][$package][$base][$file] = $tag;
+//                                    var_dump($this->scripts);
+                                break;
+                                case 'css':
+                                    $tag['file'] = $file;
+                                    $tag['version'] = $version;
+                                    $tag['package'] = $package;
+                                    $base = "{$libBase}/{$libName}";
+                                    // remove the filename from the path
+                                    $basepath = str_replace("/$file", '', $filepath);
+                                    // remove anything before the base
+                                    $basepath = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
+                                    // if this isn't base, keep everything after base
+                                    if ($basepath != $base)
+                                        $base = preg_replace("!^.*".$base."+(.*)$!", $base."$1", $basepath);
+                                    $tag['base'] = $base;
+                                    $this->styles[$version][$scope][$package][$base][$file] = $tag;
+//                                    var_dump($this->styles);
+                                break;
+                                case 'xt':
+                                    $tag['template'] = str_replace('.xt', '', $file);
+                                    $this->templates[$version][$scope][$package][$base][$file] = $tag;
+                                break;
+                                case 'xml':
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 ?>
