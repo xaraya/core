@@ -21,7 +21,7 @@ function themes_admin_view_csslibs()
 
     if (!xarVarFetch('tab',   'str:1:100', $data['tab'], 'remote', XARVAR_NOT_REQUIRED)) return;
 
-    $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_css'));
+    $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_csslibraries'));
 
     if (!isset($data['object'])) {return;}
     if (!$data['object']->checkAccess('view'))

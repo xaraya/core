@@ -21,7 +21,7 @@ function themes_admin_view_jslibs()
 
     if (!xarVarFetch('tab',   'str:1:100', $data['tab'], 'local', XARVAR_NOT_REQUIRED)) return;
 
-    $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_libraries'));
+    $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_jslibraries'));
 
     if (!isset($data['object'])) {return;}
     if (!$data['object']->checkAccess('view'))
