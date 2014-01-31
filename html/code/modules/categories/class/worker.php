@@ -113,8 +113,6 @@
          */
         public function getchildren($id=0,$myself=0)
         {
-//            if (empty($id)) throw new Exception(xarML('No id passed to getchildren'));
-            
             $q = new Query('SELECT', $this->cattable);
             if (is_array($id)) {
                 if ($myself) {
@@ -133,12 +131,57 @@
                     $q->eq('parent_id', $id);
                 }
             }
-            $q->addorder('left_id');
+            $q->setorder('left_id');
             if (!$q->run()) return;
             $result = $q->output();
             $children = array();
             foreach($result as $row) $children[$row['id']] = $row;
             return $children;
+        }
+
+        /**
+         * Fetch the descendents of a category
+         * 
+         * @param int $id ID of the parent category
+         * @param boolean $myself
+         * @return array|null Data array containing descendents of the given category, null if no children were found
+         */
+        public function getdescendents($id=0,$myself=0)
+        {
+            $parent = $this->getcatinfo($id);
+            
+            $q = new Query('SELECT', $this->cattable);
+            if ($myself) {
+                $q->ge('left_id', $parent['left_id']);
+                $q->le('right_id', $parent['right_id']);
+            } else {
+                $q->gt('left_id', $parent['left_id']);
+                $q->lt('right_id', $parent['right_id']);
+            }
+            $q->setorder('left_id');
+            if (!$q->run()) return;
+            $result = $q->output();
+            $descendents = array();
+            foreach($result as $row) $descendents[$row['id']] = $row;
+            return $descendents;
+        }
+
+        /**
+         * Delete a category and its children
+         * 
+         * @param int $id ID of the parent category
+         * @param boolean $myself
+         * @return array|null Data array containing descendents of the given category, null if no children were found
+         */
+        public function delete($id=0)
+        {
+            $parent = $this->getcatinfo($id);
+            
+            $q = new Query('DELETE', $this->cattable);
+                $q->ge('left_id', $parent['left_id']);
+                $q->le('right_id', $parent['right_id']);
+            if (!$q->run()) return;
+            return true;
         }
 
         /**
@@ -241,6 +284,56 @@
         public function getcatbasecount($args)
         {
             return count($this->getcatbases($args));
+        }
+
+        /**
+         * Append a subtree to the tree
+         * 
+         * @param itemid the ID of the toplevel node of the subtree to move
+         * @return true if successful
+         */
+        public function appendTree($itemid)
+        {
+            // Find the last top level category. We'll add the subtree after it
+            $q = new Query('SELECT', $this->cattable);
+            $q->addfield('right_id', 0);
+            $q->eq('parent_id', 0);
+            $q->setorder('right_id', 'DESC');
+            if (!$q->run()) return;
+            $result = $q->row();
+            
+            // Define the left ID of the new top level category to append
+            $left_id = (int)$result['right_id'] + 1;
+            
+            // Get the rows which we want to append, which are the category to clone and all its children
+            $children = $this->getdescendents($itemid, 1);
+            
+            // Calculate the difference of the new top level category left ID to its old value
+            $diff =  $left_id - $children[$itemid]['left_id'];
+            
+            // The parent of the new top level category is now zero
+            $children[$itemid]['parent_id'] = 0;
+            
+            // Set up an array with old and new itemids
+            $oldnewids = array();
+
+            // Update the IDs of each category and insert
+            $q = new Query('INSERT', $this->cattable);//echo "<pre>";var_dump($children);exit;
+            foreach ($children as $key => $child) {
+                $oldid = $child['id'];
+                unset($child['id']);
+                $child['left_id'] += $diff;
+                $child['right_id'] += $diff;
+                if ($child['parent_id'] != 0) $child['parent_id'] = $oldnewids[$child['parent_id']];
+                $fields = array();
+                foreach ($child as $key => $value) $fields[] = array('name' => $key, 'value' => $value);
+                $q->addfields($fields);
+                $q->run();
+                $newid = $q->lastid($this->cattable, 'id');
+                $oldnewids[$oldid] = $newid;
+                $q->clearfields();
+            }
+            return $diff;
         }
 
     }
