@@ -66,12 +66,11 @@ function categories_admin_delete()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    sys::import('modules.dynamicdata.class.objects.master');
-    $data['objects'] = DataObjectMaster::getObject(array('name' => xarModVars::get('categories','categoriesobject')));
-    $data['objects']->deleteItem(array('itemid' => $data['itemid']));
+    sys::import('modules.categories.class.worker');
+    $worker = new CategoryWorker();
+    $children = $worker->delete($data['itemid']);
 
     xarController::redirect(xarModURL('categories','admin','view', array()));
-
     return true;
 }
 
