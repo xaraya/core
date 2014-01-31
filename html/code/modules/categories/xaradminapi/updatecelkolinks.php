@@ -84,7 +84,7 @@ function categories_adminapi_updatecelkolinks($args)
               $between_string = $point_of_insertion." AND ".($cat['left'] - 1);
           }
 
-          // TODO: besided portability, also check performance here
+          // TODO: besides portability, also check performance here
           $SQLquery = "UPDATE $categoriestable SET
                        left_id = CASE
                         WHEN left_id BETWEEN ".$cat['left']." AND ".$cat['right']."
