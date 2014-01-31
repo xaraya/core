@@ -32,11 +32,11 @@
                     </xar:ml>
                 </div>
                 <div>
-                    <xar:var name="label">Delete</xar:var>
-                    <xar:button type="submit" name="confirm" label="$label"/>
-                    &#160;
                     <xar:var name="label">Cancel</xar:var>
                     <xar:button type="cancel" label="$label"/>
+                    &#160;
+                    <xar:var name="label">Delete</xar:var>
+                    <xar:button type="submit" name="confirm" label="$label"/>
                 </div>
             </fieldset>
         </form>
