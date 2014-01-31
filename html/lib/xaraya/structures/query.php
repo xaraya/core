@@ -1236,7 +1236,9 @@ class Query
     private function assembledsorts()
     {
         $s = "";
-        if (count($this->sorts)>0 && count($this->fields) > 0 && !isset($this->fields['COUNT(*)'])) {
+// CHECKME: it should be impossible to not select fields, because an empty array implies *
+//        if (count($this->sorts)>0 && count($this->fields) > 0 && !isset($this->fields['COUNT(*)'])) {
+        if (count($this->sorts)>0 && !isset($this->fields['COUNT(*)'])) {
             $s = " ORDER BY ";
         foreach ($this->sorts as $sort) {
             if (is_array($sort)) {
