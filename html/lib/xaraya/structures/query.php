@@ -378,7 +378,6 @@ class Query
             }
             else {
                 foreach ($fields as $field) $this->addfield($field);
-//            $this->fields = array_merge($this->fields,$fields);
             }
         }
     }
@@ -394,7 +393,6 @@ class Query
         }
         else {
             foreach ($tables as $table) $this->addtable($table);
-//            $this->tables = array_merge($this->tables,$tables);
         }
     }
 
