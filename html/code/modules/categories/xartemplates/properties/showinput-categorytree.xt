@@ -10,6 +10,7 @@
             <th style="text-align: center;">Actions</th>
         </tr>
 
+        <xar:var name="clonetitle">Clone category</xar:var>
         <xar:var name="modifytitle">Modify category</xar:var>
         <xar:var name="deletetitle">Delete category</xar:var>
         <xar:set name="displayindex">0</xar:set>    
@@ -55,6 +56,16 @@
                     <td style="text-align: left; margin-left: 5px;">#$template#</td>
                     <td style="text-align: center;">
                         <xar:if condition="!empty($cid)">
+                            <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
+                                <a href="#xarModURL('categories', 'admin', 'clone', array('itemid' => $cid))#" title="#$clonetitle#" style="margin-right: 5px">
+                                    <xar:set name="imgfile">'icons/'.'add.png'</xar:set>
+                                    <xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$clonetitle"/>
+                                </a>
+                            <xar:else />
+                                <a href="#xarModURL('categories', 'admin', 'clone', array('itemid' => $cid))#" title="#$modifytitle#">
+                                    Clone
+                                </a>
+                            </xar:if>
                             <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
                                 <a href="#xarModURL('categories', 'admin', 'modify', array('itemid' => $cid))#" title="#$modifytitle#" style="margin-right: 5px">
                                     <xar:set name="imgfile">'icons/'.'modify.png'</xar:set>
