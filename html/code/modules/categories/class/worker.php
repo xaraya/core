@@ -96,9 +96,9 @@
          * @return array|null Category data array, null if no category was found
          * @throws Exception Thrown if no ID was passed to the method
          */
-        public function getcatinfo($id=0)
+        public function getInfo($id=0)
         {
-            if (empty($id)) throw new Exception(xarML('No id passed to getcatinfo'));
+            if (empty($id)) throw new Exception(xarML('No id passed to getInfo'));
             
             $q = new Query('SELECT', $this->table);
             if (is_array($id)) {
@@ -113,6 +113,12 @@
                 $info = $q->row();
             }
             return $info;
+        }
+        
+        // Legacy call
+        public function getcatinfo($id=0)
+        {
+            return $this->getInfo($id);
         }
 
         /**
@@ -159,7 +165,7 @@
          */
         public function getdescendents($id=0,$myself=0)
         {
-            $parent = $this->getcatinfo($id);
+            $parent = $this->getInfo($id);
             
             $q = new Query('SELECT', $this->table);
             if ($myself) {
@@ -186,7 +192,7 @@
          */
         public function delete($id=0)
         {
-            $parent = $this->getcatinfo($id);
+            $parent = $this->getInfo($id);
             
             $q = new Query('DELETE', $this->table);
                 $q->ge($this->left, $parent[$this->left]);
