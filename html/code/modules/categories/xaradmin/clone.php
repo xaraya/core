@@ -53,7 +53,10 @@ function categories_admin_clone()
         
         sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
-        $children = $worker->appendTree($data['itemid']);
+        $toplevel = $worker->appendTree($data['itemid']);
+
+        // Change the name of the top level category we added
+        $data['object']->updateItem(array('itemid' => $toplevel, 'name' => $newname));
 
         xarController::redirect(xarModURL('categories','admin','view'));
         return true;
