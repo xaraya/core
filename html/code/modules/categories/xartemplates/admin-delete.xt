@@ -26,7 +26,7 @@
                 <input type="hidden" name="authid" id="authid" value="#$authkey#"/>
                 <div>
                     <xar:ml>
-                        <xar:mlstring>This category has #(1) sub-categories and #(2) module items assigned to them.</xar:mlstring>
+                        <xar:mlstring>This category has #(1) sub-categories and #(2) module items assigned to it and its subcategories.</xar:mlstring>
                         <xar:mlvar>#$numcats#</xar:mlvar>
                         <xar:mlvar>#$numitems#</xar:mlvar>
                     </xar:ml>
