@@ -19,6 +19,7 @@
         protected $basetable;
         protected $linktable;
         
+        private $table;
         private $left   = "left_id";
         private $right  = "right_id";
         private $parent = "parent_id";
@@ -34,12 +35,13 @@
             sys::import('modules.categories.xartables');
             xarDB::importTables(categories_xartables());
             $tables =& xarDB::getTables();
-            $this->cattable = $tables['categories'];
+            $this->table     = $tables['categories'];
+            $this->cattable  = $tables['categories'];
             $this->basetable = $tables['categories_basecategories'];
             $this->linktable = $tables['categories_linkage'];
         }
         
-        public function setTable($x)  { $this->cattable = $x; }
+        public function setTable($x)  { $this->table = $x; }
         public function setLeft($x)   { $this->left = $x; }
         public function setRight($x)  { $this->right = $x; }
         public function setParent($x) { $this->parent = $x; }
@@ -98,7 +100,7 @@
         {
             if (empty($id)) throw new Exception(xarML('No id passed to getcatinfo'));
             
-            $q = new Query('SELECT', $this->cattable);
+            $q = new Query('SELECT', $this->table);
             if (is_array($id)) {
                 $q->in('id', $id);
                 if (!$q->run()) return;
@@ -122,7 +124,7 @@
          */
         public function getchildren($id=0,$myself=0)
         {
-            $q = new Query('SELECT', $this->cattable);
+            $q = new Query('SELECT', $this->table);
             if (is_array($id)) {
                 if ($myself) {
                     $c[] = $q->pin('id', $id);
@@ -159,7 +161,7 @@
         {
             $parent = $this->getcatinfo($id);
             
-            $q = new Query('SELECT', $this->cattable);
+            $q = new Query('SELECT', $this->table);
             if ($myself) {
                 $q->ge($this->left, $parent[$this->left]);
                 $q->le($this->right, $parent[$this->right]);
@@ -186,7 +188,7 @@
         {
             $parent = $this->getcatinfo($id);
             
-            $q = new Query('DELETE', $this->cattable);
+            $q = new Query('DELETE', $this->table);
                 $q->ge($this->left, $parent[$this->left]);
                 $q->le($this->right, $parent[$this->right]);
             if (!$q->run()) return;
@@ -201,7 +203,7 @@
          */
         public function gettoplevel()
         {
-            $q = new Query('SELECT', $this->cattable);
+            $q = new Query('SELECT', $this->table);
             $q->eq($this->parent, 0);
             if (!$q->run()) return;
             $result = $q->output();
@@ -227,6 +229,7 @@
          */
         public function getcatbases($args)
         {
+            if ($this->table != $this->cattable) die("This method (getcatbases) can only be used in a categories context");
             extract($args);
             if (!isset($object)) throw new Exception(xarML('Nissing object for getcatbases'));
             sys::import('modules.dynamicdata.class.objects.master');
@@ -305,7 +308,7 @@
         {
             // Find the last top level category. We'll add the subtree after it
             sys::import('xaraya.structures.query');
-            $q = new Query('SELECT', $this->cattable);
+            $q = new Query('SELECT', $this->table);
             $q->addfield($this->right, 0);
             $q->eq($this->parent, 0);
             $q->setorder($this->right, 'DESC');
@@ -329,7 +332,7 @@
 
             // Update the IDs of each category and insert
             $newtoplevel = 0;
-            $q = new Query('INSERT', $this->cattable);
+            $q = new Query('INSERT', $this->table);
             foreach ($descendents as $key => $child) {
                 // Save the old ID and remove it as we will be creating an entry (ID needs to be empty)
                 $oldid = $child['id'];
@@ -347,7 +350,7 @@
                 
                 // Insert the new entry and get its ID
                 $q->run();
-                $newid = $q->lastid($this->cattable, 'id');
+                $newid = $q->lastid($this->table, 'id');
                 
                 // Add this entry to the list of known old/new IDs that further descendents can use to update their parent fields
                 $oldnewids[$oldid] = $newid;
