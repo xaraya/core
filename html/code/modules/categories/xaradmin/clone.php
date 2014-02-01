@@ -25,7 +25,7 @@ function categories_admin_clone()
     if (!xarVarFetch('return_url',  'isset',  $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}
     if (!xarVarFetch('itemid',      'int',    $data['itemid'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('confirm',     'str:1:', $confirm,'',XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('newname',      'str:1:', $newname,   "", XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('newname',     'str:1:', $newname,   "", XARVAR_NOT_REQUIRED)) {return;}
     
     // Support old cids for now
     if (!xarVarFetch('cid','int::', $cid, NULL, XARVAR_DONT_SET)) {return;}
