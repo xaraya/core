@@ -18,6 +18,10 @@
         protected $cattable;
         protected $basetable;
         protected $linktable;
+        
+        private $left   = "left_id";
+        private $right  = "right_id";
+        private $parent = "parent_id";
 
         /**
          * Constructor for CategoryWorker
@@ -34,6 +38,11 @@
             $this->basetable = $tables['categories_basecategories'];
             $this->linktable = $tables['categories_linkage'];
         }
+        
+        public function setTable($x)  { $this->cattable = $x; }
+        public function setLeft($x)   { $this->left = $x; }
+        public function setRight($x)  { $this->right = $x; }
+        public function setParent($x) { $this->parent = $x; }
         
         /**
          * Fetches the name for a given id from the database
@@ -117,21 +126,21 @@
             if (is_array($id)) {
                 if ($myself) {
                     $c[] = $q->pin('id', $id);
-                    $c[] = $q->pin('parent_id', $id);
+                    $c[] = $q->pin($this->parent, $id);
                     $q->qor($c);
                 } else {
-                    $q->in('parent_id', $id);
+                    $q->in($this->parent, $id);
                 }
             } else {
                 if ($myself) {
                     $c[] = $q->peq('id', $id);
-                    $c[] = $q->peq('parent_id', $id);
+                    $c[] = $q->peq($this->parent, $id);
                     $q->qor($c);
                 } else {
-                    $q->eq('parent_id', $id);
+                    $q->eq($this->parent, $id);
                 }
             }
-            $q->setorder('left_id');
+            $q->setorder($this->left);
             if (!$q->run()) return;
             $result = $q->output();
             $children = array();
@@ -152,13 +161,13 @@
             
             $q = new Query('SELECT', $this->cattable);
             if ($myself) {
-                $q->ge('left_id', $parent['left_id']);
-                $q->le('right_id', $parent['right_id']);
+                $q->ge($this->left, $parent[$this->left]);
+                $q->le($this->right, $parent[$this->right]);
             } else {
-                $q->gt('left_id', $parent['left_id']);
-                $q->lt('right_id', $parent['right_id']);
+                $q->gt($this->left, $parent[$this->left]);
+                $q->lt($this->right, $parent[$this->right]);
             }
-            $q->setorder('left_id');
+            $q->setorder($this->left);
             if (!$q->run()) return;
             $result = $q->output();
             $descendents = array();
@@ -178,8 +187,8 @@
             $parent = $this->getcatinfo($id);
             
             $q = new Query('DELETE', $this->cattable);
-                $q->ge('left_id', $parent['left_id']);
-                $q->le('right_id', $parent['right_id']);
+                $q->ge($this->left, $parent[$this->left]);
+                $q->le($this->right, $parent[$this->right]);
             if (!$q->run()) return;
             return true;
         }
@@ -193,7 +202,7 @@
         public function gettoplevel()
         {
             $q = new Query('SELECT', $this->cattable);
-            $q->eq('parent_id', 0);
+            $q->eq($this->parent, 0);
             if (!$q->run()) return;
             $result = $q->output();
             return $result;
@@ -295,45 +304,61 @@
         public function appendTree($itemid)
         {
             // Find the last top level category. We'll add the subtree after it
+            sys::import('xaraya.structures.query');
             $q = new Query('SELECT', $this->cattable);
-            $q->addfield('right_id', 0);
-            $q->eq('parent_id', 0);
-            $q->setorder('right_id', 'DESC');
+            $q->addfield($this->right, 0);
+            $q->eq($this->parent, 0);
+            $q->setorder($this->right, 'DESC');
             if (!$q->run()) return;
             $result = $q->row();
             
             // Define the left ID of the new top level category to append
-            $left_id = (int)$result['right_id'] + 1;
+            $left_id = (int)$result[$this->right] + 1;
             
-            // Get the rows which we want to append, which are the category to clone and all its children
-            $children = $this->getdescendents($itemid, 1);
+            // Get the rows which we want to append, which are the category to clone and all its descendents
+            $descendents = $this->getdescendents($itemid, 1);
             
             // Calculate the difference of the new top level category left ID to its old value
-            $diff =  $left_id - $children[$itemid]['left_id'];
+            $diff =  $left_id - $descendents[$itemid][$this->left];
             
             // The parent of the new top level category is now zero
-            $children[$itemid]['parent_id'] = 0;
+            $descendents[$itemid][$this->parent] = 0;
             
             // Set up an array with old and new itemids
             $oldnewids = array();
 
             // Update the IDs of each category and insert
-            $q = new Query('INSERT', $this->cattable);//echo "<pre>";var_dump($children);exit;
-            foreach ($children as $key => $child) {
+            $newtoplevel = 0;
+            $q = new Query('INSERT', $this->cattable);
+            foreach ($descendents as $key => $child) {
+                // Save the old ID and remove it as we will be creating an entry (ID needs to be empty)
                 $oldid = $child['id'];
                 unset($child['id']);
-                $child['left_id'] += $diff;
-                $child['right_id'] += $diff;
-                if ($child['parent_id'] != 0) $child['parent_id'] = $oldnewids[$child['parent_id']];
+                
+                // Adjust left, right and parent fields
+                $child[$this->left] += $diff;
+                $child[$this->right] += $diff;
+                if ($child[$this->parent] != 0) $child[$this->parent] = $oldnewids[$child[$this->parent]];
+                
+                // Put the updated fields in to the proper format for adding to the query, and add them
                 $fields = array();
                 foreach ($child as $key => $value) $fields[] = array('name' => $key, 'value' => $value);
                 $q->addfields($fields);
+                
+                // Insert the new entry and get its ID
                 $q->run();
                 $newid = $q->lastid($this->cattable, 'id');
+                
+                // Add this entry to the list of known old/new IDs that further descendents can use to update their parent fields
                 $oldnewids[$oldid] = $newid;
+                
+                // Remove all the fields in preparation of the next round (we'll reuse this query)
                 $q->clearfields();
+                
+                // Save the ID of the new top level category
+                if ($child[$this->parent] == 0) $newtoplevel = $newid;
             }
-            return $diff;
+            return $newtoplevel;
         }
 
     }
