@@ -193,6 +193,7 @@
         public function delete($id=0)
         {
             $parent = $this->getInfo($id);
+            if (empty($parent)) return false;
             
             $q = new Query('DELETE', $this->table);
                 $q->ge($this->left, $parent[$this->left]);
@@ -310,7 +311,7 @@
          * @param itemid the ID of the toplevel node of the subtree to move
          * @return true if successful
          */
-        public function appendTree($itemid)
+        public function appendTree($itemid, $args)
         {
             // Find the last top level category. We'll add the subtree after it
             sys::import('xaraya.structures.query');
@@ -348,6 +349,10 @@
                 $child[$this->left] += $diff;
                 $child[$this->right] += $diff;
                 if ($child[$this->parent] != 0) $child[$this->parent] = $oldnewids[$child[$this->parent]];
+                
+                // If we passed any other args, overwrite the corresponding value if the $arg passed is a valid field
+                foreach ($args as $key => $value) 
+                    if(isset($child[$key])) $child[$key] = $value;
                 
                 // Put the updated fields in to the proper format for adding to the query, and add them
                 $fields = array();
