@@ -177,7 +177,7 @@ class SelectProperty extends DataProperty
             return $this->options;
         }
         
-        if (!empty($filepath)) $filepath = sys::code() . $this->initialization_file;
+        if (empty($filepath)) $filepath = sys::code() . $this->initialization_file;
         if (!empty($this->initialization_function)) {
             @eval('$items = ' . $this->initialization_function .';');
             if (!isset($items) || !is_array($items)) $items = array();
@@ -191,7 +191,7 @@ class SelectProperty extends DataProperty
                 }
             }
             unset($items);
-        } elseif (!empty($filepath) && file_exists($filepath)) {
+        } elseif (!empty($filepath) && file_exists($filepath) && is_file($filepath)) {
             $parts = pathinfo($filepath);
             if ($parts['extension'] =='xml'){
                 $data = implode("", file($filepath));
