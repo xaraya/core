@@ -10,6 +10,8 @@
             <xar:if condition="!isset($layout)">
                 <div style="margin-top: 20px">No error message is available. 
                 <br />Please contact the system administrator.</div>
+            <xar:elseif condition="$layout eq 'general'"/>
+                <div style="margin-top: 20px">#$message#</div>
             <xar:elseif condition="$layout eq 'invalid_core'"/>
                 <div style="margin-top: 20px">The current Xaraya core #XARCORE_VERSION_NUM# is not compatible with the module #$modname#</div>
             <xar:else />
