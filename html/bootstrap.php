@@ -370,10 +370,11 @@ final class sys extends Object
     **/
     private static function shortpath($path)
     {
-        // We are in bootstrap.php and we want <code>
-            if (strpos($path, $GLOBALS['systemConfiguration']['webDir']) === 0)
-                self::$shortpath = substr($path,strlen($GLOBALS['systemConfiguration']['webDir']));
-            else self::$shortpath = $path;
+        if (empty($GLOBALS['systemConfiguration']['webDir']))
+            self::$shortpath = $path;
+        elseif (strpos($path, $GLOBALS['systemConfiguration']['webDir']) === 0)
+            self::$shortpath = substr($path,strlen($GLOBALS['systemConfiguration']['webDir']));
+        else self::$shortpath = $path;
         return self::$shortpath;
     }
 
