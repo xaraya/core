@@ -613,7 +613,7 @@ class xarMLS extends Object
         if (strpos($path, sys::code()) === 0) {
             // This is a module, property or block file
             $path = substr($path, strlen(sys::code()));
-        } elseif (strpos($path, 'themes') === 0) {
+        } elseif (strpos($path, xarTpl::getBasedir()) === 0) {
             // This is a theme file
         } else {
             throw new Exception('Unknown MLS path: ' . $path);
