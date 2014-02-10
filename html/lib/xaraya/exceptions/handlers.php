@@ -65,7 +65,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
                 if(file_exists($theme_dir . '/modules/base/message-' . $template . '.xt')) {
                     $msg = xarTpl::file($theme_dir . '/modules/base/message-' . $template . '.xt', self::$data);
                 } else {
-                    $msg = xarTpl::file('modules/base/xartemplates/message-' . $template . '.xt', self::$data);
+                    $msg = xarTpl::file(sys::code() . 'modules/base/xartemplates/message-' . $template . '.xt', self::$data);
                 }
                 echo xarTpl::renderPage($msg);
             } else {
