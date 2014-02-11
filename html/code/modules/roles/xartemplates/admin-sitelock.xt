@@ -28,40 +28,36 @@
             <fieldset>
                 <legend>Groups</legend>
                 <xar:loop name="$roles">
-                        <div class="xar-row">
-                            <div class="xar-col">
-                                <label class="xar-form-label">#$loop:item['name']#</label>
-                                <xar:if condition="$loop:item['notify'] == 'true'">
-                                    <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#" value="#$loop:item['id']#" checked="checked"/>
-                                <xar:else />
-                                    <input type="checkbox" name="notify[]" id="notify_#$loop:item['id']#" value="#$loop:item['id']#"/>
-                                </xar:if>
-                                <label for="notify_#$loop:item['id']#" title="xarML('Toggle notifications sent to this Group')#">
-                                    notify
-                                </label>
-                                <xar:set name="onclick">"this.form.action='" . xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'delete', 'id' => $loop->item['id'])) . "';this.form.submit();"</xar:set>
-                                <xar:if condition="count($roles) gt 1">
-                                    <xar:button type="button" value="$deletelabel" onclick="$onclick"/>
-                                <xar:else />
-                                    <xar:button type="button" value="$deletelabel" onclick="$onclick" disabled="disabled"/>
-                                </xar:if>
-                            </div>
-                        </div>
-                    </xar:loop>
                     <div class="xar-row">
                         <div class="xar-col">
-                            <xar:var name="label">Add a Group to the lock notification list</xar:var>
-                            <label for="newname" title="#$label#" class="xar-form-label">
-                                Add Group:
+                            <label class="xar-form-label">#$loop:item['name']#</label>
+                            <xar:data-input type="checkbox" value="$loop->item['id']"/>
+                            <label for="notify_#$loop:item['id']#" title="xarML('Toggle notifications sent to this Group')#">
+                                notify
                             </label>
-                        </div>
-                        <div class="xar-col">
-                            <input type="text" name="newname" id="newname" value="" class="xar-form-textlong xar-margin-thickright"/>
-                            <xar:var name="label">Add</xar:var>
-                            <xar:set name="onclick">"this.form.action='" . xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'add')) . "';this.form.submit();"</xar:set>
-                            <xar:button type="button" value="$label" onclick="$onclick"/>
+                            <xar:set name="onclick">"this.form.action='" . xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'delete', 'id' => $loop->item['id'])) . "';this.form.submit();"</xar:set>
+                            <xar:if condition="count($roles) gt 1">
+                                <xar:button type="button" value="$deletelabel" target="$onclick"/>
+                            <xar:else />
+                                <xar:button type="button" value="$deletelabel" target="$onclick" disabled="disabled"/>
+                            </xar:if>
                         </div>
                     </div>
+                </xar:loop>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Add a Group to the lock notification list</xar:var>
+                        <label for="newname" title="#$label#" class="xar-form-label">
+                            Add Group:
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" name="newname" id="newname" value="" class="xar-form-textlong xar-margin-thickright"/>
+                        <xar:var name="label">Add</xar:var>
+                        <xar:set name="onclick">"this.form.action='" . xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'add')) . "';this.form.submit();"</xar:set>
+                        <xar:button type="button" value="$label" target="$onclick"/>
+                    </div>
+                </div>
             </fieldset>
             <p>
                 The following message will be emailed to members in the above list when the site is locked or unlocked.
@@ -106,7 +102,7 @@
                         <input type="hidden" name="toggle" id="toggle" value="#$toggle#"/>
                         <xar:var name="label">Save Site Lock Settings</xar:var>
                         <xar:set name="onclick">"this.form.action='" . xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'save')) . "';this.form.submit();"</xar:set>
-                        <xar:button type="button" value="$label" tabindex="2" onclick="$onclick"/>
+                        <xar:button type="button" value="$label" tabindex="2" target="$onclick"/>
                     </div>
                 </div>
             </div>
