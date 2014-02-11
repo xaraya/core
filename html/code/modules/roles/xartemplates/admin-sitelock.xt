@@ -15,8 +15,8 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <xar:set name="onclick">"this.form.action='" . xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'toggle')) . "';this.form.submit();"</xar:set>
-                        <xar:button type="button" value="$togglelabel" onclick="$onclick"/>
+                        <xar:set name="onclick">xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'toggle'))</xar:set>
+                        <xar:button type="button" value="$togglelabel" target="$onclick"/>
                     </div>
                 </div>
             </fieldset>
@@ -35,7 +35,7 @@
                             <label for="notify_#$loop:item['id']#" title="xarML('Toggle notifications sent to this Group')#">
                                 notify
                             </label>
-                            <xar:set name="onclick">"this.form.action='" . xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'delete', 'id' => $loop->item['id'])) . "';this.form.submit();"</xar:set>
+                            <xar:set name="onclick">xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'delete', 'id' => $loop->item['id']))</xar:set>
                             <xar:if condition="count($roles) gt 1">
                                 <xar:button type="button" value="$deletelabel" target="$onclick"/>
                             <xar:else />
@@ -54,7 +54,7 @@
                     <div class="xar-col">
                         <input type="text" name="newname" id="newname" value="" class="xar-form-textlong xar-margin-thickright"/>
                         <xar:var name="label">Add</xar:var>
-                        <xar:set name="onclick">"this.form.action='" . xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'add')) . "';this.form.submit();"</xar:set>
+                        <xar:set name="onclick">xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'add'))</xar:set>
                         <xar:button type="button" value="$label" target="$onclick"/>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                         <input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#"/>
                         <input type="hidden" name="toggle" id="toggle" value="#$toggle#"/>
                         <xar:var name="label">Save Site Lock Settings</xar:var>
-                        <xar:set name="onclick">"this.form.action='" . xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'save')) . "';this.form.submit();"</xar:set>
+                        <xar:set name="onclick">xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'save'))</xar:set>
                         <xar:button type="button" value="$label" tabindex="2" target="$onclick"/>
                     </div>
                 </div>
