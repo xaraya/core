@@ -536,8 +536,14 @@ class xarCSS extends Object
             break;
         }
         if (empty($filePath)) return;
-
-        $tag['url'] = $filePath; //xarServer::getBaseURL() . $filePath;
+        
+        // Turn relative path into an absolute URL
+        $webDir = sys::web();
+        if (!empty($webDir) && strpos($filePath, $webDir) === 0) {
+            $filePath = substr($filePath, strlen($webDir));
+        }
+        $filePath = xarServer::getBaseURL() . $filePath;
+        $tag['url'] = $filePath;
 
         return $this->queue($method, $scope, $tag['url'], $tag);
 
