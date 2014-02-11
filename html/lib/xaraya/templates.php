@@ -978,6 +978,13 @@ class xarTpl extends Object
             break;
         }
 
+        // Turn relative path into an absolute URL
+        $webDir = sys::web();
+        if (!empty($webDir) && strpos($filePath, $webDir) === 0) {
+            $filePath = substr($filePath, strlen($webDir));
+        }
+        $filePath = xarServer::getBaseURL() . $filePath;
+
         // Return as an XML URL if required.
         // This will generally have little effect, but is here for
         // completeness to support alternative types of URL.
