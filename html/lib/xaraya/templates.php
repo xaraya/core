@@ -115,7 +115,7 @@ class xarTpl extends Object
 **/
     public static function getBaseDir()
     {
-        return xarConfigVars::get(null, 'Site.BL.ThemesDirectory', 'themes');
+        return sys::web() . xarConfigVars::get(null, 'Site.BL.ThemesDirectory', 'themes');
     }
 
 /**
@@ -459,7 +459,7 @@ class xarTpl extends Object
         // cache frequently-used sourcefilenames 
         if (xarCoreCache::isCached('Templates.Element', $cachename))
             return xarCoreCache::getCached('Templates.Element', $cachename);
-        
+
         // default paths 
         $themePath = self::getThemeDir();
         $commonPath = self::getThemeDir('common');

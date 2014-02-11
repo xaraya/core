@@ -18,18 +18,18 @@
  * For a standard installation ("out of the box")
  * use these values
  */
-//$systemConfiguration['rootDir'] = "../";
-//$systemConfiguration['webDir']  = "html/";
-//$systemConfiguration['libDir']  = "lib/";
-//$systemConfiguration['codeDir'] = "html/code/";
+//$systemConfiguration['rootDir'] = "../";          // Relative to the calling script
+//$systemConfiguration['webDir']  = "html/";        // Relative to the root directory
+//$systemConfiguration['libDir']  = "lib/";         // Relative to the root directory
+//$systemConfiguration['codeDir'] = "html/code/";   // Relative to the root directory
 /*
  * For a shared hosting environment ("flat install")
  * uncomment these values
  */
-$systemConfiguration['rootDir'] = "";
-$systemConfiguration['webDir']  = "/";
-$systemConfiguration['libDir']  = "lib/";
-$systemConfiguration['codeDir'] = "code/";
+$systemConfiguration['rootDir'] = "";               // Relative to the calling script
+$systemConfiguration['webDir']  = "";               // Relative to the root directory
+$systemConfiguration['libDir']  = "lib/";           // Relative to the root directory
+$systemConfiguration['codeDir'] = "code/";          // Relative to the root directory
 
 /*
  * This value is used to change the default behavior of the

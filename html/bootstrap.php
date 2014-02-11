@@ -244,7 +244,7 @@ final class sys extends Object
     private static $root = null;            // Save our root location
     private static $lib  = null;            // Save our lib location
     private static $code = null;            // Save our code location
-    private static $shortpath = null;       // Save our code location relative to the doc root
+    private static $web  = null;            // Save our web root location
 
     private function __construct()
     {} // no objects can be made out of this.
@@ -282,7 +282,7 @@ final class sys extends Object
      * @param  string $dp 'dot path' a dot separated string describing which component to include
      * @param  bool $root whether to prepend the relative root directory
     **/
-    private static function once($dp, $root=true, $offset='')
+    private static function once($dp, $offset='')
     {
         // If we already have it get out of here asap
         if(!isset(self::$has[$dp]))
@@ -291,8 +291,7 @@ final class sys extends Object
             self::$has[$dp] = true;
             // tiny bit faster would be to use include, but this is quite a bit safer
             // and it will be executed only once anyway. (i.e. if everything uses this class)
-            if ($root) return include_once($offset . self::root() . str_replace('.','/',$dp).'.php');
-            return include_once($offset . str_replace('.','/',$dp).'.php');
+            return include_once($offset . $dp .'.php');
         }
         return true;
     }
@@ -314,10 +313,11 @@ final class sys extends Object
     **/
     public static function import($dp, $offset='')
     {
-        if((0===strpos($dp,'modules.')) || (0===strpos($dp,'properties.')) || (0===strpos($dp,'blocks.'))) {
-            return self::once(self::shortpath($GLOBALS['systemConfiguration']['codeDir'] . $dp), false, $offset);
+        $dp = str_replace('.','/',$dp);
+        if((0===strpos($dp,'modules/')) || (0===strpos($dp,'properties/')) || (0===strpos($dp,'blocks/'))) {
+            return self::once(self::code() . $dp, $offset);
         }
-        return self::once($GLOBALS['systemConfiguration']['libDir'] . $dp, true, $offset);
+        return self::once(self::lib() . $dp, $offset);
     }
 
     /**
@@ -349,6 +349,19 @@ final class sys extends Object
     }
 
     /**
+     * Returns the path of the web root directory.
+     * Note that there WILL be a slash at the end of the return path.
+     *
+     * @return string
+    **/
+    public static function web($offset='')
+    {
+        // We are in bootstrap.php and we want <lib>
+        if(!isset(self::$web))
+            self::$web = $offset . $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['webDir'];
+        return self::$web;
+    }
+    /**
      * Returns the path of the code directory.
      * Note that there WILL be a slash at the end of the return path.
      *
@@ -358,24 +371,8 @@ final class sys extends Object
     {
         // We are in bootstrap.php and we want <code>
         if(!isset(self::$code))
-            self::$code = $offset . self::shortpath($GLOBALS['systemConfiguration']['codeDir']);
+            self::$code = $offset . $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['codeDir'];
         return self::$code;
-    }
-
-    /**
-     * Returns the a path relative to the doc root directory if the path is below that directory
-     * Note that there WILL be a slash at the end of the return path.
-     *
-     * @return string
-    **/
-    private static function shortpath($path)
-    {
-        if (empty($GLOBALS['systemConfiguration']['webDir']))
-            self::$shortpath = $path;
-        elseif (strpos($path, $GLOBALS['systemConfiguration']['webDir']) === 0)
-            self::$shortpath = substr($path,strlen($GLOBALS['systemConfiguration']['webDir']));
-        else self::$shortpath = $path;
-        return self::$shortpath;
     }
 
     /**
@@ -397,7 +394,8 @@ final class sys extends Object
         if (isset($GLOBALS['systemConfiguration']['varDir'])) {
             self::$var = $offset . $GLOBALS['systemConfiguration']['varDir'];
         } else {
-            self::$var = $offset . './var';
+            $basepath = $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['webDir'];
+            self::$var = $offset . $basepath . 'var';
         }
         return self::$var;
     }
