@@ -15,7 +15,8 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <input type="button" value="#$togglelabel#" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=toggle';this.form.submit();"/>
+                        <xar:set name="onclick">"this.form.action='" . xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'toggle')) . "';this.form.submit();"</xar:set>
+                        <xar:button type="button" value="$togglelabel" onclick="$onclick"/>
                     </div>
                 </div>
             </fieldset>
@@ -38,10 +39,11 @@
                                 <label for="notify_#$loop:item['id']#" title="xarML('Toggle notifications sent to this Group')#">
                                     notify
                                 </label>
+                                <xar:set name="onclick">"this.form.action='" . xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'delete', 'id' => $loop->item['id'])) . "';this.form.submit();"</xar:set>
                                 <xar:if condition="count($roles) gt 1">
-                                    <input type="button" value="#$deletelabel#" onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();" class="xar-amrgin-thickleft"/>
+                                    <xar:button type="button" value="$deletelabel" onclick="$onclick"/>
                                 <xar:else />
-                                    <input type="button" value="#$deletelabel#" onclick="this.form.action = '&xar-modurl-roles-admin-sitelock;&amp;cmd=delete&amp;id=#$loop:item['id']#';this.form.submit();" disabled="disabled" class="xar-amrgin-thickleft"/>
+                                    <xar:button type="button" value="$deletelabel" onclick="$onclick" disabled="disabled"/>
                                 </xar:if>
                             </div>
                         </div>
@@ -56,7 +58,8 @@
                         <div class="xar-col">
                             <input type="text" name="newname" id="newname" value="" class="xar-form-textlong xar-margin-thickright"/>
                             <xar:var name="label">Add</xar:var>
-                            <input type="button" value="#$label#" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=add';this.form.submit();" class="xar-margin-thickleft"/>
+                            <xar:set name="onclick">"this.form.action='" . xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'add')) . "';this.form.submit();"</xar:set>
+                            <xar:button type="button" value="$label" onclick="$onclick"/>
                         </div>
                     </div>
             </fieldset>
@@ -102,7 +105,8 @@
                         <input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#"/>
                         <input type="hidden" name="toggle" id="toggle" value="#$toggle#"/>
                         <xar:var name="label">Save Site Lock Settings</xar:var>
-                        <input type="button" value="#$label#" tabindex="2" onclick="this.form.action='&xar-modurl-roles-admin-sitelock;&amp;cmd=save';this.form.submit();"/>
+                        <xar:set name="onclick">"this.form.action='" . xarModURL('roles', 'admin', 'sitelock', array('cmd' => 'save')) . "';this.form.submit();"</xar:set>
+                        <xar:button type="button" value="$label" tabindex="2" onclick="$onclick"/>
                     </div>
                 </div>
             </div>
