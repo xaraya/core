@@ -183,6 +183,8 @@ class xarCSS extends Object
                 self::$instance = new $c;
             }
         }
+        self::$instance->combined   = xarModVars::get('themes', 'css.combined');
+        self::$instance->compressed = xarModVars::get('themes', 'css.compressed');
         return self::$instance;
     }
 
@@ -608,13 +610,12 @@ class xarCSS extends Object
 **/
     public function render($args)
     {
-        //print_r(self::$css);
         if (empty(self::$css)) return;
         extract($args);
         if ($this->combined) {
             $this->combine();
         }
-        $args['styles'] = self::$css;
+        $args['styles'] =& self::$css;
         $args['comments'] = !empty($comments);
 
         return xarTpl::module('themes', 'css', 'render', $args);
