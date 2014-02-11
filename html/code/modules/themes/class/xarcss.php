@@ -693,6 +693,14 @@ class xarCSS extends Object
             if (!$size || $size < strlen($content)) return;
             fclose($fp);
         }
+
+        // Turn relative path into an absolute URL
+        $webDir = sys::web();
+        if (!empty($webDir) && strpos($filePath, $webDir) === 0) {
+            $filePath = substr($filePath, strlen($webDir));
+        }
+        $filePath = xarServer::getBaseURL() . $filePath;
+
         // Queue the combined stylesheet
         $index = md5($cacheKey . '.css');
         self::$css['link']['theme'][$index] = array(
