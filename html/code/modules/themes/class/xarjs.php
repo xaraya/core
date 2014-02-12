@@ -639,7 +639,14 @@ class xarJS extends Object
                 }
                 // fill in the other tag parameters
                 $tag['src'] = $file;
+
+                // Turn relative path into an absolute URL
+                $webDir = sys::web();
+                if (!empty($webDir) && strpos($relPath, $webDir) === 0) {
+                    $relPath = substr($relPath, strlen($webDir));
+                }
                 $filePath = xarServer::getBaseURL() . $relPath;
+
                 if (!empty($params)) {
                     $filePath .= '?'.$params;
                     unset($params);
