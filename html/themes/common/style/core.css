@@ -12,6 +12,7 @@ form related styling
 -------------------------------------------------------------------------[comment] */
 .xar-row {
     display: block;
+    white-space: nowrap;
     }
 .xar-col {
     display: inline-block;
