@@ -966,7 +966,7 @@ class xarTpl extends Object
                 // common block images
                 $paths[] = self::getThemeDir('common') . '/blocks/' . $package . '/images/' . $fileName;
                 // code/blocks/block/xartemplates/style
-                $paths[27] = sys::code() . 'blocks/' . $package . '/xarimages/' . $fileName;
+                $paths[] = sys::code() . 'blocks/' . $package . '/xarimages/' . $fileName;
                 break;
         }
         if (empty($paths)) return;
