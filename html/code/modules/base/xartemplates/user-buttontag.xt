@@ -17,6 +17,8 @@
     </xar:if>
     <xar:if condition="!isset($class)">
         <xar:set name="class">'xar-button'</xar:set>
+    <xar:else/>
+        <xar:set name="class">'xar-button ' . $class</xar:set>
     </xar:if>
     <xar:if condition="$type eq 'submit' or $type eq 'reset' or $type eq 'button'">
         <xar:if condition="!isset($target)">
