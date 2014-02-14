@@ -6,7 +6,8 @@
         <span id="#$id#_text">Uploaded file: 
         <xar:var name="value"/>&#160;
         <xar:var name="label">Clear</xar:var>
-        <input type="button" onClick="document.getElementById('#$id#_hidden').value='';document.getElementById('#$id#_text').innerHTML='';" value="#$label#"/>
+        <xar:set name="onclick">"document.getElementById('" . $id . "_hidden').value='';document.getElementById('" . $id  . "_text').innerHTML='';"</xar:set>
+        <input type="button" onClick="$onclick" value="#$label#"/>
         <br /></span>
         <input type="hidden" name="#$name#" id="#$id#_hidden" value="#$value#"/>
     </xar:if>
