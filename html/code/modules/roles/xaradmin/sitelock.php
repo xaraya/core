@@ -35,6 +35,9 @@ function roles_admin_sitelock(Array $args=array())
     } else {
     // Get parameters from input
         if (!xarVarFetch('serialroles', 'str', $serialroles, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!isset($serialroles)) {
+            return xarTpl::module('roles', 'user', 'errors');
+        }
         $roles = unserialize($serialroles);
         $rolesCount = count($roles);
         if (!xarVarFetch('lockedoutmsg', 'str',   $lockedoutmsg, NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
