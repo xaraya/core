@@ -35,7 +35,7 @@ class UserListProperty extends SelectProperty
     public $validation_group_list           = null;
     public $validation_override             = true;    // Allow values not in the dropdown
     public $display_showfields = '';
-    public $display_showglue = '';
+    public $display_showglue = ', ';
 
     /*
     * Options available to user selection
@@ -161,8 +161,29 @@ class UserListProperty extends SelectProperty
         }
         $select_options['state'] = $this->initialization_user_state;
 
+        // Get the candidates
+        $base_options = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
+        
+        // Adjust for the fields to show
+        if (!empty($base_options)) {        
+            $testrow = $base_options[0];
+            $fields = explode(',',$this->display_showfields);
+            foreach ($fields as $k => $v) {
+                if (!isset($testrow[trim($v)])) unset($fields[$k]);
+            }
+            foreach($base_options as $key => $value) {
+                $namestring = '';
+                foreach ($fields as $v) {
+                    $v = $value[trim($v)];
+                    if (empty($v)) continue;
+                    $namestring .= $v . $this->display_showglue;
+                }
+                $namestring = substr($namestring, 0, -strlen($this->display_showglue));
+                $base_options[$key]['name'] = $namestring;
+            }
+        }
         $options = $this->getFirstline();
-        $options = array_merge($options,xarMod::apiFunc('roles', 'user', 'getall', $select_options));
+        $options = array_merge($options,$base_options);
         return $options;
     }
 }
