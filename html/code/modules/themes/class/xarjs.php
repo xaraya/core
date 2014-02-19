@@ -219,8 +219,9 @@ class xarJS extends Object
         // we want to look in all active modules
         $modules = xarMod::apiFunc('modules', 'admin', 'getlist',
             array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
-        // we want to look in all active themes
-        // we want to look in all active modules
+        // we want to look in all properties
+        $properties = xarMod::apiFunc('dynamicdata', 'user', 'getproptypes');
+
         // set default paths and filenames
         $baseDir     = xarTpl::getBaseDir();
         $themeDir    = xarTpl::getThemeDir();
@@ -251,6 +252,14 @@ class xarJS extends Object
             $modOSDir = $mod['osdirectory'];
             // look in code/modules/<module>/xartemplates/lib/libname/*
             $paths[] = "{$codeDir}modules/{$modOSDir}/xartemplates/{$libBase}";
+        }
+        // now we look in each property
+        foreach ($properties as $property) {
+            $propdir = $property['name'];
+            // look in code/properties/<property>/xarscripts/lib/libname/*
+            $paths[] = "{$codeDir}properties/{$propdir}/{$libBase}";
+            // look in code/properties/<property>/xartemplates/lib/libname/*
+            $paths[] = "{$codeDir}properties/{$propdir}/xartemplates/{$libBase}";
         }
         
         // build an array of potential libraries
@@ -482,7 +491,7 @@ class xarJS extends Object
                 }
                 // optionally specify plugin style
                 if (empty($style)) $style = '';
-                
+
                 $info = $this->getPluginInfo($lib, $plugin, $version, $file, $style);
                 if ($info['origin'] == 'local') {
                     $src = xarServer::getBaseURL() . $info['src'];
@@ -971,7 +980,7 @@ class xarJS extends Object
 
         if (isset($this->local_libs[$lib])) {
             $thislib = $this->local_libs[$lib];
-        
+
             // Start by taking the latest version, or the version asked for
             $plugins = $thislib->plugins;
             foreach ($plugins as $plugin => $pluginarray) {
@@ -1073,6 +1082,9 @@ class xarJSLib extends Object
         // we want to look in all active modules
         $modules = xarMod::apiFunc('modules', 'admin', 'getlist',
             array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+        // we want to look in all properties
+        $properties = xarMod::apiFunc('dynamicdata', 'user', 'getproptypes');
+
         // set default paths and filenames
         $libName     = $this->name;
         $baseDir     = xarTpl::getBaseDir();
@@ -1103,6 +1115,14 @@ class xarJSLib extends Object
             $modOSDir = $mod['osdirectory'];
             // look in code/modules/<module>/xartemplates/lib/libname/*
             $paths['module'][$modOSDir] = "{$codeDir}modules/{$modOSDir}/xartemplates/{$libBase}/{$libName}";
+        }
+        // now we look in each property
+        foreach ($properties as $property) {
+            $propdir = $property['name'];
+            // look in code/properties/<property>/xarscripts/lib/libname/*
+            $paths['properties'][$propdir] = "{$codeDir}properties/{$propdir}/{$libBase}/{$libName}";
+            // look in code/properties/<property>/xartemplates/lib/libname/*
+//            $paths['properties'][$propdir] = "{$codeDir}properties/{$propdir}/xartemplates/{$libBase}/{$libName}";
         }
         
         // Load the version class to check versions
