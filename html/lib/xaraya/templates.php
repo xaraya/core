@@ -861,7 +861,7 @@ class xarTpl extends Object
  *
  * Example:
  * $my_module_image = xarTpl::getImage('button1.png');
- * $other_module_image = xarTpl::getImage('set1/info.png','modules');
+ * $other_module_image = xarTpl::getImage('set1/info.png','module');
  *
  * Correct practices:
  *
