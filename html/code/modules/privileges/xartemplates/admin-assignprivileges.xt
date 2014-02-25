@@ -6,245 +6,233 @@
     </xar:set>
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-    <div class="xar-mod-page-head">
-        <h2>            
-            Assign Privileges            
-        </h2>
-        <xar:template file="headerconfig" type="module"/>
-	</div>
-    <div class="xar-mod-page-body">
-        <h3>
-            Privilege Assignments for #$tabmodule#
-        </h3>
-        <form id="groupassignments" method="post" action="#xarModURL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
-            <fieldset>
-                <legend>
-                    Privileges on groups
-                    <xar:if condition="count($groupassignments) eq 0">
-                        :&#160;None assigned
-                    </xar:if>
-                </legend>
-                <xar:if condition="count($groupassignments) > 0">
-                    <table class="xar-table xar-items" border="0" name="list" id="list">
-                        <tr>
-                            <th>
-                                Privilege
-                            </th>
-                            <th>
-                                Role
-                            </th>
-                            <th>
-                                Component
-                            </th>
-                            <th>
-                                Access
-                            </th>
-                            <th>
-                                Action
-                            </th>
-                        </tr>
-
-                        <xar:if condition="count($groupassignments) eq 0">
-                            <tr>
-                                <td colspan="5">No assignments to display</td>
-                            </tr>
-                        <xar:else />
-                            <xar:loop name="$groupassignments">
-                                <xar:if condition="(($loop:index + 1) % 2)">
-                                    <xar:set name="displayclass">'xar-norm'</xar:set>
-                                <xar:else />
-                                    <xar:set name="displayclass">'xar-accent'</xar:set>
-                                </xar:if>
-                                <xar:set name="row">#$loop:item#</xar:set>
-                                <xar:template file="assignmentrow"/>
-                            </xar:loop>
-                        </xar:if>
-                    </table>
-                </xar:if>
-                <fieldset>
-                    <!-- Illustrating Definition List Approach -->
-                    <legend>Add an Assignment</legend>
-                    <dl>
-                        <xar:var name="label">Assign a privilege to a user or group.</xar:var>
-                        <dt>
-	                        <label title="#$label#">
-	                            Add Privilege
-	                        </label>
-                        </dt>
-                    	<dd>
-                    		<xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege"/> 
-                    		to 
-                    		<xar:data-input type="grouplist" name="role" firstline="Select a group"/>    
-                    	</dd>
-                   	</dl>
-                   	<dl class="xar-form-actions">
-                    	<dt>
-                    		<label title="#$label#">
-	                            Assign
-	                        </label>
-                    	</dt>
-                    	<dd>                    	
-                    		<xar:var name="label">Update Assignments</xar:var>
-                            <xar:button type="submit" label="$label"/>
-                    	</dd>
-                    </dl>
-                	<input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                	<input type="hidden" name="phase" id="phase" value="update"/>
-                	<input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                	<input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#"/>
-                </fieldset>
-            </fieldset>
-        </form>
-        <form id="anonassignments" method="post" action="#xarModURL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
-            <fieldset>
-                <legend>
-                    Privileges on the anonymous user
-                    <xar:if condition="count($anonassignments) eq 0">
-                    :   &#160;None assigned
-                    </xar:if>
-                </legend>
-                <xar:if condition="count($anonassignments) > 0">
-                    <table class="xar-table" border="0" name="list" id="list" width="100%" cellpadding="2" cellspacing="2">
-                        <tr>
-                            <th>
-                                Privilege
-                            </th>
-                            <th>
-                                Role
-                            </th>
-                            <th>
-                                Component
-                            </th>
-                            <th>
-                                Access
-                            </th>
-                            <th>
-                                Action
-                            </th>
-                        </tr>
-
-                        <xar:if condition="count($anonassignments) eq 0">
-                            <tr>
-                                <td colspan="5" style="text-align: center">No assignments to display</td>
-                            </tr>
-                        <xar:else />
-                            <xar:loop name="$anonassignments">
-                                <xar:if condition="(($loop:index + 1) % 2)">
-                                    <xar:set name="displayclass">'xar-norm'</xar:set>
-                                <xar:else />
-                                    <xar:set name="displayclass">'xar-accent'</xar:set>
-                                </xar:if>
-                                <xar:set name="row">#$loop:item#</xar:set>
-                                <xar:template file="assignmentrow"/>
-                            </xar:loop>
-                        </xar:if>
-                    </table>
-                </xar:if>
+        <div class="xar-mod-page-head">
+            <h2>            
+                Assign Privileges            
+            </h2>
+            <xar:template file="headerconfig" type="module"/>
+        </div>
+        <div class="xar-mod-page-body">
+            <h3>
+                Privilege Assignments for #$tabmodule#
+            </h3>
+            <form id="groupassignments" method="post" action="#xarModURL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>
-                        <xar:var name="label">Assign a privilege to a user or group.</xar:var>
-                        <label title="#$label#">
-                            Add an assignment
-                        </label>
+                        Privileges on groups
+                        <xar:if condition="count($groupassignments) eq 0">
+                            :&#160;None assigned
+                        </xar:if>
                     </legend>
-                    <dl>
-	                    <dt><label>Add Privilege</label></dt>
-	                    <dd>
-		                    <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" /> &#160;
-		                    to the Anonymous (unregistered) user
-		                    <xar:set name="anon">xarConfigVars::get(null,'Site.User.AnonymousUID')</xar:set>
-	                    </dd>
-                    </dl>
-                    <dl class="xar-form-action">
-                    	<dt><label>Assign</label></dt>
-                    	<dd>
-                    		<xar:var name="label">Update Assignments</xar:var>
+                    <xar:if condition="count($groupassignments) > 0">
+                        <table class="xar-table xar-items" border="0" name="list" id="list">
+                            <tr>
+                                <th>
+                                    Privilege
+                                </th>
+                                <th>
+                                    Role
+                                </th>
+                                <th>
+                                    Component
+                                </th>
+                                <th>
+                                    Access
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+
+                            <xar:if condition="count($groupassignments) eq 0">
+                                <tr>
+                                    <td colspan="5">No assignments to display</td>
+                                </tr>
+                            <xar:else />
+                                <xar:loop name="$groupassignments">
+                                    <xar:if condition="(($loop:index + 1) % 2)">
+                                        <xar:set name="displayclass">'xar-norm'</xar:set>
+                                    <xar:else />
+                                        <xar:set name="displayclass">'xar-accent'</xar:set>
+                                    </xar:if>
+                                    <xar:set name="row">#$loop:item#</xar:set>
+                                    <xar:template file="assignmentrow"/>
+                                </xar:loop>
+                            </xar:if>
+                        </table>
+                    </xar:if>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Assign a privilege to a user or group</xar:var>
+                            <label title="#$label#">
+                                Add an assignment
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege"/> 
+                            to 
+                            <xar:data-input type="grouplist" name="role" firstline="Select a group"/>    
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                        </div>
+                        <div class="xar-col">
+                            <xar:var name="label">Update Assignments</xar:var>
                             <xar:button type="submit" label="$label"/>
-                    	</dd>
-                    </dl>
+                        </div>
+                    </div>
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="phase" id="phase" value="update"/>
+                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                    <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#"/>
+                </fieldset>
+            </form>
+            <form id="anonassignments" method="post" action="#xarModURL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
+                <fieldset>
+                    <legend>
+                        Privileges on the anonymous user
+                        <xar:if condition="count($anonassignments) eq 0">
+                        :   &#160;None assigned
+                        </xar:if>
+                    </legend>
+                    <xar:if condition="count($anonassignments) > 0">
+                        <table class="xar-table" border="0" name="list" id="list" width="100%" cellpadding="2" cellspacing="2">
+                            <tr>
+                                <th>
+                                    Privilege
+                                </th>
+                                <th>
+                                    Role
+                                </th>
+                                <th>
+                                    Component
+                                </th>
+                                <th>
+                                    Access
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+
+                            <xar:if condition="count($anonassignments) eq 0">
+                                <tr>
+                                    <td colspan="5" style="text-align: center">No assignments to display</td>
+                                </tr>
+                            <xar:else />
+                                <xar:loop name="$anonassignments">
+                                    <xar:if condition="(($loop:index + 1) % 2)">
+                                        <xar:set name="displayclass">'xar-norm'</xar:set>
+                                    <xar:else />
+                                        <xar:set name="displayclass">'xar-accent'</xar:set>
+                                    </xar:if>
+                                    <xar:set name="row">#$loop:item#</xar:set>
+                                    <xar:template file="assignmentrow"/>
+                                </xar:loop>
+                            </xar:if>
+                        </table>
+                    </xar:if>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Assign a privilege to the anonymous user</xar:var>
+                            <label title="#$label#">
+                                Add an assignment
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" /> &#160;
+                            to the Anonymous (unregistered) user
+                            <xar:set name="anon">xarConfigVars::get(null,'Site.User.AnonymousUID')</xar:set>
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                        </div>
+                        <div class="xar-col">
+                            <xar:var name="label">Update Assignments</xar:var>
+                            <xar:button type="submit" label="$label"/>
+                        </div>
+                    </div>
                     <input type="hidden" name="role" value="#$anon#"/>    
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="phase" id="phase" value="update"/>
                     <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                     <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#"/>
                 </fieldset>
-            </fieldset>
-        </form>
-        <form id="userassignments" method="post" action="#xarModURL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
-            <fieldset>
-                <legend>
-                    Privileges on other users
-                    <xar:if condition="count($userassignments) eq 0">
-                    :   &#160;None assigned
-                    </xar:if>
-                </legend>
-                <xar:if condition="count($userassignments) > 0">
-                    <table class="xar-table" border="0" name="list" id="list" width="100%" cellpadding="2" cellspacing="2">
-                        <tr>
-                            <th>
-                                Privilege
-                            </th>
-                            <th>
-                                Role
-                            </th>
-                            <th>
-                                Component
-                            </th>
-                            <th>
-                                Access
-                            </th>
-                            <th style="text-align: center;">
-                                Action
-                            </th>
-                        </tr>
-
-                        <xar:if condition="count($userassignments) eq 0">
-                            <tr>
-                                <td colspan="5" style="text-align: center">No assignments to display</td>
-                            </tr>
-                        <xar:else />
-                            <xar:loop name="$userassignments">
-                                <xar:if condition="(($loop:index + 1) % 2)">
-                                    <xar:set name="displayclass">'xar-norm'</xar:set>
-                                <xar:else />
-                                    <xar:set name="displayclass">'xar-accent'</xar:set>
-                                </xar:if>
-                                <xar:set name="row">#$loop:item#</xar:set>
-                                <xar:template file="assignmentrow"/>
-                            </xar:loop>
-                        </xar:if>
-                    </table>
-                </xar:if>
+            </form>
+            <form id="userassignments" method="post" action="#xarModURL('privileges','admin','assignprivileges')#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>
-                        <xar:var name="label">Assign a privilege to a user or group.</xar:var>
-                        <label title="#$label#" class="xar-form-label">
-                            Add an assignment
-                        </label>
+                        Privileges on other users
+                        <xar:if condition="count($userassignments) eq 0">
+                        :   &#160;None assigned
+                        </xar:if>
                     </legend>
-                    <dl>
-	                    <dt><label>Add Privilege</label></dt>
-	                    <dd>
-	                    <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" />&#160;
-	                    to
-	                    <input type="text" name="rolename" value="Enter a user name" />    
-	                    &#160;
-	                    </dd>
-                    </dl>
-                    <dl>
-                    <dt><label>Assign</label></dt>
-	                    <dd>
+                    <xar:if condition="count($userassignments) > 0">
+                        <table class="xar-table" border="0" name="list" id="list" width="100%" cellpadding="2" cellspacing="2">
+                            <tr>
+                                <th>
+                                    Privilege
+                                </th>
+                                <th>
+                                    Role
+                                </th>
+                                <th>
+                                    Component
+                                </th>
+                                <th>
+                                    Access
+                                </th>
+                                <th style="text-align: center;">
+                                    Action
+                                </th>
+                            </tr>
+
+                            <xar:if condition="count($userassignments) eq 0">
+                                <tr>
+                                    <td colspan="5" style="text-align: center">No assignments to display</td>
+                                </tr>
+                            <xar:else />
+                                <xar:loop name="$userassignments">
+                                    <xar:if condition="(($loop:index + 1) % 2)">
+                                        <xar:set name="displayclass">'xar-norm'</xar:set>
+                                    <xar:else />
+                                        <xar:set name="displayclass">'xar-accent'</xar:set>
+                                    </xar:if>
+                                    <xar:set name="row">#$loop:item#</xar:set>
+                                    <xar:template file="assignmentrow"/>
+                                </xar:loop>
+                            </xar:if>
+                        </table>
+                    </xar:if>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Assign a privilege to other users</xar:var>
+                            <label title="#$label#">
+                                Add an assignment
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:data-input type="dropdown" name="privilege" options="$options" firstline="Select a privilege" />&#160;
+                            to
+                            <input type="text" name="rolename" value="Enter a user name" />    
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                        </div>
+                        <div class="xar-col">
                             <xar:var name="label">Update Assignments</xar:var>
                             <xar:button type="submit" label="$label"/>
-                        </dd>
-                    </dl>
+                        </div>
+                    </div>
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="phase" id="phase" value="update"/>
                     <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                     <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#"/>
                 </fieldset>
-            </fieldset>
-        </form>
-    </div>
+            </form>
+        </div>
     </div>
 </xar:template>
