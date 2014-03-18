@@ -310,8 +310,7 @@ class Query
             $name = func_get_arg(0);
             $argsarray = $this->_deconstructfield($name);
             $argsarray['value'] = func_get_arg(1);
-        }
-        elseif ($numargs == 1) {
+        } elseif ($numargs == 1) {
             $field = func_get_arg(0);
             if (!is_array($field)) {
                 if (!is_string($field))
@@ -320,15 +319,14 @@ class Query
                     if ($this->type == 'SELECT') {
                         $field = $this->_deconstructfield($field);
                         $argsarray = $field;
-                    }
-                    else {
+                    } else {
                         $newfield = explode('=',$field);
                         if (!isset($newfield[1])) throw new Exception("The field $newfield[0] needs to have a value");
-                        $argsarray = array('name' => trim($newfield[0]), 'value' => trim($newfield[1]));
+                        $argsarray = $this->_deconstructfield(trim($newfield[0]));
+                        $argsarray['value'] = trim($newfield[1]);
                     }
                 }
-            }
-            else {
+            } else {
                 $argsarray = $field;
             }
         }
@@ -357,8 +355,7 @@ class Query
         if (!is_array($fields)) {
             if (!is_string($fields)) {
             //error msg
-            }
-            else {
+            } else {
 
                 if ($fields != '') {
                     $newfields = explode(',',$fields);
@@ -368,15 +365,13 @@ class Query
                     }
                 }
             }
-        }
-        else {
+        } else {
             if ($this->type == 'SELECT') {
                 foreach ($fields as $field) {
                     $field = $this->_deconstructfield($field);
                     $this->addfield($field);
                 }
-            }
-            else {
+            } else {
                 foreach ($fields as $field) $this->addfield($field);
             }
         }
@@ -760,7 +755,9 @@ class Query
                         $elements[] = '?';
                     }
                 } else {
-                    foreach ($condition['field2'] as $element) $elements[] = $this->dbconn->qstr($element);
+                    foreach ($condition['field2'] as $element) {
+                        $elements[] = is_numeric($element) ? $element : "'" . $element . "'";
+                    }
                 }
 
                 $sqlfield = '(' . implode(',',$elements) . ')';
@@ -1137,16 +1134,16 @@ class Query
             foreach ($this->fields as $field) {
                 if (is_array($field)) {
                     if(isset($field['name']) && isset($field['value'])) {
+                        // Turn off binding if we have an expression for the value (such as another field)
+                        if(substr($field['value'],0,1) == '&') $this->usebinding = false;
                         if ($this->usebinding) {
                             $this->bindstring .= $this->_reconstructfield($field) . " = ?, ";
                             $this->bindvars[] = $field['value'];
-                        }
-                        else {
+                        } else {
                             if ((gettype($field['value']) == 'string') && (substr($field['value'],0,1) != '&')) {
                                 echo substr($field['value'],0,1);exit;
                                 $sqlfield = $this->dbconn->qstr($field['value']);
-                            }
-                            else {
+                            } else {
                                 if(substr($field['value'],0,1) == '&') {
                                     $sqlfield = substr($field['value'],1);
                                 } else {
@@ -1179,17 +1176,10 @@ class Query
                                   'field2' => $link['field2'],
                                   'op' => $link['op']),1);
         }
-/*        if (count($this->bindings)>0) {
-            $c = " WHERE ";
-            $c .= $this->_getbindings();
-        }
-*/
+
         if (count($this->conditions)>0) {
             $conditions = $this->_getconditions();
             if (!empty($conditions)) $c = " WHERE " . $conditions;
-//            if ($conditions == '') return $c;
-//            if ($c == '') $c = " WHERE " . $conditions;
-//            else $c .= " " . $this->implicitconjunction . " "  . $conditions;
         }
         $this->conditions = $temp1;
         $this->conjunctions = $temp2;
