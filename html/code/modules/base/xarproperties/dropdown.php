@@ -119,7 +119,7 @@ class SelectProperty extends DataProperty
                 $normalizedoptions[] = array('id' => $key, 'name' => $value);
             $data['options'] = $normalizedoptions;
         }
-            
+
         // check if we need to add the current value to the options
         if (!empty($data['value']) && $this->validation_override) {
             $found = false;
@@ -177,7 +177,9 @@ class SelectProperty extends DataProperty
             return $this->options;
         }
         
+        // filepath appears always empty?
         if (empty($filepath)) $filepath = sys::code() . $this->initialization_file;
+
         if (!empty($this->initialization_function)) {
             @eval('$items = ' . $this->initialization_function .';');
             if (!isset($items) || !is_array($items)) $items = array();
