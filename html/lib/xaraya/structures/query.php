@@ -1470,7 +1470,7 @@ class Query
         $table = isset($parts[1]) ? $parts[0] : $table;
         $result = $this->dbconn->Execute("SELECT MAX($field) FROM $table");
         list($id) = $result->fields;
-        return $id;
+        return (int)$id;
     }
     public function nextid($table="", $id="")
     {
