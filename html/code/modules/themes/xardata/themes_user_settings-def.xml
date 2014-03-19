@@ -3,8 +3,8 @@
   <label>Themes</label>
   <module_id>182</module_id>
   <itemtype>7</itemtype>
-  <class>DataObject</class>
-  <filepath>auto</filepath>
+  <class>ThemesUserSettings</class>
+  <filepath>modules/themes/class/user_settings.php</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <datastore>module_variables</datastore>
