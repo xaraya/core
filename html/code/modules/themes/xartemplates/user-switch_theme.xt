@@ -8,11 +8,12 @@
                 <div class="xar-row">
                     <div class="xar-col">
                         <label for="default_theme" class="xar-form-label">
-                            Select Theme
+                            Select Themex
                         </label>
                     </div>
                     <div class="xar-col">
-                        <xar:data-input property="$user_themes" name="default_theme" id="default_theme"/>
+                        <xar:set name="value">xarModUserVars::get('themes', 'default_theme')</xar:set>#$value#
+                        <xar:data-input property="$user_themes" name="default_theme" id="default_theme" value="$value"/>
                     </div>
                 </div>
             </fieldset>
