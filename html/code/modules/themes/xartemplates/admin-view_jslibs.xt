@@ -136,7 +136,7 @@
                         </tr>
                         <xar:if condition="empty($fieldvalues)">
                             <tr>
-                                <td colspan="9">
+                                <td colspan="10">
                                     No local libraries found
                                 </td>
                             </tr>
