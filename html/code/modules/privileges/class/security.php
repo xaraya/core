@@ -112,7 +112,7 @@ class xarSecurity extends Object
     {
         self::initialize();
         $userID = xarSession::getVar('role_id');
-        xarLogMessage("PRIVS: id in security check: $userID");
+        xarLog::message("PRIVS: id in security check: $userID");
         if ($userID == XARUSER_LAST_RESORT) return true;
 
         // mask-based security check for the group(s) of the current user (optional)
@@ -172,7 +172,7 @@ class xarSecurity extends Object
             else {
                 $msg = xarML('Did not find mask #(1) registered for component #(2) in module #(3)', $maskname, $component, $module);
             }
-            xarLogMessage($msg);
+            xarLog::message($msg);
             return false;
         }
 
@@ -461,7 +461,7 @@ class xarSecurity extends Object
                 } else {
                     $msg .= " NOT FOUND. \n";
                 }
-                xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                xarLog::message($msg, XARLOG_LEVEL_DEBUG);
             }
             if ($privilege['level'] == 0 && self::includes($privilege,$mask)) {
                 if (!self::$inheritdeny && is_object($role)) {
@@ -499,7 +499,7 @@ class xarSecurity extends Object
                 echo "Comparing <font color='blue'>[" . self::present($privilege) . "]</font> and <font color='green'>[" . self::present($mask) . "]</font>. ";
                 $msg = "Comparing \n  Privilege: ".self::present($privilege).
                     "\n       Mask: ".self::present($mask);
-                xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                xarLog::message($msg, XARLOG_LEVEL_DEBUG);
             }
             if (self::includes($privilege,$mask)) {
                 if (self::implies($privilege,$mask)) {
@@ -508,7 +508,7 @@ class xarSecurity extends Object
                         $msg = $privilege['name'] . " WINS! ".
                             "Privilege includes mask. ".
                             "Privilege level greater or equal.\n";
-                        xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                        xarLog::message($msg, XARLOG_LEVEL_DEBUG);
                     }
                     if (!$pass || $privilege['level'] > $pass['level']) $pass = $privilege;
                 }
@@ -518,7 +518,7 @@ class xarSecurity extends Object
                         $msg = $mask['name'] . " MATCHES! ".
                                 "Privilege includes mask. Privilege level ".
                                 "lesser.\n";
-                        xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                        xarLog::message($msg, XARLOG_LEVEL_DEBUG);
                     }
                 }
                 $matched = true;
@@ -529,7 +529,7 @@ class xarSecurity extends Object
                         $msg = $privilege['name'] ." WINS! ".
                             "Mask includes privilege. Privilege level ".
                             "greater or equal.\n";
-                        xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                        xarLog::message($msg, XARLOG_LEVEL_DEBUG);
                     }
                     if (!$pass || $privilege['level'] > $pass['level']) $pass = $privilege;
                     $matched = true;
@@ -540,14 +540,14 @@ class xarSecurity extends Object
                         $msg = $mask['name']." MATCHES! ".
                             "Mask includes privilege. Privilege level ".
                             "lesser.\n";
-                        xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                        xarLog::message($msg, XARLOG_LEVEL_DEBUG);
                     }
                 }
             } else {
                 if($test && ($testmask == $mask['name'] || $testmask == "All")) {
                     echo "<font color='red'>no match</font>. Continuing with other checks..<br />";
                     $msg = "NO MATCH.\n";
-                    xarLogMessage($msg, XARLOG_LEVEL_DEBUG);
+                    xarLog::message($msg, XARLOG_LEVEL_DEBUG);
                 }
             }
         }

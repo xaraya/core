@@ -261,7 +261,7 @@ class xarPrivileges extends xarMasks
     {
         parent::initialize();
 
-        xarLogMessage('PRIV: getting all privs, once!');
+        xarLog::message('PRIV: getting all privs, once!');
         $where = "WHERE itemtype = " . self::PRIVILEGES_PRIVILEGETYPE;
         if (!empty($args['name']))      $where .= ' AND p.name = ' . $args['name'];
         if (!empty($args['module'])) {

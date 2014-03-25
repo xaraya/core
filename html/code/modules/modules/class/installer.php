@@ -208,7 +208,7 @@ class Installer extends Object
         if (!$this->checkformissing()) { return; }
 
         if(in_array($regid,$checked_ids)) {
-            xarLogMessage("Already got the dependencies of $regid, skipping");
+            xarLog::message("Already got the dependencies of $regid, skipping");
             return true; 
         }
         $this->moduleschecked[] = $regid;
@@ -304,7 +304,7 @@ class Installer extends Object
 
         // If we have already got the same id in the same request, dont do it again.
         if(in_array($regid, $this->dependentmodules)) {
-            xarLogMessage("We already checked module $regid, not doing it a second time");
+            xarLog::message("We already checked module $regid, not doing it a second time");
             return true;
         }
         $this->dependentmodules[] = $regid;
@@ -564,14 +564,14 @@ class Installer extends Object
 
     function removewithdependents($regid=null)
     {
-        xarLogMessage('Removing with dependents');
+        xarLog::message('Removing with dependents');
 
         // Argument check
         if (!isset($regid)) throw new EmptyParameterException('regid');
 
         // See if we have lost any modules since last generation
         if (!$this->checkformissing()) {
-            xarLogMessage('Missing module since last generation');
+            xarLog::message('Missing module since last generation');
             return;
         }
 

@@ -206,7 +206,7 @@ class DataPropertyMaster extends Object
                     xarMLSLoadTranslations(sys::code() . $propertyInfo['filepath']);
                 }
                 else
-                    xarLogMessage("WARNING: Property translations for $propertyClass NOT loaded");
+                    xarLog::message("Property translations for $propertyClass NOT loaded", XARLOG_LEVEL_WARNING);
 
                 if(!file_exists(sys::code() . $propertyInfo['filepath']))
                     throw new FileNotFoundException($propertyInfo['filepath']);

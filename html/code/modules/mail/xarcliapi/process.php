@@ -22,7 +22,7 @@
  */
 function mail_cliapi_process(Array $args=array())
 {
-    xarLogMessage("MAIL: processing incoming message");
+    xarLog::message("MAIL: processing incoming message");
     extract($args);
     assert('$argc > 0 && $argv[1] == "mail"; /* Wrong call to mail_cli_process handler */');
 

@@ -394,7 +394,7 @@ class DataObjectMaster extends Object
         $dynamicobjects = $xartable['dynamic_objects'];
 
         $bindvars = array();
-        xarLogMessage("DB: query in getObjects");
+        xarLog::message("DB: query in getObjects");
         $query = "SELECT id,
                          name,
                          label,
@@ -473,7 +473,7 @@ class DataObjectMaster extends Object
         $dynamicobjects = $xartable['dynamic_objects'];
  
         $bindvars = array();
-        xarLogMessage('DD: query in getObjectInfo');
+        xarLog::message('DD: query in getObjectInfo');
         $query = "SELECT id,
                          name,
                          label,
@@ -839,7 +839,7 @@ class DataObjectMaster extends Object
         $descriptor = new DataObjectDescriptor($args);
         $objectid = $object->createItem($descriptor->getArgs());
         $classname = get_class($object);
-        xarLogMessage("Creating an object of class " . $classname . ". Objectid: " . $objectid . ", module: " . $args['moduleid'] . ", itemtype: " . $args['itemtype']);
+        xarLog::message("Creating an object of class " . $classname . ". Objectid: " . $objectid . ", module: " . $args['moduleid'] . ", itemtype: " . $args['itemtype']);
         unset($object);
         return $objectid;
     }

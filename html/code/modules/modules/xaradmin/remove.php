@@ -75,7 +75,7 @@ function modules_admin_remove ()
     // Removes with dependents, first remove the necessary dependents then the module itself
     if (!$installer->removewithdependents($id)) {
         //Call exception
-        xarLogMessage('Missing module since last generation!');
+        xarLog::message('Missing module since last generation!');
         return;
     } // Else
 
