@@ -49,7 +49,7 @@ class xarLogger extends Object
     *
     * The level of the messages which will be logged.
     */
-    private $_logLevel;
+    private $logLevel;
 
     /**
     * Identity of the logger.
@@ -58,17 +58,17 @@ class xarLogger extends Object
     * in highly frequented sites, the time of the logged message isnt as good to diferenciate
     * different pageviews
     */
-    private $_ident;
+    private $ident;
 
     /**
     * String containing the format to use when generating timestamps.
     * @var string
     */
     // Note: before changing this, check windows support for the specifiers
-    private $_timeFormat = '%b %d %H:%M:%S';
+    private $timeFormat = '%b %d %H:%M:%S';
 
     // Elapsed time.
-    private $_elapsed = 0;
+    private $elapsed = 0;
 
     /**
      * Sets up the configuration specific parameters for each driver
@@ -80,25 +80,25 @@ class xarLogger extends Object
      */
     function setConfig(array &$conf)
     {
-        $this->_logLevel = $conf['loglevel'];
+        $this->logLevel = $conf['loglevel'];
 
         $microtime = explode(" ", microtime());
-        $this->_elapsed = ((float)$microtime[0] + (float)$microtime[1]);
+        $this->elapsed = ((float)$microtime[0] + (float)$microtime[1]);
 
 /*
         // If no identity is given yet to this page view, then create it
-        if (!isset($GLOBALS['_xar_logging_ident'])) {
-            $GLOBALS['_xar_logging_ident'] = md5(microtime());
+        if (!isset($GLOBALS['_xar_loggingident'])) {
+            $GLOBALS['_xar_loggingident'] = md5(microtime());
         }
 
         // Assigns the page view identity to be logged as the logger identity
-        $this->_ident = $GLOBALS['_xar_logging_ident'];
+        $this->ident = $GLOBALS['_xar_loggingident'];
 */
-        $this->_ident = '';
+        $this->ident = '';
 
         // If a custom time format has been provided, use it.
         if (!empty($conf['timeFormat'])) {
-            $this->_timeFormat = $conf['timeFormat'];
+            $this->timeFormat = $conf['timeFormat'];
         }
     }
 
@@ -110,7 +110,7 @@ class xarLogger extends Object
      */
     function doLogLevel($level)
     {
-        if ($level & $this->_logLevel) {
+        if ($level & $this->logLevel) {
             return true;
         }
 
@@ -148,7 +148,7 @@ class xarLogger extends Object
         // NOTE: when using E_STRICT, and PHP has no 'own' timezone setting
         // strftime() will issue notices on that. But that's what you get with
         // E_STRICT ;-) so we will leave this.  
-        return strftime($this->_timeFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->_elapsed, 3),3);
+        return strftime($this->timeFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->elapsed, 3),3);
     }
 }
 

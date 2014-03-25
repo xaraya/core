@@ -517,6 +517,29 @@
                             <div class="xar-row">
                                 <div class="xar-col">
                                     <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                                        Log level:                                
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:set name="value">@unserialize(xarSystemVars::get(sys::CONFIG, 'Log.Level'))</xar:set>
+                                    <xar:set name="options">
+                                            array(
+                                                array('id' =>   1, 'name' => xarML('Emergency')),
+                                                array('id' =>   2, 'name' => xarML('Alert')),
+                                                array('id' =>   4, 'name' => xarML('Critical')),
+                                                array('id' =>   8, 'name' => xarML('Error')),
+                                                array('id' =>  16, 'name' => xarML('Warning')),
+                                                array('id' =>  32, 'name' => xarML('Notice')),
+                                                array('id' =>  64, 'name' => xarML('Info')),
+                                                array('id' => 128, 'name' => xarML('Debug')),
+                                            )
+                                    </xar:set>
+                                    <xar:data-input type="checkboxlist" name="loglevel" value="$value" options="$options"/>
+                                </div>
+                            </div>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
                                         The current log file is:                                
                                     </label>
                                 </div>
@@ -528,6 +551,28 @@
                         <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                         <xar:template file="update-button" module="base" />
                     </form>
+                    <xar:set name="enabled">xarSystemVars::get(sys::CONFIG, 'Log.Enabled')</xar:set>
+                    <xar:if condition="$enabled">
+                        <fieldset>
+                            <legend>
+                                View Log
+                            </legend>
+                            <xar:data-input type="textarea" cols="100" rows="50" name="logfile" value="$log_data"/>
+                        </fieldset>
+                    </xar:if>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                        </div>
+                        <div class="xar-col">
+                            <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+                                <xar:var name="label">Clear Log</xar:var>
+                                <xar:button type="submit" name="clear" label="$label"/>
+                                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                                <xar:var name="label">Save and Clear Log</xar:var>
+                                <xar:button type="submit" name="clearsave" label="$label"/>
+                            </form>
+                        </div>
+                    </div>
                 </xar:if>
             <!-- Begin Other Options -->
             <xar:elseif condition="$tab eq 'other'"/>

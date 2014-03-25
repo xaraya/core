@@ -91,6 +91,7 @@ class xarLog extends Object
         
         $xarLogConfig = array();
     
+        // Check if we have a log configuration file in the var directory
         if (self::configReadable())
         {
             // CHECKME: do we need to wrap this?
@@ -98,17 +99,28 @@ class xarLog extends Object
                 throw new LoggerException('xarLog_init: Log configuration file is invalid!');
             }
     
+        // No file found. Try and fall back
         } elseif (self::fallbackPossible()) {
             //Fallback mechanism to allow some logging in important cases when
             //the user might not have logging yet installed, or for some reason we
             //should be able to have a way to get error messages back => installation?!
             $logFile = self::fallbackFile();
             if ($logFile) {
+                $levels = @unserialize(xarSystemVars::get(sys::CONFIG, 'Log.Level'));
+                if (!empty($levels)) {
+                    $logLevel = 0;
+                    $levels = explode(',', $levels);
+                    foreach ($levels as $level) $logLevel |= (int)$level;
+                } else {
+                    $logLevel = XARLOG_LEVEL_ALL;
+                }
+
                 self::$config[] = array(
                     'type'      => 'simple',
                     'config'    => array(
                         'fileName' => $logFile,
-                        'loglevel'  => XARLOG_LEVEL_ALL));
+                        'loglevel'  => $logLevel)
+                        );
             }
         }
     

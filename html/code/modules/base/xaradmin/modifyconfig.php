@@ -113,6 +113,24 @@ function base_admin_modifyconfig()
             switch ($data['tab']) {
                 case 'security':
                 break;
+                case 'logging':
+                    // Delete the log file and create a new, empty one
+                    if (!xarVarFetch('clear','isset',$clear,NULL,XARVAR_NOT_REQUIRED)) return;
+                    $filepath = $picker->initialization_basedirectory . $data['logfilename'];
+                    if (isset($clear)) {
+                        unlink($filepath);
+                        touch($filepath);
+                    }
+                    // Rename the log file and create a new, empty one
+                    if (!xarVarFetch('clearsave','isset',$clear,NULL,XARVAR_NOT_REQUIRED)) return;
+                    $filepath = $picker->initialization_basedirectory . $data['logfilename'];
+                    if (isset($clear)) {
+                        $newname = $filepath . "_" . time();
+                        rename($filepath, $newname);
+                        touch($filepath);
+                    }
+                    $data['log_data'] = trim(xarMod::apiFunc('base', 'admin', 'read_file', array('file' => $filepath)));
+                break;
             }
             break;
         case 'update':
@@ -227,7 +245,10 @@ function base_admin_modifyconfig()
                     break;
                 case 'logging':                    
                     if (!xarVarFetch('logenabled','int',$logenabled,0,XARVAR_NOT_REQUIRED)) return;
-                    $variables = array('Log.Enabled' => $logenabled, 'Log.Filename' => $data['logfilename']);
+                    $checkboxlist = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
+                    $checkboxlist->checkInput('loglevel');
+                    $loglevel = serialize($checkboxlist->value);
+                    $variables = array('Log.Enabled' => $logenabled, 'Log.Level' => $loglevel, 'Log.Filename' => $data['logfilename']);
                     xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
                     xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'logging')));
                     break;

@@ -42,6 +42,7 @@ $systemConfiguration['DB.Persistent'] = false;
  * For more advanced logging options use the logconfig module
  */
 $systemConfiguration['Log.Enabled']  = '0';
+$systemConfiguration['Log.Level'] = 's:7:"1,2,4,8";';
 $systemConfiguration['Log.Filename'] = 'xarayalog.txt';
 
 /* System Time Zone
