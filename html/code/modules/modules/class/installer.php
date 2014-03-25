@@ -577,7 +577,7 @@ class Installer extends Object
 
         //Get the dependents list
         $dependents = $this->getalldependents($regid);
-        xarLogVariable('dependents',$dependents);
+        xarLog::variable('dependents',$dependents);
 
         //Deactivate Actives
         foreach ($dependents['active'] as $active_dependent) {
