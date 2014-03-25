@@ -172,12 +172,14 @@ class FileUploadProperty extends DataProperty
             // TODO: Insert try/catch clause once we know what uploads raises
             // TODO:
             if (!isset($return) || !is_array($return) || count($return) < 2) {
+                xarLog::variable($return, XARLOG_LEVEL_ERROR);
                 $this->value = null;
                 return false;
             }
             if (empty($return[0])) {
                 $this->value = null;
                 $this->invalid = xarML('value');
+                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
                 return false;
             } else {
                 if (empty($return[1])) {

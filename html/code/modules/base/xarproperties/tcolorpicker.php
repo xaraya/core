@@ -40,6 +40,7 @@ class TColorPickerProperty extends DataProperty
         if (!empty($value)) {
             if (strlen($value) > $this->maxlength || !preg_match('/^\#(([a-f0-9]{3})|([a-f0-9]{6}))$/i', $value)) {
                 $this->invalid = xarML('color must be in the format "#RRGGBB" or "#RGB"');
+                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
                 $this->value = null;
                 return false;
             }

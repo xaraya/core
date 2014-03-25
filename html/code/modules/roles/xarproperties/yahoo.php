@@ -45,6 +45,7 @@ class YahooProperty extends TextBoxProperty
                 $this->value = $value;
             } else {
                 $this->invalid = xarML('Yahoo Messenger: #(1)', $this->name);
+                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
                 $this->value = null;
                 return false;
             }

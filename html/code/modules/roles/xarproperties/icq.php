@@ -45,6 +45,7 @@ class ICQProperty extends TextBoxProperty
             if (is_numeric($value)) {
             } else {
                 $this->invalid = xarML('ICQ Number: #(1)', $this->name);
+                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
                 $this->value = null;
                 return false;
             }

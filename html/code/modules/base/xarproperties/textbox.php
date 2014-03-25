@@ -60,6 +60,7 @@ class TextBoxProperty extends DataProperty
             } else {
                 $this->invalid = xarML('#(1) field #(3): must be less than #(2) characters long', $this->name,$this->validation_max_length + 1, $this->desc);
             }
+            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
             $this->value = null;
             return false;
         } elseif (isset($this->validation_min_length) && strlen($value) < $this->validation_min_length) {
@@ -68,6 +69,7 @@ class TextBoxProperty extends DataProperty
             } else {
                 $this->invalid = xarML('#(1) field #(3): must be at least #(2) characters long', $this->name,$this->validation_min_length, $this->desc);
             }
+            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
             $this->value = null;
             return false;
         } elseif (!empty($this->validation_regex) && !preg_match($this->validation_regex, $value)) {
@@ -76,6 +78,7 @@ class TextBoxProperty extends DataProperty
             } else {
                 $this->invalid = xarML('#(1) field #(2): does not match required pattern', $this->name, $this->desc);
             }
+            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
             $this->value = null;
             return false;
         } else {

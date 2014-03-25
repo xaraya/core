@@ -32,6 +32,7 @@ class StaticTextProperty extends DataProperty
     {
         if (isset($value) && $value != $this->value) {
             $this->invalid = xarML('static text: #(1)', $this->name);
+            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
             $this->value = null;
             return false;
         }

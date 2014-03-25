@@ -46,6 +46,7 @@ class MSNProperty extends TextBoxProperty
             $regexp = '/^(?:[^\s\000-\037\177\(\)<>@,;:\\"\[\]]\.?)+@(?:[^\s\000-\037\177\(\)<>@,;:\\\"\[\]]\.?)+\.[a-z]{2,6}$/Ui'; // TODO: verify this !
             if (!preg_match($regexp,$value)) {
                 $this->invalid = xarML('MSN Messenger: #(1)', $this->name);
+                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
                 $this->value = null;
                 return false;
             }

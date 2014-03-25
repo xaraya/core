@@ -58,6 +58,7 @@ class HTMLPageProperty extends SelectProperty
             return true;
         }
         $this->invalid = xarML('selection: #(1)', $this->name);
+        xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
         $this->value = null;
         return false;
     }

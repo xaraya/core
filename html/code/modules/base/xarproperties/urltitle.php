@@ -69,6 +69,7 @@ class URLTitleProperty extends TextBoxProperty
                         if ( (!isset($uri['scheme']) || empty($uri['scheme'])) ||
                             (!isset($uri['host']) || empty($uri['host']))) {
                                 $this->invalid = xarML('URL');
+                                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
                                 $this->value = null;
                                 return false;
                         }

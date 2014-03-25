@@ -56,6 +56,7 @@ class CalendarProperty extends DataProperty
             }
         } else {
             $this->invalid = xarML('date: #(1)', $this->name);
+            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
             $this->value = null;
             return false;
         }

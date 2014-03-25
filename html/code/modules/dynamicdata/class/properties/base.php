@@ -265,6 +265,7 @@ class DataProperty extends Object implements iDataProperty
             } else {
                 $this->invalid = xarML('#(1) cannot have the value #(2)', $this->name,$this->validation_notequals );
             }
+            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
             $this->value = null;
             return false;
         } elseif ($this->validation_equals != null && $value != $this->validation_equals) {
@@ -273,6 +274,7 @@ class DataProperty extends Object implements iDataProperty
             } else {
                 $this->invalid = xarML('#(1) must have the value #(2)', $this->name,$this->validation_notequals );
             }
+            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
             $this->value = null;
             return false;
         } elseif ($this->validation_allowempty != null && !$this->validation_allowempty && empty($value)) {
@@ -281,6 +283,7 @@ class DataProperty extends Object implements iDataProperty
             } else {
                 $this->invalid = xarML('#(1) cannot be empty', $this->name);
             }
+            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
             $this->value = null;
             return false;
         }
