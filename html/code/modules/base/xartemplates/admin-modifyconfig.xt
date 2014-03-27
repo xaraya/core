@@ -559,20 +559,20 @@
                             </legend>
                             <xar:data-input type="textarea" cols="100" rows="50" name="logfile" value="$log_data"/>
                         </fieldset>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                            </div>
+                            <div class="xar-col">
+                                <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+                                    <xar:var name="label">Clear Log</xar:var>
+                                    <xar:button type="submit" name="clear" label="$label"/>
+                                    <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                                    <xar:var name="label">Save and Clear Log</xar:var>
+                                    <xar:button type="submit" name="clearsave" label="$label"/>
+                                </form>
+                            </div>
+                        </div>
                     </xar:if>
-                    <div class="xar-row">
-                        <div class="xar-col">
-                        </div>
-                        <div class="xar-col">
-                            <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
-                                <xar:var name="label">Clear Log</xar:var>
-                                <xar:button type="submit" name="clear" label="$label"/>
-                                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                                <xar:var name="label">Save and Clear Log</xar:var>
-                                <xar:button type="submit" name="clearsave" label="$label"/>
-                            </form>
-                        </div>
-                    </div>
                 </xar:if>
             <!-- Begin Other Options -->
             <xar:elseif condition="$tab eq 'other'"/>
