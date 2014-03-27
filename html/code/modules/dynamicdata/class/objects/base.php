@@ -201,7 +201,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             }
             if (($passed === null) || ($passed === false)) $isvalid = false;
         }
-        if (!empty($this->missingfields) && !$suppress) {
+        if (!empty($this->missingfields)) {
             xarLog::variable('Missing properties', $this->missingfields, XARLOG_LEVEL_ERROR);
             if (!$suppress)
                 throw new VariableNotFoundException(array($this->name,implode(', ',$this->missingfields)),'The following fields were not found: #(1): [#(2)]');
