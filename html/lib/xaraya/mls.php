@@ -461,7 +461,7 @@ class xarMLS extends Object
             if (!in_array($locale, $siteLocales)) {
                 // Locale not available, use the default
                 $locale = self::getSiteLocale();
-                xarLogMessage("WARNING: falling back to default locale: $locale");
+                xarLogMessage("Falling back to default locale: $locale");
             }
         }
         // Set current locale
