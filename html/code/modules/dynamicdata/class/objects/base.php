@@ -108,6 +108,9 @@ class DataObject extends DataObjectMaster implements iDataObject
             if (!empty($this->properties[$name]->invalid))
                 $invalids[$name] = $this->properties[$name]->invalid;
         }
+        xarLog::message("xarLog in getInvalids functions");
+        xarLog::variable("printing invalids array in log file: ", $invalids);
+
         return $invalids;
     }
 
