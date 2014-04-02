@@ -54,7 +54,7 @@ function themes_userapi_dropdownlist(Array $args=array())
 {
     $options = array();
 
-    if ((bool) xarModVars::get('themes', 'enable_user_menu')) {        
+    if ((bool) xarModVars::get('themes', 'enable_user_menu')) {
         $themelist = xarMod::apiFunc('themes', 'admin', 'getthemelist', $args);
         $user_themes = xarModVars::get('themes', 'user_themes');
         $user_themes = !empty($user_themes) ? explode(',',$user_themes) : array();
