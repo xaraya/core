@@ -563,6 +563,8 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
             return true;
         }   */            
 
+        xarLog::message("The core is loaded");
+
         // Make the current load level == the new load level
         $current_SYSTEM_level = $new_SYSTEM_level;
         return true;
