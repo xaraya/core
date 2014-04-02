@@ -95,6 +95,9 @@ class xarTpl extends Object
     public static function setBaseDir($themesDir)
     {
         assert('$themesDir != "" && $themesDir{0} != "/"');
+        
+        xarLog::message("xarTpl::setBaseDir: Setting the theme base dir to $themesDir");
+            
         if (!is_dir($themesDir)) {
             // no directory
             throw new DirectoryNotFoundException($themesDir, 'xarTpl::setBaseDir: Nonexistent base themes directory #(1)');
@@ -129,6 +132,9 @@ class xarTpl extends Object
     public static function setThemeName($themeName)
     {
         assert('$themeName != "" && $themeName{0} != "/"');
+
+        xarLog::message("xarTpl::setThemeName: Setting the theme name to $themeName");
+
         $currentBase = self::getBaseDir();
         if (!is_dir($currentBase . '/'.$themeName)) {
             // @checkme: return false here vs throw exception in setThemeDir ?
@@ -150,6 +156,9 @@ class xarTpl extends Object
     public static function setThemeDir($themeDir)
     {
         assert('$themeDir != "" && $themeDir{0} != "/"');
+
+        xarLog::message("xarTpl::setThemeDir: Setting the theme dir to $themeDir");
+
         $currentBase = self::getBaseDir();
         if (is_dir($currentBase . '/' . $themeDir)) {
             // use current
@@ -227,6 +236,9 @@ class xarTpl extends Object
     public static function setPageTemplateName($templateName)
     {
         assert('$templateName != ""');
+
+        xarLog::message("xarTpl::setPageTemplateName: Setting the template name to $templateName");
+
         if (!self::exists('theme', self::getThemeName(), $templateName, null, 'pages'))
             return false;
         self::$pageTemplateName = $templateName;
@@ -255,6 +267,9 @@ class xarTpl extends Object
     public static function setDoctype($doctypeName)
     {
         assert('is_string($doctypeName); /* doctype should always be a string */');
+
+        xarLog::message("xarTpl::setDoctype: Setting the doc type to $doctypeName");
+
         self::$doctype = $doctypeName;    
         return true;
     }
@@ -285,8 +300,9 @@ class xarTpl extends Object
         // keep track of page title when we're caching
         xarCache::setPageTitle($title, $module);
 
-        xarLog::message("TPL: Setting pagetitle to $title");
-        // @checkme: modules is a depency of templates, redundant check?
+        xarLog::message("xarTpl::setPageTitle: Setting pagetitle to $title");
+        
+        // @checkme: modules is a dependency of templates, redundant check?
         if (!method_exists('xarModVars','Get')){
             self::$pageTitle = $title;
         } else {
@@ -1250,7 +1266,7 @@ class xarTpl extends Object
             // Load translations for the template
             xarMLSLoadTranslations($sourceFileName);
 
-            xarLog::message("Using template : $sourceFileName");
+            xarLog::message("xarTpl::executeFromFile: Using template $sourceFileName");
             $templateCode = null;
 
             // Determine if we need to compile this template
