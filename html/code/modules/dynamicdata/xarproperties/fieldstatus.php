@@ -83,6 +83,7 @@ class FieldStatusProperty extends SelectProperty
         // FIXME: rework the dataproperty so that the output of getOptions has a correct form
         // and we can call the parent method here
         // if (!parent::validateValue($value)) return false;
+        xarLog::message("DataProperty::validateValue: Validating property " . $this->name);
 
         if (empty($value)) {
             $value = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE + DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;

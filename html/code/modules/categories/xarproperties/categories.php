@@ -99,6 +99,8 @@ class CategoriesProperty extends DataProperty
 
     public function validateValue($value = null)
     {
+        if (!parent::validateValue($value)) return false;
+
         // Make sure they are valid unless we can override
 //        if (!$this->validation_override) {
         if (0) {

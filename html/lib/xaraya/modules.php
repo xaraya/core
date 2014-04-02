@@ -566,7 +566,7 @@ class xarMod extends Object implements IxarMod
             return xarCoreCache::getCached($cacheCollection, $modName);
         }
         // Log it when it doesnt come from the cache
-        xarLog::message("xarMod::getBaseInfo ". $modName ." / ". $type);
+        xarLog::message("xarMod::getBaseInfo: Getting database info of ". $modName ." (". $type. ")");
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
@@ -648,7 +648,7 @@ class xarMod extends Object implements IxarMod
             return xarCoreCache::getCached('Mod.getFileInfos', $modOsDir ." / " . $type);
         }
         // Log it when it didnt came from cache
-        xarLog::message("xarMod::getFileInfo ". $modOsDir ." / " . $type);
+        xarLog::message("xarMod::getFileInfo: Getting file info of ". $modOsDir ." (" . $type . ")");
 
 
         // TODO redo legacy support via type.
@@ -897,6 +897,9 @@ class xarMod extends Object implements IxarMod
                     return xarController::$response->NotFound();
                 }
             }
+
+            xarLog::message("xarMod::callFunc: Calling $modFunc");
+
             // let's check for that function again to be sure
             if (!function_exists($modFunc)) {
                 // Q: who are we kidding with this? osdirectory == modName always, no?
@@ -980,7 +983,7 @@ class xarMod extends Object implements IxarMod
         if (isset($loadedModuleCache[$cacheKey])) return true;
 
         // Log it when it doesnt come from the cache
-        xarLog::message("xarMod::load: loading $modName:$modType");
+        xarLog::message("xarMod::load: Loading $modName:$modType");
 
         $modBaseInfo = self::getBaseInfo($modName);
         // Not a valid module - throw exception

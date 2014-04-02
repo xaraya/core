@@ -45,6 +45,7 @@ class CheckboxListProperty extends SelectProperty
     {
         if (!isset($value)) $value = '';
         $this->setValue($value);
+        xarLog::message("DataProperty::validateValue: Validating property " . $this->name);
         return true;
     }
 

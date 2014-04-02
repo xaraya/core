@@ -43,6 +43,8 @@ class CheckboxProperty extends DataProperty
 
     public function validateValue($value = null)
     {
+        xarLog::message("DataProperty::validateValue: Validating property " . $this->name);
+
         if (empty($value) || $value == 'false') {
             $this->value = false;
         } else {
