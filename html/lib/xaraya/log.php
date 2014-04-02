@@ -225,13 +225,12 @@ class xarLog extends Object
         sys::import('xaraya.log.loggers.'.$type);
         $type = 'xarLogger_'.$type;
     
-         if (!$observer = new $type()) {
-             throw new LoggerException('xarLog_init: Unable to instantiate class for logging: '.$type);
-         }
-    
-          $observer->setConfig($config_args);
-    
-          self::$loggers[] = &$observer;
+        if (!$observer = new $type()) {
+            throw new LoggerException('xarLog_init: Unable to instantiate class for logging: '.$type);
+        }
+
+        $observer->setConfig($config_args);
+        self::$loggers[] = &$observer;
     }
 }
 
