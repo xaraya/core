@@ -552,7 +552,7 @@
                         <xar:template file="update-button" module="base" />
                     </form>
                     <xar:set name="enabled">xarSystemVars::get(sys::CONFIG, 'Log.Enabled')</xar:set>
-                    <xar:if condition="$enabled">
+                    <xar:if condition="!empty($log_data)">
                         <fieldset>
                             <legend>
                                 View Log
