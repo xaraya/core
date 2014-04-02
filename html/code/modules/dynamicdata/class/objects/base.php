@@ -152,6 +152,8 @@ class DataObject extends DataObjectMaster implements iDataObject
             $fields = !empty($this->fieldlist) ? $this->fieldlist : $this->getFieldList();
         }
 
+        xarLog::message("DataObject::checkInput: Checking object " . $this->name);
+
         $this->missingfields = array();
         foreach($fields as $name) {
             // Ignore disabled or ignored properties

@@ -194,6 +194,9 @@ class DataPropertyMaster extends Object
         {
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['class'];
+
+            xarLog::message("DataPropertyMaster::getProperty: Getting a new property $propertyClass");
+
             if (!class_exists($propertyClass)) {
                 // Filepath is complete real path to the php file, and decoupled from the class name
                 // We should load the MLS translations for the right context here, in case the property

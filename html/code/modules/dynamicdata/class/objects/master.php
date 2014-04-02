@@ -632,6 +632,9 @@ class DataObjectMaster extends Object
         $data = array_merge($args,$data);
         $data['propertyargs'] =& $info;
         
+        // Create the object if it was not in cache
+        xarLog::message("DataObjectMaster::getObject: Getting a new object " . $data['class']);
+
         if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) include_once(sys::code() . $data['filepath']);
         else sys::import('modules.dynamicdata.class.objects.base');
         $descriptor = new DataObjectDescriptor($data);

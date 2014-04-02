@@ -259,6 +259,8 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($value)) $value = $this->getValue();
         else $this->setValue($value);
 
+        xarLog::message("DataProperty::validateValue: Validating property " . $this->name);
+
         if ($this->validation_notequals != null && $value == $this->validation_notequals) {
             if (!empty($this->validation_notequals_invalid)) {
                 $this->invalid = xarML($this->validation_notequals_invalid);

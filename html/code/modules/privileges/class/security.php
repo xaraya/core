@@ -112,7 +112,7 @@ class xarSecurity extends Object
     {
         self::initialize();
         $userID = xarSession::getVar('role_id');
-        xarLog::message("PRIVS: id in security check: $userID");
+        xarLog::message("xarSecurity::check: Testing user $userID against mask $mask");
         if ($userID == XARUSER_LAST_RESORT) return true;
 
         // mask-based security check for the group(s) of the current user (optional)
@@ -172,7 +172,7 @@ class xarSecurity extends Object
             else {
                 $msg = xarML('Did not find mask #(1) registered for component #(2) in module #(3)', $maskname, $component, $module);
             }
-            xarLog::message($msg);
+            xarLog::message("xarSecurity::check: " . $msg);
             return false;
         }
 
