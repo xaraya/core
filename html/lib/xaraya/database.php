@@ -88,7 +88,7 @@ function &xarDBNewConn(array $args = null)
     } catch (Exception $e) {
         throw $e;
     }
-    xarLogMessage("New connection created, now serving " . xarDB::$count . " connections");
+    xarLog::message("New connection created, now serving " . xarDB::$count . " connections");
     return $conn;
 }
 ?>

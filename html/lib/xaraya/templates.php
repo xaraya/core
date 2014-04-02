@@ -285,7 +285,7 @@ class xarTpl extends Object
         // keep track of page title when we're caching
         xarCache::setPageTitle($title, $module);
 
-        xarLogMessage("TPL: Setting pagetitle to $title");
+        xarLog::message("TPL: Setting pagetitle to $title");
         // @checkme: modules is a depency of templates, redundant check?
         if (!method_exists('xarModVars','Get')){
             self::$pageTitle = $title;
@@ -609,17 +609,17 @@ class xarTpl extends Object
         $canonical = ($canTemplateName == $templateName) ? false : true;
 
         if (!empty($templateName)) {
-            xarLogMessage("TPL: 1. $tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt");
-            xarLogMessage("TPL: 2. $tplCommonDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt");
-            xarLogMessage("TPL: 3. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt");
+            xarLog::message("TPL: 1. $tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt");
+            xarLog::message("TPL: 2. $tplCommonDir/modules/$modOsDir/$tplSubPart/$tplBase-$templateName.xt");
+            xarLog::message("TPL: 3. $tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xt");
         }
-        xarLogMessage("TPL: 4. $tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt");
-        xarLogMessage("TPL: 5. $tplCommonDir/modules/$modOsDir/$tplSubPart/$tplBase.xt");
-        xarLogMessage("TPL: 6. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xt");
+        xarLog::message("TPL: 4. $tplThemesDir/modules/$modOsDir/$tplSubPart/$tplBase.xt");
+        xarLog::message("TPL: 5. $tplCommonDir/modules/$modOsDir/$tplSubPart/$tplBase.xt");
+        xarLog::message("TPL: 6. $tplBaseDir/xartemplates/$tplSubPart/$tplBase.xt");
         if ($canonical) {
-            xarLogMessage("TPL: 7. $tplThemesDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt");
-            xarLogMessage("TPL: 8. $tplCommonDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt");
-            xarLogMessage("TPL: 9. $tplBaseDir/xartemplates/$tplSubPart/$canTemplateName.xt");
+            xarLog::message("TPL: 7. $tplThemesDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt");
+            xarLog::message("TPL: 8. $tplCommonDir/modules/$modOsDir/$tplSubPart/$canTemplateName.xt");
+            xarLog::message("TPL: 9. $tplBaseDir/xartemplates/$tplSubPart/$canTemplateName.xt");
         }
         
         // TPL 1: Current theme (module)
@@ -1250,7 +1250,7 @@ class xarTpl extends Object
             // Load translations for the template
             xarMLSLoadTranslations($sourceFileName);
 
-            xarLogMessage("Using template : $sourceFileName");
+            xarLog::message("Using template : $sourceFileName");
             $templateCode = null;
 
             // Determine if we need to compile this template

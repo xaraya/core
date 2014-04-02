@@ -282,7 +282,7 @@ class xarCharset extends Object
             $fileName = CONVERT_TABLES_DIR . func_get_arg($i);
             $fp = fopen($fileName, "r");
             if ($fp === false) {
-                xarLogMessage("xarCharset error, can NOT read file: " . $fileName);
+                xarLog::message("xarCharset error, can NOT read file: " . $fileName);
                 continue;
             }
             while (!feof($fp)) {
@@ -322,10 +322,10 @@ class xarCharset extends Object
         if ($inString == '') {
             return '';
         } else if ($fromCharset == '') {
-            xarLogMessage("xarCharset error, empty variable \$fromCharset in convertByTable() function.");
+            xarLog::message("xarCharset error, empty variable \$fromCharset in convertByTable() function.");
             return $inString;
         } else if ($toCharset == '') {
-            xarLogMessage("xarCharset error, empty variable \$toCharset in convertByTable() function.");
+            xarLog::message("xarCharset error, empty variable \$toCharset in convertByTable() function.");
             return $inString;
         }
 
@@ -336,7 +336,7 @@ class xarCharset extends Object
         $toCharset   = strtolower($toCharset);
 
         if ($fromCharset == $toCharset) {
-            xarLogMessage("xarCharset - you are trying to convert string from ". $fromCharset ." to ". $fromCharset);
+            xarLog::message("xarCharset - you are trying to convert string from ". $fromCharset ." to ". $fromCharset);
             return $inString;
         }
 
@@ -382,7 +382,7 @@ class xarCharset extends Object
                             }
                         } else {
                             $outString .= chr($this->noCharByteVal);
-                            xarLogMessage("xarCharset error, can't find maching char \"". $inString[$i] ."\" in destination encoding table!");
+                            xarLog::message("xarCharset error, can't find maching char \"". $inString[$i] ."\" in destination encoding table!");
                         }
                     } else {
                         $outChar = $this->unicodeNumberToUtf8Char($unicodeHexChar);
@@ -394,7 +394,7 @@ class xarCharset extends Object
                     }
                 } else {
                     $outString .= chr($this->noCharByteVal);
-                    xarLogMessage("xarCharset error, can't find maching char \"". $inString[$i] ."\" in source encoding table!");
+                    xarLog::message("xarCharset error, can't find maching char \"". $inString[$i] ."\" in source encoding table!");
                 }
             }
         }

@@ -260,7 +260,7 @@ function xarLog__shutdown_handler()
 //you can't use it with javascript/mozilla loggers...
 //Maybe there should be a xaraya shutdown event?
 /*
-     xarLogMessage("xarLog shutdown handler: Ending all logging.");
+     xarLog::message("xarLog shutdown handler: Ending all logging.");
 
     foreach (array_keys($GLOBALS['xarLog_loggers']) as $id) {
        $GLOBALS['xarLog_loggers'][$id]->;

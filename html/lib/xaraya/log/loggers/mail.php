@@ -145,7 +145,7 @@ class xarLogger_mail extends xarLogger
 
                 if (mail($this->_recipient, $this->_subject, $this->_message,
                         $headers, "-f".$this->_from) == false) {
-                    //FIXME: Use xarLogMessage, with an extra variable to rule this 
+                    //FIXME: Use xarLog::message, with an extra variable to rule this 
                     // logger out and make it log on the others avaiable
                     error_log("Log_mail: Failure executing mail()", 0);
                     return false;

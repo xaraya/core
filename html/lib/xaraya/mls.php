@@ -461,7 +461,7 @@ class xarMLS extends Object
             if (!in_array($locale, $siteLocales)) {
                 // Locale not available, use the default
                 $locale = self::getSiteLocale();
-                xarLogMessage("Falling back to default locale: $locale");
+                xarLog::message("Falling back to default locale: $locale");
             }
         }
         // Set current locale
@@ -472,7 +472,7 @@ class xarMLS extends Object
             assert('$curCharset == "utf-8"; // Resetting MLS Mode to BOXED');
             // To be able to continue, we set the mode to BOXED
             if ($curCharset != "utf-8") {
-                xarLogMessage("Resetting MLS mode to BOXED");
+                xarLog::message("Resetting MLS mode to BOXED");
                 xarConfigVars::set(null, 'Site.MLS.MLSMode','BOXED');
             } else {
                 if (!xarFuncIsDisabled('ini_set')) ini_set('mbstring.func_overload', 7);
@@ -525,11 +525,11 @@ class xarMLS extends Object
         static $loadedTranslations = array();
     
         if (!isset($GLOBALS['xarMLS_backend'])) {
-            xarLogMessage("xarMLS: No translation backend was selected for ". "$dnType.$dnName.$ctxType.$ctxName");
+            xarLog::message("xarMLS: No translation backend was selected for ". "$dnType.$dnName.$ctxType.$ctxName");
             return false;
         }
         if (empty($GLOBALS['xarMLS_currentLocale'])) {
-            xarLogMessage("xarMLS: No current locale was selected");
+            xarLog::message("xarMLS: No current locale was selected");
             return false;
         }
     
@@ -598,7 +598,7 @@ class xarMLS extends Object
     static public function loadTranslations($path)
     {
         if(!file_exists($path)) {
-            xarLogMessage("MLS: Trying to load translations for a non-existing path ($path)",XARLOG_LEVEL_WARNING);
+            xarLog::message("MLS: Trying to load translations for a non-existing path ($path)",XARLOG_LEVEL_WARNING);
             //die($path);
             return true;
         }
@@ -811,7 +811,7 @@ class xarMLS extends Object
                 $madeDir = @mkdir($path, 0700);
                 if (!$madeDir) {
                     $msg = xarML("The directories under #(1) must be writeable by PHP.", $next_path);
-                    xarLogMessage($msg);
+                    xarLog::message($msg);
                     // throw new PermissionException?
                 }
                 return $madeDir;

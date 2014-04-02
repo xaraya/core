@@ -333,7 +333,7 @@ class PHPBackendGenerator extends Object
         $xmlFileExists = false;
         if (file_exists($this->xmlFileName)) {
             if (!($fp1 = fopen($this->xmlFileName, "r"))) {
-                xarLogMessage("Could not open XML input: ".$this->xmlFileName);
+                xarLog::message("Could not open XML input: ".$this->xmlFileName);
             }
             $data = fread($fp1, filesize($this->xmlFileName));
             fclose($fp1);
@@ -342,7 +342,7 @@ class PHPBackendGenerator extends Object
             xml_parser_free($xml_parser);
             $xmlFileExists = true;
         } else {
-            xarLogMessage("MLS Could not find XML input: ".$this->xmlFileName);
+            xarLog::message("MLS Could not find XML input: ".$this->xmlFileName);
         }
 
         if (!$xmlFileExists) return true;
@@ -375,7 +375,7 @@ class PHPBackendGenerator extends Object
             fputs($fp2, "?>");
             fclose($fp2);
         } else {
-            xarLogMessage("Could not create file: ".$this->fileName);
+            xarLog::message("Could not create file: ".$this->fileName);
             global $xarML_PHPBackend_entries;
             global $xarML_PHPBackend_keyEntries;
             foreach ($vals as $node) {

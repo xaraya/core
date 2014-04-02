@@ -136,7 +136,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
             $msg = "PHP error code $errorRaised at line $line of $file: $errorString";
             try {
                 // We'll try to log it.
-                xarLogMessage($msg);
+                xarLog::message($msg);
             } catch(Exception $e) {
                 // Oh well, forget it then
             }

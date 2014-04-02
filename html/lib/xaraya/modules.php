@@ -276,7 +276,7 @@ class xarMod extends Object implements IxarMod
      */
     static function getDisplayDescription($modName = NULL, $type = 'module')
     {
-        //xarLogMessage("xarMod::getDisplayDescription ". $modName ." / " . $type);
+        //xarLog::message("xarMod::getDisplayDescription ". $modName ." / " . $type);
         if (empty($modName)) $modName = self::getName();
 
         $modInfo = self::getFileInfo($modName, $type);
@@ -355,7 +355,7 @@ class xarMod extends Object implements IxarMod
      */
     static function isAvailable($modName, $type = 'module')
     {
-        //xarLogMessage("xarMod::isAvailable: begin $type:$modName");
+        //xarLog::message("xarMod::isAvailable: begin $type:$modName");
 
         // FIXME: there is no point to the cache here, since
         // xarMod::getBaseInfo() caches module details anyway.
@@ -379,7 +379,7 @@ class xarMod extends Object implements IxarMod
                 $modAvailableCache[$modBaseInfo['name']] = true;
             }
         }
-        //xarLogMessage("xarMod::isAvailable: end $type:$modName");
+        //xarLog::message("xarMod::isAvailable: end $type:$modName");
         return $modAvailableCache[$modBaseInfo['name']];
     }
 
@@ -411,7 +411,7 @@ class xarMod extends Object implements IxarMod
             throw new BadParameterException('module/theme type');
         }
         // Log it when it doesnt come from the cache
-        xarLogMessage("xarMod::getInfo ". $modRegId ." / " . $type);
+        xarLog::message("xarMod::getInfo ". $modRegId ." / " . $type);
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
@@ -566,7 +566,7 @@ class xarMod extends Object implements IxarMod
             return xarCoreCache::getCached($cacheCollection, $modName);
         }
         // Log it when it doesnt come from the cache
-        xarLogMessage("xarMod::getBaseInfo ". $modName ." / ". $type);
+        xarLog::message("xarMod::getBaseInfo ". $modName ." / ". $type);
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
@@ -648,7 +648,7 @@ class xarMod extends Object implements IxarMod
             return xarCoreCache::getCached('Mod.getFileInfos', $modOsDir ." / " . $type);
         }
         // Log it when it didnt came from cache
-        xarLogMessage("xarMod::getFileInfo ". $modOsDir ." / " . $type);
+        xarLog::message("xarMod::getFileInfo ". $modOsDir ." / " . $type);
 
 
         // TODO redo legacy support via type.
@@ -679,7 +679,7 @@ class xarMod extends Object implements IxarMod
 
         if (!file_exists($fileName)) {
             // Don't raise an exception, it is too harsh, but log it tho (bug 295)
-            xarLogMessage("xarMod::getFileInfo: Could not find xarversion.php, skipping $modOsDir");
+            xarLog::message("xarMod::getFileInfo: Could not find xarversion.php, skipping $modOsDir");
             // throw new FileNotFoundException($fileName);
             return;
         }
@@ -980,7 +980,7 @@ class xarMod extends Object implements IxarMod
         if (isset($loadedModuleCache[$cacheKey])) return true;
 
         // Log it when it doesnt come from the cache
-        xarLogMessage("xarMod::load: loading $modName:$modType");
+        xarLog::message("xarMod::load: loading $modName:$modType");
 
         $modBaseInfo = self::getBaseInfo($modName);
         // Not a valid module - throw exception
