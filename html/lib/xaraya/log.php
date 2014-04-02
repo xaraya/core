@@ -241,7 +241,7 @@ class xarLog extends Object
 function xarLog__shutdown_handler()
 {
      xarLog::message("xarLog shutdown handler");
-     xarLog::message("Leaving session: " . xarSession::getId() . " - User: " . xarUser::getVar('uname') . " ( ID: " . xarUser::getVar('id') . ")");
+     xarLog::message("Leaving session: " . xarSession::getId() . " - User: " . xarUser::getVar('uname') . " (ID: " . xarUser::getVar('id') . ")");
 
      // If the debugger was active, we can dispose it now.
      if(xarDebug::$flags & XARDBG_SQL) {
