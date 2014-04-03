@@ -557,7 +557,7 @@
                             <legend>
                                 View Log
                             </legend>
-                            <xar:data-input type="textarea" cols="100" rows="50" name="logfile" value="$log_data"/>
+                            <xar:data-input type="textarea" cols="120" rows="50" name="logfile" value="$log_data"/>
                         </fieldset>
                         <div class="xar-row">
                             <div class="xar-col">
