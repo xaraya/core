@@ -97,7 +97,7 @@ class CelkoPositionProperty extends DataProperty
                 break;
         }
         $this->reference_id = $reference_id;
-        return true;
+        return $this->validateValue($value);
     }
 
     public function createValue($itemid=0)
@@ -496,37 +496,31 @@ class CelkoPositionProperty extends DataProperty
         return $num;
     }
 
-    function build_tree($parent_id, $left_id)
+    function build_tree($parent_id, $left_id=1)
     {       
-       // the right value of this node is the left value + 1  
-       $right_id = $left_id+1;  
+        // We need tohe left ID in case there are other top level categories, and we need to know where this tree starts
+        // the right value of this node is the left value + 1  
+        $right_id = $left_id+1;  
     
-       // get all children of this node  
-        $q = "SELECT id
-              FROM " . $this->initialization_celkotable;
-        $q .= " WHERE " . $this->initialization_celkoparent_id . " = ?";
-        $bindvars = array($parent_id);
-        $result = $this->dbconn->Execute($q, $bindvars);
+        // get all children of this node
+        sys::import('modules.categories.class.worker');
+        $worker = new CategoryWorker();
+        $worker->setTable($this->initialization_celkotable);
+        $result = $worker->getchildren($parent_id);
     
-        while (!$result->EOF) {
-            list($child_id) = $result->fields;
+        foreach ($result as $child) {
            // recursive execution of this function for each  
            // child of this node  
            // $right_id is the current right value, which is  
            // incremented by the rebuild_tree function  
-           $right_id = $this->build_tree($child_id, $right_id);  
-           $result->MoveNext();
+           $right_id = $this->build_tree($child['id'], $right_id);  
        }  
        // we've got the left value, and now that we've processed  
        // the children of this node we also know the right value  
-        $bindvars = array($left_id);
-        $bindvars[] = $right_id;
-        $bindvars[] = $parent_id;
-        $q = "UPDATE " . $this->initialization_celkotable;
-        $q .= " SET " . $this->initialization_celkoleft_id . " = ?, ";
-        $q .= $this->initialization_celkoright_id . " = ? ";
-        $q .= "WHERE id = ?";  
-        $result = $this->dbconn->Execute($q, $bindvars);
+        $q = new Query('UPDATE', $this->initialization_celkotable);
+        $q->addfield($this->initialization_celkoleft_id, $left_id);
+        $q->addfield($this->initialization_celkoright_id, $right_id);
+        $q->run();
      
        // return the right value of this node + 1  
        return $right_id+1;  

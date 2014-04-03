@@ -73,8 +73,7 @@ class AccessProperty extends DataProperty
         if (!$dropdown->checkInput($name . '_failure')) return false;
         $value['failure'] = $dropdown->value;
         
-        $this->value = $value;
-        return true;
+        return $this->validateValue($value);
     }
 
     public function showInput(Array $data = array())
@@ -118,13 +117,9 @@ class AccessProperty extends DataProperty
             $this->setValue();
         }
         $value = $this->getValue();
-        if (!isset($data['level'])) $data['level'] = $value['level'];
-        if (!isset($data['group'])) $data['group'] = $value['group'];
-        if (!isset($data['failure'])) {
-            $data['failure'] = $value['failure'];
-        } else {
-            $data['showfailure'] = 1;
-        }
+        if (!isset($data['level'])) $data['level'] = (isset($value['level'])) ? $value['level'] : 800;
+        if (!isset($data['group'])) $data['group'] = (isset($value['group'])) ? $value['group'] : array();
+        if (!isset($data['failure'])) $data['failure'] = (isset($value['failure'])) ? $value['failure'] : 1;
         
         if (!isset($data['group_multiselect'])) {
             try {
