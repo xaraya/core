@@ -73,7 +73,9 @@ class AccessProperty extends DataProperty
         if (!$dropdown->checkInput($name . '_failure')) return false;
         $value['failure'] = $dropdown->value;
         
-        return $this->validateValue($value);
+        xarLog::message("DataProperty::validateValue: Skipping validation for " . $this->name);
+        $this->value = $value;
+        return true;
     }
 
     public function showInput(Array $data = array())
