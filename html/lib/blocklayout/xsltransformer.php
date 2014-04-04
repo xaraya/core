@@ -162,7 +162,7 @@ class BlockLayoutXSLTProcessor extends Object
     static function phpexpression($expr)
     {
         $res = ExpressionTransformer::transformPHPExpression($expr);
-        xarLogMessage("BL: '$expr' resolved to '$res'");
+        xarLog::message("BlockLayoutXSLTProcessor::phpexpression: '$expr' resolved to '$res'");
         return $res;
     }
 }
@@ -172,7 +172,7 @@ class XsltCallbacks extends Object
     static function mlsplaceholders($matches)
     {
         $res = $matches[1].'#'.$matches[2];
-        //xarLogMessage('MLS: ' . $matches[0] . ' => '.$res);
+        //xarLog::message('MLS: ' . $matches[0] . ' => '.$res);
         return $res;
     }
 
@@ -185,7 +185,7 @@ class XsltCallbacks extends Object
         $raw = self::reverseXMLEntities($raw);
         // Return the first match too, to ensure not changing the input
         $res = '<?php echo ' . $raw .';?>';
-        xarLogMessage('ATT: '. $matches[0] . ' => ' . $res);
+        xarLog::message('XsltCallbacks::attributes: '. $matches[0] . ' => ' . $res);
         return $res;
     }
 
@@ -244,7 +244,7 @@ class XsltCallbacks extends Object
             // &xar-session-varname;
             // &xar-url-modname-type-func-args;
         }
-        xarLogMessage('ENT: found in xml source:'.$entityName);
+        xarLog::message('XsltCallbacks::entities: found in xml source:'.$entityName);
         return $matches[0];
     }
 
