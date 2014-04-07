@@ -169,6 +169,10 @@ function dynamicdata_admin_update(Array $args=array())
                 xarMod::apiFunc('dynamicdata','admin','createproperty',$fields);
             }
             
+            // Got to the object to modify it
+            xarController::redirect(xarModURL('dynamicdata', 'admin', 'modify',
+                                      array('itemid' => $newitemid)));
+            return true;
         break;
     }
 

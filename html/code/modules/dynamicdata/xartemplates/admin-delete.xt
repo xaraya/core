@@ -34,20 +34,24 @@
         <xar:data-display object="$object"/>
         <div style="clear:both">&#160;</div>
         <form method="post" action="#xarModURL('dynamicdata','admin','delete')#">
-            <div class="xar-form-actions">
-                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
-                <input type="hidden" name="join" id="join" value="#$object:join#"/>
-                <input type="hidden" name="table" id="table" value="#$object:table#"/>
-                <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
-                <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
-                <xar:if condition="!empty($return_url)">
-                    <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
-                </xar:if>
-                <xar:var name="label">Delete</xar:var>
-                <xar:button type="submit" label="$label" name="confirm" id="confirm"/>
-                <xar:var name="label">Cancel</xar:var>
-                <xar:button type="cancel" label="$label" name="noconfirm" id="noconfirm"/>
+            <div class="xar-row">
+                <div class="xar-col">
+                </div>
+                <div class="xar-col">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                    <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
+                    <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                    <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                    <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+                    <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
+                    <xar:if condition="!empty($return_url)">
+                        <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                    </xar:if>
+                    <xar:var name="label">Cancel</xar:var>
+                    <xar:button type="cancel" label="$label" name="noconfirm" id="noconfirm"/>
+                    <xar:var name="label">Delete</xar:var>
+                    <xar:button type="submit" label="$label" name="confirm" id="confirm"/>
+                </div>
             </div>
         </form>
     </div>
