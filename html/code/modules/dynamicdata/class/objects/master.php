@@ -22,7 +22,7 @@ sys::import('modules.dynamicdata.class.objects.descriptor');
 
 class DataObjectMaster extends Object
 {
-    protected $descriptor  = null;      // descriptor object of this class
+    public $descriptor  = null;      // descriptor object of this class
 
     public $objectid    = null;         // system id of the object in this installation
     public $name        = null;         // name of the object
