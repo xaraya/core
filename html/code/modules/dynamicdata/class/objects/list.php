@@ -458,7 +458,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 // CHECKME: this should filter the fieldlist based on the status as well - cfr. master.php
 
         if(isset($args['count']) && $args['count'] == 'count') {
-            $itemcount = $this->countitems($args);var_dump($itemcount);
+            $itemcount = $this->countitems($args);
         }
         if(empty($args['numitems'])) {
             $args['numitems'] = $this->numitems;
