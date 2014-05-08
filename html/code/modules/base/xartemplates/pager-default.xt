@@ -16,12 +16,12 @@
                     <a title="#$label#" href="#$firsturl#">|&lt;</a>
                 </span>
             <xar:else />
-                <span class="xar-page-current" title="#$label#">|&lt;</span>
+                <span class="xar-page-inactive" title="#$label#">|&lt;</span>
             </xar:if>
         </xar:if>
         <!-- Display previous-block link if there is more than one block -->
-        <xar:set name="prevblocklabel">xarML('Previous #(1) pages',$prevblockpages)</xar:set>
         <xar:if condition="$totalblocks gt 1">
+            <xar:set name="prevblocklabel">xarML('Previous #(1) pages',$prevblockpages)</xar:set>
             <xar:if condition="$currentblock ne $firstblock">
                 <span class="xar-page">
                     <a title="#$prevblocklabel#" href="#$prevblockurl#">&lt;&lt;</a>
@@ -45,7 +45,7 @@
             <xar:if condition="$pagenumber ne $currentpage">
                 <xar:if condition="$middleitemsfrom[$pagenumber] ne $middleitemsto[$pagenumber]">
                     <xar:set name="pageurllabel">xarML('Page #(1) (items #(2) to #(3))',$pagenumber,$middleitemsfrom[$pagenumber],$middleitemsto[$pagenumber])</xar:set>
-                    <xar:else />
+                <xar:else />
                     <xar:set name="pageurllabel">xarML('Page #(1)',$pagenumber)</xar:set>
                 </xar:if>
             <span class="xar-page">
