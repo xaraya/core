@@ -88,9 +88,6 @@
             </xar:if>
         </xar:if>
     <xar:elseif condition="$type eq 'link'"/>
-        <xar:if condition="!isset($target)">
-            <xar:set name="target">xarServer::getBaseURL()</xar:set>
-        </xar:if>
         <xar:if condition="isset($disabled)">
             <xar:if condition="isset($title)">
                 <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" title="#$title#" disabled="#$disabled#"/>
@@ -98,13 +95,21 @@
                 <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" disabled="#$disabled#"/>
             </xar:if>
         <xar:else />
-            <a href="#$target#">
+            <xar:if condition="empty($target)">
                 <xar:if condition="isset($title)">
                     <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" title="#$title#"/>
                 <xar:else />
                     <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#"/>
                 </xar:if>
-            </a>
+            <xar:else/>
+                <a href="#$target#">
+                    <xar:if condition="isset($title)">
+                        <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" title="#$title#"/>
+                    <xar:else />
+                        <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#"/>
+                    </xar:if>
+                </a>
+            </xar:if>
         </xar:if>
     </xar:if>
 </xar:template>
