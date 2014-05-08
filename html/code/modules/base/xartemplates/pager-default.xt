@@ -12,9 +12,9 @@
         <xar:if condition="$totalpages gt 1">
             <xar:var name="label">First page</xar:var>
             <xar:if condition="$currentpagenum ne $firstpagenum">
-            <span class="xar-page">
-                <a title="#$label#" href="#$firsturl#">|&lt;</a>
-            </span>
+                <span class="xar-page">
+                    <a title="#$label#" href="#$firsturl#">|&lt;</a>
+                </span>
             <xar:else />
                 <span class="xar-page-current" title="#$label#">|&lt;</span>
             </xar:if>
@@ -23,9 +23,9 @@
         <xar:set name="prevblocklabel">xarML('Previous #(1) pages',$prevblockpages)</xar:set>
         <xar:if condition="$totalblocks gt 1">
             <xar:if condition="$currentblock ne $firstblock">
-            <span class="xar-page">
-                <a title="#$prevblocklabel#" href="#$prevblockurl#">&lt;&lt;</a>
-            </span>
+                <span class="xar-page">
+                    <a title="#$prevblocklabel#" href="#$prevblockurl#">&lt;&lt;</a>
+                </span>
             <xar:else />
                 <span class="xar-page" title="#$prevblocklabel#">&lt;&lt;</span>
             </xar:if>
@@ -34,9 +34,9 @@
         <xar:if condition="$totalblocks eq 1">
             <xar:set name="prevpagelabel">xarML('Previous #(1) items',$prevpageitems)</xar:set>
             <xar:if condition="$prevpageitems gt 0">
-            <span class="xar-page">
-                <a title="#$prevpagelabel#" href="#$prevpageurl#">&lt;</a>
-            </span>
+                <span class="xar-page">
+                    <a title="#$prevpagelabel#" href="#$prevpageurl#">&lt;</a>
+                </span>
             <xar:else />
                 <span class="xar-page-inactive" title="#$prevpagelabel#">&lt;</span>
             </xar:if>
@@ -62,20 +62,20 @@
         <xar:if condition="$totalblocks eq 1">
             <xar:set name="nextpagelabel">xarML('Next page; #(1) items',$nextpageitems)</xar:set>
             <xar:if condition="$nextpageitems gt 0">
-            <span class="xar-page">
-                <a title="#$nextpagelabel#" href="#$nextpageurl#">&gt;</a>
-            </span>
+                <span class="xar-page">
+                    <a title="#$nextpagelabel#" href="#$nextpageurl#">&gt;</a>
+                </span>
             <xar:else />
-            <span class="xar-page-inactive" title="#$nextpagelabel#">&gt;</span>
+                <span class="xar-page-inactive" title="#$nextpagelabel#">&gt;</span>
             </xar:if>
         </xar:if>
         <!-- Display next-block link if there is more than one block -->
         <xar:if condition="$totalblocks gt 1">
             <xar:set name="nextblocklabel">xarML('Next #(1) pages',$nextblockpages)</xar:set>
             <xar:if condition="$currentblock ne $lastblock">
-            <span class="xar-page">
-                <a title="#$nextblocklabel#" href="#$nextblockurl#">&gt;&gt;</a>
-            </span>
+                <span class="xar-page">
+                    <a title="#$nextblocklabel#" href="#$nextblockurl#">&gt;&gt;</a>
+                </span>
             <xar:else />
                 <span class="xar-page-inactive" title="#$nextblocklabel#">&gt;&gt;</span>
             </xar:if>
