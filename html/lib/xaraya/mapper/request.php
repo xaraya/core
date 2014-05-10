@@ -291,6 +291,9 @@ class xarRequest extends Object
         return true;
     }
 
+/*
+ * Checks whether the current reuest is an AJAX request
+ */
     public function isAJAX()
     {
         if (!isset($this->isAjax)) {
@@ -304,11 +307,19 @@ class xarRequest extends Object
         return $this->isAjax;
     }
 
+/*
+ * Halts execution at the end of an AJAX request
+ */
     public function exitAjax()
     {
         if ($this->isAjax()) exit;
     }
 
+/*
+ * Outputs a message from the AJAX request
+ * The message can be in the form of a simple string or an array
+ * IN the latter case we use a template to format the message before outputing
+ */
     public function msgAjax($msg)
     {
         if ($this->isAjax()) {
