@@ -10,7 +10,7 @@
 
 <xsl:template match="xar:button">
     <xsl:processing-instruction name="php">
-      <xsl:text>echo xarTplModule('base','user','buttontag',</xsl:text>
+      <xsl:text>echo xarTplModule('themes','user','buttontag',</xsl:text>
         <xsl:call-template name="atts2args">
           <xsl:with-param name="nodeset" select="@*[name() != 'template']"/>
         </xsl:call-template>
