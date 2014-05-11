@@ -107,7 +107,7 @@ class PassBoxProperty extends TextBoxProperty
 
     public function showOutput(Array $data = array())
     {
-        //we don't want to show the password, but leave open the possibility of displaying some value here
+        // We don't want to show the password, but leave open the possibility of displaying some value here
         if (!isset($data['value'])) $data['value'] = ' ';
         return parent::showOutput($data);
     }

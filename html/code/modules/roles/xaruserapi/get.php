@@ -133,8 +133,6 @@ function roles_userapi_get(Array $args=array())
     $user = $result->getRow();
     if (empty($user)) return false;
     // id is a reserved/key words in Oracle et al.
-    $user['id'] = $user['id'];
-    $user['itemtype'] = $user['itemtype'];
     $property->value = $user['name'];
     $user['name'] = $property->getValue($user['name']);
     return $user;
