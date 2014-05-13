@@ -38,7 +38,7 @@
                         <xar:var name="label">Add Alias</xar:var>
                         <xar:set name="iconurl">xarTpl::getImage('icons/add.png', 'theme')</xar:set>
                         <xar:var name="imagealt">[add]</xar:var>
-                        <xar:button type="submit" label="$label" src="$iconurl" title="$imagealt"/>
+                        <xar:button type="submit" label="$label" src="$iconurl" title="$imagealt" style="width: 16px"/>
                     </div>
                 </div>
             </fieldset>
