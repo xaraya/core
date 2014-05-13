@@ -250,7 +250,14 @@
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:value-of select="$source"/>
+      <xsl:choose>
+        <xsl:when test="string-length(translate($source, '&#x20;&#x9;&#xD;&#xA;', '')) = 0">
+          <xsl:value-of select="normalize-space($source)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$source"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
