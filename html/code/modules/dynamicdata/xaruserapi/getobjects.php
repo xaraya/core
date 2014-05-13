@@ -21,7 +21,8 @@
  */
 function dynamicdata_userapi_getobjects($args = array())
 {
-    return DataObjectMaster::getObjects($args);
+    $objects =  DataObjectMaster::getObjects($args);
+    return $objects;
 }
 
 ?>
