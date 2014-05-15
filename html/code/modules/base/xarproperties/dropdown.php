@@ -105,11 +105,11 @@ class SelectProperty extends DataProperty
 
         // Finally generate the options
             $data['options'] = $this->getOptions();
-        } else {
-            // If a firstline was defined add it in
-            if (isset($data['firstline'])) $this->initialization_firstline = $data['firstline'];
-            $data['options'] = array_merge($this->getFirstline(),$data['options']);
         }
+        
+        // If a firstline was defined add it in
+        if (isset($data['firstline'])) $this->initialization_firstline = $data['firstline'];
+        $data['options'] = array_merge($this->getFirstline(),$data['options']);
         
         // Make sure the optins have the correct form
         if (!is_array($data['options']))
