@@ -447,14 +447,17 @@ class FileUploadProperty extends DataProperty
         }
         
         // If no filetype restriction then let it through
-        $filetypes = $this->validation_file_extensions;
+        $filetypes = explode(",", $this->validation_file_extensions);
         if (empty($filetypes)) return true;
         
         // Validate each array element (name)
         $valid = true;
         foreach ($filenames as $name) {
-            $name = xarVarPrepForOS(basename(strval($name)));
-            $valid = $valid && preg_match("/\.$filetypes$/",strtolower($name));
+            $extension = pathinfo(strtolower($name), PATHINFO_EXTENSION);
+            if (!in_array($extension, $filetypes)) {
+                $valid = false;
+                break;
+            }
         }
         return $valid;
     }
