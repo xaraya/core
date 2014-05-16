@@ -620,11 +620,13 @@ class DataObjectMaster extends Object
 
         $info = self::_getObjectInfo($args);
         
-        if (empty($info)) {
+        // If we have no such object, just return false for now
+        if (empty($info)) return false;
+        /*{
             if (isset($args['name'])) $identifier = xarML('the name is #(1)',$args['name']);
             if (isset($args['objectid'])) $identifier = xarML('the objectid is #(1)',$args['objectid']);
             throw new Exception(xarML('Unable to get an object where #(1)', $identifier));
-        }
+        }*/
         
         $current = current($info);
         foreach ($current as $key => $value) 
