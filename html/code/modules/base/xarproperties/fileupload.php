@@ -447,7 +447,9 @@ class FileUploadProperty extends DataProperty
         }
         
         // If no filetype restriction then let it through
-        $filetypes = explode(",", $this->validation_file_extensions);
+        // Cater to old form
+        $filetypes = str_replace('|', ',', $this->validation_file_extensions);
+        $filetypes = explode(",", $filetypes);
         if (empty($filetypes)) return true;
         
         // Validate each array element (name)
