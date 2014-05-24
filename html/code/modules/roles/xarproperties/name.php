@@ -11,9 +11,10 @@
  */
 
 sys::import('modules.base.xarproperties.textbox');
+sys::import('modules.dynamicdata.class.properties.interfaces');
 
 /**
- * handle a name property
+ * Handle a name property
  *
  * @author Marc Lutolf <mfl@netspan.ch>
  */
@@ -24,10 +25,8 @@ class NameProperty extends TextBoxProperty
     public $desc       = 'Name';
     public $reqmodules = array('roles');
 
-    public $display_show_salutation;
-    public $display_show_firstname;
-    public $display_show_middlename;
-    public $initialization_refobject    = 'roles_users';    // Name of the object we want to reference
+    public $display_name_components = 'first_name,First Name;last_name,Last Name;';
+    public $display_salutation_options = 'Mr.,Mrs.,Ms.';
     public $validation_ignore_validations;
 
     function __construct(ObjectDescriptor $descriptor)
@@ -41,80 +40,67 @@ class NameProperty extends TextBoxProperty
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
-        if ($this->initialization_refobject == 'roles_groups') {
-            $property = DataPropertyMaster::getProperty(array('name' => 'objectref'));
-            $property->validation_override = true;
-            $property->initialization_refobject = $this->initialization_refobject;
-            $property->initialization_store_prop = 'id';
-            return $property->checkInput($name, $value);
-        } else {
-            // store the fieldname for validations who need them (e.g. file uploads)
-            $this->fieldname = $name;
-            if ($this->display_layout == 'single') {
-                $this->display_show_salutation     = 0;
-                $this->display_show_firstname      = 0;
-                $this->display_show_middlename     = 0;
-            }
-            if (!isset($value)) {
-                $invalid = array();
-                $validity = true;
-                $value = array();
-                $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
-                if (!$this->validation_ignore_validations) {
-                    $textbox->validation_min_length = 3;
-                }
-			}
-            $value['salutation'] = '';
-            $value['last'] = '';
-            $value['middle'] = '';
-            $value['first'] = '';
-            if ($this->display_show_salutation) {
-                $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
-                $salutation->validation_override = true;
-                $isvalid = $salutation->checkInput($name . '_salutation');
-                if ($isvalid) {
-                    $value['salutation'] = $salutation->value;
-                } else {
-                    $invalid[] = 'salutation';
-                }
-            }
-            if ($this->display_show_firstname) {
-                $isvalid = $textbox->checkInput($name . '_first');
-                if ($isvalid) {
-                    $value['first'] = $textbox->value;
-                } else {
-                    $invalid[] = 'first';
-                }
-                $validity = $validity && $isvalid;
-            }
+        $invalid = array();
+        $value = array();
+        $valid = true;
 
-            if ($this->display_show_middlename) {
-                $isvalid = $textbox->checkInput($name . '_middle');
-                if ($isvalid) {
-                    $value['middle'] = $textbox->value;
-                } else {
-                    $invalid[] = 'middle';
-                }
-                $validity = $validity && $isvalid;
-            }
-
-            $isvalid = $textbox->checkInput($name . '_last');
+        if (!empty($this->display_salutation_options)) {
+            $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
+            $salutation->validation_override = true;
+            $isvalid = $salutation->checkInput($name . '_salutation');
+            $valid = $valid && $isvalid;
             if ($isvalid) {
-                $value['last'] = $textbox->value;
+                $value['salutation'] = $salutation->value;
             } else {
-                $invalid[] = 'last';
+                $invalid[] = 'salutation';
             }
-            $validity = $validity && $isvalid;
-
-            if (!empty($invalid)) $this->invalid = implode(',',$invalid);
-            $this->value = '%' . $value['last'] .'%' . $value['first'] .'%' . $value['middle'] .'%' . $value['salutation'] .'%';
-            return $validity;
         }
+        
+        if (!empty($this->display_name_components)) {
+            $name_components = $this->getNameComponents($this->display_name_components);
+            $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
+            if (!$this->validation_ignore_validations) {
+                $textbox->validation_min_length = 3;
+            }
+            foreach ($name_components as $fieldname => $label) {
+                $isvalid = $textbox->checkInput($name . '_' . $fieldname);
+                $valid = $valid && $isvalid;
+                if ($isvalid) {
+                    $value[$fieldname] = $textbox->value;
+                } else {
+                    $invalid[] = strtolower($label);
+                }
+            }
+            
+        }
+
+        if ($valid) {
+            $this->value = serialize($value);
+        } else {
+            $this->value = null;
+            $invalid = implode(',',$invalid);
+            $this->invalid = xarML('The fields #(1) are not valid', $invalid);
+        }
+        return $valid;
+    }
+
+    public function validateValue($value = null)
+    {
+        // Dummy method
+        xarLog::message("DataProperty::validateValue: Validating property " . $this->name);
+        return true;
     }
 
     public function showInput(Array $data = array())
     {
-        if (empty($data['refobject'])) $data['refobject'] = $this->initialization_refobject;
+        if (empty($data['name_components'])) $data['name_components'] = $this->display_name_components;
+        else $this->display_name_components = $data['name_components'];
+        $data['name_components'] = $this->getNameComponents($data['name_components']);
+
+        if (empty($data['salutation_options'])) $data['salutation_options'] = $this->display_salutation_options;
+        else $this->display_salutation_options = $data['salutation_options'];
+        $data['salutation_options'] = $this->getSalutationOptions($data['salutation_options']);
+        
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValueArray();
         return DataProperty::showInput($data);
@@ -122,7 +108,14 @@ class NameProperty extends TextBoxProperty
 
     public function showOutput(Array $data = array())
     {
-        if (empty($data['refobject'])) $data['refobject'] = $this->initialization_refobject;
+        if (empty($data['name_components'])) $data['name_components'] = $this->display_name_components;
+        else $this->display_name_components = $data['name_components'];
+        $data['name_components'] = $this->getNameComponents($data['name_components']);
+
+        if (empty($data['salutation_options'])) $data['salutation_options'] = $this->display_salutation_options;
+        else $this->display_salutation_options = $data['salutation_options'];
+        $data['salutation_options'] = $this->getSalutationOptions($data['salutation_options']);
+        
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValueArray();
         return DataProperty::showOutput($data);
@@ -131,26 +124,74 @@ class NameProperty extends TextBoxProperty
     public function getValue()
     {
         $valuearray = $this->getValueArray();
-        $value = $valuearray['salutation'] . ' ' . $valuearray['first'] . ' ' . $valuearray['middle'] . ' ' . $valuearray['last'];
+        $value = implode(' ', $valuearray);
         $value = str_replace('  ',' ',$value);
         return trim($value);
     }
 
     function getValueArray()
     {
-        $value = $this->value;
-        if (!isset($value)) $value = '%%%%%';
-        if (is_array($value)) return $value;
-        $value = explode('%', $value);
-        
-        $valuearray['last'] = !empty($value[1]) ? $value[1] : '';
-        $valuearray['first'] = !empty($value[2]) ? $value[2] : '';
-        $valuearray['middle'] = !empty($value[3]) ? $value[3] : '';
-        $valuearray['salutation'] = !empty($value[4]) ? $value[4] : '';
-
-        // Backward compatibility
-        if (!empty($value[0])) $valuearray['last'] = $value[0];
+        $value = @unserialize($this->value);
+        if (!is_array($value)) $value = array('full_name' => $this->value);
+        $components = $this->getNameComponents($this->display_name_components);
+        if (!empty($this->display_salutation_options)) $components['salutation'] = xarML('Salutation');
+        $valuearray = array();
+        foreach ($components as $k => $v) {
+            if (isset($value[$k])) $valuearray[$k] = $value[$k];
+            else $valuearray[$k] = '';
+        }
         return $valuearray;
     }
+    
+    function getNameComponents($componentstring)
+    {
+        $components = explode(';', $componentstring);
+        // remove the last (empty) element
+        array_pop($components);
+        $componentarray = array();
+        foreach ($components as $component)
+        {
+            // allow escaping \, for values that need a comma
+            if (preg_match('/(?<!\\\),/', $component)) {
+                // if the component contains a , we'll assume it's an name/displaynamename combination
+                list($name,$displayname) = preg_split('/(?<!\\\),/', $component);
+                $name = trim(strtr($name,array('\,' => ',')));
+                $displayname = trim(strtr($displayname,array('\,' => ',')));
+                $componentarray[$name] = $displayname;
+            } else {
+                // otherwise we'll use the component for both name and displayname
+                $component = trim(strtr($component,array('\,' => ',')));
+                $componentarray[$component] = $component;
+            }
+        }
+        return $componentarray;
+    }
+  
+    function getSalutationOptions($string)
+    {
+        $items = explode(',', $string);
+        $optionarray = array();
+        foreach ($items as $item) {
+            // allow escaping \, for values that need a comma
+            $item = trim(strtr($item,array('\,' => ',')));
+            $optionarray[] = array('id' => $item, 'name' => $item);
+        }
+        return $optionarray;
+    }
+}
+
+class NamePropertyInstall extends NameProperty implements iDataPropertyInstall
+{
+
+    public function install(Array $data=array())
+    {
+        $dat_file = sys::code() . 'modules/roles/xardata/configurations_name-dat.xml';
+        $data = array('file' => $dat_file);
+        try {
+        $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+        } catch (Exception $e) {}
+        return true;
+    }
+    
 }
 ?>
