@@ -23,8 +23,17 @@
               </xsl:when>
               <xsl:otherwise>
                 <!-- Ok, we have nothin, but a label -->
-                <xsl:text>echo xarTplProperty('dynamicdata','label','showoutput',array('label'=&gt;'</xsl:text>
-                <xsl:value-of select="@label"/><xsl:text>'</xsl:text>
+                <xsl:text>echo xarTplProperty('dynamicdata','label','showoutput',array('label'=&gt;</xsl:text>
+                <xsl:choose>
+                  <xsl:when test="starts-with(@label,'$')">
+                    <xsl:value-of select="@label"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:text>'</xsl:text>
+                    <xsl:value-of select="@label"/>
+                    <xsl:text>'</xsl:text>
+                  </xsl:otherwise>
+                </xsl:choose>
                 <xsl:if test="@for">
                   <xsl:text>,'for'=&gt;'</xsl:text>
                   <xsl:value-of select="@for"/>
