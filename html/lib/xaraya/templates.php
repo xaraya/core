@@ -380,7 +380,6 @@ class xarTpl extends Object
         $tpl->pageTitle = self::getPageTitle();
         $tplData['tpl'] = $tpl;
 
-
         // TODO: make this work different, for example:
         // 1. Only create a link somewhere on the page, 
         //    when clicked opens a page with the variables on that page
