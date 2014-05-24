@@ -414,10 +414,11 @@ class xarUser extends Object
                 if ($userId == XARUSER_LAST_RESORT) {
                     return xarML('No Information'); // better return null here
                 }
-                // retrieve the item from the roles module
+                // Retrieve the item from the roles module
+                // FIXME: a module function in the core...
                 $userRole = xarMod::apiFunc('roles',  'user',  'get',
                                            array('id' => $userId));
-    
+   
                 if (empty($userRole) || $userRole['id'] != $userId) {
                     throw new IDNotFoundException($userId,'User identified by id #(1) does not exist.');
                 }
