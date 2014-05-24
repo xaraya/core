@@ -12,12 +12,17 @@
     <xar:if condition="$layout eq 'horizontal' OR $layout eq 'default'">
         <xar:if condition="!empty($salutation_options)">
             <xar:set name="namestring">$name . '_salutation'</xar:set>
-            <xar:data-input type="dropdown" name="$namestring" id="$namestring" value="$value['salutation']" options="$salutation_options"/>&#160;
+            <xar:data-input type="dropdown" name="$namestring" id="$namestring" value="$value['salutation'][0]['name']" options="$salutation_options"/>&#160;
         </xar:if>
         <xar:if condition="!empty($name_components)">
             <xar:foreach in="$name_components" key="$k" value="$v">
-                <xar:set name="namestring">$name . '_' . $k</xar:set>
-                <xar:data-input type="textbox" name="$namestring" id="$namestring" value="$value[$k]"/>&#160;
+                <xar:foreach in="$value['components']" value="$part">
+                    <xar:if condition="$part['id'] eq $v['id']">
+                        <xar:set name="namestring">$name . '_' . $v['id']</xar:set>
+                        <xar:data-input type="textbox" name="$namestring" id="$namestring" value="$part['name']"/>&#160;
+                        <xar:break/>
+                    </xar:if>
+                </xar:foreach>
             </xar:foreach>
         </xar:if>
     <xar:elseif condition="$layout eq 'vertical'"/>
@@ -35,16 +40,22 @@
         </xar:if>
         <xar:if condition="!empty($name_components)">
             <xar:foreach in="$name_components" key="$k" value="$v">
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <xar:data-label label="$v" for="id"/>
-                    </div>
-                    <div class="xar-col">
-                        <xar:set name="namestring">$name . '_' . $k</xar:set>
-                        <xar:data-input type="textbox" name="$namestring" id="$namestring" value="$value[$k]"/>
-                    </div>
-                </div>
+                <xar:foreach in="$value['components']" value="$part">
+                    <xar:if condition="$part['id'] eq $k">
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:data-label label="$v" for="id"/>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="namestring">$name . '_' . $v['id']</xar:set>
+                                <xar:data-input type="textbox" name="$namestring" id="$namestring" value="$part['name']"/>&#160;
+                                <xar:break/>
+                            </div>
+                        </div>
+                    </xar:if>
+                </xar:foreach>
             </xar:foreach>
         </xar:if>
     </xar:if>
+    <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

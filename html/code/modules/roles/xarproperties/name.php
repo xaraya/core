@@ -18,6 +18,12 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
  *
  * @author Marc Lutolf <mfl@netspan.ch>
  */
+/**
+ * The property is stored as a serialized array of the form
+ * array(
+ *     'salutation' => [array('id' => 'salutation, 'name' => <salutationvalue>)]  (only one element allowed)
+ *     'components' => [array('id' => <fieldname>, 'name' => <field value>)]      (one or more elements allowed)
+ */
 class NameProperty extends TextBoxProperty
 {
     public $id         = 30095;
@@ -41,7 +47,7 @@ class NameProperty extends TextBoxProperty
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
         $invalid = array();
-        $value = array();
+        $value = array('salutation' => array(), 'components' => array());
         $valid = true;
 
         if (!empty($this->display_salutation_options)) {
@@ -50,7 +56,7 @@ class NameProperty extends TextBoxProperty
             $isvalid = $salutation->checkInput($name . '_salutation');
             $valid = $valid && $isvalid;
             if ($isvalid) {
-                $value['salutation'] = $salutation->value;
+                $value['salutation'][] = array('id' => 'salutation', 'name' => $salutation->value);
             } else {
                 $invalid[] = 'salutation';
             }
@@ -62,16 +68,15 @@ class NameProperty extends TextBoxProperty
             if (!$this->validation_ignore_validations) {
                 $textbox->validation_min_length = 3;
             }
-            foreach ($name_components as $fieldname => $label) {
-                $isvalid = $textbox->checkInput($name . '_' . $fieldname);
+            foreach ($name_components as $field) {
+                    $isvalid = $textbox->checkInput($name . '_' . $field['id']);
                 $valid = $valid && $isvalid;
                 if ($isvalid) {
-                    $value[$fieldname] = $textbox->value;
+                    $value['components'][] = array('id' => $field['id'], 'name' => $textbox->value);
                 } else {
-                    $invalid[] = strtolower($label);
+                    $invalid[] = strtolower($field['name']);
                 }
             }
-            
         }
 
         if ($valid) {
@@ -117,16 +122,17 @@ class NameProperty extends TextBoxProperty
         $data['salutation_options'] = $this->getSalutationOptions($data['salutation_options']);
         
         if (isset($data['value'])) $this->value = $data['value'];
-        $data['value'] = $this->getValueArray();
+        $data['value'] = $this->getValue();
         return DataProperty::showOutput($data);
     }
 
     public function getValue()
     {
         $valuearray = $this->getValueArray();
-        $value = implode(' ', $valuearray);
-        $value = str_replace('  ',' ',$value);
-        return trim($value);
+        $value = '';
+        foreach ($valuearray as $part) {
+        }var_dump($value);
+        return $value;
     }
 
     function getValueArray()
@@ -134,13 +140,20 @@ class NameProperty extends TextBoxProperty
         $value = @unserialize($this->value);
         if (!is_array($value)) $value = array('full_name' => $this->value);
         $components = $this->getNameComponents($this->display_name_components);
-        if (!empty($this->display_salutation_options)) $components['salutation'] = xarML('Salutation');
-        $valuearray = array();
-        foreach ($components as $k => $v) {
-            if (isset($value[$k])) $valuearray[$k] = $value[$k];
-            else $valuearray[$k] = '';
-        }
-        return $valuearray;
+        $valuearray = array('salutation' => array(), 'components' => array());
+        if (!empty($this->display_salutation_options)) $valuearray['salutation'][] = array('id' => 'salutation', 'name' => xarML('Salutation'));
+        foreach ($components as $v) {
+            $found = false;
+            foreach ($value['components'] as $part) {
+                if ($part['id'] == $v['id']) {
+                    $valuearray['components'][] = array('id' => $v['id'], 'name' => $part['name']);
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) $valuearray['components'][] = array('id' => $v['id'], 'name' => '');
+        }//var_dump($valuearray);exit;var_dump($value);exit;
+        return $valuearray;exit;
     }
     
     function getNameComponents($componentstring)
@@ -157,11 +170,11 @@ class NameProperty extends TextBoxProperty
                 list($name,$displayname) = preg_split('/(?<!\\\),/', $component);
                 $name = trim(strtr($name,array('\,' => ',')));
                 $displayname = trim(strtr($displayname,array('\,' => ',')));
-                $componentarray[$name] = $displayname;
+                $componentarray[] = array('id' => $name, 'name' => $displayname);
             } else {
                 // otherwise we'll use the component for both name and displayname
                 $component = trim(strtr($component,array('\,' => ',')));
-                $componentarray[$component] = $component;
+                $componentarray[] = array('id' => $component, 'name' => $component);
             }
         }
         return $componentarray;
