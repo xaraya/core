@@ -130,18 +130,26 @@ class NameProperty extends TextBoxProperty
     {
         $valuearray = $this->getValueArray();
         $value = '';
-        foreach ($valuearray as $part) {
-        }var_dump($value);
+        if (!empty($valuearray['salutation'])) $value .= ' ' . trim($valuearray['salutation'][0]['name']);
+        foreach ($valuearray['components'] as $part) {//var_dump($part);exit;
+            try {
+                $value .= ' ' . trim($part['name']);
+            } catch (Exception $e) {}
+        }
         return $value;
     }
 
     function getValueArray()
     {
         $value = @unserialize($this->value);
-        if (!is_array($value)) $value = array('full_name' => $this->value);
+        if (!is_array($value)) {
+            $value = array('salutation' => array(), 'components' => array(array('id' => 'full_name', 'name' => $this->value)));
+        }
         $components = $this->getNameComponents($this->display_name_components);
         $valuearray = array('salutation' => array(), 'components' => array());
-        if (!empty($this->display_salutation_options)) $valuearray['salutation'][] = array('id' => 'salutation', 'name' => xarML('Salutation'));
+        if (!empty($this->display_salutation_options) && !empty($value['salutation'])) {
+            $valuearray['salutation'][] = array('id' => 'salutation', 'name' => $value['salutation'][0]['name']);
+        }
         foreach ($components as $v) {
             $found = false;
             foreach ($value['components'] as $part) {
@@ -152,8 +160,8 @@ class NameProperty extends TextBoxProperty
                 }
             }
             if (!$found) $valuearray['components'][] = array('id' => $v['id'], 'name' => '');
-        }//var_dump($valuearray);exit;var_dump($value);exit;
-        return $valuearray;exit;
+        }
+        return $valuearray;
     }
     
     function getNameComponents($componentstring)
