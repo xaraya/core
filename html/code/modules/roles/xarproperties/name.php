@@ -26,9 +26,9 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
  * Default fields displayed are: salutation, first_anme, last_name
  *
  * Note on salutations
- * The property understands the concept of a salutation, and displays any field eith the name "salutation" 
- * as a dropdown whose optiions can be configured in the backend or via a attribute salutation_options in the property tag.
- * When updating checkInput method of the textbox property is run on all fields, even salutation.
+ * The property understands the concept of a salutation, and displays any field with the name "salutation" 
+ * as a dropdown whose options can be configured in the backend or via an attribute salutation_options in the property tag.
+ * When updating, the checkInput method of the textbox property is run on all fields, even salutation.
  * This can be done without issues (we are in any case allowing option overrides) and leaves open the possibility
  * of allowing a template override with the salutation field as a textbox.
  */
