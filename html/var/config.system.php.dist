@@ -11,6 +11,8 @@
  * @link http://www.xaraya.com
  */
 
+// Database Middleware: the middleware Xaraya will use to connect ot the dataase
+$systemConfiguration['DB.Middleware'] = 'Creole';
 // Database Username: the username that will be used to connect to the database.
 $systemConfiguration['DB.UserName'] = '';
 // Database Password: the password that will be used to connect to the database.
