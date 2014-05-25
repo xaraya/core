@@ -10,9 +10,6 @@
  * @link http://xaraya.com/index.php/release/27.html
  */
 
-sys::import('modules.base.xarproperties.textbox');
-sys::import('modules.dynamicdata.class.properties.interfaces');
-
 /**
  * Handle a name property
  *
@@ -33,6 +30,9 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
  * of allowing a template override with the salutation field as a textbox.
  */
  
+sys::import('modules.base.xarproperties.textbox');
+sys::import('modules.dynamicdata.class.properties.interfaces');
+
 class NameProperty extends TextBoxProperty
 {
     public $id         = 30095;
