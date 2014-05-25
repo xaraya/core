@@ -167,7 +167,7 @@ class NameProperty extends TextBoxProperty
         {
             // allow escaping \, for values that need a comma
             if (preg_match('/(?<!\\\),/', $component)) {
-                // if the component contains a , we'll assume it's an name/displaynamename combination
+                // if the component contains a , we'll assume it's an name/displayname combination
                 list($name,$displayname) = preg_split('/(?<!\\\),/', $component);
                 $name = trim(strtr($name,array('\,' => ',')));
                 $displayname = trim(strtr($displayname,array('\,' => ',')));
