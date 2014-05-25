@@ -12,13 +12,15 @@
  *
  * @author Marcel van der Boom <mrb@hsdev.com>
  */
-sys::import('xaraya.variables');
-sys::import('xaraya.creole');
+ 
 /**
  * ConfigVars class
  *
  * @todo if core was module 0 this could be a whole lot simpler by derivation (or if all config variables were moved to a module)
  */
+
+sys::import('xaraya.variables');
+
 class xarConfigVars extends xarVars implements IxarVars
 {
     private static $KEY = 'Config.Variables'; // const cannot be private :-(
