@@ -20,14 +20,19 @@
  * array(
  *     [array('id' => <fieldname>, 'name' => <field value>)]      (one or more elements)
  *
- * Default fields displayed are: salutation, first_anme, last_name
+ * Default fields displayed are: salutation, first_name, last_name
  *
  * Note on salutations
  * The property understands the concept of a salutation, and displays any field with the name "salutation" 
  * as a dropdown whose options can be configured in the backend or via an attribute salutation_options in the property tag.
  * When updating, the checkInput method of the textbox property is run on all fields, even salutation.
  * This can be done without issues (we are in any case allowing option overrides) and leaves open the possibility
- * of allowing a template override with the salutation field as a textbox.
+ * of allowing a template override with the salutation field as a textbox. Note this only works if the display
+ * and storag values of the salutation options are the same.
+ *
+ * Note on validations
+ * For now if we set $validation_ignore_validations then a minimu length of all fields is forced.
+ * In the future this should be made field dependent, probably by adding a configuration setting.
  */
  
 sys::import('modules.base.xarproperties.textbox');
@@ -55,9 +60,9 @@ class NameProperty extends TextBoxProperty
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
-        $invalid = array();
-        $value = array();
         $valid = true;
+        $invalid = array();
+        $value = array();   // We don't allow a value to be passed to this method
 
         if (!empty($this->display_name_components)) {
             //$salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
@@ -131,7 +136,10 @@ class NameProperty extends TextBoxProperty
         $value = '';
         foreach ($valuearray as $part) {
             try {
-                $value .= ' ' . trim($part['name']);
+                $name = trim($part['name']);
+                if (empty($name)) continue;
+                if (empty($value)) $value = $name;
+                else $value .= ' ' . $name;
             } catch (Exception $e) {}
         }
         return $value;
@@ -140,9 +148,8 @@ class NameProperty extends TextBoxProperty
     function getValueArray()
     {
         $value = @unserialize($this->value);
-        if (!is_array($value)) {
-            $value = array((array('id' => 'full_name', 'name' => $this->value)));
-        }
+        if (!is_array($value)) $value = array();
+
         $components = $this->getNameComponents($this->display_name_components);
         foreach ($components as $v) {
             $found = false;

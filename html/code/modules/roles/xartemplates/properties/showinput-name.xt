@@ -9,7 +9,7 @@
         <xar:set name="style">''</xar:set>
     </xar:if>
 
-    <xar:if condition="$layout eq 'horizontal' OR $layout eq 'default'">
+    <xar:if condition="$layout eq 'horizontal' OR $layout eq 'default' OR $layout eq ''">
         <xar:if condition="!empty($name_components)">
             <xar:foreach in="$name_components" key="$k" value="$v">
                 <xar:foreach in="$value" value="$part">
@@ -34,15 +34,15 @@
                     </div>
                     <xar:foreach in="$value" value="$part">
                         <xar:if condition="$part['id'] eq $v['id']">
-                                <div class="xar-col">
-                                    <xar:set name="namestring">$name . '_' . $v['id']</xar:set>
-                                    <xar:if condition="$part['id'] eq 'salutation'">
-                                        <xar:data-input type="dropdown" name="$namestring" id="$namestring" value="$part['name']" options="$salutation_options"/>&#160;
-                                    <xar:else/>
-                                        <xar:data-input type="textbox" name="$namestring" id="$namestring" value="$part['name']"/>&#160;
-                                    </xar:if>
-                                    <xar:break/>
-                                </div>
+                            <div class="xar-col">
+                                <xar:set name="namestring">$name . '_' . $v['id']</xar:set>
+                                <xar:if condition="$part['id'] eq 'salutation'">
+                                    <xar:data-input type="dropdown" name="$namestring" id="$namestring" value="$part['name']" options="$salutation_options"/>
+                                <xar:else/>
+                                    <xar:data-input type="textbox" name="$namestring" id="$namestring" value="$part['name']"/>
+                                </xar:if>
+                                <xar:break/>
+                            </div>
                         </xar:if>
                     </xar:foreach>
                 </div>
