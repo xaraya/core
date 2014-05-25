@@ -1,0 +1,14 @@
+<items>
+  <configurations>
+    <name>display_name_components</name>
+    <label>Name Components</label>
+    <description>The components and their display labels of this property</description>
+    <property_id>3</property_id>
+  </configurations>
+  <configurations>
+    <name>display_salutation_options</name>
+    <label>Salutation Options</label>
+    <description>The options of the salutation component</description>
+    <property_id>3</property_id>
+  </configurations>
+</items>

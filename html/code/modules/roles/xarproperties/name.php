@@ -21,8 +21,16 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
 /**
  * The property is stored as a serialized array of the form
  * array(
- *     'salutation' => [array('id' => 'salutation, 'name' => <salutationvalue>)]  (only one element allowed)
- *     'components' => [array('id' => <fieldname>, 'name' => <field value>)]      (one or more elements allowed)
+ *     [array('id' => <fieldname>, 'name' => <field value>)]      (one or more elements)
+ *
+ * Default fields displayed are: salutation, first_anme, last_name
+ *
+ * Note on salutations
+ * The property understands the concept of a salutation, and displays any field eith the name "salutation" 
+ * as a dropdown whose optiions can be configured in the backend or via a attribute salutation_options in the property tag.
+ * When updating checkInput method of the textbox property is run on all fields, even salutation.
+ * This can be done without issues (we are in any case allowing option overrides) and leaves open the possibility
+ * of allowing a template override with the salutation field as a textbox.
  */
 class NameProperty extends TextBoxProperty
 {
@@ -31,7 +39,7 @@ class NameProperty extends TextBoxProperty
     public $desc       = 'Name';
     public $reqmodules = array('roles');
 
-    public $display_name_components = 'first_name,First Name;last_name,Last Name;';
+    public $display_name_components = 'salutation,Salutation;first_name,First Name;last_name,Last Name;';
     public $display_salutation_options = 'Mr.,Mrs.,Ms.';
     public $validation_ignore_validations;
 
@@ -47,32 +55,22 @@ class NameProperty extends TextBoxProperty
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
         $invalid = array();
-        $value = array('salutation' => array(), 'components' => array());
+        $value = array();
         $valid = true;
 
-        if (!empty($this->display_salutation_options)) {
-            $salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
-            $salutation->validation_override = true;
-            $isvalid = $salutation->checkInput($name . '_salutation');
-            $valid = $valid && $isvalid;
-            if ($isvalid) {
-                $value['salutation'][] = array('id' => 'salutation', 'name' => $salutation->value);
-            } else {
-                $invalid[] = 'salutation';
-            }
-        }
-        
         if (!empty($this->display_name_components)) {
-            $name_components = $this->getNameComponents($this->display_name_components);
+            //$salutation = DataPropertyMaster::getProperty(array('name' => 'dropdown'));
+            //$salutation->validation_override = true;
             $textbox = DataPropertyMaster::getProperty(array('name' => 'textbox'));
+            $name_components = $this->getNameComponents($this->display_name_components);
             if (!$this->validation_ignore_validations) {
                 $textbox->validation_min_length = 3;
             }
             foreach ($name_components as $field) {
-                    $isvalid = $textbox->checkInput($name . '_' . $field['id']);
+                $isvalid = $textbox->checkInput($name . '_' . $field['id']);
                 $valid = $valid && $isvalid;
                 if ($isvalid) {
-                    $value['components'][] = array('id' => $field['id'], 'name' => $textbox->value);
+                    $value[] = array('id' => $field['id'], 'name' => $textbox->value);
                 } else {
                     $invalid[] = strtolower($field['name']);
                 }
@@ -130,8 +128,7 @@ class NameProperty extends TextBoxProperty
     {
         $valuearray = $this->getValueArray();
         $value = '';
-        if (!empty($valuearray['salutation'])) $value .= ' ' . trim($valuearray['salutation'][0]['name']);
-        foreach ($valuearray['components'] as $part) {//var_dump($part);exit;
+        foreach ($valuearray as $part) {
             try {
                 $value .= ' ' . trim($part['name']);
             } catch (Exception $e) {}
@@ -143,23 +140,19 @@ class NameProperty extends TextBoxProperty
     {
         $value = @unserialize($this->value);
         if (!is_array($value)) {
-            $value = array('salutation' => array(), 'components' => array(array('id' => 'full_name', 'name' => $this->value)));
+            $value = array((array('id' => 'full_name', 'name' => $this->value)));
         }
         $components = $this->getNameComponents($this->display_name_components);
-        $valuearray = array('salutation' => array(), 'components' => array());
-        if (!empty($this->display_salutation_options) && !empty($value['salutation'])) {
-            $valuearray['salutation'][] = array('id' => 'salutation', 'name' => $value['salutation'][0]['name']);
-        }
         foreach ($components as $v) {
             $found = false;
-            foreach ($value['components'] as $part) {
+            foreach ($value as $part) {
                 if ($part['id'] == $v['id']) {
-                    $valuearray['components'][] = array('id' => $v['id'], 'name' => $part['name']);
+                    $valuearray[] = array('id' => $v['id'], 'name' => $part['name']);
                     $found = true;
                     break;
                 }
             }
-            if (!$found) $valuearray['components'][] = array('id' => $v['id'], 'name' => '');
+            if (!$found) $valuearray[] = array('id' => $v['id'], 'name' => '');
         }
         return $valuearray;
     }
