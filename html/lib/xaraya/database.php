@@ -1,6 +1,6 @@
 <?php
 /**
- * Database Abstraction Layer API Helpers
+ * Creole Database Abstraction Layer API Helpers
  *
  * @package core
  * @subpackage database

@@ -314,9 +314,13 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
                                 'persistent'      => $persistent,
                                 'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
     
-            if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
-                sys::import('xaraya.database_pdo');
-            } else {
+            try {
+                if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
+                    sys::import('xaraya.database_pdo');
+                } else {
+                    sys::import('xaraya.database');
+                }
+            } catch (Exception $e) {
                 sys::import('xaraya.database');
             }
     
