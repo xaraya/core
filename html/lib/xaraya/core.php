@@ -508,7 +508,6 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
             return true;
         }  
 
-
         /**
          * At last, we can give people access to the system.
          *
@@ -531,7 +530,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
             return true;
-        } 
+        }
         
         /*
          * Block subsystem
@@ -554,8 +553,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
             $current_SYSTEM_level = $new_SYSTEM_level;
             return true;
         }
-
-               
+              
         /**
          * Start Hooks Subsystem
         **/
