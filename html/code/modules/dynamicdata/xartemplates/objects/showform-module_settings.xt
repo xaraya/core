@@ -7,7 +7,7 @@
                 <label for="items_per_page" title="#$label#" size="3">List items per page:</label>
             </div>
             <div class="xar-col">
-                <xar:data-input property="$properties['items_per_page']" class="xar-form-textauto"/>
+                <xar:data-input property="$properties['items_per_page']"/>
             </div>
         </div>
     </xar:if>
