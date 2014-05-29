@@ -53,7 +53,7 @@
       <source>categories.image</source>
       <status>33</status>
       <seq>4</seq>
-      <configuration>a:2:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:26:"validation_file_extensions";s:20:"gif,jpg,jpeg,png,bmp";s:18:"validation_matches";s:0:"";s:28:"initialization_basedirectory";s:44:"sys::code() . 'modules/categories/xarimages'";s:24:"initialization_firstline";s:15:",-- No Image --";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+      <configuration>a:5:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:26:"validation_file_extensions";s:20:"gif,jpg,jpeg,png,bmp";s:28:"initialization_basedirectory";s:3:"var";s:24:"initialization_firstline";s:14:",Select Image;";}</configuration>
     </property>
     <property name="template">
       <id>240</id>
@@ -63,7 +63,7 @@
       <source>categories.template</source>
       <status>34</status>
       <seq>5</seq>
-      <configuration>a:11:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:26:"validation_file_extensions";s:0:"";s:18:"validation_matches";s:0:"";s:28:"initialization_basedirectory";s:33:"code/modules/categories/xarimages";s:24:"initialization_firstline";s:15:",-- No Image --";s:23:"initialization_function";s:0:"";s:19:"initialization_file";s:0:"";s:25:"initialization_collection";s:0:"";s:22:"initialization_options";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
+      <configuration></configuration>
     </property>
     <property name="child_categories">
       <id>241</id>
