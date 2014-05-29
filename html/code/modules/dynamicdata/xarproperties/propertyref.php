@@ -59,7 +59,7 @@ class PropertyRefProperty extends SelectProperty
             return $this->options;
         }
 */
-        $options = $this->getFirstline();
+        $options = array();
 
         // get the object whose properties we want
         $objectname = '';

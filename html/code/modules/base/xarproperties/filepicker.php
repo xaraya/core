@@ -96,12 +96,11 @@ class FilePickerProperty extends SelectProperty
 
     function getOptions()
     {
-        $options = $this->getFirstline();
         if (count($this->options) > 0) {
-            if (!empty($firstline)) $this->options = array_merge($options,$this->options);
             return $this->options;
         }
         
+        $options = array();
         if (empty($this->initialization_basedirectory)) return array();
         // this works with relative directories
         $dir = new RelativeDirectoryIterator($this->initialization_basedirectory);

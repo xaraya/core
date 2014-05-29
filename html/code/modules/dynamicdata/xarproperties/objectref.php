@@ -86,7 +86,7 @@ class ObjectRefProperty extends SelectProperty
         if (!empty($this->_items) && $this->isSameConfiguration() && !empty($this->options)) {
             return $this->options;
         }
-        $options = $this->getFirstline();
+        $options = array();
 
         // The object we need to query is in $this->initialization_refobject, we display the value of
         // the property in $this->display_prop and the id comes from $this->store_prop

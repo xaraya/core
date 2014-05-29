@@ -70,9 +70,7 @@ class ItemTypeProperty extends ComboProperty
      */
     function getOptions()
     {
-        $options = $this->getFirstline();
         if (count($this->options) > 0) {
-            if (!empty($firstline)) $this->options = array_merge($options,$this->options);
             return $this->options;
         }
         
@@ -84,6 +82,7 @@ class ItemTypeProperty extends ComboProperty
             $this->initialization_module = xarMod::getName($this->initialization_module);
         }
         */
+        $options = array();
         if (empty($this->initialization_itemtype)) {
             // we're interested in the module itemtypes (= default behaviour)
             try {

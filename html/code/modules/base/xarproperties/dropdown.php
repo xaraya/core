@@ -108,7 +108,6 @@ class SelectProperty extends DataProperty
         }
         
         // If a firstline was defined add it in
-        if (isset($data['firstline'])) $this->initialization_firstline = $data['firstline'];
         $data['options'] = array_merge($this->getFirstline(),$data['options']);
         
         // Make sure the optins have the correct form
@@ -172,15 +171,14 @@ class SelectProperty extends DataProperty
      */
     function getOptions()
     {
-        $options = $this->getFirstline();
         if (count($this->options) > 0) {
-            if (!empty($firstline)) $this->options = array_merge($options,$this->options);
             return $this->options;
         }
         
         // filepath appears always empty?
         if (empty($filepath)) $filepath = sys::code() . $this->initialization_file;
 
+        $options = array();
         if (!empty($this->initialization_function)) {
             @eval('$items = ' . $this->initialization_function .';');
             if (!isset($items) || !is_array($items)) $items = array();

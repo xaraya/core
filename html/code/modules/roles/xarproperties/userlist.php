@@ -183,9 +183,7 @@ class UserListProperty extends SelectProperty
                 $base_options[$key]['name'] = $namestring;
             }
         }
-        $options = $this->getFirstline();
-        $options = array_merge($options,$base_options);
-        return $options;
+        return $base_options;
     }
 }
 ?>
