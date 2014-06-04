@@ -101,13 +101,14 @@ class SelectProperty extends DataProperty
             if (isset($data['function']))   $this->initialization_function = $data['function'];
             if (isset($data['file']))       $this->initialization_file = $data['file'];
             if (isset($data['collection'])) $this->initialization_collection = $data['collection'];
-            if (isset($data['firstline']))  $this->initialization_firstline = $data['firstline'];
 
         // Finally generate the options
             $data['options'] = $this->getOptions();
         }
         
+        
         // If a firstline was defined add it in
+        if (isset($data['firstline']))  $this->initialization_firstline = $data['firstline'];
         $data['options'] = array_merge($this->getFirstline(),$data['options']);
         
         // Make sure the optins have the correct form
