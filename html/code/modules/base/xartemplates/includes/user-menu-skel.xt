@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- Common Administration menu -->
+    <xar:if condition="xarModVars::get('themes','userpagemenu')">
+        <!-- loadmenuarray function does all the hard work for us :) -->
+        <xar:set name="tabs">xarMod::apiFunc('base', 'admin', 'loadmenuarray', array('layout' => 'tabs'))</xar:set>
+        <!-- only display if we found some links -->
+        <xar:if condition="!empty($tabs['menulinks'])">
+            <ul class="xar-tabs xar-alt xar-norm-outline">
+                <xar:if condition="!empty($tabs['title'])">
+                    <li class="xar-tabs-label" title="#$tabs.title#">#$tabs.label#:</li>
+                <xar:else/>
+                    <li class="xar-tabs-label">#$tabs.label#:</li>
+                </xar:if>
+                <xar:foreach in="$tabs['menulinks']" value="$tab">
+                    <xar:if condition="!empty($tab['isactive'])">
+                        <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                        <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                    <xar:else />
+                        <xar:set name="tabclass">'xar-tab'</xar:set>
+                        <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                    </xar:if>
+                    <li class="#$tabclass#">
+                        <xar:if condition="!empty($tab['url'])">
+                            <a href="#$tab['url']#" class="#$linkclass#" title="#$tab['title']#">
+                                #$tab['label']#
+                            </a>
+                        <xar:else/>
+                            <a class="#$linkclass#" title="#$tab['title']#">
+                                #$tab['label']#
+                            </a>
+                        </xar:if>
+                    </li>
+                </xar:foreach>
+            </ul>
+        </xar:if>
+    </xar:if>
+</xar:template>
