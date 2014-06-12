@@ -5,7 +5,10 @@
     <div class="xar-mod-body">
         <h2>Modify Modules Configuration</h2>
         <form method="post" action="#xarServer::getCurrentURL()#">
-            <xar:data-form object="$module_settings"/>
+            <fieldset>
+                <legend>General options</legend>
+                <xar:data-form object="$module_settings"/>
+            </fieldset>
             <fieldset>
                 <legend>Configuration settings</legend>
                 <div class="xar-row">

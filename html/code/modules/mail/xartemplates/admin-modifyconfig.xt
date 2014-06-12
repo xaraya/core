@@ -66,7 +66,10 @@
 
             <!-- General tab -->
             <xar:if condition="$tab eq 'general'">
-                <xar:data-form object="$module_settings"/>
+                <fieldset>
+                    <legend>General options</legend>
+                    <xar:data-form object="$module_settings"/>
+                </fieldset>
                 <fieldset>
                     <legend>Mail Configuration</legend>
                     <div class="xar-row">

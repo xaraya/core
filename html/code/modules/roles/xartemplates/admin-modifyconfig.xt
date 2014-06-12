@@ -14,7 +14,10 @@
             <div class="xar-mod-page-body">
             <xar:if condition="$tab eq 'general'">
                 <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
-                    <xar:data-form object="$module_settings"/>
+                    <fieldset>
+                        <legend>General options</legend>
+                        <xar:data-form object="$module_settings"/>
+                    </fieldset>
                     <fieldset class="table">
                         <legend>Default Group and Site Administrator</legend>
                         <div class="xar-row">
