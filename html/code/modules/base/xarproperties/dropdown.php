@@ -323,7 +323,7 @@ class SelectProperty extends DataProperty
             $options = $this->getOptions();
         }
         // Add in a first line if it is defined
-        if (!empty($this->initialization_firstline))  {var_dump($this->initialization_firstline);
+        if (!empty($this->initialization_firstline))  {
             $options = array_merge($this->getFirstline(), $options);
         }
 
