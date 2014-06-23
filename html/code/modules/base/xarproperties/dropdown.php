@@ -109,7 +109,7 @@ class SelectProperty extends DataProperty
         
         // If a firstline was defined add it in
         if (isset($data['firstline']))  $this->initialization_firstline = $data['firstline'];
-        $data['options'] = array_merge($this->getFirstline(),$data['options']);
+        $data['options'] = array_merge($this->getFirstline(), $data['options']);
         
         // Make sure the optins have the correct form
         if (!is_array($data['options']))
@@ -267,7 +267,7 @@ class SelectProperty extends DataProperty
     }
 
     /**
-     * Gets the first line
+     * Gets the saved first line and returns it as a proper array
      * 
      * @param void N/A
      * @return array Array containing first line
@@ -322,6 +322,11 @@ class SelectProperty extends DataProperty
         } else {
             $options = $this->getOptions();
         }
+        // Add in a first line if it is defined
+        if (!empty($this->initialization_firstline))  {var_dump($this->initialization_firstline);
+            $options = array_merge($this->getFirstline(), $options);
+        }
+
         foreach ($options as $option) {
             if ($option['id'] == $this->value) {
                 if ($check) return true;
