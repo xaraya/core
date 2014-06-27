@@ -166,7 +166,7 @@ class UserListProperty extends SelectProperty
         $base_options = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
         
         // Adjust for the fields to show
-        if (!empty($base_options)) {        
+        if (!empty($base_options) && !empty($this->display_showfields)) {        
             $testrow = $base_options[0];
             $fields = explode(',',$this->display_showfields);
             foreach ($fields as $k => $v) {
