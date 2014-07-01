@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="$layout eq 'horizontal'">
+        <xar:set name="propname">$name . '_group'</xar:set>
+        <xar:data-output type="grouplist" name="$propname" options="$groupoptions" value="$group"/>
+        <xar:set name="propname">$name . '_level'</xar:set>
+        <xar:data-output type="dropdown" name="$propname" options="$leveloptions" value="$level"/>
+        <xar:set name="propname">$name . '_failure'</xar:set>
+        <xar:if condition="!isset($showfailure)">
+            <xar:data-output type="radio" name="$propname" options="$failureoptions" value="$failure"/>
+        <xar:else />
+            <xar:data-output type="radio" name="$propname" options="$failureoptions" value="$failure" hidden="hidden"/>
+        </xar:if>
+    <xar:else />
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:set name="propname">$name . '_group'</xar:set>
+                <xar:var name="label">The group the current user must belong to</xar:var>
+                <label for="#$propname#" title="#$label#" class="xar-form-label">
+                    Required Group Membership:
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:if condition="$group_multiselect">
+                    <xar:data-output type="multiselect" name="$propname" options="$groupoptions" value="$group"/>
+                <xar:else/>
+                    <xar:data-output type="grouplist" name="$propname" options="$groupoptions" value="$group"/>
+                </xar:if>
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:set name="propname">$name . '_level'</xar:set>
+                <xar:var name="label">The access level the current user must have</xar:var>
+                <label for="#$propname#" title="#$label#" class="xar-form-label">
+                    Required Access Level:
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:data-output type="dropdown" name="$propname" options="$leveloptions" value="$level"/>&#160;
+                (applies if <em>No requirement</em> is chosen above)
+            </div>
+        </div>
+        <xar:set name="propname">$name . '_failure'</xar:set>
+        <xar:if condition="!isset($showfailure)">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">What happens when the security check fails</xar:var>
+                    <label for="#$propname#" title="#$label#" class="xar-form-label">
+                        Behavior on Failure:
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-output type="radio" name="$propname" options="$failureoptions" value="$failure"/>
+                </div>
+            </div>
+        <xar:else />
+            <xar:data-output type="radio" name="$propname" options="$failureoptions" value="$failure" hidden="hidden"/>
+        </xar:if>
+    </xar:if>
+    <xar:template file="dataproperty_additions" module="base"/>
+</xar:template>
