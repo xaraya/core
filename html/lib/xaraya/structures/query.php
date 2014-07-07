@@ -36,6 +36,7 @@ class Query
     public $rowstodo            = 0;
     public $startat             = 1;
     public $createtablename;
+    public $affected            = 0;
     public $output              = array();
     public $row                 = array();
     public $dbconn;
@@ -126,6 +127,7 @@ class Query
                 } else {
                     $result = $this->dbconn->Execute($this->statement);
                 }
+                $this->affected = $this->dbconn->getUpdateCount();
                 return $result;
             }
             if($this->rowstodo != 0 && $this->limits == 1) {
@@ -139,6 +141,8 @@ class Query
             } else {
                 if ($this->usebinding) {
                     $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+                    //$stmt = $this->dbconn->prepareStatement($this->statement);
+                    //$result = $stmt->executeQuery($this->bindvars);
                 } else {
                     $result = $this->dbconn->Execute($this->statement);
                 }
@@ -242,6 +246,15 @@ class Query
     public function output()
     {
         return $this->output;
+    }
+
+    public function affected()
+    {
+        if ($this->type == 'SELECT') {
+            return count($this->output());
+        } else {
+            return $this->affected;
+        }
     }
 
     public function drop($tables=null)
