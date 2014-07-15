@@ -92,8 +92,11 @@ function categories_userapi_getcat($args)
                      >= P2.left_id
                     AND P1.left_id
                      <= P2.right_id";
-    if (isset($state)) {
+    if (isset($state) && is_array($state)) {
         $SQLquery .= ' AND P1.state in (' . implode(', ', $state) . ')';
+    }
+    if (isset($state) && !is_array($state)) {
+        $SQLquery .= ' AND P1.state ='. (int)$state;
     }
 /* this is terribly slow, at least for MySQL 3.23.49-nt
                   WHERE P1.left_id
@@ -192,7 +195,7 @@ function categories_userapi_getcat($args)
     }
 
     $SQLquery .= " ORDER BY P1.left_id";
-
+echo $SQLquery;//die();
 // cfr. xarcachemanager - this approach might change later
     $expire = xarModVars::get('categories','cache.userapi.getcat');
     if (is_numeric($items_per_page) && $items_per_page > 0 && is_numeric($startnum) && $startnum > -1) {
