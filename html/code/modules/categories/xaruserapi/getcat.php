@@ -92,11 +92,12 @@ function categories_userapi_getcat($args)
                      >= P2.left_id
                     AND P1.left_id
                      <= P2.right_id";
-    if (isset($state) && is_array($state)) {
-        $SQLquery .= ' AND P1.state in (' . implode(', ', $state) . ')';
-    }
-    if (isset($state) && !is_array($state)) {
-        $SQLquery .= ' AND P1.state ='. (int)$state;
+    if (isset($state)) {
+        if (is_array($state)) {
+            $SQLquery .= ' AND P1.state in (' . implode(', ', $state) . ')';
+        } else {
+            $SQLquery .= ' AND P1.state ='. (int)$state;
+        }
     }
 /* this is terribly slow, at least for MySQL 3.23.49-nt
                   WHERE P1.left_id
