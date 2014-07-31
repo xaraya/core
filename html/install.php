@@ -103,6 +103,7 @@ sys::import('modules.installer.functions');
 
 // Basic systems always loaded
 sys::import('xaraya.log');
+sys::import('xaraya.database');
 sys::import('xaraya.events');
 sys::import('xaraya.variables');
 sys::import('xaraya.server');
