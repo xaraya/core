@@ -82,10 +82,8 @@ class ObjectRefProperty extends SelectProperty
     // Return a list of array(id => value) for the possible options
     function getOptions()
     {
-        // Check configuration and return saved options (e.g. when we're dealing with an object list)
-        if (!empty($this->_items) && $this->isSameConfiguration() && !empty($this->options)) {
-            return $this->options;
-        }
+        if (!empty($this->options)) return $this->options;
+
         $options = array();
 
         // The object we need to query is in $this->initialization_refobject, we display the value of

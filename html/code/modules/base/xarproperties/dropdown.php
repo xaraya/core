@@ -106,7 +106,6 @@ class SelectProperty extends DataProperty
             $data['options'] = $this->getOptions();
         }
         
-        
         // If a firstline was defined add it in
         if (isset($data['firstline']))  $this->initialization_firstline = $data['firstline'];
         $data['options'] = array_merge($this->getFirstline(), $data['options']);
@@ -352,6 +351,7 @@ class SelectProperty extends DataProperty
     }
 
 // CHECKME: should we move this to properties/base.php, in case other "basic" property types want this ?
+// CHECKME: should we move remove this? It's not being used
 
     /**
      * Check if the configuration is the same as last time, e.g. to return saved options in getOptions()
