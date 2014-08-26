@@ -300,7 +300,7 @@ class Query
                 $argsarray = $table;
             }
         }
-        else throw new BadParameterException(null,'This function can only take 1 or 2 parameters');
+        else throw new BadParameterException(null, xarML('This function can only take 1 or 2 parameters'));
 
         $notdone = true;
         $limit = count($this->tables);
@@ -334,7 +334,7 @@ class Query
                         $argsarray = $field;
                     } else {
                         $newfield = explode('=',$field);
-                        if (!isset($newfield[1])) throw new Exception("The field $newfield[0] needs to have a value");
+                        if (!isset($newfield[1])) throw new Exception(xarML("The field #(1) needs to have a value", $newfield[0]));
                         $argsarray = $this->_deconstructfield(trim($newfield[0]));
                         $argsarray['value'] = trim($newfield[1]);
                     }
@@ -343,7 +343,7 @@ class Query
                 $argsarray = $field;
             }
         }
-        else throw new BadParameterException(null,'This function can only take 1 or 2 parameters');
+        else throw new BadParameterException(null, xarML('This function can only take 1 or 2 parameters'));
 
         $done = false;
         foreach ($this->fields as $key => $field) {
@@ -1142,11 +1142,12 @@ class Query
             break;
         case "UPDATE" :
             if($this->fields == array('*')) {
-                throw new BadParameterException(null,'Your query has no fields.');
+                throw new BadParameterException(null, xarML('Your query has no fields.'));
             }
             foreach ($this->fields as $field) {
                 if (is_array($field)) {
                     if(isset($field['name']) && isset($field['value'])) {
+                        if (is_array($field['value'])) throw new BadParameterException(null, xarML('The value of field #(1) is an array.', $field['name']));
                         // Turn off binding if we have an expression for the value (such as another field)
                         if(substr($field['value'],0,1) == '&') $this->usebinding = false;
                         if ($this->usebinding) {
@@ -1902,7 +1903,7 @@ class Query
 # --------------------------------------------------------
 # Sanity check: do we still have our primary table?
 #
-            if (!isset($tablestodo[$primarytable])) throw new Exception('Primary table ' . $primarytable . ' no longer available!');
+            if (!isset($tablestodo[$primarytable])) throw new Exception(xarML('Primary table #(1) no longer available!', $primarytable ));
             
 # --------------------------------------------------------
 # If we found nothing we must be almost finished: run an insert on the primary table
@@ -2013,7 +2014,7 @@ class Query
         $tableobject = $dbInfo->getTable($table['name']);
         $primarykey = $tableobject->getPrimaryKey()->getName();
         if (empty($primarykey))
-            throw new Exception('Unable to retrieve primary key');
+            throw new Exception(xarML('Unable to retrieve primary key'));
 
         $itemid = $q->lastid($table['name'], $primarykey);
         $q = new Query('SELECT',$table['name']);
