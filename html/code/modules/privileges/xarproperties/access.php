@@ -74,7 +74,7 @@ class AccessProperty extends DataProperty
         $value['failure'] = $dropdown->value;
         
         xarLog::message("DataProperty::validateValue: Skipping validation for " . $this->name);
-        $this->value = $value;
+        $this->setValue($value);
         return true;
     }
 
