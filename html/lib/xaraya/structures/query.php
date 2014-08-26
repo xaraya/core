@@ -786,7 +786,14 @@ class Query
                         $elements[] = '?';
                     }
                 } else {
-                    foreach ($condition['field2'] as $element) $elements[] = $this->dbconn->qstr($element);
+                    foreach ($condition['field2'] as $element) {
+                        if (gettype($element) == 'string') {
+                            $elements[] = $this->dbconn->qstr($element);
+                        }
+                        else {
+                            $elements[] = $element;
+                        }
+                    }
                 }
 
                 $sqlfield = $elements[0] . ' AND ' . $elements[1];
@@ -1155,7 +1162,7 @@ class Query
                             $this->bindvars[] = $field['value'];
                         } else {
                             if ((gettype($field['value']) == 'string') && (substr($field['value'],0,1) != '&')) {
-                                echo substr($field['value'],0,1);exit;
+                                //echo substr($field['value'],0,1);exit;
                                 $sqlfield = $this->dbconn->qstr($field['value']);
                             } else {
                                 if(substr($field['value'],0,1) == '&') {
