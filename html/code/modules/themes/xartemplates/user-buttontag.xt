@@ -102,6 +102,10 @@
                     <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#"/>
                 </xar:if>
             <xar:else/>
+                <!-- Resolve variables -->
+                <xar:if condition="substr($target, 0,1) eq '$'">
+                    <xar:set name="target">$$target</xar:set>
+                </xar:if>
                 <a href="#$target#">
                     <xar:if condition="isset($title)">
                         <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" title="#$title#"/>
