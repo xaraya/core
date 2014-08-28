@@ -10,7 +10,7 @@
         <xar:if condition="!empty($msg)">
             <h2><xar:var name="msg"/></h2>
         </xar:if>
-        <h3>Our apologies, you are not allowed this operation</h3>
+        <h3>Our apologies, you cannot perform this operation</h3>
 
         <!-- Insert login check here -->
 

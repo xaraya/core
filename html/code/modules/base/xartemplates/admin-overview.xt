@@ -54,7 +54,7 @@
     
             <h3>The Admin interface</h3>
             <p>
-                As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Base &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules:.
+                As an administrator, you can change the module's configuration by pointing your browser to the configuration page <strong>Admin Menu &#8594; Base &#8594; Modify Configuration</strong>. The configuration page includes the standard display options common to all core modules:
                 <ul>
                     <li><strong>List items per page:</strong>&#160; how many items are displayed in this module's list views</li>
                     <li><strong>Short URLs:</strong>&#160; whether this module supports short URLs. If the module includes code for a short URL scheme, checking this checkbox will activate it.</li>
