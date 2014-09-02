@@ -1173,9 +1173,14 @@ class Query
                             }
                             $this->bindstring .= $this->_reconstructfield($field) . " = " . $sqlfield . ", ";
                         }
+                    } elseif (!isset($field['value'])) {
+                        // No binding here; just a straight expression
+                        $this->bindstring .= $this->_reconstructfield($field) . " = NULL, ";
+                    } else {
+                        throw new BadParameterException(null, xarML('The current field is missing a name'));
                     }
-                }
-                else {
+                } else {
+                    throw new BadParameterException(null, xarML('The field #(1) is not an array:', $field));
                 }
             }
             if ($this->bindstring != "") $this->bindstring = substr($this->bindstring,0,strlen($this->bindstring)-2);
