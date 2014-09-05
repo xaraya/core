@@ -81,7 +81,7 @@
       <defaultvalue>1</defaultvalue>
       <source>themes.state</source>
       <status>33</status>
-      <seq>t</seq>
+      <seq>7</seq>
       <configuration>a:3:{s:12:"display_rows";s:3:"100";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:30:"0,Deleted;1,Inactive;3,Active;";}</configuration>
     </property>
   </properties>
