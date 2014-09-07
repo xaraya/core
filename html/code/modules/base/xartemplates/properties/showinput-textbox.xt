@@ -24,6 +24,10 @@
     <xar:if condition="!isset($onfocus)">
         <xar:set name="onfocus">'return true;'</xar:set>
     </xar:if>
-    <input type="text" name="#$name#" value="#$value#" style="#$style#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" class="#$class#" onfocus="#$onfocus#"/>
+    <!-- On change event -->
+    <xar:if condition="!isset($onchange)">
+        <xar:set name="onchange">'return true;'</xar:set>
+    </xar:if>
+    <input type="text" name="#$name#" value="#$value#" style="#$style#" size="#$size#" maxlength="#$maxlength#" id="#$id#" tabindex="#$tabindex#" class="#$class#" onfocus="#$onfocus#" onchange="#$onchange#"/>
     <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>
