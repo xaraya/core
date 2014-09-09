@@ -226,8 +226,8 @@ function xarInstallMain()
         ob_end_clean();
     }
 
-    // Render page using the installer theme default.xt page template
-    $pageOutput = xarTpl::renderPage($mainModuleOutput,'default');
+    // Render page using the installer theme admin.xt page template
+    $pageOutput = xarTpl::renderPage($mainModuleOutput,'admin');
 
     echo $pageOutput;
     return true;
