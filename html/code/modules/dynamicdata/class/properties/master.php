@@ -59,6 +59,8 @@ class DataPropertyMaster extends Object
                          object_id FROM $dynamicprop ";
         if(empty($args['objectid']))
         {
+            if (empty($args['moduleid'])) throw new EmptyParameterException('moduleid');
+            if (empty($args['itemtype'])) throw new EmptyParameterException('itemtype');
             $doargs['moduleid'] = $args['moduleid'];
             $doargs['itemtype'] = $args['itemtype'];
             $info = DataObjectDescriptor::getObjectID($doargs);
