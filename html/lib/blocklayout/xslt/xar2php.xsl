@@ -185,7 +185,7 @@
   <xsl:param name="expr"/>
   <xsl:choose>
 <!-- Ignore empty strings -->
-    <xsl:when test="string-length(translate($expr, '&#x20;&#x9;&#xD;&#xA;', '')) = 0">
+    <xsl:when test="string-length(translate($expr, '&#x20;&#x9;&#xD;&#xA;&#160;', '')) = 0">
       <xsl:value-of select="$expr"/>
     </xsl:when>
 <!-- Ignore numbers -->
@@ -250,14 +250,7 @@
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:choose>
-        <xsl:when test="string-length(translate($source, '&#x20;&#x9;&#xD;&#xA;', '')) = 0">
-          <xsl:value-of select="normalize-space($source)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$source"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="$source"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
