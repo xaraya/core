@@ -152,6 +152,11 @@ class DataObjectMaster extends Object
             $this->datastore = 'dynamicdata';
         }
 
+        if (isset($this->configuration['where'])) {
+            $condition = $this->setWhere($this->configuration['where']);
+            $this->dataquery->addconditions($this->conditions);
+        }
+        
         // always mark the internal DD objects as 'private' (= items 1-3 in xar_dynamic_objects, see xarinit.php)
         if (!empty($this->objectid) && $this->objectid == 1 && !empty($this->itemid) && $this->itemid <= 3) {
             $this->visibility = 'private';
@@ -1447,5 +1452,124 @@ class DataObjectMaster extends Object
         return self::$access_property->check($args);
 */
     }
+
+    /**
+     * Translate a string containing a SQL WHERE clause into Query conditions
+     *
+     * @param mixed where string or array of name => value pairs
+     * @return void
+     */
+    private function setWhere($where)
+    {
+        // If we have an array just get the first element (for now)
+        if (is_array($where)) $where = $where[0];
+
+        // cfr. BL compiler - adapt as needed (I don't think == and === are accepted in SQL)
+        $findLogic    = array( ' = ', ' != ',  ' < ',  ' > ', ' <= ', ' >= ');
+        $replaceLogic = array(' eq ', ' ne ', ' lt ', ' gt ', ' le ', ' ge ');
+
+        // Clean up all the operators
+        $where = str_ireplace($findLogic, $replaceLogic, $where);
+
+        // Replace property names with source field names
+        $findLogic    = array();
+        $replaceLogic = array();
+        foreach ($this->properties as $name => $property) {
+            if (empty($property->source)) continue;
+            $findLogic[] = $name;
+            $replaceLogic[] = $property->source;
+        }
+        $where = str_ireplace($findLogic, $replaceLogic, $where);
+
+        $parts = $this->parseClause($where);
+
+        // Note this property is only defined here
+        $this->conditions = new Query();
+        
+        // Turn the parts of the clause into query conditions and add them to $this->conditions
+        try {
+            $this->bracketClause($parts);
+        } catch (Exception $e) {
+            $this->conditions->clearconditions();
+            echo $e->getMessage();
+        }
+        return true;
+    }
+
+    private function parseClause($clause)
+    {   
+        // Enclose the clause in parentheses
+        $clause = '(' . $clause . ')';
+        // Split the clause into its parts
+        $parts = preg_split('/(\(|\)|or|and)/',$clause,-1,PREG_SPLIT_DELIM_CAPTURE);
+        
+        $processed_parts = array();
+        if (empty($parts)) return $processed_parts;
+        foreach ($parts as $part) {
+            $part = array_shift($parts);
+            $part = trim($part);
+            switch ($part) {
+                case "": break;
+                case "(": $processed_parts[] = array('type' => 'begin', 'value' => 1); break;
+                case ")": $processed_parts[] = array('type' => 'end', 'value' => 1); break;
+                case "or": $processed_parts[] = array('type' => 'operator', 'value' => $part); break;
+                case "and": $processed_parts[] = array('type' => 'operator', 'value' => $part); break;
+                default: $processed_parts[] = array('type' => 'operand', 'value' => $part); break;
+            }
+        }
+        return $processed_parts;
+    }
+    
+    private function bracketClause($parts)
+    {   
+        $values = array();
+        $conjunctions = array();
+        while (1) {
+            if (empty($parts)) break;
+            $part = array_shift($parts);
+            switch ($part['type']) {
+                case 'begin' :
+                    list($parts, $subclause) = $this->bracketClause($parts);
+                    $values[] = $subclause;
+                break;
+                case 'end' :
+                    $consistent = true;
+                    $this_conjunction = array_shift($conjunctions);
+                    foreach ($conjunctions as $conjunction) {
+                        if ($conjunction != $this_conjunction) {$consistent = false; break;}
+                    }
+                    if (!$consistent) throw new Exception(xarML('Inconsistent conjunctions in a clause'));
+                    if ($this_conjunction == 'or') {
+                        $clause = $this->conditions->qor($values);
+                    } else {
+                        $clause = $this->conditions->qand($values);
+                    }
+                    return array($parts, $clause);
+                break;
+                case 'operand' :
+                    $values[] = $this->parseRelation($part['value']);
+                break;
+                case 'operator' :
+                    $conjunctions[] = $part['value'];
+                break;
+            }
+        }
+    }
+    
+    private function parseRelation($string)
+    {   
+        $parts = explode(' ', $string);
+        // Make sure we have enough arguments. We need to have something like "foo = 17" or "foo = 'bar'"
+        if (count($parts) < 3) throw new Exception(xarML('Incorrect relation "#(1)"', $string));
+        
+        // Remove any parens from strings here. They will be added automatically if needed
+        $parts[2] = str_replace("'", "", $parts[2]);
+        
+        // Construct the relation and add it to the conditions
+        $func = 'p' . $parts[1];
+        $relation = $this->conditions->$func($parts[0], $parts[2]);
+        return $relation;
+    }
 }
+
 ?>
