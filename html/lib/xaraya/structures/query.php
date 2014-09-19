@@ -726,7 +726,7 @@ class Query
     {
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
         $binding = $this->binding[$key];
-        if (gettype($binding['field2']) == 'string' && !mb_eregi('JOIN', $binding['op'])) {
+        if (!is_numeric($binding['field2']) && !mb_eregi('JOIN', $binding['op'])) {
             $sqlfield = $this->dbconn->qstr($binding['field2']);
         }
         else {
@@ -787,7 +787,7 @@ class Query
                     }
                 } else {
                     foreach ($condition['field2'] as $element) {
-                        if (gettype($element) == 'string') {
+                        if (!is_numeric($element)) {
                             $elements[] = $this->dbconn->qstr($element);
                         }
                         else {
@@ -804,7 +804,7 @@ class Query
             if ($expression_flag) {
                 $condition['field2'] = trim(substr($condition['field2'],5));
                 $sqlfield = $condition['field2'];
-            } elseif (gettype($condition['field2']) == 'string' && !mb_eregi('JOIN', $condition['op'])) {
+            } elseif (!is_numeric($condition['field2']) && !mb_eregi('JOIN', $condition['op'])) {
                 if ($this->usebinding) {
                     $this->bindvars[] = $condition['field2'];
                     $sqlfield = '?';
@@ -1122,19 +1122,23 @@ class Query
                         if ($this->usebinding) {
                             $bindvalues .= "?, ";
                             $this->bindvars[] = $field['value'];
+                        } else {
+                            if (!is_numeric($field['value'])) {
+                                $sqlfield = $this->dbconn->qstr($field['value']);
+                            } else {
+                                $sqlfield = $field['value'];
+                            }
+                            $values .= $sqlfield . ", ";
                         }
-                        else {
-                        if (gettype($field['value']) == 'string') {
-                            $sqlfield = $this->dbconn->qstr($field['value']);
-                        }
-                        else {
-                            $sqlfield = $field['value'];
-                        }
-                        $values .= $sqlfield . ", ";
+                    } elseif (!isset($field['value'])) {
+                        // No binding here; just a straight expression
+                        $this->bindstring .= $this->_reconstructfield($field) . " = NULL, ";
+                    } else {
+                        throw new BadParameterException(null, xarML('The current field is missing a name'));
                     }
                 }
-                }
                 else {
+                    throw new BadParameterException(null, xarML('The field #(1) is not an array:', $field));
                 }
             }
             $names = substr($names,0,strlen($names)-2);
@@ -1161,7 +1165,7 @@ class Query
                             $this->bindstring .= $this->_reconstructfield($field) . " = ?, ";
                             $this->bindvars[] = $field['value'];
                         } else {
-                            if ((gettype($field['value']) == 'string') && (substr($field['value'],0,1) != '&')) {
+                            if (!is_numeric($field['value']) && (substr($field['value'],0,1) != '&')) {
                                 //echo substr($field['value'],0,1);exit;
                                 $sqlfield = $this->dbconn->qstr($field['value']);
                             } else {
@@ -1326,7 +1330,7 @@ class Query
         $bound = $pieces[0];
         $limit = count($pieces);
         for ($i=1;$i<$limit;$i++){
-            if (gettype($this->bindvars[$i-1]) == 'string') {
+            if (!is_numeric($this->bindvars[$i-1])) {
                 $sqlfield = $this->dbconn->qstr($this->bindvars[$i-1]);
             }
             else {
