@@ -1472,6 +1472,8 @@ class DataObjectMaster extends Object
         $where = str_ireplace($findLogic, $replaceLogic, $where);
 
         // Replace property names with source field names
+        // Note this does not preclude (if the store is a single DB table) 
+        // that we have fields in the where clause with no corresponding no properties
         $findLogic    = array();
         $replaceLogic = array();
         foreach ($this->properties as $name => $property) {
