@@ -33,6 +33,7 @@ class ArrayProperty extends DataProperty
 
     public $fields = array();
 
+    public $display_column_definition;                             // The columns the table displays
     public $display_minimum_rows = 1;                              // The table displays at least this many rows
     public $display_maximum_rows = 10;                             // The table cannot display more than this many rows
     public $initialization_addremove = 0;                          // 0: no adding/deleting of rows, 1: adding only, 2: adding and deleting    
@@ -41,7 +42,7 @@ class ArrayProperty extends DataProperty
     public $default_suffixlabel = "Row";                           // suffix for the Add/Remove Button
     public $initialization_fixed_keys = 0;                         // allow editing keys on input
 
-    public $display_column_definition = array(array("Key","Value"),array(2,2),array("",""),array("",""));  
+    public $default_column_definition = array(array("Key","Value"),array(2,2),array("",""),array("",""));  
 
     // Configuration setting to ignore
     public $initialization_other_rule_ignore    = true;
@@ -53,6 +54,7 @@ class ArrayProperty extends DataProperty
     
     function __construct(ObjectDescriptor $descriptor)
     {
+        $this->display_column_definition = $this->default_column_definition;
         parent::__construct($descriptor);
         $this->tplmodule      = 'base';
         $this->template       = 'array';
@@ -256,35 +258,38 @@ class ArrayProperty extends DataProperty
         // A bound array property contains itself an array property as part of its configuration
         if (!empty($data["configuration"])) {
         
-                // Load the configuration data and get the exploded fields
-                $configfields = $this->parseConfiguration($data["configuration"]);
+            $displayconfig = $this->display_column_definition;
+        
+            // Remove this line once legacy  code no longer needed
+            if (isset($displayconfig['value'])) $displayconfig = $displayconfig['value'];
 
-                $displayconfig = $this->display_column_definition;
-                
-                // Remove this line once legacy  code no longer needed
-                if (isset($displayconfig['value'])) $displayconfig = $displayconfig['value'];
+            // Load the configuration data and get the exploded fields
+            $configfields = $this->parseConfiguration($data["configuration"]);
 
-                $titles = $displayconfig[0];
-                $types = $displayconfig[1];
-                $defaults = $displayconfig[2];
-                $configurations = $displayconfig[3];
 
-                if (isset($configfields['value'])) $data['value'] = $configfields['value'];
+            $titles = $displayconfig[0];
+            $types = $displayconfig[1];
+            $defaults = $displayconfig[2];
+            $configurations = $displayconfig[3];
+
+            if (isset($configfields['value'])) $data['value'] = $configfields['value'];
 
         } else {
             try {
+                $displayconfig = $this->display_column_definition;
+        
                 // New way for configs
-                if (isset($this->display_column_definition['value'])) {
-                    $displayconfig = $this->display_column_definition['value'];
-                    $titles = $displayconfig[0];
-                    $types = $displayconfig[1];
-                    $defaults = $displayconfig[2];
+                if (isset($displayconfig['value'])) {
+                    $displayconfig = $displayconfig['value'];
+                    $titles =         $displayconfig[0];
+                    $types =          $displayconfig[1];
+                    $defaults =       $displayconfig[2];
                     $configurations = $displayconfig[3];
                 } else {
-                    $titles = array();
-                    $types = array();
-                    $defaults = array();
-                    $configurations = array();
+                    $titles =         $this->default_column_definition[0];
+                    $types =          $this->default_column_definition[1];
+                    $defaults =       $this->default_column_definition[2];
+                    $configurations = $this->default_column_definition[3];
                 }
             } catch (Exception $e) {
                 // Legacy way for configs
