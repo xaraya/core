@@ -318,18 +318,12 @@ class ArrayProperty extends DataProperty
 
         // Remove this line once legacy  code no longer needed
         if (isset($value['value'])) $value = $value['value'];
-        
+
         // ------------------------------------------------------------------
         // Adjust the number of rows and columns and the appropriate values
-        // Make sure we try for at least the configured minimum number of rows
-        try {
-            if (!isset($data['rows']))
-                $data['rows'] = count($value[0]);
-        } catch(Exception $e) {
-            $data['rows'] = $this->display_minimum_rows;
-        }
-        $data['rows'] = max($data['rows'], $this->display_minimum_rows);
+        if (!isset($data['rows'])) $data['rows'] = empty($value) ? 0 : count($value[0]);
         
+        /*
         // Make sure the number of titles and column types is the same
         $titlescount = count($data['column_titles']);
         $typescount = count($data['column_types']);
@@ -337,13 +331,14 @@ class ArrayProperty extends DataProperty
             $lastprop = $data['column_types'][$typescount-1];
             for ($i=$typescount;$i<$titlescount;$i++) $types[] = $lastprop;
         }
-        // Now add any missing value rows or columns        
+        // Now add any missing value rows or columns
         for ($i=0;$i<$data['rows'];$i++) {
             for ($j=0;$j<$titlescount;$j++) {
                 $property = DataPropertyMaster::getProperty(array('type' => $data['column_types'][$j]));
                 if (!isset($value[$j][$i])) $value[$j][$i] = $property->defaultvalue;
             }
         }
+        */
         $data['value'] = $value;
 
         // ------------------------------------------------------------------
