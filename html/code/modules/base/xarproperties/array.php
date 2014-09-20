@@ -250,7 +250,7 @@ class ArrayProperty extends DataProperty
         return $value;
     }
 
-        public function showInput(Array $data = array())
+    public function showInput(Array $data = array())
     {
         // If this is a column definition, load its configuration up front
         // A bound array property contains itself an array property as part of its configuration
@@ -332,7 +332,6 @@ class ArrayProperty extends DataProperty
                 if (!isset($value[$j][$i])) $value[$j][$i] = $property->defaultvalue;
             }
         }
-        if (isset($value['value'])) $value = $value['value'];
         $data['value'] = $value;
 
         // ------------------------------------------------------------------

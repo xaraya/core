@@ -23,8 +23,12 @@
                         <td>
                             <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
                             <xar:set name="propid">$id.'_value_'.$k</xar:set>
-                            <xar:set name="propvalue">$value[$k][$i]</xar:set>
-                            <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue"/>
+                            <xar:if condition="$value[$k][$i]">
+                                <xar:set name="propvalue">$value[$k][$i]</xar:set>
+                                <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue"/>
+                            <xar:else/>
+                                <xar:data-input type="$column_types[$k]" name="$propname" id="$propid"/>
+                            </xar:if>
                         </td>
                     </xar:for>
                     <td>
