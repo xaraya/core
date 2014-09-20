@@ -259,15 +259,11 @@ class ArrayProperty extends DataProperty
                 // Load the configuration data and get the exploded fields
                 $configfields = $this->parseConfiguration($data["configuration"]);
 
-                if (isset($this->display_column_definition['value'])) {
-                    $displayconfig = $this->display_column_definition['value'];
+                $displayconfig = $this->display_column_definition;
+                
+                // Remove this line once legacy  code no longer needed
+                if (isset($displayconfig['value'])) $displayconfig = $displayconfig['value'];
 
-                    // Define the layout for this special case, where the arrayproperty is a configuration setting of an array property
-                    // How best to tell?
-                    if ($this->type == 999) $data['layout'] = 'array_configuration';
-                } else {
-                    $displayconfig = $this->display_column_definition;
-                }
                 $titles = $displayconfig[0];
                 $types = $displayconfig[1];
                 $defaults = $displayconfig[2];
@@ -278,11 +274,18 @@ class ArrayProperty extends DataProperty
         } else {
             try {
                 // New way for configs
-                $displayconfig = $this->display_column_definition['value'];
-                $titles = $displayconfig[0];
-                $types = $displayconfig[1];
-                $defaults = $displayconfig[2];
-                $configurations = $displayconfig[3];
+                if (isset($this->display_column_definition['value'])) {
+                    $displayconfig = $this->display_column_definition['value'];
+                    $titles = $displayconfig[0];
+                    $types = $displayconfig[1];
+                    $defaults = $displayconfig[2];
+                    $configurations = $displayconfig[3];
+                } else {
+                    $titles = array();
+                    $types = array();
+                    $defaults = array();
+                    $configurations = array();
+                }
             } catch (Exception $e) {
                 // Legacy way for configs
                 $titles = $this->display_column_definition[0];
@@ -307,12 +310,16 @@ class ArrayProperty extends DataProperty
         // Number of rows is defined by $data['rows']
         if (!isset($data['value'])) $value = $this->getValue();
         else $value = $data['value'];
+
+        // Remove this line once legacy  code no longer needed
+        if (isset($value['value'])) $value = $value['value'];
         
         // ------------------------------------------------------------------
         // Adjust the number of rows and columns and the appropriate values
         // Make sure we try for at least the configured minimum number of rows
         try {
-            if (!isset($data['rows']))          $data['rows'] = count($value[0]);
+            if (!isset($data['rows']))
+                $data['rows'] = count($value[0]);
         } catch(Exception $e) {
             $data['rows'] = $this->display_minimum_rows;
         }
