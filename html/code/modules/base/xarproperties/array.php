@@ -332,6 +332,7 @@ class ArrayProperty extends DataProperty
                 if (!isset($value[$j][$i])) $value[$j][$i] = $property->defaultvalue;
             }
         }
+        if (isset($value['value'])) $value = $value['value'];
         $data['value'] = $value;
 
         // ------------------------------------------------------------------
@@ -345,7 +346,7 @@ class ArrayProperty extends DataProperty
         return parent::showInput($data);
     }
 
-       public function showOutput(Array $data = array())
+    public function showOutput(Array $data = array())
     {
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValue();
@@ -358,19 +359,16 @@ class ArrayProperty extends DataProperty
     
     public function updateConfiguration(Array $data = array())
     {
-        // Remove any empty rows, i.e. those where there is no title
         $temp = array();
-//        if (isset($data['configuration']['display_column_definition'])) {
-            foreach ($data['configuration']['display_column_definition']['value'][0] as $k => $v) {
-                if (!empty($v)) {
-                    $temp[0][] = $v;
-                    $temp[1][] = $data['configuration']['display_column_definition']['value'][1][$k];
-                    $temp[2][] = $data['configuration']['display_column_definition']['value'][2][$k];
-                    $temp[3][] = $data['configuration']['display_column_definition']['value'][3][$k];
-                }
-            }
-            $data['configuration']['display_column_definition'] = $temp;
-//        }
+        foreach ($data['configuration']['display_column_definition']['value'][0] as $k => $v) {
+            // Ignore/remove any empty rows, i.e. those where there is no title
+            if (empty($v)) continue;
+            $temp[0][] = $v;
+            $temp[1][] = $data['configuration']['display_column_definition']['value'][1][$k];
+            $temp[2][] = $data['configuration']['display_column_definition']['value'][2][$k];
+            $temp[3][] = $data['configuration']['display_column_definition']['value'][3][$k];
+        }
+        $data['configuration']['display_column_definition'] = $temp;
         return parent::updateConfiguration($data);
     }
 }
