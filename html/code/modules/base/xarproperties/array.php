@@ -69,6 +69,7 @@ class ArrayProperty extends DataProperty
         $this->fieldname = $name;
         if (!isset($value)) {
             // Get the number of columns and rows
+            if (empty($this->display_column_definition)) $this->display_column_definition = $this->default_column_definition;
             if (isset($this->display_column_definition['value'])) {
                 $displayconfig = $this->display_column_definition['value'];
             } else {
@@ -259,7 +260,7 @@ class ArrayProperty extends DataProperty
         if (!empty($data["configuration"])) {
         
             $displayconfig = $this->display_column_definition;
-        
+
             // Remove this line once legacy  code no longer needed
             if (isset($displayconfig['value'])) $displayconfig = $displayconfig['value'];
 
@@ -277,7 +278,7 @@ class ArrayProperty extends DataProperty
         } else {
             try {
                 $displayconfig = $this->display_column_definition;
-        
+                
                 // New way for configs
                 if (isset($displayconfig['value'])) {
                     $displayconfig = $displayconfig['value'];
