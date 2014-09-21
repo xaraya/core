@@ -1459,7 +1459,7 @@ class DataObjectMaster extends Object
      * @param mixed where string or array of name => value pairs
      * @return void
      */
-    private function setWhere($where)
+    public function setWhere($where)
     {
         // If we have an array just get the first element (for now)
         if (is_array($where)) $where = $where[0];
