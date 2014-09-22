@@ -1117,22 +1117,28 @@ class Query
             $bindvalues = '';
             foreach ($this->fields as $field) {
                 if (is_array($field)) {
-                    if(isset($field['name']) && isset($field['value'])) {
+                    if(isset($field['name'])) {
                         $names .= $field['name'] . ", ";
-                        if ($this->usebinding) {
-                            $bindvalues .= "?, ";
-                            $this->bindvars[] = $field['value'];
-                        } else {
-                            if (!is_numeric($field['value'])) {
-                                $sqlfield = $this->dbconn->qstr($field['value']);
+                        if(isset($field['value'])) {
+                            if ($this->usebinding) {
+                                $bindvalues .= "?, ";
+                                $this->bindvars[] = $field['value'];
                             } else {
-                                $sqlfield = $field['value'];
+                                if (!is_numeric($field['value'])) {
+                                    $sqlfield = $this->dbconn->qstr($field['value']);
+                                } else {
+                                    $sqlfield = $field['value'];
+                                }
+                                $values .= $sqlfield . ", ";
                             }
-                            $values .= $sqlfield . ", ";
+                        } else {
+                            if ($this->usebinding) {
+                                $bindvalues .= "?, ";
+                                $this->bindvars[] = NULL;
+                            } else {
+                                $values .= "NULL, ";
+                            }
                         }
-                    } elseif (!isset($field['value'])) {
-                        // No binding here; just a straight expression
-                        $this->bindstring .= $this->_reconstructfield($field) . " = NULL, ";
                     } else {
                         throw new BadParameterException(null, xarML('The current field is missing a name'));
                     }
@@ -1145,9 +1151,8 @@ class Query
             if ($this->usebinding) {
                 $bindvalues = substr($bindvalues,0,strlen($bindvalues)-2);
                 $this->bindstring .= $names . ") VALUES (" . $bindvalues . ")";
-            }
-            else {
-            $values = substr($values,0,strlen($values)-2);
+            } else {
+                $values = substr($values,0,strlen($values)-2);
                 $this->bindstring .= $names . ") VALUES (" . $values . ")";
             }
             break;
@@ -1157,29 +1162,35 @@ class Query
             }
             foreach ($this->fields as $field) {
                 if (is_array($field)) {
-                    if(isset($field['name']) && isset($field['value'])) {
-                        if (is_array($field['value'])) throw new BadParameterException(null, xarML('The value of field #(1) is an array.', $field['name']));
-                        // Turn off binding if we have an expression for the value (such as another field)
-                        if(substr($field['value'],0,1) == '&') $this->usebinding = false;
-                        if ($this->usebinding) {
-                            $this->bindstring .= $this->_reconstructfield($field) . " = ?, ";
-                            $this->bindvars[] = $field['value'];
-                        } else {
-                            if (!is_numeric($field['value']) && (substr($field['value'],0,1) != '&')) {
-                                //echo substr($field['value'],0,1);exit;
-                                $sqlfield = $this->dbconn->qstr($field['value']);
+                    if(isset($field['name'])) {
+                        if(isset($field['value'])) {
+                            if (is_array($field['value'])) throw new BadParameterException(null, xarML('The value of field #(1) is an array.', $field['name']));
+                            // Turn off binding if we have an expression for the value (such as another field)
+                            if(substr($field['value'],0,1) == '&') $this->usebinding = false;
+                            if ($this->usebinding) {
+                                $this->bindstring .= $this->_reconstructfield($field) . " = ?, ";
+                                $this->bindvars[] = $field['value'];
                             } else {
-                                if(substr($field['value'],0,1) == '&') {
-                                    $sqlfield = substr($field['value'],1);
+                                if (!is_numeric($field['value']) && (substr($field['value'],0,1) != '&')) {
+                                    //echo substr($field['value'],0,1);exit;
+                                    $sqlfield = $this->dbconn->qstr($field['value']);
                                 } else {
-                                    $sqlfield = $field['value'];
+                                    if(substr($field['value'],0,1) == '&') {
+                                        $sqlfield = substr($field['value'],1);
+                                    } else {
+                                        $sqlfield = $field['value'];
+                                    }
                                 }
+                                $this->bindstring .= $this->_reconstructfield($field) . " = " . $sqlfield . ", ";
                             }
-                            $this->bindstring .= $this->_reconstructfield($field) . " = " . $sqlfield . ", ";
+                        } else {
+                            if ($this->usebinding) {
+                                $this->bindstring .= $this->_reconstructfield($field) . " = ?, ";
+                                $this->bindvars[] = NULL;
+                            } else {
+                                $this->bindstring .= $this->_reconstructfield($field) . " = NULL, ";
+                            }
                         }
-                    } elseif (!isset($field['value'])) {
-                        // No binding here; just a straight expression
-                        $this->bindstring .= $this->_reconstructfield($field) . " = NULL, ";
                     } else {
                         throw new BadParameterException(null, xarML('The current field is missing a name'));
                     }
