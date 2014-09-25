@@ -25,24 +25,22 @@ class Query
     public $primary;
     public $conditions          = array();      // Normalized array of conditions used in the statement
     public $conjunctions        = array();      // Normalized array of conjunctions used with conditions used in the statement
-//    public $bindings            = array();
     public $sorts               = array();      // Aarray of fields used in the sort clause of the statement
     public $groups              = array();      // Normalized array of fields used in the group clause of the statement
     public $having              = array();      // Normalized array of fields used in the having clause of the statement
-    public $result              = array();
+    public $result              = array();      // Holds the result object of a query
     public $bindvars            = array();      // An array of bindvars in this statement
     public $rows                = 0;
     public $rowfields           = 0;
-    public $rowstodo            = 0;
-    public $startat             = 1;
+    public $rowstodo            = 0;            // Holds the number of rows to return in a SELECT query
+    public $startat             = 1;            // Holds the first record number to return in a SELECT query
     public $createtablename;
-    public $affected            = 0;
-    public $output              = array();
-    public $row                 = array();
-    public $dbconn;
-    public $statement;
-    public $israwstatement = 0;
-//    public $bindpublics;
+    public $affected            = 0;            
+    public $output              = array();      // Holds multiple rows of results
+    public $row                 = array();      // Holds a single row of results
+    public $dbconn;                             // Holds the conection object to the database
+    public $statement;                          // Holds the statement being processed/executed
+    public $israwstatement = 0;                 // Flag that indicates whether the statement to be processed was entered as a string
     public $bindstring;
     public $limits              = true;         // Flag that indicates whether the (SELECT) query uses limits
     public $optimize            = true;         // Flag that indicates whether the query will be optimized
@@ -312,7 +310,6 @@ class Query
             }
         }
         if ($notdone) $this->tables[] = $argsarray;
-    //    $this->tables[] = $argsarray;
     }
 
     public function addfield()
@@ -464,13 +461,6 @@ class Query
         return $this->addcondition(array('field1' => $field1,
                                   'field2' => $field2,
                                   'op' => $this->eqoperator),$active);
-        // Review this
-        $key = $this->_addcondition($active);
-        $limit = count($this->conditions);
-        $this->conditions[$key]=array('field1' => $field1,
-                                  'field2' => $field2,
-                                  'op' => $this->eqoperator);
-        return $key;
     }
     public function ne($field1,$field2,$active=1)
     {
@@ -591,7 +581,7 @@ class Query
         }
         return $key;
     }
-   public function pqand()
+    public function pqand()
     {
         $key = $this->_addcondition(0);
         $numargs = func_num_args();
@@ -722,11 +712,6 @@ class Query
 /*
 // ------ Private methods --------------------------------------------------------
 */
-    private function _addconditions($x)
-    {
-        foreach ($x as $condition); $this->addcondition($condition);
-    }
-
     private function _getbinding($key)
     {
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
@@ -741,17 +726,6 @@ class Query
         return $binding['field1'] . " " . $binding['op'] . " " . $sqlfield;
     }
 
-/*    private function _getbindings()
-    {
-        $this->bstring = "";
-        foreach ($this->bindings as $binding) {
-           $binding['op'] = mb_eregi('JOIN', $binding['op']) ? '=' : $binding['op'];
-           $this->bstring .= $binding['field1'] . " " . $binding['op'] . " " . $binding['field2'] . " " . $this->andoperator . " ";
-        }
-        if ($this->bstring != "") $this->bstring = substr($this->bstring,0,strlen($this->bstring)-5);
-        return $this->bstring;
-    }
-*/
     private function _getcondition($key)
     {
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
@@ -1473,8 +1447,6 @@ class Query
         if ($this->sorts == array()) return false;
         if ($x == '') return $this->sorts[0]['order'];
         foreach ($this->sorts as $order) if ($order[0] == $x) return $order;
-//        $order = $this->getorder($x);
-//        if(is_array($order)) return $order['order'];
         return false;
     }
     public function getstartat()
@@ -1527,7 +1499,6 @@ class Query
     {
         $q = xarSession::getVar($x);
         if (empty($q) || !isset($q)) return;
-//        $this = unserialize($q);
         $this->open();
         return $this;
     }
