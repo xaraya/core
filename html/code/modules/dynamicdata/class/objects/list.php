@@ -51,21 +51,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     {
         // get the object type information from our parent class
         $this->loader($descriptor);
-
-        // Set the configuration parameters
-        $args = $descriptor->getArgs();
-        unset($descriptor);
-        if (!empty($args['config'])) {
-            try {
-                // CHECKME: this should be abstracted
-                $configargs = unserialize($args['config']);
-                foreach ($configargs as $key => $value) if (!empty($key)) $this->{$key} = $value;
-                $this->configuration = $configargs;
-            } catch (Exception $e) {}
-        }
-
-        // Set the arguments passed via the constructor. These override the configuration settings
-        $this->setArguments($args);
         
         // Set limits if required
         if (isset($this->numitems) && is_numeric($this->numitems)) $this->dataquery->rowstodo = $this->numitems;
@@ -186,7 +171,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $this->setSort($this->sort);
         // add content filters before setWhere()
         $this->addFilters();
-        $this->setWhere($this->where);
+        $conditions = $this->setWhere($this->where);
+        $this->dataquery->addconditions($conditions);
         $this->setGroupBy($this->groupby);
 
     }
@@ -286,106 +272,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             }
             // one group having filters is enough here !?
             return;
-        }
-    }
-
-    /**
-     * Set where clause
-     *
-     * @param mixed where string or array of name => value pairs
-     */
-    public function setWhere($where)
-    {
-        if (empty($where)) return true;
-        
-        // find all single-quoted pieces of text with and/or and replace them first, to
-        // allow where clauses like : title eq 'this and that' and body eq 'here or there'
-        $idx = 0;
-        $found = array();
-        if (is_array($where)) $where = $where[0];
-        if(preg_match_all("/'(.*?)'/",$where,$matches)) {
-            foreach($matches[1] as $match) {
-                // skip if it doesn't contain and/or
-                if(!preg_match('/\s+(and|or)\s+/',$match))
-                    continue;
-
-                $found[$idx] = $match;
-                $match = preg_quote($match);
-
-                $match = str_replace("#","\#",$match);
-
-                $where = trim(preg_replace("#'$match'#","'~$idx~'",$where));
-                $idx++;
-            }
-        }
-
-        // cfr. BL compiler - adapt as needed (I don't think == and === are accepted in SQL)
-        $findLogic      = array(' eq ', ' ne ', ' lt ', ' gt ', ' id ', ' nd ', ' le ', ' ge ', ' like ');
-        $replaceLogic   = array( ' = ', ' != ',  ' < ',  ' > ',  ' = ', ' != ', ' <= ', ' >= ', ' like ');
-
-        $where = str_replace($findLogic, $replaceLogic, $where);
-
-        // TODO: reject multi-source WHERE clauses :-)
-        if (empty($where)) {
-            $parts = array();
-        } else {
-            $parts = preg_split('/\s+(and|or)\s+/',$where,-1,PREG_SPLIT_DELIM_CAPTURE);
-            $join = '';
-        }
-        foreach($parts as $part) {
-            if($part == 'and' || $part == 'or') {
-                $join = $part;
-                continue;
-            }
-
-            $pieces = preg_split('/\s+/',$part);
-            if (count($pieces) == 0) continue;
-            $pre = '';
-            $post = '';
-            $name = array_shift($pieces);
-            if($name == '(') {
-                $pre = '(';
-                $name = array_shift($pieces);
-            }
-
-            $last = count($pieces) - 1;
-            if($pieces[$last] == ')') {
-                $post = ')';
-                array_pop($pieces);
-            }
-
-            // sanity check on SQL
-            if(count($pieces) < 2) {
-                $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-                $vars = array('query ' . $where, 'DataObjectList', 'getWhere', 'DynamicData');
-                throw new BadParameterException($vars,$msg);
-            }
-
-            if(isset($this->properties[$name])) {
-                $this->addFilterCondition($name,$pieces[0],trim($pieces[1],"'"));
-/*
-                if(empty($idx)) {
-                    $mywhere = join(' ',$pieces);
-                } else {
-                    $mywhere = '';
-                    foreach($pieces as $piece) {
-                        // replace the pieces again if necessary
-                        if(preg_match("#'~(\d+)~'#",$piece,$matches) && isset($found[$matches[1]])) {
-                            $original = $found[$matches[1]];
-                            $piece = preg_replace("#'~(\d+)~'#","'$original'",$piece);
-                        }
-                        $mywhere .= $piece . ' ';
-                    }
-                }
-                $this->datastore->addWhere(
-                    $this->properties[$name],
-                    $mywhere,
-                    $join,
-                    $pre,
-                    $post
-                );
-                */
-            }
         }
     }
 
