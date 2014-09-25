@@ -153,8 +153,8 @@ class DataObjectMaster extends Object
         }
 
         if (isset($this->configuration['where'])) {
-            $condition = $this->setWhere($this->configuration['where']);
-            $this->dataquery->addconditions($this->conditions);
+            $conditions = $this->setWhere($this->configuration['where']);
+            $this->dataquery->addconditions($conditions);
         }
         
         // always mark the internal DD objects as 'private' (= items 1-3 in xar_dynamic_objects, see xarinit.php)
@@ -1461,6 +1461,15 @@ class DataObjectMaster extends Object
      */
     public function setWhere($where)
     {
+        // Note this property is only defined here
+        $this->conditions = new Query();
+        
+        // If the condition is empty, bail (for now)
+        if (empty($where)) return $this->conditions;
+
+        // If a string is passed, make it an array (for now)
+        if (!is_array($where)) $where = array($where);
+        
         // If we have an array just get the first element (for now)
         if (is_array($where)) $where = $where[0];
 
@@ -1478,16 +1487,13 @@ class DataObjectMaster extends Object
         $replaceLogic = array();
         foreach ($this->properties as $name => $property) {
             if (empty($property->source)) continue;
-            $findLogic[] = $name;
+            $findLogic[] = '/\b' . $name . '\b/';
             $replaceLogic[] = $property->source;
         }
-        $where = str_ireplace($findLogic, $replaceLogic, $where);
+        $where = preg_replace($findLogic, $replaceLogic, $where);
 
         $parts = $this->parseClause($where);
 
-        // Note this property is only defined here
-        $this->conditions = new Query();
-        
         // Turn the parts of the clause into query conditions and add them to $this->conditions
         try {
             $this->bracketClause($parts);
@@ -1495,7 +1501,7 @@ class DataObjectMaster extends Object
             $this->conditions->clearconditions();
             echo $e->getMessage();
         }
-        return true;
+        return $this->conditions;
     }
 
     private function parseClause($clause)
