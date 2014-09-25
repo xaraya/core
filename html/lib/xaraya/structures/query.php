@@ -50,7 +50,7 @@ class Query
     public $distinctarray = array();
 
     private $starttime;
-    private $key;                               // Unique key for this statement
+    private $key = 0;                           // Unique key for this statement (used in nested conditions)
     
 // Flags
 // Set to true to use binding variables supported by some dbs
@@ -91,7 +91,6 @@ class Query
             throw new BadParameterException(null,$msg);
         }
 
-        $this->key = time();
         $this->addtables($tables);
         $this->addfields($fields);
     }
@@ -703,13 +702,19 @@ class Query
 
     public function addcondition($x,$active=1)
     {
+        // if we already have this conditio registered, just return its key
         foreach($this->conditions as $key => $value)
             if ($value === $x) return $key;
 
-        $key = $this->_getkey();        
+        // This is a new condition: get a new key value
+        $key = $this->_getkey(); 
+        
+        // Create a conjunction to hold the condition       
         $this->conjunctions[$key]=array('conditions' => $key,
                                         'conj' => 'IMPLICIT',
                                         'active' => $active);
+                                        
+        // Add the condition to the array of conditions
         $this->conditions[$key] = $x;
         return $key;
     }
@@ -1603,8 +1608,26 @@ class Query
     public function addconditions($q)
     {
         if ($q->gettype() != $this->gettype()) return false;
-        foreach ($q->conditions as $key => $value) $this->conditions[$key] = $value;
-        foreach ($q->conjunctions as $key => $value) $this->conjunctions[$key] = $value;
+
+        // Shift all the keys of the new conditions by $this->key to avoid conflicts
+        $newkey = $this->key;
+        
+        foreach ($q->conditions as $key => $value) {
+            $this->conditions[$key + $this->key] = $value;
+            $newkey++;
+        }
+
+        foreach ($q->conjunctions as $key => $value) {
+            if (is_array($value['conditions'])) {
+                // We have nested conditions
+                foreach ($value['conditions'] as $k => $v) $value['conditions'][$k] = $v + $this->key;
+            } else {
+                $value['conditions'] = $value['conditions'] + $this->key;
+            }
+            $this->conjunctions[$key + $this->key] = $value;
+            $newkey++;
+        }
+        $this->key = $newkey;
     }
     public function addsorts($q)
     {
