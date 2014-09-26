@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    #$recipientname#,
-    <xar:br /><xar:br/>
-    Here is your new password for&#160;<xar:var scope="module" module="themes" name="SiteName"/>. You may now login to&#160;#xarServer::getBaseURL()#&#160;using the following username and password:
-    <xar:br/><xar:br/>
-    username: #$username#
-    <xar:br/><xar:br/>
-    password: #$mypassword#
-    <xar:br/><xar:br/>
-    -- <xar:var scope="module" module="mail" name="adminname"/>
+#$recipientname#,
+<xar:br /><xar:br/>
+Here is your new password for&#160;<xar:var scope="module" module="themes" name="SiteName"/>. You may now login to&#160;#xarServer::getBaseURL()#&#160;using the following username and password:
+<xar:br/>
+username: #$username#
+<xar:br/>
+password: #$mypassword#
+<xar:br/><xar:br/>
+<xar:var scope="module" module="mail" name="adminname"/>
 </xar:template>

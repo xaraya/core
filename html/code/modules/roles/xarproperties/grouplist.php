@@ -179,7 +179,7 @@ class GroupListProperty extends SelectProperty
         if ($this->_itemid) {
             // It's a standalone property
             $data['value'] = $this->retrieveValue($this->_itemid);
-        } elseif ($data['_itemid']) {
+        } elseif (isset($data['_itemid'])) {
             // It's a row in an objectlist
             $data['value'] = $this->retrieveValue($data['_itemid']);
         }
