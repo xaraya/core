@@ -225,7 +225,7 @@ class AccessProperty extends DataProperty
             } else {
                 // This is a dropdown
                 $this->initialization_group_multiselect = false;
-                if ($group == 0) $disabled = true;
+                if ((int)$group == 0) $disabled = true;
                 $group = array($group);
             }
 
@@ -253,7 +253,7 @@ class AccessProperty extends DataProperty
     
     public function checkLevel(Array $data=array())
     {
-        if (isset($data['level']))     $this->level = $data['level'];
+        if (isset($data['level']))     $this->level = (int)$data['level'];
         if (isset($data['module']))    $this->module = $data['module'];
         if (isset($data['component'])) $this->component = $data['component'];
         if (isset($data['instance']))  $this->instance = $data['instance'];
@@ -278,6 +278,7 @@ class AccessProperty extends DataProperty
         if (is_array($groups)) $this->initialization_group_multiselect = true;
         if ($this->initialization_group_multiselect) {
             foreach ($groups as $group) {
+                $group = (int)$group;
                 if ($group == $this->myself) {
                     $access = true;
                 } elseif ($group == $anonID) {
@@ -294,7 +295,7 @@ class AccessProperty extends DataProperty
                 if ($access) break;
             }
         } else {
-            $group = $groups;
+            $group = (int)$groups;
             if ($group == $this->myself) {
                 $access = true;
             } elseif ($group == $anonID) {
