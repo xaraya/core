@@ -320,6 +320,9 @@ class ArrayProperty extends DataProperty
         // Remove this line once legacy  code no longer needed
         if (isset($value['value'])) $value = $value['value'];
 
+        // We always show one line at minimum on the form
+        if (empty($value)) foreach ($data['column_titles'] as $column) $value[] = "";
+        
         // ------------------------------------------------------------------
         // Adjust the number of rows and columns and the appropriate values
         if (!isset($data['rows'])) $data['rows'] = empty($value) ? 0 : count($value[0]);
