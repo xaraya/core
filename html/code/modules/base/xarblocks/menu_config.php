@@ -281,7 +281,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                 $modulelist[$modname]['alias_name'] = $modname;
             }
             $isvalid = $accessproperty->checkInput('modulelist_'.$modname.'_view_access');
-            $modulelist[$modname]['view_access'] = $accessproperty->value;
+            $modulelist[$modname]['view_access'] = $accessproperty->getValue();
         }
 
         // put updated values in the content array
