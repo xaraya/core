@@ -404,11 +404,11 @@ function blocks_admin_modify_instance()
                             $return_url = $result['return_url'];
                     }
                     $isvalid = $accessproperty->checkInput('instance_display_access');
-                    $block->setAccess('display', $accessproperty->value);
+                    $block->setAccess('display', $accessproperty->getValue);
                     $isvalid = $accessproperty->checkInput('instance_modify_access');
-                    $block->setAccess('modify', $accessproperty->value);
+                    $block->setAccess('modify', $accessproperty->getValue);
                     $isvalid = $accessproperty->checkInput('instance_delete_access');
-                    $block->setAccess('delete', $accessproperty->value);
+                    $block->setAccess('delete', $accessproperty->getValue);
                 }
             
             break;
