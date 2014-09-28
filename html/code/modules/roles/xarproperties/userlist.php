@@ -31,7 +31,7 @@ class UserListProperty extends SelectProperty
     public $initialization_userlist_user_state = xarRoles::ROLES_STATE_ALL; // Select only users of the given state
     public $initialization_userlist_userlist   = '';                        // Select only these usera
     public $initialization_orderlist = '';
-    public $validation_userlist_group_list     = '';                        // Select only users who are members of the given group(s)
+    public $initialization_userlist_group_list = '';                        // Select only users who are members of the given group(s)
     public $validation_override                = true;                      // Allow values not in the dropdown
     public $display_showfields = '';
     public $display_showglue = ', ';
@@ -53,14 +53,12 @@ class UserListProperty extends SelectProperty
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'roles';
-        $this->template = 'userlist';
-        $this->filepath   = 'modules/roles/xarproperties';
+        $this->template  = 'userlist';
+        $this->filepath  = 'modules/roles/xarproperties';
 
         if (count($this->options) == 0) {
             $select_options = array();
-            if (($this->initialization_userlist_user_state <> xarRoles::ROLES_STATE_ALL)) $select_options['state'] = $this->initialization_userlist_user_state;
             if (!empty($this->initialization_orderlist)) $select_options['order'] = explode(',', $this->initialization_orderlist);
-            if (!empty($this->initialization_userlist_group_list)) $select_options['group'] = explode(',', $this->initialization_userlist_group_list);
 //            $users = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
             // FIXME: this function needs to be reviewed
             $users = array();
@@ -156,22 +154,22 @@ class UserListProperty extends SelectProperty
             $select_options['parent'] = $this->validation_parentgroup_list;
         }
         */
-        if (!empty($this->validation_userlist_group_list)) {
-            $select_options['grouplist'] = $this->validation_userlist_group_list;
-        }
         $select_options['state'] = $this->initialization_userlist_user_state;
+        if (!empty($this->initialization_userlist_group_list)) {
+            $select_options['grouplist'] = $this->initialization_userlist_group_list;
+        }
 
         // Get the candidates
-        $base_options = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
+        $options = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
         
         // Adjust for the fields to show
-        if (!empty($base_options) && !empty($this->display_showfields)) {        
-            $testrow = $base_options[0];
+        if (!empty($options) && !empty($this->display_showfields)) {        
+            $testrow = $options[0];
             $fields = explode(',',$this->display_showfields);
             foreach ($fields as $k => $v) {
                 if (!isset($testrow[trim($v)])) unset($fields[$k]);
             }
-            foreach($base_options as $key => $value) {
+            foreach($options as $key => $value) {
                 $namestring = '';
                 foreach ($fields as $v) {
                     $v = $value[trim($v)];
@@ -179,10 +177,10 @@ class UserListProperty extends SelectProperty
                     $namestring .= $v . $this->display_showglue;
                 }
                 $namestring = substr($namestring, 0, -strlen($this->display_showglue));
-                $base_options[$key]['name'] = $namestring;
+                $options[$key]['name'] = $namestring;
             }
         }
-        return $base_options;
+        return $options;
     }
 }
 
