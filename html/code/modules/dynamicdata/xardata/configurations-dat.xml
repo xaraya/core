@@ -233,33 +233,6 @@
     <ignore_empty>1</ignore_empty>
     <configuration>a:7:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:21:"validation_min_length";s:0:"";s:21:"validation_max_length";s:0:"";s:16:"validation_regex";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
-  <configurations itemid="27">
-    <id>27</id>
-    <name>initialization_group_list</name>
-    <description>A list of groups to chow in this field</description>
-    <property_id>2</property_id>
-    <label>Group List</label>
-    <ignore_empty>1</ignore_empty>
-    <configuration>a:0:{}</configuration>
-  </configurations>
-  <configurations itemid="28">
-    <id>28</id>
-    <name>initialization_parentgroup_list</name>
-    <description>A list of parent groups whose children are shown in this field</description>
-    <property_id>2</property_id>
-    <label>Parent Groups</label>
-    <ignore_empty>1</ignore_empty>
-    <configuration>a:0:{}</configuration>
-  </configurations>
-  <configurations itemid="29">
-    <id>29</id>
-    <name>initialization_ancestorgroup_list</name>
-    <description>A list of ancestor groups whose children are shown in this field</description>
-    <property_id>2</property_id>
-    <label>Ancestor Groups</label>
-    <ignore_empty>1</ignore_empty>
-    <configuration>a:0:{}</configuration>
-  </configurations>
   <configurations itemid="30">
     <id>30</id>
     <name>initialization_icon_url</name>

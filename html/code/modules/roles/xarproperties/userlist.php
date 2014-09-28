@@ -24,13 +24,13 @@ class UserListProperty extends SelectProperty
 
     public $grouplist = array();
     public $userstate = -1;
-    public $showlist = array();
+    public $showlist  = array();
     public $orderlist = array();
-    public $showglue = '; ';
+    public $showglue  = '; ';
 
-    public $initialization_user_state = xarRoles::ROLES_STATE_ALL;
-    public $initialization_group_list = '';
-    public $initialization_userlist = '';
+    public $initialization_userlist_user_state = xarRoles::ROLES_STATE_ALL; // Select only users of the given state
+    public $initialization_userlist_group_list = '';                        // Select only users who are members of the given group(s)
+    public $initialization_userlist_userlist   = '';                        // Select only these usera
     public $initialization_orderlist = '';
     public $validation_group_list           = null;
     public $validation_override             = true;    // Allow values not in the dropdown
@@ -43,8 +43,6 @@ class UserListProperty extends SelectProperty
     * Options take the form:
     *   option-type:option-value;
     * option-types:
-    *   group:name[,name] - select only users who are members of the given group(s)
-    *   state:value - select only users of the given state
     *   show:field[,field] - show the specified field(s) in the select item
     *   showglue:string - string to join multiple fields together
     *   order:field[,field] - order the selection by the specified field
@@ -61,9 +59,9 @@ class UserListProperty extends SelectProperty
 
         if (count($this->options) == 0) {
             $select_options = array();
-            if (($this->initialization_user_state <> xarRoles::ROLES_STATE_ALL)) $select_options['state'] = $this->initialization_user_state;
+            if (($this->initialization_userlist_user_state <> xarRoles::ROLES_STATE_ALL)) $select_options['state'] = $this->initialization_userlist_user_state;
             if (!empty($this->initialization_orderlist)) $select_options['order'] = implode(',', $this->initialization_orderlist);
-            if (!empty($this->initialization_group_list)) $select_options['group'] = implode(',', $this->initialization_group_list);
+            if (!empty($this->initialization_userlist_group_list)) $select_options['group'] = implode(',', $this->initialization_userlist_group_list);
 //            $users = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
             // FIXME: this function needs to be reviewed
             $users = array();
@@ -115,7 +113,7 @@ class UserListProperty extends SelectProperty
     {
         if (isset($data['group_list'])) $this->validation_group_list = $data['group_list'];
         if (isset($data['group'])) $this->validation_group_list = $data['group'];
-        if (isset($data['state'])) $this->initialization_user_state = $data['state'];
+        if (isset($data['state'])) $this->initialization_userlist_user_state = $data['state'];
 
         return parent::showInput($data);
     }
@@ -160,7 +158,7 @@ class UserListProperty extends SelectProperty
         if (!empty($this->validation_group_list)) {
             $select_options['grouplist'] = $this->validation_group_list;
         }
-        $select_options['state'] = $this->initialization_user_state;
+        $select_options['state'] = $this->initialization_userlist_user_state;
 
         // Get the candidates
         $base_options = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
@@ -185,5 +183,23 @@ class UserListProperty extends SelectProperty
         }
         return $base_options;
     }
+}
+
+sys::import('modules.dynamicdata.class.properties.interfaces');
+
+class UserListPropertyInstall extends UserListProperty implements iDataPropertyInstall
+{
+    public function install(Array $data=array())
+    {
+        $dat_file = sys::code() . 'modules/roles/xardata/userlist_configurations-dat.xml';
+        $data = array('file' => $dat_file);
+        try {
+            $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+        } catch (Exception $e) {
+            //
+        }
+        return true;
+    }
+    
 }
 ?>

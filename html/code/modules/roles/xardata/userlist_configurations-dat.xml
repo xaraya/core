@@ -1,0 +1,47 @@
+<items>
+  <configurations itemid="1">
+    <id>1</id>
+    <name>initialization_userlist_user_state</name>
+    <description>The state of the users we are showing</description>
+    <property_id>2</property_id>
+    <label>User State</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="2">
+    <id>2</id>
+    <name>initialization_userlist_user_list</name>
+    <description>A list of users to display</description>
+    <property_id>3</property_id>
+    <label>User List</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="3">
+    <id>3</id>
+    <name>initialization_userlist_group_list</name>
+    <description>A list of groups to chow in this field</description>
+    <property_id>2</property_id>
+    <label>Group List</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="4">
+    <id>4</id>
+    <name>initialization_userlist_parentgroup_list</name>
+    <description>A list of parent groups whose children are shown in this field</description>
+    <property_id>2</property_id>
+    <label>Parent Groups</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+  <configurations itemid="5">
+    <id>5</id>
+    <name>initialization_userlist_ancestorgroup_list</name>
+    <description>A list of ancestor groups whose children are shown in this field</description>
+    <property_id>2</property_id>
+    <label>Ancestor Groups</label>
+    <ignore_empty>1</ignore_empty>
+    <configuration>a:0:{}</configuration>
+  </configurations>
+</items>
