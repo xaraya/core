@@ -31,7 +31,7 @@ class UserListProperty extends SelectProperty
     public $initialization_userlist_user_state = xarRoles::ROLES_STATE_ALL; // Select only users of the given state
     public $initialization_userlist_userlist   = '';                        // Select only these usera
     public $initialization_orderlist = '';
-    public $validation_userlist_group_list     = '';                         / Select only users who are members of the given group(s)
+    public $validation_userlist_group_list     = '';                        // Select only users who are members of the given group(s)
     public $validation_override                = true;                      // Allow values not in the dropdown
     public $display_showfields = '';
     public $display_showglue = ', ';
