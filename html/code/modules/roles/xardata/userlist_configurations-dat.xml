@@ -10,7 +10,7 @@
   </configurations>
   <configurations itemid="2">
     <id>2</id>
-    <name>initialization_userlist_user_list</name>
+    <name>validation_userlist_user_list</name>
     <description>A list of users to display</description>
     <property_id>3</property_id>
     <label>User List</label>
@@ -19,7 +19,7 @@
   </configurations>
   <configurations itemid="3">
     <id>3</id>
-    <name>initialization_userlist_group_list</name>
+    <name>validation_userlist_group_list</name>
     <description>A list of groups to chow in this field</description>
     <property_id>2</property_id>
     <label>Group List</label>

@@ -29,11 +29,10 @@ class UserListProperty extends SelectProperty
     public $showglue  = '; ';
 
     public $initialization_userlist_user_state = xarRoles::ROLES_STATE_ALL; // Select only users of the given state
-    public $initialization_userlist_group_list = '';                        // Select only users who are members of the given group(s)
     public $initialization_userlist_userlist   = '';                        // Select only these usera
     public $initialization_orderlist = '';
-    public $validation_group_list           = null;
-    public $validation_override             = true;    // Allow values not in the dropdown
+    public $validation_userlist_group_list     = '';                         / Select only users who are members of the given group(s)
+    public $validation_override                = true;                      // Allow values not in the dropdown
     public $display_showfields = '';
     public $display_showglue = ', ';
 
@@ -60,8 +59,8 @@ class UserListProperty extends SelectProperty
         if (count($this->options) == 0) {
             $select_options = array();
             if (($this->initialization_userlist_user_state <> xarRoles::ROLES_STATE_ALL)) $select_options['state'] = $this->initialization_userlist_user_state;
-            if (!empty($this->initialization_orderlist)) $select_options['order'] = implode(',', $this->initialization_orderlist);
-            if (!empty($this->initialization_userlist_group_list)) $select_options['group'] = implode(',', $this->initialization_userlist_group_list);
+            if (!empty($this->initialization_orderlist)) $select_options['order'] = explode(',', $this->initialization_orderlist);
+            if (!empty($this->initialization_userlist_group_list)) $select_options['group'] = explode(',', $this->initialization_userlist_group_list);
 //            $users = xarMod::apiFunc('roles', 'user', 'getall', $select_options);
             // FIXME: this function needs to be reviewed
             $users = array();
@@ -111,9 +110,11 @@ class UserListProperty extends SelectProperty
 
     public function showInput(Array $data = array())
     {
-        if (isset($data['group_list'])) $this->validation_group_list = $data['group_list'];
-        if (isset($data['group'])) $this->validation_group_list = $data['group'];
-        if (isset($data['state'])) $this->initialization_userlist_user_state = $data['state'];
+        // CHECKME: Remove this?
+        if (isset($data['group_list'])) $this->validation_userlist_group_list = $data['group_list'];
+        
+        if (isset($data['group']))      $this->validation_userlist_group_list = $data['group'];
+        if (isset($data['state']))      $this->initialization_userlist_user_state = $data['state'];
 
         return parent::showInput($data);
     }
@@ -155,8 +156,8 @@ class UserListProperty extends SelectProperty
             $select_options['parent'] = $this->validation_parentgroup_list;
         }
         */
-        if (!empty($this->validation_group_list)) {
-            $select_options['grouplist'] = $this->validation_group_list;
+        if (!empty($this->validation_userlist_group_list)) {
+            $select_options['grouplist'] = $this->validation_userlist_group_list;
         }
         $select_options['state'] = $this->initialization_userlist_user_state;
 
