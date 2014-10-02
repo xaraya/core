@@ -1509,7 +1509,7 @@ class DataObjectMaster extends Object
         // Enclose the clause in parentheses
         $clause = '(' . $clause . ')';
         // Split the clause into its parts
-        $parts = preg_split('/(\(|\)|or|and)/',$clause,-1,PREG_SPLIT_DELIM_CAPTURE);
+        $parts = preg_split('/(\(|\)|\bor\b|\band\b)/',$clause,-1,PREG_SPLIT_DELIM_CAPTURE);
         
         $processed_parts = array();
         if (empty($parts)) return $processed_parts;
