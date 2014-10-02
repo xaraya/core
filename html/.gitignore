@@ -1,6 +1,6 @@
 # Ignore everything in this directory
 *
-# Except these files
+# Except these files and directories
 !.gitignore
 !what_is_this.txt
 !.htaccess.dist
@@ -17,5 +17,7 @@
 !requirements.html
 !robots.txt
 !themes/
+!upgrade.php
+!val.php
 !var/
 !ws.php
