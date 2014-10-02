@@ -1,0 +1,21 @@
+# Ignore everything in this directory
+*
+# Except these files
+!.gitignore
+!what_is_this.txt
+!.htaccess.dist
+!bootstrap.php
+!code/
+!favicon.ico
+!index.php
+!install.php
+!docs/
+!lib/
+!login.php
+!ls.php
+!readme.html
+!requirements.html
+!robots.txt
+!themes/
+!var/
+!ws.php

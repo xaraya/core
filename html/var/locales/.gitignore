@@ -1,0 +1,7 @@
+# Ignore everything in this directory
+*
+# Except these files
+!.gitignore
+!what_is_this.txt
+!en_US.iso-8859-1/
+!en_US.utf-8/
