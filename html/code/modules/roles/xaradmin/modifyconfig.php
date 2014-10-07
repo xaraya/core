@@ -150,6 +150,17 @@ function roles_admin_modifyconfig()
 
     switch (strtolower($phase)) {
         case 'modify':
+            switch ($data['tab']) {
+                case 'debugging':
+                    $debugadmins = array();
+                    $candidates = xarConfigVars::get(null, 'Site.User.DebugAdmins');
+                    foreach ($candidates as $candidate) {
+                        $admin = xarMod::apiFunc('roles','user','get',array('id' => (int)$candidate));
+                        if(!empty($admin)) $debugadmins[] = $admin['uname'];
+                    }
+                    $data['debugadmins'] = implode(',', $debugadmins);
+                    break;
+            }
         default:
             break;
 
@@ -210,7 +221,7 @@ function roles_admin_modifyconfig()
                     $debugadmins = array();
                     foreach ($candidates as $candidate) {
                         $admin = xarMod::apiFunc('roles','user','get',array('uname' => trim($candidate)));
-                        if(!empty($admin)) $debugadmins[] = $admin['uname'];
+                        if(!empty($admin)) $debugadmins[] = (int)$admin['id'];
                     }
                     xarConfigVars::set(null, 'Site.User.DebugAdmins', $debugadmins);
                 break;

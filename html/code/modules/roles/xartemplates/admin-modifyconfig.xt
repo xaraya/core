@@ -229,9 +229,6 @@
                         <legend>
                             Debug Administrators
                         </legend>
-                        <xar:set name="debugadmins">
-                            implode(',',xarConfigVars::get(null, 'Site.User.DebugAdmins'))
-                        </xar:set>
                         <div class="xar-row">
                             <div class="xar-col" style="padding-bottom: 10px;">
                                 Debug administrtors will see exceptions and error messages when debug mode in a given module is activated.<br/>
