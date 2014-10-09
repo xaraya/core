@@ -5,13 +5,13 @@
     <div class="xar-mod-body">
         <div class="xar-mod-page-head">
             <h2>Modify Roles Configuration</h2>
-                <xar:set name="xmldata">'modifyconfig'</xar:set>
-                <xar:template type="module" module="base" file="admin-menu-skel"/>
-            </div>
+            <xar:set name="xmldata">'modifyconfig'</xar:set>
+            <xar:template type="module" module="base" file="admin-menu-skel"/>
+        </div>
             <!--
                 - - - - - - - - - - - - - - - - - - - Begin General Options - - - - - - - - - - - - - - - - - - - - -
             -->
-            <div class="xar-mod-page-body">
+        <div class="xar-mod-page-body">
             <xar:if condition="$tab eq 'general'">
                 <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                     <fieldset>

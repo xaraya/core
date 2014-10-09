@@ -1,7 +1,7 @@
 <menu>
     <menutitle>
         <label>Configure</label>
-        <title>Configure</title>
+        <title>Choose a set of configuration options to modify</title>
         <variable>tab</variable>
     </menutitle>
     <menuitems>
