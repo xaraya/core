@@ -28,9 +28,9 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
 
     public $parser;
 
-    public $trans = array(); // where translations are kept
-    public $transEntries = array(); // mapping for string-based translations
-    public $transKeyEntries = array(); // mapping for key-based translations
+    public $trans = array();            // where translations are kept
+    public $transEntries = array();     // mapping for string-based translations
+    public $transKeyEntries = array();  // mapping for key-based translations
 
     public $transInd = 0;
     public $transKeyInd = 0;
