@@ -114,20 +114,20 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
         //}
 
         switch ($dnType) {
-        case XARMLS_DNTYPE_MODULE:
-            $this->spacedir = "modules";
+        case XARMLS_DNTYPE_CORE:
+            $this->spacedir = "core";
             break;
         case XARMLS_DNTYPE_THEME:
             $this->spacedir = "themes";
+            break;
+        case XARMLS_DNTYPE_MODULE:
+            $this->spacedir = "modules";
             break;
         case XARMLS_DNTYPE_PROPERTY:
             $this->spacedir = "properties";
             break;
         case XARMLS_DNTYPE_BLOCK:
             $this->spacedir = "blocks";
-            break;
-        case XARMLS_DNTYPE_CORE:
-            $this->spacedir = "core";
             break;
         default:
             $this->spacedir = NULL;
@@ -171,7 +171,12 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
 
     function findContext($ctxType, $ctxName)
     {
-        if (strpos($ctxType, 'modules:') !== false) {
+        if (strpos($ctxType, 'core:') !== false) {
+            $fileName = $this->getDomainLocation() . "/". $ctxName . "." . $this->backendtype;
+        } elseif (strpos($ctxType, 'themes:') !== false) {
+            list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
+            $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
+        } elseif (strpos($ctxType, 'modules:') !== false) {
             list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
             $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
         } elseif (strpos($ctxType, 'properties:') !== false) {
@@ -180,11 +185,6 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
         } elseif (strpos($ctxType, 'blocks:') !== false) {
             list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
             $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
-        } elseif (strpos($ctxType, 'themes:') !== false) {
-            list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
-            $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
-        } elseif (strpos($ctxType, 'core:') !== false) {
-            $fileName = $this->getDomainLocation() . "/". $ctxName . "." . $this->backendtype;
         } else {
             throw new BadParameterException(array('context',$ctxType));
         }

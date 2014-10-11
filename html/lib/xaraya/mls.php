@@ -489,7 +489,6 @@ class xarMLS extends Object
         //}
     
         $alternatives = self::getLocaleAlternatives($locale);
-    /* TODO: delete after new backend testing
         switch ($GLOBALS['xarMLS_backendName']) {
         case 'xml':
             sys::import('xaraya.mlsbackends.xml');
@@ -500,14 +499,11 @@ class xarMLS extends Object
             $GLOBALS['xarMLS_backend'] = new xarMLS__PHPTranslationsBackend($alternatives);
             break;
         case 'xml2php':
-    */
             sys::import('xaraya.mlsbackends.xml2php');
             $GLOBALS['xarMLS_backend'] = new xarMLS__XML2PHPTranslationsBackend($alternatives);
-    
-    /*
             break;
         }
-    */
+
         // Load core translations
         self::_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
         //self::loadLocaleData($locale);
