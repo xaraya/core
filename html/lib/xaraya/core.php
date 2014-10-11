@@ -453,7 +453,6 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
                             'defaultTimeOffset'   => xarConfigVars::get(null, 'Site.MLS.DefaultTimeOffset'),
                             );
         xarMLS::init($systemArgs);
-    
 
         /*
          * We've got basically all we want, start the interface
