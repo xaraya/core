@@ -535,6 +535,13 @@ class xarMLS extends Object
         }
     
         if ($GLOBALS['xarMLS_backend']->bindDomain($dnType, $dnName)) {
+            if ($dnType == XARMLS_DNTYPE_THEME) {
+                // Load common translations
+                if (!isset($loadedCommons[$dnName.'theme'])) {
+                    $loadedCommons[$dnName.'theme'] = true;
+                    if (!$GLOBALS['xarMLS_backend']->loadContext('themes:', 'common')) return; // throw back
+                }
+            }
             if ($dnType == XARMLS_DNTYPE_MODULE) {
                 // Handle in a special way the module type
                 // for which it's necessary to load common translations
@@ -556,13 +563,6 @@ class xarMLS extends Object
                 if (!isset($loadedCommons[$dnName.'block'])) {
                     $loadedCommons[$dnName.'block'] = true;
                     if (!$GLOBALS['xarMLS_backend']->loadContext('blocks:', 'common')) return; // throw back
-                }
-            }
-            if ($dnType == XARMLS_DNTYPE_THEME) {
-                // Load common translations
-                if (!isset($loadedCommons[$dnName.'theme'])) {
-                    $loadedCommons[$dnName.'theme'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('themes:', 'common')) return; // throw back
                 }
             }
     
