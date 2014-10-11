@@ -1326,7 +1326,7 @@ class xarTpl extends Object
 
         $finalTemplate ='';
         try {
-            if(self::outputTemplateFilenames() && (in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))) {
+            if(self::outputTemplateFilenames() && class_exists('xarUser') && (in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))) {
                 $outputStartComment = true;
                 if($isHeaderContent === false) {
                     if($isHeaderContent = self::modifyHeaderContent($sourceFileName, $tplOutput))
