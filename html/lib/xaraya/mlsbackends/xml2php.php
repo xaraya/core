@@ -405,7 +405,6 @@ class PHPBackendGenerator extends Object
                 }
             }
         }
-
         return true;
     }
 }
