@@ -220,11 +220,11 @@ class xarCache extends Object
     // TODO: refactor common code ?
         if (xarOutputCache::$moduleCacheIsEnabled) {
             // add javascript for module output
-            xarModuleCache::addJavaScript($position, $type, $data, $index);
+            xarModuleCache::addJavaScript($args);
         }
         if (xarOutputCache::$objectCacheIsEnabled) {
             // add javascript for object output
-            xarObjectCache::addJavaScript($position, $type, $data, $index);
+            xarObjectCache::addJavaScript($args);
         }
     }
 
