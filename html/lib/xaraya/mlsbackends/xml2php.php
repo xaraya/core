@@ -249,13 +249,13 @@ class PHPBackendGenerator extends Object
         $properties_dir = "$php_dir/properties";
         $blocks_dir = "$php_dir/blocks";
 
-        xarMLS__mkdirr($php_locale_dir);
-        xarMLS__mkdirr($php_dir);
-        xarMLS__mkdirr($modules_dir);
-        xarMLS__mkdirr($properties_dir);
-        xarMLS__mkdirr($blocks_dir);
-        xarMLS__mkdirr($themes_dir);
-        xarMLS__mkdirr($core_dir);
+        xarMLS::mkdirr($php_locale_dir);
+        xarMLS::mkdirr($php_dir);
+        xarMLS::mkdirr($modules_dir);
+        xarMLS::mkdirr($properties_dir);
+        xarMLS::mkdirr($blocks_dir);
+        xarMLS::mkdirr($themes_dir);
+        xarMLS::mkdirr($core_dir);
     }
 
     function bindDomain($dnType='core', $dnName='xaraya')
@@ -289,25 +289,25 @@ class PHPBackendGenerator extends Object
             $this->baseDir = $core_dir.'/';
             $this->baseXMLDir = $xml_core_dir.'/';
             break;
-        case XARMLS_DNTYPE_MODULE:
-            $this->baseDir = "$modules_dir/$dnName/";
-            $this->baseXMLDir = "$xml_modules_dir/$dnName/";
-            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS__mkdirr($this->baseDir);
-            break;
         case XARMLS_DNTYPE_THEME:
             $this->baseDir = "$themes_dir/$dnName/";
             $this->baseXMLDir = "$xml_themes_dir/$dnName/";
-            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS__mkdirr($this->baseDir);
+            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS::mkdirr($this->baseDir);
+            break;
+        case XARMLS_DNTYPE_MODULE:
+            $this->baseDir = "$modules_dir/$dnName/";
+            $this->baseXMLDir = "$xml_modules_dir/$dnName/";
+            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS::mkdirr($this->baseDir);
             break;
         case XARMLS_DNTYPE_PROPERTY:
             $this->baseDir = "$properties_dir/$dnName/";
             $this->baseXMLDir = "$xml_properties_dir/$dnName/";
-            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS__mkdirr($this->baseDir);
+            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS::mkdirr($this->baseDir);
             break;
         case XARMLS_DNTYPE_BLOCK:
             $this->baseDir = "$blocks_dir/$dnName/";
             $this->baseXMLDir = "$xml_blocks_dir/$dnName/";
-            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS__mkdirr($this->baseDir);
+            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS::mkdirr($this->baseDir);
             break;
         }
 
@@ -350,7 +350,7 @@ class PHPBackendGenerator extends Object
 
         if (!$xmlFileExists) return true;
 
-        if (!file_exists($dirForMkDir)) xarMLS__mkdirr($dirForMkDir);
+        if (!file_exists($dirForMkDir)) xarMLS::mkdirr($dirForMkDir);
         $fp2 = @fopen ($this->fileName, "w" );
         if ($fp2 !== false) {
             fputs($fp2, '<?php'."\n");
