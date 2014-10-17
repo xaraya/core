@@ -258,7 +258,7 @@ class PHPBackendGenerator extends Object
         xarMLS::mkdirr($core_dir);
     }
 
-    function bindDomain($dnType='core', $dnName='xaraya')
+    function bindDomain($dnType=XARMLS_DNTYPE_CORE, $dnName='xaraya')
     {
         $varDir = sys::varpath();
         $locales_dir = "$varDir/locales";
