@@ -243,7 +243,7 @@ class xarBlock extends Object implements ixarBlock
         
         // Load the block language files        
         // What to do here? return doesnt seem right
-        if (!xarMLSLoadTranslations($filepath))
+        if (!xarMLS::loadTranslations($filepath))
             return;
         
         $object = new $classname($blockinfo);

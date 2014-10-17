@@ -1263,7 +1263,7 @@ class xarTpl extends Object
 
         } else {
             // Load translations for the template
-            xarMLSLoadTranslations($sourceFileName);
+            xarMLS::loadTranslations($sourceFileName);
 
             xarLog::message("xarTpl::executeFromFile: Using template $sourceFileName");
             $templateCode = null;
