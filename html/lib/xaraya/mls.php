@@ -539,34 +539,31 @@ class xarMLS extends Object
                 // Load common translations
                 if (!isset($loadedCommons[$dnName.'theme'])) {
                     $loadedCommons[$dnName.'theme'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('themes:', 'common')) return; // throw back
+                    if (!$GLOBALS['xarMLS_backend']->loadContext('themes:', 'common')) return;
                 }
-            }
-            if ($dnType == XARMLS_DNTYPE_MODULE) {
+            } elseif ($dnType == XARMLS_DNTYPE_MODULE) {
                 // Handle in a special way the module type
                 // for which it's necessary to load common translations
                 if (!isset($loadedCommons[$dnName.'module'])) {
                     $loadedCommons[$dnName.'module'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'common')) return; // throw back
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return; // throw back
+                    if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'common')) return;
+                    if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return;
                 }
-            }
-            if ($dnType == XARMLS_DNTYPE_PROPERTY) {
+            } elseif ($dnType == XARMLS_DNTYPE_PROPERTY) {
                 // Load common translations
                 if (!isset($loadedCommons[$dnName.'property'])) {
                     $loadedCommons[$dnName.'property'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('properties:', 'common')) return; // throw back
+                    if (!$GLOBALS['xarMLS_backend']->loadContext('properties:', 'common')) return;
                 }
-            }
-            if ($dnType == XARMLS_DNTYPE_BLOCK) {
+            } elseif ($dnType == XARMLS_DNTYPE_BLOCK) {
                 // Load common translations
                 if (!isset($loadedCommons[$dnName.'block'])) {
                     $loadedCommons[$dnName.'block'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('blocks:', 'common')) return; // throw back
+                    if (!$GLOBALS['xarMLS_backend']->loadContext('blocks:', 'common')) return;
                 }
             }
     
-            if (!$GLOBALS['xarMLS_backend']->loadContext($ctxType, $ctxName)) return; // throw back
+            if (!$GLOBALS['xarMLS_backend']->loadContext($ctxType, $ctxName)) return;
             $loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"] = true;
             return true;
         } else {
