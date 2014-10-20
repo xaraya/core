@@ -105,7 +105,7 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
     //abstract function loadContext($ctxType, $ctxName);
     //abstract function getContextNames($ctxType);
 
-    function bindDomain($dnType, $dnName='xaraya')
+    function bindDomain($dnType=XARMLS_DNTYPE_CORE, $dnName='xaraya')
     {
         // only bind each domain once (?)
         //if (isset($this->domaincache["$dnType.$dnName"])) {
@@ -172,7 +172,7 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
     function findContext($ctxType, $ctxName)
     {
         if (strpos($ctxType, 'core:') !== false) {
-            $fileName = $this->getDomainLocation() . "/". $ctxName . "." . $this->backendtype;
+            $fileName = $this->getDomainLocation() . "/$ctxName." . $this->backendtype;
         } elseif (strpos($ctxType, 'themes:') !== false) {
             list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
             $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;

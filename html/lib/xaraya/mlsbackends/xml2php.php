@@ -70,7 +70,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         $GLOBALS['xarML_PHPBackend_keyEntries'] = array();
     }
 
-    function bindDomain($dnType, $dnName='xaraya')
+    function bindDomain($dnType=XARMLS_DNTYPE_CORE, $dnName='xaraya')
     {
         $bindResult = parent::bindDomain($dnType, $dnName);
 
@@ -114,8 +114,9 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
             //            }
 
             if (!$this->gen->bindDomain($dnType, $dnName)) return false;
+            // We already did this above
             if (parent::bindDomain($dnType, $dnName)) return true;
-            return false;
+            return true;
         }
 
         // FIXME: I should comment it because it creates infinite loop
