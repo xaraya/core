@@ -172,7 +172,11 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         $needGeneration = true;
 
         if (!file_exists($xmlFileName)) {
+            // No XML file, so ignore this case
             $needGeneration = false;
+        } elseif (file_exists($xmlFileName) && !file_exists($phpFileName)) {
+            // We have an XML file, but no PHP file: generate one
+            $needGeneration = true;
         } else {
             if (file_exists($phpFileName) && (filemtime($xmlFileName) < filemtime($phpFileName))) {
                 $needGeneration = false;
