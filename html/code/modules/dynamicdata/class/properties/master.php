@@ -200,24 +200,19 @@ class DataPropertyMaster extends Object
             xarLog::message("DataPropertyMaster::getProperty: Getting a new property $propertyClass");
 
             if (!class_exists($propertyClass)) {
-                // Filepath is complete real path to the php file, and decoupled from the class name
-                // We should load the MLS translations for the right context here, in case the property
-                // PHP file contains xarML() statements
-                // See bug 5097
-                if(preg_match('/modules\/(.*)\/xarproperties/',$propertyInfo['filepath'],$matches) == 1)
-                {
-                    // @todo: The preg determines the module name (in a sloppy way, FIX this)
-                    // @todo: do we still do properties from includes/properties?
-                    xarMLSLoadTranslations(sys::code() . $propertyInfo['filepath']);
-                }
-                else
-                    xarLog::message("Property translations for $propertyClass NOT loaded", XARLOG_LEVEL_WARNING);
-
-                if(!file_exists(sys::code() . $propertyInfo['filepath']))
-                    throw new FileNotFoundException($propertyInfo['filepath']);
-
+                
+                // Make sure we have a property PHP file
+                $propertyfile = sys::code() . $propertyInfo['filepath'];
+                if(!file_exists($propertyfile))
+                    throw new FileNotFoundException($propertyfile);
+                    
+                // Import the file to get the property's class
                 $dp = str_replace('/','.',substr($propertyInfo['filepath'],0,-4)); // minus .php
                 sys::import($dp);
+                
+                // Load the translations
+                $loaded = xarMLSLoadTranslations($propertyfile);
+                if (!$loaded) xarLog::message("Property translations for $propertyClass NOT loaded", XARLOG_LEVEL_WARNING);
             }
 
             $clazz = $propertyClass;
