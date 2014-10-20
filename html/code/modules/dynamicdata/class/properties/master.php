@@ -204,8 +204,7 @@ class DataPropertyMaster extends Object
                 
                 // Make sure we have a property PHP file
                 $propertyfile = sys::code() . $propertyInfo['filepath'];
-                if(!file_exists($propertyfile))
-                    throw new FileNotFoundException($propertyfile);
+                if(!file_exists($propertyfile)) throw new FileNotFoundException($propertyfile);
                     
                 // Import the file to get the property's class
                 $dp = str_replace('/','.',substr($propertyInfo['filepath'],0,-4)); // minus .php
