@@ -199,6 +199,7 @@ class DataPropertyMaster extends Object
 
             xarLog::message("DataPropertyMaster::getProperty: Getting a new property $propertyClass");
 
+            // If we don't have the class yet, get it now
             if (!class_exists($propertyClass)) {
                 
                 // Make sure we have a property PHP file
@@ -210,7 +211,7 @@ class DataPropertyMaster extends Object
                 $dp = str_replace('/','.',substr($propertyInfo['filepath'],0,-4)); // minus .php
                 sys::import($dp);
                 
-                // Load the translations
+                // Load the translations for this file
                 $loaded = xarMLSLoadTranslations($propertyfile);
                 if (!$loaded) xarLog::message("Property translations for $propertyClass NOT loaded", XARLOG_LEVEL_WARNING);
             }
