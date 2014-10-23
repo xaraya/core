@@ -519,7 +519,7 @@ class xarCSS extends Object
 
          // Debug display
          if (xarModVars::get('themes','debugmode') && 
-         in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+         in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
             foreach ($paths as $path) {
                 echo xarML('Possible location: ') . $path . "<br/>";                
             }
@@ -530,7 +530,7 @@ class xarCSS extends Object
             $filePath = $path;
             // Debug display
              if (xarModVars::get('themes','debugmode') && 
-             in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+             in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
                 echo xarML('Chosen: ') . $path . "<br/>";
              }
             break;

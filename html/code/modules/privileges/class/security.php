@@ -439,7 +439,7 @@ class xarSecurity extends Object
     */
     public static function testprivileges($mask,$privilegeset,$pass,$role='')
     {
-        $candebug = in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins'));
+        $candebug = in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'));
         $test = self::$test && $candebug;
         $testdeny = self::$testdeny && $candebug;
         $testmask = self::$testmask;

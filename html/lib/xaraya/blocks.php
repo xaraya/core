@@ -141,7 +141,7 @@ class xarBlock extends Object implements ixarBlock
             
         } catch (Exception $e) {
             if ((bool) xarModVars::get('blocks', 'noexceptions') || 
-                !in_array(xarUserGetVar('uname'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
+                !in_array(xarUser::getVar('id'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
                 if (!empty($cacheKey))
                     xarBlockCache::setCached($cacheKey, '');
                 return '';
