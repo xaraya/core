@@ -266,6 +266,7 @@ class xarHooks extends xarEvents
         }
         return true;
     }
+
     /**
      * See if a hook module (observer) is attached (hooked) to specific module (subject) (+ itemtype)
     **/
@@ -317,8 +318,10 @@ class xarHooks extends xarEvents
         return true;        
     }
     
-    // get the list of hook modules (observers) and their available subject observers (hooks)
-    // @param string $observer, name of module supplying hooks 
+    /**
+     * Get the list of hook modules (observers) and their available subject observers (hooks)
+     * @param string $observer, name of module supplying hooks 
+    **/
     public static function getObserverModules($observer=null)
     {
         // Get list of hook modules from event system
@@ -340,7 +343,9 @@ class xarHooks extends xarEvents
         return $hooklist;
     }
     
-    // get the list of modules (subjects) (+itemtypes) a hook module (observer) is hooked to     
+    /**
+     * Get the list of modules (subjects) (+itemtypes) a hook module (observer) is hooked to   
+    **/
     public static function getObserverSubjects($observer, $subject=null, $scope=null)
     {
         // Argument check
@@ -388,8 +393,10 @@ class xarHooks extends xarEvents
         return $subjects;              
     }
 
-    // Get a list of hook modules (observers) attached (hooked) 
-    // to a specific module (subject) (+itemtype) event 
+    /**
+     * Get a list of hook modules (observers) attached (hooked) 
+     * to a specific module (subject) (+itemtype) event
+    **/
     public static function getSubjectObservers($subject, $event, $itemtype=null)
     {
         if (empty($subject) || !is_string($subject))
