@@ -47,6 +47,12 @@
  */
 function mail_adminapi__sendmail(Array $args=array())
 {
+    // Branch off if we are using a newer version of PHPMailer in the lib directory
+    $use_lib = xarModVars::get('mail', 'use_external_lib');
+    if (!empty($use_lib) && file_exists(sys::lib() . 'PHPMailer')) {
+        return xarMod::apiFunc('mail', 'admin', '_sendmail_new', $args);
+    }
+    
     if (xarModVars::get('mail', 'suppresssending')) return true;
 // Get arguments from argument array
 

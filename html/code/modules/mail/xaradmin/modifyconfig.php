@@ -107,6 +107,13 @@ function mail_admin_modifyconfig()
                     xarModVars::set('mail', 'replyto', $replyto);
                     xarModVars::set('mail', 'replytoname', $replytoname);
                     xarModVars::set('mail', 'replytoemail', $replytoemail);
+
+                    // Suppoert for PHPMailer as an external library
+                    if (file_exists(sys::lib() . 'PHPMailer')) {
+                        if (!xarVarFetch('use_external_lib', 'checkbox', $use_external_lib, false, XARVAR_NOT_REQUIRED)) return;
+                        xarModVars::set('mail', 'use_external_lib', $use_external_lib);
+                    }
+                    
                     break;
                 case 'incoming':
                     break;

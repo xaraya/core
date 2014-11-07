@@ -158,6 +158,27 @@
                         </div>
                     </div>
                 </fieldset>
+                <xar:set name="library_exists">file_exists(sys::lib() . 'PHPMailer')</xar:set>
+                <xar:if condition="$library_exists">
+                    <fieldset>
+                        <legend>PHPMailer</legend>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Send mail with through an external PHPMailer library in the lib directory</xar:var>
+                                <label for="use_external_lib" title="#$label#" class="xar-form-label">
+                                    Use a newer version of PHPMaier
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="value">
+                                    <xar:var scope="module" module="mail" name="use_external_lib"/>
+                                </xar:set>
+                                <xar:data-input name="use_external_lib" value="$value" type="checkbox"/>
+                                &#160;The PHPMailer library must be present in the lib directory
+                            </div>
+                        </div>
+                    </fieldset>
+                </xar:if>
                 <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                 <xar:template file="update-button" module="base" />
             <xar:elseif condition="$tab eq 'outgoing'"/>

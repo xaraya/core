@@ -31,6 +31,7 @@ function mail_init()
     xarModVars::set('mail', 'html', false);
     xarModVars::set('mail', 'searchstrings', serialize('%%Search%%'));
     xarModVars::set('mail', 'replacestrings', serialize('Replace %%Search%% with this text'));
+    xarModVars::set('mail', 'use_external_lib', false);
 
     xarModRegisterHook('item', 'create', 'API', 'mail', 'admin', 'hookmailcreate');
     xarModRegisterHook('item', 'delete', 'API', 'mail', 'admin', 'hookmaildelete');
