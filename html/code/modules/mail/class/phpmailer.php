@@ -1312,7 +1312,7 @@ class PHPMailer extends Object
      * @param string $type File extension (MIME) type.
      * @return void
      */
-    function AddStringAttachment($string, $filename, $encoding = "base64", $type = "application/octet-stream")
+    function AddStringAttachment($string, $filename="attachment.txt", $encoding = "base64", $type = "application/octet-stream")
     {
         // Append to $attachment array
         $cur = count($this->attachment);

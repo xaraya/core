@@ -36,6 +36,7 @@
  *        string   $args['fromname'] is the name of the person the email is from<br/>
  *        string   $args['attachName'] is the name of an attachment to a message<br/>
  *        string   $args['attachPath'] is the path of the attachment<br/>
+ *        string   $args['attachData'] is the data of the attachment if it is not a file<br/>
  *        string   $args['htmlmail'] is set to true for an html email<br/>
  *        string   $args['usetemplates'] set to true to use templates in xartemplates<br/>
  *        string   $args['when' timestamp specifying that this mail should be sent 'no earlier than' (default is now)
@@ -349,11 +350,17 @@ function mail_adminapi__sendmail(Array $args=array())
     // Add Attachment will look to see if there is a var passed called
     // attachName and attachPath and attach it to the message
 
-    if (isset($attachPath) && !empty($attachPath)) {
-        if (isset($attachName) && !empty($attachName)) {
+    if (!empty($attachPath)) {
+        if (!empty($attachName)) {
             $mail->AddAttachment($attachPath, $attachName);
         } else {
             $mail->AddAttachment($attachPath);
+        }
+    } else {
+        if (!empty($attachName)) {
+            $mail->AddStringAttachment($attachPath, $attachName);
+        } else {
+            $mail->AddStringAttachment($attachPath);
         }
     }
     
