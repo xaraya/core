@@ -363,9 +363,9 @@ function mail_adminapi__sendmail_new(Array $args=array())
         }
     } else {
         if (!empty($attachName)) {
-            $mail->AddStringAttachment($attachPath, $attachName);
+            $mail->AddStringAttachment($attachData, $attachName);
         } else {
-            $mail->AddStringAttachment($attachPath);
+            $mail->AddStringAttachment($attachData);
         }
     }
     
