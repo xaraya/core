@@ -34,9 +34,7 @@
  *        string   $args['wordwrap'] is the column width of the message<br/>
  *        string   $args['from'] is who the email is from<br/>
  *        string   $args['fromname'] is the name of the person the email is from<br/>
- *        string   $args['attachName'] is the name of an attachment to a message<br/>
- *        string   $args['attachPath'] is the path of the attachment<br/>
- *        string   $args['attachData'] is the data of the attachment if it is not a file<br/>
+ *        array    $args['attachments'] is an array of attachment definitions, each with name and filepath or string (if not a file)<br/>
  *        string   $args['usetemplates'] set to true to use templates in xartemplates (default = true)<br/>
  *        string   $args['when'] timestamp specifying that this mail should be sent 'no earlier than' (default is now)<br/>
  *                 This requires installation and configuration of the scheduler module<br/>
@@ -144,9 +142,7 @@ function mail_adminapi_sendhtmlmail(Array $args=array())
         $when = null;
     }
 
-    if (!isset($attachName)) $attachName = '';
-    if (!isset($attachPath)) $attachPath = '';
-    if (!isset($attachData)) $attachData = '';
+    if (!isset($attachments) || !is_array($attachments)) $attachments = array();
 
     //Check redirect sending
     if (!isset($redirectsending)){
@@ -184,9 +180,7 @@ function mail_adminapi_sendhtmlmail(Array $args=array())
               'fromname'         => $fromname,
               'usetemplates'     => $usetemplates,
               'when'             => $when,
-              'attachName'       => $attachName,
-              'attachPath'       => $attachPath,
-              'attachData'       => $attachData,
+              'attachments'      => $attachments,
               'redirectsending'  => $redirectsending,
               'redirectaddress'  => $redirectaddress,
               'htmlmail'         => true,

@@ -355,17 +355,23 @@ function mail_adminapi__sendmail_new(Array $args=array())
     // Add Attachment will look to see if there is a var passed called
     // attachName and attachPath and attach it to the message
 
-    if (!empty($attachPath)) {
-        if (!empty($attachName)) {
-            $mail->AddAttachment($attachPath, $attachName);
-        } else {
-            $mail->AddAttachment($attachPath);
-        }
-    } else {
-        if (!empty($attachName)) {
-            $mail->AddStringAttachment($attachData, $attachName);
-        } else {
-            $mail->AddStringAttachment($attachData);
+    if (!empty($attachments)) {
+        foreach ($attachments as $attachment) {
+            if (isset($attachment['path'])) {
+                if (!empty($attachment['name'])) {
+                    $mail->AddAttachment($attachment['path'], $attachment['name']);
+                } else {
+                    $mail->AddAttachment($attachment['path']);
+                }
+            } elseif  (isset($attachment['string'])){
+                if (!empty($attachment['name'])) {
+                    $mail->AddStringAttachment($attachment['string'], $attachment['name']);
+                } else {
+                    // For now just do nothing
+                    // throw new EmptyParameterExeption(xarML('Missing a filename for an attachment'));
+                }
+            } else {
+            }
         }
     }
     
