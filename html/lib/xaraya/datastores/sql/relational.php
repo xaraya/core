@@ -415,7 +415,7 @@ class RelationalDataStore extends SQLDataStore
                 // Get the value of the primary key
                 $itemid = $row[$this->object->primary];
             } else {
-                // No primary filed: use the row key
+                // No primary field: use the row key
                 $itemid = $key;
             }
             
