@@ -35,6 +35,27 @@
             </div>
         </div>
     </xar:if>
+    <xar:if condition="isset($properties['module_alias_name'])">
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">The module alias name to use</xar:var>
+                <label for="module_alias_name" title="#$label#">Module Alias Name</label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="aliasmap">xarConfigVars::get(null,'System.ModuleAliases')</xar:set>
+                <xar:set name="options">array()</xar:set>
+                <xar:if condition="!empty($aliasmap)">
+                    <xar:foreach in="$aliasmap" key="$aliasname" value="$modulename">
+                        <xar:if condition="$modulename != $info[0]">
+                            <xar:continue/>
+                        </xar:if>
+                        <xar:set name="dummy">1;$options[$aliasname] = $aliasname</xar:set>
+                    </xar:foreach>
+                </xar:if>
+                <xar:data-input id="module_alias_name" property="$properties['module_alias_name']" options="$options" override="1"/>&#160;
+            </div>
+        </div>
+    </xar:if>
     <xar:if condition="isset($properties['use_module_icons'])">
         <div class="xar-row">
             <div class="xar-col">

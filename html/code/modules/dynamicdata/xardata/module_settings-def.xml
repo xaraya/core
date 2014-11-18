@@ -7,13 +7,17 @@
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
-  <datastore>module_variables</datastore>
   <access>a:4:{s:14:&quot;display_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;200&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;modify_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;delete_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:6:&quot;access&quot;;s:174:&quot;a:5:{s:7:&quot;display&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;update&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;create&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;delete&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;config&quot;;a:1:{i:0;i:2;}}&quot;;}</access>
-  <config>a:0:{}</config>
   <isalias>false</isalias>
+  <datastore>module_variables</datastore>
+  <config>a:0:{}</config>
+  <sources>a:0:{}</sources>
+  <relations>a:0:{}</relations>
+  <objects>a:0:{}</objects>
+  <category></category>
   <properties>
     <property name="items_per_page">
-      <id>39</id>
+      <id>5547</id>
       <label>Items Per Page</label>
       <type>integerbox</type>
       <defaultvalue>20</defaultvalue>
@@ -23,83 +27,93 @@
       <configuration></configuration>
     </property>
     <property name="enable_short_urls">
-      <id>40</id>
+      <id>5548</id>
       <label>Enable Short URLs</label>
       <type>checkbox</type>
-      <defaultvalue>false</defaultvalue>
+      <defaultvalue>0</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
       <seq>2</seq>
       <configuration></configuration>
     </property>
     <property name="use_module_alias">
-      <id>41</id>
+      <id>5549</id>
       <label>Use Module Alias</label>
       <type>checkbox</type>
-      <defaultvalue>false</defaultvalue>
+      <defaultvalue>0</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
       <seq>3</seq>
       <configuration></configuration>
     </property>
-    <property name="use_module_icons">
-      <id>41</id>
-      <label>Use Icons</label>
-      <type>checkbox</type>
-      <defaultvalue>true</defaultvalue>
-      <source>module variable: base</source>
+    <property name="module_alias_name">
+      <id>9563</id>
+      <label>Module Alias Name</label>
+      <type>dropdown</type>
+      <defaultvalue></defaultvalue>
+      <source></source>
       <status>33</status>
       <seq>4</seq>
-      <configuration></configuration>
+      <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:19:"validation_override";s:1:"1";}</configuration>
     </property>
-    <property name="enable_user_menu">
-      <id>109</id>
-      <label>Enable User Settings</label>
+    <property name="use_module_icons">
+      <id>5550</id>
+      <label>Use Icons</label>
       <type>checkbox</type>
-      <defaultvalue>false</defaultvalue>
+      <defaultvalue>1</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
       <seq>5</seq>
       <configuration></configuration>
     </property>
-    <property name="user_menu_link">
-      <id>99</id>
-      <label>Show link in user menu</label>
+    <property name="enable_user_menu">
+      <id>5551</id>
+      <label>Enable User Settings</label>
       <type>checkbox</type>
-      <defaultvalue>false</defaultvalue>
+      <defaultvalue>0</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
       <seq>6</seq>
       <configuration></configuration>
     </property>
-    <property name="admin_menu_link">
-      <id>100</id>
-      <label>Show link in admin menu</label>
+    <property name="user_menu_link">
+      <id>5552</id>
+      <label>Show link in user menu</label>
       <type>checkbox</type>
-      <defaultvalue>false</defaultvalue>
+      <defaultvalue>0</defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
       <seq>7</seq>
       <configuration></configuration>
     </property>
+    <property name="admin_menu_link">
+      <id>5553</id>
+      <label>Show link in admin menu</label>
+      <type>checkbox</type>
+      <defaultvalue>0</defaultvalue>
+      <source>module variable: base</source>
+      <status>33</status>
+      <seq>8</seq>
+      <configuration></configuration>
+    </property>
     <property name="frontend_page">
-      <id>101</id>
+      <id>5554</id>
       <label>Default Frontend Pag</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
-      <seq>8</seq>
+      <seq>9</seq>
       <configuration>a:0:{}</configuration>
     </property>
     <property name="backend_page">
-      <id>102</id>
+      <id>5555</id>
       <label>Default Backend Page</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source>module variable: base</source>
       <status>33</status>
-      <seq>9</seq>
+      <seq>10</seq>
       <configuration>a:0:{}</configuration>
     </property>
   </properties>
