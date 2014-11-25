@@ -29,20 +29,22 @@ function roles_userapi_getallgroups(Array $args=array())
 
     sys::import('xaraya.structures.query');
 
-    $q = new Query('SELECT');
-    $q->addtable($xartable['roles'],'r');
-    $q->addtable($xartable['rolemembers'], 'rm');
-    $q->leftjoin('r.id','rm.role_id');
-    $q->addfields(array('r.id AS id','r.name AS name','r.users AS users','rm.parent_id AS parentid'));
-    $conditions = array();
+    if (!isset($ancestor)) {
+        $q = new Query('SELECT');
+        $q->addtable($xartable['roles'],'r');
+        $q->addtable($xartable['rolemembers'], 'rm');
+        $q->leftjoin('r.id','rm.role_id');
+        $q->addfields(array('r.id AS id','r.name AS name','r.users AS users','rm.parent_id AS parentid'));
+        $conditions = array();
     
-    if (isset($group) || isset($parent)) {
+        if (isset($group) || isset($parent)) {
 
 // Restriction by group
-        if (isset($group)) {
-            $groups = explode(',', $group);
-            foreach ($groups as $group) {
-                $conditions[] = $q->peq('r.name',trim($group));
+            if (isset($group)) {
+                $groups = explode(',', $group);
+                foreach ($groups as $group) {
+                    $conditions[] = $q->peq('r.name',trim($group));
+                }
             }
 
 // Restriction by parent group
@@ -61,17 +63,16 @@ function roles_userapi_getallgroups(Array $args=array())
                 }
             }
         }
-    }
 
-    if (count($conditions) != 0) $q->qor($conditions);
-    $q->eq('r.itemtype',xarRoles::ROLES_GROUPTYPE);
-    $q->ne('r.state',xarRoles::ROLES_STATE_DELETED);
-    $q->setgroup('r.id');
-    $q->run();
-    return $q->output();
+        if (count($conditions) != 0) $q->qor($conditions);
+        $q->eq('r.itemtype',xarRoles::ROLES_GROUPTYPE);
+        $q->ne('r.state',xarRoles::ROLES_STATE_DELETED);
+        $q->setgroup('r.id');
+        $q->run();
+        return $q->output();
 
 // Restriction by ancestor group. This option supports group IDs or names.
-    if (isset($ancestor)) {
+    } else {
 
         // Get all the groups
         $q = new Query('SELECT');
