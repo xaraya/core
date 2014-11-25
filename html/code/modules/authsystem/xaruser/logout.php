@@ -27,9 +27,9 @@ function authsystem_user_logout()
     // Get input parameters
     if (!xarVarFetch('redirecturl','str:1:254',$redirecturl,$redirect,XARVAR_NOT_REQUIRED)) return;
     
-    $defaultauthdata=xarMod::apiFunc('roles','user','getdefaultauthdata');
-    $defaultlogoutmodname=$defaultauthdata['defaultlogoutmodname'];
-    $authmodule=$defaultauthdata['defaultauthmodname'];
+    $defaultauthdata = xarMod::apiFunc('roles','user','getdefaultauthdata');
+    $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
+    $authmodule = $defaultauthdata['defaultauthmodname'];
     // Defaults
     //if (preg_match('/$authmodule}/',$redirecturl)) {
     if (strstr($redirecturl, $defaultlogoutmodname)) {
