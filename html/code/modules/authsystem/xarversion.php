@@ -34,7 +34,7 @@ $modversion['official']           = true;
 $modversion['author']             = 'Marco Canini, Jo Dalle Nogare';
 $modversion['contact']            = 'http://www.xaraya.com/';
 $modversion['admin']              = true;
-$modversion['user']               = true;
+$modversion['user']               = false;
 $modversion['class']              = 'Authentication';
 $modversion['category']           = 'Users & Groups';
 ?>
