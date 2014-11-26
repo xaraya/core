@@ -98,8 +98,20 @@ function roles_userapi_getallgroups(Array $args=array())
             }
         }
         
-        // Run the recursion
+        // Do we include the parent(s)?
         $descendants = array();
+        if (!(isset($args['include_parents']) && empty($args['include_parents']))) {
+            foreach ($ids as $id) {
+                foreach ($allgroups as $group) {
+                    if ((int)$group['id'] == $id) {
+                        $descendants[$id] = $group;
+                        break;
+                    }
+                }
+            }
+        }
+        
+        // Run the recursion
         foreach ($ids as $id) {
             $subgroups = array_merge($descendants, recursive_getDescendants($id, $allgroups));
             foreach($subgroups as $subgroup) $descendants[$subgroup['id']] = $subgroup;
