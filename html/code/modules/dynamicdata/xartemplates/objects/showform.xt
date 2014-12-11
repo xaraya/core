@@ -8,6 +8,7 @@
     <xar:if condition="$layout eq 'default'">
         <xar:foreach in="$properties" key="$name" value="$property">
             <xar:if condition="$property->getDisplayStatus() eq DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN">
+                <xar:data-input property="$properties[$name]" hidden="hidden"/>
                 <xar:continue/>
             </xar:if>
             <div class="xar-row">
