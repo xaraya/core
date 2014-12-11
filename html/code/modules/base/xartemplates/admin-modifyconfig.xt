@@ -96,7 +96,6 @@
                         </div>
                         <div class="xar-col">
 	                        <xar:if condition="xarModVars::get('modules', 'defaultmoduletype') == 'admin'">
-	
 	                            <xar:set name="filter">array('AdminCapable' =&gt; 1)</xar:set>
 	                        <xar:else />
 	                            <xar:set name="filter">array('UserCapable' =&gt; 1)</xar:set>
@@ -108,7 +107,6 @@
                     	</div>
                     </div>
                     <xar:if condition="(int)xarModVars::get('modules', 'defaultmodule') eq (int)xarMod::getID('base')">
-
                         <div class="xar-row">
                         	<div class="xar-col">
 	                            <xar:var name="label">Use an alternate default page template.</xar:var>
