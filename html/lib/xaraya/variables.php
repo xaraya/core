@@ -421,11 +421,15 @@ function xarVarPrepForDisplay()
             try {
                 $var = htmlspecialchars($var, ENT_COMPAT, $charset);
             } catch (Exception $e) {
-                $var = htmlspecialchars($var);
+                try {
+                    $var = htmlspecialchars($var);
+                } catch (Exception $e) {
+                    // If we cannot clean the var, leave it untouched
+                }
             }
         }
         // Add to array
-        array_push($resarray, $var);
+        $resarray[] = $var;
     }
 
     // Return vars
