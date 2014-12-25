@@ -31,6 +31,7 @@ class GroupListProperty extends SelectProperty
     public $validation_parentgroup_list     = null;
     public $validation_group_list           = null;
     public $validation_override             = true;
+    public $show_top                        = false;
 
     /*
     * Options available to group selection
@@ -161,7 +162,11 @@ class GroupListProperty extends SelectProperty
     public function showInput(Array $data = array())
     {
         if (isset($data['behavior'])) $this->initialization_update_behavior = $data['behavior'];
-        if (isset($data['basegroup'])) $this->initialization_basegroup = $data['basegroup'];
+        // CHECKME: is this needed?
+        if (isset($data['basegroup'])) $this->validation_group_list = $data['basegroup'];
+        if (isset($data['parent'])) $this->validation_parentgroup_list = $data['parent'];
+        if (isset($data['ancestor'])) $this->validation_ancestorgroup_list = $data['ancestor'];
+        if (isset($data['show_top'])) $this->show_top = $data['show_top'];
 
         // If we are not standalone get the group value first 
         if ($this->_itemid) {
@@ -173,7 +178,7 @@ class GroupListProperty extends SelectProperty
     public function showOutput(Array $data = array())
     {
         if (isset($data['behavior'])) $this->initialization_update_behavior = $data['behavior'];
-        if (isset($data['basegroup'])) $this->initialization_basegroup = $data['basegroup'];
+        if (isset($data['basegroup'])) $this->validation_group_list = $data['basegroup'];
 
         // If we are not standalone get the group value first 
         if ($this->_itemid) {
@@ -195,6 +200,7 @@ class GroupListProperty extends SelectProperty
     public function getOptions()
     {
         $select_options = array();
+        $select_options['show_top'] = $this->show_top;
         if (!empty($this->validation_ancestorgroup_list)) {
             $select_options['ancestor'] = $this->validation_ancestorgroup_list;
         }
