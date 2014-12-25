@@ -27,6 +27,8 @@ function roles_userapi_getallgroups(Array $args=array())
 // Security Check
     if(!xarSecurityCheck('ViewRoles')) return;
 
+    if (!isset($show_heads)) $show_heads = 0;
+    
     sys::import('xaraya.structures.query');
 
     if (!isset($ancestor)) {
@@ -37,18 +39,16 @@ function roles_userapi_getallgroups(Array $args=array())
         $q->addfields(array('r.id AS id','r.name AS name','r.users AS users','rm.parent_id AS parentid'));
         $conditions = array();
     
-        if (isset($group) || isset($parent)) {
-
 // Restriction by group
-            if (isset($group)) {
-                $groups = explode(',', $group);
-                foreach ($groups as $group) {
-                    $conditions[] = $q->peq('r.name',trim($group));
-                }
+        if (isset($group)) {
+            $groups = explode(',', $group);
+            foreach ($groups as $group) {
+                $conditions[] = $q->peq('r.name',trim($group));
             }
+        }
 
 // Restriction by parent group
-        } elseif (isset($parent)) {
+         if (isset($parent)) {
             $groups = explode(',', $parent);
             foreach ($groups as $group) {
                 $group = xarMod::apiFunc(
@@ -61,6 +61,7 @@ function roles_userapi_getallgroups(Array $args=array())
                 if (isset($group['id']) && is_numeric($group['id'])) {
                     $conditions[] = $q->peq('rm.parent_id',$group['id']);
                 }
+                if ($show_top) $conditions[] = $q->peq('r.id',$group['id']);
             }
         }
 
@@ -110,7 +111,6 @@ function roles_userapi_getallgroups(Array $args=array())
                 }
             }
         }
-        
         // Run the recursion
         foreach ($ids as $id) {
             $subgroups = array_merge($descendants, recursive_getDescendants($id, $allgroups));
@@ -131,8 +131,8 @@ function recursive_getDescendants($ancestor, &$allgroups)
     foreach($descendants as $descendant){
         $subgroups = recursive_getDescendants((int)$descendant['id'], $allgroups);
         foreach($subgroups as $subgroup) $subgroups[$subgroup['id']] = $subgroup;
+        $descendants = array_merge($descendants, $subgroups);
     }
-    $descendants = array_merge($descendants, $subgroups);
     return $descendants;
 }
 ?>
