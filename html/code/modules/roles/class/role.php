@@ -230,15 +230,17 @@ class Role extends DataObject
      */
     public function removeMember($member)
     {
-        // delete the relevant entry from the rolemembers table
-        $xartable =& xarDB::getTables();
-        $rolesmemobjects = $this->rolememberstable;
-        $query = "DELETE FROM $rolesmemobjects WHERE role_id = ? AND parent_id = ?";
-        $bindvars = array($member->getID(), $this->getID());
-        $this->dbconn->Execute($query,$bindvars);
-        // for children that are users
-        // subtract 1 from the users field of the parent group. This is for display purposes.
-        if ($member->isUser()) {
+        // Delete the relevant entry from the rolemembers table
+        $xartables =& xarDB::getTables();
+        sys::import('xaraya.structures.query');
+        $q = new Query('DELETE', $xartables['rolemembers']);
+        $q->eq('role_id', $member->getID());
+        $q->eq('parent_id', $this->getID());
+        $q->run();
+
+        // For children that are users subtract 1 from the users field of the parent group. 
+        // This is for display purposes.
+        if ($member->isUser() && ($q->affected != 0)) {
             // get the current count.
             $bindvars = array();
             $query = "SELECT  users
