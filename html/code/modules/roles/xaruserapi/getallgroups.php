@@ -27,7 +27,7 @@ function roles_userapi_getallgroups(Array $args=array())
 // Security Check
     if(!xarSecurityCheck('ViewRoles')) return;
 
-    if (!isset($show_heads)) $show_heads = 0;
+    if (!isset($show_top)) $show_top = 0;
     
     sys::import('xaraya.structures.query');
 
@@ -101,7 +101,7 @@ function roles_userapi_getallgroups(Array $args=array())
         
         // Do we include the parent(s)?
         $descendants = array();
-        if (!(isset($args['include_parents']) && empty($args['include_parents']))) {
+        if ($show_top) {
             foreach ($ids as $id) {
                 foreach ($allgroups as $group) {
                     if ((int)$group['id'] == $id) {
