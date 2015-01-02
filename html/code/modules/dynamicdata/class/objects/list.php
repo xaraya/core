@@ -346,12 +346,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if(isset($args['count']) && (($args['count'] == 'count') || ($args['count'] == 1))) {
             $itemcount = $this->countitems($args);
         }
-        if(empty($args['numitems'])) {
-            $args['numitems'] = $this->numitems;
-        }
-        if(empty($args['startnum'])) {
-            $args['startnum'] = $this->startnum;
-        }
+        if(empty($args['numitems'])) $args['numitems'] = $this->numitems;
+        if(empty($args['startnum'])) $args['startnum'] = $this->startnum;
+
         if(!empty($args['fieldlist'])) {
             $fields = $this->getFieldList();
             $this->setFieldList($args['fieldlist']);
@@ -359,6 +356,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $this->items = array();
         $this->datastore->getItems($args);
         
+        // For now always show the values of properties with virtual datastore
+        $args['getvirtuals'] = true;
         if (!empty($args['getvirtuals'])) {
             // Get the values of properties with virtual datastore and add them to the items array
             foreach ($this->getFieldList() as $fieldname) {
