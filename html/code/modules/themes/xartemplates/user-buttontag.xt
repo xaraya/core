@@ -31,6 +31,12 @@
     <xar:if condition="!empty($submittotarget)">
         <xar:set name="onclick">$submittotarget</xar:set>
     </xar:if>
+    
+    <xar:set name="http_user_agent">strtolower($_SERVER['HTTP_USER_AGENT'])</xar:set>
+    	<xar:if condition="strpos($http_user_agent, 'trident') !== false OR strpos($http_user_agent, 'msie') !== false">
+        	<xar:set name="iebrowser">true</xar:set>
+    	</xar:if>
+    
     <xar:if condition="$type eq 'submit' or $type eq 'reset' or $type eq 'button'">
         <xar:if condition="isset($src)">
             <xar:if condition="isset($disabled)">
@@ -106,14 +112,23 @@
                 <xar:if condition="substr($target, 0,1) eq '$'">
                     <xar:set name="target">$$target</xar:set>
                 </xar:if>
-                <a href="#$target#">
-                    <xar:if condition="isset($title)">
-                        <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" title="#$title#"/>
-                    <xar:else />
-                        <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#"/>
-                    </xar:if>
-                </a>
-            </xar:if>
+				<xar:if condition="isset($iebrowser)">
+					<xar:set name="onclick">"javascript:location.href = '".$target."'"</xar:set>
+					<xar:if condition="isset($title)">
+						<input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" title="#$title#" onclick="#$onclick#" />
+					<xar:else />
+						<input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" onclick="#$onclick#"/>
+					</xar:if>                
+				<xar:else />
+					<a href="#$target#">
+						<xar:if condition="isset($title)">
+							<input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" title="#$title#"/>
+						<xar:else />
+							<input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#"/>
+						</xar:if>
+					</a>
+				</xar:if>
+	       </xar:if>
         </xar:if>
     </xar:if>
 </xar:template>
