@@ -8,10 +8,12 @@
                 <xar:loop name="$locales">
                     <xar:if condition="$loop:item['selected']">
                         <option value="#$loop:item['locale']#" selected="selected">
-                        #$loop:item['name']# (#$loop:item['country']#)</option>
+                            #$loop:item['name']# (#$loop:item['country']#)
+                        </option>
                     <xar:else />
-                        <option value="#$loop:item['locale']#">#$loop:item['name']#
-                        (#$loop:item['country']#)</option>
+                        <option value="#$loop:item['locale']#">
+                            #$loop:item['name']# (#$loop:item['country']#)
+                        </option>
                     </xar:if>
                 </xar:loop>
             </select>
