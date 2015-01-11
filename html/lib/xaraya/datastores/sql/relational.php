@@ -267,7 +267,15 @@ class RelationalDataStore extends SQLDataStore
             $q->eq($this->object->properties[$this->object->primary]->source, $itemid);
         }
 
-        if (!$q->run()) throw new Exception(xarML('Query failed'));
+        try {
+            $q->run();
+        } catch (Exception $e) {
+            echo xarML('The following notional query failed:<br/>');
+            $q->qecho();
+            echo xarML('<br/>The specific message was:<br/>');
+            echo $e->getMessage();
+            exit;
+        }
         unset($q);
         
         return $itemid;
