@@ -3,7 +3,8 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-       <img src="#xarTplGetImage('categories.png')#" alt="official icon" width="96" height="96" class="xar-module-icon"/>
+        <xar:var name="label">Official Icon</xar:var>
+       <img src="#xarTplGetImage('categories.png')#" alt="#$label#" width="96" height="96" class="xar-module-icon"/>
         <h2>
             Overview
         </h2>
