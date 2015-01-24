@@ -3,8 +3,9 @@
     <xar:if condition="isset($properties['items_per_page'])">
         <div class="xar-row">
             <div class="xar-col">
-                <xar:var name="label">The number of items to show on each page.</xar:var>
-                <label for="items_per_page" title="#$label#" size="3">List items per page:</label>
+                <xar:var name="label">List items per page</xar:var>
+                <xar:var name="title">The number of items to show on each page.</xar:var>
+                <xar:data-label property="$properties['items_per_page']" for="id" title="$label" size="3"/>
             </div>
             <div class="xar-col">
                 <xar:data-input property="$properties['items_per_page']"/>
@@ -14,8 +15,9 @@
     <xar:if condition="isset($properties['enable_short_urls'])">
         <div class="xar-row">
             <div class="xar-col">
-                <xar:var name="label">Enable short URLs for this module</xar:var>
-                <label for="enable_short_urls"  title="#$label#">Enable Short URLs</label>
+                <xar:var name="label">Enable short URLs</xar:var>
+                <xar:var name="title">Enable short URLs for this module</xar:var>
+                <xar:data-label property="$properties['enable_short_urls']" for="id" label="$label" title="$title"/>
             </div>
             <div class="xar-col">
                 <xar:data-input property="$properties['enable_short_urls']"/>
@@ -25,8 +27,9 @@
     <xar:if condition="isset($properties['use_module_alias'])">
         <div class="xar-row">
             <div class="xar-col">
-                <xar:var name="label">Use an alias instead of the module name</xar:var>
-                <label for="use_module_alias" title="#$label#">Enable module alias(es)</label>
+                <xar:var name="label">Enable module alias(es)</xar:var>
+                <xar:var name="title">Use an alias instead of the module name</xar:var>
+                <xar:data-label property="$properties['use_module_alias']" for="id" label="$label" title="$title"/>
             </div>
             <div class="xar-col">
                 <xar:data-input id="use_module_alias" property="$properties['use_module_alias']" onchange="toggle(\'aliaslink\',\'aliascheckbox\')"/>&#160;
@@ -38,8 +41,9 @@
     <xar:if condition="isset($properties['module_alias_name'])">
         <div class="xar-row">
             <div class="xar-col">
-                <xar:var name="label">The module alias name to use</xar:var>
-                <label for="module_alias_name" title="#$label#">Module Alias Name</label>
+                <xar:var name="label">Module Alias Name</xar:var>
+                <xar:var name="title">The module alias name to use</xar:var>
+                <xar:data-label property="$properties['module_alias_name']" for="id" label="$label" title="$title"/>
             </div>
             <div class="xar-col">
                 <xar:set name="aliasmap">xarConfigVars::get(null,'System.ModuleAliases')</xar:set>
@@ -52,73 +56,84 @@
                         <xar:set name="dummy">1;$options[$aliasname] = $aliasname</xar:set>
                     </xar:foreach>
                 </xar:if>
-                <xar:data-input id="module_alias_name" property="$properties['module_alias_name']" options="$options" override="1"/>&#160;
+                <xar:if condition="!empty($options)">
+                    <xar:data-input property="$properties['module_alias_name']" options="$options" override="1"/>
+                <xar:else/>
+                    No alias names defined for this module
+                    <xar:data-input property="$properties['module_alias_name']" hidden="hidden"/>
+                </xar:if>
             </div>
         </div>
     </xar:if>
     <xar:if condition="isset($properties['use_module_icons'])">
         <div class="xar-row">
             <div class="xar-col">
-                <xar:var name="label">Display icons instead of text</xar:var>
-                <label for="use_module_icons" title="#$label#">Use Icons</label>
+                <xar:var name="label">Use Icons</xar:var>
+                <xar:var name="title">Display icons instead of text</xar:var>
+                <xar:data-label property="$properties['use_module_icons']" for="id" label="$label" title="$title"/>
             </div>
             <div class="xar-col">
-                <xar:data-input id="use_module_icons" property="$properties['use_module_icons']" />
+                <xar:data-input property="$properties['use_module_icons']" />
             </div>
         </div>
     </xar:if>
     <xar:if condition="isset($properties['enable_user_menu'])">
         <div class="xar-row">
             <div class="xar-col">
-                <xar:var name="label">Enable the user settings for this module in Roles User Account.</xar:var>
-                <label for="enable_user_menu" title="#$label#">Enable User Settings</label>
+                <xar:var name="label">Enable User Settings</xar:var>
+                <xar:var name="title">Enable the user settings for this module in Roles User Account</xar:var>
+                <xar:data-label property="$properties['enable_user_menu']" for="id" label="$label" title="$title"/>
             </div>
             <div class="xar-col">
-                <xar:data-input id="enable_user_menu" property="$properties['enable_user_menu']"/>
+                <xar:data-input property="$properties['enable_user_menu']"/>
             </div>
         </div>
     </xar:if>
     <xar:if condition="isset($properties['user_menu_link'])">
         <div class="xar-row">
             <div class="xar-col">
-                <xar:var name="label">Hide the link to this module's user functions in the Base module User Menu Block.</xar:var>
-                <label for="user_menu_link" title="#$label#">Hide link in User Menu</label>
+                <xar:var name="label">Hide link in User Menu</xar:var>
+                <xar:var name="title">Hide the link to this module's user functions in the Base module User Menu Block</xar:var>
+                <xar:data-label property="$properties['user_menu_link']" for="id" label="$label" title="$title"/>
             </div>
             <div class="xar-col">
-                <xar:data-input id="user_menu_link" property="$properties['user_menu_link']"/>
+                <xar:data-input property="$properties['user_menu_link']"/>
             </div>
         </div>
     </xar:if>
     <xar:if condition="isset($properties['admin_menu_link'])">
         <div class="xar-row">
             <div class="xar-col">
-                <xar:var name="label">Hide the link to this module's admin functions in the Base module Admin Menu Block.</xar:var>
-                <label for="admin_menu_link" title="#$label#">Hide link in Admin Menu</label>
+                <xar:var name="label">Hide link in Admin Menu</xar:var>
+                <xar:var name="title">Hide the link to this module's admin functions in the Base module Admin Menu Block</xar:var>
+                <xar:data-label property="$properties['admin_menu_link']" for="id" label="$label" title="$title"/>
             </div>
             <div class="xar-col">
-                <xar:data-input id="admin_menu_link" property="$properties['admin_menu_link']"/>
+                <xar:data-input property="$properties['admin_menu_link']"/>
             </div>
         </div>
     </xar:if>
     <xar:if condition="isset($properties['frontend_page'])">
         <div class="xar-row">
             <div class="xar-col">
-                <xar:var name="label">Define a default frontend page for this module.</xar:var>
-                <label for="frontend_page" title="#$label#">Default Frontend Page</label>
+                <xar:var name="label">Default Frontend Page</xar:var>
+                <xar:var name="title">Define a default frontend page for this module</xar:var>
+                <xar:data-label property="$properties['frontend_page']" for="id" label="$label" title="$title"/>
             </div>
             <div class="xar-col">
-                <xar:data-input id="frontend_page" property="$properties['frontend_page']"/>
+                <xar:data-input property="$properties['frontend_page']"/>
             </div>
         </div>
     </xar:if>
     <xar:if condition="isset($properties['backend_page'])">
         <div class="xar-row">
             <div class="xar-col">
-                <xar:var name="label">Define a default backend page for this module.</xar:var>
-                <label for="frontend_page" title="#$label#">Default Backend Page</label>
+                <xar:var name="label">Default Backend Page</xar:var>
+                <xar:var name="title">Define a default backend page for this module</xar:var>
+                <xar:data-label property="$properties['backend_page']" for="id" label="$label" title="$title"/>
             </div>
             <div class="xar-col">
-                <xar:data-input id="backend_page" property="$properties['backend_page']"/>
+                <xar:data-input property="$properties['backend_page']"/>
             </div>
         </div>
     </xar:if>

@@ -26,8 +26,14 @@
  */
 function authsystem_user_main()
 {
-    //no registration here - just redirect to the login form
-    xarController::redirect(xarModURL('authsystem','user','showloginform'));
+    $redirect = xarModVars::get('authsystem','frontend_page');
+    if (!empty($redirect)) {
+        $truecurrenturl = xarServer::getCurrentURL(array(), false);
+        $urldata = xarModAPIFunc('roles','user','parseuserhome',array('url'=> $redirect,'truecurrenturl'=>$truecurrenturl));
+        xarController::redirect($urldata['redirecturl']);
+    } else {
+        xarController::redirect(xarModURL('authsystem', 'user', 'showloginform'));
+    }
     return true;
 }
 

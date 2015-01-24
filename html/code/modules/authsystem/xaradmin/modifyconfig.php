@@ -28,9 +28,11 @@ function authsystem_admin_modifyconfig()
     if (!xarVarFetch('uselockout',   'checkbox',  $data['uselockout'],  xarModVars::get('authsystem', 'uselockout'),     XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('lockouttime',  'int:1:',    $data['lockouttime'], (int)xarModVars::get('authsystem', 'lockouttime'),       XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
     if (!xarVarFetch('lockouttries', 'int:1:',    $data['lockouttries'], (int)xarModVars::get('authsystem', 'lockouttries'),       XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('forwarding_page', 'str',    $data['forwarding_page'], (int)xarModVars::get('authsystem', 'forwarding_page'),       XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+    if (!xarVarFetch('ask_forward',     'checkbox',  $data['ask_forward'],  xarModVars::get('authsystem', 'ask_forward'),     XARVAR_NOT_REQUIRED)) return;
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'authsystem'));
-    $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls');
+    $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, frontend_page');
     $data['module_settings']->getItem();
     
     switch (strtolower($phase)) {
@@ -39,18 +41,21 @@ function authsystem_admin_modifyconfig()
             break;
 
         case 'update':
-            // Confirm authorisation code
+            // Confirm authorisation code. AJAX calls ignore this
             if (!xarSecConfirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
                 // If this is an AJAX call, send back a message (and end)
-                xarController::$request->msgAjax($data['module_settings']->displayInvalids());
+                xarController::$request->msgAjax($data['module_settings']->getInvalids());
+                // No AJAX, just send the data to the template for display
                 return xarTpl::module('authsystem','admin','modifyconfig', $data);        
             } else {
                 $itemid = $data['module_settings']->updateItem();
             }
+            xarModVars::set('authsystem', 'forwarding_page', $data['forwarding_page']);
+            xarModVars::set('authsystem', 'ask_forward', $data['ask_forward']);
             xarModVars::set('authsystem', 'uselockout', $data['uselockout']);
             xarModVars::set('authsystem', 'lockouttime', $data['lockouttime']);
             xarModVars::set('authsystem', 'lockouttries', $data['lockouttries']);

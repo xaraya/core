@@ -16,6 +16,31 @@
                     <xar:data-form object="$module_settings"/>
                 </fieldset>
                 <fieldset>
+                    <legend>Redirects</legend>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="uselockout" class="xar-form-label" title="If logged in redirect to this page">
+                                Forwarding page
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="value">xarModVars::get('authsystem', 'forwarding_page')</xar:set>
+                            <xar:data-input type="textbox" name="forwarding_page" checked="$value"/>
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="uselockout" class="xar-form-label" title="Ask the user whether to redirect">
+                                Ask forward
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="checked">xarModVars::get('authsystem', 'ask_forward')</xar:set>
+                            <xar:data-input type="checkbox" name="ask_forward" checked="$checked"/>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
                     <legend>Login Security Options</legend>
                     <div class="xar-row">
                         <div class="xar-col">
