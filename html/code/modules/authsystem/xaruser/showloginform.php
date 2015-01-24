@@ -24,8 +24,21 @@
 function authsystem_user_showloginform(Array $args = array())
 {
     extract($args);
-    xarVarFetch('redirecturl', 'str:1:254', $redirecturl, xarServer::getBaseURL(), XARVAR_NOT_REQUIRED);
-    $data['redirecturl'] = xarVarPrepHTMLDisplay($redirecturl);
+    xarVarFetch('redirecturl', 'str:1:254', $redirecturl, '', XARVAR_NOT_REQUIRED);
+    if (empty($redirecturl)) {
+        $redirecturl = xarModVars::get('authsystem', 'forwarding_page');
+        if(empty($redirecturl)) $redirecturl = xarServer::getBaseURL();
+    }
+    $redirecturl = xarVarPrepHTMLDisplay($redirecturl);
+    $truecurrenturl = xarServer::getCurrentURL(array(), false);
+    $urldata = xarModAPIFunc('roles','user','parseuserhome',array('url'=> $redirecturl,'truecurrenturl'=>$truecurrenturl));
+    $data['redirecturl'] = $urldata['redirecturl'];
+    
+    // If we don't ask to forward, then forward immediately
+    if (!(int)xarModVars::get('authsystem', 'ask_forward')) {
+        xarController::redirect($data['redirecturl']);
+        return true;
+    }
 
     return $data;
     
@@ -33,7 +46,6 @@ function authsystem_user_showloginform(Array $args = array())
         return $data;
     } else {
         xarController::redirect($data['redirecturl']);
-        return true;
     }
 }
 ?>

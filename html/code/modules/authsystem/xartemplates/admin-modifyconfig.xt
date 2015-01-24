@@ -25,7 +25,7 @@
                         </div>
                         <div class="xar-col">
                             <xar:set name="value">xarModVars::get('authsystem', 'forwarding_page')</xar:set>
-                            <xar:data-input type="textbox" name="forwarding_page" checked="$value"/>
+                            <xar:data-input type="textbox" name="forwarding_page" value="$value"/>
                         </div>
                     </div>
                     <div class="xar-row">
