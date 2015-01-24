@@ -41,11 +41,5 @@ function authsystem_user_showloginform(Array $args = array())
     }
 
     return $data;
-    
-    if (!xarUserIsLoggedIn()) {
-        return $data;
-    } else {
-        xarController::redirect($data['redirecturl']);
-    }
 }
 ?>
