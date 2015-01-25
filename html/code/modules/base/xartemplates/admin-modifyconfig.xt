@@ -145,7 +145,7 @@
                        </div>
                        <div class="xar-col">
 	                        <xar:set name="options">
-	                            array( array('id' =&gt; 'admin', 'name' =&gt; 'Admin'), array('id' =&gt; 'user', 'name' =&gt; 'User'), )
+	                            array( array('id' =&gt; 'admin', 'name' =&gt; 'admin'), array('id' =&gt; 'user', 'name' =&gt; 'user'), )
 	                        </xar:set>
 	                        <xar:set name="value">
 	                            <xar:var scope="module" module="modules" name="defaultmoduletype"/>
