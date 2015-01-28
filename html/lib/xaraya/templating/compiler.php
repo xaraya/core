@@ -74,6 +74,9 @@ class XarayaCompiler extends xarBLCompiler
         // Add the custom tags from modules
         $xslFiles = array_merge($xslFiles,$this->getModuleTagPaths());
 
+        // Add the custom tags from properties
+        $xslFiles = array_merge($xslFiles,$this->getPropertyTagPaths());
+
         // Get any custom tags in standalone blocks
         $xslFiles = array_merge($xslFiles,$this->getBlockTagPaths());
 
@@ -116,6 +119,40 @@ class XarayaCompiler extends xarBLCompiler
                 $files[] = $fileURI . "/" . $fileInfo->getFileName();
             }
         }            
+        return $files;
+    }
+
+    private function getPropertyTagPaths()
+    {
+        // Loop through properties directory and look for tags
+        sys::import('xaraya.structures.relativedirectoryiterator');
+        $propertiesdir = sys::code() . 'properties/';
+        if (!file_exists($propertiesdir)) throw new DirectoryNotFoundException($propertiesdir);
+
+        $dir = new RelativeDirectoryIterator($propertiesdir);
+        $files = array();
+        for ($dir->rewind();$dir->valid();$dir->next()) {
+            if ($dir->isDot()) continue; // temp for emacs insanity and skip hidden files while we're at it
+            if (!$dir->isDir()) continue; // only dirs
+
+            // Check this property for a tags directory
+            $file = $dir->getPathName();
+            $filepath = $file . '/tags';
+            if (!is_dir($filepath)) continue; // only the tags directory (if it exists)
+            
+            if (strpos($filepath, '\\') != false) {
+                // On Windows, drive letters are preceeded by an extra / [file:///C:/...]
+                $fileURI = 'file:///' . str_replace('\\','/',$filepath);
+            } else {
+                $fileURI = 'file://' . $filepath;
+            }
+            foreach (new DirectoryIterator($filepath) as $fileInfo) {
+                if($fileInfo->isDot()) continue;
+                $pathinfo = pathinfo($fileInfo->getPathName());
+                if(isset($pathinfo['extension']) && $pathinfo['extension'] != 'xsl') continue;
+                $files[] = $fileURI . "/" . $fileInfo->getFileName();
+            }
+        }
         return $files;
     }
 
