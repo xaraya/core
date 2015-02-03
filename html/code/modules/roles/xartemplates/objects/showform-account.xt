@@ -16,10 +16,7 @@
             <legend>User Details</legend>
             <xar:if condition="(bool)xarModVars::get('roles', 'requirevalidation')">
                 <div class="xar-row">
-                    <div class="xar-col">
-                        <label for="email">Changing your email address will require you to
-                        revalidate your account.</label>
-                    </div>
+                        Changing your email address will require you to revalidate your account.
                 </div>
             </xar:if>
             <xar:set name="fields">array('name','uname','email','password','regdate')</xar:set>
