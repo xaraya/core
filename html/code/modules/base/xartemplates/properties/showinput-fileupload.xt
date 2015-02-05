@@ -12,7 +12,7 @@
         <input type="hidden" name="#$name#" id="#$id#_hidden" value="#$value#"/>
     </xar:if>
     <xar:if condition="!empty($file_extensions)">
-    <br />Allowed file types : #$file_extensions#</xar:if>
+    <br />Allowed file types : #$file_extensions#</xar:if>&#160;
     <input type="hidden" name="MAX_FILE_SIZE" value="#$max_file_size#"/>
     <input type="file" name="#$name#" size="#$size#" id="#$id#" tabindex="#$tabindex#"/>
     <xar:template file="dataproperty_additions" module="base"/>
