@@ -187,7 +187,7 @@ xarMLS::init($systemArgs);
  */
 function xarInstallMain()
 {
-    // let the system know that we are in the process of installing
+    // Let the system know that we are in the process of installing
     xarVarSetCached('installer','installing',1);
 
     // Make sure we can render a page
@@ -201,7 +201,7 @@ function xarInstallMain()
     // Build function name from phase
     $funcName = 'phase' . $phase;
 
-    // if the debugger is active, start it
+    // If the debugger is active, start it
     if (xarCoreIsDebuggerActive()) {
        ob_start();
     }

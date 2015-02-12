@@ -61,7 +61,7 @@ class xarTemplateCache extends Object implements ixarTemplateCache
                 $msg .= "but the setting: 'cache templates' is set to 'On'.\n";
             } else {
                 $msg .= "and the setting: 'cache template ' is set to 'Off.\n"
-                      . "Although you can switch the template cache to off (not recommended), i still need that directory to be writable.\n";
+                      . "Although you can switch the template cache to off (not recommended), I still need that directory to be writable.\n";
             }
             $msg .= "You need to change the permissions on the mentioned file/directory.";
             throw new GeneralException($dir, $msg);
