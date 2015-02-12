@@ -224,7 +224,7 @@
             <div class="xar-form-actions">
                 <div class="xar-row">
                     <div class="xar-col"></div>
-                    <div class="xar-col" style="width: 400px">
+                    <div class="xar-col" style="width: 500px">
                         <xar:if condition="$systemConfigDistIsReadable 
                                            AND $systemConfigIsWritable 
                                            AND $cacheTemplatesIsWritable 
