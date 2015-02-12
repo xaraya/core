@@ -224,7 +224,7 @@
             <div class="xar-form-actions">
                 <div class="xar-row">
                     <div class="xar-col"></div>
-                    <div class="xar-col">
+                    <div class="xar-col" style="width: 400px">
                         <xar:if condition="$systemConfigDistIsReadable 
                                            AND $systemConfigIsWritable 
                                            AND $cacheTemplatesIsWritable 
@@ -242,7 +242,8 @@
                             <input type="hidden" name="install_phase" id="install_phase" value="3"/>
                             <input type="hidden" name="agree" id="agree" value="agree"/>
                             <p class="warning">
-                                Some requirements for installation were not met. Please check the list above and make the appropriate adjustments.
+                                Some requirements for installation were not met.<br/>
+                                Please check the list above and make the appropriate adjustments.
                             </p>
                             <xar:var name="label">Check Again</xar:var>
                             <xar:button type="submit" label="$label"/>
