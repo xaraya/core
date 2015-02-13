@@ -158,8 +158,16 @@ function themes_admin_modifyconfig()
             foreach ($cachestoflush as $cachetoflush) {
                 $picker->initialization_basedirectory = sys::varpath() . "/cache/" . $cachetoflush;
                 if (!file_exists($picker->initialization_basedirectory)) continue;
-                $files = $picker->getOptions();
-                foreach ($files as $file) unlink($picker->initialization_basedirectory . "/" . $file['id']);
+
+                $dir = new RelativeDirectoryIterator($picker->initialization_basedirectory);
+
+                for($dir->rewind();$dir->valid();$dir->next()) {
+                    if($dir->isDir()) continue; // no dirs
+                    if($dir->isDot()) continue; // skip . and ..
+                    $name = $dir->getFileName();
+                    if(strpos($name, '.') !== (int) 0)
+                    unlink($picker->initialization_basedirectory . "/" . $name);
+                }
             }
             break;
     }
