@@ -34,7 +34,7 @@
  *        string   $args['wordwrap'] is the column width of the message<br/>
  *        string   $args['from'] is who the email is from<br/>
  *        string   $args['fromname'] is the name of the person the email is from<br/>
- *        array    $args['attachments'] is an array of attachment definitions, each with name and filepath or string (if not a file)<br/>
+ *        array    $args['attachments'] is an array of attachment definitions, each with name and path or string (if not a file)<br/>
  *        string   $args['usetemplates'] set to true to use templates in xartemplates (default = true)<br/>
  *        string   $args['when'] timestamp specifying that this mail should be sent 'no earlier than' (default is now)<br/>
  *                 This requires installation and configuration of the scheduler module<br/>

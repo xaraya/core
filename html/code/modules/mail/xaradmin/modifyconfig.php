@@ -37,7 +37,7 @@ function mail_admin_modifyconfig()
     $address = trim(xarModVars::get('mail', 'redirectaddress'));
     if (isset($address) && !empty($address)){
         $data['redirectaddress']=xarVarPrepForDisplay($address);
-    }else{
+    } else {
         $data['redirectaddress']='';
     }
 
@@ -85,9 +85,10 @@ function mail_admin_modifyconfig()
                     // new modvar in 2.0.0, only store the id of the designated admin
                     if (!xarVarFetch('admin_outgoing','id',$admin_outgoing)) return;
                     if (!xarVarFetch('showtemplates', 'checkbox', $showtemplates, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('replyto', 'checkbox', $replyto, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('replytoname', 'str:1:', $replytoname, '', XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('replytoemail', 'str:1:', $replytoemail, '', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('replyto',       'checkbox', $replyto,       false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('replytoname',   'str:1:',   $replytoname,   '', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('replytoemail',  'str:1:',   $replytoemail,  '', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('debugmode',     'checkbox', $debugmode,     false, XARVAR_NOT_REQUIRED)) return;
                     
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
@@ -107,6 +108,8 @@ function mail_admin_modifyconfig()
                     xarModVars::set('mail', 'replyto', $replyto);
                     xarModVars::set('mail', 'replytoname', $replytoname);
                     xarModVars::set('mail', 'replytoemail', $replytoemail);
+
+                    xarModVars::set('mail', 'debugmode', $debugmode);
 
                     // Suppoert for PHPMailer as an external library
                     if (file_exists(sys::lib() . 'PHPMailer')) {
