@@ -389,7 +389,7 @@ function mail_adminapi__sendmail(Array $args=array())
         $result = $mail->Send();
     } catch (Exception $e) {
         if (xarModVars::get('mail', 'debugmode') &&
-            in_array(xarUserGetVar('uname'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+            in_array(xarUserGetVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
             echo '<pre>',var_dump($e->getMessage),'</pre>';
         }
         $result = false;
