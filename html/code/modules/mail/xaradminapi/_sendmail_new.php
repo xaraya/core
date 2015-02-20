@@ -102,6 +102,11 @@ function mail_adminapi__sendmail_new(Array $args=array())
 
     switch($serverType) {
         case 'smtp':
+            try { 
+                require(sys::lib() . 'PHPMailer/class.smtp.php');
+            } catch (Exception $e) {
+                throw new FileNotFoundException('class.smtp.php');
+            }
             $mail->IsSMTP(); // telling the class to use SMTP
             $mail->Host = xarModVars::get('mail', 'smtpHost'); // SMTP server
             $mail->Port = xarModVars::get('mail', 'smtpPort'); // SMTP Port default 25.
