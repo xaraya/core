@@ -219,7 +219,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             xarLog::variable('Bad properties', $badnames, XARLOG_LEVEL_ERROR);
             if (xarModVars::get('dynamicdata','debugmode') && 
             in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-                echo "Bad properties: "; echo implode(', ',$badnames);
+                echo "Bad properties: "; echo $this->name . ": " . implode(', ',$badnames);
                 echo "<br />";
             }
         }
