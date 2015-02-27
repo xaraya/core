@@ -158,6 +158,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         xarLog::message("DataObject::checkInput: Checking object " . $this->name);
 
         $this->missingfields = array();
+        $badnames = array();
         foreach($fields as $name) {
             // Ignore disabled or ignored properties
             if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
@@ -204,12 +205,24 @@ class DataObject extends DataObjectMaster implements iDataObject
                     $passed = $this->properties[$name]->checkInput($name2);
                 }
             }
-            if (($passed === null) || ($passed === false)) $isvalid = false;
+            if (($passed === null) || ($passed === false)) {
+                $isvalid = false;
+                $badnames[] = $name;
+            }
         }
         if (!empty($this->missingfields)) {
             xarLog::variable('Missing properties', $this->missingfields, XARLOG_LEVEL_ERROR);
             if (!$suppress)
                 throw new VariableNotFoundException(array($this->name,implode(', ',$this->missingfields)),'The following fields were not found: #(1): [#(2)]');
+        }
+        if (!empty($badfields)) {
+            xarLog::variable('Bad properties', $badnames, XARLOG_LEVEL_ERROR);
+            // Debug code
+            if (xarModVars::get('dynamicdata','debugmode') && 
+            in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+                echo "Bad properties: "; echo implode(', ',$badnames);
+                echo "<br />";
+            }
         }
         return $isvalid;
     }
