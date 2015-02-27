@@ -215,9 +215,8 @@ class DataObject extends DataObjectMaster implements iDataObject
             if (!$suppress)
                 throw new VariableNotFoundException(array($this->name,implode(', ',$this->missingfields)),'The following fields were not found: #(1): [#(2)]');
         }
-        if (!empty($badfields)) {
+        if (!empty($badnames)) {
             xarLog::variable('Bad properties', $badnames, XARLOG_LEVEL_ERROR);
-            // Debug code
             if (xarModVars::get('dynamicdata','debugmode') && 
             in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
                 echo "Bad properties: "; echo implode(', ',$badnames);
