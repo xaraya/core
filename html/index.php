@@ -78,7 +78,7 @@ function xarMain()
             xarTpl::setThemeName($themeName);
             xarVarSetCached('Themes.name','CurrentTheme', $themeName);
         }
-    // admin theme 
+    // Admin theme 
     } elseif (xarUserIsLoggedIn() && $request->getType() == 'admin') {
         $themeName = xarModVars::get('themes', 'admin_theme');
         if (!empty($themeName) && xarThemeIsAvailable($themeName)) {
@@ -111,7 +111,7 @@ function xarMain()
     if (!empty($cacheKey) && xarPageCache::isCached($cacheKey)) {
         // Output the cached page *or* a 304 Not Modified status
         if (xarPageCache::getCached($cacheKey)) {
-            // we could return true here, but we'll continue just in case
+            // We could return true here, but we'll continue just in case
             // processing changes below someday...
             $run = 0;
         }
@@ -121,7 +121,7 @@ function xarMain()
 
         // Set page template
         if (xarUserIsLoggedIn() && $request->getType() == 'admin' && xarTpl::getPageTemplateName() == 'default') {
-             // Use the admin-$modName.xt page if available when $modType is admin
+            // Use the admin-$modName.xt page if available when $modType is admin
             // falling back on admin.xt if the former isn't available
             if (!xarTpl::setPageTemplateName('admin-'.$request->getModule())) {
                 xarTpl::setPageTemplateName('admin');
