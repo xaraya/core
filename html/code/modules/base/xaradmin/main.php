@@ -29,7 +29,7 @@
 function base_admin_main()
 {
     // Security
-    if(!xarSecurityCheck('ViewBase')) return;
+    if(!xarSecurityCheck('EditBase')) return;
 
     $request = new xarRequest();
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
