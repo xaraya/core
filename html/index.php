@@ -176,7 +176,7 @@ function xarMain()
 
         // Set the output of the page in cache
         if (!empty($cacheKey)) {
-            // save the output in cache *before* sending it to the client
+            // Save the output in cache *before* sending it to the client
             xarPageCache::setCached($cacheKey, $pageOutput);
         }
 
