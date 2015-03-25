@@ -93,7 +93,7 @@ class CategoriesProperty extends DataProperty
             else $select_type = 'multiselect';
             if (!xarVarFetch($name . '["categories"]', 'array', $categories, array(), XARVAR_NOT_REQUIRED)) return;
         }
-        $value = $categories;
+        $value = isset($categories) ? $categories : array();
         return $this->validateValue($value);
     }
 
@@ -134,7 +134,7 @@ class CategoriesProperty extends DataProperty
         $this->categories = $value;
         
         // Keep a reference of the data of this property in $this->value, for saving or easy manipulation
-        $this->value = $value;        
+        $this->value = $value;
         return true;
     }
 
