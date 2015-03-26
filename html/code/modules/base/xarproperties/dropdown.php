@@ -350,6 +350,15 @@ class SelectProperty extends DataProperty
         */
     }
 
+    /**
+     * Alias for the getOption method
+     * This make the property consistent with standard usage
+     */
+    function getValue()
+    {
+        return $this->getOption(false);
+    }
+    
 // CHECKME: should we move this to properties/base.php, in case other "basic" property types want this ?
 // CHECKME: should we move remove this? It's not being used
 
