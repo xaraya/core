@@ -35,6 +35,8 @@ sys::import('modules.dynamicdata.class.properties.base');
  *   been created and only needs to update the values of that entry. This is the case of the categories object, which uses the same xar_categories table for all its properties.
  * - In contrast if the celkopposiion property uses a different source table than the object's other properties, it will (first) have to create an entry in that source table itself.
  *   We currently don't have any examples of such a case, but this might be the case of Chris' Uebertable :)
+ *
+ *   Filters must have (for now) the form P1.foo = 1 AND P1.bar = 2 etc.
  */
 class CelkoPositionProperty extends DataProperty
 {
