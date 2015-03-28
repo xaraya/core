@@ -1457,42 +1457,16 @@ class DataObjectMaster extends Object
      * Translate a string containing a SQL WHERE clause into Query conditions
      *
      * @param mixed where string or array of name => value pairs
-     * @return void
+     * @return array of query conditions
      */
-    public function setWhere($where)
+    public function setWhere($where, $transform=1)
     {
-        // Note this property is only defined here
+        if ($transform) $wherestring = $this->transformClause($where);
+        
+        // Note this helper property is only defined in this method and the methods called from here
         $this->conditions = new Query();
-        
-        // If the condition is empty, bail (for now)
-        if (empty($where)) return $this->conditions;
 
-        // If a string is passed, make it an array (for now)
-        if (!is_array($where)) $where = array($where);
-        
-        // If we have an array just get the first element (for now)
-        if (is_array($where)) $where = $where[0];
-
-        // cfr. BL compiler - adapt as needed (I don't think == and === are accepted in SQL)
-        $findLogic    = array( ' = ', ' != ',  ' < ',  ' > ', ' <= ', ' >= ');
-        $replaceLogic = array(' eq ', ' ne ', ' lt ', ' gt ', ' le ', ' ge ');
-
-        // Clean up all the operators
-        $where = str_ireplace($findLogic, $replaceLogic, $where);
-
-        // Replace property names with source field names
-        // Note this does not preclude (if the store is a single DB table) 
-        // that we have fields in the where clause with no corresponding no properties
-        $findLogic    = array();
-        $replaceLogic = array();
-        foreach ($this->properties as $name => $property) {
-            if (empty($property->source)) continue;
-            $findLogic[] = '/\b' . $name . '\b/';
-            $replaceLogic[] = $property->source;
-        }
-        $where = preg_replace($findLogic, $replaceLogic, $where);
-
-        $parts = $this->parseClause($where);
+        $parts = $this->parseClause($wherestring);
 
         // Turn the parts of the clause into query conditions and add them to $this->conditions
         try {
@@ -1504,6 +1478,44 @@ class DataObjectMaster extends Object
         return $this->conditions;
     }
 
+    /**
+     * Transform property names to their source field names in a clause
+     *
+     * @param mixed where string or array of name => value pairs
+     * @return string representing a SQL where clause
+     */
+    private function transformClause($clause)
+    {
+        // If the condition is empty, bail (for now)
+        if (empty($clause)) return $this->conditions;
+
+        // If a string is passed, make it an array (for now)
+        if (!is_array($clause)) $clause = array($clause);
+        
+        // If we have an array just get the first element (for now)
+        if (is_array($clause)) $clause = $clause[0];
+
+        // cfr. BL compiler - adapt as needed (I don't think == and === are accepted in SQL)
+        $findLogic    = array( ' = ', ' != ',  ' < ',  ' > ', ' <= ', ' >= ');
+        $replaceLogic = array(' eq ', ' ne ', ' lt ', ' gt ', ' le ', ' ge ');
+
+        // Clean up all the operators
+        $clause = str_ireplace($findLogic, $replaceLogic, $clause);
+
+        // Replace property names with source field names
+        // Note this does not preclude (if the store is a single DB table) 
+        // that we have fields in the where clause with no corresponding no properties
+        $findLogic    = array();
+        $replaceLogic = array();
+        foreach ($this->properties as $name => $property) {
+            if (empty($property->source)) continue;
+            $findLogic[] = '/\b' . $name . '\b/';
+            $replaceLogic[] = $property->source;
+        }
+        $clause = preg_replace($findLogic, $replaceLogic, $clause);
+        return $clause;
+    }
+    
     private function parseClause($clause)
     {   
         // Enclose the clause in parentheses
