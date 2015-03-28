@@ -330,7 +330,8 @@ class CelkoPositionProperty extends DataProperty
     {
         if (!isset($data['position'])) $data['position'] = $this->position;
         if (!isset($data['reference_id'])) $data['reference_id'] = $this->reference_id;
-        
+        if (isset($data['filter'])) $this->initialization_celkofilter = $data['filter'];
+       
         $data['itemid'] = isset($data['itemid']) ? $data['itemid'] : $this->_itemid;
         if (!empty($data['itemid'])) {        
             $data['item'] = $this->getItem($data['itemid']);
@@ -387,6 +388,7 @@ class CelkoPositionProperty extends DataProperty
     {
         if (!isset($data['position'])) $data['position'] = $this->position;
         if (!isset($data['reference_id'])) $data['reference_id'] = $this->reference_id;
+        if (isset($data['filter'])) $this->initialization_celkofilter = $data['filter'];
         
         $data['itemid'] = isset($data['itemid']) ? $data['itemid'] : $this->_itemid;
         if (!empty($data['itemid'])) {        
@@ -607,6 +609,10 @@ class CelkoPositionProperty extends DataProperty
            $bindvars[] = $ecat['left_id']; $bindvars[] = $ecat['right_id'];
         }
 
+        // Add any SQL conditions passed from the template or initialization here
+        if (!empty($this->initialization_celkofilter))
+            $SQLquery .= " AND " . $this->initialization_celkofilter;
+        
         // Have to specify all selected attributes in GROUP BY
         $SQLquery .= " GROUP BY P1.id, P1." . $this->initialization_celkoname . ", P1." . $this->initialization_celkoparent_id . ", P1." . $this->initialization_celkoleft_id . ", P1." . $this->initialization_celkoright_id . " ";
         $SQLquery .= " ORDER BY P1." . $this->initialization_celkoleft_id;
