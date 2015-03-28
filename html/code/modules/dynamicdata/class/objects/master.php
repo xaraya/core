@@ -1457,50 +1457,28 @@ class DataObjectMaster extends Object
      * Translate a string containing a SQL WHERE clause into Query conditions
      *
      * @param mixed where string or array of name => value pairs
-     * @return array of query conditions
+     * @return void
      */
-    public function setWhere($where, $transform=1)
+    public function setWhere($where)
     {
-        if ($transform) $wherestring = $this->transformClause($where);
-        
-        // Note this helper property is only defined in this method and the methods called from here
+        // Note this property is only defined here
         $this->conditions = new Query();
-
-        $parts = $this->parseClause($wherestring);
-
-        // Turn the parts of the clause into query conditions and add them to $this->conditions
-        try {
-            $this->bracketClause($parts);
-        } catch (Exception $e) {
-            $this->conditions->clearconditions();
-            echo $e->getMessage();
-        }
-        return $this->conditions;
-    }
-
-    /**
-     * Transform property names to their source field names in a clause
-     *
-     * @param mixed where string or array of name => value pairs
-     * @return string representing a SQL where clause
-     */
-    private function transformClause($clause)
-    {
+        
         // If the condition is empty, bail (for now)
-        if (empty($clause)) return $this->conditions;
+        if (empty($where)) return $this->conditions;
 
         // If a string is passed, make it an array (for now)
-        if (!is_array($clause)) $clause = array($clause);
+        if (!is_array($where)) $where = array($where);
         
         // If we have an array just get the first element (for now)
-        if (is_array($clause)) $clause = $clause[0];
+        if (is_array($where)) $where = $where[0];
 
         // cfr. BL compiler - adapt as needed (I don't think == and === are accepted in SQL)
         $findLogic    = array( ' = ', ' != ',  ' < ',  ' > ', ' <= ', ' >= ');
         $replaceLogic = array(' eq ', ' ne ', ' lt ', ' gt ', ' le ', ' ge ');
 
         // Clean up all the operators
-        $clause = str_ireplace($findLogic, $replaceLogic, $clause);
+        $where = str_ireplace($findLogic, $replaceLogic, $where);
 
         // Replace property names with source field names
         // Note this does not preclude (if the store is a single DB table) 
@@ -1512,10 +1490,20 @@ class DataObjectMaster extends Object
             $findLogic[] = '/\b' . $name . '\b/';
             $replaceLogic[] = $property->source;
         }
-        $clause = preg_replace($findLogic, $replaceLogic, $clause);
-        return $clause;
+        $where = preg_replace($findLogic, $replaceLogic, $where);
+
+        $parts = $this->parseClause($where);
+
+        // Turn the parts of the clause into query conditions and add them to $this->conditions
+        try {
+            $this->bracketClause($parts);
+        } catch (Exception $e) {
+            $this->conditions->clearconditions();
+            echo $e->getMessage();
+        }
+        return $this->conditions;
     }
-    
+
     private function parseClause($clause)
     {   
         // Enclose the clause in parentheses
