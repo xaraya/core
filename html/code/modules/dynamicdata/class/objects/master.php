@@ -1461,10 +1461,14 @@ class DataObjectMaster extends Object
      */
     public function setWhere($where, $transform=1)
     {
-        if ($transform) $wherestring = $this->transformClause($where);
-        
         // Note this helper property is only defined in this method and the methods called from here
         $this->conditions = new Query();
+
+        if ($transform) $wherestring = $this->transformClause($where);
+        else $wherestring = $where;
+        
+        // If the condition is empty, bail (for now)
+        if (empty($wherestring)) return $this->conditions;
 
         $parts = $this->parseClause($wherestring);
 
@@ -1487,7 +1491,7 @@ class DataObjectMaster extends Object
     private function transformClause($clause)
     {
         // If the condition is empty, bail (for now)
-        if (empty($clause)) return $this->conditions;
+        if (empty($clause)) return '';
 
         // If a string is passed, make it an array (for now)
         if (!is_array($clause)) $clause = array($clause);
