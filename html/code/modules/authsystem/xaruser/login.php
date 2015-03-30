@@ -244,7 +244,28 @@ function authsystem_user_login()
             if(isset($redirecturl)) {
                 $redirecturl = $redirecturl;
             } else {
-                if ((bool)xarModVars::get('roles', 'loginredirect')) {
+                // Simple page redirect from the authsystem module
+                // This takes precendence over anything more complicated
+                $forwarding_page = xarModVars::get('authsystem', 'forwarding_page');
+                if ($forwarding_page) {
+                    $truecurrenturl = xarServer::getBaseURL();
+                    try {
+                        $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=>$url,'truecurrenturl'=>$truecurrenturl));
+                    } catch (Exception $e) {
+                    }
+                    if (!is_array($urldata) || !$urldata) {
+                        $externalurl = false;
+                        $redirecturl = xarServer::getBaseURL();
+    
+                    } else{
+                        $externalurl = $urldata['externalurl'];
+                        $redirecturl = $urldata['redirecturl'];
+                    }var_dump($redirecturl);exit;
+                    xarController::redirect($redirecturl);
+                    return true;
+                
+                } elseif ((bool)xarModVars::get('roles', 'loginredirect')) {
+                // Nuanced redirect via the roles module
                     $truecurrenturl = xarServer::getCurrentURL(array(), false);
                     $url = xarMod::apiFunc('roles','user','getuserhome',array('itemid' => $user['id']));
                     if (empty($url)) {
@@ -257,7 +278,6 @@ function authsystem_user_login()
                             return xarTpl::module('roles','user','errors',array('layout' => 'bad_userhome', 'message' => $e->getMessage()));
                         }
                     }
-                    $data = array();
                     if (!is_array($urldata) || !$urldata) {
                         $externalurl = false;
                         $redirecturl = xarServer::getBaseURL();
@@ -270,13 +290,14 @@ function authsystem_user_login()
             }
 
             if ($externalurl) {
+                $data = array();
                 /* Open in IFrame - works if you need it */
                 /* $data['page'] = $redirecturl;
                    $data['title'] = xarML('Home Page');
                    return xarTpl::module('roles','user','homedisplay', $data);
                  */
                  xarController::redirect($redirecturl);
-            }else {
+            } else {
                 xarController::redirect($redirecturl);
             }
 
