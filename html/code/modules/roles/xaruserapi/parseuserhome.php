@@ -15,7 +15,7 @@
  * @desct
  * @param array    $args array of optional parameters<br/>
  *        string   $args['url'] to check<br/>
- *        string   $args['truecurenturl'] calling url<br/>
+ *        string   $args['truecurrenturl'] calling url<br/>
  *        string   $args['redirecturl'] page to return user
  * @return boolean true if external URL
  */
