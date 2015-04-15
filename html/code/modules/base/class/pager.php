@@ -257,7 +257,7 @@ class xarTplPager Extends Object
     {
         if (empty($urltemplate))
             return xarServer::getCurrentURL(array('startnum' => $urlitemmatch));
-		$rawurlitemmatch = $urlitemmatch;
+	$rawurlitemmatch = $urlitemmatch;
         $urlitemmatch = rawurlencode($urlitemmatch);
 
         if (strpos($urltemplate, $urlitemmatch) === false) {
