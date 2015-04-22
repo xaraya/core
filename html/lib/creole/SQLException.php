@@ -60,7 +60,7 @@ class SQLException extends Exception {
     public function setUserInfo($info)
     {
         $this->userInfo = $info;
-        $this->message .= " [User Info: " .$this->userInfo . "]";
+        $this->message .= " [User Info: " . implode(",",$this->userInfo) . "]";
     }
     
     /**
