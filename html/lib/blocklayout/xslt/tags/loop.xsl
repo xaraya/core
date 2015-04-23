@@ -50,7 +50,7 @@
     
     <!-- Loop initialization -->
     <xsl:value-of select="$loopName"/><xsl:text> = (object) null;</xsl:text>
-    <xsl:text>$loop-&gt;index=-1;&nl;</xsl:text>
+    <xsl:value-of select="$loopName"/><xsl:text>-&gt;index=-1;&nl;</xsl:text>
     
     <!-- Start the loop -->
     <xsl:text>foreach(</xsl:text>
