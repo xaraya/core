@@ -357,7 +357,7 @@ class xarBlock extends Object implements ixarBlock
             $args['state'] = array(xarBlock::BLOCK_STATE_VISIBLE, xarBlock::BLOCK_STATE_HIDDEN);
         $args['type_state'] = array(xarBlock::TYPE_STATE_ACTIVE); // valid block type states
         // get block info
-        try {        
+        try {
             $blockinfo = xarMod::apiFunc('blocks', 'blocks', 'getinfo', $args);
             return self::render($blockinfo);
         } catch (Exception $e) { return ''; }
