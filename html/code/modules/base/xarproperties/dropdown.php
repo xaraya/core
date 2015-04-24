@@ -327,12 +327,19 @@ class SelectProperty extends DataProperty
         }
 
         foreach ($options as $option) {
+            // Make sure the array has the correct form
+            if (!isset($option['id']) || !isset($option['name'])) continue;
+            // Find the entry among the options
             if ($option['id'] == $this->value) {
                 if ($check) return true;
                 return $option['name'];
             }
         }
+        
+        // Nothing found and $check == true;
         if ($check) return false;
+
+        // Nothing found and $check == false;
         return $this->value;
 
         /* I don't see how this works, so I've moved it aside here for now (random)
