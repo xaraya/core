@@ -59,6 +59,9 @@ class SQLException extends Exception {
      */ 
     public function setUserInfo($info)
     {
+        // Make sure we have an array
+        if (!is_array($info)) $info = explode(",",$info);
+        
         $this->userInfo = $info;
         $this->message .= " [User Info: " . implode(",",$this->userInfo) . "]";
     }
