@@ -363,6 +363,7 @@ class SelectProperty extends DataProperty
      */
     function getValue()
     {
+        return $this->value;
         return $this->getOption(false);
     }
     
