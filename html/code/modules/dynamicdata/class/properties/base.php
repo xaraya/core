@@ -598,12 +598,13 @@ class DataProperty extends Object implements iDataProperty
         if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
         if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
 
-        $data['value']    = isset($data['value']) ? $data['value'] : $this->getValue();
+        $data['value']    = isset($data['value']) ? $data['value'] : $this->value;
         
         // The value might be an array
         if (is_array($data['value'])){
             $temp = array();
-            foreach ($data['value'] as $key => $tmp) $temp[$key] = xarVarPrepForDisplay($tmp);
+            foreach ($data['value'] as $key => $tmp) 
+                $temp[$key] = (!is_array($tmp)) ? xarVarPrepForDisplay($tmp) : $tmp;
             $data['value'] = $temp;
         } else {
             $data['value'] = xarVarPrepForDisplay($data['value']);

@@ -110,7 +110,7 @@ class SelectProperty extends DataProperty
         if (isset($data['firstline']))  $this->initialization_firstline = $data['firstline'];
         $data['options'] = array_merge($this->getFirstline(), $data['options']);
         
-        // Make sure the optins have the correct form
+        // Make sure the options have the correct form
         if (!is_array($data['options']))
             throw new Exception(xarML('Dropdown options do not have the correct form'));
         if (!is_array(current($data['options']))) {
