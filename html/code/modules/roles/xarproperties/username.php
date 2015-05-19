@@ -37,7 +37,7 @@ class UsernameProperty extends TextBoxProperty
         $this->filepath   = 'modules/roles/xarproperties';
 
         // Cater to a common case
-        if ($this->value == 'myself') $this->value = xarUserGetVar('id');        
+        if ($this->value == 'myself') $this->value = xarUser::getVar('id');        
     }
 
     public function validateValue($value = null)
@@ -49,7 +49,7 @@ class UsernameProperty extends TextBoxProperty
         if (!parent::validateValue($value)) return false;
 
         // We set an empty value to the id of the current user
-        if (empty($value) || ($value == 'myself')) $value = xarUserGetVar('uname');
+        if (empty($value) || ($value == 'myself')) $value = xarUser::getVar('uname');
 
         // We allow the special value [All]
         
@@ -98,7 +98,7 @@ class UsernameProperty extends TextBoxProperty
         if (isset($data['user'])) {
             // Cater to a common case
             if ($data['user'] == 'myself') {
-                $this->value = xarUserGetVar('id');
+                $this->value = xarUser::getVar('id');
                 $role = xarRoles::get($this->value);
                 $data['value'] = $role->getUser();
             } else {
@@ -120,9 +120,9 @@ class UsernameProperty extends TextBoxProperty
             // Cater to a common case
             if ($data['user'] == 'myself') {
                 if ($this->initialization_display_name == 'name')
-                    $data['value'] = xarUserGetVar('name');
+                    $data['value'] = xarUser::getVar('name');
                 else
-                    $data['value'] = xarUserGetVar('uname');
+                    $data['value'] = xarUser::getVar('uname');
             } else {
                 $data['value'] = $data['user'];
             }
@@ -149,7 +149,7 @@ class UsernameProperty extends TextBoxProperty
         if ($this->initialization_store_type == 'id') {
             if(!is_numeric($this->value)) return $this->value;
             if ($this->value == 0) return '[All]';
-            return xarUserGetVar('uname',$this->value);
+            return xarUser::getVar('uname',$this->value);
         } else {
             if (empty($this->value)) return '';
             return $this->value;
