@@ -157,6 +157,10 @@ class BlockLayoutXSLTProcessor extends Object
         $exprPattern = '/(#[^"><]*?#)/';
         $callBack    = array('XsltCallbacks','attributes');
         $this->postXML = preg_replace_callback($exprPattern,$callBack,$this->postXML);
+        
+        // Special handling for xar:attribute, where the tag is created at runtime
+        $this->postXML = str_replace('xyzzy','<?php echo $',$this->postXML);        
+        $this->postXML = str_replace('yzzyx',';?>',$this->postXML);        
     }
 
     static function phpexpression($expr)
@@ -247,7 +251,6 @@ class XsltCallbacks extends Object
         xarLog::message('XsltCallbacks::entities: found in xml source:'.$entityName);
         return $matches[0];
     }
-
 
 }
 ?>
