@@ -13,12 +13,14 @@
             </tr>        
         </thead>
         <tbody>
+            <!-- $i == row values -->
             <xar:for start="$i=0" test="$i lt $rows" iter="$i++">
                 <tr>
                     <td>
                         <xar:set name="j">$i+1</xar:set>
                         #$j#
                     </td>
+                    <!-- $k == column values -->
                     <xar:for start="$k=0" test="$k lt count($column_titles)-1" iter="$k++">
                         <td>
                             <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
