@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <!-- Common Menu -->
+    <!-- Common admin menu -->
     <xar:if condition="xarModVars::get('themes','adminpagemenu')">
         <xar:if condition="!isset($xmldata)">
             <xar:set name="xmldata">''</xar:set>
@@ -13,20 +13,20 @@
             <xar:set name="urlargs">array()</xar:set>
         </xar:if>
         <!-- loadmenuarray function does all the hard work for us :) -->
-        <xar:set name="navitems">xarMod::apiFunc('base', 'admin', 'loadmenuarray', array('layout' => 'tabs', 'xmldata' => $xmldata, 'phpdata' => $phpdata, 'urlargs' => $urlargs))</xar:set>
+        <xar:set name="tabs">xarMod::apiFunc('base', 'admin', 'loadmenuarray', array('layout' => 'tabs', 'xmldata' => $xmldata, 'phpdata' => $phpdata, 'urlargs' => $urlargs))</xar:set>
         <!-- only display if we found some links -->
-        <xar:if condition="!empty($navitems['menulinks'])">
+        <xar:if condition="!empty($tabs['menulinks'])">
             <ul class="xar-tabs xar-alt xar-norm-outline">
-                <xar:if condition="!empty($navitems['title'])">
-                    <li class="xar-tabs-label" title="#$navitems.title#">#$navitems.label#:</li>
+                <xar:if condition="!empty($tabs['title'])">
+                    <li class="xar-tabs-label" title="#$tabs.title#">#$tabs.label#:</li>
                 <xar:else/>
-                    <li class="xar-tabs-label">#$navitems.label#:</li>
+                    <li class="xar-tabs-label">#$tabs.label#:</li>
                 </xar:if>
 
-                <xar:foreach in="$navitems['menulinks']" value="$navitem">
-                    <xar:if condition="isset($navitem['value']) AND !empty($navitems['variable'])">
-                        <xar:set name="variable">$navitems['variable']</xar:set>
-                        <xar:if condition="$navitem['value'] eq ${$variable}">
+                <xar:foreach in="$tabs['menulinks']" value="$tab">
+                    <xar:if condition="isset($tab['value']) AND !empty($tabs['variable'])">
+                        <xar:set name="variable">$tabs['variable']</xar:set>
+                        <xar:if condition="$tab['value'] eq ${$variable}">
                             <xar:set name="tabclass">'xar-tab-active'</xar:set>
                             <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
                         <xar:else />
@@ -34,7 +34,7 @@
                             <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
                         </xar:if>
                     <xar:else />
-                        <xar:if condition="!empty($navitem['isactive'])">
+                        <xar:if condition="!empty($tab['isactive'])">
                             <xar:set name="tabclass">'xar-tab-active'</xar:set>
                             <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
                         <xar:else />
@@ -43,13 +43,13 @@
                         </xar:if>
                     </xar:if>
                     <li class="#$tabclass#">
-                        <xar:if condition="!empty($navitem['url'])">
-                            <a href="#$navitem['url']#" class="#$linkclass#" title="#$navitem['title']#">
-                                #$navitem['label']#
+                        <xar:if condition="!empty($tab['url'])">
+                            <a href="#$tab['url']#" class="#$linkclass#" title="#$tab['title']#">
+                                #$tab['label']#
                             </a>
                         <xar:else/>
-                            <a class="#$linkclass#" title="#$navitem['title']#">
-                                #$navitem['label']#
+                            <a class="#$linkclass#" title="#$tab['title']#">
+                                #$tab['label']#
                             </a>
                         </xar:if>
                     </li>
