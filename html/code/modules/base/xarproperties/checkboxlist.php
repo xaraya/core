@@ -69,6 +69,18 @@ class CheckboxListProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
+    public function showHidden(Array $data = array())
+    {
+        if (isset($data['value'])) {
+            if (is_array($data['value'])) {
+                $data['value'] = implode(',',$data['value']);
+            }
+        } else {
+            $data['value'] = '';
+        }
+        return parent::showHidden($data);
+    }
+
     public function getValue()
     {
         if (!is_array($this->value) && is_string($this->value) && !empty($this->value)) 
