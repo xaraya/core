@@ -12,10 +12,18 @@
                             <xar:set name="theID">$id.'_'.$key</xar:set>
                         </xar:if>
 
-                        <xar:if condition="in_array($option['id'],$value)">
-                            <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked"/>
+                        <xar:if condition="isset($default_value)">
+                            <xar:if condition="$default_value eq 1">
+                                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked"/>
+                            <xar:else />
+                                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#"/>
+                            </xar:if>
                         <xar:else />
-                            <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#"/>
+                            <xar:if condition="in_array($option['id'],$value)">
+                                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked"/>
+                            <xar:else />
+                                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#"/>
+                            </xar:if>
                         </xar:if>
 
                         <label for="#$theID#" style="margin-left: 5px">#$option['name']#</label>
@@ -32,10 +40,18 @@
                             <xar:set name="theID">$id.'_'.$key</xar:set>
                         </xar:if>
 
-                        <xar:if condition="in_array($option['id'],$value)">
-                            <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked"/>
+                        <xar:if condition="isset($default_value)">
+                            <xar:if condition="$default_value eq 1">
+                                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked"/>
+                            <xar:else />
+                                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#"/>
+                            </xar:if>
                         <xar:else />
-                            <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#"/>
+                            <xar:if condition="in_array($option['id'],$value)">
+                                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked"/>
+                            <xar:else />
+                                <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#"/>
+                            </xar:if>
                         </xar:if>
                         &#160;
                         <label for="#$theID#">#$option['name']#</label>
@@ -64,10 +80,18 @@
                                 <xar:else />
                                     <xar:set name="theID">$id.'_'.$o</xar:set>
                                 </xar:if>
-                                <xar:if condition="in_array($option['id'],$value)">
-                                    <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked"/>
+                                <xar:if condition="isset($default_value)">
+                                    <xar:if condition="$default_value eq 1">
+                                        <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked"/>
+                                    <xar:else />
+                                        <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#"/>
+                                    </xar:if>
                                 <xar:else />
-                                    <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#"/>
+                                    <xar:if condition="in_array($option['id'],$value)">
+                                        <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#" checked="checked"/>
+                                    <xar:else />
+                                        <input type="checkbox" name="#$name#[]" id="#$theID#" value="#$option['id']#"/>
+                                    </xar:if>
                                 </xar:if>
                                 &#160;
                                 <label for="#$theID#">#$option['name']#</label>
