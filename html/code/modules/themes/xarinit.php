@@ -106,6 +106,7 @@ function themes_init()
     xarModVars::set('themes', 'usedashboard', false);
     xarModVars::set('themes', 'dashtemplate', 'dashboard');
     xarModVars::set('themes', 'adminpagemenu', true);
+    xarModVars::set('themes', 'userpagemenu', true);
 
     xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditThemes','All','themes','All','All','ACCESS_EDIT');

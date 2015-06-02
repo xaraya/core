@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <!-- Common Administration menu -->
+    <!-- Common user menu -->
     <xar:if condition="xarModVars::get('themes','userpagemenu')">
+        <xar:if condition="!isset($xmldata)">
+            <xar:set name="xmldata">''</xar:set>
+        </xar:if>
+        <xar:if condition="!isset($phpdata)">
+            <xar:set name="phpdata">''</xar:set>
+        </xar:if>
+        <xar:if condition="!isset($urlargs)">
+            <xar:set name="urlargs">array()</xar:set>
+        </xar:if>
         <!-- loadmenuarray function does all the hard work for us :) -->
-        <xar:set name="tabs">xarMod::apiFunc('base', 'admin', 'loadmenuarray', array('layout' => 'tabs'))</xar:set>
+        <xar:set name="tabs">xarMod::apiFunc('base', 'admin', 'loadmenuarray', array('layout' => 'tabs', 'xmldata' => $xmldata, 'phpdata' => $phpdata, 'urlargs' => $urlargs))</xar:set>
         <!-- only display if we found some links -->
         <xar:if condition="!empty($tabs['menulinks'])">
             <ul class="xar-tabs xar-alt xar-norm-outline">
@@ -13,13 +22,25 @@
                 <xar:else/>
                     <li class="xar-tabs-label">#$tabs.label#:</li>
                 </xar:if>
+                
                 <xar:foreach in="$tabs['menulinks']" value="$tab">
-                    <xar:if condition="!empty($tab['isactive'])">
-                        <xar:set name="tabclass">'xar-tab-active'</xar:set>
-                        <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                    <xar:if condition="isset($tab['value']) AND !empty($tabs['variable'])">
+                        <xar:set name="variable">$tabs['variable']</xar:set>
+                        <xar:if condition="$tab['value'] eq ${$variable}">
+                            <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                            <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                        <xar:else />
+                            <xar:set name="tabclass">'xar-tab'</xar:set>
+                            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                        </xar:if>
                     <xar:else />
-                        <xar:set name="tabclass">'xar-tab'</xar:set>
-                        <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                        <xar:if condition="!empty($tab['isactive'])">
+                            <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                            <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                        <xar:else />
+                            <xar:set name="tabclass">'xar-tab'</xar:set>
+                            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                        </xar:if>
                     </xar:if>
                     <li class="#$tabclass#">
                         <xar:if condition="!empty($tab['url'])">

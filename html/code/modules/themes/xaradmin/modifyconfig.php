@@ -43,6 +43,7 @@ function themes_admin_modifyconfig()
 
     if (!xarVarFetch('themedir','str:1:',$data['defaultThemeDir'],'themes',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('adminpagemenu', 'checkbox', $data['adminpagemenu'], (bool)xarModVars::get('themes', 'adminpagemenu'), XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVarFetch('userpagemenu', 'checkbox', $data['userpagemenu'], (bool)xarModVars::get('themes', 'userpagemenu'), XARVAR_NOT_REQUIRED)) {return;}
 //    if (!xarVarFetch('usedashboard', 'checkbox', $data['usedashboard'], (bool)xarModVars::get('themes', 'usedashboard'), XARVAR_NOT_REQUIRED)) {return;}
 //    if (!xarVarFetch('dashtemplate', 'str:1:', $data['dashtemplate'], trim(xarModVars::get('themes', 'dashtemplate')), XARVAR_NOT_REQUIRED)) {return;}
 
@@ -108,6 +109,7 @@ function themes_admin_modifyconfig()
             xarModVars::set('themes', 'AtomTag', $data['atomtag']);
             xarModVars::set('themes', 'variable_dump', $data['variable_dump']);
             xarModVars::set('themes', 'adminpagemenu', $data['adminpagemenu']);
+            xarModVars::set('themes', 'userpagemenu', $data['userpagemenu']);
 //            xarModVars::set('themes', 'usedashboard', $data['usedashboard']);
 //            xarModVars::set('themes', 'dashtemplate', $data['dashtemplate']);
             // <chris/> Instead of setting the base theme config var dir directly, 

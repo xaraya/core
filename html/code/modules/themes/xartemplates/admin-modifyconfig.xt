@@ -75,6 +75,20 @@
                             <xar:data-input type="checkbox" name="adminpagemenu" checked="$checked"/>
                         </div>
                     </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Use submenus in the page for user functions.</xar:var>
+                            <label for="userpagemenu" title="#$label#">
+                                Enable InPage User SubMenus
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="checked">
+                                <xar:var scope="module" module="themes" name="userpagemenu"/>
+                            </xar:set>
+                            <xar:data-input type="checkbox" name="userpagemenu" checked="$checked"/>
+                        </div>
+                    </div>
                 </fieldset>
                 <fieldset>
                     <legend>                    
