@@ -144,6 +144,14 @@ class UsernameProperty extends TextBoxProperty
         return parent::showOutput($data);
     }
     
+    public function showHidden(Array $data = array())
+    {
+        if (empty($data['value'])) {
+            $data['value'] = $this->getValue();
+        }
+        return parent::showHidden($data);
+    }
+    
     public function getValue()
     {
         if ($this->initialization_store_type == 'id') {
