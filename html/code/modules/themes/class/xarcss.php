@@ -404,15 +404,14 @@ class xarCSS extends Object
             'alternatedir' => !empty($alternatedir) ? xarVarPrepForOS($alternatedir) : '',
         );
 
-        // Local absolute url, just include it and return
+        // Local or remote absolute url, just include it and return
         // We support this above all for testing third party stuff we may later integrate
         $server = xarServer::getHost();
-        if (($tag['method'] == "link") && !empty($tag['source']) &&
-            preg_match("!://($server|localhost|127\.0\.0\.1)(:\d+|)/!",$tag['source'])) {
-            $tag['url'] = $tag['source'];       
+        if (($tag['method'] == "link") && !empty($tag['source'])) {
+            $tag['url'] = $tag['source'];
             return $this->queue($method, $scope, $tag['url'], $tag);
         }
-
+        
         // set additional params based on method
         switch ($method) {
             case 'embed':
