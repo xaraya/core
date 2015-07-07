@@ -1,8 +1,8 @@
 <object name="themes_jslibraries">
-  <objectid>549</objectid>
+  <objectid>648</objectid>
   <label>JS Libraries</label>
   <module_id>182</module_id>
-  <itemtype>209</itemtype>
+  <itemtype>235</itemtype>
   <class>DataObject</class>
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
@@ -16,49 +16,49 @@
   <objects>a:1:{i:0;a:2:{i:0;s:0:&quot;&quot;;i:1;s:0:&quot;&quot;;}}</objects>
   <category></category>
   <properties>
+    <property name="id">
+      <id>7303</id>
+      <label>ID</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source></source>
+      <status>65</status>
+      <seq>1</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
     <property name="seq">
-      <id>5897</id>
+      <id>7294</id>
       <label>Sequence</label>
       <type>integerbox</type>
       <defaultvalue></defaultvalue>
       <source></source>
       <status>33</status>
-      <seq>1</seq>
+      <seq>2</seq>
       <configuration>a:0:{}</configuration>
     </property>
     <property name="type">
-      <id>5903</id>
+      <id>7295</id>
       <label>Type</label>
       <type>dropdown</type>
       <defaultvalue>lib</defaultvalue>
       <source></source>
       <status>65</status>
-      <seq>2</seq>
+      <seq>3</seq>
       <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:26:"lib,Library;plugin,Plugin;";}</configuration>
     </property>
-    <property name="lib">
-      <id>5894</id>
-      <label>Library</label>
+    <property name="parent">
+      <id>10726</id>
+      <label>Parent</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source></source>
-      <status>65</status>
-      <seq>3</seq>
-      <configuration>a:0:{}</configuration>
-    </property>
-    <property name="version">
-      <id>5895</id>
-      <label>Version</label>
-      <type>textbox</type>
-      <defaultvalue></defaultvalue>
-      <source></source>
-      <status>65</status>
+      <status>33</status>
       <seq>4</seq>
       <configuration>a:0:{}</configuration>
     </property>
-    <property name="scope">
-      <id>5899</id>
-      <label>Scope</label>
+    <property name="lib">
+      <id>7296</id>
+      <label>Library</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source></source>
@@ -66,9 +66,9 @@
       <seq>5</seq>
       <configuration>a:0:{}</configuration>
     </property>
-    <property name="package">
-      <id>5900</id>
-      <label>Package</label>
+    <property name="version">
+      <id>7297</id>
+      <label>Version</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source></source>
@@ -76,9 +76,9 @@
       <seq>6</seq>
       <configuration>a:0:{}</configuration>
     </property>
-    <property name="base">
-      <id>5896</id>
-      <label>Path</label>
+    <property name="scope">
+      <id>7298</id>
+      <label>Scope</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source></source>
@@ -86,9 +86,9 @@
       <seq>7</seq>
       <configuration>a:0:{}</configuration>
     </property>
-    <property name="src">
-      <id>5901</id>
-      <label>Source</label>
+    <property name="package">
+      <id>7299</id>
+      <label>Package</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source></source>
@@ -96,19 +96,19 @@
       <seq>8</seq>
       <configuration>a:0:{}</configuration>
     </property>
-    <property name="load">
-      <id>5898</id>
-      <label>Load</label>
-      <type>checkbox</type>
+    <property name="base">
+      <id>7300</id>
+      <label>Path</label>
+      <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source></source>
-      <status>33</status>
+      <status>65</status>
       <seq>9</seq>
       <configuration>a:0:{}</configuration>
     </property>
-    <property name="id">
-      <id>5902</id>
-      <label>ID</label>
+    <property name="src">
+      <id>7301</id>
+      <label>Source</label>
       <type>textbox</type>
       <defaultvalue></defaultvalue>
       <source></source>
@@ -116,14 +116,24 @@
       <seq>10</seq>
       <configuration>a:0:{}</configuration>
     </property>
+    <property name="load">
+      <id>7302</id>
+      <label>Load</label>
+      <type>checkbox</type>
+      <defaultvalue></defaultvalue>
+      <source></source>
+      <status>33</status>
+      <seq>11</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
     <property name="position">
-      <id>5904</id>
+      <id>7304</id>
       <label>Position</label>
       <type>dropdown</type>
       <defaultvalue>head</defaultvalue>
       <source></source>
       <status>33</status>
-      <seq>11</seq>
+      <seq>12</seq>
       <configuration>a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:20:"head,Head;body,Body;";}</configuration>
     </property>
   </properties>
