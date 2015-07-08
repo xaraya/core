@@ -25,6 +25,13 @@
                                 <label for="noexceptions">Exception Handling</label>
                             </div>
                             <div class="xar-col">
+                                <xar:data-input type="radio" name="noexceptions" options="$exceptionoptions" value="$noexceptions"/>
+                            </div>
+                        </div>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                            </div>
+                            <div class="xar-col">
     By default the blocks module suppresses exceptions it encounters when displaying blocks. <br/>
     When developing blocks or block template over-rides for your site it may be useful to see those exceptions.<br/> 
     Exception messages are only visible to the debug administrators, which are defined <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">here</a>.
