@@ -52,14 +52,17 @@ function blocks_admin_modifyconfig()
             }
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
+                xarController::$request->msgAjax($data['module_settings']->getInvalids());
                 return xarTpl::module('blocks','admin','modifyconfig', $data);
             } else {
                 $itemid = $data['module_settings']->updateItem();
                 if (!xarVarFetch('noexceptions', 'int:0:1', $noexceptions, 0, XARVAR_NOT_REQUIRED)) return;
                 xarModVars::set('blocks', 'noexceptions', $noexceptions);
-                xarController::redirect(xarModURL('blocks', 'admin', 'modifyconfig'));
-                return true;
+            //    xarController::redirect(xarModURL('blocks', 'admin', 'modifyconfig'));
+            //    return true;
             }
+            // If this is an AJAX call, end here
+            xarController::$request->exitAjax();
         break;
     }
     return $data;
