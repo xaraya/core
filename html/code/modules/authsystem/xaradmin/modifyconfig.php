@@ -62,6 +62,8 @@ function authsystem_admin_modifyconfig()
             
             // If this is an AJAX call, end here
             xarController::$request->exitAjax();
+            xarController::redirect(xarServer::getCurrentURL());
+            return true;
             break;
     }
     return $data;

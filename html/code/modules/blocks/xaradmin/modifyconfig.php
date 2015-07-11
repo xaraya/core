@@ -36,7 +36,7 @@ function blocks_admin_modifyconfig()
     switch (strtolower($phase)) {
         case 'modify':
         default:
-            $noexceptions = xarModVars::get('blocks', 'noexceptions');
+            $noexceptions = (int)xarModVars::get('blocks', 'noexceptions');
             $data['noexceptions'] = (!isset($noexceptions)) ? 1 : $noexceptions;
 
             $data['exceptionoptions'] = array(
@@ -63,6 +63,8 @@ function blocks_admin_modifyconfig()
             }
             // If this is an AJAX call, end here
             xarController::$request->exitAjax();
+            xarController::redirect(xarServer::getCurrentURL());
+            return true;
         break;
     }
     return $data;

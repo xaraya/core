@@ -7,10 +7,10 @@
     <div class="xar-mod-body">
         <div class="xar-mod-page-head">
             <h2 class="xar-mod-pagetitle">Modify Authsystem Configuration</h2>
-            <xar:ajax-form form="myform"/>
+            <xar:ajax-form form="modifyconfig-form"/>
         </div>
         <div class="xar-mod-page-body">
-            <form id="myform" method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
+            <form id="modifyconfig-form" method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>General options</legend>
                     <xar:data-form object="$module_settings"/>
