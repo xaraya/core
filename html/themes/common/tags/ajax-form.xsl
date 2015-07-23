@@ -160,7 +160,7 @@ Usage
       request.done(function (response, textStatus, jqXHR){
       var submitworked = false;
         if(!response){
-            response = "Submitted successfuly";
+            response = "Submitted successfully";
             submitworked = true;
         };
         $("#</xsl:text><xsl:value-of select="$success" />
