@@ -220,8 +220,12 @@ class PropertyRegistration extends DataContainer
 
         // We do the whole thing, or not at all (given proper db support)
         try {
-             $dbconn->begin();
+            $dbconn->begin();
 
+# --------------------------------------------------------
+#
+# Get the list of properties directories in the active modules
+#
             if (!empty($dirs) && is_array($dirs)) {
                 // We got an array of directories passed in for which to import properties
                 // typical usecase: a module which has its own property, during install phase needs that property before
@@ -268,7 +272,10 @@ class PropertyRegistration extends DataContainer
                 self::ClearCache();
             }
 
-            // Get list of properties in properties directories
+# --------------------------------------------------------
+#
+# Get the list of properties in the various properties directories
+#
             static $loaded = array();
             $proptypes = array(); $numLoaded = 0;
             foreach($propDirs as $PropertiesDir) {
@@ -297,7 +304,10 @@ class PropertyRegistration extends DataContainer
                 } // loop over the files in a directory
             } // loop over the directories
 
-            // Now get the properties in the properties directory
+# --------------------------------------------------------
+#
+# Now get the properties in the properties directory
+#
             $propertiesdir = sys::code() . 'properties/';
             if (!file_exists($propertiesdir)) throw new DirectoryNotFoundException($propertiesdir);
 
@@ -317,18 +327,21 @@ class PropertyRegistration extends DataContainer
                     } catch (Exception $e) {
                         // Die silently for now
                         // $debugadmins = xarConfigVars::get(null, 'Site.User.DebugAdmins');
-                        // if (xarModVars::get('dynamicdata','debugmode') && in_array(xarUserGetVar('uname'),$debugadmins))                       
-                        //    echo xarML('The file #(1) could not be loaded', $dp . '.php');
+                        // if (xarModVars::get('dynamicdata','debugmode') && in_array(xarUser::getVar('id'),$debugadmins))                       
+                        // echo xarML('The file #(1) could not be loaded', $dp . '.php');
                     }
                     $loaded[$file] = true;
                 }
-            } // loop over the directories in the property directory
+            }
 
+# --------------------------------------------------------
+#
+# Sort the classes into the proper order for installation
+#
             // FIXME: this wont work reliable enough, since we have the static now
             // might as well put this directly after the include above.
             $newClasses = get_declared_classes();
 
-            // Sort the classes into the proper order for installation
             $classesToSort = array();
             $edges = array();
             foreach ($newClasses as $thisclass) {
@@ -339,14 +352,24 @@ class PropertyRegistration extends DataContainer
                 if (substr($thisclass, -7) == 'Install') continue;
                 
                 // Good class: add it to the array
-                $classesToSort[] = $thisclass;
+                $classesToSort[$thisclass] = $thisclass;
                 
-                if (isset($thisclass::$deferto) && is_array($thisclass::$deferto)) {
-                    foreach ($thisclass::$deferto as $defered) {
-                        $edges[] = array($defered,$thisclass);
+                if(property_exists($thisclass, 'deferto')) {
+                    $vars = get_class_vars($thisclass);
+                    $deferto = $vars['deferto'];
+                    if (isset($deferto) && is_array($deferto)) {
+                        foreach ($thisclass::$deferto as $defered) {
+                            $edges[$defered] = array($defered,$thisclass);
+                        }
                     }
                 }
             }
+
+            // Remove any deferments where the class is not loaded
+            foreach ($edges as $key => $value) {
+                if (!isset($classesToSort[$key])) unset($edges[$key]);
+            }
+
             // Now sort the properties in the order they need to be installed
             $sortedClasses = self::topological_sort($classesToSort, $edges);
             
