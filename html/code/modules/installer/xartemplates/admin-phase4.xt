@@ -127,7 +127,7 @@
                 </div>
                 <div class="xar-col">
                     <input type="checkbox" name="install_create_database" id="install_create_database" value="1"/>
-                    &#160;(MySQL/MySQLi only)
+                    &#160;(MySQL only)
                 </div>
             </div>
             <p>
