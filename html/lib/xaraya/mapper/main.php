@@ -71,11 +71,8 @@ class xarController extends Object
             $poststring = '$_POST["' . substr($name,0,$position) . '"]' . substr($name,$position);            
         }
         $isset = false;
-        try {
-            eval("\$isset = isset($poststring);");
-        } catch (Exception $e) {
-            // Die silently for now
-        }
+        // For now, die silently if this fails
+        @eval("\$isset = isset($poststring);");
 
         if ($allowOnlyMethod == 'GET') {
             // Short URLs variables override GET variables
