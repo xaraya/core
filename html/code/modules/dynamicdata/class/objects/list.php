@@ -185,8 +185,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // If the data changed, save it
             if (!$unchanged) {
                 $db_items[$key] = $items_to_update[$key] + $db_item;
-                $single_object->updateItem($db_items[$key]);
-                var_dump($key);
+                $single_object->setFieldValues($db_items[$key],1);
+                $single_object->updateItem(array('itemid' => $key));
             }
         }
         return true;
