@@ -121,6 +121,76 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         return true;
     }
 
+    public function checkInput(Array $args = array())
+    {
+        // First get the itemids
+        if (!xarVarFetch($this->primary, 'array', $data['id'], array(), XARVAR_NOT_REQUIRED)) return;
+        if (empty($data['id'])) return true;
+        
+        // Clean the data found
+        foreach ($data['id'] as $k => $v) $data['id'][$k] = (int)$v;
+        
+        // Get the properties we will be looking at
+        $propertynames = array_keys($this->properties);
+        foreach ($propertynames as $k => $name) {
+            // No DISABLED properies
+            if($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) {
+                unset($propertynames[$key]);
+            }
+        }
+        
+        // Get the data from the form
+        $formitems = array();
+        foreach ($data['id'] as $id) {
+            $formitem = array();
+            foreach ($propertynames as $name) {
+                $isvalid = $this->properties[$name]->checkInput($name . "[" . $id . "]");
+                if ($isvalid) $formitem[$name] = $this->properties[$name]->value;
+            }
+            $formitems[$id] = $formitem;
+            
+        }
+        // Save the items for reuse
+        $this->items = $formitems;
+        return $formitems;
+    }
+
+    public function updateItems(Array $args = array())
+    {
+        // Get the items to be updated
+        if (isset($args['items'])) {
+            $items_to_update = $args['items'];
+        } else {
+            $items_to_update = $this->items;
+        }
+        
+        // Next, get the items corresponding to the itemids we have to updateq
+        $q = $this->dataquery;
+        $primarysource = $this->properties[$this->primary]->source;
+        $q->in($primarysource, array_keys($items_to_update));
+        $db_items = $this->getItems();
+        
+        // Replace the DB data with the data to be updated
+        $single_object = DataObjectMaster:: getObject(array('name' => $this->name));
+        foreach ($db_items as $key => $db_item) {
+            // Check if the data changed
+            $unchanged = true;
+            foreach ($items_to_update[$key] as $field_key => $field_value) {
+                if ($db_item[$field_key] != $field_value) {
+                    $unchanged = false;
+                    break;
+                }
+            }
+            
+            // If the data changed, save it
+            if (!$unchanged) {
+                $db_items[$key] = $items_to_update[$key] + $db_item;
+                $single_object->updateItem($db_items[$key]);
+                var_dump($key);
+            }
+        }
+        return true;
+    }
     /**
      * Set arguments for the DataObjectList class
      *
