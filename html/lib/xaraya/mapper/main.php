@@ -70,6 +70,7 @@ class xarController extends Object
             $position = strpos($name, '[');
             $poststring = '$_POST["' . substr($name,0,$position) . '"]' . substr($name,$position);            
         }
+        $isset = false;
         eval("\$isset = isset($poststring);");
 
         if ($allowOnlyMethod == 'GET') {
