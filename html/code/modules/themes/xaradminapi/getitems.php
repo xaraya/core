@@ -25,16 +25,17 @@ function themes_adminapi_getitems(Array $args=array())
     $tables =& xarDB::getTables();
     $themes_table = $tables['themes'];
     
-    $select = array();
-    $where = array();
-    $orderby = array();
+    $select   = array();
+    $where    = array();
+    $orderby  = array();
     $bindvars = array();
     
-    $select['regid'] = 'themes.regid';
-    $select['name'] = 'themes.name';
-    $select['directory'] = 'themes.directory';
-    $select['state'] = 'themes.state';
-    $select['class'] = 'themes.class';
+    $select['regid']         = 'themes.regid';
+    $select['name']          = 'themes.name';
+    $select['directory']     = 'themes.directory';
+    $select['state']         = 'themes.state';
+    $select['class']         = 'themes.class';
+    $select['configuration'] = 'themes.configuration';
 
     if (isset($name)) {
         $where[] = 'themes.name = ?';

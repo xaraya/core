@@ -435,6 +435,7 @@ class xarMod extends Object implements IxarMod
                              name,
                              directory,
                              version,
+                             configuration,
                              state
                        FROM  $the_table WHERE regid = ?";
             break;
@@ -463,6 +464,7 @@ class xarMod extends Object implements IxarMod
                  $modInfo['name'],
                  $modInfo['directory'],
                  $modInfo['version'],
+                 $modInfo['configuration'],
                  $modInfo['state']) = $result->getRow();
             break;
         }
