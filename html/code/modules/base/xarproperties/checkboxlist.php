@@ -65,7 +65,8 @@ class CheckboxListProperty extends SelectProperty
 
     public function showOutput(Array $data = array())
     {
-        if (!isset($data['value'])) $data['value'] = $this->getValue();
+        if (isset($data['value'])) $this->value = $data['value'];
+        $data['value'] = $this->getValue();
         $data['options'] = $this->getOptions();
         return parent::showOutput($data);
     }
@@ -84,9 +85,16 @@ class CheckboxListProperty extends SelectProperty
 
     public function getValue()
     {
-        if (!is_array($this->value) && is_string($this->value) && !empty($this->value)) 
-            return explode(',', $this->value);
-        else return array();
+        if (!is_array($this->value)) {
+            if (is_string($this->value) && !empty($this->value)) {
+                $value = explode(',', $this->value);
+            } else {
+                $value = array();
+            }
+        } else {
+            $value = $this->value;
+        }
+        return $value;
     }
 
     public function setValue($value=null)
