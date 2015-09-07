@@ -40,7 +40,7 @@ class XarayaSourceTemplate extends SourceTemplate
             // theme is irrelevant, date is seen in the filesystem, sourcefile in CACHEKEYS, why? it complicates the system a lot.
             $commentBlock = "<?php\n/*"
                           . "\n * Source:     " . $this->fileName         // redundant
-                          . "\n * Theme:      " . xarTpl::getThemeName()  // confusing (can be any theme now, its the theme during compilation, which is also shown on the above line)
+                          . "\n * Theme:      " . xarTpl::getThemeName()  // confusing (can be any theme now, it's the theme during compilation, which is also shown on the above line)
                           . "\n * Compiled: ~ " . date('Y-m-d H:i:s T') // redundant
                           . "\n */\n?>\n";
             $out .= $commentBlock;

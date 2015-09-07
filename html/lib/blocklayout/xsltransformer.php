@@ -69,6 +69,7 @@ class BlockLayoutXSLTProcessor extends Object
             // Set up the parameters
             $this->xslProc->setParameter('','bl_filename',basename($this->xmlFile));
             $this->xslProc->setParameter('','bl_dirname',dirname($this->xmlFile));
+            $this->xslProc->setParameter('','bl_doctype',xarTpl::getDocType());
         }
 
     }

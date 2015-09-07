@@ -28,6 +28,43 @@
                             <input type="text" id="themedir" name="themedir" value="#$value#" maxlength="100" class="xar-form-textlong"/>
                         </div>
                     </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">The default document type the BL compiler will produce</xar:var>
+                            <label for="doctype" title="#$label#">
+                                Default Document Type:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="value">
+                                <xar:var scope="config"  name="Site.BL.DocType"/>
+                            </xar:set>
+                            <xar:set name="options">
+                                array(
+                                    array('id' => 'html2', 'name' => 'html2'),
+                                    array('id' => 'html32', 'name' => 'html32'),
+                                    array('id' => 'html401-strict', 'name' => 'html401-strict'),
+                                    array('id' => 'html401-transitional', 'name' => 'html401-transitional'),
+                                    array('id' => 'html401-frameset', 'name' => 'html401-frameset'),
+                                    array('id' => 'xhtml1-strict', 'name' => 'xhtml1-strict'),
+                                    array('id' => 'xhtml1-transitional', 'name' => 'xhtml1-transitional'),
+                                    array('id' => 'xhtml1-frameset', 'name' => 'xhtml1-frameset'),
+                                    array('id' => 'xhtml11', 'name' => 'xhtml11'),
+                                    array('id' => 'mathml101', 'name' => 'mathml101'),
+                                    array('id' => 'mathml2', 'name' => 'mathml2'),
+                                    array('id' => 'svg10', 'name' => 'svg10'),
+                                    array('id' => 'svg11', 'name' => 'svg11'),
+                                    array('id' => 'svg11-basic', 'name' => 'svg11-basic'),
+                                    array('id' => 'svg11-tiny', 'name' => 'svg11-tiny'),
+                                    array('id' => 'xhtml-math-svg', 'name' => 'xhtml-math-svg'),
+                                    array('id' => 'svg-xhtml-math', 'name' => 'svg-xhtml-math'),
+                                    array('id' => 'rss', 'name' => 'rss'),
+                                    array('id' => 'html5', 'name' => 'html5'),
+                                )
+                            </xar:set>
+                            <xar:data-input type="dropdown" id="doctype" name="doctype" value="$value" options="$options" class="xar-form-textlong"/>
+                        </div>
+                    </div>
                     <!--
                     <div class="xar-row">
                         <div class="xar-col">

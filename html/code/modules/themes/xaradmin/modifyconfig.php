@@ -39,6 +39,7 @@ function themes_admin_modifyconfig()
     if (!xarVarFetch('copyright', 'str', $data['copyright'], xarModVars::get('themes', 'SiteCopyRight'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('AtomTag', 'str:1:', $data['atomtag'], (bool)xarModVars::get('themes', 'AtomTag'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('compresswhitespace', 'int', $data['compresswhitespace'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('doctype', 'str:1', $data['doctype'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('debugmode', 'int', $data['debugmode'], 0, XARVAR_NOT_REQUIRED)) return;
 
     if (!xarVarFetch('themedir','str:1:',$data['defaultThemeDir'],'themes',XARVAR_NOT_REQUIRED)) return;
@@ -120,6 +121,7 @@ function themes_admin_modifyconfig()
             xarConfigVars::set(null, 'Site.BL.CacheTemplates',$data['cachetemplates']);
             xarConfigVars::set(null, 'Site.BL.MemCacheTemplates',$data['memcachetemplates']);
             xarConfigVars::set(null, 'Site.BL.CompressWhitespace',$data['compresswhitespace']);
+            xarConfigVars::set(null, 'Site.BL.DocType',$data['doctype']);
             xarConfigVars::set(null, 'Site.Core.AllowAJAX',$data['allowajax']);
             xarModVars::set('themes', 'hidecore', $data['hidecore']);
             xarModVars::set('themes', 'selstyle', $data['selstyle']);
@@ -147,6 +149,8 @@ function themes_admin_modifyconfig()
                 foreach ($files as $file) unlink($picker->initialization_basedirectory . "/" . $file['id']);
             }
             
+            xarController::redirect(xarModURL('themes', 'admin', 'modifyconfig'));
+            return true;
             break;
         case 'flush':
             sys::import('modules.dynamicdata.class.properties.master');

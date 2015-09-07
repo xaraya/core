@@ -64,6 +64,9 @@ class xarTpl extends Object
         // This is the theme directory, solo (aka, themename)
         self::setThemeDir($args['defaultThemeDir']);
         
+        // This is the default document type
+        self::$doctype = $args['defaultDocType'];
+        
         // This should be always true or better defined if it's 
         // a client thing (js internal code generation for example)
         self::$generateXMLURLs = $args['generateXMLURLs'];
