@@ -167,7 +167,11 @@ class DataObjectMaster extends Object
         }
 //        $this->dataquery->qecho();echo "<br/><br />";
         // build the list of relevant data stores where we'll get/set our data
-        $this->getDataStore();
+        try {
+            $this->getDataStore();
+        } catch (Exception $e) {
+            echo $e->getMessage();;
+        }
            
         // Explode the configuration
         try{
@@ -211,7 +215,7 @@ class DataObjectMaster extends Object
             try {
                 $fieldlist = explode(',',$fieldlist);
             } catch (Exception $e) {
-                throw new Exception('Badly formed fieldlist attribute');
+                throw new Exception(xarML('Badly formed fieldlist attribute'));
             }
         }
         $this->fieldlist = array();
@@ -300,10 +304,14 @@ class DataObjectMaster extends Object
         switch ($this->datastore) {
             case 'relational': $this->addDataStore('relational', 'relational'); break;
             case 'module_variables': 
-                $firstproperty = reset($this->properties);
-                // FIXME: this needs a better design
-                $name = trim(substr($firstproperty->source,17));
-                $this->addDataStore($name, 'modulevars'); 
+                try {
+                    $firstproperty = reset($this->properties);
+                    // FIXME: this needs a better design
+                    $name = trim(substr($firstproperty->source,17));
+                    $this->addDataStore($name, 'modulevars'); 
+                } catch (Exception $e) {
+                    throw new Exception(xarML('Did not find a first property for module variable datastore'));
+                }
                 break;
             case 'dynamicdata': $this->addDataStore('_dynamic_data_', 'data'); break;
         }
