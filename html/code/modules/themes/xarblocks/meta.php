@@ -94,6 +94,14 @@ class Themes_MetaBlock extends BasicBlock
                     'dir' => '',
                     'scheme' => '',
                 );
+                $metatags[] = array(
+                    'type' => 'name',
+                    'value' => 'viewport',
+                    'content' => 'width=device-width, initial-scale=1.0',
+                    'lang' => '',
+                    'dir' => '',
+                    'scheme' => '',
+                );
                 if (!empty($data['usegeo'])) {
                     if (!empty($data['latitude']) && !empty($data['longitude']))
                         $content = $data['latitude'] . ', ' . $data['longitude'];
