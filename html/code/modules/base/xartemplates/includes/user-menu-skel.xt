@@ -20,7 +20,7 @@
                 <xar:if condition="!empty($tabs['title'])">
                     <li class="xar-tabs-label" title="#$tabs.title#">#$tabs.label#:</li>
                 <xar:else/>
-                    <li class="xar-tabs-label">#$tabs.label#:</li>
+                    <li class="xar-tabs-label">#$tabs.label#</li>
                 </xar:if>
                 
                 <xar:foreach in="$tabs['menulinks']" value="$tab">
