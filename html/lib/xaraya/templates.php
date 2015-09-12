@@ -40,7 +40,7 @@ class xarTpl extends Object
     protected static $themeDir;
     
     protected static $generateXMLURLs  = true;
-    protected static $doctype          = '';
+    protected static $doctype          = 'xhtml1-strict';
     protected static $pageTemplateName;
     protected static $pageTitle;
     
@@ -65,7 +65,7 @@ class xarTpl extends Object
         self::setThemeDir($args['defaultThemeDir']);
         
         // This is the default document type
-        self::$doctype = $args['defaultDocType'];
+        if (isset($args['defaultDocType'])) self::$doctype = $args['defaultDocType'];
         
         // This should be always true or better defined if it's 
         // a client thing (js internal code generation for example)
