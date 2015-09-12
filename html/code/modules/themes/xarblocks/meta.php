@@ -288,6 +288,14 @@ class Themes_MetaBlock extends BasicBlock
             'dir' => '',
             'scheme' => '',
         );
+        $metatags[] = array(
+            'type' => 'name',
+            'value' => 'viewport',
+            'content' => 'width=device-width, initial-scale=1.0',
+            'lang' => '',
+            'dir' => '',
+            'scheme' => '',
+        );
         return $metatags;
     }
     
