@@ -9,7 +9,7 @@
  * @copyright 2003-2005  The PHP Group    
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
- * @link http://xaraya.com/index.php/release/771.html
+ * @link http://xaraya.info/index.php/release/771.html
  * @author Richard Heyes
  */
 

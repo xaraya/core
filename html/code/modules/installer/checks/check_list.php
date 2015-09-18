@@ -8,7 +8,7 @@
  * @link http://www.xaraya.info
  *
  * @subpackage installer module
- * @link http://xaraya.com/index.php/release/200.html
+ * @link http://xaraya.info/index.php/release/200.html
  */
 /**
  * Check List file
@@ -19,7 +19,7 @@
  * @link http://www.xaraya.info
  *
  * @subpackage installer module
- * @link http://xaraya.com/index.php/release/200.html
+ * @link http://xaraya.info/index.php/release/200.html
  */
 /* WARNING
  * Modification of this file is not supported.

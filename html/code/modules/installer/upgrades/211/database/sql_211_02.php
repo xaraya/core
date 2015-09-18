@@ -8,7 +8,7 @@
  * @link http://www.xaraya.info
  *
  * @subpackage installer module
- * @link http://xaraya.com/index.php/release/200.html
+ * @link http://xaraya.info/index.php/release/200.html
  */
 
 function sql_211_02()

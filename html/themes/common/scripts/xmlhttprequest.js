@@ -7,7 +7,7 @@
  * @link http://www.xaraya.info
  *
  * @subpackage base module
- * @link http://xaraya.com/index.php/release/68.html
+ * @link http://xaraya.info/index.php/release/68.html
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
 
