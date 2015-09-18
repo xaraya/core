@@ -45,7 +45,7 @@ function base_admin_release()
     sys::import('modules.base.class.feedParser');
     // Check and see if a feed has been supplied to us.
     // Need to change the url once release module is moved to
-    $feedfile = "http://www.xaraya.com/index.php?module=release&func=rssviewnotes&theme=rss&releaseno=$releasenumber";
+    $feedfile = "http://xaraya.info/index.php?module=release&func=rssviewnotes&theme=rss&releaseno=$releasenumber";
 
     // Get the feed file (from cache or from the remote site)
     $feeddata = xarMod::apiFunc('base', 'user', 'getfile',
