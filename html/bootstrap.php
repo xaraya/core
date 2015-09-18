@@ -20,7 +20,7 @@
  * @subpackage core
  * @copyright (C) copyright-placeholder
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
+ * @link http://www.xaraya.info
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
 
