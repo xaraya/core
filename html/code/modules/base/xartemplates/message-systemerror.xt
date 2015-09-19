@@ -38,13 +38,14 @@
 </pre>
         </xar:if>
         <xar:if condition="isset($product) and $product ne ''">
-            <p>
-                <a href="http://bugs.xaraya.com/enter_bug.cgi?product=#$product#&amp;component=#$component#&amp;comment=#$short#"
+<!-- Properly update for use with GitHub. http://bugs.xaraya.com/enter_bug.cgi?product=#$product#&amp;component=#$component#&amp;comment=#$short# Maybe "$product" or "$component" could supply "core", "modules", "blocks", "themes", or "properties"?     -->
+		  <p>
+                <a href="https://github.com/xaraya/core/issues"
                 target="_blank">Click here to raise a bug</a>
             </p>
             <xar:else />
             <p>
-                <a href="http://bugs.xaraya.com/enter_bug.cgi">Click here to raise a bug</a>
+                <a href="https://github.com/xaraya/core/issues">Click here to raise a bug</a>
             </p>
         </xar:if>
     </div>

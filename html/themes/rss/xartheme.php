@@ -5,7 +5,7 @@
  *
  * @copyright see the html/credits.html file in this release
  * @license GPL <http://www.gnu.org/licenses/gpl.html>
- * @link http://www.xaraya.com
+ * @link http://www.xaraya.info
  * @subpackage RSS theme
  * @author Xaraya Development Team
 **/
