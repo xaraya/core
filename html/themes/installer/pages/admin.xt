@@ -9,7 +9,7 @@
     <meta name="ROBOTS" content="NOINDEX,NOFOLLOW"/>
     <meta name="resource-type" content="document"/>
     <meta http-equiv="expires" content="0"/>
-    <meta name="generator" content="Xaraya; - http://www.xaraya.com"/>
+    <meta name="generator" content="Xaraya; - http://www.xaraya.info"/>
     <meta name="rating" content="General"/>
     <link rel="stylesheet" type="text/css" href="themes/common/style/core.css"/>
     <link rel="stylesheet" type="text/css" href="themes/installer/style/style.css"/>
@@ -49,17 +49,15 @@
             <ul id="navbar_core">
                 <!--
                 <li class="navbar-item">
-                    <a href="http://www.xaraya.com/index.php/xarbb">Support Forums</a>
+                    <a href="http://www.xaraya.info">Main Site</a>
                 </li>
                 <li class="navbar-item">
-                    <a href="news://news.xaraya.com">Newsgroups</a>
+                    <a href="http://xarmaica.com/">Community Site</a>
                 </li>
-                <li class="navbar-item">
-                    <a href="irc://irc.xaraya.com">IRC Support</a>
-                </li>
+
                 -->
                 <li class="navbar-item">
-                    <a href="http://www.xaraya.com/index.php/xarpages/support" target="_blank">Support at www.xaraya.com</a>
+                    <a href="http://xarmaica.com/" target="_blank">Support at our Community Site</a>
                 </li>
                 <li class="navbar-item">
                     <a href="docs/license.html" target="_blank">GNU General Public License</a>
@@ -70,16 +68,16 @@
                 <xar:if condition="$isupgrade eq '1'">
                 <!--
                     <li class="navbar-item">
-                        <a href="http://www.xaraya.com/index.php/documentation/586">Upgrade Guide</a>
+                        <a href="http://www.xaraya.info/index.php/documentation/586">Upgrade Guide</a>
                     </li>
                 -->
                 <xar:else />
                 <!--
                     <li class="navbar-item">
-                        <a href="http://www.xaraya.com/index.php/documentation/96">Prepare for Install</a>
+                        <a href="http://www.xaraya.info/index.php/documentation/96">Prepare for Install</a>
                     </li>
                     <li class="navbar-item">
-                        <a href="http://www.xaraya.com/index.php/documentation/97">Install Guide</a>
+                        <a href="http://www.xaraya.info/index.php/documentation/97">Install Guide</a>
                     </li>
                     -->
                 </xar:if>
