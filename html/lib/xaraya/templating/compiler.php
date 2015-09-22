@@ -32,6 +32,8 @@ sys::import('blocklayout.compiler');
 
 class XarayaCompiler extends xarBLCompiler
 {    
+    private $legacy_compile = true;
+    
     public static function &instance()
     {
         if(self::$instance == null) {
@@ -184,6 +186,21 @@ class XarayaCompiler extends xarBLCompiler
             }
         }            
         return $files;
+    }
+
+    protected function getProcessor($xslFile='')
+    {   
+        if ($this->legacy_compile) {
+            $xslProc = parent::getProcessor($xslFile);
+        } else {
+            sys::import('xaraya/templating/xsltransformer');
+            if (empty($xslFile)) {
+                $xslProc = new XarayaLayoutXSLTProcessor();
+            } else {
+                $xslProc = new XarayaLayoutXSLTProcessor($xslFile);
+            }
+        }
+        return $xslProc;
     }
 }
 

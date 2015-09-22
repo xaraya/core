@@ -110,16 +110,26 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         return array();
     }
     
+    protected function getProcessor($xslFile='')
+    {
+        sys::import('blocklayout.xsltransformer');
+        if (empty($xslFile)) {
+            $xslProc = new BlockLayoutXSLTProcessor();
+        } else {
+            $xslProc = new BlockLayoutXSLTProcessor($xslFile);
+        }
+        return $xslProc;
+    }
+    
     /**
      * Private methods
      */
-    private function boot()
+    protected function boot()
     {
-        sys::import('blocklayout.xsltransformer');
         $xslFile = sys::lib() . 'blocklayout/xslt/booter.xsl';
-        $xslProc = new BlockLayoutXSLTProcessor($xslFile);
+        $xslProc = $this->getProcessor($xslFile);
         $xmlFile = sys::lib() . 'blocklayout/xslt/xar2php.xsl';
-        $doc = new DOMDocument;
+        $doc = new DOMDocument();
         $doc->load($xmlFile);
 
         // Pass the default tags
@@ -160,11 +170,10 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         return $outDoc;
     }
 
-    private function compile(&$templateSource)
+    protected function compile(&$templateSource)
     {
         if (!isset($this->processor)) {
-            sys::import('blocklayout.xsltransformer');
-            $this->processor = new BlockLayoutXSLTProcessor();
+            $this->processor = $this->getProcessor();
             $xslDoc = new DOMDocument;
             $xslDoc->loadXML($this->boot());
             $this->processor->importStyleSheet($xslDoc);

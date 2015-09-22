@@ -13,16 +13,17 @@
  * @author Marcel van der Boom <marcel@xaraya.com>
 **/
 
-sys::import('blocklayout.compiler'); // expression transformer
+sys::import('blocklayout.compiler');
+
 class BlockLayoutXSLTProcessor extends Object
 {
-    private $xslProc = null;    // Object representing the processor.
-    private $xslDoc  = null;    // Object representing the stylesheet.
-    private $xmlDoc  = null;    // Object representing the input XML.
+    protected $xslProc = null;    // Object representing the processor.
+    protected $xslDoc  = null;    // Object representing the stylesheet.
+    protected $xmlDoc  = null;    // Object representing the input XML.
 
-    private $origXml = '';      // The original XML
-    private $prepXml = '';      // The preprocessed XML
-    private $postXml = '';      // The transformed result XML
+    protected $origXml = '';      // The original XML
+    protected $prepXml = '';      // The preprocessed XML
+    protected $postXml = '';      // The transformed result XML
 
     public  $xmlFile = null;
 
@@ -45,7 +46,7 @@ class BlockLayoutXSLTProcessor extends Object
     }
 
     // This will become public once we have more pipes
-    private function setStyleSheet($xslFile)
+    protected function setStyleSheet($xslFile)
     {
         $this->xslDoc = new DOMDocument();
         $this->xslDoc->load($xslFile);
@@ -53,7 +54,7 @@ class BlockLayoutXSLTProcessor extends Object
 
     }
 
-    private function setSourceDocument(&$xml)
+    protected function setSourceDocument(&$xml)
     {
         $this->xmlDoc = new DOMDocument();
         // Setting this to false makes it 2 times faster, what do we loose?
@@ -71,10 +72,9 @@ class BlockLayoutXSLTProcessor extends Object
             $this->xslProc->setParameter('','bl_dirname',dirname($this->xmlFile));
             $this->xslProc->setParameter('','bl_doctype',xarTpl::getDocType());
         }
-
     }
 
-    private function preProcess()
+    protected function preProcess()
     {
         // Make sure our entities look like expressions
         // &xar-entity; -> #[whatever expression it needs]#
@@ -133,7 +133,7 @@ class BlockLayoutXSLTProcessor extends Object
         return $this->postXML;
     }
 
-    private function postProcess()
+    protected function postProcess()
     {
         /*
             Expressions in attributes are not handled by the transform because
@@ -252,6 +252,5 @@ class XsltCallbacks extends Object
         xarLog::message('XsltCallbacks::entities: found in xml source:'.$entityName);
         return $matches[0];
     }
-
 }
 ?>
