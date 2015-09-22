@@ -102,6 +102,15 @@ class MultiSelectProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
+    public function showHidden(Array $data = array())
+    {
+        if (isset($data['single'])) $this->validation_single = $data['single'];
+        if (isset($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        $data['value'] = $this->getSerializedValue($data['value']);
+        return parent::showHidden($data);
+    }
+
     public function getValue()
     {
         return $this->getSerializedValue($this->value);
