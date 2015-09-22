@@ -171,7 +171,6 @@ function themes_admin_view_jslibs()
             if(!xarVarFetch('dd_package',  'array', $dd_package,  array(), XARVAR_DONT_SET)) {return;}
             if(!xarVarFetch('dd_base',     'array', $dd_base,     array(), XARVAR_DONT_SET)) {return;}
             if(!xarVarFetch('dd_src',      'array', $dd_src,      array(), XARVAR_DONT_SET)) {return;}
-            if(!xarVarFetch('dd_load',     'array', $dd_load,     array(), XARVAR_DONT_SET)) {return;}
 
             $libobject->remote_libs = array();
             foreach ($dd_id as $id) {

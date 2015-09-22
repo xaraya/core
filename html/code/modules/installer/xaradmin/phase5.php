@@ -225,6 +225,7 @@ function installer_admin_phase5()
     xarVar_init($a);
     xarConfigVars::set(null, 'System.ModuleAliases',array());
     xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
+    xarConfigVars::set(null, 'Site.BL.DocType', 'xhtml1-strict');
     
     // 3. Load the definitions of all the modules in the modules table
     $prefix = xarDB::getPrefix();

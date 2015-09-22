@@ -32,7 +32,6 @@ function installer_admin_finish()
     // Defaults for templating engine options 
     xarConfigVars::set(null, 'Site.BL.CompressWhitespace', 1);
     xarConfigVars::set(null, 'Site.BL.MemCacheTemplates', false);
-    xarConfigVars::set(null, 'Site.BL.DocType', 'xhtml1-strict');
 
     // Default for AJAX calls
     xarConfigVars::set(null, 'Site.Core.AllowAJAX', true);
