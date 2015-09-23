@@ -17,10 +17,11 @@ sys::import('modules.dynamicdata.class.properties.base');
 
 class SelectProperty extends DataProperty
 {
-    public $id   = 6;
-    public $name = 'dropdown';
-    public $desc = 'Dropdown List';
+    public $id         = 6;
+    public $name       = 'dropdown';
+    public $desc       = 'Dropdown List';
     public $reqmodules = array('base');
+    public $basetype   = 'dropdown';
 
     public $options;
     public $old_config = array();

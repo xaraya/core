@@ -208,6 +208,50 @@ class DataObjectMaster extends Object
         }
     }
 
+    /**
+     * Show an filter form for this item
+     */
+    public function showFilterForm(Array $args = array())
+    {
+        $args = $args + $this->getPublicProperties();
+        $this->setFieldPrefix($args['fieldprefix']);
+
+        // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
+        if(!empty($args['preview'])) $this->checkInput();
+
+// CHECKME: this has no real purpose here anymore ???
+        // Set all properties based on what is passed in.
+        $properties = $this->getProperties($args);
+
+        if (!empty($args['fieldlist']) && !is_array($args['fieldlist'])) {
+            $args['fieldlist'] = explode(',',$args['fieldlist']);
+            if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
+        }
+        
+        if(count($args['fieldlist']) > 0) {
+            $fields = $args['fieldlist'];
+        } else {
+            $fields = array_keys($this->properties);
+        }
+
+        $args['properties'] = array();
+        foreach($fields as $name) {
+            if(!isset($this->properties[$name])) continue;
+
+            if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+            || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)) continue;
+
+            $args['properties'][$name] =& $this->properties[$name];
+        }
+
+        // pass some extra template variables for use in BL tags, API calls etc.
+        //FIXME: check these
+        $args['isprimary'] = !empty($this->primary);
+        $args['catid'] = !empty($this->catid) ? $this->catid : null;
+        $args['object'] = $this;
+        return xarTpl::object($args['tplmodule'],$args['template'],'showfilterform',$args);
+    }
+
     public function setFieldList($fieldlist=array(),$status=array())
     {
         if (empty($fieldlist)) $fieldlist = $this->setupFieldList();

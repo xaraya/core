@@ -534,7 +534,12 @@ class DataProperty extends Object implements iDataProperty
      */
     function showFilter(Array $data=array())
     {
+        // A filter cannot be hidden or disables
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) return "";
+        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) return "";
+        
+        // Make sure we can enter a value here
+        $this->setInputStatus(DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY);
         
         $data['id']    = $this->id;
         $data['name']  = $this->name;
@@ -557,8 +562,11 @@ class DataProperty extends Object implements iDataProperty
         $data['filters'] = isset($data['filters']) ? $data['filters'] : array();
         
         // Explicitly cater to the most common basetypes so as to avoid duplication in the extensions
-        if ($this->basetype == 'number') $data['filters'] = array('=','!=','>','>=','<','<=','like','notlike','null','notnull');
-        elseif ($this->basetype == 'string') $data['filters'] = array('=','!=','like','notlike','null','notnull','regex');
+        $numbertypes = array('number','decimal','integer','float');
+        $stringtypes = array('string');
+        if (in_array($this->basetype, $numbertypes)) $data['filters'] = array('=','!=','>','>=','<','<=','like','notlike','null','notnull');
+        elseif (in_array($this->basetype, $stringtypes)) $data['filters'] = array('=','!=','like','notlike','null','notnull','regex');
+        elseif (in_array($this->basetype, array('dropdown'))) $data['filters'] = array('=');
         
         // Now create the filter options for the dropdown
         $data['options'] = array();
