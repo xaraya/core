@@ -65,7 +65,8 @@ function dynamicdata_user_filtertag(Array $args=array())
         $data['properties'] = array();
         foreach ($properties as $name => $property) {
             if (!empty($args['fieldlist']) && !in_array($name,$args['fieldlist'])) continue;
-            $data['properties'][$name] = $property;
+            $property->value = $property->defaultvalue;
+            $data['properties'][$name] =& $property;
         }
         $data['button'] = $args['button'];
         $data['return_url'] = $args['return_url'];
