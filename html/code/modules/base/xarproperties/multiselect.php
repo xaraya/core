@@ -108,6 +108,29 @@ class MultiSelectProperty extends SelectProperty
         if (isset($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
         if (!isset($data['value'])) $data['value'] = $this->value;
         $data['value'] = $this->getSerializedValue($data['value']);
+
+        // Grab this code from the dropdown property
+        // If we have options passed, take them. Otherwise generate them
+        if (!isset($data['options'])) {
+
+        // Parse a configuration if one was passed
+            if(isset($data['configuration'])) {
+                $this->parseConfiguration($data['configuration']);
+                unset($data['configuration']);
+            // Legacy support: if the validation field is an array, we'll assume that this is an array of id => name
+            } elseif (!empty($data['validation']) && is_array($data['validation']) && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
+                sys::import('xaraya.legacy.validations');
+                $this->options = dropdown($data['validation']);
+            }
+
+        // Allow overriding by specific parameters
+            if (isset($data['function']))   $this->initialization_function = $data['function'];
+            if (isset($data['file']))       $this->initialization_file = $data['file'];
+            if (isset($data['collection'])) $this->initialization_collection = $data['collection'];
+
+        // Finally generate the options
+            $data['options'] = $this->getOptions();
+        }
         return parent::showHidden($data);
     }
 
