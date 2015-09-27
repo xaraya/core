@@ -55,13 +55,16 @@ function dynamicdata_user_filtertag(Array $args=array())
     } else {
         if (!isset($args['return_url'])) $args['return_url'] = xarServer::getCurrentURL();
         if (!isset($args['button'])) $args['button'] = xarML('Submit');
-        if (!isset($args['fields'])) $args['fields'] = array();
-        if (!is_array($args['fields'])) $args['fields'] = explode(',',$args['fields']);
+        $fields = '';
+        if (isset($args['fieldlist'])) $fields = $args['fieldlist'];
+        $args['fieldlist'] = explode(',', $fields);
+        if (!is_array($fields)) $args['fieldlist'] = explode(',', $fields);
         if (!isset($args['object'])) throw new Exception('Missing $object for filter tag');
         $properties = $args['object']->getProperties();
+        
         $data['properties'] = array();
         foreach ($properties as $name => $property) {
-            if (!empty($args['fields']) && !in_array($name,$args['fields'])) continue;
+            if (!empty($args['fieldlist']) && !in_array($name,$args['fieldlist'])) continue;
             $data['properties'][$name] = $property;
         }
         $data['button'] = $args['button'];

@@ -13,7 +13,7 @@
         </xar:if>
         <fieldset>
             <legend>Filter</legend>
-            <xar:data-filter object="$object" fields="name"/>
+            <xar:module main="false" module="dynamicdata" type="user" func="filtertag" object="$object" fieldlist="name"/>
         </fieldset>
         <xar:if condition="empty($object:itemcount)">
             <!-- if we don't have an item total show prev / next links -->

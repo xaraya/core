@@ -214,7 +214,7 @@ class DataObjectMaster extends Object
     public function showFilterForm(Array $args = array())
     {
         $args = $args + $this->getPublicProperties();
-        $this->setFieldPrefix($args['fieldprefix']);
+        if (isset($args['fieldprefix'])) $this->setFieldPrefix($args['fieldprefix']);
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview'])) $this->checkInput();
@@ -239,6 +239,7 @@ class DataObjectMaster extends Object
             if(!isset($this->properties[$name])) continue;
 
             if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+            || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
             || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)) continue;
 
             $args['properties'][$name] =& $this->properties[$name];
@@ -250,6 +251,22 @@ class DataObjectMaster extends Object
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
         return xarTpl::object($args['tplmodule'],$args['template'],'showfilterform',$args);
+    }
+
+    /**
+     * Get and set for field prefixes
+     */
+    public function getFieldPrefix()
+    {
+        return $this->fieldprefix;
+    }
+    
+    public function setFieldPrefix($prefix)
+    {
+        $this->fieldprefix = $prefix;
+        foreach (array_keys($this->properties) as $property)
+            $this->properties[$property]->_fieldprefix = $prefix;
+        return true;
     }
 
     public function setFieldList($fieldlist=array(),$status=array())

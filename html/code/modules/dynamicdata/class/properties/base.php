@@ -565,7 +565,7 @@ class DataProperty extends Object implements iDataProperty
         $numbertypes = array('number','decimal','integer','float');
         $stringtypes = array('string');
         if (in_array($this->basetype, $numbertypes)) $data['filters'] = array('=','!=','>','>=','<','<=','like','notlike','null','notnull');
-        elseif (in_array($this->basetype, $stringtypes)) $data['filters'] = array('=','!=','like','notlike','null','notnull','regex');
+        elseif (in_array($this->basetype, $stringtypes)) $data['filters'] = array('like','notlike','=','!=','null','notnull','regex');
         elseif (in_array($this->basetype, array('dropdown'))) $data['filters'] = array('=');
         
         // Now create the filter options for the dropdown

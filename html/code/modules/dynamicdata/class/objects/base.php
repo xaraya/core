@@ -354,21 +354,6 @@ class DataObject extends DataObjectMaster implements iDataObject
         return $fields;
     }
 
-    /**
-     * Get and set for field prefixes
-     */
-    public function getFieldPrefix()
-    {
-        return $this->fieldprefix;
-    }
-    public function setFieldPrefix($prefix)
-    {
-        $this->fieldprefix = $prefix;
-        foreach (array_keys($this->properties) as $property)
-            $this->properties[$property]->_fieldprefix = $prefix;
-        return true;
-    }
-
     public function createItem(Array $args = array())
     {
         // Sanity check: do we have a primary field?
