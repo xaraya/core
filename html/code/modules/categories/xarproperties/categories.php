@@ -27,6 +27,13 @@ sys::import('modules.categories.xarproperties.categorytree');
  * The property also references a module ID and an itemtype.
  * When bound to an object these are taken from the parent object.
  * Otherwise these can be added as attributes or the tag, or they take default values.
+ *
+ * TODO
+ * allow a nonempty source? If so, what do we want:
+ * - a simple text field that lets you enter anything freeform?
+ * - a serialized value of the categories, corresponding to what we have in the linkages table?
+ * either way once we have a non empty source, this becomes a standard property,
+ * so we need in any case to modify checkInput, validateValue and perhaps setValue, and showInput.
  */
 class CategoriesProperty extends DataProperty
 {
