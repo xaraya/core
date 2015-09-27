@@ -546,12 +546,12 @@ class DataProperty extends Object implements iDataProperty
         
         // This is the array of all possible filter options
         $filteroptions = array(
-                            '=' => array('id' => '=', 'name' => xarML('equals')),
-                            '!=' => array('id' => '!=', 'name' => xarML('not equals')),
-                            '>' => array('id' => '>', 'name' => xarML('greater than')),
-                            '>=' => array('id' => '>=', 'name' => xarML('greater than or equal')),
-                            '<' => array('id' => '<', 'name' => xarML('less than')),
-                            '<=' => array('id' => '<=', 'name' => xarML('less than or equal')),
+                            '=' => array('id' => 'eq', 'name' => xarML('equals')),
+                            '!=' => array('id' => 'ne', 'name' => xarML('not equals')),
+                            '>' => array('id' => 'gt', 'name' => xarML('greater than')),
+                            '>=' => array('id' => 'ge', 'name' => xarML('greater than or equal')),
+                            '<' => array('id' => 'lt', 'name' => xarML('less than')),
+                            '<=' => array('id' => 'le', 'name' => xarML('less than or equal')),
                             'like' => array('id' => 'like', 'name' => xarML('like')),
                             'notlike' => array('id' => 'notlike', 'name' => xarML('not like')),
                             'null' => array('id' => 'null', 'name' => xarML('is null')),
