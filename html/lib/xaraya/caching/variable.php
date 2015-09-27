@@ -19,7 +19,6 @@
  */
 class xarVariableCache extends Object
 {
-// CHECKME: we won't actually support filesystem as storage here for security !?
     public static $cacheDir       = 'var/cache/variables';
     public static $cacheTime      = 7200;
     public static $cacheSizeLimit = 2097152;
