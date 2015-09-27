@@ -12,10 +12,16 @@
                     <xar:data-label property="$properties[$name]" for="id" />
                 </div>
                 <div class="xar-col-condensed">
-                    <xar:data-filter property="$properties[$name]" />
+                    <xar:set name="fieldname">"op[$name]"</xar:set>
+                    <xar:data-filter property="$properties[$name]" name="$fieldname" />
                 </div>
                 <div class="xar-col-condensed">
-                    <xar:data-input property="$properties[$name]" />
+                    <xar:set name="fieldname">"value[$name]"</xar:set>
+                    <xar:data-input property="$properties[$name]" name="$fieldname"/>
+                    <xar:set name="fieldname">"source[$name]"</xar:set>
+                    <input type="hidden" name="#$fieldname#" value="#$property:source#"/>
+                    <xar:set name="fieldname">"name[$name]"</xar:set>
+                    <input type="hidden" name="#$fieldname#" value="#$property:name#"/>
                 </div>
             </div>
         </xar:foreach>

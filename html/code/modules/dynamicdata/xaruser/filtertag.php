@@ -31,19 +31,19 @@ function dynamicdata_user_filtertag(Array $args=array())
             if (empty($value[$name]) && !in_array($op[$name], array('eqempty','neempty','null','notnull'))) continue;
             switch($op[$name]) {
                 case 'eqempty' : 
-                    $q->eq($source[$name],''); break;
+                    $q->eq($source[$name], ''); break;
                 case 'neempty' : 
-                    $q->ne($source[$name],''); break;
+                    $q->ne($source[$name], ''); break;
                 case 'null' : 
-                    $q->eq($source[$name],NULL); break;
+                    $q->eq($source[$name], NULL); break;
                 case 'notnull' : 
-                    $q->ne($source[$name],NULL); break;
+                    $q->ne($source[$name], NULL); break;
                 case 'like' : 
-                    $q->like($source[$name],'%'.$value[$name].'%'); break;
+                    $q->like($source[$name], '%'.$value[$name].'%'); break;
                 case 'notlike' : 
-                    $q->notlike($source[$name],'%'.$value[$name].'%'); break;
+                    $q->notlike($source[$name], '%'.$value[$name].'%'); break;
                 default:
-                    $q->$op[$name]($source[$name],$value[$name]); break;
+                    $q->$op[$name]($source[$name], $value[$name]); break;
             }
         }
 
@@ -70,6 +70,7 @@ function dynamicdata_user_filtertag(Array $args=array())
         $data['button'] = $args['button'];
         $data['return_url'] = $args['return_url'];
         $data['objectname'] = $args['object']->name;
+        $data['object'] =& $args['object'];
     }
     return $data;
 }
