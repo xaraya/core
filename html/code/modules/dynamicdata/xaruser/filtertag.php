@@ -15,8 +15,8 @@
  */
 function dynamicdata_user_filtertag(Array $args=array())
 {
-    if (!xarVarFetch('filter_submitted', 'int:0', $filter_submitted,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-    
+    if (!xarVarFetch('filter_submitted', 'int:0', $filter_submitted,  0, XARVAR_NOT_REQUIRED)) {return;}
+
     if ($filter_submitted) {
         if (!xarVarFetch('objectname', 'str', $objectname,  '', XARVAR_NOT_REQUIRED)) {return;}
         if (!xarVarFetch('return_url', 'str', $return_url,  '', XARVAR_NOT_REQUIRED)) {return;}
