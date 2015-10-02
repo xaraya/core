@@ -10,7 +10,7 @@
  * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/147.html
  *
- * @author Jim McDonald, Fl�vio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
+ * @author Jim McDonald, Flavio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
  */
 
 //Load Table Maintainance API
@@ -20,7 +20,7 @@ sys::import('xaraya.structures.query');
 /**
  * * Initialise the categories module
  *
- * @author  Jim McDonald, Fl�vio Botelho <nuncanada@xaraya.com>
+ * @author  Jim McDonald, Flavio Botelho <nuncanada@xaraya.com>
  * @author  mikespub <postnuke@mikespub.net>
  * @param   void N/A
  * @return  boolean True on success null/false on failure.
@@ -219,7 +219,7 @@ function categories_init()
 /**
  * Upgrade the categories module from an old version
  *
- * @author  Jim McDonald, Fl�vio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
+ * @author  Jim McDonald, Flavio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
  * @access  public
  * @param   $oldVersion
  * @return  true on success or false on failure
