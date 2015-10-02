@@ -2,6 +2,8 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <form method="post" action="#xarModURL('dynamicdata','user','filtertag')#">
         <xar:set name="multiple">count($properties) > 1</xar:set>
+        <xar:data-filterform object="$object" fieldlist="name"/>
+        <!--
         <xar:foreach in="$properties" key="$name" value="$thisproperty">
             <div class="xar-row">
                 <div class="xar-col" style="width: 200px">
@@ -49,7 +51,6 @@
                     <input type="hidden" name="#$fieldname#" value="#$thisproperty:source#"/>
                     <xar:set name="fieldname">"name[$name]"</xar:set>
                     <input type="hidden" name="#$fieldname#" value="#$thisproperty:name#"/>
-                    <input type="hidden" name="return_url" value="#$return_url#"/>
                 </div>
                 <xar:if condition="!$multiple">
                     <div class="xar-col">
@@ -58,6 +59,11 @@
                 </xar:if>
             </div>
         </xar:foreach>
+                -->
+                    <input type="hidden" name="return_url" value="#$return_url#"/>
+                <xar:if condition="!$multiple">
+                        <xar:button type="submit" label="$button" />
+                </xar:if>
         <xar:if condition="$multiple">
             <div class="xar-row">
                 <div class="xar-col">
