@@ -1,5 +1,5 @@
 <items>
-  <caregories_linkages itemid="1">
+  <categories_linkages itemid="1">
     <id>1</id>
     <category>6</category>
     <child_category>0</child_category>
@@ -7,8 +7,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="2">
+  </categories_linkages>
+  <categories_linkages itemid="2">
     <id>2</id>
     <category>6</category>
     <child_category>0</child_category>
@@ -16,8 +16,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="3">
+  </categories_linkages>
+  <categories_linkages itemid="3">
     <id>3</id>
     <category>6</category>
     <child_category>0</child_category>
@@ -25,8 +25,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="4">
+  </categories_linkages>
+  <categories_linkages itemid="4">
     <id>4</id>
     <category>7</category>
     <child_category>0</child_category>
@@ -34,8 +34,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="5">
+  </categories_linkages>
+  <categories_linkages itemid="5">
     <id>5</id>
     <category>6</category>
     <child_category>0</child_category>
@@ -43,8 +43,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="6">
+  </categories_linkages>
+  <categories_linkages itemid="6">
     <id>6</id>
     <category>7</category>
     <child_category>0</child_category>
@@ -52,8 +52,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="7">
+  </categories_linkages>
+  <categories_linkages itemid="7">
     <id>7</id>
     <category>7</category>
     <child_category>0</child_category>
@@ -61,8 +61,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="8">
+  </categories_linkages>
+  <categories_linkages itemid="8">
     <id>8</id>
     <category>7</category>
     <child_category>0</child_category>
@@ -70,8 +70,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="9">
+  </categories_linkages>
+  <categories_linkages itemid="9">
     <id>9</id>
     <category>7</category>
     <child_category>0</child_category>
@@ -79,8 +79,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="10">
+  </categories_linkages>
+  <categories_linkages itemid="10">
     <id>10</id>
     <category>7</category>
     <child_category>0</child_category>
@@ -88,8 +88,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="11">
+  </categories_linkages>
+  <categories_linkages itemid="11">
     <id>11</id>
     <category>7</category>
     <child_category>0</child_category>
@@ -97,8 +97,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="12">
+  </categories_linkages>
+  <categories_linkages itemid="12">
     <id>12</id>
     <category>7</category>
     <child_category>0</child_category>
@@ -106,8 +106,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="13">
+  </categories_linkages>
+  <categories_linkages itemid="13">
     <id>13</id>
     <category>7</category>
     <child_category>0</child_category>
@@ -115,8 +115,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="14">
+  </categories_linkages>
+  <categories_linkages itemid="14">
     <id>14</id>
     <category>7</category>
     <child_category>0</child_category>
@@ -124,8 +124,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="15">
+  </categories_linkages>
+  <categories_linkages itemid="15">
     <id>15</id>
     <category>7</category>
     <child_category>0</child_category>
@@ -133,8 +133,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="16">
+  </categories_linkages>
+  <categories_linkages itemid="16">
     <id>16</id>
     <category>7</category>
     <child_category>0</child_category>
@@ -142,8 +142,8 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
-  <caregories_linkages itemid="17">
+  </categories_linkages>
+  <categories_linkages itemid="17">
     <id>17</id>
     <category>7</category>
     <child_category>0</child_category>
@@ -151,5 +151,23 @@
     <module>182</module>
     <itemtype>0</itemtype>
     <base_category>1</base_category>
-  </caregories_linkages>
+  </categories_linkages>
+  <categories_linkages itemid="18">
+    <id>18</id>
+    <category>7</category>
+    <child_category>0</child_category>
+    <item_id>18</item_id>
+    <module>182</module>
+    <itemtype>0</itemtype>
+    <base_category>1</base_category>
+  </categories_linkages>
+  <categories_linkages itemid="19">
+    <id>19</id>
+    <category>7</category>
+    <child_category>0</child_category>
+    <item_id>19</item_id>
+    <module>182</module>
+    <itemtype>0</itemtype>
+    <base_category>1</base_category>
+  </categories_linkages>
 </items>
