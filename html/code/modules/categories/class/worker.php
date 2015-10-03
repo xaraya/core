@@ -294,7 +294,7 @@
                             $bases[$idx]['cid'] = $bases[$idx]['category_id'];
                         }
                     }
-                } var_dump($args);var_dump($bases);exit;
+                }
                 return $bases;
             }
         }
