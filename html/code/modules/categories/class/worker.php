@@ -236,62 +236,67 @@
          */
         public function getcatbases($args)
         {
+            // Sanity check
             if ($this->table != $this->cattable) die("This method (getcatbases) can only be used in a categories context");
+            
             extract($args);
-            if (!isset($object)) throw new Exception(xarML('Nissing object for getcatbases'));
-            sys::import('modules.dynamicdata.class.objects.master');
-            $object = DataObjectMaster::getObject(array('name' => $object));
+            if (isset($object)) {
+                // We are getting the base categories of an object
+                sys::import('modules.dynamicdata.class.objects.master');
+                $object = DataObjectMaster::getObject(array('name' => $object));
 
-            if (!isset($property) && isset($object->properties['categories'])) {
-                $property = $object->properties['categories'];
-            } elseif (isset($property)) {
-                $property = $object->properties[$property];
-            } else {
-                return array();
-            }
-            
-            $configuration = $property->initialization_basecategories;
-            $base_values = $configuration[1];
-            $bases = array();
-            foreach ($base_values as $base_value) {
-                $base = (int)$base_value[1][0];
-                $bases[] = $base;
-            }
-            return $bases;
-            
-            $xartable =& xarDB::getTables();
-        
-            sys::import('xaraya.structures.query');
-            $q = new Query('SELECT');
-            $q->addtable($xartable['categories_basecategories'],'base');
-            $q->addtable($xartable['categories'],'category');
-            $q->leftjoin('base.category_id','category.id');
-            $q->addfield('base.id AS id');
-            $q->addfield('base.category_id AS category_id');
-            $q->addfield('base.name AS name');
-            $q->addfield('base.module_id AS module_id');
-            $q->addfield('base.itemtype AS itemtype');
-            $q->addfield('category.left_id AS left_id');
-            $q->addfield('category.right_id AS right_id');
-            // Aliases for 1.x modules calling categories
-        // FIXME: no way to have get the same field twice with different aliases ?
-            //$q->addfield('base.category_id AS cid');
-            if (!empty($module))  $q->eq('module_id',(int)xarMod::getRegID($module));
-            if (!empty($module_id))  $q->eq('module_id',(int)$module_id);
-            if (isset($itemtype))  $q->eq('itemtype',(int)$itemtype);
-            $q->addorder('base.id');
-        //    $q->qecho();
-            if (!$q->run()) return;
-        
-            $output = $q->output();
-            if (!empty($output)) {
-                foreach (array_keys($output) as $idx) {
-                    if (isset($output[$idx]['category_id']) && !isset($output[$idx]['cid'])) {
-                        $output[$idx]['cid'] = $output[$idx]['category_id'];
-                    }
+                if (!isset($property) && isset($object->properties['categories'])) {
+                    $property = $object->properties['categories'];
+                } elseif (isset($property)) {
+                    $property = $object->properties[$property];
+                } else {
+                    return array();
                 }
+            
+                $configuration = $property->initialization_basecategories;
+                $base_values = $configuration[1];
+                $bases = array();
+                foreach ($base_values as $base_value) {
+                    $base = (int)$base_value[1][0];
+                    $bases[] = $base;
+                }
+                return $bases;
+            } else {
+                // We are getting the base categories of a module
+                $xartable =& xarDB::getTables();
+        
+                sys::import('xaraya.structures.query');
+                $q = new Query('SELECT');
+                $q->addtable($xartable['categories_basecategories'],'base');
+                $q->addtable($xartable['categories'],'category');
+                $q->leftjoin('base.category_id','category.id');
+                $q->addfield('base.id AS id');
+                $q->addfield('base.category_id AS category_id');
+                $q->addfield('base.name AS name');
+                $q->addfield('base.module_id AS module_id');
+                $q->addfield('base.itemtype AS itemtype');
+                $q->addfield('category.left_id AS left_id');
+                $q->addfield('category.right_id AS right_id');
+                // Aliases for 1.x modules calling categories
+            // FIXME: no way to have get the same field twice with different aliases ?
+                //$q->addfield('base.category_id AS cid');
+                if (!empty($module))  $q->eq('module_id',(int)xarMod::getRegID($module));
+                if (!empty($module_id))  $q->eq('module_id',(int)$module_id);
+                if (isset($itemtype))  $q->eq('itemtype',(int)$itemtype);
+                $q->addorder('base.id');
+            //    $q->qecho();
+                if (!$q->run()) return;
+        
+                $bases = $q->output();
+                if (!empty($bases)) {
+                    foreach (array_keys($bases) as $idx) {
+                        if (isset($bases[$idx]['category_id']) && !isset($bases[$idx]['cid'])) {
+                            $bases[$idx]['cid'] = $bases[$idx]['category_id'];
+                        }
+                    }
+                } var_dump($args);var_dump($bases);exit;
+                return $bases;
             }
-            return $output;
         }
 
         /**
