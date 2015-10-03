@@ -57,14 +57,16 @@
         {
             if (empty($id)) throw new Exception(xarML('No id passed to id2name'));
             
-            $query = "SELECT name FROM $this->catstable WHERE id = ?";
-            $result = $dbconn->Execute($query,array($cid));
-            if (!$result) return;
+            $q = new Query('SELECT', $this->cattable);
+            $q->eq('id', $id);
+            $q->addfield('name');
+            $q->run();
+            $result = $q->row();
+            if (empty($result)) return xarML('Unknown category');
+            return $result['name'];
         
-            list($name) = $result->fields;
-            $result->Close();
-        
-            $name = rawurlencode($name);
+            // CHECKME: this should be done elsewhere
+            $name = rawurlencode($result['name']);
             $name = preg_replace('/%2F/','/',$name);
             return $name;
         }
@@ -78,15 +80,17 @@
          */
         public function name2id($name="Top")
         {
-            if (empty($id)) throw new Exception(xarML('No id passed to name2id'));
+            if (empty($name)) throw new Exception(xarML('No name passed to name2id'));
             
-            $query = "SELECT id FROM $this->catstable WHERE name = ?";
-            $result = $dbconn->Execute($query,array($cid));
-            if (!$result) return;
-        
-            list($id) = $result->fields;
-            $result->Close();
-            return $id;
+            $q = new Query('SELECT', $this->cattable);
+            $q->eq('name', $name);
+            $q->addfield('id');
+            $q->run();
+            $result = $q->output();
+            if (count($result) > 1) throw new Exception(xarML('Found a non-unique category name'));
+            $result = current($result);
+            if (empty($result)) return 0;
+            return (int)$result['id'];
         }
 
         /**
