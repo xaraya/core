@@ -82,7 +82,7 @@ function mail_adminapi__sendmail_new(Array $args=array())
     //ini_set("sendmail_from", $from);
 
     try { 
-        require(sys::lib() . 'PHPMailer/class.phpmailer.php');
+        require_once(sys::lib() . 'PHPMailer/class.phpmailer.php');
     } catch (Exception $e) {
         throw new FileNotFoundException('class.phpmailer.php');
     }
@@ -103,7 +103,7 @@ function mail_adminapi__sendmail_new(Array $args=array())
     switch($serverType) {
         case 'smtp':
             try { 
-                require(sys::lib() . 'PHPMailer/class.smtp.php');
+                require_once(sys::lib() . 'PHPMailer/class.smtp.php');
             } catch (Exception $e) {
                 throw new FileNotFoundException('class.smtp.php');
             }
