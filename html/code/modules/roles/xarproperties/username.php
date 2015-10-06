@@ -23,7 +23,7 @@ class UsernameProperty extends TextBoxProperty
     public $desc       = 'Username';
     public $reqmodules = array('roles');
 
-    public $display_linkrule                = 0;
+    public $display_linkurl                 = 0;
     public $validation_existrule            = 0;    // 0: no rule; 1: must not already exist; 2: must already exist
     public $validation_existrule_invalid;
     public $initialization_store_type       = 'name';
@@ -113,7 +113,8 @@ class UsernameProperty extends TextBoxProperty
 
     public function showOutput(Array $data = array())
     {
-        if (!empty($data['display_name'])) $this->initialization_display_name = $data['display_type'];
+        if (!empty($data['display_type'])) $this->initialization_display_name = $data['display_type'];
+        if (!empty($data['link_url'])) $this->display_linkurl = $data['link_url'];
         
         // The user param is a name
         if (isset($data['user'])) {
@@ -126,20 +127,33 @@ class UsernameProperty extends TextBoxProperty
             } else {
                 $data['value'] = $data['user'];
             }
-        } else {
-            if (isset($data['value'])) $this->value = $data['value'];
+            $this->display_linkurl = 0;
+        } elseif (isset($data['id'])) {
+            // The value param is an ID
+            $this->value = $data['id'];
+            $store_type = $this->initialization_store_type;
+            $this->initialization_store_type = 'id';
             $data['value'] = $this->getValue();
+            $this->initialization_store_type = $store_type;
+        } elseif (isset($data['value'])) {
+            $store_type = $this->initialization_store_type;
+            $this->initialization_store_type = 'id';
+            $data['value'] = $this->getValue();
+            $this->initialization_store_type = $store_type;
+        } else {
+            $this->value = xarUser::getVar('id');
+            $data['value'] = xarUser::getVar('uname');
         }
 
-        if ($this->display_linkrule) {
+        if ($this->display_linkurl) {
             if ($this->initialization_store_type == 'id') {
                 $textvalue = $this->value;
             } else {
                 $textvalue = $this->value;
             }
-            $data['linkurl'] = xarModURL('roles','user','display',array('id' => $this->value));
+            $data['link_url'] = xarModURL('roles','user','display',array('id' => $this->value));
         } else {
-            $data['linkurl'] = "";
+            $data['link_url'] = "";
         }
         return parent::showOutput($data);
     }
