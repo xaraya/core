@@ -131,7 +131,7 @@ function xarMain()
             if (!xarTpl::setPageTemplateName('user-'.$request->getModule())) {
                 xarTpl::setPageTemplateName('user');
             }
-        } elseif ((($request->getType() == 'user') || ($request->getType() == 'default')) && xarTplGetPageTemplateName() == 'default') {
+        } elseif (!xarUserIsLoggedIn() && ($request->getType() == 'user') && (xarTpl::getPageTemplateName() == 'default')) {
             // For the anonymous user, see if a module specific page exists
             if (!xarTpl::setPageTemplateName('user-'.$request->getModule())) {
                 xarTpl::setPageTemplateName($request->getModule());
