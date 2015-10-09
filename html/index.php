@@ -120,18 +120,18 @@ function xarMain()
     if ($run) {
 
         // Set page template
-        if (xarUserIsLoggedIn() && $request->getType() == 'admin' && xarTpl::getPageTemplateName() == 'default') {
+        if (xarUserIsLoggedIn() && ($request->getType() == 'admin') && (xarTpl::getPageTemplateName() == 'default')) {
             // Use the admin-$modName.xt page if available when $modType is admin
             // falling back on admin.xt if the former isn't available
             if (!xarTpl::setPageTemplateName('admin-'.$request->getModule())) {
                 xarTpl::setPageTemplateName('admin');
             }
-        } elseif (xarUserIsLoggedIn() && $request->getType() == 'user' && xarTpl::getPageTemplateName() == 'default') {
+        } elseif (xarUserIsLoggedIn() && ($request->getType() == 'user') && (xarTpl::getPageTemplateName() == 'default')) {
             // Same thing for user side where user is logged in
             if (!xarTpl::setPageTemplateName('user-'.$request->getModule())) {
                 xarTpl::setPageTemplateName('user');
             }
-        } elseif ($request->getType() == 'user' && xarTplGetPageTemplateName() == 'default') {
+        } elseif ((($request->getType() == 'user') || ($request->getType() == 'default')) && xarTplGetPageTemplateName() == 'default') {
             // For the anonymous user, see if a module specific page exists
             if (!xarTpl::setPageTemplateName('user-'.$request->getModule())) {
                 xarTpl::setPageTemplateName($request->getModule());
