@@ -4,9 +4,9 @@
         <thead>
             <tr>
                 <th class="xar-align-left">Column</th>
-                <xar:for start="$i=0" test="$i lt count($column_titles)" iter="$i++">
+                <xar:for start="$j=0" test="$j lt count($column_titles)" iter="$j++">
                     <th class="xar-align-left">
-                        <label>#$column_titles[$i]#</label>
+                        <label>#$column_titles[$j]#</label>
                     </th>
                 </xar:for>
                 <th class="xar-align-left">Actions</th>
@@ -15,36 +15,38 @@
         <tbody>
             <!-- $i == row values -->
             <xar:for start="$i=0" test="$i lt $rows" iter="$i++">
+                <xar:set name="row_number">$i+1</xar:set>
                 <tr>
                     <td>
-                        <xar:set name="j">$i+1</xar:set>
-                        #$j#
+                        #$row_number#
                     </td>
-                    <!-- $k == column values -->
-                    <xar:for start="$k=0" test="$k lt count($column_titles)-1" iter="$k++">
+                    <!-- $j == column values = 4 -->
+                    <xar:for start="$j=0" test="$j lt count($column_titles)" iter="$j++">
                         <td>
-                            <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
-                            <xar:set name="propid">$id.'_value_'.$k</xar:set>
-                            <xar:if condition="$value[$k][$i]">
-                                <xar:set name="propvalue">$value[$k][$i]</xar:set>
-                                <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue"/>
+                            <xar:set name="propname">$name.'[value][' . $j . '][' . $i . ']'</xar:set>
+                            <xar:set name="propid">$id.'_value_'.$j</xar:set>
+                            <xar:if condition="!isset($value[$j][$i])">
+                                No value found at row #$row_number# col #$j#<br/>
+                                The value variable contains
+                                <pre>
+                                    <xar:set name="dummy">var_dump($value)</xar:set>
+                                </pre>
+                                <xar:break/>
+                            </xar:if>
+                            <xar:if condition="$value[$j][$i]">
+                                <xar:set name="propvalue">$value[$j][$i]</xar:set>
+                                <xar:data-input type="$column_types[$j]" name="$propname" id="$propid" value="$propvalue"/>
                             <xar:else/>
-                                <xar:data-input type="$column_types[$k]" name="$propname" id="$propid"/>
+                                <xar:data-input type="$column_types[$j]" name="$propname" id="$propid"/>
                             </xar:if>
                         </td>
                     </xar:for>
-                    <td>
-                        <xar:set name="propname">$name.'[value][' . $k . '][' . $i . ']'</xar:set>
-                        <xar:set name="propid">$id.'_value_' . $i . '_' .$k</xar:set>
-                        <xar:set name="propvalue">$value[$k][$i]</xar:set>
-                        <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="$propvalue" rows="2" cols="20"/>
-                    </td>
-                    <td>
-                        <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype' => $value[1][$i]))#"><img src="#xarTplGetImage('icons/document-properties.png', 'base')#"/></a>
-                    </td>
-                    <!--
-                        <td class="xar-align-right">&#160;</td>
-                    -->
+                    <xar:if condition="isset($value[$j][$i])">
+                        <td>
+                            <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype' => $value[1][$i]))#"><img src="#xarTplGetImage('icons/document-properties.png', 'base')#"/></a>
+                        </td>
+                    </xar:if>
+                    <td class="xar-align-right">&#160;</td>
                 </tr>
             </xar:for>
             <tr>
