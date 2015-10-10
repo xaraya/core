@@ -95,7 +95,7 @@
                     <xar:set name="configuration">''</xar:set>
                 </xar:if>
                 <div class="xar-row">
-                    <div class="xar-col">
+                    <div class="xar-col-condensed">
                         <label for="#$fieldid#" title="#$init['description']#" class="xar-form-label">
                             #$init['label']#
                         </label>
