@@ -41,7 +41,7 @@
                             </xar:if>
                         </td>
                     </xar:for>
-                    <xar:if condition="isset($value[$j][$i])">
+                    <xar:if condition="isset($value[$j-1][$i])">
                         <td>
                             <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype' => $value[1][$i]))#"><img src="#xarTplGetImage('icons/document-properties.png', 'base')#"/></a>
                         </td>
