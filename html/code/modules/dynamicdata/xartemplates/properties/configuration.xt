@@ -14,7 +14,7 @@
                 </xar:if>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label for="#$fieldid#" title="#$init['description']#" class="xar-form-label">
+                        <label for="#$fieldid#" title="#$init['description']#">
                             #$init['label']#
                         </label>
                     </div>
@@ -48,7 +48,7 @@
                     </xar:if>
                     <div class="xar-row">
                         <div class="xar-col">
-                            <label for="#$fieldid#" title="#$init['description']#" class="xar-form-label">
+                            <label for="#$fieldid#" title="#$init['description']#">
                                 #$init['label']#
                             </label>
                         </div>
@@ -71,7 +71,7 @@
             <xar:else />
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label for="#$id#" title="#$init['description']#" class="xar-form-label">
+                        <label for="#$id#" title="#$init['description']#">
                             #$init['label']#
                         </label>
                     </div>
