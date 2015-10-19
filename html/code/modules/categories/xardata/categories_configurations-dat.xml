@@ -6,7 +6,7 @@
     <description>A set of categories that form the top of category trees</description>
     <property_id>30050</property_id>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+    <configuration></configuration>
   </configurations>
   <configurations itemid="2">
     <id>2</id>
@@ -15,7 +15,7 @@
     <description>Display a No Category Line</description>
     <property_id>14</property_id>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+    <configuration></configuration>
   </configurations>
   <configurations itemid="3">
     <id>3</id>
@@ -24,6 +24,6 @@
     <description>Display a All Categories Line</description>
     <property_id>14</property_id>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+    <configuration></configuration>
   </configurations>
 </items>
