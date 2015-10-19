@@ -1252,20 +1252,18 @@ class DataObjectMaster extends Object
         if ($descriptor->exists('sources')) {
             try {
                 $sources = unserialize($descriptor->get('sources'));
+                
                 if (!empty($sources)) {
-                    // Transform from array property format to datasource format
-//                    $object->datasources = array();
-//                    foreach ($sources as $source) $object->datasources[$source[0]] = array($source[1],$source[2]);
                     $object->datasources = $sources;
-                    foreach ($object->datasources as $key => $value) {
-                    
+                    foreach ($object->datasources as $key => $table) {
                         // Support simple array form
-                        if (is_array($value)) {
-                            $tabletype = $value[1];
-                            $value = $value[0];
+                        if (is_array($table)) {
+                            $tabletype = $table[1];
+                            $value = $table[0];
                         } else {
                             $tabletype = 'internal';
                         }
+
                         // Remove any spaces and similar chars
                         $value = trim($value);
                         $key = trim($key);
@@ -1283,7 +1281,9 @@ class DataObjectMaster extends Object
                         }
                     }
                 }
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+                throw new Exception(xarML('Error creating dataquery'));
+            }
         }
 
         // Set up the db table relations
