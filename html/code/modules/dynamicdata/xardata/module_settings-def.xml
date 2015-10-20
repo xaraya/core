@@ -10,10 +10,10 @@
   <access>a:4:{s:14:&quot;display_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;200&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;modify_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;delete_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:6:&quot;access&quot;;s:174:&quot;a:5:{s:7:&quot;display&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;update&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;create&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;delete&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;config&quot;;a:1:{i:0;i:2;}}&quot;;}</access>
   <isalias>false</isalias>
   <datastore>module_variables</datastore>
-  <config>a:0:{}</config>
-  <sources>a:0:{}</sources>
-  <relations>a:0:{}</relations>
-  <objects>a:0:{}</objects>
+  <config>}</config>
+  <sources></sources>
+  <relations></relations>
+  <objects></objects>
   <category></category>
   <properties>
     <property name="items_per_page">
@@ -104,7 +104,7 @@
       <source>module variable: base</source>
       <status>33</status>
       <seq>9</seq>
-      <configuration>a:0:{}</configuration>
+      <configuration></configuration>
     </property>
     <property name="backend_page">
       <id>5555</id>
@@ -114,7 +114,7 @@
       <source>module variable: base</source>
       <status>33</status>
       <seq>10</seq>
-      <configuration>a:0:{}</configuration>
+      <configuration></configuration>
     </property>
   </properties>
 </object>
