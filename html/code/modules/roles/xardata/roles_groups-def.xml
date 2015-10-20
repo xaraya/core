@@ -11,7 +11,6 @@
   <config>a:1:{s:5:"where";a:1:{i:0;s:13:"itemtype eq 2";}}</config>
   <sources>a:1:{s:5:"roles";a:2:{i:0;s:9:"xar_roles";i:1;s:8:"internal";}}</sources>
   <access>a:4:{s:14:&quot;display_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;200&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;modify_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:13:&quot;delete_access&quot;;a:3:{s:5:&quot;group&quot;;s:1:&quot;0&quot;;s:5:&quot;level&quot;;s:3:&quot;800&quot;;s:7:&quot;failure&quot;;s:1:&quot;0&quot;;}s:6:&quot;access&quot;;s:174:&quot;a:5:{s:7:&quot;display&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;update&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;create&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;delete&quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&quot;config&quot;;a:1:{i:0;i:2;}}&quot;;}</access>
-  <config>a:1:{s:5:&quot;where&quot;;s:13:&quot;role_type = 2&quot;;}</config>
   <isalias>false</isalias>
   <properties>
     <property name="id">
