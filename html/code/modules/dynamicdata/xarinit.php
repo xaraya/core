@@ -201,8 +201,8 @@ function dynamicdata_init()
                 serialize(array()),
                 serialize(array(
                     'dynamic_objects' => array($prefix . '_dynamic_objects', 'internal'),
-                    'linkages' => array($prefix . '_categories_linkage', 'foreign'),
-                    'categories' => array($prefix . '_categories', 'foreign'),
+//                    'linkages' => array($prefix . '_categories_linkage', 'foreign'),
+//                    'categories' => array($prefix . '_categories', 'foreign'),
                 )),
                 serialize(array()),
                 serialize(array()),
