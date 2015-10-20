@@ -10,10 +10,10 @@
   <access>a:4:{s:14:&amp;amp;quot;display_access&amp;amp;quot;;a:3:{s:5:&amp;amp;quot;group&amp;amp;quot;;s:1:&amp;amp;quot;0&amp;amp;quot;;s:5:&amp;amp;quot;level&amp;amp;quot;;s:3:&amp;amp;quot;200&amp;amp;quot;;s:7:&amp;amp;quot;failure&amp;amp;quot;;s:1:&amp;amp;quot;0&amp;amp;quot;;}s:13:&amp;amp;quot;modify_access&amp;amp;quot;;a:3:{s:5:&amp;amp;quot;group&amp;amp;quot;;s:1:&amp;amp;quot;0&amp;amp;quot;;s:5:&amp;amp;quot;level&amp;amp;quot;;s:3:&amp;amp;quot;800&amp;amp;quot;;s:7:&amp;amp;quot;failure&amp;amp;quot;;s:1:&amp;amp;quot;0&amp;amp;quot;;}s:13:&amp;amp;quot;delete_access&amp;amp;quot;;a:3:{s:5:&amp;amp;quot;group&amp;amp;quot;;s:1:&amp;amp;quot;0&amp;amp;quot;;s:5:&amp;amp;quot;level&amp;amp;quot;;s:3:&amp;amp;quot;800&amp;amp;quot;;s:7:&amp;amp;quot;failure&amp;amp;quot;;s:1:&amp;amp;quot;0&amp;amp;quot;;}s:6:&amp;amp;quot;access&amp;amp;quot;;s:174:&amp;amp;quot;a:5:{s:7:&amp;amp;quot;display&amp;amp;quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&amp;amp;quot;update&amp;amp;quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&amp;amp;quot;create&amp;amp;quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&amp;amp;quot;delete&amp;amp;quot;;a:2:{i:0;i:2;i:1;i:3;}s:6:&amp;amp;quot;config&amp;amp;quot;;a:1:{i:0;i:2;}}&amp;amp;quot;;}</access>
   <isalias>true</isalias>
   <datastore>relational</datastore>
-  <config>a:1:{s:0:"";a:1:{i:0;s:0:"";}}</config>
+  <config></config>
   <sources>a:1:{s:14:"configurations";a:2:{i:0;s:25:"xar_themes_configurations";i:1;s:8:"internal";}}</sources>
-  <relations>a:1:{i:0;a:2:{i:0;s:0:"";i:1;s:0:"";}}</relations>
-  <objects>a:1:{i:0;a:2:{i:0;s:0:"";i:1;s:0:"";}}</objects>
+  <relations></relations>
+  <objects></objects>
   <properties>
     <property name="id">
       <id>99</id>
