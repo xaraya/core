@@ -234,6 +234,7 @@ class ArrayProperty extends DataProperty
                 $newrow[] = $key;
                 foreach ($row as $item) $newrow[] = $item;
                 $temp[] = $newrow;
+                unset($newrow);
             }
             $value = $temp;
             return $value;
@@ -320,7 +321,7 @@ class ArrayProperty extends DataProperty
         if (isset($value['value'])) $value = $value['value'];
 
         // We always show one line at minimum on the form
-        if (empty($value)) foreach ($data['column_titles'] as $column) $value[] = "";
+        // if (empty($value)) foreach ($data['column_titles'] as $column) $value[] = "";
         
         // ------------------------------------------------------------------
         // Adjust the number of rows and columns and the appropriate values
@@ -328,7 +329,7 @@ class ArrayProperty extends DataProperty
             $data_rows = empty($value) ? 0 : count($value);
             $data['rows'] = max($data_rows, $this->display_minimum_rows);
         }
-        
+
         /*
         // Make sure the number of titles and column types is the same
         $titlescount = count($data['column_titles']);
