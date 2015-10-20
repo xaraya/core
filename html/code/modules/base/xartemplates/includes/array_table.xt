@@ -167,7 +167,7 @@
         <xar:if condition="($addremove ne 0)">
             <tfoot>
                 <tr>
-                    <xar:set name="infospan">$debug?count($column_titles)+1:count($column_titles)</xar:set>
+                    <xar:set name="infospan">$debug?count($column_titles)+1:count($column_titles)+1</xar:set>
                     <td colspan="#$infospan#">
                     <!-- Row count container (count_id: 'row_count' for js)
                          When JS is enabled and count_id is supplied this field will 

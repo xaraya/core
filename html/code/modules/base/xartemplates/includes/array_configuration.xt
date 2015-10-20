@@ -23,8 +23,8 @@
                     <!-- $j == column values = 4 -->
                     <xar:for start="$j=0" test="$j lt count($column_titles)" iter="$j++">
                         <td>
-                            <xar:set name="propname">$name.'[value][' . $i . '][' . $j . ']'</xar:set>
-                            <xar:set name="propid">$id.'_value_'.$j</xar:set>
+                            <xar:set name="propname">$name.'[' . $i . '][' . $j . ']'</xar:set>
+                            <xar:set name="propid">$id . '_' . $i . '_' . $j</xar:set>
                             <xar:if condition="!isset($value[$i][$j])">
                                 No value found at row #$row_number# col #$j#<br/>
                                 The value variable contains
@@ -51,13 +51,13 @@
             </xar:for>
             <tr>
                 <td>
-                    <xar:set name="extendedrows">$rows+1</xar:set>
+                    <xar:set name="extendedrows">$rows</xar:set>
                     New
                 </td>
                 <xar:for start="$k=0" test="$k lt count($column_titles)-1" iter="$k++">
                     <td>
-                        <xar:set name="propname">$name.'[value][' . $k . '][' . $extendedrows . ']'</xar:set>
-                        <xar:set name="propid">$id.'_value_'.$k</xar:set>
+                        <xar:set name="propname">$name.'[' . $extendedrows . '][' . $k . ']'</xar:set>
+                        <xar:set name="propid">$id . '_' . $extendedrows . '_' . $k</xar:set>
                         <!-- Force the fieldtype to a textbox -->
                         <xar:if condition="$k eq 1">
                             <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" value="2"/>
@@ -67,8 +67,8 @@
                     </td>
                 </xar:for>
                 <td>
-                    <xar:set name="propname">$name.'[value][' . $k . '][' . $extendedrows . ']'</xar:set>
-                    <xar:set name="propid">$id.'_value_' . $extendedrows . '_' .$k</xar:set>
+                    <xar:set name="propname">$name.'[' . $extendedrows . '][' . $k . ']'</xar:set>
+                    <xar:set name="propid">$id . '_' . $extendedrows . '_' . $k</xar:set>
                     <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" rows="2" cols="20"/>
                 </td>
                 <td>

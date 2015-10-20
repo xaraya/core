@@ -268,6 +268,7 @@ class ArrayProperty extends DataProperty
             $data['display_page_type'] = 'configuration';
 
             if (empty($data['value'])) $data['value'] = $this->default_column_definition;
+            $data['rows'] = count($data['value']);
 
         } else {
             // We are adding data to an item
@@ -325,7 +326,7 @@ class ArrayProperty extends DataProperty
         // Adjust the number of rows and columns and the appropriate values
         if (!isset($data['rows'])) {
             $data_rows = empty($value) ? 0 : count($value);
-            $data['rows'] = min($data_rows, $this->display_minimum_rows);
+            $data['rows'] = max($data_rows, $this->display_minimum_rows);
         }
         
         /*
@@ -407,17 +408,11 @@ class ArrayProperty extends DataProperty
     public function updateConfiguration(Array $data = array())
     {
         if ($this->type == 999) {
-            $temp = array();
-            foreach ($data['configuration']['display_column_definition']['value'][0] as $k => $v) {
+            foreach ($data['configuration']['display_column_definition'] as $row => $columns) {
                 // Ignore/remove any empty rows, i.e. those where there is no title
-                if (empty($v)) continue;
-                $temp[0][] = $v;
-                $temp[1][] = $data['configuration']['display_column_definition']['value'][1][$k];
-                $temp[2][] = $data['configuration']['display_column_definition']['value'][2][$k];
-                $temp[3][] = $data['configuration']['display_column_definition']['value'][3][$k];
+                if (empty($columns[0])) unset($data['configuration']['display_column_definition'][$row]);
             }
-            $data['configuration']['display_column_definition'] = $temp;
-        }
+        }//var_dump($data['configuration']['display_column_definition']);exit;
         return parent::updateConfiguration($data);
     }
 }
