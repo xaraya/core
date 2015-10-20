@@ -11,9 +11,9 @@
   <isalias>true</isalias>
   <datastore>relational</datastore>
   <config>a:1:{s:0:"";a:1:{i:0;s:0:"";}}</config>
-  <sources>a:1:{s:14:&quot;configurations&quot;;a:2:{i:0;s:25:&quot;xar_themes_configurations&quot;;i:1;s:8:&quot;internal&quot;;}}</sources>
-  <relations>a:1:{i:0;a:2:{i:0;s:0:&quot;&quot;;i:1;s:0:&quot;&quot;;}}</relations>
-  <objects>a:1:{i:0;a:2:{i:0;s:0:&quot;&quot;;i:1;s:0:&quot;&quot;;}}</objects>
+  <sources>a:1:{s:14:"configurations";a:2:{i:0;s:25:"xar_themes_configurations";i:1;s:8:"internal";}}</sources>
+  <relations>a:1:{i:0;a:2:{i:0;s:0:"";i:1;s:0:"";}}</relations>
+  <objects>a:1:{i:0;a:2:{i:0;s:0:"";i:1;s:0:"";}}</objects>
   <properties>
     <property name="id">
       <id>99</id>
