@@ -85,7 +85,7 @@ function dynamicdata_admin_showpropval(Array $args=array())
     $data['propertytype'] = DataPropertyMaster::getProperty(array('type' => $data['type']));
 
     if (!empty($preview) || !empty($confirm) || !empty($exit)) {
-        if (!xarVarFetch($data['name'],'isset',$configuration,NULL,XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch($data['name'], 'isset', $configuration, NULL, XARVAR_NOT_REQUIRED)) return;
 
         // pass the current value as configuration rule
         $data['configuration'] = isset($configuration) ? $configuration : '';
