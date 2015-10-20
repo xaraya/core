@@ -5,22 +5,22 @@
         <tr>
             <td>&#160;</td>
             <xar:for start="$i=0" test="$i lt count($column_titles)" iter="$i++">
-                <td style="text-align: center">
+                <td style="text-align: left">
                     <label>#$column_titles[$i]#</label>
                 </td>
             </xar:for>
         </tr>
-        <xar:for start="$i=1" test="$i le $rows" iter="$i++">
+        <xar:for start="$i=0" test="$i lt $rows" iter="$i++">
             <tr>
-                <td>
-                    Row #$i#
+                <td><xar:set name="row">$i+1</xar:set>
+                    Row #$row#
                 </td>
-                <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
+                <xar:for start="$j=0" test="$j lt count($column_titles)" iter="$j++">
                     <td>
-                        <xar:if condition="isset($value[$k][$i])">
-                            <xar:data-output type="$column_types[$k]" value="$value[$k][$i]"/>
+                        <xar:if condition="isset($value[$i][$j])">
+                            <xar:data-output property="$column_types[$j]" value="$value[$i][$j]"/>
                         <xar:else/>
-                            <xar:data-output type="$column_types[$k]"/>
+                            <xar:data-output property="$column_types[$j]"/>
                         </xar:if>
                     </td>
                 </xar:for>
