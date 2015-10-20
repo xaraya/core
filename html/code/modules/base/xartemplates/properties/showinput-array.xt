@@ -3,11 +3,11 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="info">xarController::$request->getInfo()</xar:set>
     <div class="xar-clearboth">
-        <xar:if condition="$info[2] eq 'showpropval'">
+        <xar:if condition="$info[2] eq 'showpropval' AND ($display_page_type eq 'configuration')">
             <!-- We are configuring an array property -->
             <xar:template file="array_configuration"/>
         <xar:else/>
-            <!-- We are displaying an array property -->
+            <!-- We are displaying an array property or one of its descendents -->
             <xar:template file="array_table"/>
         </xar:if >
         <br class="xar-clearall"/>

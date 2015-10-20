@@ -23,9 +23,9 @@
                     <!-- $j == column values = 4 -->
                     <xar:for start="$j=0" test="$j lt count($column_titles)" iter="$j++">
                         <td>
-                            <xar:set name="propname">$name.'[value][' . $j . '][' . $i . ']'</xar:set>
+                            <xar:set name="propname">$name.'[value][' . $i . '][' . $j . ']'</xar:set>
                             <xar:set name="propid">$id.'_value_'.$j</xar:set>
-                            <xar:if condition="!isset($value[$j][$i])">
+                            <xar:if condition="!isset($value[$i][$j])">
                                 No value found at row #$row_number# col #$j#<br/>
                                 The value variable contains
                                 <pre>
@@ -33,17 +33,17 @@
                                 </pre>
                                 <xar:break/>
                             </xar:if>
-                            <xar:if condition="$value[$j][$i]">
-                                <xar:set name="propvalue">$value[$j][$i]</xar:set>
+                            <xar:if condition="$value[$i][$j]">
+                                <xar:set name="propvalue">$value[$i][$j]</xar:set>
                                 <xar:data-input type="$column_types[$j]" name="$propname" id="$propid" value="$propvalue"/>
                             <xar:else/>
                                 <xar:data-input type="$column_types[$j]" name="$propname" id="$propid"/>
                             </xar:if>
                         </td>
                     </xar:for>
-                    <xar:if condition="isset($value[$j-1][$i])">
+                    <xar:if condition="isset($value[$i][$j-1])">
                         <td>
-                            <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype' => $value[1][$i]))#"><img src="#xarTplGetImage('icons/document-properties.png', 'base')#"/></a>
+                            <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype' => $value[$i][1]))#"><img src="#xarTplGetImage('icons/document-properties.png', 'base')#"/></a>
                         </td>
                     </xar:if>
                     <td class="xar-align-right">&#160;</td>
