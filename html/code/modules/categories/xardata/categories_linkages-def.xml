@@ -11,9 +11,9 @@
   <isalias>true</isalias>
   <datastore>relational</datastore>
   <config>a:1:{s:0:"";a:1:{i:0;s:0:"";}}</config>
-  <sources>a:1:{s:8:&quot;linkages&quot;;a:2:{i:0;s:22:&quot;xar_categories_linkage&quot;;i:1;s:8:&quot;internal&quot;;}}</sources>
-  <relations>a:1:{i:0;a:2:{i:0;s:0:&quot;&quot;;i:1;s:0:&quot;&quot;;}}</relations>
-  <objects>a:1:{i:0;a:2:{i:0;s:0:&quot;&quot;;i:1;s:0:&quot;&quot;;}}</objects>
+  <sources>a:1:{s:8:"linkages";a:2:{i:0;s:22:"xar_categories_linkage";i:1;s:8:"internal";}}</sources>
+  <relations></relations>
+  <objects></objects>
   <category></category>
   <properties>
     <property name="id">
