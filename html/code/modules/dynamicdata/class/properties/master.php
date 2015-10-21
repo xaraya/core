@@ -134,7 +134,7 @@ class DataPropertyMaster extends Object
             $args['label'] = ucwords($args['label']);
         }
 
-        // For now, always add a reference
+        // For now, always add a reference to the parent object
         $args['objectref'] = $objectref;
 
         // Get a new property
