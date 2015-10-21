@@ -474,7 +474,7 @@ class CategoriesProperty extends DataProperty
         $primary = $this->objectref->primary;
         $primary_source = $this->objectref->properties[$primary]->source;
         
-        // Assemble the links to the objects table
+        // Assemble the links to the object's table
         xarMod::load('categories');
         $tables = xarDB::getTables();
         $q->addTable($tables['categories_linkage'], 'linkage');
@@ -488,6 +488,7 @@ class CategoriesProperty extends DataProperty
         
         // Set the source of this property
         $this->objectref->properties['category']->source = 'categories.name';
+        return true;
     }
 }
 

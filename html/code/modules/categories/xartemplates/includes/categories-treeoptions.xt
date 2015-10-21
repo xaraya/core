@@ -14,7 +14,12 @@
             <xar:continue/>
         </xar:if>
     
-        <xar:set name="nodename">$node->name</xar:set>
+        <xar:if condition="$nodeid eq 1">
+            <xar:var name="nodename">All categories</xar:var>
+        <xar:else/>
+            <xar:set name="nodename">$node->name</xar:set>
+        </xar:if>
+
         <xar:set name="childobject">$node->child_object</xar:set>
 
         <xar:set name="level">$node->getLevel()</xar:set>
