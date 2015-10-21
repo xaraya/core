@@ -1289,49 +1289,55 @@ class DataObjectMaster extends Object
         // Set up the db table relations
         if ($descriptor->exists('relations')) {
             try {
-                $relationargs = unserialize($descriptor->get('relations'));
-                foreach ($relationargs as $key => $value) {
-                    $join = "";
+                $relationargs = @unserialize($descriptor->get('relations'));
+                if (is_array($relationargs)) {
+                    foreach ($relationargs as $key => $value) {
                     
-                    // Support simple array form
-//                    if (is_array($value)) $value = current($value);
-                    // Remove any spaces and similar chars
-                    $left = trim($value[0]);
-                    $right = trim($value[1]);
+                        // Support simple array form
+    //                    if (is_array($value)) $value = current($value);
+
+                        // Bail if we are missing anything
+                        if (count($value) < 2) continue;
                     
-                    // If this was just the empty first line, bail
-                    if (empty($left)) continue;
+                        // Remove any spaces and similar chars
+                        $left = trim($value[0]);
+                        $right = trim($value[1]);
                     
-                    // Check if this relation includes a foreign table
-                    // If it does do a left or right join, rather than an inner join
-                    $fromobjectparts = explode('.',$left);
-                    $fromobject = $fromobjectparts[0];
-                    if (isset($object->datasources[$fromobject])) {
-                        if (isset($object->datasources[$fromobject][1]) && $object->datasources[$fromobject][1] == 'internal') {
-                            $join = 'join';
-                        } else {
-                            if ($type != "SELECT") continue;
-                            $join = 'rightjoin';
+                        // If this was just the empty first line, bail
+                        if (empty($left)) continue;
+                    
+                        // Check if this relation includes a foreign table
+                        // If it does do a left or right join, rather than an inner join
+                        $join = "";
+                        $fromobjectparts = explode('.',$left);
+                        $fromobject = $fromobjectparts[0];
+                        if (isset($object->datasources[$fromobject])) {
+                            if (isset($object->datasources[$fromobject][1]) && $object->datasources[$fromobject][1] == 'internal') {
+                                $join = 'join';
+                            } else {
+                                if ($type != "SELECT") continue;
+                                $join = 'rightjoin';
+                            }
                         }
+                    
+                        $toobjectparts = explode('.',$right);
+                        $toobject = $toobjectparts[0];
+                        if (isset($object->datasources[$toobject])) {
+                            if (isset($object->datasources[$toobject][1]) && $object->datasources[$toobject][1] == 'internal') {
+                                $join = 'join';
+                            } else {
+                                if ($type != "SELECT") continue;
+                                $join = 'leftjoin';
+                            }                        
+                        }
+                    
+                        // If no join was defined, then this is a bad realtion: ignore
+                        if (empty($join)) continue;
+                    
+                        // Add this relation's join to the object's dataquery
+                        if ($prefix) $this->dataquery->{$join}($object->name . "_" . $left,$object->name . "_" . $right);
+                        else $this->dataquery->{$join}($left,$right);
                     }
-                    
-                    $toobjectparts = explode('.',$right);
-                    $toobject = $toobjectparts[0];
-                    if (isset($object->datasources[$toobject])) {
-                        if (isset($object->datasources[$toobject][1]) && $object->datasources[$toobject][1] == 'internal') {
-                            $join = 'join';
-                        } else {
-                            if ($type != "SELECT") continue;
-                            $join = 'leftjoin';
-                        }                        
-                    }
-                    
-                    // If no join was defined, then this is a bad realtion: ignore
-                    if (empty($join)) continue;
-                    
-                    // Add this relation's join to the object's dataquery
-                    if ($prefix) $this->dataquery->{$join}($object->name . "_" . $left,$object->name . "_" . $right);
-                    else $this->dataquery->{$join}($left,$right);
                 }
             } catch (Exception $e) {}
         }
