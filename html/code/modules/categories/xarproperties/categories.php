@@ -276,15 +276,7 @@ class CategoriesProperty extends DataProperty
             $id = is_array($tree) ? reset($tree) : $tree;
             $data['base_category'][$key] = $id;
             $nodes = new BasicSet();
-            if ($id == -1) {
-                // We want all the categories
-                // This is not really a tree because we can have many top level categories,
-                // so we'll have to create a virtual root category as parent of them all
-                $node = new CategoryTreeNode();
-            } else {
-                // We want a specific tree of which the base is $id
-                $node = new CategoryTreeNode($id);
-            }
+            $node = new CategoryTreeNode($id);
             $node->setfilter($filter);
             $tree = new CategoryTree($node);
             $nodes->addAll($node->depthfirstenumeration());
