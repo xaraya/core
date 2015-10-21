@@ -15,6 +15,9 @@
         </xar:if>
     
         <xar:if condition="$nodeid eq 1">
+            <xar:if condition="empty($include_all_cats)">
+                <xar:continue/>
+            </xar:if>
             <xar:var name="nodename">All categories</xar:var>
         <xar:else/>
             <xar:set name="nodename">$node->name</xar:set>
