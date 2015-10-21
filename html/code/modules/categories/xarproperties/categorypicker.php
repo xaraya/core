@@ -18,9 +18,8 @@
     array(
         'initialization_include_no_cat' => 1,
         'initialization_include_all_cats' => 1,
-        'initialization_basecategories' => array('Picker Dropdown',array(1=>array(1=>array(-1))),array(1=>true),array(1=>1)),
+        'initialization_basecategories' => array('Picker Dropdown',array(0=>array(0=>array(-1))),array(1=>true),array(1=>1)),
     );
-
 */
 sys::import('modules.base.xarproperties.array');
 
@@ -31,14 +30,27 @@ class CategoryPickerProperty extends ArrayProperty
     public $desc       = 'CategoryPicker';
     public $reqmodules = array('categories');
     
-    public $display_column_definition = array(array("Tree Name","Base Category","Include Self","Select Type"),array(2,100,14,6),array("New Tree",0,1,0),array("",'a:3:{s:29:"initialization_include_no_cat";i:0;s:31:"initialization_include_all_cats";i:1;s:29:"initialization_basecategories";a:4:{i:0;s:15:"Picker Dropdown";i:1;a:1:{i:1;a:1:{i:1;a:1:{i:0;i:-1;}}}i:2;a:1:{i:1;b:1;}i:3;a:1:{i:1;i:1;}}}',"",'a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:62:"1,Single Dropdown;2,Multiple - One Box;3,Multiple - Two Boxes;";}'));  
-    public $initialization_addremove = 2;
+    public $display_column_definition = array(
+                                array("Tree Name",2,"New Tree",""),
+                                array("Base Category",100,0,'a:3:{s:29:"initialization_include_no_cat";i:0;s:31:"initialization_include_all_cats";i:1;s:29:"initialization_basecategories";a:4:{i:0;a:1:{i:0;s:15:"Picker Dropdown";}i:1;a:1:{i:0;a:1:{i:0;i:-1;}}i:2;a:1:{i:0;b:1;}i:3;a:1:{i:0;i:1;}}}',),
+                                array("Include Self",14,1,""),
+                                array("Select Type",6,0,'a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:62:"1,Single Dropdown;2,Multiple - One Box;3,Multiple - Two Boxes;";}')
+                                );
+    public $display_minimum_rows      = 1;
+    public $initialization_addremove  = 2;
     
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/categories/xarproperties';
         $this->prepostprocess = 2;
+        /*
+        var_dump(serialize(array(
+                                                0 => array(0=>'Picker Dropdown'),
+                                                1 => array(0=>array(-1)),
+                                                2 => array(0=>true),
+                                                3 => array(0=>1),
+                                                    )));*/
     }
 
     /**
@@ -54,7 +66,7 @@ class CategoryPickerProperty extends ArrayProperty
         // Override or a standalone property
         if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
         // No hint at all, take the current module
-        if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarModGetName());
+        if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarMod::getName());
 
         // Do the same for itemtypes
         if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;
