@@ -134,7 +134,10 @@ class DataPropertyMaster extends Object
             $args['label'] = ucwords($args['label']);
         }
 
-        // get a new property
+        // For now, always add a reference
+        $args['objectref'] = $objectref;
+
+        // Get a new property
         $property =& self::getProperty($args);
 
         if(method_exists($objectref, 'getItems'))
@@ -147,17 +150,18 @@ class DataPropertyMaster extends Object
         // add it to the list of properties
         $objectref->properties[$property->name] =& $property;
 
+/*
         // if the property wants a reference, give it
         if ($property->include_reference) {
-            $objectref->properties[$property->name]->objectref = $objectref;
+            $objectref->properties[$property->name]->objectref =& $objectref;
         }
+*/
         
         // Expose the object configuration to the property
         $objectref->properties[$property->name]->objectconfiguration =& $objectref->configuration;
 
         // if the property involves upload, tell its object
-        if(isset($property->upload))
-            $objectref->upload = true;
+        if(isset($property->upload)) $objectref->upload = true;
     }
 
     /**
