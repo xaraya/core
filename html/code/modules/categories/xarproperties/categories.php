@@ -72,7 +72,6 @@ class CategoriesProperty extends DataProperty
         $this->template       = 'categories';
         $this->tplmodule      = 'categories';
         $this->filepath       = 'modules/categories/xarproperties';
-//        $this->prepostprocess = 2;
 
         // In a bound property, get module and itemtype from the parent object
         if (!empty($this->objectref)) {

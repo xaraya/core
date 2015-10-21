@@ -68,7 +68,6 @@ class ArrayProperty extends DataProperty
         $this->tplmodule      = 'base';
         $this->template       = 'array';
         $this->filepath       = 'modules/base/xarproperties';
-        $this->prepostprocess = 2;
     }
 
     public function checkInput($name = '', $value = null)

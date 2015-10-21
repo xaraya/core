@@ -43,7 +43,6 @@ class CategoryPickerProperty extends ArrayProperty
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/categories/xarproperties';
-        $this->prepostprocess = 2;
         /*
         var_dump(serialize(array(
                                                 0 => array(0=>'Picker Dropdown'),
