@@ -1339,34 +1339,42 @@ class DataObjectMaster extends Object
         // Set up the relations to related objects
         if ($descriptor->exists('objects')) {
             try {
-                $objectargs = unserialize($descriptor->get('objects'));
-                foreach ($objectargs as $key => $value) {
-                    // Support simple array form
-//                    if (is_array($value)) $value = current($value);
-                    // Remove any spaces and similar chars
-                    $left = trim($value[0]);
-                    $right = trim($value[1]);
+                $objectargs = @unserialize($descriptor->get('objects'));
+                if (is_array($objectargs)) {
+                    foreach ($objectargs as $key => $value) {
 
-                    // If this was just the empty first line, bail
-                    if (empty($left)) continue;
+                        // Support simple array form
+    //                    if (is_array($value)) $value = current($value);
+
+                        // Bail if we are missing anything
+                        if (count($value) < 2) continue;
                     
-                    if ((strpos($left, 'this') === false) && (strpos($right, 'this') === false)
-                    && (strpos($left, $object->name) === false) && (strpos($right, $object->name) === false)
-                    ) 
-                        echo 'One of the links must be of a property of ' . $object->name . '<br />';
-                    try {
-                        $leftside = $object->propertysource($left, $object, $prefix);
-                    } catch (Exception $e) {echo 'Cannot translate ' . $left . ' to a valid datasource<br />'; }
-                    try {
-                        $rightside = $object->propertysource($right, $object, $prefix);
-                    } catch (Exception $e) {echo 'Cannot translate ' . $right . ' to a valid datasource<br />'; }
-                    $this->dataquery->leftjoin($leftside,$rightside);
+                        // Remove any spaces and similar chars
+                        $left = trim($value[0]);
+                        $right = trim($value[1]);
+
+                        // If this was just the empty first line, bail
+                        if (empty($left)) continue;
+                        if (empty($right)) continue;
                     
-                    // FIXME: We don't yet support a sort order for related object items, so order them by ID for now
-                    $parts = explode('.',$right);
-                    $table = trim($parts[0]);
-                    // We should actually sort by the object's primary key, but lets forgoe that for now
-//                    $this->dataquery->setorder($table . ".id");
+                        if ((strpos($left, 'this') === false) && (strpos($right, 'this') === false)
+                        && (strpos($left, $object->name) === false) && (strpos($right, $object->name) === false)
+                        ) 
+                            echo 'One of the links must be of a property of ' . $object->name . '<br />';
+                        try {
+                            $leftside = $object->propertysource($left, $object, $prefix);
+                        } catch (Exception $e) {echo 'Cannot translate ' . $left . ' to a valid datasource<br />'; }
+                        try {
+                            $rightside = $object->propertysource($right, $object, $prefix);
+                        } catch (Exception $e) {echo 'Cannot translate ' . $right . ' to a valid datasource<br />'; }
+                        $this->dataquery->leftjoin($leftside,$rightside);
+                    
+                        // FIXME: We don't yet support a sort order for related object items, so order them by ID for now
+                        $parts = explode('.',$right);
+                        $table = trim($parts[0]);
+                        // We should actually sort by the object's primary key, but lets forgoe that for now
+    //                    $this->dataquery->setorder($table . ".id");
+                    }
                 }
             } catch (Exception $e) {
                 if (isset($left)) echo 'Bad object relation: ' . $left . ' or ' . $right;
