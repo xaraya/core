@@ -35,9 +35,9 @@
 
         <xar:if condition="empty($nodeid) or $nodeid ne $nodename">
             <xar:if condition="isset($value) AND is_array($value) AND in_array($nodeid,$value)">
-            <option style="padding-left: #$level#em;" value="#$nodeid#" selected="selected">
-                #$nodename#
-            </option>
+                <option style="padding-left: #$level#em;" value="#$nodeid#" selected="selected">
+                    #$nodename#
+                </option>
             <xar:else />
                 <option style="padding-left: #$level#em;" value="#$nodeid#">
                     #$nodename#
