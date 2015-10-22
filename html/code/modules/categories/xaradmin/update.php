@@ -33,6 +33,10 @@ function categories_admin_update()
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
+    // Root category cannot be modified except by the site admin
+    if (($cid == 1) && (xarUser::getVar('id') != xarModVars::get('roles', 'admin')))
+        return xarTplModule('privileges','user','errors', array('layout' => 'no_privileges'));
+
     //Reverses the order of cids with the 'last children' option:
     //Look at bug #997
 

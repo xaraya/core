@@ -343,16 +343,18 @@ class CelkoPositionProperty extends DataProperty
         if (!isset($data['position'])) $data['position'] = $this->position;
         if (!isset($data['reference_id'])) $data['reference_id'] = $this->reference_id;
         if (isset($data['filter'])) $this->initialization_celkofilter = $data['filter'];
+        if (isset($data['base_category'])) $this->initialization_celkobasecategory = $data['base_category'];
        
+        $include_self = $this->initialization_celkobasecategory[2];
         $data['itemid'] = isset($data['itemid']) ? $data['itemid'] : $this->_itemid;
         if (!empty($data['itemid'])) {        
             $data['item'] = $this->getItem($data['itemid']);
-            $items = $this->getItems(array('cid' => false,
+            $items = $this->getItems(array('cid' => $include_self,
                                            'eid' => $data['itemid']));
             $data['id'] = $data['itemid'];
         } else {
             $data['item'] = Array('left_id'=>0,'right_id'=>0,'name'=>'','description'=>'', 'template' => '');
-            $items = $this->getItems(array('cid' => false));
+            $items = $this->getItems(array('cid' => $include_self));
             $data['id'] = null;
         }
 

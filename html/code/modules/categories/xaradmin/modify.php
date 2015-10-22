@@ -32,6 +32,10 @@ function categories_admin_modify()
 
     // Security check
     if(!xarSecurityCheck('EditCategories',1,'All',"All:$cid")) return;
+    
+    // Root category cannot be modified except by the site admin
+    if (($cid == 1) && (xarUser::getVar('id') != xarModVars::get('roles', 'admin')))
+        return xarTplModule('privileges','user','errors', array('layout' => 'no_privileges'));
 
     // Setting up necessary data.
     sys::import('modules.dynamicdata.class.objects.master');

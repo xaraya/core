@@ -52,12 +52,12 @@
 						</xar:if>
 					</select> 
 					<xar:set name="position">$_position</xar:set>
-					<xar:else/>
+				<xar:else/>
 					<select name="#$ddname#" id="#$ddid#">
 						<xar:for start="$i = 0" test="$i lt count($items)" iter="$i++">
 							<xar:if condition="$items[$i]['id'] eq $reference_id">
 								<option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
-								<xar:else />
+							<xar:else />
 								<option value="#$items[$i]['id']#">#$items[$i]['slash_separated']#</option>
 							</xar:if>
 						</xar:for>
