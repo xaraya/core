@@ -65,7 +65,7 @@ class CelkoPositionProperty extends DataProperty
     public $initialization_celkoleft_id      = 'left_id';
     public $initialization_celkoright_id     = 'right_id';
     public $initialization_celkofilter       = '';
-    public $initialization_celkobasecategory = array(array('Celko Dropdown',1,false,1));
+    public $initialization_celkobasecategory = array(array('Celko Dropdown',,array(array(1)),false,1));
 
     public $atomic_value    = array();    // The atomic calues of this property are lrft, right and parent
 
