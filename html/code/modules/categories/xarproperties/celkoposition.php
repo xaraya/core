@@ -54,10 +54,10 @@ class CelkoPositionProperty extends DataProperty
 
     public $catexists;
     public $dbconn;
-    public $itemindices     = array();    // helper variable to hold items when importing
-    public $itemsknown      = array();    // helper variable to hold known references: oldkey => newkey
-    public $itemsunresolved = array();    // helper variable to hold unresolved references: newkey => oldkey
-    public $offset          = 0;          // helper variable to hold offsets for left and right ids
+    public $itemindices      = array();    // helper variable to hold items when importing
+    public $itemsknown       = array();    // helper variable to hold known references: oldkey => newkey
+    public $itemsunresolved  = array();    // helper variable to hold unresolved references: newkey => oldkey
+    public $offset           = 0;          // helper variable to hold offsets for left and right ids
     
     public $initialization_celkotable        = 'xar_categories';
     public $initialization_celkoname         = 'name';
@@ -67,7 +67,8 @@ class CelkoPositionProperty extends DataProperty
     public $initialization_celkofilter       = '';
     public $initialization_celkobasecategory = array(array('Celko Dropdown',array(array(1)),false,1));
 
-    public $atomic_value    = array();    // The atomic calues of this property are lrft, right and parent
+    public $position_options = array();
+    public $atomic_value     = array();    // The atomic calues of this property are lrft, right and parent
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -75,6 +76,13 @@ class CelkoPositionProperty extends DataProperty
         $this->tplmodule = 'categories';
         $this->filepath  = 'modules/categories/xarproperties';
         $this->dbconn = xarDB::getConn();
+
+        $this->position_options = array(
+					array('id' => '1', 'name' => xarML('Right before, in the same level')),
+					array('id' => '2', 'name' => xarML('Right after, in the same level')),
+					array('id' => '4', 'name' => xarML('The first child item')),
+					array('id' => '3', 'name' => xarML('The last child item')),
+					);
     }
 
     public function checkInput($name = '', $value = null)
@@ -331,6 +339,7 @@ class CelkoPositionProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
+        if (!isset($data['position_options'])) $data['position_options'] = $this->position_options;
         if (!isset($data['position'])) $data['position'] = $this->position;
         if (!isset($data['reference_id'])) $data['reference_id'] = $this->reference_id;
         if (isset($data['filter'])) $this->initialization_celkofilter = $data['filter'];
@@ -389,6 +398,7 @@ class CelkoPositionProperty extends DataProperty
     
     public function showHidden(Array $data = array())
     {
+        if (!isset($data['position_options'])) $data['position_options'] = $this->position_options;
         if (!isset($data['position'])) $data['position'] = $this->position;
         if (!isset($data['reference_id'])) $data['reference_id'] = $this->reference_id;
         if (isset($data['filter'])) $this->initialization_celkofilter = $data['filter'];
