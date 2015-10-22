@@ -54,7 +54,7 @@ class CategoriesProperty extends DataProperty
     public $initialization_include_no_cat   = 0;
     public $initialization_include_all_cats = 0;
     // Four columns (0 - 3) on 1 line
-    public $initialization_basecategories   = array(array('New Tree',,array(array(1)),true,1));
+    public $initialization_basecategories   = array(array('New Tree',array(array(1)),true,1));
 
     public $module_id      = 0;
     public $itemtype       = 0;
