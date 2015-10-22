@@ -54,12 +54,8 @@ class CategoriesProperty extends DataProperty
     public $initialization_include_no_cat   = 0;
     public $initialization_include_all_cats = 0;
     // Four columns (0 - 3) on 1 line
-    public $initialization_basecategories   = array(
-                                                0 => array(0=> 'New Tree'),
-                                                1 => array(0=> 0),
-                                                2 => array(0=> true),
-                                                3 => array(0=> 1),
-                                                    );
+    public $initialization_basecategories   = array(array('New Tree',1,true,1));
+
     public $module_id      = 0;
     public $itemtype       = 0;
     public $itemid;
@@ -257,7 +253,7 @@ class CategoriesProperty extends DataProperty
        } else {
             $data['tree_name']    = array(0 => 'New Tree');
             $base_categories      = array(0 => 1);
-            $data['include_self'] = array(0 => 1);
+            $data['include_self'] = array(0 => true);
             $data['select_type']  = array(0 => 1);
         }
         // Get an array of category trees, each having a base category as its head
@@ -293,7 +289,7 @@ class CategoriesProperty extends DataProperty
         if (!empty($this->source)) {
             if (!isset($data['value'])) $data['value'] = array(1=>array(1 => $this->value));
         } else {
-             // Get an array of values (selected categories) for each tree
+             // If we have no values passed, get an array of values (selected categories) for each tree
             if (!isset($data['value'])) {
                 $data['value'] = array();
                 xarMod::apiLoad('categories');

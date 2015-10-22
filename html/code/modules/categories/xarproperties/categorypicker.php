@@ -32,7 +32,7 @@ class CategoryPickerProperty extends ArrayProperty
     
     public $display_column_definition = array(
                                 array("Tree Name",2,"New Tree",""),
-                                array("Base Category",100,0,'a:3:{s:29:"initialization_include_no_cat";i:0;s:31:"initialization_include_all_cats";i:1;s:29:"initialization_basecategories";a:4:{i:0;a:1:{i:0;s:15:"Picker Dropdown";}i:1;a:1:{i:0;a:1:{i:0;i:-1;}}i:2;a:1:{i:0;b:1;}i:3;a:1:{i:0;i:1;}}}',),
+                                array("Base Category",100,0,'a:3:{s:29:"initialization_include_no_cat";i:0;s:31:"initialization_include_all_cats";i:1;s:29:"initialization_basecategories";a:1:{i:0;a:4:{i:0;s:15:"Picker Dropdown";i:1;i:1;i:2;b:1;i:3;i:1;}}}',),
                                 array("Include Self",14,1,""),
                                 array("Select Type",6,0,'a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:62:"1,Single Dropdown;2,Multiple - One Box;3,Multiple - Two Boxes;";}')
                                 );
@@ -43,13 +43,6 @@ class CategoryPickerProperty extends ArrayProperty
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/categories/xarproperties';
-        /*
-        var_dump(serialize(array(
-                                                0 => array(0=>'Picker Dropdown'),
-                                                1 => array(0=>array(-1)),
-                                                2 => array(0=>true),
-                                                3 => array(0=>1),
-                                                    )));*/
     }
 
     /**

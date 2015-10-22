@@ -45,10 +45,10 @@ class CelkoPositionProperty extends DataProperty
     public $desc         = 'Celko Position';
     public $reqmodules   = array('categories');
 
-    public $reference_id      = 0;          // The ID of the item relative to which we define the position of this item
-    public $include_reference = 1;          // Get a reference to the parent object
+    public $reference_id      = 0;        // The ID of the item relative to which we define the position of this item
+    public $include_reference = 1;        // Get a reference to the parent object
     public $moving;
-    public $position          = 2;          // By default the position of this item is after the previous item
+    public $position          = 2;        // By default the position of this item is after the previous item
     public $rightorleft;
     public $inorout;
 
@@ -59,12 +59,13 @@ class CelkoPositionProperty extends DataProperty
     public $itemsunresolved = array();    // helper variable to hold unresolved references: newkey => oldkey
     public $offset          = 0;          // helper variable to hold offsets for left and right ids
     
-    public $initialization_celkotable     = 'xar_categories';
-    public $initialization_celkoname      = 'name';
-    public $initialization_celkoparent_id = 'parent_id';
-    public $initialization_celkoleft_id   = 'left_id';
-    public $initialization_celkoright_id  = 'right_id';
-    public $initialization_celkofilter    = '';
+    public $initialization_celkotable        = 'xar_categories';
+    public $initialization_celkoname         = 'name';
+    public $initialization_celkoparent_id    = 'parent_id';
+    public $initialization_celkoleft_id      = 'left_id';
+    public $initialization_celkoright_id     = 'right_id';
+    public $initialization_celkofilter       = '';
+    public $initialization_celkobasecategory = array(array('Celko Dropdown',5,false,1));
 
     public $atomic_value    = array();    // The atomic calues of this property are lrft, right and parent
 
