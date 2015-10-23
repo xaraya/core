@@ -356,7 +356,7 @@ final class sys extends Object
     **/
     public static function web($offset='')
     {
-        // We are in bootstrap.php and we want <lib>
+        // We are in bootstrap.php and we want <web>
         if(!isset(self::$web))
             self::$web = $offset . $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['webDir'];
         return self::$web;
