@@ -67,37 +67,40 @@
                         <xar:set name="link">
                             xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $field['id']))
                         </xar:set>
+                        <xar:var name="label">Edit</xar:var>
                         <xar:set name="icon">
                             xarTpl::getImage('icons/modify.png', 'theme')
                         </xar:set>
-                        <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
+                        <xar:data-output type="urlicon" link="$link" icon="$icon" label="$label" title="$title"/>
                         &#160;
 
-                        <xar:set name="title">xarML('Move property up')</xar:set>
+                        <xar:var name="title">Move property up</xar:var>
                         <xar:set name="icon">
                             xarTpl::getImage('icons/go-up.png', 'theme')
                         </xar:set>
+                        <xar:var name="label">Up</xar:var>
                         <xar:if condition="$index gt 1 and $numprops gt 1">
                             <xar:set name="link">
                                 xarModURL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid))
                             </xar:set>
-                            <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
+                            <xar:data-output type="urlicon" link="$link" icon="$icon" label="$label" title="$title"/>
                         <xar:else />
-                            <img class="xar-icon-disabled" src="#$icon#" alt="up" title="#$title#"/>
+                            <img class="xar-icon-disabled" src="#$icon#" alt="Up" title="#$title#"/>
                         </xar:if>
                         &#160;
 
-                        <xar:set name="title">xarML('Move property down')</xar:set>
+                        <xar:var name="title">Move property down</xar:var>
                         <xar:set name="icon">
                             xarTpl::getImage('icons/go-down.png', 'theme')
                         </xar:set>
+                        <xar:var name="label">Down</xar:var>
                         <xar:if condition="$index lt $numprops and $numprops ne 1">
                             <xar:set name="link">
                                 xarModURL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
                             </xar:set>
-                            <xar:data-output type="urlicon" link="$link" icon="$icon" title="$title"/>
+                            <xar:data-output type="urlicon" link="$link" icon="$icon" label="$label" title="$title"/>
                         <xar:else />
-                            <img class="xar-icon-disabled" src="#$icon#" alt="down" title="#$title#"/>
+                            <img class="xar-icon-disabled" src="#$icon#" alt="Down" title="#$title#"/>
                         </xar:if>
                         &#160;
                     <xar:else />
