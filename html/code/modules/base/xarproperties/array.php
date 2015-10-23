@@ -31,6 +31,7 @@
 
 /* include the base class */
 sys::import('modules.dynamicdata.class.properties.base');
+
 /**
  * Handle Array Property
  */
@@ -43,13 +44,13 @@ class ArrayProperty extends DataProperty
 
     public $fields = array();
 
-    public $display_minimum_rows = 1;                // The table displays at least this many rows
-    public $display_maximum_rows = 10;               // The table cannot display more than this many rows
-    public $initialization_addremove = 0;            // 0: no adding/deleting of rows, 1: adding only, 2: adding and deleting    
+    public $display_minimum_rows         = 1;        // The table displays at least this many rows
+    public $display_maximum_rows         = 10;       // The table cannot display more than this many rows
+    public $initialization_addremove     = 0;        // 0: no adding/deleting of rows, 1: adding only, 2: adding and deleting    
     public $validation_associative_array = 0;        // flag to display the value as an associative array
     public $validation_associative_array_invalid;    // Holds an error msg for the validation above
-    public $default_suffixlabel = "Row";             // suffix for the Add/Remove Button
-    public $initialization_fixed_keys = 0;           // allow editing keys on input
+    public $default_suffixlabel          = "Row";    // suffix for the Add/Remove Button
+    public $initialization_fixed_keys    = 0;        // allow editing keys on input
 
     // The columns the table displays
     public $default_column_definition = array(array("Key",2,"",""),array("Value",2,"",""));  
