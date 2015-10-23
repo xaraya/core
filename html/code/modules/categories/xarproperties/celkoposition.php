@@ -749,7 +749,20 @@ class CelkoPositionProperty extends DataProperty
         $exportvalue = serialize(array((int)$itemid, (int)$thisItem['parent_id'], (int)$thisItem['left_id'], (int)$thisItem['right_id']));
         return $exportvalue;
     }
+
+    public function updateConfiguration(Array $data = array())
+    {
+        // Removes the empty line for adding a row
+        array_pop($data['configuration']['initialization_celkobasecategory']);
+        
+        // Ignore/remove any empty rows, i.e. those where there is no title
+        foreach ($data['configuration']['initialization_celkobasecategory'] as $row => $columns) {
+            if (empty($columns[0])) unset($data['configuration']['initialization_celkobasecategory'][$row]);
+        }
+        return parent::updateConfiguration($data);
+    }
 }
+
 sys::import('modules.dynamicdata.class.properties.interfaces');
 
 class CelkoPositionPropertyInstall extends CelkoPositionProperty implements iDataPropertyInstall
