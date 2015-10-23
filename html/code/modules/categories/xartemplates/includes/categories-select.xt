@@ -5,7 +5,7 @@
     <xar:set name="selectid">$id . "_categories_" . $index</xar:set>
     <select name="#$selectname#" id="#$selectid#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
         <xar:if condition="$include_no_cat">
-            <xar:if condition="empty((int)$value[$index])">
+            <xar:if condition="empty($value[$index])">
                 <option value="0" selected="selected">No category</option>
             <xar:else/>
                 <option value="0">No category</option>
