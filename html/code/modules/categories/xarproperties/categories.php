@@ -474,7 +474,7 @@ class CategoriesProperty extends DataProperty
         if (!empty($this->itemtype)) $q->eq('linkage.itemtype', $this->itemtype);
         
         // Set the source of this property
-        $this->objectref->properties[$this->name]->source = 'categories.name';
+        $this->source = 'categories.name';
         return true;
     }
 }
