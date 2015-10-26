@@ -454,6 +454,9 @@ class CategoriesProperty extends DataProperty
     
     public function preList()
     {
+        // Bail if there is no parent object
+        if (empty($this->objectref)) return true;
+
         // Get the parent object's query;
         $q = $this->objectref->dataquery;
         
