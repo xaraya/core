@@ -16,7 +16,17 @@
  * This is done so that we can easily access the set of values of a given column, 
  * which are all of the same property type
  * 
- * The value in value[0][row] is always the row number, starting with 1
+ * Column numbers start at 0
+ * Row numbers in non associative arrays start at 1 (more readable)
+ * In non associative arrays the value in value[0][row] is always the row number, starting with 1
+ * In all cases (?) the number of rows is the count of valuue[0]
+ *
+ * The column definition array is made up of 4 elements, each of which is an array
+ * - title
+ * - property type
+ * - default value
+ * - configuration
+ * The count of each element array must be the same
  */
 
 /* include the base class */
@@ -50,7 +60,6 @@ class ArrayProperty extends DataProperty
     public $validation_allowempty_ignore        = true;
     public $validation_equals_ignore            = true;
     public $validation_notequals_ignore         = true;
-
     
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -255,10 +264,14 @@ class ArrayProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
-        // If this is a column definition, load its configuration up front
+        // If this is an array definition, load its configuration up front
         // A bound array property contains itself an array property as part of its configuration
+        // We need to check if 
+        // - we are a bound property and 
+        // - are configuring
         if (!empty($data["configuration"])) {
-        
+            // We are entering data into a configuration 
+            // CHECKME: or an unbound property?
             $displayconfig = $this->display_column_definition;
 
             // Remove this line once legacy  code no longer needed
@@ -298,19 +311,18 @@ class ArrayProperty extends DataProperty
                 $types = $this->display_column_definition[1];
                 $defaults = $this->display_column_definition[2];
                 $configurations = $this->display_column_definition[3];
-            }
-            
+            }            
         }
         
-        if (!isset($data['column_titles'])) $data['column_titles'] = $titles;
-        if (!isset($data['column_types']))  $data['column_types'] = $types;
-        if (!isset($data['column_defaults']))  $data['column_defaults'] = $defaults;
+        if (!isset($data['column_titles']))          $data['column_titles']         = $titles;
+        if (!isset($data['column_types']))           $data['column_types']          = $types;
+        if (!isset($data['column_defaults']))        $data['column_defaults']       = $defaults;
         if (!isset($data['column_configurations']))  $data['column_configurations'] = $configurations;
 
         // If titles or types were passed directly through the tag, they may be lists we need to turn into arrays
         if (!is_array($data['column_titles'])) $data['column_titles'] = explode(',', $data['column_titles']);
-        if (!is_array($data['column_types'])) $data['column_types'] = explode(',', $data['column_types']);
-        
+        if (!is_array($data['column_types']))  $data['column_types'] = explode(',', $data['column_types']);
+
         // Now arrange the values contained in this array to the size we need
         // Number of columns is defined by count($data['column_titles'])
         // Number of rows is defined by $data['rows']
@@ -325,7 +337,9 @@ class ArrayProperty extends DataProperty
         
         // ------------------------------------------------------------------
         // Adjust the number of rows and columns and the appropriate values
-        if (!isset($data['rows'])) $data['rows'] = empty($value) ? 0 : count($value[0]);
+        if (!isset($data['rows'])) {
+            $data['rows'] = empty($value[0]) ? 0 : count($value[0]);
+        }
         
         /*
         // Make sure the number of titles and column types is the same
@@ -347,7 +361,7 @@ class ArrayProperty extends DataProperty
 
         // ------------------------------------------------------------------
         // Add some values we want to pass to the template
-        if (!isset($data['fixedkeys'])) $data['fixedkeys'] = $this->initialization_fixed_keys;
+        if (!isset($data['fixedkeys']))        $data['fixedkeys'] = $this->initialization_fixed_keys;
         if (isset($data['allowinput']))        $this->initialization_addremove = $data['allowinput'];
         if (isset($data['associative_array'])) $this->validation_associative_array = $data['associative_array'];
         if (isset($data['addremove']))         $this->initialization_addremove =  $data['addremove'];
