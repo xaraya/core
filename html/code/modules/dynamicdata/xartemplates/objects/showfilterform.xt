@@ -14,6 +14,7 @@
                 <div class="xar-col-condensed">
                     <xar:set name="fieldname">"op[$name]"</xar:set>
                     <xar:data-filter property="$properties[$name]" name="$fieldname" />
+                    <xar:set name="dummy">#$properties[$name]->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)#</xar:set>
                 </div>
                 <div class="xar-col-condensed">
                     <xar:set name="fieldname">"value[$name]"</xar:set>
