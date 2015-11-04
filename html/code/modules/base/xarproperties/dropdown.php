@@ -23,6 +23,7 @@ class SelectProperty extends DataProperty
     public $reqmodules = array('base');
     public $basetype   = 'dropdown';
 
+    public $transform  = true;                         // transform $this->value in getValue() or not
     public $options;
     public $old_config = array();
     public $itemfunc;   // CHECKME: how is this best implemented?
@@ -311,6 +312,8 @@ class SelectProperty extends DataProperty
      */
     function getOption($check = false)
     {
+        if (!$this->transform) return $this->value;
+
         if (!isset($this->value)) {
              if ($check) return true;
              return null;
@@ -405,7 +408,6 @@ class SelectProperty extends DataProperty
                 $same = false;
             }
         }
-        //echo "$type $same";
         return $same;
     }
 }
