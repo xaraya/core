@@ -424,11 +424,17 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $fields = $this->getFieldList();
             $this->setFieldList($args['fieldlist']);
         }
+
+        foreach ($this->getFieldList() as $fieldname) {
+            $this->properties[$fieldname]->preList();
+        }
+
         $this->items = array();
         $this->datastore->getItems($args);
         
         // For now always show the values of properties with virtual datastore
-        $args['getvirtuals'] = true;
+        // CHECKME: the preList method is probably a better solution
+        // $args['getvirtuals'] = true;
         if (!empty($args['getvirtuals'])) {
             // Get the values of properties with virtual datastore and add them to the items array
             foreach ($this->getFieldList() as $fieldname) {
@@ -442,6 +448,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 //                }
             }
         }
+        
         // Reinstate the original fieldlist
         if(!empty($args['fieldlist'])) $this->setFieldList($fields);
 

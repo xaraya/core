@@ -28,6 +28,8 @@ sys::import('modules.categories.xarproperties.categorytree');
  * When bound to an object these are taken from the parent object.
  * Otherwise these can be added as attributes or the tag, or they take default values.
  *
+ * Note: a base category -1 means show all the categories in a dropdown
+ *
  * TODO
  * allow a nonempty source? If so, what do we want:
  * - a simple text field that lets you enter anything freeform?
@@ -51,29 +53,27 @@ class CategoriesProperty extends DataProperty
     public $validation_allowempty_invalid;
     public $initialization_include_no_cat   = 0;
     public $initialization_include_all_cats = 0;
-    public $initialization_basecategories   = array(
-                                                0 => array(1=>'New Tree'),
-                                                1 => array(1=>array(1=>-1)),
-                                                2 => array(1=>true),
-                                                3 => array(1=>1),
-                                                    );
+    // Four columns (0 - 3) on 1 line
+    public $initialization_basecategories   = array(array('New Tree',array(array(1)),true,1));
 
-    public $module_id;
-    public $itemtype;
+    public $module_id      = 0;
+    public $itemtype       = 0;
     public $itemid;
-    public $categories = array();
+    public $categories     = array();
     public $basecategories = array();
-    
-//    public $validation_categories;
-
-    
+        
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->template       = 'categories';
         $this->tplmodule      = 'categories';
         $this->filepath       = 'modules/categories/xarproperties';
-        $this->prepostprocess = 2;
+
+        // In a bound property, get module and itemtype from the parent object
+        if (!empty($this->objectref)) {
+            $this->module_id = (int)$this->objectref->moduleid;
+            $this->itemtype  = (int)$this->objectref->itemtype;
+        }
     }
 
     public function checkInput($name = '', $value = null)
@@ -234,21 +234,27 @@ class CategoriesProperty extends DataProperty
             try {
                 $configuration = unserialize($this->configuration);
                 $configuration = $configuration['initialization_basecategories'];
-                $data['tree_name'] = $configuration[0];
-                $base_categories = $configuration[1];
-                $data['include_self'] = $configuration[2];
-                $data['select_type'] = $configuration[3];
+                $data['tree_name']    = array();
+                $base_categories      = array();
+                $data['include_self'] = array();
+                $data['select_type']  = array();
+                foreach ($configuration as $row) {
+                    $data['tree_name'][]     = $row[0];
+                    $base_categories[]       = $row[1];
+                    $data['include_self'][]  = $row[2];
+                    $data['select_type'][]   = $row[3];
+                }
             } catch(Exception $e) {
-                $data['tree_name'] = array(1 => 'New Tree');
-                $base_categories = array(1 => 1);
-                $data['include_self'] = array(1 => 1);
-                $data['select_type'] = array(1 => 1);
+                $data['tree_name']    = array(0 => 'New Tree');
+                $base_categories      = array(0 => 1);
+                $data['include_self'] = array(0 => true);
+                $data['select_type']  = array(0 => 1);
             }
        } else {
-            $data['tree_name'] = array(1 => 'New Tree');
-            $base_categories = array(1 => 1);
-            $data['include_self'] = array(1 => 1);
-            $data['select_type'] = array(1 => 1);
+            $data['tree_name']    = array(0 => 'New Tree');
+            $base_categories      = array(0 => 1);
+            $data['include_self'] = array(0 => true);
+            $data['select_type']  = array(0 => 1);
         }
         // Get an array of category trees, each having a base category as its head
         // CHECKME: what is this again?
@@ -266,15 +272,7 @@ class CategoriesProperty extends DataProperty
             $id = is_array($tree) ? reset($tree) : $tree;
             $data['base_category'][$key] = $id;
             $nodes = new BasicSet();
-            if ($id == -1) {
-                // We want all the categories
-                // This is not really a tree because we can have many top level categories,
-                // so we'll have to create a virtual root category as parent of them all
-                $node = new CategoryTreeNode();
-            } else {
-                // We want a specific tree of which the base is $id
-                $node = new CategoryTreeNode($id);
-            }
+            $node = new CategoryTreeNode($id);
             $node->setfilter($filter);
             $tree = new CategoryTree($node);
             $nodes->addAll($node->depthfirstenumeration());
@@ -287,11 +285,11 @@ class CategoriesProperty extends DataProperty
             }
             $data['trees'][$key] = $nodes;
         }
-        
+
         if (!empty($this->source)) {
             if (!isset($data['value'])) $data['value'] = array(1=>array(1 => $this->value));
         } else {
-             // Get an array of values (selected categories) for each tree
+             // If we have no values passed, get an array of values (selected categories) for each tree
             if (!isset($data['value'])) {
                 $data['value'] = array();
                 xarMod::apiLoad('categories');
@@ -353,7 +351,7 @@ class CategoriesProperty extends DataProperty
     
             // Pick up an itemid if one was passed
             if (isset($data['itemid'])) $itemid = (int)$data['itemid'];
-    
+    /*
             sys::import('xaraya.structures.query');
             xarMod::apiLoad('categories');
             $xartable =& xarDB::getTables();
@@ -368,8 +366,42 @@ class CategoriesProperty extends DataProperty
             $this->value = $q->output();
     
             $data['value'] = $this->value;
+        */
+            $this->mountValue($itemid);
+            $this->value = unserialize($this->value);
+            $data['value'] = $this->value;
         }
         return parent::showOutput($data);
+    }
+
+    public function getValue()
+    {    
+        $unpacked = unserialize($this->value);
+        return $unpacked;
+    }
+
+    public function setValue($value=null)
+    {
+        $this->value = serialize($value);
+    }
+
+    public function mountValue($itemid=0)
+    {    
+        sys::import('xaraya.structures.query');
+        xarMod::apiLoad('categories');
+        $xartable =& xarDB::getTables();
+        $q = new Query('SELECT'); 
+        $q->addtable( $xartable['categories'],'c');
+        $q->addtable( $xartable['categories_linkage'],'cl');
+        $q->join('c.id','cl.category_id');
+        $q->eq('item_id', $itemid);
+        if ($this->module_id) $q->eq('module_id', $this->module_id);
+        if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
+        $q->run();
+        $result = $q->output();
+        $this->value = serialize($result);
+    
+        return true;
     }
 
     /**
@@ -412,11 +444,41 @@ class CategoriesProperty extends DataProperty
         // Use the property's checkInput method to get the value
         $arrayprop = DataPropertyMaster::getProperty(array('name' => 'categorypicker'));
         $arrayprop->checkInput($this->propertyprefix . $this->id . '["initialization_basecategories"]');
-        // Assign the value to this configuration property for update
-        $data['configuration']['initialization_basecategories'] = $arrayprop->getValue();
         
+        // Assign the value to this configuration property for update
+        $data['configuration']['initialization_basecategories'] = unserialize($arrayprop->value);
+
         // The other configuration properties need no special treatment
         return parent::updateConfiguration($data);
+    }
+    
+    public function preList()
+    {
+        // Bail if there is no parent object
+        if (empty($this->objectref)) return true;
+
+        // Get the parent object's query;
+        $q = $this->objectref->dataquery;
+        
+        // Get the primary propety of the parent object, and its source
+        $primary = $this->objectref->primary;
+        $primary_source = $this->objectref->properties[$primary]->source;
+        
+        // Assemble the links to the object's table
+        xarMod::load('categories');
+        $tables = xarDB::getTables();
+        $q->addTable($tables['categories_linkage'], 'linkage');
+        $q->leftjoin($primary_source, 'linkage.item_id');
+        $q->addTable($tables['categories'], 'categories');
+        $q->leftjoin('categories.id', 'linkage.category_id');
+        // A zero means "all"
+        // Itemtype & module ID = 0 means the objects listing
+        if (!empty($this->module_id) && !empty($this->itemtype)) $q->eq('linkage.module_id', $this->module_id);
+        if (!empty($this->itemtype)) $q->eq('linkage.itemtype', $this->itemtype);
+        
+        // Set the source of this property
+        $this->source = 'categories.name';
+        return true;
     }
 }
 

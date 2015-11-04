@@ -45,28 +45,30 @@ class CelkoPositionProperty extends DataProperty
     public $desc         = 'Celko Position';
     public $reqmodules   = array('categories');
 
-    public $reference_id      = 0;          // The ID of the item relative to which we define the position of this item
-    public $include_reference = 1;          // Get a reference to the parent object
+    public $reference_id      = 0;        // The ID of the item relative to which we define the position of this item
+    public $include_reference = 1;        // Get a reference to the parent object
     public $moving;
-    public $position          = 2;          // By default the position of this item is after the previous item
+    public $position          = 2;        // By default the position of this item is after the previous item
     public $rightorleft;
     public $inorout;
 
     public $catexists;
     public $dbconn;
-    public $itemindices     = array();    // helper variable to hold items when importing
-    public $itemsknown      = array();    // helper variable to hold known references: oldkey => newkey
-    public $itemsunresolved = array();    // helper variable to hold unresolved references: newkey => oldkey
-    public $offset          = 0;          // helper variable to hold offsets for left and right ids
+    public $itemindices      = array();    // helper variable to hold items when importing
+    public $itemsknown       = array();    // helper variable to hold known references: oldkey => newkey
+    public $itemsunresolved  = array();    // helper variable to hold unresolved references: newkey => oldkey
+    public $offset           = 0;          // helper variable to hold offsets for left and right ids
     
-    public $initialization_celkotable     = 'xar_categories';
-    public $initialization_celkoname      = 'name';
-    public $initialization_celkoparent_id = 'parent_id';
-    public $initialization_celkoleft_id   = 'left_id';
-    public $initialization_celkoright_id  = 'right_id';
-    public $initialization_celkofilter    = '';
+    public $initialization_celkotable        = 'xar_categories';
+    public $initialization_celkoname         = 'name';
+    public $initialization_celkoparent_id    = 'parent_id';
+    public $initialization_celkoleft_id      = 'left_id';
+    public $initialization_celkoright_id     = 'right_id';
+    public $initialization_celkofilter       = '';
+    public $initialization_celkobasecategory = array(array('Celko Dropdown',array(array(1)),false,1));
 
-    public $atomic_value    = array();    // The atomic calues of this property are lrft, right and parent
+    public $position_options = array();
+    public $atomic_value     = array();    // The atomic calues of this property are lrft, right and parent
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -74,6 +76,13 @@ class CelkoPositionProperty extends DataProperty
         $this->tplmodule = 'categories';
         $this->filepath  = 'modules/categories/xarproperties';
         $this->dbconn = xarDB::getConn();
+
+        $this->position_options = array(
+					array('id' => '1', 'name' => xarML('Right before, in the same level')),
+					array('id' => '2', 'name' => xarML('Right after, in the same level')),
+					array('id' => '4', 'name' => xarML('The first child item')),
+					array('id' => '3', 'name' => xarML('The last child item')),
+					);
     }
 
     public function checkInput($name = '', $value = null)
@@ -330,19 +339,22 @@ class CelkoPositionProperty extends DataProperty
 
     public function showInput(Array $data = array())
     {
+        if (!isset($data['position_options'])) $data['position_options'] = $this->position_options;
         if (!isset($data['position'])) $data['position'] = $this->position;
         if (!isset($data['reference_id'])) $data['reference_id'] = $this->reference_id;
         if (isset($data['filter'])) $this->initialization_celkofilter = $data['filter'];
+        if (isset($data['base_category'])) $this->initialization_celkobasecategory = $data['base_category'];
        
+        $include_self = $this->initialization_celkobasecategory[0][2];
         $data['itemid'] = isset($data['itemid']) ? $data['itemid'] : $this->_itemid;
         if (!empty($data['itemid'])) {        
             $data['item'] = $this->getItem($data['itemid']);
-            $items = $this->getItems(array('cid' => false,
+            $items = $this->getItems(array('cid' => $include_self,
                                            'eid' => $data['itemid']));
             $data['id'] = $data['itemid'];
         } else {
             $data['item'] = Array('left_id'=>0,'right_id'=>0,'name'=>'','description'=>'', 'template' => '');
-            $items = $this->getItems(array('cid' => false));
+            $items = $this->getItems(array('cid' => $include_self));
             $data['id'] = null;
         }
 
@@ -388,6 +400,7 @@ class CelkoPositionProperty extends DataProperty
     
     public function showHidden(Array $data = array())
     {
+        if (!isset($data['position_options'])) $data['position_options'] = $this->position_options;
         if (!isset($data['position'])) $data['position'] = $this->position;
         if (!isset($data['reference_id'])) $data['reference_id'] = $this->reference_id;
         if (isset($data['filter'])) $this->initialization_celkofilter = $data['filter'];
@@ -736,7 +749,20 @@ class CelkoPositionProperty extends DataProperty
         $exportvalue = serialize(array((int)$itemid, (int)$thisItem['parent_id'], (int)$thisItem['left_id'], (int)$thisItem['right_id']));
         return $exportvalue;
     }
+
+    public function updateConfiguration(Array $data = array())
+    {
+        // Removes the empty line for adding a row
+        array_pop($data['configuration']['initialization_celkobasecategory']);
+        
+        // Ignore/remove any empty rows, i.e. those where there is no title
+        foreach ($data['configuration']['initialization_celkobasecategory'] as $row => $columns) {
+            if (empty($columns[0])) unset($data['configuration']['initialization_celkobasecategory'][$row]);
+        }
+        return parent::updateConfiguration($data);
+    }
 }
+
 sys::import('modules.dynamicdata.class.properties.interfaces');
 
 class CelkoPositionPropertyInstall extends CelkoPositionProperty implements iDataPropertyInstall

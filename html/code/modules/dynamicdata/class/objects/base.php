@@ -272,13 +272,6 @@ class DataObject extends DataObjectMaster implements iDataObject
             $args['properties'][$name] =& $this->properties[$name];
         }
 
-        // Special fix for the category of an object
-        // TODO: this is only valid for objects with 1 category (in this case the objects object
-        if($this->objectid == 1)
-        {
-            $this->properties['category']->source = '';
-        }
-
         // pass some extra template variables for use in BL tags, API calls etc.
         //FIXME: check these
         $args['isprimary'] = !empty($this->primary);
@@ -331,13 +324,6 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
         // clean up hookvalues
         $this->hookvalues = array();
-
-        // Special fix for the category of an object
-        // TODO: this is only valid for objects with 1 category (in this case the objects object
-        if($this->objectid == 1)
-        {
-            $this->properties['category']->source = '';
-        }
 
         // pass some extra template variables for use in BL tags, API calls etc.
         //FIXME: check these
@@ -407,13 +393,6 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->properties['itemtype']->setValue($this->getNextItemtype($args));
         }
 
-        // Special fix for the category of an object
-        // TODO: this is only valid for objects with 1 category (in this case the objects object
-        if($this->objectid == 1)
-        {
-            $this->properties['category']->source = '';
-        }
-
         /* General sequence:
          * 1. Run the property-specific createValue methods for properties using the current datastore
          * 2. Run the datastore's createItem method
@@ -456,13 +435,6 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
         if(empty($this->itemid) && !empty($this->primary)) {
             $this->itemid = $this->properties[$this->primary]->getValue();
-        }
-
-        // Special fix for the category of an object
-        // TODO: this is only valid for objects with 1 category (in this case the objects object
-        if($this->objectid == 1)
-        {
-            $this->properties['category']->source = '';
         }
 
         /* General sequence:

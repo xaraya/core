@@ -951,5 +951,11 @@ class DataProperty extends Object implements iDataProperty
     {
         return xarVarPrepForDisplay($item[$this->name]);
     }
+    
+    public function preCreate() { return true; }
+    public function preUpdate() { return true; }
+    public function preDelete() { return true; }
+    public function preGet()    { return true; }
+    public function preList()   { return true; }
 }
 ?>

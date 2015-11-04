@@ -16,40 +16,40 @@
 function arrayTable(args)
 {
     // config values and their defaults
-    this.id = (typeof args.id == 'undefined') ? null : args.id;
-    this.name = (typeof args.name == 'undefined') ? this.id : args.name;
+    this.id        = (typeof args.id == 'undefined') ? null : args.id;
+    this.name      = (typeof args.name == 'undefined') ? this.id : args.name;
     this.min       = (typeof args.min == 'undefined')       ? 2         : parseInt(args.min);
     this.max       = (typeof args.max == 'undefined')       ? 10        : parseInt(args.max);
     this.addremove = (typeof args.addremove == 'undefined') ? 0         : parseInt(args.addremove);
 
     // suffixes to look for
-    this.rows_id = (typeof args.rows_id == 'undefined') ? 'rows' : args.rows_id;
-    this.tpl_id   = (typeof args.tpl_id == 'undefined')   ? 'template' : args.tpl_id;
-    this.add_id   = (typeof args.add_id == 'undefined')   ? 'addrow' : args.add_id;
+    this.rows_id   = (typeof args.rows_id == 'undefined') ? 'rows' : args.rows_id;
+    this.tpl_id    = (typeof args.tpl_id == 'undefined')   ? 'template' : args.tpl_id;
+    this.add_id    = (typeof args.add_id == 'undefined')   ? 'addrow' : args.add_id;
     //this.del_id   = (typeof args.del_id == 'undefined') ? 'delete' : args.del_id;
     this.del_id = 'delete'; // this is a fixed value since it's used in the property code 
     this.count_id = (typeof args.count_id == 'undefined') ? null : args.count_id;
     // Delete buttons 
-    this.del_icon   = (typeof args.del_icon == 'undefined') ? '' : args.del_icon;
+    this.del_icon  = (typeof args.del_icon == 'undefined') ? '' : args.del_icon;
     this.del_alt   = (typeof args.del_alt == 'undefined') ? 'Remove' : args.del_alt;
-    this.del_title   = (typeof args.del_title == 'undefined') ? 'Remove row' : args.del_title;
+    this.del_title = (typeof args.del_title == 'undefined') ? 'Remove row' : args.del_title;
     // Add button 
-    this.add_icon   = (typeof args.add_icon == 'undefined') ? '' : args.add_icon;
+    this.add_icon  = (typeof args.add_icon == 'undefined') ? '' : args.add_icon;
     this.add_alt   = (typeof args.add_alt == 'undefined') ? 'Add' : args.add_alt;
-    this.add_title   = (typeof args.add_title == 'undefined') ? 'Add row' : args.add_title;
+    this.add_title = (typeof args.add_title == 'undefined') ? 'Add row' : args.add_title;
     // Up button
-    this.up_icon = (typeof args.up_icon == 'undefined') ? '' : args.up_icon;
-    this.up_alt   = (typeof args.up_alt == 'undefined') ? 'Up' : args.up_alt;
-    this.up_title   = (typeof args.up_title == 'undefined') ? 'Move row up' : args.up_title;
+    this.up_icon   = (typeof args.up_icon == 'undefined') ? '' : args.up_icon;
+    this.up_alt    = (typeof args.up_alt == 'undefined') ? 'Up' : args.up_alt;
+    this.up_title  = (typeof args.up_title == 'undefined') ? 'Move row up' : args.up_title;
     // Down button
     this.down_icon = (typeof args.down_icon == 'undefined') ? '' : args.down_icon;
-    this.down_alt   = (typeof args.down_alt == 'undefined') ? 'Down' : args.down_alt;
+    this.down_alt  = (typeof args.down_alt == 'undefined') ? 'Down' : args.down_alt;
     this.down_title   = (typeof args.down_title == 'undefined') ? 'Move row down' : args.down_title;
     // Icon classes 
-    this.icon_enabled   = (typeof args.icon_enabled == 'undefined') ? 'xar-icon' : args.icon_enabled;
-    this.icon_disabled  = (typeof args.icon_disabled == 'undefined') ? 'xar-icon-disabled' : args.icon_disabled;
+    this.icon_enabled     = (typeof args.icon_enabled == 'undefined') ? 'xar-icon' : args.icon_enabled;
+    this.icon_disabled    = (typeof args.icon_disabled == 'undefined') ? 'xar-icon-disabled' : args.icon_disabled;
     // Pointer styles 
-    this.pointer_enabled = (typeof args.pointer_enabled == 'undefined') ? 'pointer' : args.pointer_enabled;
+    this.pointer_enabled  = (typeof args.pointer_enabled == 'undefined') ? 'pointer' : args.pointer_enabled;
     this.pointer_disabled = (typeof args.pointer_disabled == 'undefined') ? 'not-allowed' : args.pointer_disabled;
     // Optionally debug 
     this.debug     = (typeof args.debug == 'undefined')     ? false     : args.debug;
@@ -117,6 +117,7 @@ function arrayTable(args)
         this.table.appendChild(row);
         // move the template to the end (NOTE: no need to use removeRow method here) 
         this.table.removeChild(tpl); 
+        this.table.appendChild(tpl);
         // reindex the rows 
         this.reIndex();
 
@@ -172,7 +173,7 @@ function arrayTable(args)
                     if (!delbtn) {
                         // not already set, 
                         // look for the delete checkbox dd_id + _ + row + del_id                
-                        del = document.getElementById(this.id + '_' + r + '_' + this.del_id);  
+                        del = document.getElementById(this.id + '_' + r + '_' + this.del_id);
                         // if it exists and is a checkbox, disable it, and hide it
                         if (del && del.type == 'checkbox') {
                             del.style.display = 'none';
@@ -278,19 +279,26 @@ function arrayTable(args)
             this.setIndex(images, idx);
         return true;
     }
+        
 
 /**
  * Update name and id attributes of a collection of elements with specified index
+ * Specifically we are replacing the index that indicates the row number
 **/
 
     this.setIndex = function(els, idx)
     {
-        value_re = new RegExp('^(' + this.name + '\\[value\\]\\[)(\\d+)(\\]\\[\\d+\\])$');
-        valueid_re = new RegExp('^(' + this.id + '_)(\\d+)(_\\d+)$');
-        delete_re = new RegExp('^(' + this.name + '\\[value\\]\\[)(\\d+)(\\]\\[' + this.del_id + '\\])$');
+        // Adjust the [] in the name string
+        namestring = this.name.replace('[','\\[');namestring = namestring.replace(']','\\]');
+        
+        // Set up the regex strings we will be using
+        value_re    = new RegExp('^(' + namestring + '\\[)(\\d+)(\\]\\[\\d+\\].*)$');
+        valueid_re  = new RegExp('^(' + this.id + '_)(\\d+)(_\\d+.*)$');
+        delete_re   = new RegExp('^(' + namestring + '\\[)(\\d+)(\\]\\[' + this.del_id + '\\].*)$');
         deleteid_re = new RegExp('^(' + this.id + '_)(\\d+)(_' + this.del_id + ')$');
         delbtnid_re = new RegExp('^(' + this.id + '_)(\\d+)(_' + this.del_id + '_btn)$');
-        indexid_re = new RegExp('^(' + this.id + '_)(\\d+)(_0)$');
+        indexid_re  = new RegExp('^(' + this.id + '_)(\\d+)(_1000000)$');
+        // alert(idx);
         for (j=0; j<els.length; j++) {
             // replace the idx in name attributes
             if (els[j].name) {
@@ -305,7 +313,7 @@ function arrayTable(args)
                 if (els[j].id.match(valueid_re)) {
                     els[j].id = els[j].id.replace(valueid_re, "$1"+idx+"$3");
                     if (els[j].id.match(indexid_re))
-                        els[j].value = idx;
+                        els[j].value = idx+1;
                 } else if (els[j].id.match(deleteid_re)) {
                     els[j].id = els[j].id.replace(deleteid_re, "$1"+idx+"$3");
                 } else if (els[j].id.match(delbtnid_re)) {

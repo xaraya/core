@@ -33,11 +33,9 @@
         }
 
         // Setting up necessary data.
-        $categories = xarMod::apiFunc('categories',
-                                    'user',
-                                    'getcat',
-                                    array('cid' => false,
-                                          'getchildren' => true));
+        $categories = xarMod::apiFunc('categories', 'user', 'getcat',
+                                            array('cid' => false,
+                                                  'getchildren' => true));
 
         $catinfo = array();
         $catinfo['module'] = 'categories';

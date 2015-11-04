@@ -1237,7 +1237,8 @@ class Query
                 }
             }
             else {
-                // error msg
+                $result = xarML('Incorrect HAVING clause');
+                die($result);
             }
         }
         return $s;

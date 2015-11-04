@@ -42,46 +42,46 @@
                 </div>
             </fieldset>
         <xar:elseif condition="$selstyle eq '2'"/>
-                <ul class="xar-tabs">
-                    <xar:var name="title">Click on a group tab to display users from that group</xar:var>
-                    <xar:var name="label">Help</xar:var>
-                    <li class="xar-tabs-label" title="#$title#">#$label#</li>
-                    <xar:if condition="$groupid eq 0">
+            <ul class="xar-tabs">
+                <xar:var name="title">Click on a group tab to display users from that group</xar:var>
+                <xar:var name="label">Help</xar:var>
+                <li class="xar-tabs-label" title="#$title#">#$label#</li>
+                <xar:if condition="$groupid eq 0">
+                        <li class="xar-tab-active">
+                        <a href="#xarModURL('roles','admin','showusers',array('id'=>0,'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" class="xar-accent xar-accent-outline">
+                            All Users (#$totalusers#)
+                        </a>
+                    </li>
+                <xar:else/>
+                    <li class="xar-tab">
+                        <a href="#xarModURL('roles','admin','showusers',array('id'=>0,'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" class="xar-norm xar-norm-outline">
+                            All Users (#$totalusers#)
+                        </a>
+                    </li>
+                </xar:if>
+                <xar:set name="prevgroup">""</xar:set>
+                <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
+                    <xar:if condition="$prevgroup ne $groups[$i]['name']">
+                        <xar:if condition="$groupid eq $groups[$i]['id']">
                             <li class="xar-tab-active">
-                            <a href="#xarModURL('roles','admin','showusers',array('id'=>0,'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" class="xar-accent xar-accent-outline">
-                                All Users (#$totalusers#)
-                            </a>
-                        </li>
-                    <xar:else/>
-                        <li class="xar-tab">
-                            <a href="#xarModURL('roles','admin','showusers',array('id'=>0,'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" class="xar-norm xar-norm-outline">
-                                All Users (#$totalusers#)
-                            </a>
-                        </li>
-                    </xar:if>
-                    <xar:set name="prevgroup">""</xar:set>
-                    <xar:for start="$i=0" test="$i lt count($groups)" iter="$i++">
-                        <xar:if condition="$prevgroup ne $groups[$i]['name']">
-                            <xar:if condition="$groupid eq $groups[$i]['id']">
-                                <li class="xar-tab-active">
-                                    <xar:var name="label">Display the users in this group</xar:var>
-                                    <a href="#xarModURL('roles','admin','showusers',array('id'=>$groups[$i]['id'],'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" title="#$label#" class="xar-accent xar-accent-outline">
-                                        #xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
-                                    </a>
-                                </li>
-                            <xar:else/>
-                                <li class="xar-tab">
-                                    <xar:var name="label">Display the users in this group</xar:var>
-                                    <a href="#xarModURL('roles','admin','showusers',array('id'=>$groups[$i]['id'],'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" title="#$label#" class="xar-norm xar-norm-outline">
-                                        #xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
-                                    </a>
-                                </li>
-                            </xar:if>
+                                <xar:var name="label">Display the users in this group</xar:var>
+                                <a href="#xarModURL('roles','admin','showusers',array('id'=>$groups[$i]['id'],'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" title="#$label#" class="xar-accent xar-accent-outline">
+                                    #xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
+                                </a>
+                            </li>
+                        <xar:else/>
+                            <li class="xar-tab">
+                                <xar:var name="label">Display the users in this group</xar:var>
+                                <a href="#xarModURL('roles','admin','showusers',array('id'=>$groups[$i]['id'],'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" title="#$label#" class="xar-norm xar-norm-outline">
+                                    #xarVarPrepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
+                                </a>
+                            </li>
                         </xar:if>
-                        <xar:set name="prevgroup">
-                        #xarVarPrepForDisplay($groups[$i]['name'])#</xar:set>
-                    </xar:for>
-                </ul>
+                    </xar:if>
+                    <xar:set name="prevgroup">
+                    #xarVarPrepForDisplay($groups[$i]['name'])#</xar:set>
+                </xar:for>
+            </ul>
         </xar:if>
         </div><!--/xar-mod-page-head-->
         <div class="xar-mod-page-body">

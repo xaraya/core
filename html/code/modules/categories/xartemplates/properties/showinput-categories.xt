@@ -22,7 +22,7 @@
         <xar:set name="style">''</xar:set>
     </xar:if>
 
-    <xar:set name="index">1</xar:set>
+    <xar:set name="index">0</xar:set>
 
     <xar:foreach in="$trees" key="$key" value="$nodes">
         <input type="hidden" name="#$name#[base_category][#$index#]" value="#$base_category[$index]#"/>

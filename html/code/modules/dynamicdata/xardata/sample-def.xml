@@ -8,11 +8,11 @@
   <urlparam>itemid</urlparam>
   <maxid>0</maxid>
   <datastore>dynamicdata</datastore>
-  <config>a:0:{}</config>
+  <config></config>
   <isalias>false</isalias>
   <sources></sources>
-  <relations>a:0:{}</relations>
-  <objects>a:0:{}</objects>
+  <relations></relations>
+  <objects></objects>
   <properties>
     <property name="id">
       <id>29</id>

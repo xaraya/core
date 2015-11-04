@@ -1252,20 +1252,18 @@ class DataObjectMaster extends Object
         if ($descriptor->exists('sources')) {
             try {
                 $sources = unserialize($descriptor->get('sources'));
+                
                 if (!empty($sources)) {
-                    // Transform from array property format to datasource format
-//                    $object->datasources = array();
-//                    foreach ($sources as $source) $object->datasources[$source[0]] = array($source[1],$source[2]);
                     $object->datasources = $sources;
-                    foreach ($object->datasources as $key => $value) {
-                    
+                    foreach ($object->datasources as $key => $table) {
                         // Support simple array form
-                        if (is_array($value)) {
-                            $tabletype = $value[1];
-                            $value = $value[0];
+                        if (is_array($table)) {
+                            $tabletype = $table[1];
+                            $value = $table[0];
                         } else {
                             $tabletype = 'internal';
                         }
+
                         // Remove any spaces and similar chars
                         $value = trim($value);
                         $key = trim($key);
@@ -1283,55 +1281,63 @@ class DataObjectMaster extends Object
                         }
                     }
                 }
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+                throw new Exception(xarML('Error creating dataquery'));
+            }
         }
 
         // Set up the db table relations
         if ($descriptor->exists('relations')) {
             try {
-                $relationargs = unserialize($descriptor->get('relations'));
-                foreach ($relationargs as $key => $value) {
-                    $join = "";
+                $relationargs = @unserialize($descriptor->get('relations'));
+                if (is_array($relationargs)) {
+                    foreach ($relationargs as $key => $value) {
                     
-                    // Support simple array form
-//                    if (is_array($value)) $value = current($value);
-                    // Remove any spaces and similar chars
-                    $left = trim($value[0]);
-                    $right = trim($value[1]);
+                        // Support simple array form
+    //                    if (is_array($value)) $value = current($value);
+
+                        // Bail if we are missing anything
+                        if (count($value) < 2) continue;
                     
-                    // If this was just the empty first line, bail
-                    if (empty($left)) continue;
+                        // Remove any spaces and similar chars
+                        $left = trim($value[0]);
+                        $right = trim($value[1]);
                     
-                    // Check if this relation includes a foreign table
-                    // If it does do a left or right join, rather than an inner join
-                    $fromobjectparts = explode('.',$left);
-                    $fromobject = $fromobjectparts[0];
-                    if (isset($object->datasources[$fromobject])) {
-                        if (isset($object->datasources[$fromobject][1]) && $object->datasources[$fromobject][1] == 'internal') {
-                            $join = 'join';
-                        } else {
-                            if ($type != "SELECT") continue;
-                            $join = 'rightjoin';
+                        // If this was just the empty first line, bail
+                        if (empty($left)) continue;
+                    
+                        // Check if this relation includes a foreign table
+                        // If it does do a left or right join, rather than an inner join
+                        $join = "";
+                        $fromobjectparts = explode('.',$left);
+                        $fromobject = $fromobjectparts[0];
+                        if (isset($object->datasources[$fromobject])) {
+                            if (isset($object->datasources[$fromobject][1]) && $object->datasources[$fromobject][1] == 'internal') {
+                                $join = 'join';
+                            } else {
+                                if ($type != "SELECT") continue;
+                                $join = 'rightjoin';
+                            }
                         }
+                    
+                        $toobjectparts = explode('.',$right);
+                        $toobject = $toobjectparts[0];
+                        if (isset($object->datasources[$toobject])) {
+                            if (isset($object->datasources[$toobject][1]) && $object->datasources[$toobject][1] == 'internal') {
+                                $join = 'join';
+                            } else {
+                                if ($type != "SELECT") continue;
+                                $join = 'leftjoin';
+                            }                        
+                        }
+                    
+                        // If no join was defined, then this is a bad realtion: ignore
+                        if (empty($join)) continue;
+                    
+                        // Add this relation's join to the object's dataquery
+                        if ($prefix) $this->dataquery->{$join}($object->name . "_" . $left,$object->name . "_" . $right);
+                        else $this->dataquery->{$join}($left,$right);
                     }
-                    
-                    $toobjectparts = explode('.',$right);
-                    $toobject = $toobjectparts[0];
-                    if (isset($object->datasources[$toobject])) {
-                        if (isset($object->datasources[$toobject][1]) && $object->datasources[$toobject][1] == 'internal') {
-                            $join = 'join';
-                        } else {
-                            if ($type != "SELECT") continue;
-                            $join = 'leftjoin';
-                        }                        
-                    }
-                    
-                    // If no join was defined, then this is a bad realtion: ignore
-                    if (empty($join)) continue;
-                    
-                    // Add this relation's join to the object's dataquery
-                    if ($prefix) $this->dataquery->{$join}($object->name . "_" . $left,$object->name . "_" . $right);
-                    else $this->dataquery->{$join}($left,$right);
                 }
             } catch (Exception $e) {}
         }
@@ -1339,34 +1345,42 @@ class DataObjectMaster extends Object
         // Set up the relations to related objects
         if ($descriptor->exists('objects')) {
             try {
-                $objectargs = unserialize($descriptor->get('objects'));
-                foreach ($objectargs as $key => $value) {
-                    // Support simple array form
-//                    if (is_array($value)) $value = current($value);
-                    // Remove any spaces and similar chars
-                    $left = trim($value[0]);
-                    $right = trim($value[1]);
+                $objectargs = @unserialize($descriptor->get('objects'));
+                if (is_array($objectargs)) {
+                    foreach ($objectargs as $key => $value) {
 
-                    // If this was just the empty first line, bail
-                    if (empty($left)) continue;
+                        // Support simple array form
+    //                    if (is_array($value)) $value = current($value);
+
+                        // Bail if we are missing anything
+                        if (count($value) < 2) continue;
                     
-                    if ((strpos($left, 'this') === false) && (strpos($right, 'this') === false)
-                    && (strpos($left, $object->name) === false) && (strpos($right, $object->name) === false)
-                    ) 
-                        echo 'One of the links must be of a property of ' . $object->name . '<br />';
-                    try {
-                        $leftside = $object->propertysource($left, $object, $prefix);
-                    } catch (Exception $e) {echo 'Cannot translate ' . $left . ' to a valid datasource<br />'; }
-                    try {
-                        $rightside = $object->propertysource($right, $object, $prefix);
-                    } catch (Exception $e) {echo 'Cannot translate ' . $right . ' to a valid datasource<br />'; }
-                    $this->dataquery->leftjoin($leftside,$rightside);
+                        // Remove any spaces and similar chars
+                        $left = trim($value[0]);
+                        $right = trim($value[1]);
+
+                        // If this was just the empty first line, bail
+                        if (empty($left)) continue;
+                        if (empty($right)) continue;
                     
-                    // FIXME: We don't yet support a sort order for related object items, so order them by ID for now
-                    $parts = explode('.',$right);
-                    $table = trim($parts[0]);
-                    // We should actually sort by the object's primary key, but lets forgoe that for now
-//                    $this->dataquery->setorder($table . ".id");
+                        if ((strpos($left, 'this') === false) && (strpos($right, 'this') === false)
+                        && (strpos($left, $object->name) === false) && (strpos($right, $object->name) === false)
+                        ) 
+                            echo 'One of the links must be of a property of ' . $object->name . '<br />';
+                        try {
+                            $leftside = $object->propertysource($left, $object, $prefix);
+                        } catch (Exception $e) {echo 'Cannot translate ' . $left . ' to a valid datasource<br />'; }
+                        try {
+                            $rightside = $object->propertysource($right, $object, $prefix);
+                        } catch (Exception $e) {echo 'Cannot translate ' . $right . ' to a valid datasource<br />'; }
+                        $this->dataquery->leftjoin($leftside,$rightside);
+                    
+                        // FIXME: We don't yet support a sort order for related object items, so order them by ID for now
+                        $parts = explode('.',$right);
+                        $table = trim($parts[0]);
+                        // We should actually sort by the object's primary key, but lets forgoe that for now
+    //                    $this->dataquery->setorder($table . ".id");
+                    }
                 }
             } catch (Exception $e) {
                 if (isset($left)) echo 'Bad object relation: ' . $left . ' or ' . $right;

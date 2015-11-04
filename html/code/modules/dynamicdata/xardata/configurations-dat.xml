@@ -33,7 +33,7 @@
     <property_id>2</property_id>
     <label>Generic Rule</label>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:0:{}</configuration>
+    <configuration></configuration>
   </configurations>
   <configurations itemid="5">
     <id>5</id>
@@ -42,7 +42,7 @@
     <property_id>2</property_id>
     <label>Regex Filter</label>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:0:{}</configuration>
+    <configuration></configuration>
   </configurations>
   <configurations itemid="6">
     <id>6</id>
@@ -276,7 +276,7 @@
     <property_id>19</property_id>
     <label>Module</label>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:0:{}</configuration>
+    <configuration></configuration>
   </configurations>
   <configurations itemid="35">
     <id>35</id>
@@ -285,7 +285,7 @@
     <property_id>15</property_id>
     <label>Itemtype</label>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:0:{}</configuration>
+    <configuration></configuration>
   </configurations>
   <configurations itemid="36">
     <id>36</id>
@@ -330,7 +330,7 @@
     <property_id>15</property_id>
     <label>Subitems displayed</label>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:0:{}</configuration>
+    <configuration></configuration>
   </configurations>
   <configurations itemid="41">
     <id>41</id>
@@ -348,7 +348,7 @@
     <property_id>2</property_id>
     <label>Default Items</label>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:0:{}</configuration>
+    <configuration></configuration>
   </configurations>
   <configurations itemid="43">
     <id>43</id>
@@ -366,7 +366,7 @@
     <property_id>14</property_id>
     <label>Required</label>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:0:{}</configuration>
+    <configuration></configuration>
   </configurations>
   <configurations itemid="45">
     <id>45</id>

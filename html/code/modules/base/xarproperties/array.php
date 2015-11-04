@@ -31,6 +31,7 @@
 
 /* include the base class */
 sys::import('modules.dynamicdata.class.properties.base');
+
 /**
  * Handle Array Property
  */
@@ -43,16 +44,17 @@ class ArrayProperty extends DataProperty
 
     public $fields = array();
 
-    public $display_column_definition;                             // The columns the table displays
-    public $display_minimum_rows = 1;                              // The table displays at least this many rows
-    public $display_maximum_rows = 10;                             // The table cannot display more than this many rows
-    public $initialization_addremove = 0;                          // 0: no adding/deleting of rows, 1: adding only, 2: adding and deleting    
-    public $validation_associative_array = 0;                      // flag to display the value as an associative array
-    public $validation_associative_array_invalid;                  // Holds an error msg for the validation above
-    public $default_suffixlabel = "Row";                           // suffix for the Add/Remove Button
-    public $initialization_fixed_keys = 0;                         // allow editing keys on input
+    public $display_minimum_rows         = 1;        // The table displays at least this many rows
+    public $display_maximum_rows         = 10;       // The table cannot display more than this many rows
+    public $initialization_addremove     = 0;        // 0: no adding/deleting of rows, 1: adding only, 2: adding and deleting    
+    public $validation_associative_array = 0;        // flag to display the value as an associative array
+    public $validation_associative_array_invalid;    // Holds an error msg for the validation above
+    public $default_suffixlabel          = "Row";    // suffix for the Add/Remove Button
+    public $initialization_fixed_keys    = 0;        // allow editing keys on input
 
-    public $default_column_definition = array(array("Key","Value"),array(2,2),array("",""),array("",""));  
+    // The columns the table displays
+    public $default_column_definition = array(array("Key",2,"",""),array("Value",2,"",""));  
+    public $display_column_definition = array(array("Key",2,"",""),array("Value",2,"",""));  
 
     // Configuration setting to ignore
     public $initialization_other_rule_ignore    = true;
@@ -63,12 +65,10 @@ class ArrayProperty extends DataProperty
     
     function __construct(ObjectDescriptor $descriptor)
     {
-        $this->display_column_definition = $this->default_column_definition;
         parent::__construct($descriptor);
         $this->tplmodule      = 'base';
         $this->template       = 'array';
         $this->filepath       = 'modules/base/xarproperties';
-        $this->prepostprocess = 2;
     }
 
     public function checkInput($name = '', $value = null)
@@ -78,52 +78,49 @@ class ArrayProperty extends DataProperty
         $this->fieldname = $name;
         if (!isset($value)) {
             // Get the number of columns and rows
-            if (empty($this->display_column_definition)) $this->display_column_definition = $this->default_column_definition;
             if (isset($this->display_column_definition['value'])) {
                 $displayconfig = $this->display_column_definition['value'];
             } else {
                 $displayconfig = $this->display_column_definition;
             }
-            $columncount = count($displayconfig[0]);
-            if (!xarVarFetch($name . '["value"]',    'array', $elements, array(), XARVAR_NOT_REQUIRED)) return;
+            $columncount = isset($displayconfig) ? count($displayconfig) : 0;
+            if (!xarVarFetch($name,    'array', $elements, array(), XARVAR_NOT_REQUIRED)) return;
             // Get the number of rows we are saving
             $rows = count($elements);
 
-            for ($k=1;$k<=$columncount;$k++) {
+            $value = array();
+            for ($k=0;$k<$columncount;$k++) {
                 // Get the property type for this column and get the value from the template
-                $property = DataPropertyMaster::getProperty(array('type' => $displayconfig[1][$k-1]));
-                $property->parseConfiguration($displayconfig[3][$k-1]);
+                $property = DataPropertyMaster::getProperty(array('type' => $displayconfig[$k][1]));
+                $property->parseConfiguration($displayconfig[$k][3]);
                 $i=0;
                 foreach ($elements as $row) {
                     // Ignore rows where the delete checkbox was checked
+
                     if (isset($row['delete'])) continue;
 
                     // $index is the current index of the row. May have holes if rows have been deleted
-                    $index = $row[0];
+                    $index = $row[1000000]-1;
                     
                     // Get the field name of the element we are looking at
-                    $fieldname = $name . '["value"][' . $index . '][' . $k . ']';
+                    $fieldname = $name . '[' . $index . '][' . $k . ']';
 
-                    // $i is the row index we will save with, ensuring saved data has no holes in the index
-                    $i++;
-                    
                     // Get its data
                     $valid = $property->checkInput($fieldname);
                     // Move the found data to the array we will save
-                    $value[$k-1][$i] = $property->value;
+                    $value[$i][$k] = $property->value;
+
+                    // $i is the row index we will save with, ensuring saved data has no holes in the index
+                    $i++;
                 }
             }
-
-            // Set value to the validation_associative_array  
-//            if (!xarVarFetch($name . '["settings"]["associative_array"]', 'int', $associative_array, 0, XARVAR_NOT_REQUIRED)) return;
-//            $this->validation_associative_array = $associative_array;
         }
         return $this->validateValue($value);
     }
 
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+//        if (!parent::validateValue($value)) return false;
 
         // Check if we have an array. We don't really have an error message here
         if (!is_array($value)) {
@@ -133,6 +130,12 @@ class ArrayProperty extends DataProperty
             return false;
         }
         
+        // Empty arrays are OK
+        if (empty($value)) {
+            $this->setValue($value);
+            return true;
+        }
+
         // If this is an associative array, check if the keys are unique
         if ($this->validation_associative_array) {
             $initial_count = count($value[0]);
@@ -159,10 +162,10 @@ class ArrayProperty extends DataProperty
 
     function setValue($value=null)
     {
-        // If passing a string we assume it is already a serialzed array of the correct type
         if (empty($value)) $value = array();
         if (!empty($value) && is_array($value)) {
-            //this code is added to store the values as value1,value2 in the DB for non-associative storage
+
+            $temp = array();
             if(!$this->validation_associative_array) {
             /*
                 //Legacy format. remove?
@@ -180,86 +183,62 @@ class ArrayProperty extends DataProperty
                 }
                 $this->value = $elements;
             */
-                /*$temp = array();                
-                foreach ($value as $key => $row) {
-                    array_unshift($row,$key);
-                    $temp[] = $row;
-                }
-                $value = $temp;
-                */
                 // Non associative array
-                $temp = array();
+                // CHECKME: the 100000 column should already be gone here. In that case we can remove the foreach loop
                 foreach($value as $i => $column) {
                     foreach ($column as $k => $row) {
-                        if ($k == 0) continue;
-                        $temp[$k-1][$i] = $value[$i][$k];
+                        if ($k == 1000000) continue;
+                        $temp[$i][$k] = $value[$i][$k];
                     }
                 }
             } else {
                 // Associative array
-                $temp = array();
-                $keys = array_shift($value);
                 foreach($value as $i => $column) {
-                    foreach ($column as $k => $row) {
-                        if ($k == 0) continue;
-                        $temp[$keys[$k]][$i] = $value[$i][$k];
+                    if (empty($column[0])) break;
+                    foreach ($column as $key => $item) {
+                        if ($key == 0) continue;
+                        $temp[$column[0]][] = $item;
                     }
                 }
             }
             $value = $temp;
-            $this->value = serialize($value);
-        } else {
-            $this->value = $value;
         }
+        $this->value = serialize($value);
+        return true;
     }
 
     public function getValue()
     {
-         try {
+        // If passing a string we assume it is already a serialzed array of the correct type
+        try {
             $value = unserialize($this->value);
-            $temp = array();
+        } catch(Exception $e) {
+            $value = array();
+        }
             
-            if(!$this->validation_associative_array) {
-                foreach($value as $i => $row) {
-                    foreach ($row as $k => $column) {
-                        $temp[$k][$i+1] = $value[$i][$k];
-                    }
-                }
-            /*
-                //Legacy format. remove?
-                $outer = explode(';',$this->value);
-                $value =array();
-                foreach ($outer as $element) {
-                    $inner = explode('%@$#',$element);
-                    if (count($inner)>1) $value[] = $inner;
-                    else $value[] = $element;
-                }
-            */
-            /*
-                $temp1 = array();                
-                foreach ($temp as $row) {
-                    $newkey = $row[1];
-                    unset($row[1]);
-                    $temp1[$newkey] = $row;
-                }
-                */
-            } else {
-                $keys = array_keys($value);
-                $index = 1;
-                foreach ($keys as $key) {$temp[0][$index] = $key; $index++;}
-                $index = 1;
-                foreach($value as $i => $row) {
-                    foreach ($row as $k => $column) {
-                        $temp[$k+1][$index] = $value[$i][$k];
-                    }
-                    $index++;
-                }
+        if(!$this->validation_associative_array) {
+            return $value;
+        /*
+            //Legacy format. remove?
+            $outer = explode(';',$this->value);
+            $value =array();
+            foreach ($outer as $element) {
+                $inner = explode('%@$#',$element);
+                if (count($inner)>1) $value[] = $inner;
+                else $value[] = $element;
+            }
+        */
+        } else {
+            $temp = array();
+            foreach($value as $key => $row) {
+                $newrow[] = $key;
+                foreach ($row as $item) $newrow[] = $item;
+                $temp[] = $newrow;
+                unset($newrow);
             }
             $value = $temp;
-        } catch(Exception $e) {
-            $value = null;
+            return $value;
         }
-        return $value;
     }
 
     public function showInput(Array $data = array())
@@ -269,51 +248,59 @@ class ArrayProperty extends DataProperty
         // We need to check if 
         // - we are a bound property and 
         // - are configuring
-        if (!empty($data["configuration"])) {
-            // We are entering data into a configuration 
+        if (!empty($data["configuration"]) && ($this->type == 999)) {
+
+            // We are entering data into a configuration of an array property
             // CHECKME: or an unbound property?
             $displayconfig = $this->display_column_definition;
 
-            // Remove this line once legacy  code no longer needed
+            // Remove this line once legacy code no longer needed
             if (isset($displayconfig['value'])) $displayconfig = $displayconfig['value'];
 
             // Load the configuration data and get the exploded fields
             $configfields = $this->parseConfiguration($data["configuration"]);
 
-
-            $titles = $displayconfig[0];
-            $types = $displayconfig[1];
-            $defaults = $displayconfig[2];
+            $titles         = $displayconfig[0];
+            $types          = $displayconfig[1];
+            $defaults       = $displayconfig[2];
             $configurations = $displayconfig[3];
-
+                
             if (isset($configfields['value'])) $data['value'] = $configfields['value'];
+            $data['display_page_type'] = 'configuration';
+
+            if (empty($data['value'])) $data['value'] = $this->default_column_definition;
+            $data['rows'] = count($data['value']);
 
         } else {
+            // We are adding data to an item
             try {
+                if (isset($data['column_configuration'])) $this->display_column_definition = unserialize($data['column_configuration']);
                 $displayconfig = $this->display_column_definition;
-                
+
+                // Remove this line once legacy code no longer needed
+                if (isset($displayconfig['value'])) $displayconfig = $displayconfig['value'];
+
                 // New way for configs
-                if (isset($displayconfig['value'])) {
-                    $displayconfig = $displayconfig['value'];
-                    $titles =         $displayconfig[0];
-                    $types =          $displayconfig[1];
-                    $defaults =       $displayconfig[2];
-                    $configurations = $displayconfig[3];
-                } else {
-                    $titles =         $this->default_column_definition[0];
-                    $types =          $this->default_column_definition[1];
-                    $defaults =       $this->default_column_definition[2];
-                    $configurations = $this->default_column_definition[3];
+                $titles         = array();
+                $types          = array();
+                $defaults       = array();
+                $configurations = array();
+                foreach ($displayconfig as $row) {
+                    $titles[]         = $row[0];
+                    $types[]          = $row[1];
+                    $defaults[]       = $row[2];
+                    $configurations[] = $row[3];
                 }
             } catch (Exception $e) {
                 // Legacy way for configs
-                $titles = $this->display_column_definition[0];
-                $types = $this->display_column_definition[1];
-                $defaults = $this->display_column_definition[2];
-                $configurations = $this->display_column_definition[3];
-            }            
+                $titles         = $displayconfig[0];
+                $types          = $displayconfig[1];
+                $defaults       = $displayconfig[2];
+                $configurations = $displayconfig[3];
+            }
+            $data['display_page_type'] = 'dataentry';
         }
-        
+
         if (!isset($data['column_titles']))          $data['column_titles']         = $titles;
         if (!isset($data['column_types']))           $data['column_types']          = $types;
         if (!isset($data['column_defaults']))        $data['column_defaults']       = $defaults;
@@ -326,6 +313,7 @@ class ArrayProperty extends DataProperty
         // Now arrange the values contained in this array to the size we need
         // Number of columns is defined by count($data['column_titles'])
         // Number of rows is defined by $data['rows']
+
         if (!isset($data['value'])) $value = $this->getValue();
         else $value = $data['value'];
 
@@ -333,14 +321,15 @@ class ArrayProperty extends DataProperty
         if (isset($value['value'])) $value = $value['value'];
 
         // We always show one line at minimum on the form
-        if (empty($value)) foreach ($data['column_titles'] as $column) $value[] = "";
+        // if (empty($value)) foreach ($data['column_titles'] as $column) $value[] = "";
         
         // ------------------------------------------------------------------
         // Adjust the number of rows and columns and the appropriate values
         if (!isset($data['rows'])) {
-            $data['rows'] = empty($value[0]) ? 0 : count($value[0]);
+            $data_rows = empty($value) ? 0 : count($value);
+            $data['rows'] = max($data_rows, $this->display_minimum_rows);
         }
-        
+
         /*
         // Make sure the number of titles and column types is the same
         $titlescount = count($data['column_titles']);
@@ -374,25 +363,57 @@ class ArrayProperty extends DataProperty
     {
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValue();
-        $displayconfig = $this->display_column_definition['value'];
-        $data['column_titles'] = $displayconfig[0];
-        $data['column_types'] = $displayconfig[1];
+
+        try {
+            $displayconfig = $this->display_column_definition;
+
+            // Remove this line once legacy code no longer needed
+            if (isset($displayconfig['value'])) $displayconfig = $displayconfig['value'];
+
+            // New way for configs
+            $titles         = array();
+            $types          = array();
+            $defaults       = array();
+            $configurations = array();
+            foreach ($displayconfig as $row) {
+                $titles[]         = isset($row[0]) ? $row[0] : '';
+                $types[]          = isset($row[1]) ? $row[1] : 1;
+                $defaults[]       = isset($row[2]) ? $row[2] : '';
+                $configurations[] = isset($row[3]) ? $row[3] : '';
+            }
+        } catch (Exception $e) {
+            // Legacy way for configs
+            $titles         = array();
+            $types          = array();
+            $defaults       = array();
+            $configurations = array();
+            foreach ($default_column_definition as $row) {
+                $titles[]         = $row[0];
+                $types[]          = $row[1];
+                $defaults[]       = $row[2];
+                $configurations[] = $row[0];
+            }
+        }            
+        $data['column_titles'] = $titles;
         $data['rows'] = isset($data['value'][0]) ? count($data['value'][0]) : 0;
+        
+        // We initialize the required properties here, for reuse in the template
+        $data['column_types'] =array();
+        sys::import('modules.dynamicdata.class.properties.master');
+        foreach($types as $key => $thistype) {
+            $data['column_types'][$key] = DataPropertyMaster::getProperty(array('type' => $thistype));
+        }
         return parent::showOutput($data);
     }
     
     public function updateConfiguration(Array $data = array())
     {
-        $temp = array();
-        foreach ($data['configuration']['display_column_definition']['value'][0] as $k => $v) {
-            // Ignore/remove any empty rows, i.e. those where there is no title
-            if (empty($v)) continue;
-            $temp[0][] = $v;
-            $temp[1][] = $data['configuration']['display_column_definition']['value'][1][$k];
-            $temp[2][] = $data['configuration']['display_column_definition']['value'][2][$k];
-            $temp[3][] = $data['configuration']['display_column_definition']['value'][3][$k];
-        }
-        $data['configuration']['display_column_definition'] = $temp;
+        if ($this->type == 999) {
+            foreach ($data['configuration']['display_column_definition'] as $row => $columns) {
+                // Ignore/remove any empty rows, i.e. those where there is no title
+                if (empty($columns[0])) unset($data['configuration']['display_column_definition'][$row]);
+            }
+        }//var_dump($data['configuration']['display_column_definition']);exit;
         return parent::updateConfiguration($data);
     }
 }
