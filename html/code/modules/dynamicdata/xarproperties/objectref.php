@@ -202,6 +202,7 @@ class ObjectRefProperty extends SelectProperty
         
         // Run through each of the sources and create a table entry
         // The first table is linked with a join to the current object's source table(s)
+        // By definition this is an outer join
         // The other relations are added as given in the configurtions
         $storeprop   = $object->properties[$this->initialization_store_prop]->source;
         $displayprop = $object->properties[$this->initialization_display_prop]->source;
