@@ -176,6 +176,10 @@ class ObjectRefProperty extends SelectProperty
     {
         // Bail if there is no parent object
         if (empty($this->objectref)) return true;
+        
+        // We only support relational storage
+        $store = $object->datastore->name;
+        if ($object->datastore->name == "_dynamic_data_") return true;
 
         // Get the parent object's query;
         $q = $this->objectref->dataquery;
@@ -189,7 +193,7 @@ class ObjectRefProperty extends SelectProperty
         // Assemble the links to the object's table
         $sources = unserialize($object->sources);
         
-        // We assume only a single table herr
+        // We assume only a single table here
         if (count($sources) > 1) die(xarML('Only a single source table allowed for objectref property'));
         
         $storeprop = $object->properties[$this->initialization_store_prop]->source;
