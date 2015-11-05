@@ -62,7 +62,9 @@ function dynamicdata_user_filtertag(Array $args=array())
         if (!isset($args['object'])) throw new Exception('Missing $object for filter tag');
         $properties = $args['object']->getProperties();
         
+        sys::import('xaraya.structures.query');
         $filter = unserialize(xarSession::getVar('DynamicData.Filter.' . $args['object']->name));
+        if (empty($filter)) $filter = array();
         $data['values'] = array();
         $data['ops']    = array();
         foreach ($filter->conditions as $condition) {
