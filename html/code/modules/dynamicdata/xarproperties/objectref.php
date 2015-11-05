@@ -192,10 +192,10 @@ class ObjectRefProperty extends SelectProperty
         // We assume only a single table herr
         if (count($sources) > 1) die(xarML('Only a single source table allowed for objectref property'));
         
+        $storeprop = $object->properties[$this->initialization_store_prop]->source;
+        $displayprop = $object->properties[$this->initialization_display_prop]->source;
         foreach($sources as $key => $value) {
             $q->addTable($value[0], $key);
-            $storeprop = $object->properties[$this->initialization_store_prop]->source;
-            $displayprop = $object->properties[$this->initialization_display_prop]->source;
             if ($value[1] == 'internal') {
                 $q->leftjoin($this->source, $storeprop);
             } else {
