@@ -187,27 +187,37 @@ class ObjectRefProperty extends SelectProperty
         $object = DataObjectMaster::getObjectList(array('name' => $this->initialization_refobject));
 
         // Assemble the links to the object's table
-        $sources = unserialize($object->sources);
+        $sources     = unserialize($object->sources);
+        $relations   = unserialize($object->relations);
         
-        // We assume only a single table here
-        if (count($sources) > 1) {
+        // Debug display
+        if (xarModVars::get('dynamicdata','debugmode') && 
+        in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
             echo "Ref Object: " . $this->objectref->name . "<br/>";
             echo "Property: " . $this->name . "<br/>";
             echo "Ref Object: " . $object->name . "<br/>";
-            echo "Sources: ";var_dump($sources);
-            echo "<br/>";
-            die(xarML('Only a single source table allowed for objectref property'));
+            echo "Sources: ";var_dump($sources);echo "<br/>";
+            echo "Relations: ";var_dump($relations);echo "<br/>";
         }
         
-        $storeprop = $object->properties[$this->initialization_store_prop]->source;
+        // Run through each of the sources and create a table entry
+        // The first table is linked with a join to the current object's source table(s)
+        // The other relations are added as given in the configurtions
+        $storeprop   = $object->properties[$this->initialization_store_prop]->source;
         $displayprop = $object->properties[$this->initialization_display_prop]->source;
+        $i = 0;
         foreach($sources as $key => $value) {
             $q->addTable($value[0], $key);
-            if ($value[1] == 'internal') {
-                $q->leftjoin($this->source, $storeprop);
-            } else {
+            if ($i == 0) {
                 $q->join($this->source, $storeprop);
+            } else {
+                if ($value[1] == 'internal') {
+                    $q->join($relations[$i-1][0], $relations[$i-1][1]);
+                } else {
+                    $q->leftjoin($relations[$i-1][0], $relations[$i-1][1]);
+                }
             }
+            $i++;
         }
 
         // Set the source of this property
