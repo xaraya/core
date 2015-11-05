@@ -172,5 +172,42 @@ class ObjectRefProperty extends SelectProperty
         return parent::showConfiguration($data);
     }
 
+    public function preList()
+    {
+        // Bail if there is no parent object
+        if (empty($this->objectref)) return true;
+
+        // Get the parent object's query;
+        $q = $this->objectref->dataquery;
+        
+        $object = DataObjectMaster::getObjectList(array('name' => $this->initialization_refobject));
+
+        // Get the primary propety of the parent object, and its source
+        $primary = $this->objectref->primary;
+        $primary_source = $this->objectref->properties[$primary]->source;
+
+        // Assemble the links to the object's table
+        $sources = unserialize($object->sources);
+        
+        // We assume only a single table herr
+        if (count($sources) > 1) die(xarML('Only a single source table allowed for objectref property'));
+        
+        foreach($sources as $key => $value) {
+            $q->addTable($value[0], $key);
+            $storeprop = $object->properties[$this->initialization_store_prop]->source;
+            $displayprop = $object->properties[$this->initialization_display_prop]->source;
+            if ($value[1] == 'internal') {
+                $q->leftjoin($this->source, $storeprop);
+            } else {
+                $q->join($this->source, $storeprop);
+            }
+        }
+
+        // Set the source of this property
+        $this->source = $displayprop;
+        // Do not transform the raw value
+        $this->transform = false;
+        return true;
+    }
 }
 ?>

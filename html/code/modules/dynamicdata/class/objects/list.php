@@ -63,6 +63,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // Get a reference to each property's value
         $this->configuration['items'] =& $this->items;
+        
+        foreach ($this->getFieldList() as $fieldname) {
+            $this->properties[$fieldname]->preList();
+        }
     }
 
     /**
@@ -425,9 +429,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $this->setFieldList($args['fieldlist']);
         }
 
+    /*
         foreach ($this->getFieldList() as $fieldname) {
             $this->properties[$fieldname]->preList();
         }
+    */
 
         $this->items = array();
         $this->datastore->getItems($args);

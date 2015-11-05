@@ -74,7 +74,6 @@ class DataObject extends DataObjectMaster implements iDataObject
          *
          * This may need to be adjusted in the future
          */
-
         $itemid = $this->datastore->getItem($args);
 
         if(!empty($args['fieldlist'])) $this->setFieldList($args['fieldlist']);
