@@ -65,11 +65,13 @@ function dynamicdata_user_filtertag(Array $args=array())
         sys::import('xaraya.structures.query');
         $filter = @unserialize(xarSession::getVar('DynamicData.Filter.' . $args['object']->name));
         if (empty($filter)) $filter = array();
-        $data['values'] = array();
-        $data['ops']    = array();
-        foreach ($filter->conditions as $condition) {
-            $data['values'][$condition['field1']] = $condition['field2'];
-            $data['ops'][$condition['field1']]    = $condition['op'];
+        $values = array();
+        $ops    = array();
+        if (is_object($filter)) {
+            foreach ($filter->conditions as $condition) {
+                $values[$condition['field1']] = $condition['field2'];
+                $ops[$condition['field1']]    = $condition['op'];
+            }
         }
         
         $data['properties'] = array();
@@ -79,8 +81,10 @@ function dynamicdata_user_filtertag(Array $args=array())
             if (!empty($args['fieldlist']) && !in_array($name,$args['fieldlist'])) continue;
             $property->value = $property->defaultvalue;
             $data['properties'][$name] =& $property;
-            $data['valuelist'][$name]  = $data['values'][$property->source];
-            $data['oplist'][$name]     = $data['ops'][$property->source];
+            if (isset($values[$property->source]))
+                $data['valuelist'][$name]  = $values[$property->source];
+            if (isset($ops[$property->source]))
+                $data['oplist'][$name]     = $ops[$property->source];
         }
         $data['button'] = $args['button'];
         $data['return_url'] = $args['return_url'];
