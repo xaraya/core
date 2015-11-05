@@ -191,7 +191,8 @@ class ObjectRefProperty extends SelectProperty
         
         // We assume only a single table here
         if (count($sources) > 1) {
-            echo $object->name . "<br/>";
+            echo "Object: " . $object->name . "<br/>";
+            echo "Property: " . $this->name . "<br/>";
             echo "Sources: ";var_dump($sources);
             echo "<br/>";
             die(xarML('Only a single source table allowed for objectref property'));
