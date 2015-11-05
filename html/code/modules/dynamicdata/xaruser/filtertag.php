@@ -63,7 +63,7 @@ function dynamicdata_user_filtertag(Array $args=array())
         $properties = $args['object']->getProperties();
         
         sys::import('xaraya.structures.query');
-        $filter = unserialize(xarSession::getVar('DynamicData.Filter.' . $args['object']->name));
+        $filter = @unserialize(xarSession::getVar('DynamicData.Filter.' . $args['object']->name));
         if (empty($filter)) $filter = array();
         $data['values'] = array();
         $data['ops']    = array();
