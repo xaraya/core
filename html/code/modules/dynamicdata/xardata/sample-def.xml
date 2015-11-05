@@ -10,7 +10,7 @@
   <datastore>dynamicdata</datastore>
   <config></config>
   <isalias>false</isalias>
-  <sources></sources>
+  <sources>a:0:{}</sources>
   <relations></relations>
   <objects></objects>
   <properties>
