@@ -69,7 +69,7 @@ function dynamicdata_user_filtertag(Array $args=array())
         $ops    = array();
         if (is_object($filter)) {
             foreach ($filter->conditions as $condition) {
-                $values[$condition['field1']] = $condition['field2'];
+                $values[$condition['field1']] = trim($condition['field2'], "%");
                 $ops[$condition['field1']]    = $condition['op'];
             }
         }
