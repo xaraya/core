@@ -190,7 +190,12 @@ class ObjectRefProperty extends SelectProperty
         $sources = unserialize($object->sources);
         
         // We assume only a single table here
-        if (count($sources) > 1) die(xarML('Only a single source table allowed for objectref property'));
+        if (count($sources) > 1) {
+            echo $object->name . "<br/>";
+            echo "Sources: ";var_dump($sources);
+            echo "<br/>";
+            die(xarML('Only a single source table allowed for objectref property'));
+        }
         
         $storeprop = $object->properties[$this->initialization_store_prop]->source;
         $displayprop = $object->properties[$this->initialization_display_prop]->source;
