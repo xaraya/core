@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <form method="post" action="#xarModURL('dynamicdata','user','filtertag')#">
         <xar:set name="multiple">count($properties) > 1</xar:set>
-        <xar:data-filterform object="$object" fieldlist="$fieldlist"/>
+        <xar:data-filterform object="$object" fieldlist="$fieldlist" valuelist="$valuelist" oplist="$oplist"/>
         <input type="hidden" name="return_url" value="#$return_url#"/>
         <xar:if condition="!$multiple">
             <xar:button type="submit" label="$button" />

@@ -62,11 +62,23 @@ function dynamicdata_user_filtertag(Array $args=array())
         if (!isset($args['object'])) throw new Exception('Missing $object for filter tag');
         $properties = $args['object']->getProperties();
         
+        $filter = unserialize(xarSession::getVar('DynamicData.Filter.' . $args['object']->name));
+        $data['values'] = array();
+        $data['ops']    = array();
+        foreach ($filter->conditions as $condition) {
+            $data['values'][$condition['field1']] = $condition['field2'];
+            $data['ops'][$condition['field1']]    = $condition['op'];
+        }
+        
         $data['properties'] = array();
+        $data['valuelist']  = array();
+        $data['oplist']     = array();
         foreach ($properties as $name => $property) {
             if (!empty($args['fieldlist']) && !in_array($name,$args['fieldlist'])) continue;
             $property->value = $property->defaultvalue;
             $data['properties'][$name] =& $property;
+            $data['valuelist'][$name]  = $data['values'][$property->source];
+            $data['oplist'][$name]     = $data['ops'][$property->source];
         }
         $data['button'] = $args['button'];
         $data['return_url'] = $args['return_url'];
