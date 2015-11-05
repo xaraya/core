@@ -178,17 +178,13 @@ class ObjectRefProperty extends SelectProperty
         if (empty($this->objectref)) return true;
         
         // We only support relational storage
-        $store = $object->datastore->name;
-        if ($object->datastore->name == "_dynamic_data_") return true;
+        $store = $this->objectref->datastore->name;
+        if ($this->objectref->datastore->name == "_dynamic_data_") return true;
 
         // Get the parent object's query;
         $q = $this->objectref->dataquery;
         
         $object = DataObjectMaster::getObjectList(array('name' => $this->initialization_refobject));
-
-        // Get the primary propety of the parent object, and its source
-        $primary = $this->objectref->primary;
-        $primary_source = $this->objectref->properties[$primary]->source;
 
         // Assemble the links to the object's table
         $sources = unserialize($object->sources);
