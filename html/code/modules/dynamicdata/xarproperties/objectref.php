@@ -209,7 +209,7 @@ class ObjectRefProperty extends SelectProperty
         foreach($sources as $key => $value) {
             $q->addTable($value[0], $key);
             if ($i == 0) {
-                $q->join($this->source, $storeprop);
+                $q->leftjoin($this->source, $storeprop);
             } else {
                 if ($value[1] == 'internal') {
                     $q->join($relations[$i-1][0], $relations[$i-1][1]);
