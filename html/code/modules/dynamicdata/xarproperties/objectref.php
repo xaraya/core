@@ -179,12 +179,21 @@ class ObjectRefProperty extends SelectProperty
         
         // We only support relational storage
         $store = $this->objectref->datastore->name;
-        if ($this->objectref->datastore->name == "_dynamic_data_") return true;
+        if ($this->objectref->datastore->name != "relational") return true;
 
         // Get the parent object's query;
         $q = $this->objectref->dataquery;
-        
-        $object = DataObjectMaster::getObjectList(array('name' => $this->initialization_refobject));
+
+        // Get the object associated with this property
+        $tableprefix = "";
+        if ($this->objectref->name == $this->initialization_refobject) {
+            // Case of the same table in the property and its parent object
+            $object = $this->objectref;
+            $tableprefix = $this->id . "_";
+        } else {
+            // Property table is different from the object table
+            $object = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
+        }
 
         // Assemble the links to the object's table
         $sources     = unserialize($object->sources);
@@ -197,7 +206,7 @@ class ObjectRefProperty extends SelectProperty
             echo "Property: " . $this->name . "<br/>";
             echo "Ref Object: " . $object->name . "<br/>";
             echo "Sources: ";var_dump($sources);echo "<br/>";
-            echo "Relations: ";var_dump($relations);echo "<br/>";
+            echo "Relations: ";var_dump($relations);echo "<br/>";echo "<br/>";
         }
         
         // Run through each of the sources and create a table entry
@@ -207,11 +216,15 @@ class ObjectRefProperty extends SelectProperty
         $storeprop   = $object->properties[$this->initialization_store_prop]->source;
         $displayprop = $object->properties[$this->initialization_display_prop]->source;
         $i = 0;
-        foreach($sources as $key => $value) {
-            $q->addTable($value[0], $key);
+        foreach($sources as $key => $value) {//var_dump($q->tables);echo "<br/>";
+            $q->addTable($value[0], $tableprefix . $key);//var_dump($q->tables);echo "<br/>";
             if ($i == 0) {
+                $storeprop = str_replace($key, $tableprefix . $key, $storeprop);
                 $q->leftjoin($this->source, $storeprop);
             } else {
+                foreach ($relations[$i-1] as $k => $v) {
+                    $relations[$i-1][$k] = str_replace($key, $tableprefix . $key, $relations[$i-1][$k]);
+                }
                 if ($value[1] == 'internal') {
                     $q->join($relations[$i-1][0], $relations[$i-1][1]);
                 } else {
@@ -222,6 +235,7 @@ class ObjectRefProperty extends SelectProperty
         }
 
         // Set the source of this property
+        $displayprop = str_replace($key, $tableprefix . $key, $displayprop);
         $this->source = $displayprop;
         // Do not transform the raw value
         $this->transform = false;
