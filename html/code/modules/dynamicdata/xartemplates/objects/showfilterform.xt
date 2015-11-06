@@ -21,11 +21,13 @@
                     <xar:set name="dummy">#$properties[$name]->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)#</xar:set>
                 </div>
                 <div class="xar-col-condensed">
+                    <xar:var name="firstline">All</xar:var>
+                    <xar:set name="firstline">"0,$firstline"</xar:set>
                     <xar:set name="fieldname">"value[$name]"</xar:set>
                     <xar:if condition="isset($valuelist[$name])">
-                        <xar:data-input property="$properties[$name]" name="$fieldname" value="$valuelist[$name]"/>
+                        <xar:data-input property="$properties[$name]" name="$fieldname" value="$valuelist[$name]" firstline="$firstline"/>
                     <xar:else/>
-                        <xar:data-input property="$properties[$name]" name="$fieldname"/>
+                        <xar:data-input property="$properties[$name]" name="$fieldname" firstline="$firstline"/>
                     </xar:if>
                     <xar:set name="fieldname">"source[$name]"</xar:set>
                     <input type="hidden" name="#$fieldname#" value="#$property:source#"/>
