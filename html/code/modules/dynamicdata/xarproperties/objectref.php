@@ -221,13 +221,10 @@ class ObjectRefProperty extends SelectProperty
             if ($i == 0) {
                 $q->leftjoin($this->source, $tableprefix . $storeprop);
             } else {
-                foreach ($relations[$i-1] as $k => $v) {
-                    $relations[$i-1][$k] = str_replace($key, $tableprefix . $key, $relations[$i-1][$k]);
-                }
                 if ($value[1] == 'internal') {
-                    $q->join($relations[$i-1][0], $relations[$i-1][1]);
+                    $q->join($tableprefix . $relations[$i-1][0], $tableprefix . $relations[$i-1][1]);
                 } else {
-                    $q->leftjoin($relations[$i-1][0], $relations[$i-1][1]);
+                    $q->leftjoin($tableprefix . $relations[$i-1][0], $tableprefix . $relations[$i-1][1]);
                 }
             }
             $i++;
