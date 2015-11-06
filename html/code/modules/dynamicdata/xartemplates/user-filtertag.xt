@@ -2,68 +2,11 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <form method="post" action="#xarModURL('dynamicdata','user','filtertag')#">
         <xar:set name="multiple">count($properties) > 1</xar:set>
-        <xar:data-filterform object="$object" fieldlist="name"/>
-        <!--
-        <xar:foreach in="$properties" key="$name" value="$thisproperty">
-            <div class="xar-row">
-                <div class="xar-col" style="width: 200px">
-                    <xar:data-label property="$properties[$name]" for="id" />
-                </div>
-                <div class="xar-col">
-                    <xar:if condition="$thisproperty:basetype eq 'number'">
-                        <xar:set name="options">
-                            array(
-                                array('id' => 'eq',           'name' => '='),
-                                array('id' => '&gt;',        'name' => '&gt;'),
-                                array('id' => 'ge',       'name' => '&gt;='),
-                                array('id' => '&lt;',        'name' => '&lt;'),
-                                array('id' => 'le',       'name' => '&lt;='),
-                                array('id' => 'ne',          'name' => '!='),
-                                array('id' => 'like',        'name' => 'LIKE'),
-                                array('id' => 'notlike',    'name' => 'NOT LIKE'),
-                                array('id' => 'null',     'name' => 'IS NULL'),
-                                array('id' => 'notnull', 'name' => 'IS NOT NULL'),
-                            )
-                        </xar:set>
-                    <xar:else/>
-                        <xar:set name="options">
-                            array(
-                                array('id' => 'like',        'name' => 'LIKE'),
-                                array('id' => 'notlike',    'name' => 'NOT LIKE'),
-                                array('id' => 'eq',           'name' => '='),
-                                array('id' => 'ne',          'name' => '!='),
-                                array('id' => 'regex', 'name' => 'REGEXP'),
-                                array('id' => 'notregex', 'name' => 'NOT REGEXP'),
-                                array('id' => 'eqempty', 'name' => '= ""'),
-                                array('id' => 'neempty', 'name' => '!= ""'),
-                                array('id' => 'null', 'name' => 'IS NULL'),
-                                array('id' => 'notnull', 'name' => 'IS NOT NULL'),
-                            )
-                        </xar:set>
-                    </xar:if>
-                    <xar:set name="fieldname">"op[$name]"</xar:set>
-                    <xar:data-input type="dropdown" name="$fieldname" options="$options"/>
-                </div>
-                <div class="xar-col">
-                    <xar:set name="fieldname">"value[$name]"</xar:set>
-                    <input type="text" name="#$fieldname#" />
-                    <xar:set name="fieldname">"source[$name]"</xar:set>
-                    <input type="hidden" name="#$fieldname#" value="#$thisproperty:source#"/>
-                    <xar:set name="fieldname">"name[$name]"</xar:set>
-                    <input type="hidden" name="#$fieldname#" value="#$thisproperty:name#"/>
-                </div>
-                <xar:if condition="!$multiple">
-                    <div class="xar-col">
-                        <xar:button type="submit" label="$button" />
-                    </div>
-                </xar:if>
-            </div>
-        </xar:foreach>
-                -->
-                    <input type="hidden" name="return_url" value="#$return_url#"/>
-                <xar:if condition="!$multiple">
-                        <xar:button type="submit" label="$button" />
-                </xar:if>
+        <xar:data-filterform object="$object" fieldlist="$fieldlist" valuelist="$valuelist" oplist="$oplist"/>
+        <input type="hidden" name="return_url" value="#$return_url#"/>
+        <xar:if condition="!$multiple">
+            <xar:button type="submit" label="$button" />
+        </xar:if>
         <xar:if condition="$multiple">
             <div class="xar-row">
                 <div class="xar-col">

@@ -176,31 +176,60 @@ class ObjectRefProperty extends SelectProperty
     {
         // Bail if there is no parent object
         if (empty($this->objectref)) return true;
-
-        // Get the parent object's query;
-        $q = $this->objectref->dataquery;
         
-        $object = DataObjectMaster::getObjectList(array('name' => $this->initialization_refobject));
+        // Get the object associated with this property
+        if ($this->objectref->name == $this->initialization_refobject) {
+            // Case of the same table in the property and its parent object
+            $object = $this->objectref;
+        } else {
+            // Property table is different from the object table
+            $object = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
+        }
 
-        // Get the primary propety of the parent object, and its source
-        $primary = $this->objectref->primary;
-        $primary_source = $this->objectref->properties[$primary]->source;
+        // We only support relational storage
+        $store = $object->datastore->name;
+        if ($object->datastore->name != "relational") return true;
 
         // Assemble the links to the object's table
-        $sources = unserialize($object->sources);
+        $sources     = unserialize($object->sources);
+        $relations   = unserialize($object->relations);
         
-        // We assume only a single table herr
-        if (count($sources) > 1) die(xarML('Only a single source table allowed for objectref property'));
+        // Debug display
+        if (xarModVars::get('dynamicdata','debugmode') && 
+        in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+            echo "Ref Object: " . $this->objectref->name . "<br/>";
+            echo "Property: " . $this->name . "<br/>";
+            echo "Prop Object: " . $object->name . "<br/>";
+            echo "Sources: ";var_dump($sources);echo "<br/>";
+            echo "Relations: ";var_dump($relations);echo "<br/>";echo "<br/>";
+        }
         
+        // Get the parent object's query;
+        $q = $this->objectref->dataquery;
+
+        // The tables of this property will be added with a special prefix
+        // to make sure all tables are unique
+        $tableprefix = $this->id . "_";
+        
+        // Run through each of the sources and create a table entry
+        // The first table is linked with a join to the current object's source table(s)
+        // By definition this is an outer join
+        // The other relations are added as given in the configurtions
+        $storeprop   = $tableprefix . $object->properties[$this->initialization_store_prop]->source;
+        $displayprop = $tableprefix . $object->properties[$this->initialization_display_prop]->source;
+        $i = 0;
         foreach($sources as $key => $value) {
-            $q->addTable($value[0], $key);
-            $storeprop = $object->properties[$this->initialization_store_prop]->source;
-            $displayprop = $object->properties[$this->initialization_display_prop]->source;
-            if ($value[1] == 'internal') {
+            $q->addTable($value[0], $tableprefix . $key);
+            if ($i == 0) {
                 $q->leftjoin($this->source, $storeprop);
             } else {
-                $q->join($this->source, $storeprop);
+                if ($value[1] == 'internal') {
+                    $q->join($tableprefix . $relations[$i-1][0], $tableprefix . $relations[$i-1][1]);
+                } else {
+                    $q->leftjoin($tableprefix . $relations[$i-1][0], $tableprefix . $relations[$i-1][1]);
+                }
             }
+            $i++;
         }
 
         // Set the source of this property

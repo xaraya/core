@@ -40,9 +40,9 @@ function dynamicdata_adminapi_showfilterform(Array $args=array())
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {
         return xarTpl::module('dynamicdata','admin','showfilterform',
-                            array('fields' => $fields,
-                                  'layout' => $layout),
-                            $template);
+                                array('fields' => $fields,
+                                      'layout' => $layout),
+                                $template);
     }
 
     // try getting the item id via input variables if necessary

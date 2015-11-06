@@ -62,16 +62,35 @@ function dynamicdata_user_filtertag(Array $args=array())
         if (!isset($args['object'])) throw new Exception('Missing $object for filter tag');
         $properties = $args['object']->getProperties();
         
+        sys::import('xaraya.structures.query');
+        $filter = @unserialize(xarSession::getVar('DynamicData.Filter.' . $args['object']->name));
+        if (empty($filter)) $filter = array();
+        $values = array();
+        $ops    = array();
+        if (is_object($filter)) {
+            foreach ($filter->conditions as $condition) {
+                $values[$condition['field1']] = trim($condition['field2'], "%");
+                $ops[$condition['field1']]    = $condition['op'];
+            }
+        }
+        
         $data['properties'] = array();
+        $data['valuelist']  = array();
+        $data['oplist']     = array();
         foreach ($properties as $name => $property) {
             if (!empty($args['fieldlist']) && !in_array($name,$args['fieldlist'])) continue;
             $property->value = $property->defaultvalue;
             $data['properties'][$name] =& $property;
+            if (isset($values[$property->source]))
+                $data['valuelist'][$name]  = $values[$property->source];
+            if (isset($ops[$property->source]))
+                $data['oplist'][$name]     = $ops[$property->source];
         }
         $data['button'] = $args['button'];
         $data['return_url'] = $args['return_url'];
         $data['objectname'] = $args['object']->name;
         $data['object'] =& $args['object'];
+        $data['fieldlist'] =& $args['fieldlist'];
     }
     return $data;
 }
