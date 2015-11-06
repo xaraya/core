@@ -185,11 +185,10 @@ class ObjectRefProperty extends SelectProperty
         $q = $this->objectref->dataquery;
 
         // Get the object associated with this property
-        $tableprefix = "";
+        $tableprefix = $this->id . "_";
         if ($this->objectref->name == $this->initialization_refobject) {
             // Case of the same table in the property and its parent object
             $object = $this->objectref;
-            $tableprefix = $this->id . "_";
         } else {
             // Property table is different from the object table
             $object = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
@@ -204,7 +203,7 @@ class ObjectRefProperty extends SelectProperty
         in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
             echo "Ref Object: " . $this->objectref->name . "<br/>";
             echo "Property: " . $this->name . "<br/>";
-            echo "Ref Object: " . $object->name . "<br/>";
+            echo "Prop Object: " . $object->name . "<br/>";
             echo "Sources: ";var_dump($sources);echo "<br/>";
             echo "Relations: ";var_dump($relations);echo "<br/>";echo "<br/>";
         }
