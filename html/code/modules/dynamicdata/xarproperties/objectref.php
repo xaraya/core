@@ -177,13 +177,6 @@ class ObjectRefProperty extends SelectProperty
         // Bail if there is no parent object
         if (empty($this->objectref)) return true;
         
-        // We only support relational storage
-        $store = $this->objectref->datastore->name;
-        if ($this->objectref->datastore->name != "relational") return true;
-
-        // Get the parent object's query;
-        $q = $this->objectref->dataquery;
-
         // Get the object associated with this property
         $tableprefix = $this->id . "_";
         if ($this->objectref->name == $this->initialization_refobject) {
@@ -193,6 +186,10 @@ class ObjectRefProperty extends SelectProperty
             // Property table is different from the object table
             $object = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
         }
+
+        // We only support relational storage
+        $store = $object->datastore->name;
+        if ($object->datastore->name != "relational") return true;
 
         // Assemble the links to the object's table
         $sources     = unserialize($object->sources);
@@ -208,6 +205,9 @@ class ObjectRefProperty extends SelectProperty
             echo "Relations: ";var_dump($relations);echo "<br/>";echo "<br/>";
         }
         
+        // Get the parent object's query;
+        $q = $this->objectref->dataquery;
+
         // Run through each of the sources and create a table entry
         // The first table is linked with a join to the current object's source table(s)
         // By definition this is an outer join
