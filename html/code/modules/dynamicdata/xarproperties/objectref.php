@@ -178,7 +178,6 @@ class ObjectRefProperty extends SelectProperty
         if (empty($this->objectref)) return true;
         
         // Get the object associated with this property
-        $tableprefix = $this->id . "_";
         if ($this->objectref->name == $this->initialization_refobject) {
             // Case of the same table in the property and its parent object
             $object = $this->objectref;
@@ -208,17 +207,21 @@ class ObjectRefProperty extends SelectProperty
         // Get the parent object's query;
         $q = $this->objectref->dataquery;
 
+        // The tables of this property will be added with a special prefix
+        // to make sure all tables are unique
+        $tableprefix = $this->id . "_";
+        
         // Run through each of the sources and create a table entry
         // The first table is linked with a join to the current object's source table(s)
         // By definition this is an outer join
         // The other relations are added as given in the configurtions
-        $storeprop   = $object->properties[$this->initialization_store_prop]->source;
-        $displayprop = $object->properties[$this->initialization_display_prop]->source;
+        $storeprop   = $tableprefix . $object->properties[$this->initialization_store_prop]->source;
+        $displayprop = $tableprefix . $object->properties[$this->initialization_display_prop]->source;
         $i = 0;
         foreach($sources as $key => $value) {
             $q->addTable($value[0], $tableprefix . $key);
             if ($i == 0) {
-                $q->leftjoin($this->source, $tableprefix . $storeprop);
+                $q->leftjoin($this->source, $storeprop);
             } else {
                 if ($value[1] == 'internal') {
                     $q->join($tableprefix . $relations[$i-1][0], $tableprefix . $relations[$i-1][1]);
@@ -230,7 +233,7 @@ class ObjectRefProperty extends SelectProperty
         }
 
         // Set the source of this property
-        $this->source = $tableprefix . $displayprop;
+        $this->source = $displayprop;
         // Do not transform the raw value
         $this->transform = false;
         return true;
