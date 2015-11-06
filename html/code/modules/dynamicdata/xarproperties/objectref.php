@@ -216,11 +216,10 @@ class ObjectRefProperty extends SelectProperty
         $storeprop   = $object->properties[$this->initialization_store_prop]->source;
         $displayprop = $object->properties[$this->initialization_display_prop]->source;
         $i = 0;
-        foreach($sources as $key => $value) {//var_dump($q->tables);echo "<br/>";
-            $q->addTable($value[0], $tableprefix . $key);//var_dump($q->tables);echo "<br/>";
+        foreach($sources as $key => $value) {
+            $q->addTable($value[0], $tableprefix . $key);
             if ($i == 0) {
-                $storeprop = str_replace($key, $tableprefix . $key, $storeprop);
-                $q->leftjoin($this->source, $storeprop);
+                $q->leftjoin($this->source, $tableprefix . $storeprop);
             } else {
                 foreach ($relations[$i-1] as $k => $v) {
                     $relations[$i-1][$k] = str_replace($key, $tableprefix . $key, $relations[$i-1][$k]);
@@ -235,8 +234,7 @@ class ObjectRefProperty extends SelectProperty
         }
 
         // Set the source of this property
-        $displayprop = str_replace($key, $tableprefix . $key, $displayprop);
-        $this->source = $displayprop;
+        $this->source = $tableprefix . $displayprop;
         // Do not transform the raw value
         $this->transform = false;
         return true;
