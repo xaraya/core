@@ -1251,8 +1251,8 @@ class DataObjectMaster extends Object
         // Set up the db tables
         if ($descriptor->exists('sources')) {
             try {
-                $sources = unserialize($descriptor->get('sources'));
-                
+                $sources = @unserialize($descriptor->get('sources'));
+              
                 if (!empty($sources)) {
                     $object->datasources = $sources;
                     foreach ($object->datasources as $key => $table) {
@@ -1282,7 +1282,8 @@ class DataObjectMaster extends Object
                     }
                 }
             } catch (Exception $e) {
-                throw new Exception(xarML('Error creating dataquery'));
+                echo xarML('Found sources: ');var_dump($sources);
+                throw new Exception(xarML('Error reading object sources'));
             }
         }
 
@@ -1339,7 +1340,9 @@ class DataObjectMaster extends Object
                         else $this->dataquery->{$join}($left,$right);
                     }
                 }
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+                throw new Exception(xarML('Error reading object relations'));
+            }
         }
 
         // Set up the relations to related objects
