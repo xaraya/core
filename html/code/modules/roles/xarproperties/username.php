@@ -137,7 +137,7 @@ class UsernameProperty extends TextBoxProperty
             $this->initialization_store_type = $store_type;
         } elseif (isset($data['value'])) {
             $this->value = $data['value'];
-            $data['value'] = $this->getValue(); 
+            $data['value'] = $this->getValue();
         } else {
             $this->value = xarUser::getVar('id');
             $data['value'] = xarUser::getVar('uname');
