@@ -530,7 +530,7 @@ class xarCSS extends Object
             // Debug display
              if (xarModVars::get('themes','debugmode') && 
              in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-                echo xarML('Chosen: ') . $path . "<br/>";
+                echo "<b>" . xarML('Chosen: ') . $path . "</b><br/>";
              }
             break;
         }
