@@ -48,12 +48,9 @@ function blocks_admin_modify_instance()
     $data = array();
 
     // determine the interface, method and phase 
-    if (!xarVarFetch('interface', 'pre:trim:lower:str:1:',
-        $interface, 'display', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('block_method', 'pre:trim:lower:str:1:',
-        $method, null, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('phase', 'pre:trim:lower:str:1:',
-        $phase, 'display', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('interface',    'pre:trim:lower:str:1:', $interface, 'display', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('block_method', 'pre:trim:lower:str:1:', $method,    null,      XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('phase',        'pre:trim:lower:str:1:', $phase,     'display', XARVAR_NOT_REQUIRED)) return;
 
     // admin access is needed for some operations 
     $isadmin = xarSecurityCheck('',0,'Block',"$blockinfo[type]:$blockinfo[name]:$blockinfo[block_id]",$blockinfo['module'],'',0,800);
@@ -139,24 +136,15 @@ function blocks_admin_modify_instance()
                 switch ($method) {
                     case 'config':
                         if ($isadmin) {
-                            if (!xarVarFetch('instance_name', 'pre:trim:str:1:',
-                                $name, '', XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_title', 'pre:trim:str:0:',
-                                $title, '', XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_state', 'int:0:4',
-                                $state, null, XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_expire', 'pre:trim:str:0:20',
-                                $expire, 0, XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_expire_reset', 'checkbox',
-                                $expire_reset, false, XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_box_template', 'pre:trim:str:0:',
-                                $box_template, '', XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_block_template', 'pre:trim:str:0:',
-                                $block_template, '', XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_groups', 'array',
-                                $groups, array(), XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_attachgroup', 'int:1:',
-                                $attachgroup, null, XARVAR_NOT_REQUIRED)) return;
+                            if (!xarVarFetch('instance_name',           'pre:trim:str:1:',   $name, '', XARVAR_NOT_REQUIRED)) return;
+                            if (!xarVarFetch('instance_title',          'pre:trim:str:0:',   $title, '', XARVAR_NOT_REQUIRED)) return;
+                            if (!xarVarFetch('instance_state',          'int:0:4',           $state, null, XARVAR_NOT_REQUIRED)) return;
+                            if (!xarVarFetch('instance_expire',         'pre:trim:str:0:20', $expire, 0, XARVAR_NOT_REQUIRED)) return;
+                            if (!xarVarFetch('instance_expire_reset',   'checkbox',          $expire_reset, false, XARVAR_NOT_REQUIRED)) return;
+                            if (!xarVarFetch('instance_box_template',   'pre:trim:str:0:',   $box_template, '', XARVAR_NOT_REQUIRED)) return;
+                            if (!xarVarFetch('instance_block_template', 'pre:trim:str:0:',   $block_template, '', XARVAR_NOT_REQUIRED)) return;
+                            if (!xarVarFetch('instance_groups',         'array',             $groups, array(), XARVAR_NOT_REQUIRED)) return;
+                            if (!xarVarFetch('instance_attachgroup',    'int:1:',            $attachgroup, null, XARVAR_NOT_REQUIRED)) return;
                     
                             if (empty($name) || strlen($name) > 64) {
                                 $invalid['name'] = xarML('Name must be a string between 1 and 64 characters long');
@@ -242,8 +230,7 @@ function blocks_admin_modify_instance()
                         if (empty($invalid)) {
 
                             if (!xarSecConfirmAuthKey())
-                                return xarTpl::module('privileges', 'user', 'errors', 
-                                    array('layout' => 'bad_author'));
+                                return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
 
                             if (isset($result) && is_array($result)) {
                                 if (!empty($result['content']))
