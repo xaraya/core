@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div class="xar-blockgroup-#$_bl_block_group#">
+        <xar:if condition="!empty($title)">
+            <div class="xar-block-title">
+                <xar:var name="title" prep="false"/>
+                <xar:sec mask="AdminBase" catch="false">
+                    <a href="#xarModURL('blocks','admin','modify_instance',array('block_id' => $_bl_block_id, 'tab' => 'config'))#" title="Edit this block" style="float: right; margin-left: 5px">
+                        <xar:var name="alttext">Modify</xar:var>
+                        <xar:img scope="theme" file="icons/modify-config.png" class="xar-icon" alt="$alttext"/>
+                    </a>
+                </xar:sec>
+            </div>
+        <xar:else/>
+            <xar:sec mask="AdminBase" catch="false">
+                <div class="xar-block-head">
+                    <div class="xar-block-title">
+                        <a class="xar-icon" href="#xarModURL('blocks','admin','modify_instance',array('block_id' => $_bl_block_id))#" title="Edit this block" style="float: right">
+                            <xar:var name="alttext">Modify</xar:var>
+                            <xar:img scope="theme" file="icons/modify-config.png" class="xar-icon" alt="$alttext"/>
+                        </a>
+                    </div>
+                </div>
+            </xar:sec>
+        </xar:if>
+        <div class="xar-block-body">
+            <xar:var name="content" prep="false" />
+        </div>
+    </div>
+</xar:template>
