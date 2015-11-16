@@ -1001,11 +1001,16 @@ class Query
     private function assembledtablelinks()
     {
 //FIXME: bug if two joins are between the same tables
+        // We begin with no tables yet processed and an empty query string
         $tablesdone = array();
         $t = '';
+        
+        // Process each of the links in turn
         $count = count($this->tablelinks );
         for ($i=0;$i<$count;$i++) $t .= '(';
         foreach ($this->tablelinks as $link) {
+        
+            // Get the names of the filds on either side of the link
             $fullfield1 = $this->_deconstructfield($link['field1']);
             $fullfield2 = $this->_deconstructfield($link['field2']);
             
@@ -1017,20 +1022,26 @@ class Query
                 $fullfield2 = $fullfield1;
                 $fullfield1 = $temp;
             }
-            $name = $this->_gettablenamefromalias($fullfield1['table']);
+            
+            // Get the short names of the tables
+            $name1 = $this->_gettablenamefromalias($fullfield1['table']);
+            $name2 = $this->_gettablenamefromalias($fullfield2['table']);
+            
             if (isset($tablesdone[$fullfield1['table']])) {
                 $t .= " ";
             } else {
-                $t .= $name . " " . $fullfield1['table'] . " ";
+                $t .= $name1 . " " . $fullfield1['table'] . " ";
             }
-            $tablesdone[$fullfield1['table']] = $name;
-            $name = $this->_gettablenamefromalias($fullfield2['table']);
-            $tablesdone[$fullfield2['table']] = $name;
+            
             $t .= $link['op'] . " ";
             $t .= $this->_gettablenamefromalias($fullfield2['table']);
             $t .= " " . $fullfield2['table'] . " ";
             $t .= "ON " . $link['field1'] . " = " . $link['field2'];
             $t .= ")";
+            
+            // Add the table names to the list of tables processed
+            $tablesdone[$fullfield1['table']] = $name1;
+            $tablesdone[$fullfield2['table']] = $name2;
         }
 
         return $t ;
