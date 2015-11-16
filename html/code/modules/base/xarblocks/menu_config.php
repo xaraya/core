@@ -57,6 +57,21 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
         $data = parent::update($data);
         $vars = !empty($data['content']) ? $data['content'] : array();
 
+        // Handle any methods specific to this block
+        // CHECKME: is this the right place for handling this
+        if (!xarVarFetch('menumethod',  'str:1:255', $menumethod, '', XARVAR_NOT_REQUIRED)) return;
+        switch ($menumethod) {
+            case  'linkorder':
+                $links = array_merge($vars, $this->linkorderupdate());
+                $this->blockinfo['content']['userlinks'] = $links['userlinks'];
+                $this->setContent($links);
+                if (!xarMod::apiFunc('blocks', 'instances', 'updateitem', $this->blockinfo)) return;
+                xarController::redirect($links['return_url']);
+            break;
+            default:
+            break;
+        }
+
         // display options
         if (!xarVarFetch('showlogout',  'checkbox', $showlogout, false, XARVAR_NOT_REQUIRED)) return;
         if (!xarVarFetch('logoutlabel',  'str:1:255', $logoutlabel, '', XARVAR_NOT_REQUIRED)) return;
@@ -303,9 +318,6 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
         $this->setContent($vars);
         return true;
-        $data['content'] = $vars;
-
-        return $data;
     }
 
     /**
@@ -333,14 +345,14 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                 $link['url'] = $link['encodedurl'];
                 // Add order links to parent menu items
                 if ($i < $numlinks) {
-                    $link['downurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'method' => 'linkorder', 'phase' => 'update', 'linkid' =>  $linkid, 'direction' => 'down', 'authid' => $authid, 'this' => '0'));
+                    $link['downurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' =>  $linkid, 'direction' => 'down', 'authid' => $authid, 'this' => '0'));
                     /*
                     $link['downurl'] = xarModURL('blocks', 'admin', 'modify_instance',
                         array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
                     */
                 }
                 if ($i > 1) {
-                    $link['upurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'method' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid));
+                    $link['upurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid));
                     /*
                     $link['upurl'] = xarModURL('blocks', 'admin', 'modify_instance',
                         array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
@@ -362,14 +374,14 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
                         // Add order links to child menu items
                         if ($j < $numsublinks) {
-                            $link['downurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'method' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid));
+                            $link['downurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid));
                             /*
                             $sublink['downurl'] = xarModURL('blocks', 'admin', 'modify_instance',
                                 array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
                             */
                         }
                         if ($j > 1) {
-                            $sublink['upurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'method' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid));
+                            $sublink['upurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid));
                             /*
                             $sublink['upurl'] = xarModURL('blocks', 'admin', 'modify_instance',
                                 array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
@@ -437,8 +449,8 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                 break;
             }
         }
-        $data['content']['userlinks'] = $this->userlinks;
-        $data['return_url'] = xarServer::getCurrentURL(array('interface' => 'config', 'method' => null, 'authid' => null, 'direction' => null, 'sublinkid' => null, 'linkid' => null, 'phase' => null), null, 'menulinks_'.$this->block_id);
+        $data['userlinks'] = $this->userlinks;
+        $data['return_url'] = xarServer::getCurrentURL(array('interface' => 'config', 'menumethod' => null, 'authid' => null, 'direction' => null, 'sublinkid' => null, 'linkid' => null, 'phase' => null), null, 'menulinks_'.$this->block_id);
         /* 
         $data['return_url'] = xarModURL('blocks', 'admin', 'modify_instance',
             array('block_id' => $this->block_id, 'interface' => 'config'), null, 'menulinks_'.$this->block_id);
