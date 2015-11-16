@@ -20,6 +20,16 @@
                     </xar:sec>
                 </div>
             </div>
+        <xar:else/>
+            <xar:sec mask="AdminBase" catch="false">
+                <div class="xar-block-head">
+                    <div class="xar-block-title">
+                        <a class="xar-icon" href="#xarModURL('blocks','admin','modify_instance',array('block_id' => $_bl_block_id))#" title="Edit this block" style="float: right">
+                            <xar:img scope="theme" class="xar-icon" file="icons/modify-config.png"/>
+                        </a>
+                    </div>
+                </div>
+            </xar:sec>
         </xar:if>
         <div class="xar-block-body">
             <xar:var name="content" prep="false" />
