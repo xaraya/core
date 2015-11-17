@@ -429,12 +429,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $this->setFieldList($args['fieldlist']);
         }
 
-    /*
-        foreach ($this->getFieldList() as $fieldname) {
-            $this->properties[$fieldname]->preList();
-        }
-    */
-
         $this->items = array();
         $this->datastore->getItems($args);
         
