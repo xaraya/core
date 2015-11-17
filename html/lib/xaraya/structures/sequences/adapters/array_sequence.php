@@ -73,6 +73,12 @@ class ArraySequence extends Object implements iSequence, iSequenceAdapter
         $this->items = array();
         return true;
     }
+    // Load the sequence
+    public function load($seq)
+    {
+        $this->items = $seq;
+        return true;
+    }
 
     /**
      * Getter mapper

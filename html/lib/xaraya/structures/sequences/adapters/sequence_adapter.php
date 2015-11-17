@@ -92,5 +92,9 @@ class SequenceAdapter extends Object implements iAdapter, iSequenceAdapter
     {  
         return $this->implementor->clear(); 
     } 
+    protected function load($seq) 
+    {  
+        return $this->implementor->load($seq); 
+    } 
 }
 ?>
