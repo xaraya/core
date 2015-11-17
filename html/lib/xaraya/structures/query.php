@@ -1003,10 +1003,10 @@ class Query
 //FIXME: bug if two joins are between the same tables
         // We begin with no tables yet processed and an empty query string
         $tablesdone = array();
-        $t = '';
+        $string = '';
         
-        // Resort the links. Each successive link needs to add exactly one new table to the query string
-        $count = count($this->tablelinks);
+        // Resort the links. 
+        // Each successive link needs to add exactly one new table to the query string
 
         // Create a stack and load it
         sys::import('xaraya.structures.sequences.stack');
@@ -1017,7 +1017,7 @@ class Query
         $stack1 = new Stack();
 
         // Process the stack
-        $sortedlinks = array();var_dump($this->tablelinks);echo "SS";
+        $sortedlinks = array();
         while(1) {
             // If the stack is empty then bail
             if ($stack->size == 0) break;
@@ -1042,7 +1042,7 @@ class Query
                 $sortedlinks[] = $nextlink;
                 
                 // Move the previously rejected keys back to the stack
-                $size = $stack1->size;var_dump($stack1->size);
+                $size = $stack1->size;
                 for ($i=1;$i<=$size;$i++) {
                     $item = $stack1->pop();
                     $stack->push($item);
@@ -1062,25 +1062,16 @@ class Query
         $this->tablelinks = $sortedlinks;
                 
         // Process each of the links in turn
-        $tablesdone = array();var_dump($this->tablelinks);var_dump($count);
-        for ($i=1;$i<$count;$i++) $t .= '(';echo "<pre>";var_dump($this->tablelinks);
+        $tablesdone = array();
+        $count = count($this->tablelinks);
+        for ($i=1;$i<$count;$i++) $string .= '(';
         $i = 1;
         foreach ($this->tablelinks as $link) {
         
-            // Get the names of the filds on either side of the link
+            // Get the names of the fields on either side of the link
             $fullfield1 = $this->_deconstructfield($link['field1']);
             $fullfield2 = $this->_deconstructfield($link['field2']);
             
-            // In general one table has already been added to the query string, and we need that table
-            // to be first in the next clause so that the syntax is correct. This next part makes sure that happens,
-            // For the initial two tables at the beginning of the query string this has no effect.
-            /*
-            if (isset($tablesdone[$fullfield2['table']])) {
-                $temp = $fullfield2;
-                $fullfield2 = $fullfield1;
-                $fullfield1 = $temp;
-            }
-            */
             // Get the short names of the tables
             $name1 = $this->_gettablenamefromalias($fullfield1['table']);
             $name2 = $this->_gettablenamefromalias($fullfield2['table']);
@@ -1088,35 +1079,35 @@ class Query
             // If either of the tables has not yet been processed, add them to the query string
             // N.B.: unless we are just starting, maximum one of the two tables will be added
             if (isset($tablesdone[$fullfield1['table']])) {
-                $t .= " ";
+                $string .= " ";
             } else {
                 // Do not add the operation if we are just starting out
                 // In that cse te second table will add it
-                if ($i > 1) $t .= " " . $link['op'] . " ";
+                if ($i > 1) $string .= " " . $link['op'] . " ";
                 // Add the table to the query string
-                $t .= $name1 . " " . $fullfield1['table'] . " ";
+                $string .= $name1 . " " . $fullfield1['table'] . " ";
                 // Add the table name to the list of tables processed
                 $tablesdone[$fullfield1['table']] = $name1;
             }
             if (isset($tablesdone[$fullfield2['table']])) {
-                $t .= " ";
+                $string .= " ";
             } else {
                 // Add the operation
-                $t .= $link['op'] . " ";
+                $string .= $link['op'] . " ";
                 // Add the table to the query string
-                $t .= $name2 . " " . $fullfield2['table'] . " ";
+                $string .= $name2 . " " . $fullfield2['table'] . " ";
                 // Add the table name to the list of tables processed
                 $tablesdone[$fullfield2['table']] = $name2;
             }
             
             // Add the joined fields to the query string
-            $t .= "ON " . $link['field1'] . " = " . $link['field2'];
+            $string .= "ON " . $link['field1'] . " = " . $link['field2'];
             // Add a closing parenthesis
-            if ($i < $count) $t .= ")";
+            if ($i < $count) $string .= ")";
             $i++;
             
         }
-        return $t ;
+        return $string ;
     }
 
     private function _gettablenamefromalias($alias)
