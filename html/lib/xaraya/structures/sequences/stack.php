@@ -34,7 +34,7 @@ class Stack extends SequenceAdapter implements iStack
     
     public function clear()
     {
-        parent::clear();
+        return parent::clear();
     }
 
     public function peek()
@@ -44,6 +44,11 @@ class Stack extends SequenceAdapter implements iStack
         $item = $this->pop();
         $this->push($item);
         return $item;
+    }
+
+    public function load($seq)
+    {
+        return parent::load($seq);
     }
 }
 ?>
