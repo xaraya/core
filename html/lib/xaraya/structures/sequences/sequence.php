@@ -40,5 +40,9 @@ class Sequence extends SequenceAdapter implements iSequence
     {
         return parent::clear();
     }
+    public function load($seq) 
+    {
+        return parent::load($seq);
+    }
 }
 ?>
