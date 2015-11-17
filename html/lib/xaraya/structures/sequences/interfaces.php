@@ -44,6 +44,7 @@ interface iSequence
     /* (bool)  ok   */public function insert($item, $position);
     /* (bool)  ok   */public function delete($position);
     /* (bool)  ok   */public function clear();
+    /* (bool)  ok   */public function load($seq);
 }
 
 /** 
