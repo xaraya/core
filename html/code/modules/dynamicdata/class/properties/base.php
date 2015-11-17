@@ -28,7 +28,7 @@ class DataProperty extends Object implements iDataProperty
     public $type           = 1;
     public $defaultvalue   = '';
     public $source         = 'dynamic_data';
-    public $status         = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
+    public $status         = 33;
     public $seq            = 0;
     public $format         = '0'; //<-- eh?
     public $filepath       = 'auto';
@@ -78,6 +78,9 @@ class DataProperty extends Object implements iDataProperty
      */
     public function __construct(ObjectDescriptor $descriptor)
     {
+        // Set the default status for properties
+        $this->status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE + DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
+        
         $args = $descriptor->getArgs();
         $this->template = $this->getTemplate();
 
