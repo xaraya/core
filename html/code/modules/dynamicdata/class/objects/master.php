@@ -451,6 +451,33 @@ class DataObjectMaster extends Object
             $args['id'] = count($this->properties) + 1;
         sys::import('modules.dynamicdata.class.properties.master');
         DataPropertyMaster::addProperty($args,$this);
+        return true;
+    }
+
+    /**
+     * Modify a property for this object
+     *
+     * @param $property the property or its name (required)
+     * @param $args an array of parameters that re to be changed
+     *
+    **/
+    public function modifyProperty($property, Array $args=array())
+    {
+        if (!is_object($property)) {
+            if (isset($this->properties[$name])) {
+                $property =& $this->properties[$name];
+            } else {
+                $msg = xarML('Bad property parameter for modifyProperty');
+                throw new Exception($msg);
+            }
+        }
+        // Get the description of the property and add its args to those passed
+        $args = $args + $property->descriptor->getArgs();
+        // Remove the property we are changing;
+        unset($this->properties[$property->name]);
+        // Add a new property,like the old, but with the changes passed
+        $this->addProperty($args);
+        return true;
     }
 
     /**
