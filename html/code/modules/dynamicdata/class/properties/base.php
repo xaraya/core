@@ -35,6 +35,7 @@ class DataProperty extends Object implements iDataProperty
     public $class          = '';         // this property's class
 
     // Attributes for runtime
+    public $descriptor;                 // the description object of this property
     public $template = '';
     public $layout = '';
     public $tplmodule = 'dynamicdata';
@@ -81,6 +82,7 @@ class DataProperty extends Object implements iDataProperty
         // Set the default status for properties
         $this->status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE + DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
         
+        $this->descriptor = $descriptor;
         $args = $descriptor->getArgs();
         $this->template = $this->getTemplate();
 
