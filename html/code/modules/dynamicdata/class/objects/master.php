@@ -95,7 +95,7 @@ class DataObjectMaster extends Object
      * @todo  This does too much, split it up
     **/
 
-    function toArray(Array $args=array())
+    public function toArray(Array $args=array())
     {
         $properties = $this->getPublicProperties();
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
@@ -104,7 +104,7 @@ class DataObjectMaster extends Object
         return $args;
     }
 
-    function loader(DataObjectDescriptor $descriptor)
+    public function loader(DataObjectDescriptor $descriptor)
     {
         $this->descriptor = $descriptor;
         $descriptor->refresh($this);
@@ -346,7 +346,7 @@ class DataObjectMaster extends Object
     /**
      * Set the display status of some properties
      */
-    function setDisplayStatus($fieldlist=array(), $status)
+    public function setDisplayStatus($fieldlist=array(), $status)
     {
         if(!empty($fieldlist)) {
             foreach($fieldlist as $field)
@@ -360,7 +360,7 @@ class DataObjectMaster extends Object
     /**
      * Get the data stores where the dynamic properties of this object are kept
     **/
-    function getDataStore($reset = false)
+    public function getDataStore($reset = false)
     {
         switch ($this->datastore) {
             case 'relational': $this->addDataStore('relational', 'relational'); break;
@@ -384,7 +384,7 @@ class DataObjectMaster extends Object
      * @param $name the name for the data store
      * @param $type the type of data store
     **/
-    function addDataStore($name = '_dynamic_data_', $type='data')
+    public function addDataStore($name = '_dynamic_data_', $type='data')
     {
         // get the data store
         sys::import('modules.dynamicdata.class.datastores.master');
@@ -401,7 +401,7 @@ class DataObjectMaster extends Object
     /**
      * Get the selected dynamic properties for this object
     **/
-    function &getProperties($args = array())
+    public function &getProperties($args = array())
     {
         if(!empty($args['fieldlist'])) {
             $fields = $this->getFieldList();
@@ -444,7 +444,7 @@ class DataObjectMaster extends Object
      * @todo why not keep the scope here and do this:
      *       $this->properties[$args['id']] = new Property($args); (with a reference probably)
     **/
-    function addProperty(Array $args=array())
+    public function addProperty(Array $args=array())
     {
         // TODO: find some way to have unique IDs across all objects if necessary
         if(!isset($args['id']))
@@ -458,7 +458,7 @@ class DataObjectMaster extends Object
      *
      * @return array of object definitions
     **/
-    static function &getObjects(Array $args=array())
+    public static function &getObjects(Array $args=array())
     {
         extract($args);
         $dbconn = xarDB::getConn();
@@ -514,7 +514,7 @@ class DataObjectMaster extends Object
      * @todo no ref return?
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
     **/
-    static function getObjectInfo(Array $args=array())
+    public static function getObjectInfo(Array $args=array())
     {
         if (!isset($args['objectid']) && (!isset($args['name']))) {
            throw new Exception(xarML('Cannot get object information without an objectid or a name'));
@@ -678,7 +678,7 @@ class DataObjectMaster extends Object
      * @return object the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
-    static function getObject(Array $args=array())
+    public static function getObject(Array $args=array())
     {
         /* with autoload and variable caching activated */
         // Identify the variable by its arguments here
@@ -724,7 +724,7 @@ class DataObjectMaster extends Object
         return $object;
     }
     
-    static function getfObject(Array $args=array())
+    public static function getfObject(Array $args=array())
     {
         /* with autoload and variable caching activated */
         // Identify the variable by its arguments here
@@ -791,7 +791,7 @@ class DataObjectMaster extends Object
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
     **/
-    static function getObjectList(Array $args=array())
+    public static function getObjectList(Array $args=array())
     {
         /* with autoload and variable caching activated */
         // Identify the variable by its arguments here
@@ -860,7 +860,7 @@ class DataObjectMaster extends Object
      * @todo  get rid of the classname munging
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
-    static function &getObjectInterface(Array $args=array())
+    public static function &getObjectInterface(Array $args=array())
     {
         sys::import('modules.dynamicdata.class.userinterface');
 
@@ -888,7 +888,7 @@ class DataObjectMaster extends Object
         return $object;
     }
 
-    static function isObject(Array $args)
+    public static function isObject(Array $args)
     {
         $info = self::_getObjectInfo($args);
         return !empty($info);
@@ -909,7 +909,7 @@ class DataObjectMaster extends Object
      * @param $args['class'] optional classname (e.g. <module>_DataObject)
      * @return integer object id of the created item
     **/
-    static function createObject(Array $args=array())
+    public static function createObject(Array $args=array())
     {
         // TODO: if we extend dobject classes then probably we need to put the class name here
         $object = self::getObject(array('name' => 'objects'));
@@ -923,7 +923,7 @@ class DataObjectMaster extends Object
         return $objectid;
     }
 
-    static function updateObject(Array $args=array())
+    public static function updateObject(Array $args=array())
     {
         $object = self::getObject(array('name' => 'objects'));
 
@@ -935,7 +935,7 @@ class DataObjectMaster extends Object
         return $itemid;
     }
 
-    static function deleteObject(Array $args=array())
+    public static function deleteObject(Array $args=array())
     {
         $descriptor = new DataObjectDescriptor($args);
         $args = $descriptor->getArgs();
@@ -1053,7 +1053,7 @@ class DataObjectMaster extends Object
      * @todo pick moduleid or module
      * @todo move this into a utils class?
      */
-    static function getModuleItemTypes(Array $args=array())
+    public static function getModuleItemTypes(Array $args=array())
     {
         extract($args);
         // Argument checks
