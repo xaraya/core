@@ -472,7 +472,7 @@ class DataObjectMaster extends Object
                 throw new Exception($msg);
             }
         } else {
-            Check if this is object is a property of this dataobject
+            // Check if this object is a property of this dataobject
             if (!isset($this->properties[$property->name])) {
                 $msg = xarML('Bad property object parameter for modifyProperty');
                 throw new Exception($msg);
