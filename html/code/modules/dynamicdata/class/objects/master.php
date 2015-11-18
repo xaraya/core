@@ -464,10 +464,17 @@ class DataObjectMaster extends Object
     public function modifyProperty($property, Array $args=array())
     {
         if (!is_object($property)) {
+            // Check what we assume to be a name
             if (isset($this->properties[$property])) {
                 $property =& $this->properties[$property];
             } else {
-                $msg = xarML('Bad property parameter for modifyProperty');
+                $msg = xarML('Bad property name parameter for modifyProperty');
+                throw new Exception($msg);
+            }
+        } else {
+            Check if this is object is a property of this dataobject
+            if (!isset($this->properties[$property->name])) {
+                $msg = xarML('Bad property object parameter for modifyProperty');
                 throw new Exception($msg);
             }
         }
