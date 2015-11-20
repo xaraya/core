@@ -89,6 +89,7 @@ function categories_init()
         'item_id'   => array('type'=>'integer','null'=>false),
         'module_id' => array('type'=>'integer','null'=>false),
         'itemtype' => array('type'=>'integer','null'=>false),
+        'property' => array('type'=>'integer','null'=>false),
         'basecategory' => array('type'=>'integer','null'=>false)
     );
     $query = xarDBCreateTable($xartable['categories_linkage'],$fields);

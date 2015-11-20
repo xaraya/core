@@ -76,8 +76,18 @@
       <seq>6</seq>
       <configuration></configuration>
     </property>
-    <property name="base_category">
+    <property name="property">
       <id>124</id>
+      <label>Property</label>
+      <type>integerbox</type>
+      <defaultvalue></defaultvalue>
+      <source>linkages.property</source>
+      <status>33</status>
+      <seq>6</seq>
+      <configuration></configuration>
+    </property>
+    <property name="base_category">
+      <id>125</id>
       <label>Base Category</label>
       <type>objectref</type>
       <defaultvalue></defaultvalue>
