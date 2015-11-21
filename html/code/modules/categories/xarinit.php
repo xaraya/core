@@ -83,14 +83,14 @@ function categories_init()
     if (!$result) return;
 
     $fields = array(
-        'id'                 => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-        'category_id'        => array('type'=>'integer','null'=>false),
-        'child_category_id'  => array('type'=>'integer','null'=>false),
-        'item_id'            => array('type'=>'integer','null'=>false),
-        'module_id'          => array('type'=>'integer','null'=>false),
-        'itemtype'           => array('type'=>'integer','null'=>false),
-        'property_id'        => array('type'=>'integer','null'=>false),
-        'basecategory'       => array('type'=>'integer','null'=>false)
+        'id'                 => array('type'=>'integer','unsigned'=>true,'null'=>false,'increment'=>true, 'primary_key' => true),
+        'category_id'        => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'child_category_id'  => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'item_id'            => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'module_id'          => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'itemtype'           => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'property_id'        => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'basecategory'       => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0')
     );
     $query = xarDBCreateTable($xartable['categories_linkage'],$fields);
 
