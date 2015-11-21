@@ -608,7 +608,6 @@ class CategoriesProperty extends DataProperty
         // Do the deletes
         if (!empty($todelete)) {
             $q = new Query('DELETE', $xartable['categories_linkage']); 
-            $q->addfield('item_id');
             $q->eq('item_id', (int)$itemid);
             $q->eq('property_id', $this->id);
             $q->eq('todelete', $this->id);
