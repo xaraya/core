@@ -610,7 +610,7 @@ class CategoriesProperty extends DataProperty
             $q = new Query('DELETE', $xartable['categories_linkage']); 
             $q->eq('item_id', (int)$itemid);
             $q->eq('property_id', $this->id);
-            $q->eq('todelete', $this->id);
+            $q->eq('category_id', $todelete);
             $q->run();
         }
         unset($q);
