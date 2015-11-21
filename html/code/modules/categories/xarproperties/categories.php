@@ -58,6 +58,7 @@ class CategoriesProperty extends DataProperty
 
     public $module_id      = 0;
     public $itemtype       = 0;
+    public $property       = 0;
     public $itemid;
     public $categories     = array();
     public $basecategories = array();
@@ -177,6 +178,7 @@ class CategoriesProperty extends DataProperty
                 $q->addfield('itemtype', $this->itemtype);
                 $q->addfield('basecategory', $key);
                 $q->addfield('category_id', $category);
+                $q->addfield('property_id', $this->id);
                 $q->run();
             }
         }
@@ -214,7 +216,7 @@ class CategoriesProperty extends DataProperty
 
         // Set the module_id: case of a bound property
         if (isset($this->objectref)) $this->module_id = (int)$this->objectref->module_id;
-        // Override or a standalone property
+        // Override for a standalone property
         if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
         // No hint at all, take the current module
         if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarModGetName());
@@ -224,6 +226,9 @@ class CategoriesProperty extends DataProperty
         if (isset($data['itemtype'])) $this->itemtype = (int)$data['itemtype'];
         // No hint at all, assume all itemtypes
         if (!isset($this->itemtype)) $this->itemtype = 0;
+
+        // Do the same for the property
+        if (isset($this->objectref)) $this->property = (int)$this->id;
 
         // Get the itemid
         $itemid = $this->_itemid;
@@ -270,7 +275,7 @@ class CategoriesProperty extends DataProperty
             // The base category is a single category (no multiselect), so get the category ID
             $tree = is_array($trees) ? reset($trees) : $trees;
             $id = is_array($tree) ? reset($tree) : $tree;
-            $data['base_category'][$key] = $id;
+            $data['base_category'][$key] = (int)$id;
             $nodes = new BasicSet();
             $node = new CategoryTreeNode($id);
             $node->setfilter($filter);
@@ -297,16 +302,17 @@ class CategoriesProperty extends DataProperty
                 sys::import('xaraya.structures.query');
                 foreach ($data['base_category'] as $key => $value) {
                     $q = new Query('SELECT', $xartable['categories_linkage']); 
-                    $q->eq('basecategory', (int)$key);
+                    $q->eq('basecategory', (int)$value);
                     $q->eq('item_id', (int)$itemid);
                     if ($this->module_id) $q->eq('module_id', $this->module_id);
                     if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
+                    if ($this->property) $q->eq('property_id', $this->property);
                     $q->addfield('category_id');
                     $q->run();
                     $result = $q->output();
                     $categories = array();
                     foreach ($result as $row) 
-                        if (!empty($row['category_id'])) $categories[] = $row['category_id'];
+                        if (!empty($row['category_id'])) $categories[] = (int)$row['category_id'];
                     $data['value'][$key] = $categories;
                 }
             }
@@ -349,24 +355,12 @@ class CategoriesProperty extends DataProperty
             // No hint at all, assume all itemtypes
             if (!isset($this->itemtype)) $this->itemtype = 0;
     
+            // Do the same for the property
+            if (isset($this->objectref)) $this->property = (int)$this->id;
+
             // Pick up an itemid if one was passed
             if (isset($data['itemid'])) $itemid = (int)$data['itemid'];
-    /*
-            sys::import('xaraya.structures.query');
-            xarMod::apiLoad('categories');
-            $xartable =& xarDB::getTables();
-            $q = new Query('SELECT'); 
-            $q->addtable( $xartable['categories'],'c');
-            $q->addtable( $xartable['categories_linkage'],'cl');
-            $q->join('c.id','cl.category_id');
-            $q->eq('item_id', $itemid);
-            if ($this->module_id) $q->eq('module_id', $this->module_id);
-            if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
-            $q->run();
-            $this->value = $q->output();
-    
-            $data['value'] = $this->value;
-        */
+
             $this->mountValue($itemid);
             $this->value = unserialize($this->value);
             $data['value'] = $this->value;
@@ -397,6 +391,7 @@ class CategoriesProperty extends DataProperty
         $q->eq('item_id', $itemid);
         if ($this->module_id) $q->eq('module_id', $this->module_id);
         if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
+        if ($this->property) $q->eq('property_id', $this->property);
         $q->run();
         $result = $q->output();
         $this->value = serialize($result);
@@ -464,20 +459,34 @@ class CategoriesProperty extends DataProperty
         $primary = $this->objectref->primary;
         $primary_source = $this->objectref->properties[$primary]->source;
         
+        // The tables of this property will be added with a special prefix
+        // to make sure all tables are unique
+        $tableprefix = $this->id . "_";
+
         // Assemble the links to the object's table
         xarMod::load('categories');
         $tables = xarDB::getTables();
-        $q->addTable($tables['categories_linkage'], 'linkage');
-        $q->leftjoin($primary_source, 'linkage.item_id');
-        $q->addTable($tables['categories'], 'categories');
-        $q->leftjoin('categories.id', 'linkage.category_id');
+        $q->addTable($tables['categories_linkage'], $tableprefix . 'linkage');
+        $q->leftjoin($primary_source, $tableprefix . 'linkage.item_id');
+        $q->addTable($tables['categories'], $tableprefix . 'categories');
+        $q->leftjoin($tableprefix . 'categories.id', $tableprefix . 'linkage.category_id');
         // A zero means "all"
         // Itemtype & module ID = 0 means the objects listing
-        if (!empty($this->module_id) && !empty($this->itemtype)) $q->eq('linkage.module_id', $this->module_id);
-        if (!empty($this->itemtype)) $q->eq('linkage.itemtype', $this->itemtype);
+        if (!empty($this->module_id) && !empty($this->itemtype)) $q->eq($tableprefix . 'linkage.module_id', $this->module_id);
+        if (!empty($this->itemtype)) $q->eq($tableprefix . 'linkage.itemtype', $this->itemtype);
+        if (!empty($this->property)) $q->eq('linkage.property_id', $this->property);
         
         // Set the source of this property
-        $this->source = 'categories.name';
+        $this->source = $tableprefix . 'categories.name';
+
+        // Debug display
+        if (xarModVars::get('dynamicdata','debugmode') && 
+        in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+            echo "Ref Object: " . $this->objectref->name . "<br/>";
+            echo "Property: " . $this->name . "<br/>";
+            echo "Query: " . $q->qecho() . "<br/>";
+        }
+        
         return true;
     }
 }
