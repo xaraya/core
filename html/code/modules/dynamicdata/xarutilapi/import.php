@@ -70,6 +70,10 @@ function dynamicdata_utilapi_import(Array $args=array())
     
     if ($roottag == 'object') {
         
+# --------------------------------------------------------
+#
+# Process an object definition (-def.xml file) 
+#
         //FIXME: this unconditionally CLEARS the incoming parameter!!
         $args = array();
         // Get the object's name
@@ -123,7 +127,9 @@ function dynamicdata_utilapi_import(Array $args=array())
         if ($dupexists && $overwrite) {
             $args['itemid'] = $info['objectid'];
             $args['itemtype'] = $info['itemtype'];
+            // Load the object properties directly with the values to bypass their setValue methods
             $object->setFieldValues($args,1);
+            $objectid = $object->updateItem(array('itemid' => $args['itemid']));
             $objectid = $object->updateItem();
             // remove the properties, as they will be replaced
             $duplicateobject = DataObjectMaster::getObject(array('name' => $info['name']));
@@ -136,8 +142,10 @@ function dynamicdata_utilapi_import(Array $args=array())
             $objectid = $object->createItem();
         }
 
-        // Now do the item's properties
-
+# --------------------------------------------------------
+#
+# Now process the objects's properties
+#
         $propertyproperties = array_keys($dataproperty->properties);
         $propertieshead = $xmlobject->properties;
         foreach($propertieshead->children() as $property) {
@@ -223,6 +231,10 @@ function dynamicdata_utilapi_import(Array $args=array())
         }
     } elseif ($roottag == 'items') {
 
+# --------------------------------------------------------
+#
+# Process an object's items (-dat.xml file) 
+#
         $currentobject = "";
         $index = 1;
         $count = count($xmlobject->children());
