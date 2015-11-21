@@ -38,14 +38,14 @@ function categories_init()
     $prefix = xarDB::getPrefix();
 
     $fields = array(
-        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
+        'id' => array('type' =>'integer','unsigned'=>true,'null'=>false,'increment'=>true,'primary_key'=>true),
         'name'        => array('type'=>'varchar','size'=>64,'null'=>false),
         'description' => array('type'=>'varchar','size'=>255,'null'=>false),
         'image'       => array('type'=>'varchar','size'=>255,'null'=>false),
         'template'    => array('type'=>'varchar','size'=>255,'null'=>false),
-        'parent_id'   => array('type'=>'integer','null'=>false,'default'=>'0'),
-        'left_id'     => array('type'=>'integer','null'=>true,'unsigned'=>true),
-        'right_id'    => array('type'=>'integer','null'=>true,'unsigned'=>true),
+        'parent_id'   => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'left_id'     => array('type'=>'integer','null'=>true,,'unsigned'=>true,'default'=>'0'),
+        'right_id'    => array('type'=>'integer','null'=>true,,'unsigned'=>true,'default'=>'0'),
         'child_object'=> array('type'=>'varchar','size'=>255,'null'=>false),
         'links'       => array('type'=>'integer','null'=>false,'default'=>'0','unsigned'=>true),
         'state'       => array('type'=>'integer','null'=>false,'default'=>'3')
