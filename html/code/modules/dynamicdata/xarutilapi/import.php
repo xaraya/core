@@ -123,7 +123,8 @@ function dynamicdata_utilapi_import(Array $args=array())
         if ($dupexists && $overwrite) {
             $args['itemid'] = $info['objectid'];
             $args['itemtype'] = $info['itemtype'];
-            $objectid = $object->updateItem($args);
+            $object->setFieldValues($args,1);
+            $objectid = $object->updateItem();
             // remove the properties, as they will be replaced
             $duplicateobject = DataObjectMaster::getObject(array('name' => $info['name']));
             $oldproperties = $duplicateobject->properties;
