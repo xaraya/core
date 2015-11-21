@@ -47,8 +47,8 @@ class CategoriesProperty extends DataProperty
 
     public $include_reference   = 1;
 
-    public $validation_single = false;
-    public $validation_allowempty = false;
+    public $validation_single               = false;
+    public $validation_allowempty           = false;
     public $validation_single_invalid; // CHECKME: is this a validation or something else?
     public $validation_allowempty_invalid;
     public $initialization_include_no_cat   = 0;
@@ -117,7 +117,7 @@ class CategoriesProperty extends DataProperty
                 foreach ($value as $category) {
                     if (empty($category)) continue;
                     $catparts = explode('.',$category);
-                    $category = $catparts[0];
+                    $category = (int)$catparts[0];
                     $validcat = xarMod::apiFunc('categories','user','getcatinfo',array('cid' => $category));
                     if (!$validcat) {
                         $this->invalid = xarML("The category #(1) is not valid", $category);
@@ -138,14 +138,36 @@ class CategoriesProperty extends DataProperty
             return false;
         }
         
-        // We passed the checks, set the categories
-        $this->categories = $value;
+        // We passed the checks, set the categories, amking sure we have integers
+        $this->categories = array();
+        foreach ($value as $category_id) $this->categories[] = (int)current($category_id);
         
         // Keep a reference of the data of this property in $this->value, for saving or easy manipulation
-        $this->value = $value;
+        $this->value = $this->categories;
         return true;
     }
 
+    /**
+     * Get the category links for this property
+     * 
+     * @param int $itemid
+     * @return array category links
+     */
+    private function getLinks($itemid=0)
+    {
+        sys::import('xaraya.structures.query');
+        xarMod::apiLoad('categories');
+        $xartable =& xarDB::getTables();
+        
+        $q = new Query('SELECT', $xartable['categories_linkage']); 
+        $q->eq('item_id', (int)$itemid);
+        $q->eq('property_id', $this->id);
+        $q->run();
+        $links = array();
+        foreach ($q->output() as $row) $links[(int)$row['category_id']] = $row;
+        return $links;
+    }
+    
     /**
      * Create Value
      * 
@@ -154,32 +176,39 @@ class CategoriesProperty extends DataProperty
      */
     public function createValue($itemid=0)
     {
-        // For both create and update we remove any existing links and create the new ones
-        sys::import('xaraya.structures.query');
-        xarMod::apiLoad('categories');
-        $xartable =& xarDB::getTables();
-        if (!empty($itemid)) {
-            $q = new Query('DELETE', $xartable['categories_linkage']); 
-            $q->eq('item_id', (int)$itemid);
-            // CHRCKME: shouldn't we force a value for module_id and itemtype?
-            if ($this->module_id) $q->eq('module_id', $this->module_id);
-            if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
-            $q->run();
-        }
-
-        foreach ($this->basecategories as $key => $basecategory) {
-            foreach ($this->categories[$key] as $category) {
-                // Ignore if no category was chosen (value = 0)
-                if (empty($category)) continue;
-                
-                $q = new Query('INSERT', $xartable['categories_linkage']); 
-                $q->addfield('item_id', (int)$itemid);
-                $q->addfield('module_id', $this->module_id);
-                $q->addfield('itemtype', $this->itemtype);
-                $q->addfield('basecategory', $key);
-                $q->addfield('category_id', $category);
-                $q->addfield('property_id', $this->id);
+        if (isset($this->objectref)) {
+            // This property is bound
+            return $this->updateLinks($itemid);
+        } else {
+            sys::import('xaraya.structures.query');
+            xarMod::apiLoad('categories');
+            $xartable =& xarDB::getTables();
+        
+            // This property is standalone
+            // For both create and update we remove any existing links and create the new ones
+            if (!empty($itemid)) {
+                $q = new Query('DELETE', $xartable['categories_linkage']); 
+                $q->eq('item_id', (int)$itemid);
+                // CHRCKME: shouldn't we force a value for module_id and itemtype?
+                if ($this->module_id) $q->eq('module_id', $this->module_id);
+                if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
                 $q->run();
+            }
+
+            foreach ($this->basecategories as $key => $basecategory) {
+                foreach ($this->categories[$key] as $category) {
+                    // Ignore if no category was chosen (value = 0)
+                    if (empty($category)) continue;
+                
+                    $q = new Query('INSERT', $xartable['categories_linkage']); 
+                    $q->addfield('item_id', (int)$itemid);
+                    $q->addfield('module_id', $this->module_id);
+                    $q->addfield('itemtype', $this->itemtype);
+//                    $q->addfield('basecategory', $key);
+                    $q->addfield('category_id', $category);
+                    $q->addfield('property_id', $this->id);
+                    $q->run();
+                }
             }
         }
         return true;
@@ -189,10 +218,18 @@ class CategoriesProperty extends DataProperty
      * Updates value for the given item id.
      * @param int $itemid ID of the item to be updated
      * @return boolean Returns true on success, false on failure
+     *
+     * This method also maintains integrity by updating module_id, itemtype etc. if these have changed
      */
     public function updateValue($itemid=0)
     {
-        return $this->createValue($itemid);
+        if (isset($this->objectref)) {
+            return $this->updateLinks($itemid);
+        } else {
+            // This property is standalone
+            return $this->createValue($itemid);
+        }
+        return $itemid;
     }
 
     /**
@@ -203,7 +240,20 @@ class CategoriesProperty extends DataProperty
      */
     public function deleteValue($itemid=0)
     {
-        // TODO make this work, but do we need it?
+        sys::import('xaraya.structures.query');
+        xarMod::apiLoad('categories');
+        $xartable =& xarDB::getTables();
+        
+        if (isset($this->objectref)) {
+            // This property is bound
+            $q = new Query('DELETE', $xartable['categories_linkage']); 
+            $q->eq('item_id', (int)$itemid);
+            $q->eq('property_id', $this->id);
+            $q->run();
+        } else {
+            // This property is standalone
+            // Not implemented
+        }
         return $itemid;
     }
 
@@ -487,6 +537,126 @@ class CategoriesProperty extends DataProperty
             echo "Query: " . $q->qecho() . "<br/>";
         }
         
+        return true;
+    }
+
+    /**
+     * Updates category links for a given item id.
+     * @param int $itemid ID of the item to be updated
+     * @return boolean Returns true on success, false on failure
+     *
+     * A property can have 0 to many category links
+     * The method compares categories to be added and removed, 
+     * and then tries to reuse existing linkage entries that can be overwritten
+     * This method also maintains integrity in the linkage table by 
+     * updating module_id, itemtype etc. if these have changed
+     */
+    private function updateLinks($itemid=0)
+    {
+        sys::import('xaraya.structures.query');
+        xarMod::apiLoad('categories');
+        $xartable =& xarDB::getTables();
+        
+        // This property is bound
+        // Get the base category:there is only one for each bound property
+        $basecategory = (int)$this->initialization_basecategories[0][1][0][0];
+        // Get the category links of this property and item
+        $links = $this->getLinks($itemid);
+        
+        // Calculate what rows require what actions
+        $previous_cats = array_keys($links);
+        $current_cats  = $this->categories;
+        $todelete = array_diff($previous_cats,$current_cats);
+        $tocreate = array_diff($current_cats,$previous_cats);
+        $toupdate = array_intersect($current_cats,$previous_cats);
+
+        // Set up for updating rows we want to delete
+        if (!empty($tocreate)) {
+            $q = new Query('UPDATE', $xartable['categories_linkage']); 
+        }
+
+        $reusable = min(count($todelete), count($tocreate));
+        if (!empty($reusable)) {
+            for ($i=0;$i<$reusable;$i++) {
+                // Get the of the row to delete we will overwrite
+                $this_category = array_shift($todelete);
+                $this_link = $links[$this_category];
+                $id = $this_link['id'];
+                
+                // This will be row we overwrite
+                $q->eq('id', $id);
+                
+                // Get the category we will insert into this row
+                $new_category = array_shift($tocreate);
+                $q->addfield('category_id', $new_category);
+                
+                // Check if any other items need updating
+                if ($this_link['module_id'] != $this->module_id) {
+                    $q->addfield('module_id', $this->module_id);
+                }
+                if ($this_link['itemtype'] != $this->itemtype) {
+                    $q->addfield('itemtype', $this->itemtype);
+                }
+                if ($this_link['basecategory'] != $basecategory) {
+                    $q->addfield('basecategory', $basecategory);
+                }
+                $q->run();
+            }
+        }
+        unset($q);
+        
+        // Do the deletes
+        if (!empty($todelete)) {var_dump($todelete);exit;
+            $q = new Query('DELETE', $xartable['categories_linkage']); 
+            $q->addfield('item_id');
+            $q->eq('item_id', (int)$itemid);
+            $q->eq('property_id', $this->id);
+            $q->eq('todelete', $this->id);
+            $q->run();
+        }
+        unset($q);
+    
+        // Do the creates
+        if (!empty($tocreate)) {
+            $q = new Query('INSERT', $xartable['categories_linkage']); 
+            $q->addfield('item_id', (int)$itemid);
+            $q->addfield('module_id', $this->module_id);
+            $q->addfield('itemtype', $this->itemtype);
+            $q->addfield('basecategory', $basecategory);
+            $q->addfield('property_id', $this->id);
+            foreach ($tocreate as $category) {
+                $q->addfield('category_id', $category);
+                $q->run();
+            }
+        }
+        unset($q);
+
+        // Do the updates
+        if (!empty($toupdate)) {
+            $q = new Query('UPDATE', $xartable['categories_linkage']); 
+            $q->eq('item_id', (int)$itemid);
+            $q->eq('property_id', $this->id);
+            foreach ($toupdate as $category) {
+                // Only update if something has changed
+                $this_link = $links[$category];
+                $q->eq('id', $this_link['id']);
+                $check_passed = true;
+                if ($this_link['module_id'] != $this->module_id) {
+                    $q->addfield('module_id', $this->module_id);
+                    $check_passed = false;
+                }
+                if ($this_link['itemtype'] != $this->itemtype) {
+                    $q->addfield('itemtype', $this->itemtype);
+                    $check_passed = false;
+                }
+                if ($this_link['basecategory'] != $this->basecategory) {
+                    $q->addfield('basecategory', $this->basecategory);
+                    $check_passed = false;
+                }
+                if (!$check_passed) $q->run();
+            }
+        }
+        unset($q);
         return true;
     }
 }
