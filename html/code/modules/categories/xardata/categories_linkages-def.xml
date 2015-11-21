@@ -81,7 +81,7 @@
       <label>Property</label>
       <type>integerbox</type>
       <defaultvalue></defaultvalue>
-      <source>linkages.property</source>
+      <source>linkages.property_id</source>
       <status>33</status>
       <seq>6</seq>
       <configuration></configuration>
