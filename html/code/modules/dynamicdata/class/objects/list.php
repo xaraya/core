@@ -371,38 +371,40 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      * @param cids array of category ids
      * @param andcids bool get items assigned to all the cids (AND = true) or any of the cids (OR = false)
      */
-    public function setCategories($cids, $andcids = false)
+    public function setCategories($cids, $join_by_and = false)
     {
-        if(!xarModIsAvailable('categories')) return;
-
+        // Support both a single category ID and an array of same
         if (!empty($cids) && is_numeric($cids)) {
             $cids = array($cids);
         }
 
-        if (!is_array($cids) || count($cids) == 0) return;
+        // Sanity check: bail if we don't have an array at this point
+        if (!is_array($cids) || count($cids) == 0) return true;
 
-        $categoriesdef = xarMod::apiFunc(
-            'categories','user','leftjoin',
-            array(
-                'modid' => $this->moduleid,
-                'itemtype' => $this->itemtype,
-                'cids' => $cids,
-                'andcids' => $andcids,
-                // unused options - do they have any benefit for dd lists ?
-                //'iids' => array(),    // only for these items - too early for dd here ?
-                //'cidtree' => array(), // match any category in the tree(s) below the cid(s)
-                //'groupcids' => null,  // group categories by 2 (typically) to show the items per combination in a category matrix
-            )
-        );
-
-        $this->datastore->addJoin(
-            $categoriesdef['table'],
-            $categoriesdef['field'],
-            array(),
-            $categoriesdef['where'],
-            'and',
-            $categoriesdef['more']
-        );
+        // Check the properties to see if any of them are categories
+        // If so, set up conjunction clauses for the object's dataquery
+        $conjunctions = array();
+        foreach ($this->properties as $property) {
+            // If this property is not a category, move on
+            if ($property->type != 100) continue;
+            
+            $category_source = $property->id . "_" . $property->source;
+            if (!$join_by_and) {
+                $conjunctions[] = $this->dataquery->pin($category_source, $cids);
+            } else {
+                // Not yet supported
+            }
+        }
+        
+        // If we found something, then add the conjunctions to the object's dataquery
+        if (!empty($conjunctions)) {
+            if (!$join_by_and) {
+                $this->dataquery->qor($conjunctions);
+            } else {
+                // Not yet supported
+            }
+        }
+        return true;
     }
 
     /**
