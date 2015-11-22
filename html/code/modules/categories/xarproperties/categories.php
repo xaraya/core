@@ -337,8 +337,8 @@ class CategoriesProperty extends DataProperty
                     $result = $q->output();
                     $categories = array();
                     foreach ($result as $row) 
-                        if (!empty($row['category_id'])) $categories[$key] = (int)$row['category_id'];
-                    $data['value'] = $categories;
+                        if (!empty($row['category_id'])) $categories[] = (int)$row['category_id'];
+                    $data['value'][$key] = $categories;
                 }
             }
        }
