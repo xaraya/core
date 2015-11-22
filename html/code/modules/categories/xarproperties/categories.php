@@ -30,12 +30,6 @@ sys::import('modules.categories.xarproperties.categorytree');
  *
  * Note: a base category -1 means show all the categories in a dropdown
  *
- * TODO
- * allow a nonempty source? If so, what do we want:
- * - a simple text field that lets you enter anything freeform?
- * - a serialized value of the categories, corresponding to what we have in the linkages table?
- * either way once we have a non empty source, this becomes a standard property,
- * so we need in any case to modify checkInput, validateValue and perhaps setValue, and showInput.
  */
 class CategoriesProperty extends DataProperty
 {
@@ -92,17 +86,19 @@ class CategoriesProperty extends DataProperty
         // Get the base categories from the form
         if (!xarVarFetch($name . '["base_category"]', 'array', $basecats, array(), XARVAR_NOT_REQUIRED)) return;
         $this->basecategories = $basecats;
-
         // Get the categories from the form
         // Select type of each tree can be different
+        // CHECKME: only one tree and one basecategory per property
+        /*
         foreach ($this->basecategories as $key => $base_category) {
             $select_type = 3;
             if ($select_type == 1) $select_type = 'dropdown';
             else $select_type = 'multiselect';
             if (!xarVarFetch($name . '["categories"]', 'array', $categories, array(), XARVAR_NOT_REQUIRED)) return;
         }
-        $value = isset($categories) ? $categories : array();
-        return $this->validateValue($value);
+        */
+        if (!xarVarFetch($name . '["categories"]', 'array', $categories, array(), XARVAR_NOT_REQUIRED)) return;
+        return $this->validateValue($categories);
     }
 
     public function validateValue($value = null)
@@ -147,27 +143,6 @@ class CategoriesProperty extends DataProperty
         return true;
     }
 
-    /**
-     * Get the category links for this property
-     * 
-     * @param int $itemid
-     * @return array category links
-     */
-    private function getLinks($itemid=0)
-    {
-        sys::import('xaraya.structures.query');
-        xarMod::apiLoad('categories');
-        $xartable =& xarDB::getTables();
-        
-        $q = new Query('SELECT', $xartable['categories_linkage']); 
-        $q->eq('item_id', (int)$itemid);
-        $q->eq('property_id', $this->id);
-        $q->run();
-        $links = array();
-        foreach ($q->output() as $row) $links[(int)$row['category_id']] = $row;
-        return $links;
-    }
-    
     /**
      * Create Value
      * 
@@ -541,6 +516,27 @@ class CategoriesProperty extends DataProperty
     }
 
     /**
+     * Get the category links for this property
+     * 
+     * @param int $itemid
+     * @return array category links
+     */
+    private function getLinks($itemid=0)
+    {
+        sys::import('xaraya.structures.query');
+        xarMod::apiLoad('categories');
+        $xartable =& xarDB::getTables();
+        
+        $q = new Query('SELECT', $xartable['categories_linkage']); 
+        $q->eq('item_id', (int)$itemid);
+        $q->eq('property_id', $this->id);
+        $q->run();
+        $links = array();
+        foreach ($q->output() as $row) $links[(int)$row['category_id']] = $row;
+        return $links;
+    }
+    
+    /**
      * Updates category links for a given item id.
      * @param int $itemid ID of the item to be updated
      * @return boolean Returns true on success, false on failure
@@ -575,6 +571,8 @@ class CategoriesProperty extends DataProperty
             $q = new Query('UPDATE', $xartable['categories_linkage']); 
         }
 
+        // We need to delete and create a certain number of categories
+        // Instead we update the deletes to the values of the ctegories we need to create
         $reusable = min(count($todelete), count($tocreate));
         if (!empty($reusable)) {
             for ($i=0;$i<$reusable;$i++) {
