@@ -388,9 +388,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // If this property is not a category, move on
             if ($property->type != 100) continue;
             
-            $category_source = $property->id . "_" . $property->source;
+            $category_idfield = $property->id . "_categories.id";
             if (!$join_by_and) {
-                $conjunctions[] = $this->dataquery->pin($category_source, $cids);
+                $conjunctions[] = $this->dataquery->pin($category_idfield, $cids);
             } else {
                 // Not yet supported
             }
