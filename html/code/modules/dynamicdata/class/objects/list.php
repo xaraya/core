@@ -260,11 +260,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     {
         $this->sort = array();  // FIXME: this should not be necessary
         
+        // Make sure we have an array
         if(is_array($sort)) {
             $this->sort = $sort;
         } elseif (!empty($sort)) {
             $this->sort = explode(',',$sort);
         }
+        
         foreach($this->sort as $criteria) {
             if (empty($criteria)) return true;
             
@@ -393,6 +395,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $conjunctions[] = $this->dataquery->pin($category_idfield, $cids);
             } else {
                 // Not yet supported
+                // The assembly is a bit more complicated, but doable
             }
         }
         
@@ -402,6 +405,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $this->dataquery->qor($conjunctions);
             } else {
                 // Not yet supported
+                // The assembly is a bit more complicated, but doable
             }
         }
         return true;
