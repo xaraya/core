@@ -90,6 +90,7 @@ function categories_init()
         'module_id'          => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
         'itemtype'           => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
         'property_id'        => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'tree_id'            => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
         'basecategory'       => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0')
     );
     $query = xarDBCreateTable($xartable['categories_linkage'],$fields);
