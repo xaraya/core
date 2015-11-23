@@ -130,7 +130,7 @@ class DataProperty extends Object implements iDataProperty
         $old_parts = explode('.', $source);
         $new_parts = explode('.', $this->source);
         if (isset($new_parts[0]) && isset($old_parts[1])) {
-            $source = implode('.', array($old_parts[0], $new_parts[1]));
+            $source = implode('.', array($new_parts[0], $old_parts[1]));
         } else {
             throw new Exception(xarML('Error in assembling getSource()'));
         }
