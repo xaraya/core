@@ -121,6 +121,15 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
+     * Return the datasource of this property as per its descriptor
+     */
+    public function getSource()
+    {
+        $source = $this->descriptor->get('source');
+        return $source;
+    }
+
+    /**
      * Find the datastore name and type corresponding to the data source of a property
      */
     function getDataStore()
