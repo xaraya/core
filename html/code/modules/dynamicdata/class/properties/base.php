@@ -130,6 +130,16 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
+     * Set the datasource of this property to a given value, or to its original value
+     */
+    public function setSource($source='')
+    {
+        if (empty($source)) $source = $this->descriptor->get('source');
+        $this->source = $source;
+        return true;
+    }
+
+    /**
      * Find the datastore name and type corresponding to the data source of a property
      */
     function getDataStore()
