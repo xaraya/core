@@ -65,6 +65,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $this->configuration['items'] =& $this->items;
         
         foreach ($this->getFieldList() as $fieldname) {
+            // Only properties that are configured to display in lists
+            $display_status = $this->properties[$fieldname]->getDisplayStatus();
+            if (!in_array($display_status, array(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,
+                                                 DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY,
+                                                 DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)))
+            continue;
             $this->properties[$fieldname]->preList();
         }
     }
