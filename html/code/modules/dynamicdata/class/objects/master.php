@@ -300,9 +300,13 @@ class DataObjectMaster extends Object
         return true;
     }
 
-    public function getFieldList()
+    public function getFieldList($force=0)
     {
-        if (empty($this->fieldlist)) $this->fieldlist = $this->setupFieldList();
+        if ($force) {
+            $this->fieldlist = $this->setupFieldList();
+        } else {
+            if (empty($this->fieldlist)) $this->fieldlist = $this->setupFieldList();
+        }
         return $this->fieldlist;
     }
 
