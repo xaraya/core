@@ -1321,7 +1321,7 @@ class DataObjectMaster extends Object
                 }
             } catch (Exception $e) {
                 echo xarML('Found sources: ');var_dump($sources);
-                throw new Exception(xarML('Error reading object sources'));
+                echo xarML('Error reading object sources');
             }
         }
 
