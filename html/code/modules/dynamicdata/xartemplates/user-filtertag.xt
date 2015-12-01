@@ -17,6 +17,7 @@
             </div>
         </xar:if>
         <input type="hidden" name="objectname" value="#$objectname#"/>
+        <input type="hidden" name="filtername" value="#$filtername#"/>
         <input type="hidden" name="filter_submitted" value="1"/>
     </form>
 </xar:template>

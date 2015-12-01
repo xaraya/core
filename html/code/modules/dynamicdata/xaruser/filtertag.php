@@ -19,7 +19,7 @@ function dynamicdata_user_filtertag(Array $args=array())
 
     if ($filter_submitted) {
         if (!xarVarFetch('objectname', 'str',   $objectname,  '', XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('filter',     'str',   $filtername,  '', XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('filtername', 'str',   $filtername,  '', XARVAR_NOT_REQUIRED)) {return;}
         if (!xarVarFetch('return_url', 'str',   $return_url,  '', XARVAR_NOT_REQUIRED)) {return;}
         if (!xarVarFetch('name',       'array', $names,  array(), XARVAR_NOT_REQUIRED)) {return;}
         if (!xarVarFetch('source',     'array', $source,  array(), XARVAR_NOT_REQUIRED)) {return;}
