@@ -63,6 +63,7 @@ function dynamicdata_user_filtertag(Array $args=array())
         if (!is_array($fields)) $args['fieldlist'] = explode(',', $fields);
         if (!isset($args['object'])) throw new Exception('Missing $object for filter tag');
         $properties = $args['object']->getProperties();
+        if (isset($args['filtername'])) $data['filtername'] = $args['filtername'];
         
         if (empty($filtername)) $filtername = $args['object']->name;
         $filter = @unserialize(xarSession::getVar('DynamicData.Filter.' . $filtername));
