@@ -90,6 +90,7 @@ function dynamicdata_user_filtertag(Array $args=array())
         }
         $data['button'] = $args['button'];
         $data['return_url'] = $args['return_url'];
+        $data['filtername'] = $filtername;
         $data['objectname'] = $args['object']->name;
         $data['object'] =& $args['object'];
         $data['fieldlist'] =& $args['fieldlist'];
