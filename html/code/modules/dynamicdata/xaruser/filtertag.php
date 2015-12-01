@@ -19,7 +19,7 @@ function dynamicdata_user_filtertag(Array $args=array())
 
     if ($filter_submitted) {
         if (!xarVarFetch('objectname', 'str',   $objectname,  '', XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('filter',     'str',   $filter,      '', XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('filter',     'str',   $filtername,  '', XARVAR_NOT_REQUIRED)) {return;}
         if (!xarVarFetch('return_url', 'str',   $return_url,  '', XARVAR_NOT_REQUIRED)) {return;}
         if (!xarVarFetch('name',       'array', $names,  array(), XARVAR_NOT_REQUIRED)) {return;}
         if (!xarVarFetch('source',     'array', $source,  array(), XARVAR_NOT_REQUIRED)) {return;}
@@ -49,8 +49,8 @@ function dynamicdata_user_filtertag(Array $args=array())
         }
 
         // Save the conditions in a session var. Perhaps also in some cache?
-        if (empty($filter)) $filter = $objectname;
-        xarSession::setVar('DynamicData.Filter.' . $filter, serialize($q));
+        if (empty($filtername)) $filtername = $objectname;
+        xarSession::setVar('DynamicData.Filter.' . $filtername, serialize($q));
         xarController::redirect($return_url);
         return true;
         
@@ -64,8 +64,8 @@ function dynamicdata_user_filtertag(Array $args=array())
         if (!isset($args['object'])) throw new Exception('Missing $object for filter tag');
         $properties = $args['object']->getProperties();
         
-        if (empty($filter)) $filter = $args['object']->name;
-        $filter = @unserialize(xarSession::getVar('DynamicData.Filter.' . $filter));
+        if (empty($filtername)) $filtername = $args['object']->name;
+        $filter = @unserialize(xarSession::getVar('DynamicData.Filter.' . $filtername));
         if (empty($filter)) $filter = array();
         $values = array();
         $ops    = array();
