@@ -63,10 +63,9 @@ function dynamicdata_user_filtertag(Array $args=array())
         if (!is_array($fields)) $args['fieldlist'] = explode(',', $fields);
         if (!isset($args['object'])) throw new Exception('Missing $object for filter tag');
         $properties = $args['object']->getProperties();
-        if (isset($args['filtername'])) $data['filtername'] = $args['filtername'];
         
-        if (empty($filtername)) $filtername = $args['object']->name;
-        $filter = @unserialize(xarSession::getVar('DynamicData.Filter.' . $filtername));
+        if (empty($args['filtername'])) $args['filtername'] = $args['object']->name;
+        $filter = @unserialize(xarSession::getVar('DynamicData.Filter.' . $args['filtername']));
         if (empty($filter)) $filter = array();
         $values = array();
         $ops    = array();
@@ -91,10 +90,10 @@ function dynamicdata_user_filtertag(Array $args=array())
         }
         $data['button'] = $args['button'];
         $data['return_url'] = $args['return_url'];
-        $data['filtername'] = $filtername;
         $data['objectname'] = $args['object']->name;
-        $data['object'] =& $args['object'];
-        $data['fieldlist'] =& $args['fieldlist'];
+        $data['object']     =& $args['object'];
+        $data['filtername'] = $args['filtername'];
+        $data['fieldlist']  =& $args['fieldlist'];
     }
     return $data;
 }
