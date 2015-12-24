@@ -23,17 +23,14 @@ function blocks_admin_view_instances()
     
     $data = array();
     
-    if (!xarVarFetch('tab', 'pre:trim:lower:str:1:',
-        $data['tab'], 'list', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('tab', 'pre:trim:lower:str:1:', $data['tab'], 'list', XARVAR_NOT_REQUIRED)) return;
 
     $access_property = DataPropertyMaster::getProperty(array('name' => 'access'));
         
     switch ($data['tab']) {
         case 'list':
-            if (!xarVarFetch('startnum', 'int:1',
-                $data['startnum'], 1, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('filter', 'pre:trim:str:1:',
-                $data['filter'], null, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('startnum', 'int:1', $data['startnum'], 1, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('filter', 'pre:trim:str:1:', $data['filter'], null, XARVAR_NOT_REQUIRED)) return;
             $data['items_per_page'] = xarModVars::get('blocks', 'items_per_page');
 
             $data['total'] = xarMod::apiFunc('blocks', 'instances', 'countitems',
