@@ -137,7 +137,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if (!xarVarFetch($this->primary, 'array', $data['id'], array(), XARVAR_NOT_REQUIRED)) return;
         if (empty($data['id'])) return true;
         
-        // Clean the data found
+        // Clean the itemids found
         foreach ($data['id'] as $k => $v) $data['id'][$k] = (int)$v;
         
         // Get the properties we will be looking at
