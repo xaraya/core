@@ -142,8 +142,36 @@ class VariableTableDataStore extends SQLDataStore
         // Bail if the object has no properties
         if (count($this->object->properties) < 1) return $itemid;
 
-        $props = array_keys($this->object->properties);
-        
+        $goodproperties = array();
+        foreach ($this->object->fieldlist as $key => $fieldname) {
+            $field = $this->object->properties[$fieldname];
+            $fieldtablealias = explode('.', $field->source);
+            if (empty($field->source)) {
+                // Ignore fields with no source
+                continue;
+            } elseif ($field->name == $this->object->primary) {
+                // Ignore the primary value
+                continue;
+            } elseif ($field->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_IGNORED) {
+                // Ignore the fields with IGNORE status
+                continue;
+            } elseif (isset($args[$field->name])) {
+                // We have an override through the methods parameters
+                // Encrypt if required
+                if (!empty($field->initialization_encrypt))
+                    throw new Exception(xarML('Cannot encrypt data for variable table store'));
+            } else {
+                // No override, just take the value the property already has
+                // Encrypt if required
+                if (!empty($field->initialization_encrypt)) {
+                    throw new Exception(xarML('Cannot encrypt data for variable table store'));
+                }
+            }
+            $goodproperties[$fieldname] =& $this->object->properties[$fieldname];
+        }
+
+        $props = array_keys($goodproperties);
+
         $propids = array();
         foreach ($this->object->properties as $prop) $propids[] = $prop->id;
 
