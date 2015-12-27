@@ -47,10 +47,8 @@ class Authsystem_LoginBlockConfig extends Authsystem_LoginBlock implements iBloc
      */
     public function configupdate()
     {
-        if (!xarVarFetch('showlogout', 'checkbox',
-            $showlogout, false, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('logouttitle', 'pre:trim:str:1:254',
-            $logouttitle, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('showlogout',  'checkbox',           $showlogout, false, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('logouttitle', 'pre:trim:str:1:254', $logouttitle, '', XARVAR_NOT_REQUIRED)) return;
         
         $this->showlogout = $showlogout;        
         $this->logouttitle = $logouttitle;
