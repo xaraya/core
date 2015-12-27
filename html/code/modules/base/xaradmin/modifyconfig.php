@@ -71,7 +71,6 @@ function base_admin_modifyconfig()
 
     if (extension_loaded('mcrypt')) {
         // Don't use sys::import, the scope of the var would be wrong
-        // Don't use sys::import, the scope of the var would be wrong
         // Use include instead of include_once, in case we have loaded this var in another scope
         include(sys::lib()."xaraya/encryption.php");
         $data['encryption'] = $encryption;
