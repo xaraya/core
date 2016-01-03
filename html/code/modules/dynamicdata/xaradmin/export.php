@@ -101,7 +101,8 @@ function dynamicdata_admin_export(Array $args=array())
 
         $mylist = DataObjectMaster::getObjectList(array('objectid' => $objectid,
                                                 'moduleid' => $moduleid,
-                                                'itemtype' => $itemtype));
+                                                'itemtype' => $itemtype,
+                                                'prelist' => false));     // don't run preList method
         $mylist->getItems(array('getvirtuals' => 1));
 
         if (empty($tofile)) {

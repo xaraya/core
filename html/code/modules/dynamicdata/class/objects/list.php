@@ -20,6 +20,7 @@ sys::import('modules.dynamicdata.class.objects.interfaces');
 
 class DataObjectList extends DataObjectMaster implements iDataObjectList
 {
+    public $prelist  = true;           // run preList methods or not
     public $itemids  = array();           // the list of item ids used in data stores
     public $where    = array();
     public $sort     = array();
@@ -64,14 +65,17 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // Get a reference to each property's value
         $this->configuration['items'] =& $this->items;
         
-        foreach ($this->getFieldList() as $fieldname) {
-            // Only properties that are configured to display in lists
-            $display_status = $this->properties[$fieldname]->getDisplayStatus();
-            if (!in_array($display_status, array(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,
-                                                 DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY,
-                                                 DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)))
-            continue;
-            $this->properties[$fieldname]->preList();
+        // Run the preList methods of some properties, if called for
+        if ($this->prelist) {
+            foreach ($this->getFieldList() as $fieldname) {
+                // Only properties that are configured to display in lists
+                $display_status = $this->properties[$fieldname]->getDisplayStatus();
+                if (!in_array($display_status, array(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,
+                                                     DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY,
+                                                     DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)))
+                continue;
+                $this->properties[$fieldname]->preList();
+            }
         }
     }
 
