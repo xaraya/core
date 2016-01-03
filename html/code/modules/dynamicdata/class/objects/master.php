@@ -137,7 +137,7 @@ class DataObjectMaster extends Object
         }
 
         // set the specific item id (or 0)
-        if(isset($args['itemid'])) $this->itemid = $args['itemid'];
+//        if(isset($args['itemid'])) $this->itemid = $args['itemid'];
         
         sys::import('xaraya.structures.query');
         $this->dataquery = new Query();
