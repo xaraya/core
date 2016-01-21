@@ -80,14 +80,18 @@
             </fieldset>
             <input type="hidden" name="proptype" value="#$proptype#"/>
             #$showval#
-            <fieldset class="xar-form-actions">
-                <xar:var name="label">Preview</xar:var>
-                <xar:button type="submit" label="$label" name="preview"/>
+            <div class="xar-row">
+                <div class="xar-col">
+                </div>
+                <div class="xar-col">
+                    <xar:var name="label">Preview</xar:var>
+                    <xar:button type="submit" label="$label" name="preview"/>
+                </div>
+            </div>
 <!-- See CHECKME in showpropval
                 <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
                 <input type="submit" name="confirm" value="#xarML('Update')#" disabled="disabled"/>
 -->
-            </fieldset>
         </form>
 
     <xar:else/>

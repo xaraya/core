@@ -6,7 +6,7 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
+ * @link http://www.xaraya.info
  */
 /**
  * Sequence implemented as an array
@@ -71,6 +71,12 @@ class ArraySequence extends Object implements iSequence, iSequenceAdapter
     public function clear()
     {
         $this->items = array();
+        return true;
+    }
+    // Load the sequence
+    public function load($seq)
+    {
+        $this->items = $seq;
         return true;
     }
 

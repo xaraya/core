@@ -7,8 +7,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/68.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/68.html
  */
 
 /**
@@ -70,7 +70,6 @@ function base_admin_modifyconfig()
     $data['module_settings']->getItem();
 
     if (extension_loaded('mcrypt')) {
-        // Don't use sys::import, the scope of the var would be wrong
         // Don't use sys::import, the scope of the var would be wrong
         // Use include instead of include_once, in case we have loaded this var in another scope
         include(sys::lib()."xaraya/encryption.php");

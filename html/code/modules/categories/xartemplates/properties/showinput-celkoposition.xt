@@ -52,12 +52,12 @@
 						</xar:if>
 					</select> 
 					<xar:set name="position">$_position</xar:set>
-					<xar:else/>
+				<xar:else/>
 					<select name="#$ddname#" id="#$ddid#">
 						<xar:for start="$i = 0" test="$i lt count($items)" iter="$i++">
 							<xar:if condition="$items[$i]['id'] eq $reference_id">
 								<option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option>
-								<xar:else />
+							<xar:else />
 								<option value="#$items[$i]['id']#">#$items[$i]['slash_separated']#</option>
 							</xar:if>
 						</xar:for>
@@ -73,17 +73,9 @@
 				</label>
 			</div>
 			<div class="xar-col-condensed">
-				<xar:set name="options">
-					array(
-					array('id' => '1', 'name' => xarML('Right before, in the same level')),
-					array('id' => '2', 'name' => xarML('Right after, in the same level')),
-					array('id' => '4', 'name' => xarML('The first child item')),
-					array('id' => '3', 'name' => xarML('The last child item')),
-					)
-				</xar:set>
 				<xar:set name="ddname">$name . '_position'</xar:set>
 				<xar:set name="ddid">$name . '_position'</xar:set>
-				<xar:data-input type="dropdown" name="$ddname" id="$ddid" value="$position" options="$options"/>
+				<xar:data-input type="dropdown" name="$ddname" id="$ddid" value="$position" options="$position_options"/>
 				<div style="clear: both;">&#160;</div>
 			</div>
 		</div>

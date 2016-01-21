@@ -5,8 +5,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/68.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/68.html
  *
  * @author Marc Lutolf <mfl@netspan.ch>
  */
@@ -41,8 +41,9 @@ class FilePickerProperty extends SelectProperty
         parent::__construct($descriptor);
         $this->filepath = 'modules/base/xarproperties';
         // keep things relative here if possible (cfr. basedir vs. baseurl issue for images et al.)
-        if (empty($this->initialization_basedirectory)) $this->initialization_basedirectory = 'var';
-        else {
+        if (empty($this->initialization_basedirectory)) {
+            $this->initialization_basedirectory = 'var';
+        } else {
             // Cater to common Xaraya calls
             if ((strpos($this->initialization_basedirectory,'sys') === 0) || (strpos($this->initialization_basedirectory,'xar') === 0)) {
                 eval('$temp='.$this->initialization_basedirectory.";"); 

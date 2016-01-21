@@ -27,7 +27,7 @@
                     <td>
                         <a href="http://sourceforge.net/projects/xaraya/files/">Bermuda Core</a>
                         <br/>OR<br/>
-                        <a href="http://mt.xaraya.com/download/nightly/core/">Bermuda Core (Nightly)</a>
+                        <a href="https://github.com/xaraya/core">com.xaraya.core.bermuda</a>
                     </td>
                 </tr>
                 <tr>
@@ -35,7 +35,7 @@
                         Non-core Modules
                     </td>
                     <td>
-                        <a href="http://mt.xaraya.com/download/nightly/modules/bermuda/">Bermuda Modules (Nightly)</a>
+                        <a href="https://github.com/xaraya/modules">Bermuda Modules</a>
                     </td>
                 </tr>
                 <tr>
@@ -72,7 +72,7 @@
                     <td>
                         <a href="http://sourceforge.net/projects/xaraya/files/" target="_blank">Jamaica Core</a>
                         <br/>OR<br/>
-                        <a href="http://mt.xaraya.com/download/nightly/core/" target="_blank">Jamaica Core (Nightly)</a>
+                        <a href="https://github.com/xaraya/core" target="_blank">com.xaraya.core.jamaica</a>
                     </td>
                 </tr>
                 <tr>
@@ -80,7 +80,7 @@
                         Non-core Modules
                     </td>
                     <td>
-                        <a href="http://mt.xaraya.com/download/nightly/modules/jamaica/" target="_blank">Jamaica Modules (Nightly)</a>
+                        <a href="https://github.com/xaraya/modules" target="_blank">Jamaica Modules</a>
                     </td>
                 </tr>
                 <tr>
@@ -88,7 +88,7 @@
                         Standalone Properties
                     </td>
                     <td>
-                        <a href="http://mt.xaraya.com/download/nightly/properties/jamaica/" target="_blank">Jamaica Properties (Nightly)</a>
+                        <a href="https://github.com/xaraya/properties" target="_blank">Jamaica Properties</a>
                     </td>
                 </tr>
                 <tr>
@@ -96,7 +96,7 @@
                         Standalone Blocks
                     </td>
                     <td>
-                        <a href="http://mt.xaraya.com/download/nightly/blocks/jamaica/" target="_blank">Jamaica Blocks (Nightly)</a>
+                        <a href="https://github.com/xaraya/blocks" target="_blank">Jamaica Blocks</a>
                     </td>
                 </tr>
             </table>
@@ -117,7 +117,7 @@
                     <td>
                         <a href="http://sourceforge.net/projects/xaraya/files/" target="_blank">Aruba Core</a>
                         <br/>OR<br/>
-                        <a href="http://mt.xaraya.com/download/nightly/core/" target="_blank">Aruba Core (Nightly)</a>
+                        <a href="https://github.com/xaraya/core_archives" target="_blank">Aruba Core</a>
                     </td>
                 </tr>
                 <tr>
@@ -125,7 +125,7 @@
                         Non-core Modules
                     </td>
                     <td>
-                        <a href="http://mt.xaraya.com/download/nightly/modules/aruba/" target="_blank">Aruba Modules (Nightly)</a>
+                        <a href="https://github.com/xaraya/modules" target="_blank">Aruba Modules</a>
                     </td>
                 </tr>
             </table>

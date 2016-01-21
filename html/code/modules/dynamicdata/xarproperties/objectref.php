@@ -6,8 +6,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/182.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/182.html
  *
  * @author Marcel van der Boom <marcel@xaraya.com>
  * @todo match the type of the local field to the store property type (must be the same)
@@ -172,5 +172,71 @@ class ObjectRefProperty extends SelectProperty
         return parent::showConfiguration($data);
     }
 
+    public function preList()
+    {
+        // Bail if there is no parent object
+        if (empty($this->objectref)) return true;
+        
+        // Get the object associated with this property
+        if ($this->objectref->name == $this->initialization_refobject) {
+            // Case of the same table in the property and its parent object
+            $object = $this->objectref;
+        } else {
+            // Property table is different from the object table
+            $object = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
+        }
+
+        // We only support relational storage
+        $store = $object->datastore->name;
+        if ($object->datastore->name != "relational") return true;
+
+        // Assemble the links to the object's table
+        $sources     = unserialize($object->sources);
+        $relations   = unserialize($object->relations);
+        
+        // Debug display
+        if (xarModVars::get('dynamicdata','debugmode') && 
+        in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+            echo "Ref Object: " . $this->objectref->name . "<br/>";
+            echo "Property: " . $this->name . "<br/>";
+            echo "Prop Object: " . $object->name . "<br/>";
+            echo "Sources: ";var_dump($sources);echo "<br/>";
+            echo "Relations: ";var_dump($relations);echo "<br/>";echo "<br/>";
+        }
+        
+        // Get the parent object's query;
+        $q = $this->objectref->dataquery;
+
+        // The tables of this property will be added with a special prefix
+        // to make sure all tables are unique
+        $tableprefix = $this->id . "_";
+        
+        // Run through each of the sources and create a table entry
+        // The first table is linked with a join to the current object's source table(s)
+        // By definition this is an outer join
+        // The other relations are added as given in the configurtions
+        $storeprop   = $tableprefix . $object->properties[$this->initialization_store_prop]->source;
+        $displayprop = $tableprefix . $object->properties[$this->initialization_display_prop]->source;
+        $i = 0;
+        foreach($sources as $key => $value) {
+            $q->addTable($value[0], $tableprefix . $key);
+            if ($i == 0) {
+                $q->leftjoin($this->source, $storeprop);
+            } else {
+                if ($value[1] == 'internal') {
+                    $q->join($tableprefix . $relations[$i-1][0], $tableprefix . $relations[$i-1][1]);
+                } else {
+                    $q->leftjoin($tableprefix . $relations[$i-1][0], $tableprefix . $relations[$i-1][1]);
+                }
+            }
+            $i++;
+        }
+
+        // Set the source of this property
+        $this->source = $displayprop;
+        // Do not transform the raw value
+        $this->transform = false;
+        return true;
+    }
 }
 ?>

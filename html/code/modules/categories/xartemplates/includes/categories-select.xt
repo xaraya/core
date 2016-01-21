@@ -4,9 +4,6 @@
     <xar:set name="selectname">$name . "[categories][" . $index . "][]"</xar:set>
     <xar:set name="selectid">$id . "_categories_" . $index</xar:set>
     <select name="#$selectname#" id="#$selectid#" tabindex="#$tabindex#" onchange="#$evt_change#" style="#$style#">
-        <xar:if condition="$include_all_cats">
-            <option value="-1">All categories</option>
-        </xar:if>
         <xar:if condition="$include_no_cat">
             <xar:if condition="empty($value[$index])">
                 <option value="0" selected="selected">No category</option>
@@ -14,6 +11,6 @@
                 <option value="0">No category</option>
             </xar:if>
         </xar:if>
-        <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value, 'include_self' => $include_self)"/>
+        <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value, 'include_all_cats' => $include_all_cats, 'include_self' => $include_self)"/>
     </select>
 </xar:template>

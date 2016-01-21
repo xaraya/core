@@ -17,7 +17,8 @@
                     <xar:else />
                     	<xar:set name="xar_status">''</xar:set>
                     </xar:if>
-                    <th class="#$xar_status# #$name#">
+                    <!-- <th class="#$xar_status# #$name#"> -->
+                    <th>
                         <a href="#$sorturl#=#$name#">
                             <xar:data-label property="$properties[$name]"/>
                         </a>
@@ -40,7 +41,8 @@
                         <xar:else />
                         	<xar:set name="xar_status">''</xar:set>
                         </xar:if>
-                        <td class="#$xar_status# #$name#">
+                        <!-- <td class="#$xar_status# #$name#"> -->
+                        <td>
                             <xar:if condition="empty($fields[$name])">&#160; 
                             <xar:elseif condition="!empty($linkfield) and $linkfield eq $name and !empty($links[$itemid]['display'])"/>
                                 <a href="#$links[$itemid]['display']['olink']#" title="#$links[$itemid]['display']['otitle']#">

@@ -7,8 +7,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/42.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/42.html
  */
 
 /**
@@ -47,10 +47,8 @@ class Authsystem_LoginBlockConfig extends Authsystem_LoginBlock implements iBloc
      */
     public function configupdate()
     {
-        if (!xarVarFetch('showlogout', 'checkbox',
-            $showlogout, false, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('logouttitle', 'pre:trim:str:1:254',
-            $logouttitle, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('showlogout',  'checkbox',           $showlogout, false, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch('logouttitle', 'pre:trim:str:1:254', $logouttitle, '', XARVAR_NOT_REQUIRED)) return;
         
         $this->showlogout = $showlogout;        
         $this->logouttitle = $logouttitle;

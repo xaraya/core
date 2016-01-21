@@ -7,8 +7,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/182.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/182.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -80,11 +80,12 @@ function dynamicdata_admin_showpropval(Array $args=array())
     // pass the original invalid value here
     $data['invalid']    = !empty($invalid) ? $invalid :'';
     $property = DataPropertyMaster::getProperty($data);
-    $data['propertytype'] = DataPropertyMaster::getProperty(array('type' => $data['type']));
     if (empty($property)) return;
+    
+    $data['propertytype'] = DataPropertyMaster::getProperty(array('type' => $data['type']));
 
     if (!empty($preview) || !empty($confirm) || !empty($exit)) {
-        if (!xarVarFetch($data['name'],'isset',$configuration,NULL,XARVAR_NOT_REQUIRED)) return;
+        if (!xarVarFetch($data['name'], 'isset', $configuration, NULL, XARVAR_NOT_REQUIRED)) return;
 
         // pass the current value as configuration rule
         $data['configuration'] = isset($configuration) ? $configuration : '';
@@ -215,10 +216,9 @@ function dynamicdata_config_propval($proptype)
     // call its showConfiguration() method and return
     $data['showval'] = $property->showConfiguration($data);
     $data['proptype'] = $proptype;
-    $data['propertytype'] = $property;
+//    $data['propertytype'] = $property;
     $data['propinfo'] =& $property;
-    $object = & DataPropertyMaster::getProperty(array('type' => $proptype));
-    $data['propertytype'] = $object;
+    $data['propertytype'] = & DataPropertyMaster::getProperty(array('type' => $proptype));
 
     xarTpl::setPageTitle(xarML('Sample Configuration for DataProperty Type #(1)', $proptype));
 

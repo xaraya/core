@@ -8,7 +8,7 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
+ * @link http://www.xaraya.info
  *
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
@@ -70,7 +70,9 @@ class xarController extends Object
             $position = strpos($name, '[');
             $poststring = '$_POST["' . substr($name,0,$position) . '"]' . substr($name,$position);            
         }
-        eval("\$isset = isset($poststring);");
+        $isset = false;
+        // For now, die silently if this fails
+        @eval("\$isset = isset($poststring);");
 
         if ($allowOnlyMethod == 'GET') {
             // Short URLs variables override GET variables

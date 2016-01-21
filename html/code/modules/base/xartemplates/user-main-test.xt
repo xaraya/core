@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:javascript type="src"  src="//assets.pinterest.com/js/pinit.js" position="head"/>
     <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
         <p>
@@ -122,5 +123,9 @@
         <h4>3.3. Result of running the query</h4>
         <xar:set name="foo">var_dump($items)</xar:set>
     
+    
+     <a data-pin-do="buttonBookmark" data-pin-round="true" data-pin-tall="true" href="https://www.pinterest.com/pin/create/button/">
+	    	pin it<img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_round_red_32.png" />
+	    </a>
     </div>
 </xar:template>

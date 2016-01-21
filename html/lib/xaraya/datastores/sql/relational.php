@@ -345,12 +345,12 @@ class RelationalDataStore extends SQLDataStore
     function getItems(Array $args = array())
     {
         if (!empty($args['numitems'])) {
-            $numitems = $args['numitems'];
+            $numitems = (int)$args['numitems'];
         } else {
             $numitems = 0;
         }
         if (!empty($args['startnum'])) {
-            $startnum = $args['startnum'];
+            $startnum = (int)$args['startnum'];
         } else {
             $startnum = 1;
         }

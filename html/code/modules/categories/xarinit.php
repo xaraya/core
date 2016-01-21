@@ -7,10 +7,10 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/147.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/147.html
  *
- * @author Jim McDonald, Fl�vio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
+ * @author Jim McDonald, Flavio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
  */
 
 //Load Table Maintainance API
@@ -20,7 +20,7 @@ sys::import('xaraya.structures.query');
 /**
  * * Initialise the categories module
  *
- * @author  Jim McDonald, Fl�vio Botelho <nuncanada@xaraya.com>
+ * @author  Jim McDonald, Flavio Botelho <nuncanada@xaraya.com>
  * @author  mikespub <postnuke@mikespub.net>
  * @param   void N/A
  * @return  boolean True on success null/false on failure.
@@ -38,14 +38,14 @@ function categories_init()
     $prefix = xarDB::getPrefix();
 
     $fields = array(
-        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
+        'id' => array('type' =>'integer','unsigned'=>true,'null'=>false,'increment'=>true,'primary_key'=>true),
         'name'        => array('type'=>'varchar','size'=>64,'null'=>false),
         'description' => array('type'=>'varchar','size'=>255,'null'=>false),
         'image'       => array('type'=>'varchar','size'=>255,'null'=>false),
         'template'    => array('type'=>'varchar','size'=>255,'null'=>false),
-        'parent_id'   => array('type'=>'integer','null'=>false,'default'=>'0'),
-        'left_id'     => array('type'=>'integer','null'=>true,'unsigned'=>true),
-        'right_id'    => array('type'=>'integer','null'=>true,'unsigned'=>true),
+        'parent_id'   => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'left_id'     => array('type'=>'integer','null'=>true,'unsigned'=>true,'default'=>'0'),
+        'right_id'    => array('type'=>'integer','null'=>true,'unsigned'=>true,'default'=>'0'),
         'child_object'=> array('type'=>'varchar','size'=>255,'null'=>false),
         'links'       => array('type'=>'integer','null'=>false,'default'=>'0','unsigned'=>true),
         'state'       => array('type'=>'integer','null'=>false,'default'=>'3')
@@ -83,13 +83,15 @@ function categories_init()
     if (!$result) return;
 
     $fields = array(
-        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-        'category_id'   => array('type'=>'integer','null'=>false),
-        'child_category_id'   => array('type'=>'integer','null'=>false),
-        'item_id'   => array('type'=>'integer','null'=>false),
-        'module_id' => array('type'=>'integer','null'=>false),
-        'itemtype' => array('type'=>'integer','null'=>false),
-        'basecategory' => array('type'=>'integer','null'=>false)
+        'id'                 => array('type'=>'integer','unsigned'=>true,'null'=>false,'increment'=>true, 'primary_key' => true),
+        'category_id'        => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'child_category_id'  => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'item_id'            => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'module_id'          => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'itemtype'           => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'property_id'        => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'tree_id'            => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0'),
+        'basecategory'       => array('type'=>'integer','null'=>false,'unsigned'=>true,'default'=>'0')
     );
     $query = xarDBCreateTable($xartable['categories_linkage'],$fields);
 
@@ -219,7 +221,7 @@ function categories_init()
 /**
  * Upgrade the categories module from an old version
  *
- * @author  Jim McDonald, Fl�vio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
+ * @author  Jim McDonald, Flavio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
  * @access  public
  * @param   $oldVersion
  * @return  true on success or false on failure

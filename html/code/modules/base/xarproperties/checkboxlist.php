@@ -5,8 +5,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/68.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -65,15 +65,36 @@ class CheckboxListProperty extends SelectProperty
 
     public function showOutput(Array $data = array())
     {
-        if (!isset($data['value'])) $data['value'] = $this->getValue();
+        if (isset($data['value'])) $this->value = $data['value'];
+        $data['value'] = $this->getValue();
+        $data['options'] = $this->getOptions();
         return parent::showOutput($data);
+    }
+
+    public function showHidden(Array $data = array())
+    {
+        if (isset($data['value'])) {
+            if (is_array($data['value'])) {
+                $data['value'] = implode(',',$data['value']);
+            }
+        } else {
+            $data['value'] = '';
+        }
+        return parent::showHidden($data);
     }
 
     public function getValue()
     {
-        if (!is_array($this->value) && is_string($this->value) && !empty($this->value)) 
-            return explode(',', $this->value);
-        else return array();
+        if (!is_array($this->value)) {
+            if (is_string($this->value) && !empty($this->value)) {
+                $value = explode(',', $this->value);
+            } else {
+                $value = array();
+            }
+        } else {
+            $value = $this->value;
+        }
+        return $value;
     }
 
     public function setValue($value=null)

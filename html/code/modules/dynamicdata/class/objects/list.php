@@ -10,8 +10,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/182.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/182.html
  *
  **/
 
@@ -20,6 +20,7 @@ sys::import('modules.dynamicdata.class.objects.interfaces');
 
 class DataObjectList extends DataObjectMaster implements iDataObjectList
 {
+    public $prelist  = true;           // run preList methods or not
     public $itemids  = array();           // the list of item ids used in data stores
     public $where    = array();
     public $sort     = array();
@@ -63,6 +64,19 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // Get a reference to each property's value
         $this->configuration['items'] =& $this->items;
+        
+        // Run the preList methods of some properties, if called for
+        if ($this->prelist) {
+            foreach ($this->getFieldList() as $fieldname) {
+                // Only properties that are configured to display in lists
+                $display_status = $this->properties[$fieldname]->getDisplayStatus();
+                if (!in_array($display_status, array(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,
+                                                     DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY,
+                                                     DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)))
+                continue;
+                $this->properties[$fieldname]->preList();
+            }
+        }
     }
 
     /**
@@ -121,6 +135,76 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         return true;
     }
 
+    public function checkInput(Array $args = array())
+    {
+        // First get the itemids
+        if (!xarVarFetch($this->primary, 'array', $data['id'], array(), XARVAR_NOT_REQUIRED)) return;
+        if (empty($data['id'])) return true;
+        
+        // Clean the itemids found
+        foreach ($data['id'] as $k => $v) $data['id'][$k] = (int)$v;
+        
+        // Get the properties we will be looking at
+        $propertynames = array_keys($this->properties);
+        foreach ($propertynames as $k => $name) {
+            // No DISABLED properies
+            if($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) {
+                unset($propertynames[$key]);
+            }
+        }
+        
+        // Get the data from the form
+        $formitems = array();
+        foreach ($data['id'] as $id) {
+            $formitem = array();
+            foreach ($propertynames as $name) {
+                $isvalid = $this->properties[$name]->checkInput($name . "[" . $id . "]");
+                if ($isvalid) $formitem[$name] = $this->properties[$name]->value;
+            }
+            $formitems[$id] = $formitem;
+            
+        }
+        // Save the items for reuse
+        $this->items = $formitems;
+        return $formitems;
+    }
+
+    public function updateItems(Array $args = array())
+    {
+        // Get the items to be updated
+        if (isset($args['items'])) {
+            $items_to_update = $args['items'];
+        } else {
+            $items_to_update = $this->items;
+        }
+        
+        // Next, get the items corresponding to the itemids we have to updateq
+        $q = $this->dataquery;
+        $primarysource = $this->properties[$this->primary]->source;
+        $q->in($primarysource, array_keys($items_to_update));
+        $db_items = $this->getItems();
+        
+        // Replace the DB data with the data to be updated
+        $single_object = DataObjectMaster:: getObject(array('name' => $this->name));
+        foreach ($db_items as $key => $db_item) {
+            // Check if the data changed
+            $unchanged = true;
+            foreach ($items_to_update[$key] as $field_key => $field_value) {
+                if ($db_item[$field_key] != $field_value) {
+                    $unchanged = false;
+                    break;
+                }
+            }
+            
+            // If the data changed, save it
+            if (!$unchanged) {
+                $db_items[$key] = $items_to_update[$key] + $db_item;
+                $single_object->setFieldValues($db_items[$key],1);
+                $single_object->updateItem(array('itemid' => $key));
+            }
+        }
+        return true;
+    }
     /**
      * Set arguments for the DataObjectList class
      *
@@ -186,11 +270,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     {
         $this->sort = array();  // FIXME: this should not be necessary
         
+        // Make sure we have an array
         if(is_array($sort)) {
             $this->sort = $sort;
         } elseif (!empty($sort)) {
             $this->sort = explode(',',$sort);
         }
+        
         foreach($this->sort as $criteria) {
             if (empty($criteria)) return true;
             
@@ -297,38 +383,42 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      * @param cids array of category ids
      * @param andcids bool get items assigned to all the cids (AND = true) or any of the cids (OR = false)
      */
-    public function setCategories($cids, $andcids = false)
+    public function setCategories($cids, $join_by_and = false)
     {
-        if(!xarModIsAvailable('categories')) return;
-
+        // Support both a single category ID and an array of same
         if (!empty($cids) && is_numeric($cids)) {
             $cids = array($cids);
         }
 
-        if (!is_array($cids) || count($cids) == 0) return;
+        // Sanity check: bail if we don't have an array at this point
+        if (!is_array($cids) || count($cids) == 0) return true;
 
-        $categoriesdef = xarMod::apiFunc(
-            'categories','user','leftjoin',
-            array(
-                'modid' => $this->moduleid,
-                'itemtype' => $this->itemtype,
-                'cids' => $cids,
-                'andcids' => $andcids,
-                // unused options - do they have any benefit for dd lists ?
-                //'iids' => array(),    // only for these items - too early for dd here ?
-                //'cidtree' => array(), // match any category in the tree(s) below the cid(s)
-                //'groupcids' => null,  // group categories by 2 (typically) to show the items per combination in a category matrix
-            )
-        );
-
-        $this->datastore->addJoin(
-            $categoriesdef['table'],
-            $categoriesdef['field'],
-            array(),
-            $categoriesdef['where'],
-            'and',
-            $categoriesdef['more']
-        );
+        // Check the properties to see if any of them are categories
+        // If so, set up conjunction clauses for the object's dataquery
+        $conjunctions = array();
+        foreach ($this->properties as $property) {
+            // If this property is not a category, move on
+            if ($property->type != 100) continue;
+            
+            $category_idfield = $property->id . "_categories.id";
+            if (!$join_by_and) {
+                $conjunctions[] = $this->dataquery->pin($category_idfield, $cids);
+            } else {
+                // Not yet supported
+                // The assembly is a bit more complicated, but doable
+            }
+        }
+        
+        // If we found something, then add the conjunctions to the object's dataquery
+        if (!empty($conjunctions)) {
+            if (!$join_by_and) {
+                $this->dataquery->qor($conjunctions);
+            } else {
+                // Not yet supported
+                // The assembly is a bit more complicated, but doable
+            }
+        }
+        return true;
     }
 
     /**
@@ -354,11 +444,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $fields = $this->getFieldList();
             $this->setFieldList($args['fieldlist']);
         }
+
         $this->items = array();
         $this->datastore->getItems($args);
         
         // For now always show the values of properties with virtual datastore
-        $args['getvirtuals'] = true;
+        // CHECKME: the preList method is probably a better solution
+        // $args['getvirtuals'] = true;
         if (!empty($args['getvirtuals'])) {
             // Get the values of properties with virtual datastore and add them to the items array
             foreach ($this->getFieldList() as $fieldname) {
@@ -372,6 +464,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 //                }
             }
         }
+        
         // Reinstate the original fieldlist
         if(!empty($args['fieldlist'])) $this->setFieldList($fields);
 

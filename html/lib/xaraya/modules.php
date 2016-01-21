@@ -14,7 +14,7 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
+ * @link http://www.xaraya.info
  *
  * @author Jim McDonald
  * @author Marco Canini <marco@xaraya.com>
@@ -435,6 +435,7 @@ class xarMod extends Object implements IxarMod
                              name,
                              directory,
                              version,
+                             configuration,
                              state
                        FROM  $the_table WHERE regid = ?";
             break;
@@ -463,6 +464,7 @@ class xarMod extends Object implements IxarMod
                  $modInfo['name'],
                  $modInfo['directory'],
                  $modInfo['version'],
+                 $modInfo['configuration'],
                  $modInfo['state']) = $result->getRow();
             break;
         }

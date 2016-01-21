@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <span style="display: none">
+        <xar:data-input type="multiselect" value="$value" options="$options"/>
+    </span>
+</xar:template>

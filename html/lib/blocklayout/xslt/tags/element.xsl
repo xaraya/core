@@ -10,21 +10,38 @@
 
 <xsl:template match="xar:element">
   <!--
-    This is less trivial than it sounds.
-    We can't use xsl:element just now, because we postprocess our expressions
-    and <#$sometag#> just wont do inside the xml stream, so.....
-    @todo revisit later
+    This tag only allows a name attribute that is a string (for now)
+    Need to look at preprocess and postprocess in xsltransformer.php when trying to enhance further
   -->
-  <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="@name"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-  <xsl:apply-templates />
-  <xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="@name"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+  <xsl:element name="{@name}">
+    <xsl:apply-templates />
+  </xsl:element>
 </xsl:template>
 
-<!-- This is *very* fragile -->
 <xsl:template match="xar:attribute">
-  <xsl:attribute name="{@name}">
-    <xsl:apply-templates />
-  </xsl:attribute>
+  <!--
+    This tag allows a name attribute that is either a string or a $var
+  -->
+  <xsl:choose>
+    <xsl:when test="substring(@name,1,1) = '$'">
+      <xsl:variable name="newname">
+        <xsl:call-template name="replace">
+          <xsl:with-param name="source" select="@name" />
+          <xsl:with-param name="from" select="'$'" />
+          <xsl:with-param name="to" select="'xyzzy'" />
+        </xsl:call-template>
+      </xsl:variable>
+      
+      <xsl:attribute name="{concat($newname,'yzzyx')}">
+        <xsl:value-of select="node()" />
+      </xsl:attribute>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:attribute name="{@name}">
+        <xsl:value-of select="node()" />
+      </xsl:attribute>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

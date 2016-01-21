@@ -5,8 +5,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/68.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -17,11 +17,13 @@ sys::import('modules.dynamicdata.class.properties.base');
 
 class SelectProperty extends DataProperty
 {
-    public $id   = 6;
-    public $name = 'dropdown';
-    public $desc = 'Dropdown List';
+    public $id         = 6;
+    public $name       = 'dropdown';
+    public $desc       = 'Dropdown List';
     public $reqmodules = array('base');
+    public $basetype   = 'dropdown';
 
+    public $transform  = true;                         // transform $this->value in getValue() or not
     public $options;
     public $old_config = array();
     public $itemfunc;   // CHECKME: how is this best implemented?
@@ -310,6 +312,8 @@ class SelectProperty extends DataProperty
      */
     function getOption($check = false)
     {
+        if (!$this->transform) return $this->value;
+
         if (!isset($this->value)) {
              if ($check) return true;
              return null;
@@ -404,7 +408,6 @@ class SelectProperty extends DataProperty
                 $same = false;
             }
         }
-        //echo "$type $same";
         return $same;
     }
 }

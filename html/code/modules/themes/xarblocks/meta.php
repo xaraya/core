@@ -8,8 +8,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/70.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/70.html
  */
 /**
  * Initialise block info
@@ -90,6 +90,14 @@ class Themes_MetaBlock extends BasicBlock
                     'type' => 'name',
                     'value' => 'rating',
                     'content' => xarML('General'),
+                    'lang' => '',
+                    'dir' => '',
+                    'scheme' => '',
+                );
+                $metatags[] = array(
+                    'type' => 'name',
+                    'value' => 'viewport',
+                    'content' => 'width=device-width, initial-scale=1.0',
                     'lang' => '',
                     'dir' => '',
                     'scheme' => '',
@@ -276,6 +284,14 @@ class Themes_MetaBlock extends BasicBlock
             'type' => 'name',
             'value' => 'rating',
             'content' => xarML('General'),
+            'lang' => '',
+            'dir' => '',
+            'scheme' => '',
+        );
+        $metatags[] = array(
+            'type' => 'name',
+            'value' => 'viewport',
+            'content' => 'width=device-width, initial-scale=1.0',
             'lang' => '',
             'dir' => '',
             'scheme' => '',

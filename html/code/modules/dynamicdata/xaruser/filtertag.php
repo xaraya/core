@@ -7,23 +7,24 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/182.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/182.html
  */
  /*
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 function dynamicdata_user_filtertag(Array $args=array())
 {
-    if (!xarVarFetch('filter_submitted', 'int:0', $filter_submitted,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-    
+    if (!xarVarFetch('filter_submitted', 'int:0', $filter_submitted,  0, XARVAR_NOT_REQUIRED)) {return;}
+
     if ($filter_submitted) {
-        if (!xarVarFetch('objectname', 'str', $objectname,  '', XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('return_url', 'str', $return_url,  '', XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('name', 'array', $names,  array(), XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('source', 'array', $source,  array(), XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('op', 'array', $op,  array(), XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('value', 'array', $value,  array(), XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('objectname', 'str',   $objectname,  '', XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('filtername', 'str',   $filtername,  '', XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('return_url', 'str',   $return_url,  '', XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('name',       'array', $names,  array(), XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('source',     'array', $source,  array(), XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('op',         'array', $op,  array(), XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVarFetch('value',      'array', $value,  array(), XARVAR_NOT_REQUIRED)) {return;}
         
         sys::import('xaraya.structures.query');
         $q = new Query();
@@ -31,42 +32,68 @@ function dynamicdata_user_filtertag(Array $args=array())
             if (empty($value[$name]) && !in_array($op[$name], array('eqempty','neempty','null','notnull'))) continue;
             switch($op[$name]) {
                 case 'eqempty' : 
-                    $q->eq($source[$name],''); break;
+                    $q->eq($source[$name], ''); break;
                 case 'neempty' : 
-                    $q->ne($source[$name],''); break;
+                    $q->ne($source[$name], ''); break;
                 case 'null' : 
-                    $q->eq($source[$name],NULL); break;
+                    $q->eq($source[$name], NULL); break;
                 case 'notnull' : 
-                    $q->ne($source[$name],NULL); break;
+                    $q->ne($source[$name], NULL); break;
                 case 'like' : 
-                    $q->like($source[$name],'%'.$value[$name].'%'); break;
+                    $q->like($source[$name], '%'.$value[$name].'%'); break;
                 case 'notlike' : 
-                    $q->notlike($source[$name],'%'.$value[$name].'%'); break;
+                    $q->notlike($source[$name], '%'.$value[$name].'%'); break;
                 default:
-                    $q->$op[$name]($source[$name],$value[$name]); break;
+                    $q->$op[$name]($source[$name], $value[$name]); break;
             }
         }
 
         // Save the conditions in a session var. Perhaps also in some cache?
-        xarSession::setVar('DynamicData.Filter.' . $objectname, serialize($q));
+        if (empty($filtername)) $filtername = $objectname;
+        xarSession::setVar('DynamicData.Filter.' . $filtername, serialize($q));
         xarController::redirect($return_url);
         return true;
         
     } else {
         if (!isset($args['return_url'])) $args['return_url'] = xarServer::getCurrentURL();
         if (!isset($args['button'])) $args['button'] = xarML('Submit');
-        if (!isset($args['fields'])) $args['fields'] = array();
-        if (!is_array($args['fields'])) $args['fields'] = explode(',',$args['fields']);
+        $fields = '';
+        if (isset($args['fieldlist'])) $fields = $args['fieldlist'];
+        $args['fieldlist'] = explode(',', $fields);
+        if (!is_array($fields)) $args['fieldlist'] = explode(',', $fields);
         if (!isset($args['object'])) throw new Exception('Missing $object for filter tag');
         $properties = $args['object']->getProperties();
+        
+        if (empty($args['filtername'])) $args['filtername'] = $args['object']->name;
+        $filter = @unserialize(xarSession::getVar('DynamicData.Filter.' . $args['filtername']));
+        if (empty($filter)) $filter = array();
+        $values = array();
+        $ops    = array();
+        if (is_object($filter)) {
+            foreach ($filter->conditions as $condition) {
+                $values[$condition['field1']] = trim($condition['field2'], "%");
+                $ops[$condition['field1']]    = $condition['op'];
+            }
+        }
+        
         $data['properties'] = array();
+        $data['valuelist']  = array();
+        $data['oplist']     = array();
         foreach ($properties as $name => $property) {
-            if (!empty($args['fields']) && !in_array($name,$args['fields'])) continue;
-            $data['properties'][$name] = $property;
+            if (!empty($args['fieldlist']) && !in_array($name,$args['fieldlist'])) continue;
+            $property->value = $property->defaultvalue;
+            $data['properties'][$name] =& $property;
+            if (isset($values[$property->source]))
+                $data['valuelist'][$name]  = $values[$property->source];
+            if (isset($ops[$property->source]))
+                $data['oplist'][$name]     = $ops[$property->source];
         }
         $data['button'] = $args['button'];
         $data['return_url'] = $args['return_url'];
         $data['objectname'] = $args['object']->name;
+        $data['object']     =& $args['object'];
+        $data['filtername'] = $args['filtername'];
+        $data['fieldlist']  =& $args['fieldlist'];
     }
     return $data;
 }

@@ -6,8 +6,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/182.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/182.html
  */
 
 sys::import('modules.dynamicdata.class.objects.master');
@@ -74,7 +74,6 @@ class DataObject extends DataObjectMaster implements iDataObject
          *
          * This may need to be adjusted in the future
          */
-
         $itemid = $this->datastore->getItem($args);
 
         if(!empty($args['fieldlist'])) $this->setFieldList($args['fieldlist']);
@@ -352,21 +351,6 @@ class DataObject extends DataObjectMaster implements iDataObject
             }
         }
         return $fields;
-    }
-
-    /**
-     * Get and set for field prefixes
-     */
-    public function getFieldPrefix()
-    {
-        return $this->fieldprefix;
-    }
-    public function setFieldPrefix($prefix)
-    {
-        $this->fieldprefix = $prefix;
-        foreach (array_keys($this->properties) as $property)
-            $this->properties[$property]->_fieldprefix = $prefix;
-        return true;
     }
 
     public function createItem(Array $args = array())

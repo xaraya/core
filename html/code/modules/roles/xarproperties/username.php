@@ -6,8 +6,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/27.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/27.html
  */
 
 /**
@@ -23,7 +23,7 @@ class UsernameProperty extends TextBoxProperty
     public $desc       = 'Username';
     public $reqmodules = array('roles');
 
-    public $display_linkrule                = 0;
+    public $display_linkurl                 = 0;
     public $validation_existrule            = 0;    // 0: no rule; 1: must not already exist; 2: must already exist
     public $validation_existrule_invalid;
     public $initialization_store_type       = 'name';
@@ -37,7 +37,7 @@ class UsernameProperty extends TextBoxProperty
         $this->filepath   = 'modules/roles/xarproperties';
 
         // Cater to a common case
-        if ($this->value == 'myself') $this->value = xarUserGetVar('id');        
+        if ($this->value == 'myself') $this->value = xarUser::getVar('id');        
     }
 
     public function validateValue($value = null)
@@ -49,7 +49,7 @@ class UsernameProperty extends TextBoxProperty
         if (!parent::validateValue($value)) return false;
 
         // We set an empty value to the id of the current user
-        if (empty($value) || ($value == 'myself')) $value = xarUserGetVar('uname');
+        if (empty($value) || ($value == 'myself')) $value = xarUser::getVar('uname');
 
         // We allow the special value [All]
         
@@ -98,7 +98,7 @@ class UsernameProperty extends TextBoxProperty
         if (isset($data['user'])) {
             // Cater to a common case
             if ($data['user'] == 'myself') {
-                $this->value = xarUserGetVar('id');
+                $this->value = xarUser::getVar('id');
                 $role = xarRoles::get($this->value);
                 $data['value'] = $role->getUser();
             } else {
@@ -113,35 +113,55 @@ class UsernameProperty extends TextBoxProperty
 
     public function showOutput(Array $data = array())
     {
-        if (!empty($data['display_name'])) $this->initialization_display_name = $data['display_type'];
+        if (!empty($data['display_type'])) $this->initialization_display_name = $data['display_type'];
+        if (!empty($data['link_url'])) $this->display_linkurl = $data['link_url'];
         
         // The user param is a name
         if (isset($data['user'])) {
             // Cater to a common case
             if ($data['user'] == 'myself') {
                 if ($this->initialization_display_name == 'name')
-                    $data['value'] = xarUserGetVar('name');
+                    $data['value'] = xarUser::getVar('name');
                 else
-                    $data['value'] = xarUserGetVar('uname');
+                    $data['value'] = xarUser::getVar('uname');
             } else {
                 $data['value'] = $data['user'];
             }
-        } else {
-            if (isset($data['value'])) $this->value = $data['value'];
+            $this->display_linkurl = 0;
+        } elseif (isset($data['id'])) {
+            // The value param is an ID
+            $this->value = $data['id'];
+            $store_type = $this->initialization_store_type;
+            $this->initialization_store_type = 'id';
             $data['value'] = $this->getValue();
+            $this->initialization_store_type = $store_type;
+        } elseif (isset($data['value'])) {
+            $this->value = $data['value'];
+            $data['value'] = $this->getValue();
+        } else {
+            $this->value = xarUser::getVar('id');
+            $data['value'] = xarUser::getVar('uname');
         }
 
-        if ($this->display_linkrule) {
+        if ($this->display_linkurl) {
             if ($this->initialization_store_type == 'id') {
                 $textvalue = $this->value;
             } else {
                 $textvalue = $this->value;
             }
-            $data['linkurl'] = xarModURL('roles','user','display',array('id' => $this->value));
+            $data['link_url'] = xarModURL('roles','user','display',array('id' => $this->value));
         } else {
-            $data['linkurl'] = "";
+            $data['link_url'] = "";
         }
         return parent::showOutput($data);
+    }
+    
+    public function showHidden(Array $data = array())
+    {
+        if (empty($data['value'])) {
+            $data['value'] = $this->getValue();
+        }
+        return parent::showHidden($data);
     }
     
     public function getValue()
@@ -149,7 +169,7 @@ class UsernameProperty extends TextBoxProperty
         if ($this->initialization_store_type == 'id') {
             if(!is_numeric($this->value)) return $this->value;
             if ($this->value == 0) return '[All]';
-            return xarUserGetVar('uname',$this->value);
+            return xarUser::getVar('uname',$this->value);
         } else {
             if (empty($this->value)) return '';
             return $this->value;

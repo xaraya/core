@@ -6,8 +6,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/1098.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/1098.html
  */
 
 sys::import('modules.dynamicdata.class.properties.base');
@@ -312,6 +312,38 @@ class AccessProperty extends DataProperty
         }
         return $access;
     }
+    public function showHidden(Array $data = array())
+    {
+        if (isset($data['value'])) {
+            $this->setValue($data['value']);
+        } else {
+            $this->setValue();
+        }
+        $value = $this->getValue();
+        if (!isset($data['level'])) $data['level'] = $value['level'];
+        if (!isset($data['group'])) $data['group'] = $value['group'];
+        if (!isset($data['failure'])) {
+            $data['failure'] = $value['failure'];
+        } else {
+            $data['showfailure'] = 1;
+        }
+        
+        if (!isset($data['group_multiselect'])) {
+            try {
+                unserialize($data['group']);
+                $data['group_multiselect'] = true;
+            } catch(Exception $e) {
+                $data['group_multiselect'] = false;
+            }
+        }
+        if (!isset($value['group'])) $value['group'] = $data['group_multiselect'] ? array(0) : 0;
+        
+        if (!isset($data['groupoptions'])) $data['groupoptions'] = $this->getgroupoptions();
+        if (!isset($data['leveloptions'])) $data['leveloptions'] = $this->getleveloptions();
+        $data['failureoptions'] = $this->getfailureoptions();
+
+        return parent::showHidden($data);
+    }    
 }
 
 sys::import('modules.dynamicdata.class.properties.interfaces');

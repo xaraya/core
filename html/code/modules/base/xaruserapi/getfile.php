@@ -6,8 +6,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/68.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/68.html
  */
 
 /**
@@ -149,7 +149,7 @@ function base_userapi_getfile(Array $args=array())
                 throw new BadParameterException(array($errno,$errstr,$url),'Socket error #(1) : #(2) while retrieving URL #(3)');
         }
         $baseurl = xarServer::getBaseURL();
-        $request = "GET $url HTTP/1.0\r\nHost: $proxyhost\r\nUser-Agent: Xaraya (http://www.xaraya.com/)\r\nReferer: $baseurl\r\nConnection: close\r\n\r\n";
+        $request = "GET $url HTTP/1.0\r\nHost: $proxyhost\r\nUser-Agent: Xaraya (http://www.xaraya.info/)\r\nReferer: $baseurl\r\nConnection: close\r\n\r\n";
         $size = fwrite($fp, $request);
         if (!$size) {
             if (!$superrors)

@@ -6,8 +6,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/70.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/70.html
  */
 
 // Load Table Maintainance API
@@ -106,6 +106,7 @@ function themes_init()
     xarModVars::set('themes', 'usedashboard', false);
     xarModVars::set('themes', 'dashtemplate', 'dashboard');
     xarModVars::set('themes', 'adminpagemenu', true);
+    xarModVars::set('themes', 'userpagemenu', true);
 
     xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditThemes','All','themes','All','All','ACCESS_EDIT');

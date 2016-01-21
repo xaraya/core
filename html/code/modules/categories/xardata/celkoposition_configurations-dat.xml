@@ -6,7 +6,7 @@
     <description>The table where the celko data is stored</description>
     <property_id>2</property_id>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+    <configuration></configuration>
   </configurations>
   <configurations itemid="2">
     <id>2</id>
@@ -15,7 +15,7 @@
     <description>The name field in the celko table</description>
     <property_id>2</property_id>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+    <configuration></configuration>
   </configurations>
   <configurations itemid="3">
     <id>3</id>
@@ -24,7 +24,7 @@
     <description>The field that holds the parent id of this item</description>
     <property_id>2</property_id>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+    <configuration></configuration>
   </configurations>
   <configurations itemid="4">
     <id>4</id>
@@ -33,7 +33,7 @@
     <description>The field that holds the right id of this item</description>
     <property_id>2</property_id>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+    <configuration></configuration>
   </configurations>
   <configurations itemid="5">
     <id>5</id>
@@ -42,15 +42,24 @@
     <description>The field that holds the left id of this item</description>
     <property_id>2</property_id>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+    <configuration></configuration>
   </configurations>
-  <configurations itemid="5">
-    <id>5</id>
+  <configurations itemid="6">
+    <id>6</id>
     <name>initialization_celkofilter</name>
     <label>Filter</label>
     <description>Filter conditions on the table</description>
     <property_id>2</property_id>
     <ignore_empty>1</ignore_empty>
-    <configuration>a:1:{s:14:"display_layout";s:7:"default";}</configuration>
+    <configuration></configuration>
+  </configurations>
+  <configurations itemid="7">
+    <id>7</id>
+    <name>initialization_celkobasecategory</name>
+    <label>Base Category</label>
+    <description>A category that forms the top of category tree to be displayed</description>
+    <property_id>30050</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration></configuration>
   </configurations>
 </items>

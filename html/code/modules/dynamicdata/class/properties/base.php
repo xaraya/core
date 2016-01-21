@@ -6,8 +6,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/182.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/182.html
  */
 
 sys::import('modules.dynamicdata.class.properties.master');
@@ -28,13 +28,14 @@ class DataProperty extends Object implements iDataProperty
     public $type           = 1;
     public $defaultvalue   = '';
     public $source         = 'dynamic_data';
-    public $status         = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
+    public $status         = 33;
     public $seq            = 0;
     public $format         = '0'; //<-- eh?
     public $filepath       = 'auto';
     public $class          = '';         // this property's class
 
     // Attributes for runtime
+    public $descriptor;                 // the description object of this property
     public $template = '';
     public $layout = '';
     public $tplmodule = 'dynamicdata';
@@ -78,6 +79,10 @@ class DataProperty extends Object implements iDataProperty
      */
     public function __construct(ObjectDescriptor $descriptor)
     {
+        // Set the default status for properties
+        $this->status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE + DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
+        
+        $this->descriptor = $descriptor;
         $args = $descriptor->getArgs();
         $this->template = $this->getTemplate();
 
@@ -113,6 +118,25 @@ class DataProperty extends Object implements iDataProperty
                 $this->args = unserialize($this->args);
             } catch (Exception $e) {}
         }
+    }
+
+    /**
+     * Return the datasource of this property as per its descriptor
+     */
+    public function getSource()
+    {
+        $source = $this->descriptor->get('source');
+        return $source;
+    }
+
+    /**
+     * Set the datasource of this property to a given value, or to its original value
+     */
+    public function setSource($source='')
+    {
+        if (empty($source)) $source = $this->descriptor->get('source');
+        $this->source = $source;
+        return true;
     }
 
     /**
@@ -534,19 +558,24 @@ class DataProperty extends Object implements iDataProperty
      */
     function showFilter(Array $data=array())
     {
+        // A filter cannot be hidden or disables
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) return "";
+        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) return "";
+        
+        // Make sure we can enter a value here
+        $this->setInputStatus(DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY);
         
         $data['id']    = $this->id;
         $data['name']  = $this->name;
         
         // This is the array of all possible filter options
         $filteroptions = array(
-                            '=' => array('id' => '=', 'name' => xarML('equals')),
-                            '!=' => array('id' => '!=', 'name' => xarML('not equals')),
-                            '>' => array('id' => '>', 'name' => xarML('greater than')),
-                            '>=' => array('id' => '>=', 'name' => xarML('greater than or equal')),
-                            '<' => array('id' => '<', 'name' => xarML('less than')),
-                            '<=' => array('id' => '<=', 'name' => xarML('less than or equal')),
+                            '=' => array('id' => 'eq', 'name' => xarML('equals')),
+                            '!=' => array('id' => 'ne', 'name' => xarML('not equals')),
+                            '>' => array('id' => 'gt', 'name' => xarML('greater than')),
+                            '>=' => array('id' => 'ge', 'name' => xarML('greater than or equal')),
+                            '<' => array('id' => 'lt', 'name' => xarML('less than')),
+                            '<=' => array('id' => 'le', 'name' => xarML('less than or equal')),
                             'like' => array('id' => 'like', 'name' => xarML('like')),
                             'notlike' => array('id' => 'notlike', 'name' => xarML('not like')),
                             'null' => array('id' => 'null', 'name' => xarML('is null')),
@@ -557,8 +586,11 @@ class DataProperty extends Object implements iDataProperty
         $data['filters'] = isset($data['filters']) ? $data['filters'] : array();
         
         // Explicitly cater to the most common basetypes so as to avoid duplication in the extensions
-        if ($this->basetype == 'number') $data['filters'] = array('=','!=','>','>=','<','<=','like','notlike','null','notnull');
-        elseif ($this->basetype == 'string') $data['filters'] = array('=','!=','like','notlike','null','notnull','regex');
+        $numbertypes = array('number','decimal','integer','float');
+        $stringtypes = array('string');
+        if (in_array($this->basetype, $numbertypes)) $data['filters'] = array('=','!=','>','>=','<','<=','like','notlike','null','notnull');
+        elseif (in_array($this->basetype, $stringtypes)) $data['filters'] = array('like','notlike','=','!=','null','notnull','regex');
+        elseif (in_array($this->basetype, array('dropdown'))) $data['filters'] = array('=');
         
         // Now create the filter options for the dropdown
         $data['options'] = array();
@@ -943,5 +975,11 @@ class DataProperty extends Object implements iDataProperty
     {
         return xarVarPrepForDisplay($item[$this->name]);
     }
+    
+    public function preCreate() { return true; }
+    public function preUpdate() { return true; }
+    public function preDelete() { return true; }
+    public function preGet()    { return true; }
+    public function preList()   { return true; }
 }
 ?>

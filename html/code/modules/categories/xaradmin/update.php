@@ -7,8 +7,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/147.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/147.html
  *
  */
 
@@ -32,6 +32,10 @@ function categories_admin_update()
     if (!xarSecConfirmAuthKey()) {
         return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
     }        
+
+    // Root category cannot be modified except by the site admin
+    if (($cid == 1) && (xarUser::getVar('id') != xarModVars::get('roles', 'admin')))
+        return xarTplModule('privileges','user','errors', array('layout' => 'no_privileges'));
 
     //Reverses the order of cids with the 'last children' option:
     //Look at bug #997

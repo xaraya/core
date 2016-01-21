@@ -5,8 +5,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/68.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -59,7 +59,7 @@ class CheckboxProperty extends DataProperty
         if (!isset($data['value'])) $data['value'] = $this->value;
         if ($data['value'] === true || $data['value'] === 'true') $data['value'] = 1;
         elseif ($data['value'] === false || $data['value'] === 'false') $data['value'] = 0;
-        $data['checked']  = $data['value'];
+        $data['checked'] = $data['value'];
         if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
         return parent::showInput($data);
     }

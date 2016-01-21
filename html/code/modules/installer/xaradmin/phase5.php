@@ -8,8 +8,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/200.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/200.html
  */
 
 /* Do not allow this script to run if the install script has been removed.
@@ -225,6 +225,7 @@ function installer_admin_phase5()
     xarVar_init($a);
     xarConfigVars::set(null, 'System.ModuleAliases',array());
     xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
+    xarConfigVars::set(null, 'Site.BL.DocType', 'xhtml1-strict');
     
     // 3. Load the definitions of all the modules in the modules table
     $prefix = xarDB::getPrefix();

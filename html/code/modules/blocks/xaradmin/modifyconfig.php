@@ -7,8 +7,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/13.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/13.html
  *
  * @author John Robeson
  * @author Greg Allan
@@ -36,7 +36,7 @@ function blocks_admin_modifyconfig()
     switch (strtolower($phase)) {
         case 'modify':
         default:
-            $noexceptions = xarModVars::get('blocks', 'noexceptions');
+            $noexceptions = (int)xarModVars::get('blocks', 'noexceptions');
             $data['noexceptions'] = (!isset($noexceptions)) ? 1 : $noexceptions;
 
             $data['exceptionoptions'] = array(
@@ -52,14 +52,19 @@ function blocks_admin_modifyconfig()
             }
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
+                xarController::$request->msgAjax($data['module_settings']->getInvalids());
                 return xarTpl::module('blocks','admin','modifyconfig', $data);
             } else {
                 $itemid = $data['module_settings']->updateItem();
                 if (!xarVarFetch('noexceptions', 'int:0:1', $noexceptions, 0, XARVAR_NOT_REQUIRED)) return;
                 xarModVars::set('blocks', 'noexceptions', $noexceptions);
-                xarController::redirect(xarModURL('blocks', 'admin', 'modifyconfig'));
-                return true;
+            //    xarController::redirect(xarModURL('blocks', 'admin', 'modifyconfig'));
+            //    return true;
             }
+            // If this is an AJAX call, end here
+            xarController::$request->exitAjax();
+            xarController::redirect(xarServer::getCurrentURL());
+            return true;
         break;
     }
     return $data;

@@ -4,7 +4,7 @@
  * @subpackage themes module
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com 
+ * @link http://www.xaraya.info 
  */
 
 function themes_adminapi_getitems(Array $args=array())
@@ -25,16 +25,17 @@ function themes_adminapi_getitems(Array $args=array())
     $tables =& xarDB::getTables();
     $themes_table = $tables['themes'];
     
-    $select = array();
-    $where = array();
-    $orderby = array();
+    $select   = array();
+    $where    = array();
+    $orderby  = array();
     $bindvars = array();
     
-    $select['regid'] = 'themes.regid';
-    $select['name'] = 'themes.name';
-    $select['directory'] = 'themes.directory';
-    $select['state'] = 'themes.state';
-    $select['class'] = 'themes.class';
+    $select['regid']         = 'themes.regid';
+    $select['name']          = 'themes.name';
+    $select['directory']     = 'themes.directory';
+    $select['state']         = 'themes.state';
+    $select['class']         = 'themes.class';
+    $select['configuration'] = 'themes.configuration';
 
     if (isset($name)) {
         $where[] = 'themes.name = ?';

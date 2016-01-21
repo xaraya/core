@@ -7,13 +7,13 @@
   <filepath>auto</filepath>
   <urlparam>itemid</urlparam>
   <maxid>4</maxid>
-  <access>a:0:{}</access>
+  <access></access>
   <isalias>false</isalias>
   <datastore>relational</datastore>
-  <config>a:0:{}</config>
-  <sources>a:1:{s:10:&quot;categories&quot;;a:2:{i:0;s:14:&quot;xar_categories&quot;;i:1;s:8:&quot;internal&quot;;}}</sources>
-  <relations>a:0:{}</relations>
-  <objects>a:0:{}</objects>
+  <config></config>
+  <sources>a:1:{s:10:"categories";a:2:{i:0;s:14:"xar_categories";i:1;s:8:"internal";}}</sources>
+  <relations></relations>
+  <objects></objects>
   <properties>
     <property name="id">
       <id>237</id>
@@ -93,7 +93,7 @@
       <source>categories.links</source>
       <status>33</status>
       <seq>8</seq>
-      <configuration>a:0:{}</configuration>
+      <configuration></configuration>
     </property>
     <property name="state">
       <id>7718</id>

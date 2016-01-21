@@ -5,8 +5,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/13.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/13.html
  */
 /**
  * View block instances
@@ -23,17 +23,14 @@ function blocks_admin_view_instances()
     
     $data = array();
     
-    if (!xarVarFetch('tab', 'pre:trim:lower:str:1:',
-        $data['tab'], 'list', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('tab', 'pre:trim:lower:str:1:', $data['tab'], 'list', XARVAR_NOT_REQUIRED)) return;
 
     $access_property = DataPropertyMaster::getProperty(array('name' => 'access'));
         
     switch ($data['tab']) {
         case 'list':
-            if (!xarVarFetch('startnum', 'int:1',
-                $data['startnum'], 1, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('filter', 'pre:trim:str:1:',
-                $data['filter'], null, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('startnum', 'int:1', $data['startnum'], 1, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('filter', 'pre:trim:str:1:', $data['filter'], null, XARVAR_NOT_REQUIRED)) return;
             $data['items_per_page'] = xarModVars::get('blocks', 'items_per_page');
 
             $data['total'] = xarMod::apiFunc('blocks', 'instances', 'countitems',

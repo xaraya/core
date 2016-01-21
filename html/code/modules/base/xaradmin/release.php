@@ -7,8 +7,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/68.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/68.html
  */
 /**
  * View recent module releases via central repository
@@ -45,7 +45,7 @@ function base_admin_release()
     sys::import('modules.base.class.feedParser');
     // Check and see if a feed has been supplied to us.
     // Need to change the url once release module is moved to
-    $feedfile = "http://www.xaraya.com/index.php?module=release&func=rssviewnotes&theme=rss&releaseno=$releasenumber";
+    $feedfile = "http://xaraya.info/index.php?module=release&func=rssviewnotes&theme=rss&releaseno=$releasenumber";
 
     // Get the feed file (from cache or from the remote site)
     $feeddata = xarMod::apiFunc('base', 'user', 'getfile',

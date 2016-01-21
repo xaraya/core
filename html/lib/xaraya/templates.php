@@ -8,7 +8,7 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
+ * @link http://www.xaraya.info
  *
  * @author Paul Rosania <paul@xaraya.com>
  * @author Marco Canini <marco@xaraya.com>
@@ -40,7 +40,7 @@ class xarTpl extends Object
     protected static $themeDir;
     
     protected static $generateXMLURLs  = true;
-    protected static $doctype          = '';
+    protected static $doctype          = 'xhtml1-strict';
     protected static $pageTemplateName;
     protected static $pageTitle;
     
@@ -63,6 +63,9 @@ class xarTpl extends Object
     {
         // This is the theme directory, solo (aka, themename)
         self::setThemeDir($args['defaultThemeDir']);
+        
+        // This is the default document type
+        if (isset($args['defaultDocType'])) self::$doctype = $args['defaultDocType'];
         
         // This should be always true or better defined if it's 
         // a client thing (js internal code generation for example)

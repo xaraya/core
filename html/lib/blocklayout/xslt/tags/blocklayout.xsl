@@ -18,25 +18,31 @@
     </xsl:processing-instruction>
 
     <!-- Generate the doctype
-      @todo: xsl:output has mechanisms to do this, but dont know how
-             to do that (as the result true generation has already started)
-      @todo: how should the dtd attribute really behave if unset or should
-                  that even be possible
+      If we pass a dtd attribute, use that.
+      Otherwise get the default value
     -->
-    <xsl:if test="@dtd != 'none'">
     <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE </xsl:text>
-    <xsl:call-template name="dtdlist">
-      <xsl:with-param name="dtd" select="@dtd"/>
-    </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="not(@dtd)">
+        <xsl:call-template name="dtdlist">
+          <xsl:with-param name="dtd" select="$bl_doctype"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="dtdlist">
+          <xsl:with-param name="dtd" select="@dtd"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>&nl;</xsl:text>
-    </xsl:if>
     <xsl:apply-templates />
   </xsl:template>
 
   <xsl:template name="dtdlist">
-    <xsl:param name="dtd" select='xhtml11'/>
+    <xsl:param name="dtd" select="@dtd"/>
 
-    <xsl:choose>
+     <!-- http://www.w3.org/QA/2002/04/valid-dtd-list.html -->
+     <xsl:choose>
       <xsl:when test="$dtd = 'html2'">
         <xsl:text disable-output-escaping="yes">html PUBLIC "-//IETF//DTD HTML 2.0//EN"&gt;</xsl:text>
       </xsl:when>
@@ -96,7 +102,7 @@
       </xsl:when>
       <!-- html5 [NOT a standard yet] -->
       <xsl:when test="$dtd = 'html5'">
-        <xsl:text disable-output-escaping="yes">HTML&gt;</xsl:text>
+        <xsl:text disable-output-escaping="yes">html&gt;</xsl:text>
       </xsl:when>
     </xsl:choose>
   </xsl:template>

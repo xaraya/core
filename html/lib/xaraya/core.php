@@ -8,7 +8,7 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
+ * @link http://www.xaraya.info
  *
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
@@ -465,7 +465,8 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
             $systemArgs = array(
                 'enableTemplatesCaching' => xarConfigVars::get(null, 'Site.BL.CacheTemplates'),
                 'defaultThemeDir'        => xarModVars::get('themes', 'default_theme','default'),
-                'generateXMLURLs'        => true
+                'generateXMLURLs'        => true,
+                'defaultDocType'         => xarConfigVars::get(null, 'Site.BL.DocType'),
             );
 
             xarTpl::init($systemArgs);

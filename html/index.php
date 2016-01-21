@@ -8,7 +8,7 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
+ * @link http://www.xaraya.info
  * @author Marco Canini
  */
 
@@ -120,21 +120,16 @@ function xarMain()
     if ($run) {
 
         // Set page template
-        if (xarUserIsLoggedIn() && $request->getType() == 'admin' && xarTpl::getPageTemplateName() == 'default') {
+        if (xarUserIsLoggedIn() && ($request->getType() == 'admin') && (xarTpl::getPageTemplateName() == 'default')) {
             // Use the admin-$modName.xt page if available when $modType is admin
             // falling back on admin.xt if the former isn't available
             if (!xarTpl::setPageTemplateName('admin-'.$request->getModule())) {
                 xarTpl::setPageTemplateName('admin');
             }
-        } elseif (xarUserIsLoggedIn() && $request->getType() == 'user' && xarTpl::getPageTemplateName() == 'default') {
-            // Same thing for user side where user is logged in
-            if (!xarTpl::setPageTemplateName('user-'.$request->getModule())) {
-                xarTpl::setPageTemplateName('user');
-            }
-        } elseif ($request->getType() == 'user' && xarTplGetPageTemplateName() == 'default') {
-            // For the anonymous user, see if a module specific page exists
-            if (!xarTpl::setPageTemplateName('user-'.$request->getModule())) {
-                xarTpl::setPageTemplateName($request->getModule());
+        } elseif (($request->getType() != 'admin') && (xarTpl::getPageTemplateName() == 'default')) {
+            // Same thing for user side
+            if (!xarTpl::setPageTemplateName($request->getType().'-'.$request->getModule())) {
+                xarTpl::setPageTemplateName($request->getType());
             }
         }
 

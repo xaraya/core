@@ -20,8 +20,8 @@
         <thead>
             <tr>
                 <!-- This column holds the index of the respective row -->
-                <th style="display: #$index_display#">
-                    Index
+                <th style="width: 10px">
+                    Row
                 </th>
                 
                 <xar:for start="$i=0" test="$i lt count($column_titles)" iter="$i++">
@@ -35,10 +35,10 @@
 
         <!-- rows container (rows_id: 'rows' for js) -->
         <tbody id="#$id#_rows">
-            <xar:for start="$i=1" test="$i le $rows" iter="$i++">
+            <xar:for start="$i=0" test="$i lt $rows" iter="$i++">
                 <!-- name[row] -->
-                <xar:set name="j">$i-1</xar:set>
-                <xar:set name="row_name">"{$name}[value][{$j}]"</xar:set>
+                <xar:set name="j">$i</xar:set>
+                <xar:set name="row_name">"{$name}[{$j}]"</xar:set>
                 <xar:set name="row_id">"{$id}_{$j}"</xar:set>
                 <xar:set name="col_name">"{$row_name}[0]"</xar:set>
                 <xar:set name="col_id">"{$row_id}_0"</xar:set>
@@ -46,13 +46,17 @@
                 
                     <!-- This column holds the index of the respective row -->
                     <!-- By definition this is a static value (can't change via the UI) -->
-                    <td style="display: #$index_display#">
-                        #$col_name# #$col_id#
-                        <xar:data-input type="1" name="$col_name" id="$col_id" value="$i-1" />
+                    <td>
+                        <span style="display: #$index_display#">
+                            <xar:set name="index_name">"{$row_name}[1000000]"</xar:set>
+                            <xar:set name="index_id">"{$row_id}_1000000"</xar:set>
+                            #$index_name# #$index_id#
+                        </span>
+                        <input type="text" name="#$index_name#" id="#$index_id#" value="#$i+1#" style="width: 15px" readonly="readonly"/>
                     </td>
                     
                     <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
-                        <xar:set name="col_index">$k+1</xar:set>
+                        <xar:set name="col_index">$k</xar:set>
                         <!-- columnname[row][column] -->                        
                         <xar:set name="col_name">"{$row_name}[{$col_index}]"</xar:set>
                         <xar:set name="col_id">"{$row_id}_{$col_index}"</xar:set>
@@ -69,11 +73,11 @@
                         <td>
                             <!-- row #$i# column #$k# -->
                             <span style="display: #$index_display#">#$prop_name#</span>
-                            <xar:if condition="isset($value[$k][$i])">
+                            <xar:if condition="isset($value[$i][$k])">
                                 <xar:if condition="isset($column_configurations[$k])">
-                                    <xar:data-input property="$property" name="$prop_name" id="$prop_id" value="$value[$k][$i]" configuration="$column_configurations[$k]"/>
+                                    <xar:data-input property="$property" name="$prop_name" id="$prop_id" value="$value[$i][$k]" configuration="$column_configurations[$k]"/>
                                 <xar:else/>
-                                    <xar:data-input property="$property" name="$prop_name" id="$prop_id" value="$value[$k][$i]"/>
+                                    <xar:data-input property="$property" name="$prop_name" id="$prop_id" value="$value[$i][$k]"/>
                                 </xar:if>
                             <xar:else/>
                                 <xar:if condition="isset($column_configurations[$k])">
@@ -97,14 +101,14 @@
                     </td>            
                 </tr>
             </xar:for>
-            <xar:set name="lastrow">$i-1</xar:set>
+            <xar:set name="lastrow">$i</xar:set>
             
 <!--  Begin dummy line for adding rows when no js enabled -->
 <!--  NOTE: unless addremove is 0 this must always be present in the markup otherwise js will
       fail if a row is subsequently deleted and an attempt is made to add a new one -->
             <xar:if condition="($addremove ne 0)">
                 <xar:set name="thisrow">$lastrow</xar:set>
-                <xar:set name="row_name">"{$name}[value][{$thisrow}]"</xar:set>
+                <xar:set name="row_name">"{$name}[{$thisrow}]"</xar:set>
                 <xar:set name="row_id">"{$id}_{$thisrow}"</xar:set>
                 <xar:set name="col_name">"{$row_name}[0]"</xar:set>
                 <xar:set name="col_id">"{$row_id}_0"</xar:set>
@@ -118,12 +122,16 @@
                 <!-- The row template (tpl_id: 'template' for js) 
                      If JS is available it will hide this and display the add button -->
                 <tr id="#$id#_template" style="display: #$row_display#">
-                    <td style="display: #$index_display#">
-                        #$col_name# #$col_id#
-                        <xar:data-input type="1" name="$col_name" id="$col_id" value="$thisrow"/>
+                    <td>
+                        <span style="display: #$index_display#">
+                            <xar:set name="index_name">"{$row_name}[1000000]"</xar:set>
+                            <xar:set name="index_id">"{$row_id}_1000000"</xar:set>
+                            #$index_name# #$index_id#
+                        </span>
+                        <input type="text" name="#$index_name#" id="#$index_id#" value="#$thisrow+1#" style="width: 15px" readonly="readonly"/>
                     </td>
                     <xar:for start="$k=0" test="$k lt count($column_titles)" iter="$k++">
-                        <xar:set name="col_index">$k+1</xar:set>
+                        <xar:set name="col_index">$k</xar:set>
                         <!-- name[row][column] -->                        
                         <xar:set name="col_name">"{$row_name}[{$col_index}]"</xar:set>
                         <xar:set name="col_id">"{$row_id}_{$col_index}"</xar:set>
@@ -153,14 +161,13 @@
                         <xar:data-input type="checkbox" name="$del_name" id="$del_id" value="1" checked="checked"/>
                     </td>
                 </tr>
-
             </xar:if>
 <!--  End dummy line for adding rows when no js enabled --> 
         </tbody>
         <xar:if condition="($addremove ne 0)">
             <tfoot>
                 <tr>
-                    <xar:set name="infospan">$debug?count($column_titles)+1:count($column_titles)</xar:set>
+                    <xar:set name="infospan">$debug?count($column_titles)+1:count($column_titles)+1</xar:set>
                     <td colspan="#$infospan#">
                     <!-- Row count container (count_id: 'row_count' for js)
                          When JS is enabled and count_id is supplied this field will 
@@ -185,6 +192,7 @@
     <xar:var name="add_alt">Add</xar:var>
     <xar:var name="add_title">Add a new row</xar:var>
     <!-- Create the table js object and pass in configuration params -->  
+    <!-- Set the debug option below to true to see debug info -->
     <script type="text/javascript">
 //<![CDATA[ 
         var #$id# = new arrayTable( {               // var name is the id of this property

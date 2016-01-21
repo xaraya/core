@@ -6,8 +6,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/182.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/182.html
  */
 
 /**
@@ -95,7 +95,7 @@ class DataObjectMaster extends Object
      * @todo  This does too much, split it up
     **/
 
-    function toArray(Array $args=array())
+    public function toArray(Array $args=array())
     {
         $properties = $this->getPublicProperties();
         foreach ($properties as $key => $value) if (!isset($args[$key])) $args[$key] = $value;
@@ -104,7 +104,7 @@ class DataObjectMaster extends Object
         return $args;
     }
 
-    function loader(DataObjectDescriptor $descriptor)
+    public function loader(DataObjectDescriptor $descriptor)
     {
         $this->descriptor = $descriptor;
         $descriptor->refresh($this);
@@ -137,7 +137,7 @@ class DataObjectMaster extends Object
         }
 
         // set the specific item id (or 0)
-        if(isset($args['itemid'])) $this->itemid = $args['itemid'];
+//        if(isset($args['itemid'])) $this->itemid = $args['itemid'];
         
         sys::import('xaraya.structures.query');
         $this->dataquery = new Query();
@@ -167,7 +167,11 @@ class DataObjectMaster extends Object
         }
 //        $this->dataquery->qecho();echo "<br/><br />";
         // build the list of relevant data stores where we'll get/set our data
-        $this->getDataStore();
+        try {
+            $this->getDataStore();
+        } catch (Exception $e) {
+            echo $e->getMessage();;
+        }
            
         // Explode the configuration
         try{
@@ -204,6 +208,67 @@ class DataObjectMaster extends Object
         }
     }
 
+    /**
+     * Show an filter form for this item
+     */
+    public function showFilterForm(Array $args = array())
+    {
+        $args = $args + $this->getPublicProperties();
+        if (isset($args['fieldprefix'])) $this->setFieldPrefix($args['fieldprefix']);
+
+        // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
+        if(!empty($args['preview'])) $this->checkInput();
+
+// CHECKME: this has no real purpose here anymore ???
+        // Set all properties based on what is passed in.
+        $properties = $this->getProperties($args);
+
+        if (!empty($args['fieldlist']) && !is_array($args['fieldlist'])) {
+            $args['fieldlist'] = explode(',',$args['fieldlist']);
+            if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
+        }
+        
+        if(count($args['fieldlist']) > 0) {
+            $fields = $args['fieldlist'];
+        } else {
+            $fields = array_keys($this->properties);
+        }
+
+        $args['properties'] = array();
+        foreach($fields as $name) {
+            if(!isset($this->properties[$name])) continue;
+
+            if(($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)
+            || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
+            || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)) continue;
+
+            $args['properties'][$name] =& $this->properties[$name];
+        }
+
+        // pass some extra template variables for use in BL tags, API calls etc.
+        //FIXME: check these
+        $args['isprimary'] = !empty($this->primary);
+        $args['catid'] = !empty($this->catid) ? $this->catid : null;
+        $args['object'] = $this;
+        return xarTpl::object($args['tplmodule'],$args['template'],'showfilterform',$args);
+    }
+
+    /**
+     * Get and set for field prefixes
+     */
+    public function getFieldPrefix()
+    {
+        return $this->fieldprefix;
+    }
+    
+    public function setFieldPrefix($prefix)
+    {
+        $this->fieldprefix = $prefix;
+        foreach (array_keys($this->properties) as $property)
+            $this->properties[$property]->_fieldprefix = $prefix;
+        return true;
+    }
+
     public function setFieldList($fieldlist=array(),$status=array())
     {
         if (empty($fieldlist)) $fieldlist = $this->setupFieldList();
@@ -211,7 +276,7 @@ class DataObjectMaster extends Object
             try {
                 $fieldlist = explode(',',$fieldlist);
             } catch (Exception $e) {
-                throw new Exception('Badly formed fieldlist attribute');
+                throw new Exception(xarML('Badly formed fieldlist attribute'));
             }
         }
         $this->fieldlist = array();
@@ -235,9 +300,13 @@ class DataObjectMaster extends Object
         return true;
     }
 
-    public function getFieldList()
+    public function getFieldList($force=0)
     {
-        if (empty($this->fieldlist)) $this->fieldlist = $this->setupFieldList();
+        if ($force) {
+            $this->fieldlist = $this->setupFieldList();
+        } else {
+            if (empty($this->fieldlist)) $this->fieldlist = $this->setupFieldList();
+        }
         return $this->fieldlist;
     }
 
@@ -281,7 +350,7 @@ class DataObjectMaster extends Object
     /**
      * Set the display status of some properties
      */
-    function setDisplayStatus($fieldlist=array(), $status)
+    public function setDisplayStatus($fieldlist=array(), $status)
     {
         if(!empty($fieldlist)) {
             foreach($fieldlist as $field)
@@ -295,15 +364,19 @@ class DataObjectMaster extends Object
     /**
      * Get the data stores where the dynamic properties of this object are kept
     **/
-    function getDataStore($reset = false)
+    public function getDataStore($reset = false)
     {
         switch ($this->datastore) {
             case 'relational': $this->addDataStore('relational', 'relational'); break;
             case 'module_variables': 
-                $firstproperty = reset($this->properties);
-                // FIXME: this needs a better design
-                $name = trim(substr($firstproperty->source,17));
-                $this->addDataStore($name, 'modulevars'); 
+                try {
+                    $firstproperty = reset($this->properties);
+                    // FIXME: this needs a better design
+                    $name = trim(substr($firstproperty->source,17));
+                    $this->addDataStore($name, 'modulevars'); 
+                } catch (Exception $e) {
+                    throw new Exception(xarML('Did not find a first property for module variable datastore'));
+                }
                 break;
             case 'dynamicdata': $this->addDataStore('_dynamic_data_', 'data'); break;
         }
@@ -315,7 +388,7 @@ class DataObjectMaster extends Object
      * @param $name the name for the data store
      * @param $type the type of data store
     **/
-    function addDataStore($name = '_dynamic_data_', $type='data')
+    public function addDataStore($name = '_dynamic_data_', $type='data')
     {
         // get the data store
         sys::import('modules.dynamicdata.class.datastores.master');
@@ -332,7 +405,7 @@ class DataObjectMaster extends Object
     /**
      * Get the selected dynamic properties for this object
     **/
-    function &getProperties($args = array())
+    public function &getProperties($args = array())
     {
         if(!empty($args['fieldlist'])) {
             $fields = $this->getFieldList();
@@ -375,13 +448,47 @@ class DataObjectMaster extends Object
      * @todo why not keep the scope here and do this:
      *       $this->properties[$args['id']] = new Property($args); (with a reference probably)
     **/
-    function addProperty(Array $args=array())
+    public function addProperty(Array $args=array())
     {
         // TODO: find some way to have unique IDs across all objects if necessary
         if(!isset($args['id']))
             $args['id'] = count($this->properties) + 1;
         sys::import('modules.dynamicdata.class.properties.master');
         DataPropertyMaster::addProperty($args,$this);
+        return true;
+    }
+
+    /**
+     * Modify a property for this object
+     *
+     * @param $property the property or its name (required)
+     * @param $args an array of parameters that re to be changed
+     *
+    **/
+    public function modifyProperty($property, Array $args=array())
+    {
+        if (!is_object($property)) {
+            // Check what we assume to be a name
+            if (isset($this->properties[$property])) {
+                $property =& $this->properties[$property];
+            } else {
+                $msg = xarML('Bad property name parameter for modifyProperty');
+                throw new Exception($msg);
+            }
+        } else {
+            // Check if this object is a property of this dataobject
+            if (!isset($this->properties[$property->name])) {
+                $msg = xarML('Bad property object parameter for modifyProperty');
+                throw new Exception($msg);
+            }
+        }
+        // Get the description of the property and add its args to those passed
+        $args = $args + $property->descriptor->getArgs();
+        // Remove the property we are changing;
+        unset($this->properties[$property->name]);
+        // Add a new property,like the old, but with the changes passed
+        $this->addProperty($args);
+        return true;
     }
 
     /**
@@ -389,7 +496,7 @@ class DataObjectMaster extends Object
      *
      * @return array of object definitions
     **/
-    static function &getObjects(Array $args=array())
+    public static function &getObjects(Array $args=array())
     {
         extract($args);
         $dbconn = xarDB::getConn();
@@ -445,7 +552,7 @@ class DataObjectMaster extends Object
      * @todo no ref return?
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
     **/
-    static function getObjectInfo(Array $args=array())
+    public static function getObjectInfo(Array $args=array())
     {
         if (!isset($args['objectid']) && (!isset($args['name']))) {
            throw new Exception(xarML('Cannot get object information without an objectid or a name'));
@@ -609,7 +716,7 @@ class DataObjectMaster extends Object
      * @return object the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
-    static function getObject(Array $args=array())
+    public static function getObject(Array $args=array())
     {
         /* with autoload and variable caching activated */
         // Identify the variable by its arguments here
@@ -655,7 +762,7 @@ class DataObjectMaster extends Object
         return $object;
     }
     
-    static function getfObject(Array $args=array())
+    public static function getfObject(Array $args=array())
     {
         /* with autoload and variable caching activated */
         // Identify the variable by its arguments here
@@ -722,7 +829,7 @@ class DataObjectMaster extends Object
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
     **/
-    static function getObjectList(Array $args=array())
+    public static function getObjectList(Array $args=array())
     {
         /* with autoload and variable caching activated */
         // Identify the variable by its arguments here
@@ -791,7 +898,7 @@ class DataObjectMaster extends Object
      * @todo  get rid of the classname munging
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
-    static function &getObjectInterface(Array $args=array())
+    public static function &getObjectInterface(Array $args=array())
     {
         sys::import('modules.dynamicdata.class.userinterface');
 
@@ -819,7 +926,7 @@ class DataObjectMaster extends Object
         return $object;
     }
 
-    static function isObject(Array $args)
+    public static function isObject(Array $args)
     {
         $info = self::_getObjectInfo($args);
         return !empty($info);
@@ -840,7 +947,7 @@ class DataObjectMaster extends Object
      * @param $args['class'] optional classname (e.g. <module>_DataObject)
      * @return integer object id of the created item
     **/
-    static function createObject(Array $args=array())
+    public static function createObject(Array $args=array())
     {
         // TODO: if we extend dobject classes then probably we need to put the class name here
         $object = self::getObject(array('name' => 'objects'));
@@ -854,7 +961,7 @@ class DataObjectMaster extends Object
         return $objectid;
     }
 
-    static function updateObject(Array $args=array())
+    public static function updateObject(Array $args=array())
     {
         $object = self::getObject(array('name' => 'objects'));
 
@@ -866,7 +973,7 @@ class DataObjectMaster extends Object
         return $itemid;
     }
 
-    static function deleteObject(Array $args=array())
+    public static function deleteObject(Array $args=array())
     {
         $descriptor = new DataObjectDescriptor($args);
         $args = $descriptor->getArgs();
@@ -984,7 +1091,7 @@ class DataObjectMaster extends Object
      * @todo pick moduleid or module
      * @todo move this into a utils class?
      */
-    static function getModuleItemTypes(Array $args=array())
+    public static function getModuleItemTypes(Array $args=array())
     {
         extract($args);
         // Argument checks
@@ -1182,21 +1289,19 @@ class DataObjectMaster extends Object
         // Set up the db tables
         if ($descriptor->exists('sources')) {
             try {
-                $sources = unserialize($descriptor->get('sources'));
+                $sources = @unserialize($descriptor->get('sources'));
+              
                 if (!empty($sources)) {
-                    // Transform from array property format to datasource format
-//                    $object->datasources = array();
-//                    foreach ($sources as $source) $object->datasources[$source[0]] = array($source[1],$source[2]);
                     $object->datasources = $sources;
-                    foreach ($object->datasources as $key => $value) {
-                    
+                    foreach ($object->datasources as $key => $table) {
                         // Support simple array form
-                        if (is_array($value)) {
-                            $tabletype = $value[1];
-                            $value = $value[0];
+                        if (is_array($table)) {
+                            $tabletype = $table[1];
+                            $value = $table[0];
                         } else {
                             $tabletype = 'internal';
                         }
+
                         // Remove any spaces and similar chars
                         $value = trim($value);
                         $key = trim($key);
@@ -1214,90 +1319,109 @@ class DataObjectMaster extends Object
                         }
                     }
                 }
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+                echo xarML('Found sources: ');var_dump($sources);
+                echo xarML('Error reading object sources');
+            }
         }
 
         // Set up the db table relations
         if ($descriptor->exists('relations')) {
             try {
-                $relationargs = unserialize($descriptor->get('relations'));
-                foreach ($relationargs as $key => $value) {
-                    $join = "";
+                $relationargs = @unserialize($descriptor->get('relations'));
+                if (is_array($relationargs)) {
+                    foreach ($relationargs as $key => $value) {
                     
-                    // Support simple array form
-//                    if (is_array($value)) $value = current($value);
-                    // Remove any spaces and similar chars
-                    $left = trim($value[0]);
-                    $right = trim($value[1]);
+                        // Support simple array form
+    //                    if (is_array($value)) $value = current($value);
+
+                        // Bail if we are missing anything
+                        if (count($value) < 2) continue;
                     
-                    // If this was just the empty first line, bail
-                    if (empty($left)) continue;
+                        // Remove any spaces and similar chars
+                        $left = trim($value[0]);
+                        $right = trim($value[1]);
                     
-                    // Check if this relation includes a foreign table
-                    // If it does do a left or right join, rather than an inner join
-                    $fromobjectparts = explode('.',$left);
-                    $fromobject = $fromobjectparts[0];
-                    if (isset($object->datasources[$fromobject])) {
-                        if (isset($object->datasources[$fromobject][1]) && $object->datasources[$fromobject][1] == 'internal') {
-                            $join = 'join';
-                        } else {
-                            if ($type != "SELECT") continue;
-                            $join = 'rightjoin';
+                        // If this was just the empty first line, bail
+                        if (empty($left)) continue;
+                    
+                        // Check if this relation includes a foreign table
+                        // If it does do a left or right join, rather than an inner join
+                        $join = "";
+                        $fromobjectparts = explode('.',$left);
+                        $fromobject = $fromobjectparts[0];
+                        if (isset($object->datasources[$fromobject])) {
+                            if (isset($object->datasources[$fromobject][1]) && $object->datasources[$fromobject][1] == 'internal') {
+                                $join = 'join';
+                            } else {
+                                if ($type != "SELECT") continue;
+                                $join = 'rightjoin';
+                            }
                         }
+                    
+                        $toobjectparts = explode('.',$right);
+                        $toobject = $toobjectparts[0];
+                        if (isset($object->datasources[$toobject])) {
+                            if (isset($object->datasources[$toobject][1]) && $object->datasources[$toobject][1] == 'internal') {
+                                $join = 'join';
+                            } else {
+                                if ($type != "SELECT") continue;
+                                $join = 'leftjoin';
+                            }                        
+                        }
+                    
+                        // If no join was defined, then this is a bad realtion: ignore
+                        if (empty($join)) continue;
+                    
+                        // Add this relation's join to the object's dataquery
+                        if ($prefix) $this->dataquery->{$join}($object->name . "_" . $left,$object->name . "_" . $right);
+                        else $this->dataquery->{$join}($left,$right);
                     }
-                    
-                    $toobjectparts = explode('.',$right);
-                    $toobject = $toobjectparts[0];
-                    if (isset($object->datasources[$toobject])) {
-                        if (isset($object->datasources[$toobject][1]) && $object->datasources[$toobject][1] == 'internal') {
-                            $join = 'join';
-                        } else {
-                            if ($type != "SELECT") continue;
-                            $join = 'leftjoin';
-                        }                        
-                    }
-                    
-                    // If no join was defined, then this is a bad realtion: ignore
-                    if (empty($join)) continue;
-                    
-                    // Add this relation's join to the object's dataquery
-                    if ($prefix) $this->dataquery->{$join}($object->name . "_" . $left,$object->name . "_" . $right);
-                    else $this->dataquery->{$join}($left,$right);
                 }
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+                throw new Exception(xarML('Error reading object relations'));
+            }
         }
 
         // Set up the relations to related objects
         if ($descriptor->exists('objects')) {
             try {
-                $objectargs = unserialize($descriptor->get('objects'));
-                foreach ($objectargs as $key => $value) {
-                    // Support simple array form
-//                    if (is_array($value)) $value = current($value);
-                    // Remove any spaces and similar chars
-                    $left = trim($value[0]);
-                    $right = trim($value[1]);
+                $objectargs = @unserialize($descriptor->get('objects'));
+                if (is_array($objectargs)) {
+                    foreach ($objectargs as $key => $value) {
 
-                    // If this was just the empty first line, bail
-                    if (empty($left)) continue;
+                        // Support simple array form
+    //                    if (is_array($value)) $value = current($value);
+
+                        // Bail if we are missing anything
+                        if (count($value) < 2) continue;
                     
-                    if ((strpos($left, 'this') === false) && (strpos($right, 'this') === false)
-                    && (strpos($left, $object->name) === false) && (strpos($right, $object->name) === false)
-                    ) 
-                        echo 'One of the links must be of a property of ' . $object->name . '<br />';
-                    try {
-                        $leftside = $object->propertysource($left, $object, $prefix);
-                    } catch (Exception $e) {echo 'Cannot translate ' . $left . ' to a valid datasource<br />'; }
-                    try {
-                        $rightside = $object->propertysource($right, $object, $prefix);
-                    } catch (Exception $e) {echo 'Cannot translate ' . $right . ' to a valid datasource<br />'; }
-                    $this->dataquery->leftjoin($leftside,$rightside);
+                        // Remove any spaces and similar chars
+                        $left = trim($value[0]);
+                        $right = trim($value[1]);
+
+                        // If this was just the empty first line, bail
+                        if (empty($left)) continue;
+                        if (empty($right)) continue;
                     
-                    // FIXME: We don't yet support a sort order for related object items, so order them by ID for now
-                    $parts = explode('.',$right);
-                    $table = trim($parts[0]);
-                    // We should actually sort by the object's primary key, but lets forgoe that for now
-//                    $this->dataquery->setorder($table . ".id");
+                        if ((strpos($left, 'this') === false) && (strpos($right, 'this') === false)
+                        && (strpos($left, $object->name) === false) && (strpos($right, $object->name) === false)
+                        ) 
+                            echo 'One of the links must be of a property of ' . $object->name . '<br />';
+                        try {
+                            $leftside = $object->propertysource($left, $object, $prefix);
+                        } catch (Exception $e) {echo 'Cannot translate ' . $left . ' to a valid datasource<br />'; }
+                        try {
+                            $rightside = $object->propertysource($right, $object, $prefix);
+                        } catch (Exception $e) {echo 'Cannot translate ' . $right . ' to a valid datasource<br />'; }
+                        $this->dataquery->leftjoin($leftside,$rightside);
+                    
+                        // FIXME: We don't yet support a sort order for related object items, so order them by ID for now
+                        $parts = explode('.',$right);
+                        $table = trim($parts[0]);
+                        // We should actually sort by the object's primary key, but lets forgoe that for now
+    //                    $this->dataquery->setorder($table . ".id");
+                    }
                 }
             } catch (Exception $e) {
                 if (isset($left)) echo 'Bad object relation: ' . $left . ' or ' . $right;

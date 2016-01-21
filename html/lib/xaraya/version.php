@@ -8,7 +8,7 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
+ * @link http://www.xaraya.info
  */
 class BadVersionException extends xarExceptions
 {
@@ -20,7 +20,7 @@ class BadVersionException extends xarExceptions
  *
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
+ * @link http://www.xaraya.info
  *
  * @subpackage version
  * @author Marc Lutolf <mfl@netspan.ch>

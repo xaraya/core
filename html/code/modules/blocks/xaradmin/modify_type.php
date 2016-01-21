@@ -6,8 +6,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/13.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/13.html
  */
 
 /**
@@ -102,10 +102,8 @@ function blocks_admin_modify_type(Array $args=array())
                             $invalid['check'] = xarML('Failed validating block type form input');
                         }
                         // fetch block subsystem configuration 
-                        if (!xarVarFetch('type_block_template', 'pre:trim:str:1:127',
-                            $block_template, null, XARVAR_NOT_REQUIRED)) return;
-                        if (!xarVarFetch('type_box_template', 'pre:trim:str:1:127',
-                            $box_template, null, XARVAR_NOT_REQUIRED)) return;
+                        if (!xarVarFetch('type_block_template', 'pre:trim:str:1:127', $block_template, null, XARVAR_NOT_REQUIRED)) return;
+                        if (!xarVarFetch('type_box_template', 'pre:trim:str:1:127', $box_template, null, XARVAR_NOT_REQUIRED)) return;
                         // update block configuration 
                         if (empty($invalid)) {
                             if (!xarSecConfirmAuthKey())
@@ -155,14 +153,10 @@ function blocks_admin_modify_type(Array $args=array())
             
             break;
             case 'caching':
-                if (!xarVarFetch('type_nocache', 'checkbox',
-                    $nocache, false, XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('type_pageshared', 'checkbox',
-                    $pageshared, false, XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('type_usershared', 'int:0:2',
-                    $usershared, 0, XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('type_cacheexpire', 'str:1:',
-                    $cacheexpire, null, XARVAR_NOT_REQUIRED)) return;
+                if (!xarVarFetch('type_nocache', 'checkbox', $nocache, false, XARVAR_NOT_REQUIRED)) return;
+                if (!xarVarFetch('type_pageshared', 'checkbox', $pageshared, false, XARVAR_NOT_REQUIRED)) return;
+                if (!xarVarFetch('type_usershared', 'int:0:2', $usershared, 0, XARVAR_NOT_REQUIRED)) return;
+                if (!xarVarFetch('type_cacheexpire', 'str:1:', $cacheexpire, null, XARVAR_NOT_REQUIRED)) return;
                 
                 // convert cacheexpire from hh:mm:ss format to an integer
                 if (!empty($cacheexpire)) 
@@ -269,8 +263,7 @@ function blocks_admin_modify_type(Array $args=array())
         
             if (!xarMod::apiFunc('blocks', 'types', 'updateitem', $type)) return;
             
-            if (!xarVarFetch('return_url', 'pre:trim:str:1:',
-                $return_url, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('return_url', 'pre:trim:str:1:', $return_url, '', XARVAR_NOT_REQUIRED)) return;
             if (empty($return_url))
                 $return_url = xarModURL('blocks', 'admin', 'modify_type',
                     array(

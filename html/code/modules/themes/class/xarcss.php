@@ -8,8 +8,8 @@
  * @version 2.2.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/70.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/70.html
 **/
 /**
  * Base CSS class
@@ -404,15 +404,14 @@ class xarCSS extends Object
             'alternatedir' => !empty($alternatedir) ? xarVarPrepForOS($alternatedir) : '',
         );
 
-        // Local absolute url, just include it and return
+        // Local or remote absolute url, just include it and return
         // We support this above all for testing third party stuff we may later integrate
         $server = xarServer::getHost();
-        if (($tag['method'] == "link") && !empty($tag['source']) &&
-            preg_match("!://($server|localhost|127\.0\.0\.1)(:\d+|)/!",$tag['source'])) {
-            $tag['url'] = $tag['source'];       
+        if (($tag['method'] == "link") && !empty($tag['source'])) {
+            $tag['url'] = $tag['source'];
             return $this->queue($method, $scope, $tag['url'], $tag);
         }
-
+        
         // set additional params based on method
         switch ($method) {
             case 'embed':
@@ -531,7 +530,7 @@ class xarCSS extends Object
             // Debug display
              if (xarModVars::get('themes','debugmode') && 
              in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-                echo xarML('Chosen: ') . $path . "<br/>";
+                echo "<b>" . xarML('Chosen: ') . $path . "</b><br/>";
              }
             break;
         }

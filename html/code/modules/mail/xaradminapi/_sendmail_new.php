@@ -7,8 +7,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/771.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/771.html
  */
 
 /**
@@ -82,7 +82,7 @@ function mail_adminapi__sendmail_new(Array $args=array())
     //ini_set("sendmail_from", $from);
 
     try { 
-        require(sys::lib() . 'PHPMailer/class.phpmailer.php');
+        require_once(sys::lib() . 'PHPMailer/class.phpmailer.php');
     } catch (Exception $e) {
         throw new FileNotFoundException('class.phpmailer.php');
     }
@@ -103,7 +103,7 @@ function mail_adminapi__sendmail_new(Array $args=array())
     switch($serverType) {
         case 'smtp':
             try { 
-                require(sys::lib() . 'PHPMailer/class.smtp.php');
+                require_once(sys::lib() . 'PHPMailer/class.smtp.php');
             } catch (Exception $e) {
                 throw new FileNotFoundException('class.smtp.php');
             }

@@ -5,8 +5,8 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- * @link http://xaraya.com/index.php/release/68.html
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -100,6 +100,38 @@ class MultiSelectProperty extends SelectProperty
         if (!isset($data['options'])) $data['options'] = $this->getOptions();
 
         return parent::showOutput($data);
+    }
+
+    public function showHidden(Array $data = array())
+    {
+        if (isset($data['single'])) $this->validation_single = $data['single'];
+        if (isset($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
+        if (!isset($data['value'])) $data['value'] = $this->value;
+        $data['value'] = $this->getSerializedValue($data['value']);
+
+        // Grab this code from the dropdown property
+        // If we have options passed, take them. Otherwise generate them
+        if (!isset($data['options'])) {
+
+        // Parse a configuration if one was passed
+            if(isset($data['configuration'])) {
+                $this->parseConfiguration($data['configuration']);
+                unset($data['configuration']);
+            // Legacy support: if the validation field is an array, we'll assume that this is an array of id => name
+            } elseif (!empty($data['validation']) && is_array($data['validation']) && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
+                sys::import('xaraya.legacy.validations');
+                $this->options = dropdown($data['validation']);
+            }
+
+        // Allow overriding by specific parameters
+            if (isset($data['function']))   $this->initialization_function = $data['function'];
+            if (isset($data['file']))       $this->initialization_file = $data['file'];
+            if (isset($data['collection'])) $this->initialization_collection = $data['collection'];
+
+        // Finally generate the options
+            $data['options'] = $this->getOptions();
+        }
+        return parent::showHidden($data);
     }
 
     public function getValue()

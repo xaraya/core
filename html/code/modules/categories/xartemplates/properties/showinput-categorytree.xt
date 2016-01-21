@@ -66,26 +66,28 @@
                                     Clone
                                 </a>
                             </xar:if>
-                            <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
-                                <a href="#xarModURL('categories', 'admin', 'modify', array('itemid' => $cid))#" title="#$modifytitle#" style="margin-right: 5px">
-                                    <xar:set name="imgfile">'icons/'.'modify.png'</xar:set>
-                                    <xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$modifytitle"/>
-                                </a>
-                            <xar:else />
-                                <a href="#xarModURL('categories', 'admin', 'modify', array('itemid' => $cid))#" title="#$modifytitle#">
-                                    Modify
-                                </a>
-                            </xar:if>
-                            <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
-                                <a href="#xarModURL('categories', 'admin', 'delete', array('itemid' => $cid))#" title="#$deletetitle#">
-                                    <xar:set name="imgfile">'icons/'.'delete.png'</xar:set>
-                                    <xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$deletetitle"/>
-                                </a>
-                            <xar:else />
-                                &#160;|&#160;
-                                <a href="#xarModURL('categories', 'admin', 'delete', array('itemid' => $cid))#" title="#$deletetitle#">
-                                    Delete
-                                </a>
+                            <xar:if condition="($cid ne 1) OR (xarUser::getVar('id') eq xarModVars::get('roles', 'admin'))">
+                                <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
+                                    <a href="#xarModURL('categories', 'admin', 'modify', array('itemid' => $cid))#" title="#$modifytitle#" style="margin-right: 5px">
+                                        <xar:set name="imgfile">'icons/'.'modify.png'</xar:set>
+                                        <xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$modifytitle"/>
+                                    </a>
+                                <xar:else />
+                                    <a href="#xarModURL('categories', 'admin', 'modify', array('itemid' => $cid))#" title="#$modifytitle#">
+                                        Modify
+                                    </a>
+                                </xar:if>
+                                <xar:if condition="xarModVars::get('categories', 'use_module_icons')">
+                                    <a href="#xarModURL('categories', 'admin', 'delete', array('itemid' => $cid))#" title="#$deletetitle#">
+                                        <xar:set name="imgfile">'icons/'.'delete.png'</xar:set>
+                                        <xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$deletetitle"/>
+                                    </a>
+                                <xar:else />
+                                    &#160;|&#160;
+                                    <a href="#xarModURL('categories', 'admin', 'delete', array('itemid' => $cid))#" title="#$deletetitle#">
+                                        Delete
+                                    </a>
+                                </xar:if>
                             </xar:if>
                         </xar:if>
                     </td>

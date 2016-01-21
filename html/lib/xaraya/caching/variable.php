@@ -8,7 +8,7 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
+ * @link http://www.xaraya.info
  *
  * @author mikespub
  * @author jsb
@@ -19,7 +19,6 @@
  */
 class xarVariableCache extends Object
 {
-// CHECKME: we won't actually support filesystem as storage here for security !?
     public static $cacheDir       = 'var/cache/variables';
     public static $cacheTime      = 7200;
     public static $cacheSizeLimit = 2097152;
