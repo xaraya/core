@@ -125,11 +125,12 @@ class CategoriesProperty extends DataProperty
             }
         }
         
-        // CHECKME: do we still need this?
         // Check the number of base categories against the number categories we have
-        // Remark: some of the selected categories might be empty here !
-        if (count($this->basecategories) != count($value)) {
-            $this->invalid = xarML("The number of categories and their base categories is not the same");
+        // Remark: some of the selected categories might be empty here!
+        // Consequence: if we are using e.g. checkboxes then we can have fewer categories found than base categories
+        // We can only check for more cats than base cats
+        if (count($this->basecategories) < count($value)) {
+            $this->invalid = xarML("The number of categories is greater than base categories");
             $this->value = null;
             return false;
         }
