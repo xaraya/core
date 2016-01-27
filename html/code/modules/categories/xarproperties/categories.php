@@ -575,7 +575,7 @@ class CategoriesProperty extends DataProperty
         $tocreate = array_diff($current_cats,$previous_cats);
         $toupdate = array_intersect($current_cats,$previous_cats);
 
-echo "<pre>";var_dump($previous_cats);var_dump($current_cats);
+echo "<pre>";var_dump($previous_cats);var_dump($current_cats);exit;
         // Set up for updating rows we want to delete
         if (!empty($tocreate)) {
             $q = new Query('UPDATE', $xartable['categories_linkage']); 
