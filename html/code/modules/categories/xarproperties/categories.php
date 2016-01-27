@@ -625,8 +625,8 @@ class CategoriesProperty extends DataProperty
         
         // Do the deletes
         if (!empty($todelete)) {
-            foreach($todelete as $this_key => $this_todelete) {
-                $key = explode('_',$this_key);
+            foreach($todelete as $this_todelete) {
+                $key = explode('_',$this_todelete);
                 $q = new Query('DELETE', $xartable['categories_linkage']); 
                 $q->eq('item_id', (int)$itemid);
                 $q->eq('property_id', $this->id);
@@ -641,8 +641,8 @@ class CategoriesProperty extends DataProperty
     
         // Do the creates
         if (!empty($tocreate)) {
-            foreach($tocreate as $this_key => $this_tocreate) {
-                $key = explode('_',$this_key);
+            foreach($tocreate as $this_tocreate) {
+                $key = explode('_',$this_tocreate);
                 $q = new Query('INSERT', $xartable['categories_linkage']); 
                 $q->addfield('item_id', (int)$itemid);
                 $q->addfield('module_id', $this->module_id);
