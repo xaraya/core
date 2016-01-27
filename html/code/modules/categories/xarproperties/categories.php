@@ -600,6 +600,7 @@ class CategoriesProperty extends DataProperty
                 
                 // Get the category we will insert into this row
                 $key = explode('_',array_shift($tocreate));
+                var_dump($key);exit;
                 $new_category = (int)$key[0];
                 $new_basecategory = (int)$key[1];
 
