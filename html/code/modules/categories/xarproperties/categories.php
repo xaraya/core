@@ -587,26 +587,34 @@ echo "<pre>";var_dump($links);var_dump($current_cats);exit;
         if (!empty($reusable)) {
             for ($i=0;$i<$reusable;$i++) {
                 // Get the of the row to delete we will overwrite
-                $this_category = array_shift($todelete);
-                $this_link = $links[$this_category];
+                $this_key = array_shift($todelete);
+                $key = explode('_',$this_key);
+                $this_category = (int)$key[0];
+                $this_basecategory = (int)$key[1];
+                
+                $this_link = $links[$this_key];
                 $id = $this_link['id'];
                 
-                // This will be row we overwrite
+                // This will be a row we overwrite
                 $q->eq('id', $id);
                 
                 // Get the category we will insert into this row
-                $new_category = array_shift($tocreate);
-                $q->addfield('category_id', $new_category);
-                
+                $key = explode('_',array_shift($tocreate));
+                $new_category = (int)$key[0];
+                $new_basecategory = (int)$key[1];
+
                 // Check if any other items need updating
+                if ($this_link['category_id'] != $category_id) {
+                    $q->addfield('category_id', $category_id);
+                }
                 if ($this_link['module_id'] != $this->module_id) {
                     $q->addfield('module_id', $this->module_id);
                 }
                 if ($this_link['itemtype'] != $this->itemtype) {
                     $q->addfield('itemtype', $this->itemtype);
                 }
-                if ($this_link['basecategory'] != $basecategory) {
-                    $q->addfield('basecategory', $basecategory);
+                if ($this_link['basecategory'] != $new_basecategory) {
+                    $q->addfield('basecategory', $new_basecategory);
                 }
                 $q->run();
             }
@@ -615,30 +623,38 @@ echo "<pre>";var_dump($links);var_dump($current_cats);exit;
         
         // Do the deletes
         if (!empty($todelete)) {
-            $q = new Query('DELETE', $xartable['categories_linkage']); 
-            $q->eq('item_id', (int)$itemid);
-            $q->eq('property_id', $this->id);
-            $q->eq('category_id', $todelete);
-            $q->run();
+            foreach($todelete as $this_key => $this_todelete) {
+                $key = explode('_',$this_key);
+                $q = new Query('DELETE', $xartable['categories_linkage']); 
+                $q->eq('item_id', (int)$itemid);
+                $q->eq('property_id', $this->id);
+                $q->eq('category_id', $key[0]);
+                $q->eq('basecategory', $key[1]);
+                $q->eq('module_id', $this->module_id);
+                $q->eq('itemtype', $this->itemtype);
+                $q->run();
+            }
         }
         unset($q);
     
         // Do the creates
         if (!empty($tocreate)) {
-            $q = new Query('INSERT', $xartable['categories_linkage']); 
-            $q->addfield('item_id', (int)$itemid);
-            $q->addfield('module_id', $this->module_id);
-            $q->addfield('itemtype', $this->itemtype);
-            $q->addfield('basecategory', $basecategory);
-            $q->addfield('property_id', $this->id);
-            foreach ($tocreate as $category) {
-                $q->addfield('category_id', $category);
+            foreach($tocreate as $this_key => $this_tocreate) {
+                $key = explode('_',$this_key);
+                $q = new Query('INSERT', $xartable['categories_linkage']); 
+                $q->addfield('item_id', (int)$itemid);
+                $q->addfield('module_id', $this->module_id);
+                $q->addfield('itemtype', $this->itemtype);
+                $q->addfield('basecategory', $key[1]);
+                $q->addfield('property_id', $this->id);
+                $q->addfield('category_id', $key[0]);
                 $q->run();
             }
         }
         unset($q);
 
         // Do the updates
+        /*
         if (!empty($toupdate)) {
             $q = new Query('UPDATE', $xartable['categories_linkage']); 
             $q->eq('item_id', (int)$itemid);
@@ -664,6 +680,7 @@ echo "<pre>";var_dump($links);var_dump($current_cats);exit;
             }
         }
         unset($q);
+        */
         return true;
     }
 }
