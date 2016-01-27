@@ -88,17 +88,15 @@ class CategoriesProperty extends DataProperty
         $this->basecategories = $basecats;
         // Get the categories from the form
         // Select type of each tree can be different
-        // CHECKME: only one tree and one basecategory per property
-        /*
+        $value = array();
         foreach ($this->basecategories as $key => $base_category) {
             $select_type = 3;
             if ($select_type == 1) $select_type = 'dropdown';
             else $select_type = 'multiselect';
             if (!xarVarFetch($name . '["categories"]', 'array', $categories, array(), XARVAR_NOT_REQUIRED)) return;
+            $value[$key] = $categories;
         }
-        */
-        if (!xarVarFetch($name . '["categories"]', 'array', $categories, array(), XARVAR_NOT_REQUIRED)) return;
-        return $this->validateValue($categories);
+        return $this->validateValue($value);
     }
 
     public function validateValue($value = null)
@@ -572,7 +570,7 @@ class CategoriesProperty extends DataProperty
         }
 
         // We need to delete and create a certain number of categories
-        // Instead we update the deletes to the values of the ctegories we need to create
+        // Instead we update the deletes to the values of the categories we need to create
         $reusable = min(count($todelete), count($tocreate));
         if (!empty($reusable)) {
             for ($i=0;$i<$reusable;$i++) {
@@ -646,10 +644,10 @@ class CategoriesProperty extends DataProperty
                     $q->addfield('itemtype', $this->itemtype);
                     $check_passed = false;
                 }
-                if ($this_link['basecategory'] != $this->basecategory) {
-                    $q->addfield('basecategory', $this->basecategory);
-                    $check_passed = false;
-                }
+//                if ($this_link['basecategory'] != $this->basecategory) {
+//                    $q->addfield('basecategory', $this->basecategory);
+//                    $check_passed = false;
+//                }
                 if (!$check_passed) $q->run();
             }
         }
