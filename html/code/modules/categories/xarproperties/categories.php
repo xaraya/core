@@ -570,7 +570,7 @@ class CategoriesProperty extends DataProperty
         
         // Calculate what rows require what actions
         $previous_cats = array_keys($links);
-        $current_cats  = $this->categories;
+        $current_cats  = array_keys($this->categories);
         $todelete = array_diff($previous_cats,$current_cats);
         $tocreate = array_diff($current_cats,$previous_cats);
         $toupdate = array_intersect($current_cats,$previous_cats);
