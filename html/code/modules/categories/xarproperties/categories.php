@@ -88,7 +88,6 @@ class CategoriesProperty extends DataProperty
         $this->basecategories = $basecats;
         // Get the categories from the form
         // Select type of each tree can be different
-        // CHECKME: only one tree and one basecategory per property
         /*
         foreach ($this->basecategories as $key => $base_category) {
             $select_type = 3;
@@ -129,15 +128,23 @@ class CategoriesProperty extends DataProperty
         // Remark: some of the selected categories might be empty here!
         // Consequence: if we are using e.g. checkboxes then we can have fewer categories found than base categories
         // We can only check for more cats than base cats
+        /*
         if (count($this->basecategories) < count($value)) {
             $this->invalid = xarML("The number of categories is greater than base categories");
             $this->value = null;
             return false;
         }
+        */
         
-        // We passed the checks, set the categories, amking sure we have integers
+        // We passed the checks, set the categories, making sure we have integers
+        // There can be several basecategories, and each can have several categories
         $this->categories = array();
-        foreach ($value as $category_id) $this->categories[] = (int)current($category_id);
+        foreach ($value as $baseid => $categories) {
+            foreach ($categories as $category) {
+                $category_id = (int)$category;
+                $this->categories[$category_id . "_" . (int)$this->basecategories[$baseid] = $category_id;
+            }
+        }
         
         // Keep a reference of the data of this property in $this->value, for saving or easy manipulation
         $this->value = $this->categories;
@@ -533,7 +540,8 @@ class CategoriesProperty extends DataProperty
         $q->eq('property_id', $this->id);
         $q->run();
         $links = array();
-        foreach ($q->output() as $row) $links[(int)$row['category_id']] = $row;
+        foreach ($q->output() as $row) 
+            $links[(int)$row['category_id'] . "_" . (int)$row['basecategory']] = $row;
         return $links;
     }
     
@@ -567,6 +575,7 @@ class CategoriesProperty extends DataProperty
         $tocreate = array_diff($current_cats,$previous_cats);
         $toupdate = array_intersect($current_cats,$previous_cats);
 
+echo "<pre>";var_dump($previous_cats);var_dump($current_cats);
         // Set up for updating rows we want to delete
         if (!empty($tocreate)) {
             $q = new Query('UPDATE', $xartable['categories_linkage']); 
