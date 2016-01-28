@@ -326,9 +326,9 @@ class CategoriesProperty extends DataProperty
 
         if (!empty($this->source)) {
             if (!isset($data['value'])) $data['value'] = array(1=>array(1 => $this->value));
-        } else {echo "X";
+        } else {
              // If we have no values passed, get an array of values (selected categories) for each tree
-            if (!isset($data['value'])) {var_dump($data['value']);
+            if (!isset($data['value'])) {
                 $data['value'] = array();
                 xarMod::apiLoad('categories');
                 $xartable =& xarDB::getTables();
