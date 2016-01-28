@@ -604,8 +604,8 @@ class CategoriesProperty extends DataProperty
                 $new_basecategory = (int)$key[1];
 
                 // Check if any other items need updating
-                if ($this_link['category_id'] != $category_id) {
-                    $q->addfield('category_id', $category_id);
+                if ($this_link['category_id'] != $new_category) {
+                    $q->addfield('category_id', $new_category);
                 }
                 if ($this_link['module_id'] != $this->module_id) {
                     $q->addfield('module_id', $this->module_id);
