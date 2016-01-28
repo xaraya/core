@@ -272,7 +272,7 @@ class CategoriesProperty extends DataProperty
             try {
                 $configuration = unserialize($this->configuration);
                 $configuration = $configuration['initialization_basecategories'];
-                $data['tree_name']    = array();var_dump($configuration);
+                $data['tree_name']    = array();
                 $base_categories      = array();
                 $data['include_self'] = array();
                 $data['select_type']  = array();
@@ -328,7 +328,7 @@ class CategoriesProperty extends DataProperty
             if (!isset($data['value'])) $data['value'] = array(1=>array(1 => $this->value));
         } else {
              // If we have no values passed, get an array of values (selected categories) for each tree
-            if (!isset($data['value'])) {
+            if (!isset($data['value'])) {var_dump($data['value']);
                 $data['value'] = array();
                 xarMod::apiLoad('categories');
                 $xartable =& xarDB::getTables();
