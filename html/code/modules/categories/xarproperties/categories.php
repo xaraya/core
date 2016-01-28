@@ -293,7 +293,7 @@ class CategoriesProperty extends DataProperty
             $base_categories      = array(0 => 1);
             $data['include_self'] = array(0 => true);
             $data['select_type']  = array(0 => 1);
-        }
+        }var_dump($base_categories);
         // Get an array of category trees, each having a base category as its head
         // CHECKME: what is this again?
         $filter = array(
