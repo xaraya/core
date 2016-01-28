@@ -269,7 +269,7 @@ class CategoriesProperty extends DataProperty
 
         // Retrieve the configuration settings for this property
         if (!empty($this->configuration)) {
-            try {var_dump($configuration);
+            try {
                 $configuration = unserialize($this->configuration);
                 $configuration = $configuration['initialization_basecategories'];
                 $data['tree_name']    = array();
@@ -289,7 +289,7 @@ class CategoriesProperty extends DataProperty
                 $data['select_type']  = array(0 => 1);
             }
        } else {
-            $data['tree_name']    = array(0 => 'New Tree');
+            $data['tree_name']    = array(0 => 'New Default Tree');
             $base_categories      = array(0 => 1);
             $data['include_self'] = array(0 => true);
             $data['select_type']  = array(0 => 1);
