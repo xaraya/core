@@ -288,7 +288,7 @@ class CategoriesProperty extends DataProperty
                 $data['include_self'] = array(0 => true);
                 $data['select_type']  = array(0 => 1);
             }
-       } else {{echo"Z";
+       } else {echo"Z";
             $data['tree_name']    = array(0 => 'New Tree');
             $base_categories      = array(0 => 1);
             $data['include_self'] = array(0 => true);
