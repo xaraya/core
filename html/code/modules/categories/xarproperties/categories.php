@@ -326,7 +326,7 @@ class CategoriesProperty extends DataProperty
 
         if (!empty($this->source)) {
             if (!isset($data['value'])) $data['value'] = array(1=>array(1 => $this->value));
-        } else {
+        } else {echo "X";
              // If we have no values passed, get an array of values (selected categories) for each tree
             if (!isset($data['value'])) {var_dump($data['value']);
                 $data['value'] = array();
