@@ -269,10 +269,10 @@ class CategoriesProperty extends DataProperty
 
         // Retrieve the configuration settings for this property
         if (!empty($this->configuration)) {
-            try {var_dump($this->configuration);
+            try {
                 $configuration = unserialize($this->configuration);
                 $configuration = $configuration['initialization_basecategories'];
-                $data['tree_name']    = array();
+                $data['tree_name']    = array();var_dump($configuration);
                 $base_categories      = array();
                 $data['include_self'] = array();
                 $data['select_type']  = array();
