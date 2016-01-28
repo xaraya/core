@@ -472,7 +472,7 @@ class CategoriesProperty extends DataProperty
         // Use the property's checkInput method to get the value
         $arrayprop = DataPropertyMaster::getProperty(array('name' => 'categorypicker'));
         $arrayprop->checkInput($this->propertyprefix . $this->id . '["initialization_basecategories"]');
-        
+        var_dump(unserialize($arrayprop->value));exit;
         // Assign the value to this configuration property for update
         $data['configuration']['initialization_basecategories'] = unserialize($arrayprop->value);
 
