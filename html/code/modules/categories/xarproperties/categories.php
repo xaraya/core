@@ -563,8 +563,6 @@ class CategoriesProperty extends DataProperty
         $xartable =& xarDB::getTables();
         
         // This property is bound
-        // Get the base category:there is only one for each bound property
-        $basecategory = (int)$this->initialization_basecategories[0][1][0][0];
         // Get the category links of this property and item
         $links = $this->getLinks($itemid);
         
