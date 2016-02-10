@@ -133,8 +133,8 @@ class UserListProperty extends SelectProperty
                 if (empty($user)) {
                     $user = xarUser::getVar('uname', $value);
                 }
-            } catch (NotFoundExceptions $e) {
-                // Nothing to do?
+            } catch (Exception $e) {
+                $user = '';
             }
         }
         $data['value'] = $value;
