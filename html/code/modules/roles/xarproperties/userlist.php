@@ -140,6 +140,8 @@ class UserListProperty extends SelectProperty
         $data['value'] = $value;
         $data['user'] = $user;
 
+        if (isset($data['state']))      $this->initialization_userlist_user_state = $data['state'];
+        
         return parent::showOutput($data);
     }
 

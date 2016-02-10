@@ -98,7 +98,7 @@
                             <td class="xar-align-center">
                                 <xar:var name="label">Remove this Privilege assignment</xar:var>
                                 <a href="#$removeurl#&amp;roleid=#$role['roleid']#" title="#$label#">
-                                    <img src="#sys::code()#modules/privileges/xarimages/delete.gif" class="xar-valign-middle"/>
+                                    <img src="#xarTpl::getImage('icons/'.'delete.png', 'base')#" class="xar-valign-middle"/>
                                 </a>
                             </td>
                         </tr>
