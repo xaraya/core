@@ -38,7 +38,7 @@ class SelectProperty extends DataProperty
     public $display_rows                    = 0;       // If there are more than these rows,display as a textbox
     public $display_option_link             = false;   // Wrap the output value in a link to the option's display page
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->template  = 'dropdown';
@@ -171,7 +171,7 @@ class SelectProperty extends DataProperty
      * 
      * @param void N/A
      */
-    function getOptions()
+    public function getOptions()
     {
         if (count($this->options) > 0) {
             return $this->options;
@@ -273,7 +273,7 @@ class SelectProperty extends DataProperty
      * @param void N/A
      * @return array Array containing first line
      */
-    function getFirstline()
+    public function getFirstline()
     {
         $firstline = $this->initialization_firstline;
         if (empty($firstline)) return array();
@@ -310,7 +310,7 @@ class SelectProperty extends DataProperty
      *                - true, if an option exists whose store value is $this->value<br/>
      *                - false, if no such option exists<br/>
      */
-    function getOption($check = false)
+    public function getOption($check = false)
     {
         if (!$this->transform) return $this->value;
 
@@ -365,7 +365,7 @@ class SelectProperty extends DataProperty
      * Alias for the getOption method
      * This make the property consistent with standard usage
      */
-    function getValue()
+    public function getValue()
     {
         return $this->getOption(false);
     }
@@ -383,7 +383,7 @@ class SelectProperty extends DataProperty
      * @param $type string the type of configuration you want to check (typically only initialization)
      * @return boolean true if the configuration is the same as last time we checked, false otherwise
      */
-    function isSameConfiguration($type = 'initialization')
+    public function isSameConfiguration($type = 'initialization')
     {
         if (empty($this->old_config)) {
             $this->old_config = array();
