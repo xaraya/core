@@ -48,12 +48,12 @@
                 </xar:foreach>
             </xar:if>
         <xar:else />
-        <p>
-          Specify your own layout '#$layout#' here...
-        </p>
-        <p>
-          You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype
-        </p>
+            <p>
+              Specify your own layout '#$layout#' here...
+            </p>
+            <p>
+              You can also specify a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype
+            </p>
         </xar:if>
 
         <xar:template file="dataproperty_additions" module="base"/>
