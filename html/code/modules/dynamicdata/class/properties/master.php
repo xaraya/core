@@ -73,6 +73,9 @@ class DataPropertyMaster extends Object
         if(empty($args['allprops']))
             $query .= " AND status > 0 ";
 
+        if(!empty($args['status']))
+            $query .= " AND status IN " . implode(',', $args['status']);
+
         $query .= " ORDER BY seq ASC, id ASC";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
