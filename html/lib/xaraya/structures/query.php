@@ -2184,12 +2184,12 @@ class Query
         foreach ($this->conditions as $key => $condition) {
             try {
                 $field = $this->_deconstructfield($condition['field1']);
-                if (in_array($field1['table'], $tablenames) unset($this->conditions[$key]);
+                if (in_array($field1['table'], $tablenames)) unset($this->conditions[$key]);
                 break;
             } catch (Exception $e) {}
             try {
                 $field = $this->_deconstructfield($condition['field2']);
-                if (in_array($field1['table'], $tablenames) unset($this->conditions[$key]);
+                if (in_array($field1['table'], $tablenames)) unset($this->conditions[$key]);
                 break;
             } catch (Exception $e) {}
         }
