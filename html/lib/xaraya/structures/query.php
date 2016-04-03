@@ -2177,7 +2177,7 @@ class Query
         
         // Remove fields that reference this table
         foreach ($this->fields as $key => $field) {
-            if (in_array($field1['table'], $tablenames) unset($this->fields[$key]);
+            if (in_array($field1['table'], $tablenames)) unset($this->fields[$key]);
         }
 
         // Remove conditions that reference this table
