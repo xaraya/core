@@ -87,7 +87,7 @@ $cachingConfiguration['Object.CacheMethods'] = array('view' => 1, 'display' => 1
 
 
 // Enable variable cache or not
-$cachingConfiguration['Variable.CacheIsEnabled'] = 1;
+$cachingConfiguration['Variable.CacheIsEnabled'] = 0;
 // Maximum life time of variable cache in seconds
 $cachingConfiguration['Variable.TimeExpiration'] = 7200;
 // Store the cached variables in filesystem, database or memcache. Empty defaults to database
