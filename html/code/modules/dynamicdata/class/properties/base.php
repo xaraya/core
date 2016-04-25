@@ -378,7 +378,7 @@ class DataProperty extends Object implements iDataProperty
     }
     function setInputStatus($status)
     {
-        $this->status = $status - $this->getDisplayStatus();
+        $this->status = $status + $this->getDisplayStatus();
     }
 
     /**
