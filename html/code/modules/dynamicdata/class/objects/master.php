@@ -135,9 +135,6 @@ class DataObjectMaster extends Object
                 $this->configuration = $configargs;
             } catch (Exception $e) {}
         }
-
-        // set the specific item id (or 0)
-//        if(isset($args['itemid'])) $this->itemid = $args['itemid'];
         
         sys::import('xaraya.structures.query');
         $this->dataquery = new Query();
@@ -157,15 +154,11 @@ class DataObjectMaster extends Object
             $this->dataquery->addconditions($conditions);
         }
         
-        // always mark the internal DD objects as 'private' (= items 1-3 in xar_dynamic_objects, see xarinit.php)
+        // Always mark the internal DD objects as 'private' (= items 1-3 in xar_dynamic_objects, see xarinit.php)
         if (!empty($this->objectid) && $this->objectid == 1 && !empty($this->itemid) && $this->itemid <= 3) {
             $this->visibility = 'private';
-/* CHECKME: issue warning for static table as well ?
-        } elseif (empty($this->objectid) && !empty($this->table)) {
-            $this->visibility = 'static table';
-*/
         }
-//        $this->dataquery->qecho();echo "<br/><br />";
+
         // build the list of relevant data stores where we'll get/set our data
         try {
             $this->getDataStore();
@@ -538,7 +531,7 @@ class DataObjectMaster extends Object
             ) = $result->fields;
             $objects[$info['objectid']] = $info;
         }
-//        $result->Close();
+        $result->close();
         return $objects;
     }
 
@@ -1057,27 +1050,6 @@ class DataObjectMaster extends Object
             $displayvalues[$label] = $property->showOutput();
         }
         return $displayvalues;
-
-        /* FIXME: the status value isn't being used correctly I think
-        if(count($args['fieldlist']) > 0 || !empty($this->status))
-        {
-            foreach($args['fieldlist'] as $name)
-                if(isset($this->properties[$name]))
-                {
-                    $label = xarVarPrepForDisplay($this->properties[$name]->label);
-                    $displayvalues[$label] = $this->properties[$name]->showOutput();
-                }
-        }
-        else
-        {
-            foreach(array_keys($this->properties) as $name)
-            {
-                $label = xarVarPrepForDisplay($this->properties[$name]->label);
-                $displayvalues[$label] = $this->properties[$name]->showOutput();
-            }
-        }
-        return $displayvalues;
-        */
     }
 
     /**
@@ -1246,7 +1218,7 @@ class DataObjectMaster extends Object
         }
 
         // add extra info for traditional hook modules
-// FIXME: THis causes problems if you have a property named "module", "itemtype" etc.
+// FIXME: This causes problems if you have a property named "module", "itemtype" etc.
 //        $this->hookvalues['module'] = xarMod::getName($this->moduleid);
 //        $this->hookvalues['itemtype'] = $this->itemtype;
 //        $this->hookvalues['itemid'] = $this->itemid;
@@ -1333,7 +1305,7 @@ class DataObjectMaster extends Object
                     foreach ($relationargs as $key => $value) {
                     
                         // Support simple array form
-    //                    if (is_array($value)) $value = current($value);
+                        // if (is_array($value)) $value = current($value);
 
                         // Bail if we are missing anything
                         if (count($value) < 2) continue;
@@ -1391,7 +1363,7 @@ class DataObjectMaster extends Object
                     foreach ($objectargs as $key => $value) {
 
                         // Support simple array form
-    //                    if (is_array($value)) $value = current($value);
+                        // if (is_array($value)) $value = current($value);
 
                         // Bail if we are missing anything
                         if (count($value) < 2) continue;
@@ -1557,24 +1529,6 @@ class DataObjectMaster extends Object
         } else {
             return xarSecurity::check($mask,0,'Item',$this->moduleid.':'.$this->itemtype.':'.$itemid);
         }
-/*
-        $access_method = $action . '_access';
-        $access = isset($this->$access_method) ? $this->$access_method :
-            array('group' => 0, 'level' => 100, 'failure' => 0);
-        // Decide whether this block is displayed to the current user
-        $args = array(
-            'module' => $this->module,
-            'component' => 'Block',
-            'instance' => $this->type . ":" . $this->name . ":" . $this->bid,
-            'group' => $access['group'],
-            'level' => $access['level'],
-        );
-        if (!isset(self::$access_property)) {
-            sys::import('modules.dynamicdata.class.properties.master');
-            self::$access_property = DataPropertyMaster::getProperty(array('name' => 'access'));
-        }
-        return self::$access_property->check($args);
-*/
     }
 
     /**

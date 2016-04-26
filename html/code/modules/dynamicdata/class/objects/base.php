@@ -13,9 +13,6 @@
 sys::import('modules.dynamicdata.class.objects.master');
 sys::import('modules.dynamicdata.class.objects.interfaces');
 
-// FIXME: only needed for the DataPropertyMaster::DD_* constants - handle differently ?
-//sys::import('modules.dynamicdata.class.properties.master');
-
 /**
  * DataObject Base class
  */
@@ -23,9 +20,6 @@ class DataObject extends DataObjectMaster implements iDataObject
 {
     public $itemid;
     public $missingfields  = array(); // reference to fields not found by checkInput
-
-// CHECKME: should exclude VIEWONLY here, as well as DISABLED (and IGNORED ?)
-//    public $status      = 65;       // inital status is active and can add/modify
 
     /**
      * Inherits from DataObjectMaster and sets the requested item id
@@ -298,8 +292,6 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         // If a different itemid was passed, get that item before we display
         if (isset($args['itemid']) && ($args['itemid'] != $this->properties[$this->primary]->value)) $this->getItem(array('itemid' => $args['itemid']));
-
-// CHECKME: do we always transform here if we're primary ?
 
         // Note: you can preset the list of properties to be transformed via $this->hooktransform
 

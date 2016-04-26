@@ -150,13 +150,6 @@ class DataPropertyMaster extends Object
         // add it to the list of properties
         $objectref->properties[$property->name] =& $property;
 
-/*
-        // if the property wants a reference, give it
-        if ($property->include_reference) {
-            $objectref->properties[$property->name]->objectref =& $objectref;
-        }
-*/
-        
         // Expose the object configuration to the property
         $objectref->properties[$property->name]->objectconfiguration =& $objectref->configuration;
 
