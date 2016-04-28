@@ -531,7 +531,7 @@ class DataObjectMaster extends Object
             ) = $result->fields;
             $objects[$info['objectid']] = $info;
         }
-//        $result->close();
+        $result->close();
         return $objects;
     }
 
