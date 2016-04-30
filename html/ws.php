@@ -69,7 +69,7 @@ function xarWebservicesMain()
         case  'xmlrpc':
             // xmlrpc server does automatic processing directly
             if (xarModIsAvailable('xmlrpcserver')) {
-                $server = xarModAPIFunc('xmlrpcserver','user','initxmlrpcserver');
+                $server = xarMod::apiFunc('xmlrpcserver','user','initxmlrpcserver');
             }
             if (!$server) {
                 xarLogMessage("Could not load XML-RPC server, giving up");
@@ -102,7 +102,7 @@ function xarWebservicesMain()
                     $error['errordata'] = xarML('Bad TrackBack URL.');
                 }
 
-                $server = xarModAPIFunc('trackback','user','receive',
+                $server = xarMod::apiFunc('trackback','user','receive',
                                         array('url'     =>  $url,
                                               'title'   =>  $title,
                                               'blogname'=>  $blogname,
@@ -122,7 +122,7 @@ function xarWebservicesMain()
             if (!extension_loaded('soap')) {
             }
             if(xarModIsAvailable('soapserver')) {
-                $server = xarModAPIFunc('soapserver','user','initsoapserver');
+                $server = xarMod::apiFunc('soapserver','user','initsoapserver');
 
                 if (!$server) {
                     // erm, where does this one come from? lucky because we did the api func?
@@ -144,7 +144,7 @@ function xarWebservicesMain()
         case 'webdav' :
             xarLogMessage("WebDAV request");
             if(xarModIsAvailable('webdavserver')) {
-                $server = xarModAPIFunc('webdavserver','user','initwebdavserver');
+                $server = xarMod::apiFunc('webdavserver','user','initwebdavserver');
                 if(!$server) {
                     xarLogMessage('Could not load webdav server, giving up');
                     // TODO: we need a specific handler for this
@@ -165,7 +165,7 @@ function xarWebservicesMain()
         case 'flashremoting' :
               xarLogMessage("FlashRemoting request");
             if(xarModIsAvailable('flashservices')) {
-              $server = xarModAPIFunc('flashservices','user','initflashservices');
+              $server = xarMod::apiFunc('flashservices','user','initflashservices');
               if (is_object($server)) {
                   $server->service();
 
