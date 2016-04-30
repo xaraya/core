@@ -20,23 +20,20 @@ sys::import('modules.dynamicdata.class.objects.interfaces');
 
 class DataObjectList extends DataObjectMaster implements iDataObjectList
 {
-    public $prelist  = true;           // run preList methods or not
-    public $itemids  = array();           // the list of item ids used in data stores
+    public $prelist  = true;           // Run preList methods or not
+    public $itemids  = array();        // The list of item ids used in data stores
     public $where    = array();
     public $sort     = array();
-    public $groupby  = array();     // the list of property names to group by (if any) - see also isgrouped
+    public $groupby  = array();        // The list of property names to group by (if any) - see also isgrouped
     public $numitems = null;
     public $startnum = null;
-    public $count    = 0;           // specify if you want DD to count items before getting them (e.g. for the pager)
+    public $count    = 0;              // Specify if you want DD to count items before getting them (e.g. for the pager)
 
-    public $items = array();       // the result array of itemid => (property name => value)
-    public $itemcount = null;       // the number of items given by countItems()
+    public $items = array();           // The result array of itemid => (property name => value)
+    public $itemcount = null;          // The number of items given by countItems()
 
-// CHECKME: should exclude DISPLAYONLY here, as well as DISABLED (and IGNORED ?)
-//    public $status      = 65;           // inital status is active and can add/modify
-
-    public $fieldsummary = null;          // do we show a summary for numeric fields (sum, min, max, avg, ...) ?
-    public $fieldsummarylabel = null;     // what label should we use in the options for this summary ?
+    public $fieldsummary = null;       // Do we show a summary for numeric fields (sum, min, max, avg, ...) ?
+    public $fieldsummarylabel = null;  // What label should we use in the options for this summary ?
 
     /**
      * Inherits from DataObjectMaster and sets the requested item ids, sort, where, ...
@@ -126,6 +123,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         return true;
     }
+    
     public function applyFilters(Array $args = array())
     {
         $properties = $this->getProperties($args);
@@ -205,6 +203,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         return true;
     }
+    
     /**
      * Set arguments for the DataObjectList class
      *
@@ -226,8 +225,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if (!is_array($this->fieldlist)) $this->fieldlist = explode(',',$this->fieldlist);
 
         $this->getDataStore(true);
-        // If a fieldlist was passed, only get the appropriate datastores
-//        if (isset($args['fieldlist'])) $this->getDataStores(true);
 
         // REMOVEME: secondary is now always false
         // add where clause if itemtype is one of the properties (e.g. articles)
