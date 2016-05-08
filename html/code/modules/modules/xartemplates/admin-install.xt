@@ -134,7 +134,7 @@
         <!-- This section deals with install errors. -->
         <xar:template file="install-errors" type="module"/>
         <p>
-            <a href="#xarModURL('modules','admin','list')#">Go back to the modules list</a>
+            <a href="#xarModURL('modules','admin','view')#">Go back to the modules list</a>
         </p>
     </div>
 </xar:template>
