@@ -69,7 +69,7 @@ function xarWebservicesMain()
 /**
  * Entry point for XMLRPC web service
  */
-        case  'xmlrpc':
+        case  'xmlrpc' :
             // xmlrpc server does automatic processing directly
             if (xarModIsAvailable('xmlrpcserver')) {
                 $server = xarMod::apiFunc('xmlrpcserver','user','initxmlrpcserver');
@@ -77,11 +77,10 @@ function xarWebservicesMain()
             if (!$server) {
                 xarLogMessage("Could not load XML-RPC server, giving up");
                 // TODO: we need a specific handler for this
-                throw new Exception('Could not load XML-RPC server');
+                echo xarML('Could not load XML-RPC server');
             } else {
                 xarLogMessage("Created XMLRPC server");
             }
-
         break;
 /**
  * Entry point for trackback web service
@@ -119,7 +118,7 @@ function xarWebservicesMain()
             if (!$server) {
                 xarLogMessage("Could not load trackback server, giving up");
                 // TODO: we need a specific handler for this
-                throw new Exception('Could not load trackback server');
+                echo xarML('Could not load trackback server');
             } else {
                 xarLogMessage("Created trackback server");
             }
@@ -145,7 +144,7 @@ function xarWebservicesMain()
             if (!$server) {
                 xarLogMessage("Could not load SOAP server, giving up");
                 // TODO: we need a specific handler for this
-                throw new Exception('Could not load SOAP server');
+                echo xarML('Could not load SOAP server');
             } else {
                 xarLogMessage("Created SOAP server");
             }
@@ -169,7 +168,7 @@ function xarWebservicesMain()
             if (!$server) {
                 xarLogMessage("Could not load webdav server, giving up");
                 // TODO: we need a specific handler for this
-                throw new Exception('Could not load webdav server');
+                echo xarML('Could not load webdav server');
             } else {
                 xarLogMessage("Created webdav server");
             }
@@ -192,7 +191,7 @@ function xarWebservicesMain()
             if (!$server) {
                 xarLogMessage("Could not load flashremoting server, giving up");
                 // TODO: we need a specific handler for this
-                throw new Exception('Could not load flashremoting server');
+                echo xarML('Could not load flashremoting server');
             } else {
                 xarLogMessage("Created flashremoting server");
             }
@@ -224,7 +223,7 @@ function xarWebservicesMain()
                 } else {
                     xarLogMessage("No wsdl location available, giving up");
                     // TODO: we need a specific handler for this
-                    throw new Exception('Could not move to wsdl location. URL not found.');
+                    echo xarML('Could not move to wsdl location. URL not found.');
                 }
             } else {
                 // TODO: show something nice(r) ?
@@ -233,7 +232,8 @@ function xarWebservicesMain()
 <a href="ws.php?type=trackback">Trackback Interface</a><br />
 <a href="ws.php?type=soap">SOAP Interface</a><br/>
 <a href="ws.php?type=webdav">WebDAV Interface</a><br/>
-<a href="ws.php?type=flashremoting">FLASHREMOTING Interface</a>';
+<a href="ws.php?type=flashremoting">FLASHREMOTING Interface</a><br/>
+<a href="ws.php?type=native">Native Xaraya Interface</a>';
         }
     }
 }
