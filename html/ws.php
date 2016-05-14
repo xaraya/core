@@ -62,10 +62,13 @@ function xarWebservicesMain()
      create an instance of an that server and
      serve the request according the ther servers protocol
     */
-    xarVarFetch('type','enum:rest:xmlrpc:trackback:soap:webdav:flashremoting',$type,'');
+    xarVarFetch('type','enum:rest:xmlrpc:trackback:soap:webdav:flashremoting:native',$type,'');
     xarLogMessage("In webservices with type=$type");
     $server=false;
     switch($type) {
+/**
+ * Entry point for XMLRPC web service
+ */
         case  'xmlrpc':
             // xmlrpc server does automatic processing directly
             if (xarModIsAvailable('xmlrpcserver')) {
@@ -80,6 +83,9 @@ function xarWebservicesMain()
             }
 
         break;
+/**
+ * Entry point for trackback web service
+ */
         // Hmmm, this seems a bit of a strange duck in this place here.
         // Trackback with its mixed spec. i.e. not an xml formatted request, but a simple POST
         // It doesnt mean however we can't treat the thing the same, ergo move the specifics out of here
@@ -118,6 +124,9 @@ function xarWebservicesMain()
                 xarLogMessage("Created trackback server");
             }
         break;
+/**
+ * Entry point for SOAP web service
+ */
         case 'soap' :
             if (!extension_loaded('soap')) {
             }
@@ -141,6 +150,9 @@ function xarWebservicesMain()
                 xarLogMessage("Created SOAP server");
             }
         break;
+/**
+ * Entry point for WebDAV web service
+ */
         case 'webdav' :
             xarLogMessage("WebDAV request");
             if(xarModIsAvailable('webdavserver')) {
@@ -162,6 +174,9 @@ function xarWebservicesMain()
                 xarLogMessage("Created webdav server");
             }
         break;
+/**
+ * Entry point for Flashremoting web service
+ */
         case 'flashremoting' :
               xarLogMessage("FlashRemoting request");
             if(xarModIsAvailable('flashservices')) {
@@ -182,7 +197,22 @@ function xarWebservicesMain()
                 xarLogMessage("Created flashremoting server");
             }
         break;
-
+/**
+ * Entry point for native web service
+ *
+ * This works like a "normal" Xaraya module call, but depends wsapi functions (if they exist) in each module
+ */
+        case 'native' :
+            xarVarFetch('module', 'str:1', $module, 'base', XARVAR_NOT_REQUIRED);
+            xarVarFetch('func', 'str:1', $func, 'default', XARVAR_NOT_REQUIRED);
+            try {
+                $request = xarController::getRequest(xarServer::getCurrentURL());
+                $data = xarMod::apiFunc($module, 'ws', $func, $request->getFunctionArgs());
+            } catch (Exception $e) {
+                $data = xarML('Unknown web service request');
+            }
+            echo $data;
+        break;
         default:
             if (xarServer::getVar('QUERY_STRING') == 'wsdl') {
                 // FIXME: for now wsdl description is in soapserver module
