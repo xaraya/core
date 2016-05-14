@@ -17,8 +17,11 @@
  */
 function base_wsapi_default(Array $args=array())
 {
-    $result = xarML('The following parameters were sent: ');
-    foreach ($args as $k => $v) $result .= '[' . $k . '] => "' . $v . '";';
+    $result = xarML('This is a default return to a web service call.  ');
+    if (!empty($args)) {
+        $result .= xarML('The following parameters were sent: ');
+        foreach ($args as $k => $v) $result .= '[' . $k . '] => "' . $v . '";';
+    }
     return $result;
 }
 
