@@ -203,8 +203,8 @@ function xarWebservicesMain()
  * This works like a "normal" Xaraya module call, but depends wsapi functions (if they exist) in each module
  */
         case 'native' :
-            xarVarFetch('module', 'str:1', $module, 'base', XARVAR_NOT_REQUIRED);
-            xarVarFetch('func', 'str:1', $func, 'default', XARVAR_NOT_REQUIRED);
+            xarVarFetch('module', 'str:1', $module, 'base',    XARVAR_NOT_REQUIRED);
+            xarVarFetch('func',   'str:1', $func,   'default', XARVAR_NOT_REQUIRED);
             try {
                 $request = xarController::getRequest(xarServer::getCurrentURL());
                 $data = xarMod::apiFunc($module, 'ws', $func, $request->getFunctionArgs());
