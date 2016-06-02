@@ -85,7 +85,7 @@ class PropertyRegistration extends DataContainer
 
 /*
         foreach($this->reqmodules as $required)
-            if(!xarModIsAvailable($required))
+            if(!xarMod::isAvailable($required))
                 return false;
 */
         $dbconn = xarDB::getConn();

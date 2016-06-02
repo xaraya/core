@@ -41,7 +41,7 @@ function mail_admin_modifyconfig()
         $data['redirectaddress']='';
     }
 
-    if (xarModIsAvailable('scheduler')) {
+    if (xarMod::isAvailable('scheduler')) {
         $intervals = xarMod::apiFunc('scheduler','user','intervals');
         $data['intervals'][] = array('id' => '', 'name' => xarML('not supported'));
         foreach($intervals as $id => $name) {
@@ -170,7 +170,7 @@ function mail_admin_modifyconfig()
                     xarModVars::set('mail', 'redirectsending', $redirectsending);
                     xarModVars::set('mail', 'redirectaddress', $redirectaddress);
 
-                    if (xarModIsAvailable('scheduler')) {
+                    if (xarMod::isAvailable('scheduler')) {
                         if (!xarVarFetch('interval', 'str:1', $interval, '', XARVAR_NOT_REQUIRED)) return;
                         // see if we have a scheduler job running to send queued mail
                         $job = xarMod::apiFunc('scheduler','user','get',

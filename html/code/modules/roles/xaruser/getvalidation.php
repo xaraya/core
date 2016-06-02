@@ -61,7 +61,7 @@ function roles_user_getvalidation()
         //fallback to?  This is not a core module. Leave for now once until we are sure the default is set elsewhere.
         $regmodule = 'registration';
     }
-    if (!xarModIsAvailable($regmodule)) {
+    if (!xarMod::isAvailable($regmodule)) {
         //we have to provide an error, we can't really go on
         throw new ModuleNotFoundException($regmodule);
     }
