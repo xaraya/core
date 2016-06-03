@@ -22,6 +22,7 @@
         function createItem(Array $args = array())
         {
             if (isset($args['entry'])) {
+                // This is a create via an import
                 extract($args);
 
                 // there may not be an entry point passed
@@ -54,12 +55,20 @@
                 // do the Celko dance and update all the left/right values
                 return xarMod::apiFunc('categories','admin','updatecelkolinks',array('cid' => $id, 'type' => 'create'));
             } else {
-                // This is a programatic create
-                // Make the new category the last child of its parent
-                $this->properties['position']->rightorleft = 'right';
-                $this->properties['position']->inorout = 'in';
-                $this->properties['position']->reference_id = $args['parent_id'];
+                // This is a "normal" programatic create
+                // The dataobject may already contain all the information it needs
+                // This would be when we are coming from a page submit
+                // or we may not have a complete position for the new category but only a parent ID to hang it from
+                // We then have to complete the information for the new caegory
+                if (isset($args['parent_id'])) {
+                    // Make the new category the last child of its parent
+                    $this->properties['position']->reference_id = $args['parent_id'];
+                    $this->properties['position']->rightorleft = 'right';
+                    $this->properties['position']->inorout = 'in';
+                }
+                // Now that we have all the information, run the create
                 $id = parent::createItem($args);
+                return $id;
             }
         }
     }
