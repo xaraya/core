@@ -177,8 +177,8 @@ class CelkoPositionProperty extends DataProperty
                     if (
                        !($point_of_insertion = $this->find_point_of_insertion($this->inorout, 
                                                                               $this->rightorleft, 
-                                                                              $this->left, 
-                                                                              $this->right))
+                                                                              (int)$this->left, 
+                                                                              (int)$this->right))
                       )
                     {
                        return false;

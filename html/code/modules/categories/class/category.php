@@ -54,6 +54,11 @@
                 // do the Celko dance and update all the left/right values
                 return xarMod::apiFunc('categories','admin','updatecelkolinks',array('cid' => $id, 'type' => 'create'));
             } else {
+                // This is a programatic create
+                // Make the new category the last child of its parent
+                $this->properties['position']->rightorleft = 'right';
+                $this->properties['position']->inorout = 'in';
+                $this->properties['position']->reference_id = $args['parent_id'];
                 $id = parent::createItem($args);
             }
         }

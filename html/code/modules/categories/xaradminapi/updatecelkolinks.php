@@ -29,9 +29,13 @@ function categories_adminapi_updatecelkolinks($args)
         throw new BadParameterExcepton(null,$msg);
     }
 
-    $cat = xarMod::apiFunc('categories', 'user', 'getcatinfo', array('cid'=>$cid));
-    $catparent = xarMod::apiFunc('categories', 'user', 'getcatinfo', array('cid'=>$cat['parent']));
-    $point_of_insertion = $catparent['right'];
+    //Get the information on the category and its parent
+    sys::import('modules.categories.class.worker');
+    $worker = new CategoryWorker();
+    $cat = $worker->getcatinfo($cid);
+    $catparent = $worker->getcatinfo($cat['parent_id']);
+    
+    $point_of_insertion = $catparent['right_id'];
 
     if ($type == 'create') {
 
@@ -67,34 +71,34 @@ function categories_adminapi_updatecelkolinks($args)
             if (!$result) return;
         }
     } elseif ($type == 'update') {
-       $size = $cat['right'] - $cat['left'] + 1;
-       $distance = $point_of_insertion - $cat['left'];
+       $size = $cat['right_id'] - $cat['left_id'] + 1;
+       $distance = $point_of_insertion - $cat['left_id'];
 
        // If necessary to move then evaluate
        if ($distance != 0) { // It�s Moving, baby!  Do the Evolution!
           if ($distance > 0)
           { // moving forward
-              $distance = $point_of_insertion - $cat['right'] - 1;
+              $distance = $point_of_insertion - $cat['right_id'] - 1;
               $deslocation_outside = -$size;
-              $between_string = ($cat['right'] + 1)." AND ".($point_of_insertion - 1);
+              $between_string = ($cat['right_id'] + 1)." AND ".($point_of_insertion - 1);
           }
           else
           { // $distance < 0 (moving backward)
               $deslocation_outside = $size;
-              $between_string = $point_of_insertion." AND ".($cat['left'] - 1);
+              $between_string = $point_of_insertion." AND ".($cat['left_id'] - 1);
           }
 
           // TODO: besides portability, also check performance here
           $SQLquery = "UPDATE $categoriestable SET
                        left_id = CASE
-                        WHEN left_id BETWEEN ".$cat['left']." AND ".$cat['right']."
+                        WHEN left_id BETWEEN ".$cat['left_id']." AND ".$cat['right_id']."
                            THEN left_id + ($distance)
                         WHEN left_id BETWEEN $between_string
                            THEN left_id + ($deslocation_outside)
                         ELSE left_id
                         END,
                       right_id = CASE
-                        WHEN right_id BETWEEN ".$cat['left']." AND ".$cat['right']."
+                        WHEN right_id BETWEEN ".$cat['left_id']." AND ".$cat['right_id']."
                            THEN right_id + ($distance)
                         WHEN right_id BETWEEN $between_string
                            THEN right_id + ($deslocation_outside)
