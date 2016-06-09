@@ -190,17 +190,11 @@ function roles_userapi_getall(Array $args=array())
     $result = $stmt->executeQuery($bindvars);
 
     // Put users into result array
-    sys::import('modules.dynamicdata.class.properties.master');
-    $nameproperty = DataPropertyMaster::getProperty(array('name' => 'name'));
-    
     $roles = array();
     while($result->next()) {
         list($id, $uname, $name, $email, $pass, $state, $date_reg) = $result->fields;
         if (xarSecurityCheck('ReadRoles', 0, 'Roles', "$uname")) {
 
-            $nameproperty->value = $name;
-            $name = $nameproperty->getValue();
-            
             if (!empty($idlist)) {
                 $roles[$id] = array(
                     'id'       => (int) $id,
