@@ -47,11 +47,13 @@ xarWebservicesMain();
  *
  * Entry points for client:
  * XMLRPC        : http://host.com/ws.php?type=xmlrpc
+ * JSONRPC       : http://host.com/ws.php?type=jsonrpc
  * SOAP          : http://host.com/ws.php?type=soap
  * TRACKBACK     : http://host.com/ws.php?type=trackback (Is this still right?)
  * WEBDAV        : http://host.com/ws.php?type=webdav
  * FLASHREMOTING : http://host.com/ws.php?type=flashremoting
  * REST          : http://host.com/ws.php?type=rest
+ * NATIVE        : http://host.com/ws.php?type=native
  *
  * @access public
  */
@@ -71,7 +73,7 @@ function xarWebservicesMain()
  */
         case  'xmlrpc' :
             // xmlrpc server does automatic processing directly
-            if (xarModIsAvailable('xmlrpcserver')) {
+            if (xarMod::isAvailable('xmlrpcserver')) {
                 $server = xarMod::apiFunc('xmlrpcserver','user','initxmlrpcserver');
             }
             if (!$server) {
@@ -83,13 +85,29 @@ function xarWebservicesMain()
             }
         break;
 /**
+ * Entry point for JSONRPC web service
+ */
+        case  'jsonrpc' :
+            // jsonrpc server does automatic processing directly
+            if (xarMod::isAvailable('jsonrpcserver')) {
+                $server = xarMod::apiFunc('jsonrpcserver','user','initjsonrpcserver');
+            }
+            if (!$server) {
+                xarLogMessage("Could not load JSON-RPC server, giving up");
+                // TODO: we need a specific handler for this
+                echo xarML('Could not load JSON-RPC server');
+            } else {
+                xarLogMessage("Created JSONRPC server");
+            }
+        break;
+/**
  * Entry point for trackback web service
  */
         // Hmmm, this seems a bit of a strange duck in this place here.
         // Trackback with its mixed spec. i.e. not an xml formatted request, but a simple POST
         // It doesnt mean however we can't treat the thing the same, ergo move the specifics out of here
         case  'trackback':
-            if (xarModIsAvailable('trackback')) {
+            if (xarMod::isAvailable('trackback')) {
                 $error = array();
                 if (!xarVarFetch('url', 'str:1:', $url)) {
                     // Gots to return the proper error reply
@@ -129,7 +147,7 @@ function xarWebservicesMain()
         case 'soap' :
             if (!extension_loaded('soap')) {
             }
-            if(xarModIsAvailable('soapserver')) {
+            if(xarMod::isAvailable('soapserver')) {
                 $server = xarMod::apiFunc('soapserver','user','initsoapserver');
 
                 if (!$server) {
@@ -154,7 +172,7 @@ function xarWebservicesMain()
  */
         case 'webdav' :
             xarLogMessage("WebDAV request");
-            if(xarModIsAvailable('webdavserver')) {
+            if(xarMod::isAvailable('webdavserver')) {
                 $server = xarMod::apiFunc('webdavserver','user','initwebdavserver');
                 if(!$server) {
                     xarLogMessage('Could not load webdav server, giving up');
@@ -178,7 +196,7 @@ function xarWebservicesMain()
  */
         case 'flashremoting' :
               xarLogMessage("FlashRemoting request");
-            if(xarModIsAvailable('flashservices')) {
+            if(xarMod::isAvailable('flashservices')) {
               $server = xarMod::apiFunc('flashservices','user','initflashservices');
               if (is_object($server)) {
                   $server->service();
@@ -194,6 +212,24 @@ function xarWebservicesMain()
                 echo xarML('Could not load flashremoting server');
             } else {
                 xarLogMessage("Created flashremoting server");
+            }
+        break;
+/**
+ * Entry point for REST web service
+ */
+        case 'rest' :
+            if(xarMod::isAvailable('restserver')) {
+                $server = xarMod::apiFunc('restserver','user','initrestserver');
+                if ($server) {
+                    // Try to process the request
+                    $server->ServeRequest();
+                }
+            }
+            if (!$server) {
+                xarLogMessage("Could not load REST server, giving up");
+                echo xarML('Could not load REST server');
+            } else {
+                xarLogMessage("Created REST server");
             }
         break;
 /**
