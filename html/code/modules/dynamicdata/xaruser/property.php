@@ -22,7 +22,7 @@ function dynamicdata_user_property(Array $args=array())
         return xarResponse::NotFound();
         
     try {
-        sys::import('properties.' . $property . '/' . $act);
+        sys::import('properties.' . $property . '.' . $act);
         $function = $property . "_" . $act;
         $function();
         return true;
