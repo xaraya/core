@@ -240,6 +240,14 @@ class CategoriesProperty extends DataProperty
         return $itemid;
     }
 
+    /**
+     * Displays the property for input
+     * 
+     * The value is an associateive array that has the form
+     * key:
+     * value: ID value of the category displayed
+     *
+     */
     public function showInput(Array $data = array())
     {
         if (isset($data['include_no_line'])) $this->initialization_include_no_cat = $data['include_no_line'];
@@ -325,10 +333,14 @@ class CategoriesProperty extends DataProperty
         }
 
         if (!empty($this->source)) {
+            // This property has a source other than "None". 
+            // In this scenario we are storing a value in the source
+            // CHECKME: what is the use case here?
             if (!isset($data['value'])) $data['value'] = array(1=>array(1 => $this->value));
         } else {
-             // If we have no values passed, get an array of values (selected categories) for each tree
+            // If we have a value passed, then jump over this next part
             if (!isset($data['value'])) {
+                // If we have no values passed, get an array of values (selected categories) for each tree
                 $data['value'] = array();
                 xarMod::apiLoad('categories');
                 $xartable =& xarDB::getTables();
@@ -528,6 +540,10 @@ class CategoriesProperty extends DataProperty
      * 
      * @param int $itemid
      * @return array category links
+     *
+     * The links are an associative array with
+     * key: categoryID_basecategoryID
+     * value: associtive array of the database entry with key = field name and value = field value
      */
     private function getLinks($itemid=0)
     {
@@ -573,8 +589,6 @@ class CategoriesProperty extends DataProperty
         $tocreate = array_diff($current_cats,$previous_cats);
         $toupdate = array_intersect($current_cats,$previous_cats);
 
-// echo "<pre>";var_dump($links);var_dump($current_cats);
-// var_dump($todelete);var_dump($tocreate);var_dump($toupdate);exit;
         // Set up for updating rows we want to delete
         if (!empty($tocreate)) {
             $q = new Query('UPDATE', $xartable['categories_linkage']); 
@@ -587,7 +601,9 @@ class CategoriesProperty extends DataProperty
             for ($i=0;$i<$reusable;$i++) {
                 // Get the of the row to delete we will overwrite
                 $this_key = array_shift($todelete);
+                // Explode the item into its categoryID and basecategoryID components
                 $key = explode('_',$this_key);
+
                 $this_category = (int)$key[0];
                 $this_basecategory = (int)$key[1];
                 
@@ -624,7 +640,9 @@ class CategoriesProperty extends DataProperty
         // Do the deletes
         if (!empty($todelete)) {
             foreach($todelete as $this_todelete) {
+                // Explode the item into its categoryID and basecategoryID components
                 $key = explode('_',$this_todelete);
+                // Assemble the DELETE query
                 $q = new Query('DELETE', $xartable['categories_linkage']); 
                 $q->eq('item_id', (int)$itemid);
                 $q->eq('property_id', $this->id);
@@ -640,7 +658,9 @@ class CategoriesProperty extends DataProperty
         // Do the creates
         if (!empty($tocreate)) {
             foreach($tocreate as $this_tocreate) {
+                // Explode the item into its categoryID and basecategoryID components
                 $key = explode('_',$this_tocreate);
+                // Assemble the INSERT query
                 $q = new Query('INSERT', $xartable['categories_linkage']); 
                 $q->addfield('item_id', (int)$itemid);
                 $q->addfield('module_id', $this->module_id);
@@ -653,34 +673,6 @@ class CategoriesProperty extends DataProperty
         }
         unset($q);
 
-        // Do the updates
-        /*
-        if (!empty($toupdate)) {
-            $q = new Query('UPDATE', $xartable['categories_linkage']); 
-            $q->eq('item_id', (int)$itemid);
-            $q->eq('property_id', $this->id);
-            foreach ($toupdate as $category) {
-                // Only update if something has changed
-                $this_link = $links[$category];
-                $q->eq('id', $this_link['id']);
-                $check_passed = true;
-                if ($this_link['module_id'] != $this->module_id) {
-                    $q->addfield('module_id', $this->module_id);
-                    $check_passed = false;
-                }
-                if ($this_link['itemtype'] != $this->itemtype) {
-                    $q->addfield('itemtype', $this->itemtype);
-                    $check_passed = false;
-                }
-//                if ($this_link['basecategory'] != $this->basecategory) {
-//                    $q->addfield('basecategory', $this->basecategory);
-//                    $check_passed = false;
-//                }
-                if (!$check_passed) $q->run();
-            }
-        }
-        unset($q);
-        */
         return true;
     }
 }
