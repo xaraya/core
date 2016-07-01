@@ -145,7 +145,7 @@ class CategoriesProperty extends DataProperty
                 $this->categories[$category_id . "_" . (int)$this->basecategories[$baseid]] = $category_id;
             }
         }
-        
+
         // Keep a reference of the data of this property in $this->value, for saving or easy manipulation
         $this->value = $this->categories;
         return true;
@@ -361,7 +361,7 @@ class CategoriesProperty extends DataProperty
                     $data['value'][$key] = $categories;
                 }
             }
-       }
+        }
 
         // Prepare some variables we need for the template
         $data['categories_module_id'] = $this->module_id;
@@ -672,6 +672,7 @@ class CategoriesProperty extends DataProperty
             }
         }
         unset($q);
+
         return true;
     }
 }
