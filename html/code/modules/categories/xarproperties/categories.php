@@ -672,7 +672,6 @@ class CategoriesProperty extends DataProperty
             }
         }
         unset($q);
-
         return true;
     }
 }
