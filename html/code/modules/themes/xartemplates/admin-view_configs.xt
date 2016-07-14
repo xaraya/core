@@ -8,18 +8,18 @@
 	            View Configurations
 	        </h2>
 	        <xar:if condition="$object:checkAccess('create')">
-	        <div class="xar-mod-actions">
-                <xar:if condition="xarModVars::get('themes','use_module_icons')">
-                	<xar:set name="xar_icon">'xar-icon-add'</xar:set>
-                    <!-- <xar:img scope="theme" file="icons/add.png" class="xar-icon" alt="new"/> -->
-                <xar:else />
-                    <xar:set name="xar_icon">''</xar:set>
-                </xar:if>
-	            <xar:var name="label">Create New Configuration Item</xar:var>
-	            <div>
-		            <a href="#xarModURL('themes','admin','new_config')#" title="#$label#" class="#$xar-icon">New Configuration</a>
-	            </div>
-	        </div>
+                <div class="xar-mod-actions">
+                    <xar:if condition="xarModVars::get('themes','use_module_icons')">
+                        <xar:set name="xar_icon">'xar-icon-add'</xar:set>
+                        <!-- <xar:img scope="theme" file="icons/add.png" class="xar-icon" alt="new"/> -->
+                    <xar:else />
+                        <xar:set name="xar_icon">''</xar:set>
+                    </xar:if>
+                    <xar:var name="label">Create New Configuration Item</xar:var>
+                    <div>
+                        <a href="#xarModURL('themes','admin','new_config')#" title="#$label#" class="#$xar-icon">New Configuration</a>
+                    </div>
+                </div>
 	        </xar:if>
 	    </div>
 		<div class="xar-mod-page-body">
