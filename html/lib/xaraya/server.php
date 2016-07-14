@@ -402,7 +402,7 @@ class xarServer extends Object
     }
 
     /**
-     * Generates an URL that reference to an object user interface method.
+     * Generates a URL that reference to an object user interface method.
      */
     static function getObjectURL($objectName = NULL, $methodName = 'view', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array())
     {
