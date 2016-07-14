@@ -72,9 +72,11 @@ class ObjectRefProperty extends SelectProperty
             if (is_numeric($this->value) && $this->store_prop_is_itemid) {
                 $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'display', array('itemid' => $this->value));
             } elseif (is_string($this->value)) {
-                $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'view', array('where' => array($this->initialization_store_prop => $this->value)));
+                $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'view', array('where' => $this->initialization_display_prop . " = '" . $this->value . "'"));
+            } else {
+                echo xarML('Array values for links are currently not suppoerted in the objectref property');
+                exit;
             }
-            // TODO: support array values too ?
         }
         return parent::showOutput($data);
     }
@@ -214,7 +216,7 @@ class ObjectRefProperty extends SelectProperty
         // Run through each of the sources and create a table entry
         // The first table is linked with a join to the current object's source table(s)
         // By definition this is an outer join
-        // The other relations are added as given in the configurtions
+        // The other relations are added as given in the configurations
         $storeprop   = $tableprefix . $object->properties[$this->initialization_store_prop]->source;
         $displayprop = $tableprefix . $object->properties[$this->initialization_display_prop]->source;
         $i = 0;
