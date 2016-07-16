@@ -76,10 +76,10 @@ class XarayaCompiler extends xarBLCompiler
         // Add the custom tags from modules
         $xslFiles = array_merge($xslFiles,$this->getModuleTagPaths());
 
-        // Add the custom tags from properties
+        // Add the custom tags from standalone properties
         $xslFiles = array_merge($xslFiles,$this->getPropertyTagPaths());
 
-        // Get any custom tags in standalone blocks
+        // Add the custom tags from standalone blocks
         $xslFiles = array_merge($xslFiles,$this->getBlockTagPaths());
 
         return $xslFiles;
