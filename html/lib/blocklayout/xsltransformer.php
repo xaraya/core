@@ -99,9 +99,13 @@ class BlockLayoutXSLTProcessor extends Object
     {
         $this->xslProc->setParameter($space, $name, $value);
     }
-    public function transformToXML($xmlFile)
+    public function transformToXML($xmlString)
     {
-        return $this->xslProc->transformToXML($xmlFile);
+        return $this->xslProc->transformToXML($xmlString);
+    }
+    public function transformToDoc($xmlString)
+    {
+        return $this->xslProc->transformToDoc($xmlString);
     }
 
     public function transform(&$xml)
