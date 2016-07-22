@@ -94,6 +94,38 @@ class XarayaCompiler extends xarBLCompiler
     /**
      * Private methods
      */
+    protected function boot($customDoc='')
+    {
+        // TODO: generalize this functionality to any custom markup
+        
+        // Look for the stylesheet with the tag transforms
+        $xmlFile = sys::code() . 'modules/themeworks/xslt/tag-transforms.xsl';
+        
+        if (file_exists($xmlFile)) {
+            // Create a document object and load the stylesheet
+            $doc = new DOMDocument();
+            $doc->load($xmlFile);
+        
+            // Get the stylesheet for the booter 
+            $xslFile = sys::code() . 'modules/themeworks/xslt/booter.xsl';
+            // Make it an XSL processor
+            $xslProc = $this->getProcessor($xslFile);
+        
+            // Get the value for the framework tag, which is defined in a modvar
+            $framework = xarModVars::get('themeworks', 'framework');
+            // Make sure we have a default value. Remove this line later
+            if (empty($framework)) $framework = 'bootstrap';
+            // Pass it to the processor
+            $xslProc->setParameter('', 'framework', $framework);
+
+            // Process this object to get the document to insert into the compiler
+            $customDoc = $xslProc->transformToDoc($doc);
+        }
+        
+        $outDoc = parent::boot($customDoc);
+        return $outDoc;
+    }
+
     private function getModuleTagPaths()
     {
         if (function_exists('xarModAPIFunc')) {
