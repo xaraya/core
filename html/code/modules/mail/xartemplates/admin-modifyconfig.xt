@@ -440,7 +440,7 @@
                                         array(
                                             array('id' => '', 'name' => xarML('None')),
                                             array('id' => 'ssl', 'name' => xarML('ssl')),
-                                            array('id' => 'tsl', 'name' => xarML('tsl'))
+                                            array('id' => 'tls', 'name' => xarML('tls'))
                                         )
                                     </xar:set>
                                     <xar:data-input type="dropdown" name="smtpSecure" value="$smtpSecure" options="$options"/>
