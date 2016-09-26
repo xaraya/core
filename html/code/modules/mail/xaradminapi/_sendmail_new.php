@@ -92,6 +92,14 @@ function mail_adminapi__sendmail_new(Array $args=array())
     $mail->PluginDir = sys::code() . 'modules/mail/class/';
     $mail->ClearAllRecipients();
 
+    // If we are in debug mode, then make the appropriate calls to the class
+    // We will be outputting html to the browser
+    if (xarModVars::get('mail', 'debugmode') &&
+        in_array(xarUserGetVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+        $mail->SMTPDebug = 0;
+        $mail->Debugoutput = 'html';
+    }
+
     // Set default language path to English.  This is necessary as
     // phpmailer will set an invalid path to the language directory
     // and throw an error.
