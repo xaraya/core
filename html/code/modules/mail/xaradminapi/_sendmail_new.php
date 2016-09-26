@@ -96,7 +96,7 @@ function mail_adminapi__sendmail_new(Array $args=array())
     // We will be outputting html to the browser
     if (xarModVars::get('mail', 'debugmode') &&
         in_array(xarUserGetVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-        $mail->SMTPDebug = 0;
+        $mail->SMTPDebug = 4;
         $mail->Debugoutput = 'html';
     }
 
