@@ -134,6 +134,7 @@ function mail_admin_modifyconfig()
                     if (!xarVarFetch('server', 'str:1:', $server, 'mail')) return;
                     if (!xarVarFetch('smtpHost', 'str:1:', $smtpHost, '', XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('smtpPort', 'int:1:', $smtpPort, '25', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVarFetch('smtpSecure', 'str:1:', $smtpSecure, '', XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('smtpAuth', 'checkbox', $smtpAuth, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('htmlheader', 'str:1:', $htmlheader, '', XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('smtpUserName', 'str:1:', $smtpUserName, '', XARVAR_NOT_REQUIRED)) return;
@@ -160,6 +161,7 @@ function mail_admin_modifyconfig()
                     xarModVars::set('mail', 'smtpHost', $smtpHost);
                     xarModVars::set('mail', 'smtpPort', $smtpPort);
                     xarModVars::set('mail', 'smtpAuth', $smtpAuth);
+                    xarModVars::set('mail', 'smtpSecure', $smtpSecure);
                     xarModVars::set('mail', 'smtpUserName', $smtpUserName);
                     if (!empty($smtpPassword)) xarModVars::set('mail', 'smtpPassword', $smtpPassword);
 

@@ -425,6 +425,27 @@
                                     <xar:data-input type="password" name="smtpPassword" value="$smtpPassword"/>
                                 </div>
                             </div>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <xar:var name="label">Enter the type of secure connection</xar:var>
+                                    <label for="smtpSecure" title="#$label#" class="xar-form-label">
+                                        Secure connection:
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <xar:set name="smtpSecure">
+                                        <xar:var scope="module" module="mail" name="smtpSecure"/>
+                                    </xar:set>
+                                    <xar:set name="options">
+                                        array(
+                                            array('id' => '', 'name' => xarML('None')),
+                                            array('id' => 'ssl', 'name' => xarML('ssl')),
+                                            array('id' => 'tsl', 'name' => xarML('tsl'))
+                                        )
+                                    </xar:set>
+                                    <xar:data-input type="dropdown" name="smtpSecure" value="$smtpSecure" options="$options"/>
+                                </div>
+                            </div>
                         </xar:if>
                     </xar:if>
                     <div class="xar-row">

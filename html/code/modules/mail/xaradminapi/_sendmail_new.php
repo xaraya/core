@@ -115,6 +115,15 @@ function mail_adminapi__sendmail_new(Array $args=array())
             } catch (Exception $e) {
                 throw new FileNotFoundException('class.smtp.php');
             }
+
+            // If we are in debug mode, then make the appropriate calls to the class
+            // We will be outputting html to the browser
+            if (xarModVars::get('mail', 'debugmode') &&
+                in_array(xarUserGetVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+                $mail->SMTPDebug = 4;
+                $mail->Debugoutput = 'html';
+            }
+
             $mail->IsSMTP(); // telling the class to use SMTP
             $mail->Host = xarModVars::get('mail', 'smtpHost'); // SMTP server
             $mail->Port = xarModVars::get('mail', 'smtpPort'); // SMTP Port default 25.
@@ -123,6 +132,7 @@ function mail_adminapi__sendmail_new(Array $args=array())
             // the smtp server might require authentication
             if (xarModVars::get('mail', 'smtpAuth')) {
                 $mail->SMTPAuth = true; // turn on SMTP authentication
+                $mail->SMTPSecure = xarModVars::get('mail', 'smtpSecure'); // SMTP secure configuration
                 $mail->Username = xarModVars::get('mail', 'smtpUserName'); // SMTP username
                 $mail->Password = xarModVars::get('mail', 'smtpPassword'); // SMTP password
             }
