@@ -111,6 +111,7 @@ function mail_adminapi__sendmail(Array $args=array())
             // the smtp server might require authentication
             if (xarModVars::get('mail', 'smtpAuth')) {
                 $mail->SMTPAuth = true; // turn on SMTP authentication
+                $mail->SMTPSecure = xarModVars::get('mail', 'smtpSecure'); // SMTP secure configuration
                 $mail->Username = xarModVars::get('mail', 'smtpUserName'); // SMTP username
                 $mail->Password = xarModVars::get('mail', 'smtpPassword'); // SMTP password
             }

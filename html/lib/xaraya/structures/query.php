@@ -2146,13 +2146,20 @@ class Query
     
     public function suppressTable($thistable) 
     {
+        // Support both table names and aliases
+        $tablenames = array();
+        
         // Remove this table from the list of tables
         foreach ($this->tables as $key => $table) {
             if ($table['name'] == $thistable) {
                 $thistable = $table['alias'];
+                $tablenames[] = $table['name'];
+                $tablenames[] = $table['alias'];
                 unset($this->tables[$key]);
                 break;
             } elseif ($table['alias'] == $thistable) {
+                $tablenames[] = $table['name'];
+                $tablenames[] = $table['alias'];
                 unset($this->tables[$key]);
                 break;
             }
@@ -2163,26 +2170,26 @@ class Query
             $field1 = $this->_deconstructfield($link['field1']);
             $field2 = $this->_deconstructfield($link['field2']);
 
-            if (($field1['table'] == $thistable) || ($field2['table'] == $thistable)) {
+            if (in_array($field1['table'], $tablenames) || in_array($field2['table'], $tablenames)) {
                 unset($this->tablelinks[$key]);
             }
         }
         
         // Remove fields that reference this table
         foreach ($this->fields as $key => $field) {
-            if ($field['table'] == $thistable) unset($this->fields[$key]);
+            if (in_array($field1['table'], $tablenames)) unset($this->fields[$key]);
         }
 
         // Remove conditions that reference this table
         foreach ($this->conditions as $key => $condition) {
             try {
                 $field = $this->_deconstructfield($condition['field1']);
-                if ($field['table'] == $thistable) unset($this->conditions[$key]);
+                if (in_array($field1['table'], $tablenames)) unset($this->conditions[$key]);
                 break;
             } catch (Exception $e) {}
             try {
                 $field = $this->_deconstructfield($condition['field2']);
-                if ($field['table'] == $thistable) unset($this->conditions[$key]);
+                if (in_array($field1['table'], $tablenames)) unset($this->conditions[$key]);
                 break;
             } catch (Exception $e) {}
         }

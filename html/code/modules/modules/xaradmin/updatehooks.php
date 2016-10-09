@@ -39,7 +39,7 @@ function modules_admin_updatehooks()
     $data = array();
     // Only update if the module is active.
     $modinfo = xarMod::getInfo($regId);
-    if (!empty($modinfo) && xarModIsAvailable($modinfo['name'])) {
+    if (!empty($modinfo) && xarMod::isAvailable($modinfo['name'])) {
         $data['regid'] = $regId;
         if (!empty($subjects))
             $data['subjects'] = $subjects;

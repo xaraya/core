@@ -52,7 +52,7 @@ function roles_admin_asknotification(Array $args=array())
 
                 // dynamic properties (if any)
                 $data['properties'] = null;
-                if (xarModIsAvailable('dynamicdata')) {
+                if (xarMod::isAvailable('dynamicdata')) {
                     // get the DataObject defined for this module (and itemtype, if relevant)
                     $object = xarMod::apiFunc('dynamicdata', 'user', 'getobject',
                         array('module' => 'roles'));

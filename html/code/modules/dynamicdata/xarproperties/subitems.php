@@ -71,7 +71,7 @@ class SubItemsProperty extends DataProperty
         if (empty($this->objectref)) throw new Exception(xarML('A subitem property must be part of an object'));
         // Park the current values; they may not be the same as those in the DB
         $fieldvalues = $this->objectref->getFieldValues(array(),1);
-        // Now get hte values stored in the DB
+        // Now get the values stored in the DB
         $this->objectref->getItem(array('itemid' => $this->objectref->itemid));
 
         // Calculate what rows require what actions

@@ -124,7 +124,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
     /**
      * Private methods
      */
-    protected function boot()
+    protected function boot($customDoc=null)
     {
         $xslFile = sys::lib() . 'blocklayout/xslt/booter.xsl';
         $xslProc = $this->getProcessor($xslFile);
@@ -165,8 +165,23 @@ class xarBLCompiler extends Object implements IxarBLCompiler
         // Compress excess whitespace
         $xslProc->setParameter('', 'compresswhitespace', $this->compresswhitespace);        
         
+        // Pass any custom markup. We expect this to be in the form of a stylesheet document
+        // We do this by adding the nodes to the end of our stylesheet
+        if (!empty($customDoc)) {
+            // Get the node of the import document that contains the stylesheet markup
+            $sheetnode = $customDoc->getElementsByTagName("stylesheet")->item(0);
+            // Get all its child nodes
+            $children = $sheetnode->childNodes;
+            // Run through them and append to the end of our stylesheet
+            foreach($children as $node) {
+                $tempnode = $doc->importNode( $node, true );
+                $doc->documentElement->appendChild($tempnode);
+            }
+        }
+        
         // Compile the compiler
         $outDoc = $xslProc->transformToXML($doc);
+
         return $outDoc;
     }
 

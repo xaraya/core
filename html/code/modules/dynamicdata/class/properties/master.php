@@ -150,13 +150,6 @@ class DataPropertyMaster extends Object
         // add it to the list of properties
         $objectref->properties[$property->name] =& $property;
 
-/*
-        // if the property wants a reference, give it
-        if ($property->include_reference) {
-            $objectref->properties[$property->name]->objectref =& $objectref;
-        }
-*/
-        
         // Expose the object configuration to the property
         $objectref->properties[$property->name]->objectconfiguration =& $objectref->configuration;
 
@@ -225,14 +218,7 @@ class DataPropertyMaster extends Object
         }
         // Add the alias information to the class
         $args['args'] = $propertyInfo['args'];
-/*
-        // Add default configuration to the class (if any)
-// CHECKME: we need to switch the xar_dynamic_properties_def.configuration field to TEXT in
-//          the database if we want to use this someday - otherwise it might be truncated !
-        if (!empty($propertyInfo['configuration'])) {
-            $args['configuration'] = $propertyInfo['configuration'];
-        }
-*/
+
         // DataProperty or the determined one
         $descriptor = new ObjectDescriptor($args);
         $property = new $clazz($descriptor);

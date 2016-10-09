@@ -28,6 +28,10 @@ function mail_init()
     xarModVars::set('mail', 'smtpPort', '25');
     xarModVars::set('mail', 'smtpHost', 'Your SMTP Host');
     xarModVars::set('mail', 'encoding', '8bit');
+    xarModVars::set('mail', 'smtpAuth', '');
+    xarModVars::set('mail', 'smtpSecure', '');
+    xarModVars::set('mail', 'smtpUserName', '');
+    xarModVars::set('mail', 'smtpPassword', '');
     xarModVars::set('mail', 'html', false);
     xarModVars::set('mail', 'searchstrings', serialize('%%Search%%'));
     xarModVars::set('mail', 'replacestrings', serialize('Replace %%Search%% with this text'));

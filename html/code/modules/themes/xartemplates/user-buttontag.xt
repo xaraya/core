@@ -120,7 +120,10 @@
 						<input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" onclick="#$onclick#"/>
 					</xar:if>                
 				<xar:else />
-					<a href="#$target#">
+                    <xar:if condition="!isset($window)">
+                        <xar:set name="window">"_self"</xar:set>
+                    </xar:if>
+					<a href="#$target#" target="#$window#">
 						<xar:if condition="isset($title)">
 							<input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" title="#$title#"/>
 						<xar:else />

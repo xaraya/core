@@ -63,7 +63,7 @@
                                             <xar:if condition="isset($dependencyinfo[$modInfo['regid']]) AND !is_numeric($dependencyinfo[$modInfo['regid']])">
                                                 Missing a module #$modInfo['name']# (ID #$modInfo['regid']#). 
                                             <xar:else />
-                                                <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
+                                                <a href="http://www.xaraya.com/index.php/release/#$modInfo['regid']#.html">
                                                     Missing a module with ID #$modInfo['regid']#. Click this line to get information on this missing module.
                                                 </a>
                                             </xar:if>
@@ -72,7 +72,7 @@
                                     <xar:elseif condition="is_numeric($modInfo['regid'])"/>
                                         <li>
                                             <xar:if condition="isset($dependencyinfo[$modInfo['regid']])">
-                                            Missing a module #$dependencyinfo[$modInfo]# (ID #$modInfo#). 
+                                            Missing a module #$dependencyinfo[$modInfo['regid']['name']]# (ID #$modInfo['regid']#). 
                                             <xar:else />
                                                 <a href="http://www.xaraya.com/index.php/release/#$modInfo#.html">
                                                     Missing a module with name #$modInfo['displayname']#. Click this line to get information on this missing module.
@@ -134,7 +134,7 @@
         <!-- This section deals with install errors. -->
         <xar:template file="install-errors" type="module"/>
         <p>
-            <a href="#xarModURL('modules','admin','list')#">Go back to the modules list</a>
+            <a href="#xarModURL('modules','admin','view')#">Go back to the modules list</a>
         </p>
     </div>
 </xar:template>

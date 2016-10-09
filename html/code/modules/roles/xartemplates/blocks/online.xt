@@ -14,12 +14,12 @@
                 <td class="xar-threequarterswidth">Users</td>
                 <td>&#160;</td>
                 <td colspan="2">
-                    <xar:if condition="xarModIsAvailable('messages')">
+                    <xar:if condition="xarMod::isAvailable('messages')">
                         Messages 
                     <xar:else />&#160;</xar:if>
                 </td>
             </tr>
-            <xar:if condition="xarModIsAvailable('messages')">
+            <xar:if condition="xarMod::isAvailable('messages')">
                 <tr>
                     <td>&#160;</td>
                     <td>&#160;</td>

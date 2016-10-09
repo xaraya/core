@@ -88,7 +88,6 @@ class CategoriesProperty extends DataProperty
         $this->basecategories = $basecats;
         // Get the categories from the form
         // Select type of each tree can be different
-        // CHECKME: only one tree and one basecategory per property
         /*
         foreach ($this->basecategories as $key => $base_category) {
             $select_type = 3;
@@ -125,19 +124,28 @@ class CategoriesProperty extends DataProperty
             }
         }
         
-        // CHECKME: do we still need this?
         // Check the number of base categories against the number categories we have
-        // Remark: some of the selected categories might be empty here !
-        if (count($this->basecategories) != count($value)) {
-            $this->invalid = xarML("The number of categories and their base categories is not the same");
+        // Remark: some of the selected categories might be empty here!
+        // Consequence: if we are using e.g. checkboxes then we can have fewer categories found than base categories
+        // We can only check for more cats than base cats
+        /*
+        if (count($this->basecategories) < count($value)) {
+            $this->invalid = xarML("The number of categories is greater than base categories");
             $this->value = null;
             return false;
         }
+        */
         
-        // We passed the checks, set the categories, amking sure we have integers
+        // We passed the checks, set the categories, making sure we have integers
+        // There can be several basecategories, and each can have several categories
         $this->categories = array();
-        foreach ($value as $category_id) $this->categories[] = (int)current($category_id);
-        
+        foreach ($value as $baseid => $categories) {
+            foreach ($categories as $category) {
+                $category_id = (int)$category;
+                $this->categories[$category_id . "_" . (int)$this->basecategories[$baseid]] = $category_id;
+            }
+        }
+
         // Keep a reference of the data of this property in $this->value, for saving or easy manipulation
         $this->value = $this->categories;
         return true;
@@ -232,6 +240,14 @@ class CategoriesProperty extends DataProperty
         return $itemid;
     }
 
+    /**
+     * Displays the property for input
+     * 
+     * The value is an associateive array that has the form
+     * key:
+     * value: ID value of the category displayed
+     *
+     */
     public function showInput(Array $data = array())
     {
         if (isset($data['include_no_line'])) $this->initialization_include_no_cat = $data['include_no_line'];
@@ -317,10 +333,14 @@ class CategoriesProperty extends DataProperty
         }
 
         if (!empty($this->source)) {
+            // This property has a source other than "None". 
+            // In this scenario we are storing a value in the source
+            // CHECKME: what is the use case here?
             if (!isset($data['value'])) $data['value'] = array(1=>array(1 => $this->value));
         } else {
-             // If we have no values passed, get an array of values (selected categories) for each tree
+            // If we have a value passed, then jump over this next part
             if (!isset($data['value'])) {
+                // If we have no values passed, get an array of values (selected categories) for each tree
                 $data['value'] = array();
                 xarMod::apiLoad('categories');
                 $xartable =& xarDB::getTables();
@@ -341,7 +361,7 @@ class CategoriesProperty extends DataProperty
                     $data['value'][$key] = $categories;
                 }
             }
-       }
+        }
 
         // Prepare some variables we need for the template
         $data['categories_module_id'] = $this->module_id;
@@ -464,7 +484,7 @@ class CategoriesProperty extends DataProperty
         // Use the property's checkInput method to get the value
         $arrayprop = DataPropertyMaster::getProperty(array('name' => 'categorypicker'));
         $arrayprop->checkInput($this->propertyprefix . $this->id . '["initialization_basecategories"]');
-        
+
         // Assign the value to this configuration property for update
         $data['configuration']['initialization_basecategories'] = unserialize($arrayprop->value);
 
@@ -520,6 +540,10 @@ class CategoriesProperty extends DataProperty
      * 
      * @param int $itemid
      * @return array category links
+     *
+     * The links are an associative array with
+     * key: categoryID_basecategoryID
+     * value: associtive array of the database entry with key = field name and value = field value
      */
     private function getLinks($itemid=0)
     {
@@ -532,7 +556,8 @@ class CategoriesProperty extends DataProperty
         $q->eq('property_id', $this->id);
         $q->run();
         $links = array();
-        foreach ($q->output() as $row) $links[(int)$row['category_id']] = $row;
+        foreach ($q->output() as $row) 
+            $links[(int)$row['category_id'] . "_" . (int)$row['basecategory']] = $row;
         return $links;
     }
     
@@ -554,14 +579,12 @@ class CategoriesProperty extends DataProperty
         $xartable =& xarDB::getTables();
         
         // This property is bound
-        // Get the base category:there is only one for each bound property
-        $basecategory = (int)$this->initialization_basecategories[0][1][0][0];
         // Get the category links of this property and item
         $links = $this->getLinks($itemid);
         
         // Calculate what rows require what actions
         $previous_cats = array_keys($links);
-        $current_cats  = $this->categories;
+        $current_cats  = array_keys($this->categories);
         $todelete = array_diff($previous_cats,$current_cats);
         $tocreate = array_diff($current_cats,$previous_cats);
         $toupdate = array_intersect($current_cats,$previous_cats);
@@ -572,31 +595,42 @@ class CategoriesProperty extends DataProperty
         }
 
         // We need to delete and create a certain number of categories
-        // Instead we update the deletes to the values of the ctegories we need to create
+        // Instead we update the deletes to the values of the categories we need to create
         $reusable = min(count($todelete), count($tocreate));
         if (!empty($reusable)) {
             for ($i=0;$i<$reusable;$i++) {
                 // Get the of the row to delete we will overwrite
-                $this_category = array_shift($todelete);
-                $this_link = $links[$this_category];
+                $this_key = array_shift($todelete);
+                // Explode the item into its categoryID and basecategoryID components
+                $key = explode('_',$this_key);
+
+                $this_category = (int)$key[0];
+                $this_basecategory = (int)$key[1];
+                
+                $this_link = $links[$this_key];
                 $id = $this_link['id'];
                 
-                // This will be row we overwrite
+                // This will be a row we overwrite
                 $q->eq('id', $id);
                 
                 // Get the category we will insert into this row
-                $new_category = array_shift($tocreate);
-                $q->addfield('category_id', $new_category);
-                
+                $key = explode('_',array_shift($tocreate));
+
+                $new_category = (int)$key[0];
+                $new_basecategory = (int)$key[1];
+
                 // Check if any other items need updating
+                if ($this_link['category_id'] != $new_category) {
+                    $q->addfield('category_id', $new_category);
+                }
                 if ($this_link['module_id'] != $this->module_id) {
                     $q->addfield('module_id', $this->module_id);
                 }
                 if ($this_link['itemtype'] != $this->itemtype) {
                     $q->addfield('itemtype', $this->itemtype);
                 }
-                if ($this_link['basecategory'] != $basecategory) {
-                    $q->addfield('basecategory', $basecategory);
+                if ($this_link['basecategory'] != $new_basecategory) {
+                    $q->addfield('basecategory', $new_basecategory);
                 }
                 $q->run();
             }
@@ -605,55 +639,40 @@ class CategoriesProperty extends DataProperty
         
         // Do the deletes
         if (!empty($todelete)) {
-            $q = new Query('DELETE', $xartable['categories_linkage']); 
-            $q->eq('item_id', (int)$itemid);
-            $q->eq('property_id', $this->id);
-            $q->eq('category_id', $todelete);
-            $q->run();
+            foreach($todelete as $this_todelete) {
+                // Explode the item into its categoryID and basecategoryID components
+                $key = explode('_',$this_todelete);
+                // Assemble the DELETE query
+                $q = new Query('DELETE', $xartable['categories_linkage']); 
+                $q->eq('item_id', (int)$itemid);
+                $q->eq('property_id', $this->id);
+                $q->eq('category_id', $key[0]);
+                $q->eq('basecategory', $key[1]);
+                $q->eq('module_id', $this->module_id);
+                $q->eq('itemtype', $this->itemtype);
+                $q->run();
+            }
         }
         unset($q);
     
         // Do the creates
         if (!empty($tocreate)) {
-            $q = new Query('INSERT', $xartable['categories_linkage']); 
-            $q->addfield('item_id', (int)$itemid);
-            $q->addfield('module_id', $this->module_id);
-            $q->addfield('itemtype', $this->itemtype);
-            $q->addfield('basecategory', $basecategory);
-            $q->addfield('property_id', $this->id);
-            foreach ($tocreate as $category) {
-                $q->addfield('category_id', $category);
+            foreach($tocreate as $this_tocreate) {
+                // Explode the item into its categoryID and basecategoryID components
+                $key = explode('_',$this_tocreate);
+                // Assemble the INSERT query
+                $q = new Query('INSERT', $xartable['categories_linkage']); 
+                $q->addfield('item_id', (int)$itemid);
+                $q->addfield('module_id', $this->module_id);
+                $q->addfield('itemtype', $this->itemtype);
+                $q->addfield('basecategory', $key[1]);
+                $q->addfield('property_id', $this->id);
+                $q->addfield('category_id', $key[0]);
                 $q->run();
             }
         }
         unset($q);
 
-        // Do the updates
-        if (!empty($toupdate)) {
-            $q = new Query('UPDATE', $xartable['categories_linkage']); 
-            $q->eq('item_id', (int)$itemid);
-            $q->eq('property_id', $this->id);
-            foreach ($toupdate as $category) {
-                // Only update if something has changed
-                $this_link = $links[$category];
-                $q->eq('id', $this_link['id']);
-                $check_passed = true;
-                if ($this_link['module_id'] != $this->module_id) {
-                    $q->addfield('module_id', $this->module_id);
-                    $check_passed = false;
-                }
-                if ($this_link['itemtype'] != $this->itemtype) {
-                    $q->addfield('itemtype', $this->itemtype);
-                    $check_passed = false;
-                }
-                if ($this_link['basecategory'] != $this->basecategory) {
-                    $q->addfield('basecategory', $this->basecategory);
-                    $check_passed = false;
-                }
-                if (!$check_passed) $q->run();
-            }
-        }
-        unset($q);
         return true;
     }
 }

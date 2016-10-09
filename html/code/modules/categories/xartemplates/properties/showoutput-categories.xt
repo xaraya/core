@@ -6,7 +6,7 @@
             #$category['name']#&#160;
         </xar:foreach>
     <xar:else />
-        <xar:foreach in="$catinfo" value="$category">
+        <xar:foreach in="$value" value="$category">
             #$category['name']#<br />
         </xar:foreach>
     </xar:if>

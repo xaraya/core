@@ -313,10 +313,6 @@ class DataProperty extends Object implements iDataProperty
             $this->value = null;
             return false;
         }
-
-//        $this->value = null;
-//        $this->invalid = xarML('unknown property');
-//        return false;
         return true;
     }
 
@@ -378,7 +374,7 @@ class DataProperty extends Object implements iDataProperty
     }
     function setInputStatus($status)
     {
-        $this->status = $status - $this->getDisplayStatus();
+        $this->status = $status + $this->getDisplayStatus();
     }
 
     /**

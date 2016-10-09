@@ -27,39 +27,24 @@ function categories_adminapi_unlinkcids($args)
     extract($args);
 
     // Argument check
-    if ((empty($modid)) || !is_numeric($modid) ||
-        (empty($cids)) || !is_array($cids))
-    {
+    if (empty($modid) || !is_numeric($modid)) {
         $msg = xarML('Invalid Parameter Count');
         throw new BadParameterException(null, $msg);
     }
 
+    // By convention an itemtype 0 means "all of them"
     if (!isset($itemtype) || !is_numeric($itemtype)) {
         $itemtype = 0;
     }
 
-    // Get datbase setup
-    $dbconn = xarDB::getConn();
+    // Set up the DELETE query and run
     $xartable =& xarDB::getTables();
-    $categorieslinkagetable = $xartable['categories_linkage'];
-
-    // Delete the link
-    $bindvars = array();
-    $query = "DELETE FROM $categorieslinkagetable
-              WHERE module_id = ?
-                AND itemtype = ?
-                AND category_id IN (?";
-    $bindvars[] = (int) $modid;
-    $bindvars[] = (int) $itemtype;
-    $bindvars[] = (int) array_shift($cids);
-    foreach ($cids as $cid) {
-        $bindvars[] = (int) $cid;
-        $query .= ',?';
-    }
-    $query .= ')';
-
-    $result = $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
+    sys::import('xaraya.structures.query');
+    $q = new Query('DELETE', $xartable['categories_linkage']);
+    $q->eq('module_id', (int)$modid);
+    if (!empty($itemtype)) $q->eq('itemtype', (int)$itemtype);
+    if (!empty($cids)) $q->in('category_id', $cids);
+    $q->run();
 
     return true;
 }

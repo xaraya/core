@@ -32,7 +32,7 @@ function categories_admin_delete()
     if(!xarSecurityCheck('ManageCategories',1,'category',"All:" . $data['itemid'])) return;
 
     // Root category cannot be deleted except by the site admin
-    if (($cid == 1) && (xarUser::getVar('id') != xarModVars::get('roles', 'admin')))
+    if (($data['itemid'] == 1) && (xarUser::getVar('id') != xarModVars::get('roles', 'admin')))
         return xarTplModule('privileges','user','errors', array('layout' => 'no_privileges'));
 
     // Check for confirmation

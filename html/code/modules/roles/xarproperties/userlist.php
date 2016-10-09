@@ -129,17 +129,19 @@ class UserListProperty extends SelectProperty
             $user = '';
         } else {
             try {
-                $user = xarUserGetVar('name', $value);
+                $user = xarUser::getVar('name', $value);
                 if (empty($user)) {
-                    $user = xarUserGetVar('uname', $value);
+                    $user = xarUser::getVar('uname', $value);
                 }
-            } catch (NotFoundExceptions $e) {
-                // Nothing to do?
+            } catch (Exception $e) {
+                $user = '';
             }
         }
         $data['value'] = $value;
         $data['user'] = $user;
 
+        if (isset($data['state']))      $this->initialization_userlist_user_state = $data['state'];
+        
         return parent::showOutput($data);
     }
 

@@ -394,6 +394,7 @@ class xarCSS extends Object
             'media'      => !empty($media)     ? $media     : xarCSS::CSSMEDIASCREEN,
             'rel'        => !empty($rel)       ? $rel       : xarCSS::CSSRELSTYLESHEET,
             'source'     => !empty($source)    ? $source    : '',
+            'src'        => !empty($src)       ? $src       : '',
             'title'      => !empty($title)     ? $title     : '',
             'condition'  => !empty($condition) ? $condition : '',
             'theme'      => '',
@@ -405,10 +406,10 @@ class xarCSS extends Object
         );
 
         // Local or remote absolute url, just include it and return
-        // We support this above all for testing third party stuff we may later integrate
-        $server = xarServer::getHost();
-        if (($tag['method'] == "link") && !empty($tag['source'])) {
-            $tag['url'] = $tag['source'];
+        // We support both 'source' and 'src' for compatibility with xarjs
+        if (($method == "link") && (!empty($source) || !empty($src))) {
+            if (!empty($source)) $tag['url'] = $source;
+            if (!empty($src)) $tag['url'] = $src;
             return $this->queue($method, $scope, $tag['url'], $tag);
         }
         
