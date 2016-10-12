@@ -446,6 +446,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $this->datastore->getItems($args);
         
     if (xarModVars::get('eventhub','debugmode') && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+        var_dump($args);
         var_dump($this->itemcount);
         var_dump(count($this->items));echo "XX";
     }
