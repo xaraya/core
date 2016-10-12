@@ -384,6 +384,9 @@ class RelationalDataStore extends SQLDataStore
 
         // Complete the dataquery
         $q = $this->object->dataquery;
+    if (xarModVars::get('eventhub','debugmode') && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+        $q->qecho();
+    }
         $fieldlist = $this->object->getFieldList();
         foreach ($fieldlist as $fieldname) {
             $field = $this->object->properties[$fieldname];
