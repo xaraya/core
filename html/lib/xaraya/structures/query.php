@@ -74,7 +74,6 @@ class Query
     public function __construct($type='SELECT',$tables='',$fields='')
     {
         if (xarModVars::get('dynamicdata','debugmode') && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-            $this->debugusers = array_keys(unserialize(xarModVars::get('query', 'debugusers')));
             $this->debugflag = true;
             $this->starttime = microtime(true);
         } else {
