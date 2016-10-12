@@ -73,12 +73,6 @@ class Query
 //---------------------------------------------------------
     public function __construct($type='SELECT',$tables='',$fields='')
     {
-        if (xarModVars::get('dynamicdata','debugmode') && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-            $this->debugflag = true;
-            $this->starttime = microtime(true);
-        } else {
-            $this->debugflag = false;
-        }
         if (in_array($type,array("SELECT","INSERT","UPDATE","DELETE","DROP"))) $this->type = $type;
         else {
             throw new ForbiddenOperationException($type,'This operation is not supported yet. "#(1)"');
@@ -1784,6 +1778,16 @@ class Query
             $string .= "name = " . $field['name'] . ", alias = " . $field['alias'] . ", table = " . $field['table'] . ", value = " . $field['value'] . "<br/>";
         }
         echo $string;
+    }
+
+    public function setdebug($debugflag=1)
+    {
+        if ($debugflag) {
+            $this->debugflag = true;
+            $this->starttime = microtime(true);
+        } else {
+            $this->debugflag = false;
+        }
     }
 
 /*
