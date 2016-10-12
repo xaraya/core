@@ -414,9 +414,6 @@ class RelationalDataStore extends SQLDataStore
         // Run the query
         if (!$q->run()) throw new Exception(xarML('Query failed'));
         $result = $q->output();
-    if (xarModVars::get('eventhub','debugmode') && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-        echo count($result);
-    }
         if (empty($result)) return;
 
         // Distribute the results to the appropriate properties
@@ -442,6 +439,9 @@ class RelationalDataStore extends SQLDataStore
                 $this->setItemValue($itemid, $row, $fieldname, $this->object, $fordisplay);
             }
         }
+    if (xarModVars::get('eventhub','debugmode') && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+        var_dump($result);
+    }
    }
 
     /**
