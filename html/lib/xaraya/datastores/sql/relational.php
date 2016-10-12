@@ -439,9 +439,6 @@ class RelationalDataStore extends SQLDataStore
                 $this->setItemValue($itemid, $row, $fieldname, $this->object, $fordisplay);
             }
         }
-    if (xarModVars::get('eventhub','debugmode') && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-        var_dump($result);
-    }
    }
 
     /**
