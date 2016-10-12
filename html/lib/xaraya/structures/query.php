@@ -1782,7 +1782,7 @@ class Query
 
     public function setdebug($debugflag=1)
     {
-        if ($debugflag) {
+        if ($debugflag && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
             $this->debugflag = true;
             $this->starttime = microtime(true);
         } else {
