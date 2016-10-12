@@ -73,9 +73,9 @@ class Query
 //---------------------------------------------------------
     public function __construct($type='SELECT',$tables='',$fields='')
     {
-        if (xarModVars::get('query','debugmode')) {
+        if (xarModVars::get('dynamicdata','debugmode') && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
             $this->debugusers = array_keys(unserialize(xarModVars::get('query', 'debugusers')));
-            $this->debugflag = xarModVars::get('query','debugmode') && in_array(xarUserGetVar('uname'),$this->debugusers);
+            $this->debugflag = true;
             $this->starttime = microtime(true);
         } else {
             $this->debugflag = false;
@@ -1815,7 +1815,7 @@ class Query
         $tables = array();
         foreach ($this->tables as $table) $tables[$table['alias']] = $table['name'];
         
-        // Check which tables the fields reference; remove those they do from the array
+        // Check which tables the fields reference; remove those that do from the array
         foreach ($this->fields as $field) {
             if (isset($tables[$field['table']])) {
                 unset($tables[$field['table']]);
@@ -1825,7 +1825,8 @@ class Query
             }
         }
 
-        // Check which tables the conditions reference; remove those they do from the array      
+        // Check which tables the conditions reference; 
+        // We want to keep these, so remove them from the array      
         foreach ($this->conditions as $condition) {
             try {
                 $fullfield = $this->_deconstructfield($condition['field1']);
