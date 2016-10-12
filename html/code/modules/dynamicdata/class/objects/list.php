@@ -445,12 +445,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $this->items = array();
         $this->datastore->getItems($args);
         
-    if (xarModVars::get('eventhub','debugmode') && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-//        var_dump($args);
-//        var_dump($this->itemcount);
-//        var_dump(count($this->items));echo "XX";
-    }
-
         // For now always show the values of properties with virtual datastore
         // CHECKME: the preList method is probably a better solution
         // $args['getvirtuals'] = true;
