@@ -9,7 +9,7 @@ class SubItemsProperty extends DataProperty
     public $include_reference            = 1; // tells the object this property belongs to whether to add a reference of itself to me
     
     // Configuration parameters
-    public $initialization_refobject     = 'objects';
+    public $initialization_refobject     = 'objects'; // The name of the property's object (the subitems object name)
     public $initialization_minimumitems  = 1;         // What is the minimum number of subitems per parent
     public $initialization_addremove     = 2;         // Can we add or remove items
 
