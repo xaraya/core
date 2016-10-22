@@ -388,6 +388,8 @@ class RelationalDataStore extends SQLDataStore
         foreach ($fieldlist as $fieldname) {
             $field = $this->object->properties[$fieldname];
             
+            // Check if we have a subitems property
+            // CHECKME: should we check the property type instead?
             if (empty($field->source)) {
                 if (empty($field->initialization_refobject)) continue;
                 $this->addqueryfields($q, $field->initialization_refobject);
@@ -411,23 +413,34 @@ class RelationalDataStore extends SQLDataStore
             $q->setstartat($startnum);
         }
         
+        // Set the kind of display we want/get
+        // Associative: if there are subitems then show a nested array, key is primary field, associative array
+        // Raw: no associative array
+        if (!isset($args['row_output'])) $args['row_output'] = 'associative';
+        
         // Run the query
         if (!$q->run()) throw new Exception(xarML('Query failed'));
         $result = $q->output();
         if (empty($result)) return;
-
         // Distribute the results to the appropriate properties
         $fordisplay = (isset($args['fordisplay'])) ? $args['fordisplay'] : 0;
+
         foreach ($result as $key => $row) {
-            if (!empty($this->object->primary))  {
-                // Get the value of the primary key
-                $itemid = $row[$this->object->primary];
+            if ($args['row_output'] == 'associative') {
+                // If we want to display the results as a nested set, try using the primary field as a key
+                if (!empty($this->object->primary))  {
+                    // Get the value of the primary key
+                    $itemid = $row[$this->object->primary];
+                } else {
+                    // No primary field: use the row key
+                    $itemid = $key;
+                }
             } else {
-                // No primary field: use the row key
+                // If we want to display the results as flat rows (raw output), we cannot use the primary field as a key
                 $itemid = $key;
             }
             
-            // add this itemid to the list
+            // Add this itemid to the list
             if ($saveids) $this->_itemids[] = $itemid;
 
             // Set the values of the valid properties
@@ -436,7 +449,7 @@ class RelationalDataStore extends SQLDataStore
                 if (!empty($this->object->properties[$fieldname]->initialization_encrypt))
                     $row[$fieldname] = $this->encryptor->decrypt($row[$fieldname]);
 
-                $this->setItemValue($itemid, $row, $fieldname, $this->object, $fordisplay);
+                $this->setItemValue($itemid, $row, $fieldname, $this->object, $fordisplay]);
             }
         }
    }
@@ -460,16 +473,15 @@ class RelationalDataStore extends SQLDataStore
             if ($row[$subitemsobjectname . "_" . $subitemsobject->primary] == null) return;
 
     // Assign the appropriate value to each of the subitemsobjct's properties
-            $subitemsobject = $this->object->properties[$field]->subitemsobject;
-            $fieldlist = $subitemsobject->getFieldList();
-            foreach ($fieldlist as $subproperty) {
+            $subfieldlist = $subitemsobject->getFieldList();
+            foreach ($subfieldlist as $subfield) {
     // If the property is again a subitems property, recall the function
-                if (in_array($subitemsobject->properties[$subproperty]->type,array(30069,30120))) {
+                if (in_array($subitemsobject->properties[$subfield]->type,array(30069,30120))) {
                     $this->setValue($value, $field);
                 } else {
     // Convert the source field name to this property's name and assign
-                   $sourceparts = explode('.',$subitemsobject->properties[$subproperty]->source);
-                   $subitemsobject->properties[$subproperty]->setValue($value[$subitemsobjectname . "_" . $sourceparts[1]]);   
+                   $sourceparts = explode('.',$subitemsobject->properties[$subfield]->source);
+                   $subitemsobject->properties[$subfield]->setValue($value[$subitemsobjectname . "_" . $sourceparts[1]]);   
                 }
              }
         } elseif (empty($this->object->properties[$field]->source)){
@@ -499,32 +511,32 @@ class RelationalDataStore extends SQLDataStore
             if ($row[$subitemsobjectname . "_" . $subitemsobject->primary] == null) return;
 
     // Assign the appropriate value to each of the subitemsobejct's properties
-            $subitemsobject = $object->properties[$field]->subitemsobject;
-            $fieldlist = $subitemsobject->getFieldList();
-            foreach ($fieldlist as $subproperty) {
+            $subfieldlist = $subitemsobject->getFieldList();
+            foreach ($subfieldlist as $subfield) {
     // If the property is again a subitems property, call the function again for the subitemsobject
-                if (in_array($subitemsobject->properties[$subproperty]->type,array(30069,30120))) {
+                if (in_array($subitemsobject->properties[$subfield]->type,array(30069,30120))) {
                     // First get the value of the primary index, make sure it has been assigned
                     $primary = $subitemsobject->primary;
                     $subitemsobject->properties[$primary]->setValue($row[$subitemsobject->name . "_" . $subitemsobject->properties[$primary]->name]);
                     $subitemid = $subitemsobject->properties[$primary]->value;
-                    $this->setItemValue($subitemid, $row, $subproperty, $subitemsobject, $fordisplay);
+                    $this->setItemValue($subitemid, $row, $subfield, $subitemsobject, $fordisplay);
     // Ignore any other property without a source (for now)
-                } elseif (empty($subitemsobject->properties[$subproperty]->source)){
+                } elseif (empty($subitemsobject->properties[$subfield]->source)){
                     continue;
                 } else {
     // Convert the source field name to this property's name and assign
     // Note we add the subitems to the rows of the parent object list items array
     // We do this for convenience of calling the items, and because the subobject is defined as an object, not an objectlist 
-                    $sourceparts = explode('.',$subitemsobject->properties[$subproperty]->source);
+                    $sourceparts = explode('.',$subitemsobject->properties[$subfield]->source);
                     $subobjectid = $row[$subitemsobjectname . "_" . $subitemsobject->primary];
-                    $object->items[$itemid][$subitemsobjectname . "_" . $subproperty][$subobjectid] = $row[$subitemsobjectname . "_" . $sourceparts[1]];
+                    $object->items[$itemid][$subitemsobjectname . "_" . $subfield][$subobjectid] = $row[$subitemsobjectname . "_" . $sourceparts[1]];
                 }
              }
         } elseif (empty($object->properties[$field]->source)){
     // This is some other property with a virtual datasource, ignore it
         } else {
-    // This is a  property with a normal datasource: assign the value in the usual way
+    // This is a  property with a normal datasource: assign the value in the usual way,
+    // that is using the property's setItemValue method
             $object->properties[$field]->setItemValue($itemid,$row[$object->properties[$field]->name],$fordisplay);
         }
     }
