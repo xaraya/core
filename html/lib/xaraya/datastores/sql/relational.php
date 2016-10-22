@@ -449,7 +449,7 @@ class RelationalDataStore extends SQLDataStore
                 if (!empty($this->object->properties[$fieldname]->initialization_encrypt))
                     $row[$fieldname] = $this->encryptor->decrypt($row[$fieldname]);
 
-                $this->setItemValue($itemid, $row, $fieldname, $this->object, $fordisplay]);
+                $this->setItemValue($itemid, $row, $fieldname, $this->object, $fordisplay);
             }
         }
    }
