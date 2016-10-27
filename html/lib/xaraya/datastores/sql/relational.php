@@ -449,7 +449,7 @@ class RelationalDataStore extends SQLDataStore
                 if (!empty($this->object->properties[$fieldname]->initialization_encrypt))
                     $row[$fieldname] = $this->encryptor->decrypt($row[$fieldname]);
 
-                $this->setItemValue($itemid, $row, $fieldname, $this->object, $fordisplay);
+                $this->setItemValue($itemid, $row, $fieldname, $this->object, $fordisplay, $args['row_output']);
             }
         }
    }
@@ -496,7 +496,7 @@ class RelationalDataStore extends SQLDataStore
         }
     }
 
-    private function setItemValue($itemid, $row, $field, $object, $fordisplay=0)
+    private function setItemValue($itemid, $row, $field, $object, $fordisplay=0, $row_output='associative')
     {
     // Is this a subitems property?
         if (in_array($object->properties[$field]->type,array(30069,30120))) {
@@ -529,7 +529,11 @@ class RelationalDataStore extends SQLDataStore
     // We do this for convenience of calling the items, and because the subobject is defined as an object, not an objectlist 
                     $sourceparts = explode('.',$subitemsobject->properties[$subfield]->source);
                     $subobjectid = $row[$subitemsobjectname . "_" . $subitemsobject->primary];
-                    $object->items[$itemid][$subitemsobjectname . "_" . $subfield][$subobjectid] = $row[$subitemsobjectname . "_" . $sourceparts[1]];
+                    if ($row_output == 'associative') {
+                        $object->items[$itemid][$subitemsobjectname . "_" . $subfield][$subobjectid] = $row[$subitemsobjectname . "_" . $sourceparts[1]];
+                    } else {
+                        $object->items[$itemid][$subitemsobjectname . "_" . $subfield] = $row[$subitemsobjectname . "_" . $sourceparts[1]];
+                    }
                 }
              }
         } elseif (empty($object->properties[$field]->source)){
