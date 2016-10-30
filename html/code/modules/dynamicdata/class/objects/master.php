@@ -329,8 +329,7 @@ class DataObjectMaster extends Object
                 } else {
                     $filterstate = DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY;
                 }
-                // temporarily nullifying the effect of above added IF condition
-                $filterstate = -1;
+                // Filter out properties with the state chosen above, and also the disabled properties
                 foreach($this->properties as $property)
                     if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED &&
                        $property->getDisplayStatus() != $filterstate)
