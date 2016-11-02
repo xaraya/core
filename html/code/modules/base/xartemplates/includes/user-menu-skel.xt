@@ -22,11 +22,15 @@
                 <xar:else/>
                     <li class="xar-tabs-label">#$tabs.label#</li>
                 </xar:if>
+                <!-- Get the value of the variable if it exists -->
+                <xar:if condition="isset($tabs['variable']) AND isset($$tabs['variable'])">
+                    <xar:set name="variable">$$tabs['variable']</xar:set>
+                </xar:if>
                 
                 <xar:foreach in="$tabs['menulinks']" value="$tab">
-                    <xar:if condition="isset($tab['value']) AND !empty($tabs['variable'])">
-                        <xar:set name="variable">$tabs['variable']</xar:set>
-                        <xar:if condition="$tab['value'] eq ${$variable}">
+                    <!-- Compare each tab value to the value of the variable if it exists -->
+                    <xar:if condition="isset($tab['value']) AND isset($variable)">
+                        <xar:if condition="$tab['value'] eq $variable">
                             <xar:set name="tabclass">'xar-tab-active'</xar:set>
                             <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
                         <xar:else />

@@ -111,7 +111,7 @@ function base_adminapi_loadmenuarray(Array $args=array())
                 $mask      = isset($menuitem->mask)      ? trim((string)$menuitem->mask) : null;
                 $condition = isset($menuitem->condition) ? trim((string)$menuitem->condition) : null;
                 $type      = isset($menuitem->type)      ? trim((string)$menuitem->type) : $args['modtype'] != 'user' ? $args['modtype'] : null;
-                $value     = isset($menuitem->value)     ? $menuitem->value : null;
+                $value     = isset($menuitem->value)     ? (string)$menuitem->value : null;
                 $active    = array();
                 if (isset($menuitem->includes)) {
                     foreach ($menuitem->includes->children() as $include) {
