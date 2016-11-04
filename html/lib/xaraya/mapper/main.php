@@ -264,7 +264,7 @@ class xarController extends Object
      * @return mixed absolute URL for call, or false on failure
      * @todo allow for an alternative entry point (e.g. stream.php) without affecting the other parameters
      */
-    static function URL($modName=NULL, $modType='user', $funcName='main', $args=array(), $generateXMLURL=NULL, $fragment=NULL, $entrypoint=array())
+    static function URL($modName=NULL, $modType='user', $funcName='main', $args=array(), $generateXMLURL=NULL, $fragment=NULL, $entrypoint=array(), $route=NULL)
     {
         // No module specified - just jump to the home page.
         if (empty($modName)) return xarServer::getBaseURL() . self::$entryPoint;
@@ -300,8 +300,12 @@ class xarController extends Object
         } 
         */       
 
-        // Define the default route
-        $route = xarConfigVars::get(null,'Site.Core.EnableShortURLsSupport');
+        // If we are passed a route, then use it
+        if (empty($route)) {
+            // No route passed: use the default
+            $route = xarConfigVars::get(null,'Site.Core.EnableShortURLsSupport');
+        }
+        // Define the route
         if (!empty($route)) {
             $request->setRoute($route);
         } else {
