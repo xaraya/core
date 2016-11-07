@@ -476,10 +476,14 @@ class DataObjectMaster extends Object
         }
         // Get the description of the property and add its args to those passed
         $args = $args + $property->descriptor->getArgs();
+        // Get the value
+        $value = $this->properties[$property->name]->value;
         // Remove the property we are changing;
         unset($this->properties[$property->name]);
-        // Add a new property,like the old, but with the changes passed
+        // Add a new property, like the old, but with the changes passed
         $this->addProperty($args);
+        // Add the value to the new property
+        $this->properties[$property->name]->value = $value;
         return true;
     }
 
