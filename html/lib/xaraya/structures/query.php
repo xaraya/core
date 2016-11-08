@@ -1855,7 +1855,7 @@ class Query
         // What is left are the table with no fields; remove them
         $newtables = array();
         foreach ($this->tables as $table) {
-            if (!isset($tables[$table['alias']])) $newtables[$table['alias']] = $table;
+            if (!isset($tables[$table['alias']])) $newtables[] = $table;
         }
         $this->tables = $newtables;
         
