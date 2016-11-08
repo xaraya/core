@@ -61,6 +61,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // Get a reference to each property's value
         $this->configuration['items'] =& $this->items;
+
+        // Run the preList methods of some properties, if called for
+        // By convention we run this when instantiating, rather than in one of the methods
+        if ($this->prelist) $this->runPreList();
     }
 
     /**
@@ -412,9 +416,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function &getItems(Array $args = array())
     {
-        // Run the preList methods of some properties, if called for
-        $this->runPreList();
-
         // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
 
@@ -923,17 +924,16 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
     private function runPreList()
     {
-        // Run the preList methods of some properties, if called for
-        if ($this->prelist) {
-            foreach ($this->getFieldList() as $fieldname) {
-                // Only properties that are configured to display in lists
-                $display_status = $this->properties[$fieldname]->getDisplayStatus();
-                if (!in_array($display_status, array(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,
-                                                     DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY,
-                                                     DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)))
-                continue;
-                $this->properties[$fieldname]->preList();
-            }
+        // Run the preList methods of some properties
+        $i = 0;
+        foreach ($this->getFieldList() as $fieldname) {
+            // Only properties that are configured to display in lists
+            $display_status = $this->properties[$fieldname]->getDisplayStatus();
+            if (!in_array($display_status, array(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,
+                                                 DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY,
+                                                 DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)))
+            continue;
+            $this->properties[$fieldname]->preList();
         }
     }
 }
