@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="!empty($value)">
         <xar:if condition="!empty($title)">
-            <img src="#$value#" alt="#$imagealt#" title="#$title#"/>
+            <img src="#$value#" alt="#$title#"/>
         <xar:else />
             <img src="#$value#" alt="#$imagealt#"/>
         </xar:if>
