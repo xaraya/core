@@ -165,12 +165,13 @@
          * 
          * @param int $id ID of the parent category
          * @param boolean $myself
+         * @param varchar $order
          * @return array|null Data array containing descendents of the given category, null if no children were found
          */
-        public function getdescendents($id=0,$myself=0)
+        public function getdescendents($id=0, $myself=0, $order='id')
         {
             $parent = $this->getInfo($id);
-            
+
             $q = new Query('SELECT', $this->table);
             if ($myself) {
                 $q->ge($this->left, $parent[$this->left]);
@@ -183,7 +184,11 @@
             if (!$q->run()) return;
             $result = $q->output();
             $descendents = array();
-            foreach($result as $row) $descendents[$row['id']] = $row;
+            
+            if ($order == 'celko') $order = $this->left;
+            else $order = 'id';
+            
+            foreach($result as $row) $descendents[$row[$order]] = $row;
             return $descendents;
         }
 
