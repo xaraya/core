@@ -20,10 +20,13 @@
 function categories_admin_view()
 {
     // Get parameters
-    if(!xarVarFetch('activetab',    'isset', $activetab,    0, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('startnum',     'isset', $data['startnum'],    1, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('items_per_page',   'isset', $data['items_per_page'],    xarModVars::get('categories', 'items_per_page'), XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('activetab',      'isset', $activetab             , 0, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('startnum',       'isset', $data['startnum']      , 1, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVarFetch('items_per_page', 'isset', $data['items_per_page'], xarModVars::get('categories', 'items_per_page'), XARVAR_NOT_REQUIRED)) {return;}
 
+    // Set a fallback value in case the modvar is empty
+    if (empty($data['items_per_page'])) $data['items_per_page'] = 20;
+    
     // Security check
     if(!xarSecurityCheck('ManageCategories')) return;
 
