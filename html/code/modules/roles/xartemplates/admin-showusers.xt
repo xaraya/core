@@ -23,7 +23,7 @@
             <a href="#xarModURL('roles','admin','modify',array('id'=>$groupid))#" title="#$label#">
                 #xarVarPrepForDisplay($groupname)#
             </a>
-            <xar:if condition="$search ne ''">matching
+            <xar:if condition="$search ne ''">&#160;matching
                 '#xarVarPrepForDisplay($search)#'
             </xar:if>(#$totalselect#)
         </h2>
