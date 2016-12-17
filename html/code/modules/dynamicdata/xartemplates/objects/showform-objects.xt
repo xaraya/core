@@ -9,7 +9,7 @@
             <xar:data-input property="$properties[$name]" hidden="hidden"/>
         <xar:else/>
             <div class="xar-row">
-                <div class="xar-col">
+                <div class="xar-col-condensed">
                     <xar:data-label property="$properties[$name]" for="id"/>
                 </div>
                 <div class="xar-col">
