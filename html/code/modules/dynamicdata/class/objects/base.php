@@ -391,7 +391,6 @@ class DataObject extends DataObjectMaster implements iDataObject
          *
          * This may need to be adjusted in the future
          */
-        $value = $this->properties[$this->primary]->getValue();
 
         foreach ($this->getFieldList() as $fieldname) {
             if (!empty($this->properties[$fieldname]->source) &&
