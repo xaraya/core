@@ -90,17 +90,24 @@ class SubItemsProperty extends DataProperty
         $itemsdata = array();
         $isvalid = true;
         // We won't check all the items, just those that are to be created or updated
+        // We don't look for deleted items. By ignoring them they disappear
         $itemids = array_merge($this->toupdate,$this->tocreate);
         foreach ($itemids as $prefix) {
+            // Set the index for this item on the object
             $data['object']->setFieldPrefix($prefix . "_" . $newprefix);
+            // Get the data corresponding to that index from the template
             $thisvalid = $data['object']->checkInput();
+            // Update whether the data we have is valid
             $isvalid = $isvalid && $thisvalid;
-        // Store each item for later processing
-        // Note these are storage, not display, values
-            $this->itemsdata[$newprefix][$prefix] = $data['object']->getFieldValues(array(),1);
+            // Store each item for later processing
+            // Note these are storage, not display, values
+            $itemsdata[$newprefix][$prefix] = $data['object']->getFieldValues(array(),1);
         }
+        // Put the aquired data into the property's itemsdata property
+        $this->itemsdata = $itemsdata;
         // Bring the parked values back
         $this->objectref->setFieldValues($fieldvalues);
+        // Return whether we got valid data
         return $isvalid;
     }
 
