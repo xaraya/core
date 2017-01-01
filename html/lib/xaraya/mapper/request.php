@@ -292,7 +292,7 @@ class xarRequest extends Object
     }
 
 /*
- * Checks whether the current reuest is an AJAX request
+ * Checks whether the current request is an AJAX request
  */
     public function isAJAX()
     {
@@ -318,7 +318,7 @@ class xarRequest extends Object
 /*
  * Outputs a message from the AJAX request
  * The message can be in the form of a simple string or an array
- * IN the latter case we use a template to format the message before outputing
+ * In the latter case we use a template to format the message before outputing
  */
     public function msgAjax($msg)
     {
