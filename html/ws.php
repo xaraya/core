@@ -235,7 +235,7 @@ function xarWebservicesMain()
 /**
  * Entry point for native web service
  *
- * This works like a "normal" Xaraya module call, but depends wsapi functions (if they exist) in each module
+ * This works like a "normal" Xaraya module call, but depends on wsapi functions (if they exist) in each module
  */
         case 'native' :
             xarVarFetch('module', 'str:1', $module, 'base',    XARVAR_NOT_REQUIRED);
@@ -248,6 +248,10 @@ function xarWebservicesMain()
             }
             echo $data;
         break;
+        
+/**
+ * Entry point for WSDL calls
+ */
         default:
             if (xarServer::getVar('QUERY_STRING') == 'wsdl') {
                 // FIXME: for now wsdl description is in soapserver module
