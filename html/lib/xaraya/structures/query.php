@@ -154,9 +154,6 @@ class Query
                     $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
                     $result->next(); $result->previous();
                     for ($i=0;$i< $numfields;$i++) {
-                        // Fetchfield was the only one used throughout the whole codebase, simulate it here instead of in creole
-                        //$o = $result->FetchField($i);
-                        // FIXME: get rid of it more globally since this never was portable anyway and it kills performance
                         $tmp = array_slice($result->fields,$i,1);
                         $namefield  = key($tmp);
                         $this->fields[$namefield]['name'] = strtolower($namefield);
@@ -180,12 +177,6 @@ class Query
                 }
             } else {
                 while (!$result->EOF) {
-                /*
-                    $line = array();
-                    for ($i=0;$i<$this->rowfields;$i++) {
-                        $line[] = $result->fields[$i];
-                    }
-                    */
                     $this->output[] = $result->fields;
                     $result->MoveNext();
                 }
