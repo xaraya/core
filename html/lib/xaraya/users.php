@@ -414,10 +414,42 @@ class xarUser extends Object
                 if ($userId == XARUSER_LAST_RESORT) {
                     return xarML('No Information'); // better return null here
                 }
-                // Retrieve the item from the roles module
-                // FIXME: a module function in the core...
-                $userRole = xarMod::apiFunc('roles',  'user',  'get',
-                                           array('id' => $userId));
+                
+                // Retrieve the item
+                // Rather than use roles_userapi_get, we hard code this unique case
+                // FIXME: Look at this again when we move to PDO
+                $dbconn = xarDB::getConn();
+                $tables = xarDB::getTables();
+                $rolestable = $tables['roles'];
+                $query = "SELECT * FROM " . $rolestable . " WHERE id = " . $userId;
+                $result = $dbconn->Execute($query);
+
+                // We want the result as an associative array
+                // First get the field names
+                $fields = array();
+                $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
+                $result->next(); $result->previous();
+                $numfields = count($result->fields);
+                for ($i=0;$i< $numfields;$i++) {
+                    $tmp = array_slice($result->fields,$i,1);
+                    $namefield  = key($tmp);
+                    $fields[$namefield]['name'] = strtolower($namefield);
+                }
+                $result->setFetchMode(ResultSet::FETCHMODE_NUM);
+                $result->next(); $result->previous();
+                
+                // Now get the values
+                $i=0; $line=array();
+                foreach ($fields as $key => $value ) {
+                    if(!empty($value['alias']))
+                        $line[$value['alias']] = $result->fields[$i];
+                    elseif(!empty($value['name']))
+                        $line[$value['name']] = $result->fields[$i];
+                    else
+                        $line[] = $result->fields[$i];
+                    $i++;
+                }
+                $userRole = $line;
    
                 if (empty($userRole) || $userRole['id'] != $userId) {
                     throw new IDNotFoundException($userId,'User identified by id #(1) does not exist.');
