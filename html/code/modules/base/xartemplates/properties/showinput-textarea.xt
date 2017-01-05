@@ -39,13 +39,13 @@
     -->
 
     <xar:set name="textareasource">'
-    textarea#'.$id.' {
+    textarea#' . $id . ' {
         max-width: 99%;
         width: '. $cols.'em;
         height: '. ($rows * 1.6) .'em;
     }
     '</xar:set>
-    <xar:style method="embed" source="'.$textareasource.'" media="all"/>
+    <xar:style method="embed" source="$textareasource" media="all"/>
     <textarea name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#" class="#$class#">#$value#</textarea>
     <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>
