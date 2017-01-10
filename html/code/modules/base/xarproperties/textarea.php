@@ -22,8 +22,8 @@ class TextAreaProperty extends DataProperty
     public $desc       = 'Small Text Area';
     public $reqmodules = array('base');
 
-    public $display_rows = 2;
-    public $display_columns = 50;
+    public $display_rows    = 0;
+    public $display_columns = 0;
 
     function __construct(ObjectDescriptor $descriptor)
     {
