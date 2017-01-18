@@ -126,8 +126,12 @@ function xarMain()
             if (!xarTpl::setPageTemplateName('admin-'.$request->getModule())) {
                 xarTpl::setPageTemplateName('admin');
             }
+        } elseif (!xarUserIsLoggedIn() && (xarTpl::getPageTemplateName() == 'default')) {
+            // No need to reset anything here
+            // Right now we do not allow for e.g. default-roles
         } elseif (($request->getType() != 'admin') && (xarTpl::getPageTemplateName() == 'default')) {
-            // Same thing for user side
+        
+            // Same thing as for admin on user side
             if (!xarTpl::setPageTemplateName($request->getType().'-'.$request->getModule())) {
                 xarTpl::setPageTemplateName($request->getType());
             }
