@@ -27,7 +27,7 @@
 function blocks_admin_main()
 {
     // Security
-    if(!xarSecurityCheck('ViewBlocks')) return;
+    if(!xarSecurityCheck('EditBlocks')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();

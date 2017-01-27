@@ -20,7 +20,7 @@
 function categories_admin_main()
 {
     // Security check
-    if(!xarSecurityCheck('ViewCategories')) return;
+    if(!xarSecurityCheck('EditCategories')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();
