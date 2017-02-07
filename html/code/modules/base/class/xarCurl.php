@@ -124,7 +124,7 @@ class xarCurl extends Object
      * A session will be opened immediately the object is created.
      * @return array
      */
-    function __construct(Array $args=array())
+    public function __construct(Array $args=array())
     {
         extract($args);
 
@@ -167,7 +167,7 @@ class xarCurl extends Object
      * 
      * @param void N/A
      */
-    function init()
+    public function init()
     {
         // Close any old session.
         $this->close();
@@ -202,7 +202,7 @@ class xarCurl extends Object
      * @param mixed $value Value to set to the option
      * @return boolean Returns true on success false on failure
      */
-    function setopt($option, $value)
+    public function setopt($option, $value)
     {
         if (!isset($this->curl)) {
             return false;
@@ -219,7 +219,7 @@ class xarCurl extends Object
      * @param type $type
      * @return boolean
      */
-    function _param($name = '', $value = '', $type = '')
+    private function param($name = '', $value = '', $type = '')
     {
         if (!isset($name) || $name == '') {
             return false;
@@ -258,7 +258,7 @@ class xarCurl extends Object
      * 
      * @param string $url Url
      */
-    function seturl($url)
+    public function seturl($url)
     {
         // TODO: Do a quick check: we don't want XML-encoded
         // URLs here, just a plain URL.
@@ -274,9 +274,9 @@ class xarCurl extends Object
      * @param mixed $value Post variable value
      * @return boolean
      */
-    function post($name = '', $value = '')
+    public function post($name = '', $value = '')
     {
-        return $this->_param($name, $value, 'POST');
+        return $this->param($name, $value, 'POST');
     }
 
     /**
@@ -287,9 +287,9 @@ class xarCurl extends Object
      * @param mixed $value Get variable value
      * @return bollean
      */
-    function get($name = '', $value = '')
+    public function get($name = '', $value = '')
     {
-        return $this->_param($name, $value, 'GET');
+        return $this->param($name, $value, 'GET');
     }
 
     /**
@@ -297,7 +297,7 @@ class xarCurl extends Object
      * 
      * @param string $filename Path to file to upload
      */
-    function uploadfile($filename)
+    public function uploadfile($filename)
     {
         // TODO: finish this off (not looked at this at all).
         // TODO: error if file cannot be read.
@@ -314,7 +314,7 @@ class xarCurl extends Object
      * @param void N/A
      * @return boolean Returns true on on success, false on failure
      */
-    function exec()
+    public function exec()
     {
         /**
          * Pending
@@ -445,7 +445,7 @@ class xarCurl extends Object
      * @param mixed $option
      * @return mixed
      */
-    function getinfo($option = NULL)
+    public function getinfo($option = NULL)
     {
         // Info values and elements.
         // Some of these constants are only available on later
@@ -490,7 +490,7 @@ class xarCurl extends Object
      * @param void N/A
      * @return boolean Return true on success false on failure
      */
-    function close()
+    public function close()
     {
         if (!isset($this->curl)) {
             return false;
@@ -506,7 +506,7 @@ class xarCurl extends Object
      * Return curl version
      * @return string Curl version
      */
-    function version()
+    public function version()
     {
         return curl_version();
     }
@@ -520,7 +520,7 @@ class xarCurl extends Object
     * @param    string $buffer
     * @return   string
     */
-    function _decode_chunked($buffer)
+    public function _decode_chunked($buffer)
     {
         $length = 0;
         $new = '';
