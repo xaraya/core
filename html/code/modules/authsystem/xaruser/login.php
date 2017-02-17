@@ -53,7 +53,7 @@ function authsystem_user_login()
     }
     $redirecturl = xarVarPrepHTMLDisplay($redirecturl);
     $rememberme = xarVarPrepHTMLDisplay($rememberme);
-//echo $redirecturl;exit;
+
     // Scan authentication modules and set user state appropriately
     $extAuthentication = false;
     foreach(xarUser::$authenticationModules as $authModName) {
