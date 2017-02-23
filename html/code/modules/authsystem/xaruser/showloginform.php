@@ -31,7 +31,7 @@ function authsystem_user_showloginform(Array $args = array())
     }
     $redirecturl = xarVarPrepHTMLDisplay($redirecturl);
     $truecurrenturl = xarServer::getCurrentURL(array(), false);
-    $urldata = xarModAPIFunc('roles','user','parseuserhome',array('url'=> $redirecturl,'truecurrenturl'=>$truecurrenturl));
+    $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=> $redirecturl,'truecurrenturl'=>$truecurrenturl));
     $data['redirecturl'] = $urldata['redirecturl'];
     
     // If we don't ask to forward, then forward immediately
