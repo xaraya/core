@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <!-- Commenting out this stuff for themoment. Seems to lead to confusion more than anything else
+    <!-- Commenting out this stuff for the moment. Seems to lead to confusion more than anything else
     <xar:if condition="!empty($class)">
     <xar:elseif condition="empty($rows)"/>
         <xar:set name="class">'xar-form-textareamedium'</xar:set>
@@ -24,7 +24,7 @@
         core (common) css + embedded styles on their page templates via xar:place-css tag
 
         NOTE 1: a row (height) is measured as 1.6em (a usual line height in typography)
-        but a column (width) is 1 em - roughly 1 charachter m wide
+        but a column (width) is 1 em - roughly 1 character m wide
 
         NOTE 2: every embedded style is being defined against the element's ID (which must
         be unique page-wide for the system to work, though it's outside of scope of this fix )
