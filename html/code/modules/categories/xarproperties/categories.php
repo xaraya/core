@@ -148,8 +148,8 @@ class CategoriesProperty extends DataProperty
         foreach ($value as $baseid => $categories) {
             foreach ($categories as $category) {
                 $category_id = (int)$category;
-//                $this->categories[$category_id . "_" . (int)$this->basecategories[$baseid]] = $category_id;
-                $this->categories[(int)$this->basecategories[$baseid]-1][$category_id] = $category_id;
+                $this->categories[$category_id . "_" . (int)$this->basecategories[$baseid]] = $category_id;
+//                $this->categories[(int)$this->basecategories[$baseid]-1][$category_id] = $category_id;
             }
         }
 
