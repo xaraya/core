@@ -138,16 +138,23 @@ class CategoriesProperty extends DataProperty
         
         // We passed the checks, set the categories, making sure we have integers
         // There can be several basecategories, and each can have several categories
+        // The form of the resulting array is
+        // $this->categories = array(
+        //                      [basecategory_1] => array([category_1] => category_1, ...),
+        //                      [basecategory_2] => array([category_2] => category_2, ...),
+        //                     )
+        
         $this->categories = array();
         foreach ($value as $baseid => $categories) {
             foreach ($categories as $category) {
                 $category_id = (int)$category;
-                $this->categories[$category_id . "_" . (int)$this->basecategories[$baseid]] = $category_id;
+//                $this->categories[$category_id . "_" . (int)$this->basecategories[$baseid]] = $category_id;
+                $this->categories[(int)$this->basecategories[$baseid]-1][$category_id] = $category_id;
             }
         }
 
         // Keep a reference of the data of this property in $this->value, for saving or easy manipulation
-        $this->value = $this->categories;
+        $this->value =& $this->categories;
         return true;
     }
 
@@ -515,11 +522,19 @@ class CategoriesProperty extends DataProperty
         $q->leftjoin($primary_source, $tableprefix . 'linkage.item_id');
         $q->addTable($tables['categories'], $tableprefix . 'categories');
         $q->leftjoin($tableprefix . 'categories.id', $tableprefix . 'linkage.category_id');
+        
         // A zero means "all"
         // Itemtype & module ID = 0 means the objects listing
-        if (!empty($this->module_id) && !empty($this->itemtype)) $q->eq($tableprefix . 'linkage.module_id', $this->module_id);
-        if (!empty($this->itemtype)) $q->eq($tableprefix . 'linkage.itemtype', $this->itemtype);
-        if (!empty($this->property)) $q->eq('linkage.property_id', $this->property);
+        $a = array();
+        if (!empty($this->module_id) && !empty($this->itemtype)) $a[] = $q->peq($tableprefix . 'linkage.module_id', $this->module_id);
+        if (!empty($this->itemtype)) $a[] = $q->peq($tableprefix . 'linkage.itemtype', $this->itemtype);
+        if (!empty($this->property)) $a[] = $q->peq($tableprefix . 'linkage.property_id', $this->property);
+        
+        // All the above conditions must hold
+        $b[] = $q->pqand($a);
+        // Or we have no categories defined
+        $b[] = $q->peq($tableprefix . 'linkage.item_id', 'NULL');
+        $q->qor($b);
         
         // Set the source of this property
         $this->source = $tableprefix . 'categories.name';
