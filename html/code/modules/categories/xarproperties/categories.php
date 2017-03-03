@@ -525,16 +525,23 @@ class CategoriesProperty extends DataProperty
         
         // A zero means "all"
         // Itemtype & module ID = 0 means the objects listing
-        $a = array();
-        if (!empty($this->module_id) && !empty($this->itemtype)) $a[] = $q->peq($tableprefix . 'linkage.module_id', $this->module_id);
-        if (!empty($this->itemtype)) $a[] = $q->peq($tableprefix . 'linkage.itemtype', $this->itemtype);
-        if (!empty($this->property)) $a[] = $q->peq($tableprefix . 'linkage.property_id', $this->property);
-        
-        // All the above conditions must hold
-        $b[] = $q->pqand($a);
-        // Or we have no categories defined
-        $b[] = $q->peq($tableprefix . 'linkage.item_id', 'NULL');
-        $q->qor($b);
+        // We want each of the following three conditions to hold, or not exist
+        if (!empty($this->module_id) && !empty($this->itemtype)) {
+            $a = array();
+            $a[] = $q->peq($tableprefix . 'linkage.module_id', $this->module_id);
+            $a[] = $q->peq($tableprefix . 'linkage.module_id', 'NULL');
+            $q->qor($a);
+        }
+        if (!empty($this->itemtype)) {
+            $a[] = $q->peq($tableprefix . 'linkage.itemtype', $this->itemtype);
+            $a[] = $q->peq($tableprefix . 'linkage.itemtype', 'NULL');
+            $q->qor($a);
+        }
+        if (!empty($this->property)) {
+            $a[] = $q->peq($tableprefix . 'linkage.property_id', $this->property);
+            $a[] = $q->peq($tableprefix . 'linkage.property_id', 'NULL');
+            $q->qor($a);
+        }
         
         // Set the source of this property
         $this->source = $tableprefix . 'categories.name';
