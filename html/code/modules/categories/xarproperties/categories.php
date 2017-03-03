@@ -43,7 +43,7 @@ class CategoriesProperty extends DataProperty
 
     public $validation_single               = false;
     public $validation_allowempty           = false;
-    public $validation_single_invalid; // CHECKME: is this a validation or something else?
+    public $validation_single_invalid;              // CHECKME: is this a validation or something else?
     public $validation_allowempty_invalid;
     public $initialization_include_no_cat   = 0;
     public $initialization_include_all_cats = 0;
@@ -283,10 +283,23 @@ class CategoriesProperty extends DataProperty
         if (isset($data['itemid'])) $itemid = (int)$data['itemid'];
 
         // Retrieve the configuration settings for this property
-        if (!empty($this->configuration)) {
+        // The default value (parent property) is a:0{}
+        // We allow passing both an array or a serialized array
+        if (!is_array($this->configuration)) {
             try {
                 $configuration = unserialize($this->configuration);
-                $configuration = $configuration['initialization_basecategories'];
+            } catch(Exception $e) {
+                $configuration = array();
+            }
+        } else {
+            $configuration = $this->configuration;
+        }
+
+        if (!empty($configuration)) {
+            try {
+                // CHECKME: can we remove this excess level?
+                if (isset($configuration['initialization_basecategories'])) 
+                    $configuration = $configuration['initialization_basecategories'];
                 $data['tree_name']    = array();
                 $base_categories      = array();
                 $data['include_self'] = array();
@@ -339,6 +352,7 @@ class CategoriesProperty extends DataProperty
             $data['trees'][$key] = $nodes;
         }
 
+        // Now lets turn to the value
         if (!empty($this->source)) {
             // This property has a source other than "None". 
             // In this scenario we are storing a value in the source
