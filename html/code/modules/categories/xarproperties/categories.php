@@ -140,8 +140,8 @@ class CategoriesProperty extends DataProperty
         // There can be several basecategories, and each can have several categories
         // The form of the resulting array is
         // $this->categories = array(
-        //                      [basecategory_1] => array([category_1] => category_1, ...),
-        //                      [basecategory_2] => array([category_2] => category_2, ...),
+        //                      [<category_id>_<basecategory_id>] => <category_id>,
+        //                      ...
         //                     )
         
         $this->categories = array();
@@ -149,7 +149,6 @@ class CategoriesProperty extends DataProperty
             foreach ($categories as $category) {
                 $category_id = (int)$category;
                 $this->categories[$category_id . "_" . (int)$this->basecategories[$baseid]] = $category_id;
-//                $this->categories[(int)$this->basecategories[$baseid]-1][$category_id] = $category_id;
             }
         }
 
