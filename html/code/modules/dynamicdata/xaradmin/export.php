@@ -103,6 +103,13 @@ function dynamicdata_admin_export(Array $args=array())
                                                 'moduleid' => $moduleid,
                                                 'itemtype' => $itemtype,
                                                 'prelist' => false));     // don't run preList method
+        
+        // Export all properties that are not disabled
+        foreach ($mylist->properties as $name => $property) {
+            $status = $property->getDisplayStatus();
+            if ($status == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) continue;
+            $mylist->properties[$name]->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE);
+        }
         $mylist->getItems(array('getvirtuals' => 1));
 
         if (empty($tofile)) {
