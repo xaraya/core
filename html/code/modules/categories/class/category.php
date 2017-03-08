@@ -29,7 +29,7 @@
                 $entry = isset($entry) ? $entry : array();
 
                 if (isset($args['parent_id'])) {
-                    // If this is an import replace parentid imported with the local ones
+                    // If this is an import: replace parentid imported with the local ones
                     $parentindex = $args['parent_id'];
                     if (in_array($parentindex,array_keys($this->parentindices))) {
                         $args['parent_id'] = $this->parentindices[$parentindex];

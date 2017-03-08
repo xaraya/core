@@ -45,6 +45,7 @@ function modules_adminapi_standardinstall(Array $args=array())
         $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
         if (!$objectid) return;
         else $dd_objects[$name] = $objectid;
+        
         // Let data import be allowed to be empty
         if(file_exists($dat_file)) {
             $data['file'] = $dat_file;
