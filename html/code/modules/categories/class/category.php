@@ -60,9 +60,40 @@
                 // This would be when we are coming from a page submit
                 // or we may not have a complete position for the new category but only a parent ID to hang it from
                 // We then have to complete the information for the new caegory
+                if (isset($args['relative_position'])) {
+                    switch ((int)$args['relative_position']) {
+                        case 1: // before - same level
+                        default:
+                            $this->properties['position']->rightorleft = 'left';
+                            $this->properties['position']->inorout = 'out';
+                            break;
+                        case 2: // after - same level
+                            $this->properties['position']->rightorleft = 'right';
+                            $this->properties['position']->inorout = 'out';
+                            break;
+                        case 3: // last child item
+                            $this->properties['position']->rightorleft = 'right';
+                            $this->properties['position']->inorout = 'in';
+                            break;
+                        case 4: // first child item
+                            $this->properties['position']->rightorleft = 'left';
+                            $this->properties['position']->inorout = 'in';
+                            break;
+                        default: // any other value
+                            $this->properties['position']->rightorleft = 'right';
+                            $this->properties['position']->inorout = 'in';
+                            break;
+                    }
+                } else {
+                    $this->properties['position']->rightorleft = 'right';
+                    $this->properties['position']->inorout = 'in';
+                }
                 if (isset($args['parent_id'])) {
-                    // Make the new category the last child of its parent
+                    // Add the reference to the parent category
                     $this->properties['position']->reference_id = $args['parent_id'];
+                } else {
+                    // Make the new category the last child of the root category
+                    $this->properties['position']->reference_id = 0;
                     $this->properties['position']->rightorleft = 'right';
                     $this->properties['position']->inorout = 'in';
                 }
