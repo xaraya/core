@@ -107,6 +107,10 @@ class CelkoPositionProperty extends DataProperty
                 $this->rightorleft = 'left';
                 $this->inorout = 'in';
                 break;
+            default: // any other value
+                $this->rightorleft = 'right';
+                $this->inorout = 'in';
+                break;
         }
         $this->reference_id = $reference_id;
         return $this->validateValue($value);

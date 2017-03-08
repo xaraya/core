@@ -19,6 +19,7 @@
  * The function displays the module's main entry page, or redirects to different page if the admin has defined one.
  *
  * @author Paul Rosania
+ * @author Marc Lutolf
  * 
  * @param array $args Optional parameters
  * @return mixed output display string
