@@ -196,7 +196,11 @@ function dynamicdata_utilapi_import(Array $args=array())
             }
             // TODO: watch out for multi-sites
             // replace default xar_* table prefix with local one
-            $propertyargs['source'] = preg_replace("/^xar_/",$prefix,$propertyargs['source']);
+            if (!empty($propertyargs['source'])) {
+                $propertyargs['source'] = preg_replace("/^xar_/",$prefix,$propertyargs['source']);
+            } else {
+                $propertyargs['source'] = "";
+            }
 
             // Force a new itemid to be created for this property
             $dataproperty->properties[$dataproperty->primary]->setValue(0);
