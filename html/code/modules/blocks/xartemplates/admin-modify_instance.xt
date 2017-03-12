@@ -296,6 +296,9 @@
                         </fieldset>
                         <xar:var name="submitLabel">Update Access</xar:var>
                     
+                <xar:elseif condition="$interface eq 'export'"/>
+                    <xar:template type="module" module="blocks" file="instance-info"/>
+                    <xar:template type="module" module="blocks" file="export"/>
                 <xar:else/>
                     <xar:template type="module" module="blocks" file="instance-info"/>
                         <fieldset>
