@@ -53,17 +53,13 @@ function modules_adminapi_standarddeinstall(Array $args=array())
 
 # --------------------------------------------------------
 #
-# Remove blocks
+# Remove all blocks created by this module
 #
     try {
         $blocks = unserialize(xarModVars::get($module,'blocks'));
         
-        sys::import('xaraya.structures.query');
-        $q = new Query('DELETE', $xartables['block_instances']);
         foreach ($blocks as $blockid) {
-            $q->eq('id', $blockid);
-            $q->run();
-            $q->clearconditions();
+            xarMod::apiFunc('blocks', 'instances', 'deleteitem', array('block_id' => $blockid));
         }
     } catch (Exception $e) {}
 
