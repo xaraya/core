@@ -36,7 +36,8 @@ class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
         $content_types = array();
         $content_types[] = array('value' => 'text', 'label' => xarML('Text'));
         $content_types[] = array('value' => 'html', 'label' => xarML('HTML'));
-        $content_types[] = array('value' => 'php', 'label' => xarML('PHP (echo capture)'));
+        $content_types[] = array('value' => 'bl', 'label'   => xarML('Blocklayout'));
+        $content_types[] = array('value' => 'php', 'label'  => xarML('PHP (echo capture)'));
         $content_types[] = array('value' => 'data', 'label' => xarML('PHP (template data)'));
         $data['content_types'] = $content_types;
         return $data;
@@ -49,7 +50,7 @@ class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
      */
     public function configupdate(Array $data=array())
     {
-        if (xarVarFetch('content_type', 'pre:lower:passthru:enum:text:html:php:custom:data', $content_type, 'text', XARVAR_NOT_REQUIRED)) {
+        if (xarVarFetch('content_type', 'pre:lower:passthru:enum:text:html:bl:php:custom:data', $content_type, 'text', XARVAR_NOT_REQUIRED)) {
             $args['content_type'] = $content_type;
         }
 

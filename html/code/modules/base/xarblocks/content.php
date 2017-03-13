@@ -37,7 +37,7 @@ class Base_ContentBlock extends BasicBlock implements iBlock
     public $end_date            = '';
 
     public $func_update         = 'base_contentblock_update';
-    public $notes               = "content_type can be 'text', 'html', 'php' or 'data'";
+    public $notes               = "content_type can be 'text', 'html', 'blocklayout', 'php' or 'data'";
 
 }
 ?>
