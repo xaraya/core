@@ -611,19 +611,18 @@ function blocks_admin_modify_instance()
                     // Only pass the fields we want
                     if (!in_array($key, $instancefields)) continue;
                     
-                    if (is_array($value)) {
+                    if (is_array($value)) {/*
                         foreach ($value as $k => $v) {
-                            $v = serialize($v);
                             $v = xarVarPrepForDisplay($v);
                             $value[$k] = $v;
-                        }
-                        $xml .= "  <$key>\n";
-                        $xml .= "    " . trim(xarVarPrepForDisplay(serialize($value))) . "\n";
-                        $xml .= "  </$key>\n";
+                        }*/
+                        $xml .= "  <$key>";
+                        $xml .= base64_encode(serialize($value));
+                        $xml .= "</$key>\n";
                     } else {
-                        $xml .= "  <$key>\n";
-                        $xml .= "    " . trim(xarVarPrepForDisplay($value)) . "\n";
-                        $xml .= "  </$key>\n";
+                        $xml .= "  <$key>";
+                        $xml .= base64_encode($value);
+                        $xml .= "</$key>\n";
                     }
             }
             $xml .= "</block>";
