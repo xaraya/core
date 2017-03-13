@@ -70,7 +70,7 @@ class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
                 } else {
                  throw $e;
                 }
-            }var_dump($data['content_text']);
+            }
             
         } elseif ($data['content_type'] == 'php' || $data['content_type'] == 'data') {
             // Execute the PHP code.
