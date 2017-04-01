@@ -146,6 +146,11 @@ class xarRequest extends Object
         // What is still to be defined by routing are the type (for modules) and function/function arguments or method (for objects).            
     }
     
+    function getRawURL()
+    {
+        return $this->url;
+    }
+    
     /**
      * Gets request info for current page or a given url.
      *
