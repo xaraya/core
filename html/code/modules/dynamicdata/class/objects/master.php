@@ -433,8 +433,11 @@ class DataObjectMaster extends Object
      * @param $args['name'] the name for the dynamic property (required)
      * @param $args['type'] the type of dynamic property (required)
      * @param $args['label'] the label for the dynamic property
-     * @param $args['datastore'] the datastore for the dynamic property
      * @param $args['source'] the source for the dynamic property
+     * @param $args['defaultvalue'] the default value for the dynamic property
+     * @param $args['status'] the input and display status for the dynamic property
+     * @param $args['seq'] the place in sequence this dynamic property appears in
+     * @param $args['configuration'] the configuration (serialized array) for the dynamic property
      * @param $args['id'] the id for the dynamic property
      *
      * @todo why not keep the scope here and do this:
