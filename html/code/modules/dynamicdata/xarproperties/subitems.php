@@ -1,4 +1,17 @@
 <?php
+/**
+ * @package modules
+ * @subpackage dynamicdata module
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ * @link http://xaraya.info/index.php/release/182.html
+ *
+ * @author Marc Lutolf <marc@luetolf-carroll.com>
+ */
+
 class SubItemsProperty extends DataProperty
 {
     public $id           = 30069;
@@ -130,7 +143,7 @@ class SubItemsProperty extends DataProperty
     public function deleteValue($itemid=0)
     {
         foreach($this->todelete as $id)
-            $this->subitemsobject->deleteItem(array('itemid' => $id));
+            $this->subitemsobject->deleteItem(array('itemid' => (int)$id));
         return $itemid;
     }
 
@@ -340,6 +353,30 @@ class SubItemsProperty extends DataProperty
         $this->itemsdata[$name] = $args;
     }
     
+/*
+ * Rework the postings so that we can update where possible and not delete and recreate them all each time
+ * This means addin the ID and transaction ID values of postings we will overwrite in the DB
+ */
+    public function loadItemsData($args=array())
+    {
+        $old_ids = array_keys($this->getItemsData());
+        $parent_id = (int)$this->objectref->itemid;
+        $available_slots = count($old_ids);
+
+        $needed_slots = count($args);
+        $replaceable_slots = min($available_slots, $needed_slots);
+        // Note that subitems are numbered beginning at 1
+        for($i=1;$i<=$replaceable_slots;$i++) {
+            $args[$i]['id'] = (int)array_shift($old_ids);
+            $args[$i]['transaction_id'] = $parent_id;
+        }
+        
+        // The postings of the leftover old IDs need to be deleted
+        $this->todelete = $old_ids;
+        
+        $this->setItemsData($args);//echo "<pre>";var_dump($this->todelete);exit;
+    }
+    
     // FIXME: _getitemsdata and _setitemsdata should operate as opposites
     private function _getItemsData($withkeys=0)
     {
@@ -435,7 +472,7 @@ class SubItemsProperty extends DataProperty
                     
                     // If we are creating a new parent item, we need to set the primary index to 0
                     if ($functiontype == 'create') $primary->value = 0;
-                    
+
                     if (empty($primary->value)) {
                         // Insert the link value to the parent object
                         $this->subitemsobject->properties[$sublink]->value = $this->objectref->properties[$link]->value;
