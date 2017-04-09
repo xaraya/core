@@ -17,7 +17,8 @@
 
 class Query
 {
-    public $version = "3.5";
+    public $version = "3.6";
+    public $id;                                 // A unique identifier for this query
     public $type                = 'SELECT';     // Normalized array of tables used in the statement
     public $tables              = array();      // Normalized array of tables used in the statement
     public $tablelinks          = array();      // Normalized array of table links used in the statement
@@ -84,6 +85,9 @@ class Query
 
         $this->addtables($tables);
         $this->addfields($fields);
+        
+        // Create the ID for this query
+        $this->id = $this->createID();
     }
 
     public function run($statement='',$display=1)
@@ -294,6 +298,9 @@ class Query
             }
         }
         if ($notdone) $this->tables[] = $argsarray;
+
+        // Update the ID for this query
+        $this->id = $this->createID();
     }
 
     public function addfield()
@@ -400,6 +407,10 @@ class Query
                                       'field2' => func_get_arg(2) . "." . func_get_arg(3),
                                       'op' => 'JOIN');
         }
+
+        // Update the ID for this query
+        $this->id = $this->createID();
+
         return $key;
     }
     public function addhaving(Array $args=array())
@@ -649,6 +660,8 @@ class Query
                 unset($this->conjunctions[$key]);
                 break;
             }
+        // Update the ID for this query
+        $this->id = $this->createID();
     }
 
     public function addsecuritycheck(Array $args=array())
@@ -690,6 +703,10 @@ class Query
                                         
         // Add the condition to the array of conditions
         $this->conditions[$key] = $x;
+
+        // Update the ID for this query
+        $this->id = $this->createID();
+
         return $key;
     }
 
@@ -844,6 +861,9 @@ class Query
         $this->conjunctions[$key]=array('conditions' => $key,
                                         'conj' => 'IMPLICIT',
                                         'active' => $active);
+        // Update the ID for this query
+        $this->id = $this->createID();
+
         return $key;
     }
 
@@ -1393,6 +1413,9 @@ class Query
     {
         $this->conditions = array();
         $this->conjunctions = array();
+
+        // Update the ID for this query
+        $this->id = $this->createID();
     }
     public function clearfield($x)
     {
@@ -1614,10 +1637,16 @@ class Query
     {
         $this->cleartables();
         $this->addtable($x);
+
+        // Update the ID for this query
+        $this->id = $this->createID();
     }
     public function settype($x = 'SELECT')
     {
         $this->type = $x;
+
+        // Update the ID for this query
+        $this->id = $this->createID();
     }
     public function setusebinding($x = true)
     {
@@ -1688,6 +1717,9 @@ class Query
     {
         $this->clearconditions();
         $this->addconditions($q);
+
+        // Update the ID for this query
+        $this->id = $this->createID();
     }
     public function seteqop($x='=')
     {
@@ -1869,6 +1901,9 @@ class Query
         }
         $this->sorts = $newsorts;
         
+        // Update the ID for this query
+        $this->id = $this->createID();
+
         return true;
     }
 
@@ -2190,6 +2225,23 @@ class Query
         }
 
         return true;
+    }
+
+/*
+ * Creates a unique ID for this query. 
+ * The ID includes the characteristics assumed "innate" of the query
+ * It does not include display-dependant stuff such as fields or sorts
+ */
+    public function createID()
+    {
+        $idarray = array($this->tables, $this->tablelinks, $this->conjunctions, $this->conditions);
+        $idstring = serialize($idarray);
+        $id = md5($idstring);
+        return $id;
+    }
+    public function getQueryID()
+    {
+        return $this->id;
     }
 }
 ?>
