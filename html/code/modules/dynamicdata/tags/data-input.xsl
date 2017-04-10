@@ -44,7 +44,7 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- We do have a property in the attribute -->
-        <xsl:text>try{if (isset(</xsl:text>
+        <xsl:text>try{if (null!==(</xsl:text>
         <xsl:value-of select="@property"/>
         <xsl:text>)){</xsl:text>
         <xsl:text>echo </xsl:text>
