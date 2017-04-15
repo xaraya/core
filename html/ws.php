@@ -238,7 +238,7 @@ function xarWebservicesMain()
  * This works like a "normal" Xaraya module call, but depends on wsapi functions (if they exist) in each module
  * The type is always "ws"
  * The module and function must be defined in the call
- * All other parameters passed in the call get bundled togerther in an array and passed to the called Xaraya function
+ * All other parameters passed in the call get bundled together in an array and passed to the called Xaraya function
  */
         case 'native' :
             xarVarFetch('module', 'str:1', $module, 'base',    XARVAR_NOT_REQUIRED);
