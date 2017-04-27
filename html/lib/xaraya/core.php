@@ -12,6 +12,7 @@
  *
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
+ * @author Marc Lutolf <marc@luetolf-carroll.com>
  * @todo dependencies and runlevels!
 **/
 
@@ -92,7 +93,7 @@ define('XARCORE_VERSION_REV', $rev);
  * | BLOCKS         | USER                        |   64   |
  * | HOOKS          | USER                        |  128   |
  * --------------------------------------------------------- 
-    **/
+ **/
 
 class xarConst
 {
@@ -118,7 +119,7 @@ class xarConst
     const BIT_ALL           = 255;
 
 /*
-* TDOD: Adjust when we move to PHP 5.6.x
+* TODO: Adjust when we move to PHP 5.6.x
     const SYSTEM_NONE           = 0;
     const SYSTEM_DATABASE       = self::BIT_DATABASE;
     const SYSTEM_CONFIGURATION  = self::BIT_CONFIGURATION | self::SYSTEM_DATABASE ;
@@ -207,12 +208,12 @@ class xarCore extends xarCoreCache
     const SYSTEM_HOOKS         = XARCORE_SYSTEM_HOOKS;
     const SYSTEM_ALL           = XARCORE_SYSTEM_ALL;    
 
-/**
- * Initializes the core engine
- * 
- * @param integer whatToLoad What optional systems to load.
- * @return boolean true
-**/
+    /**
+     * Initializes the core engine
+     * 
+     * @param integer whatToLoad What optional systems to load.
+     * @return boolean true
+    **/
     public static function xarInit($whatToLoad = self::SYSTEM_ALL)
     {
         static $current_SYSTEM_level = self::SYSTEM_NONE;
@@ -254,7 +255,7 @@ class xarCore extends xarCoreCache
         sys::import('xaraya.variables.system');
     
         /*
-         * Start logging subsystem
+         * Start the logging subsystem
          */
         $systemArgs = array();
         sys::import('xaraya.log');
@@ -278,7 +279,6 @@ class xarCore extends xarCoreCache
          *
          */
         if ($whatToLoad & self::SYSTEM_DATABASE) { // yeah right, as if this is optional
-
             // Decode encoded DB parameters
             // These need to be there
             $userName = xarSystemVars::get(sys::CONFIG, 'DB.UserName');
@@ -360,7 +360,6 @@ class xarCore extends xarCoreCache
         $systemArgs = array();
         xarEvents::init($systemArgs);
 
-
         /**
          * Start Configuration System
          *
@@ -374,8 +373,7 @@ class xarCore extends xarCoreCache
             sys::import('xaraya.variables');
             xarVar_init($systemArgs);
             $whatToLoad ^= self::BIT_CONFIGURATION;
-
-        // we're about done here - everything else requires configuration, at least to initialize them !?
+            // We're about done here - everything else requires configuration, at least to initialize them !?
         } else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
@@ -384,7 +382,6 @@ class xarCore extends xarCoreCache
 
         /**
          * Legacy systems
-         *
          * Before anything fancy is loaded, let's start the legacy systems
          *
          */
@@ -411,14 +408,12 @@ class xarCore extends xarCoreCache
                                 'generateXMLURLs' => true);
             xarMod::init($systemArgs);
             $whatToLoad ^= self::BIT_MODULES;
-
-        // we're about done here - everything else requires modules !?
+            // We're about done here - everything else requires modules !?
         } else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
             return true;
         }
-
 
         /**
          * Bring HTTP Protocol Server/Request/Response utilities into the story
@@ -464,7 +459,7 @@ class xarCore extends xarCoreCache
 
             xarTpl::init($systemArgs);
             $whatToLoad ^= self::BIT_TEMPLATES;
-        // we're about done here - everything else requires templates !?
+            // We're about done here - everything else requires templates !?
         } else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
@@ -494,7 +489,7 @@ class xarCore extends xarCoreCache
             xarSession_init($systemArgs);
 
             $whatToLoad ^= self::BIT_SESSION;
-        // we're about done here - everything else requires sessions !?
+            // We're about done here - everything else requires sessions !?
         } else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
@@ -503,10 +498,6 @@ class xarCore extends xarCoreCache
 
         /**
          * At last, we can give people access to the system.
-         *
-         * @todo <marcinmilan> review what pasts of the old user system need to be retained
-        **/
-        /**
          * Initialise users, session, templates for GUI functions
         **/
         if ($whatToLoad & self::SYSTEM_USER)
@@ -518,7 +509,7 @@ class xarCore extends xarCoreCache
             $systemArgs = array('authenticationModules' => xarConfigVars::get(null, 'Site.User.AuthenticationModules'));
             xarUser::init($systemArgs);
             $whatToLoad ^= self::BIT_USER;
-        // we're about done here - everything else requires Users !?
+            // We're about done here - everything else requires Users !?
         } else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
@@ -540,7 +531,7 @@ class xarCore extends xarCoreCache
             $systemArgs = array();
             xarBlock::init($systemArgs);
             $whatToLoad ^= self::BIT_BLOCKS;
-        // we're about done here - everything else requires templates !?
+            // We're about done here - everything else requires templates !?
         } else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
@@ -555,7 +546,7 @@ class xarCore extends xarCoreCache
             $systemArgs = array();
             xarHooks::init($systemArgs);
             $whatToLoad ^= self::BIT_HOOKS;
-        // we're about done here - everything else requires hooks !?
+            // We're about done here - everything else requires hooks !?
         } /*else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
