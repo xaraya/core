@@ -150,7 +150,7 @@ function xarMain()
         }
 
         // if the debugger is active, start it
-        if (xarCoreIsDebuggerActive()) {
+        if (xarCore::isDebuggerActive()) {
             ob_start();
         }
 
@@ -159,7 +159,7 @@ function xarMain()
         // Retrieve the output to send to the browser
         $mainModuleOutput = xarController::$response->getOutput();
 
-        if (xarCoreIsDebuggerActive()) {
+        if (xarCore::isDebuggerActive()) {
             if (ob_get_length() > 0) {
                 $rawOutput = ob_get_contents();
                 $mainModuleOutput = 'The following lines were printed in raw mode by module, however this
