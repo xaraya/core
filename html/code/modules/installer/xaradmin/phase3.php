@@ -46,9 +46,9 @@ function installer_admin_phase3()
     $metRequiredPHPVersion    = false;
 
     $systemVarDir             = sys::varpath();
-    $cacheDir                 = $systemVarDir . XARCORE_CACHEDIR;
-    $cacheTemplatesDir        = $systemVarDir . XARCORE_TPL_CACHEDIR;
-    $rssTemplatesDir          = $systemVarDir . XARCORE_RSS_CACHEDIR;
+    $cacheDir                 = $systemVarDir . xarConst::CACHEDIR;
+    $cacheTemplatesDir        = $systemVarDir . xarConst::TPL_CACHEDIR;
+    $rssTemplatesDir          = $systemVarDir . xarConst::RSS_CACHEDIR;
     $systemConfigFile         = $systemVarDir . '/' . sys::CONFIG;
     $systemConfigDistFile     = $systemVarDir . '/' . sys::CONFIG . '.dist';
     $phpLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/php';

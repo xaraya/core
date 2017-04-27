@@ -158,6 +158,44 @@ define('XARCORE_RSS_CACHEDIR' , '/cache/rss');
 define('XARCORE_TPL_CACHEDIR' , '/cache/templates');
 /**#@-*/
 
+class xarConst
+{
+    const BIT_DATABASE      = 1;
+    const BIT_CONFIGURATION = 2;
+    const BIT_MODULES       = 4;
+    const BIT_TEMPLATES     = 8;
+    const BIT_SESSION       = 16;
+    const BIT_USER          = 32;
+    const BIT_BLOCKS        = 64;
+    const BIT_HOOKS         = 128;
+    const BIT_ALL           = 255;
+
+/*
+* TDOD: Adjust when we move to PHP 5.6.x
+    const SYSTEM_NONE           = 0;
+    const SYSTEM_DATABASE       = self::BIT_DATABASE;
+    const SYSTEM_CONFIGURATION  = self::BIT_CONFIGURATION | self::SYSTEM_DATABASE ;
+    const SYSTEM_MODULES        = self::BIT_MODULES | self::SYSTEM_CONFIGURATION ;
+    const SYSTEM_TEMPLATES      = self::BIT_TEMPLATES | self::SYSTEM_MODULES ;
+    const SYSTEM_SESSION        = self::BIT_SESSION | self::SYSTEM_TEMPLATES ;
+    const SYSTEM_USER           = self::BIT_USER | self::SYSTEM_SESSION ;
+    const SYSTEM_BLOCKS         = self::BIT_BLOCKS | self::SYSTEM_USER ;
+    const SYSTEM_HOOKS          = self::BIT_HOOKS | self::SYSTEM_USER ;
+    const SYSTEM_ALL            = self::BIT_ALL ; 
+
+*/
+    const DBG_ACTIVE            = 1; 
+    const DBG_SQL               = 2; 
+    const DBG_EXCEPTIONS        = 4; 
+    const DBG_SHOW_PARAMS_IN_BT = 8; 
+    const DBG_INACTIVE          = 16; 
+
+    const CACHEDIR         = '/cache';
+    const DB_CACHEDIR      = '/cache/database';
+    const RSS_CACHEDIR     = '/cache/rss';
+    const TPL_CACHEDIR     = '/cache/templates';
+}
+
 /*
  * Load the Xaraya pre core early in case the entry point didn't do it (it should)
  *

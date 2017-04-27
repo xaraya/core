@@ -78,7 +78,7 @@ class xarTpl extends Object
 
         // @todo is the core define still needed now?
         sys::import('xaraya.caching.template');
-        xarTemplateCache::init(sys::varpath() . XARCORE_TPL_CACHEDIR, $args['enableTemplatesCaching']);
+        xarTemplateCache::init(sys::varpath() . xarConst::TPL_CACHEDIR, $args['enableTemplatesCaching']);
 
         // This is wrong here as well, but it's better at least than in modules.php
         sys::import('xaraya.themes');
