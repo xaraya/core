@@ -50,8 +50,7 @@ sys::import('xaraya.core');
 /**
  * Main Xaraya Entry
  *
- * @access public
- * @return bool
+ * @return void
  */
 function xarMain()
 {
