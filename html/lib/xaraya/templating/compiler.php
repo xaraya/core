@@ -16,7 +16,6 @@ if (!class_exists('xarExceptions')) {
 /**
  * Exceptions raised by this subsystem
  *
- * @package compiler
  */
 class BLCompilerException extends xarExceptions
 {
