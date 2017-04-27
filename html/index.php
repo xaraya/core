@@ -48,13 +48,13 @@ xarCache::init();
 sys::import('xaraya.core');
 
 /**
- * Main Xaraya Entry
- * This function is called with each page request
- * It does the following:
- * 1. Loads the Xaraya core
- * 2. Sets page title and theme to use in display
- * 3. Sets the theme's page to use for display (admin, user, default...)
- * 4. Processes the request
+ * Main Xaraya Entry<br/>
+ * This function is called with each page request<br/>
+ * It does the following:<br/>
+ * 1. Loads the Xaraya core<br/>
+ * 2. Sets page title and theme to use in display<br/>
+ * 3. Sets the theme's page to use for display (admin, user, default...)<br/>
+ * 4. Processes the request<br/>
  * 5. Renders the request output (sends the output to the browser)
  *
  * @return void
