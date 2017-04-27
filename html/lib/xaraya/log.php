@@ -244,11 +244,11 @@ function xarLog__shutdown_handler()
      xarLog::message("Leaving session: " . xarSession::getId() . " - User: " . xarUser::getVar('uname') . " (ID: " . xarUser::getVar('id') . ")");
 
      // If the debugger was active, we can dispose it now.
-     if(xarDebug::$flags & XARDBG_SQL) {
+     if(xarDebug::$flags & xarConst::DBG_SQL) {
          xarLog::message("Total SQL queries: $GLOBALS[xarDebug_sqlCalls].");
      }
 
-     if (xarDebug::$flags & XARDBG_ACTIVE) {
+     if (xarDebug::$flags & xarConst::DBG_ACTIVE) {
          $lmtime = explode(' ', microtime());
          $endTime = $lmtime[1] + $lmtime[0];
          $totalTime = ($endTime - xarDebug::$startTime);

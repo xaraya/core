@@ -32,7 +32,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            #xarCore::VERSION_ID# version #XARCORE_VERSION_NUM# (#xarCore::VERSION_SUB#)
+                            #xarCore::VERSION_ID# version #xarConst::VERSION_NUM# (#xarCore::VERSION_SUB#)
                         </div>
                     </div>
                     <div class="xar-row">

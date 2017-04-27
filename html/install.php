@@ -95,7 +95,7 @@ sys::import('xaraya.exceptions');
 set_exception_handler(array('ExceptionHandlers','bone'));
 
 // Enable debugging always for the installer
-xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT);
+xarCoreActivateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT);
 
 // Include some extra functions, as the installer is somewhat special
 // for loading gui and api functions
