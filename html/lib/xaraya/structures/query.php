@@ -10,10 +10,10 @@
  * 
  * 
  */
-  /**************************************************************************\
-  * Query class for SQL abstraction                                          *
-  * Written by Marc Lutolf (marcinmilan@xaraya.com)                          *
-  \**************************************************************************/
+  /**
+  * Query class for SQL abstraction
+  * 
+  */
 
 class Query
 {
