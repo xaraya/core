@@ -13,7 +13,7 @@
             <xar:elseif condition="$layout eq 'general'"/>
                 <div style="margin-top: 20px">#$message#</div>
             <xar:elseif condition="$layout eq 'invalid_core'"/>
-                <div style="margin-top: 20px">The current Xaraya core #xarConst::VERSION_NUM# is not compatible with the module #$modname#</div>
+                <div style="margin-top: 20px">The current Xaraya core #xarCore::VERSION_NUM# is not compatible with the module #$modname#</div>
             <xar:else />
                 <div style="margin-top: 20px">No error message is available. 
                 <br />Please contact the system administrator.</div>

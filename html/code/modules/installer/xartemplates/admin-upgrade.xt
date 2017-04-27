@@ -35,7 +35,7 @@
                         </label>
                     </td>
                     <td>
-                        #xarCore::VERSION_ID# version #xarConst::VERSION_NUM# (#xarCore::VERSION_SUB#)
+                        #xarCore::VERSION_ID# version #xarCore::VERSION_NUM# (#xarCore::VERSION_SUB#)
                     </td>
                     <td>
                         <xar:var scope="config" name="System.Core.VersionId"/> version
@@ -119,7 +119,7 @@
                 <xar:if condition="!$upgradable">
                     You must have at least version 2.0.0 in order to run the upgrader.
                 <xar:else/>
-                    Now preparing to run an upgrade from prior version <strong><xar:var scope="config" name="System.Core.VersionNum"/></strong> to version <strong>#xarConst::VERSION_NUM#</strong>. 
+                    Now preparing to run an upgrade from prior version <strong><xar:var scope="config" name="System.Core.VersionNum"/></strong> to version <strong>#xarCore::VERSION_NUM#</strong>. 
                     <form action="upgrade.php" method="post">
                         <input type="hidden" name="password" value="#$password#"/>
                         <p class="center">
@@ -258,7 +258,7 @@
             <br />
             <br />
             <h2>Thank you for using Xaraya.</h2>
-            <h2>Notes for Version #xarConst::VERSION_NUM#</h2>
+            <h2>Notes for Version #xarCore::VERSION_NUM#</h2>
             <xar:if condition="XARCORE_VERSION_NUM eq '2.1.0'">
                 <xar:template file="notes-210"/>
             <xar:elseif condition="XARCORE_VERSION_NUM eq '2.2.0'"/>

@@ -27,7 +27,7 @@ function base_admin_upgrade()
     // Security
     if(!xarSecurityCheck('AdminBase')) return;
     
-    $fileversion = xarConst::VERSION_NUM;
+    $fileversion = xarCore::VERSION_NUM;
     $dbversion = xarConfigVars::get(null, 'System.Core.VersionNum');
     sys::import('xaraya.version');
     $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);
