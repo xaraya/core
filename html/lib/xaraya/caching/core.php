@@ -168,7 +168,6 @@ class xarCoreCache extends Object
  *          But what about concurrent updates in bulk then (+ unserialize & autoload too early) ?
  *          There doesn't seem to be a big difference in performance using bulk or not, at least with xcache
  */
-
     public static function loadBulkStorage()
     {
         if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) return;
