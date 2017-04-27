@@ -39,7 +39,7 @@
                         <div class="xar-col">
                             <xar:var name="label">Current Build</xar:var>
                             <label title="#$label#" class="xar-form-label">                            
-                                Build:                            
+                                Git revision:                            
                             </label>
                         </div>
                         <div class="xar-col">
