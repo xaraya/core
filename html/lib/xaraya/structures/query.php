@@ -17,7 +17,7 @@
 
 class Query
 {
-    public $version = "3.6";
+    public $version             = "3.6";
     public $id;                                 // A unique identifier for this query
     public $type                = 'SELECT';     // Normalized array of tables used in the statement
     public $tables              = array();      // Normalized array of tables used in the statement
