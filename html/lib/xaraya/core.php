@@ -174,7 +174,9 @@ sys::import('xaraya.caching.core');
 
 
 /**
- * Convenience class for keeping track of core stuff
+ * Xaraya core class<br/>
+ * This class is the engine of the Xaraya framework.
+ * It is called with each page request and loads the functionality required to process the request.
  *
  * @todo change xarCore:: calls to xarCoreCache:: and put other core stuff here ?
 **/
@@ -212,7 +214,6 @@ class xarCore extends xarCoreCache
 
 /**
  * Initializes the core engine
- *
  * 
  * @param integer whatToLoad What optional systems to load.
  * @return boolean true
