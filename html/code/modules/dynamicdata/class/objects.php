@@ -9,7 +9,7 @@
  *       |-- DataObjectList   - creates an object with a list of values for a DD object. (weird duckling in here)
  * 
  * @package modules
- * @subpackage dynamicdata module
+ * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release

@@ -3,7 +3,7 @@
  * Return the properties for an item
  *
  * @package modules
- * @subpackage dynamicdata module
+ * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
