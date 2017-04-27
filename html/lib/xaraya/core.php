@@ -637,7 +637,7 @@ class xarCore extends xarCoreCache
      * @param string $funcName The function name; case-sensitive
      * @todo this seems out of place here.
     **/
-    public static function uncIsDisabled($funcName)
+    public static function funcIsDisabled($funcName)
     {
         static $disabled;
 
