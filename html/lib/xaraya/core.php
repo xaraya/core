@@ -209,7 +209,6 @@ class xarCore extends xarCoreCache
  * 
  * @param integer whatToLoad What optional systems to load.
  * @return boolean true
- * @todo <johnny> fix up sitetable prefix when we have a place to store it
 **/
     public static function xarInit($whatToLoad = self::SYSTEM_ALL)
     {
@@ -244,8 +243,7 @@ class xarCore extends xarCoreCache
             /**
              * Start exceptions subsystem
             **/
-            xarCoreActivateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT );       
-            // xarCoreActivateDebugger(xarConst::DBG_INACTIVE);
+            self::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT );       
         
             /**
              * Load system variables
@@ -570,97 +568,98 @@ class xarCore extends xarCoreCache
 
         // end init();
     }
-}
 
-/**
- * Activates the debugger.
- *
- * 
- * @param integer $flags bit mask for the debugger flags
- * @todo  a big part of this should be in the exception (error handling) subsystem.
- * @return void
-**/
-function xarCoreActivateDebugger($flags)
-{
-    xarDebug::$flags = $flags;
-    if ($flags & xarConst::DBG_INACTIVE) {
-        // Turn off error reporting
-        error_reporting(0);
-        // Turn off assertion evaluation
-        assert_options(ASSERT_ACTIVE, 0);
-    } elseif ($flags & xarConst::DBG_ACTIVE) {
-        // See if config.system.php has info for us on the errorlevel, but dont break if it has not
-        try {
-            sys::import('xaraya.variables.system');
-            $errLevel = xarSystemVars::get(sys::CONFIG, 'Exception.ErrorLevel');
-        } catch(Exception $e) {
-            $errLevel = E_ALL;
-        }
-
-        error_reporting($errLevel);
-        // Activate assertions
-        assert_options(ASSERT_ACTIVE,    1);    // Activate when debugging
-        assert_options(ASSERT_WARNING,   1);    // Issue a php warning
-        assert_options(ASSERT_BAIL,      0);    // Stop processing?
-        assert_options(ASSERT_QUIET_EVAL,0);    // Quiet evaluation of assert condition?
-        xarDebug::$sqlCalls = 0;
-        $lmtime = explode(' ', microtime());
-        xarDebug::$startTime = $lmtime[1] + $lmtime[0];
-    }
-}
-
-/**
- * Check if the debugger is active
- *
- * 
- * @return boolean true if the debugger is active, false otherwise
-**/
-function xarCoreIsDebuggerActive()
-{
-    return xarDebug::$flags & xarConst::DBG_ACTIVE;
-}
-
-/**
- * Check for specified debugger flag.
- *
- * 
- * @param integer flag the debugger flag to check for activity
- * @return boolean true if the flag is active, false otherwise
-**/
-function xarCoreIsDebugFlagSet($flag)
-{
-    return (xarDebug::$flags & xarConst::DBG_ACTIVE) && (xarDebug::$flags & $flag);
-}
-
-/**
- * Checks if a certain function was disabled in php.ini
- *
- *
- * 
- * @param string $funcName The function name; case-sensitive
- * @todo this seems out of place here.
-**/
-function xarFuncIsDisabled($funcName)
-{
-    static $disabled;
-
-    if (!isset($disabled))
+    /**
+     * Activates the debugger.
+     *
+     * 
+     * @param integer $flags bit mask for the debugger flags
+     * @todo  a big part of this should be in the exception (error handling) subsystem.
+     * @return void
+    **/
+    public static function activateDebugger($flags)
     {
-        // Fetch the disabled functions as an array.
-        // White space is trimmed here too.
-        $functions = preg_split('/[\s,]+/', trim(ini_get('disable_functions')));
+        xarDebug::$flags = $flags;
+        if ($flags & xarConst::DBG_INACTIVE) {
+            // Turn off error reporting
+            error_reporting(0);
+            // Turn off assertion evaluation
+            assert_options(ASSERT_ACTIVE, 0);
+        } elseif ($flags & xarConst::DBG_ACTIVE) {
+            // See if config.system.php has info for us on the errorlevel, but dont break if it has not
+            try {
+                sys::import('xaraya.variables.system');
+                $errLevel = xarSystemVars::get(sys::CONFIG, 'Exception.ErrorLevel');
+            } catch(Exception $e) {
+                $errLevel = E_ALL;
+            }
 
-        if ($functions[0] != '')
-        {
-            // Make the function names the keys.
-            // Values will be 0, 1, 2 etc.
-            $disabled = array_flip($functions);
-        } else {
-            $disabled = array();
+            error_reporting($errLevel);
+            // Activate assertions
+            assert_options(ASSERT_ACTIVE,    1);    // Activate when debugging
+            assert_options(ASSERT_WARNING,   1);    // Issue a php warning
+            assert_options(ASSERT_BAIL,      0);    // Stop processing?
+            assert_options(ASSERT_QUIET_EVAL,0);    // Quiet evaluation of assert condition?
+            xarDebug::$sqlCalls = 0;
+            $lmtime = explode(' ', microtime());
+            xarDebug::$startTime = $lmtime[1] + $lmtime[0];
         }
     }
 
-    return (isset($disabled[$funcName]) ? true : false);
+    /**
+     * Check if the debugger is active
+     *
+     * 
+     * @return boolean true if the debugger is active, false otherwise
+    **/
+    public static function isDebuggerActive()
+    {
+        return xarDebug::$flags & xarConst::DBG_ACTIVE;
+    }
+
+    /**
+     * Check for specified debugger flag.
+     *
+     * 
+     * @param integer flag the debugger flag to check for activity
+     * @return boolean true if the flag is active, false otherwise
+    **/
+    public static function isDebugFlagSet($flag)
+    {
+        return (xarDebug::$flags & xarConst::DBG_ACTIVE) && (xarDebug::$flags & $flag);
+    }
+
+    /**
+     * Checks if a certain function was disabled in php.ini
+     *
+     *
+     * 
+     * @param string $funcName The function name; case-sensitive
+     * @todo this seems out of place here.
+    **/
+    public static function uncIsDisabled($funcName)
+    {
+        static $disabled;
+
+        if (!isset($disabled))
+        {
+            // Fetch the disabled functions as an array.
+            // White space is trimmed here too.
+            $functions = preg_split('/[\s,]+/', trim(ini_get('disable_functions')));
+
+            if ($functions[0] != '')
+            {
+                // Make the function names the keys.
+                // Values will be 0, 1, 2 etc.
+                $disabled = array_flip($functions);
+            } else {
+                $disabled = array();
+            }
+        }
+
+        return (isset($disabled[$funcName]) ? true : false);
+    }
+
 }
 
 /**

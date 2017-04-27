@@ -197,7 +197,7 @@ class xarLog extends Object
      */
     static public function message($message, $level = XARLOG_LEVEL_DEBUG)
     {
-        if (($level == XARLOG_LEVEL_DEBUG) && !xarCoreIsDebuggerActive()) return;
+        if (($level == XARLOG_LEVEL_DEBUG) && !xarCore::isDebuggerActive()) return;
         // this makes a copy of the object, so the original $this->_buffer was never updated
         //foreach ($_xarLoggers as $logger) {
         foreach (array_keys(self::$loggers) as $id) {

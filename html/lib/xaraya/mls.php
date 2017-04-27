@@ -475,7 +475,7 @@ class xarMLS extends Object
                 xarLog::message("Resetting MLS mode to BOXED");
                 xarConfigVars::set(null, 'Site.MLS.MLSMode','BOXED');
             } else {
-                if (!xarFuncIsDisabled('ini_set')) ini_set('mbstring.func_overload', 7);
+                if (!xarCore::funcIsDisabled('ini_set')) ini_set('mbstring.func_overload', 7);
                 mb_internal_encoding($curCharset);
             }
         }

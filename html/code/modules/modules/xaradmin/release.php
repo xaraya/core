@@ -23,7 +23,7 @@ function modules_admin_release()
     if(!xarSecurityCheck('EditModules')) return;
     
     // allow fopen
-    if (!xarFuncIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
+    if (!xarCore::funcIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
     if (!ini_get('allow_url_fopen')) {
         throw new ConfigurationException('allow_url_fopen','PHP is not currently configured to allow URL retrieval
                              of remote files.  Please turn on #(1) to use the base module getfile userapi.');

@@ -455,7 +455,7 @@ class PHPMailer extends Object
         {
             $old_from = ini_get("sendmail_from");
             //XARAYA MODIFICATION -- Start
-            if (!xarFuncIsDisabled('ini_set')) ini_set("sendmail_from", $this->Sender);
+            if (!xarCore::funcIsDisabled('ini_set')) ini_set("sendmail_from", $this->Sender);
             //XARAYA MODIFICATION -- End
             //SF issue 1312256
             //$params = sprintf("-oi -f %s", $this->Sender);
@@ -468,7 +468,7 @@ class PHPMailer extends Object
 
         if (isset($old_from))
             //XARAYA MODIFICATION -- Start
-            if (!xarFuncIsDisabled('ini_set')) ini_set("sendmail_from", $old_from);
+            if (!xarCore::funcIsDisabled('ini_set')) ini_set("sendmail_from", $old_from);
             //XARAYA MODIFICATION -- End
 
         if(!$rt)

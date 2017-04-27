@@ -207,7 +207,7 @@ function dynamicdata_admin_relations(Array $args=array())
                         }
                     } catch (Exception $e) {
                         // check for allow url fopen if curl returned an error
-                        if (!xarFuncIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
+                        if (!xarCore::funcIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
                         if (!ini_get('allow_url_fopen')) {
                             throw new ConfigurationException(array('allow_url_fopen', 'cURL'),
                                 'PHP is not currently configured to allow URL retrieval of remote files. You must either enable #(1) in php.ini (not recommended) or install the #(2) module for your server, if available.');

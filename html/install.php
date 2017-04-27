@@ -95,7 +95,7 @@ sys::import('xaraya.exceptions');
 set_exception_handler(array('ExceptionHandlers','bone'));
 
 // Enable debugging always for the installer
-xarCoreActivateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT);
+xarCore::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT);
 
 // Include some extra functions, as the installer is somewhat special
 // for loading gui and api functions
@@ -203,7 +203,7 @@ function xarInstallMain()
     $funcName = 'phase' . $phase;
 
     // If the debugger is active, start it
-    if (xarCoreIsDebuggerActive()) {
+    if (xarCore::isDebuggerActive()) {
        ob_start();
     }
 
@@ -213,7 +213,7 @@ function xarInstallMain()
     // Run installer function
     $mainModuleOutput = xarInstallFunc($funcName);
 
-    if (xarCoreIsDebuggerActive()) {
+    if (xarCore::isDebuggerActive()) {
         if (ob_get_length() > 0) {
             $rawOutput = ob_get_contents();
             $mainModuleOutput = 'The following lines were printed in raw mode by module, however this

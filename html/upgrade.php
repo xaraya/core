@@ -80,7 +80,7 @@ class Upgrader extends Object
 
     private function renderPage($output)
     {
-        if (xarCoreIsDebuggerActive()) {
+        if (xarCore::isDebuggerActive()) {
             if (ob_get_length() > 0) {
                 $rawOutput = ob_get_contents();
                 $output = 'The following lines were printed in raw mode by module, however this
