@@ -49,6 +49,13 @@ sys::import('xaraya.core');
 
 /**
  * Main Xaraya Entry
+ * This function is called with each page request
+ * It does the following:
+ * 1. Loads the Xaraya core
+ * 2. Sets page title and theme to use in display
+ * 3. Sets the theme's page to use for display (admin, user, default...)
+ * 4. Processes the request
+ * 5. Renders the request output (sends the output to the browser)
  *
  * @return void
  */
