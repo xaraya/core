@@ -2,7 +2,7 @@
 /**
  * Get all data fields for an item
  * @package modules
- * @subpackage dynamicdata
+ * @subpackage modules\dynamicdata
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release

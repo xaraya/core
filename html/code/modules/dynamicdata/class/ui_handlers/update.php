@@ -2,7 +2,7 @@
 /**
  * Dynamic Object User Interface Handler
  * @package modules
- * @subpackage dynamicdata
+ * @subpackage modules\dynamicdata
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -18,7 +18,7 @@ sys::import('modules.dynamicdata.class.ui_handlers.default');
  * Dynamic Object User Interface Handler
  *
  * @package modules
- * @subpackage dynamicdata
+ * @subpackage modules\dynamicdata
  */
 class DataObjectUpdateHandler extends DataObjectDefaultHandler
 {

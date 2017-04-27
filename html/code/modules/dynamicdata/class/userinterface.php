@@ -2,7 +2,7 @@
 /**
  * Dynamic Object User Interface 
  * @package modules
- * @subpackage dynamicdata
+ * @subpackage modules\dynamicdata
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -54,7 +54,7 @@
  * }
  *
  * @package modules
- * @subpackage dynamicdata
+ * @subpackage modules\dynamicdata
  */
 class DataObjectUserInterface extends Object
 {
@@ -289,7 +289,7 @@ class DataObjectUserInterface extends Object
  * Dynamic Object Interface (deprecated)
  *
  * @package modules
- * @subpackage dynamicdata
+ * @subpackage modules\dynamicdata
  */
 class DataObjectInterface extends DataObjectUserInterface
 {
