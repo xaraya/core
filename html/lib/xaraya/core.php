@@ -279,18 +279,18 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
          *
          * FLAGS:
          *
-         * XARDBG_INACTIVE                  disable  the debugger
-         * XARDBG_ACTIVE                        enable   the debugger
-         * XARDBG_EXCEPTIONS                debug exceptions
-         * XARDBG_SQL                           debug SQL statements
-         * XARDBG_SHOW_PARAMS_IN_BT show parameters in the backtrace
+         * xarConst::DBG_INACTIVE          disable  the debugger
+         * xarConst::DBG_ACTIVE            enable   the debugger
+         * xarConst::DBG_EXCEPTIONS        debug exceptions
+         * xarConst::DBG_SQL               debug SQL statements
+         * xarConst::DBG_SHOW_PARAMS_IN_BT show parameters in the backtrace
          *
          * Flags can be OR-ed together
          */
         /**
          * Start exceptions subsystem
         **/
-        xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );       
+        xarCoreActivateDebugger(xarConst::DBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );       
         // xarCoreActivateDebugger(XARDBG_INACTIVE);
         
         /**
@@ -633,7 +633,7 @@ function xarCoreActivateDebugger($flags)
         error_reporting(0);
         // Turn off assertion evaluation
         assert_options(ASSERT_ACTIVE, 0);
-    } elseif ($flags & XARDBG_ACTIVE) {
+    } elseif ($flags & xarConst::DBG_ACTIVE) {
         // See if config.system.php has info for us on the errorlevel, but dont break if it has not
         try {
             sys::import('xaraya.variables.system');
@@ -662,7 +662,7 @@ function xarCoreActivateDebugger($flags)
 **/
 function xarCoreIsDebuggerActive()
 {
-    return xarDebug::$flags & XARDBG_ACTIVE;
+    return xarDebug::$flags & xarConst::DBG_ACTIVE;
 }
 
 /**
@@ -674,7 +674,7 @@ function xarCoreIsDebuggerActive()
 **/
 function xarCoreIsDebugFlagSet($flag)
 {
-    return (xarDebug::$flags & XARDBG_ACTIVE) && (xarDebug::$flags & $flag);
+    return (xarDebug::$flags & xarConst::DBG_ACTIVE) && (xarDebug::$flags & $flag);
 }
 
 /**
