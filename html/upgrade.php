@@ -55,7 +55,7 @@ class Upgrader extends Object
         xarCache::init();
         sys::import('xaraya.core');
         // Only load what we need from core 
-        xarCoreInit(xarCore::SYSTEM_ALL);
+        xarCore::xarInit(xarCore::SYSTEM_ALL);
         
         // Load the current request
         xarController::getRequest();

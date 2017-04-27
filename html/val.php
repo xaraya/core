@@ -21,13 +21,13 @@
 set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
 include_once('lib/bootstrap.php');
 sys::import('xaraya.core');
-xarCoreInit();
+xarCore::xarInit();
 
 if (!xarVarFetch('v', 'str:1', $v)) return;
 if (!xarVarFetch('u', 'str:1', $u)) return;
 
 //LEGACY
-$user = xarModAPIFunc('roles','user','get', array('uid' => $u));
+$user = xarMod::apiPIFunc('roles','user','get', array('uid' => $u));
 
 xarController::redirect(xarModURL('roles', 'user','getvalidation',
                               array('stage'   => 'getvalidate',

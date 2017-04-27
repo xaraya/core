@@ -40,7 +40,7 @@ sys::import('xaraya.core');
 if(!isset($_SERVER['REMOTE_ADDR'])) putenv("REMOTE_ADDR=127.0.0.1");
 
 // @todo: don't load the whole core
-xarCoreInit(XARCORE_SYSTEM_ALL);
+xarCore::xarInit(XARCORE_SYSTEM_ALL);
 
 /* Make sure we handle boney instead of fancy */
 set_exception_handler(array('ExceptionHandlers','bone'));

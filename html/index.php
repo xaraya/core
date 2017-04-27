@@ -62,7 +62,7 @@ sys::import('xaraya.core');
 function xarMain()
 {
     // Load the core with all optional systems loaded
-    xarCoreInit(XARCORE_SYSTEM_ALL);
+    xarCore::xarInit(xarCore::SYSTEM_ALL);
 
     // Create the object that models this request
     $request = xarController::getRequest();

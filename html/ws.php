@@ -31,7 +31,7 @@ include 'bootstrap.php';
 sys::import('xaraya.caching');
 xarCache::init();
 sys::import('xaraya.core');
-xarCoreInit(XARCORE_SYSTEM_ALL);
+xarCore::xarInit(XARCORE_SYSTEM_ALL);
 xarWebservicesMain();
 
 /**

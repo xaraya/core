@@ -19,7 +19,7 @@ include_once('bootstrap.php');
 sys::import('xaraya.core');
 
 // TODO: don't load the whole core
-xarCoreInit(XARCORE_SYSTEM_ALL);
+xarCore::xarInit(XARCORE_SYSTEM_ALL);
 
 function m($msg,$level=0) 
 { 
