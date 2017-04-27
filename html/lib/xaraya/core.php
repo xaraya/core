@@ -31,9 +31,6 @@ if(file_exists('../_MTN/revision'))
     if (isset($t[4]))
         $rev = str_replace(array('old_revision [',']'),'',$t[4]);
 }
-define('XARCORE_VERSION_ID',  'Bermuda');
-define('XARCORE_VERSION_NUM', '2.4.0');
-define('XARCORE_VERSION_SUB', 'altius fortius');
 define('XARCORE_VERSION_REV', $rev);
 
 /*
@@ -101,65 +98,12 @@ define('XARCORE_VERSION_REV', $rev);
  * --------------------------------------------------------- 
     **/
 
-
-/**#@+
- * Optional systems defines that can be used as parameter for xarCoreInit
- * System dependancies are yet present in the define, so you don't
- * have to care of what for example the SESSION system depends on, if you
- * need it you just pass XARCORE_SYSTEM_SESSION to xarCoreInit and its
- * dependancies will be automatically resolved
- *
- * 
- * @todo   bring these under a class as constant
-**/
-define('XARCORE_BIT_DATABASE',         1);
-define('XARCORE_BIT_CONFIGURATION',    2);
-define('XARCORE_BIT_MODULES',          4);
-define('XARCORE_BIT_TEMPLATES',        8);
-define('XARCORE_BIT_SESSION',          16);
-define('XARCORE_BIT_USER',             32);
-define('XARCORE_BIT_BLOCKS',           64);
-define('XARCORE_BIT_HOOKS',            128);
-define('XARCORE_BIT_ALL',              255);
-
-define('XARCORE_SYSTEM_NONE',            0);
-define('XARCORE_SYSTEM_DATABASE',        XARCORE_BIT_DATABASE);
-define('XARCORE_SYSTEM_CONFIGURATION',   XARCORE_BIT_CONFIGURATION | XARCORE_SYSTEM_DATABASE);
-define('XARCORE_SYSTEM_MODULES',         XARCORE_BIT_MODULES | XARCORE_SYSTEM_CONFIGURATION);
-define('XARCORE_SYSTEM_TEMPLATES',       XARCORE_BIT_TEMPLATES | XARCORE_SYSTEM_MODULES);
-define('XARCORE_SYSTEM_SESSION',         XARCORE_BIT_SESSION | XARCORE_SYSTEM_TEMPLATES);
-define('XARCORE_SYSTEM_USER',            XARCORE_BIT_USER | XARCORE_SYSTEM_SESSION);
-define('XARCORE_SYSTEM_BLOCKS',          XARCORE_BIT_BLOCKS | XARCORE_SYSTEM_USER);
-define('XARCORE_SYSTEM_HOOKS',           XARCORE_BIT_HOOKS | XARCORE_SYSTEM_USER);
-define('XARCORE_SYSTEM_ALL',             XARCORE_BIT_ALL); 
-
-/**#@+
- * Debug flags
- *
- * 
- * @todo   encapsulate in class
-**/
-define('XARDBG_ACTIVE'           , 1);
-define('XARDBG_SQL'              , 2);
-define('XARDBG_EXCEPTIONS'       , 4);
-define('XARDBG_SHOW_PARAMS_IN_BT', 8);
-define('XARDBG_INACTIVE'         ,16);
-/**#@-*/
-
-/**#@+
- * Miscelaneous defines
- *
- * 
- * @todo encapsulate in class
-**/
-define('XARCORE_CACHEDIR'     , '/cache');
-define('XARCORE_DB_CACHEDIR'  , '/cache/database');
-define('XARCORE_RSS_CACHEDIR' , '/cache/rss');
-define('XARCORE_TPL_CACHEDIR' , '/cache/templates');
-/**#@-*/
-
 class xarConst
 {
+    const VERSION_ID        = 'Bermuda';
+    const VERSION_NUM       = '2.4.0';
+    const VERSION_SUB       = 'altius fortius';
+
     const BIT_DATABASE      = 1;
     const BIT_CONFIGURATION = 2;
     const BIT_MODULES       = 4;
@@ -196,6 +140,17 @@ class xarConst
     const TPL_CACHEDIR     = '/cache/templates';
 }
 
+define('XARCORE_SYSTEM_NONE',            0);
+define('XARCORE_SYSTEM_DATABASE',        xarConst::BIT_DATABASE);
+define('XARCORE_SYSTEM_CONFIGURATION',   xarConst::BIT_CONFIGURATION | XARCORE_SYSTEM_DATABASE);
+define('XARCORE_SYSTEM_MODULES',         xarConst::BIT_MODULES | XARCORE_SYSTEM_CONFIGURATION);
+define('XARCORE_SYSTEM_TEMPLATES',       xarConst::BIT_TEMPLATES | XARCORE_SYSTEM_MODULES);
+define('XARCORE_SYSTEM_SESSION',         xarConst::BIT_SESSION | XARCORE_SYSTEM_TEMPLATES);
+define('XARCORE_SYSTEM_USER',            xarConst::BIT_USER | XARCORE_SYSTEM_SESSION);
+define('XARCORE_SYSTEM_BLOCKS',          xarConst::BIT_BLOCKS | XARCORE_SYSTEM_USER);
+define('XARCORE_SYSTEM_HOOKS',           xarConst::BIT_HOOKS | XARCORE_SYSTEM_USER);
+define('XARCORE_SYSTEM_ALL',             xarConst::BIT_ALL); 
+
 /*
  * Load the Xaraya pre core early in case the entry point didn't do it (it should)
  *
@@ -220,22 +175,23 @@ sys::import('xaraya.caching.core');
 **/
 class xarCore extends xarCoreCache
 {
-    const GENERATION = 2;
-    // The actual version information
-    const VERSION_ID  = XARCORE_VERSION_ID;
-    const VERSION_NUM = XARCORE_VERSION_NUM;
-    const VERSION_SUB = XARCORE_VERSION_SUB;
-    const VERSION_REV = XARCORE_VERSION_REV;
+    const GENERATION           = 2;
     
-    const BIT_DATABASE       = XARCORE_BIT_DATABASE;
-    const BIT_CONFIGURATION  = XARCORE_BIT_CONFIGURATION;
-    const BIT_MODULES        = XARCORE_BIT_MODULES;
-    const BIT_TEMPLATES      = XARCORE_BIT_TEMPLATES;
-    const BIT_SESSION        = XARCORE_BIT_SESSION;
-    const BIT_USER           = XARCORE_BIT_USER;
-    const BIT_BLOCKS         = XARCORE_BIT_BLOCKS;
-    const BIT_HOOKS          = XARCORE_BIT_HOOKS;
-    const BIT_ALL            = XARCORE_BIT_ALL;
+    // The actual version information
+    const VERSION_ID           = xarConst::VERSION_ID;
+    const VERSION_NUM          = xarConst::VERSION_NUM;
+    const VERSION_SUB          = xarConst::VERSION_SUB;
+    const VERSION_REV          = XARCORE_VERSION_REV;
+    
+    const BIT_DATABASE         = xarConst::BIT_DATABASE;
+    const BIT_CONFIGURATION    = xarConst::BIT_CONFIGURATION;
+    const BIT_MODULES          = xarConst::BIT_MODULES;
+    const BIT_TEMPLATES        = xarConst::BIT_TEMPLATES;
+    const BIT_SESSION          = xarConst::BIT_SESSION;
+    const BIT_USER             = xarConst::BIT_USER;
+    const BIT_BLOCKS           = xarConst::BIT_BLOCKS;
+    const BIT_HOOKS            = xarConst::BIT_HOOKS;
+    const BIT_ALL              = xarConst::BIT_ALL;
     
     const SYSTEM_NONE          = XARCORE_SYSTEM_NONE;
     const SYSTEM_DATABASE      = XARCORE_SYSTEM_DATABASE;
@@ -247,7 +203,6 @@ class xarCore extends xarCoreCache
     const SYSTEM_BLOCKS        = XARCORE_SYSTEM_BLOCKS;
     const SYSTEM_HOOKS         = XARCORE_SYSTEM_HOOKS;
     const SYSTEM_ALL           = XARCORE_SYSTEM_ALL;    
-
 }
 
 /**
@@ -290,8 +245,8 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
         /**
          * Start exceptions subsystem
         **/
-        xarCoreActivateDebugger(xarConst::DBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );       
-        // xarCoreActivateDebugger(XARDBG_INACTIVE);
+        xarCoreActivateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT );       
+        // xarCoreActivateDebugger(xarConst::DBG_INACTIVE);
         
         /**
          * Load system variables
@@ -628,7 +583,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
 function xarCoreActivateDebugger($flags)
 {
     xarDebug::$flags = $flags;
-    if ($flags & XARDBG_INACTIVE) {
+    if ($flags & xarConst::DBG_INACTIVE) {
         // Turn off error reporting
         error_reporting(0);
         // Turn off assertion evaluation
