@@ -99,8 +99,6 @@ class BasicDataStore extends DDObject implements IBasicDataStore
 /**
  * Base class for Dynamic Data Stores with a concept of ordering
  *
- * @package modules
- * @subpackage modules\dynamicdata
 **/
 
 class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
