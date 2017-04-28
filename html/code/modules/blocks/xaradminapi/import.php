@@ -1,13 +1,12 @@
 <?php
 /**
- * @package modules
- * @subpackage dynamicdata module
+ * @package modules\blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
- * @link http://xaraya.info/index.php/release/182.html
+ * @link http://xaraya.info/index.php/release/13.html
  *
  * @author Marc Lutolf <marc@luetolf-carroll.com>
  */
