@@ -13,13 +13,6 @@
 /**
  * Check List file
  *
- * @package modules
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
- * @subpackage installer module
- * @link http://xaraya.info/index.php/release/200.html
  */
 /* WARNING
  * Modification of this file is not supported.
