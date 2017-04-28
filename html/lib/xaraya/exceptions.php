@@ -4,7 +4,7 @@
  *
  * For all documentation about exceptions see RFC-0054
  *
- * @package core
+ * @package core\exceptions
  * @subpackage exceptions
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
