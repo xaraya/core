@@ -22,13 +22,6 @@
 
 /**
  * Logging package defines
- * @package core\exceptions
- * @subpackage exceptions
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  */
 
 define('XARLOG_LEVEL_EMERGENCY', 1);
@@ -45,6 +38,13 @@ define('XARLOG_LEVEL_ALL',       255);
 /**
  * Exceptions raised within the loggers
  *
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  */
 class LoggerException extends Exception
 {
