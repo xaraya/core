@@ -16,7 +16,6 @@ sys::import('xaraya.datastores.sql');
 /**
  * Class for relational datastore
  *
- * @package dynamicdata
  */
 class RelationalDataStore extends SQLDataStore
 {
