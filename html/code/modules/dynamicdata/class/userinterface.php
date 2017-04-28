@@ -52,8 +52,6 @@
  *     ...
  * }
  *
- * @package modules
- * @subpackage modules\dynamicdata
  */
 class DataObjectUserInterface extends Object
 {
@@ -287,8 +285,6 @@ class DataObjectUserInterface extends Object
 /**
  * Dynamic Object Interface (deprecated)
  *
- * @package modules
- * @subpackage modules\dynamicdata
  */
 class DataObjectInterface extends DataObjectUserInterface
 {
