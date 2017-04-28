@@ -17,8 +17,6 @@ sys::import('xaraya.objects');
 /**
  * Dynamic Object User Interface Handler
  *
- * @package modules
- * @subpackage modules\dynamicdata
  */
 class DataObjectDefaultHandler extends Object
 {

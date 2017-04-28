@@ -16,8 +16,6 @@ sys::import('modules.dynamicdata.class.ui_handlers.default');
 /**
  * Dynamic Object User Interface Handler
  *
- * @package modules
- * @subpackage modules\dynamicdata
  */
 class DataObjectSearchHandler extends DataObjectDefaultHandler
 {
