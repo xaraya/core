@@ -122,6 +122,16 @@ function xarDBGetName() { return xarDB::getName(); }
  * Wrapper functions to support Xaraya 1 API for configvars
  * NOTE: the $prep in the signature has been dropped!!
  */
+/**
+ * @package core\legacy
+ * @subpackage legacy
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+ */
 sys::import('xaraya.variables.config');
 function xarConfigSetVar($name, $value) { return xarConfigVars::set(null, $name, $value); }
 function xarConfigGetVar($name)         { return xarConfigVars::get(null, $name); }
