@@ -17,8 +17,8 @@
 /**
  * Exception raised by the events subsystem
  *
- * @package core\exceptions
- * @subpackage exceptions
+ * @package core\events
+ * @subpackage events
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -34,8 +34,8 @@ class EventRegistrationException extends RegistrationExceptions
 /**
  * Exception raised by the events subsystem
  *
- * @package core\exceptions
- * @subpackage exceptions
+ * @package core\events
+ * @subpackage events
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release

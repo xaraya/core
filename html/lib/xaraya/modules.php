@@ -19,15 +19,14 @@
  * @author Jim McDonald
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
- * @todo Use serialize in module variables?
  * @todo the double headed theme/module stuff needs to go, a theme is not a module
  */
 
 /**
  * Exception raised by the modules subsystem
  *
- * @package core\exceptions
- * @subpackage exceptions
+ * @package core\modules
+ * @subpackage modules
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -43,8 +42,8 @@ class ModuleBaseInfoNotFoundException extends NotFoundExceptions
 /**
  * Exception raised by the modules subsystem
  *
- * @package core\exceptions
- * @subpackage exceptions
+ * @package core\modules
+ * @subpackage modules
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -60,8 +59,8 @@ class ModuleNotFoundException extends NotFoundExceptions
 /**
  * Exception raised by the modules subsystem
  *
- * @package core\exceptions
- * @subpackage exceptions
+ * @package core\modules
+ * @subpackage modules
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release

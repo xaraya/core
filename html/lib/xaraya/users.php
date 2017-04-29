@@ -22,8 +22,8 @@ global $installing;
 /**
  * Exception raised by the users subsystem
  *
- * @package core\exceptions
- * @subpackage exceptions
+ * @package core\users
+ * @subpackage users
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release

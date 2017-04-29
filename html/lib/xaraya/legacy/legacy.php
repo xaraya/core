@@ -2,8 +2,8 @@
 /**
  * Exception raised by the legacy subsystem
  *
- * @package core\exceptions
- * @subpackage exceptions
+ * @package core\legacy
+ * @subpackage legacy
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
