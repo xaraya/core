@@ -1,6 +1,6 @@
 <?php
 /**
- * @package core
+ * @package core\structures
  * @subpackage structures
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -9,24 +9,23 @@
  * @link http://www.xaraya.info
  */
 
-    class RelativeDirectoryIterator extends DirectoryIterator
+class RelativeDirectoryIterator extends DirectoryIterator
+{
+    public function __construct($file)
     {
-        public function __construct($file)
-        {
-            $realpath = realpath($file);
-            if (!$realpath) return false;
-            parent::__construct($realpath);
-        }
-
-        public function getExtension()
-        {
-            $filename = $this->GetFilename();
-            $extension = strrpos($filename, ".", 1) + 1;
-            if ($extension != false)
-                return strtolower(substr($filename, $extension, strlen($filename) - $extension));
-            else
-                return "";
-        }
+        $realpath = realpath($file);
+        if (!$realpath) return false;
+        parent::__construct($realpath);
     }
 
+    public function getExtension()
+    {
+        $filename = $this->GetFilename();
+        $extension = strrpos($filename, ".", 1) + 1;
+        if ($extension != false)
+            return strtolower(substr($filename, $extension, strlen($filename) - $extension));
+        else
+            return "";
+    }
+}
 ?>

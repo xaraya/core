@@ -1,7 +1,7 @@
 #!/usr/bin/php5
 <?php
 /**
- * @package core
+ * @package core\structures
  * @subpackage structures
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
