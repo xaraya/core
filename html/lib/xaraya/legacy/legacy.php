@@ -44,7 +44,7 @@ set_include_path(realpath(sys::code()) . PATH_SEPARATOR . get_include_path());
 /**
  * Legacy Functions
  *
- * @package core
+ * @package core\legacy
  * @subpackage legacy
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
