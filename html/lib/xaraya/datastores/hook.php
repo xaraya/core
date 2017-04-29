@@ -2,7 +2,7 @@
 /**
  * Data Store is managed by a hook/utility module
  *
- * @package core
+ * @package core\datastores
  * @subpackage datastores
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
