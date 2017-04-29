@@ -38,6 +38,15 @@ function installer_public_moduleoptions()
     );
 }
 
+/**
+ * @package modules\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/200.html
+ */
 function installer_public_privilegeoptions()
 {
     return array(
@@ -59,6 +68,15 @@ function installer_public_privilegeoptions()
  *
  * @access public
  * @return boolean
+ */
+/**
+ * @package modules\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/200.html
  */
 function installer_public_configuration_load(Array $args=array())
 {
@@ -83,6 +101,15 @@ function installer_public_configuration_load(Array $args=array())
     return true;
 }
 
+/**
+ * @package modules\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/200.html
+ */
 function installer_public_commentnoncore()
 {
     xarRegisterPrivilege('CommentNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
@@ -95,6 +122,15 @@ function installer_public_commentnoncore()
     xarMakePrivilegeMember('DenyThemes','CommentNonCore');
 }
 
+/**
+ * @package modules\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/200.html
+ */
 function installer_public_moderatenoncore()
 {
     xarRegisterPrivilege('ModerateNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
@@ -111,6 +147,15 @@ function installer_public_moderatenoncore()
     xarMakePrivilegeMember('DenyThemes','ModerateNonCore');
 }
 
+/**
+ * @package modules\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/200.html
+ */
 function installer_public_readnoncore()
 {
     xarRegisterPrivilege('ReadNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
@@ -125,6 +170,16 @@ function installer_public_readnoncore()
     xarMakePrivilegeMember('DenyModules','ReadNonCore');
     xarMakePrivilegeMember('DenyThemes','ReadNonCore');
 }
+
+/**
+ * @package modules\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/200.html
+ */
 function installer_public_readnoncore2()
 {
     xarRegisterPrivilege('ReadNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
