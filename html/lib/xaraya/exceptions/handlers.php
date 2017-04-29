@@ -21,6 +21,16 @@ interface IExceptionHandlers
     public static function phperrors($errorType, $errorString, $file, $line, array $errorContext=array());
 }
 
+/**
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 class ExceptionHandlers extends Object implements IExceptionHandlers
 {
     private static $data = array();
