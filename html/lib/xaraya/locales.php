@@ -1,21 +1,5 @@
 <?php
 /**
- * Locales (Multi Language System)
- *
- * @package core
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
- * @author Marco Canini <marco@xaraya.com>
- * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @author Roger Raymond <roger@asphyxia.com>
-**/
-
-/**
  * Exception raised by the locales subsystem
  *
  * @package core\exceptions
@@ -31,6 +15,22 @@ class LocaleNotFoundException extends NotFoundExceptions
 {
     protected $message = 'The locale "#(1)" could not be found or is currently unavailable';
 }
+
+/**
+ * Locales (Multi Language System)
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+ * @author Marco Canini <marco@xaraya.com>
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @author Roger Raymond <roger@asphyxia.com>
+**/
 
 /**
  * Gets the locale data for a certain locale.
@@ -666,6 +666,20 @@ function xarMLS_strftime($format=null,$timestamp=null)
 }
 
 // MLS CLASSES
+
+/**
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+ * @author Marco Canini <marco@xaraya.com>
+ * @author Marc Lutolf <marcinmilan@xaraya.com>
+ * @author Roger Raymond <roger@asphyxia.com>
+**/
 
 /**
  * This class loads a valid locale descriptor XML file and returns its content

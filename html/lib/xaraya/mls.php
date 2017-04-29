@@ -2,7 +2,7 @@
 /**
  * Multi Language System
  *
- * @package core
+ * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
  * @version 2.4.0

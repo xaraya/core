@@ -2,7 +2,7 @@
 /**
  * Multi Language System
  *
- * @package core
+ * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -12,7 +12,6 @@
  *
  * @author Marco Canini <marco@xaraya.com>
  */
-
 
 /**
  * This is the default translations backend and should be used for production sites.
