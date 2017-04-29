@@ -16,9 +16,17 @@
 **/
 
 /**
- * Exceptions defined for this subsystem
+ * Exception raised by the locales subsystem
  *
- */
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 class LocaleNotFoundException extends NotFoundExceptions
 {
     protected $message = 'The locale "#(1)" could not be found or is currently unavailable';

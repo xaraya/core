@@ -1,6 +1,31 @@
 <?php
+/* This one exception depends on BL being inside Xaraya, try to correct this later */
+if (!class_exists('xarExceptions')) {
+    sys::import('xaraya.exceptions');
+}
 /**
- * @package core
+ * Exception raised by the templating subsystem
+ *
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
+class BLCompilerException extends xarExceptions
+{
+    protected $message = "Cannot open template file '#(1)'";
+}
+
+sys::import('blocklayout.compiler');
+
+/**
+ * XarayaCompiler - an extension of the BL compiler
+ *
+ * @package core\templating
  * @subpackage templating
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -8,27 +33,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.com
  */
-
-/* This one exception depends on BL being inside Xaraya, try to correct this later */
-if (!class_exists('xarExceptions')) {
-    sys::import('xaraya.exceptions');
-}
-/**
- * Exceptions raised by this subsystem
- *
- */
-class BLCompilerException extends xarExceptions
-{
-    protected $message = "Cannot open template file '#(1)'";
-}
-
-/**
- * XarayaCompiler - the abstraction of the BL compiler
- *
- * 
- */
-sys::import('blocklayout.compiler');
-
 class XarayaCompiler extends xarBLCompiler
 {    
     private $legacy_compile = true;

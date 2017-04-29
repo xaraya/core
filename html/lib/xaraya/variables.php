@@ -15,16 +15,35 @@
  */
 
 /**
- * Exceptions for this subsystem
+ * Exception raised by the variables subsystem
+ *
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  *
 **/
 class VariableValidationException extends ValidationExceptions
 {
     protected $message = 'The variable "#(1)" [Value: "#(2)"] did not comply with the required validation: "#(3)"';
 }
+
 /**
+ * Exception raised by the variables subsystem
+ *
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  *
  * @todo this exception is too weak
+ *
 **/
 class ConfigurationException extends ConfigurationExceptions
 {

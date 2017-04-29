@@ -20,7 +20,7 @@
 global $installing;
 
 /**
- * Exceptions defined by this subsystem
+ * Exception raised by the users subsystem
  *
  * @package core\exceptions
  * @subpackage exceptions
@@ -29,7 +29,8 @@ global $installing;
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
- */
+ *
+**/
 class NotLoggedInException extends xarExceptions
 {
     protected $message = 'An operation was encountered that requires the user to be logged in. If you are currently logged in please report this as a bug.';

@@ -14,8 +14,17 @@
  */
 
 /**
- * Exceptions defined by this subsystem
- */
+ * Exception raised by the legacy subsystem
+ *
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 class ApiDeprecationException extends DeprecationExceptions
 {
     protected $message = "You are trying to use a deprecated API function [#(1)], Replace this call with #(2)";

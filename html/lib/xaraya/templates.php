@@ -1,5 +1,39 @@
 <?php
 /**
+ * Exception raised by the templating subsystem
+ *
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
+class BLValidationException extends ValidationExceptions
+{
+    protected $message = 'A blocklayout tag or attribute construct was invalid, see the tag documentation for the correct syntax';
+}
+
+/**
+ * Exception raised by the templating subsystem
+ *
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
+class BLException extends xarExceptions
+{
+    protected $message = 'Unknown blocklayout exception (TODO)';
+}
+
+/**
  * BlockLayout Template Engine
  *
  * @package core\templating
@@ -16,20 +50,6 @@
  * @author Andy Varganov <andyv@xaraya.com>
  * @author Jason Judge
  **/
-
-/**
- * Exceptions for this subsystem
- *
-**/
-class BLValidationException extends ValidationExceptions
-{
-    protected $message = 'A blocklayout tag or attribute construct was invalid, see the tag documentation for the correct syntax';
-}
-
-class BLException extends xarExceptions
-{
-    protected $message = 'Unknown blocklayout exception (TODO)';
-}
 
 sys::import('xaraya.variables.config');
 

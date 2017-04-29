@@ -24,20 +24,50 @@
  */
 
 /**
- * Exceptions defined by this subsystem
+ * Exception raised by the modules subsystem
  *
- */
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 class ModuleBaseInfoNotFoundException extends NotFoundExceptions
 {
     protected $message = 'The base info for module "#(1)" could not be found';
 }
+
 /**
+ * Exception raised by the modules subsystem
+ *
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
 **/
 class ModuleNotFoundException extends NotFoundExceptions
 {
     protected $message = 'A module is missing, the module name could not be determined in the current context';
 }
+
 /**
+ * Exception raised by the modules subsystem
+ *
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
 **/
 class ModuleNotActiveException extends xarExceptions
 {
