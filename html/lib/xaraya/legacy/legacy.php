@@ -66,12 +66,21 @@ set_include_path(realpath(sys::code()) . PATH_SEPARATOR . get_include_path());
 function xarCoreGetVarDirPath() { return sys::varpath(); }
 
 /**
- * Wrapper functions to support Xaraya 1 API for systemvars
+ * Wrapper functions to support Xaraya 1 API for systemvars *
+ **/
+/**
+ * @package core\legacy
+ * @subpackage legacy
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  *
  * @todo this was a protected function by mistake i think
  * @deprec replaced by xarSystemVars
  * @see    xarSystemVars
- **/
+ */
 function xarCore_getSystemVar($name)
 {
     sys::import('xaraya.variables.system');
@@ -81,6 +90,14 @@ function xarCore_getSystemVar($name)
 /**
  * Get the database host
  *
+ * @package core\legacy
+ * @subpackage legacy
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
  * @deprec
  * @see xarDB::getHost()
  */
@@ -89,7 +106,14 @@ function xarDBGetHost() { return xarDB::getHost(); }
 /**
  * Get the database name
  *
- * @deprec
+ * @package core\legacy
+ * @subpackage legacy
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
  * @see xarDB::getName();
  */
 function xarDBGetName() { return xarDB::getName(); }
