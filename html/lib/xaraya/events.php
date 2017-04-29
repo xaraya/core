@@ -57,7 +57,7 @@ class DuplicateEventRegistrationException extends EventRegistrationException
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  *
-/**
+**/
 class xarEvents extends Object implements ixarEvents
 {
     // Event system itemtypes 
@@ -692,6 +692,16 @@ class xarEvents extends Object implements ixarEvents
      
 }
 
+/**
+ * @package core\events
+ * @subpackage events
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 interface ixarEvents
 {
     public static function getSubjectType();
