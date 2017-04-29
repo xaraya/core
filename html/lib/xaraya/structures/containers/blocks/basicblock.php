@@ -1,6 +1,6 @@
 <?php
 /**
- * @package core
+ * @package core\blocks
  * @subpackage blocks
  * @category Xaraya Web Applications Framework
  * @version 2.2.0

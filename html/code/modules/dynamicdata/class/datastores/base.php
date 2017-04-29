@@ -99,8 +99,17 @@ class BasicDataStore extends DDObject implements IBasicDataStore
 /**
  * Base class for Dynamic Data Stores with a concept of ordering
  *
-**/
-
+ * @package modules\dynamicdata
+ * @subpackage dynamicdata
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/182.html
+ *
+ * @author mikespub <mikespub@xaraya.com>
+ * @author Marc Lutolf <marc@luetolf-carroll.com>
+ */
 class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
 {
     public $primary= null;
@@ -144,6 +153,5 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
     {
         $this->sort = array();
     }
-
 }
 ?>
