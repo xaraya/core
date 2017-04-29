@@ -5,7 +5,7 @@
  * @checkme Control actions further and e.g. automatically detect & call hook actions in various places ?
  * @checkme Replace 'module' with 'config' scope to indicate that we actually configure hooks for module itemtypes, objects, etc. there ?
  * @todo <chris> review the above todo's and checkme's
- * @package core
+ * @package core\hooks
  * @subpackage hooks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
