@@ -24,6 +24,9 @@
  * Logging package defines
  */
 
+/*
+* @TODO: Remove this when we go to PHP 5.6
+*/
 define('XARLOG_LEVEL_EMERGENCY', 1);
 define('XARLOG_LEVEL_ALERT',     2);
 define('XARLOG_LEVEL_CRITICAL',  4);
@@ -80,6 +83,16 @@ function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
 
 class xarLog extends Object
 {
+    const LEVEL_EMERGENCY  = 1;
+    const LEVEL_ALERT      = 2;
+    const LEVEL_CRITICAL   = 4;
+    const LEVEL_ERROR      = 8;
+    const LEVEL_WARNING    = 16;
+    const LEVEL_NOTICE     = 32;
+    const LEVEL_INFO       = 64;
+    const LEVEL_DEBUG      = 128;
+    const LEVEL_ALL        = 255;
+
     static private $configFile;
     static private $logFile;
     static public $loggers  = array();
@@ -119,7 +132,7 @@ class xarLog extends Object
                     $levels = explode(',', $levels);
                     foreach ($levels as $level) $logLevel |= (int)$level;
                 } else {
-                    $logLevel = XARLOG_LEVEL_ALL;
+                    $logLevel = xarLog::LEVEL_ALL;
                 }
 
                 self::$config[] = array(
@@ -204,7 +217,7 @@ class xarLog extends Object
      */
     static public function message($message, $level = XARLOG_LEVEL_DEBUG)
     {
-        if (($level == XARLOG_LEVEL_DEBUG) && !xarCore::isDebuggerActive()) return;
+        if (($level == xarLog::LEVEL_DEBUG) && !xarCore::isDebuggerActive()) return;
         // this makes a copy of the object, so the original $this->_buffer was never updated
         //foreach ($_xarLoggers as $logger) {
         foreach (array_keys(self::$loggers) as $id) {
