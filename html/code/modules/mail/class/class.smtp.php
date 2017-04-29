@@ -1,4 +1,14 @@
 <?php
+/**
+ * @package modules\mail
+ * @subpackage mail
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/771.html
+ * @author Chris Ryan
+ */
 ////////////////////////////////////////////////////
 // SMTP - PHP SMTP class
 //
@@ -18,8 +28,6 @@
  * commands except TURN which will always return a not implemented
  * error. SMTP also provides some utility methods for sending mail
  * to an SMTP server.
- * @package PHPMailer
- * @author Chris Ryan
  */
 class SMTP extends Object
 {
