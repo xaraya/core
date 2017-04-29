@@ -2,7 +2,7 @@
 /**
  * Route Interface class
  *
- * @package core
+ * @package core\controllers
  * @subpackage controllers
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
