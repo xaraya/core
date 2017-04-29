@@ -1,13 +1,4 @@
 <?php
-/**
- * @package core
- * @subpackage logging
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- */
 /*
  * @copyright see the html/credits.html file in this release
 
@@ -32,18 +23,20 @@
 */
 
 /**
- * This class implements the Logger
+ * Base class for all loggers
+ *
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  *
  * @author  Flavio Botelho <nuncanada@ig.com.br>
  */
-
-/**
- * Base class for all loggers
- *
- */
 class xarLogger extends Object
 {
-
     /**
     * The level of logging.
     *

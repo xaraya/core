@@ -3,7 +3,7 @@
 // $Horde: horde/lib/Log/syslog.php,v 1.6 2000/06/28 21:36:13 jon Exp $
 
 /**
- * @package core
+ * @package core\logging
  * @subpackage logging
  * @category Xaraya Web Applications Framework
  * @version 2.4.0

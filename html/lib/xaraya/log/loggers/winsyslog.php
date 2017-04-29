@@ -1,6 +1,8 @@
 <?php
 /**
- * @package core
+ * Class to handle winsys logggin
+ *
+ * @package core\logging
  * @subpackage logging
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -21,8 +23,6 @@
 sys::import('xaraya.log.loggers.xarLogger');
 
 /**
- * Class to handle winsys logggin
- *
  */
 class xarLogger_winsyslog extends xarLogger_syslog 
 {
