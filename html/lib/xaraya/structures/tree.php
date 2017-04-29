@@ -94,6 +94,15 @@ class TreeNode extends Object implements ITreeNode
     }
 }
 
+/**
+ * @package core\structures
+ * @subpackage structures
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ */
 class Tree extends Object implements ITree
 {
     public $root;
@@ -169,6 +178,15 @@ class Tree extends Object implements ITree
     }
 }
 
+/**
+ * @package core\structures
+ * @subpackage structures
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ */
 interface ITreeNode
 {
     public function adddata(array $arr);
@@ -178,6 +196,16 @@ interface ITreeNode
     public function getDepth();
     public function getLevel();
 }
+
+/**
+ * @package core\structures
+ * @subpackage structures
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ */
 interface ITree
 {
     public function getRoot();

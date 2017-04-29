@@ -36,7 +36,7 @@ class LoggerException extends Exception
 /**
  * Logging Facilities
  *
- * @package core
+ * @package core\logging
  * @subpackage logging
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
