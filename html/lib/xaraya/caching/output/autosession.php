@@ -2,7 +2,7 @@
 /**
  * Automatic discovery & update of candidates for session-less page caching
  * 
- * @package core
+ * @package core\caching
  * @subpackage caching
  * @category Xaraya Web Applications Framework
  * @version 2.4.0

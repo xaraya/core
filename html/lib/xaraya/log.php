@@ -1,26 +1,5 @@
 <?php
 /**
- * Logging Facilities
- *
- * @package core
- * @subpackage logging
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
- * @author Marco Canini <marco@xaraya.com>
- * @author Flavio Botelho <nuncanada@ig.com.br>
- * @author Marcel van der Boom
- * @author Marc Lutolf
- * @todo  Document functions
- * @todo  Add options to simple & html logger
- * @todo  When calendar & xarLocaleFormatDate is done complete simple logger and html logger
- * @todo  When xarMail is done do email logger
-**/
-
-/**
  * Logging package defines
  */
 
@@ -53,6 +32,27 @@ class LoggerException extends Exception
 {
     // Fill in later.
 }
+
+/**
+ * Logging Facilities
+ *
+ * @package core
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+ * @author Marco Canini <marco@xaraya.com>
+ * @author Flavio Botelho <nuncanada@ig.com.br>
+ * @author Marcel van der Boom
+ * @author Marc Lutolf
+ * @todo  Document functions
+ * @todo  Add options to simple & html logger
+ * @todo  When calendar & xarLocaleFormatDate is done complete simple logger and html logger
+ * @todo  When xarMail is done do email logger
+**/
 
 // Legacy calls
 
