@@ -142,6 +142,16 @@ sys::import('xaraya.variables.moduser');
 /**
  * Wrapper functions to support Xaraya 1 API for modvars and moduservars
 **/
+/**
+ * @package core\legacy
+ * @subpackage legacy
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+ */
 function xarModGetVar($modName, $name, $prep = NULL) {   return xarModVars::get($modName, $name, $prep);  }
 function xarModSetVar($modName, $name, $value)       {   return xarModVars::set($modName, $name, $value); }
 function xarModDelVar($modName, $name)               {   return xarModVars::delete($modName, $name);      }
