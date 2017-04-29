@@ -2,7 +2,7 @@
 /**
  * Variable utilities
  *
- * @package core
+ * @package core\variables
  * @subpackage variables
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -34,7 +34,16 @@ class ConfigurationException extends ConfigurationExceptions
 /**
  * Interface declaration for classes dealing with sets of variables
  *
- * @todo this interface is simplistic, it probably needs more
+ * @package core\variables
+ * @subpackage variables
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+ * @author Marco Canini marco@xaraya.com
+ * @author Flavio Botelho
  */
 interface IxarVars
 {
@@ -46,8 +55,16 @@ interface IxarVars
 /**
  * Base class for variable handling in core
  *
+ * @package core\variables
+ * @subpackage variables
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
  * @author Marcel van der Boom <mrb@hsdev.com>
- **/
+ */
 class xarVars extends Object
 {
 

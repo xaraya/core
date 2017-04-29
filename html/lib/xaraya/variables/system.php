@@ -7,7 +7,7 @@ sys::import('xaraya.variables');
  * in the var dir. Most, if not all are REQUIRED. This file should not depend
  * on anything else but that file and xarCore.php.
  *
- * @package core
+ * @package core\variables
  * @subpackage variables
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
