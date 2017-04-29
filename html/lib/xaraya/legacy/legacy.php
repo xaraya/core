@@ -134,6 +134,16 @@ function xarDBGetName() { return xarDB::getName(); }
  */
 sys::import('xaraya.variables.config');
 function xarConfigSetVar($name, $value) { return xarConfigVars::set(null, $name, $value); }
+/**
+ * @package core\legacy
+ * @subpackage legacy
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+ */
 function xarConfigGetVar($name)         { return xarConfigVars::get(null, $name); }
 
 sys::import('xaraya.variables.module');
@@ -378,9 +388,19 @@ function xarResponseRedirect($redirectURL)                { return xarController
 //}
 
 /**
- * Wrapper function to support Xaraya 1 API Database functions
+ * Wrapper functions to support Xaraya 1 API Database functions
  *
 **/
+/**
+ * @package core\legacy
+ * @subpackage legacy
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+ */
 function &xarDBGetConn($index = 0)   { return xarDB::getConn($index);}
 /**
  * @package core\legacy
