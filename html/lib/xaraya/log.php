@@ -33,6 +33,92 @@ class LoggerException extends Exception
     // Fill in later.
 }
 
+// Legacy calls
+
+/**
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
+function xarLogConfigFile()
+{   
+    return xarLog::configFile(); 
+}
+
+/**
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
+function xarLogConfigReadable()
+{   
+    return xarLog::configReadable(); 
+}
+
+/**
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
+function xarLogFallbackFile()
+{   
+    return xarLog::fallbackFile(); 
+}
+
+/**
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
+function xarLogFallbackPossible()
+{   
+    return xarLog::fallbackPossible(); 
+}
+
+/**
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
+function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG)
+{   
+    return xarLog::message($message, $level); 
+}
+
+/**
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
+function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
+{   
+    return xarLog::variable($name, $var, $level); 
+}
+
 /**
  * Logging Facilities
  *
@@ -53,33 +139,6 @@ class LoggerException extends Exception
  * @todo  When calendar & xarLocaleFormatDate is done complete simple logger and html logger
  * @todo  When xarMail is done do email logger
 **/
-
-// Legacy calls
-
-function xarLogConfigFile()
-{   
-    return xarLog::configFile(); 
-}
-function xarLogConfigReadable()
-{   
-    return xarLog::configReadable(); 
-}
-function xarLogFallbackFile()
-{   
-    return xarLog::fallbackFile(); 
-}
-function xarLogFallbackPossible()
-{   
-    return xarLog::fallbackPossible(); 
-}
-function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG)
-{   
-    return xarLog::message($message, $level); 
-}
-function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
-{   
-    return xarLog::variable($name, $var, $level); 
-}
 
 class xarLog extends Object
 {
@@ -257,7 +316,14 @@ class xarLog extends Object
 /**
  * Shutdown handler for the logging system
  *
- */
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
 function xarLog__shutdown_handler()
 {
      xarLog::message("xarLog shutdown handler");
