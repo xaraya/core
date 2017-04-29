@@ -217,6 +217,14 @@ function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $bl
 /**
  * Map legacy Dynamic_Property base class to DataProperty
  * Note: this does not mean the property will actually work
+ *
+ * @package core\legacy
+ * @subpackage legacy
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  */
 sys::import('modules.dynamicdata.class.properties.base');
 class Dynamic_Property extends DataProperty 
