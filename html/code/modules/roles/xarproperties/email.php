@@ -48,7 +48,7 @@ class EmailProperty extends TextBoxProperty
                 } else {
                     $this->invalid = xarML('Emails did not match');
                 }
-                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                 return false;
             }
         }
@@ -66,7 +66,7 @@ class EmailProperty extends TextBoxProperty
                 } else {
                     $this->invalid = xarML('The email format is incorrect');
                 }
-                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                 $this->value = $value;
                 return false;
             }

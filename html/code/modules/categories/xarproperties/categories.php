@@ -116,7 +116,7 @@ class CategoriesProperty extends DataProperty
                     $validcat = xarMod::apiFunc('categories','user','getcatinfo',array('cid' => $category));
                     if (!$validcat) {
                         $this->invalid = xarML("The category #(1) is not valid", $category);
-                        xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                        xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                         $this->value = null;
                         return false;
                     }

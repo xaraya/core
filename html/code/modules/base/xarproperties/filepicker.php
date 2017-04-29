@@ -89,7 +89,7 @@ class FilePickerProperty extends SelectProperty
             return true;
         }
         $this->invalid = xarML('incorrect selection: #(1) for #(2)', $value, $this->name);
-        xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+        xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
         $this->value = null;
         return false;
     }

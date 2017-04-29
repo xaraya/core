@@ -58,7 +58,7 @@ class NumberListProperty extends SelectProperty
             $this->value = intval($value);
         } else {
             $this->invalid = xarML('integer: #(1)', $this->name);
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         }
@@ -66,7 +66,7 @@ class NumberListProperty extends SelectProperty
             if ( (isset($this->min) && $this->value < $this->min) ||
                  (isset($this->max) && $this->value > $this->max) ) {
                 $this->invalid = xarML('integer in range');
-                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                 $this->value = null;
                 return false;
             }
@@ -77,12 +77,12 @@ class NumberListProperty extends SelectProperty
                 }
             }
             $this->invalid = xarML('integer in selection');
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         } else {
             $this->invalid = xarML('integer selection');
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         }

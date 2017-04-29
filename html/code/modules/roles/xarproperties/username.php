@@ -66,7 +66,7 @@ class UsernameProperty extends TextBoxProperty
                     } else {
                         $this->invalid = xarML('user #(1) already exists', $value);
                     }
-                    xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                    xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                     return false;
                 }
                 break;
@@ -78,7 +78,7 @@ class UsernameProperty extends TextBoxProperty
                     } else {
                         $this->invalid = xarML('user #(1) does not exist', $value);
                     }
-                    xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                    xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                     return false;
                 }
                 break;

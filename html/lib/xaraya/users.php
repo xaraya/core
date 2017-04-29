@@ -478,7 +478,7 @@ class xarUser extends Object
                         if (!in_array($name, $optionalvars)) {
                         // log unknown user variables to inform the site admin
                             $msg = xarML('User variable #(1) was not correctly registered', $name);
-                            xarLog::message($msg, XARLOG_LEVEL_ERROR);
+                            xarLog::message($msg, xarLog::LEVEL_ERROR);
                         }
                         return;
                     } else {

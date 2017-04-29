@@ -591,7 +591,7 @@ class xarMLS extends Object
     static public function loadTranslations($path)
     {
         if(!file_exists($path)) {
-            xarLog::message("MLS: Trying to load translations for a non-existing path ($path)",XARLOG_LEVEL_WARNING);
+            xarLog::message("MLS: Trying to load translations for a non-existing path ($path)", xarLog::LEVEL_WARNING);
             //die($path);
             return true;
         }

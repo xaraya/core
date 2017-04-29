@@ -44,7 +44,7 @@ class AfferoProperty extends TextBoxProperty
         if (!empty($value)) {
             if (!is_string($value)) {
                 $this->invalid = xarML('Affero Name: #(1)', $this->name);
-                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                 $this->value = null;
                 return false;
             }

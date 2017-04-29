@@ -144,7 +144,7 @@ class xarLogger_simple extends xarLogger
     function _xarLogger_simple_destructor()
     {
         // Push a final message to the log.
-        $this->notify('Shutdown simple logger', XARLOG_LEVEL_DEBUG);
+        $this->notify('Shutdown simple logger', xarLog::LEVEL_DEBUG);
 
         // Flush any remaining records and stop logging.
         $this->flushBuffer(true);

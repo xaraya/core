@@ -72,7 +72,7 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
                     } else {
                         $this->invalid = xarML('unallowed selection: #(1) for #(2)', $val, $this->name);
                     }
-                    xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                    xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                     $this->value = null;
                     return false;
                 }

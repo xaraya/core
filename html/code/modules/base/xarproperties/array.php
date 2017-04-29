@@ -124,7 +124,7 @@ class ArrayProperty extends DataProperty
         // Check if we have an array. We don't really have an error message here
         if (!is_array($value)) {
             $this->invalid = xarML('The value of this property is not an array');
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         }
@@ -151,7 +151,7 @@ class ArrayProperty extends DataProperty
 // This results in the "bad data" (but only the last row of the same key) being displayed
 // Can we do better?
 //                $this->value = null;
-                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                 return false;
             }
         }

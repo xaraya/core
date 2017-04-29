@@ -34,7 +34,7 @@ class HiddenProperty extends DataProperty
 
         if (isset($value) && $value != $this->value) {
             $this->invalid = xarML('hidden field');
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         } else {

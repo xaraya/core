@@ -208,7 +208,7 @@ class DataPropertyMaster extends Object
                 
                 // Load the translations for this file
                 $loaded = xarMLSLoadTranslations($propertyfile);
-                if (!$loaded) xarLog::message("Property translations for $propertyClass NOT loaded", XARLOG_LEVEL_WARNING);
+                if (!$loaded) xarLog::message("Property translations for $propertyClass NOT loaded", xarLog::LEVEL_WARNING);
             }
 
             $clazz = $propertyClass;

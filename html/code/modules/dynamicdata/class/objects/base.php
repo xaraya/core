@@ -203,12 +203,12 @@ class DataObject extends DataObjectMaster implements iDataObject
             }
         }
         if (!empty($this->missingfields)) {
-            xarLog::variable('Missing properties', $this->missingfields, XARLOG_LEVEL_ERROR);
+            xarLog::variable('Missing properties', $this->missingfields, xarLog::LEVEL_ERROR);
             if (!$suppress)
                 throw new VariableNotFoundException(array($this->name,implode(', ',$this->missingfields)),'The following fields were not found: #(1): [#(2)]');
         }
         if (!empty($badnames)) {
-            xarLog::variable('Bad properties', $badnames, XARLOG_LEVEL_ERROR);
+            xarLog::variable('Bad properties', $badnames, xarLog::LEVEL_ERROR);
             if (xarModVars::get('dynamicdata','debugmode') && 
             in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
                 echo "Bad properties: "; echo $this->name . ": " . implode(', ',$badnames);

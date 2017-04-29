@@ -105,7 +105,7 @@ class xarLogger extends Object
     /**
      * Returns if the logger should log the given level or not.
      *
-     * @param int $level        A XARLOG_LEVEL_* integer constant mix.
+     * @param int $level        A xarLog::$LEVEL_* integer constant mix.
      * @return boolean         Should it be logger or not
      */
     function doLogLevel($level)
@@ -118,11 +118,14 @@ class xarLogger extends Object
     }
 
     /**
-     * Returns the string representation of a XARLOG_LEVEL_* integer constant.
+     * Returns the string representation of a xarLog::$LEVEL_* integer constant.
      *
-     * @param int $level        A XARLOG_LEVEL_* integer constant.
+     * @param int $level        A xarLog::$LEVEL_* integer constant.
      * @return string           The string representation of $level.
      */
+/*
+* @TODO: Change this when we go to PHP 5.6
+*/
     function levelToString($level)
     {
         static $levels = array(
