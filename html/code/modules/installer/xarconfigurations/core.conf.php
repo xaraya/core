@@ -2,6 +2,14 @@
 /**
  * Core configuration
  *
+ */
+/*
+ * @author Marcel van der Boom <marcel@xaraya.com>
+ */
+
+$configuration_name = xarML('Core Xaraya install - minimal modules needed to run Xaraya');
+
+/**
  * @package modules\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
@@ -10,12 +18,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/200.html
  */
-/*
- * @author Marcel van der Boom <marcel@xaraya.com>
- */
-
-$configuration_name = xarML('Core Xaraya install - minimal modules needed to run Xaraya');
-
 function installer_core_moduleoptions()
 {
     return array();

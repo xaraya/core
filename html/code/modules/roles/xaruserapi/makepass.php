@@ -2,13 +2,6 @@
 /**
  * Password creation
  *
- * @package modules\roles
- * @subpackage roles
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://xaraya.info/index.php/release/27.html
  */
 /*
     Please note:
@@ -39,12 +32,30 @@ define('_MAKEPASS_BOX', 5000);
 
 // taken from php.net
 //
+/**
+ * @package modules\roles
+ * @subpackage roles
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/27.html
+ */
 function _make_seed()
 {
     list($usec, $sec) = explode(' ', microtime());
     return (float) $sec + ((float) $usec * 100000);
 }
 
+/**
+ * @package modules\roles
+ * @subpackage roles
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/27.html
+ */
 function roles_userapi_makepass()
 {
     // init some

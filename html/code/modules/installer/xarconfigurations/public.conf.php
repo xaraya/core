@@ -2,13 +2,6 @@
 /**
  * Public configuration
  *
- * @package modules\installer
- * @subpackage installer
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://xaraya.info/index.php/release/200.html
  */
 /*
  * Configuration for a public site
@@ -17,6 +10,15 @@
 
 $configuration_name = xarML('Public Site - modules and privilege appropriate for open access');
 
+/**
+ * @package modules\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/200.html
+ */
 function installer_public_moduleoptions()
 {
     return array(

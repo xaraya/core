@@ -2,6 +2,13 @@
 /**
  * Intranet configuration
  *
+ */
+/*
+ * @author Marc Lutolf
+ */
+$configuration_name = xarML('Intranet - modules and privilege appropriate for restricted access');
+
+/**
  * @package modules\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
@@ -10,11 +17,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/200.html
  */
-/*
- * @author Marc Lutolf
- */
-$configuration_name = xarML('Intranet - modules and privilege appropriate for restricted access');
-
 function installer_intranet_moduleoptions()
 {
     return array(
