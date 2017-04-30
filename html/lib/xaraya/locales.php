@@ -131,9 +131,16 @@ function &xarMLSLoadLocaleData($locale = NULL)
 /**
  * Parses a string as a currency amount according to specified locale data
  *
- * 
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  * @return string representing a currency amount
- */
+ *
+**/
 function xarLocaleParseCurrency($currency, $localeData = NULL)
 {
     if ($localeData == NULL) {
@@ -149,10 +156,18 @@ function xarLocaleParseCurrency($currency, $localeData = NULL)
 /**
  * Parses a string as a number according to specified locale data
  *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  * @return string representing a number
- */
+ *
+**/
 function xarLocaleParseNumber($number, $localeData = NULL, $isCurrency = false)
 {
     if ($localeData == NULL) {
@@ -169,10 +184,18 @@ function xarLocaleParseNumber($number, $localeData = NULL, $isCurrency = false)
 /**
  * Formats a currency according to specified locale data
  *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  * @author Marco Canini <marco@xaraya.com>
  * @access public
  * @return string formatted currency
- */
+ *
+**/
 function xarLocaleFormatCurrency($currency, $localeData = NULL)
 {
     if ($localeData == NULL) {
@@ -185,10 +208,17 @@ function xarLocaleFormatCurrency($currency, $localeData = NULL)
 /**
  * Formats a number according to specified locale data
  *
- * 
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  * @return string formatted number
  * @throws BAD_PARAM
- */
+ *
+**/
 function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
 {
     if (!is_numeric($number)) {
@@ -275,8 +305,17 @@ function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
 }
 
 /**
- *  Wrapper to xarLocaleGetFormattedDate without timezone offset
- */
+ * Wrapper to xarLocaleGetFormattedDate without timezone offset
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarLocaleGetFormattedUTCDate($length = 'short', $timestamp = null, $addoffset = false)
 {
     if(!isset($timestamp)) {
@@ -291,12 +330,19 @@ function xarLocaleGetFormattedUTCDate($length = 'short', $timestamp = null, $add
 /**
  *  Grab the formated date by the user's current locale settings
  *
- * 
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  * @param string $length what date locale we want (short|medium|long)
  * @param int $timestamp optional unix timestamp in UTC to format
  * @param bool $addoffset add user timezone offset (default true)
  * @todo Check the exceptions when $length is not in the $validlengths (assert on it?)
- */
+ *
+**/
 function xarLocaleGetFormattedDate($length = 'short', $timestamp = null, $addoffset = true)
 {
     $length = strtolower($length);
@@ -327,7 +373,16 @@ function xarLocaleGetFormattedDate($length = 'short', $timestamp = null, $addoff
 
 /**
  *  Wrapper to xarLocaleGetFormattedTime without timezone offset
- */
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null, $addoffset = false)
 {
     if(!isset($timestamp)) {
@@ -342,12 +397,19 @@ function xarLocaleGetFormattedUTCTime($length = 'short',$timestamp = null, $addo
 /**
  * Grab the formated time by the user's current locale settings
  *
- * 
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  * @param string $length what time locale we want (short|medium|long)
  * @param int $timestamp optional unix timestamp in UTC to format
  * @param bool $addoffset add user timezone offset (default true)
  * @todo MichelV: why are the formatting rules not the same as PHP rules for strftime?
- */
+ *
+**/
 function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffset = true)
 {
     $length = strtolower($length);
@@ -408,8 +470,17 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
 }
 
 /**
- *  Wrapper to xarLocaleFormatDate without timezone offset
- */
+ * Wrapper to xarLocaleFormatDate without timezone offset
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarLocaleFormatUTCDate($format = null, $time = null, $addoffset = false)
 {
     if(!isset($time)) {
@@ -423,13 +494,19 @@ function xarLocaleFormatUTCDate($format = null, $time = null, $addoffset = false
 /**
  * Format a date/time according to the current locale (and/or user's preferences)
  *
- * 
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  * @param time mixed timestamp or date string (default now)
  * @param format strftime() format to use (TODO: default locale-dependent or configurable ?)
  * @param addoffset bool add user timezone offset (default true)
  * @return date string
  *
- */
+**/
 function xarLocaleFormatDate($format = null, $timestamp = null, $addoffset = true)
 {
     // CHECKME: should we default to current time only when timestamp is not set at all ?
@@ -462,11 +539,6 @@ function xarLocaleFormatDate($format = null, $timestamp = null, $addoffset = tru
  *  a timestamp that has been modified for the user's current
  *  timezone setting.
  *
- *  
- *  @param string $format valid format params from strftime() function\
- *  @param int $timestamp optional unix timestamp to translate
- *  @return string datetime string with locale translations
- *
  *  // supported strftime() format rules
  *  %a - abbreviated weekday name according to the current locale
  *  %A - full weekday name according to the current locale
@@ -486,6 +558,17 @@ function xarLocaleFormatDate($format = null, $timestamp = null, $addoffset = tru
  *  @todo unsupported strftime() format rules
  *  %Z - time zone or name or abbreviation - we should use the user or site's info for this
  *  %z - time zone or name or abbreviation - we should use the user or site's info for this
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *  @param string $format valid format params from strftime() function\
+ *  @param int $timestamp optional unix timestamp to translate
+ *  @return string datetime string with locale translations
+ *
  */
 function xarMLS_strftime($format=null,$timestamp=null)
 {
