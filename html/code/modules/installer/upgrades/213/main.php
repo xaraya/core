@@ -1,7 +1,7 @@
 <?php
 /**
- * @package modules
- * @subpackage installer module
+ * @package modules\installer
+ * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.1.3
  * @copyright see the html/credits.html file in this release

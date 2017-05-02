@@ -9,7 +9,7 @@
 $configuration_name = xarML('Intranet - modules and privilege appropriate for restricted access');
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -40,7 +40,7 @@ function installer_intranet_moduleoptions()
 /**
  * Public configuration
  *
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -71,7 +71,7 @@ function installer_intranet_privilegeoptions()
 /**
  * Public configuration
  *
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -115,7 +115,7 @@ function installer_intranet_configuration_load(Array $args=array())
 /**
  * Public configuration
  *
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -131,7 +131,7 @@ function installer_intranet_oversightprivilege()
 /**
  * Public configuration
  *
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -169,7 +169,7 @@ function installer_intranet_oversightrole()
 /**
  * Public configuration
  *
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -196,7 +196,7 @@ function installer_intranet_casualaccess()
 /**
  * Public configuration
  *
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -227,7 +227,7 @@ function installer_intranet_readnoncore()
 /**
  * Public configuration
  *
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0

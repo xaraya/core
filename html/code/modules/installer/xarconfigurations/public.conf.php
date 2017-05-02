@@ -11,7 +11,7 @@
 $configuration_name = xarML('Public Site - modules and privilege appropriate for open access');
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -41,7 +41,7 @@ function installer_public_moduleoptions()
 }
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -72,7 +72,7 @@ function installer_public_privilegeoptions()
  * @return boolean
  */
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -104,7 +104,7 @@ function installer_public_configuration_load(Array $args=array())
 }
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -125,7 +125,7 @@ function installer_public_commentnoncore()
 }
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -150,7 +150,7 @@ function installer_public_moderatenoncore()
 }
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -174,7 +174,7 @@ function installer_public_readnoncore()
 }
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0

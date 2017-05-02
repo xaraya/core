@@ -10,7 +10,7 @@
 $configuration_name = xarML('Core Xaraya install - minimal modules needed to run Xaraya');
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -24,7 +24,7 @@ function installer_core_moduleoptions()
 }
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -56,7 +56,7 @@ function installer_core_privilegeoptions()
  * @return boolean
  */
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -91,7 +91,7 @@ function installer_core_configuration_load(Array $args=array())
 }
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -114,7 +114,7 @@ function installer_core_casualaccess()
 }
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -139,7 +139,7 @@ function installer_core_readnoncore()
 }
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0

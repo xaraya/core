@@ -10,7 +10,7 @@
 $configuration_name = xarML('Community Site -- modules and privilege for semi-open access');
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -40,7 +40,7 @@ function installer_community_moduleoptions()
 }
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -71,7 +71,7 @@ function installer_community_privilegeoptions()
  * @return boolean
  */
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -107,7 +107,7 @@ function installer_community_configuration_load(Array $args=array())
 }
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -130,7 +130,7 @@ function installer_community_casualaccess()
 }
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -154,7 +154,7 @@ function installer_community_readnoncore()
 }
 
 /**
- * @package modules\installer
+ * @package modules\installer\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
