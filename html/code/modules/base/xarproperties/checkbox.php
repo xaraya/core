@@ -6,7 +6,7 @@ sys::import('modules.dynamicdata.class.properties.base');
  * The Checkbox property models an HTML input of type checkbox
  * 
  * @package modules\base
- * subpackage base
+ * @subpackage base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -25,7 +25,8 @@ class CheckboxProperty extends DataProperty
 /**
  * Create an instance of this dataproperty<br/>
  * - It belongs to the base module<br/>
- * - It has its own template(s)
+ * - It has its own input/output templates<br/>
+ * - it is found at modules/base/xarproperties
  */
     function __construct(ObjectDescriptor $descriptor)
     {
