@@ -27,6 +27,7 @@ class CheckboxProperty extends DataProperty
  * - It belongs to the base module<br/>
  * - It has its own input/output templates<br/>
  * - it is found at modules/base/xarproperties<br/>
+ *
  */
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -40,9 +41,9 @@ class CheckboxProperty extends DataProperty
  * Get the value of a checkbox from a web page<br/>
  * The value is true if checked, otherwise it is false
  * 
- * @param string name The name of the checkbox to be checked
- * @param string value The value of the checkbox to be checked
- * @return bool This method passes the value gotten to the validateValue method and returns its output.
+ * @param  string name The name of the checkbox to be checked
+ * @param  string value The value of the checkbox to be checked
+ * @return bool   This method passes the value gotten to the validateValue method and returns its output.
  */
     public function checkInput($name = '', $value = null)
     {
