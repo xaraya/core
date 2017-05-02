@@ -16,7 +16,7 @@
  * @todo centralize user/password entry in here and outside the xarcliapi
  */
 
-function xarWSLoader()
+function xarLSLoader()
 {
 /**
  * Load the layout file so we know where to find the Xaraya directories
@@ -79,29 +79,25 @@ function xarLocalServicesMain($argc, $argv)
     // Main check
     if(!isset($argv[1])) return usage();
     $handler = $argv[1];
-    if(xarMod::isAvailable($handler))
+    if(xarMod::isAvailable($handler)) {
         return xarMod::apiFunc($handler,'cli','process',array('argc'=>$argc, 'argv'=>$argv));
-    else
-        return usage();
-}
+    } else {
+        fwrite(STDERR,"Usage for local services entry point:
+        php5 ./".basename(__FILE__)." <type> [-u <user>][-p <pass>] [args]
 
-function usage()
-{
-    fwrite(STDERR,"Usage for local services entry point:
-    php5 ./".basename(__FILE__)." <type> [-u <user>][-p <pass>] [args]
-
-    <type>   : required designator for request type (module name)
-               Currently Supported:
-               - 'mail'  : a mail message is supplied at stdin
-    -u <user>: optional username to pass in
-    -p <pass>: optional cleartext password to pass in
-    [args]   : arguments specific to the supplied <type>
-    NOTES:
-       - if PHP doesnt have REMOTE_ADDR available, it will assume 127.0.0.1.
-         if that is not correct, make sure that PHP can determine your ip address
-         (for example by setting REMOTE_ADDR in the environment)
-         \n");
-    return 1;
+        <type>   : required designator for request type (module name)
+                   Currently Supported:
+                   - 'mail'  : a mail message is supplied at stdin
+        -u <user>: optional username to pass in
+        -p <pass>: optional cleartext password to pass in
+        [args]   : arguments specific to the supplied <type>
+        NOTES:
+           - if PHP doesnt have REMOTE_ADDR available, it will assume 127.0.0.1.
+             if that is not correct, make sure that PHP can determine your ip address
+             (for example by setting REMOTE_ADDR in the environment)
+             \n");
+        return 1;
+    }
 }
 
 /**
@@ -109,6 +105,10 @@ function usage()
  */
 set_exception_handler(array('ExceptionHandlers','bone'));
 
+/**
+ * Set up for local services
+ */
+xarLSLoader();
 /**
  * Process the local request and shut down
  */
