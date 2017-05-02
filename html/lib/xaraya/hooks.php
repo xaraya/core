@@ -448,6 +448,13 @@ class xarHooks extends xarEvents
 /**
  * Carry out hook operations for module
  *
+ * @package core\hooks
+ * @subpackage hooks
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  * @access public
  * @param hookScope string the scope the hook is called for - 'item', 'module', ...
  * @param hookAction string the action the hook is called for - 'transform', 'display', 'new', 'create', 'delete', ...
@@ -483,7 +490,14 @@ function xarModCallHooks($hookScope, $hookAction, $hookId, $extraInfo = NULL, $c
 /**
  * Get list of available hooks for a particular module[, scope] and action
  *
- * @access private
+ * @package core\hooks
+ * @subpackage hooks
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
  * @param callerModName string name of the calling module
  * @param hookScope string the hook scope
  * @param hookAction string the hook action
@@ -501,6 +515,13 @@ function xarModGetHookList($callerModName, $hookScope, $hookAction, $callerItemT
 /**
  * Check if a particular hook module is hooked to the current module (+ itemtype)
  *
+ * @package core\hooks
+ * @subpackage hooks
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  * @access public
  * @static modHookedCache array
  * @param hookModName string name of the hook module we're looking for
@@ -517,6 +538,13 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
 /**
  * register a hook function
  *
+ * @package core\hooks
+ * @subpackage hooks
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  * @access public
  * @param hookScope the hook scope
  * @param hookAction the hook action
@@ -536,6 +564,13 @@ function xarModRegisterHook($hookScope, $hookAction, $hookArea, $hookModName, $h
 /**
  * unregister a hook function (deprecated - use unregisterHookModule or the standard deinstall for modules instead)
  *
+ * @package core\hooks
+ * @subpackage hooks
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  * @access public
  * @param hookScope the hook scope
  * @param hookAction the hook action
