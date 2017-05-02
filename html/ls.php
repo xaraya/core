@@ -1,6 +1,6 @@
 <?php
 /**
- * Xaraya Local Services Interface 
+ * Loads the files required for a local services request
  *
  * @package core\entrypoints
  * @subpackage entrypoints
@@ -10,10 +10,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  * @author Marcel van der Boom
- *
- * @todo move this into /bin
- * @todo add site instance parameter
- * @todo centralize user/password entry in here and outside the xarcliapi
  */
 
 function xarLSLoader()
@@ -73,6 +69,10 @@ function xarLSLoader()
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  * @todo use cli/argument parsing library (perhaps getOpt from PEAR)
+ * @todo move this into /bin
+ * @todo add site instance parameter
+ * @todo centralize user/password entry in here and outside the xarcliapi
+ * @author Marcel van der Boom
 **/
 function xarLocalServicesMain($argc, $argv)
 {

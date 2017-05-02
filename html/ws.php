@@ -1,6 +1,6 @@
 <?php
 /**
- * Xaraya WebServices Interface
+ * Loads the files required for a webservices request
  *
  * @package core\entrypoints
  * @subpackage entrypoints
@@ -9,7 +9,6 @@
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
- * @author Miko
 */
  
 function xarWSLoader()
@@ -50,6 +49,8 @@ function xarWSLoader()
 }
 
 /**
+ * Xaraya WebServices Interface
+ *
  * Entry point for webservices
  *
  * Just here to create a convenient url, the
@@ -78,6 +79,7 @@ function xarWSLoader()
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  * @access public
+ * @author Miko
  */
 function xarWebservicesMain()
 {

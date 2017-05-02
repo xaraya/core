@@ -1,6 +1,6 @@
 <?php
 /**
- * Xaraya Web Interface Entry Point 
+ * Loads the files required for a web request
  *
  * @package core\entrypoints
  * @subpackage entrypoints
@@ -52,6 +52,8 @@ function xarLoader()
 }
 
 /**
+ * Xaraya Web Interface Entry Point 
+ *
  * Main Xaraya Entry<br/>
  * This function is called with each page request<br/>
  * It does the following:<br/>
