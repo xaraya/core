@@ -210,7 +210,7 @@ class xarLog extends Object
     
         // Subsystem initialized, register a shutdown function
         register_shutdown_function('xarLog__shutdown_handler');
-    
+
         return true;
     }
 
@@ -327,7 +327,11 @@ class xarLog extends Object
 function xarLog__shutdown_handler()
 {
      xarLog::message("xarLog shutdown handler");
-     xarLog::message("Leaving session: " . xarSession::getId() . " - User: " . xarUser::getVar('uname') . " (ID: " . xarUser::getVar('id') . ")");
+     if (!method_exists('xarSession', 'getId') || !method_exists('xarUser', 'getVar')) {
+         xarLog::message("Leaving session unexpectedly before session and user was defined");
+     } else{
+         xarLog::message("Leaving session: " . xarSession::getId() . " - User: " . xarUser::getVar('uname') . " (ID: " . xarUser::getVar('id') . ")");
+     }
 
      // If the debugger was active, we can dispose it now.
      if(xarDebug::$flags & xarConst::DBG_SQL) {

@@ -129,9 +129,9 @@ class xarConst
     const BIT_HOOKS         = 128;
     const BIT_ALL           = 255;
 
+    const SYSTEM_NONE           = 0;
 /*
 * TODO: Adjust when we move to PHP 5.6.x
-    const SYSTEM_NONE           = 0;
     const SYSTEM_DATABASE       = self::BIT_DATABASE;
     const SYSTEM_CONFIGURATION  = self::BIT_CONFIGURATION | self::SYSTEM_DATABASE ;
     const SYSTEM_MODULES        = self::BIT_MODULES | self::SYSTEM_CONFIGURATION ;

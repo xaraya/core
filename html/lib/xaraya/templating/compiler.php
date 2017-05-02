@@ -116,7 +116,11 @@ class XarayaCompiler extends xarBLCompiler
             $xslProc = $this->getProcessor($xslFile);
         
             // Get the value for the framework tag, which is defined in a modvar
-            $framework = xarModVars::get('themeworks', 'framework');
+            if (method_exists('xarModVars', 'get')) {
+                $framework = xarModVars::get('themeworks', 'framework');
+            } else {
+                $framework = '';
+            }
             // Make sure we have a default value. Remove this line later
             if (empty($framework)) $framework = 'bootstrap';
             // Pass it to the processor
