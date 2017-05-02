@@ -1,6 +1,12 @@
 <?php
+/* Include parent class */
+sys::import('modules.dynamicdata.class.properties.base');
+
 /**
+ * The Textbox property models an HTML input of type text
+ * 
  * @package modules\base
+ * subpackage base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -8,11 +14,6 @@
  * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
- */
-/* Include parent class */
-sys::import('modules.dynamicdata.class.properties.base');
-/**
- * Handle the textbox property
  */
 class TextBoxProperty extends DataProperty
 {
@@ -41,6 +42,10 @@ class TextBoxProperty extends DataProperty
         $this->filepath   = 'modules/base/xarproperties';
     }
 
+/**
+ * Validate the value of a textbox according to the rules inherited and set out in its configuration
+ * 
+ */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -87,6 +92,10 @@ class TextBoxProperty extends DataProperty
         }
     }
 
+/**
+ * Display a textbox for input
+ * 
+ */
     public function showInput(Array $data = array())
     {
         // Should we be doing this? (random)
