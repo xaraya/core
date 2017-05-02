@@ -575,8 +575,8 @@ class xarCore extends xarCoreCache
      * Activates the debugger.
      *
      * @param integer $flags bit mask for the debugger flags
-     * @todo  a big part of this should be in the exception (error handling) subsystem.
      * @return void
+     * @todo  a big part of this should be in the exception (error handling) subsystem.
     **/
     public static function activateDebugger($flags)
     {
