@@ -21,6 +21,19 @@ sys::import('modules.dynamicdata.class.objects.descriptor');
 
 class DataObjectMaster extends Object
 {
+/**
+ * These constants are added for convenience. They are currently not being used
+ * TODO: Remove the ones we don't need. Probably the last 3 at least
+ */
+    const MODULE_ID                 = 182;
+    const ITEMTYPE_OBJECTS          = 0;
+    const ITEMTYPE_PROPERTIES       = 1;
+    const OBJECTID_OBJECTS          = 1;
+    const OBJECTID_PROPERTIES       = 2,
+    const PROPTYPE_ID_MODULE        = 19;
+    const PROPTYPE_ID_ITEMTYPE      = 20;
+    const PROPTYPE_ID_ITEMID        = 21;
+    
     public $descriptor  = null;      // descriptor object of this class
 
     public $objectid    = null;         // system id of the object in this installation
