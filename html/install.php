@@ -2,8 +2,8 @@
 /**
  * Xaraya Installer
  *
- * @package modules
- * @subpackage installer module
+ * @package modules\installer
+ * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -61,11 +61,40 @@ if (!$metRequiredPHPVersion
  * Defines for the phases
  *
  */
+/**
+ * @package modules\installer
+ * @subpackage installer
+ */
 define ('XARINSTALL_PHASE_WELCOME',             '1');
+
+/**
+ * @package modules\installer
+ * @subpackage installer
+ */
 define ('XARINSTALL_PHASE_LANGUAGE_SELECT',     '2');
+
+/**
+ * @package modules\installer
+ * @subpackage installer
+ */
 define ('XARINSTALL_PHASE_LICENSE_AGREEMENT',   '3');
+
+/**
+ * @package modules\installer
+ * @subpackage installer
+ */
 define ('XARINSTALL_PHASE_SYSTEM_CHECK',        '4');
+
+/**
+ * @package modules\installer
+ * @subpackage installer
+ */
 define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
+
+/**
+ * @package modules\installer
+ * @subpackage installer
+ */
 define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
 // Include the core
