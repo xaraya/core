@@ -97,115 +97,133 @@ define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
  */
 define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
-// Include the core
-$systemConfiguration = array();
-include 'var/layout.system.php';
-if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
-if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
-if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
-if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
-$GLOBALS['systemConfiguration'] = $systemConfiguration;
-set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
-include 'bootstrap.php';
-sys::import('xaraya.caching');
-sys::import('xaraya.core');
-sys::import('xaraya.variables.system');
-
-// Besides what we explicitly load, we dont want to load
-// anything extra for maximum control
-$whatToLoad = XARCORE_SYSTEM_NONE;
-
-// Start Exception Handling System very early
-sys::import('xaraya.exceptions');
-/*
-    As long as we are coming in through install.php we need to pick up the
-    bones if something goes wrong, so set the handler to bone for now
-*/
-set_exception_handler(array('ExceptionHandlers','bone'));
-
-// Enable debugging always for the installer
-xarCore::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT);
-
-// Include some extra functions, as the installer is somewhat special
-// for loading gui and api functions
-sys::import('modules.installer.functions');
-
-// Basic systems always loaded
-sys::import('xaraya.log');
-sys::import('xaraya.database');
-sys::import('xaraya.events');
-sys::import('xaraya.variables');
-sys::import('xaraya.server');
-sys::import('xaraya.mls');
-sys::import('xaraya.templates');
-sys::import('xaraya.mapper.main');
-
-// Start Logging Facilities as soon as possible
-$systemArgs = array();
-xarLog::init($systemArgs);
-
-// Start HTTP Protocol Server/Request/Response utilities
-$systemArgs = array('enableShortURLsSupport' =>false,
-                    'defaultModuleName'      => 'installer',
-                    'defaultModuleType'      => 'admin',
-                    'defaultModuleFunction'  => 'main',
-                    'generateXMLURLs'        => false);
-xarServer::init($systemArgs);
-xarController::init($systemArgs);
-//xarResponse::init($systemArgs);
-
-// Start BlockLayout Template Engine
-// This is probably the trickiest part, but we want the installer
-// templateable too obviously
-// @checkme <chris/> themesBaseDirectory is not accounted for in xarTpl::init()
-// the value comes from Site.BL.ThemesDirectory and falls back to 'themes'
-// any reason we need to define it here?
-$systemArgs = array('enableTemplatesCaching' => false,
-                    'themesBaseDirectory'    => 'themes',
-                    'defaultThemeDir'        => 'installer',
-                    'defaultDocType'         => 'xhtml1-strict',
-                    'generateXMLURLs'        => false);
-xarTpl::init($systemArgs);
-
-
-// Get the install language everytime we request install.php
-// We need the var to be able to initialize MLS, but we need MLS to get the var
-// So we need something temporarily set, so we can continue
-// We set a utf locale intially, otherwise the combo box wont be filled correctly
-// for language names which include utf characters
-$GLOBALS['xarMLS_mode'] = 'SINGLE';
-xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
-
-// Construct an array of the available locale folders
-$locale_dir = sys::varpath() . '/locales/';
-$allowedLocales = array();
-if(is_dir($locale_dir)) {
-    if ($dh = opendir($locale_dir)) {
-        while (($file = readdir($dh)) !== false) {
-            // Exclude the current, previous and the Bitkeeper folder
-            // (just for us to be able to test, wont affect users who use a build)
-            if($file == '.' || $file == '..' || filetype($locale_dir . $file) == 'file' ) continue;
-            if(filetype(realpath($locale_dir . $file)) == 'dir' &&
-               file_exists(realpath($locale_dir . $file . '/locale.xml'))) {
-                $allowedLocales[] = $file;
-            }
-        }
-        closedir($dh);
+function xarInstallLoader()
+{
+/**
+ * Load the layout file so we know where to find the Xaraya directories
+ */
+    $systemConfiguration = array();
+    include 'var/layout.system.php';
+    if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
+    if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
+    if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
+    if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
+    $GLOBALS['systemConfiguration'] = $systemConfiguration;
+    if (!empty($systemConfiguration['rootDir'])) {
+        set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
     }
-}
 
-if (empty($allowedLocales)) {
-    throw new Exception("The var directory is corrupted: no locale was found!");
-}
-// A sorted combobox is better
-sort($allowedLocales);
+/**
+ * Load the bootstrap file for the minimal classes swe need
+ */
+    set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
+    include 'bootstrap.php';
 
-// Start Multi Language System
-$systemArgs = array('translationsBackend' => 'xml2php',
-                    'MLSMode'             => 'BOXED',
-                    'defaultLocale'       => $install_language,
-                    'allowedLocales'      => $allowedLocales);
-xarMLS::init($systemArgs);
+/**
+ * Set up caching
+ */
+    sys::import('xaraya.caching');
+
+    sys::import('xaraya.core');
+    sys::import('xaraya.variables.system');
+
+    // Besides what we explicitly load, we dont want to load
+    // anything extra for maximum control
+    // Todo: rework the stuff below to use xarCore::xarInit()
+    $whatToLoad = xarConst::SYSTEM_NONE;
+
+    // Start Exception Handling System very early
+    sys::import('xaraya.exceptions');
+    /*
+        As long as we are coming in through install.php we need to pick up the
+        bones if something goes wrong, so set the handler to bone for now
+    */
+    set_exception_handler(array('ExceptionHandlers','bone'));
+
+    // Enable debugging always for the installer
+    xarCore::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT);
+
+    // Include some extra functions, as the installer is somewhat special
+    // for loading gui and api functions
+    sys::import('modules.installer.functions');
+
+    // Basic systems always loaded
+    sys::import('xaraya.log');
+    sys::import('xaraya.database');
+    sys::import('xaraya.events');
+    sys::import('xaraya.variables');
+    sys::import('xaraya.server');
+    sys::import('xaraya.mls');
+    sys::import('xaraya.templates');
+    sys::import('xaraya.mapper.main');
+
+    // Start Logging Facilities as soon as possible
+    $systemArgs = array();
+    xarLog::init($systemArgs);
+
+    // Start HTTP Protocol Server/Request/Response utilities
+    $systemArgs = array('enableShortURLsSupport' =>false,
+                        'defaultModuleName'      => 'installer',
+                        'defaultModuleType'      => 'admin',
+                        'defaultModuleFunction'  => 'main',
+                        'generateXMLURLs'        => false);
+    xarServer::init($systemArgs);
+    xarController::init($systemArgs);
+    //xarResponse::init($systemArgs);
+
+    // Start BlockLayout Template Engine
+    // This is probably the trickiest part, but we want the installer
+    // templateable too obviously
+    // @checkme <chris/> themesBaseDirectory is not accounted for in xarTpl::init()
+    // the value comes from Site.BL.ThemesDirectory and falls back to 'themes'
+    // any reason we need to define it here?
+    $systemArgs = array('enableTemplatesCaching' => false,
+                        'themesBaseDirectory'    => 'themes',
+                        'defaultThemeDir'        => 'installer',
+                        'defaultDocType'         => 'xhtml1-strict',
+                        'generateXMLURLs'        => false);
+    xarTpl::init($systemArgs);
+
+
+    // Get the install language everytime we request install.php
+    // We need the var to be able to initialize MLS, but we need MLS to get the var
+    // So we need something temporarily set, so we can continue
+    // We set a utf locale intially, otherwise the combo box wont be filled correctly
+    // for language names which include utf characters
+    $GLOBALS['xarMLS_mode'] = 'SINGLE';
+    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
+
+    // Construct an array of the available locale folders
+    $locale_dir = sys::varpath() . '/locales/';
+    $allowedLocales = array();
+    if(is_dir($locale_dir)) {
+        if ($dh = opendir($locale_dir)) {
+            while (($file = readdir($dh)) !== false) {
+                // Exclude the current, previous and the Bitkeeper folder
+                // (just for us to be able to test, wont affect users who use a build)
+                if($file == '.' || $file == '..' || filetype($locale_dir . $file) == 'file' ) continue;
+                if(filetype(realpath($locale_dir . $file)) == 'dir' &&
+                   file_exists(realpath($locale_dir . $file . '/locale.xml'))) {
+                    $allowedLocales[] = $file;
+                }
+            }
+            closedir($dh);
+        }
+    }
+
+    if (empty($allowedLocales)) {
+        throw new Exception("The var directory is corrupted: no locale was found!");
+    }
+    // A sorted combobox is better
+    sort($allowedLocales);
+
+    // Start Multi Language System
+    $systemArgs = array('translationsBackend' => 'xml2php',
+                        'MLSMode'             => 'BOXED',
+                        'defaultLocale'       => $install_language,
+                        'allowedLocales'      => $allowedLocales);
+    xarMLS::init($systemArgs);
+}
 
 /**
  * Entry function for the installer
@@ -263,5 +281,12 @@ function xarInstallMain()
     return true;
 }
 
+/**
+ * Set up for the installer
+ */
+xarInstallLoader();
+/**
+ * Run  the installer
+ */
 xarInstallMain();
 ?>
