@@ -29,7 +29,7 @@ class DataObjectMaster extends Object
     const ITEMTYPE_OBJECTS          = 0;
     const ITEMTYPE_PROPERTIES       = 1;
     const OBJECTID_OBJECTS          = 1;
-    const OBJECTID_PROPERTIES       = 2,
+    const OBJECTID_PROPERTIES       = 2;
     const PROPTYPE_ID_MODULE        = 19;
     const PROPTYPE_ID_ITEMTYPE      = 20;
     const PROPTYPE_ID_ITEMID        = 21;
