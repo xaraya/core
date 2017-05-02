@@ -1,7 +1,7 @@
 <?php
 /**
  * @package modules\blocks
- * @scenario soloblock
+ * @subpackage blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
