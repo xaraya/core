@@ -40,8 +40,8 @@ class CheckboxProperty extends DataProperty
  * Get the value of a checkbox from a web page<br/>
  * The value is true if checked, otherwise it is false
  * 
- * @param  string The name of the checkbox to be checked
- * @param  string The value of the checkbox to be checked
+ * @param  string name The name of the checkbox to be checked
+ * @param  string value The value of the checkbox to be checked
  * @return bool   This method passes the value gotten to the validateValue method and returns its output.
  */
     public function checkInput($name = '', $value = null)
@@ -58,7 +58,7 @@ class CheckboxProperty extends DataProperty
 /**
  * Validate the value of a checkbox (checked or not checked)
  *
- * @return bool True if the value passes all validation checks; otherwise returns false.
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
  */
     public function validateValue($value = null)
     {
@@ -75,8 +75,8 @@ class CheckboxProperty extends DataProperty
 /**
  * Display a checkbox for input
  * 
- * @param  array An array of input parameters
- * @return string HTML markup to display the property for input on a web page
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
  */
     public function showInput(Array $data = array())
     {
@@ -90,10 +90,10 @@ class CheckboxProperty extends DataProperty
     }
 
 /**
- * Convert an integer or string value to 
+ * Convert an integer or string value to true/false
  * 
- * @param  value The value to be converted
- * @return value True if the integer or string value is 1, "1" or "true"; otherwise returns false.
+ * @param  mixed value The value to be converted
+ * @return bool  Returns true if the integer or string value is 1, "1" or "true"; otherwise returns false.
  */
     public function castType($value=null)
     {
