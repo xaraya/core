@@ -14,7 +14,6 @@ sys::import('modules.base.xarproperties.textbox');
  * @link http://xaraya.info/index.php/release/27.html
  * @author mikespub <mikespub@xaraya.com>
  */
-/**
 class EmailProperty extends TextBoxProperty
 {
     public $id         = 26;
