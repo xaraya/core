@@ -16,35 +16,47 @@
  * @todo centralize user/password entry in here and outside the xarcliapi
  */
 
+function xarWSLoader()
+{
 /**
  * Load the layout file so we know where to find the Xaraya directories
  */
-$systemConfiguration = array();
-include 'var/layout.system.php';
-if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
-if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
-if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
-if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
-$GLOBALS['systemConfiguration'] = $systemConfiguration;
-if (!empty($systemConfiguration['rootDir'])) {
-    set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
+    $systemConfiguration = array();
+    include 'var/layout.system.php';
+    if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
+    if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
+    if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
+    if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
+    $GLOBALS['systemConfiguration'] = $systemConfiguration;
+    if (!empty($systemConfiguration['rootDir'])) {
+        set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
+    }
+
+/**
+ * Load the bootstrap file for the minimal classes swe need
+ */
+    set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
+    include 'bootstrap.php';
+
+/**
+ * Set up caching
+ * Note: this happens first so we can serve cached pages to first-time visitors
+ *       without loading the core
+ */
+    sys::import('xaraya.caching');
+    xarCache::init();
+
+/**
+ * Load the Xaraya core
+ * @todo: don't load the whole core
+ */
+    sys::import('xaraya.core');
+/**
+ * We need a (fake) ip address to run Xaraya
+ */
+    if(!isset($_SERVER['REMOTE_ADDR'])) putenv("REMOTE_ADDR=127.0.0.1");
+    xarCore::xarInit(xarCore::SYSTEM_ALL);
 }
-
-set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
-include 'bootstrap.php';
-sys::import('xaraya.caching');
-xarCache::init();
-sys::import('xaraya.core');
-
-// We need a (fake) ip address to run xar.
-if(!isset($_SERVER['REMOTE_ADDR'])) putenv("REMOTE_ADDR=127.0.0.1");
-
-// @todo: don't load the whole core
-xarCore::xarInit(XARCORE_SYSTEM_ALL);
-
-/* Make sure we handle boney instead of fancy */
-set_exception_handler(array('ExceptionHandlers','bone'));
-exit(xarLocalServicesMain($argc, $argv));
 
 /**
  * Entry point for local services
@@ -91,4 +103,14 @@ function usage()
          \n");
     return 1;
 }
+
+/**
+ * Set to the minimalist exception handler
+ */
+set_exception_handler(array('ExceptionHandlers','bone'));
+
+/**
+ * Process the local request and shut down
+ */
+exit(xarLocalServicesMain($argc, $argv));
 ?>

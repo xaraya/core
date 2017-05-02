@@ -12,40 +12,44 @@
  * @author Marco Canini
  */
 
-$GLOBALS["Xaraya_PageTime"] = microtime(true); 
+function xarLoader()
+{
+    $GLOBALS["Xaraya_PageTime"] = microtime(true); 
 
 /**
  * Load the layout file so we know where to find the Xaraya directories
  */
-$systemConfiguration = array();
-include 'var/layout.system.php';
-if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
-if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
-if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
-if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
-$GLOBALS['systemConfiguration'] = $systemConfiguration;
-if (!empty($systemConfiguration['rootDir'])) {
-    set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
-}
+    $systemConfiguration = array();
+    include 'var/layout.system.php';
+    if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
+    if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
+    if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
+    if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
+    $GLOBALS['systemConfiguration'] = $systemConfiguration;
+    if (!empty($systemConfiguration['rootDir'])) {
+        set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
+    }
 
 /**
  * Load the Xaraya bootstrap so we can get started
  */
-include 'bootstrap.php';
+    include 'bootstrap.php';
 
 /**
  * Set up caching
  * Note: this happens first so we can serve cached pages to first-time visitors
  *       without loading the core
  */
-sys::import('xaraya.caching');
-// Note: we may already exit here if session-less page caching is enabled
-xarCache::init();
+    sys::import('xaraya.caching');
+    // Note: we may already exit here if session-less page caching is enabled
+    xarCache::init();
 
 /**
  * Load the Xaraya core
  */
-sys::import('xaraya.core');
+    sys::import('xaraya.core');
+    xarCore::xarInit(xarCore::SYSTEM_ALL);
+}
 
 /**
  * Main Xaraya Entry<br/>
@@ -69,9 +73,6 @@ sys::import('xaraya.core');
  */
 function xarMain()
 {
-    // Load the core with all optional systems loaded
-    xarCore::xarInit(xarCore::SYSTEM_ALL);
-
     // Create the object that models this request
     $request = xarController::getRequest();
     xarController::normalizeRequest();
@@ -200,6 +201,13 @@ function xarMain()
 }
 
 // The world is not enough...
+/**
+ * Set up for a web request
+ */
+xarLoader();
+/**
+ * Process the web request
+ */
 xarMain();
 // All done, the shutdown handlers take care of the rest
 ?>

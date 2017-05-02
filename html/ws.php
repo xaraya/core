@@ -35,7 +35,9 @@ function xarWSLoader()
     include 'bootstrap.php';
 
 /**
- * Load the caching system
+ * Set up caching
+ * Note: this happens first so we can serve cached pages to first-time visitors
+ *       without loading the core
  */
     sys::import('xaraya.caching');
     xarCache::init();
@@ -44,7 +46,7 @@ function xarWSLoader()
  * Load the Xaraya core
  */
     sys::import('xaraya.core');
-    xarCore::xarInit(XARCORE_SYSTEM_ALL);
+    xarCore::xarInit(xarCore::SYSTEM_ALL);
 }
 
 /**
