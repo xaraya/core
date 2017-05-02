@@ -31,7 +31,7 @@ function sql_230_04()
                        'themes_configurations',
                          );
     
-        if(!xarModAPIFunc('modules','admin','standardinstall',array('module' => $module, 'objects' => $objects))) return;
+        if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => $module, 'objects' => $objects))) return;
     } catch (Exception $e) {
         // Damn
         $dbconn->rollback();

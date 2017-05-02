@@ -67,8 +67,8 @@ function xarLocalServicesMain($argc, $argv)
     // Main check
     if(!isset($argv[1])) return usage();
     $handler = $argv[1];
-    if(xarModIsAvailable($handler))
-        return xarModApiFunc($handler,'cli','process',array('argc'=>$argc, 'argv'=>$argv));
+    if(xarMod::isAvailable($handler))
+        return xarMod::apiFunc($handler,'cli','process',array('argc'=>$argc, 'argv'=>$argv));
     else
         return usage();
 }

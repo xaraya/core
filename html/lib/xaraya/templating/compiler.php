@@ -132,7 +132,7 @@ class XarayaCompiler extends xarBLCompiler
 
     private function getModuleTagPaths()
     {
-        if (function_exists('xarModAPIFunc')) {
+        if (method_exists('xarMod', 'apiFunc')) {
             $activeMods = xarModAPIFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
         } else {
             return array();
@@ -196,7 +196,7 @@ class XarayaCompiler extends xarBLCompiler
 
     private function getBlockTagPaths()
     {
-        if (function_exists('xarModAPIFunc')) {
+        if (method_exists('xarMod', 'apiFunc')) {
             $activeBlocks = xarMod::apiFunc('blocks', 'instances', 'getitems', array('state' => 2));
         } else {
             return array();
