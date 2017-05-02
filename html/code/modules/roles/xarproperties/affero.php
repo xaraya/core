@@ -1,5 +1,10 @@
 <?php
+/* Include the base class */
+sys::import('modules.base.xarproperties.textbox');
+
 /**
+ * The Affero property is a basic wrapper for an Affero user name
+ *
  * @package modules\roles
  * @subpackage roles
  * @category Xaraya Web Applications Framework
@@ -7,15 +12,8 @@
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/27.html
- */
-/**
- * include the base class
- */
-sys::import('modules.base.xarproperties.textbox');
-
-/**
- * Handle Affero property
  * @author mikespub <mikespub@xaraya.com>
+ * @todo: Remove?
  */
 class AfferoProperty extends TextBoxProperty
 {

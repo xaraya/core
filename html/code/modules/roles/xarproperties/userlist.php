@@ -1,5 +1,9 @@
 <?php
+/* Include the base class */
+sys::import('modules.base.xarproperties.dropdown');
+
 /**
+ * The Userlist property displays a dropdown of available Xaraya users
  * @package modules\roles
  * @subpackage roles
  * @category Xaraya Web Applications Framework
@@ -7,11 +11,6 @@
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/27.html
- */
-/* Include the base class */
-sys::import('modules.base.xarproperties.dropdown');
-/**
- * Handle Userlist property
  * @author mikespub <mikespub@xaraya.com>
  */
 class UserListProperty extends SelectProperty

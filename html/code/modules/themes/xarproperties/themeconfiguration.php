@@ -1,5 +1,15 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.textbox');
+
+/**
+ * Handle the configuration property
+ */
+/**
+ * The theme configuration property holds configuration settings for a theme
+ *
  * @package modules\themes
  * @subpackage themes
  * @copyright see the html/credits.html file in this release
@@ -8,17 +18,8 @@
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/70.html
- *
- * @author Marc Lutolf <mfl@netspan.ch>
- */
-
-/**
- * Include the base class
- */
-sys::import('modules.base.xarproperties.textbox');
-
-/**
- * Handle the configuration property
+ * @author mikespub
+ * @todo Remove this property? It has outlived its usefulness?
  */
 class ThemeConfigurationProperty extends TextBoxProperty
 {

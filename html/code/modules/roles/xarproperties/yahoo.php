@@ -1,5 +1,10 @@
 <?php
+/* Include the base class */
+sys::import('modules.base.xarproperties.textbox');
+
 /**
+ * The Yahoo property is a basic wrapper for Yahoo Messenger functionality
+ *
  * @package modules\roles
  * @subpackage roles
  * @category Xaraya Web Applications Framework
@@ -7,13 +12,8 @@
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/27.html
- */
-/* Include the base class */
-sys::import('modules.base.xarproperties.textbox');
-
-/**
- * Handle Yahoo property
  * @author mikespub <mikespub@xaraya.com>
+ * @todo: Remove?
  */
 class YahooProperty extends TextBoxProperty
 {

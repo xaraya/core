@@ -1,5 +1,10 @@
 <?php
+/* Include the base class */
+sys::import('modules.base.xarproperties.dropdown');
+
 /**
+ * The Grouplist property displays a dropdown of Xaraya groups
+ *
  * @package modules\roles
  * @subpackage roles
  * @category Xaraya Web Applications Framework
@@ -7,11 +12,6 @@
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/27.html
- */
-/* Include the base class */
-sys::import('modules.base.xarproperties.dropdown');
-/**
- * Handle Group list property
  * @author mikespub <mikespub@xaraya.com>
  */
 class GroupListProperty extends SelectProperty

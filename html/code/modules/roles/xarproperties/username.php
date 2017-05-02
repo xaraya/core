@@ -1,5 +1,10 @@
 <?php
+/* Include the base class */
+sys::import('modules.base.xarproperties.textbox');
+
 /**
+ * The UserName property handles a Xaraya user name
+ *
  * @package modules\roles
  * @subpackage roles
  * @category Xaraya Web Applications Framework
@@ -7,14 +12,8 @@
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/27.html
- */
-
-/**
- * Handle Username Property
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.base.xarproperties.textbox');
-
 class UsernameProperty extends TextBoxProperty
 {
     public $id         = 7;

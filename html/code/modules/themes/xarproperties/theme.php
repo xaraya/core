@@ -1,5 +1,9 @@
 <?php
+sys::import('modules.dynamicdata.xarproperties.objectref');
+
 /**
+ * The theme property displays a dropdown of available themes
+ *
  * @package modules\themes
  * @subpackage themes
  * @copyright see the html/credits.html file in this release
@@ -8,12 +12,6 @@
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/70.html
- */
-
-sys::import('modules.dynamicdata.xarproperties.objectref');
-
-/**
- * Handle module property
  * @author mikespub
  */
 class ThemeProperty extends ObjectRefProperty
