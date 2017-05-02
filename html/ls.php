@@ -2,8 +2,8 @@
 /**
  * Xaraya Local Services Interface 
  *
- * @package core
- * @subpackage entrypoint
+ * @package core\entrypoints
+ * @subpackage entrypoints
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -53,9 +53,15 @@ exit(xarLocalServicesMain($argc, $argv));
  *
  * call sign: php ./ls.php <type> [args]
  *
+ * @package core\entrypoints
+ * @subpackage entrypoints
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  * @todo use cli/argument parsing library (perhaps getOpt from PEAR)
 **/
-
 function xarLocalServicesMain($argc, $argv)
 {
     // Main check

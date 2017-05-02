@@ -2,8 +2,8 @@
 /**
  * Xaraya Web Interface Entry Point 
  *
- * @package core
- * @subpackage entrypoint
+ * @package core\entrypoints
+ * @subpackage entrypoints
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -57,6 +57,14 @@ sys::import('xaraya.core');
  * 4. Processes the request<br/>
  * 5. Renders the request output (sends the output to the browser)
  *
+ * @package core\entrypoints
+ * @subpackage entrypoints
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ * @author Marco Canini
  * @return void
  */
 function xarMain()
