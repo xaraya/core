@@ -20,7 +20,7 @@
                         </label>
                     </td>
                     <td>
-                        #xarCore::VERSION_ID# version #XARCORE_VERSION_NUM# (#xarCore::VERSION_SUB#)
+                        #xarCore::VERSION_ID# version #xarCore::VERSION_NUM# (#xarCore::VERSION_SUB#)
                     </td>
                     <td>
                         <xar:var scope="config" name="System.Core.VersionId"/> version
