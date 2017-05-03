@@ -1,6 +1,6 @@
 <?php
 /**
- * Xaraya Bermuda Upgrade
+ * Loads the files required for running an upgrade
  *
  * @package modules\installer
  * @subpackage installer
@@ -11,34 +11,44 @@
  * @link http://www.xaraya.info
  * @author Marc Lutolf <mfl@netspan.ch>
  */
-
-/** Notes for use:
- *  upgrade.php is now an entry function for the upgrade process
- *  The main upgrade functions are now kept in the installer module.
- *     installer_admin_upgrade2 function contains the main database upgrade routines
- *     installer_admin_upgrade3 function contains miscellaneous upgrade routines
- *  Please add any special notes for a special upgrade in admin-upgrade3.xd in installer.
- *  TODO: cleanup and consolidate the upgrade functions in installer
- */
+function xarUpgradeLoader()
+{
 /**
- * Defines for current upgrade phases
+ * Load the layout file so we know where to find the Xaraya directories
  */
-
-// Assemble the things we'll need to create an object that uses the Xaraya core functionality
-$systemConfiguration = array();
-include 'var/layout.system.php';
-if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
-if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
-if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
-if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
-$GLOBALS['systemConfiguration'] = $systemConfiguration;
-if (!empty($systemConfiguration['rootDir'])) {
-    set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
-}
-include 'bootstrap.php';
-
+    $systemConfiguration = array();
+    include 'var/layout.system.php';
+    if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
+    if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
+    if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
+    if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
+    $GLOBALS['systemConfiguration'] = $systemConfiguration;
+    if (!empty($systemConfiguration['rootDir'])) {
+        set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
+    }
 
 /**
+ * Load the Xaraya bootstrap so we can get started
+ */
+    set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
+    include 'bootstrap.php';
+
+/**
+ * Set up caching
+ */
+    sys::import('xaraya.caching');
+    xarCache::init();
+    
+/**
+ * Load the Xaraya core
+ */
+    sys::import('xaraya.core');
+    xarCore::xarInit(xarCore::SYSTEM_ALL);
+}        
+
+/**
+ * Xaraya Upgrade Entry Point 
+ *
  * @package modules\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
@@ -48,8 +58,19 @@ include 'bootstrap.php';
  * @link http://www.xaraya.info
  * @author Marc Lutolf <mfl@netspan.ch>
  */
+/** Notes for use:<br/>
+ *  upgrade.php is now an entry function for the upgrade process<br/>
+ *  The main upgrade functions are now kept in the installer module.<br/>
+ *     installer_admin_upgrade2 function contains the main database upgrade routines<br/>
+ *     installer_admin_upgrade3 function contains miscellaneous upgrade routines<br/>
+ *  Please add any special notes for a special upgrade in admin-upgrade3.xd in installer.<br/>
+ *  TODO: cleanup and consolidate the upgrade functions in installer
+ */
 class Upgrader extends Object
 {
+/**
+ * Constants for current upgrade phases
+ */
     const XARUPGRADE_PHASE_WELCOME    = 1;
     const XARUPGRADE_DATABASE         = 2;
     const XARUPGRADE_MISCELLANEOUS    = 3;
@@ -61,12 +82,6 @@ class Upgrader extends Object
 
     protected function __construct()
     {
-        sys::import('xaraya.caching');
-        xarCache::init();
-        sys::import('xaraya.core');
-        // Only load what we need from core 
-        xarCore::xarInit(xarCore::SYSTEM_ALL);
-        
         // Load the current request
         xarController::getRequest();
         
@@ -130,10 +145,14 @@ class Upgrader extends Object
         sys::import($importpath);
         return true;
     }
-
 }
 
-// Preparations complete. Call the upgrader now
+/**
+ * Set up for an upgrade
+ */
+xarUpgradeLoader();
+/**
+ * Run the upgrade
+ */
 $upgrader = Upgrader::getInstance();    
-
 ?>
