@@ -164,10 +164,10 @@ class xarCoreCache extends Object
     }
 
 /**
- * CHECKME: work with bulk load / bulk save per scope instead of individual gets per scope:name ?
+ * CHECKME: work with bulk load per scope instead of individual gets per scope:name ?
  *          But what about concurrent updates in bulk then (+ unserialize & autoload too early) ?
- *          There doesn't seem to be a big difference in performance using bulk or not, at least with xcache
- */
+ *          get the list of scopes and load each scope from second-level cache. There doesn't seem to be a big difference in performance using bulk or not, at least with xcache
+*/
     public static function loadBulkStorage()
     {
         if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) return;
@@ -183,7 +183,11 @@ class xarCoreCache extends Object
             }
         }
     }
-
+/**
+ * CHECKME: work with bulk save per scope instead of individual gets per scope:name ?
+ *          But what about concurrent updates in bulk then (+ unserialize & autosave too early) ?
+ *          It get the list of scopes and save each scope to second-level cache  
+ */
     public static function saveBulkStorage()
     {
         if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) return;
