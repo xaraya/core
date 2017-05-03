@@ -259,18 +259,18 @@
             <br />
             <h2>Thank you for using Xaraya.</h2>
             <h2>Notes for Version #xarCore::VERSION_NUM#</h2>
-            <xar:if condition="XARCORE_VERSION_NUM eq '2.1.0'">
+            <xar:if condition="xarCore::VERSION_NUM eq '2.1.0'">
                 <xar:template file="notes-210"/>
-            <xar:elseif condition="XARCORE_VERSION_NUM eq '2.2.0'"/>
+            <xar:elseif condition="xarCore::VERSION_NUM eq '2.2.0'"/>
                 <xar:template file="notes-220"/>
-            <xar:elseif condition="XARCORE_VERSION_NUM eq '2.3.0'"/>
+            <xar:elseif condition="xarCore::VERSION_NUM eq '2.3.0'"/>
             <!-- No notes yet
                 <xar:template file="notes-230"/>
             -->
                 No notes available
-            <xar:elseif condition="XARCORE_VERSION_NUM eq '2.3.1'"/>
+            <xar:elseif condition="xarCore::VERSION_NUM eq '2.3.1'"/>
                 No notes available
-            <xar:elseif condition="XARCORE_VERSION_NUM eq '2.4.0'"/>
+            <xar:elseif condition="xarCore::VERSION_NUM eq '2.4.0'"/>
                 No notes available
             </xar:if>
         </xar:if>
