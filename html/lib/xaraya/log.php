@@ -5,7 +5,7 @@
 
 /*
 * @TODO: Remove this when we go to PHP 5.6
-*/
+
 define('XARLOG_LEVEL_EMERGENCY', 1);
 define('XARLOG_LEVEL_ALERT',     2);
 define('XARLOG_LEVEL_CRITICAL',  4);
@@ -16,7 +16,7 @@ define('XARLOG_LEVEL_INFO',      64);
 define('XARLOG_LEVEL_DEBUG',     128);
 // This is a special define that includes all the levels defined above
 define('XARLOG_LEVEL_ALL',       255);
-
+*/
 /**
  * Exceptions raised within the loggers
  *
@@ -100,8 +100,9 @@ function xarLogFallbackPossible()
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
 **/
-function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG)
+function xarLogMessage($message, $level = '')
 {   
+    if (empty($level)) $level = self::LEVEL_DEBUG;
     return xarLog::message($message, $level); 
 }
 
@@ -114,8 +115,9 @@ function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG)
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
 **/
-function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
+function xarLogVariable($name, $var, $level = '')
 {   
+    if (empty($level)) $level = self::LEVEL_DEBUG;
     return xarLog::variable($name, $var, $level); 
 }
 
@@ -191,7 +193,7 @@ class xarLog extends Object
                     $levels = explode(',', $levels);
                     foreach ($levels as $level) $logLevel |= (int)$level;
                 } else {
-                    $logLevel = xarLog::LEVEL_ALL;
+                    $logLevel = self::LEVEL_ALL;
                 }
 
                 self::$config[] = array(
@@ -274,9 +276,10 @@ class xarLog extends Object
      * @param string level. The level for this message OPTIONAL Defaults to XARLOG_LEVEL_DEBUG
      *
      */
-    static public function message($message, $level = XARLOG_LEVEL_DEBUG)
+    static public function message($message, $level = '')
     {
-        if (($level == xarLog::LEVEL_DEBUG) && !xarCore::isDebuggerActive()) return;
+        if (empty($level)) $level = self::LEVEL_DEBUG;
+        if (($level == self::LEVEL_DEBUG) && !xarCore::isDebuggerActive()) return;
         // this makes a copy of the object, so the original $this->_buffer was never updated
         //foreach ($_xarLoggers as $logger) {
         foreach (array_keys(self::$loggers) as $id) {
@@ -284,8 +287,9 @@ class xarLog extends Object
         }
     }
     
-    static public function variable($name, $var, $level = XARLOG_LEVEL_DEBUG)
+    static public function variable($name, $var, $level = '')
     {
+        if (empty($level)) $level = self::LEVEL_DEBUG;
         $args = array('name'=>$name, 'var'=>$var, 'format'=>'text');
     
         //Encapsulate core libraries in classes and let __call work lazy loading
