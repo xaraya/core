@@ -110,7 +110,7 @@
                         <strong>Last resort admin:</strong>&#160;lets you create an emergency user that can be useful in recovering a site if normal users are shut out because privileges have been misconfigured or corrupted. Checking this option will display a link to the page where the last resort admin is created.
                     </li>
                     <li>
-                        <strong>Realms support:</strong>&#160;checking this option opens a page which lets you define the behavior of <em>realms</em> in your privileges, and also an entry on the Privileges menu for creating and managing realms. Realms are used in conjunction with privileges to create different "views" of a site according to which realms users "belong" to. For more information on realms see <a href="http://xaraya.com/index.php/documentation/607">Xaraya Realms</a>.
+                        <strong>Realms support:</strong>&#160;checking this option opens a page which lets you define the behavior of <em>realms</em> in your privileges, and also an entry on the Privileges menu for creating and managing realms. Realms are used in conjunction with privileges to create different "views" of a site according to which realms users "belong" to. For more information on realms see <a href="http://xaraya.info/index.php/documentation/607">Xaraya Realms</a>.
                     </li>
                     <li>
                         <strong>Testing settings:</strong>&#160;lets you display debugging information on privleges to certain users. This is useful for testing new privilege situations on running sites. 
