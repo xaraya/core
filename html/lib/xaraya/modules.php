@@ -690,7 +690,7 @@ class xarMod extends Object implements IxarMod
             $part = 'xarversion';
             // If the locale is already present, it means we can make the translations available
             if(!empty($GLOBALS['xarMLS_currentLocale']))
-                xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
+                xarMLS_loadTranslations(xarMLS::DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
             break;
         case 'property':
             $fileName = sys::code() . 'properties/' . $modOsDir . '/main.php';
@@ -956,7 +956,7 @@ class xarMod extends Object implements IxarMod
 
             if ($found) {
                 // Load the translations file, only if we have loaded the API function for the first time here.
-                if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.$funcType, $funcName) === NULL) {return;}
+                if (xarMLS_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:'.$modType.$funcType, $funcName) === NULL) {return;}
             }
         }
 
@@ -1050,7 +1050,7 @@ class xarMod extends Object implements IxarMod
         }
 
         // Load the module translations files (common functions, uncut functions etc.)
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:', $modType) === NULL) return;
+        if (xarMLS_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:', $modType) === NULL) return;
 
         // Load database info
         self::loadDbInfo($modName, $modDir);
