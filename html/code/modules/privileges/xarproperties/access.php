@@ -1,4 +1,7 @@
 <?php
+/* Include the parent class  */
+sys::import('modules.dynamicdata.class.properties.base');
+
 /**
  * @package modules\privileges
  * @subpackage privileges
@@ -9,10 +12,23 @@
  * @link http://xaraya.info/index.php/release/1098.html
  */
 
-sys::import('modules.dynamicdata.class.properties.base');
-
 /**
- * Handle Access property
+ * The access dataproperty defines and checks user access to code or to dataobjects<br/>
+ * It is somewhat different from Xaraya's "traditional" privileges system in that the access checks are not named objects (Xaraya's masks)<br/>
+ * If it is bound to a dataobject, the access property checks whether the user has access to a given item.<br/>
+ *
+ * The property's check method checks if a user: <nr/>
+ * - belongs to a given roles group or
+ * - has a given access level (VIEW, EDIT, DELETE etc.) or
+ * - both
+ *
+ * (Note: there is a provision to include realms in the check, but this is not currently used)
+ *
+ * Access can be checked according to the needs of the situation. The usual checks for a bound access property are:
+ * - Display access: display a given item of the dataobject the access property is bound to
+ * - Modify access: modify a given item of the dataobject the access property is bound to
+ * - Add access: Create an item of the dataobject the access property is bound to
+ * - Delete access: delete a given item of the dataobject the access property is bound to
  */
 class AccessProperty extends DataProperty
 {
@@ -28,7 +44,6 @@ class AccessProperty extends DataProperty
     public $allallowed  = array('Administrators');
     public $initialization_group_multiselect = false;
     public $validation_override              = false;
-
 
     public $module      = 'All';
     public $component   = 'All';
@@ -50,12 +65,17 @@ class AccessProperty extends DataProperty
     }
 	
 /**
- * Get the value of a dropdown from a web page<br/>
- * Select one or multiple values from dropdown
+ * Get the dataproperty's values from a web page<br/>
+ * The access property has 3 values:
+ * - the value of its group multiselect
+ * - the value of its access level dropdown
+ * - the value of its exceptions radio buttons
  * 
- * @param  string name The name of the dropdown to be selected
- * @param  string value The value of the dropdown to be selected
+ * @param  string name The dataproperty's name on the web page
+ * @param  string value The dataproperty's value on the web page (this parameter is always ignored, as the method uses adhoc code to get the values of this property)
  * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+ *
+ * See showInput method for a description what this dataproperty displays.
  */	
     public function checkInput($name = '', $value = null)
     {
@@ -96,10 +116,15 @@ class AccessProperty extends DataProperty
     }
 	
 /**
- * Display a dropdown for input
+ * Display the access property for input on a web page
+ *
+ * This property displays
+ * - A multiselect with all the site's groups, and in addition the liens "No requirement", "Current User", "Users not logged in" and "Users logged in".
+ * - A dropdown of Xaraya's privileges access level (0 - 800). In addition there is also a line "No Access"
+ * - Radio buttons "Fail silently" and "Throw excpetion"
  * 
  * @param  array data An array of input parameters
- * @return string     HTML markup to display the property for input on a web page
+ * @return string     HTML markup to display the dataproperty for input on a web page
  */	
     public function showInput(Array $data = array())
     {
@@ -135,10 +160,17 @@ class AccessProperty extends DataProperty
     }
 	
 /**
- * Display a dropdown for output
+ * Display the access property's output on a web page
  * 
+ * This property displays the output templates of its three components one below the other:
+ * - the group multiselect
+ * - the level dropdown
+ * - the exception radio button chosen
+ *
+ * See the showInput method for details
+ *
  * @param  array data An array of input parameters
- * @return string     HTML markup to display the property for output on a web page
+ * @return string     HTML markup to display the dataproperty for output on a web page
  */	
     public function showOutput(Array $data = array())
     {
@@ -169,11 +201,10 @@ class AccessProperty extends DataProperty
         return parent::showOutput($data);
     }
 	
-	
 /**
- * Get the dropdown groups and options
+ * Get the options for this dataproperty's group multiselect
  * 
- * @return string    return the array key, value pairs.
+ * @return array  return the array key, value pairs.
  */	
     function getgroupoptions()
     {
@@ -189,9 +220,9 @@ class AccessProperty extends DataProperty
     }
 	
 /**
- * Get the dropdown options that are on levels
+ * Get the options for this dataproperty's level dropdown
  * 
- * @return string    return the options with key as id and value as name
+ * @return array    return the options with key as id and value as name
  */	
     function getleveloptions()
     {
@@ -204,9 +235,9 @@ class AccessProperty extends DataProperty
     }
 	
 /**
- * Get the dropdown options
+ * Get the options for this dataproperty's exception radio buttons
  * 
- * @return string    return the options that show failure and exception
+ * @return array    return the options that show failure and exception
  */	
     function getfailureoptions()
     {
@@ -218,10 +249,12 @@ class AccessProperty extends DataProperty
     }
 	
 /**
- * Set the value of input
- * 
+ * Set the value of this dataproperty
+ *
+ * This method creates a storable representation of a value and assigns it to the dataproperty's value
+ *
  * @param  string value The value of the input
- * @return string    return a storable representation of a value
+ * @return boolean    returns true
  */	    
     function setValue($value=null)
     {
@@ -237,14 +270,15 @@ class AccessProperty extends DataProperty
             }
             $this->value = serialize($value);
         }
+        return true;
     }
 		
 /**
- * Get the value of input
- * Unserialize the value of input
- * handle the exception here
+ * Get the value of this dataproperty
  * 
- * @return string    return unserialize value
+ * This method takes the storable value of the property and transforms it for use in code or in a template
+ * 
+ * @return string    return a (non storable) value of the dataproperty 
  */	 
     public function getValue()
     {
@@ -261,8 +295,10 @@ class AccessProperty extends DataProperty
     }
 	
 /**
- * Check the group is multiselect or dropdown
- * 
+ * Check whether the current user has access
+ *
+ * By default, the access level is only checked if the group check is disabled.
+ *
  * @param  array data An array of input parameters
  * @param  string exclusive 
  * @return bool   Returns true if data is in the correct realm otherwise return false
@@ -311,19 +347,20 @@ class AccessProperty extends DataProperty
     }
     
 /**
- * Check the realm of data
+ * Check whether the current user belongs to a realm that has access
  * 
+ * This is currently not used
+ *
  * @param  array data An array of input parameters
  * @return bool   Returns true
  */	
     public function checkRealm(Array $data=array())
     {
-        // CHECKME
         return true;
     }
     
 /**
- * Check the level of data
+ * Check whether the current user has the proper access level for access
  * 
  * @param  array data An array of input parameters
  * @return bool   Returns true or false 
@@ -343,13 +380,14 @@ class AccessProperty extends DataProperty
                           $this->module, 
                           '',
                           0,
-                          $this->level)) {$access = true;
+                          $this->level)) {
+            $access = true;
         }
         return $access;
     }
 		
 /**
- * Check the group of $groups
+ * Check whether the current user belongs to a group that has access
  * 
  * @param  array groups An array of input parameters
  * @return bool   Returns true or false 
@@ -397,11 +435,13 @@ class AccessProperty extends DataProperty
     }
 	
 /**
- * Used to show the hidden data
- * 
+ * Display the access property inputs as hidden on a web page
+ *
+ * The hidden property "displays" (in hidden form) its inputs on the pagein order to make sure that checkInput can find an input for this property on submit (and so avoid an exception)
+ *
  * @param  array data An array of input parameters
- * @return bool   Returns true or false 
- */	   	
+ * @return string     HTML markup to display the hidden form of the dataproperty for input on a web page
+ */	
     public function showHidden(Array $data = array())
     {
         if (isset($data['value'])) {
@@ -436,6 +476,7 @@ class AccessProperty extends DataProperty
     }    
 }
 
+/* Include the parent class  */
 sys::import('modules.dynamicdata.class.properties.interfaces');
 
 /**
@@ -449,12 +490,15 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
  */
 class AccessPropertyInstall extends AccessProperty implements iDataPropertyInstall
 {
-
 /**
- * Give access to install property
+ * Load the configuration options of this dataproperty<br/>
+ * The options are accessible in the dataproperty's configuration settings in the dynamicdata backend.
+ *
+ * Currently the only configuration option is an array of groups that bypass the check method (always have access). 
+ * The default value of this is the Administrators group.
  * 
  * @param  array data An array of input parameters
- * @return bool   Returns true or false 
+ * @return bool  Returns true
  */	 
     public function install(Array $data=array())
     {
