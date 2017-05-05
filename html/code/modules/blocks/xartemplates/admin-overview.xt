@@ -80,7 +80,7 @@
 
                 <h4>Blocks</h4>
                 <p>
-                    A block is an instance of a block type. You can create as many blocks from a given block type as required, each with its own behavior and content (several menu block on the same page, for instance). In general blocks are displayed on a site's pages by assigning them to one or more block group, but a block can also be displayed anywhere on a page by using a block tag (see <a href="http://xaraya.com/documentation/rfcs/rfc0010.html" target="_blank">RFC0010</a> for details about using block and block group tags).
+                    A block is an instance of a block type. You can create as many blocks from a given block type as required, each with its own behavior and content (several menu block on the same page, for instance). In general blocks are displayed on a site's pages by assigning them to one or more block group, but a block can also be displayed anywhere on a page by using a block tag (see <a href="http://xaraya.info/documentation/rfcs/rfc0010.html" target="_blank">RFC0010</a> for details about using block and block group tags).
                 </p>
 
                 <h3>Available Blocks</h3>
@@ -101,9 +101,9 @@
 
                 <!--
                 <h3>Further Information</h3>
-                <xar:set name="relateddocurl">'http://www.xaraya.com/index.php/keywords/blocks/'</xar:set>
+                <xar:set name="relateddocurl">'http://www.xaraya.info/index.php/keywords/blocks/'</xar:set>
                 <xar:var name="relateddocurltext">Related documentation on Blocks</xar:var>
-                <xar:set name="moduledocurl">'http://www.xaraya.com/index.php/release/13.html'</xar:set>
+                <xar:set name="moduledocurl">'http://www.xaraya.info/index.php/release/13.html'</xar:set>
                 <xar:var name="moduledocurltext">Blocks Module - Xaraya Extension 13</xar:var>
                 <p>Further information on the Blocks module can be found at</p>
                 <ul>
