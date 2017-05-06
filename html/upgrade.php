@@ -154,5 +154,5 @@ xarUpgradeLoader();
 /**
  * Run the upgrade
  */
-$upgrader = Upgrader::getInstance();    
+Upgrader::getInstance();    
 ?>
