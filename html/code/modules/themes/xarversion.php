@@ -21,21 +21,24 @@
  * the file correctly, resulting in unexpected results.
  */
  
-$modversion['name']               = 'Themes Administration';
-$modversion['id']                 = '70';
-$modversion['version']            = '2.4.0';
-$modversion['displayname']        = xarML('Themes');
-$modversion['description']        = 'Configure themes, change site appearance';
-$modversion['displaydescription'] = xarML('Configure themes, change site appearance');
-$modversion['credits']            = 'xardocs/credits.txt';
-$modversion['help']               = '';
-$modversion['changelog']          = 'xardocs/changelog.txt';
-$modversion['license']            = '';
-$modversion['official']           = true;
-$modversion['author']             = 'Marty Vance, Andy Varganov';
-$modversion['contact']            = 'http://www.xaraya.com/';
-$modversion['admin']              = true;
-$modversion['user']               = false;
-$modversion['class']              = 'Core Admin';
-$modversion['category']           = 'System';
+$modversion = array(
+    'name'               => 'Themes Administration',
+    'id'                 => '70',
+    'version'            => '2.4.0',
+    'displayname'        => xarML('Themes'),
+    'description'        => 'Configure themes, change site appearance',
+    'displaydescription' => xarML('Configure themes, change site appearance'),
+    'credits'            => 'xardocs/credits.txt',
+    'help'               => '',
+    'changelog'          => 'xardocs/changelog.txt',
+    'license'            => '',
+    'official'           => true,
+    'author'             => 'Marty Vance, Andy Varganov',
+    'contact'            => 'http://www.xaraya.com/',
+    'admin'              => true,
+    'user'               => false,
+    'class'              => 'Core Admin',
+    'category'           => 'System',
+);
+
 ?>

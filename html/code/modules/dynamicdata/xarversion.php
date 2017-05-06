@@ -20,21 +20,23 @@
  * the file correctly, resulting in unexpected results.
  */
  
-$modversion['name']               = 'Dynamic Data';
-$modversion['id']                 = '182';
-$modversion['displayname']        = xarML('Dynamic Data');
-$modversion['version']            = '2.4.0';
-$modversion['description']        = 'Dynamic Data Module';
-$modversion['displaydescription'] = xarML('Dynamic Data Module');
-$modversion['credits']            = 'xardocs/credits.txt';
-$modversion['help']               = 'xardocs/help.txt';
-$modversion['changelog']          = 'xardocs/changelog.txt';
-$modversion['license']            = 'xardocs/license.txt';
-$modversion['official']           = true;
-$modversion['author']             = 'mikespub';
-$modversion['contact']            = 'http://www.xaraya.com/';
-$modversion['admin']              = true;
-$modversion['user']               = true;
-$modversion['class']              = 'Core Complete';
-$modversion['category']           = 'Content';
+$modversion = array(
+    'name'               => 'Dynamic Data',
+    'id'                 => '182',
+    'displayname'        => xarML('Dynamic Data'),
+    'version'            => '2.4.0',
+    'description'        => 'Dynamic Data Module',
+    'displaydescription' => xarML('Dynamic Data Module'),
+    'credits'            => 'xardocs/credits.txt',
+    'help'               => 'xardocs/help.txt',
+    'changelog'          => 'xardocs/changelog.txt',
+    'license'            => 'xardocs/license.txt',
+    'official'           => true,
+    'author'             => 'mikespub',
+    'contact'            => 'http://www.xaraya.com/',
+    'admin'              => true,
+    'user'               => true,
+    'class'              => 'Core Complete',
+    'category'           => 'Content',
+);
 ?>

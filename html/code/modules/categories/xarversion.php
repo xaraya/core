@@ -3,7 +3,7 @@
  * Categories System
  *
  * @package modules\categories
- * @subpackage categories module
+ * @subpackage categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -12,22 +12,24 @@
  *
  * @author Jim McDonald, Flavio Botelho <nuncanada@xaraya.com>, mikespub <postnuke@mikespub.net>
 */
-    $modversion['name']           = 'categories';
-    $modversion['id']             = '147';
-    $modversion['version']        = '2.4.0';
-    $modversion['displayname']    = xarML('Categories');
-    $modversion['description']    = 'Categorised data utility';
-    $modversion['credits']        = 'xardocs/credits.txt';
-    $modversion['help']           = 'xardocs/help.txt';
-    $modversion['changelog']      = 'xardocs/changelog.txt';
-    $modversion['license']        = 'xardocs/license.txt';
-    $modversion['official']       = true;
-    $modversion['author']         = 'Jim McDonald';
-    $modversion['contact']        = 'http://www.mcdee.net/';
-    $modversion['admin']          = true;
-    $modversion['user']           = false;
-    $modversion['class']          = 'Core Complete';
-    $modversion['category']       = 'Content';
-    $modversion['securityschema'] = array('categories::category' => 'Category name::Category ID',
-                                      'categories::item' => 'Category ID:Module ID:Item ID');
+$modversion = array(
+    'name'           => 'categories',
+    'id'             => '147',
+    'version'        => '2.4.0',
+    'displayname'    => xarML('Categories'),
+    'description'    => 'Categorised data utility',
+    'credits'        => 'xardocs/credits.txt',
+    'help'           => 'xardocs/help.txt',
+    'changelog'      => 'xardocs/changelog.txt',
+    'license'        => 'xardocs/license.txt',
+    'official'       => true,
+    'author'         => 'Jim McDonald',
+    'contact'        => 'http://www.mcdee.net/',
+    'admin'          => true,
+    'user'           => false,
+    'class'          => 'Core Complete',
+    'category'       => 'Content',
+    'securityschema' => array('categories::category' => 'Category name::Category ID',
+                                      'categories::item' => 'Category ID:Module ID:Item ID'),
+);
 ?>

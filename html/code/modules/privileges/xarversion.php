@@ -20,18 +20,20 @@
  * the file correctly, resulting in unexpected results.
  */
  
-$modversion['name']               = 'Privileges Adminstration';
-$modversion['id']                 = '1098';
-$modversion['version']            = '2.4.0';
-$modversion['displayname']        = xarML('Privileges');
-$modversion['description']        = 'Modify privileges security';
-$modversion['displaydescription'] = xarML('Modify privileges security');
-$modversion['official']           = true;
-$modversion['author']             = 'Marc Lutolf';
-$modversion['contact']            = 'http://www.xaraya.com/';
-$modversion['admin']              = true;
-$modversion['user']               = false;
-$modversion['class']              = 'Core Complete';
-$modversion['category']           = 'Users & Groups';
-$modversion['securityschema']     = array('Privileges::' => 'name:id');
+$modversion = array(
+    'name'               => 'Privileges Adminstration',
+    'id'                 => '1098',
+    'version'            => '2.4.0',
+    'displayname'        => xarML('Privileges'),
+    'description'        => 'Modify privileges security',
+    'displaydescription' => xarML('Modify privileges security'),
+    'official'           => true,
+    'author'             => 'Marc Lutolf',
+    'contact'            => 'http://www.xaraya.com/',
+    'admin'              => true,
+    'user'               => false,
+    'class'              => 'Core Complete',
+    'category'           => 'Users & Groups',
+    'securityschema'     => array('Privileges::' => 'name:id'),
+);
 ?>
