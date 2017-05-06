@@ -55,7 +55,7 @@
                         </label>
                     </td>
                     <td>
-                        #xarCore::VERSION_REV#
+                        #xarCore::$build#
                     </td>
                     <td>
                         <xar:if condition="isset($oldversionnum)">

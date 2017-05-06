@@ -122,10 +122,10 @@ function installer_admin_upgrade()
         $success = xarMod::apiFunc('dynamicdata','admin','importpropertytypes');
 
         // Align the db and filesystem version info
-        xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);
+        xarConfigVars::set(null, 'System.Core.VersionId',  xarCore::VERSION_ID);
         xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
-        xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
         xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
+        xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::$build);
         
         sys::import('xaraya.version');
         // Get the list of version checks

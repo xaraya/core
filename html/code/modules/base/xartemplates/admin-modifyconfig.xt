@@ -43,7 +43,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            #xarCore::VERSION_REV#
+                            #xarCore::$build#
                         </div>
                     </div>
                 </fieldset>
