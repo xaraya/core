@@ -151,7 +151,7 @@ function installer_adminapi_createdb(Array $args=array())
                        'databaseName' => $dbName,
                        'systemTablePrefix' => $dbPrefix,
                        'siteTablePrefix' => $dbPrefix);
-   $dbconn = xarDBNewConn($createArgs);
+   $dbconn = xarDB::newConn($createArgs);
 
    $dbCharset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
    $query = xarDBCreateDatabase($dbName,$dbType,$dbCharset);

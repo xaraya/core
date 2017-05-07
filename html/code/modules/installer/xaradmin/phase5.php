@@ -83,14 +83,14 @@ function installer_admin_phase5()
     // so let's try connecting with the dbname first, and then without if that fails
     $dbExists = false;
     try {
-      $dbconn = xarDBNewConn($init_args);
+      $dbconn = xarDB::newConn($init_args);
       $dbExists = true;
     } catch(Exception $e) {
       // Couldn't connect to the specified dbName
       // Let's try without db name
       try {
         $init_args['databaseName'] ='';
-        $dbconn = xarDBNewConn($init_args);
+        $dbconn = xarDB::newConn($init_args);
       } catch(Exception $e) {
         // It failed without dbname too
         return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
