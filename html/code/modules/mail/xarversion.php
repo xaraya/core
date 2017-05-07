@@ -20,21 +20,23 @@
  * the file correctly, resulting in unexpected results.
  */
  
-$modversion['name']               = 'Mail';
-$modversion['id']                 = '771';
-$modversion['displayname']        = xarML('Mail');
-$modversion['version']            = '2.4.0';
-$modversion['description']        = 'Ma4l handling utility module';
-$modversion['displaydescription'] = xarML('Mail handling utility module');
-$modversion['credits']            = 'xardocs/credits.txt';
-$modversion['help']               = 'xardocs/help.txt';
-$modversion['changelog']          = 'xardocs/changelog.txt';
-$modversion['license']            = 'xardocs/license.txt';
-$modversion['official']           = true;
-$modversion['author']             = 'John Cox via phpMailer';
-$modversion['contact']            = 'http://www.xaraya.com/';
-$modversion['admin']              = true;
-$modversion['user']               = false;
-$modversion['class']              = 'Core Complete';
-$modversion['category']           = 'System';
+$modversion = array(
+    'name'               => 'Mail',
+    'id'                 => '771',
+    'displayname'        => xarML('Mail'),
+    'version'            => '2.4.0',
+    'description'        => 'Ma4l handling utility module',
+    'displaydescription' => xarML('Mail handling utility module'),
+    'credits'            => 'xardocs/credits.txt',
+    'help'               => 'xardocs/help.txt',
+    'changelog'          => 'xardocs/changelog.txt',
+    'license'            => 'xardocs/license.txt',
+    'official'           => true,
+    'author'             => 'John Cox via phpMailer',
+    'contact'            => 'http://www.xaraya.com/',
+    'admin'              => true,
+    'user'               => false,
+    'class'              => 'Core Complete',
+    'category'           => 'System',
+);
 ?>

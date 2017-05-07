@@ -16,20 +16,6 @@
  * @todo dependencies and runlevels!
 **/
 
-/**
- * Get the current git revision
- * This is displayed in the base module backend
- * Handy if we're running from a working copy, prolly comment out on distributing
- */
-$rev = 'unknown';
-$path = '../.git/refs/heads/com.xaraya.core.bermuda';
-if(file_exists($path))
-{
-    $text = file($path);
-    $rev = $text[0];
-}
-define('XARCORE_VERSION_REV', $rev);
-
 /*
  * System dependencies for (optional) systems
  * FIXME: This diagram isn't correct (or at least not detailed enough)
@@ -167,19 +153,19 @@ define('XARCORE_SYSTEM_HOOKS',           xarConst::BIT_HOOKS | XARCORE_SYSTEM_US
 define('XARCORE_SYSTEM_ALL',             xarConst::BIT_ALL); 
 
 /**
- * Load the Xaraya pre core early in case the entry point didn't do it (it should)
+ * Sanity check that we are coming in through a normal entry point
  *
  */
-if(!class_exists('sys'))
-{
-    // @todo: this aint right, it's not here, but one level up.
-    include (dirname(__FILE__).'/bootstrap.php');
-}
+if(!class_exists('sys')) die("The Xaraya precore was not loaded");
+
+/**
+ * Now begin loading
+ *
+ */
 // Before we do anything make sure we can except out of code in a predictable matter
 sys::import('xaraya.exceptions');
 // Load core caching in case we didn't go through xarCache::init()
 sys::import('xaraya.caching.core');
-
 
 /**
  * Xaraya core class<br/>
@@ -196,7 +182,7 @@ class xarCore extends xarCoreCache
     const VERSION_ID           = xarConst::VERSION_ID;
     const VERSION_NUM          = xarConst::VERSION_NUM;
     const VERSION_SUB          = xarConst::VERSION_SUB;
-    const VERSION_REV          = XARCORE_VERSION_REV;
+    const VERSION_REV          = 'unknown';
     
     const BIT_DATABASE         = xarConst::BIT_DATABASE;
     const BIT_CONFIGURATION    = xarConst::BIT_CONFIGURATION;
@@ -217,7 +203,9 @@ class xarCore extends xarCoreCache
     const SYSTEM_USER          = XARCORE_SYSTEM_USER;
     const SYSTEM_BLOCKS        = XARCORE_SYSTEM_BLOCKS;
     const SYSTEM_HOOKS         = XARCORE_SYSTEM_HOOKS;
-    const SYSTEM_ALL           = XARCORE_SYSTEM_ALL;    
+    const SYSTEM_ALL           = XARCORE_SYSTEM_ALL;   
+    
+    public static $build       = 'unknown';
 
     /**
      * Initializes the core engine
@@ -229,6 +217,18 @@ class xarCore extends xarCoreCache
     {
         static $current_SYSTEM_level = self::SYSTEM_NONE;
         static $first_load = true;
+
+        /**
+         * Get the current git revision
+         * This is displayed in the base module backend
+         * Handy if we're running from a working copy, prolly comment out on distributing
+         */
+        $path = '../.git/refs/heads/com.xaraya.core.bermuda';
+        if(file_exists($path)) {
+            $text = file($path);
+            $rev = $text[0];
+            self::$build = $rev;
+        }
 
         $new_SYSTEM_level = $whatToLoad;
     

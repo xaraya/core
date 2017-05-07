@@ -29,7 +29,7 @@ function sql_210_20()
 
     // Run the query
     try {
-        xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
+        xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::$build);
     } catch (Exception $e) {
         // Damn
         $data['success'] = false;

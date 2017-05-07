@@ -22,21 +22,23 @@
  * the file correctly, resulting in unexpected results.
  */
  
-$modversion['name']               = 'Blocks Administration';
-$modversion['id']                 = '13';
-$modversion['displayname']        = xarML('Blocks');
-$modversion['version']            = '2.4.0';
-$modversion['description']        = 'Administration of block instances and groups';
-$modversion['displaydescription'] = xarML('Administration of block instances and groups');
-$modversion['credits']            = '';
-$modversion['help']               = '';
-$modversion['changelog']          = '';
-$modversion['license']            = '';
-$modversion['official']           = true;
-$modversion['author']             = 'Jim McDonald, Paul Rosania';
-$modversion['contact']            = 'http://www.xaraya.com/';
-$modversion['admin']              = true;
-$modversion['user']               = false;
-$modversion['class']              = 'Core Admin';
-$modversion['category']           = 'System';
+$modversion = array(
+    'name'               => 'Blocks Administration',
+    'id'                 => '13',
+    'displayname'        => xarML('Blocks'),
+    'version'            => '2.4.0',
+    'description'        => 'Administration of block instances and groups',
+    'displaydescription' => xarML('Administration of block instances and groups'),
+    'credits'            => '',
+    'help'               => '',
+    'changelog'          => '',
+    'license'            => '',
+    'official'           => true,
+    'author'             => 'Jim McDonald, Paul Rosania',
+    'contact'            => 'http://www.xaraya.com/',
+    'admin'              => true,
+    'user'               => false,
+    'class'              => 'Core Admin',
+    'category'           => 'System',
+);
 ?>

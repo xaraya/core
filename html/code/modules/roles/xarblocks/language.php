@@ -27,8 +27,8 @@ class Roles_LanguageBlock extends BasicBlock
 
     function display()
     {
-        // if (xarMLSGetMode() != XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
-        if (xarMLSGetMode() == XARMLS_SINGLE_LANGUAGE_MODE) return;
+        // if (xarMLSGetMode() != xarMLS::BOXED_MULTI_LANGUAGE_MODE) {
+        if (xarMLSGetMode() == xarMLS::SINGLE_LANGUAGE_MODE) return;
 
         $current_locale = xarUserGetNavigationLocale();
 

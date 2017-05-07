@@ -1,9 +1,10 @@
 <?php
-/* Include the base class */
+/* Include the parent class */
 sys::import('modules.base.xarproperties.dropdown');
 
 /**
  * The Userlist property displays a dropdown of available Xaraya users
+ *
  * @package modules\roles
  * @subpackage roles
  * @category Xaraya Web Applications Framework
@@ -184,8 +185,21 @@ class UserListProperty extends SelectProperty
     }
 }
 
+/* Include the parent class */
 sys::import('modules.dynamicdata.class.properties.interfaces');
 
+/**
+ * This class loads the configuration data of the userlist property
+ *
+ * @package modules\roles
+ * @subpackage roles
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/27.html
+ * @author Marc Lutolf <marc@luetolf-carroll.com>
+ */
 class UserListPropertyInstall extends UserListProperty implements iDataPropertyInstall
 {
     public function install(Array $data=array())

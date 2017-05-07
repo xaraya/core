@@ -70,7 +70,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
         // MLS -> xarMod::getBaseInfo -> xarDisplayableName -> xarMod::getFileInfo -> MLS
         // We don't use and don't translate KEYS files now,
         // but I will recheck this code in the menus clone
-        //        if ($dnType == XARMLS_DNTYPE_MODULE) {
+        //        if ($dnType == xarMLS::DNTYPE_MODULE) {
         //            $this->loadKEYS($dnName);
         //        }
         return false;

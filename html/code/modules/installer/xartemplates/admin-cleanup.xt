@@ -6,7 +6,7 @@
         <h1>Installation Complete</h1>
         <h3>Congratulations, you have successfully installed Xaraya
         <xar:var scope="config" name="System.Core.VersionId"/>
-        #xarConst::VERSION_NUM# (<xar:var scope="config" name="System.Core.VersionSub"/>) Build 
+        #xarCore::VERSION_NUM# (<xar:var scope="config" name="System.Core.VersionSub"/>) Build 
         <xar:var scope="config" name="System.Core.VersionRev"/>
         !</h3>
 

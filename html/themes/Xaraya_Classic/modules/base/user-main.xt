@@ -10,7 +10,7 @@
         <div class="xar-mod-body xar-overflow-auto">
             <xar:set name="versionnum">xarCore::VERSION_NUM</xar:set>
             <xar:if condition="defined('XARCORE_VERSION_REV')">
-                <xar:set name="mtrev">xarCore::VERSION_REV</xar:set>
+                <xar:set name="mtrev">xarCore::$build</xar:set>
             </xar:if>
             <h2>Xaraya has reached Production Stable Version #$versionnum#</h2>
             <xar:if condition="isset($mtrev)">

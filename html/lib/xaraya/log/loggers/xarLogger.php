@@ -122,14 +122,14 @@ class xarLogger extends Object
     function levelToString($level)
     {
         static $levels = array(
-            XARLOG_LEVEL_EMERGENCY => 'EMERGENCY',
-            XARLOG_LEVEL_ALERT     => 'ALERT',
-            XARLOG_LEVEL_CRITICAL  => 'CRITICAL',
-            XARLOG_LEVEL_ERROR     => 'ERROR',
-            XARLOG_LEVEL_WARNING   => 'WARNING',
-            XARLOG_LEVEL_NOTICE    => 'NOTICE',
-            XARLOG_LEVEL_INFO      => 'INFO',
-            XARLOG_LEVEL_DEBUG     => 'DEBUG'
+            xarLog::LEVEL_EMERGENCY => 'EMERGENCY',
+            xarLog::LEVEL_ALERT     => 'ALERT',
+            xarLog::LEVEL_CRITICAL  => 'CRITICAL',
+            xarLog::LEVEL_ERROR     => 'ERROR',
+            xarLog::LEVEL_WARNING   => 'WARNING',
+            xarLog::LEVEL_NOTICE    => 'NOTICE',
+            xarLog::LEVEL_INFO      => 'INFO',
+            xarLog::LEVEL_DEBUG     => 'DEBUG'
          );
 
         return $levels[$level];

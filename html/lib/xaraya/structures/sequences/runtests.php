@@ -18,7 +18,6 @@ chdir('/var/mt/xar/core/core.2.x/html');
 include_once('bootstrap.php');
 sys::import('xaraya.core');
 
-// TODO: don't load the whole core
 xarCore::xarInit(xarCore::SYSTEM_ALL);
 
 function m($msg,$level=0) 

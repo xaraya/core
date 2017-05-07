@@ -35,28 +35,21 @@
 */
 
 /**
- * Early PHP checks
+ * Check PHP and MySQL versions
  *
  */
  
+/**
+ * @package modules\installer
+ * @subpackage installer
+ */
 define('MYSQL_REQUIRED_VERSION', '5.0.0');
+/**
+ * @package modules\installer
+ * @subpackage installer
+ */
 define('PHP_REQUIRED_VERSION', '5.3.0');
-$xmlextension             = extension_loaded('xml');
-$xslextension             = extension_loaded('xsl');
 
-if (function_exists('version_compare')) {
-    if (version_compare(PHP_VERSION,PHP_REQUIRED_VERSION,'>=')) $metRequiredPHPVersion = true;
-} else {
-    $metRequiredPHPVersion = false;
-}
-if (!$metRequiredPHPVersion
-    || !$xmlextension
-    || !$xslextension
-    ) {
-        header('Location: requirements.html');
-        exit;
-    }
-    
 /**
  * Defines for the phases
  *
@@ -97,8 +90,33 @@ define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
  */
 define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
 
+/**
+ * Loads the files required for running an installation
+ *
+ * @package modules\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ * @author Marc Lutolf <mfl@netspan.ch>
+ */
 function xarInstallLoader()
 {
+    $xmlextension = extension_loaded('xml');
+    $xslextension = extension_loaded('xsl');
+
+    if (function_exists('version_compare')) {
+        if (version_compare(PHP_VERSION,PHP_REQUIRED_VERSION,'>=')) $metRequiredPHPVersion = true;
+    } else {
+        $metRequiredPHPVersion = false;
+    }
+    if (!$metRequiredPHPVersion || !$xmlextension || !$xslextension) {
+        header('Location: requirements.html');
+        exit;
+    }
+    
 /**
  * Load the layout file so we know where to find the Xaraya directories
  */
