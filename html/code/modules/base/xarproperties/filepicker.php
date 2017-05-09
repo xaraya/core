@@ -1,5 +1,12 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.dropdown');
+sys::import('xaraya.structures.relativedirectoryiterator');
+
+
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -9,8 +16,7 @@
  *
  * @author Marc Lutolf <mfl@netspan.ch>
  */
-sys::import('modules.base.xarproperties.dropdown');
-sys::import('xaraya.structures.relativedirectoryiterator');
+
 
 /**
  * Handle file picker property

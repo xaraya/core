@@ -1,4 +1,6 @@
 <?php
+/* Include parent class */
+sys::import('modules.dynamicdata.class.properties.base');
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
@@ -7,8 +9,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/68.html
  */
-/* Include parent class */
-sys::import('modules.dynamicdata.class.properties.base');
+
 /**
  * Class to handle file upload properties
  */
