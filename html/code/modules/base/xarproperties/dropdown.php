@@ -49,7 +49,11 @@ class SelectProperty extends DataProperty
         $this->tplmodule = 'base';
         $this->filepath  = 'modules/base/xarproperties';
     }
-
+/**
+ * Validate the value of a selected dropdown option
+ *
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -85,7 +89,13 @@ class SelectProperty extends DataProperty
         $this->value = null;
         return false;
     }
-
+/**
+ * Display a Dropdown for input
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
+ */
+	
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
@@ -146,7 +156,12 @@ class SelectProperty extends DataProperty
         if(isset($data['rows'])) $this->display_rows = $data['rows']; 
         return parent::showInput($data);
     }
-
+/**
+ * Display a dropdown for output
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for output on a web page
+ */	
     public function showOutput(Array $data = array())
     {
         if (isset($data['option_link'])) $this->display_option_link = $data['option_link'];

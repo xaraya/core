@@ -45,6 +45,11 @@ class NumberListProperty extends SelectProperty
             }
         }
     }
+	/**
+ * Validate the value of a input
+ *  
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
 
     public function validateValue($value = null)
     {

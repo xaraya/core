@@ -40,6 +40,12 @@ class NumberBoxProperty extends TextBoxProperty
         if (!is_numeric($this->value) && !empty($this->value)) throw new Exception(xarML('The default value of a #(1) must be numeric',$this->name));
     }
 
+	/**
+ * Validate the value of a input box
+ *  
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
+	
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -96,7 +102,12 @@ class NumberBoxProperty extends TextBoxProperty
         $this->value = $value;
         return true;
     }
-
+/**
+ * Convert an integer or string value to true/false
+ * 
+ * @param  mixed value The value to be converted
+ * @return bool  Returns true if the integer or string value is 1, "1" or "true"; otherwise returns false.
+ */
     public function castType($value=null)
     {
         if (!is_null($value)) return (int)$value;

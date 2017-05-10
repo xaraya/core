@@ -22,7 +22,12 @@ class LanguageListProperty extends SelectProperty
     public $id         = 36;
     public $name       = 'language';
     public $desc       = 'Language List';
-
+/**
+     * Retrieve the list of options on demand
+     * 
+     * @param void N/A
+     * @return array Array of options
+     */
     function getOptions()
     {
         if (count($this->options) > 0) {

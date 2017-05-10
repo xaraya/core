@@ -362,7 +362,12 @@ class FileUploadProperty extends DataProperty
 
         return parent::showInput($data);
     }
+/**
+ * Display a file upload output
+ * 
+ * @param  array data An array of input parameters
 
+ */	
     public function showOutput(Array $data = array())
     {
         extract($data);

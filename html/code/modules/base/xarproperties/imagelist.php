@@ -48,7 +48,12 @@ class ImageListProperty extends FilePickerProperty
         // Default selection
         if (!isset($this->initialization_firstline)) $this->initialization_firstline = ',' . xarML('Select Image');
     }
-
+/**
+ * Display the output 
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for output on a web page
+ */	
     public function showOutput(Array $data = array())
     {
         extract($data);

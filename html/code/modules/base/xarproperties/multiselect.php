@@ -47,7 +47,11 @@ class MultiSelectProperty extends SelectProperty
         }
        return $this->validateValue($value);
     }
-    
+    	/**
+ * Validate the value of a selected options
+ *  
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
     public function validateValue($value = null)
     {
         // do NOT call parent validateValue here - it will always fail !!!
@@ -85,6 +89,12 @@ class MultiSelectProperty extends SelectProperty
         return true;
     }
 
+/**
+ * Display a Dropdown for input
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
+ */
     public function showInput(Array $data = array())
     {
         if (isset($data['single'])) $this->validation_single = $data['single'];
