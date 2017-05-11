@@ -3,7 +3,6 @@
  * Configuration information for the Base module
  *
  * @package modules\base
- * @subpackage base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -21,23 +20,21 @@
  * the file correctly, resulting in unexpected results.
  */
  
-$modversion = array(
-    'name'               => 'Base',
-    'id'                 => '68',
-    'displayname'        => xarML('Base'),
-    'version'            => '2.4.0',
-    'description'        => 'Home Page',
-    'displaydescription' => xarML('Home Page'),
-    'credits'            => 'xardocs/credits.txt',
-    'help'               => 'xardocs/help.txt',
-    'changelog'          => 'xardocs/changelog.txt',
-    'license'            => 'xardocs/license.txt',
-    'official'           => true,
-    'author'             => 'John Robeson, Greg Allan',
-    'contact'            => 'http://www.xaraya.com/',
-    'admin'              => true,
-    'user'               => true,
-    'class'              => 'Core Admin',
-    'category'           => 'System',
-);
+$modversion['name']               = 'Base';
+$modversion['id']                 = '68';
+$modversion['displayname']        = xarML('Base');
+$modversion['version']            = '2.4.0';
+$modversion['description']        = 'Home Page';
+$modversion['displaydescription'] = xarML('Home Page');
+$modversion['credits']            = 'xardocs/credits.txt';
+$modversion['help']               = 'xardocs/help.txt';
+$modversion['changelog']          = 'xardocs/changelog.txt';
+$modversion['license']            = 'xardocs/license.txt';
+$modversion['official']           = true;
+$modversion['author']             = 'John Robeson, Greg Allan';
+$modversion['contact']            = 'http://www.xaraya.com/';
+$modversion['admin']              = true;
+$modversion['user']               = true;
+$modversion['class']              = 'Core Admin';
+$modversion['category']           = 'System';
 ?>

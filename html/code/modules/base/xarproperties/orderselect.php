@@ -1,5 +1,9 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import("modules.base.xarproperties.multiselect");
+/**
  * OrderSelect Property
  *
  * @package modules\base
@@ -9,7 +13,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/68.html
  */
-sys::import("modules.base.xarproperties.multiselect");
+
 /**
  * handle the orderselect property
  * @author Dracos <dracos@xaraya.com>

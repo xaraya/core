@@ -1,5 +1,11 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.calendar');
+
+
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -10,7 +16,7 @@
  * @author Roger Keays <roger.keays@ninthave.net>
  */
 
-sys::import('modules.base.xarproperties.calendar');
+
 
 /**
  * Handle the extended date property

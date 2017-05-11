@@ -1,5 +1,9 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.dropdown');
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -9,7 +13,7 @@
  *
  * @author mikespub <mikespub@xaraya.com>
 */
-sys::import('modules.base.xarproperties.dropdown');
+
 /**
  * Handle the numberlist property
  */
@@ -41,6 +45,11 @@ class NumberListProperty extends SelectProperty
             }
         }
     }
+	/**
+ * Validate the value of a input
+ *  
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
 
     public function validateValue($value = null)
     {

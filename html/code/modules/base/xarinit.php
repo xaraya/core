@@ -175,9 +175,9 @@ function base_init()
      * Set System Configuration Variables
      *****************************************************************/
     xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
-    xarConfigVars::set(null, 'System.Core.VersionId',  xarCore::VERSION_ID);
+    xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);
     xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
-    xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::$build);
+    xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
     $allowedAPITypes = array();
     /*****************************************************************
      * Set site configuration variables

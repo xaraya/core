@@ -1,5 +1,9 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.dropdown');
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -9,7 +13,7 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.base.xarproperties.dropdown');
+
 /**
  * Handle the language list property
  */
@@ -18,7 +22,12 @@ class LanguageListProperty extends SelectProperty
     public $id         = 36;
     public $name       = 'language';
     public $desc       = 'Language List';
-
+/**
+     * Retrieve the list of options on demand
+     * 
+     * @param void N/A
+     * @return array Array of options
+     */
     function getOptions()
     {
         if (count($this->options) > 0) {

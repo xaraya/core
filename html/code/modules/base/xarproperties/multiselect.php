@@ -1,5 +1,9 @@
 <?php
 /**
+ * Include the base class
+ */
+ sys::import('modules.base.xarproperties.dropdown');
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -9,7 +13,7 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.base.xarproperties.dropdown');
+
 /**
  * Handle the multiselect property
  */
@@ -43,7 +47,11 @@ class MultiSelectProperty extends SelectProperty
         }
        return $this->validateValue($value);
     }
-    
+    	/**
+ * Validate the value of a selected options
+ *  
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
     public function validateValue($value = null)
     {
         // do NOT call parent validateValue here - it will always fail !!!
@@ -81,6 +89,12 @@ class MultiSelectProperty extends SelectProperty
         return true;
     }
 
+/**
+ * Display a Dropdown for input
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
+ */
     public function showInput(Array $data = array())
     {
         if (isset($data['single'])) $this->validation_single = $data['single'];
