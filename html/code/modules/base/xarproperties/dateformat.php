@@ -15,7 +15,7 @@ sys::import('modules.base.xarproperties.dropdown');
  */
 
 /**
- * Handle the date format property
+ * This property displays a dropdown of date formats
  */
 class DateFormatProperty extends SelectProperty
 {

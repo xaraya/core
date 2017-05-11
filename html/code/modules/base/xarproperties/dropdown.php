@@ -14,11 +14,11 @@ sys::import('modules.dynamicdata.class.properties.base');
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+
 /**
- * Handle select property
+ * This property displays a generic dropdown
+ * Its extensions are widely used to display drodpwons of specific data
  */
-
-
 class SelectProperty extends DataProperty
 {
     public $id         = 6;

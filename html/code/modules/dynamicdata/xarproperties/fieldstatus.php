@@ -13,7 +13,9 @@
 sys::import('modules.base.xarproperties.dropdown');
 
 /**
- * Handle field status property
+ * This property displays a dropdown of dataproperty statuses
+ * The allowed values are defined in the dtatproperty master class
+ * modules/dynamicdata/class/properties/master.php
  */
 class FieldStatusProperty extends SelectProperty
 {

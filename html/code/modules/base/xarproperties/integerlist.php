@@ -15,7 +15,7 @@ sys::import('modules.base.xarproperties.dropdown');
 */
 
 /**
- * Handle the numberlist property
+ * This property displays a dropdown containing a list of integers
  */
 class NumberListProperty extends SelectProperty
 {

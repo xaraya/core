@@ -16,11 +16,7 @@ sys::import('modules.base.xarproperties.calendar');
  * @author Roger Keays <roger.keays@ninthave.net>
  */
 
-
-
 /**
- * Handle the extended date property
- *
  * The extended date property converts the value provided by the javascript
  * calendar into a universal YYYY-MM-DD format for storage in most databases
  * supporting the 'date' type.

@@ -17,7 +17,7 @@
 sys::import('modules.base.xarproperties.textarea');
 
 /**
- * Handle the configuration property
+ * This property holds the configuration of a dataproperty
  */
 class ConfigurationProperty extends TextAreaProperty
 {

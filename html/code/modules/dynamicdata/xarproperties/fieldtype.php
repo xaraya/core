@@ -17,7 +17,7 @@
 sys::import('modules.dynamicdata.xarproperties.objectref');
 
 /**
- * Handle field type property
+ * This property displays a dropdown of dataproperties
  */
 class FieldTypeProperty extends ObjectRefProperty
 {

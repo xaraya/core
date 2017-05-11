@@ -15,7 +15,7 @@
  */
 
 /**
- * handle the URL + Title property
+ * This property displays a title for a URL; if a link is provided then the icon is shown as a link to the URL
  */
 class URLTitleProperty extends TextBoxProperty
 {

@@ -13,7 +13,7 @@ sys::import('modules.base.xarproperties.dropdown');
  */
 
 /**
- * Handle check box list property
+ * This property displays a cluster of checkboxes
  */
 class CheckboxListProperty extends SelectProperty
 {

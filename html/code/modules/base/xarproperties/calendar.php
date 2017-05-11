@@ -9,7 +9,8 @@
  */
 
 /**
- * Handle calendar property
+ * This property displays a textbox for date/time input
+ * @todo Review this
  */
 class CalendarProperty extends DataProperty
 {

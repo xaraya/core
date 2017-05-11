@@ -38,7 +38,7 @@
 sys::import('modules.base.xarproperties.combobox');
 
 /**
- * Handle the item type property
+ * This property displays a dropdown/textbox of dynamicdata itemtypes
  */
 class ItemTypeProperty extends ComboProperty
 {

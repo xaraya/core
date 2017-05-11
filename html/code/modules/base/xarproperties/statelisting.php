@@ -16,6 +16,10 @@ sys::import('modules.base.xarproperties.dropdown');
 
 
 /**
+ * This property displays a dropdown of US, Canadian and Australian states
+ * @todo Rework this
+ */
+/**
  * Handle the StateList property
  *
  * Show a dropdown of US states

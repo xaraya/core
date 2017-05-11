@@ -17,9 +17,8 @@ sys::import('xaraya.structures.relativedirectoryiterator');
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-
 /**
- * Handle file picker property
+ * This property displays a dropdown of file names
  * 
  * Parameters:
  * basedir          base directory whose contents are displayed

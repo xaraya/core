@@ -15,7 +15,7 @@ sys::import('modules.base.xarproperties.dropdown');
  */
 
 /**
- * Handle the country list property
+ * This property displays a dropdown of countries
  */
 class CountryListProperty extends SelectProperty
 {

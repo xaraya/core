@@ -14,9 +14,8 @@ sys::import('modules.base.xarproperties.dropdown');
  * @author mikespub <mikespub@xaraya.com>
  */
 
-
 /**
- * Handle the timezone property
+ * This property displays a dropdown of time zones
  */
 class TimeZoneProperty extends SelectProperty
 {

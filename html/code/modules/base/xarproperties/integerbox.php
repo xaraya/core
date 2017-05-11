@@ -16,7 +16,7 @@ sys::import('modules.base.xarproperties.textbox');
 
 
 /**
- * Handle the numberbox property
+ * This property displays a textbox whose contents is an integer
  */
 class NumberBoxProperty extends TextBoxProperty
 {

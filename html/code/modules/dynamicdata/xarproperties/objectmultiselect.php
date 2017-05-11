@@ -12,7 +12,7 @@
  */
 sys::import('modules.dynamicdata.xarproperties.objectref');
 /**
- * Handle the object multiselect property
+ * This property displays a multiselect of items of a dataobject
  */
 class ObjectMultiSelectProperty extends ObjectRefProperty
 {

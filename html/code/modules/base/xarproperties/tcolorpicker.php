@@ -11,7 +11,7 @@
  */
 
 /**
- * Handle Tigra color picker property
+ * This property displays a Tigra color picker
  */
 class TColorPickerProperty extends DataProperty
 {

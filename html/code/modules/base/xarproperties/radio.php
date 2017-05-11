@@ -15,7 +15,7 @@ sys::import('modules.base.xarproperties.dropdown');
  */
 
 /**
- * Handle radio buttons property
+ * This property displays a cluster of radio buttons
  */
 class RadioButtonsProperty extends SelectProperty
 {

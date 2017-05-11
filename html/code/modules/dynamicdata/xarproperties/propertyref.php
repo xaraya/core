@@ -14,6 +14,7 @@
 sys::import('modules.base.xarproperties.dropdown');
 
 /**
+ * This property displays a dropdown of properties of a dataobject
  * Select a property from a particular object, either by specifying the reference object in configuration, or
  * by specifying which other property from the current objectref contains the objectname or objectid
  */

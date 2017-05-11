@@ -19,7 +19,7 @@
 sys::import('modules.base.xarproperties.dropdown');
 
 /**
- * Handle the objectreference property
+ * This property displays a dropdown of items of a dataproperty
  *
  * DataObject Reference Property (foreign key like dropdown)
  * You can specify the to be referenced object and what property values

@@ -15,7 +15,7 @@ sys::import('modules.base.xarproperties.dropdown');
  */
 
 /**
- * Handle the language list property
+ * This property displays a dropdown containing the list of languages available on this site as per the base module backend
  */
 class LanguageListProperty extends SelectProperty
 {

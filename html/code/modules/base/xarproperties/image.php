@@ -15,7 +15,7 @@
  */
 
 /**
- * Handle the image property
+ * This property displays an image
  */
 class ImageProperty extends TextBoxProperty
 {

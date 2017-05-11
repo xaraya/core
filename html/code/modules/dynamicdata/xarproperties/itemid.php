@@ -17,7 +17,8 @@
 sys::import('modules.base.xarproperties.integerbox');
 
 /**
- * Handle item id property
+ * This property models an ID
+ * This is a speciic case of a number. It is sually used to hold datarecord IDs, which are assigned, unique and autoincrement
  */
 class ItemIDProperty extends NumberBoxProperty
 {

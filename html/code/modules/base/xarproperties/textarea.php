@@ -15,9 +15,8 @@ sys::import('modules.dynamicdata.class.properties.base');
  */
 
 /**
- * Handle text area property
+ * This property displays a text area
  */
-
 class TextAreaProperty extends DataProperty
 {
     public $id         = 3;

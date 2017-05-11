@@ -12,7 +12,7 @@
  */
 
 /**
- * Handle subform property
+ * @todo This has been superceded by the subitems property
  */
 class SubFormProperty extends DataProperty
 {

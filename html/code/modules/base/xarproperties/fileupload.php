@@ -11,7 +11,7 @@ sys::import('modules.dynamicdata.class.properties.base');
  */
 
 /**
- * Class to handle file upload properties
+ * This property displays file tag on a template (suitable for uploading files)
  */
 class FileUploadProperty extends DataProperty
 {

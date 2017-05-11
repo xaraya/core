@@ -11,7 +11,8 @@
  */
 
 /**
- * Class to handle hidden property
+ * This property displays a vlaue that is hidden on the template
+ @todo Review this
  */
 class HiddenProperty extends DataProperty
 {

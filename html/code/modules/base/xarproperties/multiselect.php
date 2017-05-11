@@ -15,7 +15,7 @@
  */
 
 /**
- * Handle the multiselect property
+ * This property displays a multiselect box
  */
 class MultiSelectProperty extends SelectProperty
 {

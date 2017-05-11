@@ -16,7 +16,7 @@ sys::import('modules.base.xarproperties.textbox');
  */
 
 /**
- * Handle the URL property
+ * This property displays a raw URL link
  */
 class URLProperty extends TextBoxProperty
 {

@@ -10,7 +10,7 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * Handle the static text property
+ * This property displays a chunk of static text. The text cannot be modified.
  */
 class StaticTextProperty extends DataProperty
 {

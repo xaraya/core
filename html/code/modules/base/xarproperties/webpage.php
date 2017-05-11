@@ -15,7 +15,7 @@
 */
 
 /**
- * Class to handle dynamic html page property
+ * This property displays a dropdown of a list of web pages
  */
 class HTMLPageProperty extends SelectProperty
 {

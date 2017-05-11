@@ -15,7 +15,7 @@ sys::import('modules.base.xarproperties.textbox');
 
 
 /**
- * Handle floatbox property
+ * This property displays the result of a calculation
  */
 class CalculatedProperty extends TextBoxProperty
 {

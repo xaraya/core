@@ -32,7 +32,7 @@
 sys::import('modules.dynamicdata.class.properties.base');
 
 /**
- * Handle Array Property
+ * This property models an array
  */
 class ArrayProperty extends DataProperty
 {

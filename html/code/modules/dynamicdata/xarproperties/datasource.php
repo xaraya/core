@@ -17,7 +17,10 @@
 sys::import('modules.base.xarproperties.dropdown');
 
 /**
- * Class for data source property
+ * This property displays a dropdown of data sources
+ * If a relational datastore is defined, it shows the database fields available as sources
+ * if the module variable datastore is defined, it shows the module variable items availabel as sources
+ * If the dynamicdata or virtual datastore is defined, it shows nothing
  */
 class DataSourceProperty extends SelectProperty
 {

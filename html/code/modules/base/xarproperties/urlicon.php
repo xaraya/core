@@ -16,7 +16,7 @@ sys::import('modules.base.xarproperties.url');
  */
 
 /**
- * Handle the URLIcon property
+ * This property displays an icon for a URL; if a link is provided then the icon is shown as a link to the URL
  */
 class URLIconProperty extends URLProperty
 {

@@ -12,11 +12,11 @@ sys::import("modules.base.xarproperties.multiselect");
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/68.html
+ * @author Dracos <dracos@xaraya.com>
  */
 
 /**
- * handle the orderselect property
- * @author Dracos <dracos@xaraya.com>
+ * This property displays a multiselect box with the contents ordered alphabetically
  */
 class OrderSelectProperty extends MultiSelectProperty
 {
