@@ -7,13 +7,13 @@
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/1.html
+ * @author mikespub
  */
 
 sys::import('modules.dynamicdata.xarproperties.objectref');
 
 /**
- * Handle module property
- * @author mikespub
+ * This property displays a dropdown of Xaraya modules (subject to filters)
  */
 class ModuleProperty extends ObjectRefProperty
 {
