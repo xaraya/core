@@ -30,6 +30,40 @@ class xarDB extends Creole
     public static function getPrefix() { return self::$prefix;}
     public static function setPrefix($prefix) { self::$prefix =  $prefix; }
 
+/**
+ * Initialise a new db connection
+ *
+ * Create a new connection based on the supplied parameters
+ *
+ */
+public static function newConn(array $args = null)
+{
+    // Get database parameters
+    $dsn = array('phptype'   => $args['databaseType'],
+                 'hostspec'  => $args['databaseHost'],
+                 'username'  => $args['userName'],
+                 'password'  => $args['password'],
+                 'database'  => $args['databaseName'],
+                 'encoding'  => $args['databaseCharset']);
+    // Set flags
+    $flags = 0;
+    $persistent = !empty($args['persistent']) ? true : false;
+    if($persistent) $flags |= self::PERSISTENT;
+    // if code uses assoc fetching and makes a mess of column names, correct
+    // this by forcing returns to be lowercase
+    // <mrb> : this is not for nothing a COMPAT flag. the problem still lies
+    //         in creating the database schema case sensitive in the first
+    //         place. Unfortunately, that is just not portable.
+    $flags |= self::COMPAT_ASSOC_LOWER;
+
+    try {
+        $conn = self::getConnection($dsn,$flags); // cached on dsn hash, so no worries
+    } catch (Exception $e) {
+        throw $e;
+    }
+    xarLog::message("New connection created, now serving " . self::$count . " connections");
+    return $conn;
+}
     /**
      * Get an array of database tables
      *

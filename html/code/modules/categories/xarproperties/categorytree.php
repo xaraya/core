@@ -15,6 +15,9 @@
 
 sys::import('modules.categories.class.categories');
 
+/**
+ * This property displays a cluster of categories as a tree
+ */
 class CategoryTreeProperty extends DataProperty
 {
     public $id         = 30046;

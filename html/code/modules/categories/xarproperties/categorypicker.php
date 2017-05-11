@@ -23,6 +23,9 @@
 */
 sys::import('modules.base.xarproperties.array');
 
+/**
+ * This property displays a configuration widget for a categories dropdown
+ */
 class CategoryPickerProperty extends ArrayProperty
 {
     public $id         = 30050;

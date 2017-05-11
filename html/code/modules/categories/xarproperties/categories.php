@@ -30,6 +30,7 @@ sys::import('modules.categories.xarproperties.categorytree');
  *
  * Note: a base category -1 means show all the categories in a dropdown
  *
+ * The configuration of this property is handled by a categorypicker property
  */
 class CategoriesProperty extends DataProperty
 {

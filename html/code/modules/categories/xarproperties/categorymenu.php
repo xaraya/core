@@ -15,6 +15,9 @@
 
 sys::import('modules.categories.xarproperties.categorytree');
 
+/**
+ * This property displays a multitiered menu of categories
+ */
 class CategoryMenuProperty extends CategoryTreeProperty
 {
     public $id         = 30047;

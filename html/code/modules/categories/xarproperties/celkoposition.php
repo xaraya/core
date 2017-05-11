@@ -14,9 +14,18 @@
 sys::import('modules.dynamicdata.class.properties.base');
 
 /**
- * Handle the CelkoPosition property
+ * The CelkoPosition property
  *
  * Show the position of an item in a tree of nested sets
+ * The celko position of an item in a hierarchical structure is given by its position relative to another item.
+ * Allowed positions are:
+ * - before a given item on the same level
+ * - after a given item on the same level
+ * - first child of a given item
+ * - last child of a given item
+ *
+ * The input for this property shows a drodown of available categories, and a second dropdown with the values above
+ * This code is used for categories, but it can (and is) used for any hierarchy of nested sets.
  *
  * Notes
  *

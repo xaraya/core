@@ -39,6 +39,9 @@
 sys::import('modules.base.xarproperties.dropdown');
 sys::import('modules.categories.xarproperties.categorytree');
 
+/**
+ * This property displays a awidget that allows the user to navigate objects by their categories
+ */
 class CategoryNavigationProperty extends SelectProperty
 {
     /**
