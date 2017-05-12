@@ -14,7 +14,7 @@ sys::import('modules.base.xarproperties.dropdown');
  */
 
 /**
- * This property displays a dropdown and/or textbox
+ *  This property displays a dropdown and/or textbox
  */
     class ComboProperty extends SelectProperty
     {

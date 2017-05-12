@@ -1,5 +1,10 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.textarea');
+
+/**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
@@ -11,10 +16,7 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
-/**
- * Include the base class
- */
-sys::import('modules.base.xarproperties.textarea');
+
 
 /**
  * This property holds the configuration of a dataproperty

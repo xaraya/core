@@ -10,11 +10,10 @@
  *
  * @author Marc Lutolf <marc@luetolf-carroll.com>
  */
-
-/**
- * This property models the subitems of a dataobject. It is a dataobject attached to another dataobject
- * It is used when you want to model hierarchical data
- */
+ /**
+  * This property models the subitems of a dataobject. It is a dataobject attached to another dataobject
+  * It is used when you want to model hierarchical data
+  */
 class SubItemsProperty extends DataProperty
 {
     public $id           = 30069;

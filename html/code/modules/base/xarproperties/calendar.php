@@ -9,7 +9,7 @@
  */
 
 /**
- * This property displays a textbox for date/time input
+ * This property displays a textbox for date/time input	
  * @todo Review this
  */
 class CalendarProperty extends DataProperty
@@ -212,7 +212,7 @@ class CalendarProperty extends DataProperty
                     $this->configuration = '';
                 }
             } else {
-                $this->	 = $validation;
+                $this->configuration	 = $validation;
             }
         }
 

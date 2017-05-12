@@ -14,6 +14,7 @@ sys::import('modules.dynamicdata.xarproperties.objectref');
 
 /**
  * This property displays a dropdown of Xaraya modules (subject to filters)
+ * 
  */
 class ModuleProperty extends ObjectRefProperty
 {

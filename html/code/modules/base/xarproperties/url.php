@@ -29,7 +29,10 @@ class URLProperty extends TextBoxProperty
         parent::__construct($descriptor);
         $this->template = 'url';
     }
-
+/**
+ * Validate the value of a url and also passes for all types of url schemes
+ * 
+ */
     function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;

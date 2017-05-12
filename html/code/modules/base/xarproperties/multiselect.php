@@ -104,7 +104,12 @@ class MultiSelectProperty extends SelectProperty
 
         return parent::showInput($data);
     }
-
+/**
+ * Display a dropdown for output
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for output on a web page
+ */	
     public function showOutput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
@@ -114,7 +119,12 @@ class MultiSelectProperty extends SelectProperty
 
         return parent::showOutput($data);
     }
-
+/**
+ * Used to show the hidden data
+ * 
+ * @param  array data An array of input parameters
+ * @return bool   Returns true or false 
+ */	   	
     public function showHidden(Array $data = array())
     {
         if (isset($data['single'])) $this->validation_single = $data['single'];
@@ -146,12 +156,22 @@ class MultiSelectProperty extends SelectProperty
         }
         return parent::showHidden($data);
     }
-
+ /**
+     * Unserializes a given value
+     * 
+     * @param string $value Serialized value
+     * @return array Return unserialized value of $value param
+     */
     public function getValue()
     {
         return $this->getSerializedValue($this->value);
     }
-
+/**
+     * Unserializes a given value
+     * 
+     * @param string $value Serialized value
+     * @return array Return unserialized value of $value param
+     */
     public function getItemValue($itemid)
     {
         return $this->getSerializedValue($this->_items[$itemid][$this->name]);

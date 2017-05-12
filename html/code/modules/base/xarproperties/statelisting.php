@@ -16,13 +16,9 @@ sys::import('modules.base.xarproperties.dropdown');
 
 
 /**
- * This property displays a dropdown of US, Canadian and Australian states
- * @todo Rework this
- */
-/**
  * Handle the StateList property
  *
- * Show a dropdown of US states
+ * This property displays a dropdown of US, Canadian and Australian states
  */
 class StateListProperty extends SelectProperty
 {
@@ -36,6 +32,12 @@ class StateListProperty extends SelectProperty
         $this->template  = 'statelisting';
     }   
 
+	
+	 /**
+     * Get Options
+     *
+     * Get a list of States
+     */
    function getOptions()
    {
         if (count($this->options) > 0) {

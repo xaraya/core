@@ -14,6 +14,7 @@ sys::import('modules.base.xarproperties.dropdown');
  * @author mikespub <mikespub@xaraya.com>
  */
 
+
 /**
  * This property displays a dropdown of time zones
  */
@@ -29,7 +30,12 @@ class TimeZoneProperty extends SelectProperty
         $this->tplmodule = 'base';
         $this->template  = 'timezone';
     }
-
+/**
+ * Display a timezone of region
+ * 
+ * @param  array data An array of input parameters 
+ * @return string     HTML markup to display the property for output on a web page
+ */
     public function showOutput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
@@ -38,7 +44,11 @@ class TimeZoneProperty extends SelectProperty
         $data['offset'] = $zone->getOffset($datetime)/3600;
         return parent::showOutput($data);
     }
-
+ /**
+     * Get Options
+     *
+     * Get a array of timezones
+     */
     function getOptions()
     {
         if (count($this->options) > 0) {

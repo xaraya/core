@@ -15,7 +15,7 @@
  */
 
 /**
- * This property displays a drodown of available imsge icons
+ * This property displays a dropdown of available image icons
  */
 class ImageListProperty extends FilePickerProperty
 {

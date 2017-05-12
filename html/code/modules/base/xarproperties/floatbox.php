@@ -14,6 +14,7 @@ sys::import('modules.base.xarproperties.integerbox');
  * @author mikespub <mikespub@xaraya.com>
  */
 
+
 /**
  * This property displays a textbox whose content is a number of type float
  */

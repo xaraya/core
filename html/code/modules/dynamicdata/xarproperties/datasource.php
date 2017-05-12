@@ -1,5 +1,9 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.dropdown');
+/**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
@@ -10,12 +14,7 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-
-/**
- * Include the base class
- */
-sys::import('modules.base.xarproperties.dropdown');
-
+ 
 /**
  * This property displays a dropdown of data sources
  * If a relational datastore is defined, it shows the database fields available as sources

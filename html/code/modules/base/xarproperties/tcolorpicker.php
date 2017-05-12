@@ -11,7 +11,7 @@
  */
 
 /**
- * This property displays a Tigra color picker
+ *  This property displays a Tigra color picker
  */
 class TColorPickerProperty extends DataProperty
 {
@@ -31,6 +31,11 @@ class TColorPickerProperty extends DataProperty
         $this->template = 'tcolorpicker';
         $this->filepath = 'modules/base/xarproperties';
     }
+	/**
+ * Validate the value of a color format
+ *  
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
 
     public function validateValue($value = null)
     {
@@ -46,7 +51,12 @@ class TColorPickerProperty extends DataProperty
         }
         return true;
     }
-
+/**
+ * Display a color picker for input
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
+ */
     public function showInput(Array $data = array())
     {
         if (empty($maxlength) && isset($this->max)) {

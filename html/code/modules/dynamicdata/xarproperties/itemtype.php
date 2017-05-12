@@ -1,5 +1,9 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.combobox');
+/**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
@@ -32,10 +36,6 @@
      */
 
 
-/**
- * Include the base class
- */
-sys::import('modules.base.xarproperties.combobox');
 
 /**
  * This property displays a dropdown/textbox of dynamicdata itemtypes
