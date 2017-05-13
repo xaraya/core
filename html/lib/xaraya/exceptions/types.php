@@ -2,7 +2,7 @@
 /**
  * Exception types
  *
- * @package core
+ * @package core\exceptions
  * @subpackage exceptions
  * @category Xaraya Web Applications Framework
  * @version 2.4.0

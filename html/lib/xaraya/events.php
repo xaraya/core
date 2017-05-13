@@ -1,14 +1,5 @@
 <?php
 /**
- * @package core
- * @subpackage events
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-/**
  * Note: ALL subjects and their observers must be registered into the EMS
  * The EMS makes no assumptions about a response when an event is notified
  * Event designers should document any requirements
@@ -24,18 +15,49 @@
 **/
 
 /**
- * Exceptions raised by this subsystem
+ * Exception raised by the events subsystem
  *
- */
+ * @package core\events
+ * @subpackage events
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 class EventRegistrationException extends RegistrationExceptions
 {
     protected $message = 'The event "#(1)" is not properly registered';
 }
+
+/**
+ * Exception raised by the events subsystem
+ *
+ * @package core\events
+ * @subpackage events
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 class DuplicateEventRegistrationException extends EventRegistrationException
 {
     protected $message = 'Unable to register event subject "#(1)", already registered by another module';
 }
 
+/**
+ * @package core\events
+ * @subpackage events
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 class xarEvents extends Object implements ixarEvents
 {
     // Event system itemtypes 
@@ -670,6 +692,16 @@ class xarEvents extends Object implements ixarEvents
      
 }
 
+/**
+ * @package core\events
+ * @subpackage events
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 interface ixarEvents
 {
     public static function getSubjectType();

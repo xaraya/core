@@ -1,13 +1,4 @@
 <?php
-/**
- * @package core
- * @subpackage logging
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- */
 /*
  * @copyright see the html/credits.html file in this release
 
@@ -32,18 +23,20 @@
 */
 
 /**
- * This class implements the Logger
+ * Base class for all loggers
+ *
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  *
  * @author  Flavio Botelho <nuncanada@ig.com.br>
  */
-
-/**
- * Base class for all loggers
- *
- */
 class xarLogger extends Object
 {
-
     /**
     * The level of logging.
     *
@@ -105,7 +98,7 @@ class xarLogger extends Object
     /**
      * Returns if the logger should log the given level or not.
      *
-     * @param int $level        A XARLOG_LEVEL_* integer constant mix.
+     * @param int $level        A xarLog::$LEVEL_* integer constant mix.
      * @return boolean         Should it be logger or not
      */
     function doLogLevel($level)
@@ -118,22 +111,25 @@ class xarLogger extends Object
     }
 
     /**
-     * Returns the string representation of a XARLOG_LEVEL_* integer constant.
+     * Returns the string representation of a xarLog::$LEVEL_* integer constant.
      *
-     * @param int $level        A XARLOG_LEVEL_* integer constant.
+     * @param int $level        A xarLog::$LEVEL_* integer constant.
      * @return string           The string representation of $level.
      */
+/*
+* @TODO: Change this when we go to PHP 5.6
+*/
     function levelToString($level)
     {
         static $levels = array(
-            XARLOG_LEVEL_EMERGENCY => 'EMERGENCY',
-            XARLOG_LEVEL_ALERT     => 'ALERT',
-            XARLOG_LEVEL_CRITICAL  => 'CRITICAL',
-            XARLOG_LEVEL_ERROR     => 'ERROR',
-            XARLOG_LEVEL_WARNING   => 'WARNING',
-            XARLOG_LEVEL_NOTICE    => 'NOTICE',
-            XARLOG_LEVEL_INFO      => 'INFO',
-            XARLOG_LEVEL_DEBUG     => 'DEBUG'
+            xarLog::LEVEL_EMERGENCY => 'EMERGENCY',
+            xarLog::LEVEL_ALERT     => 'ALERT',
+            xarLog::LEVEL_CRITICAL  => 'CRITICAL',
+            xarLog::LEVEL_ERROR     => 'ERROR',
+            xarLog::LEVEL_WARNING   => 'WARNING',
+            xarLog::LEVEL_NOTICE    => 'NOTICE',
+            xarLog::LEVEL_INFO      => 'INFO',
+            xarLog::LEVEL_DEBUG     => 'DEBUG'
          );
 
         return $levels[$level];

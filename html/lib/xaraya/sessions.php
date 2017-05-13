@@ -197,7 +197,7 @@ class xarSession extends Object implements IsessionHandler
     {
         //All in here is based on the possibility of changing
         //PHP's session related configuration
-        if (!xarFuncIsDisabled('ini_set')) {
+        if (!xarCore::funcIsDisabled('ini_set')) {
             // PHP configuration variables
             // Stop adding SID to URLs
             ini_set('session.use_trans_sid', 0);
@@ -234,7 +234,7 @@ class xarSession extends Object implements IsessionHandler
                     $host = xarServer::getVar('HTTP_HOST');
                     $host = preg_replace('/:.*/', '', $host);
                     // this won't work for non-standard ports
-                    //if (!xarFuncIsDisabled('ini_set')) ini_set('session.referer_check', "$host$path");
+                    //if (!xarCore::funcIsDisabled('ini_set')) ini_set('session.referer_check', "$host$path");
                     // this should be customized for multi-server setups wanting to
                     // share sessions
                     $args['refererCheck'] = $host;

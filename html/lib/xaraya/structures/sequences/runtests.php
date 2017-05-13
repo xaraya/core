@@ -1,7 +1,7 @@
 #!/usr/bin/php5
 <?php
 /**
- * @package core
+ * @package core\structures
  * @subpackage structures
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -19,7 +19,7 @@ include_once('bootstrap.php');
 sys::import('xaraya.core');
 
 // TODO: don't load the whole core
-xarCoreInit(XARCORE_SYSTEM_ALL);
+xarCore::xarInit(xarConst::SYSTEM_ALL);
 
 function m($msg,$level=0) 
 { 

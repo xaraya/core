@@ -2,13 +2,12 @@
 /**
  * Installer
  *
- * @package modules
- * @subpackage installer module
+ * @package modules\installer\installer
+ * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/200.html
  */
 
@@ -84,14 +83,14 @@ function installer_admin_phase5()
     // so let's try connecting with the dbname first, and then without if that fails
     $dbExists = false;
     try {
-      $dbconn = xarDBNewConn($init_args);
+      $dbconn = xarDB::newConn($init_args);
       $dbExists = true;
     } catch(Exception $e) {
       // Couldn't connect to the specified dbName
       // Let's try without db name
       try {
         $init_args['databaseName'] ='';
-        $dbconn = xarDBNewConn($init_args);
+        $dbconn = xarDB::newConn($init_args);
       } catch(Exception $e) {
         // It failed without dbname too
         return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));

@@ -2,13 +2,12 @@
 /**
  * Main entry point for the admin interface of this module
  *
- * @package modules
- * @subpackage privileges module
+ * @package modules\privileges
+ * @subpackage privileges
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/1098.html
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
@@ -25,7 +24,7 @@
 function privileges_admin_main()
 {
     // Security
-    if(!xarSecurityCheck('ViewPrivileges')) return;
+    if(!xarSecurityCheck('EditPrivileges')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();

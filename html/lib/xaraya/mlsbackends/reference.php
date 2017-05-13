@@ -1,6 +1,6 @@
 <?php
 /**
- * @package core
+ * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -39,6 +39,15 @@ interface ITranslationsBackend {
     function getContextNames($ctxType);
 }
 
+/**
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ */
 /**
  * Base class for the translation backends
  *
@@ -105,7 +114,7 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
     //abstract function loadContext($ctxType, $ctxName);
     //abstract function getContextNames($ctxType);
 
-    function bindDomain($dnType=XARMLS_DNTYPE_CORE, $dnName='xaraya')
+    function bindDomain($dnType=xarMLS::DNTYPE_CORE, $dnName='xaraya')
     {
         // only bind each domain once (?)
         //if (isset($this->domaincache["$dnType.$dnName"])) {
@@ -114,19 +123,19 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
         //}
 
         switch ($dnType) {
-        case XARMLS_DNTYPE_CORE:
+        case xarMLS::DNTYPE_CORE:
             $this->spacedir = "core";
             break;
-        case XARMLS_DNTYPE_THEME:
+        case xarMLS::DNTYPE_THEME:
             $this->spacedir = "themes";
             break;
-        case XARMLS_DNTYPE_MODULE:
+        case xarMLS::DNTYPE_MODULE:
             $this->spacedir = "modules";
             break;
-        case XARMLS_DNTYPE_PROPERTY:
+        case xarMLS::DNTYPE_PROPERTY:
             $this->spacedir = "properties";
             break;
-        case XARMLS_DNTYPE_BLOCK:
+        case xarMLS::DNTYPE_BLOCK:
             $this->spacedir = "blocks";
             break;
         default:

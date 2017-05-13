@@ -1,6 +1,6 @@
 <?php
 /**
- * @package core
+ * @package core\logging
  * @subpackage logging
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -144,7 +144,7 @@ class xarLogger_simple extends xarLogger
     function _xarLogger_simple_destructor()
     {
         // Push a final message to the log.
-        $this->notify('Shutdown simple logger', XARLOG_LEVEL_DEBUG);
+        $this->notify('Shutdown simple logger', xarLog::LEVEL_DEBUG);
 
         // Flush any remaining records and stop logging.
         $this->flushBuffer(true);

@@ -1,12 +1,11 @@
 <?php
 /**
- * @package modules
- * @subpackage dynamicdata module
+ * @package modules\dynamicdata
+ * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/182.html
  */
 
@@ -291,7 +290,7 @@ class DataProperty extends Object implements iDataProperty
             } else {
                 $this->invalid = xarML('#(1) cannot have the value #(2)', $this->name,$this->validation_notequals );
             }
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         } elseif ($this->validation_equals != null && $value != $this->validation_equals) {
@@ -300,7 +299,7 @@ class DataProperty extends Object implements iDataProperty
             } else {
                 $this->invalid = xarML('#(1) must have the value #(2)', $this->name,$this->validation_notequals );
             }
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         } elseif ($this->validation_allowempty != null && !$this->validation_allowempty && empty($value)) {
@@ -309,7 +308,7 @@ class DataProperty extends Object implements iDataProperty
             } else {
                 $this->invalid = xarML('#(1) cannot be empty', $this->name);
             }
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         }

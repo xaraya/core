@@ -13,20 +13,20 @@
         <menuitem>
 			<mask>ManageCategories</mask>
             <includes>
-                <includeitem>new</includeitem>
-            </includes>
-            <target>new</target>
-			<title>Add a new category</title>
-            <label>Add Category</label>
-        </menuitem>
-        <menuitem>
-			<mask>ManageCategories</mask>
-            <includes>
                 <includeitem>view</includeitem>
             </includes>
             <target>view</target>
 			<title>View and Edit categories</title>
             <label>View Categories</label>
+        </menuitem>
+        <menuitem>
+			<mask>ManageCategories</mask>
+            <includes>
+                <includeitem>new</includeitem>
+            </includes>
+            <target>new</target>
+			<title>Add a new category</title>
+            <label>Add Category</label>
         </menuitem>
         <menuitem>
 			<mask>AdminCategories</mask>

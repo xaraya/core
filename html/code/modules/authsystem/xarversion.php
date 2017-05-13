@@ -3,11 +3,11 @@
  * Configuration information for the Authsystem module
  *
  * @package modules\authsystem
+ * @subpackage authsystem
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/42.html
  *
  * @author Marco Canini
@@ -20,21 +20,23 @@
  * the file correctly, resulting in unexpected results.
  */
  
-$modversion['name']               = 'authsystem';
-$modversion['displayname']        = xarML('Authsystem');
-$modversion['id']                 = '42';
-$modversion['version']            = '2.4.0';
-$modversion['description']        = 'Xaraya default authentication module';
-$modversion['displaydescription'] = xarML('Xaraya default authentication module');
-$modversion['credits']            = 'xardocs/credits.txt';
-$modversion['help']               = 'xardocs/help.txt';
-$modversion['changelog']          = 'xardocs/changelog.txt';
-$modversion['license']            = 'docs/license.txt';
-$modversion['official']           = true;
-$modversion['author']             = 'Marco Canini, Jo Dalle Nogare';
-$modversion['contact']            = 'http://www.xaraya.com/';
-$modversion['admin']              = true;
-$modversion['user']               = false;
-$modversion['class']              = 'Authentication';
-$modversion['category']           = 'Users & Groups';
+$modversion = array(
+    'name'               => 'authsystem',
+    'displayname'        => xarML('Authsystem'),
+    'id'                 => '42',
+    'version'            => '2.4.0',
+    'description'        => 'Xaraya default authentication module',
+    'displaydescription' => xarML('Xaraya default authentication module'),
+    'credits'            => 'xardocs/credits.txt',
+    'help'               => 'xardocs/help.txt',
+    'changelog'          => 'xardocs/changelog.txt',
+    'license'            => 'docs/license.txt',
+    'official'           => true,
+    'author'             => 'Marco Canini, Jo Dalle Nogare',
+    'contact'            => 'http://www.xaraya.com/',
+    'admin'              => true,
+    'user'               => true,
+    'class'              => 'Authentication',
+    'category'           => 'Users & Groups',
+);
 ?>

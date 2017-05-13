@@ -1,12 +1,11 @@
 <?php
 /**
- * @package modules
- * @subpackage dynamicdata module
+ * @package modules\dynamicdata
+ * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/182.html
  *
  * @author mikespub <mikespub@xaraya.com>
@@ -196,7 +195,11 @@ function dynamicdata_utilapi_import(Array $args=array())
             }
             // TODO: watch out for multi-sites
             // replace default xar_* table prefix with local one
-            $propertyargs['source'] = preg_replace("/^xar_/",$prefix,$propertyargs['source']);
+            if (!empty($propertyargs['source'])) {
+                $propertyargs['source'] = preg_replace("/^xar_/",$prefix,$propertyargs['source']);
+            } else {
+                $propertyargs['source'] = "";
+            }
 
             // Force a new itemid to be created for this property
             $dataproperty->properties[$dataproperty->primary]->setValue(0);

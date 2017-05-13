@@ -1,20 +1,24 @@
 <?php
+/* Include parent class */
+sys::import('modules.dynamicdata.class.properties.base');
+
 /**
+ * The Textbox property models an HTML input of type text
+ * 
  * @package modules\base
+ * subpackage base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-/* Include parent class */
-sys::import('modules.dynamicdata.class.properties.base');
-/**
- * Handle the textbox property
- */
+ 
+ /**
+  * This property displays a textbox
+  */
 class TextBoxProperty extends DataProperty
 {
     public $id         = 2;
@@ -42,6 +46,10 @@ class TextBoxProperty extends DataProperty
         $this->filepath   = 'modules/base/xarproperties';
     }
 
+/**
+ * Validate the value of a textbox according to the rules inherited and set out in its configuration
+ * 
+ */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -60,7 +68,7 @@ class TextBoxProperty extends DataProperty
             } else {
                 $this->invalid = xarML('#(1) field #(3): must be less than #(2) characters long', $this->name,$this->validation_max_length + 1, $this->desc);
             }
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         } elseif (isset($this->validation_min_length) && strlen($value) < $this->validation_min_length) {
@@ -69,7 +77,7 @@ class TextBoxProperty extends DataProperty
             } else {
                 $this->invalid = xarML('#(1) field #(3): must be at least #(2) characters long', $this->name,$this->validation_min_length, $this->desc);
             }
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         } elseif (!empty($this->validation_regex) && !preg_match($this->validation_regex, $value)) {
@@ -78,7 +86,7 @@ class TextBoxProperty extends DataProperty
             } else {
                 $this->invalid = xarML('#(1) field #(2): does not match required pattern', $this->name, $this->desc);
             }
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         } else {
@@ -88,6 +96,10 @@ class TextBoxProperty extends DataProperty
         }
     }
 
+/**
+ * Display a textbox for input
+ * 
+ */
     public function showInput(Array $data = array())
     {
         // Should we be doing this? (random)

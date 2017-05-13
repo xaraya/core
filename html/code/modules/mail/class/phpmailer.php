@@ -2,13 +2,12 @@
 /**
  * PHPMailer Class - Xaraya Modification
  *
- * @package modules
- * @subpackage mail module
+ * @package modules\mail
+ * @subpackage mail
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
- * @copyright  2001 - 2003  Brent R. Matzelle
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/771.html
  * @authorBrent R. Matzelle
  */
@@ -26,7 +25,6 @@
 
 /**
  * PHPMailer - PHP email transport class
- * @package PHPMailer
  * @author Brent R. Matzelle
  * @copyright 2001 - 2003 Brent R. Matzelle
  */
@@ -455,7 +453,7 @@ class PHPMailer extends Object
         {
             $old_from = ini_get("sendmail_from");
             //XARAYA MODIFICATION -- Start
-            if (!xarFuncIsDisabled('ini_set')) ini_set("sendmail_from", $this->Sender);
+            if (!xarCore::funcIsDisabled('ini_set')) ini_set("sendmail_from", $this->Sender);
             //XARAYA MODIFICATION -- End
             //SF issue 1312256
             //$params = sprintf("-oi -f %s", $this->Sender);
@@ -468,7 +466,7 @@ class PHPMailer extends Object
 
         if (isset($old_from))
             //XARAYA MODIFICATION -- Start
-            if (!xarFuncIsDisabled('ini_set')) ini_set("sendmail_from", $old_from);
+            if (!xarCore::funcIsDisabled('ini_set')) ini_set("sendmail_from", $old_from);
             //XARAYA MODIFICATION -- End
 
         if(!$rt)

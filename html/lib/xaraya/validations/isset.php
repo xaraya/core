@@ -2,7 +2,7 @@
 /**
  * IsSet Validation Function
  *
- * @package core
+ * @package core\validation
  * @subpackage validation
  * @category Xaraya Web Applications Framework
  * @version 2.4.0

@@ -1,13 +1,12 @@
 <?php
 /**
  * Modify the system configuration File
- * @package modules
- * @subpackage installer module
+ * @package modules\installer\installer
+ * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/200.html
  */
 
@@ -152,7 +151,7 @@ function installer_adminapi_createdb(Array $args=array())
                        'databaseName' => $dbName,
                        'systemTablePrefix' => $dbPrefix,
                        'siteTablePrefix' => $dbPrefix);
-   $dbconn = xarDBNewConn($createArgs);
+   $dbconn = xarDB::newConn($createArgs);
 
    $dbCharset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
    $query = xarDBCreateDatabase($dbName,$dbType,$dbCharset);

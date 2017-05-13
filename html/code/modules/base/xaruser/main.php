@@ -7,7 +7,6 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  */
 
@@ -19,6 +18,7 @@
  * The function displays the module's main entry page, or redirects to different page if the admin has defined one.
  *
  * @author Paul Rosania
+ * @author Marc Lutolf
  * 
  * @param array $args Optional parameters
  * @return mixed output display string

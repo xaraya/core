@@ -1,6 +1,7 @@
 <?php
 /**
  * @package modules\blocks
+ * @subpackage blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -602,11 +603,37 @@ function blocks_admin_modify_instance()
         case 'access':
             // nothing special...
         break;
+        case 'export':
+            $instancefields = array('block_id', 'type_id', 'type', 'name', 'title', 'state', 'content');
+            $xml = '';
+            $xml .= '<block name="' . $blockinfo['name'] . '">' . "\n";
+            foreach ($blockinfo as $key => $value) {
+            
+                    // Only pass the fields we want
+                    if (!in_array($key, $instancefields)) continue;
+                    
+                    if (is_array($value)) {/*
+                        foreach ($value as $k => $v) {
+                            $v = xarVarPrepForDisplay($v);
+                            $value[$k] = $v;
+                        }*/
+                        $xml .= "  <$key>";
+                        $xml .= base64_encode(serialize($value));
+                        $xml .= "</$key>\n";
+                    } else {
+                        $xml .= "  <$key>";
+                        $xml .= base64_encode($value);
+                        $xml .= "</$key>\n";
+                    }
+            }
+            $xml .= "</block>";
+            $data['xml'] =& $xml;
+        break;
         default:
             if (empty($method))
                 $method = $interface;
             // show custom configuration supplied by block type
-            $modify_method = $method.'modify';
+            $modify_method = $method . 'modify';
             $data['block_output'] = xarBlock::guiMethod($block, $modify_method, $method.'-'.$block->type);
         
         break;
@@ -656,6 +683,14 @@ function blocks_admin_modify_instance()
                 'active' => ($interface == 'display' && $method == 'preview'),
             );
         }        
+        if ($isadmin) {
+            $interfaces[] = array(
+                'url' => xarServer::getCurrentURL(array('interface' => 'export', 'block_method' => null)),
+                'label' => xarML('Export'),
+                'title' => xarML('Export the data of this block to a XML file'),
+                'active' => ($interface == 'export'),
+            );
+        }
         if ($block->show_help) {
             $interfaces[] = array(
                 'url' => xarServer::getCurrentURL(array('interface' => 'display', 'block_method' => 'help')),

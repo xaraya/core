@@ -2,7 +2,7 @@
 /**
  * Variable utilities
  *
- * @package core
+ * @package core\variables
  * @subpackage variables
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -15,16 +15,35 @@
  */
 
 /**
- * Exceptions for this subsystem
+ * Exception raised by the variables subsystem
+ *
+ * @package core\variables
+ * @subpackage variables
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  *
 **/
 class VariableValidationException extends ValidationExceptions
 {
     protected $message = 'The variable "#(1)" [Value: "#(2)"] did not comply with the required validation: "#(3)"';
 }
+
 /**
+ * Exception raised by the variables subsystem
+ *
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  *
  * @todo this exception is too weak
+ *
 **/
 class ConfigurationException extends ConfigurationExceptions
 {
@@ -34,7 +53,16 @@ class ConfigurationException extends ConfigurationExceptions
 /**
  * Interface declaration for classes dealing with sets of variables
  *
- * @todo this interface is simplistic, it probably needs more
+ * @package core\variables
+ * @subpackage variables
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+ * @author Marco Canini marco@xaraya.com
+ * @author Flavio Botelho
  */
 interface IxarVars
 {
@@ -46,8 +74,16 @@ interface IxarVars
 /**
  * Base class for variable handling in core
  *
+ * @package core\variables
+ * @subpackage variables
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
  * @author Marcel van der Boom <mrb@hsdev.com>
- **/
+ */
 class xarVars extends Object
 {
 

@@ -2,13 +2,12 @@
 /**
  * Send mail
  *
- * @package modules
- * @subpackage roles module
+ * @package modules\roles
+ * @subpackage roles
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/27.html
  */
 
@@ -22,7 +21,7 @@ function roles_admin_sendmail()
     if (!xarVarFetch('state',   'int:0:', $state, xarRoles::ROLES_STATE_CURRENT)) return;
     if (!xarVarFetch('message', 'str:1:', $message,'')) return;
     if (!xarVarFetch('subject', 'str:1',  $subject, '')) return;
-    if (!xarVarFetch('includesubgroups','int:0:',$includesubgroups,0,XARVAR_NOT_REQUIRED));
+    if (!xarVarFetch('includesubgroups','int:0:',$includesubgroups,0,XARVAR_NOT_REQUIRED)) return;
 
     // Confirm authorisation code.
     if (!xarSecConfirmAuthKey()) {

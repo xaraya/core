@@ -1,9 +1,9 @@
 <?php
 /**
- * Xaraya Web Interface Entry Point 
+ * Loads the files required for a web request
  *
- * @package core
- * @subpackage entrypoint
+ * @package core\entrypoints
+ * @subpackage entrypoints
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -12,52 +12,70 @@
  * @author Marco Canini
  */
 
-$GLOBALS["Xaraya_PageTime"] = microtime(true); 
+function xarLoader()
+{
+    $GLOBALS["Xaraya_PageTime"] = microtime(true); 
 
 /**
  * Load the layout file so we know where to find the Xaraya directories
  */
-$systemConfiguration = array();
-include 'var/layout.system.php';
-if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
-if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
-if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
-if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
-$GLOBALS['systemConfiguration'] = $systemConfiguration;
-if (!empty($systemConfiguration['rootDir'])) {
-    set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
-}
+    $systemConfiguration = array();
+    include 'var/layout.system.php';
+    if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
+    if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
+    if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
+    if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
+    $GLOBALS['systemConfiguration'] = $systemConfiguration;
+    if (!empty($systemConfiguration['rootDir'])) {
+        set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
+    }
 
 /**
  * Load the Xaraya bootstrap so we can get started
  */
-include 'bootstrap.php';
+    set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
+    include 'bootstrap.php';
 
 /**
  * Set up caching
  * Note: this happens first so we can serve cached pages to first-time visitors
  *       without loading the core
  */
-sys::import('xaraya.caching');
-// Note: we may already exit here if session-less page caching is enabled
-xarCache::init();
+    sys::import('xaraya.caching');
+    // Note: we may already exit here if session-less page caching is enabled
+    xarCache::init();
 
 /**
  * Load the Xaraya core
  */
-sys::import('xaraya.core');
+    sys::import('xaraya.core');
+    xarCore::xarInit(xarCore::SYSTEM_ALL);
+}
 
 /**
- * Main Xaraya Entry
+ * Xaraya Web Interface Entry Point 
  *
- * @access public
- * @return bool
+ * Main Xaraya Entry<br/>
+ * This function is called with each page request<br/>
+ * It does the following:<br/>
+ * 1. Loads the Xaraya core<br/>
+ * 2. Sets page title and theme to use in display<br/>
+ * 3. Sets the theme's page to use for display (admin, user, default...)<br/>
+ * 4. Processes the request<br/>
+ * 5. Renders the request output (sends the output to the browser)
+ *
+ * @package core\entrypoints
+ * @subpackage entrypoints
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ * @author Marco Canini
+ * @return void
  */
 function xarMain()
 {
-    // Load the core with all optional systems loaded
-    xarCoreInit(XARCORE_SYSTEM_ALL);
-
     // Create the object that models this request
     $request = xarController::getRequest();
     xarController::normalizeRequest();
@@ -126,8 +144,12 @@ function xarMain()
             if (!xarTpl::setPageTemplateName('admin-'.$request->getModule())) {
                 xarTpl::setPageTemplateName('admin');
             }
+        } elseif (!xarUserIsLoggedIn() && (xarTpl::getPageTemplateName() == 'default')) {
+            // No need to reset anything here
+            // Right now we do not allow for e.g. default-roles
         } elseif (($request->getType() != 'admin') && (xarTpl::getPageTemplateName() == 'default')) {
-            // Same thing for user side
+        
+            // Same thing as for admin on user side
             if (!xarTpl::setPageTemplateName($request->getType().'-'.$request->getModule())) {
                 xarTpl::setPageTemplateName($request->getType());
             }
@@ -140,7 +162,7 @@ function xarMain()
         }
 
         // if the debugger is active, start it
-        if (xarCoreIsDebuggerActive()) {
+        if (xarCore::isDebuggerActive()) {
             ob_start();
         }
 
@@ -149,7 +171,7 @@ function xarMain()
         // Retrieve the output to send to the browser
         $mainModuleOutput = xarController::$response->getOutput();
 
-        if (xarCoreIsDebuggerActive()) {
+        if (xarCore::isDebuggerActive()) {
             if (ob_get_length() > 0) {
                 $rawOutput = ob_get_contents();
                 $mainModuleOutput = 'The following lines were printed in raw mode by module, however this
@@ -182,6 +204,13 @@ function xarMain()
 }
 
 // The world is not enough...
+/**
+ * Set up for a web request
+ */
+xarLoader();
+/**
+ * Process the web request
+ */
 xarMain();
 // All done, the shutdown handlers take care of the rest
 ?>

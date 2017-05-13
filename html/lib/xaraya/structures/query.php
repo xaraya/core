@@ -1,23 +1,22 @@
 <?php
 /**
- * @package core
+ * @package core\structures
  * @subpackage structures
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
- * 
- * 
  */
-  /**************************************************************************\
-  * Query class for SQL abstraction                                          *
-  * Written by Marc Lutolf (marcinmilan@xaraya.com)                          *
-  \**************************************************************************/
+  /**
+  * Query class for SQL abstraction
+  * 
+  */
 
 class Query
 {
-    public $version = "3.5";
+    public $version             = "3.6";
+    public $id;                                 // A unique identifier for this query
     public $type                = 'SELECT';     // Normalized array of tables used in the statement
     public $tables              = array();      // Normalized array of tables used in the statement
     public $tablelinks          = array();      // Normalized array of table links used in the statement
@@ -73,13 +72,6 @@ class Query
 //---------------------------------------------------------
     public function __construct($type='SELECT',$tables='',$fields='')
     {
-        if (xarModVars::get('query','debugmode')) {
-            $this->debugusers = array_keys(unserialize(xarModVars::get('query', 'debugusers')));
-            $this->debugflag = xarModVars::get('query','debugmode') && in_array(xarUserGetVar('uname'),$this->debugusers);
-            $this->starttime = microtime(true);
-        } else {
-            $this->debugflag = false;
-        }
         if (in_array($type,array("SELECT","INSERT","UPDATE","DELETE","DROP"))) $this->type = $type;
         else {
             throw new ForbiddenOperationException($type,'This operation is not supported yet. "#(1)"');
@@ -91,6 +83,9 @@ class Query
 
         $this->addtables($tables);
         $this->addfields($fields);
+        
+        // Create the ID for this query
+        $this->id = $this->createID();
     }
 
     public function run($statement='',$display=1)
@@ -161,9 +156,6 @@ class Query
                     $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
                     $result->next(); $result->previous();
                     for ($i=0;$i< $numfields;$i++) {
-                        // Fetchfield was the only one used throughout the whole codebase, simulate it here instead of in creole
-                        //$o = $result->FetchField($i);
-                        // FIXME: get rid of it more globally since this never was portable anyway and it kills performance
                         $tmp = array_slice($result->fields,$i,1);
                         $namefield  = key($tmp);
                         $this->fields[$namefield]['name'] = strtolower($namefield);
@@ -187,12 +179,6 @@ class Query
                 }
             } else {
                 while (!$result->EOF) {
-                /*
-                    $line = array();
-                    for ($i=0;$i<$this->rowfields;$i++) {
-                        $line[] = $result->fields[$i];
-                    }
-                    */
                     $this->output[] = $result->fields;
                     $result->MoveNext();
                 }
@@ -310,6 +296,9 @@ class Query
             }
         }
         if ($notdone) $this->tables[] = $argsarray;
+
+        // Update the ID for this query
+        $this->id = $this->createID();
     }
 
     public function addfield()
@@ -416,6 +405,10 @@ class Query
                                       'field2' => func_get_arg(2) . "." . func_get_arg(3),
                                       'op' => 'JOIN');
         }
+
+        // Update the ID for this query
+        $this->id = $this->createID();
+
         return $key;
     }
     public function addhaving(Array $args=array())
@@ -665,6 +658,8 @@ class Query
                 unset($this->conjunctions[$key]);
                 break;
             }
+        // Update the ID for this query
+        $this->id = $this->createID();
     }
 
     public function addsecuritycheck(Array $args=array())
@@ -706,6 +701,10 @@ class Query
                                         
         // Add the condition to the array of conditions
         $this->conditions[$key] = $x;
+
+        // Update the ID for this query
+        $this->id = $this->createID();
+
         return $key;
     }
 
@@ -860,6 +859,9 @@ class Query
         $this->conjunctions[$key]=array('conditions' => $key,
                                         'conj' => 'IMPLICIT',
                                         'active' => $active);
+        // Update the ID for this query
+        $this->id = $this->createID();
+
         return $key;
     }
 
@@ -1409,6 +1411,9 @@ class Query
     {
         $this->conditions = array();
         $this->conjunctions = array();
+
+        // Update the ID for this query
+        $this->id = $this->createID();
     }
     public function clearfield($x)
     {
@@ -1630,10 +1635,16 @@ class Query
     {
         $this->cleartables();
         $this->addtable($x);
+
+        // Update the ID for this query
+        $this->id = $this->createID();
     }
     public function settype($x = 'SELECT')
     {
         $this->type = $x;
+
+        // Update the ID for this query
+        $this->id = $this->createID();
     }
     public function setusebinding($x = true)
     {
@@ -1704,6 +1715,9 @@ class Query
     {
         $this->clearconditions();
         $this->addconditions($q);
+
+        // Update the ID for this query
+        $this->id = $this->createID();
     }
     public function seteqop($x='=')
     {
@@ -1787,6 +1801,16 @@ class Query
         echo $string;
     }
 
+    public function setdebug($debugflag=1)
+    {
+        if ($debugflag && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+            $this->debugflag = true;
+            $this->starttime = microtime(true);
+        } else {
+            $this->debugflag = false;
+        }
+    }
+
 /*
  * This method removes tables from the query that we don't need
  * Approach: identify all the relevant tables, then what is left is those we don't need
@@ -1815,7 +1839,7 @@ class Query
         $tables = array();
         foreach ($this->tables as $table) $tables[$table['alias']] = $table['name'];
         
-        // Check which tables the fields reference; remove those they do from the array
+        // Check which tables the fields reference; remove those that do from the array
         foreach ($this->fields as $field) {
             if (isset($tables[$field['table']])) {
                 unset($tables[$field['table']]);
@@ -1825,7 +1849,8 @@ class Query
             }
         }
 
-        // Check which tables the conditions reference; remove those they do from the array      
+        // Check which tables the conditions reference; 
+        // We want to keep these, so remove them from the array      
         foreach ($this->conditions as $condition) {
             try {
                 $fullfield = $this->_deconstructfield($condition['field1']);
@@ -1874,6 +1899,9 @@ class Query
         }
         $this->sorts = $newsorts;
         
+        // Update the ID for this query
+        $this->id = $this->createID();
+
         return true;
     }
 
@@ -2195,6 +2223,23 @@ class Query
         }
 
         return true;
+    }
+
+/*
+ * Creates a unique ID for this query. 
+ * The ID includes the characteristics assumed "innate" of the query
+ * It does not include display-dependant stuff such as fields or sorts
+ */
+    public function createID()
+    {
+        $idarray = array($this->tables, $this->tablelinks, $this->conjunctions, $this->conditions);
+        $idstring = serialize($idarray);
+        $id = md5($idstring);
+        return $id;
+    }
+    public function getQueryID()
+    {
+        return $this->id;
     }
 }
 ?>

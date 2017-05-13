@@ -2,7 +2,7 @@
 /**
  * Class for conversion between charsets
  *
- * @package core
+ * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -143,6 +143,18 @@ define ("CONVERT_TABLES_DIR", sys::lib() . 'transforms/convtables/');
  * </code>
  *
  * You can get full tables with encodings from http://www.unicode.org
+**/
+/**
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+ * @author Mikolaj Jedrzejak <mikolajj@op.pl>
+ * @author Vladimirs Metenchuks <voll@xaraya.com>
 **/
 class xarCharset extends Object
 {

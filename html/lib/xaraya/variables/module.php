@@ -1,6 +1,6 @@
 <?php
 /**
- * @package core
+ * @package core\variables
  * @subpackage variables
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -22,6 +22,13 @@ interface IxarModVars extends IxarVars
 /**
  * Class to model interface to module variables
  *
+ * @package core\variables
+ * @subpackage variables
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  */
 class xarModVars extends xarVars implements IxarModVars
 {

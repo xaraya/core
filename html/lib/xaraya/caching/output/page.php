@@ -2,7 +2,7 @@
 /**
  * Page caching
  * 
- * @package core
+ * @package core\caching
  * @subpackage caching
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -406,12 +406,19 @@ class xarPageCache extends Object
 }
 
 /**
- * check if the user can benefit from page caching
- *
+ * Check if the user can benefit from page caching
  * 
+ * @package core\caching
+ * @subpackage caching
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
  * @return boolean
  * @todo Note : don't do this if admins get cached too :)
- */
+**/
 function xarPage_checkUserCaching($cacheGroups)
 {
     if (!xarUserIsLoggedIn()) {

@@ -7,7 +7,6 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  */
 
@@ -37,7 +36,7 @@ class Base_ContentBlock extends BasicBlock implements iBlock
     public $end_date            = '';
 
     public $func_update         = 'base_contentblock_update';
-    public $notes               = "content_type can be 'text', 'html', 'php' or 'data'";
+    public $notes               = "content_type can be 'text', 'html', 'blocklayout', 'php' or 'data'";
 
 }
 ?>

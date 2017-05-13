@@ -2,8 +2,8 @@
 /**
  * Upgrade SQL file
  *
- * @package modules
- * @subpackage installer module
+ * @package modules\installer
+ * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -29,7 +29,7 @@ function sql_210_20()
 
     // Run the query
     try {
-        xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
+        xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::$build);
     } catch (Exception $e) {
         // Damn
         $data['success'] = false;

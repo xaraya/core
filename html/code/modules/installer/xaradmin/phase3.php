@@ -2,13 +2,12 @@
 /**
  * Installer
  *
- * @package modules
- * @subpackage installer module
+ * @package modules\installer\installer
+ * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/200.html
  */
 
@@ -46,9 +45,9 @@ function installer_admin_phase3()
     $metRequiredPHPVersion    = false;
 
     $systemVarDir             = sys::varpath();
-    $cacheDir                 = $systemVarDir . XARCORE_CACHEDIR;
-    $cacheTemplatesDir        = $systemVarDir . XARCORE_TPL_CACHEDIR;
-    $rssTemplatesDir          = $systemVarDir . XARCORE_RSS_CACHEDIR;
+    $cacheDir                 = $systemVarDir . xarConst::CACHEDIR;
+    $cacheTemplatesDir        = $systemVarDir . xarConst::TPL_CACHEDIR;
+    $rssTemplatesDir          = $systemVarDir . xarConst::RSS_CACHEDIR;
     $systemConfigFile         = $systemVarDir . '/' . sys::CONFIG;
     $systemConfigDistFile     = $systemVarDir . '/' . sys::CONFIG . '.dist';
     $phpLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/php';

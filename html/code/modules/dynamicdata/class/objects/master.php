@@ -1,12 +1,11 @@
 <?php
 /**
- * @package modules
- * @subpackage dynamicdata module
+ * @package modules\dynamicdata
+ * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/182.html
  */
 
@@ -22,6 +21,19 @@ sys::import('modules.dynamicdata.class.objects.descriptor');
 
 class DataObjectMaster extends Object
 {
+/**
+ * These constants are added for convenience. They are currently not being used
+ * TODO: Remove the ones we don't need. Probably the last 3 at least
+ */
+    const MODULE_ID                 = 182;
+    const ITEMTYPE_OBJECTS          = 0;
+    const ITEMTYPE_PROPERTIES       = 1;
+    const OBJECTID_OBJECTS          = 1;
+    const OBJECTID_PROPERTIES       = 2;
+    const PROPTYPE_ID_MODULE        = 19;
+    const PROPTYPE_ID_ITEMTYPE      = 20;
+    const PROPTYPE_ID_ITEMID        = 21;
+    
     public $descriptor  = null;      // descriptor object of this class
 
     public $objectid    = null;         // system id of the object in this installation
@@ -329,8 +341,7 @@ class DataObjectMaster extends Object
                 } else {
                     $filterstate = DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY;
                 }
-                // temporarily nullifying the effect of above added IF condition
-                $filterstate = -1;
+                // Filter out properties with the state chosen above, and also the disabled properties
                 foreach($this->properties as $property)
                     if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED &&
                        $property->getDisplayStatus() != $filterstate)
@@ -434,8 +445,11 @@ class DataObjectMaster extends Object
      * @param $args['name'] the name for the dynamic property (required)
      * @param $args['type'] the type of dynamic property (required)
      * @param $args['label'] the label for the dynamic property
-     * @param $args['datastore'] the datastore for the dynamic property
      * @param $args['source'] the source for the dynamic property
+     * @param $args['defaultvalue'] the default value for the dynamic property
+     * @param $args['status'] the input and display status for the dynamic property
+     * @param $args['seq'] the place in sequence this dynamic property appears in
+     * @param $args['configuration'] the configuration (serialized array) for the dynamic property
      * @param $args['id'] the id for the dynamic property
      *
      * @todo why not keep the scope here and do this:
@@ -477,10 +491,14 @@ class DataObjectMaster extends Object
         }
         // Get the description of the property and add its args to those passed
         $args = $args + $property->descriptor->getArgs();
+        // Get the value
+        $value = $this->properties[$property->name]->value;
         // Remove the property we are changing;
         unset($this->properties[$property->name]);
-        // Add a new property,like the old, but with the changes passed
+        // Add a new property, like the old, but with the changes passed
         $this->addProperty($args);
+        // Add the value to the new property
+        $this->properties[$property->name]->value = $value;
         return true;
     }
 

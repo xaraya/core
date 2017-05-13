@@ -1,9 +1,7 @@
 <?php
 /**
- * @package core
+ * @package core\datastores
  * @subpackage datastores
- * Interface declarations for the datastores hierarchy
- *
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release

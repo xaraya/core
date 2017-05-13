@@ -7,16 +7,16 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  */
 
 /**
  * Display block
  *
- * Displays a Text/HTML/PHP Block
+ * Displays a Text/HTML/Blocklayout/PHP Block
  *
  * @author Jason Judge
+ * @author Marc Lutolf
  */
 sys::import('modules.base.xarblocks.content');
 class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
@@ -42,8 +42,35 @@ class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
 
         // Special preparation for each content type.
         if ($data['content_type'] == 'text') {
-        // Nothing special
+            // Nothing special
 
+        } elseif ($data['content_type'] == 'HTML') {
+            // Nothing special
+
+        } elseif ($data['content_type'] == 'bl') {
+            // Run the markup through the BL compiler
+            // Assemble the string to be compiled for the input template
+            sys::import('xaraya.templating.compiler');
+            $blCompiler = XarayaCompiler::instance();
+            $tplInputString  = '<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">';
+            $tplInputString .= $data['content_text'];
+            $tplInputString .= '</xar:template>';
+
+            // We are ready. Run the template and its data through the compiler
+            try {
+                // No passing arguments (yet)
+                $args = array();
+                $tplInputString = $blCompiler->compilestring($tplInputString);
+                $data['content_text'] = xarTplString($tplInputString, $args);
+            } catch(Exception $e) {
+                // Show an error message if I am an admin. Otherwise just throw an exception
+                if (xarIsParent("Administrators", xarUser::getVar('uname'))) {
+                    echo "<pre>";var_dump($e->getMessage());echo "</pre>";
+                } else {
+                 throw $e;
+                }
+            }
+            
         } elseif ($data['content_type'] == 'php' || $data['content_type'] == 'data') {
             // Execute the PHP code.
             ob_start();

@@ -1,40 +1,55 @@
 <?php
 /**
- * Xaraya WebServices Interface
+ * Loads the files required for a webservices request
  *
- * @package core
- * @subpackage entrypoint
+ * @package core\entrypoints
+ * @subpackage entrypoints
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
- * @author Miko
 */
- 
+function xarWSLoader()
+{
 /**
  * Load the layout file so we know where to find the Xaraya directories
  */
-$systemConfiguration = array();
-include 'var/layout.system.php';
-if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
-if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
-if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
-if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
-$GLOBALS['systemConfiguration'] = $systemConfiguration;
-if (!empty($systemConfiguration['rootDir'])) {
-    set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
-}
-
-set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
-include 'bootstrap.php';
-sys::import('xaraya.caching');
-xarCache::init();
-sys::import('xaraya.core');
-xarCoreInit(XARCORE_SYSTEM_ALL);
-xarWebservicesMain();
+    $systemConfiguration = array();
+    include 'var/layout.system.php';
+    if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
+    if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
+    if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
+    if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
+    $GLOBALS['systemConfiguration'] = $systemConfiguration;
+    if (!empty($systemConfiguration['rootDir'])) {
+        set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
+    }
 
 /**
+ * Load the bootstrap file for the minimal classes swe need
+ */
+    set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
+    include 'bootstrap.php';
+
+/**
+ * Set up caching
+ * Note: this happens first so we can serve cached pages to first-time visitors
+ *       without loading the core
+ */
+    sys::import('xaraya.caching');
+    xarCache::init();
+
+/**
+ * Load the Xaraya core
+ */
+    sys::import('xaraya.core');
+    xarCore::xarInit(xarCore::SYSTEM_ALL);
+}
+
+/**
+ * Xaraya WebServices Interface
+ *
  * Entry point for webservices
  *
  * Just here to create a convenient url, the
@@ -45,25 +60,33 @@ xarWebservicesMain();
  * This script accepts one parameter: type [xmlrpc, soap]
  * with which the protocol is chosen
  *
- * Entry points for client:
- * XMLRPC        : http://host.com/ws.php?type=xmlrpc
- * JSONRPC       : http://host.com/ws.php?type=jsonrpc
- * SOAP          : http://host.com/ws.php?type=soap
- * TRACKBACK     : http://host.com/ws.php?type=trackback (Is this still right?)
- * WEBDAV        : http://host.com/ws.php?type=webdav
- * FLASHREMOTING : http://host.com/ws.php?type=flashremoting
- * REST          : http://host.com/ws.php?type=rest
- * NATIVE        : http://host.com/ws.php?type=native
+ * Entry points for client:<br/>
+ * XMLRPC        : http://host.com/ws.php?type=xmlrpc<br/>
+ * JSONRPC       : http://host.com/ws.php?type=jsonrpc<br/>
+ * SOAP          : http://host.com/ws.php?type=soap<br/>
+ * TRACKBACK     : http://host.com/ws.php?type=trackback (Is this still right?)<br/>
+ * WEBDAV        : http://host.com/ws.php?type=webdav<br/>
+ * FLASHREMOTING : http://host.com/ws.php?type=flashremoting<br/>
+ * REST          : http://host.com/ws.php?type=rest<br/>
+ * NATIVE        : http://host.com/ws.php?type=native<br/>
  *
+ * @package core\entrypoints
+ * @subpackage entrypoints
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  * @access public
+ * @author Miko
  */
 function xarWebservicesMain()
 {
-    /*
-     determine the server type, then
-     create an instance of an that server and
-     serve the request according the ther servers protocol
-    */
+/*
+ determine the server type, then
+ create an instance of that server and
+ serve the request according the the servers protocol
+*/
     xarVarFetch('type','enum:rest:xmlrpc:trackback:soap:webdav:flashremoting:native',$type,'');
     xarLogMessage("In webservices with type=$type");
     $server=false;
@@ -235,7 +258,10 @@ function xarWebservicesMain()
 /**
  * Entry point for native web service
  *
- * This works like a "normal" Xaraya module call, but depends wsapi functions (if they exist) in each module
+ * This works like a "normal" Xaraya module call, but depends on wsapi functions (if they exist) in each module
+ * The type is always "ws"
+ * The module and function must be defined in the call
+ * All other parameters passed in the call get bundled together in an array and passed to the called Xaraya function
  */
         case 'native' :
             xarVarFetch('module', 'str:1', $module, 'base',    XARVAR_NOT_REQUIRED);
@@ -248,6 +274,10 @@ function xarWebservicesMain()
             }
             echo $data;
         break;
+        
+/**
+ * Entry point for WSDL calls
+ */
         default:
             if (xarServer::getVar('QUERY_STRING') == 'wsdl') {
                 // FIXME: for now wsdl description is in soapserver module
@@ -273,4 +303,14 @@ function xarWebservicesMain()
         }
     }
 }
+
+/**
+ * Set up for web services
+ */
+xarWSLoader();
+/**
+ * Process the web service request
+ */
+xarWebservicesMain();
+
 ?>

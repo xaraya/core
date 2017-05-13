@@ -1,6 +1,6 @@
 <?php
 /**
- * @package core
+ * @package core\logging
  * @subpackage logging
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -40,7 +40,6 @@ sys::import('xaraya.log.loggers.xarLogger');
  */
 class xarLogger_mail extends xarLogger 
 {
-
     /** 
      * String holding the recipient's email address.
      * @var string

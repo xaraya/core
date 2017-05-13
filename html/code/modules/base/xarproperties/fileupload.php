@@ -1,17 +1,17 @@
 <?php
+/* Include parent class */
+sys::import('modules.dynamicdata.class.properties.base');
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  */
-/* Include parent class */
-sys::import('modules.dynamicdata.class.properties.base');
+
 /**
- * Class to handle file upload properties
+ * This property displays file tag on a template (suitable for uploading files)
  */
 class FileUploadProperty extends DataProperty
 {
@@ -172,14 +172,14 @@ class FileUploadProperty extends DataProperty
             // TODO: Insert try/catch clause once we know what uploads raises
             // TODO:
             if (!isset($return) || !is_array($return) || count($return) < 2) {
-                xarLog::variable($return, XARLOG_LEVEL_ERROR);
+                xarLog::variable($return, xarLog::LEVEL_ERROR);
                 $this->value = null;
                 return false;
             }
             if (empty($return[0])) {
                 $this->value = null;
                 $this->invalid = xarML('value');
-                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                 return false;
             } else {
                 if (empty($return[1])) {
@@ -362,7 +362,12 @@ class FileUploadProperty extends DataProperty
 
         return parent::showInput($data);
     }
+/**
+ * Display a file upload output
+ * 
+ * @param  array data An array of input parameters
 
+ */	
     public function showOutput(Array $data = array())
     {
         extract($data);

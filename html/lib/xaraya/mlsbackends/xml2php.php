@@ -2,7 +2,7 @@
 /**
  * Multi Language System
  *
- * @package core
+ * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -70,7 +70,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         $GLOBALS['xarML_PHPBackend_keyEntries'] = array();
     }
 
-    function bindDomain($dnType=XARMLS_DNTYPE_CORE, $dnName='xaraya')
+    function bindDomain($dnType=xarMLS::DNTYPE_CORE, $dnName='xaraya')
     {
         $bindResult = parent::bindDomain($dnType, $dnName);
 
@@ -84,23 +84,23 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         $xml_dir = "$xml_locale_dir/xml";
 
         switch ($dnType) {
-            case XARMLS_DNTYPE_CORE:
+            case xarMLS::DNTYPE_CORE:
             $this->basePHPDir = "$php_dir/core/";
             $this->baseXMLDir = "$xml_dir/core/";
             break;
-            case XARMLS_DNTYPE_THEME:
+            case xarMLS::DNTYPE_THEME:
             $this->basePHPDir = "$php_dir/themes/$dnName/";
             $this->baseXMLDir = "$xml_dir/themes/$dnName/";
             break;
-            case XARMLS_DNTYPE_MODULE:
+            case xarMLS::DNTYPE_MODULE:
             $this->basePHPDir = "$php_dir/modules/$dnName/";
             $this->baseXMLDir = "$xml_dir/modules/$dnName/";
             break;
-            case XARMLS_DNTYPE_PROPERTY:
+            case xarMLS::DNTYPE_PROPERTY:
             $this->basePHPDir = "$php_dir/properties/$dnName/";
             $this->baseXMLDir = "$xml_dir/properties/$dnName/";
             break;
-            case XARMLS_DNTYPE_BLOCK:
+            case xarMLS::DNTYPE_BLOCK:
             $this->basePHPDir = "$php_dir/blocks/$dnName/";
             $this->baseXMLDir = "$xml_dir/blocks/$dnName/";
             break;
@@ -123,7 +123,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         // MLS -> xarMod::getBaseInfo -> xarDisplayableName -> xarMod::getFileInfo -> MLS
         // We don't use and don't translate KEYS files now,
         // but I will recheck this code in the menus clone
-        // if ($dnType == XARMLS_DNTYPE_MODULE) {
+        // if ($dnType == xarMLS::DNTYPE_MODULE) {
         //     $this->loadKEYS($dnName);
         // }
 
@@ -228,6 +228,17 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
     }
 }
 
+/**
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+ * @author Marco Canini <marco@xaraya.com>
+ */
 class PHPBackendGenerator extends Object
 {
 
@@ -264,7 +275,7 @@ class PHPBackendGenerator extends Object
         xarMLS::mkdirr($core_dir);
     }
 
-    function bindDomain($dnType=XARMLS_DNTYPE_CORE, $dnName='xaraya')
+    function bindDomain($dnType=xarMLS::DNTYPE_CORE, $dnName='xaraya')
     {
         $varDir = sys::varpath();
         $locales_dir = "$varDir/locales";
@@ -291,26 +302,26 @@ class PHPBackendGenerator extends Object
         $xml_blocks_dir = "$xml_dir/blocks";
 
         switch ($dnType) {
-        case XARMLS_DNTYPE_CORE:
+        case xarMLS::DNTYPE_CORE:
             $this->baseDir = $core_dir.'/';
             $this->baseXMLDir = $xml_core_dir.'/';
             break;
-        case XARMLS_DNTYPE_THEME:
+        case xarMLS::DNTYPE_THEME:
             $this->baseDir = "$themes_dir/$dnName/";
             $this->baseXMLDir = "$xml_themes_dir/$dnName/";
             if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS::mkdirr($this->baseDir);
             break;
-        case XARMLS_DNTYPE_MODULE:
+        case xarMLS::DNTYPE_MODULE:
             $this->baseDir = "$modules_dir/$dnName/";
             $this->baseXMLDir = "$xml_modules_dir/$dnName/";
             if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS::mkdirr($this->baseDir);
             break;
-        case XARMLS_DNTYPE_PROPERTY:
+        case xarMLS::DNTYPE_PROPERTY:
             $this->baseDir = "$properties_dir/$dnName/";
             $this->baseXMLDir = "$xml_properties_dir/$dnName/";
             if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS::mkdirr($this->baseDir);
             break;
-        case XARMLS_DNTYPE_BLOCK:
+        case xarMLS::DNTYPE_BLOCK:
             $this->baseDir = "$blocks_dir/$dnName/";
             $this->baseXMLDir = "$xml_blocks_dir/$dnName/";
             if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS::mkdirr($this->baseDir);

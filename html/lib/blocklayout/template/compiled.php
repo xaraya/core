@@ -73,7 +73,12 @@ class CompiledTemplate extends Object
                 $res = include("var://_compiler_output");
                 // or simply eval('?[remove]>'.$_compiler_output); without streams
             } else {
-                $res = include($this->fileName);
+                try {
+                    $res = include($this->fileName);
+                } catch (Exception $e) {
+                    echo $e->getMessage();
+                    exit;       
+                }
             }
             
         } catch (Exception $e) {

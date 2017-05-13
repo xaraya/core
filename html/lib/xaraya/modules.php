@@ -19,25 +19,54 @@
  * @author Jim McDonald
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
- * @todo Use serialize in module variables?
  * @todo the double headed theme/module stuff needs to go, a theme is not a module
  */
 
 /**
- * Exceptions defined by this subsystem
+ * Exception raised by the modules subsystem
  *
- */
+ * @package core\modules
+ * @subpackage modules
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 class ModuleBaseInfoNotFoundException extends NotFoundExceptions
 {
     protected $message = 'The base info for module "#(1)" could not be found';
 }
+
 /**
+ * Exception raised by the modules subsystem
+ *
+ * @package core\modules
+ * @subpackage modules
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
 **/
 class ModuleNotFoundException extends NotFoundExceptions
 {
     protected $message = 'A module is missing, the module name could not be determined in the current context';
 }
+
 /**
+ * Exception raised by the modules subsystem
+ *
+ * @package core\modules
+ * @subpackage modules
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
 **/
 class ModuleNotActiveException extends xarExceptions
 {
@@ -661,7 +690,7 @@ class xarMod extends Object implements IxarMod
             $part = 'xarversion';
             // If the locale is already present, it means we can make the translations available
             if(!empty($GLOBALS['xarMLS_currentLocale']))
-                xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
+                xarMLS_loadTranslations(xarMLS::DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
             break;
         case 'property':
             $fileName = sys::code() . 'properties/' . $modOsDir . '/main.php';
@@ -927,7 +956,7 @@ class xarMod extends Object implements IxarMod
 
             if ($found) {
                 // Load the translations file, only if we have loaded the API function for the first time here.
-                if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:'.$modType.$funcType, $funcName) === NULL) {return;}
+                if (xarMLS_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:'.$modType.$funcType, $funcName) === NULL) {return;}
             }
         }
 
@@ -1021,7 +1050,7 @@ class xarMod extends Object implements IxarMod
         }
 
         // Load the module translations files (common functions, uncut functions etc.)
-        if (xarMLS_loadTranslations(XARMLS_DNTYPE_MODULE, $modName, 'modules:', $modType) === NULL) return;
+        if (xarMLS_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:', $modType) === NULL) return;
 
         // Load database info
         self::loadDbInfo($modName, $modDir);
@@ -1045,7 +1074,7 @@ class xarMod extends Object implements IxarMod
     {
         $modInfo = self::getInfo(self::getRegId($modName));
         if ((strpos($modInfo['class'], 'Core') !== false)) {
-            return $modInfo['version'] == XARCORE_VERSION_NUM;
+            return $modInfo['version'] == xarCore::VERSION_NUM;
         } else {
             // Add check for non core modules here
             return true;

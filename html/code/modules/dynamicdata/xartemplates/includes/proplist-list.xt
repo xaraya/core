@@ -135,7 +135,7 @@
                 <td class="#$displayclass#">
                     &#160;
                 </td>
-                <td colspan="5" class="#$displayclass#">
+                <td colspan="6" class="#$displayclass#">
                     <xar:set name="name">'dd_source[' . $field['id'] . ']'</xar:set>
                     <xar:set name="id">'dd_source_' . $field['id']</xar:set>
                     <xar:if condition="!isset($objectinfo) OR ($objectinfo['datastore'] eq 'relational')">
@@ -151,9 +151,6 @@
                     <xar:set name="name">'dd_status['.$field['id'].']'</xar:set>
                     <xar:set name="id">'dd_status_'.$field['id']</xar:set>
                     <xar:data-input property="$fieldstatusprop" name="$name" id="$id" size="15" value="$field['status']"/>
-                </td>
-                <td class="#$displayclass#">
-                    &#160;
                 </td>
             </tr>
         </xar:foreach>

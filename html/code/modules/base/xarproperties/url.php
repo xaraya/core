@@ -1,22 +1,22 @@
 <?php
 /**
- * @package modules\base
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- * @link http://xaraya.info/index.php/release/68.html
- *
- * @author mikespub <mikespub@xaraya.com>
- */
-/**
  * Include the base class
  */
 sys::import('modules.base.xarproperties.textbox');
 
 /**
- * Handle the URL property
+ * @package modules\base
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/68.html
+ *
+ * @author mikespub <mikespub@xaraya.com>
+ */
+
+/**
+ * This property displays a raw URL link
  */
 class URLProperty extends TextBoxProperty
 {
@@ -29,7 +29,10 @@ class URLProperty extends TextBoxProperty
         parent::__construct($descriptor);
         $this->template = 'url';
     }
-
+/**
+ * Validate the value of a url and also passes for all types of url schemes
+ * 
+ */
     function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -41,7 +44,7 @@ class URLProperty extends TextBoxProperty
            //check it is not invalid eg html tag
             if (preg_match('/[<>"]/',$value)) {
                 $this->invalid = xarML('Invalid URL: #(1)', $value);
-                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                 $this->value = null;
                 return false;
             } else {
@@ -56,7 +59,7 @@ class URLProperty extends TextBoxProperty
                     if (empty($uri['scheme'])) $value = 'http://' . $value;
                     if (!filter_var($value, FILTER_VALIDATE_URL)) {
                         $this->invalid = xarML('Invalid URL: #(1)', $value);
-                        xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                        xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                         $this->value = null;
                         return false;
                     } 

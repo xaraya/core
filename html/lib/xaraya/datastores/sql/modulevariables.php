@@ -2,7 +2,7 @@
 /**
  * Data Store is the module variables // TODO: integrate module variable handling with DD
  *
- * @package core
+ * @package core\datastores
  * @subpackage datastores
  * @category Xaraya Web Applications Framework
  * @version 2.4.0

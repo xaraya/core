@@ -2,13 +2,12 @@
 /**
  * Module installer
  *
- * @package modules
- * @subpackage modules module
+ * @package modules\modules
+ * @subpackage modules
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/1.html
  *
  * @author Marc Lutolf <mfl@netspan.ch>
@@ -612,12 +611,12 @@ class Installer extends Object
             $valid_le = true;
             if (!empty($info['dependencyinfo'][0]['version_ge'])) {
                 sys::import('xaraya.version');
-                $result = xarVersion::compare(XARCORE_VERSION_NUM,$info['dependencyinfo'][0]['version_ge']);
+                $result = xarVersion::compare(xarCore::VERSION_NUM,$info['dependencyinfo'][0]['version_ge']);
                 $valid_ge = $result >= 0;
             }
             if (!empty($info['dependencyinfo'][0]['version_le'])) {
                 sys::import('xaraya.version');
-                $result = xarVersion::compare(XARCORE_VERSION_NUM,$info['dependencyinfo'][0]['version_le']);
+                $result = xarVersion::compare(xarCore::VERSION_NUM,$info['dependencyinfo'][0]['version_le']);
                 $valid_le = $result <= 0;
             }
             return $valid_ge && $valid_le;

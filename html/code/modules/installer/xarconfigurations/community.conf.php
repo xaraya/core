@@ -2,21 +2,29 @@
 /**
  * Community configuration
  *
- * @package modules
- * @subpackage installer module
+ */
+/**
+ * @package modules\installer\installer
+ * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/200.html
- */
-/*
+ *
  * @author Marc Lutolf
  */
-
 $configuration_name = xarML('Community Site -- modules and privilege for semi-open access');
 
+/**
+ * @package modules\installer\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/200.html
+ */
 function installer_community_moduleoptions()
 {
     return array(
@@ -38,6 +46,15 @@ function installer_community_moduleoptions()
     );
 }
 
+/**
+ * @package modules\installer\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/200.html
+ */
 function installer_community_privilegeoptions()
 {
     return array(
@@ -59,6 +76,15 @@ function installer_community_privilegeoptions()
  *
  * @access public
  * @return boolean
+ */
+/**
+ * @package modules\installer\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/200.html
  */
 function installer_community_configuration_load(Array $args=array())
 {
@@ -87,16 +113,22 @@ function installer_community_configuration_load(Array $args=array())
     return true;
 }
 
+/**
+ * @package modules\installer\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/200.html
+ */
 function installer_community_casualaccess()
 {
     xarRegisterPrivilege('CasualAccess','All','themes','Block','All','ACCESS_OVERVIEW','Minimal access to a site');
-    // FIXME there is no registration module at this point
-//    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
     xarRegisterPrivilege('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW','View the Login block');
     xarRegisterPrivilege('ViewBlocks','All','base','Block','All','ACCESS_OVERVIEW','View blocks of the Base module');
     xarRegisterPrivilege('ViewLoginItems','All','dynamicdata','Item','All','ACCESS_OVERVIEW','View some Dynamic Data items');
     xarRegisterPrivilege('ViewBlockItems','All','blocks','BlockItem','All','ACCESS_OVERVIEW','View block items in general');
-//    xarMakePrivilegeMember('ViewRegistrationLogin','CasualAccess');
     xarMakePrivilegeMember('ViewLogin','CasualAccess');
     xarMakePrivilegeMember('ViewBlocks','CasualAccess');
     xarMakePrivilegeMember('ViewAuthsystem','CasualAccess');
@@ -104,25 +136,39 @@ function installer_community_casualaccess()
     xarMakePrivilegeMember('ViewBlockItems','CasualAccess');
 }
 
+/**
+ * @package modules\installer\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/200.html
+ */
 function installer_community_readnoncore()
 {
     xarRegisterPrivilege('ReadNonCore','All',null,'All','All','ACCESS_NONE','Read access only to none-core modules');
-//    xarRegisterPrivilege('ViewRegistrationLogin','All','registration','Block','rlogin:Login:All','ACCESS_OVERVIEW','View the User Access block');
     xarRegisterPrivilege('DenyPrivileges','All','privileges','All','All','ACCESS_NONE','Deny access to the Privileges module');
-//    xarRegisterPrivilege('DenyBlocks','All','blocks','All','All','ACCESS_NONE','Deny access to the Blocks module');
     xarRegisterPrivilege('DenyMail','All','mail','All','All','ACCESS_NONE','Deny access to the Mail module');
     xarRegisterPrivilege('DenyModules','All','modules','All','All','ACCESS_NONE','Deny access to the Modules module');
     xarRegisterPrivilege('DenyThemes','All','themes','All','All','ACCESS_NONE','Deny access to the Themes module');
     xarMakePrivilegeMember('ReadAccess','ReadNonCore');
     xarMakePrivilegeMember('ViewAuthsystem','ReadNonCore');
     xarMakePrivilegeMember('DenyPrivileges','ReadNonCore');
-//    xarMakePrivilegeMember('DenyBlocks','ReadNonCore');
     xarMakePrivilegeMember('DenyMail','ReadNonCore');
     xarMakePrivilegeMember('DenyModules','ReadNonCore');
     xarMakePrivilegeMember('DenyThemes','ReadNonCore');
-//    xarMakePrivilegeMember('ViewRegistrationLogin','ReadNonCore');
 }
 
+/**
+ * @package modules\installer\installer
+ * @subpackage installer
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/200.html
+ */
 function installer_community_readaccess()
 {
         xarRegisterPrivilege('ReadAccess','All','All','All','All','ACCESS_READ','Read access to all modules');

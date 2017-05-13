@@ -1,20 +1,25 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.dropdown');
+sys::import('xaraya.structures.relativedirectoryiterator');
+
+
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  *
  * @author Marc Lutolf <mfl@netspan.ch>
  */
-sys::import('modules.base.xarproperties.dropdown');
-sys::import('xaraya.structures.relativedirectoryiterator');
+
 
 /**
- * Handle file picker property
+ * This property displays a dropdown of file names
  * 
  * Parameters:
  * basedir          base directory whose contents are displayed
@@ -56,7 +61,12 @@ class FilePickerProperty extends SelectProperty
         $this->initialization_basedirectory = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->initialization_basedirectory);
         $this->setExtensions();
     }
-
+/**
+ * Display a Dropdown for input
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
+ */
     public function showInput(Array $data = array())
     {
         if (isset($data['basedir'])) $this->initialization_basedirectory = $data['basedir'];
@@ -72,7 +82,11 @@ class FilePickerProperty extends SelectProperty
         if (isset($data['firstline']))  $this->initialization_firstline = $data['firstline'];
         return parent::showInput($data);
     }
-
+/**
+ * Validate the file
+ *
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -90,11 +104,15 @@ class FilePickerProperty extends SelectProperty
             return true;
         }
         $this->invalid = xarML('incorrect selection: #(1) for #(2)', $value, $this->name);
-        xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+        xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
         $this->value = null;
         return false;
     }
-
+    /**
+     * Retrieve the list of options on demand
+     * 
+     * @param void N/A
+     */
     function getOptions()
     {
         if (count($this->options) > 0) {

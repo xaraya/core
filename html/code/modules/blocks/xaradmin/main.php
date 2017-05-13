@@ -3,6 +3,7 @@
  * Main entry point for the admin interface of this module
  *
  * @package modules\blocks
+ * @subpackage blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -27,7 +28,7 @@
 function blocks_admin_main()
 {
     // Security
-    if(!xarSecurityCheck('ViewBlocks')) return;
+    if(!xarSecurityCheck('EditBlocks')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();

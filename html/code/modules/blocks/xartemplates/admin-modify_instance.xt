@@ -296,6 +296,9 @@
                         </fieldset>
                         <xar:var name="submitLabel">Update Access</xar:var>
                     
+                <xar:elseif condition="$interface eq 'export'"/>
+                    <xar:template type="module" module="blocks" file="instance-info"/>
+                    <xar:template type="module" module="blocks" file="export"/>
                 <xar:else/>
                     <xar:template type="module" module="blocks" file="instance-info"/>
                         <fieldset>
@@ -311,7 +314,7 @@
                 </xar:if>
 
                 <xar:if condition="!empty($submitLabel)">
-                    <fieldset class="xar-form-actions">
+                    <div class="xar-form-actions">
                         <div class="xar-row">
                             <div class="xar-col">
                             </div>
@@ -324,7 +327,7 @@
                                 <xar:button type="submit" value="$submitLabel"/>
                             </div>
                         </div>
-                    </fieldset>
+                    </div>
                 </xar:if>
             
             </form>

@@ -3,6 +3,7 @@
  * Display a single block in the module space
  *
  * @package modules\blocks
+ * @subpackage blocks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release

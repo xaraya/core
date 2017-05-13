@@ -1,18 +1,21 @@
 <?php
 /**
+ * Include the base class
+ */
+ sys::import('modules.base.xarproperties.textbox');
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.base.xarproperties.textbox');
+
 /**
- * Handle the image property
+ * This property displays an image
  */
 class ImageProperty extends TextBoxProperty
 {
@@ -44,7 +47,11 @@ class ImageProperty extends TextBoxProperty
 
         if ($this->initialization_image_source == 'upload') $this->upload = true;
     }
-
+/**
+ * Validate the value of a field
+ *
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;

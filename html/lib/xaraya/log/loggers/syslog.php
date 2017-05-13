@@ -1,6 +1,6 @@
 <?php
 /**
- * @package core
+ * @package core\logging
  * @subpackage logging
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -147,14 +147,14 @@ class xarLogger_syslog extends xarLogger
     }
 
     /**
-     * Converts a XARLOG_LEVEL* constant into a syslog LOG_* constant.
+     * Converts a xarLog::LEVEL* constant into a syslog LOG_* constant.
      *
      * This function exists because, under Windows, not all of the LOG_*
-     * constants have unique values.  Instead, the XARLOG_LEVEL_* were introduced
+     * constants have unique values.  Instead, the xarLog::LEVEL_* were introduced
      * for global use, with the conversion to the LOG_* constants kept local to
      * to the syslog driver.
      *
-     * @param int $level     XARLOG_LEVEL_* value to convert to LOG_* value.
+     * @param int $level     xarLog::LEVEL_* value to convert to LOG_* value.
      *
      * @return  The LOG_* representation of $priority.
      *
@@ -163,14 +163,14 @@ class xarLogger_syslog extends xarLogger
     function _toSyslog($level)
     {
         static $levels = array(
-            XARLOG_LEVEL_EMERGENCY => LOG_EMERG,
-            XARLOG_LEVEL_ALERT     => LOG_ALERT,
-            XARLOG_LEVEL_CRITICAL  => LOG_CRIT,
-            XARLOG_LEVEL_ERROR     => LOG_ERR,
-            XARLOG_LEVEL_WARNING   => LOG_WARNING,
-            XARLOG_LEVEL_NOTICE    => LOG_NOTICE,
-            XARLOG_LEVEL_INFO      => LOG_INFO,
-            XARLOG_LEVEL_DEBUG     => LOG_DEBUG
+            xarLog::LEVEL_EMERGENCY => LOG_EMERG,
+            xarLog::LEVEL_ALERT     => LOG_ALERT,
+            xarLog::LEVEL_CRITICAL  => LOG_CRIT,
+            xarLog::LEVEL_ERROR     => LOG_ERR,
+            xarLog::LEVEL_WARNING   => LOG_WARNING,
+            xarLog::LEVEL_NOTICE    => LOG_NOTICE,
+            xarLog::LEVEL_INFO      => LOG_INFO,
+            xarLog::LEVEL_DEBUG     => LOG_DEBUG
         );
 
         return $levels[$level];

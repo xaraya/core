@@ -1,19 +1,22 @@
 <?php
+/* Include the parent class  */
+sys::import('modules.dynamicdata.class.properties.base');
+
 /**
+ * The Checkbox property models an HTML input of type checkbox
+ * 
  * @package modules\base
+ * @subpackage base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-/* Include the parent class  */
-sys::import('modules.dynamicdata.class.properties.base');
 /**
- * Handle check box property
+ * This property displays a checkbox
  */
 class CheckboxProperty extends DataProperty
 {
@@ -22,6 +25,13 @@ class CheckboxProperty extends DataProperty
     public $desc       = 'Checkbox';
     public $reqmodules = array('base');
 
+/**
+ * Create an instance of this dataproperty<br/>
+ * - It belongs to the base module<br/>
+ * - It has its own input/output templates<br/>
+ * - it is found at modules/base/xarproperties<br/>
+ *
+ */
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
@@ -30,6 +40,14 @@ class CheckboxProperty extends DataProperty
         $this->filepath  = 'modules/base/xarproperties';
     }
 
+/**
+ * Get the value of a checkbox from a web page<br/>
+ * The value is true if checked, otherwise it is false
+ * 
+ * @param  string name The name of the checkbox to be checked
+ * @param  string value The value of the checkbox to be checked
+ * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+ */
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
@@ -41,6 +59,11 @@ class CheckboxProperty extends DataProperty
         return $this->validateValue($value);
     }
 
+/**
+ * Validate the value of a checkbox (checked or not checked)
+ *
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
     public function validateValue($value = null)
     {
         xarLog::message("DataProperty::validateValue: Validating property " . $this->name);
@@ -53,6 +76,12 @@ class CheckboxProperty extends DataProperty
         return true;
     }
 
+/**
+ * Display a checkbox for input
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
+ */
     public function showInput(Array $data = array())
     {
         if (isset($data['checked'])) $data['value']  = $data['checked'];
@@ -64,6 +93,12 @@ class CheckboxProperty extends DataProperty
         return parent::showInput($data);
     }
 
+/**
+ * Convert an integer or string value to true/false
+ * 
+ * @param  mixed value The value to be converted
+ * @return bool  Returns true if the integer or string value is 1, "1" or "true"; otherwise returns false.
+ */
     public function castType($value=null)
     {
         return ($value === 1 || $value === '1' || $value === true || $value === 'true') ? true : false;

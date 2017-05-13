@@ -1,18 +1,21 @@
 <?php
 /**
+ * Include the base class
+ */
+ sys::import('modules.base.xarproperties.textbox');
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.base.xarproperties.textbox');
+
 /**
- * handle the URL + Title property
+ * This property displays a title for a URL; if a link is provided then the icon is shown as a link to the URL
  */
 class URLTitleProperty extends TextBoxProperty
 {
@@ -69,7 +72,7 @@ class URLTitleProperty extends TextBoxProperty
                         if ( (!isset($uri['scheme']) || empty($uri['scheme'])) ||
                             (!isset($uri['host']) || empty($uri['host']))) {
                                 $this->invalid = xarML('URL');
-                                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                                 $this->value = null;
                                 return false;
                         }

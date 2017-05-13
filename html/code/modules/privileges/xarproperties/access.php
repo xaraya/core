@@ -1,17 +1,19 @@
 <?php
 /**
- * @package modules
- * @subpackage privileges module
+ * @package modules\privileges
+ * @subpackage privileges
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/1098.html
  */
 
 sys::import('modules.dynamicdata.class.properties.base');
 
+/**
+ * Handle Access property
+ */
 class AccessProperty extends DataProperty
 {
     public $id          = 30092;
@@ -32,6 +34,13 @@ class AccessProperty extends DataProperty
     public $component   = 'All';
     public $instance    = 'All';
 
+/**
+ * Create an instance of this dataproperty<br/>
+ * - It belongs to the privileges module<br/>
+ * - It has its own input/output templates<br/>
+ * - it is found at modules/privileges/xarproperties<br/>
+ *
+ */	
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
@@ -39,7 +48,15 @@ class AccessProperty extends DataProperty
         $this->filepath  = 'modules/privileges/xarproperties';
         $this->template  = 'access';
     }
-
+	
+/**
+ * Get the value of a dropdown from a web page<br/>
+ * Select one or multiple values from dropdown
+ * 
+ * @param  string name The name of the dropdown to be selected
+ * @param  string value The value of the dropdown to be selected
+ * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+ */	
     public function checkInput($name = '', $value = null)
     {
         $dropdown = DataPropertyMaster::getProperty(array('name' => 'dropdown'));        
@@ -77,7 +94,13 @@ class AccessProperty extends DataProperty
         $this->setValue($value);
         return true;
     }
-
+	
+/**
+ * Display a dropdown for input
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
+ */	
     public function showInput(Array $data = array())
     {
         if (isset($data['value'])) {
@@ -110,7 +133,13 @@ class AccessProperty extends DataProperty
 
         return parent::showInput($data);
     }
-
+	
+/**
+ * Display a dropdown for output
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for output on a web page
+ */	
     public function showOutput(Array $data = array())
     {
         if (isset($data['value'])) {
@@ -139,7 +168,13 @@ class AccessProperty extends DataProperty
 
         return parent::showOutput($data);
     }
-
+	
+	
+/**
+ * Get the dropdown groups and options
+ * 
+ * @return string    return the array key, value pairs.
+ */	
     function getgroupoptions()
     {
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
@@ -152,7 +187,12 @@ class AccessProperty extends DataProperty
         );
         return array_merge($firstlines, $options);
     }
-
+	
+/**
+ * Get the dropdown options that are on levels
+ * 
+ * @return string    return the options with key as id and value as name
+ */	
     function getleveloptions()
     {
         sys::import('modules.privileges.class.securitylevel');
@@ -162,7 +202,12 @@ class AccessProperty extends DataProperty
         foreach ($accesslevels as $key => $value) $options[] = array('id' => $key, 'name' => $value);
         return $options;
     }
-
+	
+/**
+ * Get the dropdown options
+ * 
+ * @return string    return the options that show failure and exception
+ */	
     function getfailureoptions()
     {
         $options = array(
@@ -171,7 +216,13 @@ class AccessProperty extends DataProperty
                     );
         return $options;
     }
-    
+	
+/**
+ * Set the value of input
+ * 
+ * @param  string value The value of the input
+ * @return string    return a storable representation of a value
+ */	    
     function setValue($value=null)
     {
         if (!empty($value) && !is_array($value)) {
@@ -187,7 +238,14 @@ class AccessProperty extends DataProperty
             $this->value = serialize($value);
         }
     }
-
+		
+/**
+ * Get the value of input
+ * Unserialize the value of input
+ * handle the exception here
+ * 
+ * @return string    return unserialize value
+ */	 
     public function getValue()
     {
         try {
@@ -201,7 +259,14 @@ class AccessProperty extends DataProperty
         }
         return $value;
     }
-
+	
+/**
+ * Check the group is multiselect or dropdown
+ * 
+ * @param  array data An array of input parameters
+ * @param  string exclusive 
+ * @return bool   Returns true if data is in the correct realm otherwise return false
+ */
     public function check(Array $data=array(), $exclusive=1)
     {
         // Some groups always have access
@@ -245,12 +310,24 @@ class AccessProperty extends DataProperty
         }
     }
     
+/**
+ * Check the realm of data
+ * 
+ * @param  array data An array of input parameters
+ * @return bool   Returns true
+ */	
     public function checkRealm(Array $data=array())
     {
         // CHECKME
         return true;
     }
     
+/**
+ * Check the level of data
+ * 
+ * @param  array data An array of input parameters
+ * @return bool   Returns true or false 
+ */	
     public function checkLevel(Array $data=array())
     {
         if (isset($data['level']))     $this->level = (int)$data['level'];
@@ -270,7 +347,13 @@ class AccessProperty extends DataProperty
         }
         return $access;
     }
-    
+		
+/**
+ * Check the group of $groups
+ * 
+ * @param  array groups An array of input parameters
+ * @return bool   Returns true or false 
+ */	    
     public function checkGroup(Array $groups=array())
     {
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
@@ -312,6 +395,13 @@ class AccessProperty extends DataProperty
         }
         return $access;
     }
+	
+/**
+ * Used to show the hidden data
+ * 
+ * @param  array data An array of input parameters
+ * @return bool   Returns true or false 
+ */	   	
     public function showHidden(Array $data = array())
     {
         if (isset($data['value'])) {
@@ -348,9 +438,24 @@ class AccessProperty extends DataProperty
 
 sys::import('modules.dynamicdata.class.properties.interfaces');
 
+/**
+ * @package modules\privileges
+ * @subpackage privileges
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/1098.html
+ */
 class AccessPropertyInstall extends AccessProperty implements iDataPropertyInstall
 {
 
+/**
+ * Give access to install property
+ * 
+ * @param  array data An array of input parameters
+ * @return bool   Returns true or false 
+ */	 
     public function install(Array $data=array())
     {
         $dat_file = sys::code() . 'modules/privileges/xardata/privileges_access_configurations-dat.xml';

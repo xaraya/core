@@ -1,8 +1,130 @@
 <?php
 /**
+ * Logging package defines
+ */
+
+/*
+* @TODO: Remove this when we go to PHP 5.6
+
+define('XARLOG_LEVEL_EMERGENCY', 1);
+define('XARLOG_LEVEL_ALERT',     2);
+define('XARLOG_LEVEL_CRITICAL',  4);
+define('XARLOG_LEVEL_ERROR',     8);
+define('XARLOG_LEVEL_WARNING',   16);
+define('XARLOG_LEVEL_NOTICE',    32);
+define('XARLOG_LEVEL_INFO',      64);
+define('XARLOG_LEVEL_DEBUG',     128);
+// This is a special define that includes all the levels defined above
+define('XARLOG_LEVEL_ALL',       255);
+*/
+/**
+ * Exceptions raised within the loggers
+ *
+ * @package core\exceptions
+ * @subpackage exceptions
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ */
+class LoggerException extends Exception
+{
+    // Fill in later.
+}
+
+// Legacy calls
+
+/**
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
+function xarLogConfigFile()
+{   
+    return xarLog::configFile(); 
+}
+
+/**
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
+function xarLogConfigReadable()
+{   
+    return xarLog::configReadable(); 
+}
+
+/**
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
+function xarLogFallbackFile()
+{   
+    return xarLog::fallbackFile(); 
+}
+
+/**
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
+function xarLogFallbackPossible()
+{   
+    return xarLog::fallbackPossible(); 
+}
+
+/**
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
+function xarLogMessage($message, $level = '')
+{   
+    if (empty($level)) $level = self::LEVEL_DEBUG;
+    return xarLog::message($message, $level); 
+}
+
+/**
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
+function xarLogVariable($name, $var, $level = '')
+{   
+    if (empty($level)) $level = self::LEVEL_DEBUG;
+    return xarLog::variable($name, $var, $level); 
+}
+
+/**
  * Logging Facilities
  *
- * @package core
+ * @package core\logging
  * @subpackage logging
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -20,59 +142,18 @@
  * @todo  When xarMail is done do email logger
 **/
 
-/**
- * Logging package defines
- */
-
-define('XARLOG_LEVEL_EMERGENCY', 1);
-define('XARLOG_LEVEL_ALERT',     2);
-define('XARLOG_LEVEL_CRITICAL',  4);
-define('XARLOG_LEVEL_ERROR',     8);
-define('XARLOG_LEVEL_WARNING',   16);
-define('XARLOG_LEVEL_NOTICE',    32);
-define('XARLOG_LEVEL_INFO',      64);
-define('XARLOG_LEVEL_DEBUG',     128);
-// This is a special define that includes all the levels defined above
-define('XARLOG_LEVEL_ALL',       255);
-
-/**
- * Exceptions raised within the loggers
- *
- */
-class LoggerException extends Exception
-{
-    // Fill in later.
-}
-
-// Legacy calls
-
-function xarLogConfigFile()
-{   
-    return xarLog::configFile(); 
-}
-function xarLogConfigReadable()
-{   
-    return xarLog::configReadable(); 
-}
-function xarLogFallbackFile()
-{   
-    return xarLog::fallbackFile(); 
-}
-function xarLogFallbackPossible()
-{   
-    return xarLog::fallbackPossible(); 
-}
-function xarLogMessage($message, $level = XARLOG_LEVEL_DEBUG)
-{   
-    return xarLog::message($message, $level); 
-}
-function xarLogVariable($name, $var, $level = XARLOG_LEVEL_DEBUG)
-{   
-    return xarLog::variable($name, $var, $level); 
-}
-
 class xarLog extends Object
 {
+    const LEVEL_EMERGENCY  = 1;
+    const LEVEL_ALERT      = 2;
+    const LEVEL_CRITICAL   = 4;
+    const LEVEL_ERROR      = 8;
+    const LEVEL_WARNING    = 16;
+    const LEVEL_NOTICE     = 32;
+    const LEVEL_INFO       = 64;
+    const LEVEL_DEBUG      = 128;
+    const LEVEL_ALL        = 255;
+
     static private $configFile;
     static private $logFile;
     static public $loggers  = array();
@@ -112,7 +193,7 @@ class xarLog extends Object
                     $levels = explode(',', $levels);
                     foreach ($levels as $level) $logLevel |= (int)$level;
                 } else {
-                    $logLevel = XARLOG_LEVEL_ALL;
+                    $logLevel = self::LEVEL_ALL;
                 }
 
                 self::$config[] = array(
@@ -131,7 +212,7 @@ class xarLog extends Object
     
         // Subsystem initialized, register a shutdown function
         register_shutdown_function('xarLog__shutdown_handler');
-    
+
         return true;
     }
 
@@ -195,9 +276,10 @@ class xarLog extends Object
      * @param string level. The level for this message OPTIONAL Defaults to XARLOG_LEVEL_DEBUG
      *
      */
-    static public function message($message, $level = XARLOG_LEVEL_DEBUG)
+    static public function message($message, $level = '')
     {
-        if (($level == XARLOG_LEVEL_DEBUG) && !xarCoreIsDebuggerActive()) return;
+        if (empty($level)) $level = self::LEVEL_DEBUG;
+        if (($level == self::LEVEL_DEBUG) && !xarCore::isDebuggerActive()) return;
         // this makes a copy of the object, so the original $this->_buffer was never updated
         //foreach ($_xarLoggers as $logger) {
         foreach (array_keys(self::$loggers) as $id) {
@@ -205,8 +287,9 @@ class xarLog extends Object
         }
     }
     
-    static public function variable($name, $var, $level = XARLOG_LEVEL_DEBUG)
+    static public function variable($name, $var, $level = '')
     {
+        if (empty($level)) $level = self::LEVEL_DEBUG;
         $args = array('name'=>$name, 'var'=>$var, 'format'=>'text');
     
         //Encapsulate core libraries in classes and let __call work lazy loading
@@ -237,18 +320,29 @@ class xarLog extends Object
 /**
  * Shutdown handler for the logging system
  *
- */
+ * @package core\logging
+ * @subpackage logging
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+**/
 function xarLog__shutdown_handler()
 {
      xarLog::message("xarLog shutdown handler");
-     xarLog::message("Leaving session: " . xarSession::getId() . " - User: " . xarUser::getVar('uname') . " (ID: " . xarUser::getVar('id') . ")");
+     if (!method_exists('xarSession', 'getId') || !method_exists('xarUser', 'getVar')) {
+         xarLog::message("Leaving session unexpectedly before session and user was defined");
+     } else{
+         xarLog::message("Leaving session: " . xarSession::getId() . " - User: " . xarUser::getVar('uname') . " (ID: " . xarUser::getVar('id') . ")");
+     }
 
      // If the debugger was active, we can dispose it now.
-     if(xarDebug::$flags & XARDBG_SQL) {
+     if(xarDebug::$flags & xarConst::DBG_SQL) {
          xarLog::message("Total SQL queries: $GLOBALS[xarDebug_sqlCalls].");
      }
 
-     if (xarDebug::$flags & XARDBG_ACTIVE) {
+     if (xarDebug::$flags & xarConst::DBG_ACTIVE) {
          $lmtime = explode(' ', microtime());
          $endTime = $lmtime[1] + $lmtime[0];
          $totalTime = ($endTime - xarDebug::$startTime);

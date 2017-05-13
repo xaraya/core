@@ -21,7 +21,7 @@
             <h3>Concepts</h3>
             <h4>Authentication modules</h4>
             <p>
-                An authentication module is used to log users in to a Xaraya site. The Authsystem module used by default in Xaraya authenticates by checking the user name and password given, but this is only one possible way of authentication. Xaraya can work with different types of authentication modules that are available at www.xaraya.com or from 3rd party providers. You can search for such modules at the <a href="http://www.xaraya.com/index.php?module=release&amp;func=search" target="_blank">Extensions page</a> on www.xaraya.com 
+                An authentication module is used to log users in to a Xaraya site. The Authsystem module used by default in Xaraya authenticates by checking the user name and password given, but this is only one possible way of authentication. Xaraya can work with different types of authentication modules that are available at www.xaraya.com or from 3rd party providers. You can search for such modules at the <a href="http://www.xaraya.info/index.php?module=release&amp;func=search" target="_blank">Extensions page</a> on www.xaraya.info. <!-- ToDO: Better resources for 2.x  -->
             </p>
             <p>
                 To have Xaraya recognize an installed authentication module other than the default, go to the Roles module configuration page <strong>Admin Menu &#8594; Roles &#8594; Modify Configuration</strong> and set the authentication module you want to use as the default authentication module.
@@ -63,12 +63,12 @@
                 <li>Authsystem Module Extension page at 
                 <xar:var name="label">Authsystem Module - Xaraya Extension 42</xar:var>
                 <a title="#$label#"
-                href="http://www.xaraya.com/index.php/release/42.html">Xaraya Extension and
+                href="http://www.xaraya.info/index.php/release/42.html">Xaraya Extension and
                 Releases</a>. Click on Version History tab at the bottom to get the latest release
                 information.</li>
                 <li>Related tutorials and documentation on Authsystem module at 
                 <xar:var name="label">Related documentation on Authsystem</xar:var>
-                <a href="http://www.xaraya.com/index.php/keywords/authsystem/"
+                <a href="http://www.xaraya.info/index.php/keywords/authsystem/"
                 title="#$label#">Xaraya Documentation.</a></li>
             </ul>
             <p class="xar-sub">

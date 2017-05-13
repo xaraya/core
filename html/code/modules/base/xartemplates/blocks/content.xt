@@ -15,6 +15,13 @@
         </div>
     </xar:if>
     <!--
+        Content type is Blocklayout.
+        Display the content as-is - we assume it is entered by an admin and so can be trusted.
+    -->
+    <xar:if condition="$content_type eq 'bl' and $custom_format eq ''">
+        <div>#$content_text#</div>
+    </xar:if>
+    <!--
         Content type is html.
         Display the content as-is - we assume it is entered by an admin and so can be trusted.
     -->

@@ -3,11 +3,11 @@
  * Categories Module
  *
  * @package modules\categories
+ * @subpackage categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/147.html
  *
  * @author Marc Lutolf <mfl@netspan.ch>
@@ -30,6 +30,7 @@ sys::import('modules.categories.xarproperties.categorytree');
  *
  * Note: a base category -1 means show all the categories in a dropdown
  *
+ * The configuration of this property is handled by a categorypicker property
  */
 class CategoriesProperty extends DataProperty
 {
@@ -43,7 +44,7 @@ class CategoriesProperty extends DataProperty
 
     public $validation_single               = false;
     public $validation_allowempty           = false;
-    public $validation_single_invalid; // CHECKME: is this a validation or something else?
+    public $validation_single_invalid;              // CHECKME: is this a validation or something else?
     public $validation_allowempty_invalid;
     public $initialization_include_no_cat   = 0;
     public $initialization_include_all_cats = 0;
@@ -116,7 +117,7 @@ class CategoriesProperty extends DataProperty
                     $validcat = xarMod::apiFunc('categories','user','getcatinfo',array('cid' => $category));
                     if (!$validcat) {
                         $this->invalid = xarML("The category #(1) is not valid", $category);
-                        xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                        xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                         $this->value = null;
                         return false;
                     }
@@ -138,6 +139,12 @@ class CategoriesProperty extends DataProperty
         
         // We passed the checks, set the categories, making sure we have integers
         // There can be several basecategories, and each can have several categories
+        // The form of the resulting array is
+        // $this->categories = array(
+        //                      [<category_id>_<basecategory_id>] => <category_id>,
+        //                      ...
+        //                     )
+        
         $this->categories = array();
         foreach ($value as $baseid => $categories) {
             foreach ($categories as $category) {
@@ -147,7 +154,7 @@ class CategoriesProperty extends DataProperty
         }
 
         // Keep a reference of the data of this property in $this->value, for saving or easy manipulation
-        $this->value = $this->categories;
+        $this->value =& $this->categories;
         return true;
     }
 
@@ -276,10 +283,23 @@ class CategoriesProperty extends DataProperty
         if (isset($data['itemid'])) $itemid = (int)$data['itemid'];
 
         // Retrieve the configuration settings for this property
-        if (!empty($this->configuration)) {
+        // The default value (parent property) is a:0{}
+        // We allow passing both an array or a serialized array
+        if (!is_array($this->configuration)) {
             try {
                 $configuration = unserialize($this->configuration);
-                $configuration = $configuration['initialization_basecategories'];
+            } catch(Exception $e) {
+                $configuration = array();
+            }
+        } else {
+            $configuration = $this->configuration;
+        }
+
+        if (!empty($configuration)) {
+            try {
+                // CHECKME: can we remove this excess level?
+                if (isset($configuration['initialization_basecategories'])) 
+                    $configuration = $configuration['initialization_basecategories'];
                 $data['tree_name']    = array();
                 $base_categories      = array();
                 $data['include_self'] = array();
@@ -332,6 +352,7 @@ class CategoriesProperty extends DataProperty
             $data['trees'][$key] = $nodes;
         }
 
+        // Now lets turn to the value
         if (!empty($this->source)) {
             // This property has a source other than "None". 
             // In this scenario we are storing a value in the source
@@ -515,14 +536,36 @@ class CategoriesProperty extends DataProperty
         $q->leftjoin($primary_source, $tableprefix . 'linkage.item_id');
         $q->addTable($tables['categories'], $tableprefix . 'categories');
         $q->leftjoin($tableprefix . 'categories.id', $tableprefix . 'linkage.category_id');
+        
         // A zero means "all"
         // Itemtype & module ID = 0 means the objects listing
-        if (!empty($this->module_id) && !empty($this->itemtype)) $q->eq($tableprefix . 'linkage.module_id', $this->module_id);
-        if (!empty($this->itemtype)) $q->eq($tableprefix . 'linkage.itemtype', $this->itemtype);
-        if (!empty($this->property)) $q->eq('linkage.property_id', $this->property);
+        // We want each of the following three conditions to hold, or not exist
+        if (!empty($this->module_id) && !empty($this->itemtype)) {
+            $a = array();
+            $a[] = $q->peq($tableprefix . 'linkage.module_id', $this->module_id);
+            $a[] = $q->peq($tableprefix . 'linkage.module_id', 'NULL');
+            $q->qor($a);
+        }
+        if (!empty($this->itemtype)) {
+            $a[] = $q->peq($tableprefix . 'linkage.itemtype', $this->itemtype);
+            $a[] = $q->peq($tableprefix . 'linkage.itemtype', 'NULL');
+            $q->qor($a);
+        }
+        if (!empty($this->property)) {
+            $a[] = $q->peq($tableprefix . 'linkage.property_id', $this->property);
+            $a[] = $q->peq($tableprefix . 'linkage.property_id', 'NULL');
+            $q->qor($a);
+        }
         
         // Set the source of this property
         $this->source = $tableprefix . 'categories.name';
+       
+        // Align the display status of this property with that of the name property in he categories object
+        // In other words, we can make this field be displayed or not depending on the display status we give it in the DD UI
+        $categories_object = DataObjectMaster::getObject(array('name' => 'categories'));
+        $display_status = $categories_object->properties['name']->getDisplayStatus();
+        $this->setDisplayStatus($display_status);
+        $this->objectref->setFieldList();
 
         // Debug display
         if (xarModVars::get('dynamicdata','debugmode') && 

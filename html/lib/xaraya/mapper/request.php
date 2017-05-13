@@ -2,7 +2,7 @@
 /**
  * Request class
  *
- * @package core
+ * @package core\controllers
  * @subpackage controllers
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -144,6 +144,11 @@ class xarRequest extends Object
         $this->setFunctionArgs($params);
         // At this point the request has assembled the module or object it belongs to and any query parameters.
         // What is still to be defined by routing are the type (for modules) and function/function arguments or method (for objects).            
+    }
+    
+    function getRawURL()
+    {
+        return $this->url;
     }
     
     /**
@@ -292,7 +297,7 @@ class xarRequest extends Object
     }
 
 /*
- * Checks whether the current reuest is an AJAX request
+ * Checks whether the current request is an AJAX request
  */
     public function isAJAX()
     {
@@ -318,7 +323,7 @@ class xarRequest extends Object
 /*
  * Outputs a message from the AJAX request
  * The message can be in the form of a simple string or an array
- * IN the latter case we use a template to format the message before outputing
+ * In the latter case we use a template to format the message before outputing
  */
     public function msgAjax($msg)
     {

@@ -1,12 +1,11 @@
 <?php
 /**
- * @package modules
- * @subpackage installer module
+ * @package modules\installer\installer
+ * @subpackage installer
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/200.html
  */
 
@@ -123,10 +122,10 @@ function installer_admin_upgrade()
         $success = xarMod::apiFunc('dynamicdata','admin','importpropertytypes');
 
         // Align the db and filesystem version info
-        xarConfigVars::set(null, 'System.Core.VersionId', xarCore::VERSION_ID);
+        xarConfigVars::set(null, 'System.Core.VersionId',  xarCore::VERSION_ID);
         xarConfigVars::set(null, 'System.Core.VersionNum', xarCore::VERSION_NUM);
-        xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::VERSION_REV);
         xarConfigVars::set(null, 'System.Core.VersionSub', xarCore::VERSION_SUB);
+        xarConfigVars::set(null, 'System.Core.VersionRev', xarCore::$build);
         
         sys::import('xaraya.version');
         // Get the list of version checks

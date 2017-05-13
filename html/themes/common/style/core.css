@@ -39,6 +39,16 @@ form related styling
     min-width: 110px;
     max-width: 10%;
     }
+.xar-col-expanded {
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+    }
+.xar-row .xar-col-expanded {
+    min-width: 700px;
+    max-width: 90%;
+    }
+/*
 text related styling
 -------------------------------------------------------------------------[comment] */
 .xar-note {

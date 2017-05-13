@@ -2,13 +2,13 @@
 /**
  * Main entry point for the admin interface of this module
  *
- * @package modules
- * @subpackage themes module
+ * @package modules\themes
+ * @subpackage themes
+ * @copyright see the html/credits.html file in this release
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/70.html
  */
 /**
@@ -25,7 +25,7 @@
 function themes_admin_main()
 {
     // Security
-    if(!xarSecurityCheck('ViewThemes')) return;
+    if(!xarSecurityCheck('EditThemes')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();

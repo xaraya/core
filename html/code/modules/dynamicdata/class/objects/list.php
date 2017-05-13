@@ -4,13 +4,12 @@
  * Note : for performance reasons, we won't use an array of objects here,
  *        but a single object with an array of item values
  *
- * @package modules
- * @subpackage dynamicdata module
+ * @package modules\dynamicdata
+ * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/182.html
  *
  **/
@@ -30,7 +29,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     public $count    = 0;              // Specify if you want DD to count items before getting them (e.g. for the pager)
 
     public $items = array();           // The result array of itemid => (property name => value)
-    public $itemcount = null;          // The number of items given by countItems()
+    public $itemcount = 0;             // The number of items given by countItems()
 
     public $fieldsummary = null;       // Do we show a summary for numeric fields (sum, min, max, avg, ...) ?
     public $fieldsummarylabel = null;  // What label should we use in the options for this summary ?
@@ -61,19 +60,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // Get a reference to each property's value
         $this->configuration['items'] =& $this->items;
-        
+
         // Run the preList methods of some properties, if called for
-        if ($this->prelist) {
-            foreach ($this->getFieldList() as $fieldname) {
-                // Only properties that are configured to display in lists
-                $display_status = $this->properties[$fieldname]->getDisplayStatus();
-                if (!in_array($display_status, array(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,
-                                                     DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY,
-                                                     DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)))
-                continue;
-                $this->properties[$fieldname]->preList();
-            }
-        }
+        // By convention we run this when instantiating, rather than in one of the methods
+        if ($this->prelist) $this->runPreList();
     }
 
     /**
@@ -929,6 +919,21 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         $itemid = $this->datastore->getNext($args);
         return $itemid;
+    }
+
+    private function runPreList()
+    {
+        // Run the preList methods of some properties
+        $i = 0;
+        foreach ($this->getFieldList() as $fieldname) {
+            // Only properties that are configured to display in lists
+            $display_status = $this->properties[$fieldname]->getDisplayStatus();
+            if (!in_array($display_status, array(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,
+                                                 DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY,
+                                                 DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)))
+            continue;
+            $this->properties[$fieldname]->preList();
+        }
     }
 }
 ?>

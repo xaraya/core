@@ -9,6 +9,17 @@
     <xar:if condition="isset($label)">
         <xar:set name="value">$label</xar:set>
     </xar:if>
+    <xar:if condition="!isset($id)">
+        <xar:if condition="isset($name)">
+            <xar:set name="id">$name</xar:set>
+        <xar:else/>
+            <xar:if condition="isset($label)">
+                <xar:set name="id">$label</xar:set>
+            <xar:else/>
+                <xar:set name="id">''</xar:set>
+            </xar:if>
+        </xar:if>
+    </xar:if>
     <xar:if condition="!isset($value)">
         <xar:set name="value">''</xar:set>
     </xar:if>
@@ -32,38 +43,33 @@
         <xar:set name="onclick">$submittotarget</xar:set>
     </xar:if>
     
-    <xar:set name="http_user_agent">strtolower($_SERVER['HTTP_USER_AGENT'])</xar:set>
-    	<xar:if condition="strpos($http_user_agent, 'trident') !== false OR strpos($http_user_agent, 'msie') !== false">
-        	<xar:set name="iebrowser">true</xar:set>
-    	</xar:if>
-    
     <xar:if condition="$type eq 'submit' or $type eq 'reset' or $type eq 'button'">
         <xar:if condition="isset($src)">
             <xar:if condition="isset($disabled)">
                 <xar:if condition="isset($title)">
-                    <input type="image" name="#$name#" value="#$value#" style="#$style#" class="#$class#" src="#$src#" onclick="#$onclick#" title="#$title#" disabled="#$disabled#"/>
+                    <input type="image" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" src="#$src#" onclick="#$onclick#" title="#$title#" disabled="#$disabled#"/>
                 <xar:else />
-                    <input type="image" name="#$name#" value="#$value#" style="#$style#" class="#$class#" src="#$src#" onclick="#$onclick#" disabled="#$disabled#"/>
+                    <input type="image" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" src="#$src#" onclick="#$onclick#" disabled="#$disabled#"/>
                 </xar:if>
             <xar:else />
                 <xar:if condition="isset($title)">
-                    <input type="image" name="#$name#" value="#$value#" style="#$style#" class="#$class#" src="#$src#" onclick="#$onclick#" title="#$title#"/>
+                    <input type="image" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" src="#$src#" onclick="#$onclick#" title="#$title#"/>
                 <xar:else />
-                    <input type="image" name="#$name#" value="#$value#" style="#$style#" class="#$class#" src="#$src#" onclick="#$onclick#"/>
+                    <input type="image" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" src="#$src#" onclick="#$onclick#"/>
                 </xar:if>
             </xar:if>
         <xar:else />
             <xar:if condition="isset($disabled)">
                 <xar:if condition="isset($title)">
-                    <input type="#$type#" name="#$name#" value="#$value#" style="#$style#" class="#$class#" onclick="#$onclick#" title="#$title#" disabled="#$disabled#"/>
+                    <input type="#$type#" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" onclick="#$onclick#" title="#$title#" disabled="#$disabled#"/>
                 <xar:else />
-                    <input type="#$type#" name="#$name#" value="#$value#" style="#$style#" class="#$class#" onclick="#$onclick#" disabled="#$disabled#"/>
+                    <input type="#$type#" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" onclick="#$onclick#" disabled="#$disabled#"/>
                 </xar:if>
             <xar:else />
                 <xar:if condition="isset($title)">
-                    <input type="#$type#" name="#$name#" value="#$value#" style="#$style#" class="#$class#" onclick="#$onclick#" title="#$title#"/>
+                    <input type="#$type#" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" onclick="#$onclick#" title="#$title#"/>
                 <xar:else />
-                    <input type="#$type#" name="#$name#" value="#$value#" style="#$style#" class="#$class#" onclick="#$onclick#"/>
+                    <input type="#$type#" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" onclick="#$onclick#"/>
                 </xar:if>
             </xar:if>
         </xar:if>
@@ -82,55 +88,47 @@
         </xar:if>
         <xar:if condition="isset($disabled)">
             <xar:if condition="isset($title)">
-                <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" onclick="#$target#" title="#$title#" disabled="#$disabled#"/>
+                <input type="button" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" onclick="#$target#" title="#$title#" disabled="#$disabled#"/>
             <xar:else />
-                <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" onclick="#$target#" disabled="#$disabled#"/>
+                <input type="button" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" onclick="#$target#" disabled="#$disabled#"/>
             </xar:if>
         <xar:else />
             <xar:if condition="isset($title)">
-                <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" onclick="#$target#" title="#$title#"/>
+                <input type="button" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" onclick="#$target#" title="#$title#"/>
             <xar:else />
-                <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" onclick="#$target#"/>
+                <input type="button" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" onclick="#$target#"/>
             </xar:if>
         </xar:if>
     <xar:elseif condition="$type eq 'link'"/>
         <xar:if condition="isset($disabled)">
             <xar:if condition="isset($title)">
-                <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" title="#$title#" disabled="#$disabled#"/>
+                <input type="button" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" title="#$title#" disabled="#$disabled#"/>
             <xar:else />
-                <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" disabled="#$disabled#"/>
+                <input type="button" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" disabled="#$disabled#"/>
             </xar:if>
         <xar:else />
             <xar:if condition="empty($target)">
                 <xar:if condition="isset($title)">
-                    <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" title="#$title#"/>
+                    <input type="button" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" title="#$title#"/>
                 <xar:else />
-                    <input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#"/>
+                    <input type="button" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#"/>
                 </xar:if>
             <xar:else/>
                 <!-- Resolve variables -->
                 <xar:if condition="substr($target, 0,1) eq '$'">
                     <xar:set name="target">$$target</xar:set>
                 </xar:if>
-				<xar:if condition="isset($iebrowser)">
-					<xar:set name="onclick">"javascript:location.href = '".$target."'"</xar:set>
-					<xar:if condition="isset($title)">
-						<input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" title="#$title#" onclick="#$onclick#" />
-					<xar:else />
-						<input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" onclick="#$onclick#"/>
-					</xar:if>                
-				<xar:else />
-                    <xar:if condition="!isset($window)">
-                        <xar:set name="window">"_self"</xar:set>
-                    </xar:if>
-					<a href="#$target#" target="#$window#">
-						<xar:if condition="isset($title)">
-							<input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#" title="#$title#"/>
-						<xar:else />
-							<input type="button" name="#$name#" value="#$value#" style="#$style#" class="#$class#"/>
-						</xar:if>
-					</a>
-				</xar:if>
+                <xar:if condition="!isset($window)">
+                    <xar:set name="window">"_self"</xar:set>
+					<xar:set name="onclick">"location.href = '".$target."'"</xar:set>
+                <xar:else/>
+					<xar:set name="onclick">"window.open('".$target."','".$window."')"</xar:set>
+                </xar:if>
+                <xar:if condition="isset($title)">
+                    <input type="button" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" title="#$title#" onclick="#$onclick#"/>
+                <xar:else />
+                    <input type="button" name="#$name#" id="#$id#" value="#$value#" style="#$style#" class="#$class#" onclick="#$onclick#"/>
+                </xar:if>
 	       </xar:if>
         </xar:if>
     </xar:if>

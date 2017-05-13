@@ -7,7 +7,6 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  */
 /**
@@ -27,7 +26,7 @@ function base_admin_upgrade()
     // Security
     if(!xarSecurityCheck('AdminBase')) return;
     
-    $fileversion = XARCORE_VERSION_NUM;
+    $fileversion = xarCore::VERSION_NUM;
     $dbversion = xarConfigVars::get(null, 'System.Core.VersionNum');
     sys::import('xaraya.version');
     $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);

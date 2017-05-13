@@ -1,18 +1,17 @@
 <?php
+/* Include the base class */
+sys::import('modules.base.xarproperties.textbox');
+
 /**
- * @package modules
- * @subpackage roles module
+ * The PasswordBox property displays is a wrapper for a HTML input of type password
+ *
+ * @package modules\roles
+ * @subpackage roles
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/27.html
- */
-
-sys::import('modules.base.xarproperties.textbox');
-/**
- * Handle Passwordbox property
  * @author mikespub <mikespub@xaraya.com>
  */
 class PassBoxProperty extends TextBoxProperty
@@ -67,7 +66,7 @@ class PassBoxProperty extends TextBoxProperty
                 } else {
                     $this->invalid = xarML('Passwords did not match');
                 }
-                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                 $this->value = null;
                 return false;
             }

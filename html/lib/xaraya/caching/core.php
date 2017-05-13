@@ -2,7 +2,7 @@
 /**
  * Xaraya Core Cache
  *
- * @package core
+ * @package core\caching
  * @subpackage caching
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -164,11 +164,10 @@ class xarCoreCache extends Object
     }
 
 /**
- * CHECKME: work with bulk load / bulk save per scope instead of individual gets per scope:name ?
- *          But what about concurrent updates in bulk then (+ unserialize & autoload too early) ?
- *          There doesn't seem to be a big difference in performance using bulk or not, at least with xcache
- */
-
+ * CHECKME: work with bulk load per scope instead of individual gets per scope:name ?
+ *          But what about concurrent updates in bulk then (+ unserialize & autoload too early) ?<br/>
+ *          Get the list of scopes and load each scope from second-level cache. There doesn't seem to be a big difference in performance using bulk or not, at least with xcache
+*/
     public static function loadBulkStorage()
     {
         if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) return;
@@ -184,7 +183,11 @@ class xarCoreCache extends Object
             }
         }
     }
-
+/**
+ * CHECKME: work with bulk save per scope instead of individual gets per scope:name ?<br/>
+ *          But what about concurrent updates in bulk then (+ unserialize & autosave too early) ?<br/>
+ *          It gets the list of scopes and save each scope to second-level cache  
+ */
     public static function saveBulkStorage()
     {
         if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) return;

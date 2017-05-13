@@ -1,12 +1,11 @@
 <?php
 /**
- * @package modules
- * @subpackage dynamicdata module
+ * @package modules\dynamicdata
+ * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/182.html
  *
  * @author mikespub <mikespub@xaraya.com>
@@ -103,6 +102,13 @@ function dynamicdata_admin_export(Array $args=array())
                                                 'moduleid' => $moduleid,
                                                 'itemtype' => $itemtype,
                                                 'prelist' => false));     // don't run preList method
+        
+        // Export all properties that are not disabled
+        foreach ($mylist->properties as $name => $property) {
+            $status = $property->getDisplayStatus();
+            if ($status == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) continue;
+            $mylist->properties[$name]->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE);
+        }
         $mylist->getItems(array('getvirtuals' => 1));
 
         if (empty($tofile)) {

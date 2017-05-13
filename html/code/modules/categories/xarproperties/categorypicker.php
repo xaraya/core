@@ -3,11 +3,11 @@
  * Categories Module
  *
  * @package modules\categories
+ * @subpackage categories
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/147.html
  *
  * @author Marc Lutolf <mfl@netspan.ch>
@@ -23,6 +23,9 @@
 */
 sys::import('modules.base.xarproperties.array');
 
+/**
+ * This property displays a configuration widget for a categories dropdown
+ */
 class CategoryPickerProperty extends ArrayProperty
 {
     public $id         = 30050;
@@ -32,7 +35,7 @@ class CategoryPickerProperty extends ArrayProperty
     
     public $display_column_definition = array(
                                 array("Tree Name",2,"New Tree",""),
-                                array("Base Category",100,0,'a:3:{s:29:"initialization_include_no_cat";i:0;s:31:"initialization_include_all_cats";i:1;s:29:"initialization_basecategories";a:1:{i:0;a:4:{i:0;s:15:"Picker Dropdown";i:1;i:1;i:2;b:1;i:3;i:1;}}}',),
+                                array("Root Branch",100,0,'a:3:{s:29:"initialization_include_no_cat";i:0;s:31:"initialization_include_all_cats";i:1;s:29:"initialization_basecategories";a:1:{i:0;a:4:{i:0;s:15:"Picker Dropdown";i:1;i:1;i:2;b:1;i:3;i:1;}}}',),
                                 array("Include Self",14,1,""),
                                 array("Select Type",6,0,'a:3:{s:12:"display_rows";s:1:"0";s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:62:"1,Single Dropdown;2,Multiple - One Box;3,Multiple - Two Boxes;";}')
                                 );

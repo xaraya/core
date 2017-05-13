@@ -32,14 +32,14 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            #xarCore::VERSION_ID# version #XARCORE_VERSION_NUM# (#xarCore::VERSION_SUB#)
+                            #xarCore::VERSION_ID# version #xarCore::VERSION_NUM# (#xarCore::VERSION_SUB#)
                         </div>
                     </div>
                     <div class="xar-row">
                         <div class="xar-col">
                             <xar:var name="label">Current Build</xar:var>
                             <label title="#$label#" class="xar-form-label">                            
-                                Build:                            
+                                Git revision:                            
                             </label>
                         </div>
                         <div class="xar-col">
@@ -569,7 +569,7 @@
                             <legend>
                                 View Log
                             </legend>
-                            <xar:data-input type="textarea" cols="120" rows="50" name="logfile" value="$log_data"/>
+                            <xar:data-input type="textarea" style="width: 95%; height: 1000px" name="logfile" value="$log_data"/>
                         </fieldset>
                         <div class="xar-row">
                             <div class="xar-col">

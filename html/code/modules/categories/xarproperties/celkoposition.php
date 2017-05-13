@@ -2,19 +2,30 @@
 /**
  * CelkoPosition Property
  *
- * @package properties\celkoposition
- * @category Third Party Xaraya Property
- * @version 1.0.0
- * @copyright (C) 2011 Netspan AG
+ * @package modules\categories
+ * @subpackage categories
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/147.html
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 sys::import('modules.dynamicdata.class.properties.base');
 
 /**
- * Handle the CelkoPosition property
+ * The CelkoPosition property
  *
  * Show the position of an item in a tree of nested sets
+ * The celko position of an item in a hierarchical structure is given by its position relative to another item.
+ * Allowed positions are:
+ * - before a given item on the same level
+ * - after a given item on the same level
+ * - first child of a given item
+ * - last child of a given item
+ *
+ * The input for this property shows a drodown of available categories, and a second dropdown with the values above
+ * This code is used for categories, but it can (and is) used for any hierarchy of nested sets.
  *
  * Notes
  *
@@ -105,6 +116,10 @@ class CelkoPositionProperty extends DataProperty
                 break;
             case 4: // first child item
                 $this->rightorleft = 'left';
+                $this->inorout = 'in';
+                break;
+            default: // any other value
+                $this->rightorleft = 'right';
                 $this->inorout = 'in';
                 break;
         }

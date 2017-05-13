@@ -2,13 +2,12 @@
 /**
  * Main entry point for the admin interface of this module
  *
- * @package modules
- * @subpackage mail module
+ * @package modules\mail
+ * @subpackage mail
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/771.html
  */
 
@@ -27,7 +26,7 @@
 function mail_admin_main()
 {
     // Security
-    if (!xarSecurityCheck('ViewMail')) return;
+    if (!xarSecurityCheck('EditMail')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();

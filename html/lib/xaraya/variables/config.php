@@ -2,7 +2,7 @@
 /**
  * Configuration variable handling
  *
- * @package core
+ * @package core\variables
  * @subpackage variables
  * @category Xaraya Web Applications Framework
  * @version 2.4.0

@@ -1,18 +1,21 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.dropdown');
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
 */
-sys::import('modules.base.xarproperties.dropdown');
+
 /**
- * Handle the numberlist property
+ * This property displays a dropdown containing a list of integers
  */
 class NumberListProperty extends SelectProperty
 {
@@ -42,6 +45,11 @@ class NumberListProperty extends SelectProperty
             }
         }
     }
+	/**
+ * Validate the value of a input
+ *  
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
 
     public function validateValue($value = null)
     {
@@ -59,7 +67,7 @@ class NumberListProperty extends SelectProperty
             $this->value = intval($value);
         } else {
             $this->invalid = xarML('integer: #(1)', $this->name);
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         }
@@ -67,7 +75,7 @@ class NumberListProperty extends SelectProperty
             if ( (isset($this->min) && $this->value < $this->min) ||
                  (isset($this->max) && $this->value > $this->max) ) {
                 $this->invalid = xarML('integer in range');
-                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                 $this->value = null;
                 return false;
             }
@@ -78,12 +86,12 @@ class NumberListProperty extends SelectProperty
                 }
             }
             $this->invalid = xarML('integer in selection');
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         } else {
             $this->invalid = xarML('integer selection');
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         }

@@ -1,21 +1,19 @@
 <?php
-/**
- * @package modules
- * @subpackage roles module
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- * @link http://xaraya.info/index.php/release/27.html
- */
-
 /* Include the base class */
 sys::import('modules.base.xarproperties.textbox');
 
 /**
- * Handle ICQ property
+ * The ICQ property is a basic wrapper for ICQ messaging functionality
+ *
+ * @package modules\roles
+ * @subpackage roles
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/27.html
  * @author mikespub <mikespub@xaraya.com>
+ * @todo: Remove?
  */
 class ICQProperty extends TextBoxProperty
 {
@@ -45,7 +43,7 @@ class ICQProperty extends TextBoxProperty
             if (is_numeric($value)) {
             } else {
                 $this->invalid = xarML('ICQ Number: #(1)', $this->name);
-                xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+                xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
                 $this->value = null;
                 return false;
             }

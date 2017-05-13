@@ -2,7 +2,7 @@
 /**
  * Multi Language System
  *
- * @package core
+ * @package core\multilanguage
  * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -23,105 +23,359 @@
  * @todo See how utf-8 works for xml backend
  */
 
-/**
- * Multilange package defines
- */
-define('XARMLS_SINGLE_LANGUAGE_MODE', 'SINGLE');
-define('XARMLS_BOXED_MULTI_LANGUAGE_MODE', 'BOXED');
-define('XARMLS_UNBOXED_MULTI_LANGUAGE_MODE', 'UNBOXED');
-
-
-define('XARMLS_DNTYPE_CORE', 1);
-define('XARMLS_DNTYPE_THEME', 2);
-define('XARMLS_DNTYPE_MODULE', 3);
-define('XARMLS_DNTYPE_PROPERTY', 4);
-define('XARMLS_DNTYPE_BLOCK', 5);
-
 sys::import('xaraya.locales');
 sys::import('xaraya.transforms.xarCharset');
 sys::import('xaraya.mlsbackends.reference');
 
 // Legacy calls
 
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLSGetMode()
 {   
     return xarMLS::getMode(); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLSGetSiteLocale()
 {   
     return xarMLS::getSiteLocale(); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLSListSiteLocales()
 {   
     return xarMLS::listSiteLocales(); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLSGetCurrentLocale()
 {   
     return xarMLS::getCurrentLocale(); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLSGetCharsetFromLocale($locale)
 {   
     return xarMLS::getCharsetFromLocale($locale); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarML($rawstring/*, ...*/)
 {
     return call_user_func_array(array('xarMLS', 'translate'), func_get_args());
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLByKey($key/*, ...*/)
 {   
     return call_user_func_array(array('xarMLS', 'translateByKey'), func_get_args());
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarLocaleGetInfo($locale)
 {   
     return xarMLS::localeGetInfo($locale); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarLocaleGetString($localeInfo)
 {   
     return xarMLS::localeGetString($localeInfo); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarLocaleGetList($filter=array())
 {   
     return xarMLS::localeGetList($filter); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLS_userTime($time=null,$flag=1)
 {   
     return xarMLS::userTime($time,$flag); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLS_userOffset($timestamp = null)
 {   
     return xarMLS::userOffset($timestamp); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLS_setCurrentLocale($locale)
 {   
     return xarMLS::setCurrentLocale($locale); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
 {   
     return xarMLS::_loadTranslations($dnType, $dnName, $ctxType, $ctxName); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLSLoadTranslations($path)
 {   
     return xarMLS::loadTranslations($path); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLS_convertFromInput($var, $method)
 {   
     return xarMLS::convertFromInput($var, $method); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLS__parseLocaleString($locale)
 {   
     return xarMLS::parseLocaleString($locale); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLS__mkdirr($path)
 {   
     return xarMLS::mkdirr($path); 
 }
+
+/**
+ * Legacy call
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 function xarMLS__iswritable($directory=NULL)
 {   
     return xarMLS::iswritable($directory=NULL); 
 }
 
+
+/**
+ * Multilanguage System Class
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
 class xarMLS extends Object
 {
+    const SINGLE_LANGUAGE_MODE          = 'SINGLE';
+    const BOXED_MULTI_LANGUAGE_MODE     = 'BOXED';
+    const UNBOXED_MULTI_LANGUAGE_MODE   = 'UNBOXED';
+    const DNTYPE_CORE       = 1;
+    const DNTYPE_THEME      = 2;
+    const DNTYPE_MODULE     = 3;
+    const DNTYPE_PROPERTY   = 4;
+    const DNTYPE_BLOCK      = 5;
+
     /**
      * Initializes the Multi Language System
      *
@@ -131,11 +385,11 @@ class xarMLS extends Object
     static public function init(&$args)
     {
         switch ($args['MLSMode']) {
-        case XARMLS_SINGLE_LANGUAGE_MODE:
-        case XARMLS_BOXED_MULTI_LANGUAGE_MODE:
+        case xarMLS::SINGLE_LANGUAGE_MODE:
+        case xarMLS::BOXED_MULTI_LANGUAGE_MODE:
             $GLOBALS['xarMLS_mode'] = $args['MLSMode'];
             break;
-        case XARMLS_UNBOXED_MULTI_LANGUAGE_MODE:
+        case xarMLS::UNBOXED_MULTI_LANGUAGE_MODE:
             $GLOBALS['xarMLS_mode'] = $args['MLSMode'];
             if (!function_exists('mb_http_input')) {
                 // mbstring required
@@ -214,7 +468,7 @@ class xarMLS extends Object
     static public function listSiteLocales()
     {
         $mode = self::getMode();
-        if ($mode == XARMLS_SINGLE_LANGUAGE_MODE) {
+        if ($mode == xarMLS::SINGLE_LANGUAGE_MODE) {
             return array($GLOBALS['xarMLS_defaultLocale']);
         } else {
             return $GLOBALS['xarMLS_allowedLocales'];
@@ -451,11 +705,11 @@ class xarMLS extends Object
     
         $mode = self::getMode();
         switch ($mode) {
-        case XARMLS_SINGLE_LANGUAGE_MODE:
+        case xarMLS::SINGLE_LANGUAGE_MODE:
                 $locale  = self::getSiteLocale();
                 break;
-        case XARMLS_UNBOXED_MULTI_LANGUAGE_MODE:
-        case XARMLS_BOXED_MULTI_LANGUAGE_MODE:
+        case xarMLS::UNBOXED_MULTI_LANGUAGE_MODE:
+        case xarMLS::BOXED_MULTI_LANGUAGE_MODE:
             // check for locale availability
             $siteLocales = self::listSiteLocales();
             if (!in_array($locale, $siteLocales)) {
@@ -468,19 +722,19 @@ class xarMLS extends Object
         $GLOBALS['xarMLS_currentLocale'] = $locale;
     
         $curCharset = self::getCharsetFromLocale($locale);
-        if ($mode == XARMLS_UNBOXED_MULTI_LANGUAGE_MODE) {
+        if ($mode == xarMLS::UNBOXED_MULTI_LANGUAGE_MODE) {
             assert('$curCharset == "utf-8"; // Resetting MLS Mode to BOXED');
             // To be able to continue, we set the mode to BOXED
             if ($curCharset != "utf-8") {
                 xarLog::message("Resetting MLS mode to BOXED");
                 xarConfigVars::set(null, 'Site.MLS.MLSMode','BOXED');
             } else {
-                if (!xarFuncIsDisabled('ini_set')) ini_set('mbstring.func_overload', 7);
+                if (!xarCore::funcIsDisabled('ini_set')) ini_set('mbstring.func_overload', 7);
                 mb_internal_encoding($curCharset);
             }
         }
     
-        //if ($mode == XARMLS_BOXED_MULTI_LANGUAGE_MODE) {
+        //if ($mode == xarMLS::BOXED_MULTI_LANGUAGE_MODE) {
         //if (substr($curCharset, 0, 9) != 'iso-8859-' &&
         //$curCharset != 'windows-1251') {
         // Do not use mbstring for single byte charsets
@@ -505,7 +759,7 @@ class xarMLS extends Object
         }
 
         // Load core translations
-        self::_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
+        self::_loadTranslations(xarMLS::DNTYPE_CORE, 'xaraya', 'core:', 'core');
         //self::loadLocaleData($locale);
     }
 
@@ -535,13 +789,13 @@ class xarMLS extends Object
         }
     
         if ($GLOBALS['xarMLS_backend']->bindDomain($dnType, $dnName)) {
-            if ($dnType == XARMLS_DNTYPE_THEME) {
+            if ($dnType == xarMLS::DNTYPE_THEME) {
                 // Load common translations
                 if (!isset($loadedCommons[$dnName.'theme'])) {
                     $loadedCommons[$dnName.'theme'] = true;
                     if (!$GLOBALS['xarMLS_backend']->loadContext('themes:', 'common')) return;
                 }
-            } elseif ($dnType == XARMLS_DNTYPE_MODULE) {
+            } elseif ($dnType == xarMLS::DNTYPE_MODULE) {
                 // Handle in a special way the module type
                 // for which it's necessary to load common translations
                 if (!isset($loadedCommons[$dnName.'module'])) {
@@ -549,13 +803,13 @@ class xarMLS extends Object
                     if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'common')) return;
                     if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return;
                 }
-            } elseif ($dnType == XARMLS_DNTYPE_PROPERTY) {
+            } elseif ($dnType == xarMLS::DNTYPE_PROPERTY) {
                 // Load common translations
                 if (!isset($loadedCommons[$dnName.'property'])) {
                     $loadedCommons[$dnName.'property'] = true;
                     if (!$GLOBALS['xarMLS_backend']->loadContext('properties:', 'common')) return;
                 }
-            } elseif ($dnType == XARMLS_DNTYPE_BLOCK) {
+            } elseif ($dnType == xarMLS::DNTYPE_BLOCK) {
                 // Load common translations
                 if (!isset($loadedCommons[$dnName.'block'])) {
                     $loadedCommons[$dnName.'block'] = true;
@@ -591,14 +845,14 @@ class xarMLS extends Object
     static public function loadTranslations($path)
     {
         if(!file_exists($path)) {
-            xarLog::message("MLS: Trying to load translations for a non-existing path ($path)",XARLOG_LEVEL_WARNING);
+            xarLog::message("MLS: Trying to load translations for a non-existing path ($path)", xarLog::LEVEL_WARNING);
             //die($path);
             return true;
         }
     
         // If this is a core file, get the translations and bail
         if (strpos($path, sys::lib()) === 0) {
-            $translations = self::_loadTranslations(XARMLS_DNTYPE_CORE, 'xaraya', 'core:', 'core');
+            $translations = self::_loadTranslations(xarMLS::DNTYPE_CORE, 'xaraya', 'core:', 'core');
             return $translations;        
         }
         
@@ -619,19 +873,19 @@ class xarMLS extends Object
     
         $firstelement = array_shift($pathElements);
         if ($firstelement == 'modules') {
-            $dnType = XARMLS_DNTYPE_MODULE;
+            $dnType = xarMLS::DNTYPE_MODULE;
             $possibleOverride = false;
             $ctxType= 'modules';
         } elseif ($firstelement == 'properties') {
-            $dnType = XARMLS_DNTYPE_PROPERTY;
+            $dnType = xarMLS::DNTYPE_PROPERTY;
             $possibleOverride = false;
             $ctxType= 'properties';
         } elseif ($firstelement == 'blocks') {
-            $dnType = XARMLS_DNTYPE_BLOCK;
+            $dnType = xarMLS::DNTYPE_BLOCK;
             $possibleOverride = false;
             $ctxType= 'blocks';
         } else {
-            $dnType = XARMLS_DNTYPE_THEME;
+            $dnType = xarMLS::DNTYPE_THEME;
             $possibleOverride = true;
             $ctxType= 'themes';
         }
@@ -659,7 +913,7 @@ class xarMLS extends Object
         // Ok, based on possible overrides, we load internal only, or interal plus overrides
         $ok = false;
         if($possibleOverride) {
-            $ok= self::_loadTranslations(XARMLS_DNTYPE_MODULE,$dnName,$ctxType,$ctxName);
+            $ok= self::_loadTranslations(xarMLS::DNTYPE_MODULE,$dnName,$ctxType,$ctxName);
         }
         // And load the determined stuff
         // @todo: should we check for success on *both*, where is the exception here? further up the tree?
@@ -670,7 +924,7 @@ class xarMLS extends Object
     static public function convertFromInput($var, $method)
     {
         // FIXME: <marco> Can we trust browsers?
-        if (self::getMode() == XARMLS_SINGLE_LANGUAGE_MODE ||
+        if (self::getMode() == xarMLS::SINGLE_LANGUAGE_MODE ||
             !function_exists('mb_http_input')) {
             return $var;
         }
@@ -689,7 +943,7 @@ class xarMLS extends Object
     static private function xarMLS__convertFromCharset($var, $charset)
     {
         // FIXME: <marco> Can we trust browsers?
-        if (self::getMode() == XARMLS_SINGLE_LANGUAGE_MODE ||
+        if (self::getMode() == xarMLS::SINGLE_LANGUAGE_MODE ||
             !function_exists('mb_convert_encoding')) return $var;
         $curCharset = self::getCharsetFromLocale(self::getCurrentLocale());
         $var = mb_convert_encoding($var, $curCharset, $charset);

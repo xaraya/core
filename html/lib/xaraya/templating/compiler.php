@@ -1,35 +1,38 @@
 <?php
+/* This one exception depends on BL being inside Xaraya, try to correct this later */
+if (!class_exists('xarExceptions')) {
+    sys::import('xaraya.exceptions');
+}
 /**
- * @package core
+ * Exception raised by the templating subsystem
+ *
+ * @package core\templating
  * @subpackage templating
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
- */
-
-/* This one exception depends on BL being inside Xaraya, try to correct this later */
-if (!class_exists('xarExceptions')) {
-    sys::import('xaraya.exceptions');
-}
-/**
- * Exceptions raised by this subsystem
  *
- * @package compiler
- */
+**/
 class BLCompilerException extends xarExceptions
 {
     protected $message = "Cannot open template file '#(1)'";
 }
 
-/**
- * XarayaCompiler - the abstraction of the BL compiler
- *
- * 
- */
 sys::import('blocklayout.compiler');
 
+/**
+ * XarayaCompiler - an extension of the BL compiler
+ *
+ * @package core\templating
+ * @subpackage templating
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.com
+ */
 class XarayaCompiler extends xarBLCompiler
 {    
     private $legacy_compile = true;
@@ -88,7 +91,8 @@ class XarayaCompiler extends xarBLCompiler
     public function compileFile($fileName)
     {
         xarLog::message("BL: compiling $fileName");
-        return parent::compileFile($fileName);
+        $output = parent::compileFile($fileName);
+        return $output;
     }
 
     /**
@@ -112,7 +116,11 @@ class XarayaCompiler extends xarBLCompiler
             $xslProc = $this->getProcessor($xslFile);
         
             // Get the value for the framework tag, which is defined in a modvar
-            $framework = xarModVars::get('themeworks', 'framework');
+            if (method_exists('xarModVars', 'get')) {
+                $framework = xarModVars::get('themeworks', 'framework');
+            } else {
+                $framework = '';
+            }
             // Make sure we have a default value. Remove this line later
             if (empty($framework)) $framework = 'bootstrap';
             // Pass it to the processor
@@ -128,7 +136,7 @@ class XarayaCompiler extends xarBLCompiler
 
     private function getModuleTagPaths()
     {
-        if (function_exists('xarModAPIFunc')) {
+        if (method_exists('xarMod', 'apiFunc')) {
             $activeMods = xarModAPIFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
         } else {
             return array();
@@ -192,7 +200,7 @@ class XarayaCompiler extends xarBLCompiler
 
     private function getBlockTagPaths()
     {
-        if (function_exists('xarModAPIFunc')) {
+        if (method_exists('xarMod', 'apiFunc')) {
             $activeBlocks = xarMod::apiFunc('blocks', 'instances', 'getitems', array('state' => 2));
         } else {
             return array();

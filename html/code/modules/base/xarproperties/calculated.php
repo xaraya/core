@@ -1,19 +1,21 @@
 <?php
+/* Include the parent class  */
+sys::import('modules.base.xarproperties.textbox');
+
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.base.xarproperties.textbox');
+
 
 /**
- * Handle floatbox property
+ * This property displays the result of a calculation
  */
 class CalculatedProperty extends TextBoxProperty
 {
@@ -49,14 +51,24 @@ class CalculatedProperty extends TextBoxProperty
         if (empty($this->calculation)) $this->calculation = $this->initialization_other_rule;
         $this->display_tooltip .= $this->calculation;
     }
-
+/**
+ * Display a textbox for input
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
+ */
     public function showInput(Array $data = array())
     {
         $data['value'] = $this->calculateValue($data);
     // CHECKME: see no input status above
         return parent::showInput($data);
     }
-
+/**
+ * Display a textbox for output
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for output on a web page
+ */
     public function showOutput(Array $args = array())
     {
         // the dummy datastore will use the itemid as value for this property !

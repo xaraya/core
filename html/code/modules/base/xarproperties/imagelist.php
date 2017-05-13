@@ -1,18 +1,21 @@
 <?php
 /**
+ * Include the base class
+ */
+ sys::import('modules.base.xarproperties.filepicker');
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.base.xarproperties.filepicker');
+
 /**
- * Handle the imagelist property
+ * This property displays a dropdown of available image icons
  */
 class ImageListProperty extends FilePickerProperty
 {
@@ -45,7 +48,12 @@ class ImageListProperty extends FilePickerProperty
         // Default selection
         if (!isset($this->initialization_firstline)) $this->initialization_firstline = ',' . xarML('Select Image');
     }
-
+/**
+ * Display the output 
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for output on a web page
+ */	
     public function showOutput(Array $data = array())
     {
         extract($data);

@@ -1,20 +1,24 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.dynamicdata.class.properties.base');
+
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+ 
 /**
- * Handle select property
+ * This property displays a generic dropdown
+ * Its extensions are widely used to display drodpwons of specific data
  */
-sys::import('modules.dynamicdata.class.properties.base');
-
 class SelectProperty extends DataProperty
 {
     public $id         = 6;
@@ -45,7 +49,11 @@ class SelectProperty extends DataProperty
         $this->tplmodule = 'base';
         $this->filepath  = 'modules/base/xarproperties';
     }
-
+/**
+ * Validate the value of a selected dropdown option
+ *
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -77,11 +85,17 @@ class SelectProperty extends DataProperty
         } else {
             $this->invalid = xarML('unallowed selection: #(1) for #(2)', $value, $this->name);
         }
-        xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+        xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
         $this->value = null;
         return false;
     }
-
+/**
+ * Display a Dropdown for input
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
+ */
+	
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
@@ -142,7 +156,12 @@ class SelectProperty extends DataProperty
         if(isset($data['rows'])) $this->display_rows = $data['rows']; 
         return parent::showInput($data);
     }
-
+/**
+ * Display a dropdown for output
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for output on a web page
+ */	
     public function showOutput(Array $data = array())
     {
         if (isset($data['option_link'])) $this->display_option_link = $data['option_link'];

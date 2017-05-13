@@ -1,13 +1,12 @@
 <?php
 /**
  * Return relationship information
- * @package modules
- * @subpackage dynamicdata module
+ * @package modules\dynamicdata
+ * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/182.html
  *
  * @author mikespub <mikespub@xaraya.com>
@@ -207,7 +206,7 @@ function dynamicdata_admin_relations(Array $args=array())
                         }
                     } catch (Exception $e) {
                         // check for allow url fopen if curl returned an error
-                        if (!xarFuncIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
+                        if (!xarCore::funcIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
                         if (!ini_get('allow_url_fopen')) {
                             throw new ConfigurationException(array('allow_url_fopen', 'cURL'),
                                 'PHP is not currently configured to allow URL retrieval of remote files. You must either enable #(1) in php.ini (not recommended) or install the #(2) module for your server, if available.');

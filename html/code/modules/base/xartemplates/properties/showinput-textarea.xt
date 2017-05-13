@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <!-- Commenting out this stuff for themoment. Seems to lead to confusion more than anything else
+    <!-- Commenting out this stuff for the moment. Seems to lead to confusion more than anything else
     <xar:if condition="!empty($class)">
     <xar:elseif condition="empty($rows)"/>
         <xar:set name="class">'xar-form-textareamedium'</xar:set>
@@ -24,7 +24,7 @@
         core (common) css + embedded styles on their page templates via xar:place-css tag
 
         NOTE 1: a row (height) is measured as 1.6em (a usual line height in typography)
-        but a column (width) is 1 em - roughly 1 charachter m wide
+        but a column (width) is 1 em - roughly 1 character m wide
 
         NOTE 2: every embedded style is being defined against the element's ID (which must
         be unique page-wide for the system to work, though it's outside of scope of this fix )
@@ -38,14 +38,42 @@
         I'm hesitant to pass along ie-only workarounds at this moment, so be aware of this! (andyv)
     -->
 
-    <xar:set name="textareasource">'
-    textarea#'.$id.' {
-        max-width: 99%;
-        width: '. $cols.'em;
-        height: '. ($rows * 1.6) .'em;
-    }
-    '</xar:set>
-    <xar:style method="embed" source="'.$textareasource.'" media="all"/>
-    <textarea name="#$name#" rows="#$rows#" cols="#$cols#" id="#$id#" tabindex="#$tabindex#" class="#$class#">#$value#</textarea>
+    <xar:if condition="!empty($style)">
+        <xar:set name="textareasource">
+            'textarea#' . $id . ' {' . $style . '}'
+        </xar:set>
+    <xar:elseif condition="!empty($class)"/>
+        <!-- do nothing -->
+        <xar:set name="textareasource">
+            'textarea#' . $id . ' {}'
+        </xar:set>
+    <xar:elseif condition="!empty($rows) AND !empty($cols)"/>
+        <xar:set name="textareasource">
+            'textarea#' . $id . ' {
+                width: '. $cols.'em;
+                height: '. ($rows * 1.6) .'em;
+            }'
+        </xar:set>
+    <xar:elseif condition="!empty($rows)"/>
+        <xar:set name="textareasource">
+            'textarea#' . $id . ' {
+                height: '. ($rows * 1.6) .'em;
+            }'
+        </xar:set>
+    <xar:elseif condition="!empty($cols)"/>
+        <xar:set name="textareasource">
+            'textarea#' . $id . ' {
+                width: '. $cols.'em;
+            }'
+        </xar:set>
+    <xar:else/>
+        <!-- do nothing -->
+        <xar:set name="textareasource">
+            'textarea#' . $id . ' {}'
+        </xar:set>
+    </xar:if>
+    
+    <xar:style method="embed" source="$textareasource" media="all"/>
+    <textarea name="#$name#" id="#$id#" tabindex="#$tabindex#" class="#$class#">#$value#</textarea>
     <xar:template file="dataproperty_additions" module="base"/>
 </xar:template>

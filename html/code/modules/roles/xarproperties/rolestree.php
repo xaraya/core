@@ -1,23 +1,18 @@
 <?php
+/* Include the base class */
+sys::import('modules.dynamicdata.class.properties.base');
+
 /**
- * @package modules
- * @subpackage roles module
+ * The RolesTree property displays groups and users in a tree format
+ *
+ * @package modules\roles
+ * @subpackage roles
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/27.html
- *
  * @author Marc Lutolf <mfl@netspan.ch>
- */
-
-sys::import('xaraya.structures.tree');
-sys::import('modules.roles.class.roles');
-sys::import('modules.dynamicdata.class.properties.base');
-
-/**
- * Handle Roles Tree Property
  */
 class RolesTreeProperty extends DataProperty
 {
@@ -43,11 +38,27 @@ class RolesTreeProperty extends DataProperty
         return parent::showInput($data);
     }
 }
-// ---------------------------------------------------------------
+
+/* Include the base class */
+sys::import('xaraya.structures.tree');
+
+/**
+ * The RolesTree class models a tree structure of Xaraya users and groups
+ *
+ * @package modules\roles
+ * @subpackage roles
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://xaraya.info/index.php/release/27.html
+ * @author Marc Lutolf <mfl@netspan.ch>
+ */
 class RolesTree extends Tree
 {
     function createnodes(TreeNode $node)
     {
+        sys::import('modules.roles.class.roles');
         $data = xarRoles::getgroups();
          foreach ($data as $row) {
             $nodedata = array(

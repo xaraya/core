@@ -1,12 +1,12 @@
 <?php
 /**
- * @package modules
- * @subpackage themes module
+ * @package modules\themes
+ * @subpackage themes
+ * @copyright see the html/credits.html file in this release
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/70.html
  */
 
@@ -97,7 +97,7 @@ function themes_init()
     xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright 2013 ');
     xarModVars::set('themes', 'SiteTitleSeparator', ' :: ');
     xarModVars::set('themes', 'SiteTitleOrder', 'default');
-    xarModVars::set('themes', 'SiteFooter', '<a href="http://www.xaraya.com"><img src="themes/common/images/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder"/></a>');
+    xarModVars::set('themes', 'SiteFooter', '<a href="http://www.xaraya.info"><img src="themes/common/images/xaraya.gif" alt="Powered by Xaraya" class="xar-noborder"/></a>');
     xarModVars::set('themes', 'ShowPHPCommentBlockInTemplates', false);
     xarModVars::set('themes', 'ShowTemplates', false);
     xarModVars::set('themes', 'variable_dump', false);

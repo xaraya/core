@@ -36,7 +36,7 @@ putenv("REMOTE_ADDR=127.0.0.1");
 chdir("../../../../html");
 include '../lib/bootstrap.php';
 sys::import('xaraya.core');
-xarCoreInit(XARCORE_SYSTEM_ALL);
+xarCore::xarInit(xarCore::SYSTEM_ALL);
 
 /* Make sure we handle boney instead of fancy */
 set_exception_handler(array('ExceptionHandlers','bone'));

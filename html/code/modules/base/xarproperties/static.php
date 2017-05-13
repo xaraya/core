@@ -5,13 +5,12 @@
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/68.html
  *
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * Handle the static text property
+ * This property displays a chunk of static text. The text cannot be modified.
  */
 class StaticTextProperty extends DataProperty
 {
@@ -27,13 +26,18 @@ class StaticTextProperty extends DataProperty
         $this->template = 'static';
         $this->filepath = 'modules/base/xarproperties';
     }
+	/**
+ * Validate the value of a input
+ *  
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
 
     public function validateValue($value = null)
     {
         xarLog::message("DataProperty::validateValue: Validating property " . $this->name);
         if (isset($value) && $value != $this->value) {
             $this->invalid = xarML('static text: #(1)', $this->name);
-            xarLog::message($this->invalid, XARLOG_LEVEL_ERROR);
+            xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
             return false;
         }

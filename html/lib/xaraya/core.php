@@ -12,29 +12,9 @@
  *
  * @author Marco Canini <marco@xaraya.com>
  * @author Marcel van der Boom <marcel@xaraya.com>
+ * @author Marc Lutolf <marc@luetolf-carroll.com>
  * @todo dependencies and runlevels!
 **/
-
-/**
- * Core version information
- *
- * should be upgraded on each release for
- * better control on config settings
- *
-**/
-
-// Handy if we're running from a mt working copy, prolly comment out on distributing
-$rev = 'unknown';
-if(file_exists('../_MTN/revision'))
-{
-    $t= file('../_MTN/revision');
-    if (isset($t[4]))
-        $rev = str_replace(array('old_revision [',']'),'',$t[4]);
-}
-define('XARCORE_VERSION_ID',  'Bermuda');
-define('XARCORE_VERSION_NUM', '2.4.0');
-define('XARCORE_VERSION_SUB', 'altius fortius');
-define('XARCORE_VERSION_REV', $rev);
 
 /*
  * System dependencies for (optional) systems
@@ -99,103 +79,120 @@ define('XARCORE_VERSION_REV', $rev);
  * | BLOCKS         | USER                        |   64   |
  * | HOOKS          | USER                        |  128   |
  * --------------------------------------------------------- 
-    **/
+ **/
 
-
-/**#@+
- * Optional systems defines that can be used as parameter for xarCoreInit
- * System dependancies are yet present in the define, so you don't
- * have to care of what for example the SESSION system depends on, if you
- * need it you just pass XARCORE_SYSTEM_SESSION to xarCoreInit and its
- * dependancies will be automatically resolved
+/**
+ * @package core
+ * @subpackage core
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  *
- * 
- * @todo   bring these under a class as constant
+ * @author Marc Lutolf <marc@luetolf-carroll.com>
 **/
-define('XARCORE_BIT_DATABASE',         1);
-define('XARCORE_BIT_CONFIGURATION',    2);
-define('XARCORE_BIT_MODULES',          4);
-define('XARCORE_BIT_TEMPLATES',        8);
-define('XARCORE_BIT_SESSION',          16);
-define('XARCORE_BIT_USER',             32);
-define('XARCORE_BIT_BLOCKS',           64);
-define('XARCORE_BIT_HOOKS',            128);
-define('XARCORE_BIT_ALL',              255);
+class xarConst
+{
+    /**
+     * Core version information
+     *
+     * should be upgraded on each release for
+     * better control on config settings
+     *
+    **/
+    const VERSION_ID        = 'Bermuda';
+    const VERSION_NUM       = '2.4.0';
+    const VERSION_SUB       = 'altius fortius';
+
+    const BIT_DATABASE      = 1;
+    const BIT_CONFIGURATION = 2;
+    const BIT_MODULES       = 4;
+    const BIT_TEMPLATES     = 8;
+    const BIT_SESSION       = 16;
+    const BIT_USER          = 32;
+    const BIT_BLOCKS        = 64;
+    const BIT_HOOKS         = 128;
+    const BIT_ALL           = 255;
+
+    const SYSTEM_NONE           = 0;
+/*
+* TODO: Adjust when we move to PHP 5.6.x
+    const SYSTEM_DATABASE       = self::BIT_DATABASE;
+    const SYSTEM_CONFIGURATION  = self::BIT_CONFIGURATION | self::SYSTEM_DATABASE ;
+    const SYSTEM_MODULES        = self::BIT_MODULES | self::SYSTEM_CONFIGURATION ;
+    const SYSTEM_TEMPLATES      = self::BIT_TEMPLATES | self::SYSTEM_MODULES ;
+    const SYSTEM_SESSION        = self::BIT_SESSION | self::SYSTEM_TEMPLATES ;
+    const SYSTEM_USER           = self::BIT_USER | self::SYSTEM_SESSION ;
+    const SYSTEM_BLOCKS         = self::BIT_BLOCKS | self::SYSTEM_USER ;
+    const SYSTEM_HOOKS          = self::BIT_HOOKS | self::SYSTEM_USER ;
+    const SYSTEM_ALL            = self::BIT_ALL ; 
+
+*/
+    const DBG_ACTIVE            = 1; 
+    const DBG_SQL               = 2; 
+    const DBG_EXCEPTIONS        = 4; 
+    const DBG_SHOW_PARAMS_IN_BT = 8; 
+    const DBG_INACTIVE          = 16; 
+
+    const CACHEDIR         = '/cache';
+    const DB_CACHEDIR      = '/cache/database';
+    const RSS_CACHEDIR     = '/cache/rss';
+    const TPL_CACHEDIR     = '/cache/templates';
+}
 
 define('XARCORE_SYSTEM_NONE',            0);
-define('XARCORE_SYSTEM_DATABASE',        XARCORE_BIT_DATABASE);
-define('XARCORE_SYSTEM_CONFIGURATION',   XARCORE_BIT_CONFIGURATION | XARCORE_SYSTEM_DATABASE);
-define('XARCORE_SYSTEM_MODULES',         XARCORE_BIT_MODULES | XARCORE_SYSTEM_CONFIGURATION);
-define('XARCORE_SYSTEM_TEMPLATES',       XARCORE_BIT_TEMPLATES | XARCORE_SYSTEM_MODULES);
-define('XARCORE_SYSTEM_SESSION',         XARCORE_BIT_SESSION | XARCORE_SYSTEM_TEMPLATES);
-define('XARCORE_SYSTEM_USER',            XARCORE_BIT_USER | XARCORE_SYSTEM_SESSION);
-define('XARCORE_SYSTEM_BLOCKS',          XARCORE_BIT_BLOCKS | XARCORE_SYSTEM_USER);
-define('XARCORE_SYSTEM_HOOKS',           XARCORE_BIT_HOOKS | XARCORE_SYSTEM_USER);
-define('XARCORE_SYSTEM_ALL',             XARCORE_BIT_ALL); 
+define('XARCORE_SYSTEM_DATABASE',        xarConst::BIT_DATABASE);
+define('XARCORE_SYSTEM_CONFIGURATION',   xarConst::BIT_CONFIGURATION | XARCORE_SYSTEM_DATABASE);
+define('XARCORE_SYSTEM_MODULES',         xarConst::BIT_MODULES | XARCORE_SYSTEM_CONFIGURATION);
+define('XARCORE_SYSTEM_TEMPLATES',       xarConst::BIT_TEMPLATES | XARCORE_SYSTEM_MODULES);
+define('XARCORE_SYSTEM_SESSION',         xarConst::BIT_SESSION | XARCORE_SYSTEM_TEMPLATES);
+define('XARCORE_SYSTEM_USER',            xarConst::BIT_USER | XARCORE_SYSTEM_SESSION);
+define('XARCORE_SYSTEM_BLOCKS',          xarConst::BIT_BLOCKS | XARCORE_SYSTEM_USER);
+define('XARCORE_SYSTEM_HOOKS',           xarConst::BIT_HOOKS | XARCORE_SYSTEM_USER);
+define('XARCORE_SYSTEM_ALL',             xarConst::BIT_ALL); 
 
-/**#@+
- * Debug flags
- *
- * 
- * @todo   encapsulate in class
-**/
-define('XARDBG_ACTIVE'           , 1);
-define('XARDBG_SQL'              , 2);
-define('XARDBG_EXCEPTIONS'       , 4);
-define('XARDBG_SHOW_PARAMS_IN_BT', 8);
-define('XARDBG_INACTIVE'         ,16);
-/**#@-*/
-
-/**#@+
- * Miscelaneous defines
- *
- * 
- * @todo encapsulate in class
-**/
-define('XARCORE_CACHEDIR'     , '/cache');
-define('XARCORE_DB_CACHEDIR'  , '/cache/database');
-define('XARCORE_RSS_CACHEDIR' , '/cache/rss');
-define('XARCORE_TPL_CACHEDIR' , '/cache/templates');
-/**#@-*/
-
-/*
- * Load the Xaraya pre core early in case the entry point didn't do it (it should)
+/**
+ * Sanity check that we are coming in through a normal entry point
  *
  */
-if(!class_exists('sys'))
-{
-    // @todo: this aint right, it's not here, but one level up.
-    include (dirname(__FILE__).'/bootstrap.php');
-}
+if(!class_exists('sys')) die("The Xaraya precore was not loaded");
+
+/**
+ * Now begin loading
+ *
+ */
 // Before we do anything make sure we can except out of code in a predictable matter
 sys::import('xaraya.exceptions');
 // Load core caching in case we didn't go through xarCache::init()
 sys::import('xaraya.caching.core');
 
-
 /**
- * Convenience class for keeping track of core stuff
+ * Xaraya core class<br/>
+ * This class is the engine of the Xaraya framework.
+ * It is called with each page request and loads the functionality required to process the request.
  *
  * @todo change xarCore:: calls to xarCoreCache:: and put other core stuff here ?
 **/
 class xarCore extends xarCoreCache
 {
-    const GENERATION = 2;
-    // The actual version information
-    const VERSION_ID  = XARCORE_VERSION_ID;
-    const VERSION_NUM = XARCORE_VERSION_NUM;
-    const VERSION_SUB = XARCORE_VERSION_SUB;
-    const VERSION_REV = XARCORE_VERSION_REV;
+    const GENERATION           = 2;
     
-    const BIT_DATABASE       = XARCORE_BIT_DATABASE;
-    const BIT_CONFIGURATION  = XARCORE_BIT_CONFIGURATION;
-    const BIT_MODULES        = XARCORE_BIT_MODULES;
-    const BIT_TEMPLATES      = XARCORE_BIT_TEMPLATES;
-    const BIT_SESSION        = XARCORE_BIT_SESSION;
-    const BIT_USER           = XARCORE_BIT_USER;
-    const BIT_BLOCKS         = XARCORE_BIT_BLOCKS;
-    const BIT_HOOKS          = XARCORE_BIT_HOOKS;
-    const BIT_ALL            = XARCORE_BIT_ALL;
+    // The actual version information
+    const VERSION_ID           = xarConst::VERSION_ID;
+    const VERSION_NUM          = xarConst::VERSION_NUM;
+    const VERSION_SUB          = xarConst::VERSION_SUB;
+    const VERSION_REV          = 'unknown';
+    
+    const BIT_DATABASE         = xarConst::BIT_DATABASE;
+    const BIT_CONFIGURATION    = xarConst::BIT_CONFIGURATION;
+    const BIT_MODULES          = xarConst::BIT_MODULES;
+    const BIT_TEMPLATES        = xarConst::BIT_TEMPLATES;
+    const BIT_SESSION          = xarConst::BIT_SESSION;
+    const BIT_USER             = xarConst::BIT_USER;
+    const BIT_BLOCKS           = xarConst::BIT_BLOCKS;
+    const BIT_HOOKS            = xarConst::BIT_HOOKS;
+    const BIT_ALL              = xarConst::BIT_ALL;
     
     const SYSTEM_NONE          = XARCORE_SYSTEM_NONE;
     const SYSTEM_DATABASE      = XARCORE_SYSTEM_DATABASE;
@@ -206,25 +203,35 @@ class xarCore extends xarCoreCache
     const SYSTEM_USER          = XARCORE_SYSTEM_USER;
     const SYSTEM_BLOCKS        = XARCORE_SYSTEM_BLOCKS;
     const SYSTEM_HOOKS         = XARCORE_SYSTEM_HOOKS;
-    const SYSTEM_ALL           = XARCORE_SYSTEM_ALL;    
+    const SYSTEM_ALL           = XARCORE_SYSTEM_ALL;   
+    
+    public static $build       = 'unknown';
 
-}
-
-/**
- * Initializes the core engine
- *
- * 
- * @param integer whatToLoad What optional systems to load.
- * @return boolean true
- * @todo <johnny> fix up sitetable prefix when we have a place to store it
-**/
-function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
-{
-        static $current_SYSTEM_level = xarCore::SYSTEM_NONE;
+    /**
+     * Initializes the core engine
+     * 
+     * @param integer whatToLoad What optional systems to load.
+     * @return boolean true
+    **/
+    public static function xarInit($whatToLoad = self::SYSTEM_ALL)
+    {
+        static $current_SYSTEM_level = self::SYSTEM_NONE;
         static $first_load = true;
 
+        /**
+         * Get the current git revision
+         * This is displayed in the base module backend
+         * Handy if we're running from a working copy, prolly comment out on distributing
+         */
+        $path = '../.git/refs/heads/com.xaraya.core.bermuda';
+        if(file_exists($path)) {
+            $text = file($path);
+            $rev = $text[0];
+            self::$build = $rev;
+        }
+
         $new_SYSTEM_level = $whatToLoad;
-        
+    
         // Make sure it only loads the current load level (or less than the current load level) once.
         if ($whatToLoad <= $current_SYSTEM_level) {
             if (!$first_load) return true; // Does this ever happen? If so, we might consider an assert
@@ -235,37 +242,36 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
             // that we've already loaded
             $whatToLoad ^= $current_SYSTEM_level;
         }
-        /*
+        /**
          * At this point we should be able to catch all low level errors, so we can start the debugger
          *
          * FLAGS:
          *
-         * XARDBG_INACTIVE                  disable  the debugger
-         * XARDBG_ACTIVE                        enable   the debugger
-         * XARDBG_EXCEPTIONS                debug exceptions
-         * XARDBG_SQL                           debug SQL statements
-         * XARDBG_SHOW_PARAMS_IN_BT show parameters in the backtrace
+         * xarConst::DBG_INACTIVE          disable  the debugger
+         * xarConst::DBG_ACTIVE            enable   the debugger
+         * xarConst::DBG_EXCEPTIONS        debug exceptions
+         * xarConst::DBG_SQL               debug SQL statements
+         * xarConst::DBG_SHOW_PARAMS_IN_BT show parameters in the backtrace
          *
          * Flags can be OR-ed together
          */
         /**
          * Start exceptions subsystem
         **/
-        xarCoreActivateDebugger(XARDBG_ACTIVE | XARDBG_EXCEPTIONS | XARDBG_SHOW_PARAMS_IN_BT );       
-        // xarCoreActivateDebugger(XARDBG_INACTIVE);
-        
+        self::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT );       
+    
         /**
          * Load system variables
         **/
         sys::import('xaraya.variables.system');
-        
+    
         /*
-         * Start logging subsystem
+         * Start the logging subsystem
          */
         $systemArgs = array();
         sys::import('xaraya.log');
         xarLog::init($systemArgs);
-        
+    
         /**
          * Make sure we can get time for logging
         **/
@@ -275,7 +281,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
             die('Your configuration file appears to be missing. This usually indicates Xaraya has not been installed. <br/>Please refer to point 4 of the installation instructions <a href="readme.html" target="_blank">here</a>');
         }
 
-        /*
+        /**
          * Start Database Connection Handling System
          *
          * Most of the stuff, except for logging, exception and system related things,
@@ -283,8 +289,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
          * It think this is the earliest we can do
          *
          */
-        if ($whatToLoad & xarCore::SYSTEM_DATABASE) { // yeah right, as if this is optional
-    
+        if ($whatToLoad & self::SYSTEM_DATABASE) { // yeah right, as if this is optional
             // Decode encoded DB parameters
             // These need to be there
             $userName = xarSystemVars::get(sys::CONFIG, 'DB.UserName');
@@ -303,7 +308,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
             } catch(VariableNotFoundException $e) {
                 // doesnt matter, we assume not encoded
             }
-    
+
             // Optionals dealt with, do the rest inline
             $systemArgs = array('userName' => $userName,
                                 'password' => $password,
@@ -313,7 +318,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
                                 'databaseCharset' => xarSystemVars::get(sys::CONFIG, 'DB.Charset'),
                                 'persistent'      => $persistent,
                                 'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
-    
+
             try {
                 if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
                     sys::import('xaraya.database_pdo');
@@ -323,7 +328,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
             } catch (Exception $e) {
                 sys::import('xaraya.database');
             }
-    
+
             // Connect to database
             try {
                 xarDB_init($systemArgs);
@@ -332,10 +337,10 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
                 // and want to cater to possible errors in each
                 die("Connection error: a database connection could not be established");
             }
-            $whatToLoad ^= xarCore::BIT_DATABASE;
+            $whatToLoad ^= self::BIT_DATABASE;
         }
 
-        /*
+        /**
          * Start autoload
          *
          * Note: we only need this for variable caching for now, but if we generalize autoloading
@@ -366,8 +371,7 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
         $systemArgs = array();
         xarEvents::init($systemArgs);
 
-
-         /*
+        /**
          * Start Configuration System
          *
          * Ok, we can  except, we can log our actions, we can access the db and we can
@@ -375,13 +379,12 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
          * can start configuring the framework
          *
          */
-        if ($whatToLoad & xarCore::SYSTEM_CONFIGURATION) {
+        if ($whatToLoad & self::SYSTEM_CONFIGURATION) {
             // Start Variables utilities
             sys::import('xaraya.variables');
             xarVar_init($systemArgs);
-            $whatToLoad ^= xarCore::BIT_CONFIGURATION;
-    
-        // we're about done here - everything else requires configuration, at least to initialize them !?
+            $whatToLoad ^= self::BIT_CONFIGURATION;
+            // We're about done here - everything else requires configuration, at least to initialize them !?
         } else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
@@ -390,15 +393,14 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
 
         /**
          * Legacy systems
-         *
          * Before anything fancy is loaded, let's start the legacy systems
          *
          */
         if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true) {
             sys::import('xaraya.legacy.legacy');
         }
-        
-        /*
+    
+        /**
          * At this point we haven't made any assumptions about architecture
          * except that we use a database as storage container.
          *
@@ -411,22 +413,20 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
          * @todo <marco> Figure out how to dynamically compute generateXMLURLs argument based on browser request or XHTML site compliance. For now just pass true.
          * @todo <mrb> i thought it was configurable
         **/
-        if ($whatToLoad & xarCore::SYSTEM_MODULES) {
+        if ($whatToLoad & self::SYSTEM_MODULES) {
             sys::import('xaraya.modules');
             $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
                                 'generateXMLURLs' => true);
             xarMod::init($systemArgs);
-            $whatToLoad ^= xarCore::BIT_MODULES;
-    
-        // we're about done here - everything else requires modules !?
+            $whatToLoad ^= self::BIT_MODULES;
+            // We're about done here - everything else requires modules !?
         } else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
             return true;
         }
 
-    
-        /*
+        /**
          * Bring HTTP Protocol Server/Request/Response utilities into the story
          *
          */
@@ -436,9 +436,8 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
         xarServer::init($systemArgs);
         sys::import('xaraya.mapper.main');
         xarController::init($systemArgs);
-    //    xarController::$response->init($systemArgs);
-    
-        /*
+
+        /**
          * Bring Multi Language System online
          *
          */
@@ -454,14 +453,14 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
                             );
         xarMLS::init($systemArgs);
 
-        /*
+        /**
          * We've got basically all we want, start the interface
          * Start BlockLayout Template Engine
          *
          */
-        if ($whatToLoad & xarCore::SYSTEM_TEMPLATES) { 
+        if ($whatToLoad & self::SYSTEM_TEMPLATES) { 
             sys::import('xaraya.templates');
-    
+
             $systemArgs = array(
                 'enableTemplatesCaching' => xarConfigVars::get(null, 'Site.BL.CacheTemplates'),
                 'defaultThemeDir'        => xarModVars::get('themes', 'default_theme','default'),
@@ -470,26 +469,26 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
             );
 
             xarTpl::init($systemArgs);
-            $whatToLoad ^= xarCore::BIT_TEMPLATES;
-        // we're about done here - everything else requires templates !?
+            $whatToLoad ^= self::BIT_TEMPLATES;
+            // We're about done here - everything else requires templates !?
         } else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
             return true;
         }      
 
-        /*
+        /**
          * We deal with users through the sessions subsystem
          *
          */
         // @todo Assuming a fixed 2 here needs to be reviewed, core is a too low level system to assume this.
         $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID',2);
         define('_XAR_ID_UNREGISTERED', $anonid);
-    
-        if ($whatToLoad & xarCore::SYSTEM_SESSION)
+
+        if ($whatToLoad & self::SYSTEM_SESSION)
         {
             sys::import('xaraya.sessions');
-    
+
             $systemArgs = array(
                 'securityLevel'     => xarConfigVars::get(null, 'Site.Session.SecurityLevel'),
                 'duration'          => xarConfigVars::get(null, 'Site.Session.Duration'),
@@ -499,9 +498,9 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
                 'cookieDomain'      => xarConfigVars::get(null, 'Site.Session.CookieDomain'),
                 'refererCheck'      => xarConfigVars::get(null, 'Site.Session.RefererCheck'));
             xarSession_init($systemArgs);
-    
-            $whatToLoad ^= xarCore::BIT_SESSION;
-        // we're about done here - everything else requires sessions !?
+
+            $whatToLoad ^= self::BIT_SESSION;
+            // We're about done here - everything else requires sessions !?
         } else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
@@ -510,59 +509,55 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
 
         /**
          * At last, we can give people access to the system.
-         *
-         * @todo <marcinmilan> review what pasts of the old user system need to be retained
-        **/
-        /**
          * Initialise users, session, templates for GUI functions
         **/
-        if ($whatToLoad & xarCore::SYSTEM_USER)
+        if ($whatToLoad & self::SYSTEM_USER)
         {
             sys::import('xaraya.users');
             sys::import('xaraya.security');
-    
+
             // Start User System
             $systemArgs = array('authenticationModules' => xarConfigVars::get(null, 'Site.User.AuthenticationModules'));
             xarUser::init($systemArgs);
-            $whatToLoad ^= xarCore::BIT_USER;
-        // we're about done here - everything else requires Users !?
+            $whatToLoad ^= self::BIT_USER;
+            // We're about done here - everything else requires Users !?
         } else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
             return true;
         }
-        
-        /*
+    
+        /**
          * Block subsystem
          *
          */
         // FIXME: This is wrong, should be part of templating
         //        it's a legacy thought, we don't need it anymore
-    
-        if ($whatToLoad & xarCore::SYSTEM_BLOCKS)
+
+        if ($whatToLoad & self::SYSTEM_BLOCKS)
         {
             sys::import('xaraya.blocks');
-    
+
             // Start Blocks Support Sytem
             $systemArgs = array();
             xarBlock::init($systemArgs);
-            $whatToLoad ^= xarCore::BIT_BLOCKS;
-        // we're about done here - everything else requires templates !?
+            $whatToLoad ^= self::BIT_BLOCKS;
+            // We're about done here - everything else requires templates !?
         } else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
             return true;
         }
-              
+          
         /**
          * Start Hooks Subsystem
         **/
-        if ($whatToLoad & xarCore::SYSTEM_HOOKS) {
+        if ($whatToLoad & self::SYSTEM_HOOKS) {
             sys::import('xaraya.hooks');
             $systemArgs = array();
             xarHooks::init($systemArgs);
-            $whatToLoad ^= xarCore::BIT_HOOKS;
-        // we're about done here - everything else requires hooks !?
+            $whatToLoad ^= self::BIT_HOOKS;
+            // We're about done here - everything else requires hooks !?
         } /*else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
@@ -574,99 +569,93 @@ function xarCoreInit($whatToLoad = xarCore::SYSTEM_ALL)
         // Make the current load level == the new load level
         $current_SYSTEM_level = $new_SYSTEM_level;
         return true;
-
-    // end init();
-}
-
-/**
- * Activates the debugger.
- *
- * 
- * @param integer $flags bit mask for the debugger flags
- * @todo  a big part of this should be in the exception (error handling) subsystem.
- * @return void
-**/
-function xarCoreActivateDebugger($flags)
-{
-    xarDebug::$flags = $flags;
-    if ($flags & XARDBG_INACTIVE) {
-        // Turn off error reporting
-        error_reporting(0);
-        // Turn off assertion evaluation
-        assert_options(ASSERT_ACTIVE, 0);
-    } elseif ($flags & XARDBG_ACTIVE) {
-        // See if config.system.php has info for us on the errorlevel, but dont break if it has not
-        try {
-            sys::import('xaraya.variables.system');
-            $errLevel = xarSystemVars::get(sys::CONFIG, 'Exception.ErrorLevel');
-        } catch(Exception $e) {
-            $errLevel = E_ALL;
-        }
-
-        error_reporting($errLevel);
-        // Activate assertions
-        assert_options(ASSERT_ACTIVE,    1);    // Activate when debugging
-        assert_options(ASSERT_WARNING,   1);    // Issue a php warning
-        assert_options(ASSERT_BAIL,      0);    // Stop processing?
-        assert_options(ASSERT_QUIET_EVAL,0);    // Quiet evaluation of assert condition?
-        xarDebug::$sqlCalls = 0;
-        $lmtime = explode(' ', microtime());
-        xarDebug::$startTime = $lmtime[1] + $lmtime[0];
     }
-}
 
-/**
- * Check if the debugger is active
- *
- * 
- * @return boolean true if the debugger is active, false otherwise
-**/
-function xarCoreIsDebuggerActive()
-{
-    return xarDebug::$flags & XARDBG_ACTIVE;
-}
-
-/**
- * Check for specified debugger flag.
- *
- * 
- * @param integer flag the debugger flag to check for activity
- * @return boolean true if the flag is active, false otherwise
-**/
-function xarCoreIsDebugFlagSet($flag)
-{
-    return (xarDebug::$flags & XARDBG_ACTIVE) && (xarDebug::$flags & $flag);
-}
-
-/**
- * Checks if a certain function was disabled in php.ini
- *
- *
- * 
- * @param string $funcName The function name; case-sensitive
- * @todo this seems out of place here.
-**/
-function xarFuncIsDisabled($funcName)
-{
-    static $disabled;
-
-    if (!isset($disabled))
+    /**
+     * Activates the debugger.
+     *
+     * @param integer $flags bit mask for the debugger flags
+     * @return void
+     * @todo  a big part of this should be in the exception (error handling) subsystem.
+    **/
+    public static function activateDebugger($flags)
     {
-        // Fetch the disabled functions as an array.
-        // White space is trimmed here too.
-        $functions = preg_split('/[\s,]+/', trim(ini_get('disable_functions')));
+        xarDebug::$flags = $flags;
+        if ($flags & xarConst::DBG_INACTIVE) {
+            // Turn off error reporting
+            error_reporting(0);
+            // Turn off assertion evaluation
+            assert_options(ASSERT_ACTIVE, 0);
+        } elseif ($flags & xarConst::DBG_ACTIVE) {
+            // See if config.system.php has info for us on the errorlevel, but dont break if it has not
+            try {
+                sys::import('xaraya.variables.system');
+                $errLevel = xarSystemVars::get(sys::CONFIG, 'Exception.ErrorLevel');
+            } catch(Exception $e) {
+                $errLevel = E_ALL;
+            }
 
-        if ($functions[0] != '')
-        {
-            // Make the function names the keys.
-            // Values will be 0, 1, 2 etc.
-            $disabled = array_flip($functions);
-        } else {
-            $disabled = array();
+            error_reporting($errLevel);
+            // Activate assertions
+            assert_options(ASSERT_ACTIVE,    1);    // Activate when debugging
+            assert_options(ASSERT_WARNING,   1);    // Issue a php warning
+            assert_options(ASSERT_BAIL,      0);    // Stop processing?
+            assert_options(ASSERT_QUIET_EVAL,0);    // Quiet evaluation of assert condition?
+            xarDebug::$sqlCalls = 0;
+            $lmtime = explode(' ', microtime());
+            xarDebug::$startTime = $lmtime[1] + $lmtime[0];
         }
     }
 
-    return (isset($disabled[$funcName]) ? true : false);
+    /**
+     * Check if the debugger is active
+     *
+     * @return boolean true if the debugger is active, false otherwise
+    **/
+    public static function isDebuggerActive()
+    {
+        return xarDebug::$flags & xarConst::DBG_ACTIVE;
+    }
+
+    /**
+     * Check for specified debugger flag.
+     *
+     * @param integer flag the debugger flag to check for activity
+     * @return boolean true if the flag is active, false otherwise
+    **/
+    public static function isDebugFlagSet($flag)
+    {
+        return (xarDebug::$flags & xarConst::DBG_ACTIVE) && (xarDebug::$flags & $flag);
+    }
+
+    /**
+     * Checks if a certain function was disabled in php.ini
+     *
+     * @param string $funcName The function name; case-sensitive
+     * @todo this seems out of place here.
+    **/
+    public static function funcIsDisabled($funcName)
+    {
+        static $disabled;
+
+        if (!isset($disabled))
+        {
+            // Fetch the disabled functions as an array.
+            // White space is trimmed here too.
+            $functions = preg_split('/[\s,]+/', trim(ini_get('disable_functions')));
+
+            if ($functions[0] != '')
+            {
+                // Make the function names the keys.
+                // Values will be 0, 1, 2 etc.
+                $disabled = array_flip($functions);
+            } else {
+                $disabled = array();
+            }
+        }
+
+        return (isset($disabled[$funcName]) ? true : false);
+    }
 }
 
 /**
@@ -680,6 +669,5 @@ class xarDebug extends Object
     public static $sqlCalls  = 0; // Should be in flags imo
     public static $startTime = 0; // Should not be here at all
 }
-
 
 ?>

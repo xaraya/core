@@ -1,11 +1,11 @@
 <?php
 /**
- * @package modules
- * @subpackage dynamicdata module
+ * @package modules\dynamicdata
+ * @subpackage dynamicdata
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
  * @link http://xaraya.info/index.php/release/182.html
  * @author mikespub <mikespub@xaraya.com>
  */
@@ -98,10 +98,10 @@ function dynamicdata_userapi_showview(Array $args=array())
     if (!isset($object)) return;
     if (!$object->checkAccess('view'))
         return xarML('View #(1) is forbidden', $object->label);
-    // Count before numitems!
-    $numthings = 0;
+        
+    // We need to get the total count before adding numitems!
     if($args['count']) {
-        $numthings = $object->countItems();
+        $itemcount = $object->countItems();
     }
 
     // Get the selected items
@@ -139,8 +139,7 @@ function dynamicdata_userapi_showview(Array $args=array())
                                    'linkfunc'  => $linkfunc,
                                    'param'     => $param,
                                    'pagerurl'  => $pagerurl,
-                                   'linkfield' => $linkfield,
-                                   'itemcount' => $numthings));
+                                   'linkfield' => $linkfield));
 }
 
 ?>
