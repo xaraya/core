@@ -391,8 +391,8 @@ class xarSecurity extends Object
         unset($coreset['roles']);
         $coreset['privileges'] = array();
         $coreset['children'] = array();
-        if (count($roles) == 0) return $coreset;
-        if ($module_id == null) return $coreset;
+        if (count($roles) === 0) return $coreset;
+        if ($module_id === null) return $coreset;
 
         $parents = array();
         foreach ($roles as $role) {
@@ -572,7 +572,7 @@ class xarSecurity extends Object
         if (($p1['realm'] != 'all') && ($fails)) return false;
 
         // match module and component. bail if no match.
-        if (($p1['module'] == null) || (($p1['module'] != self::PRIVILEGES_ALL) && ($p1['module']!=$p2['module']))) {
+        if (($p1['module'] === null) || (($p1['module'] != self::PRIVILEGES_ALL) && ($p1['module']!=$p2['module']))) {
             return false;
         }
         if (($p1['component'] != 'all') && ($p1['component']!=$p2['component'])) {
