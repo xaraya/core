@@ -263,7 +263,7 @@ class xarUser extends Object
             return true;
         }
         // get the current userid before logging out
-        $userId = xarSessionGetVar('id');
+        $userId = xarSession::getVar('id');
     
         // Reset user session information
         $res = xarSession_setUserInfo(_XAR_ID_UNREGISTERED, false);
@@ -290,9 +290,9 @@ class xarUser extends Object
     static public function isLoggedIn()
     {
         // FIXME: restore "clean" code once id+session issues are resolved
-        //return xarSessionGetVar('role_id') != _XAR_ID_UNREGISTERED;
-        return (xarSessionGetVar('role_id') != _XAR_ID_UNREGISTERED
-                && xarSessionGetVar('role_id') != 0);
+        //return xarSession::getVar('role_id') != _XAR_ID_UNREGISTERED;
+        return (xarSession::getVar('role_id') != _XAR_ID_UNREGISTERED
+                && xarSession::getVar('role_id') != 0);
     }
 
     /**
@@ -345,10 +345,10 @@ class xarUser extends Object
     
             $locale = xarModUserVars::get('roles', 'locale');
             if (empty($locale)) {
-                $locale = xarSessionGetVar('navigationLocale');
+                $locale = xarSession::getVar('navigationLocale');
             }
         } else {
-            $locale = xarSessionGetVar('navigationLocale');
+            $locale = xarSession::getVar('navigationLocale');
         }
         if (empty($locale)) {
             $locale = xarConfigVars::get(null, 'Site.MLS.DefaultLocale');
@@ -389,7 +389,7 @@ class xarUser extends Object
      * @param  integer $userId integer the user to get the variable for
      * @return mixed the value of the user variable if the variable exists, void if the variable doesn't exist
      * @throws EmptyParameterException, NotLoggedInException, BadParameterException, IDNotFoundException
-     * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xarSessionGetVar('role_id')) {
+     * @todo <marco> #1 figure out why this check failsall the time now: if ($userId != xarSession::getVar('role_id')) {
      * @todo <marco FIXME: ignoring unknown user variables for now...
      * @todo redesign the delegation to auth* modules for handling user variables
      * @todo add some security for getting to user variables (at least from another id)
@@ -399,7 +399,7 @@ class xarUser extends Object
     {
         if (empty($name)) throw new EmptyParameterException('name');
     
-        if (empty($userId)) $userId = xarSessionGetVar('role_id');
+        if (empty($userId)) $userId = xarSession::getVar('role_id');
         //LEGACY
         if ($name == 'id' || $name == 'uid') return $userId;
     
@@ -540,7 +540,7 @@ class xarUser extends Object
         }
     
         if (empty($userId)) {
-            $userId = xarSessionGetVar('role_id');
+            $userId = xarSession::getVar('role_id');
         }
         if ($userId == _XAR_ID_UNREGISTERED) {
             // Anonymous user
@@ -622,8 +622,8 @@ class xarUser extends Object
      */
     static private function getAuthModule($userId)
     {
-        if ($userId == xarSessionGetVar('role_id')) {
-            $authModName = xarSessionGetVar('authenticationModule');
+        if ($userId == xarSession::getVar('role_id')) {
+            $authModName = xarSession::getVar('authenticationModule');
             if (isset($authModName)) {
                 return $authModName;
             }

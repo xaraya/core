@@ -263,7 +263,7 @@ function xarUFindRole($name){ return xarRoles::ufindRole($name); }
 
 function xarCurrentRole()
 {
-    return xarRoles::getRole(xarSessionGetVar('role_id'));
+    return xarRoles::getRole(xarSession::getVar('role_id'));
 }
 
 function xarIsParent($name1, $name2)
@@ -474,8 +474,8 @@ function xarSecGenAuthKey($modName = NULL)
     }
 
     // Date gives extra security but leave it out for now
-    // $key = xarSessionGetVar('rand') . $modName . date ('YmdGi');
-    $key = xarSessionGetVar('rand') . strtolower($modName);
+    // $key = xarSession::getVar('rand') . $modName . date ('YmdGi');
+    $key = xarSession::getVar('rand') . strtolower($modName);
 
     // Encrypt key
     $authid = md5($key);
@@ -508,7 +508,7 @@ function xarSecConfirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=fal
     $authid = xarController::getVar($authIdVarName);
 
     // Regenerate static part of key
-    $partkey = xarSessionGetVar('rand') . strtolower($modName);
+    $partkey = xarSession::getVar('rand') . strtolower($modName);
 
 // Not using time-sensitive keys for the moment
 //    // Key life is 5 minutes, so search backwards and forwards 5
