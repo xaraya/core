@@ -14,7 +14,7 @@ sys::import('modules.base.xarproperties.dropdown');
 
 /**
  * This property displays a dropdown of dataproperty statuses
- * The allowed values are defined in the dtatproperty master class
+ * The allowed values are defined in the dataproperty master class
  * modules/dynamicdata/class/properties/master.php
  */
 class FieldStatusProperty extends SelectProperty
@@ -36,6 +36,12 @@ class FieldStatusProperty extends SelectProperty
         $this->template   =  'fieldstatus';
     }
 
+	/**
+	* Display a Dropdown for input
+	* 
+	* @param  array data An array of input parameters
+	* @return string     HTML markup to display the property for input on a web page
+	*/	
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) {
@@ -60,6 +66,13 @@ class FieldStatusProperty extends SelectProperty
         return parent::showInput($data);
     }
 
+	/**
+	* Get the value of a dropdown from a web page<br/>
+	* 
+	* @param  string name The name of the dropdown
+	* @param  string value The value of the dropdown
+	* @return bool   This method passes the value gotten to the validateValue method and returns its output.
+	*/	
     public function checkInput($name = '', $value = null)
     {
         if (empty($name)) {
@@ -79,6 +92,11 @@ class FieldStatusProperty extends SelectProperty
         return $this->validateValue($value);
     }
 
+	/**
+	* Validate the value of a selected dropdown option
+	*
+	* @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	*/	
     public function validateValue($value = null)
     {
         // FIXME: rework the dataproperty so that the output of getOptions has a correct form
@@ -98,6 +116,11 @@ class FieldStatusProperty extends SelectProperty
         return false;
     }
 
+	/**
+	* Retrieve the list of options
+	*  
+	* @param void N/A
+	*/	
     function getOptions()
     {
         $options['display'] = array(
@@ -116,6 +139,8 @@ class FieldStatusProperty extends SelectProperty
                          );
         return $options;
     }
+	
+	
     function getOption($check = false)
     {
         //TODO: get this working
