@@ -23,7 +23,7 @@ class CalendarProperty extends DataProperty
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
-        $this->filepath   = 'modules/base/xarproperties';
+        $this->filepath  = 'modules/base/xarproperties';
     }
 /**
  * Validate the date and Time
@@ -212,7 +212,7 @@ class CalendarProperty extends DataProperty
                     $this->configuration = '';
                 }
             } else {
-                $this->	 = $validation;
+                $this->configuration	 = $validation;
             }
         }
 
