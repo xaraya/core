@@ -11,8 +11,7 @@
  */
 
 /**
- * This property displays a vlaue that is hidden on the template
- @todo Review this
+ *  This property implement a hidden textbox.used to hide value on web page.
  */
 class HiddenProperty extends DataProperty
 {

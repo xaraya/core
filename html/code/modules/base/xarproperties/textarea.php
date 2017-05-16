@@ -17,6 +17,7 @@ sys::import('modules.dynamicdata.class.properties.base');
 /**
  * This property displays a text area
  */
+
 class TextAreaProperty extends DataProperty
 {
     public $id         = 3;
@@ -39,7 +40,10 @@ class TextAreaProperty extends DataProperty
             $this->display_rows = $this->args['rows'];
         }
     }
-
+/**
+ 
+ * @return array   array of provided elements
+ */
     function aliases()
     {
         $a1['id']   = 4;
@@ -56,7 +60,12 @@ class TextAreaProperty extends DataProperty
 
         return array($a1, $a2);
     }
-
+/**
+ * Display a textarea for input
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
+ */
     public function showInput(Array $data = array())
     {
         // TODO: the way the template is organized now, this only works when an id is set.

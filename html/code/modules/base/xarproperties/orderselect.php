@@ -17,6 +17,7 @@ sys::import("modules.base.xarproperties.multiselect");
 
 /**
  * This property displays a multiselect box with the contents ordered alphabetically
+ * 
  */
 class OrderSelectProperty extends MultiSelectProperty
 {
@@ -33,7 +34,12 @@ class OrderSelectProperty extends MultiSelectProperty
         parent::__construct($descriptor);
         $this->template  = 'orderselect';
     }
-
+/**
+ * Get the value of a checkbox from a web page<br/>
+ * 
+ * @param  string value The value of the input
+ * @return bool   This method passes the value gotten to the validateOrder method and returns its output.Returns true if the function has been successfully completed. Returns false if the function completion has failed.
+ */
     public function checkInput($name = '', $value = null)
     {
         if (parent::checkInput($name, $value)) return false;
@@ -71,7 +77,12 @@ class OrderSelectProperty extends MultiSelectProperty
         $this->order = implode(';', $tmp);
         return true;
     }
-
+/**
+ * Display a options for input
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
+ */
     public function showInput(Array $data = array())
     {
         if (empty($data['options'])) $data['options'] = $this->getOptions();
@@ -97,7 +108,12 @@ class OrderSelectProperty extends MultiSelectProperty
         }
         return parent::showInput($data);
     }
-
+/**
+ * Display options for output
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for output on a web page
+ */	
     public function showOutput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
