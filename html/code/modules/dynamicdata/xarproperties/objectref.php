@@ -47,6 +47,12 @@ class ObjectRefProperty extends SelectProperty
         $this->filepath   = 'modules/dynamicdata/xarproperties';
     }
 
+	/**
+	 * Display a dropdown of items for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         // Allow overriding by specific parameters
@@ -57,6 +63,12 @@ class ObjectRefProperty extends SelectProperty
         return parent::showInput($data);
     }
 
+	/**
+	 * Display a dropdown of items for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */
     public function showOutput(Array $data = array())
     {
         // Allow overriding by specific parameters
@@ -154,6 +166,12 @@ class ObjectRefProperty extends SelectProperty
         return $options;
     }
 
+    /**
+     * Show the current configuration rule for this property type
+     *
+     * @param  array data An array of input parameters
+     * @return string containing the HTML (or other) text to output on a web page
+     */ 
     public function showConfiguration(Array $data = array())
     {
         if (!isset($data['configuration'])) $data['configuration'] = $this->configuration;
@@ -173,6 +191,9 @@ class ObjectRefProperty extends SelectProperty
         return parent::showConfiguration($data);
     }
 
+	/**
+     * List the objects in dropdown
+     */ 
     public function preList()
     {
         // Bail if there is no parent object
