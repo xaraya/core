@@ -123,7 +123,7 @@ function modules_adminapi_getitems(Array $args=array())
             $startnum = 1;
         $stmt->setOffset($startnum - 1);
     }
-    $result = $stmt->executeQuery($bindvars);
+    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
 
     $items = array();
     while ($result->next()) {
