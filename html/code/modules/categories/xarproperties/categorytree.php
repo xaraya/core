@@ -33,6 +33,12 @@ class CategoryTreeProperty extends DataProperty
         $this->filepath   = 'modules/categories/xarproperties';
     }
 
+	/**
+	 * Display the property for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         if (empty($data['startnum'])) $data['startnum'] = 1;
