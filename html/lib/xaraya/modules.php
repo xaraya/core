@@ -305,7 +305,6 @@ class xarMod extends Object implements IxarMod
      */
     static function getDisplayDescription($modName = NULL, $type = 'module')
     {
-        //xarLog::message("xarMod::getDisplayDescription ". $modName ." / " . $type);
         if (empty($modName)) $modName = self::getName();
 
         $modInfo = self::getFileInfo($modName, $type);

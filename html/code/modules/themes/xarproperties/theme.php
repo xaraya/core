@@ -14,6 +14,10 @@ sys::import('modules.dynamicdata.xarproperties.objectref');
  * @link http://xaraya.info/index.php/release/70.html
  * @author mikespub
  */
+
+/**
+ * This property displays a dropdown of themes on this site (subject to whatever filters are configured)
+ */
 class ThemeProperty extends ObjectRefProperty
 {
     public $id         = 38;
