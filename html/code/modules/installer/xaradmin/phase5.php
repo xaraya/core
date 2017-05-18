@@ -252,8 +252,8 @@ function installer_admin_phase5()
                               $modversion['version'],
                               $modversion['class'],
                               $modversion['category'],
-                              isset($modversion['admin']) ? $modversion['admin']:false,
-                              isset($modversion['user'])  ? $modversion['user']:false,
+                              !empty($modversion['admin']) ? 1 : 0,
+                              !empty($modversion['user'])  ? 1 : 0,
                               3); // chris: shouldn't this be a class constant?
             $result = $newStmt->executeUpdate($bindvars);
             $newModId = $dbconn->getLastId($tables['modules']);
