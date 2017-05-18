@@ -39,6 +39,9 @@ class PassBoxProperty extends TextBoxProperty
         $this->filepath   = 'modules/roles/xarproperties';
     }
 
+	/**
+	 * @return array   array of provided elements
+	 */
     function aliases()
     {
         $a1['id']   = 461;
@@ -48,11 +51,22 @@ class PassBoxProperty extends TextBoxProperty
         return array($a1);
     }
 
+	/**
+	 * Set the value of input
+	 * 
+	 * @param  string value The value of the input
+	 * @return string    return a encrypted value
+	 */	
     function setValue($value=null)
     {
-         $this->value = $this->encrypt($value);
+        $this->value = $this->encrypt($value);
     }
 
+	/**
+	 * Validate the value of a textbox
+	 *
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
         if (!isset($value)) $value = "";
@@ -82,6 +96,13 @@ class PassBoxProperty extends TextBoxProperty
         return true;
     }
 
+	/**
+	 * Encrypt the provided value
+	 *
+	 * @param string value  The value to be encrypted
+	 * @return string  Returns the hashed value 
+	 * @throws Exception Thrown if hash type not defined
+	 */
     public function encrypt($value = null)
     {
         if (empty($value)) return null;
@@ -98,12 +119,24 @@ class PassBoxProperty extends TextBoxProperty
         }
     }
 
+	/**
+	 * Display a textbox for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         if (isset($data['confirm'])) $this->validation_password_confirm = $data['confirm'];
         return parent::showInput($data);
     }
 
+	/**
+	 * Display a textbox for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */
     public function showOutput(Array $data = array())
     {
         // We don't want to show the password, but leave open the possibility of displaying some value here

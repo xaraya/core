@@ -35,6 +35,11 @@ class AIMProperty extends TextBoxProperty
         }
     }
 
+	/**
+	 * Validate the value of a textbox
+	 *
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -52,6 +57,12 @@ class AIMProperty extends TextBoxProperty
         return true;
     }
 
+	/**
+	 * Display a textbox for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         if(!isset($data['value'])) $data['value'] = $this->value;
@@ -64,6 +75,12 @@ class AIMProperty extends TextBoxProperty
         return parent::showInput($data);
     }
 
+	/**
+     * Display a textbox for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */
     public function showOutput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;

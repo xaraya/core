@@ -34,12 +34,24 @@ class ThemeProperty extends ObjectRefProperty
         $this->initialization_display_prop = 'name';
     }
 
+	/**
+	 * Display a dropdown for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     function showInput(Array $data=array())
     {
         if (!empty($data['filter'])) $this->filter = $data['filter'];
         return parent::showInput($data);
     }
 
+	/**
+     * Retrieve the list of options on demand
+     * 
+     * @param void N/A
+	 * @return string Returns list of options
+     */
     function getOptions()
     {
         if (count($this->options) > 0) {
