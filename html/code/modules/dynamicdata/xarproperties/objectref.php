@@ -191,9 +191,6 @@ class ObjectRefProperty extends SelectProperty
         return parent::showConfiguration($data);
     }
 
-	/**
-     * List the objects in dropdown
-     */ 
     public function preList()
     {
         // Bail if there is no parent object

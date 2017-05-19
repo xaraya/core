@@ -73,7 +73,7 @@ class SubItemsProperty extends DataProperty
     }
 
 	/**
-	 * Get the value of subitems from a web page<br/>
+	 * Get the value of subitems from a web page
 	 * 
 	 * @param  string name The name of the subitems
 	 * @param  string value The value of the subitems

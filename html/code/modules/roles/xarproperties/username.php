@@ -38,6 +38,11 @@ class UsernameProperty extends TextBoxProperty
         if ($this->value == 'myself') $this->value = xarUser::getVar('id');        
     }
 
+	/**
+	 * Validate the value of a textbox
+	 *
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
         // Save the current value of this property for comparison below
@@ -90,6 +95,12 @@ class UsernameProperty extends TextBoxProperty
         return true;
     }
 
+	/**
+	 * Display a textbox for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         // The user param is a name
@@ -109,6 +120,12 @@ class UsernameProperty extends TextBoxProperty
         return parent::showInput($data);
     }
 
+	/**
+	 * Display a textbox for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */	
     public function showOutput(Array $data = array())
     {
         if (!empty($data['display_type'])) $this->initialization_display_name = $data['display_type'];
@@ -154,6 +171,11 @@ class UsernameProperty extends TextBoxProperty
         return parent::showOutput($data);
     }
     
+	/**
+	 * Used to show the hidden data
+	 * 
+	 * @param  array data An array of input parameters 
+	 */	
     public function showHidden(Array $data = array())
     {
         if (empty($data['value'])) {
@@ -162,6 +184,12 @@ class UsernameProperty extends TextBoxProperty
         return parent::showHidden($data);
     }
     
+	/**
+	 * Get the value of input
+	 *  Check the value of input whether it is numeric or not.
+	 * 
+	 * @return string    return value
+	 */	
     public function getValue()
     {
         if ($this->initialization_store_type == 'id') {
@@ -174,6 +202,12 @@ class UsernameProperty extends TextBoxProperty
         }
     }
 
+	/**
+	 * Set the value of input
+	 * 
+	 * @param  string value The value of the input
+	 * @return string    return a storable representation of a value
+	 */	
     public function setValue($value=null)
     {
         if ($this->initialization_store_type == 'id') {

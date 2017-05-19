@@ -33,7 +33,7 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
     }
 
 	/**
-	 * Get the value of a multiselect from a web page<br/>
+	 * Get the value of a multiselect from a web page
 	 * 
 	 * @param  string name The name of the multiselect
 	 * @param  string value The value of the multiselect

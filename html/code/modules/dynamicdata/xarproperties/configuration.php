@@ -40,7 +40,7 @@ class ConfigurationProperty extends TextAreaProperty
     }
 
 	/**
-	* Get the value of a textarea from a web page<br/>
+	* Get the value of a textarea from a web page
 	* 
 	* @param  string name The name of the textarea
 	* @param  string value The value of the textarea

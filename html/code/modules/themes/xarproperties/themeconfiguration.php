@@ -40,6 +40,13 @@ class ThemeConfigurationProperty extends TextBoxProperty
         $this->include_reference = 1;
     }
 
+	/**
+	 * Get the value of a textbox from a web page
+	 * 
+	 * @param  string name The name of the textbox
+	 * @param  string value The value of the textbox
+	 * @return bool  Returns true
+	 */
     public function checkInput($name = '', $value = null)
     {
         $name = !empty($name) ? $name : $this->propertyprefix . $this->id;        
@@ -48,6 +55,12 @@ class ThemeConfigurationProperty extends TextBoxProperty
         return true;
     }
 
+	/**
+	 * Display a textbox for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         // set theme regid the from object reference (= theme_configuration) if possible
@@ -63,6 +76,12 @@ class ThemeConfigurationProperty extends TextBoxProperty
         return parent::showInput($data);
     }
 
+	/**
+	 * Display a textbox for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */
     public function showOutput(Array $data = array())
     {
         // set theme regid the from object reference (= theme_configuration) if possible
@@ -78,6 +97,11 @@ class ThemeConfigurationProperty extends TextBoxProperty
         return parent::showOutput($data);
     }
 
+	/**
+     * Parse the configuration rule
+     *
+     * @param string $configuration
+     */
     public function parseConfiguration($configuration = '')
     {
         if (is_array($configuration)) {
@@ -104,6 +128,10 @@ class ThemeConfigurationProperty extends TextBoxProperty
             $this->configuration[$name] = $configarg;
         }
     }
+	
+	/**
+	 * Get the configuration for the theme property type
+	 */
     public function getThemeConfigurations()
     {
         // cache configuration for all properties

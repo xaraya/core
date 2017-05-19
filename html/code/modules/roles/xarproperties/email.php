@@ -33,6 +33,11 @@ class EmailProperty extends TextBoxProperty
         $this->filepath   = 'modules/roles/xarproperties';
     }
 
+	/**
+	 * Validate the value of a textbox
+	 *
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
         if (!isset($value)) $value = "";
@@ -74,6 +79,12 @@ class EmailProperty extends TextBoxProperty
         return true;
     }
 
+	/**
+	 * Display a textbox for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         if (isset($data['confirm'])) $this->validation_email_confirm = $data['confirm'];

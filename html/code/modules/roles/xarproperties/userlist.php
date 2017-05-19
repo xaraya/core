@@ -105,6 +105,12 @@ class UserListProperty extends SelectProperty
         return false;
     }
 
+	/**
+	 * Display a dropdown for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         // CHECKME: Remove this?
@@ -144,6 +150,11 @@ class UserListProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
+	/**
+     * Retrieve the list of options on demand
+     * 
+     * @param void N/A
+     */
     public function getOptions()
     {
         $select_options = array();
