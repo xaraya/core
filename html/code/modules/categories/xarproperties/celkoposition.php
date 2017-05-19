@@ -547,7 +547,7 @@ class CelkoPositionProperty extends DataProperty
     }
      
 	/*
-	 * Move the item from one positiontion to other hierarchical structure of categories
+	 * Move the item from one position to other in hierarchical structure of categories
 	 *
 	 * @param int $id ID to be moved
      */

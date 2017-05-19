@@ -45,6 +45,11 @@ class HTMLPageProperty extends SelectProperty
         }
     }
 
+	/**
+	 * Validate the value of a selected dropdown option
+	 *
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -66,6 +71,12 @@ class HTMLPageProperty extends SelectProperty
         return false;
     }
 
+	/**
+	 * Display a Dropdown for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) {
@@ -93,6 +104,12 @@ class HTMLPageProperty extends SelectProperty
         return parent::showInput($data);
     }
 
+	/**
+	 * Display a dropdown for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */	
     public function showOutput(Array $data = array())
     {
         extract($data);
@@ -116,6 +133,12 @@ class HTMLPageProperty extends SelectProperty
         $data['srcpath']  = $srcpath;
         return parent::showOutput($data);
     }
+	
+	/**
+     * Retrieve the list of options on demand
+     * 
+     * @param void N/A
+     */
     public function getOptions()
     {
         $options = parent::getOptions();

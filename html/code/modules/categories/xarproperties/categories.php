@@ -555,9 +555,7 @@ class CategoriesProperty extends DataProperty
         return parent::updateConfiguration($data);
     }
     
-	/**
-	 *  Pending
-	 */
+	
     public function preList()
     {
         // Bail if there is no parent object

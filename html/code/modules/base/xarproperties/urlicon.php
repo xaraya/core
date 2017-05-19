@@ -33,7 +33,7 @@ class URLIconProperty extends URLProperty
     }
 
     public function showOutput(Array $data = array())
-    {;
+    {
         if (empty($data['value'])) $data['value'] = $this->value;
         if (empty($data['link'])) $data['link'] = '';
 
