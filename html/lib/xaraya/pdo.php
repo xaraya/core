@@ -184,8 +184,9 @@ class xarPDO extends PDO
     public function __construct($dsn, $username, $password, $options)
     {
         try {
-        parent::__construct($dsn, $username, $password, $options);
-        } catch (Exception $e) {var_dump($e->getMessage());exit;
+            parent::__construct($dsn, $username, $password, $options);
+        } catch (Exception $e) {
+            var_dump($e->getMessage());exit;
         }
         $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('xarPDOStatement', array($this)));
         $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -381,9 +382,6 @@ class ResultSet extends Object
         $this->fetchflag = empty($flag) ? self::FETCHMODE_NUM : $flag;
         $this->pdostatement = $pdostatement;
         $this->array = $this->pdostatement->fetchAll($this->fetchflag);
-    if ($dork) {
-    echo "<pre>";var_dump($this->array);exit;
-    }
         $this->EOF = count($this->array) === 0;
         // @todo: This is an odd Creole legacy. Remove instances of calling $resilt->fields without next() first
         if (!empty($this->array)) $this->fields = reset($this->array);
