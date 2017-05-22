@@ -31,7 +31,7 @@ class Installer extends Object
     public $fileExtensions            = array();
     public $databaseExtensions        = array();
 
-    protected function __construct($type = 'modules')
+    protected function __construct($type='modules')
     {
         $this->extType = $type;
         if ($this->extType == 'themes') {
@@ -49,7 +49,7 @@ class Installer extends Object
         $this->modulestack = new Stack();
     }
 
-    public static function getInstance($type = 'modules')
+    public static function getInstance($type='modules')
     {
         if (null === self::$instance) {
             self::$instance = new self($type);
