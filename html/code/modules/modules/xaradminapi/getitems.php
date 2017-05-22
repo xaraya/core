@@ -26,9 +26,9 @@ function modules_adminapi_getitems(Array $args=array())
     $tables =& xarDB::getTables();
     $modules_table = $tables['modules'];
     
-    $select = array();
-    $where = array();
-    $orderby = array();
+    $select   = array();
+    $where    = array();
+    $orderby  = array();
     $bindvars = array();
 
     $select['id']            = 'mods.id';
@@ -128,8 +128,10 @@ function modules_adminapi_getitems(Array $args=array())
     $items = array();
     while ($result->next()) {
         $item = array();
-        foreach (array_keys($select) as $field)
-            $item[$field] = array_shift($result->fields);
+        foreach (array_keys($select) as $field) {
+            if ($field == 'systemid') $item[$field] = $result->fields['id'];
+            else $item[$field] = $result->fields[$field];
+        }
 
         if (xarVarIsCached('Mod.Infos', $item['regid'])) {
             // merge cached info with db info 
@@ -165,7 +167,7 @@ function modules_adminapi_getitems(Array $args=array())
         $items[] = $item;    
     }
     $result->close();
-        
+
     return $items;
 }
 ?>
