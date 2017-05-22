@@ -26,6 +26,12 @@ class Roles_UserBlock extends BasicBlock
     protected $text_type_long      = 'User\'s Custom Box';
     protected $show_preview        = true;
 
+	/**
+     * Display the user info via block
+     * 
+     * @param array $data Data array
+     * @return array Display data array or null if nothing is to display.
+     */
     function display(Array $data=array())
     {
         if (!xarUserIsLoggedIn()) return;

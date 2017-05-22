@@ -12,13 +12,16 @@
  * @link http://xaraya.info/index.php/release/13.html
  */
 
-sys::import('xaraya.structures.containers.blocks.basicblock');
-
 /**
  * Initialise block info
  *
  * @author  Chris Powis <crisp@xaraya.com>
 */
+sys::import('xaraya.structures.containers.blocks.basicblock');
+
+/**
+ * Blocks Block Group Block
+ */
 class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
 {
     
@@ -35,9 +38,9 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
     
     public $group_instances     = array();
 
-/**
- * Implement required methods of the iBlockGroup interface
-**/
+	/**
+	 * Implement required methods of the iBlockGroup interface
+	 **/
     public function attachInstance($block_id)
     {
         if (in_array($block_id, $this->group_instances)) return true;
@@ -45,6 +48,12 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
         return true;      
     }
 
+	/**
+     * Detach the given block instance
+     * 
+     * @param string $block_id block id to be detached
+     * @return boolean Returns true if $block_id not in group instances array 
+     */
     public function detachInstance($block_id)
     {
         if (!in_array($block_id, $this->group_instances)) return true;
@@ -57,6 +66,7 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
         return true;
     }
 
+	
     public function orderInstance($block_id, $direction)
     {
         foreach ($this->group_instances as $i => $id) {
@@ -72,6 +82,9 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
         return true;
     }
 
+	/**
+	 * Get the group instances in array
+	 */
     public function getInstances()
     {
         $instances = array();
