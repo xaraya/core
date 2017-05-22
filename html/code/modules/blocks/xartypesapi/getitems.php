@@ -164,8 +164,6 @@ function blocks_typesapi_getitems(Array $args=array())
         $types[$item['type_id']] = $item;
     }
     $result->close();                  
-
     return $types;   
-   
 }
 ?>
