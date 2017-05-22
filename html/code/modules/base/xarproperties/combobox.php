@@ -1,4 +1,7 @@
 <?php
+/* include the parent class */
+sys::import('modules.base.xarproperties.dropdown');
+
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
@@ -9,10 +12,9 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-/* include the parent class */
-sys::import('modules.base.xarproperties.dropdown');
+
 /**
- * Handle the combo property
+ *  This property displays a dropdown and/or textbox
  */
     class ComboProperty extends SelectProperty
     {
@@ -28,7 +30,13 @@ sys::import('modules.base.xarproperties.dropdown');
             parent::__construct($descriptor);
             $this->template  = 'combobox';
         }
-
+/**
+ * Get the value of a textbox or dropdown from a web page<br/>
+ *  
+ * @param  string name The name of the dropdown to be selected
+ * @param  string value The value of the on the basis of name if not available from property id
+ * @return    This method passes the value gotten to the validateValue method and returns its output.
+ */	
         public function checkInput($name = '', $value = null)
         {
             $name = empty($name) ? $this->propertyprefix . $this->id : $name;
@@ -63,7 +71,12 @@ sys::import('modules.base.xarproperties.dropdown');
                 return parent::checkInput($name, $value);
             }
         }
-
+/**
+ * Display a textbox or dropdown for input
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
+ */
         public function showInput(Array $data = array())
         {
             if (empty($data['mode'])) $data['mode'] = $this->display_combo_mode;

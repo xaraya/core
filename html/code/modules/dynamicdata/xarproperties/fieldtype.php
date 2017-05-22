@@ -17,7 +17,7 @@
 sys::import('modules.dynamicdata.xarproperties.objectref');
 
 /**
- * Handle field type property
+ * This property displays a dropdown of dataproperties
  */
 class FieldTypeProperty extends ObjectRefProperty
 {
@@ -34,6 +34,12 @@ class FieldTypeProperty extends ObjectRefProperty
         // CHECKME: can we somehow get rid of $this->initialization_refobject here, or
         //          switch back to SelectProperty and use initialization_store_type ?
     }
+	
+	/**
+     * Retrieve the list of options on demand
+     * 
+     * @param void N/A
+     */
     function getOptions()
     {
         if (count($this->options) > 0) {

@@ -83,14 +83,14 @@ function installer_admin_phase5()
     // so let's try connecting with the dbname first, and then without if that fails
     $dbExists = false;
     try {
-      $dbconn = xarDBNewConn($init_args);
+      $dbconn = xarDB::newConn($init_args);
       $dbExists = true;
     } catch(Exception $e) {
       // Couldn't connect to the specified dbName
       // Let's try without db name
       try {
         $init_args['databaseName'] ='';
-        $dbconn = xarDBNewConn($init_args);
+        $dbconn = xarDB::newConn($init_args);
       } catch(Exception $e) {
         // It failed without dbname too
         return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
@@ -252,8 +252,8 @@ function installer_admin_phase5()
                               $modversion['version'],
                               $modversion['class'],
                               $modversion['category'],
-                              isset($modversion['admin']) ? $modversion['admin']:false,
-                              isset($modversion['user'])  ? $modversion['user']:false,
+                              !empty($modversion['admin']) ? 1 : 0,
+                              !empty($modversion['user'])  ? 1 : 0,
                               3); // chris: shouldn't this be a class constant?
             $result = $newStmt->executeUpdate($bindvars);
             $newModId = $dbconn->getLastId($tables['modules']);

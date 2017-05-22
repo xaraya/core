@@ -9,7 +9,8 @@
  */
 
 /**
- * Handle calendar property
+ * This property displays a textbox for date/time input	
+ * @todo Review this
  */
 class CalendarProperty extends DataProperty
 {
@@ -22,9 +23,14 @@ class CalendarProperty extends DataProperty
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'base';
-        $this->filepath   = 'modules/base/xarproperties';
+        $this->filepath  = 'modules/base/xarproperties';
     }
-
+	
+	/**
+	 * Validate the date and Time
+	 *
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -69,7 +75,13 @@ class CalendarProperty extends DataProperty
         }
         return true;
     }
-
+	
+	/**
+	 * Display a textbox for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         extract($data);
@@ -108,7 +120,13 @@ class CalendarProperty extends DataProperty
         $data['value']      = $value;
         return parent::showInput($data);
     }
-
+	
+	/**
+	 * Display a textbox for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */
     public function showOutput(Array $data = array())
     {
         extract($data);
@@ -138,7 +156,13 @@ class CalendarProperty extends DataProperty
         // $data['returnvalue']= xarLocaleFormatDate($dateformat, $value);
         return parent::showOutput($data);
     }
-
+	
+	/**
+	 * Display the Configuration (uses calendar template as default, allow template override by child classes)
+	 * 
+	 * @param  array data An array of input parameters 
+	 * @return string     HTML markup to display the property for output on a web page
+	 */
     public function showConfiguration(Array $args = array())
     {
         extract($args);
@@ -168,7 +192,12 @@ class CalendarProperty extends DataProperty
         }
         return xarTpl::property('base', $template, 'configuration', $data);
     }
-
+	
+	/**
+	 * Update the Configuration 
+	 * 
+	 * Validate the data and  save it in $this->configuration
+	 */
     public function updateConfiguration(Array $args = array())
     {
         extract($args);
@@ -188,7 +217,7 @@ class CalendarProperty extends DataProperty
                     $this->configuration = '';
                 }
             } else {
-                $this->configuration = $validation;
+                $this->configuration	 = $validation;
             }
         }
 

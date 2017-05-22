@@ -1,5 +1,10 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.integerbox');
+
+/**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
@@ -10,14 +15,9 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-
 /**
- * Include the base class
- */
-sys::import('modules.base.xarproperties.integerbox');
-
-/**
- * Handle item id property
+ * This property models an ID
+ * This is a speciic case of a number. It is sually used to hold datarecord IDs, which are assigned, unique and autoincrement
  */
 class ItemIDProperty extends NumberBoxProperty
 {

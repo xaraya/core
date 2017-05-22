@@ -1,5 +1,9 @@
 <?php
 /**
+ * Include the base class
+ */
+ sys::import('modules.base.xarproperties.dropdown');
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -9,9 +13,9 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.base.xarproperties.dropdown');
+
 /**
- * Handle the multiselect property
+ * This property displays a multiselect box
  */
 class MultiSelectProperty extends SelectProperty
 {
@@ -31,6 +35,13 @@ class MultiSelectProperty extends SelectProperty
         $this->template =  'multiselect';
     }
 
+	/**
+	 * Get the value of a dropdown
+	 * 
+	 * @param  string name The name of the dropdown
+	 * @param  string value The value of the dropdown to be selected
+	 * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+	 */
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
@@ -43,7 +54,12 @@ class MultiSelectProperty extends SelectProperty
         }
        return $this->validateValue($value);
     }
-    
+	
+    /**
+	 * Validate the value of a selected options
+	 *  
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
         // do NOT call parent validateValue here - it will always fail !!!
@@ -81,6 +97,12 @@ class MultiSelectProperty extends SelectProperty
         return true;
     }
 
+	/**
+	 * Display a Dropdown for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         if (isset($data['single'])) $this->validation_single = $data['single'];
@@ -90,7 +112,12 @@ class MultiSelectProperty extends SelectProperty
 
         return parent::showInput($data);
     }
-
+	/**
+	 * Display a dropdown for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */	
     public function showOutput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
@@ -100,7 +127,12 @@ class MultiSelectProperty extends SelectProperty
 
         return parent::showOutput($data);
     }
-
+	/**
+	 * Used to show the hidden data
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return bool   Returns true or false 
+	 */	   	
     public function showHidden(Array $data = array())
     {
         if (isset($data['single'])) $this->validation_single = $data['single'];
@@ -132,12 +164,24 @@ class MultiSelectProperty extends SelectProperty
         }
         return parent::showHidden($data);
     }
-
+	
+    /**
+     * Unserializes a given value
+     * 
+     * @param string $value Serialized value
+     * @return array Return unserialized value of $value param
+     */
     public function getValue()
     {
         return $this->getSerializedValue($this->value);
     }
-
+	
+    /**
+     * Unserializes a given value
+     * 
+     * @param string $value Serialized value
+     * @return array Return unserialized value of $value param
+     */
     public function getItemValue($itemid)
     {
         return $this->getSerializedValue($this->_items[$itemid][$this->name]);

@@ -1,5 +1,10 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.url');
+
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -9,13 +14,9 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-/**
- * Include the base class
- */
-sys::import('modules.base.xarproperties.url');
 
 /**
- * Handle the URLIcon property
+ * This property displays an icon for a URL; if a link is provided then the icon is shown as a link to the URL
  */
 class URLIconProperty extends URLProperty
 {
@@ -32,7 +33,7 @@ class URLIconProperty extends URLProperty
     }
 
     public function showOutput(Array $data = array())
-    {;
+    {
         if (empty($data['value'])) $data['value'] = $this->value;
         if (empty($data['link'])) $data['link'] = '';
 

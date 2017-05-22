@@ -11,7 +11,7 @@
  */
 
 /**
- * Class to handle hidden property
+ *  This property implement a hidden textbox.used to hide value on web page.
  */
 class HiddenProperty extends DataProperty
 {
@@ -27,7 +27,11 @@ class HiddenProperty extends DataProperty
         $this->template = 'hidden';
         $this->filepath   = 'modules/base/xarproperties';
     }
-
+/**
+ * Validate the value of a hidden field
+ *
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
     public function validateValue($value = null)
     {
         xarLog::message("DataProperty::validateValue: Validating property " . $this->name);

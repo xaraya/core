@@ -19,6 +19,7 @@ $coremodules = array(
     array('name' => "authsystem",   'regid' => 42),
     array('name' => "base",         'regid' => 68),
     array('name' => "blocks",       'regid' => 13),
+    array('name' => "categories",   'regid' => 147),
     array('name' => "dynamicdata",  'regid' => 182),
     array('name' => "installer",    'regid' => 200),
     array('name' => "mail",         'regid' => 771),

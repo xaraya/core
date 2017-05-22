@@ -1,4 +1,6 @@
 <?php
+/* include the base class */
+sys::import('modules.base.xarproperties.dropdown');
 /**
  * @package modules\base
  * @category Xaraya Web Applications Framework
@@ -9,10 +11,9 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-/* include the base class */
-sys::import('modules.base.xarproperties.dropdown');
+
 /**
- * Handle check box list property
+ * This property displays a cluster of checkboxes
  */
 class CheckboxListProperty extends SelectProperty
 {
@@ -28,7 +29,14 @@ class CheckboxListProperty extends SelectProperty
         $this->tplmodule = 'base';
         $this->template  = 'checkboxlist';
     }
-
+/**
+ * Get the value of a checkbox from a web page<br/>
+ * The value is true if checked, otherwise it is false
+ * 
+ * @param  string name The name of the checkbox to be checked
+ * @param  string value The value of the checkbox to be checked
+ * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+ */
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
@@ -39,7 +47,11 @@ class CheckboxListProperty extends SelectProperty
         }
         return $this->validateValue($value);
     }
-
+/**
+ * Validate the value of a checkbox (checked or not checked)
+ *
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
     public function validateValue($value = null)
     {
         if (!isset($value)) $value = '';
@@ -47,7 +59,13 @@ class CheckboxListProperty extends SelectProperty
         xarLog::message("DataProperty::validateValue: Validating property " . $this->name);
         return true;
     }
-
+/**
+ * Display a checkbox for input
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for input on a web page
+ */
+	
     public function showInput(Array $data = array())
     {
         if (isset($data['value'])) {
@@ -61,7 +79,12 @@ class CheckboxListProperty extends SelectProperty
         if (!isset($data['rows_cols'])) $data['rows_cols'] = $this->display_columns;
         return parent::showInput($data);
     }
-
+/**
+ * Display a checkbox for output
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for output on a web page
+ */
     public function showOutput(Array $data = array())
     {
         if (isset($data['value'])) $this->value = $data['value'];
@@ -69,7 +92,12 @@ class CheckboxListProperty extends SelectProperty
         $data['options'] = $this->getOptions();
         return parent::showOutput($data);
     }
-
+/**
+ * Used to show the hidden data
+ * 
+ * @param  array data An array of input parameters
+ * @return bool   Returns true or false 
+ */	  
     public function showHidden(Array $data = array())
     {
         if (isset($data['value'])) {
@@ -81,7 +109,13 @@ class CheckboxListProperty extends SelectProperty
         }
         return parent::showHidden($data);
     }
-
+/**
+ * Get the value of input
+ *  Check the value of input whether it is in an array or not.
+ * If value of input is not an array it converts string into array first.
+ * 
+ * @return array    return always array value
+ */	 
     public function getValue()
     {
         if (!is_array($this->value)) {
@@ -95,7 +129,12 @@ class CheckboxListProperty extends SelectProperty
         }
         return $value;
     }
-
+/**
+ * Set the value of input
+ * 
+ * @param  string value The value of the input
+ * @return string    return a storable representation of a value
+ */	   
     public function setValue($value=null)
     {
         if ( is_array($value) ) $this->value = implode ( ',', $value);

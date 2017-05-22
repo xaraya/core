@@ -39,6 +39,9 @@
 sys::import('modules.base.xarproperties.dropdown');
 sys::import('modules.categories.xarproperties.categorytree');
 
+/**
+ * This property displays a widget that allows the user to navigate objects by their categories
+ */
 class CategoryNavigationProperty extends SelectProperty
 {
     /**
@@ -53,7 +56,7 @@ class CategoryNavigationProperty extends SelectProperty
 
     public $display_layout = 'tree';
 
-/*    public $baselist   = 'all';
+/*  public $baselist   = 'all';
     public $cidlist    = array();
     public $itemid     = 0;
     public $showbase   = true;
@@ -66,16 +69,28 @@ class CategoryNavigationProperty extends SelectProperty
         $this->filepath   = 'modules/categories/xarproperties';
     }
 
+	/**
+	 * Display the property for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         return parent::showInput($data);
     }
 
+	/**
+	 * Display the property for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */	
     public function showOutput(Array $data = array())
     {
         // fix missing $data['...'] conversions below
         extract($data);
-
+						
     // TODO: for multi-module pages, we'll need some other reference point(s)
     //       (e.g. cross-module categories defined in categories admin ?)
 
@@ -1076,6 +1091,17 @@ class CategoryNavigationProperty extends SelectProperty
         return ($a['baseorder'] > $b['baseorder']) ? 1 : -1;
     }
 
+	/**
+     * Retrieve or check an individual option on demand
+     *
+     * @param  $check boolean
+     * @return if check == false:<br/>
+     *                - display value, if found, of an option whose store value is $this->value<br/>
+     *                - $this->value, if not found<br/>
+     *         if check == true:<br/>
+     *                - true, if an option exists whose store value is $this->value<br/>
+     *                - false, if no such option exists<br/>
+     */
     function getOption($check = false)
     {
         if (!isset($this->value)) {

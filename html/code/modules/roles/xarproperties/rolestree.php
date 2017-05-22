@@ -21,7 +21,7 @@ class RolesTreeProperty extends DataProperty
     public $desc       = 'Roles Tree';
     public $reqmodules = array('roles');
 
-     function __construct(ObjectDescriptor $descriptor)
+    function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
 
@@ -29,6 +29,12 @@ class RolesTreeProperty extends DataProperty
         $this->filepath   = 'modules/roles/xarproperties';
     }
 
+	/**
+	 * Display the property for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         if (!isset($data['topid'])) $data['topid'] = (int)xarModVars::get('roles', 'everybody');
@@ -56,6 +62,11 @@ sys::import('xaraya.structures.tree');
  */
 class RolesTree extends Tree
 {
+	/**
+	*  Create nodes for a tree format
+	* 
+	* @param  TreeNode data An array of input parameters
+	*/
     function createnodes(TreeNode $node)
     {
         sys::import('modules.roles.class.roles');

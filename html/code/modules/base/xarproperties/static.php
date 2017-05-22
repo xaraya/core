@@ -10,7 +10,7 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * Handle the static text property
+ * This property displays a chunk of static text. The text cannot be modified.
  */
 class StaticTextProperty extends DataProperty
 {
@@ -26,6 +26,11 @@ class StaticTextProperty extends DataProperty
         $this->template = 'static';
         $this->filepath = 'modules/base/xarproperties';
     }
+	/**
+ * Validate the value of a input
+ *  
+ * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+ */
 
     public function validateValue($value = null)
     {

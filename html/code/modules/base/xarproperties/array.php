@@ -18,7 +18,7 @@
  * Column numbers start at 0
  * Row numbers in non associative arrays start at 1 (more readable)
  * In non associative arrays the value in value[0][row] is always the row number, starting with 1
- * In all cases (?) the number of rows is the count of valuue[0]
+ * In all cases (?) the number of rows is the count of value[0]
  *
  * The column definition array is made up of 4 elements, each of which is an array
  * - title
@@ -32,7 +32,7 @@
 sys::import('modules.dynamicdata.class.properties.base');
 
 /**
- * Handle Array Property
+ * This property models an array
  */
 class ArrayProperty extends DataProperty
 {
@@ -70,6 +70,13 @@ class ArrayProperty extends DataProperty
         $this->filepath       = 'modules/base/xarproperties';
     }
 
+	/**
+	 * Get the value of an array from a web page
+	 * 
+	 * @param  string name The name of an array
+	 * @param  string value The value of an array
+	 * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+	 */
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
@@ -117,6 +124,11 @@ class ArrayProperty extends DataProperty
         return $this->validateValue($value);
     }
 
+	/**
+	 * Validate the value of an array
+	 *
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
 //        if (!parent::validateValue($value)) return false;
@@ -159,6 +171,12 @@ class ArrayProperty extends DataProperty
         return true;
     }
 
+	/**
+	 * Set the value of an array
+	 * 
+	 * @param  string value The value of the input
+	 * @return bool Returns true
+	 */	 
     function setValue($value=null)
     {
         if (empty($value)) $value = array();
@@ -206,6 +224,11 @@ class ArrayProperty extends DataProperty
         return true;
     }
 
+	/**
+	 * Get the value of an array
+	 * 
+	 * @return array    return always array value
+	 */	
     public function getValue()
     {
         // If passing a string we assume it is already a serialzed array of the correct type
@@ -240,6 +263,12 @@ class ArrayProperty extends DataProperty
         }
     }
 
+	/**
+	 * Display an array for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         // If this is an array definition, load its configuration up front
@@ -358,6 +387,12 @@ class ArrayProperty extends DataProperty
         return parent::showInput($data);
     }
 
+	/**
+	 * Display an array for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */	
     public function showOutput(Array $data = array())
     {
         if (isset($data['value'])) $this->value = $data['value'];
@@ -405,6 +440,11 @@ class ArrayProperty extends DataProperty
         return parent::showOutput($data);
     }
     
+	/**
+     * Update the current configuration rule in a specific way for this property type
+     *
+     * @param  array data An array of input parameters
+     */
     public function updateConfiguration(Array $data = array())
     {
         if ($this->type == 999) {

@@ -14,9 +14,18 @@
 sys::import('modules.dynamicdata.class.properties.base');
 
 /**
- * Handle the CelkoPosition property
+ * The CelkoPosition property
  *
  * Show the position of an item in a tree of nested sets
+ * The celko position of an item in a hierarchical structure is given by its position relative to another item.
+ * Allowed positions are:
+ * - before a given item on the same level
+ * - after a given item on the same level
+ * - first child of a given item
+ * - last child of a given item
+ *
+ * The input for this property shows a dropdown of available categories, and a second dropdown with the values above
+ * This code is used for categories, but it can (and is) used for any hierarchy of nested sets.
  *
  * Notes
  *
@@ -87,6 +96,13 @@ class CelkoPositionProperty extends DataProperty
 					);
     }
 
+	/**
+	 * Get the value of a dropdown from a web page
+	 * 
+	 * @param  string name The name of the dropdown
+	 * @param  string value The value of the dropdown
+	 * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+	 */
     public function checkInput($name = '', $value = null)
     {
         if (!xarVarFetch($name . '_reference_id', 'int:0', $reference_id)) return;
@@ -118,6 +134,12 @@ class CelkoPositionProperty extends DataProperty
         return $this->validateValue($value);
     }
 
+	/**
+     * Create Value
+     * 
+     * @param int $itemid
+     * @return boolean Returns true or false
+     */
     public function createValue($itemid=0)
     {
         $n = $this->countItems($itemid);
@@ -252,6 +274,12 @@ class CelkoPositionProperty extends DataProperty
         return true;
     }
 
+	/**
+     * Updates value for the given item id.
+	 *
+     * @param int $itemid ID of the item to be updated
+     * @return boolean Returns true on success, false on failure
+     */
     public function updateValue($itemid=0)
     {
         // Obtain current information on the item
@@ -343,6 +371,12 @@ class CelkoPositionProperty extends DataProperty
        } 
     }
 
+	/**
+	 * Display a dropdown for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         if (!isset($data['position_options'])) $data['position_options'] = $this->position_options;
@@ -350,7 +384,7 @@ class CelkoPositionProperty extends DataProperty
         if (!isset($data['reference_id'])) $data['reference_id'] = $this->reference_id;
         if (isset($data['filter'])) $this->initialization_celkofilter = $data['filter'];
         if (isset($data['base_category'])) $this->initialization_celkobasecategory = $data['base_category'];
-       
+        
         $include_self = $this->initialization_celkobasecategory[0][2];
         $data['itemid'] = isset($data['itemid']) ? $data['itemid'] : $this->_itemid;
         if (!empty($data['itemid'])) {        
@@ -404,6 +438,12 @@ class CelkoPositionProperty extends DataProperty
 
     }
     
+	/**
+	 * Used to show the hidden data
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return bool   Returns true or false 
+	 */	
     public function showHidden(Array $data = array())
     {
         if (!isset($data['position_options'])) $data['position_options'] = $this->position_options;
@@ -474,6 +514,12 @@ class CelkoPositionProperty extends DataProperty
         for ($i=1;$i<4;$i++) if (!$this->dbconn->Execute($SQLquery[$i],$bindvars[$i])) return;
     }
 
+	/**
+     * Fetch item from the database
+     * 
+     * @param int $id ID of the item
+     * @return array Array of fetched item
+     */
     public function getItem($id) 
     {
         sys::import('xaraya.structures.query');
@@ -489,11 +535,22 @@ class CelkoPositionProperty extends DataProperty
         return $result;
     }
     
+	/**
+     * Get the value of this property for a particular item
+     *
+     * @param int $id the id we want the value for
+     * @return array return unserialized value of $id param
+     */
     public function getItemValue($id) 
     {
         return serialize($this->getItem($id));
     }
-    
+     
+	/*
+	 * Move the item from one position to other in hierarchical structure of categories
+	 *
+	 * @param int $id ID to be moved
+     */
     public function mountValue($id) 
     {
         $result = $this->getItem($id);
@@ -503,9 +560,9 @@ class CelkoPositionProperty extends DataProperty
         $this->atomic_value['parent'] = $result['parent_id'];
     }
     
-/**
- * Return the number of items in the celko table that have this itemid
- */
+	/**
+	 * Return the number of items in the celko table that have this itemid
+	 */
     private function countItems($itemid=0)
     {
         $sql = "SELECT COUNT(id) AS childnum
@@ -520,6 +577,13 @@ class CelkoPositionProperty extends DataProperty
         return $num;
     }
 
+	/*
+	 * Used to build tree of categories
+	 *
+	 * @param int $parent_id Parent ID of the tree
+	 * @param int $left_id Left ID of the first level categories
+	 * @return int returns the right value of node
+	*/
     function build_tree($parent_id, $left_id=1)
     {       
         // We need tohe left ID in case there are other top level categories, and we need to know where this tree starts
@@ -722,6 +786,9 @@ class CelkoPositionProperty extends DataProperty
         return $parent_id;
     }
     
+	/**
+	 * Set the values of this property
+	 */
     private function setCelkoValues($newid, $oldid)
     {
         if (isset($this->itemindices[$newid])) {
@@ -741,14 +808,17 @@ class CelkoPositionProperty extends DataProperty
         return true;
     }
     
+	/**
+	 * The import value imports the value from an XML file.
+	 */
     public function importValue(SimpleXMLElement $element)
     {
         return $element->{$this->name};
     }
 
-/**
- * The export value is a serialized array with the elements itemid, parentid, leftid, rightid
- */
+	/**
+	 * The export value is a serialized array with the elements itemid, parentid, leftid, rightid
+	 */
     public function exportValue($itemid, $item)
     {
         $thisItem = $this->getItem($itemid);
@@ -756,6 +826,11 @@ class CelkoPositionProperty extends DataProperty
         return $exportvalue;
     }
 
+	/**
+     * Update the current configuration rule in a specific way for this property type
+     *
+     * @param  array data An array of input parameters
+     */
     public function updateConfiguration(Array $data = array())
     {
         // Removes the empty line for adding a row
@@ -773,6 +848,12 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
 
 class CelkoPositionPropertyInstall extends CelkoPositionProperty implements iDataPropertyInstall
 {
+	/**
+     * Install method
+     * 
+     * @param array $data Parameter data array
+     * @return boolean Returns true.
+     */
     public function install(Array $data=array())
     {
         $dat_file = sys::code() . 'modules/categories/xardata/celkoposition_configurations-dat.xml';

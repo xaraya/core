@@ -1,5 +1,10 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.textarea');
+
+/**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
@@ -11,13 +16,10 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
-/**
- * Include the base class
- */
-sys::import('modules.base.xarproperties.textarea');
+
 
 /**
- * Handle the configuration property
+ * This property holds the configuration of a dataproperty
  */
 class ConfigurationProperty extends TextAreaProperty
 {
@@ -37,6 +39,13 @@ class ConfigurationProperty extends TextAreaProperty
         $this->include_reference = 1;
     }
 
+	/**
+	* Get the value of a textarea from a web page
+	* 
+	* @param  string name The name of the textarea
+	* @param  string value The value of the textarea
+	* @return bool   This method returns true if $data configuration updated otherwise returns false 
+	*/	
     public function checkInput($name = '', $value = null)
     {
         // set property type from object reference (= dynamic configuration) if possible
@@ -61,6 +70,12 @@ class ConfigurationProperty extends TextAreaProperty
         return true;
     }
 
+	/**
+	* Display a textarea for input
+	* 
+	* @param  array data An array of input parameters
+	* @return string     HTML markup to display the property for input on a web page
+	*/	
     public function showInput(Array $data = array())
     {
         // set property type from object reference (= dynamic configuration) if possible
@@ -84,6 +99,12 @@ class ConfigurationProperty extends TextAreaProperty
         return $property->showConfiguration($data);
     }
 
+	/**
+	* Display a textarea for output
+	* 
+	* @param  array data An array of input parameters
+	* @return string     HTML markup to display the property for output on a web page
+	*/	
     public function showOutput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;

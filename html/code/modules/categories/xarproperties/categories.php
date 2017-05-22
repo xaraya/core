@@ -30,6 +30,7 @@ sys::import('modules.categories.xarproperties.categorytree');
  *
  * Note: a base category -1 means show all the categories in a dropdown
  *
+ * The configuration of this property is handled by a categorypicker property
  */
 class CategoriesProperty extends DataProperty
 {
@@ -71,6 +72,13 @@ class CategoriesProperty extends DataProperty
         }
     }
 
+	/**
+	 * Get the value of the property from a web page
+	 * 
+	 * @param  string name The name of the property
+	 * @param  string value The value of the property
+	 * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+	 */
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
@@ -100,6 +108,11 @@ class CategoriesProperty extends DataProperty
         return $this->validateValue($categories);
     }
 
+	/**
+	 * Validate the value of the property
+	 *
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -249,7 +262,7 @@ class CategoriesProperty extends DataProperty
     /**
      * Displays the property for input
      * 
-     * The value is an associateive array that has the form
+     * The value is an associative array that has the form
      * key:
      * value: ID value of the category displayed
      *
@@ -390,6 +403,14 @@ class CategoriesProperty extends DataProperty
         return parent::showInput($data);
     }
 
+	/**
+     * Displays the property for output
+     * 
+     * The value is an associative array that has the form
+     * key:
+     * value: ID value of the category displayed
+     *
+     */
     public function showOutput(Array $data = array())
     {
         if (!empty($this->source)) {
@@ -433,17 +454,34 @@ class CategoriesProperty extends DataProperty
         return parent::showOutput($data);
     }
 
+	/**
+	 * Get the value of input
+	 * Unserialize the value
+	 * 
+	 * @return array    return the unserialized value
+	 */	 
     public function getValue()
     {    
         $unpacked = unserialize($this->value);
         return $unpacked;
     }
 
+	/**
+	 * Set the value of input
+	 * 
+	 * @param  string value The value of the input
+	 */	
     public function setValue($value=null)
     {
         $this->value = serialize($value);
     }
 
+	/*
+	 * Move the item from the base category to the other categories in property
+	 *
+	 * @param int $itemid Item ID to be moved
+     * @return boolean Returns true
+     */
     public function mountValue($itemid=0)
     {    
         sys::import('xaraya.structures.query');
@@ -498,6 +536,11 @@ class CategoriesProperty extends DataProperty
         return $items;
     }
 
+	/**
+     * Update the current configuration rule in a specific way for this property type
+     *
+     * @param  array data An array of input parameters
+     */
     public function updateConfiguration(Array $data = array())
     {
         // Array properties and their extensions have arrays as values
@@ -512,6 +555,7 @@ class CategoriesProperty extends DataProperty
         return parent::updateConfiguration($data);
     }
     
+	
     public function preList()
     {
         // Bail if there is no parent object

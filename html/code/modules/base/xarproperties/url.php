@@ -1,5 +1,10 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.textbox');
+
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -9,13 +14,9 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-/**
- * Include the base class
- */
-sys::import('modules.base.xarproperties.textbox');
 
 /**
- * Handle the URL property
+ * This property displays a raw URL link
  */
 class URLProperty extends TextBoxProperty
 {
@@ -28,7 +29,10 @@ class URLProperty extends TextBoxProperty
         parent::__construct($descriptor);
         $this->template = 'url';
     }
-
+/**
+ * Validate the value of a url and also passes for all types of url schemes
+ * 
+ */
     function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;

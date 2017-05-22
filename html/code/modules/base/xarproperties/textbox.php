@@ -15,6 +15,10 @@ sys::import('modules.dynamicdata.class.properties.base');
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+ 
+ /**
+  * This property displays a textbox
+  */
 class TextBoxProperty extends DataProperty
 {
     public $id         = 2;

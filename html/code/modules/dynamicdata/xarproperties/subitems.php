@@ -10,7 +10,10 @@
  *
  * @author Marc Lutolf <marc@luetolf-carroll.com>
  */
-
+ /**
+  * This property models the subitems of a dataobject. It is a dataobject attached to another dataobject
+  * It is used when you want to model hierarchical data
+  */
 class SubItemsProperty extends DataProperty
 {
     public $id           = 30069;
@@ -69,6 +72,13 @@ class SubItemsProperty extends DataProperty
         }
     }
 
+	/**
+	 * Get the value of subitems from a web page
+	 * 
+	 * @param  string name The name of the subitems
+	 * @param  string value The value of the subitems
+	 * @return bool   This method returns the true or false value.
+	 */
     public function checkInput($name = '', $value = null)
     {
         $oldprefix = $this->objectref->getFieldPrefix();
@@ -139,6 +149,9 @@ class SubItemsProperty extends DataProperty
         return $this->valueFunction($itemid, 'update');
     }
 
+/*
+ *  Delete the items from the subitem's itemdata property
+ */ 
     public function deleteValue($itemid=0)
     {
         foreach($this->todelete as $id)
@@ -154,7 +167,13 @@ class SubItemsProperty extends DataProperty
         $this->_setItemsData($this->_getItemsData());
         return true;
     }
-
+    
+	/**
+	 * Display subitems for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         if (!isset($data['name'])) $data['name'] = $this->propertyprefix . $this->id;
@@ -251,6 +270,12 @@ class SubItemsProperty extends DataProperty
         return parent::showInput($data);
     }
 
+	/**
+	 * Display subitems for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */	
     public function showOutput(Array $data = array())
     {
         // If there is no override from the tag, rearrange the items
@@ -278,6 +303,12 @@ class SubItemsProperty extends DataProperty
         return parent::showOutput($data);
     }
 
+	/**
+	 * Used to show the hidden subitems
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */	 
     public function showHidden(Array $data = array())
     {
         // Force the fieldprefix

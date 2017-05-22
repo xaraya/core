@@ -15,6 +15,9 @@
 
 sys::import('modules.categories.xarproperties.categorytree');
 
+/**
+ * This property displays a multitiered menu of categories
+ */
 class CategoryMenuProperty extends CategoryTreeProperty
 {
     public $id         = 30047;
@@ -22,6 +25,12 @@ class CategoryMenuProperty extends CategoryTreeProperty
     public $desc       = 'CategoryMenu';
     public $reqmodules = array('categories');
 
+	/**
+	 * Display the property for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         if(!xarVarFetch('activetab',    'isset', $data['activetab'],    0, XARVAR_NOT_REQUIRED)) {return;}

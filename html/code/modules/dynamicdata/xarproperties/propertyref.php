@@ -14,6 +14,7 @@
 sys::import('modules.base.xarproperties.dropdown');
 
 /**
+ * This property displays a dropdown of properties of a dataobject
  * Select a property from a particular object, either by specifying the reference object in configuration, or
  * by specifying which other property from the current objectref contains the objectname or objectid
  */
@@ -35,6 +36,12 @@ class PropertyRefProperty extends SelectProperty
         $this->include_reference = 1;
     }
 
+	/**
+	 * Display a dropdown of properties for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         // Allow overriding by specific parameters
@@ -43,6 +50,12 @@ class PropertyRefProperty extends SelectProperty
         return parent::showInput($data);
     }
 
+	/**
+	 * Display a dropdown of properties for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */
     public function showOutput(Array $data = array())
     {
         // Override getOption() below
@@ -109,6 +122,17 @@ class PropertyRefProperty extends SelectProperty
         return $options;
     }
 
+	/**
+     * Retrieve or check an individual option on demand
+     *
+     * @param  $check boolean
+     * @return if check == false:<br/>
+     *                - display value, if found, of an option whose store value is $this->value<br/>
+     *                - $this->value, if not found<br/>
+     *         if check == true:<br/>
+     *                - true, if an option exists whose store value is $this->value<br/>
+     *                - false, if no such option exists<br/>
+     */
     function getOption($check = false)
     {
         if ($check) return true;

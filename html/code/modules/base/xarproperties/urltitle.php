@@ -1,5 +1,9 @@
 <?php
 /**
+ * Include the base class
+ */
+ sys::import('modules.base.xarproperties.textbox');
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -9,9 +13,9 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.base.xarproperties.textbox');
+
 /**
- * handle the URL + Title property
+ * This property displays a title for a URL; if a link is provided then the icon is shown as a link to the URL
  */
 class URLTitleProperty extends TextBoxProperty
 {
@@ -26,6 +30,11 @@ class URLTitleProperty extends TextBoxProperty
         $this->template  = 'urltitle';
     }
 
+	/**
+	 * Validate the value of a url title textbox
+	 *
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -85,7 +94,13 @@ class URLTitleProperty extends TextBoxProperty
         }
         return true;
     }
-
+	
+	/**
+	 * Display a textbox for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) {
@@ -126,6 +141,12 @@ class URLTitleProperty extends TextBoxProperty
         return parent::showInput($data);
     }
 
+	/**
+	 * Display a textbox for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */	
     public function showOutput(Array $data = array())
     {
         extract($data);

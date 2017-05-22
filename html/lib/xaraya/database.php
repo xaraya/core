@@ -47,48 +47,11 @@ function xarDB_init(array &$args)
 
     if(!isset($args['doConnect']) or $args['doConnect']) {
         try {
-            xarDBNewConn($args);
+            xarDB::newConn($args);
         } catch (Exception $e) {
             throw $e;
         }
     }
     return true;
-}
-
-/**
- * Initialise a new db connection
- *
- * Create a new connection based on the supplied parameters
- *
- * 
- * @todo   make an object/class method out of this
- */
-function &xarDBNewConn(array $args = null)
-{
-    // Get database parameters
-    $dsn = array('phptype'   => $args['databaseType'],
-                 'hostspec'  => $args['databaseHost'],
-                 'username'  => $args['userName'],
-                 'password'  => $args['password'],
-                 'database'  => $args['databaseName'],
-                 'encoding'  => $args['databaseCharset']);
-    // Set flags
-    $flags = 0;
-    $persistent = !empty($args['persistent']) ? true : false;
-    if($persistent) $flags |= xarDB::PERSISTENT;
-    // if code uses assoc fetching and makes a mess of column names, correct
-    // this by forcing returns to be lowercase
-    // <mrb> : this is not for nothing a COMPAT flag. the problem still lies
-    //         in creating the database schema case sensitive in the first
-    //         place. Unfortunately, that is just not portable.
-    $flags |= xarDB::COMPAT_ASSOC_LOWER;
-
-    try {
-        $conn = xarDB::getConnection($dsn,$flags); // cached on dsn hash, so no worries
-    } catch (Exception $e) {
-        throw $e;
-    }
-    xarLog::message("New connection created, now serving " . xarDB::$count . " connections");
-    return $conn;
 }
 ?>

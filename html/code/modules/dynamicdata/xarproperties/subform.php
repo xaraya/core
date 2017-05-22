@@ -12,7 +12,7 @@
  */
 
 /**
- * Handle subform property
+ * @todo This has been superceded by the subitems property
  */
 class SubFormProperty extends DataProperty
 {
@@ -48,6 +48,13 @@ class SubFormProperty extends DataProperty
     public $initialization_fixed_keys = 1;
 */
 
+    /**
+	 * Get the value of a this property type from a web page<br/>
+	 * 
+	 * @param  string name The name of this property type
+	 * @param  string value The value of this property type
+	 * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+	 */
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
@@ -60,6 +67,11 @@ class SubFormProperty extends DataProperty
         return $this->validateValue($value);
     }
 
+	/**
+	 * Validate the value of this property type
+	 *
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -431,6 +443,12 @@ class SubFormProperty extends DataProperty
         return true;
     }
 
+	/**
+	 * Display this property type for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         extract($data);
@@ -509,6 +527,12 @@ class SubFormProperty extends DataProperty
         return parent::showInput($data);
     }
 
+	/**
+	 * Display this property type for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */
     public function showOutput(Array $args = array())
     {
         extract($args);
@@ -544,6 +568,9 @@ class SubFormProperty extends DataProperty
         return xarTpl::property($module, $template, 'showoutput', $data);
     }
 
+	/**
+     * Return the current object in the subform, e.g. in case you want to access it afterwards
+     */
     function &getObject($value)
     {
         if (isset($this->objectref)) {

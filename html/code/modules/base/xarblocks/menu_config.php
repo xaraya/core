@@ -112,11 +112,11 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
             } elseif ($new_link['ismodlink'] && $new_position > 1) {
                 $new_link['ismodlink'] = 0;
                  if (empty($new_label)) {
-                    $new_label = xarModGetDisplayableName($new_link['modname']);
+                    $new_label = xarMod::getDisplayName($new_link['modname']);
                     $new_link['name'] = $new_link['modname'] . '_' . $new_link['modtype'] . '_main';
                 }
                 if (empty($new_title)) {
-                    $new_title = xarModGetDisplayableDescription($new_link['modname']);
+                    $new_title = xarMod::getDisplayDescription($new_link['modname']);
                 }
             } elseif ($new_link['ismodlink']) {
                 $new_link['name'] = $new_link['modname'] . '_' . $new_link['modtype'];

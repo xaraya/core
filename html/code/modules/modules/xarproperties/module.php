@@ -7,13 +7,14 @@
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/1.html
+ * @author mikespub
  */
 
 sys::import('modules.dynamicdata.xarproperties.objectref');
 
 /**
- * Handle module property
- * @author mikespub
+ * This property displays a dropdown of Xaraya modules (subject to filters)
+ * 
  */
 class ModuleProperty extends ObjectRefProperty
 {
@@ -35,12 +36,26 @@ class ModuleProperty extends ObjectRefProperty
         $this->filepath = 'modules/modules/xarproperties';
     }
 
+	/**
+	 * Display a dropdown for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     function showInput(Array $data=array())
     {
         if (!empty($data['filter'])) $this->filter = $data['filter'];
         return parent::showInput($data);
     }
 
+	/**
+     * Retrieve the list of options on demand
+     * 
+     * N.B. the code below is repetitive, but lets leave it clearly separated for 
+     * each type of input for the moment
+     * 
+     * @param void N/A
+     */
     function getOptions()
     {
         if (count($this->options) > 0) {

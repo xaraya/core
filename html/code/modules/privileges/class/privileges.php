@@ -434,7 +434,7 @@ class xarPrivileges extends xarMasks
                 $allmodules[] = array(
                     'id'   => $result->getInt(1),
                     'name' => $result->getString(2),
-                     //'display' => xarModGetDisplayableName($name),
+                     //'display' => xarMod::getDisplayName($name),
                     'display' => ucfirst($result->getString(2))
                 );
             }

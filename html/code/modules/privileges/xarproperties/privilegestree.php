@@ -1,7 +1,4 @@
 <?php
-/* Include the parent class  */
-sys::import('modules.dynamicdata.class.properties.base');
-
 /**
  * @package modules\privileges
  * @subpackage privileges
@@ -14,10 +11,12 @@ sys::import('modules.dynamicdata.class.properties.base');
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
+sys::import('xaraya.structures.tree');
 sys::import('modules.privileges.class.privileges');
+sys::import('modules.dynamicdata.class.properties.base');
 
 /**
- * The privilegestree property displays a hierarchy of Xaraya privileges in tree form
+ * Handle Privileges Tree property
  */
 class PrivilegesTreeProperty extends DataProperty
 {
@@ -26,12 +25,13 @@ class PrivilegesTreeProperty extends DataProperty
     public $desc       = 'PrivilegesTree';
     public $reqmodules = array('privileges');
 	
-/**
- * Create an instance of this dataproperty<br/>
- * - It belongs to the privileges module<br/>
- * - it is found at modules/privileges/xarproperties<br/>
- *
- */
+	/**
+	 * Create an instance of this dataproperty<br/>
+	 * - It belongs to the privileges module<br/>
+	 * - It has its own input/output templates<br/>
+	 * - it is found at modules/privileges/xarproperties<br/>
+	 *
+	 */
     function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
@@ -42,12 +42,12 @@ class PrivilegesTreeProperty extends DataProperty
         $this->privs = new xarPrivileges();
     }
 	
-/**
- * Display this dataproperty for input
- * 
- * @param  array data An array of input parameters
- * @return string     HTML markup to display the property for input on a web page
- */	
+	/**
+	 * Display a options for input to show wheather you want to display input for an instance or not.
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */	
     public function showInput(Array $data = array())
     {
         if (!isset($data['show'])) $data['show'] = 'assigned';
@@ -60,34 +60,18 @@ class PrivilegesTreeProperty extends DataProperty
         $data['trees'] = $trees;
         return parent::showInput($data);
     }
+
 }
-
 // ---------------------------------------------------------------
-/* Include the parent class  */
-sys::import('xaraya.structures.tree');
-
-/**
- * Class that models a tree of Xaraya privileges
- *
- * @package modules\privileges
- * @subpackage privileges
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://xaraya.info/index.php/release/1098.html
- *
- * @author Marc Lutolf <mfl@netspan.ch>
- */
-
 class PrivilegesTree extends Tree
 {
-/**
-*  Create a set of privileges nodes below a given node
-* 
-* @param  TreeNode node An array of input parameters
-* @return string  Return data of user that have permission to create node 
-*/	
+	
+	/**
+	*  Give privileges to user to create nodes
+	* 
+	* @param  TreeNode data An array of input parameters
+	* @return string  Returns data of user that have permission to create node 
+	*/	
     function createnodes(TreeNode $node)
     {
         //FIXME this is too unwieldy and largely duplicating a similar query in xarPrivileges

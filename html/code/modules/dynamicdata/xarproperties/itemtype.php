@@ -1,5 +1,9 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.combobox');
+/**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
@@ -32,13 +36,9 @@
      */
 
 
-/**
- * Include the base class
- */
-sys::import('modules.base.xarproperties.combobox');
 
 /**
- * Handle the item type property
+ * This property displays a dropdown/textbox of dynamicdata itemtypes
  */
 class ItemTypeProperty extends ComboProperty
 {
@@ -56,6 +56,12 @@ class ItemTypeProperty extends ComboProperty
         $this->filepath   = 'modules/dynamicdata/xarproperties';
     }
 
+	/**
+	 * Display a Dropdown/textbox for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         if (!empty($data['module'])) $this->initialization_module = $data['module'];
@@ -66,6 +72,8 @@ class ItemTypeProperty extends ComboProperty
 
     /**
      * Retrieve the list of options on demand
+	 * 
+     * @param void N/A
      */
     function getOptions()
     {

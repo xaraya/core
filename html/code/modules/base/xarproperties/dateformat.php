@@ -1,5 +1,9 @@
 <?php
 /**
+ * Include the base class
+ */
+sys::import('modules.base.xarproperties.dropdown');
+/**
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -9,12 +13,9 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+
 /**
- * Include the base class
- */
-sys::import('modules.base.xarproperties.dropdown');
-/**
- * Handle the date format property
+ * This property displays a dropdown of date formats
  */
 class DateFormatProperty extends SelectProperty
 {

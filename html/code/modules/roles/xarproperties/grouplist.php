@@ -49,6 +49,12 @@ class GroupListProperty extends SelectProperty
         $this->filepath   = 'modules/roles/xarproperties';
     }
 
+	/**
+	 * Get the value of a dropdown
+	 * 
+	 * @param  string name The name of the dropdown
+	 * @param  string value The value of the dropdown
+	 */
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
@@ -62,6 +68,11 @@ class GroupListProperty extends SelectProperty
         return parent::checkInput();
     }
 
+	/**
+	 * Validate the value of a selected dropdown option
+	 *
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -83,6 +94,12 @@ class GroupListProperty extends SelectProperty
         return false;
     }
 
+	/**
+     * Create Value
+     * 
+     * @param int $itemid
+     * @return boolean Returns true
+     */
     public function createValue($itemid=0)
     {
         $xartable =& xarDB::getTables();
@@ -122,16 +139,32 @@ class GroupListProperty extends SelectProperty
         return true;
     }
 
+	/**
+     * Updates value for the given item id.
+	 *
+     * @param int $itemid ID of the item to be updated
+     * @return boolean Returns true on success, false on failure
+     */
     public function updateValue($itemid=0)
     {
         return $this->createValue($itemid);
     }
 
+	/**
+     * Deletes a value by item ID. Not implemented
+     * 
+     * @param int $itemid Item ID to be deleted
+     * @return int Returns Item ID
+     */
     public function deleteValue($itemid=0)
     {
         return $itemid;
     }
 
+	/**
+	 * Get the value by item ID
+	 * @param int $itemid the item id of value
+	 */
     public function retrieveValue($itemid)
     {
         $this->value = $itemid;
@@ -158,6 +191,12 @@ class GroupListProperty extends SelectProperty
         return $value;
     }
 
+	/**
+	 * Display a dropdown for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         if (isset($data['behavior'])) $this->initialization_update_behavior = $data['behavior'];
@@ -174,6 +213,12 @@ class GroupListProperty extends SelectProperty
         return parent::showInput($data);
     }
 
+	/**
+	 * Display a dropdown for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */	
     public function showOutput(Array $data = array())
     {
         if (isset($data['behavior'])) $this->initialization_update_behavior = $data['behavior'];
@@ -196,6 +241,11 @@ class GroupListProperty extends SelectProperty
         return parent::showOutput($data);
     }
 
+	/**
+     * Retrieve the list of options
+     * 
+     * @param void N/A
+     */
     public function getOptions()
     {
         $select_options = array();

@@ -93,12 +93,12 @@ function modules_adminapi_getitems(Array $args=array())
 
     if (isset($user_capable)) {
         $where[] = 'mods.user_capable = ?';
-        $bindvars[] = (bool) $user_capable;
+        $bindvars[] = (int) $user_capable;
     }
 
     if (isset($admin_capable)) {
         $where[] = 'mods.admin_capable = ?';
-        $bindvars[] = (bool) $admin_capable;
+        $bindvars[] = (int) $admin_capable;
     }  
 
     if (!is_array($sort))
@@ -123,7 +123,7 @@ function modules_adminapi_getitems(Array $args=array())
             $startnum = 1;
         $stmt->setOffset($startnum - 1);
     }
-    $result = $stmt->executeQuery($bindvars);
+    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
 
     $items = array();
     while ($result->next()) {
@@ -135,8 +135,8 @@ function modules_adminapi_getitems(Array $args=array())
             // merge cached info with db info 
             $item += xarVarGetCached('Mod.Infos', $item['regid']);
         } else {
-            $item['displayname'] = xarModGetDisplayableName($item['name']);
-            $item['displaydescription'] = xarModGetDisplayableDescription($item['name']);
+            $item['displayname'] = xarMod::getDisplayableName($item['name']);
+            $item['displaydescription'] = xarMod::getDisplayDescription($item['name']);
             // Shortcut for os prepared directory
             $item['osdirectory'] = xarVarPrepForOS($item['directory']);
 

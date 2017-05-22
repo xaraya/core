@@ -479,45 +479,6 @@ function &xarDBNewDataDict(Connection &$dbconn, $mode = 'READONLY')
 }
 
 /**
- * Wrapper function to support Xaraya 1 Error functions
- *
-**/
-/**
- * @package core\legacy
- * @subpackage legacy
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
- */
-function xarCurrentErrorType()
-{
-    // Xaraya 2.x throws exceptions, use try { ... } catch (Exception $e) { ... }
-    if (!defined('XAR_NO_EXCEPTION')) {
-        define('XAR_NO_EXCEPTION', 0);
-    }
-    // pretend everything is OK for now
-    return XAR_NO_EXCEPTION;
-}
-
-/**
- * @package core\legacy
- * @subpackage legacy
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
- */
-function xarErrorHandled()
-{
-    return true;
-}
-
-/**
  * Wrapper function to support Xaraya 1 Block functions
  *
 **/

@@ -15,6 +15,9 @@ sys::import('modules.dynamicdata.class.properties.base');
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+/**
+ * This property displays a checkbox
+ */
 class CheckboxProperty extends DataProperty
 {
     public $id         = 14;
