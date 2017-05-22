@@ -135,7 +135,7 @@ function modules_adminapi_getitems(Array $args=array())
             // merge cached info with db info 
             $item += xarVarGetCached('Mod.Infos', $item['regid']);
         } else {
-            $item['displayname'] = xarMod::getDisplayableName($item['name']);
+            $item['displayname'] = xarMod::getDisplayName($item['name']);
             $item['displaydescription'] = xarMod::getDisplayDescription($item['name']);
             // Shortcut for os prepared directory
             $item['osdirectory'] = xarVarPrepForOS($item['directory']);
