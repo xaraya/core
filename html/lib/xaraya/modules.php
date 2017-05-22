@@ -617,7 +617,7 @@ class xarMod extends Object implements IxarMod
         }
         $bindvars = array($modName, $modName);
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_NUM);
 
         if (!$result->next()) {
             $result->Close();
