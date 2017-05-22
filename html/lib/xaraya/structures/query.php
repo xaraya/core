@@ -122,21 +122,42 @@ class Query
                 $this->affected = $this->dbconn->getUpdateCount();
                 return $result;
             }
-            if($this->rowstodo != 0 && $this->limits == 1) {
-                $begin = $this->startat-1;
-                if ($this->usebinding) {
-                    $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin,$this->bindvars);
-                }
-                else {
-                    $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
-                }
-            } else {
-                if ($this->usebinding) {
-                    $result = $this->dbconn->Execute($this->statement,$this->bindvars);
-                    //$stmt = $this->dbconn->prepareStatement($this->statement);
-                    //$result = $stmt->executeQuery($this->bindvars);
+            // This is a select
+            if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
+                if($this->rowstodo != 0 && $this->limits == 1) {
+                    $begin = $this->startat-1;
+                    if ($this->usebinding) {
+                        $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin,$this->bindvars, PDO::FETCH_ASSOC);
+                    }
+                    else {
+                        $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin, PDO::FETCH_ASSOC);
+                    }
                 } else {
-                    $result = $this->dbconn->Execute($this->statement);
+                    if ($this->usebinding) {
+//                        $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+                        $stmt = $this->dbconn->prepareStatement($this->statement);
+                        $result = $stmt->executeQuery($this->bindvars, PDO::FETCH_ASSOC);
+                    } else {
+                        $result = $this->dbconn->Execute($this->statement);
+                    }
+                }                
+            } else {
+                if($this->rowstodo != 0 && $this->limits == 1) {
+                    $begin = $this->startat-1;
+                    if ($this->usebinding) {
+                        $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin,$this->bindvars);
+                    }
+                    else {
+                        $result = $this->dbconn->SelectLimit($this->statement,$this->rowstodo,$begin);
+                    }
+                } else {
+                    if ($this->usebinding) {
+                        $result = $this->dbconn->Execute($this->statement,$this->bindvars);
+                        //$stmt = $this->dbconn->prepareStatement($this->statement);
+                        //$result = $stmt->executeQuery($this->bindvars);
+                    } else {
+                        $result = $this->dbconn->Execute($this->statement);
+                    }
                 }
             }
         }
@@ -151,36 +172,40 @@ class Query
             $numfields = count($result->fields); // Better than the private var, fields should still be protected
         $this->output = array();
         if ($display == 1) {
-            if (!$this->israwstatement) {
-                if ($this->fields == array() && $numfields > 0) {
-                    $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
-                    $result->next(); $result->previous();
-                    for ($i=0;$i< $numfields;$i++) {
-                        $tmp = array_slice($result->fields,$i,1);
-                        $namefield  = key($tmp);
-                        $this->fields[$namefield]['name'] = strtolower($namefield);
-                    }
-                    $result->setFetchMode(ResultSet::FETCHMODE_NUM);
-                    $result->next(); $result->previous();
-                }
-                while (!$result->EOF) {
-                    $i=0; $line=array();
-                    foreach ($this->fields as $key => $value ) {
-                        if(!empty($value['alias']))
-                            $line[$value['alias']] = $result->fields[$i];
-                        elseif(!empty($value['name']))
-                            $line[$value['name']] = $result->fields[$i];
-                        else
-                            $line[] = $result->fields[$i];
-                        $i++;
-                    }
-                    $this->output[] = $line;
-                    $result->MoveNext();
-                }
+            if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
+                $this->output = $result->getall();
             } else {
-                while (!$result->EOF) {
-                    $this->output[] = $result->fields;
-                    $result->MoveNext();
+                if (!$this->israwstatement) {
+                    if ($this->fields == array() && $numfields > 0) {
+                        $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
+                        $result->next(); $result->previous();
+                        for ($i=0;$i< $numfields;$i++) {
+                            $tmp = array_slice($result->fields,$i,1);
+                            $namefield  = key($tmp);
+                            $this->fields[$namefield]['name'] = strtolower($namefield);
+                        }
+                        $result->setFetchMode(ResultSet::FETCHMODE_NUM);
+                        $result->next(); $result->previous();
+                    }
+                    while (!$result->EOF) {
+                        $i=0; $line=array();
+                        foreach ($this->fields as $key => $value ) {
+                            if(!empty($value['alias']))
+                                $line[$value['alias']] = $result->fields[$i];
+                            elseif(!empty($value['name']))
+                                $line[$value['name']] = $result->fields[$i];
+                            else
+                                $line[] = $result->fields[$i];
+                            $i++;
+                        }
+                        $this->output[] = $line;
+                        $result->MoveNext();
+                    }
+                } else {
+                    while (!$result->EOF) {
+                        $this->output[] = $result->fields;
+                        $result->MoveNext();
+                    }
                 }
             }
         }

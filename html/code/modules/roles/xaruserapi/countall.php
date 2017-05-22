@@ -57,15 +57,14 @@ function roles_userapi_countall(Array $args=array())
 
     $query .= " AND itemtype = ?";
     $bindvars[] = xarRoles::ROLES_USERTYPE;
-    $bindvars[] = 0;
+
 // cfr. xarcachemanager - this approach might change later
     $expire = xarModVars::get('roles','cache.userapi.countall');
     if (!empty($expire)){
         $result = $dbconn->CacheExecute($expire,$query,$bindvars);
     } else {
-        $result = $dbconn->Execute($query,$bindvars);
+        $result = $dbconn->Execute($query, $bindvars);
     }
-
     // Obtain the number of users
     list($numroles) = $result->fields;
 

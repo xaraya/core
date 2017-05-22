@@ -98,7 +98,7 @@ function modules_adminapi_getlist(Array $args=array())
     } else {
         $get['state'] = XARMOD_STATE_ACTIVE;
     }
-   
+
     return xarMod::apiFunc('modules', 'admin', 'getitems', $get);
 }
 ?>

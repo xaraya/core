@@ -44,6 +44,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
             array('filter' => array($typeCapable => true, 'State' => XARMOD_STATE_ACTIVE)));
         // get module aliases while we're here, we need those too
         $aliasMap = xarConfigVars::get(null,'System.ModuleAliases');
+//        echo "<pre>AA";var_dump(array($typeCapable => true, 'State' => XARMOD_STATE_ACTIVE));echo "BB";
         $aliases = array();
         if (!empty($aliasMap)) {
             foreach ($aliasMap as $alias => $modname) {
