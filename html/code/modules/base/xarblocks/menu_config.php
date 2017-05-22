@@ -21,6 +21,8 @@ sys::import('modules.base.xarblocks.menu');
 class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 {
     /**
+     * Initialize the configuration
+     *
      * This method is called by the BasicBlock class constructor
      * @param void N/A
      */
