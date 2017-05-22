@@ -22,8 +22,9 @@ sys::import('modules.base.xarblocks.menu');
 class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
 {
     /**
+     * Initialize the block display
+     *
      * This method is called by the BasicBlock class constructor
-     * 
      * @param void N/A
      */
     public function init()
@@ -32,7 +33,7 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
     }
 
     /**
-     * Display function
+     * Display the menu block
      * 
      * @param array $data Data array
      * @return array Display data array or null if nothing is to display.

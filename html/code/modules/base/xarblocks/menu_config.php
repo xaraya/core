@@ -30,10 +30,10 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     }
 
     /**
-     * Modify Function to the Blocks Admin
+     * Modify the configuration of the menu block
      * 
      * @param array $data Data array
-     * @return array Data array
+     * @return array $data array of values to be displayed in the block's configuration page
      */
     public function configmodify(Array $data=array())
     {
@@ -46,7 +46,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     }
 
     /**
-     * Updates the Block config from the Blocks Admin
+     * Update the configuration of the menu block
      * 
      * @param array $data Data array
      * @return boolean Returns true on success, false on failure
