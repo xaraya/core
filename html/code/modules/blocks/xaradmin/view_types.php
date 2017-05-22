@@ -24,7 +24,7 @@ function blocks_admin_view_types()
     // Security - checkme: Edit vs Manage? 
     if (!xarSecurityCheck('ManageBlocks')) {return;}
 
-    // refresh block types
+    // Refresh block types
     if (!xarMod::apiFunc('blocks', 'types', 'refresh')) return;
     
     $data = array();
