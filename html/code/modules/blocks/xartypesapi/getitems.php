@@ -22,7 +22,7 @@
 function blocks_typesapi_getitems(Array $args=array())
 {
     extract($args);
-    
+
     if (!empty($type_id) && !is_numeric($type_id))
         $invalid[] = 'type_id';
 
@@ -163,7 +163,7 @@ function blocks_typesapi_getitems(Array $args=array())
         }
         $types[$item['type_id']] = $item;
     }
-    $result->close();                  
+    $result->close();
     return $types;   
 }
 ?>
