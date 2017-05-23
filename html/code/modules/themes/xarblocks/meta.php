@@ -20,6 +20,10 @@
  * @return  void
 */
 sys::import('xaraya.structures.containers.blocks.basicblock');
+
+/**
+ * Themes Meta Block
+ */
 class Themes_MetaBlock extends BasicBlock
 {
     protected $type                = 'meta';
@@ -35,6 +39,12 @@ class Themes_MetaBlock extends BasicBlock
     // link data now stored as array as of 2.2.1
     public $linktags            = array();
     
+	/**
+     * Initialize the block
+     *
+     * This method is called by the BasicBlock class constructor
+     * @param void N/A
+     */
     public function init() 
     {
         parent::init();
@@ -44,7 +54,13 @@ class Themes_MetaBlock extends BasicBlock
             $this->linktags = $this->default_linktags();
     }
 
-    
+    /**
+     * Upgrade the block code<br/>
+     * This method is called by the BasicBlock class constructor
+     * 
+     * @param string $oldversion Version to upgrade from (old version)
+     * @return boolean Returns true on success, false/null on failure
+     */
     public function upgrade($oldversion)
     {
         // grab existing content
@@ -168,6 +184,11 @@ class Themes_MetaBlock extends BasicBlock
         return true;
     }
 
+	/**
+	 * Method to parse the linktags
+	 *
+	 * @return array Returns linktags array
+	 */
     public function parseLinkTags()
     {
         $linktags = array();
@@ -182,6 +203,12 @@ class Themes_MetaBlock extends BasicBlock
         return $linktags;
     }    
     
+	/**
+     * Method to decode urls
+     * 
+     * @param string $url Url string to decode
+     * @return string[]|string Returns either decoded url as a string or parts array
+     */
     public function _decodeURL($url)
     {
         $url = preg_replace('/&amp;/','&', $url);
@@ -244,6 +271,11 @@ class Themes_MetaBlock extends BasicBlock
         return $decoded_url;
     }
     
+	/**
+	 * Method to display the default metatags
+	 * 
+     * @return array Returns array of metatags
+	 */
     public function default_metatags()
     {
         // metatags array
@@ -299,6 +331,11 @@ class Themes_MetaBlock extends BasicBlock
         return $metatags;
     }
     
+	/**
+	 * Method to display the default linktags
+	 * 
+     * @return array Returns array of linktags
+	 */
     public function default_linktags()
     {
         $linktags = array(

@@ -23,14 +23,21 @@ sys::import('modules.themes.xarblocks.meta');
 sys::import('modules.themes.class.xarmeta');
 class Themes_MetaBlockConfig extends Themes_MetaBlock
 {
+	/**
+     * Initialize the configuration
+     *
+     * This method is called by the BasicBlock class constructor
+     * @param void N/A
+     */
     public function init() 
     {
         parent::init();
     }
-/**
- * Modify Function to the Blocks Admin
- * @param $data array containing title,content
- */
+	
+	/**
+	 * Modify Function to the Blocks Admin
+	 * @param $data array containing title,content
+	 */
     public function configmodify()
     {
         $data = $this->getContent();
@@ -42,10 +49,10 @@ class Themes_MetaBlockConfig extends Themes_MetaBlock
         return $data;
     }
 
-/**
- * Updates the Block config from the Blocks Admin
- * @param $data array containing title,content
- */
+	/**
+	 * Updates the Block config from the Blocks Admin
+	 * @param $data array containing title,content
+	 */
     public function configupdate()
     {
         // FIXME: use better validation on these parameters.

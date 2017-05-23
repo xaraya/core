@@ -23,16 +23,22 @@ sys::import('modules.themes.xarblocks.meta');
 sys::import('modules.themes.class.xarmeta');
 class Themes_MetaBlockDisplay extends Themes_MetaBlock
 {
+	/**
+     * Initialize the block display
+     *
+     * This method is called by the BasicBlock class constructor
+     * @param void N/A
+     */
     public function init() 
     {
         parent::init();
     }
 
-/**
- * Display func.
- * @param $data array containing title,content
- * @todo: add the same functionality for links we now use for metatags
- */
+	/**
+	 * Display func.
+	 * @param $data array containing title,content
+	 * @todo: add the same functionality for links we now use for metatags
+	 */
     function display()
     {
         $meta = $this->getContent();
@@ -92,6 +98,12 @@ class Themes_MetaBlockDisplay extends Themes_MetaBlock
 
     }
 
+	/**
+     * Method to get help content
+     * 
+     * @param void N/A
+     * @return array Display data array
+     */ 
     public function help()
     {
         return $this->getInfo();
