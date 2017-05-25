@@ -193,7 +193,6 @@ class PropertyRegistration extends DataContainer
                 } catch(Exception $e) {
                     $property['aliases']        = array();
                 }
-
                 $proptypes[$id] = $property;
             }
         }

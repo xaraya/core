@@ -305,7 +305,6 @@ class xarMod extends Object implements IxarMod
      */
     static function getDisplayDescription($modName = NULL, $type = 'module')
     {
-        //xarLog::message("xarMod::getDisplayDescription ". $modName ." / " . $type);
         if (empty($modName)) $modName = self::getName();
 
         $modInfo = self::getFileInfo($modName, $type);
@@ -618,7 +617,7 @@ class xarMod extends Object implements IxarMod
         }
         $bindvars = array($modName, $modName);
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_NUM);
 
         if (!$result->next()) {
             $result->Close();

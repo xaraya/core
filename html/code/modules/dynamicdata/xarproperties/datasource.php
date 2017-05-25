@@ -18,7 +18,7 @@ sys::import('modules.base.xarproperties.dropdown');
 /**
  * This property displays a dropdown of data sources
  * If a relational datastore is defined, it shows the database fields available as sources
- * if the module variable datastore is defined, it shows the module variable items availabel as sources
+ * if the module variable datastore is defined, it shows the module variable items available as sources
  * If the dynamicdata or virtual datastore is defined, it shows nothing
  */
 class DataSourceProperty extends SelectProperty
@@ -37,6 +37,11 @@ class DataSourceProperty extends SelectProperty
         $this->filepath = 'modules/dynamicdata/xarproperties';
     }
 
+	/**
+	* Retrieve the list of options
+	* 
+	* @param void N/A
+	*/	
     function getOptions()
     {
         if (count($this->options) > 0) {

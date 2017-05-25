@@ -26,9 +26,9 @@ function modules_adminapi_getitems(Array $args=array())
     $tables =& xarDB::getTables();
     $modules_table = $tables['modules'];
     
-    $select = array();
-    $where = array();
-    $orderby = array();
+    $select   = array();
+    $where    = array();
+    $orderby  = array();
     $bindvars = array();
 
     $select['id']            = 'mods.id';
@@ -93,12 +93,12 @@ function modules_adminapi_getitems(Array $args=array())
 
     if (isset($user_capable)) {
         $where[] = 'mods.user_capable = ?';
-        $bindvars[] = (bool) $user_capable;
+        $bindvars[] = (int) $user_capable;
     }
 
     if (isset($admin_capable)) {
         $where[] = 'mods.admin_capable = ?';
-        $bindvars[] = (bool) $admin_capable;
+        $bindvars[] = (int) $admin_capable;
     }  
 
     if (!is_array($sort))
@@ -123,20 +123,22 @@ function modules_adminapi_getitems(Array $args=array())
             $startnum = 1;
         $stmt->setOffset($startnum - 1);
     }
-    $result = $stmt->executeQuery($bindvars);
+    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
 
     $items = array();
     while ($result->next()) {
         $item = array();
-        foreach (array_keys($select) as $field)
-            $item[$field] = array_shift($result->fields);
+        foreach (array_keys($select) as $field) {
+            if ($field == 'systemid') $item[$field] = $result->fields['id'];
+            else $item[$field] = $result->fields[$field];
+        }
 
         if (xarVarIsCached('Mod.Infos', $item['regid'])) {
             // merge cached info with db info 
             $item += xarVarGetCached('Mod.Infos', $item['regid']);
         } else {
-            $item['displayname'] = xarModGetDisplayableName($item['name']);
-            $item['displaydescription'] = xarModGetDisplayableDescription($item['name']);
+            $item['displayname'] = xarMod::getDisplayName($item['name']);
+            $item['displaydescription'] = xarMod::getDisplayDescription($item['name']);
             // Shortcut for os prepared directory
             $item['osdirectory'] = xarVarPrepForOS($item['directory']);
 
@@ -165,7 +167,7 @@ function modules_adminapi_getitems(Array $args=array())
         $items[] = $item;    
     }
     $result->close();
-        
+
     return $items;
 }
 ?>

@@ -73,10 +73,11 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 
 
     /**
+     * Initialize the block
+     *
      * This method is called by the BasicBlock class constructor
-     * 
      * @param void N/A
-     */ 
+     */
     public function init()
     {
         parent::init();
@@ -86,6 +87,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
     }
 
     /**
+     * Upgrade the block code<br/>
      * This method is called by the BasicBlock class constructor
      * 
      * @param string $oldversion Version to upgrade from (old version)

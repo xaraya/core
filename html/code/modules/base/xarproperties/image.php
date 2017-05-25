@@ -47,11 +47,11 @@ class ImageProperty extends TextBoxProperty
 
         if ($this->initialization_image_source == 'upload') $this->upload = true;
     }
-/**
- * Validate the value of a field
- *
- * @return bool Returns true if the value passes all validation checks; otherwise returns false.
- */
+	/**
+	 * Validate the value of a field
+	 *
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
         if (!parent::validateValue($value)) return false;
@@ -78,6 +78,12 @@ class ImageProperty extends TextBoxProperty
         return true;
     }
 
+	/**
+	 * Display a field for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         // CHECKME: why not use image_source as attribute instead of inputtype ?
@@ -90,6 +96,12 @@ class ImageProperty extends TextBoxProperty
         return parent::showInput($data);
     }
 
+	/**
+	 * Display a field for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */	
     public function showOutput(Array $data = array())
     {
         if(!empty($data['inputtype'])) $this->initialization_image_source = $data['inputtype'];

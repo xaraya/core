@@ -225,7 +225,7 @@ class xarPrivileges extends xarMasks
                   " ORDER BY p.name";
         $stmt = parent::$dbconn->prepareStatement($query);
         // The fetchmode *needed* to be here, dunno why. Exception otherwise
-        $result = $stmt->executeQuery($query,ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array(), ResultSet::FETCHMODE_NUM);
         $allprivileges = array();
         while($result->next()) {
             list($id, $name, $role_id, $role_type, $role_name, $module, $component, $instance, $level,
@@ -277,7 +277,7 @@ class xarPrivileges extends xarMasks
                   " ORDER BY p.name";
         $stmt = parent::$dbconn->prepareStatement($query);
         // The fetchmode *needed* to be here, dunno why. Exception otherwise
-        $result = $stmt->executeQuery($query,ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array(), ResultSet::FETCHMODE_NUM);
         $allprivileges = array();
         while($result->next()) {
             list($id, $name, $realm, $module, $component, $instance, $level,
@@ -434,7 +434,7 @@ class xarPrivileges extends xarMasks
                 $allmodules[] = array(
                     'id'   => $result->getInt(1),
                     'name' => $result->getString(2),
-                     //'display' => xarModGetDisplayableName($name),
+                     //'display' => xarMod::getDisplayName($name),
                     'display' => ucfirst($result->getString(2))
                 );
             }

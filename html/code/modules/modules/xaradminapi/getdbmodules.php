@@ -38,9 +38,12 @@ function modules_adminapi_getdbmodules(Array $args=array())
 
     if ($modregid) {
         $sql .= " WHERE $xartable[modules].regid = ?";
+        $bindvars = array($modregid);
+    } else {
+        $bindvars = array();
     }
     $stmt = $dbconn->prepareStatement($sql);
-    $result = $stmt->executeQuery(array($modregid));
+    $result = $stmt->executeQuery($bindvars);
 
     while($result->next()) {
         list($regid, $name, $directory, $class, $version, $state) = $result->fields;

@@ -114,6 +114,13 @@ class FileUploadProperty extends DataProperty
         }
     }
 
+	/**
+	 * Get the value of a file upload from a web page
+	 * 
+	 * @param  string name The name of the file
+	 * @param  string value The value of the file
+	 * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+	 */
     function checkInput($name='', $value = null)
     {
         if (empty($name)) $name = $this->propertyprefix . $this->id;
@@ -126,6 +133,11 @@ class FileUploadProperty extends DataProperty
         return $this->validateValue($value);
     }
 
+	/**
+	 * Validate the value of a file uploaded
+	 *
+	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 */
     public function validateValue($value = null)
     {
         // the variable corresponding to the file upload field is no longer set in PHP 4.2.1+
@@ -309,6 +321,12 @@ class FileUploadProperty extends DataProperty
         return true;
     }
 
+	/**
+	 * Display a file upload for input
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
     public function showInput(Array $data = array())
     {
         $data['name'] = empty($data['name']) ? $this->propertyprefix . $this->id : $data['name'];
@@ -362,12 +380,12 @@ class FileUploadProperty extends DataProperty
 
         return parent::showInput($data);
     }
-/**
- * Display a file upload output
- * 
- * @param  array data An array of input parameters
-
- */	
+	/**
+	 * Display a file upload for output
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for output on a web page
+	 */	
     public function showOutput(Array $data = array())
     {
         extract($data);

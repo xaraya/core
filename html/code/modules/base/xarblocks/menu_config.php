@@ -21,6 +21,8 @@ sys::import('modules.base.xarblocks.menu');
 class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 {
     /**
+     * Initialize the configuration
+     *
      * This method is called by the BasicBlock class constructor
      * @param void N/A
      */
@@ -30,10 +32,10 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     }
 
     /**
-     * Modify Function to the Blocks Admin
+     * Modify the configuration of the menu block
      * 
      * @param array $data Data array
-     * @return array Data array
+     * @return array $data array of values to be displayed in the block's configuration page
      */
     public function configmodify(Array $data=array())
     {
@@ -46,7 +48,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     }
 
     /**
-     * Updates the Block config from the Blocks Admin
+     * Update the configuration of the menu block
      * 
      * @param array $data Data array
      * @return boolean Returns true on success, false on failure
@@ -112,11 +114,11 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
             } elseif ($new_link['ismodlink'] && $new_position > 1) {
                 $new_link['ismodlink'] = 0;
                  if (empty($new_label)) {
-                    $new_label = xarModGetDisplayableName($new_link['modname']);
+                    $new_label = xarMod::getDisplayName($new_link['modname']);
                     $new_link['name'] = $new_link['modname'] . '_' . $new_link['modtype'] . '_main';
                 }
                 if (empty($new_title)) {
-                    $new_title = xarModGetDisplayableDescription($new_link['modname']);
+                    $new_title = xarMod::getDisplayDescription($new_link['modname']);
                 }
             } elseif ($new_link['ismodlink']) {
                 $new_link['name'] = $new_link['modname'] . '_' . $new_link['modtype'];

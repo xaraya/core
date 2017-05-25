@@ -77,12 +77,12 @@ function modules_adminapi_countitems(Array $args=array())
 
     if (isset($user_capable)) {
         $where[] = 'mods.user_capable = ?';
-        $bindvars[] = (bool) $user_capable;
+        $bindvars[] = (int) $user_capable;
     }
 
     if (isset($admin_capable)) {
         $where[] = 'mods.admin_capable = ?';
-        $bindvars[] = (bool) $admin_capable;
+        $bindvars[] = (int) $admin_capable;
     }  
     
     
