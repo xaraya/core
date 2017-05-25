@@ -177,6 +177,8 @@ class xarDB
 
 class xarPDO extends PDO
 {
+    private $databaseInfo;
+
     public $databaseType  = "PDO";
     public $queryString;
     public $row_count     = 0; 
@@ -191,6 +193,20 @@ class xarPDO extends PDO
         $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('xarPDOStatement', array($this)));
         $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     }
+
+    public function getDatabaseInfo()
+    {
+        if (null === $this->databaseInfo) {
+            $databaseInfo = new DatabaseInfo($this);
+            
+            // Set up pointer
+            $this->databaseInfo = $databaseInfo;
+        } else {
+            $databaseInfo = $this->databaseInfo;
+        }
+        return $databaseInfo;
+    }
+
     // Note that commit() and rollback() are the same as in Creole
     public function begin()
     {
@@ -269,9 +285,6 @@ class xarPDO extends PDO
     public function getUpdateCount()
     {
         return $this->row_count;
-    }
-    public function getDatabaseInfo()
-    {
     }
 }
 
@@ -352,6 +365,38 @@ class xarPDOStatement extends PDOStatement
     {
         $this->offset = $offset;
         return true;
+    }
+}
+
+/**
+ * DatabaseInfo class: holds the metainformation of the database
+ *
+ * PDO does not have much metadata, so we have to roll our own here
+ *
+ */
+class DatabaseInfo extends Object
+{
+    private $pdo;
+    private $tables;
+
+    public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
+    public function getTable($name)
+    {
+        $pdostatement = $this->pdo->query("SELECT * FROM $name LIMIT 1");
+        for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
+            $column = $pdostatement->getColumnMeta($i);
+            $this->tables[$name][$column['name']] = $column;
+        }
+        return $this->tables[ strtoupper($name) ];
+    }
+
+    public function getPDO()
+    {
+        return $this->pdo;
     }
 }
 
@@ -501,6 +546,11 @@ class ResultSet extends Object
         if (!array_key_exists($col, $this->fields)) { throw new Exception("Invalid resultset column: " . $column); }
         if ($this->fields[$col] === null) { return null; }
 		return ($this->rtrimString ? rtrim($this->fields[$col]) : (string) $this->fields[$col]);
+    }
+
+    public function getStatement()
+    {
+        return $this->pdostatement;
     }
 }
 ?>

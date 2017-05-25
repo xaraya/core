@@ -183,8 +183,7 @@ class DataStoreFactory extends Object
         }
         */
         // try to get the meta table definition
-        if (!empty($args))
-        {
+        if (!empty($args)) {
             foreach ($args as $key => $value) {
                 if (is_array($value)){
                     $tableobject = $dbInfo->getTable(current($value));
