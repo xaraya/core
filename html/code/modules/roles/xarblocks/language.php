@@ -18,6 +18,9 @@
  */
 sys::import('xaraya.structures.containers.blocks.basicblock');
 
+/**
+ * Roles Language Block
+ */
 class Roles_LanguageBlock extends BasicBlock
 {
     protected $type                = 'language';
@@ -25,6 +28,10 @@ class Roles_LanguageBlock extends BasicBlock
     protected $text_type           = 'Language';
     protected $text_type_long      = 'Language selection';
 
+	/**
+	 * Display the language block
+	 * @return array Display data array
+	 */
     function display()
     {
         // if (xarMLSGetMode() != xarMLS::BOXED_MULTI_LANGUAGE_MODE) {

@@ -12,21 +12,23 @@
  * @link http://xaraya.info/index.php/release/13.html
  */
 
-sys::import('modules.blocks.xarblocks.blockgroup');
-
 /**
  * Display block
  *
  * @author  Chris Powis <crisp@xaraya.com>
-*/
+*/ 
+sys::import('modules.blocks.xarblocks.blockgroup');
+
 class Blocks_BlockgroupBlockDisplay extends Blocks_BlockgroupBlock implements iBlockGroup
 {
-    /**
-     * Display function
-     */
+	/**
+     * Display the blockgroup block
+     * 
+     * @param array $data Data array
+     * @return array Display data array or null if nothing is to display.
+     */ 
     function display(Array $data=array())
     {
-
         $data = $this->getContent();
 
         if (empty($this->group_instances)) return;

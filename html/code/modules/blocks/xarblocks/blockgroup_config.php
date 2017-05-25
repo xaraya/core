@@ -12,13 +12,13 @@
  * @link http://xaraya.info/index.php/release/13.html
  */
 
-sys::import('modules.blocks.xarblocks.blockgroup');
-
 /**
  * Manage block config
  *
  * @author  Chris Powis <crisp@xaraya.com>
-*/
+*/ 
+sys::import('modules.blocks.xarblocks.blockgroup');
+
 class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBlockGroup
 {   
     /**
@@ -73,10 +73,11 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
         // $data['numitems'] = $numitems;
         return $data;
     }
-/**
- * Updates the Block config from the Blocks Admin
- * @param $data array containing title,content
- */
+	
+	/**
+	 * Updates the Block config from the Blocks Admin
+	 * @param $data array containing title,content
+	 */
     public function configupdate(Array $data=array())
     {
 
@@ -112,7 +113,9 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
         return true;
     }
 
-    // custom update method to handle block ordering
+    /**
+     * custom update method to handle block ordering
+	 */
     public function orderupdate()
     {
         $data = $this->getInfo();

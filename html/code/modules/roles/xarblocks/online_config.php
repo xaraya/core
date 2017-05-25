@@ -22,11 +22,22 @@
 sys::import('modules.roles.xarblocks.online');
 class Roles_OnlineBlockConfig extends Roles_OnlineBlock
 {
+	/**
+     * Modify the configuration of the online block
+     * 
+     * @param array $data Data array
+     * @return array  array of values to be displayed in the block's configuration page
+     */
     function configmodify(Array $data=array())
     {
         return $this->getContent();
     }
 
+	/**
+     * Update the configuration of the online block
+     * 
+     * @return boolean Returns true on success, false on failure
+     */
     public function configupdate()
     {
         if (!xarVarFetch('showusers',     'checkbox', $args['showusers'], false, XARVAR_NOT_REQUIRED)) return;

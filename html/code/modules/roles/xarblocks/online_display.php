@@ -23,10 +23,10 @@
 sys::import('modules.roles.xarblocks.online');
 class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
 {
-/**
- * Display method
- * @FIXME: this method inefficiently runs db queries, whether required for display or not
-**/
+	/**
+	 * Display method
+	 * @FIXME: this method inefficiently runs db queries, whether required for display or not
+	 **/
     function display()
     {
         $data = $this->getContent();
