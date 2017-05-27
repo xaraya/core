@@ -56,11 +56,32 @@ class FilePickerProperty extends SelectProperty
             }
         }
         // Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory
-        $this->initialization_basedirectory = preg_replace('/\{user_theme\}/',"themes/".xarModVars::get('themes', 'default_theme'),$this->initialization_basedirectory);
-        $this->initialization_basedirectory = preg_replace('/\{admin_theme\}/',"themes/".xarModVars::get('themes', 'admin_theme'),$this->initialization_basedirectory);
-        $this->initialization_basedirectory = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->initialization_basedirectory);
+        $this->initialization_basedirectory = $this->getThemeDir();
+
         $this->setExtensions();
     }
+
+    /**
+     * Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory - move to templates/themes?
+     * 
+     * @param  string basedir Base directory to be replaced
+     * @return string         Corresponding theme directory
+     */
+    public function getThemeDir($basedir = null)
+    {
+        if (!$basedir) $basedir = $this->initialization_basedirectory;
+        if (strpos($basedir, '{user_theme}') !== false) {
+            $basedir = str_replace('{user_theme}',"themes/".xarModVars::get('themes', 'default_theme'),$basedir);
+        }
+        if (strpos($basedir, '{admin_theme}') !== false) {
+            $basedir = str_replace('{admin_theme}',"themes/".xarModVars::get('themes', 'admin_theme'),$basedir);
+        }
+        if (strpos($basedir, '{theme}') !== false) {
+            $basedir = str_replace('{theme}',xarTpl::getThemeDir(),$basedir);
+        }
+        return $basedir;
+    }
+
 /**
  * Display a Dropdown for input
  * 
@@ -69,12 +90,7 @@ class FilePickerProperty extends SelectProperty
  */
     public function showInput(Array $data = array())
     {
-        if (isset($data['basedir'])) $this->initialization_basedirectory = $data['basedir'];
-
-        // Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory
-        $this->initialization_basedirectory = preg_replace('/\{user_theme\}/',"themes/".xarModVars::get('themes', 'default_theme'),$this->initialization_basedirectory);
-        $this->initialization_basedirectory = preg_replace('/\{admin_theme\}/',"themes/".xarModVars::get('themes', 'admin_theme'),$this->initialization_basedirectory);
-        $this->initialization_basedirectory = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->initialization_basedirectory);
+        if (isset($data['basedir'])) $this->initialization_basedirectory = $this->getThemeDir($data['basedir']);
 
         if (isset($data['matches'])) $this->validation_matches = $data['matches'];
         if (isset($data['extensions'])) $this->setExtensions($data['extensions']);
