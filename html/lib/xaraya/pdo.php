@@ -386,17 +386,76 @@ class DatabaseInfo extends Object
 
     public function getTable($name)
     {
-        $pdostatement = $this->pdo->query("SELECT * FROM $name LIMIT 1");
-        for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
-            $column = $pdostatement->getColumnMeta($i);
-            $this->tables[$name][$column['name']] = $column;
+        $pdotable = new PDOTable();
+        
+        // Table name is upper case by convention
+        $name = strtoupper($name);
+        
+        // If we don't yet have this table's information, then get it
+        if (!isset($this->tables[$name])) {
+            $pdostatement = $this->pdo->query("SELECT * FROM $name LIMIT 1");
+            for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
+                $column = $pdostatement->getColumnMeta($i);
+                $this->tables[$name][$column['name']] = $column;
+            }
         }
-        return $this->tables[ strtoupper($name) ];
+        
+        $pdotable->setTable($this->tables[$name]);
+        return $pdotable;
     }
 
     public function getPDO()
     {
         return $this->pdo;
+    }
+}
+
+/**
+ * PDOTable class: holds the metainformation of a database table
+ *
+ * PDO does not have much metadata, so we have to roll our own here
+ *
+ */
+class PDOTable extends Object
+{
+    private $table;
+
+    public function getColumns()
+    {
+        $columne = array();
+        foreach ($this->table as $column) {
+            $col = new PDOColumn($column);
+            $columns[] = $col;
+        }
+        return $columns;
+    }
+
+    public function setTable($tableinfo)
+    {
+        $this->table = $tableinfo;
+        return true;
+    }
+}
+
+/**
+ * PDOTable class: holds the metainformation of a database table
+ *
+ * PDO does not have much metadata, so we have to roll our own here
+ *
+ */
+class PDOColumn extends Object
+{
+    private $column;
+
+    public function __construct($column)
+    {
+        $this->column = $column;
+    }
+
+
+    public function getName()
+    {
+        return $this->column['name'];
     }
 }
 
