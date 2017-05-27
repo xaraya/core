@@ -336,11 +336,17 @@ class xarCore extends xarCoreCache
          */
     /* CHECKME: initialize autoload based on config vars, or based on modules, or earlier ? */
         sys::import('xaraya.caching');
-        xarCache::Init();
+        xarCache::init();
+
+        // check that the database was installed before we activate variable caching (we don't need to load it yet)
+        if (xarSystemVars::get(sys::CONFIG, 'DB.Installation') != 3) {
+            xarCache::$variableCacheIsEnabled = false;
+        }
+
         if (xarCache::$variableCacheIsEnabled) {
             sys::import('xaraya.caching.variable');
-//            sys::import('xaraya.autoload');
-//            xarAutoload::initialize();
+            sys::import('xaraya.autoload');
+            xarAutoload::initialize();
         }
     /*
     // Testing of autoload + second-level cache storage - please do not use on live sites
@@ -670,4 +676,3 @@ class xarDebug extends Object
     public static $startTime = 0; // Should not be here at all
 }
 
-?>
