@@ -450,12 +450,26 @@ class PDOColumn extends Object
     public function __construct($column)
     {
         $this->column = $column;
+        var_dump($column);exit;
+        return true;
     }
 
 
+    public function getType()
+    {
+        return $this->column['native_type'];
+    }
     public function getName()
     {
         return $this->column['name'];
+    }
+    public function getFlags()
+    {
+        return $this->column['flags'];
+    }
+    public function getTable()
+    {
+        return $this->column['table'];
     }
 }
 
