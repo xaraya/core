@@ -148,6 +148,14 @@ class xarAutoload extends Object
         // Some predefined classes
         switch ($class)
         {
+            case 'query':
+                sys::import('xaraya.structures.query');
+                return;
+
+            case 'category':
+                sys::import('modules.categories.class.category');
+                return;
+
             case 'categories':
                 sys::import('modules.categories.class.categories');
                 return;

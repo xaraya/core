@@ -218,18 +218,6 @@ class xarCore extends xarCoreCache
         static $current_SYSTEM_level = self::SYSTEM_NONE;
         static $first_load = true;
 
-        /**
-         * Get the current git revision
-         * This is displayed in the base module backend
-         * Handy if we're running from a working copy, prolly comment out on distributing
-         */
-        $path = '../.git/refs/heads/com.xaraya.core.bermuda';
-        if(file_exists($path)) {
-            $text = file($path);
-            $rev = $text[0];
-            self::$build = $rev;
-        }
-
         $new_SYSTEM_level = $whatToLoad;
     
         // Make sure it only loads the current load level (or less than the current load level) once.
@@ -563,6 +551,18 @@ class xarCore extends xarCoreCache
             $current_SYSTEM_level = $new_SYSTEM_level;
             return true;
         }   */            
+
+        /**
+         * Get the current git revision
+         * This is displayed in the base module backend
+         * Handy if we're running from a working copy, prolly comment out on distributing
+		 */
+        $path = '../.git/refs/heads/com.xaraya.core.bermuda';
+        if(@file_exists($path)) {
+            $text = file($path);
+            $rev = $text[0];
+            self::$build = $rev;
+        }
 
         xarLog::message("The core is loaded");
 

@@ -26,6 +26,9 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
             // CHECKME: this assumes that we create this instance after loading xarTemplate.php
             $this->dir = sys::varpath() . xarConst::TPL_CACHEDIR;
 
+        } elseif ($this->type == 'variable') {
+            $this->dir = realpath($this->cachedir);
+
         } else {
             $this->dir = realpath($this->cachedir . '/' . $this->type);
         }
@@ -42,6 +45,14 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
         $this->namespace = $namespace;
         // the default prefix for the cache keys will be 'type/namespace', except in filesystem (for now)
         $this->prefix = $this->namespace;
+    }
+
+    public function getCacheKey($key = '')
+    {
+        $cache_key = parent::getCacheKey($key);
+        // cfr. variable caching
+        $cache_key = str_replace(':', '.', $cache_key);
+        return $cache_key;
     }
 
     public function isCached($key = '', $expire = 0, $log = 1)
