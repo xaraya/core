@@ -32,7 +32,6 @@ class xarMask extends Object
     public $description = '';      //the long description of this privilege/mask
     public $normalform;            //the normalized form of this privilege/mask
 
-    public $dbconn;
     public $privilegestable;
     public $privmemberstable;
     public $rolestable;
@@ -53,7 +52,6 @@ class xarMask extends Object
     {
         extract($pargs);
 
-        $this->dbconn = xarDB::getConn();
         $xartable =& xarDB::getTables();
         $this->privilegestable = $xartable['privileges'];
         $this->privmemberstable = $xartable['privmembers'];

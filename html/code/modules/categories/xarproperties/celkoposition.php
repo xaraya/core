@@ -64,7 +64,6 @@ class CelkoPositionProperty extends DataProperty
     public $inorout;
 
     public $catexists;
-    public $dbconn;
     public $itemindices      = array();    // helper variable to hold items when importing
     public $itemsknown       = array();    // helper variable to hold known references: oldkey => newkey
     public $itemsunresolved  = array();    // helper variable to hold unresolved references: newkey => oldkey
@@ -86,7 +85,6 @@ class CelkoPositionProperty extends DataProperty
         parent::__construct($descriptor);
         $this->tplmodule = 'categories';
         $this->filepath  = 'modules/categories/xarproperties';
-        $this->dbconn = xarDB::getConn();
 
         $this->position_options = array(
 					array('id' => '1', 'name' => xarML('Right before, in the same level')),
@@ -352,7 +350,8 @@ class CelkoPositionProperty extends DataProperty
                      // the databases we are supporting are complying with it. This can be
                      // broken down in 3 simple UPDATES which shouldnt be a problem with any database
 
-            $result = $this->dbconn->Execute($SQLquery);
+            $dbconn = xarDB::getConn();
+            $result = $dbconn->Execute($SQLquery);
             if (!$result) return;
 
           /* Find the right parent for this item */
@@ -365,7 +364,7 @@ class CelkoPositionProperty extends DataProperty
           $SQLquery = "UPDATE " . $this->initialization_celkotable .
                        " SET " . $this->initialization_celkoparent_id . " = ?
                        WHERE id = ?";
-        $result = $this->dbconn->Execute($SQLquery,array($parent_id, $itemid));
+        $result = $dbconn->Execute($SQLquery,array($parent_id, $itemid));
         if (!$result) return;
 
        } 
@@ -511,7 +510,8 @@ class CelkoPositionProperty extends DataProperty
                                      WHERE id = ?";
         $bindvars[3] = array($parent, $point_of_insertion, $point_of_insertion + 1,$itemid);
 
-        for ($i=1;$i<4;$i++) if (!$this->dbconn->Execute($SQLquery[$i],$bindvars[$i])) return;
+        $dbconn = xarDB::getConn();
+        for ($i=1;$i<4;$i++) if (!$dbconn->Execute($SQLquery[$i],$bindvars[$i])) return;
     }
 
 	/**
@@ -570,7 +570,8 @@ class CelkoPositionProperty extends DataProperty
         if (!empty($itemid)) {
             $sql .= " WHERE id = " . $itemid;
         }
-        $result = $this->dbconn->Execute($sql);
+        $dbconn = xarDB::getConn();
+        $result = $dbconn->Execute($sql);
         if (!$result) return;
         $num = $result->fields[0];
         $result->Close();
@@ -704,10 +705,11 @@ class CelkoPositionProperty extends DataProperty
 
     // cfr. xarcachemanager - this approach might change later
         $expire = xarModVars::get('categories','cache.userapi.getcat');
+        $dbconn = xarDB::getConn();
         if (!empty($expire)){
-            $result = $this->dbconn->CacheExecute($expire,$SQLquery,$bindvars);
+            $result = $dbconn->CacheExecute($expire,$SQLquery,$bindvars);
         } else {
-            $result = $this->dbconn->Execute($SQLquery, $bindvars);
+            $result = $dbconn->Execute($SQLquery, $bindvars);
         }
         if (!$result) return;
         if ($result->EOF) return Array();
