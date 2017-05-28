@@ -449,6 +449,11 @@ class DataObject extends DataObjectMaster implements iDataObject
             }
         }
 
+        // CHECKME: flush the variable cache if necessary
+        if ($this->objectid == 1) {
+            DataObjectMaster::flushVariableCache(array('objectid' => $this->itemid));
+        }
+
         return $this->itemid;
     }
 
@@ -497,6 +502,11 @@ class DataObject extends DataObjectMaster implements iDataObject
                 method_exists($this->properties[$fieldname],'deletevalue')) {
                 $this->properties[$fieldname]->deleteValue($this->itemid);
             }
+        }
+
+        // CHECKME: flush the variable cache if necessary
+        if ($this->objectid == 1) {
+            DataObjectMaster::flushVariableCache(array('objectid' => $this->itemid));
         }
 
         // call delete hooks for this item
