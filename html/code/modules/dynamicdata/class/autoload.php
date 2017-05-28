@@ -19,6 +19,10 @@ function dynamicdata_autoload($class)
 {
     static $classpathlist = array();
 
+    if (xarAutoload::$shutdown) {
+        return false;
+    }
+
     $class = strtolower($class);
 
     // Some predefined classes
@@ -126,4 +130,3 @@ if (class_exists('xarAutoload')) {
 } else {
     // guess you'll have to register it yourself :-)
 }
-?>
