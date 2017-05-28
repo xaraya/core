@@ -163,6 +163,16 @@ class xarCoreCache extends Object
         }
     }
 
+    /**
+     * Get the list of cached scopes from the cache collection
+     *
+     * @return array list of cache scopes
+    **/
+    public static function getCachedScopes()
+    {
+        return array_keys(self::$cacheCollection);
+    }
+
 /**
  * CHECKME: work with bulk load per scope instead of individual gets per scope:name ?
  *          But what about concurrent updates in bulk then (+ unserialize & autoload too early) ?<br/>
