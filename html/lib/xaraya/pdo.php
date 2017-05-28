@@ -450,7 +450,6 @@ class PDOColumn extends Object
     public function __construct($column)
     {
         $this->column = $column;
-        var_dump($column);exit;
         return true;
     }
 
@@ -458,6 +457,10 @@ class PDOColumn extends Object
     public function getType()
     {
         return $this->column['native_type'];
+    }
+    public function getPDOType()
+    {
+        return $this->column['pdo_type'];
     }
     public function getName()
     {
@@ -470,6 +473,14 @@ class PDOColumn extends Object
     public function getTable()
     {
         return $this->column['table'];
+    }
+    public function getLength()
+    {
+        return $this->column['len'];
+    }
+    public function getPrecision()
+    {
+        return $this->column['precision'];
     }
 }
 
