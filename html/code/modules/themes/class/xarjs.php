@@ -60,10 +60,12 @@ class xarJS extends Object
     // array of script srcs found by scope ...
     public $scripts = array();
 
-    // optionally cache results for $refresh seconds
-    public $refresh = 0;
     // keep track of last run for caching
     public $last_run = 0;
+
+    // avoid refreshing on each unserialize
+    public  $refreshed  = false;
+    private $expires    = 24*60*60;
 
 /**
  * Magic methods to make this object persistent
@@ -84,6 +86,7 @@ class xarJS extends Object
 **/
     private function __construct()
     {
+        xarLog::message('xarJS::__construct: hello world');
         // todo: run init scripts
         //$this->scan();
     }
@@ -103,8 +106,14 @@ class xarJS extends Object
     public function __wakeup()
     {
         // Check what libraries are present in the filesystem
-        $this->refresh();
-        
+        if (time() - $this->last_run > $this->expires) {
+            xarLog::message('xarJS::__wakeup: unserialize & refresh ' . (string)$this->last_run);
+            $this->refresh();
+            $this->refreshed = true;
+        } else {
+            //xarLog::message('xarJS::__wakeup: unserialize & NOT refresh');
+            $this->refreshed = false;
+        }
         // Load the default libraries
         foreach($this->default_libs as $lib) {
             $this->register($lib);
@@ -125,6 +134,7 @@ class xarJS extends Object
 **/
     public function __sleep()
     {
+        xarLog::message('xarJS::__sleep: serialize');
         // set the last run time before we exit
         $this->last_run = time();
         // return the array of public property names to store
@@ -143,6 +153,11 @@ class xarJS extends Object
 **/
     public function __destruct()
     {
+        if (!$this->refreshed && time() - $this->last_run < $this->expires) {
+            //xarLog::message('xarJS::__destruct: NOT saving modvars');
+            return;
+        }
+        xarLog::message('xarJS::__destruct: saving modvars');
         // basically, we serialize and set this object as a modvar
         // xarModVars::set can be a little flaky,
         // this workaround seems to do the trick
@@ -183,7 +198,8 @@ class xarJS extends Object
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
-            // try unserializing the stored modvar
+            xarLog::message('xarJS::getInstance: loading modvars');
+          // try unserializing the stored modvar
             self::$instance = @unserialize(xarModVars::get(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE));
             // fall back to new instance (first run)
             if (empty(self::$instance)) {
@@ -191,6 +207,8 @@ class xarJS extends Object
                 // this is the one and only time the __construct() method will be run
                 self::$instance = new $c;
             }
+        } else {
+            //xarLog::message('xarJS::getInstance: NOT loading modvars');
         }
         return self::$instance;
     }
@@ -269,6 +287,7 @@ class xarJS extends Object
         $libs = array();
         foreach ($paths as $path) {
             if (!is_dir($path)) continue;
+            //xarLog::message('xarJS::refresh: looking in ' . $path);
             $folders = $this->getFolders($path, 1);
             if (empty($folders)) continue;
             foreach (array_keys($folders) as $lib) {
@@ -1303,5 +1322,3 @@ class xarJSLib extends Object
     }
 
 }
-
-?>

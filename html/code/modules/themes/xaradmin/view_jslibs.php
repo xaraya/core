@@ -30,6 +30,8 @@ function themes_admin_view_jslibs()
        
     sys::import('modules.themes.class.xarjs');
     $libobject = xarJS::getInstance(); 
+    // CHECKME: is this the right place to do it?
+    $libobject->refresh();
 
     if ($data['tab'] == 'auto') {
         if(!xarVarFetch('confirm',      'bool', $confirm,          false, XARVAR_DONT_SET)) {return;}
@@ -53,6 +55,8 @@ function themes_admin_view_jslibs()
                 $libobject->default_libs[$key]['seq'] = $index;
                 $libobject->default_libs[$key]['load'] = 1;
             }
+            // let xarJS::__destruct know we need to save this
+            $libobject->refreshed = true;
         }
         $data['fieldvalues'] = $libobject->default_libs;
     } elseif ($data['tab'] == 'local') {
@@ -135,6 +139,8 @@ function themes_admin_view_jslibs()
                 $libobject->default_libs[$key]['seq'] = $index;
                 $libobject->default_libs[$key]['load'] = 1;
             }
+            // let xarJS::__destruct know we need to save this
+            $libobject->refreshed = true;
         }
     
         // Strip out any default libs whose local files are no longer present
@@ -215,6 +221,8 @@ function themes_admin_view_jslibs()
                 $libobject->remote_libs[$id]['load'] = $new_load;
                 $libobject->remote_libs[$id]['origin'] = 'remote';
             }
+            // let xarJS::__destruct know we need to save this
+            $libobject->refreshed = true;
         }
 
         foreach($libobject->default_libs as $key => $value) {
