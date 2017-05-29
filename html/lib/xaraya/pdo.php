@@ -180,8 +180,9 @@ class xarPDO extends PDO
     private $databaseInfo;
 
     public $databaseType  = "PDO";
-    public $queryString;
+    public $queryString   = '';
     public $row_count     = 0; 
+    public $last_id       = null; 
        
     public function __construct($dsn, $username, $password, $options)
     {
@@ -216,15 +217,15 @@ class xarPDO extends PDO
         return true;
     }
     /* OK */
-    public function prepareStatement($sql='')
+    public function prepareStatement($string='')
     {
-        if (substr(strtoupper($sql),0,6) == "SELECT") {
+        if (substr(strtoupper($string),0,6) == "SELECT") {
             // This only works for MySQL !!
-            $sql .= " LIMIT ? OFFSET ?";
+            $string .= " LIMIT ? OFFSET ?";
         }
         
-        $this->queryString = $sql;
-        return parent::prepare($sql);
+        $this->queryString = $string;
+        return parent::prepare($string);
     }
     public function qstr($string)
     {
@@ -233,6 +234,9 @@ class xarPDO extends PDO
     public function executeUpdate($string='')
     {
         $stmt = $this->exec($string);
+        if (substr(strtoupper($string),0,6) == "INSERT") {
+            $this->last_id = $this->lastInsertId();
+        }
         return $stmt;
     }
     public function Execute($string, $bindvars=array(), $flag=0)
@@ -247,6 +251,9 @@ class xarPDO extends PDO
             $stmt = $this->query($string, $flag);
             $result = new ResultSet($stmt, $flag);
         }
+        if (substr(strtoupper($string),0,6) == "INSERT") {
+            $this->last_id = $this->lastInsertId();
+        }
         $this->row_count = $stmt->rowCount();
         return $result;
     }
@@ -256,6 +263,9 @@ class xarPDO extends PDO
         if (empty($flag)) $flag = PDO::FETCH_NUM;
 
         $stmt = $this->query($string);
+        if (substr(strtoupper($string),0,6) == "INSERT") {
+            $this->last_id = $this->lastInsertId();
+        }
         $this->row_count = $stmt->rowCount();
         return new ResultSet($stmt, $flag);
     }
@@ -285,6 +295,11 @@ class xarPDO extends PDO
     public function getUpdateCount()
     {
         return $this->row_count;
+    }
+
+    public function PO_Insert_ID($table=null, $field=null)
+    {   
+        return $this->last_id;
     }
 }
 
@@ -331,6 +346,11 @@ class xarPDOStatement extends PDOStatement
         
         // Run the query
         $d = parent::execute();
+        
+        if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
+            $this->pdo->last_id = $this->lastInsertId();
+        }
+        
         // Create a result set for the results
         $result = new ResultSet($this, $flag,$dork);
         // Save the bindvras
@@ -353,6 +373,11 @@ class xarPDOStatement extends PDOStatement
         }
         // Run the query
         parent::execute();
+
+        if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
+            $this->pdo->last_id = $this->lastInsertId();
+        }
+        
         // Save the bindvras
         $this->bindvars = $bindvars;
     }
