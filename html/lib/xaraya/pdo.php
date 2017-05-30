@@ -348,7 +348,7 @@ class xarPDOStatement extends PDOStatement
         $d = parent::execute();
         
         if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
-            $this->pdo->last_id = $this->lastInsertId();
+            $this->pdo->last_id = $this->pdo->lastInsertId();
         }
         
         // Create a result set for the results
@@ -375,7 +375,7 @@ class xarPDOStatement extends PDOStatement
         parent::execute();
 
         if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
-            $this->pdo->last_id = $this->lastInsertId();
+            $this->pdo->last_id = $this->pdo->lastInsertId();
         }
         
         // Save the bindvras
