@@ -120,11 +120,24 @@ class DataProperty extends Object implements iDataProperty
     }
 
     /**
+     * Return the label of this property as per its descriptor
+     */
+    public function getLabel()
+    {
+        $label = $this->descriptor->get('label');
+        return $label;
+    }
+
+    /**
      * Return the datasource of this property as per its descriptor
      */
-    public function getSource()
+    public function getSource($format='full')
     {
         $source = $this->descriptor->get('source');
+        if ($format == 'field') {
+            $parts = explode('.', $source);
+            if (isset($parts[1])) $source = $parts[1];
+        }
         return $source;
     }
 
