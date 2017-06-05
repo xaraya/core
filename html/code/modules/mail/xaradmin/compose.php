@@ -28,10 +28,16 @@ function mail_admin_compose()
     $data['authid']         = xarSecGenAuthKey();
 
     // Get the admin email address
-    $data['email']  = xarModVars::get('mail', 'adminmail');
-    $data['name']   = xarModVars::get('mail', 'adminname');
+    $data['email']   = xarModVars::get('mail', 'adminmail');
+    $data['name']    = xarModVars::get('mail', 'adminname');
 
-    // everything else happens in Template for now
+    if (!xarVarFetch('confirm', 'int', $confirm, 0, XARVAR_NOT_REQUIRED)) return;
+    
+    $data['message'] = '';
+    if ($confirm) {
+        $data['message'] = xarML('Message sent');
+    }
+    // everything else happens in the template for now
     return $data;
 }
 ?>

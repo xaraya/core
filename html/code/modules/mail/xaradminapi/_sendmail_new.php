@@ -177,45 +177,47 @@ function mail_adminapi__sendmail_new(Array $args=array())
     }
     if (xarModVars::get('mail','redirectsending')) {
         $redirectsending = xarModVars::get('mail','redirectsending');
-        $redirectaddress = xarModVars::get('mail','redirectaddress');        
+        $redirectaddress = explode(',', xarModVars::get('mail','redirectaddress'));        
     }
     if ($redirectsending) {
         $mail->ClearAddresses();
         $recipients = array();
         if (!empty($redirectaddress)) {
-            $info = $redirectaddress;
             $name = xarML('Xaraya Mail Debugging');
+            foreach ($redirectaddress as $address) {
+                $mail->AddAddress(trim($address), $name);
+            }
         } else {
             return true;
+        }
+    } else {
+        if (!empty($recipients)) {
+            foreach($recipients as $k=>$v) {
+                if (!is_numeric($k) && !is_numeric($v)) {
+                    // $recipients[$info] = $name describes $recipients parameter
+                    $mail->AddAddress($k, $v);
+                } else if (!is_numeric($k)) {
+                    // $recipients[$info] = (int) describes $recipients parameter
+                    $mail->AddAddress($k);
+                } else {
+                    // $recipients[(int)] = $info describes $recipients parameter
+                    $mail->AddAddress($v);
+                }// if
+            }// foreach
+        } else {
+            if (!empty($info)) {
+                if (!empty($name)) {
+                    $mail->AddAddress($info, $name);
+                } else {
+                    $mail->AddAddress($info);
+                }
+            }
         }
     }
 
     if($message_envelope) {
         $mail->Sender = $message_envelope;
     }
-
-    if (!empty($recipients)) {
-        foreach($recipients as $k=>$v) {
-            if (!is_numeric($k) && !is_numeric($v)) {
-                // $recipients[$info] = $name describes $recipients parameter
-                $mail->AddAddress($k, $v);
-            } else if (!is_numeric($k)) {
-                // $recipients[$info] = (int) describes $recipients parameter
-                $mail->AddAddress($k);
-            } else {
-                // $recipients[(int)] = $info describes $recipients parameter
-                $mail->AddAddress($v);
-            }// if
-        }// foreach
-    } else {
-        if (!empty($info)) {
-            if (!empty($name)) {
-                $mail->AddAddress($info, $name);
-            } else {
-                $mail->AddAddress($info);
-            }
-        }
-    }// if
 
     // Add a "CC" address
     if ($redirectsending) {
