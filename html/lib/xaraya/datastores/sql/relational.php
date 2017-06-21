@@ -25,9 +25,11 @@ class RelationalDataStore extends SQLDataStore
     {
         parent::__construct($name);
         
-        // Load the encryption class in case we have encrypted fields
-        sys::import('xaraya.encryptor');
-        $this->encryptor = xarEncryptor::instance();
+        if (extension_loaded('mcrypt')) {
+            // Load the encryption class in case we have encrypted fields
+            sys::import('xaraya.encryptor');
+            $this->encryptor = xarEncryptor::instance();
+        }
     }
 
     function __toString()
