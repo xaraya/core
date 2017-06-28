@@ -102,7 +102,7 @@ function xarLogFallbackPossible()
 **/
 function xarLogMessage($message, $level = '')
 {   
-    if (empty($level)) $level = self::LEVEL_DEBUG;
+    if (empty($level)) $level = xarLog::LEVEL_DEBUG;
     return xarLog::message($message, $level); 
 }
 
@@ -117,7 +117,7 @@ function xarLogMessage($message, $level = '')
 **/
 function xarLogVariable($name, $var, $level = '')
 {   
-    if (empty($level)) $level = self::LEVEL_DEBUG;
+    if (empty($level)) $level = xarLog::LEVEL_DEBUG;
     return xarLog::variable($name, $var, $level); 
 }
 
