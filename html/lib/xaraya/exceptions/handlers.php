@@ -172,7 +172,11 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
         // @todo: it might not always be smart to show content of variables
         $msg.= "Variables: ";
         foreach($errorContext as $varName => $varValue) {
-            $msg .= "\$$varName:\n$spacer  ". str_replace("\n","\n$spacer  ",htmlspecialchars(print_r($varValue,true)))."\n$spacer";
+            if (!isset($varValue)) {
+                $msg .= "\$$varName:\n$spacer  ". str_replace("\n","\n$spacer  ","does not exist"."\n$spacer";
+            } else {
+                $msg .= "\$$varName:\n$spacer  ". str_replace("\n","\n$spacer  ",htmlspecialchars(print_r($varValue,true)))."\n$spacer";
+            }
         }
 
         if (!function_exists('xarModURL')) {
