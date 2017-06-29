@@ -170,7 +170,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
         $msg.= "Code     : $errorRaised\n";
         $msg.= "Message  : ".str_replace("\n","\n$spacer",wordwrap($errorString,75,"\n"))."\n";
         // @todo: it might not always be smart to show content of variables
-        $msg.= "Variables: ";
+        $msg.= "Variables: ";var_dump($errorContext);exit;
         foreach($errorContext as $varName => $varValue) {
             if (!isset($varValue)) {
                 $msg .= "\$$varName:\n$spacer  ". str_replace("\n","\n$spacer  ","does not exist")."\n$spacer";
