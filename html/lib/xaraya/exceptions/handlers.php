@@ -172,7 +172,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
 
         // Show variables only if this vonfigvar is set in the themes backend
         // Default is no
-        if (xarConfigVars::set(null, 'Site.BL.ExceptionDisplay')) {
+        if (xarConfigVars::get(null, 'Site.BL.ExceptionDisplay')) {
             $msg.= "Variables: ";
             foreach($errorContext as $varName => $varValue) {
                 $msg .= "\$$varName:\n$spacer  ". str_replace("\n","\n$spacer  ",htmlspecialchars(print_r($varValue,true)))."\n$spacer";
