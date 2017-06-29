@@ -35,6 +35,9 @@ function installer_admin_finish()
     // Default for AJAX calls
     xarConfigVars::set(null, 'Site.Core.AllowAJAX', true);
 
+    // Display variable values in exceptions?
+    xarConfigVars::set(null, 'Site.BL.ExceptionDisplay', false);
+
     // Declare the installation a success
     $variables = array('DB.Installation' => 3);
     xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
