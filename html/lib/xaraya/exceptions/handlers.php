@@ -170,14 +170,14 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
         $msg.= "Code     : $errorRaised\n";
         $msg.= "Message  : ".str_replace("\n","\n$spacer",wordwrap($errorString,75,"\n"))."\n";
         // @todo: it might not always be smart to show content of variables
-        $msg.= "Variables: ";var_dump($errorContext);exit;
+        $msg.= "Variables: ";/*var_dump($errorContext);exit;
         foreach($errorContext as $varName => $varValue) {
             if (!isset($varValue)) {
                 $msg .= "\$$varName:\n$spacer  ". str_replace("\n","\n$spacer  ","does not exist")."\n$spacer";
             } else {
                 $msg .= "\$$varName:\n$spacer  ". str_replace("\n","\n$spacer  ",htmlspecialchars(print_r($varValue,true)))."\n$spacer";
             }
-        }
+        }*/
 
         if (!function_exists('xarModURL')) {
             $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered.\n\n";
