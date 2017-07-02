@@ -439,7 +439,7 @@ class xarMod extends Object implements IxarMod
             throw new BadParameterException('module/theme type');
         }
         // Log it when it doesn't come from the cache
-        xarLog::message("xarMod::getInfo: Getting database info of ID ". $modRegId ."' (a " . $type . ")");
+        xarLog::message("xarMod::getInfo: Getting database info of ID '". $modRegId ."' (a " . $type . ")");
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
@@ -1103,7 +1103,6 @@ class xarMod extends Object implements IxarMod
 
     /**
      * Check access for a specific action on module level (see also xarObject and xarBlock)
-     *
      * 
      * @param moduleName string the module we want to check access for
      * @param action string the action we want to take on this module (view/admin) // CHECKME: any others we really use on module level ?
