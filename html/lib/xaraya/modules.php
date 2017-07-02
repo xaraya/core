@@ -596,7 +596,7 @@ class xarMod extends Object implements IxarMod
             return xarCoreCache::getCached($cacheCollection, $modName);
         }
         // Log it when it doesnt come from the cache
-        xarLog::message("xarMod::getBaseInfo: Getting database info of ". $modName ." (". $type. ")");
+        xarLog::message("xarMod::getBaseInfo: Getting database info of '". $modName ."' (a ". $type. ")");
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
