@@ -678,7 +678,7 @@ class xarMod extends Object implements IxarMod
             return xarCoreCache::getCached('Mod.getFileInfos', $modOsDir ." / " . $type);
         }
         // Log it when it didnt came from cache
-        xarLog::message("xarMod::getFileInfo: Getting file info of ". $modOsDir ." (" . $type . ")");
+        xarLog::message("xarMod::getFileInfo: Getting file info of '". $modOsDir ."' (a " . $type . ")");
 
 
         // TODO redo legacy support via type.
