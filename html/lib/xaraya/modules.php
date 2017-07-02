@@ -438,8 +438,8 @@ class xarMod extends Object implements IxarMod
         default:
             throw new BadParameterException('module/theme type');
         }
-        // Log it when it doesnt come from the cache
-        xarLog::message("xarMod::getInfo ". $modRegId ." / " . $type);
+        // Log it when it doesn't come from the cache
+        xarLog::message("xarMod::getInfo: Getting file info of ID ". $modRegId ."' (a " . $type . ")");
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
