@@ -91,7 +91,8 @@ class xarRequest extends Object
         } else {
             // CHECKME: are these next lines needed?
             // Try and get it from the current request path
-            $url = xarServer::getCurrentURL();
+            // Note: we don't generate an XML compatible URL here
+            $url = xarServer::getCurrentURL(array(), false);
             $params = $_GET;
 
             // We now have a URL. Set it.
