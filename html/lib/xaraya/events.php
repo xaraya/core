@@ -271,10 +271,8 @@ class xarEvents extends Object implements ixarEvents
         $tables = xarDB::getTables();
         $bindvars = array();
         $emstable = $tables['eventsystem'];
-        $nextId = $dbconn->GenId($emstable);
         $query = "INSERT INTO $emstable 
                   (
-                  id,
                   event,
                   module_id,
                   area,
@@ -286,7 +284,6 @@ class xarEvents extends Object implements ixarEvents
                   VALUES (?,?,?,?,?,?,?,?)";
 
         $bindvars = array();
-        $bindvars[] = $nextId;
         $bindvars[] = $event;
         $bindvars[] = $module_id;
         $bindvars[] = $area;

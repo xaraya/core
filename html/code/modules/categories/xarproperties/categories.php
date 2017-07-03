@@ -197,6 +197,9 @@ class CategoriesProperty extends DataProperty
                 $q->run();
             }
 
+            // Make sure the categories are in the form of an array
+            if (!is_array($this->categories)) $this->categories = unserialize($this->categories);
+
             foreach ($this->basecategories as $key => $basecategory) {
                 foreach ($this->categories[$key] as $category) {
                     // Ignore if no category was chosen (value = 0)
@@ -670,6 +673,10 @@ class CategoriesProperty extends DataProperty
         
         // Calculate what rows require what actions
         $previous_cats = array_keys($links);
+        
+        // Make sure the categories are in the form of an array
+        if (!is_array($this->categories)) $this->categories = unserialize($this->categories);
+
         $current_cats  = array_keys($this->categories);
         $todelete = array_diff($previous_cats,$current_cats);
         $tocreate = array_diff($current_cats,$previous_cats);

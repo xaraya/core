@@ -153,8 +153,8 @@ class CountryListProperty extends SelectProperty
         $options[] = array('id' =>'kz', 'name'=>xarML('Kazakhstan'));
         $options[] = array('id' =>'ke', 'name'=>xarML('Kenya'));
         $options[] = array('id' =>'ki', 'name'=>xarML('Kiribati'));
-        $options[] = array('id' =>'kp', 'name'=>xarML('Korea, Democratic People\'s Republic'));
-        $options[] = array('id' =>'kr', 'name'=>xarML('Korea, Republic of'));
+        $options[] = array('id' =>'kp', 'name'=>xarML('Democratic People\'s Republic Korea'));
+        $options[] = array('id' =>'kr', 'name'=>xarML('Republic of Korea'));
         $options[] = array('id' =>'kw', 'name'=>xarML('Kuwait'));
         $options[] = array('id' =>'kg', 'name'=>xarML('Kyrgyzstan'));
         $options[] = array('id' =>'la', 'name'=>xarML('Lao People\'s Democratic Republic'));

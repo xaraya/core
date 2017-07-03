@@ -438,8 +438,8 @@ class xarMod extends Object implements IxarMod
         default:
             throw new BadParameterException('module/theme type');
         }
-        // Log it when it doesnt come from the cache
-        xarLog::message("xarMod::getInfo ". $modRegId ." / " . $type);
+        // Log it when it doesn't come from the cache
+        xarLog::message("xarMod::getInfo: Getting database info of ID '". $modRegId ."' (a " . $type . ")");
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
@@ -596,7 +596,7 @@ class xarMod extends Object implements IxarMod
             return xarCoreCache::getCached($cacheCollection, $modName);
         }
         // Log it when it doesnt come from the cache
-        xarLog::message("xarMod::getBaseInfo: Getting database info of ". $modName ." (". $type. ")");
+        xarLog::message("xarMod::getBaseInfo: Getting database info of '". $modName ."' (a ". $type. ")");
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
@@ -678,7 +678,7 @@ class xarMod extends Object implements IxarMod
             return xarCoreCache::getCached('Mod.getFileInfos', $modOsDir ." / " . $type);
         }
         // Log it when it didnt came from cache
-        xarLog::message("xarMod::getFileInfo: Getting file info of ". $modOsDir ." (" . $type . ")");
+        xarLog::message("xarMod::getFileInfo: Getting file info of '". $modOsDir ."' (a " . $type . ")");
 
 
         // TODO redo legacy support via type.
@@ -1103,7 +1103,6 @@ class xarMod extends Object implements IxarMod
 
     /**
      * Check access for a specific action on module level (see also xarObject and xarBlock)
-     *
      * 
      * @param moduleName string the module we want to check access for
      * @param action string the action we want to take on this module (view/admin) // CHECKME: any others we really use on module level ?

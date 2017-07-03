@@ -73,9 +73,9 @@ function blocks_instancesapi_createitem(Array $args=array())
     $blocks_table = $tables['block_instances'];
     
     $query = "INSERT INTO $blocks_table    
-              (id, type_id, name, title, state, content)
-              VALUES (?,?,?,?,?,?)";
-    $bindvars = array($dbconn->genId($blocks_table), $type_id, $name, $title, $state, serialize($content));
+              (type_id, name, title, state, content)
+              VALUES (?,?,?,?,?)";
+    $bindvars = array($type_id, $name, $title, $state, serialize($content));
 
     $stmt = $dbconn->prepareStatement($query);
     $result = $stmt->executeQuery($bindvars);

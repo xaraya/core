@@ -41,6 +41,7 @@ function themes_admin_modifyconfig()
     if (!xarVarFetch('compresswhitespace', 'int', $data['compresswhitespace'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('doctype', 'str:1', $data['doctype'], 0, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('debugmode', 'int', $data['debugmode'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('exceptionsdisplay', 'int', $data['exceptionsdisplay'], 0, XARVAR_NOT_REQUIRED)) return;
 
     if (!xarVarFetch('themedir','str:1:',$data['defaultThemeDir'],'themes',XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('adminpagemenu', 'checkbox', $data['adminpagemenu'], (bool)xarModVars::get('themes', 'adminpagemenu'), XARVAR_NOT_REQUIRED)) {return;}
@@ -122,6 +123,7 @@ function themes_admin_modifyconfig()
             xarConfigVars::set(null, 'Site.BL.MemCacheTemplates',$data['memcachetemplates']);
             xarConfigVars::set(null, 'Site.BL.CompressWhitespace',$data['compresswhitespace']);
             xarConfigVars::set(null, 'Site.BL.DocType',$data['doctype']);
+            xarConfigVars::set(null, 'Site.BL.ExceptionDisplay',$data['exceptionsdisplay']);
             xarConfigVars::set(null, 'Site.Core.AllowAJAX',$data['allowajax']);
             xarModVars::set('themes', 'hidecore', $data['hidecore']);
             xarModVars::set('themes', 'selstyle', $data['selstyle']);

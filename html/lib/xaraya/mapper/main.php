@@ -40,7 +40,8 @@ class xarController extends Object
      */
     static function init(Array $args=array())
     {
-        self::$allowShortURLs = $args['enableShortURLsSupport'];
+        if (isset($args['enableShortURLsSupport']))
+            self::$allowShortURLs = $args['enableShortURLsSupport'];
 
         // The following allows you to modify the BaseModURL from the config file
         // it can be used to configure Xaraya for mod_rewrite by
@@ -266,6 +267,9 @@ class xarController extends Object
      */
     static function URL($modName=NULL, $modType='user', $funcName='main', $args=array(), $generateXMLURL=NULL, $fragment=NULL, $entrypoint=array(), $route=NULL)
     {
+        // (Re)initialize the controller
+        self::init();
+        
         // No module specified - just jump to the home page.
         if (empty($modName)) return xarServer::getBaseURL() . self::$entryPoint;
 

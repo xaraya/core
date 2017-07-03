@@ -175,7 +175,7 @@ class DataObjectMaster extends Object
         try {
             $this->getDataStore();
         } catch (Exception $e) {
-            echo $e->getMessage();;
+            echo $e->getMessage();
         }
            
         // Explode the configuration

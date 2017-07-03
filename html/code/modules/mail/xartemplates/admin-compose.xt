@@ -13,6 +13,7 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Compose Message</h2>
+        <div><span style="color: red">#$message#</span></div>
         <form action="#xarModURL('mail','admin','sendtest')#" method="post" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Message Details</legend>
@@ -20,7 +21,7 @@
                     <div class="xar-col">
                         <xar:var name="label">Recipient Name</xar:var>
                         <label for="name" title="#$label#" class="xar-form-label">
-                            Name:
+                            Recipient Name:
                         </label>
                     </div>
                     <div class="xar-col">
@@ -31,7 +32,7 @@
                     <div class="xar-col">
                         <xar:var name="label">Recipient Email Address</xar:var>
                         <label for="email" title="#$label#" class="xar-form-label">
-                            Email:
+                            Recipient Email:
                         </label>
                     </div>
                     <div class="xar-col">
@@ -95,15 +96,13 @@
                 </div>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <xar:var name="label">Message Subject</xar:var>
+                        <xar:var name="label">Message Body</xar:var>
                         <label for="message" title="#$label#" class="xar-form-label">
                             Message:
                         </label>
-                        <div class="xar-row">
-                            <div class="xar-col">
-                                <textarea name="message" id="message" class="xar-form-textarealarge"></textarea>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input type="textarea" name="message" id="message" class="xar-form-textarealarge"/>
                     </div>
                 </div>
                 <xar:if condition="xarModIsAvailable('scheduler')">
@@ -124,6 +123,7 @@
                 <div class="xar-row">
                     <div class="xar-col"></div>
                     <div class="xar-col">
+                        <input type="hidden" name="confirm" id="confirm" value="1"/>
                         <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                         <xar:var name="label">Send Message</xar:var>
                         <xar:button type="submit" label="$label"/>

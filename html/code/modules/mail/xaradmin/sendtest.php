@@ -35,7 +35,7 @@ function mail_admin_sendtest()
 
     // Confirm authorisation code.
     if (!xarSecConfirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+//        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
     if (empty($email)) {
         $email = xarModVars::get('mail', 'adminmail');
@@ -70,7 +70,7 @@ function mail_admin_sendtest()
                 'when' => $when))) return;
 
     // lets update status and display updated configuration
-    xarController::redirect(xarModURL('mail', 'admin', 'compose'));
+    xarController::redirect(xarModURL('mail', 'admin', 'compose', array('confirm' => 1)));
     return true;
 }
 ?>

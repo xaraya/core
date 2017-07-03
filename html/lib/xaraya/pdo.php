@@ -180,8 +180,9 @@ class xarPDO extends PDO
     private $databaseInfo;
 
     public $databaseType  = "PDO";
-    public $queryString;
+    public $queryString   = '';
     public $row_count     = 0; 
+    public $last_id       = null; 
        
     public function __construct($dsn, $username, $password, $options)
     {
@@ -216,15 +217,15 @@ class xarPDO extends PDO
         return true;
     }
     /* OK */
-    public function prepareStatement($sql='')
+    public function prepareStatement($string='')
     {
-        if (substr(strtoupper($sql),0,6) == "SELECT") {
+        if (substr(strtoupper($string),0,6) == "SELECT") {
             // This only works for MySQL !!
-            $sql .= " LIMIT ? OFFSET ?";
+            $string .= " LIMIT ? OFFSET ?";
         }
         
-        $this->queryString = $sql;
-        return parent::prepare($sql);
+        $this->queryString = $string;
+        return parent::prepare($string);
     }
     public function qstr($string)
     {
@@ -233,6 +234,9 @@ class xarPDO extends PDO
     public function executeUpdate($string='')
     {
         $stmt = $this->exec($string);
+        if (substr(strtoupper($string),0,6) == "INSERT") {
+            $this->last_id = $this->lastInsertId();
+        }
         return $stmt;
     }
     public function Execute($string, $bindvars=array(), $flag=0)
@@ -247,6 +251,9 @@ class xarPDO extends PDO
             $stmt = $this->query($string, $flag);
             $result = new ResultSet($stmt, $flag);
         }
+        if (substr(strtoupper($string),0,6) == "INSERT") {
+            $this->last_id = $this->lastInsertId();
+        }
         $this->row_count = $stmt->rowCount();
         return $result;
     }
@@ -256,6 +263,9 @@ class xarPDO extends PDO
         if (empty($flag)) $flag = PDO::FETCH_NUM;
 
         $stmt = $this->query($string);
+        if (substr(strtoupper($string),0,6) == "INSERT") {
+            $this->last_id = $this->lastInsertId();
+        }
         $this->row_count = $stmt->rowCount();
         return new ResultSet($stmt, $flag);
     }
@@ -285,6 +295,11 @@ class xarPDO extends PDO
     public function getUpdateCount()
     {
         return $this->row_count;
+    }
+
+    public function PO_Insert_ID($table=null, $field=null)
+    {   
+        return $this->last_id;
     }
 }
 
@@ -331,6 +346,11 @@ class xarPDOStatement extends PDOStatement
         
         // Run the query
         $d = parent::execute();
+        
+        if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
+            $this->pdo->last_id = $this->pdo->lastInsertId();
+        }
+        
         // Create a result set for the results
         $result = new ResultSet($this, $flag,$dork);
         // Save the bindvras
@@ -353,6 +373,11 @@ class xarPDOStatement extends PDOStatement
         }
         // Run the query
         parent::execute();
+
+        if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
+            $this->pdo->last_id = $this->pdo->lastInsertId();
+        }
+        
         // Save the bindvras
         $this->bindvars = $bindvars;
     }
@@ -386,17 +411,101 @@ class DatabaseInfo extends Object
 
     public function getTable($name)
     {
-        $pdostatement = $this->pdo->query("SELECT * FROM $name LIMIT 1");
-        for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
-            $column = $pdostatement->getColumnMeta($i);
-            $this->tables[$name][$column['name']] = $column;
+        $pdotable = new PDOTable();
+        
+        // Table name is upper case by convention
+        $name = strtoupper($name);
+        
+        // If we don't yet have this table's information, then get it
+        if (!isset($this->tables[$name])) {
+            $pdostatement = $this->pdo->query("SELECT * FROM $name LIMIT 1");
+            for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
+                $column = $pdostatement->getColumnMeta($i);
+                $this->tables[$name][$column['name']] = $column;
+            }
         }
-        return $this->tables[ strtoupper($name) ];
+        
+        $pdotable->setTable($this->tables[$name]);
+        return $pdotable;
     }
 
     public function getPDO()
     {
         return $this->pdo;
+    }
+}
+
+/**
+ * PDOTable class: holds the metainformation of a database table
+ *
+ * PDO does not have much metadata, so we have to roll our own here
+ *
+ */
+class PDOTable extends Object
+{
+    private $table;
+
+    public function getColumns()
+    {
+        $columne = array();
+        foreach ($this->table as $column) {
+            $col = new PDOColumn($column);
+            $columns[] = $col;
+        }
+        return $columns;
+    }
+
+    public function setTable($tableinfo)
+    {
+        $this->table = $tableinfo;
+        return true;
+    }
+}
+
+/**
+ * PDOTable class: holds the metainformation of a database table
+ *
+ * PDO does not have much metadata, so we have to roll our own here
+ *
+ */
+class PDOColumn extends Object
+{
+    private $column;
+
+    public function __construct($column)
+    {
+        $this->column = $column;
+        return true;
+    }
+
+
+    public function getType()
+    {
+        return $this->column['native_type'];
+    }
+    public function getPDOType()
+    {
+        return $this->column['pdo_type'];
+    }
+    public function getName()
+    {
+        return $this->column['name'];
+    }
+    public function getFlags()
+    {
+        return $this->column['flags'];
+    }
+    public function getTable()
+    {
+        return $this->column['table'];
+    }
+    public function getLength()
+    {
+        return $this->column['len'];
+    }
+    public function getPrecision()
+    {
+        return $this->column['precision'];
     }
 }
 

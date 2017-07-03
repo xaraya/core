@@ -4,13 +4,25 @@
     <div class="xar-row">
         <div class="xar-col">
             <xar:var name="label">Debug mode</xar:var>
-            <label for="checked" title="#$label#" class="xar-form-label">            
+            <label for="debugmode" title="#$label#" class="xar-form-label">            
                 Enable debug mode:            
             </label>
         </div>
         <div class="xar-col">
             <xar:set name="checked">xarModVars::get('themes', 'debugmode')</xar:set>
-            <xar:data-input type="checkbox" name="debugmode"  checked="$checked"/>
+            <xar:data-input type="checkbox" name="debugmode" checked="$checked"/>
+        </div>
+    </div>
+    <div class="xar-row">
+        <div class="xar-col">
+            <xar:var name="label">Exceptions display</xar:var>
+            <label for="exceptionsdisplay" title="#$label#" class="xar-form-label">            
+                Display variables when showing exceptions            
+            </label>
+        </div>
+        <div class="xar-col">
+            <xar:set name="checked">xarConfigVars::get(null, 'Site.BL.ExceptionDisplay')</xar:set>
+            <xar:data-input type="checkbox" name="exceptionsdisplay" checked="$checked"/>
         </div>
     </div>
 </xar:template>

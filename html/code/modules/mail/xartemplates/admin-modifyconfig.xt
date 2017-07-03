@@ -527,7 +527,7 @@
                             <xar:set name="value">
                                 <xar:var scope="module" module="mail" name="redirectaddress"/>
                             </xar:set>
-                            <input type="text" name="redirectaddress" value="#$value#" maxlength="100" class="xar-form-textxlong"/>
+                            <xar:data-input type="textarea" name="redirectaddress" value="$value" rows="5" cols="20"/>
                         </div>
                     </div>
                     <div class="xar-row">

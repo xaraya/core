@@ -6,7 +6,7 @@
     <xar:set name="sitename"><xar:var scope="module" module="themes" name="SiteName"/></xar:set>
     <xar:set name="adminnav"><xar:block module="base" type="adminmenu" template="mainnavbubble;top"/> </xar:set>
 
-    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <html xml:lang="en" lang="en">
         <head>
             <title><xar:var name="tpl:pageTitle"/></title>
             <meta name="robots" content="index,follow"/>
