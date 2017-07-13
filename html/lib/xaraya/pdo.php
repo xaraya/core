@@ -280,8 +280,8 @@ class xarPDO extends PDO
             $string .= " LIMIT $limit OFFSET $offset";
         }
         if (empty($bindvars)) {
-            // FIXME: there is no such method
             $stmt = $this->query($string, $flag);
+            $result = new ResultSet($stmt, $flag);
         } else {
             // Prepare a SQL statement
             $stmt = self::prepare($string);
@@ -291,10 +291,9 @@ class xarPDO extends PDO
             
             // Execute the SQL statment and create a result set
             $result = $stmt->executeQuery($bindvars, $flag);
-            
-            // Save the number of rows
-            $this->row_count = $stmt->rowCount();
         }
+        // Save the number of rows
+        $this->row_count = $stmt->rowCount();
         // Save the limit and offset for future use
         $stmt->setLimit($limit);
         $stmt->setOffset($offset);
