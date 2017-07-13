@@ -280,16 +280,26 @@ class xarPDO extends PDO
             $string .= " LIMIT $limit OFFSET $offset";
         }
         if (empty($bindvars)) {
+            // FIXME: there is no such method
             $stmt = $this->query($string, $flag);
         } else {
+            // Prepare a SQL statement
             $stmt = self::prepare($string);
+            
+            // Pass this PDO object to the statement created
             $stmt->setPDO($this);
-            $stmt->executeQuery($bindvars, $flag);
+            
+            // Execute the SQL statment and create a result set
+            $result = $stmt->executeQuery($bindvars, $flag);
+            
+            // Save the number of rows
             $this->row_count = $stmt->rowCount();
         }
+        // Save the limit and offset for future use
         $stmt->setLimit($limit);
         $stmt->setOffset($offset);
-        return new ResultSet($stmt, $flag);
+        
+        return $result;
     }
     
     public function getUpdateCount()
@@ -318,7 +328,7 @@ class xarPDOStatement extends PDOStatement
     {
         $this->pdo = $pdo;
     }
-    public function executeQuery($bindvars=array(), $flag=0,$dork=0)
+    public function executeQuery($bindvars=array(), $flag=0)
     {
         if (empty($flag)) $flag = PDO::FETCH_NUM;
 
@@ -352,11 +362,12 @@ class xarPDOStatement extends PDOStatement
         }
         
         // Create a result set for the results
-        $result = new ResultSet($this, $flag,$dork);
+        $result = new ResultSet($this, $flag);
         // Save the bindvras
         $this->bindvars = $bindvars;
         return $result;
     }
+    
     /* Be insistent and enforce types here */
     public function executeUpdate($bindvars=array(), $flag=0)
     {
