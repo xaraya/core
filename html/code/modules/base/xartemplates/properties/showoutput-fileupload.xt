@@ -10,7 +10,7 @@
             <a href="#$value#" title="#$label#" target="#$target#">#$label#</a>
         <xar:else/>
             <xar:var name="label">Download</xar:var>
-            <a href="#$value#" title="#$label#"target="#$target#">#$value#</a>
+            <a href="#$value#" title="#$label#" target="#$target#">#$value#</a>
         </xar:if>
     <xar:else/> 
         <!-- something went wrong here - the file doesn't exist -->
