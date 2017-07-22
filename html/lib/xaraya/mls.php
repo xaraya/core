@@ -1143,7 +1143,6 @@ class xarMLSContext extends Object
         $contextName = preg_replace('/^(xar)?(.+)\..*$/', '$2', array_pop($pathElements));
     
         // Determine the contextType: bein by getting its prefix
-        self::setDomainType($domainType);
         $contextType = self::getContextTypePrefix($domainType);
         $contextType .= ":";
         
