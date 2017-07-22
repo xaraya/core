@@ -1084,12 +1084,12 @@ class xarMLS extends Object
 class xarMLSContext extends Object
 {
     static private $domains = array(
-                        xarMLS::DNTYPE_CORE     => array('context_type' => 'core'),
-                        xarMLS::DNTYPE_THEME    => array('context_type' => 'themes'),
-                        xarMLS::DNTYPE_MODULE   => array('context_type' => 'modules'),
-                        xarMLS::DNTYPE_PROPERTY => array('context_type' => 'properties'),
-                        xarMLS::DNTYPE_BLOCK    => array('context_type' => 'blocks'),
-                        xarMLS::DNTYPE_OBJECT   => array('context_type' => 'onjects'),
+                        xarMLS::DNTYPE_CORE     => array('context_type_prefix' => 'core', 'context_type_text' => 'core'),
+                        xarMLS::DNTYPE_THEME    => array('context_type_prefix' => 'themes', 'context_type_text' => 'theme'),
+                        xarMLS::DNTYPE_MODULE   => array('context_type_prefix' => 'modules', 'context_type_text' => 'module'),
+                        xarMLS::DNTYPE_PROPERTY => array('context_type_prefix' => 'properties', 'context_type_text' => 'property'),
+                        xarMLS::DNTYPE_BLOCK    => array('context_type_prefix' => 'blocks', 'context_type_text' => 'block'),
+                        xarMLS::DNTYPE_OBJECT   => array('context_type_prefix' => 'onjects', 'context_type_text' => 'object'),
                             );
     static private $current_domain_type = xarMLS::DNTYPE_CORE;
     
@@ -1168,7 +1168,14 @@ class xarMLSContext extends Object
     {
         if (empty($domainType)) $domainType = self::$current_domain_type;
         $current_domain = self::$domains[$domainType];
-        return $current_domain['context_type'];
+        return $current_domain['context_type_prefix'];
+    }
+
+    static public function getContextTypeText($domainType=null)
+    {
+        if (empty($domainType)) $domainType = self::$current_domain_type;
+        $current_domain = self::$domains[$domainType];
+        return $current_domain['context_type_text'];
     }
 
     static public function getContextTypeComponents($contextType=null)
@@ -1178,7 +1185,7 @@ class xarMLSContext extends Object
         // Check the validity of the prefix
         $good = false;
         foreach (self::$domains as $domain){
-            if ($domain['context_type'] == $parts[0]) continue;
+            if ($domain['context_type_prefix'] == $parts[0]) continue;
             $good = true;
         }
         if (!$good) die("Incorrect context prefix " . $parts[0]);
