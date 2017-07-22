@@ -32,7 +32,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         parent::__construct($locales);
         $this->backendtype = "php";
 
-        $this->gen = new PHPBackendGenerator(xarMLSGetCurrentLocale());
+        $this->gen = new PHPBackendGenerator(xarMLS::getCurrentLocale());
         if (!isset($this->gen)) return false;
     }
 
@@ -70,9 +70,9 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         $GLOBALS['xarML_PHPBackend_keyEntries'] = array();
     }
 
-    function bindDomain($dnType=xarMLS::DNTYPE_CORE, $dnName='xaraya')
+    function bindDomain($domainType=xarMLS::DNTYPE_CORE, $domainName='xaraya')
     {
-        $bindResult = parent::bindDomain($dnType, $dnName);
+        $bindResult = parent::bindDomain($domainType, $domainName);
 
         $php_locale_dir = sys::varpath()."/locales/{$this->locale}";
 
@@ -83,26 +83,21 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         $php_dir = "$php_locale_dir/php";
         $xml_dir = "$xml_locale_dir/xml";
 
-        switch ($dnType) {
-            case xarMLS::DNTYPE_CORE:
-            $this->basePHPDir = "$php_dir/core/";
-            $this->baseXMLDir = "$xml_dir/core/";
-            break;
+        // Determine the contextType: bein by getting its prefix
+        xarMLSContext::setDomainType($domainType);
+        $contextType = xarMLSContext::getContextTypePrefix($domainType);
+
+        $this->basePHPDir = $php_dir . "/" . $contextType . "/";
+        $this->baseXMLDir = $xml_dir . "/" . $contextType . "/";
+
+        // The core and objects don't have a domain name in the file path, the other do
+        switch ($domainType) {
             case xarMLS::DNTYPE_THEME:
-            $this->basePHPDir = "$php_dir/themes/$dnName/";
-            $this->baseXMLDir = "$xml_dir/themes/$dnName/";
-            break;
             case xarMLS::DNTYPE_MODULE:
-            $this->basePHPDir = "$php_dir/modules/$dnName/";
-            $this->baseXMLDir = "$xml_dir/modules/$dnName/";
-            break;
             case xarMLS::DNTYPE_PROPERTY:
-            $this->basePHPDir = "$php_dir/properties/$dnName/";
-            $this->baseXMLDir = "$xml_dir/properties/$dnName/";
-            break;
             case xarMLS::DNTYPE_BLOCK:
-            $this->basePHPDir = "$php_dir/blocks/$dnName/";
-            $this->baseXMLDir = "$xml_dir/blocks/$dnName/";
+            $this->basePHPDir .= $domainName . "/";
+            $this->baseXMLDir = $domainName . "/";
             break;
         }
 
@@ -113,9 +108,9 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
             //                if (!isset($this->gen)) return false;
             //            }
 
-            if (!$this->gen->bindDomain($dnType, $dnName)) return false;
+            if (!$this->gen->bindDomain($domainType, $domainName)) return false;
             // We already did this above
-            if (parent::bindDomain($dnType, $dnName)) return true;
+            if (parent::bindDomain($domainType, $domainName)) return true;
             return true;
         }
 
@@ -127,8 +122,8 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         //     $this->loadKEYS($dnName);
         // }
 
-        if (!$this->gen->bindDomain($dnType, $dnName)) return false;
-        if (parent::bindDomain($dnType, $dnName)) return true;
+        if (!$this->gen->bindDomain($domainType, $domainName)) return false;
+        if (parent::bindDomain($domainType, $domainName)) return true;
 
         return false;
     }
@@ -169,6 +164,8 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         $phpFileName .= $ctxName . ".php";
         $xmlFileName .= $ctxName . ".xml";
 
+        // We need both XML and PHP files at present
+        // Check whether PHP files need to be regenerated
         $needGeneration = true;
 
         if (!file_exists($xmlFileName)) {
@@ -259,12 +256,13 @@ class PHPBackendGenerator extends Object
         $locales_dir = "$varDir/locales";
 
         $php_locale_dir = "$locales_dir/{$this->locale}";
-        $php_dir = "$php_locale_dir/php";
-        $core_dir = "$php_dir/core";
-        $modules_dir = "$php_dir/modules";
-        $themes_dir = "$php_dir/themes";
+        $php_dir        = "$php_locale_dir/php";
+        $core_dir       = "$php_dir/core";
+        $modules_dir    = "$php_dir/modules";
+        $themes_dir     = "$php_dir/themes";
         $properties_dir = "$php_dir/properties";
-        $blocks_dir = "$php_dir/blocks";
+        $blocks_dir     = "$php_dir/blocks";
+        $objects_dir    = "$php_dir/objects";
 
         xarMLS::mkdirr($php_locale_dir);
         xarMLS::mkdirr($php_dir);
@@ -272,6 +270,7 @@ class PHPBackendGenerator extends Object
         xarMLS::mkdirr($properties_dir);
         xarMLS::mkdirr($blocks_dir);
         xarMLS::mkdirr($themes_dir);
+        xarMLS::mkdirr($objects_dir);
         xarMLS::mkdirr($core_dir);
     }
 
@@ -289,17 +288,19 @@ class PHPBackendGenerator extends Object
         $php_dir = "$php_locale_dir/php";
         $xml_dir = "$xml_locale_dir/xml";
         
-        $core_dir = "$php_dir/core";
-        $modules_dir = "$php_dir/modules";
-        $themes_dir = "$php_dir/themes";
+        $core_dir       = "$php_dir/core";
+        $modules_dir    = "$php_dir/modules";
+        $themes_dir     = "$php_dir/themes";
         $properties_dir = "$php_dir/properties";
-        $blocks_dir = "$php_dir/blocks";
+        $blocks_dir     = "$php_dir/blocks";
+        $objects_dir    = "$php_dir/objects";
         
-        $xml_core_dir = "$xml_dir/core";
-        $xml_modules_dir = "$xml_dir/modules";
-        $xml_themes_dir = "$xml_dir/themes";
+        $xml_core_dir       = "$xml_dir/core";
+        $xml_modules_dir    = "$xml_dir/modules";
+        $xml_themes_dir     = "$xml_dir/themes";
         $xml_properties_dir = "$xml_dir/properties";
-        $xml_blocks_dir = "$xml_dir/blocks";
+        $xml_blocks_dir     = "$xml_dir/blocks";
+        $xml_objects_dir    = "$xml_dir/objects";
 
         switch ($dnType) {
         case xarMLS::DNTYPE_CORE:
@@ -324,6 +325,11 @@ class PHPBackendGenerator extends Object
         case xarMLS::DNTYPE_BLOCK:
             $this->baseDir = "$blocks_dir/$dnName/";
             $this->baseXMLDir = "$xml_blocks_dir/$dnName/";
+            if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS::mkdirr($this->baseDir);
+            break;
+        case xarMLS::DNTYPE_OBJECT:
+            $this->baseDir = "$objects_dir/$dnName/";
+            $this->baseXMLDir = "$xml_objects_dir/$dnName/";
             if (file_exists($this->baseXMLDir) && !file_exists($this->baseDir)) xarMLS::mkdirr($this->baseDir);
             break;
         }
