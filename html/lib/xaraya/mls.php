@@ -1165,7 +1165,7 @@ class xarMLSContext extends Object
         return $contextArray;
     }
 
-    static private function getContextTypePrefix($domainType=null)
+    static public function getContextTypePrefix($domainType=null)
     {
         if (empty($domainType)) $domainType = self::$current_domain_type;
         $current_domain = self::$domains[$domainType];

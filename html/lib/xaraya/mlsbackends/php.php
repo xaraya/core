@@ -107,24 +107,24 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
         return true;
     }
 
-    function getContextNames($ctxType)
+    function getContextNames($contextType)
     {
         $contextParts = xarMLSContext::getContextTypeComponents($contextType);
         
         // Complete the directory path if the context directory is not empty
         if (!empty($contextParts[1])) $this->contextlocation = $this->domainlocation . "/" . $contextParts[1];
         
-        $ctxNames = array();
+        $contextNames = array();
         if (!file_exists($this->contextlocation)) {
-            return $ctxNames;
+            return $contextNames;
         }
         $dd = opendir($this->contextlocation);
         while ($fileName = readdir($dd)) {
             if (!preg_match('/^(.+)\.php$/', $fileName, $matches)) continue;
-            $ctxNames[] = $matches[1];
+            $contextNames[] = $matches[1];
         }
         closedir($dd);
-        return $ctxNames;
+        return $contextNames;
     }
 }
 
