@@ -1165,11 +1165,30 @@ class xarMLSContext extends Object
         return $contextArray;
     }
 
-    static public function getContextTypePrefix($domainType=null)
+    static private function getContextTypePrefix($domainType=null)
     {
         if (empty($domainType)) $domainType = self::$current_domain_type;
         $current_domain = self::$domains[$domainType];
         return $current_domain['context_type'];
+    }
+
+    static public function getContextTypeComponents($contextType=null)
+    {
+        $parts = explode(':', $contextType);
+        
+        // Check the validity of the prefix
+        $good = false;
+        foreach (self::$domains as $domain){
+            if ($domain['context_type'] == $parts[0]) continue;
+            $good = true;
+        }
+        if (!$good) die("Incorrect context prefix " . $parts[0]);
+        
+        // Remove any empty chars in the directory
+        $parts[1] = trim($parts[1]);
+        
+        // Return the prefix and directory
+        return $parts;
     }
 }
 

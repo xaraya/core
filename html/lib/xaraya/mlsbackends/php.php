@@ -109,10 +109,11 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
 
     function getContextNames($ctxType)
     {
-        // FIXME need more global check
-        if (($ctxType == 'core:') || ($ctxType == 'modules:') || ($ctxType == 'properties:') || ($ctxType == 'blocks:') || ($ctxType == 'themes:')) $directory = '';
-        else list($prefix,$directory) = explode(':',$ctxType);
-        $this->contextlocation = $this->domainlocation . "/" . $directory;
+        $contextParts = xarMLSContext::getContextTypeComponents($contextType);
+        
+        // Complete the directory path if the context directory is not empty
+        if (!empty($contextParts[1])) $this->contextlocation = $this->domainlocation . "/" . $contextParts[1];
+        
         $ctxNames = array();
         if (!file_exists($this->contextlocation)) {
             return $ctxNames;
