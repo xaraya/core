@@ -110,7 +110,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         // Patch from Camille Perinel
         $charset = xarMLSGetCharsetFromLocale($this->locale);
 
-            $this->parser = xml_parser_create('utf-8');
+        $this->parser = xml_parser_create('utf-8');
         if ($charset == 'utf-8') {
             $this->parser = xml_parser_create('utf-8');
         } else {

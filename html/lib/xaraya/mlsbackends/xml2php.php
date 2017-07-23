@@ -99,6 +99,8 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
             $this->baseXMLDir = $domainName . "/";
             break;
         }
+        $this->baseXMLDir = xarMLSContext::getDomainPath($domainType, $this->locale, 'xml', $domainName);
+        $this->basePHPDir = xarMLSContext::getDomainPath($domainType, $this->locale, 'php', $domainName);
 
         if ($bindResult) {
             if (!isset($this->gen)) return false;
@@ -144,24 +146,27 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         }
     }
 */
-    function findContext($ctxType, $ctxName)
+    function findContext($contextType, $contextName)
     {
+if ($contextType == 'objects:publications_documents') {
+    var_dump($this->locale);
+}
+        // Check if the file already exists
         // Returns filename or false if absent
-        $fileName = parent::findContext($ctxType, $ctxName);
+        $fileName = parent::findContext($contextType, $contextName);
 
         $phpFileName = $this->basePHPDir;
         $xmlFileName = $this->baseXMLDir;
-
-        if (!mb_ereg("^[a-z]+:$", $ctxType)) {
-            list($prefix,$directory) = explode(':',$ctxType);
-            if ($directory != "") {
-                $phpFileName .= $directory . "/";
-                $xmlFileName .= $directory . "/";
+            
+        if (!mb_ereg("^[a-z]+:$", $contextType)) {
+            $contextParts = xarMLSContext::getContextTypeComponents($contextType);
+            if (!empty($contextParts[1])) {
+                $phpFileName .= $contextParts[1] . "/";
+                $xmlFileName .= $contextParts[1] . "/";
             }
         }
-
-        $phpFileName .= $ctxName . ".php";
-        $xmlFileName .= $ctxName . ".xml";
+        $phpFileName .= $contextName . ".php";
+        $xmlFileName .= $contextName . ".xml";
 
         // We need both XML and PHP files at present
         // Check whether PHP files need to be regenerated
@@ -187,16 +192,17 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
             //if (parent::bindDomain($dnType, $dnName)) return true;
 
             if (!isset($this->gen)) return false;
-            if (!$this->gen->create($ctxType, $ctxName)) return false;
-            $fileName = parent::findContext($ctxType, $ctxName);
+            if (!$this->gen->create($contextType, $contextName)) return false;
+
+            $fileName = parent::findContext($contextType, $contextName);
             if ($fileName === false) return false;
         }
         return $fileName;
     }
 
-    function loadContext($ctxType, $ctxName)
+    function loadContext($contextType, $contextName)
     {
-        if (!$fileName = $this->findContext($ctxType, $ctxName)) {
+        if (!$fileName = $this->findContext($contextType, $contextName)) {
             return true;
         }
         include $fileName;
