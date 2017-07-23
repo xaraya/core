@@ -770,15 +770,15 @@ class xarMLS extends Object
      * @author Marco Canini <marco@xaraya.com>
      * @return boolean
      */
-    static public function _loadTranslations($dnType, $dnName, $ctxType, $ctxName)
+    static public function _loadTranslations($domainType, $domainName, $contextType, $contextName)
     {
         static $loadedCommons = array();
         static $loadedTranslations = array();
     
-        xarLog::message("MLS: Loading translations for the context ". "$dnType,$dnName,$ctxType,$ctxName");
+        xarLog::message("MLS: Loading translations for the context ". "$domainType,$domainName,$contextType,$contextName");
 
         if (!isset($GLOBALS['xarMLS_backend'])) {
-            xarLog::message("xarMLS: No translation backend was selected for ". "$dnType,$dnName,$ctxType,$ctxName");
+            xarLog::message("xarMLS: No translation backend was selected for ". "$domainType,$domainName,$contextType,$contextName");
             return false;
         }
         if (empty($GLOBALS['xarMLS_currentLocale'])) {
@@ -787,53 +787,59 @@ class xarMLS extends Object
         }
     
         // only load each translation once
-        if (isset($loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"])) {
-            return $loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"];
+        if (isset($loadedTranslations["$domainType.$domainName.$contextType.$contextName"])) {
+            return $loadedTranslations["$domainType.$domainName.$contextType.$contextName"];
         }
 
-        if ($GLOBALS['xarMLS_backend']->bindDomain($dnType, $dnName)) {
-            if ($dnType == xarMLS::DNTYPE_THEME) {
-                // Load common translations
-                if (!isset($loadedCommons[$dnName.'theme'])) {
-                    $loadedCommons[$dnName.'theme'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('themes:', 'common')) return;
-                }
-            } elseif ($dnType == xarMLS::DNTYPE_MODULE) {
-                // Handle in a special way the module type
-                // for which it's necessary to load common translations
-                if (!isset($loadedCommons[$dnName.'module'])) {
-                    $loadedCommons[$dnName.'module'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'common')) return;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return;
-                }
-            } elseif ($dnType == xarMLS::DNTYPE_PROPERTY) {
-                // Load common translations
-                if (!isset($loadedCommons[$dnName.'property'])) {
-                    $loadedCommons[$dnName.'property'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('properties:', 'common')) return;
-                }
-            } elseif ($dnType == xarMLS::DNTYPE_BLOCK) {
-                // Load common translations
-                if (!isset($loadedCommons[$dnName.'block'])) {
-                    $loadedCommons[$dnName.'block'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('blocks:', 'common')) return;
-                }
-            } elseif ($dnType == xarMLS::DNTYPE_OBJECT) {
-                // Load common translations
-                if (!isset($loadedCommons[$dnName.'object'])) {
-                    $loadedCommons[$dnName.'object'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('objects:', 'common')) return;
-                }
+        if ($GLOBALS['xarMLS_backend']->bindDomain($domainType, $domainName)) {
+            switch ($domainType) {
+                case xarMLS::DNTYPE_THEME:
+                    // Load common translations
+                    if (!isset($loadedCommons[$domainName.'theme'])) {
+                        $loadedCommons[$domainName.'theme'] = true;
+                        if (!$GLOBALS['xarMLS_backend']->loadContext('themes:', 'common')) return;
+                    }
+                break;
+                case xarMLS::DNTYPE_MODULE:
+                    // Handle in a special way the module type
+                    // for which it's necessary to load common translations
+                    if (!isset($loadedCommons[$domainName.'module'])) {
+                        $loadedCommons[$domainName.'module'] = true;
+                        if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'common')) return;
+                        if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return;
+                    }
+                break;
+                case xarMLS::DNTYPE_PROPERTY:
+                    // Load common translations
+                    if (!isset($loadedCommons[$domainName.'property'])) {
+                        $loadedCommons[$domainName.'property'] = true;
+                        if (!$GLOBALS['xarMLS_backend']->loadContext('properties:', 'common')) return;
+                    }
+                break;
+                case xarMLS::DNTYPE_BLOCK:
+                    // Load common translations
+                    if (!isset($loadedCommons[$domainName.'block'])) {
+                        $loadedCommons[$domainName.'block'] = true;
+                        if (!$GLOBALS['xarMLS_backend']->loadContext('blocks:', 'common')) return;
+                    }
+                break;
+                case xarMLS::DNTYPE_OBJECT:
+                    // Load common translations
+                    if (!isset($loadedCommons[$domainName.'object'])) {
+                        $loadedCommons[$domainName.'object'] = true;
+                        if (!$GLOBALS['xarMLS_backend']->loadContext('objects:', 'common')) return;
+                    }
+                break;
             }
 
-            if (!$GLOBALS['xarMLS_backend']->loadContext($ctxType, $ctxName)) return;
-            $loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"] = true;
+            if (!$GLOBALS['xarMLS_backend']->loadContext($contextType, $contextName)) return;
+            $loadedTranslations["$domainType.$domainName.$contextType.$contextName"] = true;
             return true;
         } else {
             // FIXME: postpone
-            //xarEvt_fire('MLSMissingTranslationDomain', array($dnType, $dnName));
+            //xarEvt_fire('MLSMissingTranslationDomain', array($domainType, $domainName));
     
-            $loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"] = false;
+            $loadedTranslations["$domainType.$domainName.$contextType.$contextName"] = false;
             return false;
         }
     }
