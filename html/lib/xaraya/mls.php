@@ -1090,12 +1090,12 @@ class xarMLS extends Object
 class xarMLSContext extends Object
 {
     static private $domains = array(
-                        xarMLS::DNTYPE_CORE     => array('context_type_prefix' => 'xaraya',     'context_type_text' => 'core'),
-                        xarMLS::DNTYPE_THEME    => array('context_type_prefix' => 'themes',     'context_type_text' => 'theme'),
-                        xarMLS::DNTYPE_MODULE   => array('context_type_prefix' => 'modules',    'context_type_text' => 'module'),
-                        xarMLS::DNTYPE_PROPERTY => array('context_type_prefix' => 'properties', 'context_type_text' => 'property'),
-                        xarMLS::DNTYPE_BLOCK    => array('context_type_prefix' => 'blocks',     'context_type_text' => 'block'),
-                        xarMLS::DNTYPE_OBJECT   => array('context_type_prefix' => 'objects',    'context_type_text' => 'object'),
+                xarMLS::DNTYPE_CORE     => array('context_type_prefix' => 'xaraya',     'context_type_text' => 'core'),
+                xarMLS::DNTYPE_THEME    => array('context_type_prefix' => 'themes',     'context_type_text' => 'theme'),
+                xarMLS::DNTYPE_MODULE   => array('context_type_prefix' => 'modules',    'context_type_text' => 'module'),
+                xarMLS::DNTYPE_PROPERTY => array('context_type_prefix' => 'properties', 'context_type_text' => 'property'),
+                xarMLS::DNTYPE_BLOCK    => array('context_type_prefix' => 'blocks',     'context_type_text' => 'block'),
+                xarMLS::DNTYPE_OBJECT   => array('context_type_prefix' => 'objects',    'context_type_text' => 'object'),
                             );
     static private $current_domain_type = xarMLS::DNTYPE_CORE;
     

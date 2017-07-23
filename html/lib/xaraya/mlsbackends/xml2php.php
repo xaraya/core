@@ -148,9 +148,6 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
 */
     function findContext($contextType, $contextName)
     {
-if ($contextType == 'objects:publications_documents') {
-    var_dump($this->locale);
-}
         // Check if the file already exists
         // Returns filename or false if absent
         $fileName = parent::findContext($contextType, $contextName);
