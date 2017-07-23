@@ -122,14 +122,8 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
         //    return $this->domaincache["$dnType.$dnName"];
         //}
 
-        $this->spacedir = xarMLSContext::getContextTypePrefix($dnType);
-
         foreach ($this->locales as $locale) {
-            if($this->spacedir == "core" || $this->spacedir == "xaraya") {
-                $this->domainlocation  = sys::varpath() . "/locales/" . $locale . "/" . $this->backendtype . "/" . $this->spacedir;
-            } else {
-                $this->domainlocation  = sys::varpath() . "/locales/" . $locale . "/" . $this->backendtype . "/" . $this->spacedir . "/" . $dnName;
-            }
+            $this->domainlocation = xarMLSContext::getDomainPath($dnType, $locale, $this->backendtype, $dnName);
 
             if (file_exists($this->domainlocation)) {
                 $this->locale = $locale;
@@ -174,7 +168,6 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
         // Remove any stray slashes
         $fileName = str_replace('//','/',$fileName);
         if (!file_exists($fileName)) {
-//            throw new FileNotFoundException($fileName);
             return false;
         }
         return $fileName;
