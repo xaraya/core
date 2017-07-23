@@ -85,7 +85,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         else return false;
     }
 
-    function loadContext($ctxType, $ctxName)
+    function loadContext($contextType, $contextName)
     {
         static $xmlExtensionLoaded = null;
 
@@ -121,7 +121,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         xml_set_element_handler($this->parser, "beginElement","endElement");
         xml_set_character_data_handler($this->parser, "characterData");
 
-        if (!$fileName = $this->findContext($ctxType, $ctxName)) {
+        if (!$fileName = $this->findContext($contextType, $contextName)) {
             //  throw new ContextNotFounException(array($ctxName,$this->locale),'Could not load context:"#(1)" in "#(2)"');
             return true;
         }
