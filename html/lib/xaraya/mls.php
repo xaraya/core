@@ -695,6 +695,9 @@ class xarMLS extends Object
      */
     static public function setCurrentLocale($locale)
     {
+        // Only refresh if we need to
+        if (self::getCurrentLocale() == $locale) return true;
+        
         static $called = 0;
     
         // FIXME: during initialisation, the current locale was set, and it gets called
@@ -719,6 +722,7 @@ class xarMLS extends Object
                 xarLog::message("Falling back to default locale: $locale", xarLog::LEVEL_INFO);
             }
         }
+
         // Set current locale
         $GLOBALS['xarMLS_currentLocale'] = $locale;
     
@@ -747,24 +751,21 @@ class xarMLS extends Object
         switch ($GLOBALS['xarMLS_backendName']) {
         case 'xml':
             sys::import('xaraya.mlsbackends.xml');
-            if (!isset($GLOBALS['xarMLS_backend']))
-                $GLOBALS['xarMLS_backend'] = new xarMLS__XMLTranslationsBackend($alternatives);
+            $GLOBALS['xarMLS_backend'] = new xarMLS__XMLTranslationsBackend($alternatives);
             break;
         case 'php':
             sys::import('xaraya.mlsbackends.php');
-            if (!isset($GLOBALS['xarMLS_backend']))
-                $GLOBALS['xarMLS_backend'] = new xarMLS__PHPTranslationsBackend($alternatives);
+            $GLOBALS['xarMLS_backend'] = new xarMLS__PHPTranslationsBackend($alternatives);
             break;
         case 'xml2php':
             sys::import('xaraya.mlsbackends.xml2php');
-            if (!isset($GLOBALS['xarMLS_backend']))
-                $GLOBALS['xarMLS_backend'] = new xarMLS__XML2PHPTranslationsBackend($alternatives);
+            $GLOBALS['xarMLS_backend'] = new xarMLS__XML2PHPTranslationsBackend($alternatives);
             break;
         }
 
         // Load core translations
         self::_loadTranslations(xarMLS::DNTYPE_CORE, 'xaraya', 'core:', 'core');
-        //self::loadLocaleData($locale);
+        return true;
     }
 
     /**
