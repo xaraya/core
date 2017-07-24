@@ -747,15 +747,18 @@ class xarMLS extends Object
         switch ($GLOBALS['xarMLS_backendName']) {
         case 'xml':
             sys::import('xaraya.mlsbackends.xml');
-            $GLOBALS['xarMLS_backend'] = new xarMLS__XMLTranslationsBackend($alternatives);
+            if (!isset($GLOBALS['xarMLS_backend']))
+                $GLOBALS['xarMLS_backend'] = new xarMLS__XMLTranslationsBackend($alternatives);
             break;
         case 'php':
             sys::import('xaraya.mlsbackends.php');
-            $GLOBALS['xarMLS_backend'] = new xarMLS__PHPTranslationsBackend($alternatives);
+            if (!isset($GLOBALS['xarMLS_backend']))
+                $GLOBALS['xarMLS_backend'] = new xarMLS__PHPTranslationsBackend($alternatives);
             break;
         case 'xml2php':
             sys::import('xaraya.mlsbackends.xml2php');
-            $GLOBALS['xarMLS_backend'] = new xarMLS__XML2PHPTranslationsBackend($alternatives);
+            if (!isset($GLOBALS['xarMLS_backend']))
+                $GLOBALS['xarMLS_backend'] = new xarMLS__XML2PHPTranslationsBackend($alternatives);
             break;
         }
 
