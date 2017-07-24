@@ -353,7 +353,7 @@ class xarUser extends Object
         if (empty($locale)) {
             $locale = xarConfigVars::get(null, 'Site.MLS.DefaultLocale');
         }
-        xarSessionSetVar('navigationLocale', $locale);
+        xarSession::setVar('navigationLocale', $locale);
         return $locale;
     }
 
