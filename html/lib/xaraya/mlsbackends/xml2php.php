@@ -99,8 +99,8 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
             $this->baseXMLDir = $domainName . "/";
             break;
         }
-        $this->baseXMLDir = xarMLSContext::getDomainPath($domainType, $this->locale, 'xml', $domainName);
-        $this->basePHPDir = xarMLSContext::getDomainPath($domainType, $this->locale, 'php', $domainName);
+        $this->baseXMLDir = xarMLSContext::getDomainPath($domainType, $this->locale, 'xml', $domainName) . "/";
+        $this->basePHPDir = xarMLSContext::getDomainPath($domainType, $this->locale, 'php', $domainName) . "/";
 
         if ($bindResult) {
             if (!isset($this->gen)) return false;
