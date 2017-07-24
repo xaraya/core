@@ -339,9 +339,9 @@ class xarUser extends Object
         if (self::isLoggedIn())
         {
             $id = self::getVar('id');
-              //last resort user is falling over on this uservar by setting multiple times
-             //return true for last resort user - use default locale
-             if ($id == XARUSER_LAST_RESORT) return true;
+            //last resort user is falling over on this uservar by setting multiple times
+            //return true for last resort user - use default locale
+            if ($id == XARUSER_LAST_RESORT) return true;
     
             $locale = xarModUserVars::get('roles', 'locale');
             if (empty($locale)) {
