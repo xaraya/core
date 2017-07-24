@@ -564,7 +564,7 @@ class xarCore extends xarCoreCache
             return true;
         }   */            
 
-        xarLog::message("The core is loaded");
+        xarLog::message("The core is loaded", xarLog::LEVEL_INFO);
 
         // Make the current load level == the new load level
         $current_SYSTEM_level = $new_SYSTEM_level;

@@ -193,7 +193,7 @@ class DataPropertyMaster extends Object
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['class'];
 
-            xarLog::message("DataPropertyMaster::getProperty: Getting a new property $propertyClass");
+            xarLog::message("DataPropertyMaster::getProperty: Getting a new property $propertyClass", xarLog::LEVEL_INFO);
 
             // If we don't have the class yet, get it now
             if (!class_exists($propertyClass)) {

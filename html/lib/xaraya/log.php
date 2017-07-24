@@ -332,9 +332,9 @@ function xarLog__shutdown_handler()
 {
      xarLog::message("xarLog shutdown handler");
      if (!method_exists('xarSession', 'getId') || !method_exists('xarUser', 'getVar')) {
-         xarLog::message("Leaving session unexpectedly before session and user was defined");
+         xarLog::message("Leaving session unexpectedly before session and user was defined", xarLog::LEVEL_WARNING);
      } else{
-         xarLog::message("Leaving session: " . xarSession::getId() . " - User: " . xarUser::getVar('uname') . " (ID: " . xarUser::getVar('id') . ")");
+         xarLog::message("Leaving session: " . xarSession::getId() . " - User: " . xarUser::getVar('uname') . " (ID: " . xarUser::getVar('id') . ")", xarLog::LEVEL_INFO);
      }
 
      // If the debugger was active, we can dispose it now.

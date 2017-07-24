@@ -100,7 +100,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             if (!empty($this->properties[$name]->invalid))
                 $invalids[$name] = $this->properties[$name]->invalid;
         }
-        xarLog::message("xarLog in getInvalids functions");
+        xarLog::message("xarLog in getInvalids functions", xarLog::LEVEL_INFO);
         xarLog::variable("printing invalids array in log file: ", $invalids);
 
         return $invalids;
@@ -147,7 +147,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             $fields = !empty($this->fieldlist) ? $this->fieldlist : $this->getFieldList();
         }
 
-        xarLog::message("DataObject::checkInput: Checking object " . $this->name);
+        xarLog::message("DataObject::checkInput: Checking object " . $this->name, xarLog::LEVEL_INFO);
 
         $this->missingfields = array();
         $badnames = array();

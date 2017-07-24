@@ -13,7 +13,7 @@
     
     function loadsourcefilename($tplBaseDir,$tplSubPart,$tplBase,$templateName,$canTemplateName,$canonical)
     {
-        xarLog::message("TPL: 7. Try legacy .xd templates in $tplBaseDir/xartemplates/");
+        xarLog::message("TPL: 7. Try legacy .xd templates in $tplBaseDir/xartemplates/", xarLog::LEVEL_INFO);
         if(!empty($templateName) &&
             file_exists($sourceFileName = "$tplBaseDir/xartemplates/$tplSubPart/$tplBase-$templateName.xd")) {
         } elseif(

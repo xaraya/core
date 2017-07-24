@@ -29,7 +29,7 @@ class BaseEventObserver extends EventObserver implements ixarEventObserver
     {
         $args = $subject->getArgs();
         if (!empty($args['event'])) {
-            xarLog::message("xarEvents::notify: notified $args[event] subject observers");
+            xarLog::message("xarEvents::notify: notified $args[event] subject observers", xarLog::LEVEL_INFO);
         }
     }
 }

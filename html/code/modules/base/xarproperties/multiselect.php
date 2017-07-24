@@ -64,7 +64,7 @@ class MultiSelectProperty extends SelectProperty
     {
         // do NOT call parent validateValue here - it will always fail !!!
         //if (!parent::validateValue($value)) return false;
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name);
+        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_INFO);
 
         // If we allow values not in the options, accept the current value and return
         if ($this->validation_override) {

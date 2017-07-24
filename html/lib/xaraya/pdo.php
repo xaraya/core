@@ -63,7 +63,7 @@ class xarDB
         } catch (Exception $e) {
             throw $e;
         }
-        xarLog::message("New connection created, now serving " . self::$count . " connections");
+        xarLog::message("New connection created, now serving " . self::$count . " connections", xarLog::LEVEL_INFO);
         return $conn;
     }
     /**
@@ -211,12 +211,13 @@ class xarPDO extends PDO
     // Note that commit() and rollback() are the same as in Creole
     public function begin()
     {
+        xarLog::message("DB: starting transaction", xarLog::LEVEL_INFO);
         // Only start a transaction of we need to
         if (!PDO::inTransaction())
             parent::beginTransaction();
         return true;
     }
-    /* OK */
+
     public function prepareStatement($string='')
     {
         if (substr(strtoupper($string),0,6) == "SELECT") {
@@ -227,20 +228,25 @@ class xarPDO extends PDO
         $this->queryString = $string;
         return parent::prepare($string);
     }
+    
     public function qstr($string)
     {
         return "'".str_replace("'","\\'",$string)."'";
     }
+    
     public function executeUpdate($string='')
     {
+        xarLog::message("DB: Executing $string", xarLog::LEVEL_INFO);
         $stmt = $this->exec($string);
         if (substr(strtoupper($string),0,6) == "INSERT") {
             $this->last_id = $this->lastInsertId();
         }
         return $stmt;
     }
+    
     public function Execute($string, $bindvars=array(), $flag=0)
     {
+        xarLog::message("DB: Executing $string", xarLog::LEVEL_INFO);
         if (empty($flag)) $flag = PDO::FETCH_NUM;
         
         if (is_array($bindvars) && !empty($bindvars)) {
@@ -257,9 +263,10 @@ class xarPDO extends PDO
         $this->row_count = $stmt->rowCount();
         return $result;
     }
-    /* OK */
+
     public function ExecuteQuery($string='', $flag=0)
     {
+        xarLog::message("DB: Executing $string", xarLog::LEVEL_INFO);
         if (empty($flag)) $flag = PDO::FETCH_NUM;
 
         $stmt = $this->query($string);
@@ -269,6 +276,7 @@ class xarPDO extends PDO
         $this->row_count = $stmt->rowCount();
         return new ResultSet($stmt, $flag);
     }
+    
     public function SelectLimit($string='', $limit=0, $offset=0, $bindvars=array(), $flag=0)
     {
         if (empty($flag)) $flag = PDO::FETCH_NUM;
@@ -329,6 +337,7 @@ class xarPDOStatement extends PDOStatement
     }
     public function executeQuery($bindvars=array(), $flag=0)
     {
+        xarLog::message("DB: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
         if (empty($flag)) $flag = PDO::FETCH_NUM;
 
         $index = 0;
@@ -370,6 +379,7 @@ class xarPDOStatement extends PDOStatement
     /* Be insistent and enforce types here */
     public function executeUpdate($bindvars=array(), $flag=0)
     {
+        xarLog::message("DB: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
         $index = 0;
         foreach ($bindvars as $bindvar) {
             $index++;
