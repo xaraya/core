@@ -98,7 +98,14 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet {
      */
     public function close()
     {
-        @mysqli_free_result($this->result);
+        // Throws an error if we do not include the is_resource condition
+        // Apparently at this point it is not a resource, at least in some cases
+        if (isset($this->result) && is_resource($this->result)) {
+            mysqli_free_result($this->result);
+        } else {
+        // Remove it anyway
+            unset($this->result);
+        }
         $this->fields = array();
     }
 
