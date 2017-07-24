@@ -27,6 +27,7 @@ class DataProperty extends Object implements iDataProperty
     public $type           = 1;
     public $defaultvalue   = '';
     public $source         = 'dynamic_data';
+    public $translatable   = 0;          // as it says
     public $status         = 33;
     public $seq            = 0;
     public $format         = '0'; //<-- eh?
@@ -34,7 +35,7 @@ class DataProperty extends Object implements iDataProperty
     public $class          = '';         // this property's class
 
     // Attributes for runtime
-    public $descriptor;                 // the description object of this property
+    public $descriptor;                  // the description object of this property
     public $template = '';
     public $layout = '';
     public $tplmodule = 'dynamicdata';
@@ -295,7 +296,7 @@ class DataProperty extends Object implements iDataProperty
         if(!isset($value)) $value = $this->getValue();
         else $this->setValue($value);
 
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name);
+        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_INFO);
 
         if ($this->validation_notequals != null && $value == $this->validation_notequals) {
             if (!empty($this->validation_notequals_invalid)) {
@@ -493,6 +494,13 @@ class DataProperty extends Object implements iDataProperty
         if (empty($data['_itemid'])) $data['_itemid'] = 0;
 
         if(!isset($data['value']))     $data['value']    = $this->value;
+
+        // If we are set up to do so, translate this value
+        if ($this->translatable && xarMod::isAvailable('translations')) {
+            xarMLS::_loadTranslations(xarMLS::DNTYPE_OBJECT, $this->objectref->name, 'objects:' . $this->objectref->name, $this->name);
+            $data['value'] = xarML($data['value']);
+        }
+        
         // If this is set, pass only allowed HTML tags
         if ($this->display_striptags)  $data['value']    = xarVarPrepHTMLDisplay($data['value']);
         
