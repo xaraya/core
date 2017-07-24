@@ -369,7 +369,6 @@ class xarUser extends Object
         if (xarMLSGetMode() != xarMLS::SINGLE_LANGUAGE_MODE) {
             xarSessionSetVar('navigationLocale', $locale);
             if (self::isLoggedIn()) {
-                $userLocale = xarModUserVars::get('roles', 'locale');
                 xarModUserVars::set('roles', 'locale', $locale);
             }
             return true;
