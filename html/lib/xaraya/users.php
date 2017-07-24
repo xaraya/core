@@ -366,6 +366,7 @@ class xarUser extends Object
      */
     static public function setNavigationLocale($locale)
     {
+        xarLog::message("Changing the navigation locale from ". self::getNavigationLocale() . " to " . $locale, xarLog::LEVEL_INFO);
         if (xarMLSGetMode() != xarMLS::SINGLE_LANGUAGE_MODE) {
             xarSessionSetVar('navigationLocale', $locale);
             if (self::isLoggedIn()) {

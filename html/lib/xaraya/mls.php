@@ -695,6 +695,8 @@ class xarMLS extends Object
      */
     static public function setCurrentLocale($locale)
     {
+        xarLog::message("Changing the default locale from ". self::getCurrentLocale() . " to " . $locale, xarLog::LEVEL_INFO);
+        
         // Only refresh if we need to
         if (self::getCurrentLocale() == $locale) return true;
         
