@@ -89,7 +89,7 @@ class xarBlockCache extends Object
 
         // the output depends on the current host, theme and locale
         $factors = xarServer::getVar('HTTP_HOST') . xarTpl::getThemeDir() .
-                   xarUserGetNavigationLocale();
+                   xarUser::getNavigationLocale();
 
         // add page identifier if needed
         if (self::$pageShared == 0) {

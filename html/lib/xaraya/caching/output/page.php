@@ -110,7 +110,7 @@ class xarPageCache extends Object
 
         // the output depends on the current host, theme and locale
         $factors = xarServer::getVar('HTTP_HOST') . xarTpl::getThemeDir() .
-                xarUserGetNavigationLocale();
+                xarUser::getNavigationLocale();
 
         // add user groups as a factor if necessary
         // Note : we don't share the cache between groups or with anonymous here
