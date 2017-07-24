@@ -409,9 +409,9 @@ class xarTpl extends Object
         // 2. Create a page in the themes module with an interface
         // 3. Use 1. to link to 2.
         // @checkme: modules is a depency of templates, redundant check?
-        if (method_exists('xarModVars','Get') && function_exists('xarUserGetVar')) {
+        if (method_exists('xarModVars','Get') && method_exists('xarUser','getVar')) {
             if (xarModVars::get('themes', 'variable_dump') &&
-                in_array(xarUserGetVar('uname'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+                in_array(xarUser::getVar('uname'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
                 echo '<pre>',var_dump($tplData),'</pre>';
             }
         } 
@@ -1380,10 +1380,10 @@ class xarTpl extends Object
     {
         try {
             // We need to make sure enough of the core is loaded to run this
-            $allowed = function_exists('xarUserGetVar');
+            $allowed = method_exists('xarUser','getVar');
             if ($allowed && 
                 !isset(self::$showPHPCommentBlockInTemplates) && 
-                (in_array(xarUserGetVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))) {
+                (in_array(xarUser::getVar('uname'),xarConfigVars::get(null, 'Site.User.DebugAdmins')))) {
                 // Default to not show the comments
                 self::$showPHPCommentBlockInTemplates = 0;
                 // @checkme: modules is a depency of templates, redundant check?
