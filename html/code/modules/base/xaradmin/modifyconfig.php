@@ -240,6 +240,9 @@ function base_admin_modifyconfig()
                     xarConfigVars::set(null, 'Site.MLS.MLSMode', $MLSMode);
                     xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $defaultLocale);
                     xarConfigVars::set(null, 'Site.MLS.AllowedLocales', $localesList);
+                    // Also set the following modvar. 
+                    // It sets the navigation locale for all logged in users who have not explicitly chosen one
+                    xarModVars::set('roles', 'locale', $defaultLocale);
 
                     xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
                     break;
