@@ -407,7 +407,7 @@ class xarMLS extends Object
         $GLOBALS['xarMLS_localeDataLoader'] = new xarMLS__LocaleDataLoader();
         $GLOBALS['xarMLS_localeDataCache'] = array();
     
-        $GLOBALS['xarMLS_currentLocale'] = ''; // <-- FIXME: this causes problems
+        $GLOBALS['xarMLS_currentLocale'] = '';
     
         $GLOBALS['xarMLS_defaultLocale'] = $args['defaultLocale'];
         $GLOBALS['xarMLS_allowedLocales'] = $args['allowedLocales'];
