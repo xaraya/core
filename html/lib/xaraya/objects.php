@@ -71,10 +71,11 @@ class xarObject extends Object implements IxarObject
      * @param objectName string registered name of object
      * @param methodName string specific method to run
      * @param args array arguments to pass to the method
+     * @param roleid mixed override the current user or null
      * @return mixed The output of the method, or false on failure
      * @throws BAD_PARAM
      */
-    static function classMethod($objectName, $methodName = 'showDisplay', $args = array())
+    static function classMethod($objectName, $methodName = 'showDisplay', $args = array(), $roleid = null)
     {
         if (empty($objectName)) throw new EmptyParameterException('objectName');
 
@@ -87,17 +88,26 @@ class xarObject extends Object implements IxarObject
         {
             case 'countitems':
                 $objectlist = DataObjectMaster::getObjectList($args);
+                if (!$objectlist->checkAccess('view', null, $roleid)) {
+                    return;
+                }
                 return $objectlist->countItems($args);
                 break;
 
             case 'getitems':
                 $objectlist = DataObjectMaster::getObjectList($args);
+                if (!$objectlist->checkAccess('view', null, $roleid)) {
+                    return;
+                }
                 return $objectlist->getItems($args);
                 break;
 
             case 'showview':
             case 'getviewvalues':
                 $objectlist = DataObjectMaster::getObjectList($args);
+                if (!$objectlist->checkAccess('view', null, $roleid)) {
+                    return;
+                }
                 // get the items first
                 $objectlist->getItems($args);
                 return $objectlist->{$methodName}($args);
@@ -106,8 +116,13 @@ class xarObject extends Object implements IxarObject
             // CHECKME: what do we want to return here ?
             case 'getitem':
                 $object = DataObjectMaster::getObject($args);
+                if (!$object->checkAccess('display', $args['itemid'], $roleid)) {
+                    return;
+                }
                 // get the item first
-                $object->getItem($args);
+                if (!$object->getItem($args)) {
+                    return;
+                }
                 return $object->getFieldValues($args);
                 break;
 
@@ -115,14 +130,28 @@ class xarObject extends Object implements IxarObject
             case 'getdisplayvalues':
             case 'showform':
             case 'showdisplay':
+                $object = DataObjectMaster::getObject($args);
+                if (!$object->checkAccess('display', $args['itemid'], $roleid)) {
+                    return;
+                }
+                // get the item first
+                if (!$object->getItem($args)) {
+                    return;
+                }
+                return $object->{$methodName}($args);
+                break;
+
             case 'createitem':
             case 'updateitem':
             case 'deleteitem':
             default:
                 $object = DataObjectMaster::getObject($args);
-                if (!empty($args['itemid'])) {
-                    // get the item first
-                    $object->getItem($args);
+                if (!$object->checkAccess('delete', $args['itemid'], $roleid)) {
+                    return;
+                }
+                // get the item first
+                if (!empty($args['itemid']) && !$object->getItem($args)) {
+                    return;
                 }
                 return $object->{$methodName}($args);
                 break;

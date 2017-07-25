@@ -174,6 +174,9 @@ function dynamicdata_admin_updateprop()
         $res = $property->addToObject(array('object_id' => $objectid));
     }
 
+    // CHECKME: flush the variable cache if necessary
+    DataObjectMaster::flushVariableCache(array('objectid' => $objectid));
+
     if ($isprimary) {
         $modinfo = xarMod::getInfo($module_id);
         xarModCallHooks('module','updateconfig',$modinfo['name'],
@@ -186,4 +189,3 @@ function dynamicdata_admin_updateprop()
                               'table'    => $table)));
     return true;
 }
-?>

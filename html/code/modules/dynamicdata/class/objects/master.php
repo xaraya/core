@@ -646,8 +646,8 @@ class DataObjectMaster extends Object
         ) = $result->fields;
         $result->close();
  
-        xarCore::setCached($cacheKey,$info['objectid'],$info);
-        xarCore::setCached($cacheKey,$info['name'],$info);
+        xarCoreCache::setCached($cacheKey,$info['objectid'],$info);
+        xarCoreCache::setCached($cacheKey,$info['name'],$info);
         return $info;
     }
     
@@ -658,11 +658,11 @@ class DataObjectMaster extends Object
         }
 
         $cacheKey = 'DynamicData._ObjectInfo';
-        if(isset($args['objectid']) && xarCore::isCached($cacheKey,$args['objectid'])) {
-            return xarCore::getCached($cacheKey,$args['objectid']);
+        if(isset($args['objectid']) && xarCoreCache::isCached($cacheKey,$args['objectid'])) {
+            return xarCoreCache::getCached($cacheKey,$args['objectid']);
         }
-        if(isset($args['name']) && xarCore::isCached($cacheKey,$args['name'])) {
-            return xarCore::getCached($cacheKey,$args['name']);
+        if(isset($args['name']) && xarCoreCache::isCached($cacheKey,$args['name'])) {
+            return xarCoreCache::getCached($cacheKey,$args['name']);
         }
 
         sys::import('modules.dynamicdata.xartables');
@@ -711,10 +711,97 @@ class DataObjectMaster extends Object
         $result = $q->output();
         $row = $q->row();
         if (!empty($row)) {
-            xarCore::setCached($cacheKey,$row['object_id'],$result);
-            xarCore::setCached($cacheKey,$row['object_name'],$result);
+            xarCoreCache::setCached($cacheKey,$row['object_id'],$result);
+            xarCoreCache::setCached($cacheKey,$row['object_name'],$result);
         }
         return $result;
+    }
+
+    /**
+     * Class method to flush the variable cache in all scopes for a particular object definition
+     *
+     * @param $args['objectid'] id of the object you're looking for, and/or
+     * @param $args['name'] name of the object you're looking for
+     * @return null
+    **/
+    public static function flushVariableCache($args=array())
+    {
+        // check if variable caching is actually enabled at all...
+        if (!xarCache::$variableCacheIsEnabled) {
+            return;
+        }
+        // get the missing object information
+        if (empty($args['name']) || empty($args['objectid'])) {
+            $args = self::getObjectInfo($args);
+        }
+        // flush the variable cache in all scopes
+        $scopes = array('DataObject', 'DataObjectList');
+        if (!empty($args['name'])) {
+            foreach ($scopes as $scope) {
+                $cacheKey = self::getVariableCacheKey($scope, array('name' => $args['name']));
+                if (!empty($cacheKey)) {
+                    xarVariableCache::delCached($cacheKey);
+                }
+            }
+        }
+        if (!empty($args['objectid'])) {
+            foreach ($scopes as $scope) {
+                $cacheKey = self::getVariableCacheKey($scope, array('objectid' => $args['objectid']));
+                if (!empty($cacheKey)) {
+                    xarVariableCache::delCached($cacheKey);
+                }
+            }
+        }
+    }
+
+    /**
+     * Class method to get the variable cache key in a certain scope for a particular object definition
+     *
+     * @param $args['objectid'] id of the object you're looking for, or
+     * @param $args['name'] name of the object you're looking for
+     * @return mixed cacheKey if it can be cached, or null if not
+    **/
+    public static function getVariableCacheKey($scope, $args=array())
+    {
+        // check if variable caching is actually enabled at all...
+        if (!xarCache::$variableCacheIsEnabled) {
+            return;
+        }
+        if (empty($scope)) {
+           throw new Exception(xarML('Cannot get variable cache key without a scope'));
+        }
+        if (empty($args['objectid']) && empty($args['name'])) {
+           throw new Exception(xarML('Cannot get object information without an objectid or a name'));
+        }
+        if (!empty($args['name'])) {
+            $scope .= '.ByName';
+            //$cacheKey = xarCache::getVariableKey($scope, $args['name']);
+            $name = $args['name'];
+            unset($args['name']);
+        } elseif (!empty($args['objectid'])) {
+            $scope .= '.ById';
+            //$cacheKey = xarCache::getVariableKey($scope, $args['objectid']);
+            $name = $args['objectid'];
+            unset($args['objectid']);
+        }
+        // Note: this is supposed to be about caching a DataObject or DataObjectList variable before we do getItem(), getItems() etc.
+        // we'll set itemid back after getting the object variable from cache if necessary...
+        // CHECKME: any *tricky* objects relying on itemid being set at creation time to affect properties etc. should perhaps rethink their approach :-)
+        if (isset($args['itemid'])) {
+            unset($args['itemid']);
+        }
+        if (empty($args)) {
+            xarLog::message('DataObjectMaster::getVariableCacheKey: ' . $scope . '(' . $name . ')');
+            $cacheKey = xarCache::getVariableKey($scope, $name);
+        } else {
+            xarLog::message('DataObjectMaster::getVariableCacheKey: TODO ' . $scope . '(' . $name . ') with ' . json_encode($args));
+            // TODO: any remaining arguments should *not* affect the object creation itself if we rehydrate correctly afterwards, but we'll play it safe for now...
+            //$hash = md5(serialize($args));
+            //$name .= '-' . $hash;
+            //$cacheKey = xarCache::getVariableKey($scope, $name);
+            $cacheKey = null;
+        }
+        return $cacheKey;
     }
 
     /**
@@ -731,14 +818,20 @@ class DataObjectMaster extends Object
     public static function getObject(Array $args=array())
     {
         /* with autoload and variable caching activated */
+        // CHECKME: that actually checked if we can do output caching in object ui handlers etc.
         // Identify the variable by its arguments here
-        $hash = md5(serialize($args));
+        //$hash = md5(serialize($args));
         // Get a cache key for this variable if it's suitable for variable caching
-        $cacheKey = xarCache::getObjectKey('DataObject', $hash);
+        //$cacheKey = xarCache::getObjectKey('DataObject', $hash);
+        // CHECKME: this is supposed to be about caching a DataObject variable before we do getItem() etc.
+        $cacheKey = self::getVariableCacheKey('DataObject', $args);
         // Check if the variable is cached
         if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
             // Return the cached variable
             $object = xarVariableCache::getCached($cacheKey);
+            if (!empty($args['itemid'])) {
+                $object->itemid = $args['itemid'];
+            }
             return $object;
         }
 
@@ -844,10 +937,13 @@ class DataObjectMaster extends Object
     public static function getObjectList(Array $args=array())
     {
         /* with autoload and variable caching activated */
+        // CHECKME: that actually checked if we can do output caching in object ui handlers etc.
         // Identify the variable by its arguments here
-        $hash = md5(serialize($args));
+        //$hash = md5(serialize($args));
         // Get a cache key for this variable if it's suitable for variable caching
-        $cacheKey = xarCache::getObjectKey('DataObjectList', $hash);
+        //$cacheKey = xarCache::getObjectKey('DataObjectList', $hash);
+        // CHECKME: this is supposed to be about caching a DataObjectList variable before we do getItems() etc.
+        $cacheKey = self::getVariableCacheKey('DataObjectList', $args);
         // Check if the variable is cached
         if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
             // Return the cached variable

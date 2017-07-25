@@ -19,6 +19,10 @@ function dynamicdata_autoload($class)
 {
     static $classpathlist = array();
 
+    if (xarAutoload::$shutdown) {
+        return false;
+    }
+
     $class = strtolower($class);
 
     // Some predefined classes
@@ -58,8 +62,11 @@ function dynamicdata_autoload($class)
             return;
 */
 
-        case 'flattabledatastore':
-            sys::import('xaraya.datastores.sql.flattable');
+        //case 'flattabledatastore':
+        //    sys::import('xaraya.datastores.sql.flattable');
+        //    return;
+        case 'relationaldatastore':
+            sys::import('xaraya.datastores.sql.relational');
             return;
         case 'variabletabledatastore':
             sys::import('xaraya.datastores.sql.variabletable');
@@ -68,10 +75,13 @@ function dynamicdata_autoload($class)
             sys::import('xaraya.datastores.sql.modulevariables');
             return;
         case 'dummydatastore':
-            sys::import('xaraya.datastores.dummy');
+            sys::import('xaraya.datastores.virtual');
             return;
         case 'hookdatastore':
             sys::import('xaraya.datastores.hook');
+            return;
+        case 'functiondatastore':
+            sys::import('xaraya.datastores.function');
             return;
         case 'datastorelinks':
             sys::import('modules.dynamicdata.class.datastores.links');
@@ -120,4 +130,3 @@ if (class_exists('xarAutoload')) {
 } else {
     // guess you'll have to register it yourself :-)
 }
-?>

@@ -26,6 +26,7 @@ class FieldTypeProperty extends ObjectRefProperty
     public $desc       = 'Field Type';
     public $initialization_store_prop   = 'id';
     public $initialization_display_prop = 'label';
+    public $initialization_refobject    = null;    // There is no object corresponding to the xar_dynamic_properties_def table
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -62,6 +63,12 @@ class FieldTypeProperty extends ObjectRefProperty
             $this->options = $options;
         }
         return $options;
+    }
+
+    public function preList()
+    {
+        // Skip prefill for fieldtype
+        return true;
     }
 }
 ?>

@@ -23,7 +23,6 @@ class Role extends DataObject
 {
     public $parentlevel;  //we use this just to store transient information
 
-    public $dbconn;
     public $rolestable;
     public $rolememberstable;
     public $privilegestable;
@@ -47,8 +46,6 @@ class Role extends DataObject
     public function __construct(DataObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-
-        $this->dbconn = xarDB::getConn();
 
         // dodgy. remove later on
         sys::import('modules.privileges.xartables');
@@ -178,7 +175,6 @@ class Role extends DataObject
         $query = "INSERT INTO $this->rolememberstable (role_id, parent_id)
                     values (".$member->getID().", ". $this->getID().")";
 
-        $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
 
@@ -201,7 +197,6 @@ class Role extends DataObject
             $value = $row['users']+1;
             $query = "UPDATE  " . $this->rolestable . " SET users = " . $value . " WHERE id = ?";
             $bindvars[] =  $this->getID();
-            $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
 
@@ -289,7 +284,8 @@ class Role extends DataObject
         // where this role is the child
         $query = "SELECT parent_id FROM $this->rolememberstable WHERE role_id= ?";
         // Execute the query, bail if an exception was thrown
-        $stmt = $this->dbconn->prepareStatement($query);
+        $dbconn = xarDB::getConn();
+        $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($this->getID()));
 
         if(count($result->fields) == 1)
@@ -407,7 +403,10 @@ class Role extends DataObject
                   WHERE   p.id = acl.privilege_id AND
                           acl.role_id = ?";
 //                          echo $query;exit;
-        if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
+        if(!isset($stmt)) {
+            $dbconn = xarDB::getConn();
+            $stmt = $dbconn->prepareStatement($query);
+        }
         $result = $stmt->executeQuery(array($this->properties['id']->value));
 
         sys::import('modules.privileges.class.privilege');
@@ -481,7 +480,8 @@ class Role extends DataObject
         // create an entry in the privmembers table
         $query = "INSERT INTO $this->acltable VALUES (?,?)";
         $bindvars = array($this->getID(),$privilege->getID());
-        $this->dbconn->Execute($query,$bindvars);
+        $dbconn = xarDB::getConn();
+        $dbconn->Execute($query,$bindvars);
 
         // Refresh the privileges cached for the current sessions
         xarMasks::clearCache();
@@ -501,7 +501,8 @@ class Role extends DataObject
         $query = "DELETE FROM $this->acltable
                   WHERE role_id= ? AND privilege_id= ?";
         $bindvars = array($this->properties['id']->value, $privilege->getID());
-        $this->dbconn->Execute($query,$bindvars);
+        $dbconn = xarDB::getConn();
+        $dbconn->Execute($query,$bindvars);
 
         // Refresh the privileges cached for the current sessions
         xarMasks::clearCache();
@@ -548,7 +549,8 @@ class Role extends DataObject
         if (isset($selection)) $query .= $selection;
         $query .= " ORDER BY " . $order;
         // Prepare the query
-        $stmt = $this->dbconn->prepareStatement($query);
+        $dbconn = xarDB::getConn();
+        $stmt = $dbconn->prepareStatement($query);
 
         if ($startnum != 0) {
             $stmt->setLimit($numitems);
@@ -654,7 +656,10 @@ class Role extends DataObject
         $query = "SELECT r.*
                   FROM $this->rolestable r, $this->rolememberstable rm
                   WHERE r.id = rm.parent_id AND rm.role_id = ?";
-        if(!isset($stmt)) $stmt = $this->dbconn->prepareStatement($query);
+        if(!isset($stmt)) {
+            $dbconn = xarDB::getConn();
+            $stmt = $dbconn->prepareStatement($query);
+        }
         $result = $stmt->executeQuery(array($this->properties['id']->value));
 
         // collect the table values and use them to create new role objects

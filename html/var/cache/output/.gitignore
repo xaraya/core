@@ -3,10 +3,8 @@
 # Except these files
 !.gitignore
 !what_is_this.txt
-!config.caching.php.dist
-!css/
-!database/
-!output/
-!rss/
-!templates/
-!variables/
+!cache.no.*
+!block/
+!module/
+!object/
+!page/

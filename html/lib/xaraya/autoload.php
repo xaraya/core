@@ -26,6 +26,7 @@ class xarAutoload extends Object
 {
     private static $registerlist = array();
     private static $classpathlist = array();
+    public static $shutdown = false;
 
     /**
      * Initialize the list of autoload functions
@@ -143,11 +144,23 @@ class xarAutoload extends Object
      */
     public static function autoload_todo($class)
     {
+        if (self::$shutdown) {
+            return false;
+        }
+
         $class = strtolower($class);
 
         // Some predefined classes
         switch ($class)
         {
+            case 'query':
+                sys::import('xaraya.structures.query');
+                return;
+
+            case 'category':
+                sys::import('modules.categories.class.category');
+                return;
+
             case 'categories':
                 sys::import('modules.categories.class.categories');
                 return;
@@ -188,4 +201,3 @@ class xarAutoload extends Object
         return false;
     }
 }
-?>

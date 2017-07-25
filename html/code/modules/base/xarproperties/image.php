@@ -40,13 +40,33 @@ class ImageProperty extends TextBoxProperty
         $this->template  = 'image';
 
         // Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory
-        $this->initialization_basedirectory = preg_replace('/\{user_theme\}/',"themes/".xarModVars::get('themes', 'default_theme'),$this->initialization_basedirectory);
-        $this->initialization_basedirectory = preg_replace('/\{admin_theme\}/',"themes/".xarModVars::get('themes', 'admin_theme'),$this->initialization_basedirectory);
-        $this->initialization_basedirectory = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->initialization_basedirectory);
+        $this->initialization_basedirectory = $this->getThemeDir();
         // FIXME: baseurl is no longer initialized - could be different from basedir !
 
         if ($this->initialization_image_source == 'upload') $this->upload = true;
     }
+
+    /**
+     * Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory - move to templates/themes?
+     * 
+     * @param  string basedir Base directory to be replaced
+     * @return string         Corresponding theme directory
+     */
+    public function getThemeDir($basedir = null)
+    {
+        if (!$basedir) $basedir = $this->initialization_basedirectory;
+        if (strpos($basedir, '{user_theme}') !== false) {
+            $basedir = str_replace('{user_theme}',"themes/".xarModVars::get('themes', 'default_theme'),$basedir);
+        }
+        if (strpos($basedir, '{admin_theme}') !== false) {
+            $basedir = str_replace('{admin_theme}',"themes/".xarModVars::get('themes', 'admin_theme'),$basedir);
+        }
+        if (strpos($basedir, '{theme}') !== false) {
+            $basedir = str_replace('{theme}',xarTpl::getThemeDir(),$basedir);
+        }
+        return $basedir;
+    }
+
 	/**
 	 * Validate the value of a field
 	 *
@@ -105,7 +125,7 @@ class ImageProperty extends TextBoxProperty
     public function showOutput(Array $data = array())
     {
         if(!empty($data['inputtype'])) $this->initialization_image_source = $data['inputtype'];
-        if(!empty($data['basedir'])) $this->initialization_basedirectory = $data['basedir'];
+        if(!empty($data['basedir'])) $this->initialization_basedirectory = $this->getThemeDir($data['basedir']);
         if (empty($data['value'])) $data['value'] = $this->value;
         if (!empty($data['value'])) {
             // FIXME: baseurl is no longer initialized - could be different from basedir !

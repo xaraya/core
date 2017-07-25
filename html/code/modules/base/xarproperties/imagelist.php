@@ -33,16 +33,12 @@ class ImageListProperty extends FilePickerProperty
 
         if (empty($this->validation_file_extensions)) $this->setExtensions('gif,jpg,jpeg,png,bmp');
 
-        // Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory
-        $this->initialization_basedirectory = preg_replace('/\{user_theme\}/',"themes/".xarModVars::get('themes', 'default_theme'),$this->initialization_basedirectory);
-        $this->initialization_basedirectory = preg_replace('/\{admin_theme\}/',"themes/".xarModVars::get('themes', 'admin_theme'),$this->initialization_basedirectory);
-        $this->initialization_basedirectory = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->initialization_basedirectory);
+        // Replace {theme}, {user_theme}, {admin_theme} with the appropriate theme directory - already done in parent
+        //$this->initialization_basedirectory = $this->getThemeDir();
 
         // FIXME: baseurl is no longer initialized - could be different from basedir !
         if (isset($this->baseurl)) {
-            $this->baseurl = preg_replace('/\{user_theme\}/',"themes/".xarModVars::get('themes', 'default_theme'),$this->baseurl);
-            $this->baseurl = preg_replace('/\{admin_theme\}/',"themes/".xarModVars::get('themes', 'admin_theme'),$this->baseurl);
-            $this->baseurl = preg_replace('/\{theme\}/',xarTpl::getThemeDir(),$this->baseurl);
+            $this->baseurl = $this->getThemeDir($this->baseurl);
         }
         
         // Default selection

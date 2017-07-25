@@ -206,6 +206,7 @@ class ObjectRefProperty extends SelectProperty
         }
 
         // We only support relational storage
+        if (!$object || !$object->datastore) return true;
         $store = $object->datastore->name;
         if ($object->datastore->name != "relational") return true;
 

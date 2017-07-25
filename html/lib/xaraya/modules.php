@@ -496,7 +496,7 @@ class xarMod extends Object implements IxarMod
                  $modInfo['state']) = $result->getRow();
             break;
         }
-        $result->Close();
+        $result->close();
         unset($result);
 
         $modInfo['regid'] = (int) $modRegId;
@@ -620,7 +620,7 @@ class xarMod extends Object implements IxarMod
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_NUM);
 
         if (!$result->next()) {
-            $result->Close();
+            $result->close();
             return;
         }
 
@@ -630,7 +630,7 @@ class xarMod extends Object implements IxarMod
         } else {
             list($regid,  $directory, $systemid, $version, $state, $name) = $result->getRow();
         }
-        $result->Close();
+        $result->close();
 
         $modBaseInfo['regid'] = (int) $regid;
         $modBaseInfo['systemid'] = (int) $systemid;

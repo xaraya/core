@@ -64,6 +64,10 @@ class xarCSS extends Object
     private $combined   = true;
     private $compressed = true;
 
+    // avoid refreshing on each unserialize
+    public  $refreshed  = false;
+    private $expires    = 24*60*60;
+
 /**
  * object constructor
  *
@@ -80,6 +84,7 @@ class xarCSS extends Object
 
     private function __construct()
     {
+        xarLog::message('xarCSS::__construct: hello world');
         $this->combined   = xarModVars::get('themes', 'css.combined');
         $this->compressed = xarModVars::get('themes', 'css.compressed');
     }
@@ -99,7 +104,14 @@ class xarCSS extends Object
     public function __wakeup()
     {
         // Check what libraries are present in the filesystem
-        $this->refresh();
+        if (time() - $this->last_run > $this->expires) {
+            xarLog::message('xarCSS::__wakeup: unserialize & refresh ' . (string)$this->last_run);
+            $this->refresh();
+            $this->refreshed = true;
+        } else {
+            //xarLog::message('xarCSS::__wakeup: unserialize & NOT refresh');
+            $this->refreshed = false;
+        }
         // Load the default libraries
         foreach($this->default_libs as $lib) {
 //            $this->register($lib);
@@ -120,6 +132,7 @@ class xarCSS extends Object
 **/
     public function __sleep()
     {
+        xarLog::message('xarCSS::__sleep: serialize');
         // set the last run time before we exit
         $this->last_run = time();
         // return the array of public property names to store
@@ -138,6 +151,11 @@ class xarCSS extends Object
 **/
     public function __destruct()
     {
+        if (!$this->refreshed && time() - $this->last_run < $this->expires) {
+            //xarLog::message('xarCSS::__destruct: NOT saving modvars');
+            return;
+        }
+        xarLog::message('xarCSS::__destruct: saving modvars');
         // basically, we serialize and set this object as a modvar
         // xarModVars::set can be a little flaky,
         // this workaround seems to do the trick
@@ -174,6 +192,7 @@ class xarCSS extends Object
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
+            xarLog::message('xarCSS::getInstance: loading modvars');
             // try unserializing the stored modvar
             self::$instance = @unserialize(xarModVars::get(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE));
             // fall back to new instance (first run)
@@ -182,6 +201,8 @@ class xarCSS extends Object
                 // this is the one and only time the __construct() method will be run
                 self::$instance = new $c;
             }
+        } else {
+            //xarLog::message('xarCSS::getInstance: NOT loading modvars');
         }
         self::$instance->combined   = xarModVars::get('themes', 'css.combined');
         self::$instance->compressed = xarModVars::get('themes', 'css.compressed');
@@ -254,6 +275,7 @@ class xarCSS extends Object
         $libs = array();
         foreach ($paths as $path) {
             if (!is_dir($path)) continue;
+            //xarLog::message('xarCSS::refresh: looking in ' . $path);
             $folders = $this->getFolders($path, 1);
             if (empty($folders)) continue;
             foreach (array_keys($folders) as $lib) {
@@ -1012,4 +1034,3 @@ class xarCSSLib extends Object
         }
     }
 }
-?>
