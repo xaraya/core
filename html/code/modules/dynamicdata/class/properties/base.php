@@ -497,7 +497,7 @@ class DataProperty extends Object implements iDataProperty
 
         // If we are set up to do so, translate this value
         if ($this->translatable && xarMod::isAvailable('translations')) {
-            xarMLS::_loadTranslations(xarMLS::DNTYPE_OBJECT, $this->objectref->name, 'objects:' . $this->objectref->name, $this->name);
+            xarMLS::_loadTranslations(xarMLS::DNTYPE_OBJECT, 'object', 'objects:' . $this->objectref->name, $this->name);
             $data['value'] = xarML($data['value']);
         }
         
