@@ -337,14 +337,14 @@ class DataObjectMaster extends Object
                 // CHECKME: filter out DISPLAYONLY or VIEWONLY depending on the class we're in !
                 sys::import('modules.dynamicdata.class.properties.master');
                 if (method_exists($this, 'getItems')) {
-                    $filterstate = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
+                    $not_allowed_state = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
                 } else {
-                    $filterstate = DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY;
+                    $not_allowed_state = DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY;
                 }
                 // Filter out properties with the state chosen above, and also the disabled properties
                 foreach($this->properties as $property)
                     if($property->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED &&
-                       $property->getDisplayStatus() != $filterstate)
+                       $property->getDisplayStatus() != $not_allowed_state)
                         $fields[$property->id] = $property->name;
             }
         }
@@ -517,7 +517,7 @@ class DataObjectMaster extends Object
         $dynamicobjects = $xartable['dynamic_objects'];
 
         $bindvars = array();
-        xarLog::message("DB: query in getObjects");
+        xarLog::message("DB: query in getObjects", xarLog::LEVEL_INFO);
         $query = "SELECT id,
                          name,
                          label,
@@ -596,7 +596,7 @@ class DataObjectMaster extends Object
         $dynamicobjects = $xartable['dynamic_objects'];
  
         $bindvars = array();
-        xarLog::message('DD: query in getObjectInfo');
+        xarLog::message('DD: query in getObjectInfo', xarLog::LEVEL_INFO);
         $query = "SELECT id,
                          name,
                          label,
@@ -701,6 +701,7 @@ class DataObjectMaster extends Object
         $q->addfield('p.type AS type');
         $q->addfield('p.defaultvalue AS defaultvalue');
         $q->addfield('p.source AS source');
+        $q->addfield('p.translatable AS translatable');
         $q->addfield('p.status AS status');
         $q->addfield('p.seq AS seq');
         $q->addfield('p.configuration AS configuration');
@@ -851,7 +852,7 @@ class DataObjectMaster extends Object
         $data['propertyargs'] =& $info;
         
         // Create the object if it was not in cache
-        xarLog::message("DataObjectMaster::getObject: Getting a new object " . $data['class']);
+        xarLog::message("DataObjectMaster::getObject: Getting a new object " . $data['class'], xarLog::LEVEL_INFO);
 
         if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) include_once(sys::code() . $data['filepath']);
         else sys::import('modules.dynamicdata.class.objects.base');
@@ -1063,7 +1064,7 @@ class DataObjectMaster extends Object
         $descriptor = new DataObjectDescriptor($args);
         $objectid = $object->createItem($descriptor->getArgs());
         $classname = get_class($object);
-        xarLog::message("Creating an object of class " . $classname . ". Objectid: " . $objectid . ", module: " . $args['moduleid'] . ", itemtype: " . $args['itemtype']);
+        xarLog::message("Creating an object of class " . $classname . ". Objectid: " . $objectid . ", module: " . $args['moduleid'] . ", itemtype: " . $args['itemtype'], xarLog::LEVEL_INFO);
         unset($object);
         return $objectid;
     }

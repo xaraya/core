@@ -42,7 +42,7 @@ function blocks_adminapi_import(Array $args=array())
 
     if (!empty($file)) {
         $xmlobject = simplexml_load_file($file);
-        xarLog::message('Blocks: import file ' . $file);
+        xarLog::message('Blocks: import file ' . $file, xarLog::LEVEL_INFO);
         
     } elseif (!empty($xml)) {
         // remove garbage from the end
@@ -67,7 +67,7 @@ function blocks_adminapi_import(Array $args=array())
         $args = array();
         // Get the object's name
         $args['name'] = (string)($xmlobject->attributes()->name);
-        xarLog::message('Blocks: importing ' . $args['name']);
+        xarLog::message('Blocks: importing ' . $args['name'], xarLog::LEVEL_INFO);
 
         // Check if the block exists
         // Strictly speaking we could have the same name for blocks in different states, but lets not allow that here

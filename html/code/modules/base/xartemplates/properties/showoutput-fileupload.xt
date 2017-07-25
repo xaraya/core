@@ -2,9 +2,16 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="$file_OK">
+        <xar:if condition="empty($target)">
+            <xar:set name="target">'_self'</xar:set>
+        </xar:if>
         <!-- TODO: convert basedir to base URL when necessary ? -->
-        <xar:var name="label">Download</xar:var>
-        <a href="#$value#" title="#$label#">#$value#</a>
+        <xar:if condition="!empty($label)">
+            <a href="#$value#" title="#$label#" target="#$target#">#$label#</a>
+        <xar:else/>
+            <xar:var name="label">Download</xar:var>
+            <a href="#$value#" title="#$label#" target="#$target#">#$value#</a>
+        </xar:if>
     <xar:else/> 
         <!-- something went wrong here - the file doesn't exist -->
         <xar:var name="value"/>

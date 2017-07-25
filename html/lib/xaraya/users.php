@@ -339,9 +339,9 @@ class xarUser extends Object
         if (self::isLoggedIn())
         {
             $id = self::getVar('id');
-              //last resort user is falling over on this uservar by setting multiple times
-             //return true for last resort user - use default locale
-             if ($id == XARUSER_LAST_RESORT) return true;
+            //last resort user is falling over on this uservar by setting multiple times
+            //return true for last resort user - use default locale
+            if ($id == XARUSER_LAST_RESORT) return true;
     
             $locale = xarModUserVars::get('roles', 'locale');
             if (empty($locale)) {
@@ -353,7 +353,7 @@ class xarUser extends Object
         if (empty($locale)) {
             $locale = xarConfigVars::get(null, 'Site.MLS.DefaultLocale');
         }
-        xarSessionSetVar('navigationLocale', $locale);
+        xarSession::setVar('navigationLocale', $locale);
         return $locale;
     }
 
@@ -366,10 +366,10 @@ class xarUser extends Object
      */
     static public function setNavigationLocale($locale)
     {
+        xarLog::message("Changing the navigation locale from ". self::getNavigationLocale() . " to " . $locale, xarLog::LEVEL_INFO);
         if (xarMLSGetMode() != xarMLS::SINGLE_LANGUAGE_MODE) {
             xarSessionSetVar('navigationLocale', $locale);
             if (self::isLoggedIn()) {
-                $userLocale = xarModUserVars::get('roles', 'locale');
                 xarModUserVars::set('roles', 'locale', $locale);
             }
             return true;

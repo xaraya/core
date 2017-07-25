@@ -79,14 +79,17 @@ function xarMain()
     // Create the object that models this request
     $request = xarController::getRequest();
     xarController::normalizeRequest();
+    xarLog::message('Retrieved a request: ' . $request->getModule() . "_" . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_INFO);
 
     // Default Page Title
     $SiteSlogan = xarModVars::get('themes', 'SiteSlogan');
     xarTpl::setPageTitle(xarVarPrepForDisplay($SiteSlogan));
-
+    xarLog::message('The page title is set: ' . xarTpl::getPageTitle(), xarLog::LEVEL_INFO);
+    
     // Check the Installation
     if ((xarController::$request->getModule() != 'installer') && (xarSystemVars::get(sys::CONFIG, 'DB.Installation') != 3))
         die('Xaraya was not properly installed. The exact error cannot be diagnosed.<br/>Please rerun the installer. If you have important data in your database please make a backup first.');
+    xarLog::message('The installation is checked', xarLog::LEVEL_INFO);
 
     // Theme Override
     xarVarFetch('theme','str:1:',$themeName,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
@@ -119,7 +122,8 @@ function xarMain()
             xarTpl::setThemeName(strtolower($themeName));
             xarVarSetCached('Themes.name','CurrentTheme', $themeName);
         }
-    }
+    }    
+    xarLog::message('The theme is set: ' . xarTpl::getThemeName(), xarLog::LEVEL_INFO);
 
     // Get a cache key for this page if it's suitable for page caching
     $cacheKey = xarCache::getPageKey();
@@ -134,6 +138,12 @@ function xarMain()
             $run = 0;
         }
     }
+    if ($run) {
+        $message = 'The page is not cached. Continue processing the request.';
+    } else {
+        $message = 'The page is cached. Using the cached page.';
+    }
+    xarLog::message($message, xarLog::LEVEL_INFO);
 
     if ($run) {
 
@@ -160,6 +170,7 @@ function xarMain()
         if (!empty($pageName)){
             xarTpl::setPageTemplateName($pageName);
         }
+        xarLog::message('The page template is set: ' . xarTpl::getPageTemplateName(), xarLog::LEVEL_INFO);
 
         // if the debugger is active, start it
         if (xarCore::isDebuggerActive()) {
@@ -167,8 +178,12 @@ function xarMain()
         }
 
         // Process the request
+        xarLog::message('Dispatching request: ' . $request->getModule() . "_" . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_INFO);
         xarController::dispatch($request);
+
+
         // Retrieve the output to send to the browser
+        xarLog::message('Processing request ' . $request->getModule() . "_"  . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_INFO);
         $mainModuleOutput = xarController::$response->getOutput();
 
         if (xarCore::isDebuggerActive()) {
@@ -186,9 +201,11 @@ function xarMain()
         }
 
         // We're all done, one ServerRequest made
+        xarLog::message('Notifying listeners of this request', xarLog::LEVEL_INFO);
         xarEvents::notify('ServerRequest');
         
         // Render page with the output
+        xarLog::message('Creating the page output', xarLog::LEVEL_INFO);
         $pageOutput = xarTpl::renderPage($mainModuleOutput);
 
         // Set the output of the page in cache
@@ -197,6 +214,7 @@ function xarMain()
             xarPageCache::setCached($cacheKey, $pageOutput);
         }
 
+        xarLog::message('Rendering the result page', xarLog::LEVEL_INFO);
         echo $pageOutput;
     }
 

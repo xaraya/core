@@ -91,7 +91,8 @@ class xarRequest extends Object
         } else {
             // CHECKME: are these next lines needed?
             // Try and get it from the current request path
-            $url = xarServer::getCurrentURL();
+            // Note: we don't generate an XML compatible URL here
+            $url = xarServer::getCurrentURL(array(), false);
             $params = $_GET;
 
             // We now have a URL. Set it.
@@ -184,7 +185,7 @@ class xarRequest extends Object
         } elseif (is_array($loopHole)) {
             // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
             //        because they request the current module too at the moment - unnecessary ?
-            xarLog::message('Avoiding loop in xarController::$request->getInfo()');
+            xarLog::message('Avoiding loop in xarController::$request->getInfo()', xarLog::LEVEL_INFO);
             return $loopHole;
         }
         // Get variables

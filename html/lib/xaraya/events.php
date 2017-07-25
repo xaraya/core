@@ -161,7 +161,7 @@ class xarEvents extends Object implements ixarEvents
             }
         } catch (Exception $e) {
             // Events never fail, ever!
-            xarLog::message("xarEvents::notify: failed notifying $event subject observers");
+            xarLog::message("xarEvents::notify: failed notifying $event subject observers", xarLog::LEVEL_EMERGENCY);
             $response = false;
         }
         

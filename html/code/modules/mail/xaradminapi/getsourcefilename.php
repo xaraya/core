@@ -38,8 +38,8 @@ function mail_adminapi_getsourcefilename(Array $args=array())
     
     unset($sourceFileName);
 
-    xarLog::message("TPL: 1. $tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt");
-    xarLog::message("TPL: 2. $tplMessagingDir/$modType-$templateName-$messagepart.xt");
+    xarLog::message("TPL: 1. $tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt", xarLog::LEVEL_INFO);
+    xarLog::message("TPL: 2. $tplMessagingDir/$modType-$templateName-$messagepart.xt", xarLog::LEVEL_INFO);
        
     if(!empty($templateName) &&
         file_exists($sourceFileName = "$tplMessagingDir/$modType-$templateName-$messagepart-$mailType.xt")) {

@@ -22,6 +22,7 @@
  */
 function dynamicdata_userapi_getobject(Array $args=array())
 {
+    sys::import('modules.dynamicdata.class.objects.master');
     $object = DataObjectMaster::getObject($args);
     return $object;
 }

@@ -291,7 +291,7 @@ function dynamicdata_init()
                 'default'     => 'dynamic_data',
                 'charset'     => $charset,
             ),
-            /* is this property active ? (unused at the moment) */
+            /* is this property active ?  */
             'status'     => array(
                 'type'        => 'integer',
                 'size'        => 'tiny',
@@ -299,11 +299,19 @@ function dynamicdata_init()
                 'null'        => false,
                 'default'     => '33'
             ),
+            /* is this property active ? */
+            'translatable'    => array(
+                'type'        => 'integer',
+                'size'        => 'tiny',
+                'unsigned'    => true,
+                'null'        => false,
+                'default'     => '0'
+            ),
             /* the order of this property */
             'seq'      => array(
                 'type'        => 'integer',
                 'size'        => 'tiny',
-                'unsigned'     => true,
+                'unsigned'    => true,
                 'null'        => false
             ),
             /* specific configuration rules for this property (e.g. basedir, size, ...) */
@@ -362,16 +370,17 @@ function dynamicdata_init()
             array('category'  ,'Category'           ,$objectid[1],100,8            ,''                           ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,16 ,'a:3:{s:14:"display_layout";s:7:"default";s:29:"initialization_include_no_cat";s:1:"1";s:29:"initialization_basecategories";a:1:{i:0;a:4:{i:0;s:15:"Object Category";i:1;a:1:{i:0;a:1:{i:0;s:1:"5";}}i:2;b:0;i:3;s:1:"1";}}}'),
 
             // Properties for the Properties DD object
-            array('id'        ,'Id'                 ,$objectid[2],21,''            ,'dynamic_properties.id'        ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,1 ,''),
-            array('name'      ,'Name'               ,$objectid[2],2 ,''            ,'dynamic_properties.name'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,''),
-            array('label'     ,'Label'              ,$objectid[2],2 ,''            ,'dynamic_properties.label'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,''),
-            array('objectid'  ,'Object'             ,$objectid[2],24,''            ,'dynamic_properties.object_id' ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,''),
-            array('type'      ,'Property Type'      ,$objectid[2],22,''            ,'dynamic_properties.type'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,''),
+            array('id'           ,'Id'                 ,$objectid[2],21,''            ,'dynamic_properties.id'        ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,1 ,''),
+            array('name'         ,'Name'               ,$objectid[2],2 ,''            ,'dynamic_properties.name'      ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,2 ,''),
+            array('label'        ,'Label'              ,$objectid[2],2 ,''            ,'dynamic_properties.label'     ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3 ,''),
+            array('objectid'     ,'Object'             ,$objectid[2],24,''            ,'dynamic_properties.object_id' ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4 ,''),
+            array('type'         ,'Property Type'      ,$objectid[2],22,''            ,'dynamic_properties.type'      ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7 ,''),
             array('defaultvalue' ,'Default Value'   ,$objectid[2],3 ,''            ,'dynamic_properties.defaultvalue'   ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8 ,'varchar (254)'),
-            array('source'    ,'Source'             ,$objectid[2],23,'dynamic_data','dynamic_properties.source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,''),
-            array('status'    ,'Status'             ,$objectid[2],25,'1'           ,'dynamic_properties.status'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,''),
-            array('seq'       ,'Order'              ,$objectid[2],15,'0'           ,'dynamic_properties.seq'       ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11,''),
-            array('configuration','Configuration'   ,$objectid[2],998,'a:0:{}'     ,'dynamic_properties.configuration',DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12,''),
+            array('source'       ,'Source'             ,$objectid[2],23,'dynamic_data','dynamic_properties.source'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9 ,''),
+            array('status'       ,'Status'             ,$objectid[2],25,'33'          ,'dynamic_properties.status'    ,DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,''),
+            array('translatable' ,'Translatable'       ,$objectid[2],25,'0'           ,'dynamic_properties.translatable',DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,''),
+            array('seq'          ,'Order'              ,$objectid[2],15,'0'           ,'dynamic_properties.seq'       ,DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,11,''),
+            array('configuration','Configuration'   ,$objectid[2],998,'a:0:{}'        ,'dynamic_properties.configuration',DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,12,''),
         );
 
         $propid = array();

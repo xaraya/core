@@ -122,33 +122,8 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
         //    return $this->domaincache["$dnType.$dnName"];
         //}
 
-        switch ($dnType) {
-        case xarMLS::DNTYPE_CORE:
-            $this->spacedir = "core";
-            break;
-        case xarMLS::DNTYPE_THEME:
-            $this->spacedir = "themes";
-            break;
-        case xarMLS::DNTYPE_MODULE:
-            $this->spacedir = "modules";
-            break;
-        case xarMLS::DNTYPE_PROPERTY:
-            $this->spacedir = "properties";
-            break;
-        case xarMLS::DNTYPE_BLOCK:
-            $this->spacedir = "blocks";
-            break;
-        default:
-            $this->spacedir = NULL;
-            break;
-        }
-
         foreach ($this->locales as $locale) {
-            if($this->spacedir == "core" || $this->spacedir == "xaraya") {
-                $this->domainlocation  = sys::varpath() . "/locales/" . $locale . "/" . $this->backendtype . "/" . $this->spacedir;
-            } else {
-                $this->domainlocation  = sys::varpath() . "/locales/" . $locale . "/" . $this->backendtype . "/" . $this->spacedir . "/" . $dnName;
-            }
+            $this->domainlocation = xarMLSContext::getDomainPath($dnType, $locale, $this->backendtype, $dnName);
 
             if (file_exists($this->domainlocation)) {
                 $this->locale = $locale;
@@ -178,28 +153,21 @@ abstract class xarMLS__ReferencesBackend  extends Object implements ITranslation
         return $this->findContext($ctxType, $ctxName) != false;
     }
 
-    function findContext($ctxType, $ctxName)
+    function findContext($contextType, $contextName)
     {
-        if (strpos($ctxType, 'core:') !== false) {
-            $fileName = $this->getDomainLocation() . "/$ctxName." . $this->backendtype;
-        } elseif (strpos($ctxType, 'themes:') !== false) {
-            list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
-            $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
-        } elseif (strpos($ctxType, 'modules:') !== false) {
-            list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
-            $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
-        } elseif (strpos($ctxType, 'properties:') !== false) {
-            list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
-            $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
-        } elseif (strpos($ctxType, 'blocks:') !== false) {
-            list ($ctxPrefix,$ctxDir) = explode(":", $ctxType);
-            $fileName = $this->getDomainLocation() . "/$ctxDir/$ctxName." . $this->backendtype;
-        } else {
-            throw new BadParameterException(array('context',$ctxType));
-        }
+        // Start with the domain location
+        $fileName = $this->getDomainLocation();
+        
+        // Add in a context directory if it is not empty
+        $contextParts = xarMLSContext::getContextTypeComponents($contextType);
+        if (!empty($contextParts[1])) $fileName .= "/" . $contextParts[1];
+        
+        // Add the file name and its extension
+        $fileName .= "/" . $contextName . "." . $this->backendtype;
+        
+        // Remove any stray slashes
         $fileName = str_replace('//','/',$fileName);
         if (!file_exists($fileName)) {
-//            throw new FileNotFoundException($fileName);
             return false;
         }
         return $fileName;

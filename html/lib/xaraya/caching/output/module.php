@@ -122,7 +122,7 @@ class xarModuleCache extends Object
 
         // the output depends on the current host, theme and locale
         $factors = xarServer::getVar('HTTP_HOST') . xarTpl::getThemeDir() .
-                   xarUserGetNavigationLocale();
+                   xarUser::getNavigationLocale();
 
         // add group or user identifier if needed
         if (self::$userShared == 2) {

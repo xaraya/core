@@ -439,7 +439,7 @@ class xarMod extends Object implements IxarMod
             throw new BadParameterException('module/theme type');
         }
         // Log it when it doesn't come from the cache
-        xarLog::message("xarMod::getInfo: Getting database info of ID '". $modRegId ."' (a " . $type . ")");
+        xarLog::message("xarMod::getInfo: Getting database info of ID '". $modRegId ."' (a " . $type . ")", xarLog::LEVEL_INFO);
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
@@ -596,7 +596,7 @@ class xarMod extends Object implements IxarMod
             return xarCoreCache::getCached($cacheCollection, $modName);
         }
         // Log it when it doesnt come from the cache
-        xarLog::message("xarMod::getBaseInfo: Getting database info of '". $modName ."' (a ". $type. ")");
+        xarLog::message("xarMod::getBaseInfo: Getting database info of '". $modName ."' (a ". $type. ")", xarLog::LEVEL_INFO);
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
@@ -678,7 +678,7 @@ class xarMod extends Object implements IxarMod
             return xarCoreCache::getCached('Mod.getFileInfos', $modOsDir ." / " . $type);
         }
         // Log it when it didnt came from cache
-        xarLog::message("xarMod::getFileInfo: Getting file info of '". $modOsDir ."' (a " . $type . ")");
+        xarLog::message("xarMod::getFileInfo: Getting file info of '". $modOsDir ."' (a " . $type . ")", xarLog::LEVEL_INFO);
 
 
         // TODO redo legacy support via type.
@@ -689,7 +689,7 @@ class xarMod extends Object implements IxarMod
             $part = 'xarversion';
             // If the locale is already present, it means we can make the translations available
             if(!empty($GLOBALS['xarMLS_currentLocale']))
-                xarMLS_loadTranslations(xarMLS::DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
+                xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
             break;
         case 'property':
             $fileName = sys::code() . 'properties/' . $modOsDir . '/main.php';
@@ -709,7 +709,7 @@ class xarMod extends Object implements IxarMod
 
         if (!file_exists($fileName)) {
             // Don't raise an exception, it is too harsh, but log it tho (bug 295)
-            xarLog::message("xarMod::getFileInfo: Could not find xarversion.php, skipping $modOsDir");
+            xarLog::message("xarMod::getFileInfo: Could not find xarversion.php, skipping $modOsDir", xarLog::LEVEL_WARNING);
             // throw new FileNotFoundException($fileName);
             return;
         }
@@ -928,7 +928,7 @@ class xarMod extends Object implements IxarMod
                 }
             }
 
-            xarLog::message("xarMod::callFunc: Calling $modFunc");
+            xarLog::message("xarMod::callFunc: Calling $modFunc", xarLog::LEVEL_INFO);
 
             // let's check for that function again to be sure
             if (!function_exists($modFunc)) {
@@ -955,7 +955,7 @@ class xarMod extends Object implements IxarMod
 
             if ($found) {
                 // Load the translations file, only if we have loaded the API function for the first time here.
-                if (xarMLS_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:'.$modType.$funcType, $funcName) === NULL) {return;}
+                if (xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:'.$modType.$funcType, $funcName) === NULL) {return;}
             }
         }
 
@@ -1013,7 +1013,7 @@ class xarMod extends Object implements IxarMod
         if (isset($loadedModuleCache[$cacheKey])) return true;
 
         // Log it when it doesnt come from the cache
-        xarLog::message("xarMod::load: Loading $modName:$modType");
+        xarLog::message("xarMod::load: Loading $modName:$modType", xarLog::LEVEL_INFO);
 
         $modBaseInfo = self::getBaseInfo($modName);
         // Not a valid module - throw exception
@@ -1049,7 +1049,7 @@ class xarMod extends Object implements IxarMod
         }
 
         // Load the module translations files (common functions, uncut functions etc.)
-        if (xarMLS_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:', $modType) === NULL) return;
+        if (xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modName, 'modules:', $modType) === NULL) return;
 
         // Load database info
         self::loadDbInfo($modName, $modDir);

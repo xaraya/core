@@ -375,6 +375,7 @@ class xarMLS extends Object
     const DNTYPE_MODULE     = 3;
     const DNTYPE_PROPERTY   = 4;
     const DNTYPE_BLOCK      = 5;
+    const DNTYPE_OBJECT     = 6;
 
     /**
      * Initializes the Multi Language System
@@ -406,7 +407,7 @@ class xarMLS extends Object
         $GLOBALS['xarMLS_localeDataLoader'] = new xarMLS__LocaleDataLoader();
         $GLOBALS['xarMLS_localeDataCache'] = array();
     
-        $GLOBALS['xarMLS_currentLocale'] = ''; // <-- FIXME: this causes problems
+        $GLOBALS['xarMLS_currentLocale'] = '';
     
         $GLOBALS['xarMLS_defaultLocale'] = $args['defaultLocale'];
         $GLOBALS['xarMLS_allowedLocales'] = $args['allowedLocales'];
@@ -520,7 +521,7 @@ class xarMLS extends Object
         // - space around newline -> ' '
         // - multiple newlines -> 1 newline
     //    $string = preg_replace(array('[\x0d]','/[\t ]+/','/\s*\n\s*/'), array('',' ',"\n"),$string);
-    
+
         if (isset($GLOBALS['xarMLS_backend'])) {
             $trans = $GLOBALS['xarMLS_backend']->translate($string,1);
         } else {
@@ -694,6 +695,11 @@ class xarMLS extends Object
      */
     static public function setCurrentLocale($locale)
     {
+        xarLog::message("Changing the default locale from ". self::getCurrentLocale() . " to " . $locale, xarLog::LEVEL_INFO);
+        
+        // Only refresh if we need to
+        if (self::getCurrentLocale() == $locale) return true;
+        
         static $called = 0;
     
         // FIXME: during initialisation, the current locale was set, and it gets called
@@ -715,9 +721,10 @@ class xarMLS extends Object
             if (!in_array($locale, $siteLocales)) {
                 // Locale not available, use the default
                 $locale = self::getSiteLocale();
-                xarLog::message("Falling back to default locale: $locale");
+                xarLog::message("Falling back to default locale: $locale", xarLog::LEVEL_INFO);
             }
         }
+
         // Set current locale
         $GLOBALS['xarMLS_currentLocale'] = $locale;
     
@@ -726,7 +733,7 @@ class xarMLS extends Object
             assert('$curCharset == "utf-8"; // Resetting MLS Mode to BOXED');
             // To be able to continue, we set the mode to BOXED
             if ($curCharset != "utf-8") {
-                xarLog::message("Resetting MLS mode to BOXED");
+                xarLog::message("Resetting MLS mode to BOXED", xarLog::LEVEL_INFO);
                 xarConfigVars::set(null, 'Site.MLS.MLSMode','BOXED');
             } else {
                 if (!xarCore::funcIsDisabled('ini_set')) ini_set('mbstring.func_overload', 7);
@@ -760,7 +767,7 @@ class xarMLS extends Object
 
         // Load core translations
         self::_loadTranslations(xarMLS::DNTYPE_CORE, 'xaraya', 'core:', 'core');
-        //self::loadLocaleData($locale);
+        return true;
     }
 
     /**
@@ -769,62 +776,76 @@ class xarMLS extends Object
      * @author Marco Canini <marco@xaraya.com>
      * @return boolean
      */
-    static public function _loadTranslations($dnType, $dnName, $ctxType, $ctxName)
+    static public function _loadTranslations($domainType, $domainName, $contextType, $contextName)
     {
         static $loadedCommons = array();
         static $loadedTranslations = array();
     
+        xarLog::message("MLS: Loading translations for the context ". "$domainType,$domainName,$contextType,$contextName", xarLog::LEVEL_INFO);
+
         if (!isset($GLOBALS['xarMLS_backend'])) {
-            xarLog::message("xarMLS: No translation backend was selected for ". "$dnType.$dnName.$ctxType.$ctxName");
+            xarLog::message("xarMLS: No translation backend was selected for ". "$domainType,$domainName,$contextType,$contextName", xarLog::LEVEL_WARNING);
             return false;
         }
         if (empty($GLOBALS['xarMLS_currentLocale'])) {
-            xarLog::message("xarMLS: No current locale was selected");
+            xarLog::message("xarMLS: No current locale was selected", xarLog::LEVEL_WARNING);
             return false;
         }
     
         // only load each translation once
-        if (isset($loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"])) {
-            return $loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"];
+        if (isset($loadedTranslations["$domainType.$domainName.$contextType.$contextName"])) {
+            return $loadedTranslations["$domainType.$domainName.$contextType.$contextName"];
         }
-    
-        if ($GLOBALS['xarMLS_backend']->bindDomain($dnType, $dnName)) {
-            if ($dnType == xarMLS::DNTYPE_THEME) {
-                // Load common translations
-                if (!isset($loadedCommons[$dnName.'theme'])) {
-                    $loadedCommons[$dnName.'theme'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('themes:', 'common')) return;
-                }
-            } elseif ($dnType == xarMLS::DNTYPE_MODULE) {
-                // Handle in a special way the module type
-                // for which it's necessary to load common translations
-                if (!isset($loadedCommons[$dnName.'module'])) {
-                    $loadedCommons[$dnName.'module'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'common')) return;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return;
-                }
-            } elseif ($dnType == xarMLS::DNTYPE_PROPERTY) {
-                // Load common translations
-                if (!isset($loadedCommons[$dnName.'property'])) {
-                    $loadedCommons[$dnName.'property'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('properties:', 'common')) return;
-                }
-            } elseif ($dnType == xarMLS::DNTYPE_BLOCK) {
-                // Load common translations
-                if (!isset($loadedCommons[$dnName.'block'])) {
-                    $loadedCommons[$dnName.'block'] = true;
-                    if (!$GLOBALS['xarMLS_backend']->loadContext('blocks:', 'common')) return;
-                }
+
+        if ($GLOBALS['xarMLS_backend']->bindDomain($domainType, $domainName)) {
+            switch ($domainType) {
+                case xarMLS::DNTYPE_THEME:
+                    // Load common translations
+                    if (!isset($loadedCommons[$domainName.'theme'])) {
+                        $loadedCommons[$domainName.'theme'] = true;
+                        if (!$GLOBALS['xarMLS_backend']->loadContext('themes:', 'common')) return;
+                    }
+                break;
+                case xarMLS::DNTYPE_MODULE:
+                    // Handle in a special way the module type
+                    // for which it's necessary to load common translations
+                    if (!isset($loadedCommons[$domainName.'module'])) {
+                        $loadedCommons[$domainName.'module'] = true;
+                        if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'common')) return;
+                        if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return;
+                    }
+                break;
+                case xarMLS::DNTYPE_PROPERTY:
+                    // Load common translations
+                    if (!isset($loadedCommons[$domainName.'property'])) {
+                        $loadedCommons[$domainName.'property'] = true;
+                        if (!$GLOBALS['xarMLS_backend']->loadContext('properties:', 'common')) return;
+                    }
+                break;
+                case xarMLS::DNTYPE_BLOCK:
+                    // Load common translations
+                    if (!isset($loadedCommons[$domainName.'block'])) {
+                        $loadedCommons[$domainName.'block'] = true;
+                        if (!$GLOBALS['xarMLS_backend']->loadContext('blocks:', 'common')) return;
+                    }
+                break;
+                case xarMLS::DNTYPE_OBJECT:
+                    // Load common translations
+                    if (!isset($loadedCommons[$domainName.'object'])) {
+                        $loadedCommons[$domainName.'object'] = true;
+                        if (!$GLOBALS['xarMLS_backend']->loadContext('objects:', 'common')) return;
+                    }
+                break;
             }
-    
-            if (!$GLOBALS['xarMLS_backend']->loadContext($ctxType, $ctxName)) return;
-            $loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"] = true;
+
+            if (!$GLOBALS['xarMLS_backend']->loadContext($contextType, $contextName)) return;
+            $loadedTranslations["$domainType.$domainName.$contextType.$contextName"] = true;
             return true;
         } else {
             // FIXME: postpone
-            //xarEvt_fire('MLSMissingTranslationDomain', array($dnType, $dnName));
+            //xarEvt_fire('MLSMissingTranslationDomain', array($domainType, $domainName));
     
-            $loadedTranslations["$dnType.$dnName.$ctxType.$ctxName"] = false;
+            $loadedTranslations["$domainType.$domainName.$contextType.$contextName"] = false;
             return false;
         }
     }
@@ -844,80 +865,37 @@ class xarMLS extends Object
      **/
     static public function loadTranslations($path)
     {
+        xarLog::message("MLS: Loading translations for the path: $path", xarLog::LEVEL_INFO);
         if(!file_exists($path)) {
-            xarLog::message("MLS: Trying to load translations for a non-existing path ($path)", xarLog::LEVEL_WARNING);
+            xarLog::message("MLS: Failed loading translations for a non-existing path ($path)", xarLog::LEVEL_WARNING);
             //die($path);
             return true;
         }
     
+        $domainArray = xarMLSContext::getContextFromPath($path);
+        $domainType = $domainArray[0];
+        
         // If this is a core file, get the translations and bail
-        if (strpos($path, sys::lib()) === 0) {
+        if ($domainArray == xarMLS::DNTYPE_CORE) {
             $translations = self::_loadTranslations(xarMLS::DNTYPE_CORE, 'xaraya', 'core:', 'core');
             return $translations;        
         }
-        
-        // Remove the parts of the path before the dnType marker ('xaraya', 'modules' etc.)
-        if (strpos($path, sys::code()) === 0) {
-            // This is a module, property or block file
-            $path = substr($path, strlen(sys::code()));
-        } elseif (strpos($path, xarTpl::getBasedir()) === 0) {
-            // This is a theme file
-        } else {
-            throw new Exception('Unknown MLS path: ' . $path);
-        }
-        
-        // Get a structured representation of the path.
-        $pathElements = explode("/",$path);
-    
-        // Determine dnType
-    
-        $firstelement = array_shift($pathElements);
-        if ($firstelement == 'modules') {
-            $dnType = xarMLS::DNTYPE_MODULE;
-            $possibleOverride = false;
-            $ctxType= 'modules';
-        } elseif ($firstelement == 'properties') {
-            $dnType = xarMLS::DNTYPE_PROPERTY;
-            $possibleOverride = false;
-            $ctxType= 'properties';
-        } elseif ($firstelement == 'blocks') {
-            $dnType = xarMLS::DNTYPE_BLOCK;
-            $possibleOverride = false;
-            $ctxType= 'blocks';
-        } else {
-            $dnType = xarMLS::DNTYPE_THEME;
+
+        // Themes can override other domain types
+        if ($domainType == xarMLS::DNTYPE_THEME) {
             $possibleOverride = true;
-            $ctxType= 'themes';
+        } else {
+            $possibleOverride = false;
         }
-        $ctxType .= ":";
-    
-        // Determine dnName
-        // The specifics within that Type are in the next element, overridden or not
-        // NOTE: $pathElements changes here!
-        $dnName = array_shift($pathElements);
-    
-        // Determine ctxName, which is just the basename of the file without extension it seems
-        // CHECKME: there was a hardcoded substr(str,0,-3) here earlier
-        // NOTE: $pathElements changes here!
-        $ctxName = preg_replace('/^(xar)?(.+)\..*$/', '$2', array_pop($pathElements));
-    
-        // Determine ctxType further if needed (i.e. more path components are there)
-        // Peek into the first element and unwind the rest of the path elements into $ctxType
-        // xartemplates -> templates, xarblocks -> blocks, xarproperties -> properties etc.
-        // NOTE: pnFile.php type files support needed?
-        if(!empty($pathElements)) {
-            $pathElements[0] = preg_replace('/^xar(.+)/','$1',$pathElements[0]);
-            $ctxType .= implode("/",$pathElements);
-        }
-    
+
         // Ok, based on possible overrides, we load internal only, or interal plus overrides
         $ok = false;
         if($possibleOverride) {
-            $ok= self::_loadTranslations(xarMLS::DNTYPE_MODULE,$dnName,$ctxType,$ctxName);
+            $ok= self::_loadTranslations(xarMLS::DNTYPE_MODULE, $domainArray[1], $domainArray[2], $domainArray[3]);
         }
         // And load the determined stuff
         // @todo: should we check for success on *both*, where is the exception here? further up the tree?
-        $ok = self::_loadTranslations($dnType, $dnName, $ctxType, $ctxName);
+        $ok = self::_loadTranslations($domainType, $domainArray[1], $domainArray[2], $domainArray[3]);
         return $ok;
     }
 
@@ -1058,7 +1036,7 @@ class xarMLS extends Object
                 $madeDir = @mkdir($path, 0700);
                 if (!$madeDir) {
                     $msg = xarML("The directories under #(1) must be writeable by PHP.", $next_path);
-                    xarLog::message($msg);
+                    xarLog::message($msg, xarLog::LEVEL_ERROR);
                     // throw new PermissionException?
                 }
                 return $madeDir;
@@ -1100,6 +1078,146 @@ class xarMLS extends Object
             $isWritable = self::mkdirr($directory);
             return $isWritable;
         }
+    }
+}
+
+/**
+ * Multilanguage Context Class
+ *
+ * @package core\multilanguage
+ * @subpackage multilanguage
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ *
+**/
+class xarMLSContext extends Object
+{
+    static private $domains = array(
+                xarMLS::DNTYPE_CORE     => array('context_type_prefix' => 'xaraya',     'context_type_text' => 'core'),
+                xarMLS::DNTYPE_THEME    => array('context_type_prefix' => 'themes',     'context_type_text' => 'theme'),
+                xarMLS::DNTYPE_MODULE   => array('context_type_prefix' => 'modules',    'context_type_text' => 'module'),
+                xarMLS::DNTYPE_PROPERTY => array('context_type_prefix' => 'properties', 'context_type_text' => 'property'),
+                xarMLS::DNTYPE_BLOCK    => array('context_type_prefix' => 'blocks',     'context_type_text' => 'block'),
+                xarMLS::DNTYPE_OBJECT   => array('context_type_prefix' => 'objects',    'context_type_text' => 'object'),
+                            );
+    static private $current_domain_type = xarMLS::DNTYPE_CORE;
+    
+    /**
+     * Initializes the Context Class
+     *
+     * @throws Exception
+     * @return boolean true
+     */
+    static public function init(&$args)
+    {
+        return true;
+    }
+    
+    static public function setDomainType($domainType_id=xarMLS::DNTYPE_CORE)
+    {
+        self::$current_domain_type = $domainType_id;
+    }
+    
+    static public function getContextFromPath($path='')
+    {
+        if (strpos($path, sys::lib()) === 0) {
+            $domainType = xarMLS::DNTYPE_CORE;
+            $path = substr($path, strlen(sys::lib()));
+        } elseif (strpos($path, xarTpl::getBasedir()) === 0) {
+            $domainType = xarMLS::DNTYPE_THEME;
+        } elseif (strpos($path, sys::code()) === 0) {
+            // This is a module, property or block file
+            $path = substr($path, strlen(sys::code()));
+            if (strpos($path, 'modules') === 0) {
+                $domainType = xarMLS::DNTYPE_MODULE;
+            } elseif (strpos($path, 'properties') === 0) {
+                $domainType = xarMLS::DNTYPE_PROPERTY;
+            } elseif (strpos($path, 'blocks') === 0) {
+                $domainType = xarMLS::DNTYPE_BLOCK;
+            }
+        } else {
+            $domainType = 0;
+            return false;
+        }
+
+        // Get a structured representation of the rest of the path
+        $pathElements = explode("/",$path);
+    
+        // Determine domainName
+        // The specifics within that Type are in the next element, overridden or not
+        // NOTE: $pathElements changes here!
+        $domainName = array_shift($pathElements);
+    
+        // Determine contextName, which is just the basename of the file without extension it seems
+        $contextName = preg_replace('/^(xar)?(.+)\..*$/', '$2', array_pop($pathElements));
+    
+        // Determine the contextType: bein by getting its prefix
+        $contextType = self::getContextTypePrefix($domainType);
+        $contextType .= ":";
+        
+        // Determine contextType further if needed (i.e. more path components are there)
+        // Peek into the first element and unwind the rest of the path elements into $ctxType
+        // xartemplates -> templates, xarblocks -> blocks, xarproperties -> properties etc.
+        // NOTE: pnFile.php type files support needed?
+        if(!empty($pathElements)) {
+            $pathElements[0] = preg_replace('/^xar(.+)/','$1',$pathElements[0]);
+            $contextType .= implode("/",$pathElements);
+        }
+        
+        $contextArray = array(
+                            $domainType,
+                            $domainName,
+                            $contextType,
+                            $contextName,
+                            );
+        return $contextArray;
+    }
+
+    static public function getContextTypePrefix($domainType=null)
+    {
+        if (empty($domainType)) $domainType = self::$current_domain_type;
+        $current_domain = self::$domains[$domainType];
+        return $current_domain['context_type_prefix'];
+    }
+
+    static public function getContextTypeText($domainType=null)
+    {
+        if (empty($domainType)) $domainType = self::$current_domain_type;
+        $current_domain = self::$domains[$domainType];
+        return $current_domain['context_type_text'];
+    }
+
+    static public function getContextTypeComponents($contextType=null)
+    {
+        $parts = explode(':', $contextType);
+        
+        // Check the validity of the prefix
+        $good = false;
+        foreach (self::$domains as $domain){
+            if ($domain['context_type_prefix'] == $parts[0]) continue;
+            $good = true;
+        }
+        if (!$good) die("Incorrect context prefix " . $parts[0]);
+        
+        // Remove any empty chars in the directory
+        $parts[1] = trim($parts[1]);
+        
+        // Return the prefix and directory
+        return $parts;
+    }
+    
+    static public function getDomainPath($domainType, $locale, $backendType, $domainName="xaraya")
+    {
+        $prefix = self::getContextTypePrefix($domainType);
+        $domainpath  = sys::varpath() . "/locales/" . $locale . "/" . $backendType . "/" . $prefix;
+
+        if (!in_array($prefix, array("xaraya","objects"))) {
+            $domainpath  .= "/" . $domainName;
+        }
+        return $domainpath;
     }
 }
 

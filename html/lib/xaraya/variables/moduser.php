@@ -42,7 +42,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
     static function get($scope, $name, $itemid = null)
     {
         // If id not specified take the current user
-        if ($itemid == NULL) $itemid = xarUserGetVar('id');
+        if ($itemid == NULL) $itemid = xarUser::getVar('id');
 
         // Anonymous user always uses the module default setting
         if ($itemid == _XAR_ID_UNREGISTERED) return xarModVars::get($scope, $name);
@@ -71,7 +71,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
     static function set($scope, $name, $value, $itemid = null)
     {
         // If no id specified assume current user
-        if ($itemid == null) $itemid = xarUserGetVar('id');
+        if ($itemid == null) $itemid = xarUser::getVar('id');
 
         // For anonymous users no preference can be set
         // MrB: should we raise an exception here?
@@ -98,7 +98,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
     static function delete($scope, $name, $itemid = null)
     {
         // If id is not set assume current user
-        if ($itemid == null) $itemid = xarUserGetVar('id');
+        if ($itemid == null) $itemid = xarUser::getVar('id');
 
         // Deleting for anonymous user is useless return true
         // MrB: should we continue, can't harm either and we have

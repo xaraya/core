@@ -183,6 +183,22 @@ class SelectProperty extends DataProperty
     }
 
     /**
+     * (re)define the list of options
+     * 
+     * @param options array of options
+     * 
+     * This array should have the form:
+     * array (
+     *     array('id' => [some_id], 'name' => [some_name]),
+     *     ....
+     * )
+     */
+    public function setOptions($options=array())
+    {
+        $this->options = $options;
+    }
+
+    /**
      * Retrieve the list of options on demand
      * 
      * N.B. the code below is repetitive, but lets leave it clearly separated for 

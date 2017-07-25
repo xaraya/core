@@ -85,7 +85,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         else return false;
     }
 
-    function loadContext($ctxType, $ctxName)
+    function loadContext($contextType, $contextName)
     {
         static $xmlExtensionLoaded = null;
 
@@ -110,7 +110,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         // Patch from Camille Perinel
         $charset = xarMLSGetCharsetFromLocale($this->locale);
 
-            $this->parser = xml_parser_create('utf-8');
+        $this->parser = xml_parser_create('utf-8');
         if ($charset == 'utf-8') {
             $this->parser = xml_parser_create('utf-8');
         } else {
@@ -121,7 +121,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         xml_set_element_handler($this->parser, "beginElement","endElement");
         xml_set_character_data_handler($this->parser, "characterData");
 
-        if (!$fileName = $this->findContext($ctxType, $ctxName)) {
+        if (!$fileName = $this->findContext($contextType, $contextName)) {
             //  throw new ContextNotFounException(array($ctxName,$this->locale),'Could not load context:"#(1)" in "#(2)"');
             return true;
         }
@@ -148,22 +148,22 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
 
     function getContextNames($ctxType)
     {
-        // FIXME need more global check
-        if (($ctxType == 'core:') || ($ctxType == 'modules:') || ($ctxType == 'properties:') || ($ctxType == 'blocks:') || ($ctxType == 'themes:')) $directory = '';
-        else list($prefix,$directory) = explode(':',$ctxType);
-        $this->contextlocation = $this->domainlocation . "/" . $directory;
-
-        $ctxNames = array();
+        $contextParts = xarMLSContext::getContextTypeComponents($contextType);
+        
+        // Complete the directory path if the context directory is not empty
+        if (!empty($contextParts[1])) $this->contextlocation = $this->domainlocation . "/" . $contextParts[1];
+        
+        $contextNames = array();
         if (!file_exists($this->contextlocation)) {
-            return $ctxNames;
+            return $contextNames;
         }
         $dd = opendir($this->contextlocation);
         while ($fileName = readdir($dd)) {
             if (!preg_match('/^(.+)\.xml$/', $fileName, $matches)) continue;
-            $ctxNames[] = $matches[1];
+            $contextNames[] = $matches[1];
         }
         closedir($dd);
-        return $ctxNames;
+        return $contextNames;
     }
 
     function getEntry($string)

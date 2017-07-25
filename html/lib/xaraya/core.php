@@ -562,7 +562,7 @@ class xarCore extends xarCoreCache
          * Get the current git revision
          * This is displayed in the base module backend
          * Handy if we're running from a working copy, prolly comment out on distributing
-		 */
+		     */
         $path = '../.git/refs/heads/com.xaraya.core.bermuda';
         if(@file_exists($path)) {
             $text = file($path);
@@ -570,7 +570,7 @@ class xarCore extends xarCoreCache
             self::$build = $rev;
         }
 
-        xarLog::message("The core is loaded");
+        xarLog::message("The core is loaded", xarLog::LEVEL_INFO);
 
         // Make the current load level == the new load level
         $current_SYSTEM_level = $new_SYSTEM_level;

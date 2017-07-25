@@ -391,7 +391,7 @@ class Role extends DataObject
             return xarVarGetCached($cacheKey,$this->properties['id']->value);
         }
         // We'll have to get it.
-        xarLog::message("ROLE: getting privileges for id: " . $this->properties['id']->value);
+        xarLog::message("ROLE: getting privileges for id: " . $this->properties['id']->value, xarLog::LEVEL_INFO);
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
         $xartable =& xarDB::getTables();
         $query = "SELECT  p.id, p.name, r.name, p.module_id, m.name,

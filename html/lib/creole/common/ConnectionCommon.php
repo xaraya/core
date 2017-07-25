@@ -175,7 +175,7 @@ abstract class ConnectionCommon {
         	$this->setSavepoint( $savepointIdentifier );
         }
         $this->transactionOpcount++;
-        xarLog::message("DB: starting transaction [".$this->transactionOpcount."]");
+        xarLog::message("DB: starting transaction [".$this->transactionOpcount."]", xarLog::LEVEL_INFO);
     }
 
     /**
@@ -186,11 +186,11 @@ abstract class ConnectionCommon {
         if ($this->transactionOpcount > 0) {
             if ($this->transactionOpcount == 1 || $this->supportsNestedTrans()) {
                 $this->commitTrans();
-				xarLog::message("DB: committed transaction [".$this->transactionOpcount."]");
+				xarLog::message("DB: committed transaction [".$this->transactionOpcount."]", xarLog::LEVEL_INFO);
             } elseif ($this->supportsSavepoints()) {
             	$savepointIdentifier = array_pop( $this->nestedTransactionSavepoints );
             	$this->releaseSavepoint( $savepointIdentifier );
-			    xarLog::message("DB: releasing savepoint of transaction [".$this->transactionOpcount."]");
+			    xarLog::message("DB: releasing savepoint of transaction [".$this->transactionOpcount."]", xarLog::LEVEL_WARNING);
             }
             $this->transactionOpcount--;
         }
@@ -207,7 +207,7 @@ abstract class ConnectionCommon {
             } elseif ($this->supportsSavepoints()) {
             	$savepointIdentifier = array_pop( $this->nestedTransactionSavepoints );
             	$this->rollbackToSavepoint( $savepointIdentifier );
-				xarLog::message("DB: Rolled back transaction [".$this->transactionOpcount."]");
+				xarLog::message("DB: Rolled back transaction [".$this->transactionOpcount."]", xarLog::LEVEL_WARNING);
             }
             $this->transactionOpcount--;
         }
@@ -318,7 +318,7 @@ abstract class ConnectionCommon {
     // to prevent changing all execute statements
     public function &Execute($sql,$bindvars = array(), $fetchmode = null)
     {
-        xarLog::message("DB: Executing $sql");
+        xarLog::message("DB: Executing $sql", xarLog::LEVEL_INFO);
         $stmt = $this->prepareStatement($sql);
         if($stmt) {
             if($this->isSelect($sql)) {
@@ -350,7 +350,7 @@ abstract class ConnectionCommon {
 
     public function &SelectLimit($sql,$limit=0 ,$offset=0 , $bindvars = array(),$fetchmode = null)
     {
-        xarLog::message("DB: Executing $sql");
+        xarLog::message("DB: Executing $sql", xarLog::LEVEL_INFO);
         $stmt = $this->prepareStatement($sql);
         $stmt->setLimit($limit);
         $stmt->setOffset($offset);
