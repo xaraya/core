@@ -70,10 +70,10 @@
                 <thead>
                     <tr>
                         <!-- the first two cells are hidden if js is not available -->
-                        <th id="_show_1" style="display: none;">Available Options</th>
+                        <th id="_show_1" style="display: none; text-align: center">Available</th>
                         <th id="_show_2" style="display: none;">&#160;</th>
                         <!-- the last cell holds the real multi-select and is always visible -->
-                        <th>Selected Options</th>
+                        <th style="display: block; text-align: center">Selected</th>
                     </tr>
                 </thead>
                 <tbody>
