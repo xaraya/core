@@ -187,6 +187,8 @@ class DataObjectMaster extends Object
         try{
             $this->access_rules = unserialize($this->access);            
         } catch (Exception $e) {}
+        
+        return true;
     }
 
     private function propertysource($sourcestring, $object, $prefix=false)
