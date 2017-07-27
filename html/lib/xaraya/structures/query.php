@@ -93,6 +93,9 @@ class Query
         if ($this->debugflag) $querystart = microtime(true);
 
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
+        if ($this->debugflag && (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO')) {
+            $this->dbconn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        }
         if (empty($statement) && ($this->optimize == true)) $this->optimize();
 
         $this->setstatement($statement);
