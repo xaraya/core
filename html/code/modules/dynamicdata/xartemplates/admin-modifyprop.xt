@@ -122,7 +122,7 @@
                                 <strong>#$labels['linkto']#</strong>#$link['to']#</label>
                             </p>
                         </xar:foreach>
-                        <xar:else />
+                    <xar:else />
                         <p>
                             <label>
                             <strong>#$labels['module']#</strong>#$relation['module']#</label>

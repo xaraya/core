@@ -125,8 +125,10 @@ function dynamicdata_admin_modifyprop()
     }
     $data['hooks'] = $hooks;
 
-    $data['fieldtypeprop'] =& DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
+    $data['fieldtypeprop']   =& DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
     $data['fieldstatusprop'] =& DataPropertyMaster::getProperty(array('type' => 'fieldstatus'));
+    $data['dropdown']        =& DataPropertyMaster::getProperty(array('type' => 'dropdown'));
+    $data['checkbox']        =& DataPropertyMaster::getProperty(array('type' => 'checkbox'));
 
     // We have to specify this here, the js expects non xml urls and the => makes the template invalied
     $data['urlform'] = xarModURL('dynamicdata','admin','form',array('objectid' => $data['objectid'], 'theme' => 'print'),false);

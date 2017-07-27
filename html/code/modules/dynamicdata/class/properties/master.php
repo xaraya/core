@@ -54,7 +54,7 @@ class DataPropertyMaster extends Object
         $bindvars = array();
         $query = "SELECT name, label, type,
                          id, defaultvalue, source,
-                         status, seq, configuration,
+                         status, translatable, seq, configuration,
                          object_id FROM $dynamicprop ";
         if(empty($args['objectid']))
         {
@@ -79,7 +79,7 @@ class DataPropertyMaster extends Object
         $properties = array();
         while ($result->next()) {
             list(
-                $name, $label, $type, $id, $defaultvalue, $source, $status,
+                $name, $label, $type, $id, $defaultvalue, $source, $status, $translatable,
                 $seq, $configuration, $_objectid
                 ) = $result->fields;
             $property = array(
@@ -90,6 +90,7 @@ class DataPropertyMaster extends Object
                 'defaultvalue'  => $defaultvalue,
                 'source'        => $source,
                 'status'        => $status,
+                'translatable'  => $translatable,
                 'seq'           => $seq,
                 'configuration' => $configuration,
                 // some internal variables
