@@ -793,10 +793,10 @@ class DataObjectMaster extends Object
             unset($args['itemid']);
         }
         if (empty($args)) {
-            xarLog::message('DataObjectMaster::getVariableCacheKey: ' . $scope . '(' . $name . ')');
+            xarLog::message('DataObjectMaster::getVariableCacheKey: ' . $scope . '(' . $name . ')', xarLog::LEVEL_INFO);
             $cacheKey = xarCache::getVariableKey($scope, $name);
         } else {
-            xarLog::message('DataObjectMaster::getVariableCacheKey: TODO ' . $scope . '(' . $name . ') with ' . json_encode($args));
+            xarLog::message('DataObjectMaster::getVariableCacheKey: TODO ' . $scope . '(' . $name . ') with ' . json_encode($args), xarLog::LEVEL_INFO);
             // TODO: any remaining arguments should *not* affect the object creation itself if we rehydrate correctly afterwards, but we'll play it safe for now...
             //$hash = md5(serialize($args));
             //$name .= '-' . $hash;
