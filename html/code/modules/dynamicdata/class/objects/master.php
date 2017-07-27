@@ -865,60 +865,6 @@ class DataObjectMaster extends Object
         }
         return $object;
     }
-    
-    public static function getfObject(Array $args=array())
-    {
-        /* with autoload and variable caching activated */
-        // Identify the variable by its arguments here
-        $hash = md5(serialize($args));
-        // Get a cache key for this variable if it's suitable for variable caching
-        $cacheKey = xarCache::getVariableKey('DataObject', $hash);
-        // Check if the variable is cached
-        if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
-            // Return the cached variable
-            $object = xarVariableCache::getCached($cacheKey);
-            return $object;
-        }
-        if(!isset($args['itemid'])) $args['itemid'] = null;
-
-// FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
-        // Complete the info if this is a known object
-        $info = self::_getObjectInfo($args);
-
-        if ($info != null) $args = array_merge($args,$info);
-        else return $info;
-
-        // TODO: Try to get the object from the cache ?
-//        if (!empty($args['objectid']) && xarCoreCache::isCached('DDObject', $args['objectid'])) {
-//            // serialize is better here - shallow cloning is not enough for array of properties, datastores etc. and with deep cloning internal references are lost
-//            $object = unserialize(xarCoreCache::getCached('DDObject', $args['objectid']));
-//            return $object;
-//        }
-
-        if(!empty($args['filepath']) && ($args['filepath'] != 'auto')) include_once(sys::code() . $args['filepath']);
-        else sys::import('modules.dynamicdata.class.objects.base');
-        if (!empty($args['class'])) {
-            if(!class_exists($args['class'])) {
-                throw new ClassNotFoundException($args['class']);
-            }
-        } else {
-            //CHECKME: remove this later. only here for backward compatibility
-            $args['class'] = 'DataObject';
-        }
-        // here we can use our own classes to retrieve this
-        $descriptor = new DataObjectDescriptor($args);
-
-        $object = new $args['class']($descriptor);
-        // serialize is better here - shallow cloning is not enough for array of properties, datastores etc. and with deep cloning internal references are lost
-//        xarCoreCache::setCached('DDObject', $args['objectid'], serialize($object));
-
-        /* with autoload and variable caching activated */
-        // Set the variable in cache
-        if (!empty($cacheKey)) {
-            xarVariableCache::setCached($cacheKey, $object);
-        }
-        return $object;
-    }
 
     /**
      * Class method to retrieve a particular object list definition, with sub-classing
