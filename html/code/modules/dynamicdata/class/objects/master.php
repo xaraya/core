@@ -819,6 +819,19 @@ class DataObjectMaster extends Object
     **/
     public static function getObject(Array $args=array())
     {
+        // Once autoload is enabled this block can be moved beyond the cache retrieval code
+        $info = self::_getObjectInfo($args);
+        // If we have no such object, just return false for now
+        if (empty($info)) return false;
+        // The info method calls an entry for each of the object's properties. We only need one
+        $current = current($info);
+        foreach ($current as $key => $value) 
+            if (strpos($key, 'object_') === 0) $data[substr($key,7)] = $value;
+        $data = array_merge($args,$data);
+        // Make sure the class for this object is loaded
+        if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) include_once(sys::code() . $data['filepath']);
+        else sys::import('modules.dynamicdata.class.objects.base');
+
         /* with autoload and variable caching activated */
         // CHECKME: that actually checked if we can do output caching in object ui handlers etc.
         // Identify the variable by its arguments here
@@ -837,27 +850,11 @@ class DataObjectMaster extends Object
             return $object;
         }
 
-        $info = self::_getObjectInfo($args);
-        
-        // If we have no such object, just return false for now
-        if (empty($info)) return false;
-        /*{
-            if (isset($args['name'])) $identifier = xarML('the name is #(1)',$args['name']);
-            if (isset($args['objectid'])) $identifier = xarML('the objectid is #(1)',$args['objectid']);
-            throw new Exception(xarML('Unable to get an object where #(1)', $identifier));
-        }*/
-        
-        $current = current($info);
-        foreach ($current as $key => $value) 
-            if (strpos($key, 'object_') === 0) $data[substr($key,7)] = $value;
-        $data = array_merge($args,$data);
         $data['propertyargs'] =& $info;
         
         // Create the object if it was not in cache
         xarLog::message("DataObjectMaster::getObject: Getting a new object " . $data['class'], xarLog::LEVEL_INFO);
 
-        if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) include_once(sys::code() . $data['filepath']);
-        else sys::import('modules.dynamicdata.class.objects.base');
         $descriptor = new DataObjectDescriptor($data);
         $object = new $data['class']($descriptor);
         
@@ -938,6 +935,24 @@ class DataObjectMaster extends Object
     **/
     public static function getObjectList(Array $args=array())
     {
+        // Once autoload is enabled this block can be moved beyond the cache retrieval code
+        // Complete the info if this is a known object
+        $info = self::_getObjectInfo($args);
+        if (empty($info)) {
+            if (isset($args['name'])) $identifier = xarML('the name is #(1)',$args['name']);
+            if (isset($args['objectid'])) $identifier = xarML('the objectid is #(1)',$args['objectid']);
+            throw new Exception(xarML('Unable to create an object where #(1)', $identifier));
+        }
+        // The info method calls an entry for each of the object's properties. We only need one
+        $current = current($info);
+        foreach ($current as $key => $value) 
+            if (strpos($key, 'object_') === 0) $data[substr($key,7)] = $value;
+        $data = $args + $data;
+        // Make sure the class for this object is loaded
+        sys::import('modules.dynamicdata.class.objects.list');
+        $class = 'DataObjectList';
+        if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) include_once(sys::code() . $data['filepath']);
+        
         /* with autoload and variable caching activated */
         // CHECKME: that actually checked if we can do output caching in object ui handlers etc.
         // Identify the variable by its arguments here
@@ -953,22 +968,8 @@ class DataObjectMaster extends Object
             return $object;
         }
 // FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
-        // Complete the info if this is a known object
-        $info = self::_getObjectInfo($args);
-        if (empty($info)) {
-            if (isset($args['name'])) $identifier = xarML('the name is #(1)',$args['name']);
-            if (isset($args['objectid'])) $identifier = xarML('the objectid is #(1)',$args['objectid']);
-            throw new Exception(xarML('Unable to create an object where #(1)', $identifier));
-        }
-        $current = current($info);
-        foreach ($current as $key => $value) 
-            if (strpos($key, 'object_') === 0) $data[substr($key,7)] = $value;
-        $data = $args + $data;        
         $data['propertyargs'] =& $info;
 
-        sys::import('modules.dynamicdata.class.objects.list');
-        $class = 'DataObjectList';
-        if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) include_once(sys::code() . $data['filepath']);
         if(!empty($data['class']))
         {
             if(class_exists($data['class'] . 'List'))
