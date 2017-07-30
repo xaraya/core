@@ -1025,6 +1025,7 @@ class DataObjectMaster extends Object
         // Update specific part
         $itemid = $object->getItem(array('itemid' => $args['objectid']));
         if(empty($itemid)) return;
+        xarLog::message("Updating an object " . $object->name . ". Objectid: " . $itemid, xarLog::LEVEL_INFO);
         $itemid = $object->updateItem($args);
         unset($object);
         return $itemid;
@@ -1048,6 +1049,8 @@ class DataObjectMaster extends Object
 
         sys::import('xaraya.structures.query');
         // TODO: delete all the (dynamic ?) data for this object
+
+        xarLog::message("Deleting an object with ID " . $args['objectid'], xarLog::LEVEL_INFO);
 
         // Delete all the properties of this object
         $q = new Query('DELETE', $tables['dynamic_properties']);
