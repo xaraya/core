@@ -126,7 +126,7 @@ public static function newConn(array $args = null)
       if (count(self::$connections) <= $index && isset(self::$firstDSN) && isset(self::$firstFlags)) {
           self::getConnection(self::$firstDSN, self::$firstFlags);
       }
-      // CHECKME: I've spent almost a day debuggin this when not assigning
+      // CHECKME: I've spent almost a day debugging this when not assigning
       //          it first to a temporary variable before returning. 
       // The observed effect was that an exception did not occur when $index
       // whas 0 (the default case) in $connections and it didn't exist.
