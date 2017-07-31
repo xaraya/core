@@ -621,7 +621,11 @@ class ResultSet extends Object
     function first()  {$this->rewind(); return $this->getRow();}
     function getall() {return $this->array;}
     
+    // Two of these functions is one too many
     public function RecordCount(){
+        return $this->getRecordCount();
+    }
+    public function getRecordCount(){
         return count($this->array);
     }
 
