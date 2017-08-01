@@ -114,7 +114,7 @@ function base_admin_modifyconfig()
                 case 'caching':
                     $data['cache_settings'] = xarCache::getConfig();
                     if (empty($data['cache_settings']['Variable.CacheStorage']))
-                        $data['cache_settings']['Variable.CacheStorage'] = 'files';
+                        $data['cache_settings']['Variable.CacheStorage'] = 'database';
 //                    var_dump($data['cache_settings']);
                 break;
                 case 'logging':
