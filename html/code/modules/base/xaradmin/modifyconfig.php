@@ -111,6 +111,12 @@ function base_admin_modifyconfig()
             switch ($data['tab']) {
                 case 'security':
                 break;
+                case 'caching':
+                    $data['cache_settings'] = xarCache::getConfig();
+                    if (empty($data['cache_settings']['Variable.CacheStorage']))
+                        $data['cache_settings']['Variable.CacheStorage'] = 'files';
+//                    var_dump($data['cache_settings']);
+                break;
                 case 'logging':
                     // Delete the log file and create a new, empty one
                     if (!xarVarFetch('clear','isset',$clear,NULL,XARVAR_NOT_REQUIRED)) return;
@@ -245,6 +251,8 @@ function base_admin_modifyconfig()
                     xarModVars::set('roles', 'locale', $defaultLocale);
 
                     xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
+                    break;
+                case 'caching':                    
                     break;
                 case 'logging':                    
                     if (!xarVarFetch('logenabled','int',$logenabled,0,XARVAR_NOT_REQUIRED)) return;

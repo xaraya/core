@@ -21,6 +21,11 @@
             <label>Languages and Locales</label>
         </menuitem>
         <menuitem>
+            <value>caching</value>
+            <target>modifyconfig</target>
+            <label>Caching</label>
+        </menuitem>
+        <menuitem>
             <value>logging</value>
             <target>modifyconfig</target>
             <label>Logging</label>

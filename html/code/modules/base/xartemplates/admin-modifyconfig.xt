@@ -145,7 +145,10 @@
                        </div>
                        <div class="xar-col">
 	                        <xar:set name="options">
-	                            array( array('id' =&gt; 'admin', 'name' =&gt; 'admin'), array('id' =&gt; 'user', 'name' =&gt; 'user'), )
+	                            array( 
+	                                array('id' =&gt; 'admin', 'name' =&gt; 'admin'), 
+	                                array('id' =&gt; 'user', 'name' =&gt; 'user'), 
+	                            )
 	                        </xar:set>
 	                        <xar:set name="value">
 	                            <xar:var scope="module" module="modules" name="defaultmoduletype"/>
@@ -483,7 +486,84 @@
                     <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                     <xar:template file="update-button" module="base" />
                 </form>
-            <!-- Begin Logging Options -->
+            <!-- Begin caching Options -->
+            <xar:elseif condition="$tab eq 'caching'"/>
+                <div style="padding: 5px">
+                    These options are set in var/cache/config.caching.php
+                </div>
+               <fieldset>
+                    <legend>Persistent Caching</legend>
+                    <div class="xar-row">
+                    	<div class="xar-col">
+                            <xar:var name="label">Enable persistent caching</xar:var>
+                            <label for="shorturl" title="#$label#" class="xar-form-label">
+                                Enable Persistent Caching
+                            </label>
+                        </div>
+                    	<div class="xar-col">
+                            <xar:set name="value">$cache_settings['Variable.CacheIsEnabled']</xar:set>
+                            <xar:data-output type="checkbox" name="persistent_isenabled" value="$value"/>
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                    	<div class="xar-col">
+                            <xar:var name="label">Storage type</xar:var>
+                            <label for="shorturl" title="#$label#" class="xar-form-label">
+                                Storage Type
+                            </label>
+                        </div>
+                    	<div class="xar-col">
+	                        <xar:set name="options">
+	                            array( 
+	                                array('id' => 'files', 'name' => 'File System'), 
+	                                array('id' => 'database', 'name' => 'Database'), 
+	                            )
+	                        </xar:set>
+                            <xar:set name="value">$cache_settings['Variable.CacheStorage']</xar:set>
+                            <xar:data-output type="dropdown" name="persistent_storagetype" value="$value" options="$options"/>
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                    	<div class="xar-col">
+                            <xar:var name="label">The length of time before the content in cache is deleted</xar:var>
+                            <label for="shorturl" title="#$label#" class="xar-form-label">
+                                Expires after
+                            </label>
+                        </div>
+                    	<div class="xar-col">
+                            <xar:set name="value">$cache_settings['Variable.TimeExpiration']</xar:set>
+                            <xar:data-output type="integerbox" name="persistent_timeexpiration" value="$value"/>
+                            seconds
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                    	<div class="xar-col">
+                            <xar:var name="label">The maximum size a single item to be cached can have</xar:var>
+                            <label for="shorturl" title="#$label#" class="xar-form-label">
+                                Cache size
+                            </label>
+                        </div>
+                    	<div class="xar-col">
+                            <xar:set name="value">$cache_settings['Variable.SizeLimit']</xar:set>
+                            <xar:data-output type="integerbox" name="persistent_sizelimit" value="$value"/>
+                            bytes
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                    	<div class="xar-col">
+                            <xar:var name="label">The name of the file to write to for persistent caching</xar:var>
+                            <label for="shorturl" title="#$label#" class="xar-form-label">
+                                Log File
+                            </label>
+                        </div>
+                    	<div class="xar-col">
+                            <xar:set name="value">$cache_settings['Variable.LogFile']</xar:set>
+                            <xar:data-output type="textbox" name="persistent_logfile" value="$value"/>
+                            (if logging is enabled)
+                        </div>
+                    </div>
+                </fieldset>
+            <!-- Begin logging Options -->
             <xar:elseif condition="$tab eq 'logging'"/>
                 <xar:set name="writable">is_writeable(sys::varpath() . 'logs')</xar:set>
                 <xar:if condition="$writable">
