@@ -518,8 +518,9 @@ function dynamicdata_init()
     xarModVars::set('dynamicdata', 'use_module_alias',0);
     xarModVars::set('dynamicdata', 'module_alias_name','Query');
     xarModVars::set('dynamicdata', 'debugmode', 0);
-    xarModVars::set('dynamicdata', 'administrators', serialize(array()));
+//    xarModVars::set('dynamicdata', 'administrators', serialize(array()));
     xarModVars::set('dynamicdata', 'getlinkedobjects', 0);
+    xarModVars::set('dynamicdata', 'caching', 0);
 
 
     /**
