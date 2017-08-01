@@ -21,69 +21,91 @@
         <div class="xar-mod-page-body">
         <!-- Begin Site Display Options -->
         <xar:if condition="$tab eq 'setup'">
-            <fieldset>
-                <legend>Version Information</legend>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <xar:var name="label">Current Version</xar:var>
-                        <label title="#$label#" class="xar-form-label">                            
-                            Xaraya Core:                            
-                        </label>
+            <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+                <fieldset>
+                    <legend>Version Information</legend>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Current Version</xar:var>
+                            <label title="#$label#" class="xar-form-label">                            
+                                Xaraya Core:                            
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            #xarCore::VERSION_ID# version #xarCore::VERSION_NUM# (#xarCore::VERSION_SUB#)
+                        </div>
                     </div>
-                    <div class="xar-col">
-                        #xarCore::VERSION_ID# version #xarCore::VERSION_NUM# (#xarCore::VERSION_SUB#)
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Current Build</xar:var>
+                            <label title="#$label#" class="xar-form-label">                            
+                                Git revision:                            
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            #xarCore::VERSION_REV#
+                        </div>
                     </div>
-                </div>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <xar:var name="label">Current Build</xar:var>
-                        <label title="#$label#" class="xar-form-label">                            
-                            Git revision:                            
-                        </label>
+                </fieldset>
+                <fieldset>
+                    <legend>                        
+                        Database Information                        
+                    </legend>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Host</xar:var>
+                            <label title="#$label#" class="xar-form-label">                            
+                                Host:                            
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            #xarSystemVars::get(sys::CONFIG, 'DB.Host')#
+                        </div>
                     </div>
-                    <div class="xar-col">
-                        #xarCore::VERSION_REV#
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Database Type</xar:var>
+                            <label title="#$label#" class="xar-form-label">                            
+                                Database Type:                            
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            #xarSystemVars::get(sys::CONFIG, 'DB.Type')#
+                        </div>
                     </div>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend>                        
-                    Database Information                        
-                </legend>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <xar:var name="label">Host</xar:var>
-                        <label title="#$label#" class="xar-form-label">                            
-                            Host:                            
-                        </label>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Current Database</xar:var>
+                            <label title="#$label#" class="xar-form-label">                            
+                                Current Database:                            
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            #xarSystemVars::get(sys::CONFIG, 'DB.Name')#
+                        </div>
                     </div>
-                    <div class="xar-col">
-                        #xarSystemVars::get(sys::CONFIG, 'DB.Host')#
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">The software layer between Xaraya and its database</xar:var>
+                            <label title="#$label#" class="xar-form-label">                            
+                                Database Middleware:                            
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="options">
+                                array( 
+                                    array('id' => 'Creole', 'name' => 'Creole'), 
+                                    array('id' => 'PDO', 'name' => 'PDO'), 
+                                )
+                            </xar:set>
+                            <xar:set name="value">xarSystemVars::get(sys::CONFIG, 'DB.Middleware')</xar:set>
+                            <xar:data-input type="dropdown" name="middleware" id="middleware" options="$options" value="$value"/>
+                        </div>
                     </div>
-                </div>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <xar:var name="label">Database Type</xar:var>
-                        <label title="#$label#" class="xar-form-label">                            
-                            Database Type:                            
-                        </label>
-                    </div>
-                    <div class="xar-col">
-                        #xarSystemVars::get(sys::CONFIG, 'DB.Type')#
-                    </div>
-                </div>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <xar:var name="label">Current Database</xar:var>
-                        <label title="#$label#" class="xar-form-label">                            
-                            Current Database:                            
-                        </label>
-                    </div>
-                    <div class="xar-col">
-                        #xarSystemVars::get(sys::CONFIG, 'DB.Name')#
-                    </div>
-                </div>
-            </fieldset>
+                </fieldset>
+                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                <xar:template file="update-button" module="base" />
+            </form>
         <xar:elseif condition="$tab eq 'display'"/>
             <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                 <fieldset>
@@ -197,16 +219,16 @@
                     </div>
                </fieldset>
                -->
-               <fieldset>
+                <fieldset>
                     <legend>URL Scheme</legend>
                     <div class="xar-row">
-                    	<div class="xar-col">
+                        <div class="xar-col">
                             <xar:var name="label">Enable short url support throughout Xaraya.</xar:var>
                             <label for="shorturl" title="#$label#" class="xar-form-label">
                                 Default Route
                             </label>
                         </div>
-                    	<div class="xar-col">
+                        <div class="xar-col">
                             <xar:set name="value">
                                 <xar:var scope="config" name="Site.Core.EnableShortURLsSupport"/>
                             </xar:set>
@@ -225,31 +247,31 @@
                         </div>
                     </div>
                     <div class="xar-row">
-                    	<div class="xar-col">
-	                        <xar:var name="label">The web server allows forwards slashes in URLs</xar:var>
-	                        <label for="allowsslashes" title="#$label#" class="xar-form-label">
-	                            Web server allows slashes
-	                        </label>
+                        <div class="xar-col">
+                            <xar:var name="label">The web server allows forwards slashes in URLs</xar:var>
+                            <label for="allowsslashes" title="#$label#" class="xar-form-label">
+                                Web server allows slashes
+                            </label>
                         </div>
-                    	<div class="xar-col">
-	                        <xar:set name="checked">
-	                            <xar:var scope="config" name="Site.Core.WebserverAllowsSlashes"/>
-	                        </xar:set>
-	                        <xar:data-input type="checkbox" name="allowsslashes" id="allowsslashes" checked="$checked"/>
+                        <div class="xar-col">
+                            <xar:set name="checked">
+                                <xar:var scope="config" name="Site.Core.WebserverAllowsSlashes"/>
+                            </xar:set>
+                            <xar:data-input type="checkbox" name="allowsslashes" id="allowsslashes" checked="$checked"/>
                         </div>
                     </div>
                     <div class="xar-row">
-                    	<div class="xar-col">
-	                        <xar:var name="label">Change HTML Entities to readible entities.</xar:var>
-	                        <label for="htmlentites" title="#$label#" class="xar-form-label">
-	                            HTML Entities
-	                        </label>
+                        <div class="xar-col">
+                            <xar:var name="label">Change HTML Entities to readible entities.</xar:var>
+                            <label for="htmlentites" title="#$label#" class="xar-form-label">
+                                HTML Entities
+                            </label>
                         </div>
-                    	<div class="xar-col">
-	                        <xar:set name="checked">
-	                            <xar:var scope="config" name="Site.Core.FixHTMLEntities"/>
-	                        </xar:set>
-	                        <xar:data-input type="checkbox" name="htmlentites" id="htmlentites" checked="$checked"/> Fix HTML Entities
+                        <div class="xar-col">
+                            <xar:set name="checked">
+                                <xar:var scope="config" name="Site.Core.FixHTMLEntities"/>
+                            </xar:set>
+                            <xar:data-input type="checkbox" name="htmlentites" id="htmlentites" checked="$checked"/> Fix HTML Entities
                         </div>
                     </div>
                 </fieldset>

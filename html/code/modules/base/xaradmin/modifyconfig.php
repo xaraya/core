@@ -139,6 +139,12 @@ function base_admin_modifyconfig()
             break;
         case 'update':
             switch ($data['tab']) {
+                case 'setup':
+                    if (!xarVarFetch('middleware', 'str', $middleware, 'Creole' ,XARVAR_NOT_REQUIRED)) return;
+                    $variables = array('DB.Middleware' => $middleware);
+                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
+                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'setup')));
+                    break;
                 case 'display':
                     if (!xarVarFetch('alternatepagetemplate','checkbox',$alternatePageTemplate,false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('alternatepagetemplatename','str',$alternatePageTemplateName,'',XARVAR_NOT_REQUIRED)) return;
