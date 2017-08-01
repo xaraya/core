@@ -20,70 +20,75 @@
         </div>
         <div class="xar-mod-page-body">
         <!-- Begin Site Display Options -->
-        <xar:if condition="$tab eq 'display'">
+        <xar:if condition="$tab eq 'setup'">
+            <fieldset>
+                <legend>Version Information</legend>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Current Version</xar:var>
+                        <label title="#$label#" class="xar-form-label">                            
+                            Xaraya Core:                            
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        #xarCore::VERSION_ID# version #xarCore::VERSION_NUM# (#xarCore::VERSION_SUB#)
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Current Build</xar:var>
+                        <label title="#$label#" class="xar-form-label">                            
+                            Git revision:                            
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        #xarCore::VERSION_REV#
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>                        
+                    Database Information                        
+                </legend>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Host</xar:var>
+                        <label title="#$label#" class="xar-form-label">                            
+                            Host:                            
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        #xarSystemVars::get(sys::CONFIG, 'DB.Host')#
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Database Type</xar:var>
+                        <label title="#$label#" class="xar-form-label">                            
+                            Database Type:                            
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        #xarSystemVars::get(sys::CONFIG, 'DB.Type')#
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Current Database</xar:var>
+                        <label title="#$label#" class="xar-form-label">                            
+                            Current Database:                            
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        #xarSystemVars::get(sys::CONFIG, 'DB.Name')#
+                    </div>
+                </div>
+            </fieldset>
+        <xar:elseif condition="$tab eq 'display'"/>
             <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
                 <fieldset>
-                    <legend>Version Information</legend>
-                    <div class="xar-row">
-                        <div class="xar-col">
-                            <xar:var name="label">Current Version</xar:var>
-                            <label title="#$label#" class="xar-form-label">                            
-                                Xaraya Core:                            
-                            </label>
-                        </div>
-                        <div class="xar-col">
-                            #xarCore::VERSION_ID# version #xarCore::VERSION_NUM# (#xarCore::VERSION_SUB#)
-                        </div>
-                    </div>
-                    <div class="xar-row">
-                        <div class="xar-col">
-                            <xar:var name="label">Current Build</xar:var>
-                            <label title="#$label#" class="xar-form-label">                            
-                                Git revision:                            
-                            </label>
-                        </div>
-                        <div class="xar-col">
-                            #xarCore::VERSION_REV#
-                        </div>
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <legend>                        
-                        Database Information                        
-                    </legend>
-                    <div class="xar-row">
-                        <div class="xar-col">
-                            <xar:var name="label">Host</xar:var>
-                            <label title="#$label#" class="xar-form-label">                            
-                                Host:                            
-                            </label>
-                        </div>
-                        <div class="xar-col">
-                            #xarSystemVars::get(sys::CONFIG, 'DB.Host')#
-                        </div>
-                    </div>
-                    <div class="xar-row">
-                        <div class="xar-col">
-                            <xar:var name="label">Database Type</xar:var>
-                            <label title="#$label#" class="xar-form-label">                            
-                                Database Type:                            
-                            </label>
-                        </div>
-                        <div class="xar-col">
-                            #xarSystemVars::get(sys::CONFIG, 'DB.Type')#
-                        </div>
-                    </div>
-                    <div class="xar-row">
-                        <div class="xar-col">
-                            <xar:var name="label">Current Database</xar:var>
-                            <label title="#$label#" class="xar-form-label">                            
-                                Current Database:                            
-                            </label>
-                        </div>
-                        <div class="xar-col">
-                            #xarSystemVars::get(sys::CONFIG, 'DB.Name')#
-                        </div>
-                    </div>
+                    <legend>General Options</legend>
+                    <xar:data-form object="$module_settings"/>
                 </fieldset>
                 <fieldset>
                     <legend>Site Default Front Page Settings</legend>
@@ -193,7 +198,7 @@
                </fieldset>
                -->
                <fieldset>
-                    <legend>General Display Options</legend>
+                    <legend>URL Scheme</legend>
                     <div class="xar-row">
                     	<div class="xar-col">
                             <xar:var name="label">Enable short url support throughout Xaraya.</xar:var>
@@ -248,7 +253,6 @@
                         </div>
                     </div>
                 </fieldset>
-                <xar:data-form object="$module_settings"/>
                 <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                 <xar:template file="update-button" module="base" />
             </form>

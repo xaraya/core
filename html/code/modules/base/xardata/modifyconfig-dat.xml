@@ -6,6 +6,11 @@
     </menutitle>
     <menuitems>
         <menuitem>
+            <value>setup</value>
+            <target>modifyconfig</target>
+            <label>Site Setup</label>
+        </menuitem>
+        <menuitem>
             <value>display</value>
             <target>modifyconfig</target>
             <label>Site Display</label>
