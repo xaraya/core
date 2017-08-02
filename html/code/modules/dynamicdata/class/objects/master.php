@@ -910,12 +910,16 @@ class DataObjectMaster extends Object
         // Get a cache key for this variable if it's suitable for variable caching
         //$cacheKey = xarCache::getObjectKey('DataObjectList', $hash);
         // CHECKME: this is supposed to be about caching a DataObjectList variable before we do getItems() etc.
-        $cacheKey = self::getVariableCacheKey('DataObjectList', $args);
-        // Check if the variable is cached
-        if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
-            // Return the cached variable
-            $object = xarVariableCache::getCached($cacheKey);
-            return $object;
+
+        // Do we allow caching?
+        if (xarModVars::get('dynamicdata', 'caching')) {
+            $cacheKey = self::getVariableCacheKey('DataObjectList', $args);
+            // Check if the variable is cached
+            if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
+                // Return the cached variable
+                $object = xarVariableCache::getCached($cacheKey);
+                return $object;
+            }
         }
 // FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
         $data['propertyargs'] =& $info;
