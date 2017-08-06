@@ -89,13 +89,13 @@ class SelectProperty extends DataProperty
         $this->value = null;
         return false;
     }
+
 /**
  * Display a Dropdown for input
  * 
  * @param  array data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
- */
-	
+ */	
     public function showInput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
@@ -156,12 +156,13 @@ class SelectProperty extends DataProperty
         if(isset($data['rows'])) $this->display_rows = $data['rows']; 
         return parent::showInput($data);
     }
-/**
- * Display a dropdown for output
- * 
- * @param  array data An array of input parameters
- * @return string     HTML markup to display the property for output on a web page
- */	
+    
+    /**
+     * Display a dropdown for output
+     * 
+     * @param  array data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */	
     public function showOutput(Array $data = array())
     {
         if (isset($data['option_link'])) $this->display_option_link = $data['option_link'];
@@ -450,15 +451,17 @@ class SelectProperty extends DataProperty
 /**
  * The installation class for the dropdown (select) dataproperty
  *
- * @todo this is close to exceptions or logging than core, see also notes earlier
 **/
-/**
- * 
- */
 sys::import('modules.dynamicdata.class.properties.interfaces');
 
 class DropdownPropertyInstall extends SelectProperty implements iDataPropertyInstall
 {
+    /**
+     * Install this property
+     * 
+     * @param  array data An array of input parameters
+     * @return bool     true
+     */
     public function install(Array $data=array())
     {
         $dat_file = sys::code() . 'modules/base/xardata/dropdown_configurations-dat.xml';
