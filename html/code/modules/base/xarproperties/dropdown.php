@@ -448,18 +448,12 @@ class SelectProperty extends DataProperty
 }
 
 /**
- * @package modules\base
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://xaraya.info/index.php/release/68.html
- *
- * @author mikespub <mikespub@xaraya.com>
- */
- 
-/**
  * The installation class for the dropdown (select) dataproperty
+ *
+ * @todo this is close to exceptions or logging than core, see also notes earlier
+**/
+/**
+ * 
  */
 sys::import('modules.dynamicdata.class.properties.interfaces');
 
