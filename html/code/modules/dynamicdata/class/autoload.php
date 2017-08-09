@@ -1,6 +1,7 @@
 <?php
 /**
- * Dynamic Data Autoload
+ * Dynamicdata Module
+ *
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
@@ -13,90 +14,43 @@
  */
 
 /**
- * Dynamic Data Autoload - moved this from xarAutoload::autoload_todo because it has lots :-)
+ * Autoload function for this module's classes
  */
-function dynamicdata_autoload($class)
+function dynamicdata_classes_autoload($class)
 {
-    static $classpathlist = array();
-
-    if (xarAutoload::$shutdown) {
-        return false;
-    }
-
     $class = strtolower($class);
 
-    // Some predefined classes
-    switch ($class)
-    {
-        case 'dataobject':
-            sys::import('modules.dynamicdata.class.objects.base');
-            return;
-        case 'dataobjectlist':
-            sys::import('modules.dynamicdata.class.objects.list');
-            return;
-        case 'dataobjectmaster':
-            sys::import('modules.dynamicdata.class.objects.master');
-            return;
-        case 'dataobjectdescriptor':
-            sys::import('modules.dynamicdata.class.objects.descriptor');
-            return;
-        case 'dataobjectlinks':
-            sys::import('modules.dynamicdata.class.objects.links');
-            return;
-/* if we remove all sys::import from the classes someday ? :-)
-        case 'idataobject':
-        case 'idataobjectlist':
-            sys::import('modules.dynamicdata.class.objects.interfaces');
-            return;
-*/
+    $class_array = array(
+        // Events
+        // Controllers
+        
+        'dataobject'                => 'modules.dynamicdata.class.objects.base',
+        'dataobjectlist'            => 'modules.dynamicdata.class.objects.list',
+        'dataobjectmaster'          => 'modules.dynamicdata.class.objects.master',
+        'dataobjectdescriptor'      => 'modules.dynamicdata.class.objects.descriptor',
+        'dataobjectlinks'           => 'modules.dynamicdata.class.objects.links',
+        'idataobject'               => 'modules.dynamicdata.class.objects.interfaces',
 
-        case 'dataproperty':
-            sys::import('modules.dynamicdata.class.properties.base');
-            return;
-        case 'datapropertymaster':
-            sys::import('modules.dynamicdata.class.properties.master');
-            return;
-/* if we remove all sys::import from the classes someday ? :-)
-        case 'idataproperty':
-            sys::import('modules.dynamicdata.class.properties.interfaces');
-            return;
-*/
-
-        //case 'flattabledatastore':
-        //    sys::import('xaraya.datastores.sql.flattable');
-        //    return;
-        case 'relationaldatastore':
-            sys::import('xaraya.datastores.sql.relational');
-            return;
-        case 'variabletabledatastore':
-            sys::import('xaraya.datastores.sql.variabletable');
-            return;
-        case 'modulevariablesdatastore':
-            sys::import('xaraya.datastores.sql.modulevariables');
-            return;
-        case 'dummydatastore':
-            sys::import('xaraya.datastores.virtual');
-            return;
-        case 'hookdatastore':
-            sys::import('xaraya.datastores.hook');
-            return;
-        case 'functiondatastore':
-            sys::import('xaraya.datastores.function');
-            return;
-        case 'datastorelinks':
-            sys::import('modules.dynamicdata.class.datastores.links');
-            return;
-/* if we remove all sys::import from the classes someday ? :-)
-        case 'iddobject':
-        case 'ibasicdatastore':
-        case 'iordereddatastore':
-        case 'isqldatastore':
-            sys::import('xaraya.datastores.interface');
-            return;
-*/
-        default:
-            break;
+        'dataproperty'              => 'modules.dynamicdata.class.properties.base',
+        'datapropertymaster'        => 'modules.dynamicdata.class.properties.master',
+        'idataproperty'             => 'modules.dynamicdata.class.properties.interfaces',
+        'propertyregistration'      => 'modules.dynamicdata.class.properties.registration',
+        
+        'relationaldatastore'       => 'xaraya.datastores.sql.relational',
+        'variabletabledatastore'    => 'xaraya.datastores.sql.variabletable',
+        'modulevariablesdatastore'  => 'xaraya.datastores.sql.modulevariables',
+        'dummydatastore'            => 'xaraya.datastores.virtual',
+        'hookdatastore'             => 'xaraya.datastores.hook',
+        'functiondatastore'         => 'xaraya.datastores.function',
+        'datastorelinks'            => 'modules.dynamicdata.class.datastores.links',
+        
+    );
+    
+    if (isset($class_array[$class])) {
+        sys::import($class_array[$class]);
+        return true;
     }
+    return false;
 
     // We still haven't found it, so look at the properties now
 
@@ -123,10 +77,11 @@ function dynamicdata_autoload($class)
 }
 
 /**
- * Register this function for autoload on import !?
+ * Register this function for autoload on import
  */
 if (class_exists('xarAutoload')) {
-    xarAutoload::registerFunction('dynamicdata_autoload');
+    xarAutoload::registerFunction('dynamicdata_classes_autoload');
 } else {
     // guess you'll have to register it yourself :-)
 }
+?>

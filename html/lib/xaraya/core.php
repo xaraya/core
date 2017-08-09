@@ -444,7 +444,7 @@ class xarCore extends xarCoreCache
          */
         if (xarCache::$variableCacheIsEnabled) {
             sys::import('xaraya.autoload');
-//            xarAutoload::initialize();
+            xarAutoload::initialize();
         }
 
         /**
