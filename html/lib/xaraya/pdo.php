@@ -281,6 +281,10 @@ class xarPDO extends PDO
     {
         if (empty($flag)) $flag = PDO::FETCH_NUM;
         $limit = empty($limit) ? 1000000 : $limit;
+        
+        // Only allow positive integers (for now)
+        $limit = $limit < 0 ? 0 : $limit;
+        $offset = $offset < 0 ? 0 : $offset;
 
         // Lets try this the easy way
         // This only works for MySQL !!
